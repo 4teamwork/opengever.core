@@ -185,6 +185,12 @@ Zusätzliche Metadaten:
 
        :Datentyp: ``Text``
 
+   .. py:attribute:: approved_documents
+
+       :Datentyp: ``Text``
+
+Im Parameter ``approved_documents`` (optional) kann eine Liste von UIDs der genehmigten Dokumente mitgegeben werden. Diese Dokumente müssen sich entweder in der Aufgabe befinden, oder mit einem Verweis von der Aufgabe referenziert sein.
+
 
 Überarbeiten
 ~~~~~~~~~~~~

@@ -1,13 +1,22 @@
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
+from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
+from opengever.document.approvals import IApprovalList
 from opengever.ogds.models.user import User
+from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.uuid.interfaces import IUUID
+from z3c.relationfield import RelationValue
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 import json
 
 
@@ -555,3 +564,88 @@ class TestAPITransitions(IntegrationTestCase):
         response = IResponseContainer(self.seq_subtask_2).list()[-1]
         self.assertEqual(u'Muss trotzdem gemacht werden.', response.text)
         self.assertEqual('task-transition-skipped-open', response.transition)
+
+
+class TestApprovalViaTask(IntegrationTestCase):
+
+    def create_task_for_approval(self, browser, with_docs=True):
+        self.login(self.dossier_responsible, browser=browser)
+        task = create(
+            Builder('task')
+            .within(self.dossier)
+            .having(issuer=self.dossier_responsible.id,
+                    responsible=self.regular_user.id,
+                    responsible_client='fa',
+                    task_type='approval'))
+
+        if with_docs:
+            contained_doc = create(
+                Builder('document')
+                .within(task)
+                .titled(u'Vertr\xe4gsentwurf'))
+
+            intids = getUtility(IIntIds)
+            related_doc = self.document
+            relation = RelationValue(intids.getId(related_doc))
+            ITask(task).relatedItems.append(relation)
+
+        self.set_workflow_state('task-state-in-progress', task)
+        if with_docs:
+            return task, contained_doc, related_doc
+        else:
+            return task
+
+    @browsing
+    def test_approve_docs_on_resolve(self, browser):
+        task, contained_doc, related_doc = self.create_task_for_approval(browser)
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-in-progress-resolved'.format(task.absolute_url())
+
+        data = {'text': 'Sind alle genehmigt',
+                'approved_documents': [
+                    IUUID(contained_doc), IUUID(related_doc)]}
+
+        with freeze(datetime(2021, 8, 18, 12, 45)):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual('task-state-resolved',
+                         api.content.get_state(task))
+
+        self.assertEqual([{
+            'approver': 'kathi.barfuss',
+            'task_uid': IUUID(task),
+            'approved': datetime(2021, 8, 18, 12, 45),
+            'version_id': 0}],
+            IApprovalList(contained_doc).storage.list())
+
+        self.assertEqual([{
+            'approver': 'kathi.barfuss',
+            'task_uid': IUUID(task),
+            'approved': datetime(2021, 8, 18, 12, 45),
+            'version_id': 0}],
+            IApprovalList(related_doc).storage.list())
+
+        response = IResponseContainer(task).list()[-1]
+        self.assertEqual('task-transition-in-progress-resolved',
+                         response.transition)
+
+    @browsing
+    def test_approve_docs_on_resolve_rejects_docs_not_associated_with_task(self, browser):
+        task = self.create_task_for_approval(
+            browser, with_docs=False)
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@workflow/task-transition-in-progress-resolved'.format(task.absolute_url())
+
+        data = {'text': 'Dieses Dokument ist gar nicht in der Aufgabe',
+                'approved_documents': [IUUID(self.proposaldocument)]}
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(url, method='POST', data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual('task-state-in-progress', api.content.get_state(task))
+        self.assertEqual([], IApprovalList(self.proposaldocument).storage.list())

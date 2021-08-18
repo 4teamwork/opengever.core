@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-04-23 10:53+0000\n"
+"POT-Creation-Date: 2021-08-18 08:25+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -274,6 +274,10 @@ msgstr "Choix du numéro de classement où le dossier doit être créé."
 msgid "help_accept_task_response"
 msgstr "Saisie d'un texte pour la réponse créée automatiquement."
 
+#: ./opengever/task/transition.py
+msgid "help_approved_documents"
+msgstr ""
+
 #. Default: "Enter a answer text which will be shown as response on the succesor task."
 #: ./opengever/task/browser/assign_dossier.py
 msgid "help_assign_to_dossier_task_response"
@@ -412,6 +416,11 @@ msgstr "Ajouter tâche au processus"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
 msgstr "Suppléance"
+
+#. Default: "Approved documents"
+#: ./opengever/task/transition.py
+msgid "label_approved_documents"
+msgstr ""
 
 #. Default: "Assign to a ..."
 #: ./opengever/task/browser/assign_dossier.py
