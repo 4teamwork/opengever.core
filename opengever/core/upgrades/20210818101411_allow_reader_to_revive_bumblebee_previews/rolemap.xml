@@ -1,0 +1,11 @@
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.bumblebee: Revive Preview" acquire="True">
+      <role name="Administrator" />
+      <role name="Manager" />
+      <role name="Reader" />
+    </permission>
+
+  </permissions>
+</rolemap>
