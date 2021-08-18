@@ -81,11 +81,8 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def _can_copy_between_workspace_and_dossier(self):
         """Only if the workspace_client_feature is enabled and
-        the context is a main dossier with linked workspaces.
+        the main dossier is open with linked workspaces.
         """
-        if not self._is_main_dossier():
-            return False
-
         if not self._is_open_dossier():
             return False
 
@@ -106,7 +103,8 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def is_copy_documents_from_workspace_available(self):
         return (
-            self._can_copy_between_workspace_and_dossier()
+            self._is_main_dossier()
+            and self._can_copy_between_workspace_and_dossier()
             and self._can_add_content_to_dossier()
         )
 
