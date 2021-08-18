@@ -28,6 +28,7 @@ from .readonly import PatchMembershipToolSetLoginTimes
 from .readonly import PatchPloneProtectOnUserLogsIn
 from .readonly import PatchPloneUserAllowed
 from .readonly import PatchPloneUserGetRolesInContext
+from .relation_fields import PatchRelationFieldEventHandlers
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
@@ -39,7 +40,6 @@ from .workflowtool import PatchWorkflowTool
 from opengever.debug import debug_modified_out_of_sync_env_var_is_set
 from opengever.debug.patches.modified_out_of_sync import PatchConnectionRegister
 from opengever.readonly import readonly_env_var_is_set
-
 
 PatchActionInfo()()
 PatchBaseOrderedViewletManagerExceptions()()
@@ -58,6 +58,8 @@ PatchDXContainerPastePermission()()
 PatchDXCreateContentInContainer()()
 PatchExceptionFormatter()()
 PatchExtendedPathIndex()()
+PatchFullHistory()()
+PatchGetJsonschemaForPortalType()()
 PatchInvokeFactory()()
 PatchMembershipToolCreateMemberarea()()
 PatchMembershipToolSetLoginTimes()()
@@ -65,6 +67,7 @@ PatchNamedfileNamedDataConverter()()
 PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
 PatchPloneProtectOnUserLogsIn()()
+PatchRelationFieldEventHandlers()()
 PatchResourceRegistriesURLRegex()()
 PatchSessionCookie()()
 PatchTransmogrifyDXSchemaUpdater()()
@@ -74,8 +77,6 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
-PatchGetJsonschemaForPortalType()()
-PatchFullHistory()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
