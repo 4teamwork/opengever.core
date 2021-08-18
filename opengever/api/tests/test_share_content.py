@@ -57,14 +57,41 @@ class TestShareContentPost(IntegrationTestCase):
                      data=data)
         expected_to = ', '.join((self.archivist.getProperty('email'),
                                  self.workspace_guest.getProperty('email')))
-        expected_cc = ', '.join((self.workspace_admin.getProperty('email'),
-                                 self.workspace_owner.getProperty('email')))
+        expected_cc = ', '.join((self.workspace_owner.getProperty('email'),
+                                 self.workspace_admin.getProperty('email')))
 
         process_mail_queue()
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEqual(expected_to, mail['To'])
         self.assertEqual(expected_cc, mail['Cc'])
+        self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
+                         mail['From'])
+        self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())
+
+    @browsing
+    def test_share_workspace_with_group(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+
+        url = '{}/@share-content'.format(self.workspace.absolute_url())
+        data = json.dumps({
+            'actors_to': [{'token': 'projekt_a'}],
+            'comment': u'Check out this fantastic w\xf6rkspace!'
+        })
+
+        browser.open(url, method='POST', headers=self.api_headers,
+                     data=data)
+        expected_to = ', '.join((self.regular_user.getProperty('email'),
+                                 self.dossier_responsible.getProperty('email')))
+
+        process_mail_queue()
+        self.assertEqual(1, len(mailing.get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+
+        self.assertEqual(expected_to, mail['To'])
         self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
                          mail['From'])
         self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())

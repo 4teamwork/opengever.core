@@ -1,4 +1,4 @@
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.base.actor import ActorLookup
 from opengever.workspace.content_sharing_mailer import ContentSharingMailer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -12,9 +12,11 @@ from zope.interface import alsoProvides
 class ShareContentPost(Service):
 
     def get_email_adresses(self, actors):
-        service = ogds_service()
+        emails = set()
         for actor in actors:
-            emails.append(service.fetch_user(actor['token']).email)
+            for representative in ActorLookup(actor['token']).lookup().representatives():
+                if representative.active:
+                    emails.add(representative.email)
         return ', '.join(emails)
 
     def extract_data(self):

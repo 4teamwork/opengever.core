@@ -1,6 +1,6 @@
 Inhalte teilen
 ==============
-Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräumen mit anderen Mitgliedern geteilt werden. Die ausgewählten Mitglieder erhalten eine E-Mail mit einem Hinweis zum geteilten Inhalt.
+Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräumen mit anderen Mitgliedern geteilt werden. Die ausgewählten Mitglieder erhalten eine E-Mail mit einem Hinweis zum geteilten Inhalt. Es können auch Gruppen ausgewählt werden.
 
 **Beispiel-Request**:
 
@@ -22,8 +22,8 @@ Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräum
       ],
       "actors_cc": [
         {
-          "title": "Ziegler Robert (robert.ziegler)",
-          "token": "robert.ziegler"
+          "title": "Gruppe A",
+          "token": "gruppe-a"
         }
       ],
       "comment": "Have you seen this ToDo yet?"
