@@ -10,7 +10,7 @@ Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräum
     Accept: application/json
 
     {
-      "users_to": [
+      "actors_to": [
         {
           "title": "Baerfuss Kaethi (kathi.barfuss)",
           "token": "kathi.barfuss"
@@ -20,7 +20,7 @@ Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräum
           "token": "nicole.kohler"
         },
       ],
-      "users_cc": [
+      "actors_cc": [
         {
           "title": "Ziegler Robert (robert.ziegler)",
           "token": "robert.ziegler"

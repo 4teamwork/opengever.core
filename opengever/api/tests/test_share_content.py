@@ -20,8 +20,8 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         data = json.dumps({
-            'users_to': [{'token': self.archivist.getId()}],
-            'users_cc': [{'token': self.workspace_admin.getId()}],
+            'actors_to': [{'token': self.archivist.getId()}],
+            'actors_cc': [{'token': self.workspace_admin.getId()}],
             'comment': u'Check out this fantastic w\xf6rkspace!'
         })
 
@@ -46,10 +46,10 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace_folder.absolute_url())
         data = json.dumps({
-            'users_to': [{'token': self.archivist.getId()},
-                         {'token': self.workspace_guest.getId()}],
-            'users_cc': [{'token': self.workspace_admin.getId()},
-                         {'token': self.workspace_owner.getId()}],
+            'actors_to': [{'token': self.archivist.getId()},
+                          {'token': self.workspace_guest.getId()}],
+            'actors_cc': [{'token': self.workspace_admin.getId()},
+                          {'token': self.workspace_owner.getId()}],
             'comment': u'Check out this fantastic w\xf6rkspace!'
         })
 
@@ -78,7 +78,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         data = json.dumps({
-            'users_to': [{'token': self.archivist.getId()}],
+            'actors_to': [{'token': self.archivist.getId()}],
         })
 
         browser.open(url, method='POST', headers=self.api_headers,
@@ -102,7 +102,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(doc_in_workspace.absolute_url())
         data = json.dumps({
-            'users_to': [{'token': self.workspace_admin.getId()}],
+            'actors_to': [{'token': self.workspace_admin.getId()}],
         })
         browser.open(url, method='POST', headers=self.api_headers,
                      data=data)
@@ -120,7 +120,7 @@ class TestShareContentPost(IntegrationTestCase):
             browser.json)
 
     @browsing
-    def test_share_content_without_users_to_raises_bad_request(self, browser):
+    def test_share_content_without_actors_to_raises_bad_request(self, browser):
         self.login(self.workspace_member, browser=browser)
         process_mail_queue()
         mailing = Mailing(self.portal)
@@ -129,7 +129,7 @@ class TestShareContentPost(IntegrationTestCase):
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         comment = u'Check out this fantastic w\xf6rkspace!'
         data = json.dumps({
-            'users_cc': [{'token': self.workspace_admin.getId()}],
+            'actors_cc': [{'token': self.workspace_admin.getId()}],
             'comment': comment
         })
 
@@ -138,6 +138,6 @@ class TestShareContentPost(IntegrationTestCase):
                          data=data)
 
         self.assertEqual(
-            {"message": "Property 'users_to' is required",
+            {"message": "Property 'actors_to' is required",
              "type": "BadRequest"},
             browser.json)
