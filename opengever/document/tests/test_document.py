@@ -139,7 +139,16 @@ class TestDocument(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertEqual([], self.document.related_items())
         self.assertEqual([self.document], self.subdocument.related_items())
-        self.assertEqual([self.document, self.subdocument], self.subsubdocument.related_items())
+        self.assertEqual([self.document, self.subdocument],
+                         self.subsubdocument.related_items())
+
+        self.assertItemsEqual(
+            [self.proposal, self.subdocument, self.subsubdocument, self.task,
+             self.subtask, self.info_task, self.private_task, self.inbox_task],
+            self.document.related_items(bidirectional=True))
+        self.assertItemsEqual(
+            [self.subdocument, self.subsubdocument],
+            self.document.related_items(bidirectional=True, documents_only=True))
 
     def test_is_removed(self):
         self.login(self.regular_user)
