@@ -255,10 +255,12 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
     schemas = [IResponse, IApprovedDocuments]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        self.maybe_approve_documents(transition_params)
+        approved_documents = self.maybe_approve_documents(transition_params)
         response = add_simple_response(
             self.context, transition=transition,
-            text=transition_params.get('text'))
+            text=transition_params.get('text'),
+            approved_documents=approved_documents,
+        )
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.sync_change(transition, transition_params.get('text'), disable_sync)

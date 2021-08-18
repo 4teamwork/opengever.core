@@ -44,6 +44,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                   u'review_state': u'task-state-resolved',
                   u'title': self.subtask.title}
              ],
+             u'approved_documents': [],
              u'changes': [],
              u'created': json_compatible(self.subtask.created().utcdatetime()),
              u'creator': {u'title': u'Ziegler Robert', u'token': u'robert.ziegler'},
@@ -108,6 +109,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              'response_id': 1481272800000000,
              'response_type': 'comment',
              u'created': u'2016-12-09T09:40:00',
+             u'approved_documents': [],
              u'changes': [],
              u'creator': {
                  u'token': self.regular_user.id,

@@ -27,6 +27,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
                 u'is_leafnode': None,
                 u'review_state': u'document-state-draft',
                 u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung'}],
+              u'approved_documents': [],
               u'changes': [],
               u'creator': {
                   u'token': u'nicole.kohler',

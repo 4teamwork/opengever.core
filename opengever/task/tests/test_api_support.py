@@ -6,17 +6,20 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
+from opengever.api.task import SerializeTaskResponseToJson
 from opengever.base.response import IResponseContainer
 from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
 from opengever.document.approvals import IApprovalList
 from opengever.ogds.models.user import User
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
+from operator import attrgetter
 from plone import api
 from plone.uuid.interfaces import IUUID
 from z3c.relationfield import RelationValue
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 import json
 
 
@@ -633,6 +636,35 @@ class TestApprovalViaTask(IntegrationTestCase):
         response = IResponseContainer(task).list()[-1]
         self.assertEqual('task-transition-in-progress-resolved',
                          response.transition)
+
+        # Task response should contain references to approved documents
+        approved_docs = map(attrgetter('to_object'), response.approved_documents)
+        self.assertItemsEqual([contained_doc, related_doc], approved_docs)
+
+        serializer = SerializeTaskResponseToJson(response, getRequest())
+        serialized = serializer(container=task)
+
+        self.assertEqual(2, len(serialized['approved_documents']))
+        expected_approved_docs = [
+            {u'@id': contained_doc.absolute_url(),
+             u'@type': u'opengever.document.document',
+             u'checked_out': None,
+             u'description': u'',
+             u'file_extension': u'',
+             u'is_leafnode': None,
+             u'review_state': u'document-state-draft',
+             u'title': u'Vertr\xe4gsentwurf'},
+            {u'@id': related_doc.absolute_url(),
+             u'@type': u'opengever.document.document',
+             u'checked_out': None,
+             u'description': u'Wichtige Vertr\xe4ge',
+             u'file_extension': u'.docx',
+             u'is_leafnode': None,
+             u'review_state': u'document-state-draft',
+             u'title': u'Vertr\xe4gsentwurf'},
+        ]
+        self.assertItemsEqual(expected_approved_docs,
+                              serialized['approved_documents'])
 
     @browsing
     def test_approve_docs_on_resolve_rejects_docs_not_associated_with_task(self, browser):

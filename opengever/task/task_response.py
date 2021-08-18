@@ -4,6 +4,7 @@ from persistent.list import PersistentList
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
+from zope.schema import List
 
 
 class ITaskResponse(IResponse):
@@ -25,6 +26,9 @@ class ITaskResponse(IResponse):
 
     related_items = RelationList(required=False)
 
+    # Documents approved during task resolution
+    approved_documents = RelationList(required=False)
+
 
 class TaskResponse(Response):
 
@@ -38,6 +42,7 @@ class TaskResponse(Response):
         self.mimetype = ''
         self.added_objects = PersistentList()
         self.related_items = PersistentList()
+        self.approved_documents = PersistentList()
 
     def add_related_item(self, relation):
         self.related_items.append(relation)
