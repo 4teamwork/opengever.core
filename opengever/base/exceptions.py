@@ -29,3 +29,9 @@ class NonRemoteOguid(Exception):
 class IncorrectConfigurationError(Exception):
     """Exception raised when Gever is not configured correctly
     """
+
+
+class ReferenceNumberCannotBeFreed(Exception):
+    """Exception raised when trying to free a reference number
+    that is still in use.
+    """

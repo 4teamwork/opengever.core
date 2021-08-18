@@ -2,11 +2,13 @@ from Acquisition import aq_base
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
+from opengever.base.exceptions import ReferenceNumberCannotBeFreed
 from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.repository.events import RepositoryPrefixUnlocked
 from persistent.dict import PersistentDict
 from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
@@ -15,6 +17,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.app.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import getUtility
+from zope.event import notify
 from zope.interface import implementer
 import re
 
@@ -192,7 +195,7 @@ class ReferenceNumberPrefixAdpater(object):
 
         return prefix in self.get_reference_mapping()['reference_prefix'].values()
 
-    def get_number_mapping(self):
+    def get_number_mapping(self, missing_title_as_none=False):
         items = []
         intid_util = getUtility(IIntIds)
 
@@ -208,8 +211,11 @@ class ReferenceNumberPrefixAdpater(object):
                 # be in the list, because it should be available to remove
                 # via the reference prefix manager.
                 active = False
-                title = _('label_already_removed',
-                          '-- Already removed object --')
+                if missing_title_as_none:
+                    title = None
+                else:
+                    title = _('label_already_removed',
+                              '-- Already removed object --')
 
             items.append({'prefix': prefix, 'title': title, 'active': active})
 
@@ -226,10 +232,12 @@ class ReferenceNumberPrefixAdpater(object):
             prefix = unicode(prefix)
 
         if self.is_prefix_used(prefix):
-            raise Exception("Prefix is in use.")
+            raise ReferenceNumberCannotBeFreed("Prefix is in use.")
 
         if prefix in self.get_child_mapping().keys():
             self.get_child_mapping().pop(prefix)
+
+        notify(RepositoryPrefixUnlocked(self.context, prefix))
 
 
 @implementer(IMovabilityChecker)
