@@ -3,19 +3,25 @@ from opengever.base.monkey.patching import MonkeyPatch
 
 class PatchRelationFieldEventHandlers(MonkeyPatch):
     """Monkeypatch for z3c.relation.event._potential_relations
+
+    This fixes an issue where event handlers would not work crrectly, notably
+    to remove references from the catalog when an object is deleted.
     """
 
     def __call__(self):
+        from plone.dexterity.utils import iterSchemata
         from z3c.relationfield.interfaces import IRelation
         from z3c.relationfield.interfaces import IRelationList
-        from zope.interface import providedBy
-        from zope.schema import getFields
+        from zope.schema import getFieldsInOrder
 
         def _potential_relations(obj):
-            """Copy of z3c.relation.event._potential_relations
+            """Copy of z3c.relation.event._potential_relations, with the
+            following modifications:
+              - Make sure to iterate over all fields
+              - use the interface to adapt the object when getting the field value
             """
-            for iface in providedBy(obj).flattened():
-                for name, field in getFields(iface).items():
+            for schema in iterSchemata(obj):
+                for name, field in getFieldsInOrder(schema):
                     if IRelation.providedBy(field):
                         try:
                             relation = getattr(obj, name)
@@ -25,7 +31,7 @@ class PatchRelationFieldEventHandlers(MonkeyPatch):
                         yield name, None, relation
                     if IRelationList.providedBy(field):
                         try:
-                            l = getattr(obj, name)
+                            l = getattr(field.interface(obj), name)
                         except AttributeError:
                             # can't find the relation list on this object
                             continue
