@@ -38,9 +38,18 @@ class TestReviveBumblebeePreview(IntegrationTestCase):
             browser.css('.actionMenuContent li').text)
 
     @browsing
-    def test_action_is_enabled_on_bumblebee_document(self, browser):
+    def test_action_is_enabled_for_admin_on_bumblebee_document(self, browser):
         self.login(self.administrator, browser)
+        browser.visit(self.document)
 
+        self.assertTrue(IBumblebeeable.providedBy(self.document))
+        self.assertIn(
+            'Regenerate PDF preview',
+            browser.css('.actionMenuContent li').text)
+
+    @browsing
+    def test_action_is_enabled_for_reader_on_bumblebee_document(self, browser):
+        self.login(self.regular_user, browser)
         browser.visit(self.document)
 
         self.assertTrue(IBumblebeeable.providedBy(self.document))
