@@ -5,6 +5,8 @@ from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.dossier.utils import get_main_dossier
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
@@ -33,6 +35,8 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
             self.context)
         result[u'blocked_local_roles'] = bool(
             getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
+        result[u'is_protected'] = IProtectDossier(self.context).is_dossier_protected() \
+            if IProtectDossierMarker.providedBy(self.context) else False
 
         extend_with_backreferences(
             result, self.context, self.request, 'relatedDossier')
