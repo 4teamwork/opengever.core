@@ -39,6 +39,15 @@ class TestRelatedDocuments(IntegrationTestCase):
         self.assertTrue(related_docs[0].isBroken())
         self.assertIsNone(related_docs[0].to_object)
 
+    def test_related_items_does_not_include_broken_relations(self):
+        self.login(self.manager)
+        related_docs = self.subdocument.related_items()
+        self.assertEqual(self.document, related_docs[0])
+
+        api.content.delete(self.document)
+        related_docs = self.subdocument.related_items()
+        self.assertEqual(0, len(related_docs))
+
     def test_relations_get_removed_when_from_object_is_deleted(self):
         self.login(self.manager)
         catalog = component.queryUtility(ICatalog)
