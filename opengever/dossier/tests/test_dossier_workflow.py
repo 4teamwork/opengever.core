@@ -25,7 +25,7 @@ class TestDossierWorkflow(IntegrationTestCase):
     def test_offer_transition_is_hidden_in_action_menu(self, browser):
         self.login(self.manager, browser)
         browser.visit(self.expired_dossier)
-        expected = ['Cover page (PDF)', 'Export as Zip',
+        expected = ['Cover page (PDF)', 'Export as Zip', 'Protect dossier',
                     'Print details (PDF)', 'Properties', 'Sharing',
                     'Policy...']
         self.assertItemsEqual(expected, self.get_action_menu_content())
@@ -35,7 +35,7 @@ class TestDossierWorkflow(IntegrationTestCase):
         self.login(self.dossier_manager, browser)
         browser.visit(self.dossier)
         expected = ['Cover page (PDF)', 'Export as Zip', 'Print details (PDF)',
-                    'Properties', 'Deactivate']
+                    'Properties', 'Deactivate', 'Protect dossier']
         self.assertItemsEqual(expected, self.get_action_menu_content())
 
     @browsing
@@ -43,6 +43,6 @@ class TestDossierWorkflow(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.visit(self.dossier)
         expected = ['Cover page (PDF)', 'Export as Zip', 'Print details (PDF)',
-                    'Properties', 'Sharing', 'Deactivate',
+                    'Properties', 'Sharing', 'Deactivate', 'Protect dossier',
                     'Resolve', 'Policy...']
         self.assertItemsEqual(expected, self.get_action_menu_content())
