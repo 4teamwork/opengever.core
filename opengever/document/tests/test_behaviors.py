@@ -5,9 +5,12 @@ from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.restapi.interfaces import IFieldSerializer
+from plone.restapi.services.sources.get import get_field_by_name
 from zc.relation.interfaces import ICatalog
 from zope import component
 from zope.component import getUtility
+from zope.component import queryMultiAdapter
 from zope.intid.interfaces import IIntIds
 
 
@@ -47,6 +50,20 @@ class TestRelatedDocuments(IntegrationTestCase):
         api.content.delete(self.document)
         related_docs = self.subdocument.related_items()
         self.assertEqual(0, len(related_docs))
+
+    def test_broken_relations_do_not_get_serialized(self):
+        self.login(self.manager)
+        field = get_field_by_name('relatedItems', self.subdocument)
+        serializer = queryMultiAdapter(
+            (field, self.subdocument, self.request), IFieldSerializer)
+
+        value = serializer()
+        self.assertEqual(1, len(value))
+        self.assertEqual(self.document.absolute_url(), value[0]['@id'])
+
+        api.content.delete(self.document)
+        value = serializer()
+        self.assertEqual(0, len(value))
 
     def test_relations_get_removed_when_from_object_is_deleted(self):
         self.login(self.manager)

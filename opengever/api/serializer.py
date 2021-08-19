@@ -29,17 +29,20 @@ from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
+from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
+from plone.restapi.serializer.relationfield import RelationListFieldSerializer
 from plone.restapi.serializer.group import SerializeGroupToJson
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from Products.PlonePAS.interfaces.group import IGroupData
 from Products.ZCatalog.interfaces import ICatalogBrain
 from sqlalchemy import func
+from z3c.relationfield.interfaces import IRelationList
 from zc.relation.interfaces import ICatalog
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -50,7 +53,6 @@ from zope.interface import implementer
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 import logging
-
 
 logger = logging.getLogger('opengever.api.serializer')
 
@@ -161,6 +163,15 @@ class GeverSerializeFolderToJson(SerializeFolderToJson):
 
         drop_inactive_language_fields(result)
         return result
+
+
+@adapter(IRelationList, IDexterityContent, IOpengeverBaseLayer)
+@implementer(IFieldSerializer)
+class GeverRelationListFieldSerializer(RelationListFieldSerializer):
+
+    def __call__(self):
+        value = super(RelationListFieldSerializer, self).__call__()
+        return [item for item in value if item is not None]
 
 
 @adapter(long)
