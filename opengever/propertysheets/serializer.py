@@ -50,16 +50,29 @@ class PropertySheetFieldSerializer(DefaultFieldSerializer):
             for name, field in definition.get_fields():
                 if name not in data:
                     continue
-                if not IChoice.providedBy(field):
-                    continue
 
-                field_value = data[name]
-                try:
-                    term = field.vocabulary.getTerm(field_value)
-                    data[name] = {"token": term.token, "title": term.title}
-                except LookupError:
-                    # in case of invalid terms we pretend that there is no
-                    # value in storage and drop the field from serialization
-                    del data[name]
+                if IChoice.providedBy(field):
+                    field_value = data[name]
+                    try:
+                        term = field.vocabulary.getTerm(field_value)
+                        data[name] = {"token": term.token, "title": term.title}
+                    except LookupError:
+                        # in case of invalid terms we pretend that there is no
+                        # value in storage and drop the field from serialization
+                        del data[name]
+
+                elif IChoice.providedBy(field.value_type):
+                    field_values = data[name]
+                    tokenized_values = []
+                    for field_value in field_values:
+                        try:
+                            term = field.value_type.vocabulary.getTerm(field_value)
+                            tokenized_values.append({"token": term.token, "title": term.title})
+                        except LookupError:
+                            # In case of invalid terms we skip them and pretend there
+                            # is no such value
+                            pass
+
+                    data[name] = tokenized_values
 
         return value

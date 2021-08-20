@@ -55,6 +55,38 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
             self.serializer(),
         )
 
+    def test_serializes_multiple_choice_fields_as_a_list_of_token_title_object(self):
+        self.login(self.regular_user)
+
+        choices = [u"one", u"two", u"dr\xfc\xfc"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "multiple_choice", u"multichoose", u"Multi Choose", u"", True, values=choices
+            )
+        )
+        self.document.document_type = u"question"
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "multichoose": [u"dr\xfc\xfc", u"one"],
+            }
+        }
+
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "multichoose": [
+                        {"title": u"dr\xfc\xfc",
+                         "token": u"dr\xfc\xfc".encode("unicode_escape")},
+                        {"title": u"one", "token": u"one"}
+                    ]
+                }
+            },
+            self.serializer(),
+        )
+
     def test_skips_invalid_vocabulary_values_during_serialization(self):
         self.login(self.regular_user)
 

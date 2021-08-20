@@ -19,6 +19,8 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("bool", u"yesorno", u"Yes or no", u"", True)
             .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -31,6 +33,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
                 "IDocumentMetadata.document_type.question": {
                     "yesorno": False,
                     "choose": u"zw\xf6i".encode("unicode_escape"),
+                    "choosemulti": ["one", "three"],
                     "num": 123,
                     "text": u"bl\xe4\nblub",
                     "textline": u"bl\xe4",
@@ -47,6 +50,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             "IDocumentMetadata.document_type.question": {
                 "yesorno": False,
                 "choose": u"zw\xf6i",
+                "choosemulti": ["three", "one"],
                 "num": 123,
                 "text": u"bl\xe4\nblub",
                 "textline": u"bl\xe4",

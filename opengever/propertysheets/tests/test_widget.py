@@ -25,6 +25,8 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
             )
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -44,6 +46,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Custom properties",  # the composite field label
                 u"Yes or no",
                 u"Choose",
+                u"Choose Multi",
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
@@ -55,6 +58,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
             {
                 "Yes or no": True,
                 "Choose": u"zw\xf6i",
+                "Choose Multi": ["one", "three"],
                 "Number": "3",
                 "Some lines of text": "Foo\nbar",
                 "A line of text": u"b\xe4\xe4",
@@ -69,6 +73,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 3,
                     "yesorno": True,
                     "choose": u"zw\xf6i",
+                    "choosemulti": ["three", "one"],
                     "textline": u"b\xe4\xe4",
                 }
             },

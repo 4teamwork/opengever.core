@@ -13,6 +13,7 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
+from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.globalrequest import getRequest
@@ -88,6 +89,7 @@ class PropertySheetSchemaDefinition(object):
     FACTORIES = {
         'bool': fields.BoolFactory,
         'choice': fields.ChoiceFactory,
+        'multiple_choice': fields.MultiChoiceFactory,
         'int': fields.IntFactory,
         'text': fields.TextFactory,
         'textline': fields.TextLineFactory,
@@ -183,15 +185,17 @@ class PropertySheetSchemaDefinition(object):
             "required": required,
         }
 
-        if field_type == 'choice':
+        if field_type in ['choice', 'multiple_choice']:
             if not values:
                 raise InvalidFieldTypeDefinition(
-                    "For 'choice' fields types values are required."
+                    "For 'choice' or 'multiple_choice' fields types "
+                    "values are required."
                 )
 
             if not all(isinstance(choice, basestring) for choice in values):
                 raise InvalidFieldTypeDefinition(
-                    "For 'choice' field types values must be string."
+                    "For 'choice' or 'multiple_choice' fields types "
+                    "values must be string."
                 )
 
             # Using `unicode_escape` encoding for tokens is a requirement of
@@ -203,12 +207,19 @@ class PropertySheetSchemaDefinition(object):
                 )
                 for item in values
             ]
-            properties['vocabulary'] = SimpleVocabulary(terms)
-            # The field factory injects an empty list as values argument if it
-            # is not set. This will lead to a conflict with the vocabylary we
-            # provide here. We prevent this error by actively setting the
-            # values argument to None.
-            properties['values'] = None
+
+            vocabulary = SimpleVocabulary(terms)
+            if field_type == 'multiple_choice':
+                properties['value_type'] = Choice(
+                    values=None, vocabulary=SimpleVocabulary(terms))
+            else:
+                properties['vocabulary'] = vocabulary
+                # The field factory injects an empty list as values argument if it
+                # is not set. This will lead to a conflict with the vocabylary we
+                # provide here. We prevent this error by actively setting the
+                # values argument to None.
+                properties['values'] = None
+
         elif values:
             raise InvalidFieldTypeDefinition(
                 "The argument 'values' is only valid for 'choice' fields."
