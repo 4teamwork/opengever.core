@@ -3,6 +3,9 @@ from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
+from opengever.base.utils import unrestrictedUuidToObject
+from opengever.document.approvals import IApprovalList
+from opengever.document.versioner import Versioner
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.task import _
@@ -17,6 +20,7 @@ from opengever.task.browser.modify_deadline import validate_deadline_changed
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import sync_task_response
+from opengever.task.sources import DocumentsFromTaskSourceBinder
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
 from plone import api
@@ -25,6 +29,7 @@ from z3c.form import validator
 from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
+from zExceptions import BadRequest
 from zope import schema
 from zope.component import adapter
 from zope.component import getUtility
@@ -103,6 +108,20 @@ class INewResponsibleSchema(Schema):
         description=_(u'help_responsible_client', default=u''),
         vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True)
+
+
+class IApprovedDocuments(Schema):
+
+    approved_documents = schema.List(
+        title=_(u"label_approved_documents", default=u"Approved documents"),
+        description=_(u"help_approved_documents", default=u""),
+        value_type=schema.Choice(
+            source=DocumentsFromTaskSourceBinder(),
+            ),
+        required=False,
+        missing_value=[],
+        default=[]
+    )
 
 
 class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
@@ -233,15 +252,37 @@ validator.WidgetValidatorDiscriminators(
 @adapter(ITask, IBrowserRequest)
 class ResolveTransitionExtender(DefaultTransitionExtender):
 
-    schemas = [IResponse, ]
+    schemas = [IResponse, IApprovedDocuments]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
+        approved_documents = self.maybe_approve_documents(transition_params)
         response = add_simple_response(
             self.context, transition=transition,
-            text=transition_params.get('text'))
+            text=transition_params.get('text'),
+            approved_documents=approved_documents,
+        )
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         self.sync_change(transition, transition_params.get('text'), disable_sync)
+
+    def maybe_approve_documents(self, transition_params):
+        approved_documents = transition_params.get('approved_documents', [])
+        approved_documents = map(unrestrictedUuidToObject, approved_documents)
+
+        if approved_documents:
+            if self.context.task_type != 'approval':
+                raise BadRequest(
+                    "Param 'approved_documents' is only supported for tasks "
+                    "of task_type 'approval'.")
+
+            for doc in approved_documents:
+                approvals = IApprovalList(doc)
+                versioner = Versioner(doc)
+                current_version_id = versioner.get_current_version_id(
+                    missing_as_zero=True)
+                approvals.add(current_version_id, self.context)
+
+        return approved_documents
 
 
 @implementer(ITransitionExtender)

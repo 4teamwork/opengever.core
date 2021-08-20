@@ -94,12 +94,13 @@ def get_task_type_title(task_type, language):
 
 def add_simple_response(task, text='', field_changes=None, added_objects=None,
                         successor_oguid=None, supress_events=False,
-                        supress_activity=False, **kwargs):
+                        supress_activity=False, approved_documents=(), **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
     `added_objects`: objects which were added to the task
     `successor_oguid`: an OGUID to a (remote) object which was referenced.
+    `approved_documents`: Documents that have been approved.
     """
 
     response = TaskResponse()
@@ -122,6 +123,12 @@ def add_simple_response(task, text='', field_changes=None, added_objects=None,
         for obj in added_objects:
             iid = intids.getId(obj)
             response.added_objects.append(RelationValue(iid))
+
+    if approved_documents:
+        intids = getUtility(IIntIds)
+        for obj in approved_documents:
+            iid = intids.getId(obj)
+            response.approved_documents.append(RelationValue(iid))
 
     if successor_oguid:
         response.successor_oguid = successor_oguid

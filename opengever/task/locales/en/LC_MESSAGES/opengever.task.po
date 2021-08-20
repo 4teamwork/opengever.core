@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-04-23 10:53+0000\n"
+"POT-Creation-Date: 2021-08-18 08:25+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -327,6 +327,10 @@ msgstr "Select the repository folder in which the dossier should be created."
 msgid "help_accept_task_response"
 msgstr "Enter an answer text that will be shown as the response when the task is accepted."
 
+#: ./opengever/task/transition.py
+msgid "help_approved_documents"
+msgstr "Approved documents"
+
 #. German translation: Geben sie einen Antwort text ein, dieser wird bei der Aufgabenkopie als Antwort hinzugefügt.
 #. Default: "Enter a answer text which will be shown as response on the succesor task."
 #: ./opengever/task/browser/assign_dossier.py
@@ -494,6 +498,11 @@ msgstr "Add task to sequence"
 #: ./opengever/task/viewlets/templates/actionmenuviewlet.pt
 msgid "label_agency"
 msgstr "Deputy settings"
+
+#. Default: "Approved documents"
+#: ./opengever/task/transition.py
+msgid "label_approved_documents"
+msgstr "Approved documents"
 
 #. German translation: Weiterleitung zuweisen an ein ...
 #. Default: "Assign to a ..."
