@@ -29,7 +29,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                                           'principal:AuthenticatedUsers',
                                           'principal:fa_users',
                                           'Anonymous']),
-                ('email', u'kathi.barfuss@gever.local'),
+                ('email', u'foo@example.com'),
                 ('location', None),
                 ('portrait', None),
                 ('fullname', u'B\xe4rfuss K\xe4thi'),

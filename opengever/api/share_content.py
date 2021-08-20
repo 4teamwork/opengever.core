@@ -1,4 +1,4 @@
-from opengever.ogds.base.utils import ogds_service
+from opengever.ogds.base.actor import ActorLookup
 from opengever.workspace.content_sharing_mailer import ContentSharingMailer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -11,20 +11,21 @@ from zope.interface import alsoProvides
 
 class ShareContentPost(Service):
 
-    def get_email_adresses(self, users):
-        service = ogds_service()
-        emails = []
-        for user in users:
-            emails.append(service.fetch_user(user['token']).email)
+    def get_email_adresses(self, actors):
+        emails = set()
+        for actor in actors:
+            for representative in ActorLookup(actor['token']).lookup().representatives():
+                if representative.active:
+                    emails.add(representative.email)
         return ', '.join(emails)
 
     def extract_data(self):
         data = json_body(self.request)
         self.comment = data.get('comment', u'')
-        self.users_to = data.get('users_to', [])
-        if not self.users_to:
-            raise BadRequest("Property 'users_to' is required")
-        self.users_cc = data.get('users_cc', [])
+        self.actors_to = data.get('actors_to', [])
+        if not self.actors_to:
+            raise BadRequest("Property 'actors_to' is required")
+        self.actors_cc = data.get('actors_cc', [])
 
     def reply(self):
         if not is_within_workspace(self.context):
@@ -32,8 +33,8 @@ class ShareContentPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         self.extract_data()
-        emails_to = self.get_email_adresses(self.users_to)
-        emails_cc = self.get_email_adresses(self.users_cc)
+        emails_to = self.get_email_adresses(self.actors_to)
+        emails_cc = self.get_email_adresses(self.actors_cc)
 
         sender_id = api.user.get_current().getId()
         mailer = ContentSharingMailer()

@@ -2045,7 +2045,11 @@ class OpengeverContentFixture(object):
         )
 
         builder.update_properties()  # updates builder.userid
-        email = '{}@gever.local'.format(builder.userid)
+        if 'email' in kwargs:
+            email = kwargs['email']
+        else:
+            email = '{}@gever.local'.format(builder.userid)
+
         plone_user = create(builder.with_email(email))
 
         create(

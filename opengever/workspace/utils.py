@@ -45,6 +45,14 @@ def get_containing_workspace(context):
 
 
 def get_workspace_user_ids(context, disregard_block=False):
+    return get_workspace_actor_ids(context, 'user', disregard_block)
+
+
+def get_workspace_group_ids(context):
+    return get_workspace_actor_ids(context, 'group')
+
+
+def get_workspace_actor_ids(context, actor_type, disregard_block=False, ):
     """ Walks up the Acquisition chain and collects all userids assigned
     to a role with the View permission.
     """
@@ -52,23 +60,23 @@ def get_workspace_user_ids(context, disregard_block=False):
     if not containing_workspace:
         return []
 
-    users = set([])
+    actor_ids = set([])
     allowed_roles_to_view = roles_of_permission(containing_workspace, 'View')
     portal = api.portal.get()
 
-    def is_valid_userid(*args):
-        user, roles, role_type, name = args
-        return role_type == u'user' and set(roles) & set(allowed_roles_to_view)
+    def is_valid_actorid(valid_role_type, actor, roles, role_type, name):
+        return role_type == valid_role_type and set(roles) & set(allowed_roles_to_view)
 
     for content in aq_chain(containing_workspace):
         if aq_base(content) == aq_base(portal):
             break
-        userroles = portal.acl_users._getLocalRolesForDisplay(content)
-        users = users.union(set(
+        actorroles = portal.acl_users._getLocalRolesForDisplay(content)
+        actor_ids = actor_ids.union(set(
             map(itemgetter(0),
-                filter(lambda args: is_valid_userid(*args), userroles))))
+                filter(lambda args: is_valid_actorid(actor_type, *args), actorroles))))
+
         if getattr(aq_base(containing_workspace), '__ac_local_roles_block__', None) \
                 and not disregard_block:
             break
 
-    return list(users)
+    return list(actor_ids)

@@ -1,3 +1,4 @@
+from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
 from opengever.ogds.base.sources import ActualWorkspaceMembersSource
 from opengever.workspace.utils import is_within_workspace
 from plone.restapi.batching import HypermediaBatch
@@ -15,6 +16,11 @@ class ActualWorkspaceMembersGet(Service):
         source = ActualWorkspaceMembersSource(self.context)
         query = safe_unicode(self.request.form.get('query', ''))
         results = source.search(query)
+
+        if self.request.form.get('include_groups'):
+            group_source = ActualWorkspaceGroupsSource(self.context)
+            group_results = group_source.search(query)
+            results.extend(group_results)
 
         batch = HypermediaBatch(self.request, results)
 
