@@ -276,7 +276,7 @@ msgstr "Saisie d'un texte pour la réponse créée automatiquement."
 
 #: ./opengever/task/transition.py
 msgid "help_approved_documents"
-msgstr ""
+msgstr "Documents approuvés"
 
 #. Default: "Enter a answer text which will be shown as response on the succesor task."
 #: ./opengever/task/browser/assign_dossier.py
@@ -420,7 +420,7 @@ msgstr "Suppléance"
 #. Default: "Approved documents"
 #: ./opengever/task/transition.py
 msgid "label_approved_documents"
-msgstr ""
+msgstr "Documents approuvés"
 
 #. Default: "Assign to a ..."
 #: ./opengever/task/browser/assign_dossier.py
