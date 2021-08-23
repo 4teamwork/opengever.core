@@ -7,6 +7,7 @@ from opengever.activity.mailer import process_mail_queue
 from opengever.activity.model import Activity
 from opengever.activity.model import Resource
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.inbox.activities import ForwardingWatcherAddedActivity
@@ -218,6 +219,8 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
             self.portal, Oguid.for_object(forwarding).id,
             u'OK. That is something for me.', dossier=None)
 
+        create_session().expire_all()
+
         forwarding_resources = Resource.query.filter_by(oguid=Oguid.for_object(forwarding)).all()
         self.assertEqual(1, len(forwarding_resources))
         successor_resources = Resource.query.filter_by(oguid=Oguid.for_object(successor)).all()
@@ -253,6 +256,8 @@ class TestForwardingActivitesIntegration(IntegrationTestCase):
         task = accept_forwarding_with_successor(
             self.portal, Oguid.for_object(forwarding).id,
             u'OK. That is something for me.', dossier=self.dossier)
+
+        create_session().expire_all()
 
         forwarding_resources = Resource.query.filter_by(oguid=Oguid.for_object(forwarding)).all()
         self.assertEqual(1, len(forwarding_resources))
