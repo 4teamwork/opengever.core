@@ -275,7 +275,7 @@
                         "null",
                         "string"
                     ],
-                    "title": "Pr\u00e4fix des Aktenzeichens",
+                    "title": "Ordnungspositionsnummer",
                     "description": "",
                     "_zope_schema_type": "TextLine",
                     "default": "<H\u00f6chste auf dieser Ebene vergebene Nummer + 1>"

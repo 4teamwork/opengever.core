@@ -236,7 +236,7 @@
 
    .. py:attribute:: reference_number_prefix
 
-       :Feldname: :field-title:`Präfix des Aktenzeichens`
+       :Feldname: :field-title:`Ordnungspositionsnummer`
        :Datentyp: ``TextLine``
        
        :Default: <Höchste auf dieser Ebene vergebene Nummer + 1>

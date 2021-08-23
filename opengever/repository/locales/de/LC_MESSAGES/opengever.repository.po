@@ -193,7 +193,7 @@ msgstr "Aktenzeichen Zusatz"
 #. Default: "Repository number"
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
-msgstr "Präfix des Aktenzeichens"
+msgstr "Ordnungspositionsnummer"
 
 #. Default: "Referenced activity"
 #: ./opengever/repository/repositoryfolder.py

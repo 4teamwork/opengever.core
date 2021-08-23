@@ -224,7 +224,7 @@ msgstr "Proposals"
 msgid "label_reference_number_addendum"
 msgstr "Reference number addendum"
 
-#. German translation: Präfix des Aktenzeichens
+#. German translation: Ordnungspositionsnummer
 #. Default: "Repository number"
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
