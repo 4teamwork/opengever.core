@@ -40,10 +40,18 @@ class IReferenceNumberPrefix(model.Schema):
             ],
         )
 
+    # In technical contexts, this field / concept is still called
+    # "reference number prefix", even though that's incorrect. In any user
+    # facing context, it should be called "Repository number".
+    #
+    # This term only refers to the local component of a single
+    # RepositoryFolder. For the full dotted number and the complete reference
+    # number, different terms are used ("rubric" and "reference number",
+    # respectively).
     reference_number_prefix = schema.TextLine(
         title=_(
             u'label_reference_number_prefix',
-            default=u'Reference Prefix'),
+            default=u'Repository number'),
         required=False,
         defaultFactory=reference_number_prefix_default,
         )
