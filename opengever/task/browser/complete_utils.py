@@ -29,9 +29,9 @@ import json
 # harm than good.
 
 
-def complete_task_and_deliver_documents(task, transition,
-                                        docs_to_deliver=None,
-                                        response_text=None):
+def complete_task_and_deliver_documents(
+        task, transition, docs_to_deliver=None, response_text=None,
+        approved_documents=None):
     """Delivers the selected documents to the predecesser task and
     complete the task:
 
@@ -42,10 +42,14 @@ def complete_task_and_deliver_documents(task, transition,
     """
     # Syncing the workflow change is done during document delivery
     # (see below) therefore we skip the workflow syncing.
+    transition_data = {'text': response_text}
+    if approved_documents:
+        transition_data['approved_documents'] = approved_documents
+
     util.change_task_workflow_state(task,
                                     transition,
                                     disable_sync=True,
-                                    text=response_text)
+                                    **transition_data)
 
     response_obj = IResponseContainer(task).list()[-1]
 
