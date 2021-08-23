@@ -873,9 +873,18 @@
 
   <plone:service
       method="POST"
-      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      for="Products.CMFCore.interfaces.IFolderish"
       factory=".add.GeverFolderPost"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
       permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="PATCH"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".update.GeverContentPatch"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="cmf.ModifyPortalContent"
       />
 
   <plone:service

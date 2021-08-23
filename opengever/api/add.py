@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from Acquisition.interfaces import IAcquirer
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.meeting.browser.proposalforms import get_selected_template
 from opengever.meeting.browser.proposalforms import IAddProposalSupplementaryFields
 from opengever.quota.exceptions import ForbiddenByQuota
@@ -212,6 +214,10 @@ class GeverFolderPost(FolderPost):
 
         self.before_serialization(self.obj)
         serialized_obj = self.serialize_object()
+
+        # Handle dossier protection if required
+        if IProtectDossierMarker.providedBy(self.obj):
+            IProtectDossier(self.obj).protect()
 
         return serialized_obj
 
