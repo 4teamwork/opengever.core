@@ -9,7 +9,6 @@ from opengever.activity.roles import TASK_REMINDER_WATCHER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
-from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.base.model import create_session
 from zope.i18nmessageid import MessageFactory
 
@@ -231,7 +230,6 @@ NOTIFICATION_CONFIGURATION = [
         'activities': ['todo-assigned'],
         'default_settings': {
             'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
-            'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
         }
     },
     {
@@ -240,7 +238,6 @@ NOTIFICATION_CONFIGURATION = [
         'activities': ['todo-modified'],
         'default_settings': {
             'badge_notification_roles': [TODO_RESPONSIBLE_ROLE],
-            'digest_notification_roles': [WORKSPACE_MEMBER_ROLE],
         }
     },
     {
