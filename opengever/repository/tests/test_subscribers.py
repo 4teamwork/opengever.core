@@ -13,7 +13,7 @@ class TestReferencePrefixUpdating(IntegrationTestCase):
         self.assertEquals('Client1 1.1', obj2brain(self.leaf_repofolder).reference)
 
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Reference number component': u'7'}).save()
+        browser.fill({'Repository number': u'7'}).save()
         self.assertEquals('Client1 1.7', obj2brain(self.leaf_repofolder).reference)
 
     @browsing
@@ -26,5 +26,5 @@ class TestReferencePrefixUpdating(IntegrationTestCase):
         self.assertEquals('Client1 1.1 / 1', obj2brain(self.dossier).reference)
 
         browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Reference number component': u'7'}).save()
+        browser.fill({'Repository number': u'7'}).save()
         self.assertEquals('Client1 1.7 / 1', obj2brain(self.dossier).reference)

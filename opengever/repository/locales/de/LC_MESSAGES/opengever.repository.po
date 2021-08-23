@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-05-28 13:17+0000\n"
+"POT-Creation-Date: 2021-08-23 08:54+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -190,7 +190,7 @@ msgstr "Anträge"
 msgid "label_reference_number_addendum"
 msgstr "Aktenzeichen Zusatz"
 
-#. Default: "Reference Prefix"
+#. Default: "Repository number"
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
 msgstr "Präfix des Aktenzeichens"
