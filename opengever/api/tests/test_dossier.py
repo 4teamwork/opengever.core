@@ -29,6 +29,12 @@ class TestDossierSerializer(IntegrationTestCase):
         self.assertIn("blocked_local_roles", browser.json)
 
     @browsing
+    def test_dossier_serializer_contains_is_protected(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, method="GET", headers=self.api_headers)
+        self.assertIn("is_protected", browser.json)
+
+    @browsing
     def test_undeterminable_subdossier_within_items(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.dossier, method="GET", headers=self.api_headers)
