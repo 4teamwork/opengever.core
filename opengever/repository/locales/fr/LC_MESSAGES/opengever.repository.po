@@ -192,7 +192,7 @@ msgstr "Numéro de référence addendum"
 #. Default: "Repository number"
 #: ./opengever/repository/behaviors/referenceprefix.py
 msgid "label_reference_number_prefix"
-msgstr "Préfixe référence"
+msgstr "Numéro de classement"
 
 #. Default: "Referenced activity"
 #: ./opengever/repository/repositoryfolder.py
