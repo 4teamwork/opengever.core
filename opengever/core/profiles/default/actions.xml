@@ -819,6 +819,19 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="protect_dossier" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Protect dossier</property>
+      <property name="description">Gever-UI action</property>
+      <property name="icon_expr" />
+      <property name="available_expr">
+        python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker')
+      </property>
+      <property name="permissions">
+        <element value="opengever.dossier: Protect dossier" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
     <object name="prefix_manager" meta_type="CMF Action" i18n:domain="opengever.core">
       <property name="title" i18n:translate="">Prefix Manager</property>
       <property name="description" i18n:translate="">Unlock unused repository prefixes.</property>
