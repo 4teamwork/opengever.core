@@ -301,7 +301,7 @@ class Document(Item, BaseDocumentMixin):
         relations = IRelatedDocuments(self).relatedItems
 
         if relations:
-            _related_items += [rel.to_object for rel in relations]
+            _related_items += [rel.to_object for rel in relations if not rel.isBroken()]
 
         if bidirectional:
             catalog = getUtility(ICatalog)

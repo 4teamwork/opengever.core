@@ -183,7 +183,8 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
         ids = self.get_dossier_back_relations()
         if IDossier(self.context).relatedDossier:
             for rel in IDossier(self.context).relatedDossier:
-                ids.append(rel.to_id)
+                if not rel.isBroken():
+                    ids.append(rel.to_id)
 
         for iid in ids:
             obj = intids.queryObject(iid)
