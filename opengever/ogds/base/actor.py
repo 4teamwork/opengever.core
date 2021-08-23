@@ -485,7 +485,7 @@ class OGDSUserActor(Actor):
 
     def represents_url(self):
         return '{}/@ogds-users/{}'.format(
-            api.portal.get().absolute_url(), self.identifier)
+            api.portal.get().absolute_url(), self.identifier.split(':')[-1])
 
     def get_portrait_url(self):
         mtool = api.portal.get_tool('portal_membership')
@@ -641,7 +641,8 @@ class ActorLookup(object):
         return IPropertiedUser.providedBy(user) or IMemberData.providedBy(user)
 
     def load_user(self):
-        user = ogds_service().fetch_user(self.identifier)
+        userid = self.identifier.split(':')[-1]
+        user = ogds_service().fetch_user(userid)
         if not user:
             portal = getSite()
             portal_membership = getToolByName(portal, 'portal_membership')

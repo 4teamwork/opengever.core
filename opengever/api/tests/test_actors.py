@@ -180,6 +180,36 @@ class TestActorsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_actors_response_for_ogds_user_with_orgunit(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'fa:jurgen.konig'
+        url = "{}/{}".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictEqual(
+            {
+                u'@id': url,
+                u'@type': u'virtual.ogds.actor',
+                u'active': True,
+                u'actor_type': u'user',
+                u'identifier': actor_id,
+                u'portrait_url': None,
+                u'label': u'K\xf6nig J\xfcrgen',
+                u'representatives': [
+                    {
+                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
+                        u'identifier': u'jurgen.konig',
+                    },
+                ],
+                u'represents': {
+                    u'@id': u'http://nohost/plone/@ogds-users/jurgen.konig',
+                },
+            },
+            browser.json)
+
+    @browsing
     def test_actors_response_for_group(self, browser):
         self.login(self.regular_user, browser=browser)
 
