@@ -28,10 +28,21 @@ Ein actor ist kein Plone Inhaltstyp, deshalb beinhaltet die Response weniger Inf
 
       {
         "@id": "http://example.org/@actors/peter.mueller",
+        "@type": "virtual.ogds.actor",
+        "active": true,
         "actor_type": "user",
         "identifier": "peter.mueller",
         "label": "Mueller Peter",
-        "portrait_url": "http://example.org/defaultUser.png"
+        "portrait_url": "http://example.org/portraits/peter.mueller.png"
+        "representatives": [
+           {
+               "@id": "http://example.org/@actors/peter.mueller",
+               "identifier": "peter.mueller"
+           },
+        ],
+        "represents": {
+            "@id": "http://example.org/@actors/peter.mueller"
+        }
       }
 
 Via POST können die Daten von mehreren actors mit einem Request abgefragt werden. Im Request-body wird die Liste von actor ID angegeben:
@@ -66,17 +77,39 @@ Via POST können die Daten von mehreren actors mit einem Request abgefragt werde
         "items": [
           {
             "@id": "http://example.org/@actors/peter.mueller",
+            "@type": "virtual.ogds.actor",
+            "active": true,
             "actor_type": "user",
             "identifier": "peter.mueller",
             "label": "Mueller Peter",
-            "portrait_url": "http://example.org/defaultUser.png"
+            "portrait_url": "http://example.org/portraits/peter.mueller.png",
+            "representatives": [
+               {
+                 "@id": "http://example.org/@actors/peter.mueller",
+                 "identifier": "peter.mueller"
+               },
+            ],
+            "represents": {
+               "@id": "http://example.org/@actors/peter.mueller"
+            }
           },
           {
             "@id": "http://example.org/@actors/inbox:fa",
+            "@type": "virtual.ogds.actor",
+            "active": true,
             "actor_type": "inbox",
             "identifier": "inbox:afi",
             "label": "Eingangskorb",
-            "portrait_url": null
+            "portrait_url": null,
+            "representatives": [
+               {
+                 "@id": "http://example.org/@actors/peter.mueller",
+                 "identifier": "peter.mueller"
+               },
+            ],
+            "represents": {
+               "@id": "http://example.org/eingangskorb/eingangskorb_fa"
+            }
           },
           { "...": "..." }
         ]
