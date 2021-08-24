@@ -26,6 +26,7 @@ For known actor types use:
 
 from opengever.base.utils import escape_html
 from opengever.contact.utils import get_contactfolder_url
+from opengever.inbox.utils import get_inbox_for_org_unit
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.interfaces import IActor
@@ -138,6 +139,10 @@ class Actor(object):
 
         return link
 
+    @property
+    def is_active(self):
+        return True
+
     def corresponds_to(self, user):
         raise NotImplementedError()
 
@@ -146,6 +151,9 @@ class Actor(object):
         raise NotImplementedError()
 
     def represents(self):
+        raise NotImplementedError()
+
+    def represents_url(self):
         raise NotImplementedError()
 
     def representatives(self):
@@ -175,7 +183,14 @@ class NullActor(object):
     def get_link(self, with_icon=False):
         return self.identifier or u''
 
+    @property
+    def is_active(self):
+        return False
+
     def represents(self):
+        return None
+
+    def represents_url(self):
         return None
 
     def representatives(self):
@@ -213,6 +228,9 @@ class SystemActor(object):
     def represents(self):
         return None
 
+    def represents_url(self):
+        return None
+
     def representatives(self):
         return []
 
@@ -247,6 +265,10 @@ class InboxActor(Actor):
         return translate(label, context=getRequest())
 
     @property
+    def is_active(self):
+        return self.org_unit.enabled
+
+    @property
     def permission_identifier(self):
         return self.org_unit.inbox_group.groupid
 
@@ -255,6 +277,13 @@ class InboxActor(Actor):
 
     def represents(self):
         return self.org_unit
+
+    def represents_url(self):
+        inbox = get_inbox_for_org_unit(self.org_unit.id())
+        if inbox is not None:
+            return inbox.absolute_url()
+        else:
+            return None
 
     def get_portrait_url(self):
         return None
@@ -281,6 +310,10 @@ class TeamActor(Actor):
         return self.team.label()
 
     @property
+    def is_active(self):
+        return self.team.active
+
+    @property
     def permission_identifier(self):
         return self.team.group.groupid
 
@@ -289,6 +322,10 @@ class TeamActor(Actor):
 
     def represents(self):
         return self.team
+
+    def represents_url(self):
+        return '{}/@teams/{}'.format(
+            api.portal.getSite().absolute_url(), self.identifier)
 
     def get_portrait_url(self):
         return None
@@ -313,6 +350,10 @@ class CommitteeActor(Actor):
     def get_label(self, with_principal=None):
         return self.committee.title
 
+    @property
+    def is_active(self):
+        return self.committee.is_active()
+
     def representatives(self):
         # Avoid circular imports
         from opengever.meeting.activity.helpers import get_users_by_group
@@ -320,6 +361,9 @@ class CommitteeActor(Actor):
 
     def represents(self):
         return self.committee
+
+    def represents_url(self):
+        return self.represents().resolve_committee().absolute_url()
 
     def get_portrait_url(self):
         return None
@@ -359,6 +403,9 @@ class ContactActor(Actor):
     def represents(self):
         return self.contact
 
+    def represents_url(self):
+        return self.represents().getURL()
+
     def get_portrait_url(self):
         return None
 
@@ -392,10 +439,18 @@ class PloneUserActor(Actor):
     def represents(self):
         return self.user
 
+    def represents_url(self):
+        return '{}/@users/{}'.format(
+            api.portal.getSite().absolute_url(), self.identifier)
+
     def get_portrait_url(self):
-        portrait = self.user.getPersonalPortrait()
-        if portrait:
-            return portrait.absolute_url()
+        mtool = api.portal.get_tool('portal_membership')
+        portrait = mtool.getPersonalPortrait(self.user.id)
+        portrait_url = portrait.absolute_url()
+        if not portrait_url.endswith('/defaultUser.png'):
+            return portrait_url
+        else:
+            return None
 
 
 @implementer(IActor)
@@ -415,6 +470,10 @@ class OGDSUserActor(Actor):
         return UserDetails.url_for(self.user.userid)
 
     @property
+    def is_active(self):
+        return self.user.active
+
+    @property
     def permission_identifier(self):
         return self.identifier
 
@@ -424,12 +483,18 @@ class OGDSUserActor(Actor):
     def represents(self):
         return self.user
 
+    def represents_url(self):
+        return '{}/@ogds-users/{}'.format(
+            api.portal.get().absolute_url(), self.identifier.split(':')[-1])
+
     def get_portrait_url(self):
         mtool = api.portal.get_tool('portal_membership')
-        member = mtool.getMemberById(self.user.userid)
-        portrait = member.getPersonalPortrait()
-        if portrait:
-            return portrait.absolute_url()
+        portrait = mtool.getPersonalPortrait(self.user.userid)
+        portrait_url = portrait.absolute_url()
+        if not portrait_url.endswith('/defaultUser.png'):
+            return portrait_url
+        else:
+            return None
 
 
 @implementer(IActor)
@@ -451,6 +516,10 @@ class OGDSGroupActor(Actor):
         return groupmembers_url(self.group.groupid)
 
     @property
+    def is_active(self):
+        return self.group.active
+
+    @property
     def permission_identifier(self):
         return self.identifier
 
@@ -459,6 +528,10 @@ class OGDSGroupActor(Actor):
 
     def represents(self):
         return self.group
+
+    def represents_url(self):
+        return '{}/@ogds-groups/{}'.format(
+            api.portal.get().absolute_url(), self.group.groupid)
 
     def get_portrait_url(self):
         return None
@@ -490,6 +563,9 @@ class InteractiveActor(Actor):
         return u''
 
     def represents(self):
+        return None
+
+    def represents_url(self):
         return None
 
     def representatives(self):
@@ -565,7 +641,8 @@ class ActorLookup(object):
         return IPropertiedUser.providedBy(user) or IMemberData.providedBy(user)
 
     def load_user(self):
-        user = ogds_service().fetch_user(self.identifier)
+        userid = self.identifier.split(':')[-1]
+        user = ogds_service().fetch_user(userid)
         if not user:
             portal = getSite()
             portal_membership = getToolByName(portal, 'portal_membership')

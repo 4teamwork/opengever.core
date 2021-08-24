@@ -34,13 +34,23 @@ class SerializeActorToJson(object):
         self.request = request
 
     def __call__(self):
+        represents_url = self.context.represents_url()
+        represents = {'@id': represents_url} if represents_url else None
+
         result = {
             '@id': '{}/@actors/{}'.format(
                 api.portal.get().absolute_url(), self.context.identifier),
+            '@type': 'virtual.ogds.actor',
+            'active': self.context.is_active,
             'actor_type': self.context.actor_type,
             'identifier': self.context.identifier,
             'label': self.context.get_label(with_principal=False),
             'portrait_url': self.context.get_portrait_url(),
+            'representatives': [
+                serialize_actor_id_to_json_summary(r.userid)
+                for r in self.context.representatives()
+            ],
+            'represents': represents,
         }
 
         return result
