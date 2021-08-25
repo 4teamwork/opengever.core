@@ -114,8 +114,13 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
     def getActionsMenuItems(self, context, request):
         results = super(OGCombinedActionsWorkflowMenu, self).getActionsMenuItems(
             context, request)
-        return filter(lambda item: (item.get('extra', {}).get('id', None) not in
-                                    ['create_forwarding', 'create_task_from_proposal']), results)
+        filtered_actions = [
+            'create_forwarding',
+            'create_task_from_proposal',
+            'protect_dossier',
+        ]
+        return filter(lambda item: (item.get('extra', {}).get('id', None)
+                                    not in filtered_actions), results)
 
     def getWorkflowMenuItems(self, context, request):
         """ftw.contentmenu >= 2.2.2 does no longer protect the workflows
