@@ -1543,38 +1543,6 @@ class TestObjectButtonsGetForTemplates(ObjectButtonsTestBase):
         )
 
 
-class TestObjectButtonsGetForDossiers(ObjectButtonsTestBase):
-
-    @browsing
-    def test_available_object_button_actions_for_dossier(self, browser):
-        self.login(self.dossier_responsible, browser)
-        expected_object_buttons = [
-            {u'icon': u'', u'id': u'zipexport', u'title': u'Export as Zip'},
-            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
-            {u'icon': u'', u'id': u'pdf_dossierdetails', u'title': u'Print details (PDF)'},
-            {u'icon': u'', u'id': u'export_pdf', u'title': u'Cover page (PDF)'}
-        ]
-        self.assertListEqual(
-            expected_object_buttons,
-            self.get_object_buttons(browser, self.dossier),
-        )
-
-    @browsing
-    def test_available_object_button_actions_for_dossier_as_dossier_manager(self, browser):
-        self.login(self.dossier_manager, browser)
-        expected_object_buttons = [
-            {u'icon': u'', u'id': u'zipexport', u'title': u'Export as Zip'},
-            {u'icon': u'', u'id': u'properties', u'title': u'Properties'},
-            {u'icon': u'', u'id': u'protect_dossier', u'title': u'Protect dossier'},
-            {u'icon': u'', u'id': u'pdf_dossierdetails', u'title': u'Print details (PDF)'},
-            {u'icon': u'', u'id': u'export_pdf', u'title': u'Cover page (PDF)'}
-        ]
-        self.assertListEqual(
-            expected_object_buttons,
-            self.get_object_buttons(browser, self.dossier),
-        )
-
-
 class TestObjectButtonsGetForDossierTemplateDocuments(ObjectButtonsTestBase):
 
     @browsing
