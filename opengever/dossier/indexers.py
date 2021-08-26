@@ -239,11 +239,13 @@ class SearchableTextExtender(object):
             field = getFields(IDossierCustomProperties).get('custom_properties')
             active_slot = field.get_active_assignment_slot(self.context)
             for slot in [active_slot, field.default_slot]:
-                searchable.extend([
-                    ensure_str(value) for value
-                    in custom_properties.get(slot, {}).values()
-                    if not isinstance(value, bool)
-                ])
+                for value in custom_properties.get(slot, {}).values():
+                    if isinstance(value, bool):
+                        continue
+                    elif isinstance(value, list):
+                        searchable.extend([ensure_str(item) for item in value])
+                    else:
+                        searchable.append(ensure_str(value))
 
         return ' '.join(searchable)
 

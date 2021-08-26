@@ -210,11 +210,13 @@ def metadata(obj):
         field = getFields(IDocumentCustomProperties).get('custom_properties')
         active_slot = field.get_active_assignment_slot(obj)
         for slot in [active_slot, field.default_slot]:
-            metadata.extend([
-                ensure_str(value) for value
-                in custom_properties.get(slot, {}).values()
-                if not isinstance(value, bool)
-            ])
+            for value in custom_properties.get(slot, {}).values():
+                if isinstance(value, bool):
+                    continue
+                elif isinstance(value, list):
+                    metadata.extend([ensure_str(item) for item in value])
+                else:
+                    metadata.append(ensure_str(value))
 
     return ' '.join(metadata)
 

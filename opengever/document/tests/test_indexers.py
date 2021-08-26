@@ -258,6 +258,8 @@ class TestDocumentIndexers(FunctionalTestCase):
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("bool", u"yesorno", u"Yes or no", u"", True)
             .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -267,6 +269,7 @@ class TestDocumentIndexers(FunctionalTestCase):
             "IDocumentMetadata.document_type.question": {
                 "yesorno": False,
                 "choose": u"gr\xfcn",
+                "choosemulti": ["rot", "blau"],
                 "num": 122333,
                 "text": u"K\xe4fer\nJ\xe4ger",
                 "textline": u"Kr\xe4he",
@@ -278,6 +281,8 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertIn(u"K\xe4fer", indexed_value)
         self.assertIn(u"J\xe4ger", indexed_value)
         self.assertIn(u"Kr\xe4he", indexed_value)
+        self.assertIn(u"rot", indexed_value)
+        self.assertIn(u"blau", indexed_value)
 
 
 class SolrDocumentIndexer(SolrIntegrationTestCase):
