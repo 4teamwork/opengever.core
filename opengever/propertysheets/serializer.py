@@ -61,7 +61,8 @@ class PropertySheetFieldSerializer(DefaultFieldSerializer):
                         # value in storage and drop the field from serialization
                         del data[name]
 
-                elif IChoice.providedBy(field.value_type):
+                elif hasattr(field, 'value_type') and IChoice.providedBy(
+                        field.value_type):
                     field_values = data[name]
                     tokenized_values = []
                     for field_value in field_values:
