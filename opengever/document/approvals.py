@@ -1,3 +1,4 @@
+from AccessControl.unauthorized import Unauthorized
 from collections import defaultdict
 from datetime import datetime
 from opengever.document.behaviors import IBaseDocument
@@ -149,8 +150,15 @@ class ApprovalList(object):
            at least one user (but the current one hasn't).
         - `None` otherwise (no approvals at all)
         """
-        current_version_id = Versioner(self.context).get_current_version_id(
-            missing_as_zero=True)
+
+        try:
+            current_version_id = Versioner(self.context).get_current_version_id(
+                missing_as_zero=True)
+        except Unauthorized:
+            # In some cases the current user is not allowed to access the history
+            # metadata of the original object, in this case we remove all approvals
+            return None
+
         approvals = self.get_grouped_by_version_id()
 
         current_version_approvals = approvals.get(current_version_id)
