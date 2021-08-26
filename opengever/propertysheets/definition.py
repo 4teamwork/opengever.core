@@ -22,6 +22,7 @@ from zope.schema import Choice
 from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
 from zope.schema import Int
+from zope.schema import Set
 from zope.schema import TextLine
 from zope.schema import ValidationError
 from zope.schema.interfaces import IVocabularyFactory
@@ -43,6 +44,8 @@ class SolrDynamicField(object):
         Choice: 'string',
         Int: 'int',
         TextLine: 'string',
+        # We currently only support multiple_choice for string values
+        Set: 'strings'
     }
     DYNAMIC_FIELD_IDENT = '_custom_field_'
 

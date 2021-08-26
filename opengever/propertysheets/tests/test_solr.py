@@ -42,6 +42,7 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
             "IDocumentMetadata.document_type.regulations": {
                 "yesorno": False,
                 "choose": u"gr\xfcn",
+                "choosemulti": ["two", "three"],
                 "num": 122333,
                 "text": u"K\xe4fer\nJ\xe4ger",
                 "textline": u"Kr\xe4he",
@@ -55,6 +56,8 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
             solr_doc.get(u'yesorno_custom_field_boolean'), False)
         self.assertEqual(
             solr_doc.get(u'choose_custom_field_string'), u"gr\xfcn")
+        self.assertEqual(
+            solr_doc.get(u'choosemulti_custom_field_strings'), ["three", "two"])
         self.assertEqual(
             solr_doc.get(u'num_custom_field_int'), 122333)
         self.assertNotIn(u'text_custom_field_string', solr_doc)
