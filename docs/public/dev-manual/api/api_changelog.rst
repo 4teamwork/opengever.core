@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add new endpoint ``@reactivate-local-group`` (see :ref:`docs <reactivate-local-group>`)
+
 
 2021.17.0 (2021-08-30)
 ----------------------

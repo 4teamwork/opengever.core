@@ -1352,6 +1352,15 @@
       />
 
   <plone:service
+      method="POST"
+      name="@reactivate-local-group"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".reactivate_local_group.ReactivateLocalGroupPost"
+      permission="opengever.api.ManageGroups"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
       method="GET"
       name="@participations"
       for="opengever.dossier.behaviors.participation.IParticipationAwareMarker"
