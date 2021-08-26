@@ -20,6 +20,7 @@ class PatchActionInfo(MonkeyPatch):
             if object is not None and ( category.startswith('object') or
                                         category.startswith('workflow') or
                                         category.startswith('file') or  # <-- patched
+                                        category == 'ui_context_actions' or  # <-- patched
                                         category.startswith('document') ):
                 context = object
             else:

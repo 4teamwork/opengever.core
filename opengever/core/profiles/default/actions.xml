@@ -1221,4 +1221,22 @@
 
   </object>
 
+  <!-- Gever UI actions for a context -->
+  <object name="ui_context_actions" meta_type="CMF Action Category">
+
+    <object name="protect_dossier" meta_type="CMF Action" i18n:domain="plone">
+      <property name="title" i18n:translate="">Protect dossier</property>
+      <property name="description" i18n:translate="" />
+      <property name="icon_expr" />
+      <property name="available_expr">
+        python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.dossier.behaviors.protect_dossier.IProtectDossierMarker')
+      </property>
+      <property name="permissions">
+        <element value="opengever.dossier: Protect dossier" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
 </object>

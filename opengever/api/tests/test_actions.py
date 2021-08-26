@@ -35,6 +35,16 @@ class ObjectButtonsTestBase(IntegrationTestCase):
         return browser.json['object_buttons']
 
 
+class UIContextActionsTestBase(IntegrationTestCase):
+
+    maxDiff = None
+
+    def get_ui_context_actions(self, browser, context):
+        browser.open(context.absolute_url() + '/@actions',
+                     method='GET', headers=self.api_headers)
+        return browser.json['ui_context_actions']
+
+
 class FolderActionsTestBase(IntegrationTestCase):
 
     maxDiff = None
@@ -1952,3 +1962,26 @@ class TestWebActionsIntegration(IntegrationTestCase):
                 u'title': u'Open in ExternalApp'
             }],
             browser.json.get('webactions'))
+
+
+class TestUIContextActionsGetForDossiers(UIContextActionsTestBase):
+
+    @browsing
+    def test_available_ui_context_actions_for_dossier_as_dossier_responsible(self, browser):
+        self.login(self.dossier_responsible, browser)
+        expected_ui_context_actions = []
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.dossier),
+        )
+
+    @browsing
+    def test_available_ui_context_actions_for_dossier_as_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser)
+        expected_ui_context_actions = [
+            {u'icon': u'', u'id': u'protect_dossier', u'title': u'Protect dossier'},
+        ]
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.dossier),
+        )
