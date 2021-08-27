@@ -522,6 +522,7 @@ class NightlyIndexer(object):
         else:
             function = index_in_catalog
         self.job_type = MaintenanceJobType(function, idxs=tuple(idxs))
+        self.intids = getUtility(IIntIds)
 
     def __enter__(self):
         key, self.queue = self.queue_manager.add_queue(self.job_type, IITreeSet)
@@ -529,6 +530,9 @@ class NightlyIndexer(object):
 
     def add_by_intid(self, intid):
         self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
+
+    def add_by_obj(self, obj):
+        self.add_by_intid(self.intids.getId(obj))
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if len(self.queue) == 0:
