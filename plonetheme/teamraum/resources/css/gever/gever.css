@@ -3790,6 +3790,7 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 #opengever_meeting_meeting.word-feature .agenda_item.ui-sortable-helper, #opengever_meeting_meeting.word-feature .agenda_item.paragraph.ui-sortable-helper { border: 1px solid rgba(0, 0, 0, 0.15); }
 #opengever_meeting_meeting.word-feature .agenda_item.ui-sortable-helper td, #opengever_meeting_meeting.word-feature .agenda_item.paragraph.ui-sortable-helper td { border-top: 2px solid transparent; }
 #opengever_meeting_meeting.word-feature .agenda_item .sortable-handle { padding: 16px 14px; }
+#opengever_meeting_meeting.word-feature .agenda_item .sortable-handle.sortable-handle-agenda-item-attachment { float: left; padding: 6px; }
 #opengever_meeting_meeting.word-feature .agenda_item ul.documents-list { width: 100%; }
 #opengever_meeting_meeting.word-feature .agenda_item ul.documents-list li.excerpt { width: 100%; margin: 0; clear: both; position: relative; left: -6px; }
 #opengever_meeting_meeting.word-feature .agenda_item ul.documents-list li.excerpt:hover { background-color: #e6e6e6; }

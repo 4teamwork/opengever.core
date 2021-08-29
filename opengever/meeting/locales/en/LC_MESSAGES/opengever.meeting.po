@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-07-02 10:48+0000\n"
+"POT-Creation-Date: 2021-08-29 18:45+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1824,6 +1824,16 @@ msgstr "Meetings"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "memberships"
 msgstr "Memberships"
+
+#. Default: "Attachment order updated."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "message_attachment_order_successfully_message"
+msgstr ""
+
+#. Default: "Information"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "message_attachment_order_successfully_message_title"
+msgstr ""
 
 #. German translation: Das Antragsdokument wurde von ${creator} ausgecheckt.
 #. Default: "The proposal document is being checked out by ${creator}."

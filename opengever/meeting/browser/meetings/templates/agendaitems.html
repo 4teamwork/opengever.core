@@ -1,7 +1,7 @@
 <script id="agendaitemsTemplate" type="text/x-handlebars-template">
   {{#each agendaitems}}
-  <tr class="{{css_class}} word-feature agenda_item" data-uid="{{id}}" id="ai{{id}}" completed="{{is_completed}}">
-    {{#if ../agendalist_editable}}<td class="sortable-handle"></td>{{/if}}
+  <tr class="{{css_class}} word-feature agenda_item" data-uid="{{id}}" data-proposal-url="{{submitted_proposal_url}}" id="ai{{id}}" completed="{{is_completed}}">
+    {{#if ../agendalist_editable}}<td class="sortable-handle sortable-handle-agenda-item"></td>{{/if}}
     <td class="title">
 
       <div class="agenda-item-actions">
@@ -118,9 +118,13 @@
       {{#if has_documents}}
       <div class="attachements">
         <div class="documents_label">%(label_attachments)s:</div>
-        <ul class="documents-list">
+        <ul class="documents-list"
+            data-message-attachment-order-successfully-message="%(message_attachment_order_successfully_message)s"
+            data-message-attachment-order-successfully-message-title="%(message_attachment_order_successfully_message_title)s"
+            >
           {{#each documents}}
-          <li>
+          <li class="attachment" data-id="{{id}}" data-position="{{@index}}">
+            {{#if ../../agendalist_editable}}<span class="sortable-handle sortable-handle-agenda-item-attachment"></span>{{/if}}
             {{{link}}}
           </li>
           {{/each}}
