@@ -57,8 +57,7 @@
       />
 
   <utility
-      component=".lifecycle.custody_period_vf"
-      provides="zope.schema.interfaces.IVocabularyFactory"
+      factory=".lifecycle.CustodyPeriodVocabulary"
       name="lifecycle_custody_period_vocabulary"
       />
 
