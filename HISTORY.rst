@@ -10,6 +10,48 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.17.0 (2021-08-30)
+----------------------
+
+New features:
+
+
+- Include @type, active,  portrait_url, representatives and respresents in @actors endpoint. [buchi]
+- Add support for groups in @share-content endpoint. [tinagerber]
+- Include group users and groups in @actual-workspace-members endpoint. [tinagerber]
+- Add new @reference-numbers endpoint. [njohner]
+- Add approval_state Solr field and corresponding Plone indexer. [lgraf]
+- API: Allow for approving documents when resolving a task. [lgraf]
+- Include committee in proposal serialization. [tinagerber]
+- Include proposal, meeting, submitted_proposal and submitted_with in document serialization. [tinagerber]
+- Agenda item attachments of submitted proposals can be reordered. [elioschmutz]
+
+
+Bug fixes:
+
+
+- Dossier protection works properly over the REST-API.
+- Show copy document to workspace action also in subdossiers. [phgross]
+- Fix updating document title in favorites when document title is changed via API. [deiferni]
+- Remove `@@` prefix from links to personal preferences browser view. [deiferni]
+- Fix handling of relations when an object is deleted. [njohner]
+
+
+Other changes:
+
+
+- Reindex missing changed dates in Solr. [njohner]
+- Bump ftw.solr to 2.9.5 to allow unrestrictedSearch. [njohner]
+- Allow Reader to revive bumblebee previews. [deiferni]
+- Always redirect to notification resource in `@@resolve_oguid` if user has permission to view. [deiferni]
+- Revert merge of upgrade reindexing reference and sortable_reference. [njohner]
+- Add new actions category: ui_context_actions with a new action: `protect_dossier`. [elioschmutz]
+- Expose `is_protected` in the dossier serializer. [elioschmutz]
+- Bump docxcompose to version 1.3.3. [njohner]
+- Change workspace daily digest notification defaults. [deiferni]
+- Rename label for "Reference prefix" to "Repository number" (en, de, fr) [lgraf]
+
+
 2021.16.0 (2021-08-12)
 ----------------------
 
