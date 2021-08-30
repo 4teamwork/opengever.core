@@ -285,6 +285,10 @@
     };
 
     this.trackEvent = function(event, callback, options, payload) {
+      if (event.disableFurtherEventTracking) {
+        return;
+      }
+
       var target = $(event.currentTarget);
       var request = $.Deferred();
       var actionRequest = $.when(callback.call(self, target, event, payload));

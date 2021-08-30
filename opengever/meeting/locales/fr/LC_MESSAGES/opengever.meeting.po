@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-07-02 10:48+0000\n"
+"POT-Creation-Date: 2021-08-29 18:45+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -1526,6 +1526,16 @@ msgstr "Séances"
 #: ./opengever/meeting/browser/tabbed.py
 msgid "memberships"
 msgstr "Adhésions"
+
+#. Default: "Attachment order updated."
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "message_attachment_order_successfully_message"
+msgstr ""
+
+#. Default: "Information"
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "message_attachment_order_successfully_message_title"
+msgstr ""
 
 #. Default: "The proposal document is being checked out by ${creator}."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt

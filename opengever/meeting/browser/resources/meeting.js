@@ -460,13 +460,55 @@
     };
 
     var sortableSettings = {
-      handle: ".sortable-handle",
+      handle: ".sortable-handle-agenda-item",
       forcePlaceholderSize: true,
       placeholder: "placeholder",
       items: "tr",
       tolerance: "intersects",
       update: self.updateSortOrder,
       helper: sortableHelper
+    };
+
+    var sortableSettingsAgendaItemAttachments = {
+      handle: ".sortable-handle-agenda-item-attachment",
+      forcePlaceholderSize: true,
+      placeholder: "placeholder",
+      items: "li.attachment",
+      tolerance: "intersects",
+      stop: function(event, ui) {
+        var proposalUrl = $(event.target).closest("tr.agenda_item").data("proposalUrl");
+        var newPosition = $("li", event.target).toArray().findIndex(function(item) {
+          return  $(item).data("id") === ui.item.data("id") ;
+        });
+        var delta = newPosition - ui.item.data("position");
+
+        // Update position data attributes. Required to know the old index
+        // when dragging the next time.
+        $("li", event.target).toArray().map(function(item, index) {
+          $(item).data("position", index);
+        });
+
+        $.ajax({
+          url: proposalUrl,
+          type: "PATCH",
+          data: JSON.stringify({
+            ordering: { "obj_id": ui.item.data("id"), "delta": delta }
+          }),
+          headers: { Accept: "application/json" },
+          dataType: "json",
+          contentType: "application/json",
+          success: function() {
+            self.messageFactory.shout([{
+              messageTitle: $(event.target).data("message-attachment-order-successfully-message-title"),
+              message: $(event.target).data("message-attachment-order-successfully-message"),
+              messageClass: "info"}
+            ]);
+          },
+          error: function() {
+            self.refresh();
+          }
+        });
+      },
     };
 
     Controller.call(this, $("#agendaitemsTemplate").html(), $("#agenda_items tbody"), options);
@@ -537,6 +579,7 @@
 
     this.onRender = function() {
       this.outlet.sortable(sortableSettings);
+      $('.documents-list', this.outlet).sortable(sortableSettingsAgendaItemAttachments);
       $(document).trigger("agendaItemsReady");
       this.updateCloseTransitionActionState();
     };
@@ -772,6 +815,27 @@
         options: {
           prevent: false,
           update: true
+        }
+      },
+      // Register the event only to disable the event-tracking in the Controller.js.
+      // Otherwise it would always refresh the UI due to the same event in an upper scope
+      // to order agenda-items. Refreshing the UI will end in collapsing of
+      // all expanded agenda-items.
+      {
+        method: "sortupdate",
+        target: "#agenda_items .documents-list",
+        callback: function(el, event) {
+          // Tells the Controller.js that it should stop track the event for this
+          // specific event. This is required because we have a nested sortable ui.
+          // The Controller.js would update the UI due to the same registered event
+          // for a parent element, the agenda-items.
+          // Just disable event propagation does not work because
+          // jquery sortable requires it to work properly.
+          event.disableFurtherEventTracking = true;
+        },
+        options: {
+          prevent: false,
+          update: false
         }
       },
       {

@@ -191,7 +191,7 @@ class AgendaItemsView(BrowserView):
 
         submitted_proposal = item.proposal.resolve_submitted_proposal()
         docs = IContentListing(submitted_proposal.get_documents())
-        return [doc.render_link() for doc in docs]
+        return [{'link': doc.render_link(), 'id': doc.id} for doc in docs]
 
     def _serialize_submitted_excerpt(self, item):
         if not item.has_proposal:
@@ -261,6 +261,9 @@ class AgendaItemsView(BrowserView):
         for item in meeting.agenda_items:
             data = item.serialize()
             data['documents'] = self._serialize_submitted_documents(item)
+            data['submitted_proposal_url'] = ''
+            if item.proposal:
+                data['submitted_proposal_url'] = item.proposal.resolve_submitted_proposal().absolute_url()
             data['excerpt'] = self._serialize_submitted_excerpt(item)
             data['has_documents'] = self.has_documents(item)
             data['delete_link'] = meeting.get_url(

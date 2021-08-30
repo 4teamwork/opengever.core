@@ -735,6 +735,10 @@ body.feature-word-meeting.model-meeting h1.documentFirstHeading .meeting-number 
 
       .sortable-handle {
         padding: 16px 14px;
+        &.sortable-handle-agenda-item-attachment {
+          float: left;
+          padding: 6px;
+        }
       }
 
 

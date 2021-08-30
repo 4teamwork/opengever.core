@@ -63,7 +63,7 @@ class TestDisplayAgendaItems(IntegrationTestCase):
         self.assertTrue(item.get('has_documents'))
 
         pattern = re.compile('<a class="document_link.*?>(.*?)</a>')
-        browser_titles = [pattern.search(el).groups()[0] for el in item.get('documents')]
+        browser_titles = [pattern.search(el.get('link')).groups()[0] for el in item.get('documents')]
         self.assertEquals([u'Doc 3', 'Doc 2', 'Doc 4', 'Doc 1'],
                           browser_titles)
 
