@@ -339,3 +339,30 @@ Gruppen erstellen, modifizieren und löschen kann über den ``@groups`` Endpoint
 - Er steht auch für Administratoren zur Verfügung.
 - Er wurde eingeschränkt um nur die Administration von gewissen Rollen zu erlauben: ``workspace_guest``, ``workspace_member`` und ``workspace_admin``.
 - Gruppennamen darf nicht länger als 255 Zeichen lang sein
+
+.. _reactivate-local-group:
+
+Lokale Gruppen reaktivieren
+---------------------------
+
+Mit dem ``@reactivate-local-group`` Endpoint kann eine lokale, inaktive Gruppe wieder aktiviert werden. Der Endpoint steht auf Stufe PloneSite zur Verfügung.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /@reactivate-local-group HTTP/1.1
+      Accept: application/json
+
+      {
+        "groupname": "test-group"
+      }
+
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
+      Content-Type: application/json
