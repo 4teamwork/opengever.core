@@ -156,24 +156,18 @@ ILifeCycle['retention_period'].defaultFactory = retention_period_default
 # ---------- CUSTODY PERIOD -----------
 # Vocabulary
 
-def _get_custody_period_choices():
-    registry = getUtility(IRegistry)
-    proxy = registry.forInterface(IBaseCustodyPeriods)
-    choices = []
-    nums = getattr(proxy, 'custody_periods')
 
-    for num in nums:
-        num = int(num)
-        choices.append((num, num))
+@implementer(IVocabularyFactory)
+class CustodyPeriodVocabulary(object):
 
-    return choices
+    def __call__(self, context):
+        terms = []
+        custody_periods = getUtility(IRegistry).forInterface(IBaseCustodyPeriods).custody_periods
+        for custody_period in custody_periods:
+            custody_period = int(custody_period)
+            terms.append(SimpleTerm(custody_period, title=_(custody_period)))
 
-
-custody_period_vf = RestrictedVocabularyFactory(
-    ILifeCycle['custody_period'],
-    _get_custody_period_choices,
-    message_factory=_,
-    restricted=True)
+        return SimpleVocabulary(terms)
 
 
 @provider(IContextAwareDefaultFactory)
