@@ -6,6 +6,8 @@ and run overnight by the NightlyMaintenanceJobsProvider. MaintenanceJobs are
 grouped by MaintenanceJobType in the queues (one queue per type) for efficiency.
 """
 
+from BTrees.IIBTree import IITreeSet
+from BTrees.OOBTree import OOTreeSet
 from opengever.nightlyjobs.interfaces import INightlyJobProvider
 from persistent.dict import PersistentDict
 from Products.CMFPlone.interfaces import IPloneSiteRoot
@@ -137,10 +139,13 @@ class MaintenanceQueuesManager(object):
 
     A queue should be a TreeSet, for example an IITreeSet to store IntIds.
     """
+    supported_queue_types = (IITreeSet, OOTreeSet)
+
     def __init__(self, context):
         self.context = context
 
-    def add_queue(self, job_type, queue_type):
+    def add_queue(self, job_type, queue_type=IITreeSet):
+        self.assert_queue_type_is_valid(queue_type)
         ann = IAnnotations(self.context)
         if NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY not in ann:
             ann[NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY] = PersistentDict()
@@ -153,6 +158,9 @@ class MaintenanceQueuesManager(object):
         else:
             queues[queue_key] = queue_type()
         return queue_key, queues[queue_key]
+
+    def assert_queue_type_is_valid(self, queue_type):
+        assert queue_type in self.supported_queue_types, "Invalid queue type"
 
     def remove_queue(self, job_type):
         self.get_queues().pop(self.queue_key_for_job_type(job_type))

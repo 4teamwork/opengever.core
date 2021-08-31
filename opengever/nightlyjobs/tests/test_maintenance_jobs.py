@@ -97,6 +97,11 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
         self.assertEqual(self.queue_manager.get_queues(),
                          {self.job_type.job_type_identifier: queue})
 
+    def test_adding_invalid_queue_raises(self):
+        with self.assertRaises(AssertionError) as exc:
+            self.queue_manager.add_queue(self.job_type, list)
+        self.assertEqual("Invalid queue type", exc.exception.message)
+
     def test_adding_already_existing_queue_is_ignored(self):
         self.queue_manager.add_queue(self.job_type, IITreeSet)
         job = MaintenanceJob(self.job_type, 1)
