@@ -499,6 +499,7 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
 class NightlyIndexer(object):
 
     def __init__(self, idxs, index_in_solr_only=False):
+        self.check_preconditions(idxs, index_in_solr_only)
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
         if index_in_solr_only:
             function_name = self.index_in_solr.__name__
@@ -515,6 +516,11 @@ class NightlyIndexer(object):
     def __enter__(self):
         key, self.queue = self.queue_manager.add_queue(self.job_type, IITreeSet)
         return self
+
+    def check_preconditions(self, idxs, index_in_solr_only):
+        if index_in_solr_only and 'SearchableText' in idxs:
+            raise ValueError(
+                "Reindexing SearchableText in solr only is not supported")
 
     @staticmethod
     def index_in_catalog(intid, idxs):

@@ -168,3 +168,11 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
             self.subdossier, "Title", ["new", "subdossier", "title"])
         self.assert_catalog_data(
             self.empty_dossier, "Title", ["new", "empty", "dossier", "title"])
+
+    def test_trying_to_reindex_searchable_text_in_solr_raises(self):
+        with self.assertRaises(ValueError) as exc:
+            NightlyIndexer(idxs=["Title", "SearchableText"],
+                           index_in_solr_only=True)
+        self.assertEqual(
+            'Reindexing SearchableText in solr only is not supported',
+            exc.exception.message)
