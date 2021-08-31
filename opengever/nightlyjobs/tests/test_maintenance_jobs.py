@@ -5,6 +5,7 @@ from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
 from opengever.nightlyjobs.maintenance_jobs import NightlyMaintenanceJobsProvider
 from opengever.nightlyjobs.maintenance_jobs import QueueAlreadyExistsWithDifferentType
+from opengever.nightlyjobs.maintenance_jobs import FunctionNotFound
 from opengever.testing import IntegrationTestCase
 from plone import api
 from unittest import TestCase
@@ -18,44 +19,44 @@ def return_args(variable_argument, **kwargs):
     return output
 
 
-def write_args_to_portal(variable_argument, **kwargs):
-    output = {"variable_argument": variable_argument}
-    output.update(kwargs)
-    portal = api.portal.get()
-    annotations = IAnnotations(portal)
-    if 'jobs_run' not in annotations:
-        annotations['jobs_run'] = []
-    annotations['jobs_run'].append(output)
+return_args_dotted_name = "opengever.nightlyjobs.tests.test_maintenance_jobs.return_args"
 
 
 class TestNightlyMaintenanceJobTypes(TestCase):
 
     def test_job_type_identifier(self):
-        job_type = MaintenanceJobType(return_args, foo=1, bar="bar")
+        job_type = MaintenanceJobType(
+            return_args_dotted_name, foo=1, bar="bar")
         self.assertEqual(
-            ('return_args',
-             'opengever.nightlyjobs.tests.test_maintenance_jobs',
+            ('opengever.nightlyjobs.tests.test_maintenance_jobs.return_args',
              (('bar', 'bar'), ('foo', 1))),
             job_type.job_type_identifier)
 
     def test_job_type_representation(self):
-        job_type = MaintenanceJobType(return_args, foo=1, bar="bar")
+        job_type = MaintenanceJobType(
+            return_args_dotted_name, foo=1, bar="bar")
         self.assertEqual(
             str(job_type),
             'MaintenanceJobType(return_args, foo=1, bar=bar)')
 
     def test_can_recreate_job_type_from_identifier(self):
-        original = MaintenanceJobType(return_args, foo=1, bar="bar")
+        original = MaintenanceJobType(
+            return_args_dotted_name, foo=1, bar="bar")
         recreated = MaintenanceJobType.from_identifier(
             original.job_type_identifier)
         self.assertEqual(original, recreated)
+
+    def test_raises_if_function_dotted_name_cannot_be_resolved(self):
+        with self.assertRaises(FunctionNotFound):
+            MaintenanceJobType("unresolvable.function.name", foo=1)
 
 
 class TestNightlyMaintenanceJobs(TestCase):
 
     def setUp(self):
         super(TestNightlyMaintenanceJobs, self).setUp()
-        self.job_type = MaintenanceJobType(return_args, foo=1, bar="bar")
+        self.job_type = MaintenanceJobType(
+            return_args_dotted_name, foo=1, bar="bar")
 
     def test_job_representation(self):
         job = MaintenanceJob(self.job_type, 123)
@@ -76,7 +77,8 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
     def setUp(self):
         super(TestMaintenanceQueuesManager, self).setUp()
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
-        self.job_type = MaintenanceJobType(return_args, foo=1, bar="bar")
+        self.job_type = MaintenanceJobType(
+            return_args_dotted_name, foo=1, bar="bar")
 
     def test_queue_key_is_job_type_identifier(self):
         self.assertEqual(self.queue_manager.queue_key_for_job_type(self.job_type),
@@ -120,7 +122,8 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
         self.queue_manager.add_job(job1)
         self.queue_manager.add_job(job2)
 
-        job_type2 = MaintenanceJobType(return_args, foo=2, bar="bar")
+        job_type2 = MaintenanceJobType(
+            return_args_dotted_name, foo=2, bar="bar")
         job3 = MaintenanceJob(job_type2, 1)
         self.queue_manager.add_queue(job_type2, IITreeSet)
         self.queue_manager.add_job(job3)
@@ -158,6 +161,19 @@ class TestNightlyMaintenanceJobsProvider(IntegrationTestCase):
     features = ('nightly-jobs', )
     maxDiff = None
 
+    write_args_dotted_name = "opengever.nightlyjobs.tests.test_maintenance_jobs"\
+        ".TestNightlyMaintenanceJobsProvider.write_args_to_portal"
+
+    @staticmethod
+    def write_args_to_portal(variable_argument, **kwargs):
+        output = {"variable_argument": variable_argument}
+        output.update(kwargs)
+        portal = api.portal.get()
+        annotations = IAnnotations(portal)
+        if 'jobs_run' not in annotations:
+            annotations['jobs_run'] = []
+        annotations['jobs_run'].append(output)
+
     def execute_nightly_jobs(self):
         nightly_logger = logging.getLogger('opengever.nightlyjobs')
 
@@ -173,8 +189,10 @@ class TestNightlyMaintenanceJobsProvider(IntegrationTestCase):
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
         annotations = IAnnotations(api.portal.get())
 
-        job_type1 = MaintenanceJobType(write_args_to_portal, foo=1, bar="bar")
-        job_type2 = MaintenanceJobType(write_args_to_portal, foo=2, bar="bar")
+        job_type1 = MaintenanceJobType(
+            self.write_args_dotted_name, foo=1, bar="bar")
+        job_type2 = MaintenanceJobType(
+            self.write_args_dotted_name, foo=2, bar="bar")
 
         job1 = MaintenanceJob(job_type1, 1)
         job2 = MaintenanceJob(job_type1, 2)

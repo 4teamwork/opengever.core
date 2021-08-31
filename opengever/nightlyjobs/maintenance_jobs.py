@@ -11,9 +11,9 @@ from persistent.dict import PersistentDict
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation import IAnnotations
 from zope.component import adapter
+from zope.dottedname.resolve import resolve
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
-import importlib
 import logging
 
 
@@ -42,51 +42,46 @@ class MaintenanceJobType(object):
     (fixed_arguments).
 
     An instance of MaintenanceJobType is fully determined by its
-    job_type_identifier which contains the fixed_arguments and the information
-    needed to import the function.
+    job_type_identifier which contains the fixed_arguments and the function's
+    dotted name.
 
     The class contains a constructor from_identifier allowing to reconstruct a
     MaintenanceJobType from a job_type_identifier.
     """
 
-    def __init__(self, function, **fixed_arguments):
-        self.function = function
+    def __init__(self, function_dotted_name, **fixed_arguments):
+        self.function_dotted_name = function_dotted_name
         self.fixed_arguments = fixed_arguments
+        try:
+            self.function = resolve(self.function_dotted_name)
+        except ImportError:
+            raise FunctionNotFound()
 
     def __eq__(self, other):
-        return (self.function == other.function and
+        return (self.function_dotted_name == other.function_dotted_name and
                 self.fixed_arguments == other.fixed_arguments)
 
     def __repr__(self):
         return u'{}({}, {})'.format(
             self.__class__.__name__,
-            self.function.__name__,
+            self.function_name,
             ", ".join(["{}={}".format(name, value) for name, value in
                        self.fixed_arguments.items()]))
 
     @property
-    def module_dotted_name(self):
-        return self.function.__module__
-
-    @property
     def function_name(self):
-        return self.function.__name__
+        return self.function_dotted_name.rsplit(".", 1)[-1]
 
     @property
     def job_type_identifier(self):
-        return (self.function_name,
-                self.module_dotted_name,
+        return (self.function_dotted_name,
                 tuple(sorted(self.fixed_arguments.items())))
 
     @classmethod
     def from_identifier(cls, job_type_identifier):
-        function_name, module_dotted_name, fixed_args_tuple = job_type_identifier
-        module = importlib.import_module(module_dotted_name)
-        function = getattr(module, function_name)
-        if function is None:
-            raise FunctionNotFound()
+        function_dotted_name, fixed_args_tuple = job_type_identifier
         fixed_arguments = dict(fixed_args_tuple)
-        return cls(function, **fixed_arguments)
+        return cls(function_dotted_name, **fixed_arguments)
 
 
 class MaintenanceJob(object):

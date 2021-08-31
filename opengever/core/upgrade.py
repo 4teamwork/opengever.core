@@ -496,37 +496,42 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
         self.operations = get_operations(self.connection)
 
 
-def index_in_catalog(intid, idxs):
-    intids = getUtility(IIntIds)
-    obj = intids.queryObject(intid)
-    if obj:
-        obj.reindexObject(idxs=idxs)
-
-
-def index_in_solr(intid, idxs):
-    intids = getUtility(IIntIds)
-    obj = intids.queryObject(intid)
-    if obj:
-        manager = getUtility(ISolrConnectionManager)
-        handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
-        handler.add(idxs)
-        manager.connection.commit(extract_after_commit=False)
-
-
 class NightlyIndexer(object):
 
     def __init__(self, idxs, index_in_solr_only=False):
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
         if index_in_solr_only:
-            function = index_in_solr
+            function_name = self.index_in_solr.__name__
         else:
-            function = index_in_catalog
-        self.job_type = MaintenanceJobType(function, idxs=tuple(idxs))
+            function_name = self.index_in_catalog.__name__
+
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         function_name))
+        self.job_type = MaintenanceJobType(function_dotted_name,
+                                           idxs=tuple(idxs))
         self.intids = getUtility(IIntIds)
 
     def __enter__(self):
         key, self.queue = self.queue_manager.add_queue(self.job_type, IITreeSet)
         return self
+
+    @staticmethod
+    def index_in_catalog(intid, idxs):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        if obj:
+            obj.reindexObject(idxs=idxs)
+
+    @staticmethod
+    def index_in_solr(intid, idxs):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        if obj:
+            manager = getUtility(ISolrConnectionManager)
+            handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
+            handler.add(idxs)
+            manager.connection.commit(extract_after_commit=False)
 
     def add_by_intid(self, intid):
         self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
