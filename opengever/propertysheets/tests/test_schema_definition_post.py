@@ -125,6 +125,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "values": [u"\xf6ins", u"zwei"]
                 },
                 {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"]
+                },
+                {
                     "name": "nummer",
                     "field_type": u"int",
                     "title": u"zahl"
@@ -155,7 +161,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         definition = storage.get("meinschema")
 
         self.assertEqual(
-            ["yn", "wahl", "nummer", "text", "zeiletext"],
+            ["yn", "wahl", "colors", "nummer", "text", "zeiletext"],
             definition.get_fieldnames()
         )
 

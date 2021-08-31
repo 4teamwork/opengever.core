@@ -1,6 +1,7 @@
 from copy import deepcopy
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.monkey.patching import MonkeyPatch
+from opengever.propertysheets.field import IPropertySheetField
 from plone.dexterity.content import _marker
 from plone.dexterity.utils import iterSchemataForType
 from plone.registry.recordsproxy import RecordsProxy
@@ -267,8 +268,27 @@ class PatchZ3CFormChangedField(MonkeyPatch):
             except AttributeError:
                 return True
 
-            if stored_value != value:
-                return True
+            if IPropertySheetField.providedBy(field) and stored_value:
+                # multiple choice fields are stored as sets which can not
+                # be compared with cmp(). Therefore we compare lists
+                cp_stored_value = deepcopy(stored_value)
+                for slot, value_dict in cp_stored_value.items():
+                    for k, v in value_dict.items():
+                        if isinstance(v, set):
+                            value_dict[k] = tuple(v)
+
+                cp_value = deepcopy(value)
+                for slot, value_dict in cp_value.items():
+                    for k, v in value_dict.items():
+                        if isinstance(v, set):
+                            value_dict[k] = tuple(v)
+
+                if cp_stored_value != cp_value:
+                    return True
+
+            else:
+                if stored_value != value:
+                    return True
 
             # Work around the fact that unicode and bytestrings are considered
             # equal in python 2 for emtpy default values u'' and '' by also

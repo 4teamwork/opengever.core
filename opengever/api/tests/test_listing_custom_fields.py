@@ -32,6 +32,11 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                             u"title": u"Choose",
                             u"type": u"string"
                         },
+                        u'choosemulti_custom_field_strings': {
+                            u'name': u'choosemulti_custom_field_strings',
+                            u'title': u'Choose multi',
+                            u'type': u'array'
+                        },
                         u"f1_custom_field_string": {
                             u"name": u"f1_custom_field_string",
                             u"title": u"Field 1",

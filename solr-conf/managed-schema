@@ -188,6 +188,7 @@
     <dynamicField name="*_custom_field_string" type="string" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_int" type="pint" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_boolean" type="boolean" indexed="true" stored="false"/>
+    <dynamicField name="*_custom_field_strings" type="string" indexed="true" stored="false" multiValued="true"/>
 
     <dynamicField name="ignored_*" type="ignored"/>
 

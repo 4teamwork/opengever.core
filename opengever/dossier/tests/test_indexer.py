@@ -215,6 +215,8 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             .assigned_to_slots(u"IDossier.dossier_type.businesscase")
             .with_field("bool", u"yesorno", u"Yes or no", u"", True)
             .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -224,6 +226,7 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             "IDossier.dossier_type.businesscase": {
                 "yesorno": False,
                 "choose": u"gr\xfcn",
+                "choosemulti": ["rot", "blau"],
                 "num": 122333,
                 "text": u"K\xe4fer\nJ\xe4ger",
                 "textline": u"Kr\xe4he",
@@ -238,6 +241,8 @@ class TestDossierIndexers(SolrIntegrationTestCase):
         self.assertIn(u"K\xe4fer", indexed_value)
         self.assertIn(u"J\xe4ger", indexed_value)
         self.assertIn(u"Kr\xe4he", indexed_value)
+        self.assertIn(u"rot", indexed_value)
+        self.assertIn(u"blau", indexed_value)
 
     def test_dossiertemplate_searchable_text_contains_keywords(self):
         self.login(self.regular_user)

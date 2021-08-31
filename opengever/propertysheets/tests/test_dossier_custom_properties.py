@@ -18,6 +18,8 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
             .named("schema1")
             .assigned_to_slots(u"IDossier.dossier_type.businesscase")
             .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
             .with_field("textline", u"textline", u"A line of text", u"", True)
         )
         self.dossier.dossier_type = u"businesscase"
@@ -27,6 +29,7 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
             "custom_properties": {
                 "IDossier.dossier_type.businesscase": {
                     "choose": u"zw\xf6i".encode("unicode_escape"),
+                    "choosemulti": ["one", "three"],
                     "textline": u"bl\xe4",
                 },
             }
@@ -37,6 +40,7 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
         expected_properties = {
             "IDossier.dossier_type.businesscase": {
                 "choose": u"zw\xf6i",
+                "choosemulti": ["three", "one"],
                 "textline": u"bl\xe4",
             },
         }
