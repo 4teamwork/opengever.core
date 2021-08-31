@@ -1,11 +1,12 @@
 from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
+from opengever.nightlyjobs.maintenance_jobs import FunctionNotFound
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
 from opengever.nightlyjobs.maintenance_jobs import NightlyMaintenanceJobsProvider
 from opengever.nightlyjobs.maintenance_jobs import QueueAlreadyExistsWithDifferentType
-from opengever.nightlyjobs.maintenance_jobs import FunctionNotFound
+from opengever.nightlyjobs.maintenance_jobs import UnhashableArguments
 from opengever.testing import IntegrationTestCase
 from plone import api
 from unittest import TestCase
@@ -49,6 +50,10 @@ class TestNightlyMaintenanceJobTypes(TestCase):
     def test_raises_if_function_dotted_name_cannot_be_resolved(self):
         with self.assertRaises(FunctionNotFound):
             MaintenanceJobType("unresolvable.function.name", foo=1)
+
+    def test_raises_if_arguments_are_not_hashable(self):
+        with self.assertRaises(UnhashableArguments):
+            MaintenanceJobType(return_args_dotted_name, foo=[1])
 
 
 class TestNightlyMaintenanceJobs(TestCase):

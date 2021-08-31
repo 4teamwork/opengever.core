@@ -37,6 +37,10 @@ class FunctionNotFound(Exception):
     """Raised when the function of a maintenance job cannot be found"""
 
 
+class UnhashableArguments(Exception):
+    """Raised when the fixed_arguments are not hashable"""
+
+
 class MaintenanceJobType(object):
     """A maintenance job type is composed of a function and a set of arguments
     (fixed_arguments).
@@ -52,10 +56,16 @@ class MaintenanceJobType(object):
     def __init__(self, function_dotted_name, **fixed_arguments):
         self.function_dotted_name = function_dotted_name
         self.fixed_arguments = fixed_arguments
+
         try:
             self.function = resolve(self.function_dotted_name)
         except ImportError:
             raise FunctionNotFound()
+
+        try:
+            hash(self.job_type_identifier)
+        except TypeError:
+            raise UnhashableArguments()
 
     def __eq__(self, other):
         return (self.function_dotted_name == other.function_dotted_name and
