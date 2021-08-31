@@ -1434,3 +1434,25 @@ Example configuration:
 .. _testing fixtures: https://github.com/4teamwork/opengever.core/blob/master/opengever/testing/fixtures.py
 .. _COMPONENT_REGISTRY_ISOLATION: https://github.com/4teamwork/ftw.testing#component-registry-isolation-layer
 .. _Sablon: https://github.com/4teamwork/sablon
+
+
+Nightly Jobs
+------------
+
+Gever offers a whole infrastructure to execute certain jobs overnight, to avoid excessive load of the instances during working hours. Nightly jobs are executed via a cronjob calling the ``NightlyJobRunner``, which will try to execute all jobs provided by the registered nightly job providers (named multiadapters of INightlyJobProvider).
+
+Reindexing operations as nightly maintenance jobs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We offer a high level API to create nightly maintenance jobs for reindexing operations,
+which can be used in upgrade steps:
+
+.. code:: python
+
+    query = {'object_provides': IDexterityContent.__identifier__}
+    with NightlyIndexer(idxs=["sortable_reference"],
+                        index_in_solr_only=True) as indexer:
+        for obj in self.objects(query, 'Index sortable_reference in Solr'):
+            indexer.add_by_obj(obj)
+
+This will register the corresponding jobs to the ``NightlyMaintenanceJobsProvider``.
