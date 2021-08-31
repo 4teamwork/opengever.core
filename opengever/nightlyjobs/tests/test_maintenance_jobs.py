@@ -38,6 +38,12 @@ class TestNightlyMaintenanceJobTypes(TestCase):
              (('bar', 'bar'), ('foo', 1))),
             job_type.job_type_identifier)
 
+    def test_job_type_representation(self):
+        job_type = MaintenanceJobType(return_args, foo=1, bar="bar")
+        self.assertEqual(
+            str(job_type),
+            'MaintenanceJobType(return_args, foo=1, bar=bar)')
+
     def test_can_recreate_job_type_from_identifier(self):
         original = MaintenanceJobType(return_args, foo=1, bar="bar")
         recreated = MaintenanceJobType.from_identifier(

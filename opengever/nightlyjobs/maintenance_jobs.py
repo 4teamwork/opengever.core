@@ -57,6 +57,13 @@ class MaintenanceJobType(object):
         return (self.function == other.function and
                 self.fixed_arguments == other.fixed_arguments)
 
+    def __repr__(self):
+        return u'{}({}, {})'.format(
+            self.__class__.__name__,
+            self.function.__name__,
+            ", ".join(["{}={}".format(name, value) for name, value in
+                       self.fixed_arguments.items()]))
+
     @property
     def module_dotted_name(self):
         return self.function.__module__
