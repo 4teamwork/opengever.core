@@ -127,6 +127,35 @@ class TestProtectDossier(IntegrationTestCase):
         self.assert_local_roles([], 'projekt_a', new_dossier)
 
     @browsing
+    def test_update_localroles_if_user_has_cleared_protection_fields(self, browser):
+        self.login(self.dossier_manager, browser)
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'})
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill(self.regular_user.getId())
+        browser.click_on('Save')
+
+        new_dossier = browser.context
+        self.assert_local_roles(
+            IProtectDossier(new_dossier).READING_AND_WRITING_ROLES,
+            self.regular_user.getId(), new_dossier)
+
+        dossier_manager_roles = ['Owner']
+        dossier_manager_roles.extend(IProtectDossier(new_dossier).DOSSIER_MANAGER_ROLES)
+        self.assert_local_roles(dossier_manager_roles, self.dossier_manager.getId(), new_dossier)
+
+        browser.open(new_dossier, view="@@edit")
+        browser.fill({'Title': 'My new Dossier'})
+        form = browser.find_form_by_field('Read only access')
+        form.find_widget('Read/Write access').fill([])
+        form.find_widget('Dossier manager').fill('')
+        browser.click_on('Save')
+        self.assert_local_roles([], self.regular_user.getId(), new_dossier)
+        self.assert_local_roles(['Owner'], self.dossier_manager.getId(), new_dossier)
+
+    @browsing
     def test_regular_user_cannot_see_protect_dossier_fields(self, browser):
         self.login(self.regular_user, browser)
 
@@ -388,6 +417,7 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         dossier_protector = IProtectDossier(self.dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
         dossier_protector.reading = [self.regular_user.getId()]
         dossier_protector.protect()
 
