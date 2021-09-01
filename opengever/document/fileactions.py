@@ -10,7 +10,6 @@ from opengever.officeconnector.helpers import is_officeconnector_attach_feature_
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
-from opengever.wopi.lock import get_lock_token
 from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
@@ -271,12 +270,9 @@ class DocumentFileActions(BaseDocumentFileActions):
     def _can_edit_with_office_online(self):
         # Office Online allows collaborative editing
         # Thus a document is editable by Office Online if it's not checked out and not locked
-        # or if it's checked out by Office Online.
+        # or if it's collaboratively checked out.
         if self.context.checked_out_by():
-            if get_lock_token(self.context):
-                return True
-            else:
-                return False
+            return self.context.is_collaborative_checkout()
         if self.context.is_locked():
             return False
         return True
