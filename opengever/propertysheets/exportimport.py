@@ -19,7 +19,25 @@ import zope.schema
 
 
 class BaseHandler(PSBaseHandler):
-    pass
+
+    # Remove 'defaultFactory' from the write-blacklist
+    filteredAttributes = PSBaseHandler.filteredAttributes.copy()
+    filteredAttributes.pop('defaultFactory')
+
+    def writeAttribute(self, attributeField, field, ignoreDefault=True):
+        if attributeField.getName() == 'defaultFactory' and field.defaultFactory:
+            # Create a clone of the field, with its defaultFactory callable
+            # turned into a dottedname string so it can be serialized.
+            clone = self.klass.__new__(self.klass)
+            clone.__dict__.update(field.__dict__)
+            clone.defaultFactory = self.dottedname(field.defaultFactory)
+            field = clone
+
+        return super(BaseHandler, self).writeAttribute(
+            attributeField, field, ignoreDefault=ignoreDefault)
+
+    def dottedname(self, func):
+        return func.__module__ + '.' + func.__name__
 
 
 class DictHandlerFactory(BaseHandler, PSDictHandler):
@@ -27,11 +45,25 @@ class DictHandlerFactory(BaseHandler, PSDictHandler):
 
 
 class ObjectHandlerFactory(BaseHandler, PSObjectHandler):
-    pass
+
+    # Need to redefine those (like on PSObjectHandler) because we need to
+    # inject our custom BaseHandler so it comes first in the MRO.
+    filteredAttributes = BaseHandler.filteredAttributes.copy()
+    filteredAttributes.update({'default': 'w', 'missing_value': 'w'})
 
 
 class ChoiceHandlerFactory(BaseHandler, PSChoiceHandler):
-    pass
+
+    # Need to redefine those (like on PSChoiceHandler) because we need to
+    # inject our custom BaseHandler so it comes first in the MRO.
+    filteredAttributes = BaseHandler.filteredAttributes.copy()
+    filteredAttributes.update(
+        {'vocabulary': 'w',
+         'values': 'w',
+         'source': 'w',
+         'vocabularyName': 'rw'
+         }
+    )
 
 
 # These are all the handlers from plone.supermodel.fields.
@@ -39,6 +71,7 @@ class ChoiceHandlerFactory(BaseHandler, PSChoiceHandler):
 # We need to reinstantiate them here (and re-register them in overrides.zcml)
 # to make sure they use or subclass our customized BaseHandler class from
 # above.
+
 
 BytesHandler = BaseHandler(zope.schema.Bytes)
 ASCIIHandler = BaseHandler(zope.schema.ASCII)
