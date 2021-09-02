@@ -13,9 +13,9 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
-from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.dottedname.resolve import resolve
 from zope.globalrequest import getRequest
 from zope.schema import Bool
 from zope.schema import Choice
@@ -171,7 +171,7 @@ class PropertySheetSchemaDefinition(object):
 
         self._assignments = tuple(assignments)
 
-    def add_field(self, field_type, name, title, description, required, values=None):
+    def add_field(self, field_type, name, title, description, required, values=None, default=None, default_factory=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
@@ -228,7 +228,15 @@ class PropertySheetSchemaDefinition(object):
                 "The argument 'values' is only valid for 'choice' fields."
             )
 
+        if default is not None:
+            properties['default'] = default
+
+        if default_factory is not None:
+            fac = resolve(default_factory)
+            properties['defaultFactory'] = fac
+
         field = factory(**properties)
+        # field.default_expression = 'defaultExpression:%s' % default_factory
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
         self._init_field(field)
