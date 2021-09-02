@@ -219,6 +219,7 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
             'responsible',
             old_responsible, ITask(self.context).responsible,
             _(u"label_responsible", default=u"Responsible"))
+        self.context.reindexObject(idxs=["responsible"])
         self.context.sync()
 
 
