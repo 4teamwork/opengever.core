@@ -15,11 +15,61 @@ from plone.supermodel.exportimport import BaseHandler as PSBaseHandler
 from plone.supermodel.exportimport import ChoiceHandler as PSChoiceHandler
 from plone.supermodel.exportimport import DictHandler as PSDictHandler
 from plone.supermodel.exportimport import ObjectHandler as PSObjectHandler
+from zope.dottedname.resolve import resolve
 import zope.schema
 
 
 class BaseHandler(PSBaseHandler):
-    pass
+
+    # Remove 'defaultFactory' from the write-blacklist
+    filteredAttributes = PSBaseHandler.filteredAttributes.copy()
+    filteredAttributes.pop('defaultFactory')
+
+    def writeAttribute(self, attributeField, field, ignoreDefault=True):
+        """Add support for serialization of defaultFactories to dottednames.
+
+        plone.supermodel's BaseHandler only supports deserialization, probably
+        because not all Python callables can be addressed via dotted names,
+        but we can make it work for simple cases without any fancy scopes.
+        """
+        if attributeField.getName() == 'defaultFactory' and field.defaultFactory:
+            # Create a clone of the field, with its defaultFactory callable
+            # turned into a dottedname string so it can be serialized.
+            clone = self.klass.__new__(self.klass)
+            clone.__dict__.update(field.__dict__)
+            clone.defaultFactory = dottedname(field.defaultFactory)
+            field = clone
+
+        return super(BaseHandler, self).writeAttribute(
+            attributeField, field, ignoreDefault=ignoreDefault)
+
+
+def dottedname(func):
+    """Construct the dotted name for the given function.
+
+    This only works for functions in module scope. Attempts to build a dotted
+    name for an object any other scope will return `None`.
+
+    We need to be defensive here, because we don't want this to trip up
+    plone.supermodel XML serialization of regular types, outside the context
+    of PropertySheets. Also, by making sure the name we built actually
+    resolves back to the same object, we ensure roundtrip-safety.
+    """
+    path = (func.__module__, func.__name__)
+    if not all(path):
+        return None
+
+    name = '.'.join(path)
+    try:
+        resolved = resolve(name)
+    except (ImportError, ValueError, AttributeError):
+        resolved = None
+
+    # Make sure the name we constructed resolves to the given function
+    if resolved is not func:
+        return None
+
+    return name
 
 
 class DictHandlerFactory(BaseHandler, PSDictHandler):
@@ -27,11 +77,25 @@ class DictHandlerFactory(BaseHandler, PSDictHandler):
 
 
 class ObjectHandlerFactory(BaseHandler, PSObjectHandler):
-    pass
+
+    # Need to redefine those (like on PSObjectHandler) because we need to
+    # inject our custom BaseHandler so it comes first in the MRO.
+    filteredAttributes = BaseHandler.filteredAttributes.copy()
+    filteredAttributes.update({'default': 'w', 'missing_value': 'w'})
 
 
 class ChoiceHandlerFactory(BaseHandler, PSChoiceHandler):
-    pass
+
+    # Need to redefine those (like on PSChoiceHandler) because we need to
+    # inject our custom BaseHandler so it comes first in the MRO.
+    filteredAttributes = BaseHandler.filteredAttributes.copy()
+    filteredAttributes.update(
+        {'vocabulary': 'w',
+         'values': 'w',
+         'source': 'w',
+         'vocabularyName': 'rw'
+         }
+    )
 
 
 # These are all the handlers from plone.supermodel.fields.
@@ -39,6 +103,7 @@ class ChoiceHandlerFactory(BaseHandler, PSChoiceHandler):
 # We need to reinstantiate them here (and re-register them in overrides.zcml)
 # to make sure they use or subclass our customized BaseHandler class from
 # above.
+
 
 BytesHandler = BaseHandler(zope.schema.Bytes)
 ASCIIHandler = BaseHandler(zope.schema.ASCII)
