@@ -71,6 +71,12 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             "choice", u"chooseone", u"choose", u"", False, values=choices
         )
         definition.add_field(
+            "choice", u"choice_with_default", u"Choice with default",
+            u"", True,
+            values=[u'de', u'fr', u'en'],
+            default=u'fr',
+        )
+        definition.add_field(
             "int", u"num", u"A number", u"Put a number.", True
         )
         definition.add_field(
@@ -82,3 +88,101 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
 
         json_schema = definition.get_json_schema()
         Draft4Validator.check_schema(json_schema)
+
+        expected = {
+            'assignments': [
+                u'IDocumentMetadata.document_type.question',
+            ],
+            'fieldsets': [
+                {
+                    'behavior': 'plone',
+                    'fields': [
+                       u'yesorno',
+                       u'chooseone',
+                       u'choice_with_default',
+                       u'num',
+                       u'blabla',
+                       u'bla',
+                    ],
+                    'id': 'default',
+                    'title': 'Default',
+                }
+            ],
+            'properties': {
+                u'bla': {
+                    u'description': u'Say something short.',
+                    u'factory': u'Text line (String)',
+                    u'title': u'Textline',
+                    u'type': u'string',
+                },
+                u'blabla': {
+                    u'description': u'Say something long.',
+                    u'factory': u'Text',
+                    u'title': u'Text',
+                    u'type': u'string',
+                    u'widget': u'textarea',
+                },
+                u'choice_with_default': {
+                    u'choices': [
+                        [u'de', u'de'],
+                        [u'fr', u'fr'],
+                        [u'en', u'en'],
+                    ],
+                    u'default': u'fr',
+                    u'description': u'',
+                    u'enum': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'enumNames': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'Choice with default',
+                    u'type': u'string',
+                },
+                u'chooseone': {
+                    u'choices': [
+                        [u'bl\\xe4h', u'bl\xe4h'],
+                        [u'blub', u'blub'],
+                    ],
+                    u'description': u'',
+                    u'enum': [
+                        u'bl\\xe4h',
+                        u'blub',
+                    ],
+                    u'enumNames': [
+                        u'bl\xe4h',
+                        u'blub',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'choose',
+                    u'type': u'string',
+                },
+                u'num': {
+                    u'description': u'Put a number.',
+                    u'factory': u'Integer',
+                    u'title': u'A number',
+                    u'type': u'integer',
+                },
+                u'yesorno': {
+                    u'description': u'',
+                    u'factory': u'Yes/No',
+                    u'title': u'y/n',
+                    u'type': u'boolean',
+                },
+            },
+            'required': [
+                u'choice_with_default',
+                u'num',
+                u'blabla',
+                u'bla',
+            ],
+            'title': 'schema',
+            'type': 'object',
+        }     
+
+        self.assertEqual(expected, json_schema)

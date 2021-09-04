@@ -166,6 +166,72 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         )
 
     @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_static_defaults(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default": True,
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default": u"fr",
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default": [u"gr\xfcn"],
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default": 42,
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default": u"some text",
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default": u"some text line",
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(u'some text', fields['text'].default)
+        self.assertEqual(u'some text line', fields['zeiletext'].default)
+
+    @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):
         self.login(self.manager, browser)
 

@@ -129,3 +129,21 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
 
         # smoke-test to validate the schema
         Draft4Validator.check_schema(json_schema)
+
+    def test_returns_static_default_in_json_schema(self):
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices, default=u'fr')
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['language']
+        self.assertEqual(u'fr', prop['default'])
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)

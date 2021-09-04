@@ -27,6 +27,11 @@ class TestPropertySheetWidget(IntegrationTestCase):
             )
             .with_field("multiple_choice", u"choosemulti",
                         u"Choose Multi", u"", True, values=choices)
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -47,6 +52,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Yes or no",
                 u"Choose",
                 u"Choose Multi",
+                u"Choose with default",
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
@@ -74,6 +80,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "yesorno": True,
                     "choose": u"zw\xf6i",
                     "choosemulti": ["three", "one"],
+                    "choose_default": u"fr",
                     "textline": u"b\xe4\xe4",
                 }
             },
@@ -92,6 +99,11 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("bool", u"yesorno", u"Yes or no", u"", True)
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
             )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
@@ -145,6 +157,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 3,
                     "yesorno": True,
                     "choose": u"two",
+                    "choose_default": u"fr",
                     "textline": u"b\xe4\xe4",
                 }
             },
@@ -160,11 +173,17 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
         )
         IDocumentCustomProperties(self.document).custom_properties = {
                 "IDocumentMetadata.document_type.question": {
                     "num": 3,
                     "textline": u"b\xe4\xe4",
+                    "choose_default": u"en",   # <-- different from default
                 }
             }
         self.document.document_type = u"contract"
@@ -185,6 +204,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 "IDocumentMetadata.document_type.question": {
                     "num": 3,
                     "textline": u"b\xe4\xe4",
+                    "choose_default": u"en",
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,
@@ -203,12 +223,18 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
             )
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
         )
         IDocumentCustomProperties(self.document).custom_properties = {
                 "IDocumentMetadata.document_type.question": {
                     "textline": u"b\xe4\xe4",
                     "iwasremoved": 123,
                     "choose": "inolongerexist",
+                    "choose_default": u"en",
                 }
             }
         self.document.document_type = u"contract"
@@ -251,6 +277,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 4,
                     "textline": u"b\xe4\xe4",
                     "choose": "two",
+                    "choose_default": u"en",
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,

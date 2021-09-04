@@ -4,6 +4,8 @@ from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from opengever.testing.test_case import FunctionalTestCase
 from opengever.testing.test_case import TestCase
 from zope import schema
+from zope.schema.interfaces import ConstraintNotSatisfied
+from zope.schema.interfaces import WrongType
 
 
 class TestIsIdentifier(TestCase):
@@ -237,6 +239,20 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['yesorno']
         self.assertIsInstance(field, schema.Bool)
 
+    def test_add_bool_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field("bool", u"yesorno", u"y/n", u"", False,
+                             default=True)
+
+        field = definition.schema_class['yesorno']
+        self.assertEqual(True, field.default)
+
+    def test_add_bool_field_rejects_default_with_wrong_type(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        with self.assertRaises(WrongType):
+            definition.add_field("bool", u"yesorno", u"y/n", u"", False,
+                                 default=['a string'])
+
     def test_add_choice_field_with_simple_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         choices = ['one', 'two', 'three']
@@ -276,6 +292,17 @@ class TestSchemaDefinition(FunctionalTestCase):
         self.assertEqual(
             [u"bl\xe4h".encode("unicode_escape"), "blub"], voc_tokens
         )
+
+    def test_add_choice_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [u'de', u'fr', u'en']
+        definition.add_field(
+            "choice", u"language", u"Language", u"", True,
+            values=choices, default=u'fr'
+        )
+
+        field = definition.schema_class["language"]
+        self.assertEqual(u'fr', field.default)
 
     def test_add_choice_field_requires_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
@@ -322,6 +349,16 @@ class TestSchemaDefinition(FunctionalTestCase):
                 "choice", u"chooseone", u"choose", u"", False, values=choices
             )
 
+    def test_add_choice_field_rejects_default_not_in_vocab(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [u'de', u'fr', u'en']
+
+        with self.assertRaises(ConstraintNotSatisfied):
+            definition.add_field(
+                "choice", u"language", u"Language", u"", True,
+                values=choices, default=u'not-in-vocab'
+            )
+
     def test_add_non_choice_field_prevents_adding_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         with self.assertRaises(InvalidFieldTypeDefinition):
@@ -339,6 +376,16 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['num']
         self.assertIsInstance(field, schema.Int)
 
+    def test_add_int_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "int", u"num", u"A number", u"Put a number.", True,
+            default=42
+        )
+
+        field = definition.schema_class['num']
+        self.assertEqual(42, field.default)
+
     def test_add_text_field(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(
@@ -349,6 +396,16 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['blabla']
         self.assertIsInstance(field, schema.Text)
 
+    def test_add_text_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "text", u"blabla", u"Text", u"Say something long.", True,
+            default=u'Some text'
+        )
+
+        field = definition.schema_class['blabla']
+        self.assertEqual(u'Some text', field.default)
+
     def test_add_textline_field(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(
@@ -358,6 +415,16 @@ class TestSchemaDefinition(FunctionalTestCase):
         self.assertEqual(["bla"], definition.schema_class.names())
         field = definition.schema_class['bla']
         self.assertIsInstance(field, schema.TextLine)
+
+    def test_add_textline_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "textline", u"bla", u"Textline", u"Say something short.", True,
+            default=u'Some text line'
+        )
+
+        field = definition.schema_class['bla']
+        self.assertEqual(u'Some text line', field.default)
 
     def test_enforces_valid_assignments_as_fieldnames(self):
         definition = PropertySheetSchemaDefinition.create("foo")

@@ -13,9 +13,9 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
-from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.dottedname.resolve import resolve
 from zope.globalrequest import getRequest
 from zope.schema import Bool
 from zope.schema import Choice
@@ -171,7 +171,8 @@ class PropertySheetSchemaDefinition(object):
 
         self._assignments = tuple(assignments)
 
-    def add_field(self, field_type, name, title, description, required, values=None):
+    def add_field(self, field_type, name, title, description, required,
+                  values=None, default=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
@@ -227,6 +228,16 @@ class PropertySheetSchemaDefinition(object):
             raise InvalidFieldTypeDefinition(
                 "The argument 'values' is only valid for 'choice' fields."
             )
+
+        if default is not None:
+            if field_type == 'multiple_choice' and isinstance(default, list):
+                # Multiple choice fields strictly require their default to be
+                # of type 'set' (which can't be specified in JSON). So if it's
+                # list, convert it. Otherwise, it's an invalid default anyway,
+                # so we just let zope.schema handle raise WrongType.
+                default = set(default)
+
+            properties['default'] = default
 
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)
