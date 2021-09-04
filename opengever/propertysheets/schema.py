@@ -1,3 +1,4 @@
+from opengever.propertysheets.exportimport import dottedname
 from plone.restapi.serializer.converters import IJsonCompatible
 from plone.restapi.types.utils import get_fieldset_infos
 from plone.restapi.types.utils import get_fieldsets
@@ -23,6 +24,11 @@ def get_property_sheet_schema(schema_class):
         # Determine required fields
         if field.field.required:
             required.append(name)
+
+        # Serialize defaultFactory dottedname, if present
+        default_factory = field.field.defaultFactory
+        if default_factory is not None:
+            properties[name]['default_factory'] = dottedname(default_factory)
 
     schema_info = {
         "type": "object",

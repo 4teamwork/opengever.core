@@ -172,7 +172,7 @@ class PropertySheetSchemaDefinition(object):
         self._assignments = tuple(assignments)
 
     def add_field(self, field_type, name, title, description, required,
-                  values=None, default=None):
+                  values=None, default=None, default_factory=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
@@ -238,6 +238,10 @@ class PropertySheetSchemaDefinition(object):
                 default = set(default)
 
             properties['default'] = default
+
+        # Resolve a possible defaultFactory dottedname into callable
+        if default_factory is not None:
+            properties['defaultFactory'] = resolve(default_factory)
 
         field = factory(**properties)
         schema = IEditableSchema(self.schema_class)

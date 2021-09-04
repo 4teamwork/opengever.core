@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
 
 
@@ -47,6 +49,25 @@ class TestCustomPropertiesFieldsetForDocumentEditForm(IntegrationTestCase):
         widget = browser.find('Language')
         self.assertEqual('fr', widget.value)
 
+    @browsing
+    def test_edit_form_prefills_default_from_default_factory(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'choice', u'language', u'Language', u'', True, values=choices,
+                default_factory=dottedname(dummy_default_factory_fr)
+            )
+        )
+
+        browser.open(self.document, view="@@edit")
+        widget = browser.find('Language')
+        self.assertEqual('fr', widget.value)
+
 
 class TestCustomPropertiesFieldsetForDocumentAddForm(IntegrationTestCase):
 
@@ -83,6 +104,25 @@ class TestCustomPropertiesFieldsetForDocumentAddForm(IntegrationTestCase):
             .with_field(
                 'choice', u'language', u'Language', u'', True, values=choices,
                 default=u'fr'
+            )
+        )
+
+        browser.open(self.dossier, view="++add++opengever.document.document")
+        widget = browser.find('Language')
+        self.assertEqual('fr', widget.value)
+
+    @browsing
+    def test_add_form_prefills_default_from_default_factory(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'choice', u'language', u'Language', u'', True, values=choices,
+                default_factory=dottedname(dummy_default_factory_fr)
             )
         )
 

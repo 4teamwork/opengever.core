@@ -1,7 +1,14 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.testing import dummy_default_factory_42
+from opengever.propertysheets.testing import dummy_default_factory_fr
+from opengever.propertysheets.testing import dummy_default_factory_gruen
+from opengever.propertysheets.testing import dummy_default_factory_some_text
+from opengever.propertysheets.testing import dummy_default_factory_some_text_line
+from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing import IntegrationTestCase
 from zope import schema
 import json
@@ -230,6 +237,89 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(42, fields['nummer'].default)
         self.assertEqual(u'some text', fields['text'].default)
         self.assertEqual(u'some text line', fields['zeiletext'].default)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_factories(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_factory": dottedname(dummy_default_factory_true),
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_factory": dottedname(dummy_default_factory_fr),
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default_factory": dottedname(dummy_default_factory_gruen),
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default_factory": dottedname(dummy_default_factory_42),
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default_factory": dottedname(dummy_default_factory_some_text),
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_factory": dottedname(dummy_default_factory_some_text_line),
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(dummy_default_factory_true,
+                         fields['yn'].defaultFactory)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(dummy_default_factory_fr,
+                         fields['language'].defaultFactory)
+
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(dummy_default_factory_gruen,
+                         fields['colors'].defaultFactory)
+
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(dummy_default_factory_42,
+                         fields['nummer'].defaultFactory)
+
+        self.assertEqual(u'Some text', fields['text'].default)
+        self.assertEqual(dummy_default_factory_some_text,
+                         fields['text'].defaultFactory)
+
+        self.assertEqual(u'Some text line', fields['zeiletext'].default)
+        self.assertEqual(dummy_default_factory_some_text_line,
+                         fields['zeiletext'].defaultFactory)
 
     @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):

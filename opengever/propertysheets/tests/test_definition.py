@@ -1,6 +1,12 @@
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
+from opengever.propertysheets.exportimport import dottedname
+from opengever.propertysheets.testing import dummy_default_factory_42
+from opengever.propertysheets.testing import dummy_default_factory_fr
+from opengever.propertysheets.testing import dummy_default_factory_some_text
+from opengever.propertysheets.testing import dummy_default_factory_some_text_line
+from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing.test_case import FunctionalTestCase
 from opengever.testing.test_case import TestCase
 from zope import schema
@@ -253,6 +259,16 @@ class TestSchemaDefinition(FunctionalTestCase):
             definition.add_field("bool", u"yesorno", u"y/n", u"", False,
                                  default=['a string'])
 
+    def test_add_bool_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "bool", u"yesorno", u"y/n", u"", False,
+            default_factory=dottedname(dummy_default_factory_true))
+
+        field = definition.schema_class['yesorno']
+        self.assertEqual(dummy_default_factory_true, field.defaultFactory)
+        self.assertEqual(True, field.default)
+
     def test_add_choice_field_with_simple_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         choices = ['one', 'two', 'three']
@@ -302,6 +318,18 @@ class TestSchemaDefinition(FunctionalTestCase):
         )
 
         field = definition.schema_class["language"]
+        self.assertEqual(u'fr', field.default)
+
+    def test_add_choice_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [u'de', u'fr', u'en']
+        definition.add_field(
+            "choice", u"language", u"Language", u"", True, values=choices,
+            default_factory=dottedname(dummy_default_factory_fr)
+        )
+
+        field = definition.schema_class["language"]
+        self.assertEqual(dummy_default_factory_fr, field.defaultFactory)
         self.assertEqual(u'fr', field.default)
 
     def test_add_choice_field_requires_values(self):
@@ -386,6 +414,17 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['num']
         self.assertEqual(42, field.default)
 
+    def test_add_int_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "int", u"num", u"A number", u"Put a number.", True,
+            default_factory=dottedname(dummy_default_factory_42)
+        )
+
+        field = definition.schema_class['num']
+        self.assertEqual(dummy_default_factory_42, field.defaultFactory)
+        self.assertEqual(42, field.default)
+
     def test_add_text_field(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(
@@ -406,6 +445,17 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['blabla']
         self.assertEqual(u'Some text', field.default)
 
+    def test_add_text_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "text", u"blabla", u"Text", u"Say something long.", True,
+            default_factory=dottedname(dummy_default_factory_some_text)
+        )
+
+        field = definition.schema_class['blabla']
+        self.assertEqual(dummy_default_factory_some_text, field.defaultFactory)
+        self.assertEqual(u'Some text', field.default)
+
     def test_add_textline_field(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         definition.add_field(
@@ -424,6 +474,17 @@ class TestSchemaDefinition(FunctionalTestCase):
         )
 
         field = definition.schema_class['bla']
+        self.assertEqual(u'Some text line', field.default)
+
+    def test_add_textline_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "textline", u"bla", u"Textline", u"Say something short.", True,
+            default_factory=dottedname(dummy_default_factory_some_text_line)
+        )
+
+        field = definition.schema_class['bla']
+        self.assertEqual(dummy_default_factory_some_text_line, field.defaultFactory)
         self.assertEqual(u'Some text line', field.default)
 
     def test_enforces_valid_assignments_as_fieldnames(self):

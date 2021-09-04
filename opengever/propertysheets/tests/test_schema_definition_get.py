@@ -2,7 +2,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
 
 
@@ -127,6 +129,32 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
 
         prop = browser.json['properties']['language']
         self.assertEqual(u'fr', prop['default'])
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_factory(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_factory=dottedname(dummy_default_factory_fr))
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['language']
+        self.assertEqual(u'fr', prop['default'])
+        self.assertEqual(
+            dottedname(dummy_default_factory_fr),
+            prop['default_factory'])
 
     @browsing
     def test_property_sheet_schema_definition_get_404(self, browser):

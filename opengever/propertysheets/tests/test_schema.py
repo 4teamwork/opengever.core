@@ -1,5 +1,7 @@
 from jsonschema import Draft4Validator
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exportimport import dottedname
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import FunctionalTestCase
 
 
@@ -77,6 +79,12 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             default=u'fr',
         )
         definition.add_field(
+            "choice", u"choice_with_default_factory", u"Choice with default factory",
+            u"", True,
+            values=[u'de', u'fr', u'en'],
+            default_factory=dottedname(dummy_default_factory_fr),
+        )
+        definition.add_field(
             "int", u"num", u"A number", u"Put a number.", True
         )
         definition.add_field(
@@ -100,6 +108,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                        u'yesorno',
                        u'chooseone',
                        u'choice_with_default',
+                       u'choice_with_default_factory',
                        u'num',
                        u'blabla',
                        u'bla',
@@ -144,6 +153,29 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                     u'title': u'Choice with default',
                     u'type': u'string',
                 },
+                u'choice_with_default_factory': {
+                    u'choices': [
+                        [u'de', u'de'],
+                        [u'fr', u'fr'],
+                        [u'en', u'en'],
+                    ],
+                    u'default': u'fr',
+                    u'default_factory': u'opengever.propertysheets.testing.dummy_default_factory_fr',
+                    u'description': u'',
+                    u'enum': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'enumNames': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'Choice with default factory',
+                    u'type': u'string',
+                },
                 u'chooseone': {
                     u'choices': [
                         [u'bl\\xe4h', u'bl\xe4h'],
@@ -177,6 +209,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             },
             'required': [
                 u'choice_with_default',
+                u'choice_with_default_factory',
                 u'num',
                 u'blabla',
                 u'bla',

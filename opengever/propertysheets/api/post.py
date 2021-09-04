@@ -123,8 +123,10 @@ class PropertySheetsPost(Service):
             required = field_data.get("required", False)
             values = field_data.get("values", None)
             default = field_data.get("default", None)
+            default_factory = field_data.get("default_factory", None)
             schema_definition.add_field(
-                field_type, name, title, description, required, values, default
+                field_type, name, title, description, required, values,
+                default, default_factory
             )
 
         self.storage.save(schema_definition)
