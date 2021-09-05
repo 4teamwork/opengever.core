@@ -269,6 +269,17 @@ class TestSchemaDefinition(FunctionalTestCase):
         self.assertEqual(dummy_default_factory_true, field.defaultFactory)
         self.assertEqual(True, field.default)
 
+    def test_add_bool_field_with_default_expression(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "bool", u"yesorno", u"y/n", u"", False,
+            default_expression="portal/validate_email")
+
+        field = definition.schema_class['yesorno']
+        self.assertEqual("portal/validate_email", field.default_expression)
+        self.assertEqual(True, field.defaultFactory())
+        self.assertEqual(True, field.default)
+
     def test_add_choice_field_with_simple_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
         choices = ['one', 'two', 'three']
@@ -331,6 +342,19 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class["language"]
         self.assertEqual(dummy_default_factory_fr, field.defaultFactory)
         self.assertEqual(u'fr', field.default)
+
+    def test_add_choice_field_with_default_expression(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        choices = [u'de', u'fr', u'en']
+        definition.add_field(
+            "choice", u"language", u"Language", u"", True, values=choices,
+            default_expression="portal/language"
+        )
+
+        field = definition.schema_class["language"]
+        self.assertEqual("portal/language", field.default_expression)
+        self.assertEqual(u'en', field.defaultFactory())
+        self.assertEqual(u'en', field.default)
 
     def test_add_choice_field_requires_values(self):
         definition = PropertySheetSchemaDefinition.create("foo")
@@ -486,6 +510,18 @@ class TestSchemaDefinition(FunctionalTestCase):
         field = definition.schema_class['bla']
         self.assertEqual(dummy_default_factory_some_text_line, field.defaultFactory)
         self.assertEqual(u'Some text line', field.default)
+
+    def test_add_textline_field_with_default_expression(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "textline", u"userid", u"User ID from Member object", u"", True,
+            default_expression="member/getId"
+        )
+
+        field = definition.schema_class['userid']
+        self.assertEqual("member/getId", field.default_expression)
+        self.assertEqual(u'test_user_1_', field.defaultFactory())
+        self.assertEqual(u'test_user_1_', field.default)
 
     def test_enforces_valid_assignments_as_fieldnames(self):
         definition = PropertySheetSchemaDefinition.create("foo")

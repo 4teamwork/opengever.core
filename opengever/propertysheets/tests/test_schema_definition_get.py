@@ -157,6 +157,32 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             prop['default_factory'])
 
     @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_expression(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_expression="portal/language")
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['language']
+        self.assertEqual(u'en', prop['default'])
+        self.assertEqual(
+            'portal/language',
+            prop['default_expression'])
+
+    @browsing
     def test_property_sheet_schema_definition_get_404(self, browser):
         self.login(self.regular_user, browser)
 

@@ -322,6 +322,95 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                          fields['zeiletext'].defaultFactory)
 
     @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_expressions(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_expression": "python: True",
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_expression": "python: u'fr'",
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default_expression": "python: {u'gr\\xfcn'}",
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default_expression": "python: 42",
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default_expression": "python: 'Some text'",
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_expression": "python: 'Some text line'",
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(True, fields['yn'].defaultFactory())
+        self.assertEqual("python: True",
+                         fields['yn'].default_expression)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(u'fr', fields['language'].defaultFactory())
+        self.assertEqual("python: u'fr'",
+                         fields['language'].default_expression)
+
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].defaultFactory())
+        self.assertEqual(u"python: {u'gr\\xfcn'}",
+                         fields['colors'].default_expression)
+
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(42, fields['nummer'].defaultFactory())
+        self.assertEqual("python: 42",
+                         fields['nummer'].default_expression)
+
+        self.assertEqual(u'Some text', fields['text'].default)
+        self.assertEqual(u'Some text', fields['text'].defaultFactory())
+        self.assertEqual("python: 'Some text'",
+                         fields['text'].default_expression)
+
+        self.assertEqual(u'Some text line', fields['zeiletext'].default)
+        self.assertEqual(u'Some text line', fields['zeiletext'].defaultFactory())
+        self.assertEqual("python: 'Some text line'",
+                         fields['zeiletext'].default_expression)
+
+    @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):
         self.login(self.manager, browser)
 

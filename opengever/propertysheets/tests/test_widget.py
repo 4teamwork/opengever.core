@@ -40,6 +40,12 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 values=[u'de', u'fr', u'en'],
                 default_factory=dottedname(dummy_default_factory_fr),
             )
+            .with_field(
+                "choice", u"choose_default_expression", u"Choose with default expression",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_expression='portal/language',
+            )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -62,6 +68,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Choose Multi",
                 u"Choose with default",
                 u"Choose with default factory",
+                u"Choose with default expression",
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
@@ -91,6 +98,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "choosemulti": ["three", "one"],
                     "choose_default": u"fr",
                     "choose_default_factory": u"fr",
+                    "choose_default_expression": u"en",
                     "textline": u"b\xe4\xe4",
                 }
             },
@@ -120,6 +128,12 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"", True,
                 values=[u'de', u'fr', u'en'],
                 default_factory=dottedname(dummy_default_factory_fr),
+            )
+            .with_field(
+                "choice", u"choose_default_expression", u"Choose with default expression",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_expression='portal/language',
             )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
@@ -175,6 +189,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "choose": u"two",
                     "choose_default": u"fr",
                     "choose_default_factory": u"fr",
+                    "choose_default_expression": u"en",
                     "textline": u"b\xe4\xe4",
                 }
             },

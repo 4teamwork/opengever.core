@@ -30,6 +30,11 @@ def get_property_sheet_schema(schema_class):
         if default_factory is not None:
             properties[name]['default_factory'] = dottedname(default_factory)
 
+        # Serialize default_expression, if present
+        default_expression = getattr(field.field, 'default_expression', None)
+        if default_expression is not None:
+            properties[name]['default_expression'] = default_expression
+
     schema_info = {
         "type": "object",
         "title": schema_class.getName(),

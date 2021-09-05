@@ -85,6 +85,12 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             default_factory=dottedname(dummy_default_factory_fr),
         )
         definition.add_field(
+            "choice", u"choice_with_default_expression", u"Choice with default expression",
+            u"", True,
+            values=[u'de', u'fr', u'en'],
+            default_expression='portal/language',
+        )
+        definition.add_field(
             "int", u"num", u"A number", u"Put a number.", True
         )
         definition.add_field(
@@ -109,6 +115,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                        u'chooseone',
                        u'choice_with_default',
                        u'choice_with_default_factory',
+                       u'choice_with_default_expression',
                        u'num',
                        u'blabla',
                        u'bla',
@@ -151,6 +158,30 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                     ],
                     u'factory': u'Choice',
                     u'title': u'Choice with default',
+                    u'type': u'string',
+                },
+                u'choice_with_default_expression': {
+                    u'choices': [
+                        [u'de', u'de'],
+                        [u'fr', u'fr'],
+                        [u'en', u'en'],
+                    ],
+                    u'default': u'en',
+                    u'default_expression': u'portal/language',
+                    u'default_factory': None,
+                    u'description': u'',
+                    u'enum': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'enumNames': [
+                        u'de',
+                        u'fr',
+                        u'en',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'Choice with default expression',
                     u'type': u'string',
                 },
                 u'choice_with_default_factory': {
@@ -210,6 +241,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             'required': [
                 u'choice_with_default',
                 u'choice_with_default_factory',
+                u'choice_with_default_expression',
                 u'num',
                 u'blabla',
                 u'bla',
