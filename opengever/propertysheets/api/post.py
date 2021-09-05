@@ -121,10 +121,10 @@ class PropertySheetsPost(Service):
             title = field_data.get("title", name)
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
-            values = field_data.get("values", None)
-            default = field_data.get("default", None)
-            default_factory = field_data.get("default_factory", None)
-            default_expression = field_data.get("default_expression", None)
+            values = field_data.get("values")
+            default = field_data.get("default")
+            default_factory = field_data.get("default_factory")
+            default_expression = field_data.get("default_expression")
             schema_definition.add_field(
                 field_type, name, title, description, required, values,
                 default, default_factory, default_expression
