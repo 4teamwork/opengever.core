@@ -11,6 +11,7 @@ subclassed, we need to re-instantiate and re-register all of the type
 specific handlers to make use of it.
 """
 
+from opengever.propertysheets.default_expression import attach_expression_default_factory
 from plone.supermodel.exportimport import BaseHandler as PSBaseHandler
 from plone.supermodel.exportimport import ChoiceHandler as PSChoiceHandler
 from plone.supermodel.exportimport import DictHandler as PSDictHandler
@@ -58,6 +59,11 @@ class BaseHandler(PSBaseHandler):
             if value is not None:
                 setattr(field, attr_name, value)
 
+        # If a default_expression is present, turn it into a defaultFactory
+        default_expression = getattr(field, 'default_expression', None)
+        if default_expression is not None:
+            attach_expression_default_factory(field, default_expression)
+
         return field
 
     def writeAttribute(self, attributeField, field, ignoreDefault=True):
@@ -104,7 +110,9 @@ def dottedname(func):
     of PropertySheets. Also, by making sure the name we built actually
     resolves back to the same object, we ensure roundtrip-safety.
     """
-    path = (func.__module__, func.__name__)
+    path = (getattr(func, '__module__', None),
+            getattr(func, '__name__', None))
+
     if not all(path):
         return None
 

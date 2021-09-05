@@ -1,4 +1,5 @@
 from doctest import Example
+from functools import partial
 from lxml.doctestcompare import LXMLOutputChecker
 from opengever.propertysheets.exportimport import BaseHandler
 from opengever.propertysheets.exportimport import CUSTOM_FIELD_ATTRIBUTES
@@ -7,6 +8,7 @@ from opengever.testing import IntegrationTestCase
 from plone.supermodel import loadString
 from plone.supermodel import serializeSchema
 from plone.supermodel.exportimport import BaseHandler as PSBaseHandler
+from plone.supermodel.interfaces import IDefaultFactory
 from plone.supermodel.interfaces import IFieldExportImportHandler
 from zope.component import getUtility
 from zope.interface import Interface
@@ -14,6 +16,7 @@ from zope.interface import provider
 from zope.schema import Choice
 from zope.schema import TextLine
 from zope.schema.interfaces import IContextAwareDefaultFactory
+import functools
 import inspect
 import unittest
 
@@ -143,6 +146,34 @@ class TestSupermodelExportImport(IntegrationTestCase):
         self.assertEqual(
             expression,
             deserialized_schema['userid'].default_expression)
+
+    def test_default_expression_is_turned_into_evaluating_factory_upon_deserialization(self):
+        expression = 'member/getId'
+
+        xml_schema = """\
+        <model %s>
+          <schema name="Dummy" based-on="zope.interface.Interface">
+            <field name="userid" type="zope.schema.TextLine">
+              <default_expression>%s</default_expression>
+              <title>User ID</title>
+            </field>
+          </schema>
+        </model>
+        """ % (self.MODEL_XMLNS, expression)
+
+        model = loadString(xml_schema)
+        deserialized_schema = model.schemata['Dummy']
+
+        field = deserialized_schema['userid']
+
+        self.assertIsInstance(field.defaultFactory, functools.partial)
+        self.assertTrue(IDefaultFactory.providedBy(field.defaultFactory))
+
+        self.login(self.regular_user)
+        self.assertEqual(u'kathi.barfuss', field.defaultFactory())
+
+        self.login(self.dossier_responsible)
+        self.assertEqual(u'robert.ziegler', field.defaultFactory())
 
     def test_serialized_schemas_dont_get_contaminated_by_custom_attributes(self):
         """Our custom attribute serialization must only add them to fields in
@@ -284,3 +315,9 @@ class TestDottednameHelper(unittest.TestCase):
 
     def test_dottedname_doesnt_resolve_lambdas(self):
         self.assertIsNone(dottedname(lambda arg: arg))
+
+    def test_dottedname_doesnt_choke_on_partials(self):
+        def func(arg):
+            return 42
+
+        self.assertIsNone(dottedname(partial(func, 'x')))
