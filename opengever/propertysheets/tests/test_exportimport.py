@@ -1,6 +1,7 @@
 from doctest import Example
 from lxml.doctestcompare import LXMLOutputChecker
 from opengever.propertysheets.exportimport import BaseHandler
+from opengever.propertysheets.exportimport import CUSTOM_FIELD_ATTRIBUTES
 from opengever.propertysheets.exportimport import dottedname
 from opengever.testing import IntegrationTestCase
 from plone.supermodel import loadString
@@ -11,6 +12,7 @@ from zope.component import getUtility
 from zope.interface import Interface
 from zope.interface import provider
 from zope.schema import Choice
+from zope.schema import TextLine
 from zope.schema.interfaces import IContextAwareDefaultFactory
 import inspect
 import unittest
@@ -97,6 +99,93 @@ class TestSupermodelExportImport(IntegrationTestCase):
         self.assertEqual(
             dummy_default_factory,
             deserialized_schema['language'].defaultFactory)
+
+    def test_serializes_default_expression(self):
+
+        class SchemaWithDefaultExpression(Interface):
+
+            userid = TextLine(
+                title=u'User ID',
+            )
+
+        expression = 'member/getId'
+        SchemaWithDefaultExpression['userid'].default_expression = expression
+
+        expected = """\
+            <schema name="Dummy" based-on="zope.interface.Interface">
+              <field name="userid" type="zope.schema.TextLine">
+                <default_expression>%s</default_expression>
+                <title>User ID</title>
+              </field>
+            </schema>
+        """ % expression
+
+        serialized_schema = serializeSchema(
+            SchemaWithDefaultExpression, name='Dummy')
+        self.assertSchemaXMLEqual(expected, serialized_schema)
+
+    def test_deserializes_default_expression(self):
+        expression = 'member/getId'
+
+        xml_schema = """\
+        <model %s>
+          <schema name="Dummy" based-on="zope.interface.Interface">
+            <field name="userid" type="zope.schema.TextLine">
+              <default_expression>%s</default_expression>
+              <title>User ID</title>
+            </field>
+          </schema>
+        </model>
+        """ % (self.MODEL_XMLNS, expression)
+
+        model = loadString(xml_schema)
+        deserialized_schema = model.schemata['Dummy']
+        self.assertEqual(
+            expression,
+            deserialized_schema['userid'].default_expression)
+
+    def test_serialized_schemas_dont_get_contaminated_by_custom_attributes(self):
+        """Our custom attribute serialization must only add them to fields in
+        serialized schemas if any custom attributes actually were present.
+        """
+
+        class RegularSchema(Interface):
+
+            some_field = TextLine(
+                title=u'Some title',
+            )
+        expected = """\
+            <schema name="Regular" based-on="zope.interface.Interface">
+              <field name="some_field" type="zope.schema.TextLine">
+                <title>Some title</title>
+              </field>
+            </schema>
+        """
+
+        serialized_schema = serializeSchema(
+            RegularSchema, name='Regular')
+        self.assertSchemaXMLEqual(expected, serialized_schema)
+
+    def test_deserialized_fields_dont_get_contaminated_by_custom_attributes(self):
+        """Our custom attribute deserialization must only add them to fields
+        if any custom attributes actually were present in the XML schema.
+        """
+        xml_schema = """\
+        <model %s>
+          <schema name="Regular" based-on="zope.interface.Interface">
+            <field name="some_field" type="zope.schema.TextLine">
+              <title>Some title</title>
+            </field>
+          </schema>
+        </model>
+        """ % self.MODEL_XMLNS
+
+        model = loadString(xml_schema)
+        deserialized_schema = model.schemata['Regular']
+
+        for attr_name in CUSTOM_FIELD_ATTRIBUTES:
+            self.assertFalse(
+                hasattr(deserialized_schema['some_field'], attr_name))
 
 
 class TestSupermodelHandlerOverrides(IntegrationTestCase):

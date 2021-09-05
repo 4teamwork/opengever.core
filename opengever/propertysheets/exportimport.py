@@ -19,26 +19,75 @@ from zope.dottedname.resolve import resolve
 import zope.schema
 
 
+CUSTOM_FIELD_ATTRIBUTES = (
+    'default_expression',
+)
+
+
 class BaseHandler(PSBaseHandler):
 
     # Remove 'defaultFactory' from the write-blacklist
     filteredAttributes = PSBaseHandler.filteredAttributes.copy()
     filteredAttributes.pop('defaultFactory')
 
-    def writeAttribute(self, attributeField, field, ignoreDefault=True):
-        """Add support for serialization of defaultFactories to dottednames.
+    def __init__(self, klass):
+        super(BaseHandler, self).__init__(klass)
 
-        plone.supermodel's BaseHandler only supports deserialization, probably
-        because not all Python callables can be addressed via dotted names,
-        but we can make it work for simple cases without any fancy scopes.
+        # Add support for our custom default_expression attribute
+        # that we store on the IField as a Python attribute
+        self.fieldAttributes['default_expression'] = \
+            zope.schema.TextLine(
+                __name__='default_expression',
+                title=u"Default from TALES expression"
+            )
+
+    def _constructField(self, attributes):
+        """Sneak our custom attributes by the zope.schema Field constructors.
         """
-        if attributeField.getName() == 'defaultFactory' and field.defaultFactory:
+        custom_attrs = {name: None for name in CUSTOM_FIELD_ATTRIBUTES}
+
+        # Pop them from the attributes dict passed to field constructors
+        for attr_name in custom_attrs:
+            custom_attrs[attr_name] = attributes.pop(attr_name, None)
+
+        # Have the superclass construct the field as usual
+        field = super(BaseHandler, self)._constructField(attributes)
+
+        # Set the custom attributes as plain Python attributes on the field
+        for attr_name, value in custom_attrs.items():
+            if value is not None:
+                setattr(field, attr_name, value)
+
+        return field
+
+    def writeAttribute(self, attributeField, field, ignoreDefault=True):
+        """Add support for serialization of our custom attributes.
+        """
+        attribute_name = attributeField.getName()
+
+        # First, we serialize defaultFactories to dottednames.
+        #
+        # plone.supermodel's BaseHandler only supports deserialization,
+        # probably because not all Python callables can be addressed via
+        # dotted names, but we can make it work for simple cases without
+        # any fancy scopes.
+        if attribute_name == 'defaultFactory' and field.defaultFactory:
             # Create a clone of the field, with its defaultFactory callable
             # turned into a dottedname string so it can be serialized.
             clone = self.klass.__new__(self.klass)
             clone.__dict__.update(field.__dict__)
             clone.defaultFactory = dottedname(field.defaultFactory)
             field = clone
+
+        # We also serialize some completely custom attributes that we
+        # piggy-back on the IField. Because these are not part of the IField
+        # schema (unlike defaultFactory), we need to make sure they don't get
+        # in the way of serialization. We added them to fieldAttributes above,
+        # which means they'll automatically be serialized. But if they don't
+        # exist, we need to handle that here to avoid an AttributeError.
+        if attribute_name in CUSTOM_FIELD_ATTRIBUTES:
+            if not hasattr(field, attribute_name):
+                return None
 
         return super(BaseHandler, self).writeAttribute(
             attributeField, field, ignoreDefault=ignoreDefault)
