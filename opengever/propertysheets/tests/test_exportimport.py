@@ -175,6 +175,52 @@ class TestSupermodelExportImport(IntegrationTestCase):
         self.login(self.dossier_responsible)
         self.assertEqual(u'robert.ziegler', field.defaultFactory())
 
+    def test_serializes_default_from_member(self):
+        self.login(self.regular_user)
+
+        class SchemaWithDefaultFromMember(Interface):
+
+            userid = TextLine(
+                title=u'User ID',
+            )
+
+        dfm_options = '{"property": "email"}'
+        field = SchemaWithDefaultFromMember['userid']
+        field.default_from_member = dfm_options
+
+        expected = """\
+            <schema name="Dummy" based-on="zope.interface.Interface">
+              <field name="userid" type="zope.schema.TextLine">
+                <default_from_member>%s</default_from_member>
+                <title>User ID</title>
+              </field>
+            </schema>
+        """ % dfm_options
+
+        serialized_schema = serializeSchema(
+            SchemaWithDefaultFromMember, name='Dummy')
+        self.assertSchemaXMLEqual(expected, serialized_schema)
+
+    def test_deserializes_default_from_member(self):
+        dfm_options = '{"property": "email"}'
+
+        xml_schema = """\
+        <model %s>
+          <schema name="Dummy" based-on="zope.interface.Interface">
+            <field name="userid" type="zope.schema.TextLine">
+              <default_from_member>%s</default_from_member>
+              <title>User ID</title>
+            </field>
+          </schema>
+        </model>
+        """ % (self.MODEL_XMLNS, dfm_options)
+
+        model = loadString(xml_schema)
+        deserialized_schema = model.schemata['Dummy']
+        self.assertEqual(
+            dfm_options,
+            deserialized_schema['userid'].default_from_member)
+
     def test_serialized_schemas_dont_get_contaminated_by_custom_attributes(self):
         """Our custom attribute serialization must only add them to fields in
         serialized schemas if any custom attributes actually were present.

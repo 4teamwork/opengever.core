@@ -22,6 +22,7 @@ import zope.schema
 
 CUSTOM_FIELD_ATTRIBUTES = (
     'default_expression',
+    'default_from_member',
 )
 
 
@@ -32,14 +33,25 @@ class BaseHandler(PSBaseHandler):
     filteredAttributes.pop('defaultFactory')
 
     def __init__(self, klass):
+        """Add support for our custom attributes.
+
+        These get stored as plain Python attributes on the IField that
+        gets passed from/to the plone.supermodel export/import handlers.
+        """
         super(BaseHandler, self).__init__(klass)
 
-        # Add support for our custom default_expression attribute
-        # that we store on the IField as a Python attribute
+        # default_expression - string with a TALES expression
         self.fieldAttributes['default_expression'] = \
             zope.schema.TextLine(
                 __name__='default_expression',
                 title=u"Default from TALES expression"
+            )
+
+        # default_from_member - string wth a JSON encoded dict
+        self.fieldAttributes['default_from_member'] = \
+            zope.schema.TextLine(
+                __name__='default_from_member',
+                title=u"Default from Member property"
             )
 
     def _constructField(self, attributes):
