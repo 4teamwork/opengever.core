@@ -99,8 +99,7 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
-        manager.checkout()
-        create_lock(self.document, 'TOKEN')
+        manager.checkout(True)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertTrue(actions.is_office_online_edit_action_available())
 
