@@ -125,6 +125,8 @@ class MethodValidator(SimpleFieldValidator):
                 raise Invalid(msg)
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 WidgetValidatorDiscriminators(MethodValidator,
                               field=IChooseMethodSchema['method'])
 

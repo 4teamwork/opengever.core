@@ -136,12 +136,15 @@ class ISendDocumentSchema(Interface):
                             or enter a extern mail-addres'))
 
 
-# put the validators
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI or remove the `send_as_email` action.
 validator.WidgetValidatorDiscriminators(
     DocumentSizeValidator,
     field=ISendDocumentSchema['documents'],
     )
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI or remove the `send_as_email` action.
 validator.WidgetValidatorDiscriminators(
     AddressValidator,
     field=ISendDocumentSchema['extern_receiver'],

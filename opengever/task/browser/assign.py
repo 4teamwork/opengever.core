@@ -105,6 +105,7 @@ class InProgressStateLimitiationsValidator(validator.SimpleFieldValidator):
             validate_no_admin_unit_change(self.context, data['responsible_client'])
 
 
+# this validator is relevant for API requests and used in `TransitionExtender`
 validator.WidgetValidatorDiscriminators(
     InProgressStateLimitiationsValidator,
     field=IAssignSchema['responsible'],

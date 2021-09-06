@@ -73,6 +73,8 @@ class DossierValidator(SimpleFieldValidator):
             raise Invalid(msg)
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 WidgetValidatorDiscriminators(DossierValidator,
                               field=IChooseDossierSchema['dossier'])
 

@@ -74,6 +74,8 @@ class ReferenceNumberPrefixValidator(validator.SimpleFieldValidator):
                 raise schema.interfaces.ConstraintNotSatisfied()
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 validator.WidgetValidatorDiscriminators(
     ReferenceNumberPrefixValidator,
     field=IReferenceNumberPrefix['reference_number_prefix'],

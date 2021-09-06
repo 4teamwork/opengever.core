@@ -201,6 +201,7 @@ class IFilingFormSchema(model.Schema):
                         all fields are required."))
 
 
+# this validator is relevant for API requests and used in `TransitionExtender`
 validator.WidgetValidatorDiscriminators(
     EnddateValidator,
     field=IFilingFormSchema['dossier_enddate'],
