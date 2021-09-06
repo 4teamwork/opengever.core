@@ -18,6 +18,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
 from opengever.trash.trash import ITrasher
+from opengever.wopi.lock import create_lock
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import logout
@@ -112,12 +113,24 @@ class TestCheckinIntegration(IntegrationTestCase):
         with self.assertRaises(Unauthorized):
             manager.checkin(collaborative=True)
 
+    def test_checkin_allowed_if_collaboratively_checked_out_and_not_locked(self):
+        self.login(self.regular_user)
+        manager = getMultiAdapter((self.document, self.portal.REQUEST),
+                                  ICheckinCheckoutManager)
+
+        manager.checkout(collaborative=True)
+        self.assertEqual(self.regular_user.getId(),
+                         manager.get_checked_out_by())
+
+        self.assertTrue(manager.is_checkin_allowed())
+
     def test_collaborative_checkout_can_only_be_checked_in_collaboratively(self):
         self.login(self.regular_user)
         manager = getMultiAdapter((self.document, self.portal.REQUEST),
                                   ICheckinCheckoutManager)
 
         manager.checkout(collaborative=True)
+        create_lock(self.document, 'lock-token')
         manager.add_collaborator(self.dossier_responsible.getId())
         self.assertEqual(self.regular_user.getId(),
                          manager.get_checked_out_by())
