@@ -109,5 +109,6 @@
       component=".exportimport.ChoiceHandler"
       name="zope.schema.Choice"
       />
+  <adapter factory=".exportimport.SafeObjectFromUnicode" />
 
 </configure>

@@ -13,11 +13,16 @@ specific handlers to make use of it.
 
 from opengever.propertysheets.default_expression import attach_expression_default_factory
 from opengever.propertysheets.default_from_member import attach_member_property_default_factory
+from plone.supermodel.converters import ObjectFromUnicode
 from plone.supermodel.exportimport import BaseHandler as PSBaseHandler
 from plone.supermodel.exportimport import ChoiceHandler as PSChoiceHandler
 from plone.supermodel.exportimport import DictHandler as PSDictHandler
 from plone.supermodel.exportimport import ObjectHandler as PSObjectHandler
+from zope.component import adapter
 from zope.dottedname.resolve import resolve
+from zope.interface import implementer
+from zope.schema.interfaces import IFromUnicode
+from zope.schema.interfaces import IObject
 import zope.schema
 
 
@@ -171,6 +176,28 @@ class ChoiceHandlerFactory(BaseHandler, PSChoiceHandler):
          'vocabularyName': 'rw'
          }
     )
+
+
+@implementer(IFromUnicode)
+@adapter(IObject)
+class SafeObjectFromUnicode(ObjectFromUnicode):
+
+    def __init__(self, context):
+        self.context = context
+
+    def fromUnicode(self, value):
+        # Fail gracefully if unable to resolve dotted name for a defaultFactory
+        # (for example, because the function was deleted in the meantime) 
+        if getattr(self.context, '__name__') == 'defaultFactory':
+            try:
+                obj = resolve(value)
+                self.context.validate(obj)
+                return obj
+            except Exception:
+                return None
+
+        # Delegate to original implementation for all other cases
+        return super(SafeObjectFromUnicode, self).fromUnicode(value)
 
 
 # These are all the handlers from plone.supermodel.fields.

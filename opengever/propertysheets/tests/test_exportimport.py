@@ -103,6 +103,30 @@ class TestSupermodelExportImport(IntegrationTestCase):
             dummy_default_factory,
             deserialized_schema['language'].defaultFactory)
 
+    def test_deserializing_nonexistent_default_factory_fails_gracefully(self):
+        dottedname = 'i.am.gone.forever'
+        xml_schema = """\
+        <model %s>
+          <schema name="Dummy" based-on="zope.interface.Interface">
+            <field name="language" type="zope.schema.Choice">
+              <default>de</default>
+              <defaultFactory>%s</defaultFactory>
+              <title>Language</title>
+              <values>
+                <element>de</element>
+                <element>fr</element>
+              </values>
+            </field>
+          </schema>
+        </model>
+        """ % (self.MODEL_XMLNS, dottedname)
+
+        model = loadString(xml_schema)
+        deserialized_schema = model.schemata['Dummy']
+        self.assertEqual(
+            None,
+            deserialized_schema['language'].defaultFactory)
+
     def test_serializes_default_expression(self):
 
         class SchemaWithDefaultExpression(Interface):
