@@ -57,6 +57,12 @@ class INightlyJobProvider(Interface):
         load constraints.
         """
 
+    def maybe_commit(job):
+        """This method is called after each job has been executed for the given
+        provider. The provider is in charge of deciding whether and how to
+        commit.
+        """
+
     def __iter__():
         """Returns an iterator of jobs.
 

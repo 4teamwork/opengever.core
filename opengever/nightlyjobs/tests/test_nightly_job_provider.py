@@ -64,6 +64,9 @@ class DocumentTitleModifierJobProvider(object):
         obj = uuidToObject(job['uid'])
         obj.title = u'Modified {}'.format(obj.title)
 
+    def maybe_commit(self, job):
+        pass
+
 
 class TestNightlyJobProviderClasses(IntegrationTestCase):
 

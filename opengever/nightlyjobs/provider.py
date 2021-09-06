@@ -4,6 +4,7 @@ from zope.component import adapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
 import logging
+import transaction
 
 
 @implementer(INightlyJobProvider)
@@ -14,3 +15,6 @@ class NightlyJobProviderBase(object):
         self.context = context
         self.request = request
         self.logger = logger
+
+    def maybe_commit(self, job):
+        transaction.commit()
