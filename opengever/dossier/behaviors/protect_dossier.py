@@ -182,7 +182,7 @@ class DossierProtection(AnnotationsFactoryImpl):
         to the current dossier also if it not defined in the schema. This
         is to prevent locking out yourself.
         """
-        if not self.need_update(force_update):
+        if not self.is_update_allowed(force_update):
             return
 
         self.update_role_inheritance()
@@ -193,16 +193,14 @@ class DossierProtection(AnnotationsFactoryImpl):
 
         self.context.reindexObjectSecurity()
 
-    def need_update(self, force_update=False):
+    def is_update_allowed(self, force_update=False):
         """Only update the permissions if the current user has the
         protect dossier permission and a dossier manager is set.
         """
         if force_update:
             return True
-
-        return api.user.has_permission(
-            'opengever.dossier: Protect dossier', obj=self.context) and \
-            self.dossier_manager
+        return api.user.has_permission('opengever.dossier: Protect dossier', obj=self.context) and \
+            (self.dossier_manager or not self.is_dossier_protected())
 
     def update_role_inheritance(self):
         old_value = self.is_role_inheritance_blocked(self.context)
