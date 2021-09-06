@@ -779,3 +779,55 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=self.api_headers,
             )
+
+    @browsing
+    def test_dynamic_defaults_require_manager_role(self, browser):
+        """This test would not *currently* fail if the protection for dynamic
+        defaults wasn't in place, because the entire @propertysheets POST
+        endpoint is restricted to managers anyway. It *would* however fail if
+        that API endpoint was ever opened up (tested manually).
+        """
+        self.login(self.regular_user, browser)
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_factory": dottedname(
+                            dummy_default_factory_fr),
+                    }]
+                }),
+                headers=self.api_headers,
+            )
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_expression": "member/getId",
+                    }]
+                }),
+                headers=self.api_headers,
+            )
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_from_member": {'property': 'fullname'},
+                    }]
+                }),
+                headers=self.api_headers,
+            )
