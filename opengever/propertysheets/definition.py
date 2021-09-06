@@ -102,6 +102,12 @@ class PropertySheetSchemaDefinition(object):
         'textline': fields.TextLineFactory,
     }
 
+    DYNAMIC_DEFAULT_PROPERTIES = (
+        'default_factory',
+        'default_expression',
+        'default_from_member',
+    )
+
     @classmethod
     def create(cls, name, assignments=None):
 
@@ -184,6 +190,21 @@ class PropertySheetSchemaDefinition(object):
         if not isidentifier(name):
             raise InvalidFieldTypeDefinition(
                 "The name '{}' is not a valid identifier.".format(name)
+            )
+
+        # Make all default value properties mutually exclusive
+        dynamic_defaults = [
+            default_factory,
+            default_expression,
+            default_from_member
+        ]
+        assert len(dynamic_defaults) == len(self.DYNAMIC_DEFAULT_PROPERTIES)
+
+        all_defaults = [default] + dynamic_defaults
+        if len(filter(None, all_defaults)) > 1:
+            raise InvalidFieldTypeDefinition(
+                "The default value properties ('default', {}) are mutually "
+                "exclusive".format(','.join(self.DYNAMIC_DEFAULT_PROPERTIES))
             )
 
         factory = self.FACTORIES[field_type]

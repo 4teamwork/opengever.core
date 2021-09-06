@@ -551,3 +551,27 @@ class TestSchemaDefinition(FunctionalTestCase):
             definition.add_field(
                 "bool", u"in val id!", u"", u"", True
             )
+
+    def test_default_value_properties_are_mutually_exclusive(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "text", u"mytext", u"My text", u"", False,
+                default='foo',
+                default_factory='some.dotted.name'
+            )
+
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "text", u"mytext", u"My text", u"", False,
+                default='foo',
+                default_expression='member/getId'
+            )
+
+        with self.assertRaises(InvalidFieldTypeDefinition):
+            definition.add_field(
+                "text", u"mytext", u"My text", u"", False,
+                default='foo',
+                default_from_member={'property': 'fullname'}
+            )
