@@ -1,8 +1,16 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.testing import dummy_default_factory_42
+from opengever.propertysheets.testing import dummy_default_factory_fr
+from opengever.propertysheets.testing import dummy_default_factory_gruen
+from opengever.propertysheets.testing import dummy_default_factory_some_text
+from opengever.propertysheets.testing import dummy_default_factory_some_text_line
+from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope import schema
 import json
 
@@ -164,6 +172,320 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             ["yn", "wahl", "colors", "nummer", "text", "zeiletext"],
             definition.get_fieldnames()
         )
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_static_defaults(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default": True,
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default": u"fr",
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default": [u"gr\xfcn"],
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default": 42,
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default": u"some text",
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default": u"some text line",
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(u'some text', fields['text'].default)
+        self.assertEqual(u'some text line', fields['zeiletext'].default)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_factories(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_factory": dottedname(dummy_default_factory_true),
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_factory": dottedname(dummy_default_factory_fr),
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default_factory": dottedname(dummy_default_factory_gruen),
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default_factory": dottedname(dummy_default_factory_42),
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default_factory": dottedname(dummy_default_factory_some_text),
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_factory": dottedname(dummy_default_factory_some_text_line),
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(dummy_default_factory_true,
+                         fields['yn'].defaultFactory)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(dummy_default_factory_fr,
+                         fields['language'].defaultFactory)
+
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(dummy_default_factory_gruen,
+                         fields['colors'].defaultFactory)
+
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(dummy_default_factory_42,
+                         fields['nummer'].defaultFactory)
+
+        self.assertEqual(u'Some text', fields['text'].default)
+        self.assertEqual(dummy_default_factory_some_text,
+                         fields['text'].defaultFactory)
+
+        self.assertEqual(u'Some text line', fields['zeiletext'].default)
+        self.assertEqual(dummy_default_factory_some_text_line,
+                         fields['zeiletext'].defaultFactory)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_expressions(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_expression": "python: True",
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Language",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_expression": "python: u'fr'",
+                },
+                {
+                    "name": "colors",
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"],
+                    "default_expression": "python: {u'gr\\xfcn'}",
+                },
+                {
+                    "name": "nummer",
+                    "field_type": u"int",
+                    "title": u"zahl",
+                    "default_expression": "python: 42",
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "required": True,
+                    "default_expression": "python: 'Some text'",
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_expression": "python: 'Some text line'",
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(True, fields['yn'].defaultFactory())
+        self.assertEqual("python: True",
+                         fields['yn'].default_expression)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(u'fr', fields['language'].defaultFactory())
+        self.assertEqual("python: u'fr'",
+                         fields['language'].default_expression)
+
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].default)
+        self.assertEqual(set([u'gr\xfcn']), fields['colors'].defaultFactory())
+        self.assertEqual(u"python: {u'gr\\xfcn'}",
+                         fields['colors'].default_expression)
+
+        self.assertEqual(42, fields['nummer'].default)
+        self.assertEqual(42, fields['nummer'].defaultFactory())
+        self.assertEqual("python: 42",
+                         fields['nummer'].default_expression)
+
+        self.assertEqual(u'Some text', fields['text'].default)
+        self.assertEqual(u'Some text', fields['text'].defaultFactory())
+        self.assertEqual("python: 'Some text'",
+                         fields['text'].default_expression)
+
+        self.assertEqual(u'Some text line', fields['zeiletext'].default)
+        self.assertEqual(u'Some text line', fields['zeiletext'].defaultFactory())
+        self.assertEqual("python: 'Some text line'",
+                         fields['zeiletext'].default_expression)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({
+            'listed': True,
+            'language': 'fr',
+            'description': 'Some text\n Lorem Ipsum',
+            'fullname': u'B\xe4rfuss K\xe4thi',
+        })
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_from_member": {'property': 'listed'},
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Location",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_from_member": {'property': 'language'},
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "default_from_member": {'property': 'description'},
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_from_member": {'property': 'fullname'},
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+
+        self.login(self.manager, browser)
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        self.login(self.regular_user, browser)
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(True, fields['yn'].defaultFactory())
+        self.assertEqual('{"property": "listed"}',
+                         fields['yn'].default_from_member)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(u'fr', fields['language'].defaultFactory())
+        self.assertEqual('{"property": "language"}',
+                         fields['language'].default_from_member)
+
+        self.assertEqual('Some text\n Lorem Ipsum', fields['text'].default)
+        self.assertEqual('Some text\n Lorem Ipsum', fields['text'].defaultFactory())
+        self.assertEqual('{"property": "description"}',
+                         fields['text'].default_from_member)
+
+        self.assertEqual(u'B\xe4rfuss K\xe4thi', fields['zeiletext'].default)
+        self.assertEqual(u'B\xe4rfuss K\xe4thi', fields['zeiletext'].defaultFactory())
+        self.assertEqual('{"property": "fullname"}',
+                         fields['zeiletext'].default_from_member)
 
     @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):
@@ -455,5 +777,57 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                 view="@propertysheets/test",
                 method="POST",
                 data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+    @browsing
+    def test_dynamic_defaults_require_manager_role(self, browser):
+        """This test would not *currently* fail if the protection for dynamic
+        defaults wasn't in place, because the entire @propertysheets POST
+        endpoint is restricted to managers anyway. It *would* however fail if
+        that API endpoint was ever opened up (tested manually).
+        """
+        self.login(self.regular_user, browser)
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_factory": dottedname(
+                            dummy_default_factory_fr),
+                    }]
+                }),
+                headers=self.api_headers,
+            )
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_expression": "member/getId",
+                    }]
+                }),
+                headers=self.api_headers,
+            )
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps({
+                    "fields": [{
+                        "name": "foo",
+                        "field_type": "text",
+                        "default_from_member": {'property': 'fullname'},
+                    }]
+                }),
                 headers=self.api_headers,
             )

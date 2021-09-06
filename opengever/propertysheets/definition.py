@@ -1,4 +1,6 @@
 from copy import deepcopy
+from opengever.propertysheets.default_expression import attach_expression_default_factory
+from opengever.propertysheets.default_from_member import attach_member_property_default_factory
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
@@ -13,9 +15,10 @@ from plone.schemaeditor.utils import IEditableSchema
 from plone.supermodel import loadString
 from plone.supermodel import model
 from plone.supermodel import serializeSchema
-from zope import schema
+from Products.CMFCore.Expression import Expression
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.dottedname.resolve import resolve
 from zope.globalrequest import getRequest
 from zope.schema import Bool
 from zope.schema import Choice
@@ -28,6 +31,7 @@ from zope.schema import ValidationError
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import WrongType
 from zope.schema.vocabulary import SimpleVocabulary
+import json
 import keyword
 import re
 import tokenize
@@ -97,6 +101,12 @@ class PropertySheetSchemaDefinition(object):
         'text': fields.TextFactory,
         'textline': fields.TextLineFactory,
     }
+
+    DYNAMIC_DEFAULT_PROPERTIES = (
+        'default_factory',
+        'default_expression',
+        'default_from_member',
+    )
 
     @classmethod
     def create(cls, name, assignments=None):
@@ -171,13 +181,30 @@ class PropertySheetSchemaDefinition(object):
 
         self._assignments = tuple(assignments)
 
-    def add_field(self, field_type, name, title, description, required, values=None):
+    def add_field(self, field_type, name, title, description, required,
+                  values=None, default=None, default_factory=None,
+                  default_expression=None, default_from_member=None):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
         if not isidentifier(name):
             raise InvalidFieldTypeDefinition(
                 "The name '{}' is not a valid identifier.".format(name)
+            )
+
+        # Make all default value properties mutually exclusive
+        dynamic_defaults = [
+            default_factory,
+            default_expression,
+            default_from_member
+        ]
+        assert len(dynamic_defaults) == len(self.DYNAMIC_DEFAULT_PROPERTIES)
+
+        all_defaults = [default] + dynamic_defaults
+        if len(filter(None, all_defaults)) > 1:
+            raise InvalidFieldTypeDefinition(
+                "The default value properties ('default', {}) are mutually "
+                "exclusive".format(','.join(self.DYNAMIC_DEFAULT_PROPERTIES))
             )
 
         factory = self.FACTORIES[field_type]
@@ -228,7 +255,73 @@ class PropertySheetSchemaDefinition(object):
                 "The argument 'values' is only valid for 'choice' fields."
             )
 
+        if default is not None:
+            if field_type == 'multiple_choice' and isinstance(default, list):
+                # Multiple choice fields strictly require their default to be
+                # of type 'set' (which can't be specified in JSON). So if it's
+                # list, convert it. Otherwise, it's an invalid default anyway,
+                # so we just let zope.schema handle raise WrongType.
+                default = set(default)
+
+            properties['default'] = default
+
+        # Resolve a possible defaultFactory dottedname into callable
+        if default_factory is not None:
+            properties['defaultFactory'] = resolve(default_factory)
+
         field = factory(**properties)
+
+        if default_expression is not None:
+            # Validate default_expression and set it as an attribute on the
+            # IField to carry it over to the export/import handler.
+            if not isinstance(default_expression, basestring):
+                raise InvalidFieldTypeDefinition(
+                    "default_expression must be a string")
+            try:
+                Expression(default_expression)
+            except Exception as exc:
+                raise InvalidFieldTypeDefinition(
+                    "default_expression must be a valid TALES expression. "
+                    "Got: %r" % exc)
+            field.default_expression = default_expression
+
+            # This is only really needed for cases where the added field
+            # is immediately used, like in tests. Usually, the schema goes
+            # through a save/load pass and plone.supermodel deserialization
+            # takes care of this for us.
+            attach_expression_default_factory(field, default_expression)
+
+        if default_from_member is not None:
+            # Validate options format and set it as an attribute on the
+            # IField to carry it over to the export/import handler.
+            if not isinstance(default_from_member, dict):
+                raise InvalidFieldTypeDefinition(
+                    'default_from_member must be a dictionary')
+
+            property_name = default_from_member.get('property')
+            if not property_name:
+                raise InvalidFieldTypeDefinition(
+                    '"default_from_member" key "property" is required '
+                    'for "default_from_member"')
+
+            mapping = default_from_member.get('mapping', {})
+            if not isinstance(mapping, dict):
+                raise InvalidFieldTypeDefinition(
+                    '"default_from_member" key "mapping" must be a dictionary '
+                    'with strings for both keys and values')
+
+            # For ease of serialization we store the default_from_member
+            # options as a JSON encoded string. 
+            default_from_member = json.dumps(default_from_member)
+
+            field.default_from_member = default_from_member
+
+            # This is only really needed for cases where the added field
+            # is immediately used, like in tests. Usually, the schema goes
+            # through a save/load pass and plone.supermodel deserialization
+            # takes care of this for us.
+            attach_member_property_default_factory(field, default_from_member)
+
         schema = IEditableSchema(self.schema_class)
         schema.addField(field)
         self._init_field(field)

@@ -3,9 +3,12 @@ from ftw.builder import create
 from jsonschema import Draft4Validator
 from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
 from opengever.propertysheets.assignment import DOCUMENT_TYPE_ASSIGNMENT_SLOT_PREFIX
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.field import PropertySheetField
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.propertysheets.tests.fixture import fixture_assignment_factory
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.restapi.types.interfaces import IJsonSchemaProvider
 from zope.component import getMultiAdapter
 
@@ -126,6 +129,103 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
             },
             json_schema,
         )
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)
+
+    def test_returns_static_default_in_json_schema(self):
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices, default=u'fr')
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['language']
+        self.assertEqual(u'fr', prop['default'])
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)
+
+    def test_returns_default_factory_in_json_schema(self):
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_factory=dottedname(dummy_default_factory_fr))
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['language']
+
+        self.assertEqual(u'fr', prop['default'])
+        self.assertEqual(
+            dottedname(dummy_default_factory_fr),
+            prop['default_factory'])
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)
+
+    def test_returns_default_expression_in_json_schema(self):
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_expression="portal/language")
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['language']
+
+        self.assertEqual(u'en', prop['default'])
+        self.assertEqual(
+            "portal/language",
+            prop['default_expression'])
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)
+
+    def test_returns_default_from_member_in_json_schema(self):
+        member = api.user.get_current()
+        member.setProperties({'location': 'Berlin'})
+
+        default_from_member_options = {
+            'property': 'location',
+            'fallback': 'CH',
+            'mapping': {
+                'Bern': 'CH',
+                'St. Gallen': 'CH',
+                'Berlin': 'DE'}
+        }
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("textline", u"location", u"Location", u"", True,
+                        default_from_member=default_from_member_options)
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['location']
+
+        self.assertEqual(u'DE', prop['default'])
+        self.assertEqual(
+            default_from_member_options,
+            prop['default_from_member'])
 
         # smoke-test to validate the schema
         Draft4Validator.check_schema(json_schema)

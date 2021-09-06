@@ -81,8 +81,12 @@ Einzelne Felder werden in folgendem Format erwartet:
 - ``description``: Die Beschreibung des Feldes
 - ``required``: Ob das Feld erforderlich ist
 - ``values``: Auswahlmöglichkeiten für das Feld, nur für ``choice`` Feldtyp
+- ``default``: Ein statischer Default-Wert
 
-Die für das Assigmnet verwendeten Assignment-Slots müssen aus dem Vokabular
+Es existieren noch weitere Möglichkeiten, Defaults anzugeben. Details dazu sind
+im Abschnitt :ref:`Default-Werte <propertysheet-default-values>` beschrieben.
+
+Die für das Assignment verwendeten Assignment-Slots müssen aus dem Vokabular
 ``opengever.propertysheets.PropertySheetAssignmentsVocabulary`` stammen. Ein
 Spezialfall ist dabei der Default-Slot ``IDocument.default`` bzw.
 ``IDossier.default``, welcher unabhängig vom Dokument- oder Dossiertyp Feld
@@ -144,6 +148,116 @@ ist im Moment nicht unterstützt.
       "title": "question",
       "type": "object"
   }
+
+.. _propertysheet-default-values:
+
+Default-Werte
+-------------
+
+Feld-Definitionen für alle Typen unterstützen folgende Optionen, um Default-Werte
+bestimmen zu können. Diese Optionen schliessen sich gegenseitig aus, es kann
+immer nur eine dieser Optionen angegeben werden
+
+- ``default``: Ein statischer Default-Wert
+- ``default_factory``: Bestimmen des Defaults mittels einer default factory Funktion
+- ``default_expression``: Bestimmen des Defaults mittels einer TALES expression
+- ``default_from_member``: Bestimmen des Defaults mittels eines Properties auf dem Member / User
+
+Optionen für dynamische Default-Werte (alle Optionen ausser ``default``)
+können nur von Benutzern mit Manager-Berechtigungen gesetzt werden.
+
+
+``default``
+^^^^^^^^^^^
+
+Diese Option erwartet einen statischen Wert, welcher als default für das Feld
+verwendet wird. Der Typ des Werts muss dem Feld-Typ entsprechen.
+
+**Beispiel**:
+
+.. sourcecode:: json
+
+    {
+      "name": "language",
+      "title": "Language",
+      "field_type": "text",
+      "default": "en"
+    }
+
+``default_factory``
+^^^^^^^^^^^^^^^^^^^
+
+Diese Option aktzeptiert einen String, der einen dottedname zu einer default
+factory enthält (eine Python Funktion, die dynamisch einen Default-Wert
+zurückgibt).
+
+**Beispiel**:
+
+.. sourcecode:: json
+
+    {
+      "name": "language",
+      "title": "Language",
+      "field_type": "text",
+      "default_factory": "opengever.document.example.language_default_factory"
+    }
+
+
+
+``default_expression``
+^^^^^^^^^^^^^^^^^^^^^^
+
+Diese Option aktzeptiert einen String, der eine gültige
+`TALES Expression <https://zope.readthedocs.io/en/latest/zopebook/AppendixC.html#tales-overview>`_
+enthält, welche dynamisch ausgewertet wird um einen Default-Wert zu bestimmen.
+
+Der ExpressionContext in dem die Expression ausgewertet wird, enthält die
+üblichen Namen. Allerdings sind aufgrund einer Limitierung zur Zeit der
+aktuelle Kontext und der enthaltende Folder nicht verfügbar. ``here`` und
+``object`` sind daher ``None``, und der ``folder`` ist auf das Portal gesetzt.  
+
+**Beispiel**:
+
+.. sourcecode:: json
+
+    {
+      "name": "userid",
+      "title": "User ID",
+      "field_type": "text",
+      "default_expression": "member/getId"
+    }
+
+``default_from_member``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+Diese Option aktzeptiert ein JSON Objekt mit mindestens einem key ``property``
+das definiert, von welchem Property auf dem eingeloggten Member (~= User) der
+Default-Wert bestimmt werden soll. Wenn LDAP-Properties via dem LDAPUserFolder
+Schema entsprechend gemappt sind, können auch diese als Default-Werte verwendet
+werden.
+
+Optional unterstützt ``default_from_member`` auch die Angabe eines Mappings,
+und eines Fallback-Wertes der Verwendet wird wenn das Property nicht gefunden
+werden kann, oder einen Wert zurückgibt der Falsy ist.
+
+**Beispiel**:
+
+.. sourcecode:: json
+
+    {
+      "name": "userid",
+      "title": "User ID",
+      "field_type": "text",
+      "default_from_member": {
+        "property": "username",
+        "fallback": "<No username found>",
+        "mapping": {
+          "p.mueller": "peter.mueller",
+          "h.meier": "hans.meier"
+        }
+      }
+    }
+
 
 
 Serialisierung/Deserialisierung von Custom Properties

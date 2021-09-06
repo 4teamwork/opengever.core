@@ -5,7 +5,10 @@ from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.propertysheets.exportimport import dottedname
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestPropertySheetWidget(IntegrationTestCase):
@@ -15,7 +18,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self, browser
     ):
         self.login(self.manager, browser)
-
+        
         choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
@@ -27,6 +30,29 @@ class TestPropertySheetWidget(IntegrationTestCase):
             )
             .with_field("multiple_choice", u"choosemulti",
                         u"Choose Multi", u"", True, values=choices)
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
+            .with_field(
+                "choice", u"choose_default_factory", u"Choose with default factory",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_factory=dottedname(dummy_default_factory_fr),
+            )
+            .with_field(
+                "choice", u"choose_default_expression", u"Choose with default expression",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_expression='portal/language',
+            )
+            .with_field(
+                "choice", u"choose_default_from_member", u"Choose with default from member",
+                u"", False,
+                values=[u'CH', u'DE', u'US'],
+                default_from_member={'property': 'location'},
+            )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -34,7 +60,12 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self.document.document_type = u"question"
 
         self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'CH'})
+
         browser.open(self.document, view="@@edit")
+        self.maxDiff = None
 
         fieldset = browser.css(
             "#formfield-form-widgets-"
@@ -47,6 +78,10 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Yes or no",
                 u"Choose",
                 u"Choose Multi",
+                u"Choose with default",
+                u"Choose with default factory",
+                u"Choose with default expression",
+                u"Choose with default from member",
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
@@ -74,6 +109,10 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "yesorno": True,
                     "choose": u"zw\xf6i",
                     "choosemulti": ["three", "one"],
+                    "choose_default": u"fr",
+                    "choose_default_factory": u"fr",
+                    "choose_default_expression": u"en",
+                    "choose_default_from_member": u"CH",
                     "textline": u"b\xe4\xe4",
                 }
             },
@@ -92,6 +131,23 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("bool", u"yesorno", u"Yes or no", u"", True)
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
+            .with_field(
+                "choice", u"choose_default_factory", u"Choose with default factory",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_factory=dottedname(dummy_default_factory_fr),
+            )
+            .with_field(
+                "choice", u"choose_default_expression", u"Choose with default expression",
+                u"", True,
+                values=[u'de', u'fr', u'en'],
+                default_expression='portal/language',
             )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
@@ -145,6 +201,9 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 3,
                     "yesorno": True,
                     "choose": u"two",
+                    "choose_default": u"fr",
+                    "choose_default_factory": u"fr",
+                    "choose_default_expression": u"en",
                     "textline": u"b\xe4\xe4",
                 }
             },
@@ -160,11 +219,17 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
         )
         IDocumentCustomProperties(self.document).custom_properties = {
                 "IDocumentMetadata.document_type.question": {
                     "num": 3,
                     "textline": u"b\xe4\xe4",
+                    "choose_default": u"en",   # <-- different from default
                 }
             }
         self.document.document_type = u"contract"
@@ -185,6 +250,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 "IDocumentMetadata.document_type.question": {
                     "num": 3,
                     "textline": u"b\xe4\xe4",
+                    "choose_default": u"en",
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,
@@ -203,12 +269,18 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
             )
+            .with_field(
+                "choice", u"choose_default", u"Choose with default", u"", True,
+                values=[u'de', u'fr', u'en'],
+                default=u'fr',
+            )
         )
         IDocumentCustomProperties(self.document).custom_properties = {
                 "IDocumentMetadata.document_type.question": {
                     "textline": u"b\xe4\xe4",
                     "iwasremoved": 123,
                     "choose": "inolongerexist",
+                    "choose_default": u"en",
                 }
             }
         self.document.document_type = u"contract"
@@ -251,6 +323,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 4,
                     "textline": u"b\xe4\xe4",
                     "choose": "two",
+                    "choose_default": u"en",
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,

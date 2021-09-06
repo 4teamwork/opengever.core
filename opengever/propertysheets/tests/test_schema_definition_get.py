@@ -2,8 +2,11 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
+from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestSchemaDefinitionGet(IntegrationTestCase):
@@ -105,6 +108,109 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
         )
         self.assertEqual("application/json+schema", browser.mimetype)
         Draft4Validator.check_schema(browser.json)
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_static_default(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices, default=u'fr')
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['language']
+        self.assertEqual(u'fr', prop['default'])
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_factory(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_factory=dottedname(dummy_default_factory_fr))
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['language']
+        self.assertEqual(u'fr', prop['default'])
+        self.assertEqual(
+            dottedname(dummy_default_factory_fr),
+            prop['default_factory'])
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_expression(self, browser):
+        self.login(self.regular_user, browser)
+
+        choices = [u'de', u'fr', u'en']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"language", u"Language", u"", True,
+                        values=choices,
+                        default_expression="portal/language")
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['language']
+        self.assertEqual(u'en', prop['default'])
+        self.assertEqual(
+            'portal/language',
+            prop['default_expression'])
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'CH'})
+
+        choices = [u'CH', u'DE', u'US']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"location", u"Location", u"", True,
+                        values=choices,
+                        default_from_member={'property': 'location'})
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['location']
+        self.assertEqual(u'CH', prop['default'])
+        self.assertEqual(
+            {'property': 'location'},
+            prop['default_from_member'])
 
     @browsing
     def test_property_sheet_schema_definition_get_404(self, browser):

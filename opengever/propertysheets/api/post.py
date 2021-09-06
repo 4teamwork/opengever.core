@@ -3,11 +3,13 @@ from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from plone.supermodel import model
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implementer
@@ -81,6 +83,14 @@ class PropertySheetsPost(Service):
             )
             if field_errors:
                 errors.extend(field_errors)
+
+            # Require Manager role for any kind of dynamic defaults
+            dynamic_defaults = PropertySheetSchemaDefinition.DYNAMIC_DEFAULT_PROPERTIES
+            if any(p in field_data for p in dynamic_defaults):
+                if not api.user.has_permission('cmf.ManagePortal'):
+                    raise Unauthorized(
+                        'Setting any dynamic defaults requires Manager role')
+
         if errors:
             raise BadRequest(errors)
 
@@ -121,9 +131,15 @@ class PropertySheetsPost(Service):
             title = field_data.get("title", name)
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
-            values = field_data.get("values", None)
+            values = field_data.get("values")
+            default = field_data.get("default")
+            default_factory = field_data.get("default_factory")
+            default_expression = field_data.get("default_expression")
+            default_from_member = field_data.get("default_from_member")
             schema_definition.add_field(
-                field_type, name, title, description, required, values
+                field_type, name, title, description, required, values,
+                default, default_factory, default_expression,
+                default_from_member
             )
 
         self.storage.save(schema_definition)
