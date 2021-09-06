@@ -1,0 +1,1 @@
+- Include checkout collaborators and file modification time in document serialization. [buchi]

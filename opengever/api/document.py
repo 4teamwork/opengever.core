@@ -62,6 +62,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'checked_out': checked_out_by,
             'checked_out_fullname': checked_out_by_fullname,
             'checkout_collaborators': list(obj.get_collaborators()),
+            'file_mtime': obj.get_file_mtime(),
             'is_collaborative_checkout': obj.is_collaborative_checkout(),
             'is_locked': obj.is_locked(),
             'containing_dossier': obj.containing_dossier_title(),

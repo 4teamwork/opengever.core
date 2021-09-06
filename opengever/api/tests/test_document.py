@@ -124,6 +124,13 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(browser.json['checkout_collaborators'], ['kathi.barfuss'])
 
     @browsing
+    def test_contains_file_modification_time(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.subdocument, headers={'Accept': 'application/json'})
+        self.assertTrue(isinstance(browser.json['file_mtime'], float))
+
+    @browsing
     def test_respects_version_id_when_traversing_on_older_version(self, browser):
         self.login(self.regular_user, browser)
 

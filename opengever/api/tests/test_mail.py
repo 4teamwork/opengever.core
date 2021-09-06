@@ -30,6 +30,7 @@ class TestGetMail(IntegrationTestCase):
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
         self.assertEqual([], browser.json['attachments'])
+        self.assertEqual(self.mail_eml.message._p_mtime, browser.json['file_mtime'])
 
     @browsing
     def test_contains_also_original_message(self, browser):

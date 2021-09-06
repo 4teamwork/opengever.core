@@ -347,6 +347,11 @@ class OGMail(Mail, BaseDocumentMixin):
             return self.get_file().filename
         return None
 
+    def get_file_mtime(self):
+        if self.has_file():
+            return self.get_file()._p_mtime
+        return None
+
     def get_download_view_name(self):
         if self.original_message:
             return '@@download/original_message'
