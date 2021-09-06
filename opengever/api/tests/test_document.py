@@ -313,9 +313,6 @@ class TestDocumentDelete(IntegrationTestCase):
 
 class TestDocumentPatch(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestDocumentPatch, self).setUp()
-
     @browsing
     def test_document_patch_forbidden_if_not_checked_out(self, browser):
         self.login(self.regular_user, browser)
