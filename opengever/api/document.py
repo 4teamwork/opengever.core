@@ -21,6 +21,10 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
+import os.path
+
+
+MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 
 @implementer(ISerializeToJson)
@@ -107,20 +111,74 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 class DocumentPatch(ContentPatch):
 
     def reply(self):
+        data = json_body(self.request)
 
-        # Only allow updating a documents file if the document is checked-out
-        # by the current user.
+        error = self._validate_checked_out(data) or self._validate_proposal_document(data)
+        if error:
+            self.request.response.setStatus(403)
+            return error
+
+        return super(DocumentPatch, self).reply()
+
+    def _validate_checked_out(self, data):
+        """Only allow updating a documents file if the document is checked-out
+        by the current user.
+        """
+        if 'file' not in data:
+            return
+
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
         if not manager.is_checked_out_by_current_user():
-            data = json_body(self.request)
-            if 'file' in data:
-                self.request.response.setStatus(403)
-                return dict(error=dict(
-                    type='Forbidden',
-                    message='Document not checked-out by current user.'))
+            return {
+                "error": {
+                    "type": "Forbidden",
+                    "message": "Document not checked-out by current user."
+                }
+            }
 
-        return super(DocumentPatch, self).reply()
+    def _validate_proposal_document(self, data):
+        """Prevent a proposals document being replaced by non-docx file.
+        """
+        if not self.context.is_inside_a_proposal():
+            return
+
+        if 'file' not in data:
+            return
+
+        value = data['file']
+        if not value:
+            return {
+                "error": {
+                    "type": "Forbidden",
+                    "message": "It's not possible to have no file in proposal "
+                               "documents."
+
+                }
+            }
+
+        content_type = value.get('content-type')
+        filename = value.get('filename')
+
+        if content_type and content_type != MIME_DOCX:
+            return {
+                "error": {
+                    "type": "Forbidden",
+                    "message": "Mime type must be {} for "
+                               "proposal documents.".format(MIME_DOCX)
+
+                }
+            }
+
+        if not os.path.splitext(filename)[1].lower() == '.docx':
+            return {
+                "error": {
+                    "type": "Forbidden",
+                    "message": "File extension must be .docx for "
+                               "proposal documents."
+
+                }
+            }
 
 
 @implementer(IExpandableElement)

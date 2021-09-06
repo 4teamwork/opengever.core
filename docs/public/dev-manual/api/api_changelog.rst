@@ -14,6 +14,8 @@ Other Changes
 
 - Add new endpoint ``@reactivate-local-group`` (see :ref:`docs <reactivate-local-group>`)
 - Propertysheets: ``multiple_choice`` fields are now supported.
+- Prevent changing ``file`` of ``opengever.document.document`` to a non-docx file if it is inside an ``opengever.meeting.proposal``.
+- Prevent setting ``file`` to ``null`` for ``opengever.document.document`` if it is inside an ``opengever.meeting.proposal``.
 
 
 2021.17.0 (2021-08-30)

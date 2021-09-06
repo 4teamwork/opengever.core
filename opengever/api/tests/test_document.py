@@ -313,9 +313,6 @@ class TestDocumentDelete(IntegrationTestCase):
 
 class TestDocumentPatch(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestDocumentPatch, self).setUp()
-
     @browsing
     def test_document_patch_forbidden_if_not_checked_out(self, browser):
         self.login(self.regular_user, browser)
@@ -404,3 +401,82 @@ class TestDocumentPatch(IntegrationTestCase):
         self.assertEqual(browser.status_code, 204)
         self.assertEqual(self.document.get_filename(), 'foo.txt')
         self.assertEqual(self.document.title, 'foo')
+
+    @browsing
+    def test_disallows_non_docx_mimetype_for_proposal_documents(self, browser):
+        self.login(self.regular_user, browser)
+        document = self.draft_proposal.get_proposal_document()
+        manager = getMultiAdapter((document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        data = {
+            "file": {
+                "data": "foo bar",
+                "filename": "foo.txt",
+                "content-type": "text/plain"
+            }
+        }
+
+        with browser.expect_http_error(code=403, reason="Forbidden"):
+            browser.open(
+                document,
+                data=json.dumps(data),
+                method="PATCH",
+                headers=self.api_headers)
+        self.assertEqual(
+            browser.json["error"]["message"],
+            "Mime type must be "
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document "
+            "for proposal documents."
+        )
+
+    @browsing
+    def test_disallows_non_docx_filename_for_proposal_documents(self, browser):
+        self.login(self.regular_user, browser)
+        document = self.draft_proposal.get_proposal_document()
+        manager = getMultiAdapter((document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        data = {
+            "file": {
+                "data": "foo bar",
+                "filename": "foo.txt",
+            }
+        }
+
+        with browser.expect_http_error(code=403, reason="Forbidden"):
+            browser.open(
+                document,
+                data=json.dumps(data),
+                method="PATCH",
+                headers=self.api_headers)
+        self.assertEqual(
+            browser.json["error"]["message"],
+            'File extension must be .docx for proposal documents.'
+        )
+
+    @browsing
+    def test_prevents_removing_file_from_proposal_document(self, browser):
+        self.login(self.regular_user, browser)
+        document = self.draft_proposal.get_proposal_document()
+        manager = getMultiAdapter((document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        data = {
+            "file": None
+        }
+
+        browser.exception_bubbling = True
+        with browser.expect_http_error(code=403, reason="Forbidden"):
+            browser.open(
+                document,
+                data=json.dumps(data),
+                method="PATCH",
+                headers=self.api_headers)
+        self.assertEqual(
+            browser.json["error"]["message"],
+            "It's not possible to have no file in proposal documents."
+        )
