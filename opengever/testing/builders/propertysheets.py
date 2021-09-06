@@ -36,10 +36,10 @@ class PropertySheetSchemaBuilder(object):
 
     def with_field(self, field_type, name, title, description, required,
                    values=None, default=None, default_factory=None,
-                   default_expression=None):
+                   default_expression=None, default_from_member=None):
         self.field_defs.append(
             (field_type, name, title, description, required, values,
-             default, default_factory, default_expression)
+             default, default_factory, default_expression, default_from_member)
         )
         return self
 

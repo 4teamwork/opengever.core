@@ -5,6 +5,7 @@ from plone.restapi.types.utils import get_fieldsets
 from plone.restapi.types.utils import get_jsonschema_properties
 from plone.restapi.types.utils import iter_fields
 from zope.globalrequest import getRequest
+import json
 
 
 def get_property_sheet_schema(schema_class):
@@ -34,6 +35,11 @@ def get_property_sheet_schema(schema_class):
         default_expression = getattr(field.field, 'default_expression', None)
         if default_expression is not None:
             properties[name]['default_expression'] = default_expression
+
+        # Serialize default_from_member options, if present
+        default_from_member = getattr(field.field, 'default_from_member', None)
+        if default_from_member is not None:
+            properties[name]['default_from_member'] = json.loads(default_from_member)
 
     schema_info = {
         "type": "object",

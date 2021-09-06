@@ -8,6 +8,7 @@ from opengever.propertysheets.field import PropertySheetField
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.propertysheets.tests.fixture import fixture_assignment_factory
 from opengever.testing import FunctionalTestCase
+from plone import api
 from plone.restapi.types.interfaces import IJsonSchemaProvider
 from zope.component import getMultiAdapter
 
@@ -192,6 +193,39 @@ class TestPropertySheetFieldSchemaProvider(FunctionalTestCase):
         self.assertEqual(
             "portal/language",
             prop['default_expression'])
+
+        # smoke-test to validate the schema
+        Draft4Validator.check_schema(json_schema)
+
+    def test_returns_default_from_member_in_json_schema(self):
+        member = api.user.get_current()
+        member.setProperties({'location': 'Berlin'})
+
+        default_from_member_options = {
+            'property': 'location',
+            'fallback': 'CH',
+            'mapping': {
+                'Bern': 'CH',
+                'St. Gallen': 'CH',
+                'Berlin': 'DE'}
+        }
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("textline", u"location", u"Location", u"", True,
+                        default_from_member=default_from_member_options)
+        )
+
+        json_schema = self.schema_provider.get_schema()
+        assignment = json_schema['properties']['IDocument.default']
+        prop = assignment['properties']['location']
+
+        self.assertEqual(u'DE', prop['default'])
+        self.assertEqual(
+            default_from_member_options,
+            prop['default_from_member'])
 
         # smoke-test to validate the schema
         Draft4Validator.check_schema(json_schema)

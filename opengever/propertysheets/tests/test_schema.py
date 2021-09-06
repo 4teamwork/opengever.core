@@ -3,6 +3,7 @@ from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import FunctionalTestCase
+from plone import api
 
 
 class TestPropertySheetJSONSchema(FunctionalTestCase):
@@ -64,6 +65,9 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
         )
 
     def test_validate_complex_sheet_schema_with_all_supported_fields(self):
+        member = api.user.get_current()
+        member.setProperties({'location': 'Switzerland'})
+
         definition = PropertySheetSchemaDefinition.create(
             "schema", assignments=[u"IDocumentMetadata.document_type.question"]
         )
@@ -91,6 +95,19 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             default_expression='portal/language',
         )
         definition.add_field(
+            "choice", u"choice_with_default_from_member", u"Choice with default from Member",
+            u"", True,
+            values=[u'CH', u'DE', u'US'],
+            default_from_member={
+                'property': 'location',
+                'mapping': {
+                    'Switzerland': 'CH',
+                    'Germany': 'DE',
+                    'United States': 'US',
+                }
+            },
+        )
+        definition.add_field(
             "int", u"num", u"A number", u"Put a number.", True
         )
         definition.add_field(
@@ -116,6 +133,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                        u'choice_with_default',
                        u'choice_with_default_factory',
                        u'choice_with_default_expression',
+                       u'choice_with_default_from_member',
                        u'num',
                        u'blabla',
                        u'bla',
@@ -207,6 +225,37 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                     u'title': u'Choice with default factory',
                     u'type': u'string',
                 },
+                u'choice_with_default_from_member': {
+                    u'choices': [
+                        [u'CH', u'CH'],
+                        [u'DE', u'DE'],
+                        [u'US', u'US'],
+                    ],
+                    u'default': u'CH',
+                    u'default_from_member': {
+                        u'mapping': {
+                            u'Germany': u'DE',
+                            u'Switzerland': u'CH',
+                            u'United States': u'US',
+                        },
+                        u'property': u'location',
+                    },
+                    u'default_factory': None,
+                    u'description': u'',
+                    u'enum': [
+                        u'CH',
+                        u'DE',
+                        u'US',
+                    ],
+                    u'enumNames': [
+                        u'CH',
+                        u'DE',
+                        u'US',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'Choice with default from Member',
+                    u'type': u'string',
+                },
                 u'chooseone': {
                     u'choices': [
                         [u'bl\\xe4h', u'bl\xe4h'],
@@ -242,6 +291,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                 u'choice_with_default',
                 u'choice_with_default_factory',
                 u'choice_with_default_expression',
+                u'choice_with_default_from_member',
                 u'num',
                 u'blabla',
                 u'bla',

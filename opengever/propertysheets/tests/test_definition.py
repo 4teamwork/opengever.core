@@ -9,6 +9,7 @@ from opengever.propertysheets.testing import dummy_default_factory_some_text_lin
 from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing.test_case import FunctionalTestCase
 from opengever.testing.test_case import TestCase
+from plone import api
 from zope import schema
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import WrongType
@@ -522,6 +523,26 @@ class TestSchemaDefinition(FunctionalTestCase):
         self.assertEqual("member/getId", field.default_expression)
         self.assertEqual(u'test_user_1_', field.defaultFactory())
         self.assertEqual(u'test_user_1_', field.default)
+
+    def test_add_textline_field_with_default_from_member(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+
+        definition.add_field(
+            "textline", u"userid", u"Location from Member property", u"", True,
+            default_from_member={"property": "location"}
+        )
+
+        member = api.user.get_current()
+        field = definition.schema_class['userid']
+        self.assertEqual('{"property": "location"}', field.default_from_member)
+
+        member.setProperties({'location': 'Bern'})
+        self.assertEqual(u'Bern', field.defaultFactory())
+        self.assertEqual(u'Bern', field.default)
+
+        member.setProperties({'location': 'St. Gallen'})
+        self.assertEqual(u'St. Gallen', field.defaultFactory())
+        self.assertEqual(u'St. Gallen', field.default)
 
     def test_enforces_valid_assignments_as_fieldnames(self):
         definition = PropertySheetSchemaDefinition.create("foo")

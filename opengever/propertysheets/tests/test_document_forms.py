@@ -5,6 +5,7 @@ from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestCustomPropertiesFieldsetForDocumentEditForm(IntegrationTestCase):
@@ -87,6 +88,27 @@ class TestCustomPropertiesFieldsetForDocumentEditForm(IntegrationTestCase):
         widget = browser.find('Language')
         self.assertEqual('en', widget.value)
 
+    @browsing
+    def test_edit_form_prefills_default_from_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'location', u'Location', u'', False,
+                default_from_member={'property': 'location'}
+            )
+        )
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'Bern'})
+
+        browser.open(self.document, view="@@edit")
+        widget = browser.find('Location')
+        self.assertEqual('Bern', widget.value)
+
 
 class TestCustomPropertiesFieldsetForDocumentAddForm(IntegrationTestCase):
 
@@ -167,3 +189,24 @@ class TestCustomPropertiesFieldsetForDocumentAddForm(IntegrationTestCase):
         browser.open(self.dossier, view="++add++opengever.document.document")
         widget = browser.find('Language')
         self.assertEqual('en', widget.value)
+
+    @browsing
+    def test_add_form_prefills_default_from_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'location', u'Location', u'', False,
+                default_from_member={'property': 'location'}
+            )
+        )
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'Bern'})
+
+        browser.open(self.dossier, view="++add++opengever.document.document")
+        widget = browser.find('Location')
+        self.assertEqual('Bern', widget.value)

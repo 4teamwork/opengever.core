@@ -8,6 +8,7 @@ from opengever.document.behaviors.customproperties import IDocumentCustomPropert
 from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestPropertySheetWidget(IntegrationTestCase):
@@ -17,7 +18,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self, browser
     ):
         self.login(self.manager, browser)
-
+        
         choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
@@ -46,6 +47,12 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 values=[u'de', u'fr', u'en'],
                 default_expression='portal/language',
             )
+            .with_field(
+                "choice", u"choose_default_from_member", u"Choose with default from member",
+                u"", False,
+                values=[u'CH', u'DE', u'US'],
+                default_from_member={'property': 'location'},
+            )
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
@@ -53,7 +60,12 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self.document.document_type = u"question"
 
         self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'CH'})
+
         browser.open(self.document, view="@@edit")
+        self.maxDiff = None
 
         fieldset = browser.css(
             "#formfield-form-widgets-"
@@ -69,6 +81,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Choose with default",
                 u"Choose with default factory",
                 u"Choose with default expression",
+                u"Choose with default from member",
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
@@ -99,6 +112,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "choose_default": u"fr",
                     "choose_default_factory": u"fr",
                     "choose_default_expression": u"en",
+                    "choose_default_from_member": u"CH",
                     "textline": u"b\xe4\xe4",
                 }
             },

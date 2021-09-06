@@ -12,6 +12,7 @@ specific handlers to make use of it.
 """
 
 from opengever.propertysheets.default_expression import attach_expression_default_factory
+from opengever.propertysheets.default_from_member import attach_member_property_default_factory
 from plone.supermodel.exportimport import BaseHandler as PSBaseHandler
 from plone.supermodel.exportimport import ChoiceHandler as PSChoiceHandler
 from plone.supermodel.exportimport import DictHandler as PSDictHandler
@@ -75,6 +76,11 @@ class BaseHandler(PSBaseHandler):
         default_expression = getattr(field, 'default_expression', None)
         if default_expression is not None:
             attach_expression_default_factory(field, default_expression)
+
+        # If default_from_member is present, turn it into a defaultFactory
+        default_from_member = getattr(field, 'default_from_member', None)
+        if default_from_member is not None:
+            attach_member_property_default_factory(field, default_from_member)
 
         return field
 

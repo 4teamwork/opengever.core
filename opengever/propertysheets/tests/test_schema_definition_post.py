@@ -10,6 +10,7 @@ from opengever.propertysheets.testing import dummy_default_factory_some_text
 from opengever.propertysheets.testing import dummy_default_factory_some_text_line
 from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope import schema
 import json
 
@@ -409,6 +410,82 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(u'Some text line', fields['zeiletext'].defaultFactory())
         self.assertEqual("python: 'Some text line'",
                          fields['zeiletext'].default_expression)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({
+            'listed': True,
+            'language': 'fr',
+            'description': 'Some text\n Lorem Ipsum',
+            'fullname': u'B\xe4rfuss K\xe4thi',
+        })
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_from_member": {'property': 'listed'},
+                },
+                {
+                    "name": "language",
+                    "field_type": u"choice",
+                    "title": u"Location",
+                    "values": [u"de", u"fr", u"en"],
+                    "default_from_member": {'property': 'language'},
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                    "title": u"text",
+                    "default_from_member": {'property': 'description'},
+                },
+                {
+                    "name": "zeiletext",
+                    "field_type": u"textline",
+                    "title": u"zeile",
+                    "default_from_member": {'property': 'fullname'},
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+
+        self.login(self.manager, browser)
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        self.login(self.regular_user, browser)
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        fields = dict(definition.get_fields())
+
+        self.assertEqual(True, fields['yn'].default)
+        self.assertEqual(True, fields['yn'].defaultFactory())
+        self.assertEqual('{"property": "listed"}',
+                         fields['yn'].default_from_member)
+
+        self.assertEqual(u'fr', fields['language'].default)
+        self.assertEqual(u'fr', fields['language'].defaultFactory())
+        self.assertEqual('{"property": "language"}',
+                         fields['language'].default_from_member)
+
+        self.assertEqual('Some text\n Lorem Ipsum', fields['text'].default)
+        self.assertEqual('Some text\n Lorem Ipsum', fields['text'].defaultFactory())
+        self.assertEqual('{"property": "description"}',
+                         fields['text'].default_from_member)
+
+        self.assertEqual(u'B\xe4rfuss K\xe4thi', fields['zeiletext'].default)
+        self.assertEqual(u'B\xe4rfuss K\xe4thi', fields['zeiletext'].defaultFactory())
+        self.assertEqual('{"property": "fullname"}',
+                         fields['zeiletext'].default_from_member)
 
     @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):

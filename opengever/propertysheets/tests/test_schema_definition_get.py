@@ -6,6 +6,7 @@ from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestSchemaDefinitionGet(IntegrationTestCase):
@@ -181,6 +182,35 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
         self.assertEqual(
             'portal/language',
             prop['default_expression'])
+
+    @browsing
+    def test_property_sheet_schema_definition_get_field_with_default_from_member(self, browser):
+        self.login(self.regular_user, browser)
+
+        member = api.user.get_current()
+        member.setProperties({'location': 'CH'})
+
+        choices = [u'CH', u'DE', u'US']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("choice", u"location", u"Location", u"", True,
+                        values=choices,
+                        default_from_member={'property': 'location'})
+        )
+
+        browser.open(
+            view="@propertysheets/schema",
+            method="GET",
+            headers=self.api_headers,
+        )
+
+        prop = browser.json['properties']['location']
+        self.assertEqual(u'CH', prop['default'])
+        self.assertEqual(
+            {'property': 'location'},
+            prop['default_from_member'])
 
     @browsing
     def test_property_sheet_schema_definition_get_404(self, browser):
