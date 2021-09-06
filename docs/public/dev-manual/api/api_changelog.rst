@@ -12,6 +12,10 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@propertysheets``: Add support for defaults from Member properties
+- ``@propertysheets``: Add support for default TALES expressions
+- ``@propertysheets``: Add support for default factories
+- ``@propertysheets``: Add support for static defaults
 - Add new endpoint ``@reactivate-local-group`` (see :ref:`docs <reactivate-local-group>`)
 - Propertysheets: ``multiple_choice`` fields are now supported.
 
