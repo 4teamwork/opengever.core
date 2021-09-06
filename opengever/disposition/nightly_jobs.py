@@ -1,24 +1,15 @@
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IDisposition
-from opengever.nightlyjobs.interfaces import INightlyJobProvider
+from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from plone import api
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from zope.component import adapter
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
-import logging
 
 
-@implementer(INightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
-class NightlySIPDelivery(object):
+class NightlySIPDelivery(NightlyJobProviderBase):
     """Nightly job provider that delivers SIP packages scheduled for delivery.
     """
 
     def __init__(self, context, request, logger):
-        self.context = context
-        self.request = request
-        self.logger = logger
+        super(NightlySIPDelivery, self).__init__(context, request, logger)
 
         self.catalog = api.portal.get_tool('portal_catalog')
 

@@ -8,16 +8,10 @@ grouped by MaintenanceJobType in the queues (one queue per type) for efficiency.
 
 from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
-from opengever.nightlyjobs.interfaces import INightlyJobProvider
+from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from persistent.dict import PersistentDict
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation import IAnnotations
-from zope.component import adapter
 from zope.dottedname.resolve import resolve
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
-import logging
-
 
 NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY = 'NIGHTLY_MAINTENANCE_JOB_QUEUES'
 
@@ -208,17 +202,13 @@ class MaintenanceQueuesManager(object):
         return sum(len(queue) for queue in self.get_queues().values())
 
 
-@implementer(INightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
-class NightlyMaintenanceJobsProvider(object):
+class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
     """This provider is used to run MaintenanceJobs over night which have
     previously been added in a queue using the MaintenanceQueuesManager.
     """
 
     def __init__(self, context, request, logger):
-        self.context = context
-        self.request = request
-        self.logger = logger
+        super(NightlyMaintenanceJobsProvider, self).__init__(context, request, logger)
         self.queues_manager = MaintenanceQueuesManager(context)
 
     def __iter__(self):
