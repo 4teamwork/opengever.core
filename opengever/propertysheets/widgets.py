@@ -96,6 +96,18 @@ class PropertySheetWiget(Widget):
                 widget.value = converter.toWidgetValue(sheet_value)
                 widget.update()
 
+                # XXX: Re-set the actual widget value after calling .update()
+                #
+                # This is necessary because these widgets aren't context aware,
+                # and so in z3c.form Widget.update(), or our patched variant of
+                # it respectively, an actual value for the widget never gets
+                # extracted.
+                #
+                # That then leads to widget.value being overwritten with any
+                # kind of default value that mess of a method is able to find.
+                if sheet_value is not None:
+                    widget.value = converter.toWidgetValue(sheet_value)
+
     def _get_widget(self, name):
         return [widget for widget in self.widgets if widget.field.getName() == name][0]
 
