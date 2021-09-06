@@ -147,6 +147,16 @@ class DocumentPatch(ContentPatch):
             return
 
         value = data['file']
+        if not value:
+            return {
+                "error": {
+                    "type": "Forbidden",
+                    "message": "It's not possible to have no file in proposal "
+                               "documents."
+
+                }
+            }
+
         content_type = value.get('content-type')
         filename = value.get('filename')
 

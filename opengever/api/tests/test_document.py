@@ -456,3 +456,27 @@ class TestDocumentPatch(IntegrationTestCase):
             browser.json["error"]["message"],
             'File extension must be .docx for proposal documents.'
         )
+
+    @browsing
+    def test_prevents_removing_file_from_proposal_document(self, browser):
+        self.login(self.regular_user, browser)
+        document = self.draft_proposal.get_proposal_document()
+        manager = getMultiAdapter((document, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        data = {
+            "file": None
+        }
+
+        browser.exception_bubbling = True
+        with browser.expect_http_error(code=403, reason="Forbidden"):
+            browser.open(
+                document,
+                data=json.dumps(data),
+                method="PATCH",
+                headers=self.api_headers)
+        self.assertEqual(
+            browser.json["error"]["message"],
+            "It's not possible to have no file in proposal documents."
+        )
