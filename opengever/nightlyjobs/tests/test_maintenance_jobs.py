@@ -94,8 +94,9 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
         key, queue = self.queue_manager.add_queue(self.job_type, IITreeSet)
         self.assertIn(self.job_type.job_type_identifier,
                       self.queue_manager.get_queues())
-        self.assertEqual(self.queue_manager.get_queues(),
-                         {self.job_type.job_type_identifier: queue})
+        self.assertEqual(
+            self.queue_manager.get_queues(),
+            {self.job_type.job_type_identifier: queue})
 
     def test_adding_invalid_queue_raises(self):
         with self.assertRaises(AssertionError) as exc:
@@ -123,7 +124,7 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
         job = MaintenanceJob(self.job_type, 123)
         self.queue_manager.add_job(job)
         queue = self.queue_manager.get_queue(self.job_type)
-        self.assertEqual([123], list(queue))
+        self.assertEqual([123], list(queue['queue']))
 
     def test_returns_jobs_from_all_queues(self):
         job1 = MaintenanceJob(self.job_type, 1)
@@ -152,18 +153,6 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
 
         self.queue_manager.add_job(job)
         self.assertEqual(1, self.queue_manager.get_jobs_count())
-
-    def test_removing_last_job_from_queue_removes_queue(self):
-        job = MaintenanceJob(self.job_type, 123)
-        self.queue_manager.add_queue(self.job_type, IITreeSet)
-        self.queue_manager.add_job(job)
-
-        self.assertIn(self.job_type.job_type_identifier,
-                      self.queue_manager.get_queues())
-
-        self.queue_manager.remove_job(job)
-        self.assertNotIn(self.job_type.job_type_identifier,
-                         self.queue_manager.get_queues())
 
 
 class TestNightlyMaintenanceJobsProvider(IntegrationTestCase):
@@ -194,6 +183,7 @@ class TestNightlyMaintenanceJobsProvider(IntegrationTestCase):
 
         for job in jobs:
             nightly_job_provider.run_job(job, None)
+            nightly_job_provider.maybe_commit(job)
 
     def test_runs_maintenance_jobs_and_clears_queues(self):
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())

@@ -8,10 +8,12 @@ grouped by MaintenanceJobType in the queues (one queue per type) for efficiency.
 
 from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
+from collections import Counter
 from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from persistent.dict import PersistentDict
 from zope.annotation import IAnnotations
 from zope.dottedname.resolve import resolve
+import transaction
 
 NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY = 'NIGHTLY_MAINTENANCE_JOB_QUEUES'
 
@@ -138,7 +140,7 @@ class MaintenanceQueuesManager(object):
     def __init__(self, context):
         self.context = context
 
-    def add_queue(self, job_type, queue_type=IITreeSet):
+    def add_queue(self, job_type, queue_type=IITreeSet, commit_batch_size=1000):
         self.assert_queue_type_is_valid(queue_type)
         ann = IAnnotations(self.context)
         if NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY not in ann:
@@ -147,10 +149,13 @@ class MaintenanceQueuesManager(object):
         queue_key = self.queue_key_for_job_type(job_type)
         queues = self.get_queues()
         if queue_key in queues:
-            if not isinstance(queues[queue_key], queue_type):
-                raise QueueAlreadyExistsWithDifferentType
+            if not isinstance(queues[queue_key]['queue'], queue_type):
+                raise QueueAlreadyExistsWithDifferentType()
         else:
-            queues[queue_key] = queue_type()
+            queues[queue_key] = PersistentDict(
+                {'queue': queue_type(),
+                 'commit_batch_size': commit_batch_size})
+
         return queue_key, queues[queue_key]
 
     def assert_queue_type_is_valid(self, queue_type):
@@ -175,16 +180,14 @@ class MaintenanceQueuesManager(object):
         return queue
 
     def add_job(self, job):
-        queue = self.get_queue(job.job_type)
+        queue = self.get_queue(job.job_type)['queue']
         queue.add(job.variable_argument)
 
-    def remove_job(self, job, remove_queue_if_empty=True):
-        queue = self.get_queue(job.job_type)
+    def remove_job(self, job):
+        queue = self.get_queue(job.job_type)['queue']
         if job.variable_argument not in queue:
             raise JobIsMissing()
         queue.remove(job.variable_argument)
-        if remove_queue_if_empty and len(queue) == 0:
-            self.remove_queue(job.job_type)
 
     @property
     def jobs(self):
@@ -193,13 +196,13 @@ class MaintenanceQueuesManager(object):
             job_type = MaintenanceJobType.from_identifier(queue_key)
 
             # Avoid list size changing during iteration
-            job_arguments = list(queue)
+            job_arguments = list(queue['queue'])
 
             for variable_argument in job_arguments:
                 yield MaintenanceJob(job_type, variable_argument)
 
     def get_jobs_count(self):
-        return sum(len(queue) for queue in self.get_queues().values())
+        return sum(len(queue['queue']) for queue in self.get_queues().values())
 
 
 class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
@@ -210,6 +213,7 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
     def __init__(self, context, request, logger):
         super(NightlyMaintenanceJobsProvider, self).__init__(context, request, logger)
         self.queues_manager = MaintenanceQueuesManager(context)
+        self.job_counter = Counter()
 
     def __iter__(self):
         return self.queues_manager.jobs
@@ -224,3 +228,18 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
 
         job.execute()
         self.queues_manager.remove_job(job)
+        key = self.queues_manager.queue_key_for_job_type(job.job_type)
+        self.job_counter[key] += 1
+
+    def maybe_commit(self, job):
+        key = self.queues_manager.queue_key_for_job_type(job.job_type)
+        queue = self.queues_manager.get_queue(job.job_type)
+
+        # If it is the last job of a queue, we remove the queue and commit
+        force = False
+        if len(queue['queue']) == 0:
+            self.queues_manager.remove_queue(job.job_type)
+            force = True
+
+        if self.job_counter[key] % queue['commit_batch_size'] == 0 or force:
+            transaction.commit()
