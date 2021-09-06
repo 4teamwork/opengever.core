@@ -503,8 +503,10 @@ class NightlyIndexer(object):
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
         if index_in_solr_only:
             function_name = self.index_in_solr.__name__
+            self.commit_solr = True
         else:
             function_name = self.index_in_catalog.__name__
+            self.commit_solr = False
 
         function_dotted_name = ".".join((self.__module__,
                                          self.__class__.__name__,
@@ -514,7 +516,11 @@ class NightlyIndexer(object):
         self.intids = getUtility(IIntIds)
 
     def __enter__(self):
-        key, self.queue = self.queue_manager.add_queue(self.job_type, IITreeSet)
+        key, self.queue = self.queue_manager.add_queue(
+            self.job_type,
+            queue_type=IITreeSet,
+            commit_batch_size=1000,
+            commit_to_solr=self.commit_solr)
         return self
 
     def check_preconditions(self, idxs, index_in_solr_only):
@@ -537,7 +543,6 @@ class NightlyIndexer(object):
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(idxs)
-            manager.connection.commit(extract_after_commit=False)
 
     def add_by_intid(self, intid):
         self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))

@@ -9,9 +9,11 @@ grouped by MaintenanceJobType in the queues (one queue per type) for efficiency.
 from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
 from collections import Counter
+from ftw.solr.interfaces import ISolrConnectionManager
 from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from persistent.dict import PersistentDict
 from zope.annotation import IAnnotations
+from zope.component import getUtility
 from zope.dottedname.resolve import resolve
 import transaction
 
@@ -134,13 +136,21 @@ class MaintenanceQueuesManager(object):
     needs to be stored in the actual queue (e.g. the object's IntId).
 
     A queue should be a TreeSet, for example an IITreeSet to store IntIds.
+
+    For each queue, i.e. for each job type, we also store a commit_batch_size,
+    i.e. the number of jobs of that type which should be run
+    between commits, as well as the commit_to_solr flag which indicates
+    whether we need to specifically commit to solr in addition to normal
+    calls to transaction.commit. This is typically necessary when indexing only
+    in solr directly using the solr index handlers.
     """
     supported_queue_types = (IITreeSet, OOTreeSet)
 
     def __init__(self, context):
         self.context = context
 
-    def add_queue(self, job_type, queue_type=IITreeSet, commit_batch_size=1000):
+    def add_queue(self, job_type, queue_type=IITreeSet,
+                  commit_batch_size=1000, commit_to_solr=False):
         self.assert_queue_type_is_valid(queue_type)
         ann = IAnnotations(self.context)
         if NIGHTLY_MAINTENANCE_JOB_QUEUES_KEY not in ann:
@@ -154,7 +164,8 @@ class MaintenanceQueuesManager(object):
         else:
             queues[queue_key] = PersistentDict(
                 {'queue': queue_type(),
-                 'commit_batch_size': commit_batch_size})
+                 'commit_batch_size': commit_batch_size,
+                 'commit_to_solr': commit_to_solr})
 
         return queue_key, queues[queue_key]
 
@@ -242,4 +253,7 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
             force = True
 
         if self.job_counter[key] % queue['commit_batch_size'] == 0 or force:
+            if queue['commit_to_solr']:
+                manager = getUtility(ISolrConnectionManager)
+                manager.connection.commit(extract_after_commit=False)
             transaction.commit()
