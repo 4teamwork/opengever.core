@@ -121,6 +121,7 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         browser.open(self.subdocument, headers={'Accept': 'application/json'})
         self.assertTrue(browser.json['is_collaborative_checkout'])
+        self.assertEqual(browser.json['checkout_collaborators'], ['kathi.barfuss'])
 
     @browsing
     def test_respects_version_id_when_traversing_on_older_version(self, browser):
