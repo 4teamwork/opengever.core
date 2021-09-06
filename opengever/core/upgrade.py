@@ -1,9 +1,16 @@
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
+from BTrees.IIBTree import IITreeSet
 from decorator import decorator
+from ftw.solr.interfaces import ISolrConnectionManager
+from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.upgrade import UpgradeStep
 from ftw.upgrade.directory.recorder import UpgradeStepRecorder
 from opengever.base.model import create_session
+from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
+from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
+from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
+from plone import api
 from plone.memoize import forever
 from Products.CMFCore.utils import getToolByName
 from sqlalchemy import BigInteger
@@ -14,8 +21,11 @@ from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
+from zope.component import getMultiAdapter
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
+from zope.intid.interfaces import IIntIds
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
@@ -484,3 +494,62 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
         self.session = create_session()
         self.connection = self.session.connection()
         self.operations = get_operations(self.connection)
+
+
+class NightlyIndexer(object):
+
+    def __init__(self, idxs, index_in_solr_only=False):
+        self.check_preconditions(idxs, index_in_solr_only)
+        self.queue_manager = MaintenanceQueuesManager(api.portal.get())
+        if index_in_solr_only:
+            function_name = self.index_in_solr.__name__
+            self.commit_solr = True
+        else:
+            function_name = self.index_in_catalog.__name__
+            self.commit_solr = False
+
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         function_name))
+        self.job_type = MaintenanceJobType(function_dotted_name,
+                                           idxs=tuple(idxs))
+        self.intids = getUtility(IIntIds)
+
+    def __enter__(self):
+        key, self.queue = self.queue_manager.add_queue(
+            self.job_type,
+            queue_type=IITreeSet,
+            commit_batch_size=1000,
+            commit_to_solr=self.commit_solr)
+        return self
+
+    def check_preconditions(self, idxs, index_in_solr_only):
+        if index_in_solr_only and 'SearchableText' in idxs:
+            raise ValueError(
+                "Reindexing SearchableText in solr only is not supported")
+
+    @staticmethod
+    def index_in_catalog(intid, idxs):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        if obj:
+            obj.reindexObject(idxs=idxs)
+
+    @staticmethod
+    def index_in_solr(intid, idxs):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        if obj:
+            manager = getUtility(ISolrConnectionManager)
+            handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
+            handler.add(idxs)
+
+    def add_by_intid(self, intid):
+        self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
+
+    def add_by_obj(self, obj):
+        self.add_by_intid(self.intids.getId(obj))
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if len(self.queue) == 0:
+            self.queue_manager.remove_queue(self.job_type)

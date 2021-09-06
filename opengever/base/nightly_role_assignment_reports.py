@@ -3,26 +3,17 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.storage import STATE_IN_PROGRESS
 from opengever.base.storage import STATE_READY
-from opengever.nightlyjobs.interfaces import INightlyJobProvider
+from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from plone import api
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from zope.component import adapter
 from zope.component.hooks import getSite
 from zope.component.hooks import setSite
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
 import gc
-import logging
 
 
-@implementer(INightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
-class NightlyRoleAssignmentReports(object):
+class NightlyRoleAssignmentReports(NightlyJobProviderBase):
 
     def __init__(self, context, request, logger):
-        self.context = context
-        self.request = request
-        self.logger = logger
+        super(NightlyRoleAssignmentReports, self).__init__(context, request, logger)
 
         self.storage = IRoleAssignmentReportsStorage(self.context)
         self.catalog = api.portal.get_tool('portal_catalog')

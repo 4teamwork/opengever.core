@@ -114,7 +114,8 @@ class NightlyJobRunner(object):
                     message = self.format_early_abort_message(exc)
                     self.log_to_sentry(message)
                     return exc
-                transaction.commit()
+
+                provider.maybe_commit(job)
 
                 # If we set up our own task queue, process its jobs.
                 # This must happen after the transaction has been committed.

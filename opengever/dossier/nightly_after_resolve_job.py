@@ -1,13 +1,7 @@
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.resolve import AfterResolveJobs
-from opengever.nightlyjobs.interfaces import INightlyJobProvider
+from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from plone import api
-from Products.CMFPlone.interfaces import IPloneSiteRoot
-from zope.component import adapter
-from zope.interface import implementer
-from zope.publisher.interfaces.browser import IBrowserRequest
-import logging
-
 
 MAX_CONVERSION_REQUESTS_PER_NIGHT = 10000
 
@@ -15,14 +9,10 @@ MAX_CONVERSION_REQUESTS_PER_NIGHT = 10000
 sent_conversion_requests = 0
 
 
-@implementer(INightlyJobProvider)
-@adapter(IPloneSiteRoot, IBrowserRequest, logging.Logger)
-class ExecuteNightlyAfterResolveJobs(object):
+class ExecuteNightlyAfterResolveJobs(NightlyJobProviderBase):
 
     def __init__(self, context, request, logger):
-        self.context = context
-        self.request = request
-        self.logger = logger
+        super(ExecuteNightlyAfterResolveJobs, self).__init__(context, request, logger)
 
         self.catalog = api.portal.get_tool('portal_catalog')
 
