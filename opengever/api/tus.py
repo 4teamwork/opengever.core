@@ -1,7 +1,9 @@
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.proposaltemplate import IProposalTemplate
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.restapi.services.content.tus import UploadPatch
 from zExceptions import BadRequest
@@ -30,6 +32,20 @@ class GeverUploadPatch(UploadPatch):
             return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
 
         return data
+
+    def create_or_modify_content(self, tus_upload):
+        """Initialize default values for custom properties.
+        """
+        result = super(GeverUploadPatch, self).create_or_modify_content(tus_upload)
+
+        # Ugh. create_or_modify_content doesn't return the created object, so
+        # we need to get it using the Location header that gets set.
+        location = self.request.response.getHeader('Location')
+        doc_id = location.replace(self.context.absolute_url(), '').lstrip('/')
+        created_doc = self.context.restrictedTraverse(doc_id)
+
+        initialize_customproperties_defaults(created_doc, IDocumentCustomProperties)
+        return result
 
 
 @implementer(IPublishTraverse)

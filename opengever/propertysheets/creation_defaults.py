@@ -1,4 +1,17 @@
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from zope.component import queryAdapter
+
+
+def initialize_customproperties_defaults(obj, behavior_iface):
+    behavior = queryAdapter(obj, behavior_iface)
+    if behavior:
+        custom_prop_defaults = get_customproperties_defaults(
+            behavior_iface['custom_properties'])
+
+        # Only attempt to set defaults if no actual custom properties exist yet
+        if not behavior.custom_properties:
+            behavior.custom_properties = custom_prop_defaults
+            obj.reindexObject()
 
 
 def get_customproperties_defaults(propsheet_field):
