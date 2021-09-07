@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.proposaltemplate import IProposalTemplate
@@ -7,7 +8,9 @@ from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import noLongerProvides
 from zope.publisher.interfaces import IPublishTraverse
 import transaction
 
@@ -18,7 +21,9 @@ class GeverUploadPatch(UploadPatch):
 
     def reply(self):
         try:
+            alsoProvides(self.request, IDuringContentCreation)
             data = super(GeverUploadPatch, self).reply()
+            noLongerProvides(self.request, IDuringContentCreation)
         except ForbiddenByQuota as exc:
             transaction.abort()
             self.request.response.setStatus(507)
