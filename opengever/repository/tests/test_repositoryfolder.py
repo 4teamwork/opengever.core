@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
@@ -125,6 +126,14 @@ class TestRepositoryFolder(IntegrationTestCase):
         self.assertEquals(
             ['Repository Folder'],
             factoriesmenu.addable_types())
+
+    @browsing
+    def test_repofolder_not_addable_when_repofolder_is_deactivated(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(self.branch_repofolder)
+        self.assertIn('Repository Folder', factoriesmenu.addable_types())
+        editbar.menu_option('Actions', 'Deactivate').click()
+        self.assertFalse(factoriesmenu.visible())
 
     @browsing
     def test_dossiers_addable_in_empty_repofolder_folder(self, browser):
