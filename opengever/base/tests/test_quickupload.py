@@ -1,7 +1,9 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.journal.browser import JournalHistory
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from zope.i18n import translate
 
@@ -36,6 +38,40 @@ class TestOGQuickupload(IntegrationTestCase):
         self.assertEquals('document', content.Title())
         self.assertEquals('text', content.file.data)
         self.assertEquals(u'', content.description)
+
+    def test_set_custom_properties_default_values(self):
+        self.login(self.regular_user)
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'notrequired', u'Optional field with default', u'',
+                required=False,
+                default=u'Not required, still has default'
+            )
+            .with_field(
+                'multiple_choice', u'languages', u'Languages', u'',
+                required=True, values=[u'de', u'fr', u'en'],
+                default={u'de', u'en'},
+            )
+        )
+
+        content = create(Builder('quickuploaded_document')
+                         .within(self.dossier)
+                         .with_data('text'))
+
+        expected_defaults = {
+            u'IDocument.default': {
+                u'languages': [u'de', u'en'],
+                u'notrequired': u'Not required, still has default',
+            },
+        }
+        self.assertEqual(
+            expected_defaults,
+            IDocumentCustomProperties(content).custom_properties)
 
     def test_expect_one_journal_entry_after_upload(self):
         content = create(Builder('quickuploaded_document')
