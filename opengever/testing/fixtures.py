@@ -521,6 +521,8 @@ class OpengeverContentFixture(object):
             .assigned_to_slots(u"IDossier.default")
             .with_field("textline", u"additional_title",
                         u"Additional dossier title", u"", False)
+            .with_field("textline", u"location", u"Location", u"", False,
+                        default=u"B\xfcren an der Aare")
         )
 
     @staticuid()

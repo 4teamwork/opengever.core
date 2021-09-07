@@ -65,7 +65,12 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                             u"name": u"additional_title_custom_field_string",
                             u"title": u"Additional dossier title",
                             u"type": u"string"
-                        }
+                        },
+                        u'location_custom_field_string': {
+                            u'name': u'location_custom_field_string',
+                            u'title': u'Location',
+                            u'type': u'string'
+                        },
                     }
                 }
             },
