@@ -31,6 +31,7 @@ from plone.supermodel import model
 from plone.supermodel.interfaces import FIELDSETS_KEY
 from plone.supermodel.model import Fieldset
 from plone.uuid.interfaces import IUUID
+from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import func
 from z3c.form.interfaces import DISPLAY_MODE
 from z3c.relationfield.relation import RelationValue
@@ -407,15 +408,16 @@ def extract_email(header_from):
 
 def get_author_by_email(mail):
     header_from = utils.get_header(mail.msg, 'From')
-    email = extract_email(header_from)
 
+    email = safe_unicode(extract_email(header_from)).strip()
     session = create_session()
     principal = session.query(User).filter(
         func.lower(User.email) == email).first()
+    if principal:
+        return u'{0} {1}'.format(principal.lastname, principal.firstname)
 
-    if principal is None:
-        return header_from.decode('utf-8')
-    return u'{0} {1}'.format(principal.lastname, principal.firstname)
+    author = safe_unicode(header_from).strip()
+    return author.replace(u'\n', u'').replace(u'\r', u'')
 
 
 def initialize_metadata(mail, event):

@@ -17,6 +17,7 @@ from opengever.testing.sql import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from unittest import TestCase
 from zope.component import getUtility
+from email.message import Message
 
 
 def get_preserved_as_paper_default():
@@ -205,6 +206,42 @@ class TestMailPreservedAsPaperDefault(FunctionalTestCase):
 
         inbound_mail = self.create_mail_inbound()
         self.assertEquals(False, inbound_mail.preserved_as_paper)
+
+
+class TestGetAuthorByEmail(FunctionalTestCase):
+
+    def make_mail(self, from_header=u'foo@example.com'):
+        class FakeMail(object):
+            def __init__(self, msg):
+                self.msg = msg
+
+        msg = Message()
+        msg['From'] = from_header.encode('utf-8')
+        return FakeMail(msg)
+
+    def test_replaces_newlines_in_fallback_to_plain_header_value(self):
+        self.assertEqual(
+            u'f\xfc\xfcbar',
+            get_author_by_email(
+                self.make_mail(from_header=u'\nf\xfc\xfc\nbar\n')
+            )
+        )
+
+    def test_replaces_crs_in_fallback_to_plain_header_value(self):
+        self.assertEqual(
+            u'f\xfc\xfcbar',
+            get_author_by_email(
+                self.make_mail(from_header=u'\rf\xfc\xfc\rbar\r')
+            )
+        )
+
+    def test_strips_whitespace(self):
+        self.assertEqual(
+            u'foo@example.com',
+            get_author_by_email(
+                self.make_mail(from_header=u' foo@example.com ')
+            )
+        )
 
 
 class TestEmailRegex(TestCase):
