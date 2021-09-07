@@ -1,0 +1,1 @@
+Fix changing bucket being iterated in size during relation catalog cleanup. [deiferni]
