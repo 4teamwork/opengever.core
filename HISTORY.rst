@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.17.1 (2021-09-07)
+----------------------
+
+Bug fixes:
+
+
+- Fix changing bucket being iterated in size during relation catalog cleanup. [deiferni]
+
+
 2021.17.0 (2021-08-30)
 ----------------------
 
