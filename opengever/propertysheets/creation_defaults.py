@@ -1,3 +1,4 @@
+from copy import copy
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.component import queryAdapter
 
@@ -38,7 +39,11 @@ def get_customproperties_defaults(propsheet_field):
         if definition is not None:
             for (field_name, field) in definition.get_fields():
                 if field.default is not None:
-                    slot_values[field.__name__] = field.default
+                    # Make sure to dereference defaults that have possibly
+                    # been declared as a mutable kwarg
+                    default = copy(field.default)
+
+                    slot_values[field.__name__] = default
 
             if slot_values:
                 default_values_by_slot[slot_name] = slot_values
