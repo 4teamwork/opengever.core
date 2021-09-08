@@ -3,7 +3,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.mail.browser.extract_attachments import content_type_helper
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
@@ -113,6 +115,43 @@ class TestExtractAttachmentView(FunctionalTestCase):
         browser.css('.formControls input.standalone').first.click()
 
         self.assertEquals(self.mail.absolute_url(), browser.url)
+
+    @browsing
+    def test_initializes_custom_properties_with_defaults(self, browser):
+        PropertySheetSchemaStorage().clear()
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'notrequired', u'Optional field with default', u'',
+                required=False,
+                default=u'Not required, still has default'
+            )
+            .with_field(
+                'multiple_choice', u'languages', u'Languages', u'',
+                required=True, values=[u'de', u'fr', u'en'],
+                default={u'de', u'en'},
+            )
+        )
+        transaction.commit()
+
+        browser.login().open(self.mail, view='extract_attachments')
+        browser.fill({'attachments:list': ['1']}).submit()
+
+        doc = self.dossier.listFolderContents(
+            {'portal_type': 'opengever.document.document'})[0]
+        self.assertEquals('B\xc3\xbccher', doc.Title())
+
+        expected_defaults = {
+            u'IDocument.default': {
+                u'languages': [u'de', u'en'],
+                u'notrequired': u'Not required, still has default',
+            },
+        }
+        self.assertEqual(
+            expected_defaults,
+            IDocumentCustomProperties(doc).custom_properties)
 
 
 class TestExtractAttachments(IntegrationTestCase):

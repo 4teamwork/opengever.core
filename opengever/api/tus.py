@@ -1,15 +1,24 @@
+from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.proposaltemplate import IProposalTemplate
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.restapi.services.content.tus import UploadPatch
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import noLongerProvides
 from zope.publisher.interfaces import IPublishTraverse
+import logging
 import transaction
+
+
+logger = logging.getLogger('opengever.api')
 
 
 @implementer(IPublishTraverse)
@@ -18,13 +27,37 @@ class GeverUploadPatch(UploadPatch):
 
     def reply(self):
         try:
+            alsoProvides(self.request, IDuringContentCreation)
             data = super(GeverUploadPatch, self).reply()
+            noLongerProvides(self.request, IDuringContentCreation)
         except ForbiddenByQuota as exc:
             transaction.abort()
             self.request.response.setStatus(507)
             return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
 
         return data
+
+    def create_or_modify_content(self, tus_upload):
+        """Initialize default values for custom properties.
+        """
+        result = super(GeverUploadPatch, self).create_or_modify_content(tus_upload)
+
+        # Ugh. create_or_modify_content doesn't return the created object, so
+        # we need to get it using the Location header that gets set.
+        try:
+            location = self.request.response.getHeader('Location')
+            doc_id = location.replace(self.context.absolute_url(), '').lstrip('/')
+            created_doc = self.context.restrictedTraverse(doc_id)
+        except Exception as exc:
+            created_doc = None
+            logger.warn(
+                'Failed to determine created document after TUS upload '
+                'for %r. Got: %r' % (self.request, exc))
+
+        if created_doc:
+            initialize_customproperties_defaults(
+                created_doc, IDocumentCustomProperties)
+        return result
 
 
 @implementer(IPublishTraverse)

@@ -3,7 +3,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
 from ftw.mail.interfaces import IEmailAddress
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import FunctionalTestCase
 from opengever.testing.assets import load
 from plone import api
@@ -62,3 +64,38 @@ class TestMailInbound(FunctionalTestCase):
         self.assertEqual(MESSAGE_SOURCE_MAILIN, obj.message_source)
         self.assertEqual('Hello.p7m', obj.message.filename)
         self.assertEqual('application/pkcs7-mime', obj.message.contentType)
+
+    def test_initialized_docproperties_default_values(self):
+        dossier = create(Builder("dossier"))
+        to_addess = IEmailAddress(self.request).get_email_for_object(dossier)
+
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'notrequired', u'Optional field with default', u'',
+                required=False,
+                default=u'Not required, still has default'
+            )
+            .with_field(
+                'multiple_choice', u'languages', u'Languages', u'',
+                required=True, values=[u'de', u'fr', u'en'],
+                default={u'de', u'en'},
+            )
+        )
+
+        message = self.MAIL_TEMPLATE.format(to_addess)
+
+        obj = inbound.createMailInContainer(dossier, message)
+        expected_defaults = {
+            u'IDocument.default': {
+                u'languages': [u'de', u'en'],
+                u'notrequired': u'Not required, still has default',
+            },
+        }
+        self.assertEqual(
+            expected_defaults,
+            IDocumentCustomProperties(obj).custom_properties)

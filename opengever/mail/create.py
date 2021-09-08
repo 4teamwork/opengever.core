@@ -1,6 +1,8 @@
 from ftw.mail.create import CreateMailInContainer
 from opengever.base.command import CreateEmailCommand
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 import email
 
 
@@ -26,7 +28,13 @@ class OGCreateMailInContainer(CreateMailInContainer):
 
         command = CreateEmailCommand(self.context, filename, message,
                                      message_source=MESSAGE_SOURCE_MAILIN)
-        return command.execute()
+
+        obj = command.execute()
+
+        # Initialize custom properties with default values
+        initialize_customproperties_defaults(obj, IDocumentCustomProperties)
+
+        return obj
 
     def is_application_pkcs7_mime(self, message_raw):
         """Return if message is of application/pkcs7-mime media type.

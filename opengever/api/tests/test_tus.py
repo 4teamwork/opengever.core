@@ -1,10 +1,15 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.private.interfaces import IPrivateFolderQuotaSettings
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from plone import api
 from six import BytesIO
 from unittest import skipIf
+
 
 UPLOAD_DATA = b"abcdefgh"
 UPLOAD_LENGTH = len(UPLOAD_DATA)
@@ -91,6 +96,24 @@ class TestTUSUpload(IntegrationTestCase):
                 data=BytesIO(UPLOAD_DATA),
             )
 
+    def assert_tus_upload_succeeds(self, folder, browser, headers=None):
+        location = self.prepare_tus_upload(folder, browser, headers=headers)
+        browser.open(
+            location,
+            method='PATCH',
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/offset+octet-stream",
+                "Upload-Offset": "0",
+                "Tus-Resumable": "1.0.0",
+            },
+            data=BytesIO(UPLOAD_DATA),
+        )
+        self.assertEqual(browser.status_code, 204)
+        location = browser.headers['location']
+        doc_id = location.replace(folder.absolute_url(), '').lstrip('/')
+        doc = folder.restrictedTraverse(doc_id)
+        return doc
 
     def checkout(self, doc, browser):
         browser.open(
@@ -182,3 +205,74 @@ class TestTUSUpload(IntegrationTestCase):
                 self.private_dossier, browser, code=507, reason='Insufficient Storage')
 
         self.assertEqual(0, len(children["added"]))
+
+    @browsing
+    def test_initializes_custom_properties_with_defaults_on_tus_upload(self, browser):
+        self.login(self.regular_user, browser)
+
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'notrequired', u'Optional field with default', u'',
+                required=False,
+                default=u'Not required, still has default'
+            )
+            .with_field(
+                'multiple_choice', u'languages', u'Languages', u'',
+                required=True, values=[u'de', u'fr', u'en'],
+                default={u'de', u'en'},
+            )
+        )
+
+        doc = self.assert_tus_upload_succeeds(self.dossier, browser)
+        expected_defaults = {
+            u'IDocument.default': {
+                u'languages': [u'de', u'en'],
+                u'notrequired': u'Not required, still has default',
+            },
+        }
+        self.assertEqual(
+            expected_defaults,
+            IDocumentCustomProperties(doc).custom_properties)
+
+    @browsing
+    def test_does_not_overwrite_existing_properties_on_tus_replace(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout(self.document, browser)
+
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'textline', u'notrequired', u'Optional field with default', u'',
+                required=False,
+                default=u'Not required, still has default'
+            )
+            .with_field(
+                'multiple_choice', u'languages', u'Languages', u'',
+                required=True, values=[u'de', u'fr', u'en'],
+                default={u'de', u'en'},
+            )
+        )
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            u'IDocument.default': {
+                u'notrequired': u'This is an actual value, not a default',
+            },
+        } 
+        self.assert_tus_replace_succeeds(self.document, browser)
+        expected_defaults = {
+            u'IDocument.default': {
+                u'notrequired': u'This is an actual value, not a default',
+            },
+        }
+        self.assertEqual(
+            expected_defaults,
+            IDocumentCustomProperties(self.document).custom_properties)

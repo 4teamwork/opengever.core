@@ -12,6 +12,7 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _
@@ -20,6 +21,7 @@ from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.ogds.models.user import User
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from plone import api
 from plone.app.dexterity.behaviors import metadata
@@ -262,6 +264,11 @@ class OGMail(Mail, BaseDocumentMixin):
 
             IRelatedDocuments(doc).relatedItems = [RelationValue(iid)]
             alsoProvides(doc, IExtractedFromMail)
+
+            # Initialize custom properties with default values
+            initialize_customproperties_defaults(
+                doc, IDocumentCustomProperties, reindex=False)
+
             doc.reindexObject()
 
         # mark attachment as extracted
