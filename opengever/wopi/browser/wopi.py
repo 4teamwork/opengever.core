@@ -160,7 +160,7 @@ class WOPIView(BrowserView):
             'UserCanWrite': True,
             'CloseUrl': self.obj.absolute_url(),
             'HostEditUrl': '{}/office_online_edit'.format(self.obj.absolute_url()),
-            'BreadcrumbBrandName': 'OneGov GEVER',
+            'BreadcrumbBrandName': api.portal.get().title,
             'BreadcrumbBrandUrl': self.portal_state.portal_url(),
             'BreadcrumbDocName': self.obj.Title(),
             'BreadcrumbFolderName': dossier.Title(),
