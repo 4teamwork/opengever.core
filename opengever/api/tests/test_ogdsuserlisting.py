@@ -290,3 +290,33 @@ class TestOGDSUserListingGet(IntegrationTestCase):
             [u'Ziegler', u'User', u'Secretary', u'Schr\xf6dinger'],
             [each['lastname'] for each in browser.json['items'][:4]])
         self.assertEqual(19, browser.json['items_total'])
+
+    @browsing
+    def test_handles_non_ascii_userids(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        ogds_user = User.query.get_by_userid(self.reader_user.id)
+        ogds_user.userid = u'l\xfccklicher.laser'
+
+        browser.open(self.portal,
+                     view=u'@ogds-user-listing?search=L\xfcck',
+                     headers=self.api_headers)
+
+        self.assertEqual(1, len(browser.json['items']))
+        self.assertEqual([
+            {u'@id': u'http://nohost/plone/@ogds-users/l\xfccklicher.laser',
+             u'@type': u'virtual.ogds.user',
+             u'active': True,
+             u'department': None,
+             u'directorate': None,
+             u'email': u'lucklicher.laser@gever.local',
+             u'email2': None,
+             u'firstname': u'L\xfccklicher',
+             u'lastname': u'L\xe4ser',
+             u'phone_fax': None,
+             u'phone_mobile': None,
+             u'phone_office': None,
+             u'title': u'L\xe4ser L\xfccklicher',
+             u'userid': u'l\xfccklicher.laser'}],
+            browser.json['items'])
+        self.assertEqual(1, browser.json['items_total'])
