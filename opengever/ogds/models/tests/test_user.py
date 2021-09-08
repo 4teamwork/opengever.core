@@ -21,7 +21,7 @@ class TestUserModel(OGDSTestCase):
         self.assertEqual(users[-1].userid, 'admin')
 
     def test_repr(self):
-        self.assertEqual(str(User('a-user')), '<User a-user>')
+        self.assertEqual(str(User('a-user')), "<User 'a-user'>")
 
     def test_fullname_is_last_and_firstname(self):
         self.assertEqual('Smith John', self.john.fullname())
@@ -66,3 +66,15 @@ class TestUserModel(OGDSTestCase):
 
         for key, value in attrs.items():
             self.assertEqual(getattr(user, key), value)
+
+    def test_supports_non_ascii_firstname_and_lastname(self):
+        self.john.firstname = u'J\xf6hn'
+        self.john.lastname = u'Sm\xe4th'
+
+        self.assertEqual(u'Sm\xe4th J\xf6hn (john)', self.john.label())
+        self.assertEqual(u'Sm\xe4th J\xf6hn', self.john.fullname())
+
+    def test_supports_non_ascii_userid(self):
+        self.john.userid = u'J\xf6hn'
+        self.assertEqual(u'Smith John (J\xf6hn)', self.john.label())
+        self.assertEqual("<User u'J\\xf6hn'>", str(self.john))
