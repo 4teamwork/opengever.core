@@ -22,6 +22,7 @@ Other Changes
 - Prevent setting ``file`` to ``null`` for ``opengever.document.document`` if it is inside an ``opengever.meeting.proposal``.
 - Include checkout collaborators and file modification time in document serialization.
 - Include checkout collaborators, file modification time, lock time and lock timeout in document status.
+- ``@complete-successor-task``: Prevent transferring checked out documents when completing successor tasks.
 
 
 2021.17.0 (2021-08-30)

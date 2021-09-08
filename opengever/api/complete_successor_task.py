@@ -3,6 +3,7 @@ from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.task.browser.complete_utils import complete_task_and_deliver_documents
 from opengever.task.exceptions import TaskRemoteRequestError
+from opengever.task.validators import get_checked_out_documents
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.CMFDiffTool.utils import safe_utf8
@@ -70,6 +71,10 @@ class CompleteSuccessorTaskPost(RemoteTaskBaseService):
 
         # Map any supported document reference type to an IntId
         docs_to_deliver = map(self._resolve_doc_ref_to_intid, docs_to_deliver)
+
+        invalid = get_checked_out_documents(docs_to_deliver)
+        if invalid:
+            raise BadRequest('Some documents are checked out.')
 
         # Validate that this is actually a successor task
         successor_task = self.context
