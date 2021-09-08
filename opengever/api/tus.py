@@ -14,7 +14,11 @@ from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
 from zope.publisher.interfaces import IPublishTraverse
+import logging
 import transaction
+
+
+logger = logging.getLogger('opengever.api')
 
 
 @implementer(IPublishTraverse)
@@ -40,11 +44,19 @@ class GeverUploadPatch(UploadPatch):
 
         # Ugh. create_or_modify_content doesn't return the created object, so
         # we need to get it using the Location header that gets set.
-        location = self.request.response.getHeader('Location')
-        doc_id = location.replace(self.context.absolute_url(), '').lstrip('/')
-        created_doc = self.context.restrictedTraverse(doc_id)
+        try:
+            location = self.request.response.getHeader('Location')
+            doc_id = location.replace(self.context.absolute_url(), '').lstrip('/')
+            created_doc = self.context.restrictedTraverse(doc_id)
+        except Exception as exc:
+            created_doc = None
+            logger.warn(
+                'Failed to determine created document after TUS upload '
+                'for %r. Got: %r' % (self.request, exc))
 
-        initialize_customproperties_defaults(created_doc, IDocumentCustomProperties)
+        if created_doc:
+            initialize_customproperties_defaults(
+                created_doc, IDocumentCustomProperties)
         return result
 
 
