@@ -451,7 +451,7 @@ class SerializeSQLModelToJsonSummaryBase(object):
 
     @property
     def get_url(self):
-        return '{}/{}/{}'.format(
+        return u'{}/{}/{}'.format(
             self.base_url,
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)

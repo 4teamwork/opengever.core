@@ -25,7 +25,7 @@ class OGDSUserGet(Service):
         return self
 
     def reply(self):
-        userid = self.read_params()
+        userid = self.read_params().decode('utf-8')
         service = ogds_service()
         user = service.fetch_user(userid)
         serializer = queryMultiAdapter((user, self.request), ISerializeToJson)

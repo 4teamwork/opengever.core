@@ -76,7 +76,7 @@ class User(Base):
         super(User, self).__init__(**kwargs)
 
     def __repr__(self):
-        return '<User %s>' % self.userid
+        return '<User %r>' % self.userid
 
     def __eq__(self, other):
         if isinstance(other, User):
@@ -93,7 +93,7 @@ class User(Base):
         if not with_principal:
             return self.fullname()
 
-        return "%s (%s)" % (self.fullname(), self.userid)
+        return u"%s (%s)" % (self.fullname(), self.userid)
 
     def fullname(self):
         """Return a visual representation of the UserPersona as String.
@@ -109,4 +109,4 @@ class User(Base):
         if not parts:
             parts.append(self.userid)
 
-        return ' '.join(parts)
+        return u' '.join(parts)
