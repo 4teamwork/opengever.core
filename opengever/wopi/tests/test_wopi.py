@@ -83,3 +83,7 @@ class TestWOPIView(IntegrationTestCase):
             self.check_file_info()[u'HostEditUrl'],
             u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/office_online_edit',
         )
+
+    def test_breadcrumbBrandName_is_portal_title(self):
+        self.assertIn(u'BreadcrumbBrandName', self.check_file_info())
+        self.assertEqual('Plone site', self.check_file_info()[u'BreadcrumbBrandName'])
