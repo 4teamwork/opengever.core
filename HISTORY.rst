@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.17.2 (2021-09-08)
+----------------------
+
+Bug fixes:
+
+
+- Avoid workflow update for all documents, in the FixSharingPermissions upgradestep. [phgross]
+
+
 2021.17.1 (2021-09-07)
 ----------------------
 
