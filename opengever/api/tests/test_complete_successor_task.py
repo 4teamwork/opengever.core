@@ -7,11 +7,13 @@ from opengever.api.complete_successor_task import CompleteSuccessorTaskPost
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.document.approvals import IApprovalList
+from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.intid import IIntIds
 import json
@@ -103,6 +105,51 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
             {u'type': u'BadRequest',
              u'message': u'@complete-successor-task only supports successor '
                          u'tasks. This task has no predecessor.'},
+            browser.json)
+
+    @browsing
+    def test_prevents_checked_out_documents(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Test setup - create predecessor and accepted successor task pair
+        predecessor, successor = self.prepare_accepted_task_pair()
+
+        # Add a document in successor that is supposed to be delivered back
+        produced_doc = create(Builder('document')
+                              .within(successor)
+                              .titled(u'Statement in response to inquiry')
+                              .attach_file_containing(
+                                  'Statement text',
+                                  u'statement.docx'))
+
+        self.login(self.dossier_responsible, browser)
+        manager = getMultiAdapter((produced_doc, self.request),
+                                  ICheckinCheckoutManager)
+        manager.checkout()
+
+        self.login(self.regular_user, browser)
+        # Need to trick the transition controller into thinking its a remote
+        # request so that it allows the resolve transition on the predecessor
+        with patch('opengever.task.browser.transitioncontroller.'
+                   'RequestChecker.is_remote',
+                   new_callable=PropertyMock) as mock_is_remote:
+            mock_is_remote.return_value = True
+
+            request_body = json.dumps({
+                'transition': 'task-transition-in-progress-resolved',
+                'text': 'I finished this task.',
+                'documents': ["/".join(produced_doc.getPhysicalPath())]
+            })
+            with browser.expect_http_error(code=400):
+                browser.open(
+                    successor.absolute_url() + '/@complete-successor-task',
+                    method='POST',
+                    data=request_body,
+                    headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'message': u'Some documents are checked out.'},
             browser.json)
 
     @browsing
