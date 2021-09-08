@@ -15,7 +15,6 @@
 
   <include package="collective.vdexvocabulary" file="meta.zcml" />
 
-  <include package=".behaviors" />
   <include package=".checkout" />
   <include package=".widgets" />
 
