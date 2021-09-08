@@ -161,17 +161,18 @@ class CheckinCheckoutManager(object):
         if not self.check_permission('opengever.document: Checkin'):
             return False
 
-        if self.is_collaborative_checkout() and not collaborative:
-            # If collaboratively checked out, only checkin(collaborative=True)
-            # is allowed (via the WOPI View for now)
-            return False
-
         current_user_id = getSecurityManager().getUser().getId()
 
-        if collaborative:
-            # For collaborative checkouts, any of the collaborators are
-            # allowed to check in
-            return current_user_id in self.get_collaborators()
+        if self.is_collaborative_checkout():
+            # Check-in is allowed for collaborators if lock has expired
+            if not self.is_locked() and current_user_id in self.get_collaborators():
+                return True
+            # Disallow check-in if not via the WOPI API
+            elif not collaborative:
+                return False
+            # Allow check-in for collaborators using the WOPI API
+            else:
+                return current_user_id in self.get_collaborators()
 
         return self.get_checked_out_by() == current_user_id
 
@@ -264,6 +265,7 @@ class CheckinCheckoutManager(object):
 
         # remember that we canceled in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
+        self.annotations.pop(COLLABORATORS_ANNOTATIONS_KEY, None)
 
         # finally, reindex the object
         self.context.reindexObject(idxs=['checked_out'])

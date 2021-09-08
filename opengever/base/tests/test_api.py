@@ -1,4 +1,6 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing.freezer import freeze
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.wopi.lock import create_lock as create_wopi_lock
@@ -19,7 +21,11 @@ class TestDocumentStatus(IntegrationTestCase):
             u'checked_out': False,
             u'checked_out_by': None,
             u'checked_out_collaboratively': False,
+            u'checkout_collaborators': [],
+            u'file_mtime': self.mail_eml.message._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.mail_eml),
+            u'lock_time': None,
+            u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
             u'title': u'Die B\xfcrgschaft',
@@ -31,12 +37,15 @@ class TestDocumentStatus(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.document, view='status', headers=self.api_headers)
-
         expected = {
             u'checked_out': False,
             u'checked_out_by': None,
             u'checked_out_collaboratively': False,
+            u'checkout_collaborators': [],
+            u'file_mtime': self.document.file._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.document),
+            u'lock_time': None,
+            u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
             u'title': u'Vertr\xe4gsentwurf',
@@ -56,7 +65,11 @@ class TestDocumentStatus(IntegrationTestCase):
             u'checked_out': True,
             u'checked_out_by': self.regular_user.getId(),
             u'checked_out_collaboratively': False,
+            u'checkout_collaborators': [],
+            u'file_mtime': self.document.file._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.document),
+            u'lock_time': None,
+            u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
             u'title': u'Vertr\xe4gsentwurf',
@@ -69,15 +82,19 @@ class TestDocumentStatus(IntegrationTestCase):
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout()
-        ILockable(self.document).lock()
-
-        browser.open(self.document, view='status', headers=self.api_headers)
+        with freeze(datetime(2021, 9, 6, 10, 54, 21)):
+            ILockable(self.document).lock()
+            browser.open(self.document, view='status', headers=self.api_headers)
 
         expected = {
             u'checked_out': True,
             u'checked_out_by': self.regular_user.getId(),
             u'checked_out_collaboratively': False,
+            u'checkout_collaborators': [],
+            u'file_mtime': self.document.file._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.document),
+            u'lock_time': 1630918461.0,
+            u'lock_timeout': 600,
             u'locked': True,
             u'locked_by': self.regular_user.getId(),
             u'title': u'Vertr\xe4gsentwurf',
@@ -90,18 +107,21 @@ class TestDocumentStatus(IntegrationTestCase):
         manager = getMultiAdapter((self.document, self.request),
                                   ICheckinCheckoutManager)
         manager.checkout(collaborative=True)
-        create_wopi_lock(self.document, 'my-token')
-
-        browser.open(self.document, view='status', headers=self.api_headers)
+        with freeze(datetime(2021, 9, 6, 10, 54, 21)):
+            create_wopi_lock(self.document, 'my-token')
+            browser.open(self.document, view='status', headers=self.api_headers)
 
         expected = {
             u'checked_out': True,
             u'checked_out_by': self.regular_user.getId(),
             u'checked_out_collaboratively': True,
+            u'checkout_collaborators': [u'kathi.barfuss'],
+            u'file_mtime': self.document.file._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.document),
+            u'lock_time': 1630918461.0,
+            u'lock_timeout': 1800,
             u'locked': True,
             u'locked_by': self.regular_user.getId(),
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
-

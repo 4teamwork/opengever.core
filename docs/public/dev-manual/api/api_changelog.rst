@@ -20,6 +20,8 @@ Other Changes
 - Propertysheets: ``multiple_choice`` fields are now supported.
 - Prevent changing ``file`` of ``opengever.document.document`` to a non-docx file if it is inside an ``opengever.meeting.proposal``.
 - Prevent setting ``file`` to ``null`` for ``opengever.document.document`` if it is inside an ``opengever.meeting.proposal``.
+- Include checkout collaborators and file modification time in document serialization.
+- Include checkout collaborators, file modification time, lock time and lock timeout in document status.
 
 
 2021.17.0 (2021-08-30)

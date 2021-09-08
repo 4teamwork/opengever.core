@@ -360,6 +360,11 @@ class Document(Item, BaseDocumentMixin):
                                   ICheckinCheckoutManager)
         return manager.is_collaborative_checkout()
 
+    def get_collaborators(self):
+        manager = getMultiAdapter((self, self.REQUEST),
+                                  ICheckinCheckoutManager)
+        return manager.get_collaborators()
+
     def is_office_online_editable(self):
         filename = self.get_filename()
         if filename is None:
@@ -463,6 +468,11 @@ class Document(Item, BaseDocumentMixin):
     def get_filename(self):
         if self.has_file():
             return self.file.filename
+        return None
+
+    def get_file_mtime(self):
+        if self.has_file():
+            return self.file._p_mtime
         return None
 
     def get_download_view_name(self):

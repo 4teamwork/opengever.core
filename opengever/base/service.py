@@ -1,6 +1,6 @@
 from plone.rest import Service
+from plone.restapi.services.locking.locking import lock_info
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getMultiAdapter
 from zope.component import getUtility
 import json
 
@@ -9,20 +9,21 @@ class DocumentStatus(Service):
     """Provide information on the current status of a document."""
 
     def render(self):
-        lock_manager = getMultiAdapter(
-            (self.context, self.request), name='plone_lock_info')
-
         payload = {}
         payload['int_id'] = getUtility(IIntIds).getId(self.context)
         payload['title'] = self.context.title_or_id()
+        payload['checkout_collaborators'] = list(self.context.get_collaborators())
         payload['checked_out'] = self.context.is_checked_out()
         payload['checked_out_collaboratively'] = self.context.is_collaborative_checkout()
         payload['checked_out_by'] = self.context.checked_out_by()
-        payload['locked'] = lock_manager.is_locked()
-        if lock_manager.lock_info():
-            payload['locked_by'] = lock_manager.lock_info()['creator']
-        else:
-            payload['locked_by'] = None
+
+        info = lock_info(self.context)
+        payload['locked'] = info['locked']
+        payload['locked_by'] = info.get('creator')
+        payload['lock_time'] = info.get('time')
+        payload['lock_timeout'] = info.get('timeout')
+
+        payload['file_mtime'] = self.context.get_file_mtime()
 
         return json.dumps(payload)
 

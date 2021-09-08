@@ -296,6 +296,11 @@ class OGMail(Mail, BaseDocumentMixin):
         """
         return False
 
+    def get_collaborators(self):
+        """Mail does not support checkin/checkout.
+        """
+        return []
+
     def is_checkout_and_edit_available(self):
         """Mail does not support checkin/checkout.
         """
@@ -347,6 +352,11 @@ class OGMail(Mail, BaseDocumentMixin):
     def get_filename(self):
         if self.has_file():
             return self.get_file().filename
+        return None
+
+    def get_file_mtime(self):
+        if self.has_file():
+            return self.get_file()._p_mtime
         return None
 
     def get_download_view_name(self):
