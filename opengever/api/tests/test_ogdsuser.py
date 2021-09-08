@@ -5,6 +5,7 @@ from opengever.api.serializer import SerializeUserModelToJson
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.tests.base import OGDSTestCase
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
 
@@ -155,6 +156,24 @@ class TestOGDSUserGet(IntegrationTestCase):
             browser.open(self.portal,
                          view='@ogds-users/kathi.barfuss/foobar',
                          headers=self.api_headers)
+
+    @browsing
+    def test_handles_non_ascii_userids(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        ogds_user = User.query.get_by_userid(self.reader_user.id)
+        ogds_user.userid = u'l\xfccklicher.laser'
+
+        browser.open(u'http://nohost/plone/@ogds-users/l\xfccklicher.laser',
+                     headers=self.api_headers)
+
+        self.assertEqual(
+            u'http://nohost/plone/@ogds-users/l%C3%BCcklicher.laser',
+            browser.json['@id'])
+
+        self.assertEqual(
+            u'l\xfccklicher.laser',
+            browser.json['userid'])
 
 
 class TestAssignedGroupsMethod(OGDSTestCase):
