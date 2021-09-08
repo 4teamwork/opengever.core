@@ -567,54 +567,6 @@ class TestDocumentAuthorResolving(IntegrationTestCase):
 class TestDocumentValidatorsInAddForm(IntegrationTestCase):
 
     @browsing
-    def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-
-        factoriesmenu.add('Document')
-        # No file, not preserved as paper
-        browser.fill({'Title': 'My Document',
-                      'Physical file': False}).save()
-        self.assertEquals(
-            erroneous_fields(),
-            {'Physical file': [
-                "You didn't select a file, but neither is the document flagged as "
-                "being preserved as a physical file. Please remedy this."]})
-
-    @browsing
-    def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-
-        factoriesmenu.add('Document')
-        # No file, but preserved as paper
-        browser.fill({'Title': 'My Document',
-                      'Physical file': True}).save()
-        assert_message('Item created')
-
-    @browsing
-    def test_doc_with_file_but_not_preserved_as_paper_is_valid(self, browser):
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-
-        factoriesmenu.add('Document')
-        # File, but not preserved as paper
-        browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Physical file': False}).save()
-        assert_message('Item created')
-
-    @browsing
-    def test_doc_with_both_file_and_preserved_as_paper_is_valid(self, browser):
-        self.login(self.dossier_responsible, browser)
-        browser.open(self.dossier)
-
-        factoriesmenu.add('Document')
-        # File AND preserved as paper
-        browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Physical file': True}).save()
-        assert_message('Item created')
-
-    @browsing
     def test_mails_are_not_allowed(self, browser):
         self.login(self.dossier_responsible, browser)
         browser.open(self.dossier)
@@ -662,17 +614,6 @@ class TestDocumentValidatorsInEditForm(FunctionalTestCase):
         browser.forms['form'].save()
         assert_no_error_messages()
 
-    @browsing
-    def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
-        browser.login().open(self.doc_without_file.absolute_url() + '/edit')
-        # No file, not preserved as paper
-        browser.fill({'Physical file': False}).save()
-        self.assertEquals(
-            erroneous_fields(),
-            {'Physical file': [
-                "You didn't select a file, but neither is the document flagged as "
-                "being preserved as a physical file. Please remedy this."]})
-
 
 class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
 
@@ -703,45 +644,6 @@ class TestDocumentValidatorsInEditFormForCheckedOutDoc(FunctionalTestCase):
         browser.login().open(self.doc_without_file.absolute_url() + '/edit')
         browser.forms['form'].save()
         assert_no_error_messages()
-
-    @browsing
-    def test_doc_without_either_file_or_paper_form_is_invalid(self, browser):
-        browser.login().open(self.doc_without_file.absolute_url() + '/edit')
-        # No file, not preserved as paper
-        browser.fill({'Physical file': False}).save()
-        self.assertEquals(
-            erroneous_fields(),
-            {'Physical file': [
-                "You didn't select a file, but neither is the document flagged as "
-                "being preserved as a physical file. Please remedy this."]})
-
-    @browsing
-    def test_doc_without_file_but_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.doc_with_file.absolute_url() + '/edit')
-        # Remove file, but add preserved as paper
-        browser.fill({'Remove existing file': 'remove',
-                      'Physical file': True}).save()
-        assert_no_error_messages()
-
-    @browsing
-    def test_doc_with_file_but_not_preserved_as_paper_is_valid(self, browser):
-        browser.login().open(self.doc_without_file.absolute_url() + '/edit')
-        # Add File, but remove preserved as paper
-        browser.fill({'File': ('File data', 'file.txt', 'text/plain'),
-                      'Physical file': False}).save()
-        assert_no_error_messages()
-
-    @browsing
-    def test_doc_without_paper_form_and_removing_the_file_is_invalid(self, browser):
-        browser.login().open(self.doc_with_file, view='edit')
-        browser.fill({'Remove existing file': 'remove',
-                      'Physical file': False}).save()
-
-        self.assertEquals(
-            erroneous_fields(),
-            {'Physical file': [
-                "You didn't select a file, but neither is the document flagged as "
-                "being preserved as a physical file. Please remedy this."]})
 
 
 class TestPublicTrial(FunctionalTestCase):
