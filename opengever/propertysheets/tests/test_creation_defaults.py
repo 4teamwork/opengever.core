@@ -15,6 +15,43 @@ def location_df(context):
     return u'CH'
 
 
+mutable_default = {'a', 'b'}
+
+
+@provider(IContextAwareDefaultFactory)
+def mutable_default_df(context, default=mutable_default):
+    return default
+
+
+class TestPropertySheetsCreationDefaults(IntegrationTestCase):
+
+    def test_dereferences_defaults_declared_as_mutable_kwargs(self):
+        self.login(self.regular_user)
+        PropertySheetSchemaStorage().clear()       
+
+        create(
+            Builder('property_sheet_schema')
+            .named('schema1')
+            .assigned_to_slots(u'IDocument.default')
+            .with_field(
+                'multiple_choice', u'mutable',
+                u'Field with mutable kwarg default', u'',
+                required=True,
+                values=('a', 'b', 'c'),
+                default_factory=dottedname(mutable_default_df),
+            )
+        )
+
+        field = IDocumentCustomProperties['custom_properties']
+        defaults = get_customproperties_defaults(field)
+        self.assertEqual(
+            {'IDocument.default': {
+                'mutable': set([u'a', u'b'])}},
+            defaults)
+
+        self.assertFalse(defaults['IDocument.default']['mutable'] is mutable_default)
+
+
 class TestPropertySheetsCreationDefaultsForDocument(IntegrationTestCase):
 
     def test_doesnt_produce_empty_slots_if_no_defaults(self):
