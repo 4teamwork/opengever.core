@@ -206,6 +206,8 @@ class RepositoryfolderValidator(BaseRepositoryfolderValidator):
     pass
 
 
+# this validator is only relevant for the classic UI as we currently do not
+# allow committee creation in then new UI.
 WidgetValidatorDiscriminators(
     RepositoryfolderValidator,
     field=ICommittee['repository_folder'])

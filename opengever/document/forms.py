@@ -359,5 +359,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
                   default=u"User is not allowed to add a document there."))
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=ISaveAsPdfSchema['destination_folder'])

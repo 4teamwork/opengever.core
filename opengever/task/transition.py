@@ -134,6 +134,7 @@ class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
             validate_no_teams(self.context, value)
 
 
+# this validator is relevant for API requests and used in `TransitionExtender`
 validator.WidgetValidatorDiscriminators(
     NoTeamsInProgressStateValidator,
     field=INewResponsibleSchema['responsible'],
@@ -149,6 +150,7 @@ class NoAdminUnitChangeInProgressStateValidator(validator.SimpleFieldValidator):
             validate_no_admin_unit_change(self.context, value)
 
 
+# this validator is relevant for API requests and used in `TransitionExtender`
 validator.WidgetValidatorDiscriminators(
     NoAdminUnitChangeInProgressStateValidator,
     field=INewResponsibleSchema['responsible_client'],
@@ -243,6 +245,7 @@ class DeadlineChangedValidator(validator.SimpleFieldValidator):
         validate_deadline_changed(self.context, value)
 
 
+# this validator is relevant for API requests and used in `TransitionExtender`
 validator.WidgetValidatorDiscriminators(
     DeadlineChangedValidator,
     field=INewDeadline['new_deadline'],

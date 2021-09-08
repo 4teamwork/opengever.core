@@ -356,5 +356,7 @@ class DestinationValidator(validator.SimpleFieldValidator):
                               failed_objects=', '.join(failed_objects))))
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])

@@ -128,6 +128,8 @@ class Z3CFormClamavValidator(NamedFileWidgetValidator):
             self.field.getName(), filename, filelike, self.request)
 
 
+# this validator is only relevant for the classic UI and can be removed
+# once we only support the new UI.
 validator.WidgetValidatorDiscriminators(Z3CFormClamavValidator,
                                         field=INamedField,
                                         widget=INamedFileWidget)
