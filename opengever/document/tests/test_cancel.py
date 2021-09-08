@@ -55,6 +55,23 @@ class TestCancelDocuments(FunctionalTestCase):
         self.assertEquals('Test data', doc.file.data)
         self.assertEquals(None, self.get_manager(doc).get_checked_out_by())
 
+    def test_cancel_clears_collaborators(self):
+        doc = create(Builder('document').within(self.dossier)
+                     .with_dummy_content())
+        manager = self.get_manager(doc)
+
+        manager.checkout(collaborative=True)
+        manager.add_collaborator('kathi.barfuss')
+        self.assertEqual(
+            ['test_user_1_', 'kathi.barfuss'],
+            manager.get_collaborators())
+        self.assertTrue(manager.is_collaborative_checkout())
+
+        manager.cancel()
+        self.assertEqual([], manager.get_collaborators())
+        self.assertFalse(manager.is_collaborative_checkout())
+        self.assertIsNone(manager.get_checked_out_by())
+
     @browsing
     def test_cancel_checkout_for_all_selected_documents(self, browser):
         doc1 = create(Builder('document').within(self.dossier).checked_out())

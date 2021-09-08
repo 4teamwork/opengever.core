@@ -265,6 +265,7 @@ class CheckinCheckoutManager(object):
 
         # remember that we canceled in
         self.annotations[CHECKIN_CHECKOUT_ANNOTATIONS_KEY] = None
+        self.annotations.pop(COLLABORATORS_ANNOTATIONS_KEY, None)
 
         # finally, reindex the object
         self.context.reindexObject(idxs=['checked_out'])
