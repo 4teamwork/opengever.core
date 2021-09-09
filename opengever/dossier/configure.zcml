@@ -333,4 +333,6 @@
   <adapter factory=".participations.PloneParticipationData" />
   <adapter factory=".participations.SQLParticipationData" />
 
+  <adapter factory=".move_items.DossierMovabiliyChecker" />
+
 </configure>

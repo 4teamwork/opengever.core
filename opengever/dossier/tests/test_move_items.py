@@ -8,14 +8,15 @@ from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
-from opengever.task.task import ITask
+from opengever.dossier.interfaces import IDossierContainerTypes
+from opengever.dossier.move_items import DossierMovabiliyChecker
 from opengever.testing import IntegrationTestCase
-from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from requests_toolbelt.utils import formdata
+from zExceptions import Forbidden
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import pytz
@@ -51,6 +52,41 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         self.assert_contains(self.dossier, [task_title])
         self.assert_does_not_contain(bad_target, [task_title])
 
+    def test_moving_dossier_respects_maximum_dossier_depth(self):
+        self.login(self.manager)
+        empty_dossier_title = self.empty_dossier.title.encode("utf-8")
+        self.assert_contains(self.leaf_repofolder, [empty_dossier_title])
+        self.assert_does_not_contain(self.subdossier2, [empty_dossier_title])
+        self.move_items([self.empty_dossier],
+                        source=self.leaf_repofolder,
+                        target=self.subdossier2)
+        self.assert_contains(self.leaf_repofolder, [empty_dossier_title])
+        self.assert_does_not_contain(self.subdossier2, [empty_dossier_title])
+
+    @browsing
+    def test_moving_dossier_containing_subdossier_respects_maximum_dossier_depth(self, browser):
+        self.login(self.manager, browser)
+        resolvable_dossier_title = self.resolvable_dossier.title.encode("utf-8")
+        self.assert_contains(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_does_not_contain(self.empty_dossier, [resolvable_dossier_title])
+        self.move_items([self.resolvable_dossier],
+                        source=self.leaf_repofolder,
+                        target=self.empty_dossier)
+        self.assert_contains(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_does_not_contain(self.empty_dossier, [resolvable_dossier_title])
+
+        api.portal.set_registry_record(
+            name='maximum_dossier_depth',
+            value=2,
+            interface=IDossierContainerTypes
+            )
+
+        self.move_items([self.resolvable_dossier],
+                        source=self.leaf_repofolder,
+                        target=self.empty_dossier)
+        self.assert_does_not_contain(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_contains(self.empty_dossier, [resolvable_dossier_title])
+
     def test_render_documents_tab_when_no_items_are_selected(self):
         self.login(self.regular_user)
         view = self.dossier.restrictedTraverse('move_items')
@@ -67,19 +103,19 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         """ Test integration of move_items method
         """
         self.login(self.manager)
-        subdossier_title = self.subdossier.title.encode("utf-8")
-        doc_title = self.document.title.encode("utf-8")
-        self.assert_contains(self.dossier, [doc_title, subdossier_title])
+        subsubdossier_title = self.subsubdossier.title.encode("utf-8")
+        doc_title = self.subdocument.title.encode("utf-8")
+        self.assert_contains(self.subdossier, [doc_title, subsubdossier_title])
         self.assert_does_not_contain(self.empty_dossier,
-                                     [doc_title, subdossier_title])
+                                     [doc_title, subsubdossier_title])
 
-        self.move_items([self.document, self.subdossier],
-                        source=self.dossier,
+        self.move_items([self.subdocument, self.subsubdossier],
+                        source=self.subdossier,
                         target=self.empty_dossier)
 
         self.assert_does_not_contain(
-            self.dossier, [doc_title, subdossier_title])
-        self.assert_contains(self.empty_dossier, [doc_title, subdossier_title])
+            self.subdossier, [doc_title, subsubdossier_title])
+        self.assert_contains(self.empty_dossier, [doc_title, subsubdossier_title])
 
     def test_only_open_items_appear_in_destination_widget(self):
         self.login(self.dossier_manager)
@@ -1044,3 +1080,64 @@ class TestMoveItem(IntegrationTestCase):
         self.assertIn(doc_title, [a.Title for a in self.templates.getFolderContents()])
         self.assertNotIn(doc_title, [a.Title for a in self.dossiertemplate.getFolderContents()])
         assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))
+
+
+class TestDossierMovabilityChecker(IntegrationTestCase):
+
+    def test_dossier_structure_depth(self):
+        self.login(self.manager)
+        self.assertEqual(3, DossierMovabiliyChecker(
+            self.dossier).dossier_structure_depth())
+        self.assertEqual(2, DossierMovabiliyChecker(
+            self.subdossier).dossier_structure_depth())
+        self.assertEqual(1, DossierMovabiliyChecker(
+            self.subsubdossier).dossier_structure_depth())
+
+    def test_raises_when_dossier_depth_would_be_exceeded(self):
+        self.login(self.manager)
+
+        # Only one subdossier level allowed.
+        self.assertEqual(1, api.portal.get_registry_record(
+            name='maximum_dossier_depth',
+            interface=IDossierContainerTypes
+            ))
+
+        # empty_dossier can only be moved to main dossier
+        with self.assertRaises(Forbidden):
+            DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+                self.subsubdossier)
+
+        with self.assertRaises(Forbidden):
+            DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+                self.subdossier)
+
+        DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+            self.dossier)
+
+        # self.subdossier contains a subsubdossier, hence cannot be moved into
+        # a dossier
+        with self.assertRaises(Forbidden):
+            DossierMovabiliyChecker(self.subdossier).validate_movement(
+                self.empty_dossier)
+
+        DossierMovabiliyChecker(self.subsubdossier).validate_movement(
+            self.empty_dossier)
+
+        # two subdossier levels allowed.
+        api.portal.set_registry_record(
+            name='maximum_dossier_depth',
+            value=2,
+            interface=IDossierContainerTypes
+            )
+
+        # empty_dossier can be moved to a subdossier but not to a subsubdossier
+        with self.assertRaises(Forbidden):
+            DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+                self.subsubdossier)
+
+        DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+            self.subdossier)
+
+        # a dossier containing a subdossier can be moved into a main dossier
+        DossierMovabiliyChecker(self.subdossier).validate_movement(
+            self.empty_dossier)

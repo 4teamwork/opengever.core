@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-23 14:26+0000\n"
+"POT-Creation-Date: 2021-09-10 06:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,11 +57,12 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier has already been resolved."
 msgstr ""
 
 #: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier is already being resolved"
 msgstr ""
 
@@ -131,7 +132,7 @@ msgstr ""
 msgid "Not all linked workspaces are deactivated."
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "Not all required fields are filled."
 msgstr ""
 
@@ -207,7 +208,7 @@ msgstr ""
 msgid "The Dossier has been resolved"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier ${dossier} has a invalid end_date"
 msgstr ""
 
@@ -215,7 +216,7 @@ msgstr ""
 msgid "The dossier contains active proposals."
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier has been succesfully resolved."
 msgstr ""
 
@@ -223,11 +224,11 @@ msgstr ""
 msgid "The filing number has been given."
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given value is not a valid Year."
 msgstr ""
 
@@ -243,7 +244,7 @@ msgstr ""
 msgid "The start or end date is invalid"
 msgstr ""
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The subdossier has been succesfully resolved."
 msgstr ""
 
@@ -255,7 +256,7 @@ msgstr ""
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr ""
 
@@ -365,7 +366,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr ""
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "error_enddate"
 msgstr ""
 
@@ -402,7 +403,7 @@ msgid "fieldset_protect"
 msgstr ""
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_action"
 msgstr ""
 
@@ -433,14 +434,14 @@ msgid "filing_number"
 msgstr ""
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "filing_prefix"
 msgstr ""
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_year"
 msgstr ""
 
@@ -630,6 +631,7 @@ msgstr ""
 
 #. Default: "Dossier type"
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_dossier_type"
 msgstr ""
 
@@ -649,9 +651,9 @@ msgid "label_email_address"
 msgstr ""
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/report.py
+#: ./opengever/dossier/filing/form.py
 msgid "label_end"
 msgstr ""
 
@@ -728,6 +730,11 @@ msgstr ""
 #. Default: "Reference Number will be generated                 after content creation"
 #: ./opengever/dossier/widget.py
 msgid "label_no_reference_number"
+msgstr ""
+
+#. Default: "Dossier ${name} cannot be moved because it would exceed the maximum allowed dossier depth."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_exceeds_maximum_depth"
 msgstr ""
 
 #. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
@@ -967,23 +974,23 @@ msgstr ""
 msgid "note_text_confirm_abord"
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "only resolve, set filing no later"
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set a new filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and take the existing filing no"
 msgstr ""
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "set a filing no"
 msgstr ""
 

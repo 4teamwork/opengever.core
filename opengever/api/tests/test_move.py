@@ -1,7 +1,9 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -192,3 +194,56 @@ class TestMove(IntegrationTestCase):
 
         self.assertEqual({u'type': u'Forbidden', u'message':
                           u'Documents inside a closed dossier cannot be moved.'}, browser.json)
+
+    @browsing
+    def test_moving_dossier_respects_maximum_dossier_depth(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.subdossier, view='/@move',
+                         data=json.dumps({"source": self.empty_dossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': u'This would exceed maximally allowed dossier depth.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        api.portal.set_registry_record(name='maximum_dossier_depth',
+                                       value=2,
+                                       interface=IDossierContainerTypes)
+
+        empty_dossier_title = self.empty_dossier.Title()
+        with self.observe_children(self.subdossier) as children:
+            browser.open(self.subdossier, view='/@move',
+                         data=json.dumps({"source": self.empty_dossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children["added"]))
+        self.assertEqual(empty_dossier_title, children["added"].pop().Title())
+
+    @browsing
+    def test_moving_dossier_with_subdossier_respects_maximum_dossier_depth(self, browser):
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@move',
+                         data=json.dumps({"source": self.resolvable_dossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': u'This would exceed maximally allowed dossier depth.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        api.portal.set_registry_record(name='maximum_dossier_depth',
+                                       value=2,
+                                       interface=IDossierContainerTypes)
+
+        resolvable_dossier_title = self.resolvable_dossier.Title()
+        with self.observe_children(self.empty_dossier) as children:
+            browser.open(self.empty_dossier, view='/@move',
+                         data=json.dumps({"source": self.resolvable_dossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children["added"]))
+        self.assertEqual(resolvable_dossier_title, children["added"].pop().Title())
