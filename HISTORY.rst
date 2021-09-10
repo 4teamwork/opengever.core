@@ -10,6 +10,44 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.18.0 (2021-09-10)
+----------------------
+
+New features:
+
+
+- Add new customfield type multiple_choice.
+- - Include checkout collaborators and file modification time in document serialization. [buchi]
+- - Include checkout collaborators, file modification time, lock time and lock timeout in document status. [buchi]
+- Add nightly maintenance jobs. [njohner]
+- Property sheets: Add support for static as well as dynamic default values. [lgraf]
+- Add @reactivate-local-group endpoint. [tinagerber]
+
+
+Bug fixes:
+
+
+- Sanitize document_author after extracting from mail header. [deiferni]
+- Prevent non-docx and empty files in a PATCH request to a proposal document. [deiferni]
+- Prevent transferring checked out documents when completing successor tasks. [deiferni]
+- No longer allow adding a repository folder to a repository folder when the repository folder is deactivated. [tinagerber]
+- Avoid workflow update for all documents, in the FixSharingPermissions upgradestep. [phgross]
+- Allow editing of a document with Office Online even if the document is not locked. [tinagerber]
+- Fix changing bucket being iterated in size during relation catalog cleanup. [deiferni]
+- Add support for unicode userids in ogds-users and ogds-user-listing endpoints. [njohner]
+- Update local roles when dossier protection is revoked. [tinagerber]
+- Reindex responsible when accepting a team task. [njohner]
+- Use portal title as WOPI BreadcrumbBrandName. [phgross]
+
+
+Other changes:
+
+
+- Drop validation requiring a file or `preserved_as_paper` to be `True`. [deiferni]
+- - Allow check-in for collaborators if lock expired. [buchi]
+- Remove value restriction for the custody_period field. [tinagerber]
+
+
 2021.17.0 (2021-08-30)
 ----------------------
 

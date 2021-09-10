@@ -1,1 +1,0 @@
-- Include checkout collaborators, file modification time, lock time and lock timeout in document status. [buchi]
