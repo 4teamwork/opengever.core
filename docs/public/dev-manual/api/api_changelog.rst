@@ -3,11 +3,17 @@
 API Changelog
 =============
 
-2021.18.0 (unreleased)
+2021.19.0 (unreleased)
 ----------------------
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+2021.18.0 (2021-09-10)
+----------------------
 
 Other Changes
 ^^^^^^^^^^^^^
