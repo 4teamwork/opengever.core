@@ -160,7 +160,7 @@ class TestTUSUpload(IntegrationTestCase):
         self.assert_tus_replace_fails(self.document, browser)
 
     @skipIf(
-        datetime.now() < datetime(2021, 9, 11),
+        datetime.now() < datetime(2022, 9, 11),
         "Lock verification temporary disabled, because it's not yet supported "
         "by Office Connector",
     )
@@ -266,7 +266,7 @@ class TestTUSUpload(IntegrationTestCase):
             u'IDocument.default': {
                 u'notrequired': u'This is an actual value, not a default',
             },
-        } 
+        }
         self.assert_tus_replace_succeeds(self.document, browser)
         expected_defaults = {
             u'IDocument.default': {
