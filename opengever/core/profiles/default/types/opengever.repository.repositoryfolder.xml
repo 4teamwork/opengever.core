@@ -34,6 +34,7 @@
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.dossier.dossiertemplate.behaviors.IRestrictAddableDossierTemplates" />
+    <element value="opengever.repository.behaviors.responsibleorg.IResponsibleOrgUnit" />
   </property>
 
   <!-- View information -->

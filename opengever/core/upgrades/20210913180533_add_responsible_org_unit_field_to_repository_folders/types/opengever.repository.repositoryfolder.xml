@@ -1,0 +1,8 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.repository.repositoryfolder" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+    <!-- enabled behaviors -->
+    <property name="behaviors" purge="False">
+        <element value="opengever.repository.behaviors.responsibleorg.IResponsibleOrgUnit" />
+    </property>
+
+</object>

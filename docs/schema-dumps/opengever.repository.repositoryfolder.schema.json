@@ -202,6 +202,13 @@
             "description": "",
             "_zope_schema_type": "RelationList",
             "default": []
+        },
+        "responsible_org_unit": {
+            "type": "string",
+            "title": "Federf\u00fchrendes Amt",
+            "maxLength": 30,
+            "description": "",
+            "_zope_schema_type": "TextLine"
         }
     },
     "allOf": [
@@ -250,6 +257,7 @@
         "date_of_cassation",
         "date_of_submission",
         "reference_number_prefix",
-        "addable_dossier_templates"
+        "addable_dossier_templates",
+        "responsible_org_unit"
     ]
 }
