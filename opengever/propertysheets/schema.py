@@ -22,6 +22,15 @@ def get_property_sheet_schema(schema_class):
     required = []
     for field in iter_fields(fieldsets):
         name = field.field.getName()
+
+        # Transform default *value* to *token*
+        default = getattr(field.field, 'default', None)
+        if default is not None:
+            vocab = getattr(field.field, 'vocabulary', None)
+            if vocab:
+                term = vocab.getTerm(field.field.default)
+                properties[name]['default'] = term.token
+
         # Determine required fields
         if field.field.required:
             required.append(name)

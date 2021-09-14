@@ -108,6 +108,12 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
             },
         )
         definition.add_field(
+            "choice", u"choice_with_unicode", u"Choice with Unicode",
+            u"", True,
+            values=[u'Deutsch', u'Fran\xe7ais'],
+            default=u'Fran\xe7ais',
+        )
+        definition.add_field(
             "int", u"num", u"A number", u"Put a number.", True
         )
         definition.add_field(
@@ -134,6 +140,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                        u'choice_with_default_factory',
                        u'choice_with_default_expression',
                        u'choice_with_default_from_member',
+                       u'choice_with_unicode',
                        u'num',
                        u'blabla',
                        u'bla',
@@ -256,6 +263,25 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                     u'title': u'Choice with default from Member',
                     u'type': u'string',
                 },
+                u'choice_with_unicode': {
+                    u'choices': [
+                        [u'Deutsch', u'Deutsch'],
+                        [u'Fran\\xe7ais', u'Fran\xe7ais'],
+                    ],
+                    u'default': u'Fran\\xe7ais',
+                    u'description': u'',
+                    u'enum': [
+                        u'Deutsch',
+                        u'Fran\\xe7ais',
+                    ],
+                    u'enumNames': [
+                        u'Deutsch',
+                        u'Fran\xe7ais',
+                    ],
+                    u'factory': u'Choice',
+                    u'title': u'Choice with Unicode',
+                    u'type': u'string',
+                },
                 u'chooseone': {
                     u'choices': [
                         [u'bl\\xe4h', u'bl\xe4h'],
@@ -292,6 +318,7 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                 u'choice_with_default_factory',
                 u'choice_with_default_expression',
                 u'choice_with_default_from_member',
+                u'choice_with_unicode',
                 u'num',
                 u'blabla',
                 u'bla',
