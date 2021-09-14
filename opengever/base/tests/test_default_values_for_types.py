@@ -84,6 +84,7 @@ REPOFOLDER_MISSING_VALUES = {
     'former_reference': None,
     'location': None,
     'referenced_activity': None,
+    'responsible_org_unit': None,
     'retention_period_annotation': None,
     'title_fr': None,
     'valid_from': None,
