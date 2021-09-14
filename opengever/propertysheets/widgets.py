@@ -69,6 +69,14 @@ class PropertySheetWiget(Widget):
             self.widgets.append(widget)
 
     def update(self):
+        if '/++widget++' in self.request.URL:
+            # z3c.form ++widget++ traversal requests try to update the entire
+            # form (for example for autocomplete searches in the 'responsible'
+            # field). This causes issues because of the 'special' way the
+            # propertysheet widgets work, and we therefore prevent them from
+            # updating themselves.
+            return
+
         super(PropertySheetWiget, self).update()
         self.initialize_widgets()
 
