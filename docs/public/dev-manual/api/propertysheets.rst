@@ -240,6 +240,14 @@ Optional unterstützt ``default_from_member`` auch die Angabe eines Mappings,
 und eines Fallback-Wertes der Verwendet wird wenn das Property nicht gefunden
 werden kann, oder einen Wert zurückgibt der Falsy ist.
 
+Wenn ein Mapping verwendet wird, kann über den Parameter ``allow_unmapped``
+gesteuert werden, ob Rückgabewerte erlaubt sind, die nicht im Mapping vorkommen:
+
+- ``allow_unmapped = False (default)``: Werte, die nicht im Mapping vorkommen, sind nicht erlaubt. Für solche Werte wird stattdessen das ``fallback`` verwendet.
+
+- ``allow_unmapped = True``: Werte, die nicht im Mapping vorkommen, werden 1:1 als default zurückgegeben.
+
+
 **Beispiel**:
 
 .. sourcecode:: json
