@@ -198,5 +198,5 @@ class NightlyJobRunner(object):
         return len(self.job_providers[provider_name])
 
     def get_executed_jobs_count(self, provider_name=None):
-        return (self.get_initial_jobs_count(provider_name) -
-                self.get_remaining_jobs_count(provider_name))
+        return (self.get_initial_jobs_count(provider_name)
+                - self.get_remaining_jobs_count(provider_name))
