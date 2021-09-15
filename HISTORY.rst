@@ -16,6 +16,7 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 Bug fixes:
 
 
+- @propertysheets: Add `allow_unmapped` to `default_from_member` options. [lgraf]
 - Fix ++widget++ traversal when form contains custom properties. [lgraf]
 - Transform default *value* to *token* in custom property schemas. [lgraf]
 
