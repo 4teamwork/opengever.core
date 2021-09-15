@@ -129,7 +129,7 @@ class XlsSource(object):
                 continue
 
             if key == 'reference_number' and not isinstance(cell, basestring):
-                raise Exception("Reference number has to be string: %s" % cell)
+                cell = str(cell)
 
             if key in ('valid_from', 'valid_until') and cell in ('', u''):
                 cell = None
