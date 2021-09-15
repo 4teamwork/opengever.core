@@ -35,6 +35,7 @@ def member_property_default_factory(default_from_member_options):
     property_name = default_from_member_options['property']
     mapping = default_from_member_options.get('mapping', {})
     fallback = default_from_member_options.get('fallback')
+    allow_unmapped = default_from_member_options.get('allow_unmapped', False)
 
     member = api.user.get_current()
 
@@ -55,6 +56,9 @@ def member_property_default_factory(default_from_member_options):
 
         if result in mapping:
             result = mapping[result]
+        else:
+            if mapping and not allow_unmapped:
+                result = fallback
 
     except Exception as exc:
         logger.warn(
@@ -64,5 +68,5 @@ def member_property_default_factory(default_from_member_options):
     if isinstance(result, str):
         # Most text-like zope.schema fields require unicode
         result = safe_unicode(result)
-    
+
     return result

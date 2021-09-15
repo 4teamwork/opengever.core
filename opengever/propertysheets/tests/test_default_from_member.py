@@ -1,5 +1,6 @@
 from opengever.propertysheets.default_from_member import member_property_default_factory
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -72,3 +73,38 @@ class TestDefaultFromMemberDefaultFactory(IntegrationTestCase):
                     'fallback': u'<No description>'
                     }
                 )))
+
+    def test_uses_fallback_for_unmapped_value_by_default(self):
+        self.login(self.regular_user)
+
+        member = api.user.get_current()
+        member.setProperties({'email': 'notmapped@example.org'})
+
+        self.assertEqual(
+            u'FALLBACK',
+            member_property_default_factory(
+                json.dumps({
+                    'property': 'email',
+                    'fallback': u'FALLBACK',
+                    'mapping': {
+                        u'foo@example.com': u'FOO@EXAMPLE.COM',
+                    }
+                })))
+
+    def test_honours_allow_unmapped(self):
+        self.login(self.regular_user)
+
+        member = api.user.get_current()
+        member.setProperties({'email': 'notmapped@example.org'})
+
+        self.assertEqual(
+            u'notmapped@example.org',
+            member_property_default_factory(
+                json.dumps({
+                    'property': 'email',
+                    'fallback': u'FALLBACK',
+                    'allow_unmapped': True,
+                    'mapping': {
+                        u'foo@example.com': u'FOO@EXAMPLE.COM',
+                    }
+                })))
