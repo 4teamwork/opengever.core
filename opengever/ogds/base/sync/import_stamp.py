@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timedelta
 from opengever.base.protect import unprotected_write
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
@@ -13,6 +14,7 @@ from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.globalrequest import setRequest
 from zope.interface import implementer
+import dateutil
 import logging
 
 
@@ -20,6 +22,16 @@ logger = logging.getLogger('opengever.ogds.base')
 
 DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
+
+
+def ogds_sync_within_24h():
+    sync_stamp = getUtility(ISyncStamp).get_sync_stamp()
+
+    if not sync_stamp:
+        return False
+
+    sync_stamp = dateutil.parser.parse(sync_stamp)
+    return sync_stamp + timedelta(hours=24) > datetime.now()
 
 
 def update_sync_stamp(context):

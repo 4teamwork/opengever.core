@@ -1,7 +1,11 @@
+from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
+from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.sync.import_stamp import ogds_sync_within_24h
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
@@ -9,7 +13,10 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
+from zope.annotation import IAnnotations
+from zope.component import getUtility
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
@@ -312,3 +319,21 @@ class TestOGDSUpdater(FunctionalTestCase):
 
         group = ogds_service().fetch_group('duplicate_group')
         self.assertEqual(group.is_local, True)
+
+
+class TestImportStamp(IntegrationTestCase):
+
+    def test_ogds_sync_within_24h_helper(self):
+        util = getUtility(ISyncStamp)
+
+        util.set_sync_stamp((datetime.now() - timedelta(hours=23)).isoformat())
+        self.assertTrue(ogds_sync_within_24h())
+
+        util.set_sync_stamp((datetime.now() - timedelta(hours=25)).isoformat())
+        self.assertFalse(ogds_sync_within_24h())
+
+        IAnnotations(self.portal)['sync_stamp'] = None
+        self.assertFalse(ogds_sync_within_24h())
+
+        IAnnotations(self.portal).pop('sync_stamp')
+        self.assertFalse(ogds_sync_within_24h())
