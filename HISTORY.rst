@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.18.1 (2021-09-15)
+----------------------
+
+Bug fixes:
+
+
+- Fix ++widget++ traversal when form contains custom properties. [lgraf]
+- Transform default *value* to *token* in custom property schemas. [lgraf]
+
+
 2021.18.0 (2021-09-10)
 ----------------------
 
