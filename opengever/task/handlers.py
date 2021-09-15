@@ -7,6 +7,7 @@ from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.inbox.forwarding import IForwarding
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task.activities import TaskAddedActivity
+from opengever.task.browser.transitioncontroller import TaskChecker
 from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
@@ -92,6 +93,15 @@ def cancel_subtasks(task, event):
 
 
 def start_next_task(task, event):
+    if not task.is_from_tasktemplate or not task.get_is_subtask():
+        return
+
+    if event.action in FINAL_TRANSITIONS:
+        task.sync()
+        if TaskChecker(task.aq_parent.get_sql_object()).all_subtasks_finished:
+            task.close_main_task()
+            return
+
     if event.action not in ['task-transition-open-resolved',
                             'task-transition-open-tested-and-closed',
                             'task-transition-in-progress-resolved',
