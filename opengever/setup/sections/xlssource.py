@@ -9,30 +9,30 @@ import xlrd
 
 
 PRIVACY_LAYER_MAPPING = {
-    u"Enthält schützenswerte Personendaten": 'privacy_layer_yes',
-    u'Ja': 'privacy_layer_yes',
-    u"Keine Datenschutzstufe": 'privacy_layer_no',
-    u"Nein": 'privacy_layer_no'}
+    u"enthält schützenswerte personendaten": 'privacy_layer_yes',
+    u'ja': 'privacy_layer_yes',
+    u"keine datenschutzstufe": 'privacy_layer_no',
+    u"nein": 'privacy_layer_no'}
 
-CLASSIFICATION_MAPPING = {u"Nicht klassifiziert": 'unprotected',
-                          u"Vertraulich": 'confidential',
-                          u'Geheim': 'classified'
+CLASSIFICATION_MAPPING = {u"nicht klassifiziert": 'unprotected',
+                          u"vertraulich": 'confidential',
+                          u'geheim': 'classified'
                           }
 
-PUBLIC_TRIAL_MAPPING = {u"Nicht geprüft": 'unchecked',
-                        u"Noch nicht geprüft": 'unchecked',
-                        u"Öffentlich": 'public',
-                        u'Nicht öffentlich': 'private'
+PUBLIC_TRIAL_MAPPING = {u"nicht geprüft": 'unchecked',
+                        u"noch nicht geprüft": 'unchecked',
+                        u"öffentlich": 'public',
+                        u'nicht öffentlich': 'private'
                         }
 
-ARCHIVAL_VALUE_MAPPING = {u'Nicht geprüft': u'unchecked',
-                          u"Noch nicht geprüft": u'unchecked',
-                          u'Anbieten': u'prompt',
-                          u'Archivwürdig': u'archival worthy',
-                          u'Archivieren': u'archival worthy',
-                          u'Nicht archivwürdig': u'not archival worthy',
-                          u'Sampling': u'archival worthy with sampling',
-                          u'Auswahl archivw\xfcrdig': u'archival worthy with sampling',
+ARCHIVAL_VALUE_MAPPING = {u'nicht geprüft': u'unchecked',
+                          u"noch nicht geprüft": u'unchecked',
+                          u'anbieten': u'prompt',
+                          u'archivwürdig': u'archival worthy',
+                          u'archivieren': u'archival worthy',
+                          u'nicht archivwürdig': u'not archival worthy',
+                          u'sampling': u'archival worthy with sampling',
+                          u'auswahl archivw\xfcrdig': u'archival worthy with sampling',
                           }
 
 BLOCK_INHERITANCE_MAPPING = {u'ja': True,
@@ -143,7 +143,7 @@ class XlsSource(object):
 
                 # Data not already a valid term
                 if cell not in mapping.values():
-                    cell = mapping[cell]
+                    cell = mapping[cell.lower()]
 
             data[key] = cell
 
