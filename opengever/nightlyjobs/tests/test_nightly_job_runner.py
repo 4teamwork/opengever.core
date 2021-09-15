@@ -4,6 +4,7 @@ from datetime import timedelta
 from ftw.testing.freezer import FreezedClock
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
+from opengever.nightlyjobs.runner import nightly_run_within_24h
 from opengever.nightlyjobs.runner import SystemLoadCritical
 from opengever.nightlyjobs.runner import TimeWindowExceeded
 from opengever.nightlyjobs.testing import TestingNightlyJobRunner
@@ -12,6 +13,7 @@ from opengever.nightlyjobs.tests.test_nightly_job_provider import IWantToBeModif
 from opengever.testing import IntegrationTestCase
 from plone import api
 from Products.CMFPlone.interfaces import IPloneSiteRoot
+from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.interface import alsoProvides
 from zope.publisher.interfaces.browser import IBrowserRequest
@@ -295,3 +297,31 @@ class TestNightlyJobRunner(IntegrationTestCase):
                            "document-title executed 0 out of 1 jobs"
         self.assertEqual(expected_message,
                          runner.format_early_abort_message(exception))
+
+    def test_nightly_job_runner_updates_last_run_timestamp(self):
+        self.login(self.manager)
+
+        runner = self.get_load_controlled_runner()
+        exception = runner.execute_pending_jobs()
+
+        self.assertIsNone(exception)
+
+        timestamp = IAnnotations(self.portal).get('last_nightly_run')
+        self.assertEqual(datetime(2019, 1, 1, 4, 0), timestamp)
+
+    def test_nightly_run_within_24h_helper(self):
+        self.login(self.manager)
+
+        ann = IAnnotations(self.portal)
+
+        ann['last_nightly_run'] = datetime.now() - timedelta(hours=23)
+        self.assertTrue(nightly_run_within_24h())
+
+        ann['last_nightly_run'] = datetime.now() - timedelta(hours=25)
+        self.assertFalse(nightly_run_within_24h())
+
+        ann['last_nightly_run'] = None
+        self.assertFalse(nightly_run_within_24h())
+
+        ann.pop('last_nightly_run')
+        self.assertFalse(nightly_run_within_24h())
