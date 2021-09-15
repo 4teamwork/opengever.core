@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2021.19.0 (unreleased)
+2021.18.1 (unreleased)
 ----------------------
 
 Breaking Changes
@@ -11,6 +11,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@propertysheets``: Add ``allow_unmapped`` to ``default_from_member`` options.
+
 
 2021.18.0 (2021-09-10)
 ----------------------
