@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser import InsufficientPrivileges
 from ftw.testing import freeze
 from mock import Mock
 from mock import patch
@@ -87,10 +88,9 @@ class TestMyInvitationsView(IntegrationTestCase):
             parsed_url = urlparse.urlparse(browser.url)
             self.assertEqual('/portal/login', parsed_url.path)
 
-
             # with redirect_url to accept the invitation and no_redirect in payload
             payload = serialize_and_sign_payload({'iid': self.invitation_id,
-                                                      u'no_redirect': 1})
+                                                  u'no_redirect': 1})
             accept_url = "{}/@@my-invitations/accept?invitation={}".format(
                 self.workspace_url, payload)
             params = urlparse.parse_qs(parsed_url.query)
@@ -129,6 +129,25 @@ class TestMyInvitationsView(IntegrationTestCase):
         self.assertDictEqual(
             {u'new_user': 1, u'iid': self.invitation_id, u'no_redirect': 1},
             callback_payload)
+
+    @browsing
+    def test_accept_accepted_invitation_when_not_signed_in_redirects_to_login_form(self, browser):
+        self.maxDiff = None
+        with freeze(FROZEN_NOW):
+            self.login(self.regular_user, browser=browser)
+            browser.open(self.accept_url)
+            self.logout(browser=browser)
+
+            # redirect fails because portal is not set up
+            with browser.expect_http_error():
+                browser.open(self.accept_url)
+
+            # check that we get redirected to login
+            parsed_url = urlparse.urlparse(browser.url)
+            self.assertEqual('/portal/login', parsed_url.path)
+
+            params = urlparse.parse_qs(parsed_url.query)
+            self.assertDictEqual({'next': [self.workspace_url]}, params)
 
     @browsing
     def test_accept_invitation_grants_local_roles(self, browser):
@@ -175,9 +194,8 @@ class TestMyInvitationsView(IntegrationTestCase):
                          [invitation['recipient'] for invitation in
                           self.storage.iter_invitations_for_current_user()])
 
-
     @browsing
-    def test_invitation_can_only_be_accepted_once(self, browser):
+    def test_accept_invitation_twice_redirects_to_workspace(self, browser):
         self.login(self.regular_user, browser=browser)
         invitations = tuple(self.storage.iter_invitations_for_current_user())
         self.assertEqual(2, len(invitations))
@@ -186,8 +204,9 @@ class TestMyInvitationsView(IntegrationTestCase):
 
         invitations = tuple(self.storage.iter_invitations_for_current_user())
         self.assertEqual(1, len(invitations))
-        with browser.expect_http_error(400):
-            browser.open(self.accept_url)
+
+        browser.open(self.accept_url)
+        self.assertEqual(browser.url, self.workspace.absolute_url())
 
     @browsing
     def test_cannot_accept_invalid_invitation(self, browser):
@@ -200,7 +219,7 @@ class TestMyInvitationsView(IntegrationTestCase):
             browser.open(accept_url)
 
     @browsing
-    def test_decline_invitation_invalidates_it(self, browser):
+    def test_accept_declined_invitation_tries_to_redirect_to_workspace(self, browser):
         self.login(self.regular_user, browser=browser)
         invitations = tuple(self.storage.iter_invitations_for_current_user())
         self.assertEqual(2, len(invitations))
@@ -213,8 +232,15 @@ class TestMyInvitationsView(IntegrationTestCase):
 
         invitations = tuple(self.storage.iter_invitations_for_current_user())
         self.assertEqual(1, len(invitations))
-        with browser.expect_http_error(400):
+
+        with self.assertRaises(InsufficientPrivileges):
             browser.open(self.accept_url)
+
+        # redirects to require_login as permissions are missing
+        parsed_url = urlparse.urlparse(browser.url)
+        self.assertEqual('/plone/acl_users/credentials_cookie_auth/require_login', parsed_url.path)
+        params = urlparse.parse_qs(parsed_url.query)
+        self.assertDictEqual({'came_from': [self.workspace_url]}, params)
 
     @browsing
     def test_cannot_access_workspace_of_declined_invitation(self, browser):
