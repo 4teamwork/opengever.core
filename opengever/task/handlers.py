@@ -92,7 +92,7 @@ def cancel_subtasks(task, event):
     task.cancel_subtasks()
 
 
-def start_next_task(task, event):
+def review_state_changed(task, event):
     if not task.is_from_tasktemplate or not task.get_is_subtask():
         return
 
