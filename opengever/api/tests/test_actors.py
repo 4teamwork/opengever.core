@@ -52,7 +52,7 @@ class TestActorsGet(IntegrationTestCase):
                     },
                 ],
                 u'represents': {
-                    u'@id': u'http://nohost/plone/@teams/team:1',
+                    u'@id': u'http://nohost/plone/@teams/1',
                 },
             },
             browser.json,
@@ -351,7 +351,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                         },
                     ],
                     u'represents': {
-                        u'@id': u'http://nohost/plone/@teams/team:1',
+                        u'@id': u'http://nohost/plone/@teams/1',
                     },
                 },
                 {
@@ -408,7 +408,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                         },
                     ],
                     u'represents': {
-                        u'@id': u'http://nohost/plone/@teams/team:1',
+                        u'@id': u'http://nohost/plone/@teams/1',
                     },
                 },
                 {

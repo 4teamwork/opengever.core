@@ -325,7 +325,7 @@ class TeamActor(Actor):
 
     def represents_url(self):
         return '{}/@teams/{}'.format(
-            api.portal.getSite().absolute_url(), self.identifier)
+            api.portal.getSite().absolute_url(), self.team.team_id)
 
     def get_portrait_url(self):
         return None
