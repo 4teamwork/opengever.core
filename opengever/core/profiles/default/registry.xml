@@ -56,6 +56,7 @@
 
   <!-- CONTACT -->
   <records interface="opengever.contact.interfaces.IContactSettings" />
+  <records interface="opengever.kub.interfaces.IKuBSettings" />
 
   <!-- DATEPICKER -->
   <record name="ftw.datepicker.interfaces.IDatetimeRegistry.various">
