@@ -106,6 +106,22 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.login(self.dossier_responsible)
         self.assertTrue(get_checker(self.expired_task).task.all_subtasks_finished)
 
+    def test_all_subtasks_finished_also_considers_subtasks_without_view_permission(self):
+        self.login(self.regular_user)
+        create(Builder('task')
+               .within(self.task_in_protected_dossier)
+               .titled(u'Ein notwendiges \xdcbel')
+               .having(
+            responsible_client='fa',
+            responsible=self.regular_user.getId(),
+            issuer=self.dossier_responsible.getId(),
+        ).in_state('task-state-open'))
+
+        task_checker = get_checker(self.task_in_protected_dossier).task
+
+        self.login(self.secretariat_user)
+        self.assertFalse(task_checker.all_subtasks_finished)
+
     def test_has_successors(self):
         self.login(self.dossier_responsible)
         self.register_successor(self.task, self.subtask)
