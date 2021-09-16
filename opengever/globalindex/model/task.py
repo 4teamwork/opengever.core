@@ -516,7 +516,7 @@ class TaskQuery(BaseQuery):
 
         # Check for global roles. Global Administrators, Readers and
         # Managers are always able to access a task, so no need to restrict.
-        global_roles = set(api.user.get_roles(user=member))
+        global_roles = set(member.getRoles())
         if not set(self.roles_allowed_to_see_tasks).isdisjoint(global_roles):
             return self
 
