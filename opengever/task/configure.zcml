@@ -126,7 +126,7 @@
   <subscriber
       for="opengever.task.task.ITask
            Products.CMFCore.interfaces.IActionSucceededEvent"
-      handler=".handlers.start_next_task"
+      handler=".handlers.review_state_changed"
       />
 
   <subscriber

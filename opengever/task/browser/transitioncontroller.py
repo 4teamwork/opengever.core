@@ -1,6 +1,7 @@
 from Acquisition import aq_parent
 from opengever.base import utils
 from opengever.base.interfaces import IInternalWorkflowTransition
+from opengever.base.security import elevated_privileges
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -680,11 +681,11 @@ class TaskChecker(object):
     def all_subtasks_finished(self):
 
         task = self.task
-
-        if task.predecessor is not None:
-            query = Task.query.subtasks_by_tasks([task, task.predecessor])
-        else:
-            query = Task.query.subtasks_by_task(task)
+        with elevated_privileges():
+            if task.predecessor is not None:
+                query = Task.query.subtasks_by_tasks([task, task.predecessor])
+            else:
+                query = Task.query.subtasks_by_task(task)
 
         query = query.filter(
             ~Task.query._attribute('review_state').in_(FINISHED_TASK_STATES))

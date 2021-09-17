@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
+from opengever.base.security import elevated_privileges
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
@@ -153,6 +154,17 @@ class TestTaskQueries(IntegrationTestCase):
         self.login(self.administrator)
         sql_task = self.task_in_protected_dossier.get_sql_object()
         self.assertIn(sql_task, Task.query.restrict().all())
+
+    def test_restrict_respects_with_elevated_privileges_context_manager(self):
+        self.login(self.regular_user)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+
+        self.login(self.secretariat_user)
+        self.assertNotIn(sql_task, Task.query.restrict().all())
+
+        with elevated_privileges():
+            all_tasks = Task.query.restrict().all()
+        self.assertIn(sql_task, all_tasks)
 
     def test_by_container_list_recursive_all_tasks_inside_the_given_container(self):
         self.login(self.regular_user)

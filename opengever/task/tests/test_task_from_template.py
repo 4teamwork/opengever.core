@@ -6,6 +6,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -119,7 +120,6 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         api.content.transition(
             obj=self.subtask, transition='task-transition-planned-skipped')
-
 
         # Skipping a planned task - does not open the next task
         self.assertEquals(
@@ -471,3 +471,104 @@ class TestAddingSubtaskToSequentialSubtask(IntegrationTestCase):
         subsubtask = self.seq_subtask_1.objectValues()[0]
         self.assertFalse(subsubtask.is_from_sequential_tasktemplate)
         self.assertIsNone(self.seq_subtask_1.get_tasktemplate_order())
+
+
+class TestCloseTaskFromTemplate(IntegrationTestCase):
+
+    def test_closes_main_task_if_all_subtasks_are_in_final_state(self):
+        self.login(self.administrator)
+        self.seq_subtask_1.task_type = 'correction'
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.sequential_task))
+
+        api.content.transition(
+            obj=self.seq_subtask_2, transition='task-transition-planned-skipped')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.sequential_task))
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-open-resolved')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.sequential_task))
+
+        api.content.transition(
+            obj=self.seq_subtask_3, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.sequential_task))
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-resolved-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(self.sequential_task))
+
+    def test_closes_parallel_main_task(self):
+        self.login(self.dossier_responsible)
+        parallel_task = create(Builder('task')
+                               .within(self.dossier)
+                               .having(responsible_client='fa',
+                                       responsible=self.regular_user.getId(),
+                                       issuer=self.dossier_responsible.getId(),
+                                       task_type='direct-execution')
+                               .in_state('task-state-in-progress')
+                               .as_parallel_task())
+
+        parallel_subtask_1 = create(Builder('task')
+                                    .within(parallel_task)
+                                    .having(responsible_client='fa',
+                                            responsible=self.regular_user.getId(),
+                                            issuer=self.dossier_responsible.getId(),
+                                            task_type='direct-execution')
+                                    .in_state('task-state-open')
+                                    .as_parallel_task())
+
+        parallel_subtask_2 = create(Builder('task')
+                                    .within(parallel_task)
+                                    .having(responsible_client='fa',
+                                            responsible=self.regular_user.getId(),
+                                            issuer=self.dossier_responsible.getId(),
+                                            task_type='direct-execution')
+                                    .in_state('task-state-open')
+                                    .as_parallel_task())
+
+        api.content.transition(
+            obj=parallel_subtask_2, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(parallel_task))
+
+        api.content.transition(
+            obj=parallel_subtask_1, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(parallel_task))
+
+    def test_records_activity_and_adds_journal_entry_when_main_task_is_closed(self):
+        self.activate_feature('activity')
+        self.login(self.administrator)
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-open-tested-and-closed')
+
+        api.content.transition(
+            obj=self.seq_subtask_2, transition='task-transition-open-tested-and-closed')
+        last_journal_entry_type = get_journal_entry(self.dossier, -1)['action']['type']
+        self.assertNotEqual(last_journal_entry_type, 'Task modified')
+
+        api.content.transition(
+            obj=self.seq_subtask_3, transition='task-transition-open-tested-and-closed')
+
+        activities = Resource.query.get_by_oguid(
+            Oguid.for_object(self.sequential_task)).activities
+
+        activity = activities[-1]
+        self.assertEquals(u'task-transition-in-progress-tested-and-closed', activity.kind)
+        self.assertEquals(u'Task closed', activity.label)
+
+        last_journal_entry = get_journal_entry(self.dossier, -1)
+        self.assertEqual(last_journal_entry['action']['type'], 'Task modified')
+        self.assertEqual(last_journal_entry['actor'], self.administrator.getId())

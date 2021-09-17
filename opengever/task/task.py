@@ -674,6 +674,14 @@ class Task(Container, TaskReminderSupport):
 
         next_task.sync()
 
+    def close_main_task(self):
+        parent = aq_parent(aq_inner(self))
+        if not parent:
+            return
+        with elevated_privileges():
+            api.content.transition(
+                obj=parent, transition='task-transition-in-progress-tested-and-closed')
+
     def get_next_planned_task(self):
         next_task = self.get_sql_object().get_next_task()
         if not next_task:
