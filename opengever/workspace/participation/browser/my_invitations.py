@@ -77,10 +77,8 @@ class MyWorkspaceInvitations(BrowserView):
         invitation = self._get_invitation(iid)
         if not invitation:
             raise BadRequest('Wrong invitation')
-        if invitation['status'] != STATE_PENDING:
-            raise BadRequest('Invitation not pending')
 
-        return self._get_invitation(iid), payload
+        return invitation, payload
 
     def _get_invitation(self, iid):
         try:
@@ -130,6 +128,15 @@ class MyWorkspaceInvitations(BrowserView):
         invitation, payload = self.get_invitation_and_validate_payload()
         with elevated_privileges():
             target_workspace = uuidToObject(invitation['target_uuid'])
+
+        if invitation['status'] != STATE_PENDING:
+            if not api.user.is_anonymous():
+                return self.request.RESPONSE.redirect(target_workspace.absolute_url())
+            elif not payload.get("no_redirect"):
+                params = {'next': target_workspace.absolute_url()}
+                redirect_url = "{}/login?{}".format(
+                    get_gever_portal_url(), urlencode(params))
+                return self.request.RESPONSE.redirect(redirect_url)
 
         if api.user.is_anonymous():
             if payload.get("no_redirect", None):
