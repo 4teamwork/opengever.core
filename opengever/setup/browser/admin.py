@@ -142,6 +142,7 @@ class CreateDeployment(BrowserView):
             self.context, self.config, self.db_session,
             is_development_setup=is_development_setup,
             has_purge_sql=self.form.get('purge_sql', False),
+            has_purge_solr=self.form.get('purge_solr', False),
             ldap_profile=self.form.get('ldap', None),
             has_ogds_sync=self.form.get('sync_ogds', False))
         deployment.create()
