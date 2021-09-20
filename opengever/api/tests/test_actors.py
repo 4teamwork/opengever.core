@@ -270,6 +270,30 @@ class TestActorsGet(IntegrationTestCase):
         )
 
     @browsing
+    def test_actors_response_for_system_actor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = '__system__'
+        url = "{}/{}".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictEqual(
+            {
+                u'@id': url,
+                u'@type': u'virtual.ogds.actor',
+                u'active': False,
+                u'actor_type': u'system',
+                u'identifier': actor_id,
+                u'portrait_url': None,
+                u'label': u'',
+                u'representatives': [],
+                u'represents': None,
+            },
+            browser.json
+        )
+
+    @browsing
     def test_raises_bad_request_when_actor_is_missing(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(400):
