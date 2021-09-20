@@ -8,6 +8,7 @@ from opengever.nightlyjobs.interfaces import INightlyJobProvider
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
 from plone import api
 from plone.subrequest import subrequest
+from zope.annotation import IAnnotations
 from zope.component import getAdapters
 from zope.component import provideUtility
 from zope.globalrequest import getRequest
@@ -21,6 +22,51 @@ import transaction
 def nightly_jobs_feature_enabled():
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=INightlyJobsSettings)
+
+
+def get_nightly_run_timestamp():
+    """Get the timestamp of the last nightly run as a datetime.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    portal = api.portal.get()
+    last_run = IAnnotations(portal).get('last_nightly_run')
+
+    if last_run:
+        return last_run
+
+
+def nightly_run_within_24h():
+    """Determine whether nightly jobs ran within the last 24h.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    last_run = get_nightly_run_timestamp()
+
+    if not last_run:
+        return False
+
+    # Timestamp update may only be committed at the very end.
+    # So add a margin of error of 4h (usual duration) + 1h
+    delta = timedelta(hours=24 + 4 + 1)
+    return last_run + delta > datetime.now()
+
+
+def get_job_counts():
+    """Get the nightly job counts (by provider).
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    logger = logging.getLogger('opengever.nightlyjobs')
+    providers = {name: provider for name, provider
+                 in getAdapters([api.portal.get(), getRequest(), logger],
+                                INightlyJobProvider)}
+
+    job_counts = {name: len(provider) for name, provider in providers.items()}
+    return job_counts
 
 
 class TimeWindowExceeded(Exception):
@@ -97,11 +143,25 @@ class NightlyJobRunner(object):
                 in getAdapters([api.portal.get(), getRequest(), self.log],
                                INightlyJobProvider)}
 
+    def update_last_run_timestamp(self):
+        """Update timestamp that tracks when nightly jobs were last executed.
+
+        This tracks *attempts* to run them, not success. The timestamp will
+        be updated whenever the runner starts executing jobs, and
+        - we're not outside the time window
+        - nightly jobs are not disabled via registry
+        - system load at the start doesn't lead to an immediate abort
+        """
+        portal = api.portal.get()
+        IAnnotations(portal)['last_nightly_run'] = datetime.now()
+
     def execute_pending_jobs(self, early_check=True):
         if early_check:
             # When invoked from a cron job, we first check that time window
             # and system load are acceptable. Otherwise cron job is misconfigured.
             self.interrupt_if_necessary()
+
+        self.update_last_run_timestamp()
 
         for provider_name, provider in self.job_providers.items():
             self.log.info('Executing jobs for provider %r' % provider_name)
@@ -121,6 +181,11 @@ class NightlyJobRunner(object):
                 # This must happen after the transaction has been committed.
                 if self.setup_own_task_queue:
                     self.process_task_queue()
+        else:
+            # No jobs tonight. Because no provider will have committed
+            # anything, we commit ourselves to persist the updated
+            # last_nightly_run timestamp.
+            transaction.commit()
 
     def setup_task_queue(self):
         task_queue = LocalVolatileTaskQueue()
@@ -198,5 +263,5 @@ class NightlyJobRunner(object):
         return len(self.job_providers[provider_name])
 
     def get_executed_jobs_count(self, provider_name=None):
-        return (self.get_initial_jobs_count(provider_name) -
-                self.get_remaining_jobs_count(provider_name))
+        return (self.get_initial_jobs_count(provider_name)
+                - self.get_remaining_jobs_count(provider_name))
