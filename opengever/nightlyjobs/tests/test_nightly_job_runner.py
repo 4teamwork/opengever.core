@@ -4,6 +4,7 @@ from datetime import timedelta
 from ftw.testing.freezer import FreezedClock
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
+from opengever.nightlyjobs.runner import get_nightly_run_timestamp
 from opengever.nightlyjobs.runner import nightly_run_within_24h
 from opengever.nightlyjobs.runner import SystemLoadCritical
 from opengever.nightlyjobs.runner import TimeWindowExceeded
@@ -308,6 +309,17 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
         timestamp = IAnnotations(self.portal).get('last_nightly_run')
         self.assertEqual(datetime(2019, 1, 1, 4, 0), timestamp)
+
+    def test_get_nightly_run_timestamp(self):
+        self.login(self.manager)
+
+        ann = IAnnotations(self.portal)
+
+        self.assertIsNone(get_nightly_run_timestamp())
+
+        ann['last_nightly_run'] = datetime(2021, 5, 17, 12, 45)
+        self.assertEqual(
+            datetime(2021, 5, 17, 12, 45), get_nightly_run_timestamp())
 
     def test_nightly_run_within_24h_helper(self):
         self.login(self.manager)

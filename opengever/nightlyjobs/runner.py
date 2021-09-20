@@ -24,9 +24,26 @@ def nightly_jobs_feature_enabled():
         'is_feature_enabled', interface=INightlyJobsSettings)
 
 
-def nightly_run_within_24h():
+def get_nightly_run_timestamp():
+    """Get the timestamp of the last nightly run as a datetime.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
     portal = api.portal.get()
     last_run = IAnnotations(portal).get('last_nightly_run')
+
+    if last_run:
+        return last_run
+
+
+def nightly_run_within_24h():
+    """Determine whether nightly jobs ran within the last 24h.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    last_run = get_nightly_run_timestamp()
 
     if not last_run:
         return False
