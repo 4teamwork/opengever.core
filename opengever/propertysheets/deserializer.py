@@ -7,6 +7,7 @@ from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.schema import Set
 
 
 @implementer(IFieldDeserializer)
@@ -44,6 +45,14 @@ class PropertySheetFieldDeserializer(DefaultFieldDeserializer):
                 deserializer = getMultiAdapter(
                     (field, self.context, self.request), IFieldDeserializer
                 )
+
+                # If an API client specifies None as the field value
+                # for a multiple_choice field, the CollectionFieldDeserializer
+                # will turn it into [None] which will cause RequiredMissing.
+                # We therefore replace it with an empty list.
+                if isinstance(field, Set) and field_value is None:
+                    field_value = []
+
                 data[name] = deserializer(field_value)
 
         return value
