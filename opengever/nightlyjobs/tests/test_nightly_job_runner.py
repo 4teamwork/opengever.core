@@ -317,7 +317,11 @@ class TestNightlyJobRunner(IntegrationTestCase):
         ann['last_nightly_run'] = datetime.now() - timedelta(hours=23)
         self.assertTrue(nightly_run_within_24h())
 
-        ann['last_nightly_run'] = datetime.now() - timedelta(hours=25)
+        # Margin of error (24h + 4h + 1h)
+        ann['last_nightly_run'] = datetime.now() - timedelta(hours=28)
+        self.assertTrue(nightly_run_within_24h())
+
+        ann['last_nightly_run'] = datetime.now() - timedelta(hours=30)
         self.assertFalse(nightly_run_within_24h())
 
         ann['last_nightly_run'] = None

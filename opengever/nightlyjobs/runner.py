@@ -31,7 +31,10 @@ def nightly_run_within_24h():
     if not last_run:
         return False
 
-    return last_run + timedelta(hours=24) > datetime.now()
+    # Timestamp update may only be committed at the very end.
+    # So add a margin of error of 4h (usual duration) + 1h
+    delta = timedelta(hours=24 + 4 + 1)
+    return last_run + delta > datetime.now()
 
 
 class TimeWindowExceeded(Exception):
