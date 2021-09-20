@@ -4,6 +4,7 @@ from datetime import timedelta
 from ftw.testing.freezer import FreezedClock
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
+from opengever.nightlyjobs.runner import get_job_counts
 from opengever.nightlyjobs.runner import get_nightly_run_timestamp
 from opengever.nightlyjobs.runner import nightly_run_within_24h
 from opengever.nightlyjobs.runner import SystemLoadCritical
@@ -341,3 +342,25 @@ class TestNightlyJobRunner(IntegrationTestCase):
 
         ann.pop('last_nightly_run')
         self.assertFalse(nightly_run_within_24h())
+
+    def test_get_job_counts(self):
+        self.login(self.manager)
+
+        expected = {
+            u'complete-role-assignment-reports': 1,
+            u'deliver-sip-packages': 0,
+            u'document-title': 1,
+            u'execute-after-resolve-jobs': 0,
+            u'maintenance-jobs': 0,
+        }
+
+        self.assertEqual(expected, get_job_counts())
+
+        self.portal.getSiteManager().registerAdapter(
+            DossierTitleModifierJobProvider, name='dossier-title')
+
+        alsoProvides(self.dossier, IWantToBeModified)
+        self.dossier.reindexObject(idxs=["object_provides"])
+
+        expected['dossier-title'] = 1
+        self.assertEqual(expected, get_job_counts())

@@ -54,6 +54,21 @@ def nightly_run_within_24h():
     return last_run + delta > datetime.now()
 
 
+def get_job_counts():
+    """Get the nightly job counts (by provider).
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    logger = logging.getLogger('opengever.nightlyjobs')
+    providers = {name: provider for name, provider
+                 in getAdapters([api.portal.get(), getRequest(), logger],
+                                INightlyJobProvider)}
+
+    job_counts = {name: len(provider) for name, provider in providers.items()}
+    return job_counts
+
+
 class TimeWindowExceeded(Exception):
 
     message = "Time window exceeded. Window: {}-{}. "\
