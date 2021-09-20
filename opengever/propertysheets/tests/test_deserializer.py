@@ -72,3 +72,33 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
             },
             deserialized_data,
         )
+
+    def test_deserializes_empty_multiple_choice(self):
+        self.login(self.regular_user)
+
+        choices = ["one", "two", "five"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "multiple_choice", u"choose", u"Choose", u"", False, values=choices
+            )
+        )
+
+        deserialized_data = self.deserializer(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": None
+                }
+            }
+        )
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": set([]),
+                },
+            },
+            deserialized_data,
+        )
+
