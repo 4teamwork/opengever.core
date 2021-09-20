@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-03-23 14:26+0000\n"
+"POT-Creation-Date: 2021-09-10 06:35+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -57,11 +57,12 @@ msgstr "Benutzerdefinierte Felder"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier has already been resolved."
 msgstr "Dieses Dossier wurde bereits abgeschlossen."
 
 #: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier is already being resolved"
 msgstr "Der Abschlussvorgang für dieses Dossier läuft bereits."
 
@@ -131,7 +132,7 @@ msgstr "Es existieren noch Teamräume, auf die Sie keinen Zugriff haben. Das Dos
 msgid "Not all linked workspaces are deactivated."
 msgstr "Nicht alle verlinkten Teamräume sind deaktiviert."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "Not all required fields are filled."
 msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 
@@ -208,7 +209,7 @@ msgstr "Das Dossier wurde storniert."
 msgid "The Dossier has been resolved"
 msgstr "Das Dossier wurde erfolgreich abgeschlossen"
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier ${dossier} has a invalid end_date"
 msgstr "Das Dossier ${dossier} hat ein ungültiges Enddatum."
 
@@ -216,7 +217,7 @@ msgstr "Das Dossier ${dossier} hat ein ungültiges Enddatum."
 msgid "The dossier contains active proposals."
 msgstr "Das Dossier enthält aktive Anträge."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier has been succesfully resolved."
 msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 
@@ -224,11 +225,11 @@ msgstr "Das Dossier wurde erfolgreich abgeschlossen."
 msgid "The filing number has been given."
 msgstr "Die Ablagenummer wurde vergeben."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "Das Ende-Datum ist ungültig, es muss jünger oder gleich sein wie das Datum des jüngsten enthaltenen Dokuments (${date})."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given value is not a valid Year."
 msgstr "Das angegeben Ablagejahr ist ungültig."
 
@@ -244,7 +245,7 @@ msgstr "Das Beginn-Datum muss vor dem Ende-Datum liegen."
 msgid "The start or end date is invalid"
 msgstr "Das Beginn- oder Ende-Datum ist ungültig."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The subdossier has been succesfully resolved."
 msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 
@@ -256,7 +257,7 @@ msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossie
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Mit einer neuen Version des Dossiers ${title} aktualisiert."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Für die Vergabe der Ablagenummer, werden alle Felder benötigt."
 
@@ -366,7 +367,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}"
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "error_enddate"
 msgstr "Enddatum erforderlich"
 
@@ -403,7 +404,7 @@ msgid "fieldset_protect"
 msgstr "Schützen"
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_action"
 msgstr "Aktion"
 
@@ -434,14 +435,14 @@ msgid "filing_number"
 msgstr "Ablagenummer"
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "filing_prefix"
 msgstr "Ablage Präfix"
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_year"
 msgstr "Ablage Jahr"
 
@@ -633,6 +634,7 @@ msgstr "Dossiervorlagen"
 
 #. Default: "Dossier type"
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_dossier_type"
 msgstr "Dossiertyp"
 
@@ -652,9 +654,9 @@ msgid "label_email_address"
 msgstr "E-Mail"
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/report.py
+#: ./opengever/dossier/filing/form.py
 msgid "label_end"
 msgstr "Ende"
 
@@ -732,6 +734,11 @@ msgstr "Zuletzt Bearbeitet"
 #: ./opengever/dossier/widget.py
 msgid "label_no_reference_number"
 msgstr "Die Archivnummer wird erst beim Erstellen generiert."
+
+#. Default: "Dossier ${name} cannot be moved because it would exceed the maximum allowed dossier depth."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_exceeds_maximum_depth"
+msgstr "Das Dossier ${name} kann nicht verschoben werden, weil die maximal erlaubte Dossiertiefe überschritten würde."
 
 #. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
 #: ./opengever/dossier/move_items.py
@@ -970,23 +977,23 @@ msgstr "Es sind nicht alle Aufgaben abgeschlossen"
 msgid "note_text_confirm_abord"
 msgstr "Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "only resolve, set filing no later"
 msgstr "Nur abschliessen (keine Ablagenummer vergeben)"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set a new filing no"
 msgstr "Abschliessen und Ablagenummer neu vergeben"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set filing no"
 msgstr "Abschliessen und Ablagenummer vergeben"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and take the existing filing no"
 msgstr "Abschliessen und die existierende Ablagenummer verwenden"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "set a filing no"
 msgstr "Ablagenummer vergeben"
 

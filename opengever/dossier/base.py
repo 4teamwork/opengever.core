@@ -185,13 +185,18 @@ class DossierContainer(Container):
         """Only checks if the maximum dossier depth allows another level
         of subdossiers but not for permissions.
         """
+        return self.is_dossier_structure_addable(additional_depth=1)
+
+    def is_dossier_structure_addable(self, additional_depth=1):
+        """Checks if the maximum dossier depth allows additional_depth levels
+        of subdossiers but not for permissions.
+        """
         max_depth = api.portal.get_registry_record(
             name='maximum_dossier_depth',
             interface=IDossierContainerTypes,
             default=100,
             )
-
-        return self._get_dossier_depth() <= max_depth
+        return self._get_dossier_depth() + additional_depth <= max_depth + 1
 
     def has_subdossiers(self):
         return len(self.get_subdossiers()) > 0
@@ -202,8 +207,7 @@ class DossierContainer(Container):
             sort_order='ascending',
             review_state=None,
             depth=-1,
-            unrestricted=False,
-        ):
+            unrestricted=False):
 
         dossier_path = '/'.join(self.getPhysicalPath())
 

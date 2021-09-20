@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-23 14:26+0000\n"
+"POT-Creation-Date: 2021-09-10 06:35+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -56,11 +56,12 @@ msgstr "Champs personnalisés"
 msgid "Description"
 msgstr "Description"
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier has already been resolved."
 msgstr "Ce dossier a déjà été clôturé."
 
 #: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "Dossier is already being resolved"
 msgstr "Le processus de clôture de ce dossier est déjà en cours."
 
@@ -130,7 +131,7 @@ msgstr "Vous ne pouvez pas clôturer le dossier, parce que vous n'avez opas acc�
 msgid "Not all linked workspaces are deactivated."
 msgstr "Tous les espaces de travail liés ne sont pas désactivés."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "Not all required fields are filled."
 msgstr "Un ou plusieurs des champs requis n'ont pas été remplis."
 
@@ -206,7 +207,7 @@ msgstr "Le dossier a été annulé."
 msgid "The Dossier has been resolved"
 msgstr "Le dossier a été clôturé avec succès."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier ${dossier} has a invalid end_date"
 msgstr "La date de clôture du dossier ${dossier} n'est pas valable."
 
@@ -214,7 +215,7 @@ msgstr "La date de clôture du dossier ${dossier} n'est pas valable."
 msgid "The dossier contains active proposals."
 msgstr "Le dossier contient des requêtes actives."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The dossier has been succesfully resolved."
 msgstr "Le dossier a été clôturé avec succès."
 
@@ -222,11 +223,11 @@ msgstr "Le dossier a été clôturé avec succès."
 msgid "The filing number has been given."
 msgstr "Le numéro d'inventaire a été attribué."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given end date is not valid, it needs to be younger or                  equal than ${date} (the youngest contained object)."
 msgstr "La date de clôture n'est pas valable. Elle doit être plus récente ou égale à la date de l'objet le plus récent y contenu (${date})."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "The given value is not a valid Year."
 msgstr "L'année d'archivage indiquée n'est pas valable."
 
@@ -242,7 +243,7 @@ msgstr "La date de début doit être plus récente que la date de clôture."
 msgid "The start or end date is invalid"
 msgstr "La date de début ou la date de clôture n'est pas valable."
 
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/statusmessage_mixin.py
 msgid "The subdossier has been succesfully resolved."
 msgstr "Le sous-dossier a été clôturé avec succès."
 
@@ -254,7 +255,7 @@ msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier princ
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Actualisé par une nouvelle version du dossier ${title}."
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "When the Action give filing number is selected,                         all fields are required."
 msgstr "Pour l'attribution du numéro d'inventaire, tous les champs sont obligatoires."
 
@@ -364,7 +365,7 @@ msgid "error_NotInContentTypes ${failed_objects}"
 msgstr "Aucun objet n'a été déplacé. Les objets suivants ne peuvent être insérés dans le classeur choisi: ${failed_objects}"
 
 #. Default: "The enddate is required."
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "error_enddate"
 msgstr "Date de clôture requise"
 
@@ -401,7 +402,7 @@ msgid "fieldset_protect"
 msgstr "Protéger"
 
 #. Default: "Action"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_action"
 msgstr "Action"
 
@@ -432,14 +433,14 @@ msgid "filing_number"
 msgstr "Numéro d'inventaire"
 
 #. Default: "filing prefix"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "filing_prefix"
 msgstr "Préfixe du lieu de dépôt"
 
 #. Default: "filing Year"
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "filing_year"
 msgstr "Année de dépôt"
 
@@ -631,6 +632,7 @@ msgstr "Modèles de dossier"
 
 #. Default: "Dossier type"
 #: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_dossier_type"
 msgstr "Type de dossier"
 
@@ -650,9 +652,9 @@ msgid "label_email_address"
 msgstr "E-mail"
 
 #. Default: "Closing Date"
-#: ./opengever/dossier/archive.py
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/report.py
+#: ./opengever/dossier/filing/form.py
 msgid "label_end"
 msgstr "Fin"
 
@@ -730,6 +732,11 @@ msgstr "Dernière modification"
 #: ./opengever/dossier/widget.py
 msgid "label_no_reference_number"
 msgstr "Le numéro de classement est seulement généré lors de la création du document."
+
+#. Default: "Dossier ${name} cannot be moved because it would exceed the maximum allowed dossier depth."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_exceeds_maximum_depth"
+msgstr "Le dossier ${name} ne peut pas être déplacé car celà enfreindrait la profondeur maximale de dossiers autorisée"
 
 #. Default: "Document ${name} is inside a proposal and therefore not movable. Move the proposal instead"
 #: ./opengever/dossier/move_items.py
@@ -968,23 +975,23 @@ msgstr "Pas toutes les tâches ont été clôturées."
 msgid "note_text_confirm_abord"
 msgstr "Vous avez des modifications non sauvegardées. Voulez-vous vraiment annuler?"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "only resolve, set filing no later"
 msgstr "Clôturer seulement (numéro d'inventaire non attribué)"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set a new filing no"
 msgstr "Clôturer et attribuer un nouveau numéro d'inventaire"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and set filing no"
 msgstr "Clôturer et attribuer un numéro d'inventaire"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "resolve and take the existing filing no"
 msgstr "Clôturer et utiliser le numéro d'inventaire existant"
 
-#: ./opengever/dossier/archive.py
+#: ./opengever/dossier/filing/form.py
 msgid "set a filing no"
 msgstr "Attribuer un numéro d'inventaire"
 

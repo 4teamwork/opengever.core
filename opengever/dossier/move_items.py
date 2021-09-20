@@ -2,6 +2,7 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
+from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
@@ -20,6 +21,7 @@ from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zExceptions import Forbidden
 from zope import schema
+from zope.component import adapter
 from zope.interface import Interface, Invalid
 import z3c.form
 
@@ -130,6 +132,12 @@ class MoveItemsForm(form.Form):
                             default=u'Document ${name} is inside a proposal '
                                     u'and therefore not movable. Move the '
                                     u'proposal instead',
+                            mapping=dict(name=obj.title))
+                    elif exc.message == u'This would exceed maximally allowed dossier depth.':
+                        msg = _(
+                            'label_not_movable_since_exceeds_maximum_depth',
+                            default=u'Dossier ${name} cannot be moved because '
+                            'it would exceed the maximum allowed dossier depth.',
                             mapping=dict(name=obj.title))
                     else:
                         raise Exception(
@@ -360,3 +368,26 @@ class DestinationValidator(validator.SimpleFieldValidator):
 # once we only support the new UI.
 validator.WidgetValidatorDiscriminators(
     DestinationValidator, field=IMoveItemsSchema['destination_folder'])
+
+
+@adapter(IDossierMarker)
+class DossierMovabiliyChecker(DefaultMovabilityChecker):
+
+    def validate_movement(self, target):
+        """Avoid exceeding maximum dossier depth
+        """
+        if not IDossierMarker.providedBy(target):
+            return
+
+        # determine depth of structure being moved
+        substructure_depth = self.dossier_structure_depth()
+
+        if not target.is_dossier_structure_addable(substructure_depth):
+            raise Forbidden(u'This would exceed maximally allowed dossier depth.')
+
+    def dossier_structure_depth(self):
+        subdossiers = self.context.get_subdossiers(unrestricted=True)
+        if not subdossiers:
+            return 1
+        max_level = max([len(brain.getPath().split('/')) for brain in subdossiers])
+        return max_level - len(self.context.getPhysicalPath()) + 1
