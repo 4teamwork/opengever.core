@@ -225,6 +225,10 @@ class SystemActor(object):
     def get_link(self, with_icon=False):
         return u''
 
+    @property
+    def is_active(self):
+        return False
+
     def represents(self):
         return None
 
