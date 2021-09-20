@@ -24,14 +24,30 @@ DICTSTORAGE_SYNC_KEY = 'last_ldap_synchronisation'
 REQUEST_SYNC_KEY = 'last_ldap_synchronisation'
 
 
-def ogds_sync_within_24h():
+def get_ogds_sync_stamp():
+    """Get the timestamp of the last OGDS sync as a datetime.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
     sync_stamp = getUtility(ISyncStamp).get_sync_stamp()
 
-    if not sync_stamp:
+    if sync_stamp:
+        return dateutil.parser.parse(sync_stamp)
+
+
+def ogds_sync_within_24h():
+    """Determine whether an OGDS sync happened within the last 24h.
+
+    This function is used by the @@health-check view in og.maintenance.
+    Don't change it without testing that the health check still works!
+    """
+    sync_stamp_dt = get_ogds_sync_stamp()
+
+    if not sync_stamp_dt:
         return False
 
-    sync_stamp = dateutil.parser.parse(sync_stamp)
-    return sync_stamp + timedelta(hours=24) > datetime.now()
+    return sync_stamp_dt + timedelta(hours=24) > datetime.now()
 
 
 def update_sync_stamp(context):

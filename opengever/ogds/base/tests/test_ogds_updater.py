@@ -5,6 +5,7 @@ from ftw.builder import create
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
+from opengever.ogds.base.sync.import_stamp import get_ogds_sync_stamp
 from opengever.ogds.base.sync.import_stamp import ogds_sync_within_24h
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
@@ -322,6 +323,14 @@ class TestOGDSUpdater(FunctionalTestCase):
 
 
 class TestImportStamp(IntegrationTestCase):
+
+    def test_get_ogds_sync_stamp(self):
+        util = getUtility(ISyncStamp)
+
+        self.assertIsNone(get_ogds_sync_stamp())
+
+        util.set_sync_stamp(datetime(2021, 9, 11, 12, 45).isoformat())
+        self.assertEqual(datetime(2021, 9, 11, 12, 45), get_ogds_sync_stamp())
 
     def test_ogds_sync_within_24h_helper(self):
         util = getUtility(ISyncStamp)
