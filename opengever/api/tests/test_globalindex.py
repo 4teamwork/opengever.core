@@ -83,6 +83,16 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'next': u'http://nohost/plone/@globalindex?b_start=3&b_size=3'},
             browser.json['batching'])
 
+        browser.open(self.portal, view='@globalindex?b_start=6&b_size=3',
+                     headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@globalindex?b_start=6&b_size=3',
+             u'first': u'http://nohost/plone/@globalindex?b_start=0&b_size=3',
+             u'last': u'http://nohost/plone/@globalindex?b_start=12&b_size=3',
+             u'prev': u'http://nohost/plone/@globalindex?b_start=3&b_size=3',
+             u'next': u'http://nohost/plone/@globalindex?b_start=9&b_size=3'},
+            browser.json['batching'])
+
     @browsing
     def test_respect_sort_parameter(self, browser):
         self.login(self.regular_user, browser=browser)
