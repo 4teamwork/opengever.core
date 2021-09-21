@@ -1,5 +1,6 @@
 from AccessControl.interfaces import IRoleManager
 from ftw.mail.interfaces import IMailSettings
+from ftw.solr.browser.maintenance import SolrMaintenanceView
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.contact.interfaces import IContactFolder
@@ -22,7 +23,7 @@ from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from sqlalchemy import MetaData
 from zope.component import getAdapter
 from zope.component import getUtility
-
+from zope.globalrequest import getRequest
 
 # these profiles will be installed automatically
 EXTENSION_PROFILES = (
@@ -45,6 +46,7 @@ class GeverDeployment(object):
     def __init__(self, context, config, db_session,
                  is_development_setup=False,
                  has_purge_sql=False,
+                 has_purge_solr=False,
                  ldap_profile=None,
                  has_ogds_sync=False):
         self.context = context
@@ -53,11 +55,13 @@ class GeverDeployment(object):
         self.is_development_setup = is_development_setup
         self.is_policyless = config.get('is_policyless', False)
         self.has_purge_sql = has_purge_sql
+        self.has_purge_solr = has_purge_solr
         self.ldap_profile = ldap_profile
         self.has_ogds_sync = has_ogds_sync
 
     def create(self):
         self.prepare_sql()
+        self.prepare_solr()
         self.site = self.setup_plone_site()
 
         self.setup_ldap()
@@ -75,6 +79,11 @@ class GeverDeployment(object):
             return
 
         self.drop_sql_tables(self.db_session)
+
+    def prepare_solr(self):
+        if not self.has_purge_solr:
+            return
+        SolrMaintenanceView(self.context, getRequest()).clear(force=True)
 
     def setup_plone_site(self):
         config = self.config

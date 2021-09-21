@@ -125,6 +125,19 @@
           </span>
         </div>
 
+        <div class="field">
+          <label for="purge_solr">
+            Purge Solr
+          </label>
+          <div class="formHelp"></div>
+          <input type="checkbox" name="purge_solr:boolean"
+                 id="purge_solr"
+                 tal:attributes="checked python:'checked' if view.is_development_mode else ''"/>
+          <span class="purge_solr_label">
+            Purge Solr completely before setup
+          </span>
+        </div>
+
       </fieldset>
 
       <div class="formControls">
