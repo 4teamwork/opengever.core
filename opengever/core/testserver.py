@@ -1,3 +1,5 @@
+# from opengever.base import model
+# from z3c.saconfig import named_scoped_session
 from contextlib import contextmanager
 from datetime import datetime
 from ftw.builder import session
@@ -6,6 +8,7 @@ from ftw.testing import staticuid
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.core import sqlite_testing
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import activate_bumblebee_feature
@@ -23,10 +26,28 @@ import os
 import pytz
 import transaction
 
-
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
+
+
+class SQLiteBackup(object):
+    backup_data = ''
+
+    def backup(self):
+        for line in create_session().bind.raw_connection().connection.iterdump():
+            if 'CREATE TABLE' in line or \
+               'opengever_upgrade_version' in line or \
+               'CREATE INDEX' in line:
+                continue
+            self.backup_data += line
+
+    def restore(self):
+            sqlite_testing.truncate_tables()
+            create_session().bind.raw_connection().connection.executescript(self.backup_data)
+
+
+sqlite_backup = SQLiteBackup()
 
 
 class TestserverLayer(OpengeverFixture):
@@ -105,6 +126,8 @@ class TestserverLayer(OpengeverFixture):
         transaction.commit()
         SolrReplicationAPIClient.get_instance().create_backup('fixture')
 
+        sqlite_backup.backup()
+
     def setupLanguageTool(self, portal):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de')
@@ -152,12 +175,16 @@ class TestServerFunctionalTesting(FunctionalTesting):
         super(TestServerFunctionalTesting, self).testSetUp()
         self.context_manager = self.isolation()
         self.context_manager.__enter__()
+
         transaction.commit()
 
     def testTearDown(self):
         self.context_manager.__exit__(None, None, None)
         SolrReplicationAPIClient.get_instance().restore_backup('fixture')
         SolrReplicationAPIClient.get_instance().await_restored()
+
+        sqlite_backup.restore()
+
         super(TestServerFunctionalTesting, self).testTearDown()
 
 
