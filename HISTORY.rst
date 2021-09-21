@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.19.0 (2021-09-21)
+----------------------
+
+New features:
+
+
+- Add responsible_org_unit field to repository folders. [njohner]
+- Automatically close main task when all subtasks in a sequential or parallel task are in a final state. [tinagerber]
+
+
+Bug fixes:
+
+
+- Moving a dossier over the API now respects the maximum dossier depth. [njohner]
+- Fix ++widget++ traversal when form contains custom properties. [lgraf]
+- Transform default *value* to *token* in custom property schemas. [lgraf]
+- Propertysheets: Avoid 'RequiredMissing' for empty multiple_choice fields [lgraf]
+- Improve performance for SQL API endpoints, which uses the SQLHypermediaBatch. [phgross]
+- Fix actor represents URL for teams. [buchi]
+- Remove immediate_view for proposals, fixes protocol approval proposal creation. [phgross]
+- Fix actors endpoint for the SystemActor. [phgross]
+
+
+Other changes:
+
+
+- Redirect to workspace if the invitation link refers to an already accepted invitation. [tinagerber]
+- Make import of repository excel files more robust. [njohner]
+- Enable nightly jobs in policy templates. [njohner]
+- NightlyJobRunner: Update a timestamp on PloneSite when executing jobs. [lgraf]
+- OGDS sync: Add helper to determine if sync happened in last 24h. [lgraf]
+
+
 2021.18.0 (2021-09-10)
 ----------------------
 
