@@ -18,9 +18,11 @@ from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
+from plone.testing.zca import _REGISTRIES
 from requests.exceptions import ConnectionError
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
+from zope.site.hooks import siteinfo
 import imp
 import os
 import pytz
@@ -42,10 +44,23 @@ class SQLiteBackup(object):
                 continue
             self.backup_data += line
 
-    def restore(self):
-            sqlite_testing.truncate_tables()
-            create_session().bind.raw_connection().connection.executescript(self.backup_data)
+    def restore(self, retry=0, max_retry=5):
+            try:
+                transaction.commit()
+                sqlite_testing.truncate_tables()
+                create_session().bind.raw_connection().connection.executescript(self.backup_data)
+            except Exception as e:
+                if retry < max_retry:
+                    try:
+                        transaction.abort()
+                        # Check if the sitemanager is accessible.
+                        siteinfo.sm
+                    except:
+                        # Restore the sitemanager. This fixes the `test-stack-xxx` issue.
+                        siteinfo.sm = _REGISTRIES[-1]
 
+                    return self.restore(retry=retry + 1)
+                raise e
 
 sqlite_backup = SQLiteBackup()
 
