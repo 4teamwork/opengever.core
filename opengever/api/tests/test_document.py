@@ -193,7 +193,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(expected_links, browser.json['teamraum_connect_links'])
 
     @browsing
-    def test_contains_dossier_backreferences(self, browser):
+    def test_contains_document_backreferences(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.subdocument, method="GET", headers=self.api_headers)
