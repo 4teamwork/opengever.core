@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.18.2 (2021-09-22)
+----------------------
+
+Bug fixes:
+
+
+- Improve performance for SQL API endpoints, which uses the SQLHypermediaBatch. [phgross]
+- Fix actors endpoint for the SystemActor. [phgross]
+
+
 2021.18.1 (2021-09-15)
 ----------------------
 

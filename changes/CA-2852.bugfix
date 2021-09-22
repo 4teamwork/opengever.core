@@ -1,1 +1,0 @@
-Improve performance for SQL API endpoints, which uses the SQLHypermediaBatch. [phgross]
