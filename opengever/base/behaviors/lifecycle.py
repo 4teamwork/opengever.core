@@ -42,7 +42,7 @@ class ILifeCycle(model.Schema):
             u'date_of_submission', ],
     )
 
-    # dexterity.write_permission(retention_period='cmf.ManagePortal')
+    form.write_permission(retention_period='opengever.base.EditLifecycleAndClassification')
     retention_period = schema.Choice(
         title=_(u'label_retention_period', u'Retention period (years)'),
         description=_(u'help_retention_period', default=u''),
@@ -50,14 +50,14 @@ class ILifeCycle(model.Schema):
         required=True,
     )
 
-    # dexterity.write_permission(retention_period_annotation='cmf.ManagePortal')
+    form.write_permission(retention_period_annotation='opengever.base.EditLifecycleAndClassification')
     retention_period_annotation = schema.Text(
         title=_(u'label_retention_period_annotation',
                 default=u'retentionPeriodAnnotation'),
         required=False
     )
 
-    # dexterity.write_permission(archival_value='cmf.ManagePortal')
+    form.write_permission(archival_value='opengever.base.EditLifecycleAndClassification')
     archival_value = schema.Choice(
         title=_(u'label_archival_value', default=u'Archival value'),
         description=_(u'help_archival_value', default=u'Archival value code'),
@@ -65,14 +65,14 @@ class ILifeCycle(model.Schema):
         required=True,
     )
 
-    # dexterity.write_permission(archival_value_annotation='cmf.ManagePortal')
+    form.write_permission(archival_value_annotation='opengever.base.EditLifecycleAndClassification')
     archival_value_annotation = schema.Text(
         title=_(u'label_archival_value_annotation',
                 default=u'archivalValueAnnotation'),
         required=False
     )
 
-    # dexterity.write_permission(custody_period='cmf.ManagePortal')
+    form.write_permission(custody_period='opengever.base.EditLifecycleAndClassification')
     custody_period = schema.Choice(
         title=_(u'label_custody_period', default=u'Custody period (years)'),
         description=_(u'help_custody_period', default=u''),

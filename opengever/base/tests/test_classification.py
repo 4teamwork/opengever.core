@@ -8,6 +8,7 @@ from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+import json
 
 
 class TestClassificationDefault(IntegrationTestCase):
@@ -592,3 +593,102 @@ class TestChangesToPublicTrialAreJournalized(IntegrationTestCase):
         self.assert_journal_entry(
             self.document, 'Public trial modified',
             u'Disclosure status changed to "public".')
+
+
+class TestClassificationFieldsAreProtected(IntegrationTestCase):
+
+    @browsing
+    def test_fields_are_only_visible_on_add_form_if_permission_available(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        self.assertIsNotNone(browser.forms['form'].find_field('Classification'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Privacy protection'))
+
+        browser.css('#form-buttons-cancel').first.click()
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        factoriesmenu.add(u'Business Case Dossier')
+        self.assertIsNone(browser.forms['form'].find_field('Classification'))
+        self.assertIsNone(browser.forms['form'].find_field('Privacy protection'))
+
+    @browsing
+    def test_fields_are_only_visible_on_edit_form_if_permission_available(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, view='edit')
+        self.assertIsNotNone(browser.forms['form'].find_field('Classification'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Privacy protection'))
+
+        browser.css('#form-buttons-cancel').first.click()
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        browser.open(self.dossier, view='edit')
+        self.assertIsNone(browser.forms['form'].find_field('Classification'))
+        self.assertIsNone(browser.forms['form'].find_field('Privacy protection'))
+
+    @browsing
+    def test_create_dossier_via_api_only_overwrites_classification_fields_if_permission_available(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unprotected', IClassification(self.leaf_repofolder).classification)
+        self.assertEqual(u'privacy_layer_no', IClassification(self.leaf_repofolder).privacy_layer)
+
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'responsible': self.regular_user.id,
+            u'title': u'Sanierung B\xe4rengraben 2016',
+            u'classification': u'confidential',
+            u'privacy_layer': u'privacy_layer_yes',
+        }
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open(self.leaf_repofolder, data=json.dumps(payload),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+
+        self.assertEqual(u'confidential', IClassification(dossier).classification)
+        self.assertEqual(u'privacy_layer_yes', IClassification(dossier).privacy_layer)
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open(self.leaf_repofolder, data=json.dumps(payload),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+
+        self.assertEqual(u'unprotected', IClassification(dossier).classification)
+        self.assertEqual(u'privacy_layer_no', IClassification(dossier).privacy_layer)
+
+    @browsing
+    def test_edit_dossier_via_api_overwrites_classification_fields_if_permission_available(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unprotected', IClassification(self.dossier).classification)
+        self.assertEqual(u'privacy_layer_no', IClassification(self.dossier).privacy_layer)
+
+        payload = {
+            u'classification': u'confidential',
+            u'privacy_layer': u'privacy_layer_yes',
+        }
+        browser.open(self.dossier, data=json.dumps(payload),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(u'confidential', IClassification(self.dossier).classification)
+        self.assertEqual(u'privacy_layer_yes', IClassification(self.dossier).privacy_layer)
+
+    @browsing
+    def test_edit_dossier_via_api_does_not_overwrite_classification_fields_if_permission_missing(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unprotected', IClassification(self.dossier).classification)
+        self.assertEqual(u'privacy_layer_no', IClassification(self.dossier).privacy_layer)
+
+        payload = {
+            u'classification': u'confidential',
+            u'privacy_layer': u'privacy_layer_yes',
+        }
+        self.dossier.manage_permission("Edit lifecycle and classification", roles=[])
+        browser.open(self.dossier, data=json.dumps(payload),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(u'unprotected', IClassification(self.dossier).classification)
+        self.assertEqual(u'privacy_layer_no', IClassification(self.dossier).privacy_layer)

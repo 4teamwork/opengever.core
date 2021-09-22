@@ -42,6 +42,15 @@
       <role name="Manager" />
     </permission>
 
+    <permission name="Edit lifecycle and classification" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Administrator" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+    </permission>
+
     <permission name="ftw.keywordwidget: Add new term" acquire="False">
       <role name="Manager" />
       <role name="Site Administrator" />

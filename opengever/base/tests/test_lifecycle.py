@@ -8,6 +8,7 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+import json
 
 
 def set_retention_period_restricted(value):
@@ -711,3 +712,132 @@ class TestDateOfCassation(IntegrationTestCase):
         self.login(self.manager, browser=browser)
         browser.open(self.dossier, view='edit')
         self.assertIsNotNone(browser.forms['form'].find_field('Date of cassation'))
+
+
+class TestLifeCycleFieldsAreProtected(IntegrationTestCase):
+
+    @browsing
+    def test_fields_are_only_visible_on_add_form_if_permission_available(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        self.assertIsNotNone(browser.forms['form'].find_field('Retention period (years)'))
+        self.assertIsNotNone(browser.forms['form'].find_field(
+            'Comment about retention period assessment'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Archival value'))
+        self.assertIsNotNone(browser.forms['form'].find_field(
+            'Comment about archival value assessment'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Regular safeguard period (years)'))
+
+        browser.css('#form-buttons-cancel').first.click()
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        factoriesmenu.add(u'Business Case Dossier')
+        self.assertIsNone(browser.forms['form'].find_field('Retention period (years)'))
+        self.assertIsNone(browser.forms['form'].find_field(
+            'Comment about retention period assessment'))
+        self.assertIsNone(browser.forms['form'].find_field('Archival value'))
+        self.assertIsNone(browser.forms['form'].find_field(
+            'Comment about archival value assessment'))
+        self.assertIsNone(browser.forms['form'].find_field('Regular safeguard period (years)'))
+
+    @browsing
+    def test_fields_are_only_visible_on_edit_form_if_permission_available(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier, view='edit')
+        self.assertIsNotNone(browser.forms['form'].find_field('Retention period (years)'))
+        self.assertIsNotNone(browser.forms['form'].find_field(
+            'Comment about retention period assessment'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Archival value'))
+        self.assertIsNotNone(browser.forms['form'].find_field(
+            'Comment about archival value assessment'))
+        self.assertIsNotNone(browser.forms['form'].find_field('Regular safeguard period (years)'))
+
+        browser.css('#form-buttons-cancel').first.click()
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        browser.open(self.dossier, view='edit')
+        self.assertIsNone(browser.forms['form'].find_field('Retention period (years)'))
+        self.assertIsNone(browser.forms['form'].find_field(
+            'Comment about retention period assessment'))
+        self.assertIsNone(browser.forms['form'].find_field('Archival value'))
+        self.assertIsNone(browser.forms['form'].find_field(
+            'Comment about archival value assessment'))
+        self.assertIsNone(browser.forms['form'].find_field('Regular safeguard period (years)'))
+
+    @browsing
+    def test_create_dossier_via_api_only_overwrites_lifecycle_fields_if_permission_available(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unchecked', ILifeCycle(self.leaf_repofolder).archival_value)
+        self.assertEqual(30, ILifeCycle(self.leaf_repofolder).custody_period)
+        self.assertEqual(5, ILifeCycle(self.leaf_repofolder).retention_period)
+
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'archival_value': u'prompt',
+            u'custody_period': 100,
+            u'responsible': self.regular_user.id,
+            u'retention_period': 10,
+            u'title': u'Sanierung B\xe4rengraben 2016',
+        }
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open(self.leaf_repofolder, data=json.dumps(payload),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+
+        self.assertEqual(u'prompt', ILifeCycle(dossier).archival_value)
+        self.assertEqual(100, ILifeCycle(dossier).custody_period)
+        self.assertEqual(10, ILifeCycle(dossier).retention_period)
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open(self.leaf_repofolder, data=json.dumps(payload),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+
+        self.assertEqual(u'unchecked', ILifeCycle(dossier).archival_value)
+        self.assertEqual(30, ILifeCycle(dossier).custody_period)
+        self.assertEqual(5, ILifeCycle(dossier).retention_period)
+
+    @browsing
+    def test_edit_dossier_via_api_overwrites_lifecycle_fields_if_permission_available(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unchecked', ILifeCycle(self.dossier).archival_value)
+        self.assertEqual(30, ILifeCycle(self.dossier).custody_period)
+        self.assertEqual(15, ILifeCycle(self.dossier).retention_period)
+
+        payload = {
+            u'archival_value': u'prompt',
+            u'custody_period': 100,
+            u'retention_period': 10,
+        }
+        browser.open(self.dossier, data=json.dumps(payload),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(u'prompt', ILifeCycle(self.dossier).archival_value)
+        self.assertEqual(100, ILifeCycle(self.dossier).custody_period)
+        self.assertEqual(10, ILifeCycle(self.dossier).retention_period)
+
+    @browsing
+    def test_edit_dossier_via_api_does_not_overwrite_lifecycle_fields_if_permission_missing(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual(u'unchecked', ILifeCycle(self.dossier).archival_value)
+        self.assertEqual(30, ILifeCycle(self.dossier).custody_period)
+        self.assertEqual(15, ILifeCycle(self.dossier).retention_period)
+
+        payload = {
+            u'archival_value': u'prompt',
+            u'custody_period': 100,
+            u'retention_period': 10,
+        }
+        self.dossier.manage_permission("Edit lifecycle and classification", roles=[])
+        browser.open(self.dossier, data=json.dumps(payload),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(u'unchecked', ILifeCycle(self.dossier).archival_value)
+        self.assertEqual(30, ILifeCycle(self.dossier).custody_period)
+        self.assertEqual(15, ILifeCycle(self.dossier).retention_period)

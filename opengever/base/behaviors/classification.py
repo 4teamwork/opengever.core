@@ -6,6 +6,7 @@ from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.memoize import ram
 from plone.supermodel import model
@@ -67,6 +68,7 @@ class IClassification(model.Schema):
         ],
     )
 
+    form.write_permission(classification='opengever.base.EditLifecycleAndClassification')
     classification = schema.Choice(
         title=_(u'label_classification', default=u'Classification'),
         description=_(u'help_classification', default=u''),
@@ -74,6 +76,7 @@ class IClassification(model.Schema):
         required=True,
     )
 
+    form.write_permission(privacy_layer='opengever.base.EditLifecycleAndClassification')
     privacy_layer = schema.Choice(
         title=_(u'label_privacy_layer', default=u'Privacy layer'),
         description=_(u'help_privacy_layer', default=u''),

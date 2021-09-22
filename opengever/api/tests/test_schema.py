@@ -66,6 +66,28 @@ class TestSchemaEndpoint(IntegrationTestCase):
             response, required_languages=['fr', 'en'], inactive_languages=['de'])
 
     @browsing
+    def test_add_schema_does_not_contain_protected_fields(self, browser):
+        self.login(self.regular_user, browser)
+        response = browser.open(
+            self.leaf_repofolder, view='@schema/opengever.dossier.businesscasedossier',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertIn('classification', fieldset['fields'])
+        self.assertIn('privacy_layer', fieldset['fields'])
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        response = browser.open(
+            self.leaf_repofolder, view='@schema/opengever.dossier.businesscasedossier',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertNotIn('classification', fieldset['fields'])
+        self.assertNotIn('privacy_layer', fieldset['fields'])
+
+    @browsing
     def test_edit_schema_only_contains_translated_title_fields_for_active_languages(self, browser):
         self.login(self.regular_user, browser)
 
@@ -87,14 +109,36 @@ class TestSchemaEndpoint(IntegrationTestCase):
         self.assert_translated_title_fields(
             response, required_languages=['fr', 'en'], inactive_languages=['de'])
 
+    @browsing
+    def test_edit_schema_does_not_contain_protected_fields(self, browser):
+        self.login(self.regular_user, browser)
+        response = browser.open(
+            self.leaf_repofolder, view='@schema',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertIn('classification', fieldset['fields'])
+        self.assertIn('privacy_layer', fieldset['fields'])
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        response = browser.open(
+            self.leaf_repofolder, view='@schema',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertNotIn('classification', fieldset['fields'])
+        self.assertNotIn('privacy_layer', fieldset['fields'])
+
     def _get_schema_fieldset(self, schema, name):
         for item in schema['fieldsets']:
-            if item['behavior'] == name:
+            if item['id'] == name:
                 return item
         return None
 
     def assert_translated_title_fields(self, response, required_languages, inactive_languages):
-        fieldset = self._get_schema_fieldset(response, "plone")
+        fieldset = self._get_schema_fieldset(response, "common")
         for lang in required_languages:
             field_name = 'title_{}'.format(lang)
             self.assertIn(field_name, response['required'])
