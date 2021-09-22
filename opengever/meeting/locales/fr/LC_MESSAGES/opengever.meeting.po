@@ -1530,12 +1530,12 @@ msgstr "Adhésions"
 #. Default: "Attachment order updated."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "message_attachment_order_successfully_message"
-msgstr ""
+msgstr "L'ordre des pièces jointes a été actualisé"
 
 #. Default: "Information"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "message_attachment_order_successfully_message_title"
-msgstr ""
+msgstr "Information"
 
 #. Default: "The proposal document is being checked out by ${creator}."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt

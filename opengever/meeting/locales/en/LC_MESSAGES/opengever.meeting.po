@@ -1828,12 +1828,12 @@ msgstr "Memberships"
 #. Default: "Attachment order updated."
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "message_attachment_order_successfully_message"
-msgstr ""
+msgstr "The attachments' order has been successfully updated"
 
 #. Default: "Information"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "message_attachment_order_successfully_message_title"
-msgstr ""
+msgstr "Information"
 
 #. German translation: Das Antragsdokument wurde von ${creator} ausgecheckt.
 #. Default: "The proposal document is being checked out by ${creator}."
