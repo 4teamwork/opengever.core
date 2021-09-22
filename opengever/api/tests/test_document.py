@@ -212,6 +212,18 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual([], browser.json['back_references_relatedItems'])
 
     @browsing
+    def test_filters_anything_but_documents_from_backreferences(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.document, method="GET", headers=self.api_headers)
+        self.assertEqual([
+            (u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22',
+             u'opengever.document.document'),
+            (u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23',
+             u'opengever.document.document')],
+            [(ref['@id'], ref['@type']) for ref in browser.json['back_references_relatedItems']])
+
+    @browsing
     def test_approvals_expansion(self, browser):
         self.login(self.regular_user, browser=browser)
 
