@@ -1,6 +1,7 @@
 from Acquisition import aq_inner, aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.behaviors.utils import omit_classification_group
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -26,6 +27,7 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from zExceptions import Unauthorized
 from zope.component import getUtility
+from zope.security import checkPermission
 import base64
 
 
@@ -98,8 +100,13 @@ class DossierAddForm(add.DefaultAddForm):
 
     def updateFields(self):
         super(DossierAddForm, self).updateFields()
-        fields = ['IClassification.public_trial',
-                  'IClassification.public_trial_statement']
+
+        if checkPermission('opengever.base.EditLifecycleAndClassification', self.context):
+            fields = ['IClassification.public_trial',
+                      'IClassification.public_trial_statement']
+        else:
+            omit_classification_group(self)
+            fields = []
 
         if not has_active_dossier_types(self.context):
             fields.append('IDossier.dossier_type')
@@ -147,8 +154,12 @@ class DossierEditForm(edit.DefaultEditForm):
                 group.fields['IDossier.reference_number'].widgetFactory = referenceNumberWidgetFactory
                 group.fields['IDossier.reference_number'].mode = 'display'
 
-        fields = ['IClassification.public_trial',
-                  'IClassification.public_trial_statement']
+        if checkPermission('opengever.base.EditLifecycleAndClassification', self.context):
+            fields = ['IClassification.public_trial',
+                      'IClassification.public_trial_statement']
+        else:
+            omit_classification_group(self)
+            fields = []
 
         if not has_active_dossier_types(self.context):
             fields.append('IDossier.dossier_type')

@@ -1,4 +1,5 @@
 from opengever.base.behaviors.utils import hide_fields_from_behavior
+from opengever.base.behaviors.utils import omit_classification_group
 from opengever.base.browser.translated_title import TranslatedTitleAddForm
 from opengever.base.browser.translated_title import TranslatedTitleEditForm
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -9,6 +10,7 @@ from plone.dexterity.interfaces import IDexterityFTI
 from Products.CMFCore.interfaces import IFolderish
 from zope.component import adapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.security import checkPermission
 
 
 class AddForm(TranslatedTitleAddForm):
@@ -34,9 +36,12 @@ class AddForm(TranslatedTitleAddForm):
 
     def updateFields(self):
         super(AddForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        if checkPermission('opengever.base.EditLifecycleAndClassification', self.context):
+            hide_fields_from_behavior(self,
+                                      ['IClassification.public_trial',
+                                       'IClassification.public_trial_statement'])
+        else:
+            omit_classification_group(self)
 
 
 @adapter(IFolderish, IDefaultBrowserLayer, IDexterityFTI)
@@ -48,6 +53,9 @@ class EditForm(TranslatedTitleEditForm):
 
     def updateFields(self):
         super(EditForm, self).updateFields()
-        hide_fields_from_behavior(self,
-                                  ['IClassification.public_trial',
-                                   'IClassification.public_trial_statement'])
+        if checkPermission('opengever.base.EditLifecycleAndClassification', self.context):
+            hide_fields_from_behavior(self,
+                                      ['IClassification.public_trial',
+                                       'IClassification.public_trial_statement'])
+        else:
+            omit_classification_group(self)

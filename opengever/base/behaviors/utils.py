@@ -42,3 +42,9 @@ def hide_fields_from_behavior(form, fieldnames):
         for fieldname in fieldnames:
             if fieldname in group.fields:
                 group.fields[fieldname].mode = HIDDEN_MODE
+
+
+def omit_classification_group(form):
+    for group in form.groups:
+        if group.__name__ == u'classification':
+            form.groups.remove(group)
