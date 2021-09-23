@@ -27,6 +27,7 @@ import imp
 import os
 import pytz
 import transaction
+from ZODB.POSException import ConflictError
 
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
@@ -35,6 +36,7 @@ REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
 
 class SQLiteBackup(object):
     backup_data = ''
+    siteinfo_sm = None
 
     def backup(self):
         for line in create_session().bind.raw_connection().connection.iterdump():
@@ -44,9 +46,10 @@ class SQLiteBackup(object):
                 continue
             self.backup_data += line
 
+        self.siteinfo_sm = siteinfo.sm
+
     def restore(self, retry=0, max_retry=5):
             try:
-                transaction.commit()
                 sqlite_testing.truncate_tables()
                 create_session().bind.raw_connection().connection.executescript(self.backup_data)
             except Exception as e:
@@ -57,7 +60,7 @@ class SQLiteBackup(object):
                         siteinfo.sm
                     except:
                         # Restore the sitemanager. This fixes the `test-stack-xxx` issue.
-                        siteinfo.sm = _REGISTRIES[-1]
+                        siteinfo.sm = self.siteinfo_sm
 
                     return self.restore(retry=retry + 1)
                 raise e
