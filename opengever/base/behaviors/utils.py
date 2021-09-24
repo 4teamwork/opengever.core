@@ -8,9 +8,9 @@ import re
 # TODO: Move to a more suitable place
 def split_string_by_numbers(x):
     x = str(x)
-    r = re.compile('(\d+)')
-    l = r.split(x)
-    return [int(y) if y.isdigit() else y for y in l]
+    r = re.compile(r'(\d+)')
+    left = r.split(x)
+    return [int(y) if y.isdigit() else y for y in left]
 
 
 def set_attachment_content_disposition(request, filename, file=None):
