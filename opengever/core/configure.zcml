@@ -3,6 +3,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:profilehook="http://namespaces.zope.org/profilehook"
     xmlns:upgrade-step="http://namespaces.zope.org/ftw.upgrade"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.core">
 
@@ -37,5 +38,13 @@
       />
 
   <i18n:registerTranslations directory="locales" />
+
+  <include package="collective.monkeypatcher" file="meta.zcml" />
+
+  <monkey:patch
+     class="ZServer.medusa.http_server.http_request"
+     original="log_date_string"
+     replacement=".testserver.log_date_string"
+     docstringWarning="false" />
 
 </configure>

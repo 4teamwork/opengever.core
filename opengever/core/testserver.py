@@ -30,6 +30,9 @@ SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
 
+def log_date_string(*arg, **kwargs):
+     return ''
+
 
 class SQLiteBackup(object):
     backup_data = ''
