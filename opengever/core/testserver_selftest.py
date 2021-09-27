@@ -11,6 +11,7 @@ import signal
 import socket
 import subprocess
 import sys
+import threading
 import unittest
 import xmlrpclib
 
@@ -46,6 +47,7 @@ class TestserverSelftest(object):
             self.wait_for_testserver()
             print ansi_green('> TESTSERVER IS READY')
             print ansi_green('> PERFORMING SELFTEST')
+            self.sturdyness_test()
             self.selftest()
         finally:
             print ansi_green('> STOPPING TESTSERVER')
@@ -131,6 +133,30 @@ class TestserverSelftest(object):
                              'SQL isolation does not work properly.')
 
             self.testserverctl('zodb_teardown')
+
+    def sturdyness_test(self):
+        """This test makes sure that the testserver is sturdy enough, meaning that we can
+        make requests while doing isolation without breaking it.
+        """
+        controller_proxy = xmlrpclib.ServerProxy(self.xmlrpc_url)
+
+        def isolate():
+            controller_proxy.isolate()
+
+        isolation_thread = threading.Thread(target=isolate)
+
+        # What we are doing here is basically trigger isolaten and then make
+        # an @config request before isolation has finished. This usually
+        # causes a "KeyError: 'test-stack-4'" and then breaks the DB connection.
+        # It usually breaks on each attempt, altough this depends on the machine load.
+        with browser:
+            browser.replace_request_header('Accept', 'application/json')
+            browser.replace_request_header('Content-Type', 'application/json')
+            isolation_thread.start()
+            browser.open(self.plone_url + '@config')
+            isolation_thread.join()
+
+        controller_proxy.zodb_teardown()
 
     def testserverctl(self, *args):
         args = ['bin/testserverctl'] + list(args)

@@ -1,8 +1,12 @@
+from functools import wraps
 from plone.app.robotframework import server as robotframework_server
 from six.moves.xmlrpc_server import SimpleXMLRPCServer
+from ZPublisher import Publish
 import argparse
 import logging
+import os
 import sys
+import time
 
 
 """To make e2e tests more robus when teardown/setup the zodb, we have
@@ -18,8 +22,77 @@ This allows us to teardown/setup the database in one single request.
 """
 
 
+class IsolationReadynessTimeout(Exception):
+
+    def __init__(self, timeout):
+        super(IsolationReadynessTimeout, self).__init__(
+            'Timeout awaiting isolation readyness (after {} seconds).'.format(timeout))
+
+
+class IsolationReadyness(object):
+    """This singleton object knows whether test setup / isolation is
+    finished and the testserver is ready to handle requests.
+    This is important, so that the testserver is sturdy enough for
+    randomly timed requests from the client.
+    """
+
+    def __init__(self):
+        self._ready = False
+
+    def teardown_started(self):
+        self._ready = False
+
+    def setup_finished(self):
+        self._ready = True
+
+    def await_ready(self, timeout_s=5):
+        interval_s = 0.1
+        for _ in range(int(timeout_s / interval_s)):
+            if self._ready:
+                return
+            time.sleep(interval_s)
+        raise IsolationReadynessTimeout(timeout_s)
+
+    def patch_publisher(self):
+        """We are patching the publisher in order to let HTTP requests wait
+        until the isolation / test setup has finished.
+        If requests are processed while tearing down / setting up, it may
+        corrupt the database connection, leaving the testserver in an
+        unrecoverable state.
+        """
+        original = Publish.publish_module_standard
+
+        @wraps(Publish.publish_module_standard)
+        def publish_module_standard(module_name,
+                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                                    environ=os.environ, debug=0, request=None, response=None):
+            try:
+                self.await_ready()
+            except Exception, exc:
+                # XXX this will not properly close the pending HTTP request.
+                # I couldn't get that running. I don't think this is very important though,
+                # since it would have to be fixed anyway and the exception is visible in the log.
+                logging.exception(exc)
+                raise
+            else:
+                return original(module_name, stdin, stdout, stderr, environ, debug, request, response)
+
+        Publish.publish_module_standard = publish_module_standard
+
+
+ISOLATION_READYNESS = IsolationReadyness()
+
+
 class Zope2Server(robotframework_server.Zope2Server):
     is_zodb_setup = False
+
+    def zodb_setup(self, *args, **kwargs):
+        robotframework_server.Zope2Server.zodb_setup(self, *args, **kwargs)
+        ISOLATION_READYNESS.setup_finished()
+
+    def zodb_teardown(self, *args, **kwargs):
+        ISOLATION_READYNESS.teardown_started()
+        robotframework_server.Zope2Server.zodb_teardown(self, *args, **kwargs)
 
     def isolate(self, *args, **kwargs):
         if self.is_zodb_setup:
