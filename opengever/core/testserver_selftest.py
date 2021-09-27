@@ -140,7 +140,7 @@ class TestserverSelftest(object):
     def start_testserver(self):
         """Start the testserver in a subprocess controlled by a separate thread.
         """
-        args = ['bin/testserver']
+        args = ['bin/testserver', '-v']
         print ansi_blue('>', *args)
         self.testserver_process = subprocess.Popen(args, stdout=subprocess.PIPE)
 
