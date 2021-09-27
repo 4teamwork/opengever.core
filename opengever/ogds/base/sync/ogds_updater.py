@@ -532,10 +532,19 @@ class OGDSUpdater(object):
         """
         ldap_keys = set(ldap_objects.keys())
         ogds_keys = set(ogds_objects.keys())
+        lower_ogds_keys = set([userid.lower() for userid in ogds_keys])
         ogds_active_keys = set(
             [key for key, value in ogds_objects.items() if value.get('active')])
 
         added = ldap_keys - ogds_keys
+        # Skip duplicate users with different capitalization
+        added_ignore_capitalization = set([
+            userid for userid in added
+            if userid.lower() not in lower_ogds_keys])
+
+        for skipped in added - added_ignore_capitalization:
+            logger.info('Skip duplicate user {}'.format(skipped))
+
         deleted = ogds_active_keys - ldap_keys
         existing = ldap_keys & ogds_keys
         modified = {}
@@ -545,7 +554,7 @@ class OGDSUpdater(object):
                 attributes = dict(diff).keys()
                 modified[key] = attributes
 
-        added_mappings = [ldap_objects[a] for a in added]
+        added_mappings = [ldap_objects[a] for a in added_ignore_capitalization]
         deleted_mappings = [{pk: d, 'active': False} for d in deleted]
         modified_mappings = []
         for key, modified_attrs in modified.items():
