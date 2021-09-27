@@ -2,6 +2,7 @@ from plone.app.robotframework import server as robotframework_server
 from six.moves.xmlrpc_server import SimpleXMLRPCServer
 import argparse
 import logging
+import sys
 
 
 """To make e2e tests more robust during teardown/setup of the zodb, we have
@@ -115,6 +116,7 @@ def server():
         global HAS_VERBOSE_CONSOLE
         HAS_VERBOSE_CONSOLE = True
         loglevel = logging.ERROR - (args.verbose - 1) * 10
+        logging.getLogger().addHandler(logging.StreamHandler(sys.stderr))
     else:
         loglevel = logging.ERROR
     logging.basicConfig(level=loglevel)
