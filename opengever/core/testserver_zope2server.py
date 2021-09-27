@@ -6,6 +6,7 @@ import argparse
 import logging
 import os
 import sys
+import threading
 import time
 
 
@@ -23,10 +24,7 @@ This allows us to teardown/setup the database in one single request.
 
 
 class IsolationReadinessTimeout(Exception):
-
-    def __init__(self, timeout):
-        super(IsolationReadinessTimeout, self).__init__(
-            'Timeout awaiting isolation readiness (after {} seconds).'.format(timeout))
+    pass
 
 
 class IsolationReadiness(object):
@@ -34,24 +32,34 @@ class IsolationReadiness(object):
     finished and the testserver is ready to handle requests.
     This is important, so that the testserver is sturdy enough for
     randomly timed requests from the client.
+
+    It makes sure that we are not handling HTTP requests while doing
+    the isolation and not starting with the teardown when we still have
+    HTTP requests running.
     """
 
     def __init__(self):
+        self._lock = threading.Lock()
         self._ready = False
+        self._active_http_requests = 0
 
     def teardown_started(self):
-        self._ready = False
+        with self._lock:
+            self._ready = False
+        for _ in self.wait(5, message='Could not initialize teardown.'):
+            with self._lock:
+                if self._active_http_requests == 0:
+                    return
 
     def setup_finished(self):
-        self._ready = True
+        with self._lock:
+            self._ready = True
 
-    def await_ready(self, timeout_s=5):
-        interval_s = 0.1
-        for _ in range(int(timeout_s / interval_s)):
-            if self._ready:
-                return
-            time.sleep(interval_s)
-        raise IsolationReadinessTimeout(timeout_s)
+    def await_ready_for_request(self):
+        for _ in self.wait(5, message='Request has timed out.'):
+            with self._lock:
+                if self._ready:
+                    return
 
     def patch_publisher(self):
         """We are patching the publisher in order to let HTTP requests wait
@@ -63,11 +71,12 @@ class IsolationReadiness(object):
         original = Publish.publish_module_standard
 
         @wraps(Publish.publish_module_standard)
-        def publish_module_standard(module_name,
-                                    stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
-                                    environ=os.environ, debug=0, request=None, response=None):
+        def publish_module_standard(
+                module_name,
+                stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
+                environ=os.environ, debug=0, request=None, response=None):
             try:
-                self.await_ready()
+                self.await_ready_for_request()
             except Exception, exc:
                 # XXX this will not properly close the pending HTTP request.
                 # I couldn't get that running. I don't think this is very important though,
@@ -75,9 +84,23 @@ class IsolationReadiness(object):
                 logging.exception(exc)
                 raise
             else:
-                return original(module_name, stdin, stdout, stderr, environ, debug, request, response)
+                with self._lock:
+                    self._active_http_requests += 1
+                try:
+                    return original(module_name, stdin, stdout,
+                                    stderr, environ, debug, request, response)
+                finally:
+                    with self._lock:
+                        self._active_http_requests -= 1
 
         Publish.publish_module_standard = publish_module_standard
+
+    def wait(self, timeout_seconds, interval_seconds=0.1, message=''):
+        for _ in range(int(timeout_seconds / interval_seconds)):
+            yield
+            time.sleep(interval_seconds)
+        raise IsolationReadiness(': '.join(filter(None, (
+            'Timeout after {} seconds'.format(timeout_seconds)))))
 
 
 ISOLATION_READINESS = IsolationReadiness()
