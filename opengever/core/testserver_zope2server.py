@@ -76,6 +76,10 @@ class IsolationReadiness(object):
                 stdin=sys.stdin, stdout=sys.stdout, stderr=sys.stderr,
                 environ=os.environ, debug=0, request=None, response=None):
             try:
+                if not self._ready:
+                    print 'WARNING: unexpected request:', request.method, \
+                        request.base + request.get('PATH_TRANSLATED')
+                    print '         while testserver is in teardown/setup phase.'
                 self.await_ready_for_request()
             except Exception, exc:
                 # XXX this will not properly close the pending HTTP request.
