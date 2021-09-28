@@ -16,6 +16,7 @@ from opengever.ogds.models.user import User
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.app.testing import TEST_USER_ID
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 
@@ -46,6 +47,20 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_users()
         self.assertIsNotNone(ogds_service().fetch_user('sk1m1'))
         self.assertIsNotNone(ogds_service().fetch_user('john'))
+
+    def test_skips_duplicates_users_with_capitalization(self):
+        create(Builder('ogds_user')
+               .id('peter')
+               .having(firstname=u'Hans', lastname=u'Peter'))
+
+        FAKE_LDAP_USERFOLDER.users = [
+            create(Builder('ldapuser').named('PETER'))]
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_users()
+
+        self.assertEqual([TEST_USER_ID, 'peter'],
+                         [user.userid for user in ogds_service().all_users()])
 
     def test_flags_users_not_present_in_ldap_as_inactive(self):
         create(Builder('ogds_user').id('john.doe'))
