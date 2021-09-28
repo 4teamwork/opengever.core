@@ -6,6 +6,7 @@ from ftw.testing import staticuid
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.core import sqlite_testing
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import activate_bumblebee_feature
@@ -27,6 +28,35 @@ import transaction
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
+
+
+class SQLiteBackup(object):
+    backup_data = ''
+
+    def isolate(self):
+        if self.backup_data:
+            self.restore()
+        else:
+            self.backup()
+
+    def backup(self):
+        for line in create_session().bind.raw_connection().connection.iterdump():
+            # We only want to store sql statements of the
+            # DML (Data Manipulation Language). Thus, we skip all other statements.
+            #
+            # When we restore the data in the restore-function, we'll empty all
+            # tables and feed it with the backedup data.
+            if 'CREATE TABLE' in line or \
+               'opengever_upgrade_version' in line or \
+               'CREATE INDEX' in line:
+                continue
+            self.backup_data += line
+
+    def restore(self):
+        sqlite_testing.truncate_tables()
+        create_session().bind.raw_connection().connection.executescript(self.backup_data)
+
+sqlite_backup = SQLiteBackup()
 
 
 class TestserverLayer(OpengeverFixture):
@@ -152,6 +182,8 @@ class TestServerFunctionalTesting(FunctionalTesting):
         super(TestServerFunctionalTesting, self).testSetUp()
         self.context_manager = self.isolation()
         self.context_manager.__enter__()
+
+        sqlite_backup.isolate()
         transaction.commit()
 
     def testTearDown(self):

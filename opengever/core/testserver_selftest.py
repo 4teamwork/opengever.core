@@ -85,6 +85,20 @@ class TestserverSelftest(object):
                  u'email': u'99001@example.org'},
                 browser.json)
 
+            # Make sure the dossier is not yet in the ist of favorites
+            favorites_url = self.plone_url + '/@favorites/' + SITE_OWNER_NAME
+            dossier_oguid = browser.json['oguid']
+            browser.open(favorites_url)
+            self.assertNotIn(dossier_oguid, [favorite['oguid'] for favorite in browser.json],
+                             'The fixture has changed and the dossier is now a favorite by default. '
+                             'The test needs to be changed.')
+
+            # Add the dossier to the list of favorites and verify that it is there.
+            browser.open(favorites_url, method='POST', data=json.dumps({'oguid': dossier_oguid}))
+            browser.open(favorites_url)
+            self.assertIn(dossier_oguid, [favorite['oguid'] for favorite in browser.json],
+                          'Marking the dossier seems to not have worked - the test case does not work.')
+
             browser.open(search_url)
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004',
@@ -109,6 +123,12 @@ class TestserverSelftest(object):
                   'id': 'document-1',
                   'UID': u'createtemplates00000000000000002'}],
                 browser.json['items'])
+
+            # Make sure that the SQL isolation works by checking whether the favorite we added
+            # before teardown/setup is properly removed.
+            browser.open(favorites_url)
+            self.assertNotIn(dossier_oguid, [favorite['oguid'] for favorite in browser.json],
+                             'SQL isolation does not work properly.')
 
             self.testserverctl('zodb_teardown')
 
