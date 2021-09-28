@@ -193,7 +193,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(expected_links, browser.json['teamraum_connect_links'])
 
     @browsing
-    def test_contains_dossier_backreferences(self, browser):
+    def test_contains_document_backreferences(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.subdocument, method="GET", headers=self.api_headers)
@@ -210,6 +210,18 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         browser.open(self.mail_eml, method="GET", headers=self.api_headers)
         self.assertEqual([], browser.json['back_references_relatedItems'])
+
+    @browsing
+    def test_filters_anything_but_documents_from_backreferences(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.document, method="GET", headers=self.api_headers)
+        self.assertEqual([
+            (u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22',
+             u'opengever.document.document'),
+            (u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23',
+             u'opengever.document.document')],
+            [(ref['@id'], ref['@type']) for ref in browser.json['back_references_relatedItems']])
 
     @browsing
     def test_approvals_expansion(self, browser):

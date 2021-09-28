@@ -107,7 +107,8 @@ def extend_with_groupurl(result, context, request):
         api.portal.get().absolute_url(), context.groupid)
 
 
-def extend_with_backreferences(result, context, request, reference_attribute_name):
+def extend_with_backreferences(result, context, request, reference_attribute_name,
+                               documents_only=False):
     """Extend the given result dict with an additional key
     `back_references_{reference_attribute_name}` for example
     `back_references_relatedDossiers` and a list of backreferences.
@@ -118,6 +119,13 @@ def extend_with_backreferences(result, context, request, reference_attribute_nam
     relations = catalog.findRelations(
         {'to_id': intids.getId(aq_inner(context)),
          'from_attribute': reference_attribute_name})
+
+    # Filter non-documentish types for document-to-document relations
+    if documents_only:
+        relations = filter(
+            lambda rel: IBaseDocument.providedBy(rel.from_object),
+            relations)
+
     summaries = [
         getMultiAdapter((relation.from_object, request), ISerializeToJsonSummary)()
         for relation in relations]
