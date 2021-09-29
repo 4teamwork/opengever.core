@@ -180,6 +180,7 @@ NON_WRITE_PERMISSIONS = [
     'opengever.meeting: Add Member',
     'opengever.repository: Export repository',
     'opengever.sharing: List Protected Objects',
+    'opengever.workspace: Manage Workspaces',
     'opengever.workspaceclient: Use Workspace Client',
     'Plone Site Setup: Calendar',
     'Plone Site Setup: Editing',

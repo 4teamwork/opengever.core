@@ -364,6 +364,11 @@
       <role name="Reader" />
     </permission>
 
+    <permission name="opengever.workspace: Manage Workspaces" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
   </permissions>
 
 </rolemap>
