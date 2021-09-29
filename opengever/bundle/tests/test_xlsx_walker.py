@@ -19,7 +19,7 @@ class TestXLSXWalker(TestCase):
              u'close_dossiers_access': u'og_demo-ftw_users',
              u'description': u'',
              u'edit_dossiers_access': u'og_demo-ftw_users',
-             u'effective_title': u'Ordnungssysteme',
+             u'effective_title': u'Ordnungssystem',
              u'effective_title_fr': u'Syst\xe8me de classement',
              u'effective_title_en': u'Repository',
              u'manage_dossiers_access': u'og_demo-ftw_users',
@@ -186,9 +186,9 @@ class TestXLSXWalker(TestCase):
         self.assertIsNone(root.reference_number_prefix)
         self.assertIsNone(root.parent_reference_number)
         self.assertIsNotNone(root.guid)
-        self.assertTrue(root.guid.startswith('ROOT-Ordnungssysteme-'), root.guid)
+        self.assertTrue(root.guid.startswith('ROOT-Ordnungssystem-'), root.guid)
         self.assertIsNone(root.parent_guid)
-        self.assertEqual(u'Ordnungssysteme', root.title)
+        self.assertEqual(u'Ordnungssystem', root.title)
         self.assertEqual(u'Syst\xe8me de classement', root.title_fr)
         self.assertEqual(u'Repository', root.title_en)
         self.assertEqual(u'2000-01-01', root.valid_from)
@@ -265,7 +265,7 @@ class TestXLSXWalker(TestCase):
              u'close_dossiers_access': u'og_demo-ftw_users',
              u'description': u'',
              u'edit_dossiers_access': u'og_demo-ftw_users',
-             u'effective_title': u'Ordnungssysteme',
+             u'effective_title': u'Ordnungssystem',
              u'manage_dossiers_access': u'og_demo-ftw_users',
              u'reactivate_dossiers_access': u'og_demo-ftw_users',
              u'read_dossiers_access': u'og_demo-ftw_users',
@@ -325,9 +325,9 @@ class TestXLSXWalker(TestCase):
         self.assertIsNone(root.reference_number_prefix)
         self.assertIsNone(root.parent_reference_number)
         self.assertIsNotNone(root.guid)
-        self.assertTrue(root.guid.startswith('ROOT-Ordnungssysteme-'), root.guid)
+        self.assertTrue(root.guid.startswith('ROOT-Ordnungssystem-'), root.guid)
         self.assertIsNone(root.parent_guid)
-        self.assertEqual(u'Ordnungssysteme', root.title)
+        self.assertEqual(u'Ordnungssystem', root.title)
         self.assertIsNone(root.title_fr)
         self.assertIsNone(root.title_en)
         self.assertEqual(u'2000-01-01', root.valid_from)
