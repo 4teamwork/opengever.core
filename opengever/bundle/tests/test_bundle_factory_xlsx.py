@@ -78,7 +78,7 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         self.assertEqual(0, len(documents_json))
 
         # Assert that the structure was generated correctly
-        root = self.find_item_by_title(reporoot_json, u'Ordnungssysteme')
+        root = self.find_item_by_title(reporoot_json, u'Ordnungssystem')
         self.assertIsNotNone(root)
         self.assertEqual(u'Syst\xe8me de classement', root['title_fr'])
         self.assertEqual(u'Repository', root['title_en'])
@@ -184,9 +184,9 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         self.assertEqual(0, len(documents_json))
 
         # Assert that the structure was generated correctly
-        root = self.find_item_by_title(reporoot_json, u'Ordnungssysteme')
+        root = self.find_item_by_title(reporoot_json, u'Ordnungssystem')
         self.assertIsNotNone(root)
-        self.assertEqual(u'Ordnungssysteme', root['title_de'])
+        self.assertEqual(u'Ordnungssystem', root['title_de'])
         self.assertEqual(None, root['title_en'])
         self.assertEqual(None, root['title_fr'])
         self.assertEqual(u'2000-01-01', root['valid_from'])
