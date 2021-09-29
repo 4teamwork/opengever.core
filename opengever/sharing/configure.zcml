@@ -29,12 +29,6 @@
 
   <!--  Sharing behaviors -->
   <plone:behavior
-      title="OpenGever Standard Sharing"
-      description="Adds OpenGever Standard Sharing View"
-      provides=".behaviors.IStandard"
-      />
-
-  <plone:behavior
       title="OpenGever Dossier Sharing"
       description="Adds OpenGever Dossier Sharing View"
       provides=".behaviors.IDossier"

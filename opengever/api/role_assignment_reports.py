@@ -81,11 +81,10 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
 
     def get_referenced_roles(self):
         roles = []
-        for role in ROLE_MAPPING[0][1]:
+        for role in ROLE_MAPPING.keys():
             roles.append(
-                {'id': role[0],
-                 'title': translate(role[0],
-                                    context=self.request, domain='plone')})
+                {'id': role,
+                 'title': translate(role, context=self.request, domain='plone')})
 
         return roles
 
