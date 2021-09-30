@@ -1,0 +1,12 @@
+<rolemap>
+  <permissions>
+    <permission name="Edit lifecycle and classification" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Administrator" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+    </permission>
+  </permissions>
+</rolemap>

@@ -252,13 +252,12 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
                 """Update the widget-values of the dossier add-form
                 with the values of the selected dossiertemplate values.
                 """
+                self.is_available()
                 super(WrappedForm, self).update()
 
                 if not getSecurityManager().getUser().getId():
                     # this happens during ++widget++ traversal
                     return
-
-                self.is_available()
 
                 template_obj = get_saved_template_obj(self.context)
 

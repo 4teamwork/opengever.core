@@ -8,4 +8,6 @@
 
   <permission id="opengever.base.EditDateOfCassation" title="Edit date of cassation" />
 
+  <permission id="opengever.base.EditLifecycleAndClassification" title="Edit lifecycle and classification" />
+
 </configure>

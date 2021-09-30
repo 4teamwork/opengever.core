@@ -215,6 +215,7 @@
                    ATContentTypes: Add Large Plone Folder,
                    ATContentTypes: Add Link,
                    ATContentTypes: Add News Item,
+                   Edit lifecycle and classification,
                    ftw.usermigration: Migrate users,
                    opengever.api: Manage Groups,
                    opengever.api: Manage Role Assignment Reports,
