@@ -11,6 +11,7 @@ from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OpengeverFixture
+from opengever.core.testserver_zope2server import ISOLATION_READINESS
 from opengever.testing.helpers import incrementing_intids
 from plone import api
 from plone.app.testing import applyProfile
@@ -63,6 +64,7 @@ class TestserverLayer(OpengeverFixture):
     defaultBases = (COMPONENT_REGISTRY_ISOLATION,)
 
     def setUpZope(self, app, configurationContext):
+        ISOLATION_READINESS.patch_publisher()
         solr = SolrServer.get_instance()
         solr.configure(SOLR_PORT, SOLR_CORE)
 

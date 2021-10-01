@@ -1120,11 +1120,13 @@ Once installed properly, the server can be started with ``bin/testserver``:
 
 .. code::
 
-   ./bin/testserver
+   ./bin/testserver -v
    Plone:  http://localhost:55001/plone
    XMLRPC: http://localhost:55002
    ...
    18:13:39 [ ready ] Started Zope 2 server
+
+Use the `-v` flag in order to make errors and exceptions appear on `stderr`.
 
 Next you need to tell the testserver that you will now run a test:
 
