@@ -33,6 +33,7 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.orm import composite
 from sqlalchemy.schema import Sequence
 import logging
+import os.path
 
 
 logger = logging.getLogger('opengever.base')
@@ -179,6 +180,22 @@ class Favorite(Base):
     def truncate_title(title):
         return safe_unicode(title)[:CONTENT_TITLE_LENGTH]
 
+    @staticmethod
+    def truncate_filename(filename):
+        if not filename:
+            return filename
+
+        # try to preserve extension while truncating
+        root, ext = os.path.splitext(safe_unicode(filename))
+        preserved_ext = root[:FILENAME_LENGTH - len(ext)] + ext
+        if len(preserved_ext) <= FILENAME_LENGTH:
+            return preserved_ext
+
+        # but mercilessly truncate as a fallback to handle very long extensions
+        # most likely the file has no "real" extension but a dot in its name
+        # somewhere
+        return filename[:FILENAME_LENGTH]
+
 
 class FavoriteQuery(BaseQuery):
 
@@ -242,8 +259,10 @@ class FavoriteQuery(BaseQuery):
     def update_filename(self, obj):
         if not IBaseDocument.providedBy(obj):
             return
+        new_filename = obj.get_filename()
+        truncated_filename = Favorite.truncate_filename(new_filename)
         query = self.by_object(obj)
-        query.update({'filename': obj.get_filename()})
+        query.update({'filename': truncated_filename})
 
 
 Favorite.query_cls = FavoriteQuery
