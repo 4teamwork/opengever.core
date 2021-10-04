@@ -44,6 +44,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
             u'filename': u'Vertraegsentwurf.docx',
             u'title': u'Vertr\xe4gsentwurf',
             u'uuid': u'createtreatydossiers000000000002',
+            u'version': None,
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
@@ -91,6 +92,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCas
             u'unlock': u'@unlock',
             u'upload': u'@tus-replace',
             u'uuid': u'createtreatydossiers000000000002',
+            u'version': None,
             }]
         payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)

@@ -39,6 +39,7 @@ class TestOfficeConnectorDocugatePayload(IntegrationTestCase):
                 u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/'
                 u'vertrage-und-vereinbarungen/dossier-1/document-41',
                 u'uuid': u'createshadowdocument000000000001',
+                u'version': None,
             }]
         )
 

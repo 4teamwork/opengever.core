@@ -146,6 +146,7 @@ class OfficeConnectorPayload(Service):
                         'document-url': document.absolute_url(),
                         'document': document,
                         'uuid': uuid,
+                        'version': document.get_current_version_id(),
                         }
                     )
 
