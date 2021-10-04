@@ -252,3 +252,13 @@
        :Default: []
        
        
+
+
+   .. py:attribute:: responsible_org_unit
+
+       :Feldname: :field-title:`Federführendes Amt`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       

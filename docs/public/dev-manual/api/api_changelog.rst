@@ -10,6 +10,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add new endpoint ``@accessible-workspaces`` (see :ref:`docs <accessible-workspaces>`)
 
 2021.19.0 (2021-09-21)
 ----------------------

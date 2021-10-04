@@ -222,6 +222,14 @@
 
   <plone:service
       method="GET"
+      name="@accessible-workspaces"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".accessible_workspaces.AccessibleWorkspacesGet"
+      permission="opengever.workspace.ManageWorkspaces"
+      />
+
+  <plone:service
+      method="GET"
       name="@favorites"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".favorites.FavoritesGet"
