@@ -41,6 +41,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"filename": u"Die Buergschaft.eml",
             u"title": u"Die B\xfcrgschaft",
             u"uuid": u"createemails00000000000000000001",
+            u'version': 0,
         }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEqual(200, browser.status_code)
@@ -80,6 +81,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             u"filename": u"No Subject.msg",
             u"title": u"[No Subject]",
             u"uuid": u"createemails00000000000000000002",
+            u'version': 0,
         }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEqual(200, browser.status_code)
@@ -128,6 +130,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"filename": u"Die Buergschaft.eml",
                 u"title": u"Die B\xfcrgschaft",
                 u"uuid": u"createemails00000000000000000001",
+                u'version': 0,
             },
             {
                 u"bcc": u"1014013300@example.org",
@@ -139,6 +142,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
                 u"filename": u"No Subject.msg",
                 u"title": u"[No Subject]",
                 u"uuid": u"createemails00000000000000000002",
+                u'version': 0,
             },
         ]
 

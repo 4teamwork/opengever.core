@@ -53,6 +53,7 @@ class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
             u'filename': u'Dokument im Eingangskoerbliweiterleitung.txt',
             u'title': u'Dokument im Eingangsk\xf6rbliweiterleitung',
             u'uuid': u'createinboxfa0000000000000000004',
+            u'version': None,
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)

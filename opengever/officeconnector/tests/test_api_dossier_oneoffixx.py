@@ -44,6 +44,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-41',
             u'filename': None,
             u'uuid': u'createshadowdocument000000000001',
+            u'version': None,
             }]
 
         payloads = self.fetch_document_oneoffixx_payloads(browser, raw_token, token)
@@ -95,6 +96,7 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
             u'unlock': u'@unlock',
             u'upload': u'@tus-replace',
             u'uuid': u'createshadowdocument000000000001',
+            u'version': None,
         }]
         # XXX - As the last document we touched was XML and we touched XML
         # namespacing after that, we'll need to reset the browser to circumvent
