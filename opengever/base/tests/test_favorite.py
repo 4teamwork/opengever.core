@@ -11,7 +11,32 @@ from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from sqlalchemy.exc import IntegrityError
+from unittest import TestCase
 import json
+
+
+class TestFavoriteTruncateFilename(TestCase):
+
+    def test_truncate_filename_none(self):
+        self.assertIsNone(Favorite.truncate_filename(None))
+
+    def test_truncate_filename_empty(self):
+        self.assertEqual(u'', Favorite.truncate_filename(u''))
+
+    def test_truncate_short_filename(self):
+        self.assertEqual(u'foo.txt', Favorite.truncate_filename(u'foo.txt'))
+
+    def test_truncate_long_filename_preserves_short_extensions(self):
+        expected = '{}.foo'.format(101 * 'x')
+        self.assertEqual(
+            expected, Favorite.truncate_filename('{}.foo'.format(200 * 'x'))
+        )
+
+    def test_truncate_long_filename_truncates_long_extensions(self):
+        expected = 'foo.{}'.format(101 * 'x')
+        self.assertEqual(
+            expected, Favorite.truncate_filename('foo.{}'.format(200 * 'x'))
+        )
 
 
 class TestFavoriteModel(IntegrationTestCase):
