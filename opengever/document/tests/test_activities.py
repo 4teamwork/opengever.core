@@ -5,6 +5,7 @@ from opengever.activity.model import Notification
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.document.activities import DocumentWatcherAddedActivity
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 import json
@@ -93,6 +94,22 @@ class TestDocumentChangedActivities(IntegrationTestCase):
         self.assertEqual([u'New document version created by B\xe4rfuss K\xe4thi (kathi.barfuss)',
                           u'New document version created by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                          [activity.summary for activity in activities])
+
+    @browsing
+    def test_no_document_version_created_activity_when_cancelling_checkout(self, browser):
+        self.login(self.regular_user, browser)
+
+        versioner = Versioner(self.document)
+        versioner.create_initial_version()
+
+        self.assertEqual(0, Activity.query.count())
+        manager = getMultiAdapter(
+            (self.document, self.request),
+            ICheckinCheckoutManager)
+        manager.checkout()
+        manager.cancel()
+
+        self.assertEqual(0, Activity.query.count())
 
     @browsing
     def test_change_document_title_notifies_watcher(self, browser):
