@@ -148,8 +148,8 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers=self.api_headers)
         query = self.solr.search.call_args[1]["query"]
-        self.assertEqual(u'(Title:feedb\xe4ck* OR SearchableText:feedb\xe4ck* '
-                         u'OR metadata:feedb\xe4ck*)',
+        self.assertEqual(u'(Title:*feedb\xe4ck* OR SearchableText:*feedb\xe4ck* '
+                         u'OR metadata:*feedb\xe4ck*)',
                          query)
 
     @browsing
@@ -553,6 +553,17 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
                      headers=self.api_headers)
         self.assertEqual(
             [self.taskdocument.absolute_url()],
+            [item['@id'] for item in browser.json['items']])
+
+    @browsing
+    def test_search_filter_also_finds_word_parts_within_a_word(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@listing?name=tasks&search=eintritt&columns=title'
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [self.sequential_task.absolute_url()],
             [item['@id'] for item in browser.json['items']])
 
     @browsing

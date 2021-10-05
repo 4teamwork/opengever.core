@@ -139,8 +139,8 @@ class ListingGet(SolrQueryBaseService):
         query = '*:*'
         if term:
             pattern = (
-                u'(Title:{term}* OR SearchableText:{term}*'
-                u' OR metadata:{term}*)')
+                u'(Title:*{term}* OR SearchableText:*{term}*'
+                u' OR metadata:*{term}*)')
             term_queries = [
                 pattern.format(term=escape(safe_unicode(t))) for t in term.split()]
             query = u' AND '.join(term_queries)
