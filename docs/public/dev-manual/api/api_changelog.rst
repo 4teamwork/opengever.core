@@ -18,6 +18,7 @@ Other Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@propertysheets``: Add ``allow_unmapped`` to ``default_from_member`` options.
+- ``@listing``.``@solrsearch``: Find search term also within a word.
 
 
 2021.18.0 (2021-09-10)
