@@ -102,6 +102,17 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             [item["@id"] for item in browser.json[u'items']])
 
     @browsing
+    def test_simple_search_query_also_finds_word_parts_within_a_word(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = '@solrsearch?q=eintritt'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [self.sequential_task.absolute_url()],
+            [item['@id'] for item in browser.json['items']])
+
+    @browsing
     def test_raw_query(self, browser):
         self.login(self.regular_user, browser=browser)
 
