@@ -103,8 +103,7 @@ class IsolationReadiness(object):
         for _ in range(int(timeout_seconds / interval_seconds)):
             yield
             time.sleep(interval_seconds)
-        raise IsolationReadiness(': '.join(filter(None, (
-            'Timeout after {} seconds'.format(timeout_seconds)))))
+        raise IsolationReadiness('Timeout after {} seconds'.format(timeout_seconds))
 
 
 ISOLATION_READINESS = IsolationReadiness()
