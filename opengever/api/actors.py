@@ -20,7 +20,7 @@ def serialize_actor_id_to_json_summary(actor_id):
     We therefore should only return data that we can compute without retrieving
     the actual actor object.
     """
-    url = '{}/@actors/{}'.format(api.portal.get().absolute_url(), actor_id)
+    url = u'{}/@actors/{}'.format(api.portal.get().absolute_url(), actor_id)
     return {'@id': url,
             'identifier': actor_id}
 
