@@ -112,6 +112,11 @@ def _update_favorites_icon_class(context):
         favorite.icon_class = get_css_class(context, for_user=favorite.userid)
 
 
+def document_reverted_to_version(context, event):
+    if event.create_version:
+        document_version_created(context, event)
+
+
 def document_version_created(context, event):
     DocumenVersionCreatedActivity(context, getRequest()).record()
 

@@ -236,7 +236,7 @@
   <subscriber
       for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectRevertedToVersion"
-      handler=".handlers.document_version_created"
+      handler=".handlers.document_reverted_to_version"
       />
 
   <subscriber
