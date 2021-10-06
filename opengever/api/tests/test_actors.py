@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.api.actors import serialize_actor_id_to_json_summary
@@ -15,6 +16,12 @@ class TestActorSummarySerialization(IntegrationTestCase):
             {'@id': self.actors_url + "/some_id",
              'identifier': 'some_id'},
             serialize_actor_id_to_json_summary('some_id'))
+
+    def test_serialize_unicode_actor_id_to_json_summary(self):
+        self.assertDictEqual(
+            {'@id': self.actors_url + u"/Utilisateurs authentifiés",
+             'identifier': u'Utilisateurs authentifiés'},
+            serialize_actor_id_to_json_summary(u'Utilisateurs authentifiés'))
 
 
 class TestActorsGet(IntegrationTestCase):
