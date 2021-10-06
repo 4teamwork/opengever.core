@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.20.0 (2021-10-06)
+----------------------
+
+New features:
+
+
+- Add new endpoint @accessible-workspaces. [tinagerber]
+- Add permission to protect lifecycle and classification fields. [tinagerber]
+
+
+Bug fixes:
+
+
+- Filter non-documentish types for document-to-document relations. [lgraf]
+- Skip duplicate users with different capitalization during ogds sync. [phgross]
+- Do not create DocumenVersionCreatedActivity when cancelling checkout. [njohner]
+- Fix handling of unicode actor ids. [buchi]
+- Truncate too long filenames when updating favorites. [deiferni]
+- Bump Products.LDAPMultiPlugins to version 1.15.post4 which fixes case-insensitivity in filtering by group base DN. [buchi]
+
+
+Other changes:
+
+
+- Implement e2e testserver ogds isolation. [elioschmutz]
+- Include document version in Office Connector metadata. [buchi]
+- Add checkbox to purge solr when deploying Gever. [njohner]
+
+
 2021.19.0 (2021-09-21)
 ----------------------
 

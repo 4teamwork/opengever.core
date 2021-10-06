@@ -1,1 +1,0 @@
-Bump Products.LDAPMultiPlugins to version 1.15.post4 which fixes case-insensitivity in filtering by group base DN. [buchi]
