@@ -100,7 +100,7 @@ def accept_forwarding_with_successor(
     transaction.savepoint()
     # Close the predessecor forwarding
 
-    response_text = response_text or ''
+    response_text = response_text or u''
     request_data = {'response_text': response_text.encode('utf-8'),
                     'successor_oguid': successor_tc.get_oguid(),
                     'transition': 'forwarding-transition-accept'}
