@@ -44,6 +44,7 @@ EDITABLE_TYPES = [
     'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
     # MS OneNote
     'application/onenote',
+    'application/msonenote',
     # MS Powerpoint
     'application/vnd.ms-powerpoint.addin.macroEnabled.12',
     'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
