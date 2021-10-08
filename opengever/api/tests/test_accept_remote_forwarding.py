@@ -242,8 +242,7 @@ class TestAcceptRemoteForwardingPost(IntegrationTestCase):
             u'title': doc_in_successor_forwarding.title}],
             response['items'])
 
-    @browsing
-    def test_accept_remote_forwarding_creates_task_in_dossier(self, browser):
+    def _accept_remote_forwarding_creates_task_in_dossier(self, browser, response):
         self.login(self.secretariat_user, browser)
 
         forwarding = create(Builder('forwarding')
@@ -276,7 +275,7 @@ class TestAcceptRemoteForwardingPost(IntegrationTestCase):
             request_body = json.dumps({
                 'dossier_oguid': Oguid.for_object(self.dossier).id,
                 'forwarding_oguid': u'plone:%s' % sql_forwarding.int_id,
-                'text': u'I hereby accept this forwarding.',
+                'text': response,
             })
 
             browser.open(local_url, method='POST', data=request_body, headers=self.api_headers)
@@ -339,3 +338,13 @@ class TestAcceptRemoteForwardingPost(IntegrationTestCase):
             response['items'])
 
         self.assertEqual(self.dossier.absolute_url(), response['parent']['@id'])
+
+    @browsing
+    def test_accept_remote_forwarding_with_response_creates_task_in_dossier(self, browser):
+        self._accept_remote_forwarding_creates_task_in_dossier(
+            browser, response=u'I hereby accept this forwarding.')
+
+    @browsing
+    def test_accept_remote_forwarding_without_response_creates_task_in_dossier(self, browser):
+        self._accept_remote_forwarding_creates_task_in_dossier(
+            browser, response=None)
