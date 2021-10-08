@@ -13,6 +13,7 @@ from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
+from zope.lifecycleevent.interfaces import IObjectMovedEvent
 import logging
 
 
@@ -49,6 +50,9 @@ def before_documend_checked_in(context, event):
 def document_moved_or_added(context, event):
     if IObjectRemovedEvent.providedBy(event):
         return
+
+    if IObjectMovedEvent.providedBy(event):
+        context.reindexObject(idxs=["reference", "sortable_reference"])
 
     if context.REQUEST.get(DISABLE_DOCPROPERTY_UPDATE_FLAG):
         return

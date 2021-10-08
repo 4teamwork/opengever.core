@@ -3,6 +3,7 @@ from datetime import datetime
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr.converters import to_iso8601
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
@@ -12,6 +13,7 @@ from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.move_items import DossierMovabiliyChecker
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
+from opengever.testing.helpers import solr_data_for
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
@@ -152,7 +154,7 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
                              [a.Title for a in container.getFolderContents()])
 
 
-class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper):
+class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHelper):
 
     MOVE_TIME = datetime(2018, 4, 30, 0, 0, tzinfo=pytz.UTC)
 
@@ -161,7 +163,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         self.maxDiff = None
         self.login(self.regular_user, browser=browser)
 
-        subdocument_metadata = self.get_catalog_metadata(self.subdocument)
+        initial_metadata = self.get_catalog_metadata(self.subdocument)
 
         with freeze(self.MOVE_TIME):
             ZOPE_MOVE_TIME = DateTime()
@@ -176,18 +178,19 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         moved_metadata = self.get_catalog_metadata(moved)
 
         # We expect some of the metadata to get modified during pasting
-        modified_metadata = {'UID': moved.UID(),
-                             # creator
+        modified_metadata = {# creator
                              'listCreators': ('robert.ziegler', 'kathi.barfuss'),
                              # dates
                              'modified': ZOPE_MOVE_TIME,
                              # containing dossier and subdossier
-                             'reference': 'Client1 1.1 / 4 / 22',
                              'containing_dossier': self.empty_dossier.Title(),
                              'containing_subdossier': '',
+                             # reference number
+                             'reference': 'Client1 1.1 / 4 / 22',
                              }
 
-        unchanged_metadata = ['id',
+        unchanged_metadata = ['UID',
+                              'id',
                               'getId',
                               'sequence_number',
                               'Creator',
@@ -247,13 +250,19 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                             "unchanged and modified metadata")
 
         expected_metadata = deepcopy(modified_metadata)
-        expected_metadata.update({key: subdocument_metadata[key] for key in unchanged_metadata})
+        expected_metadata.update({key: initial_metadata[key] for key in unchanged_metadata})
+
+        # Make sure fields expected to change really did
+        for key, value in modified_metadata.items():
+            self.assertNotEqual(
+                initial_metadata[key], value,
+                "Expected {} to have changed during move".format(key))
 
         # Make sure that the developer thinks about whether a newly added metadata
         # column should be modified during copy/paste of a document or not.
         self.assertItemsEqual(
             expected_metadata.keys(),
-            subdocument_metadata.keys(),
+            initial_metadata.keys(),
             msg="A new metadata column was added, please add it to "
                 "'unchanged_metadata' if it should not be modified during "
                 "copy/paste of a document, or to 'modified_metadata' otherwise")
@@ -273,11 +282,126 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                                  "a move operation")
 
     @browsing
+    def test_move_document_solrdata_update(self, browser):
+        self.maxDiff = None
+        self.login(self.regular_user, browser=browser)
+
+        initial_solrdata = solr_data_for(self.subdocument)
+
+        with freeze(self.MOVE_TIME):
+            with self.observe_children(self.empty_dossier) as children:
+                self.move_items((self.subdocument, ),
+                                source=self.subdossier,
+                                target=self.empty_dossier)
+                self.commit_solr()
+
+        self.assertEqual(1, len(children['added']))
+        moved = children['added'].pop()
+        moved_solrdata = solr_data_for(moved)
+
+        # We expect some of the metadata to get modified during pasting
+        paste_time_index = to_iso8601(self.MOVE_TIME).replace(".000Z", "Z")
+        modified_solrdata = {
+            'path': moved.absolute_url_path(),
+            'path_parent': moved.absolute_url_path(),
+            'path_depth': 6,
+
+            # dates
+            'modified': paste_time_index,
+
+            # containing dossier and subdossier
+            'containing_dossier': self.empty_dossier.Title(),
+            'containing_subdossier': '',
+
+            # reference number
+            'reference': 'Client1 1.1 / 4 / 22',
+            'sortable_reference': 'client00000001 00000001.00000001 / 00000004 / 00000022',
+
+            # internal solr field
+            '_version_': moved_solrdata['_version_']
+        }
+
+        unchanged_solrdata = [
+            u'changed',
+            u'object_provides',
+            u'bumblebee_checksum',
+            u'Title',
+            u'file_extension',
+            u'id',
+            u'document_date',
+            u'sequence_number_string',
+            u'Description',
+            u'is_folderish',
+            u'filename',
+            u'filesize',
+            u'public_trial',
+            u'review_state',
+            u'trashed',
+            u'metadata',
+            u'checked_out',
+            u'portal_type',
+            u'allowedRolesAndUsers',
+            u'getObjSize',
+            u'UID',
+            u'language',
+            u'Creator',
+            u'getIcon',
+            u'created',
+            u'SearchableText',
+            u'sortable_title',
+            u'sequence_number',
+            u'Subject']
+
+        # Make sure no key is in both lists of unchanged and modified data
+        self.assertTrue(set(unchanged_solrdata).isdisjoint(modified_solrdata.keys()),
+                        msg="Make sure no key is in both lists of "
+                            "unchanged and modified indexdata")
+
+        expected_solrdata = deepcopy(modified_solrdata)
+        expected_solrdata.update({key: initial_solrdata[key] for key in unchanged_solrdata})
+
+        # Make sure that the developer thinks about whether a newly added
+        # solr index should be modified during copy/paste of a document or not.
+        self.assertItemsEqual(
+            expected_solrdata.keys(),
+            initial_solrdata.keys(),
+            msg="A new solr index was added, please add it to 'unchanged_solrdata'"
+                " if it should not be modified during copy/paste "
+                "of a document, or to 'modified_solrdata' otherwise")
+
+        # Make sure fields expected to change really did
+        for key, value in modified_solrdata.items():
+            self.assertNotEqual(
+                initial_solrdata[key], value,
+                "Expected {} to have changed during move".format(key))
+
+        self.assertDictEqual(expected_solrdata, moved_solrdata)
+
+        # Make sure the solrdata was up to date
+        # we freeze to the paste time to avoid seeing differences in dates
+        # that get modified by indexing (such as modified)
+        with freeze(self.MOVE_TIME):
+            moved.reindexObject()
+            self.commit_solr()
+            reindexed_moved_solrdata = solr_data_for(moved)
+
+        # Some index data is not up to date, but does not have to be
+        # Other data should be up to date but is not.
+        not_up_to_date = ['metadata', '_version_']
+        for key in not_up_to_date:
+            self.assertNotEqual(moved_solrdata.pop(key),
+                                reindexed_moved_solrdata.pop(key))
+
+        self.assertDictEqual(moved_solrdata, reindexed_moved_solrdata,
+                             msg="Some indexdata was not up to date after "
+                                 "a move operation")
+
+    @browsing
     def test_move_document_indexdata_update(self, browser):
         self.maxDiff = None
         self.login(self.regular_user, browser=browser)
 
-        subdocument_indexdata = self.get_catalog_indexdata(self.subdocument)
+        initial_indexdata = self.get_catalog_indexdata(self.subdocument)
 
         with freeze(self.MOVE_TIME):
             with self.observe_children(self.empty_dossier) as children:
@@ -292,7 +416,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         # We expect some of the metadata to get modified during pasting
         paste_time_index = self.dateindex_value_from_datetime(self.MOVE_TIME)
         modified_indexdata = {
-            'UID': moved.UID(),
             'path': moved.absolute_url_path(),
 
             # dates
@@ -301,12 +424,12 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
             # containing dossier and subdossier
             'containing_dossier': self.empty_dossier.Title(),
             'containing_subdossier': '',
-            # 'reference': 'Client1 1.1 / 4 / 41', # reference should be updated
+            'reference': 'Client1 1.1 / 4 / 22',
         }
 
-        unchanged_indexdata = ['id',
+        unchanged_indexdata = ['UID',
+                               'id',
                                'getId',
-                               'reference',
                                'sequence_number',
                                'is_subdossier',
                                'Title',
@@ -360,16 +483,22 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
                             "unchanged and modified indexdata")
 
         expected_indexdata = deepcopy(modified_indexdata)
-        expected_indexdata.update({key: subdocument_indexdata[key] for key in unchanged_indexdata})
+        expected_indexdata.update({key: initial_indexdata[key] for key in unchanged_indexdata})
 
         # Make sure that the developer thinks about whether a newly added
         # index should be modified during copy/paste of a document or not.
         self.assertItemsEqual(
             expected_indexdata.keys(),
-            subdocument_indexdata.keys(),
+            initial_indexdata.keys(),
             msg="A new index was added, please add it to 'unchanged_indexdata'"
                 " if it should not be modified during copy/paste "
                 "of a document, or to 'modified_indexdata' otherwise")
+
+        # Make sure fields expected to change really did
+        for key, value in modified_indexdata.items():
+            self.assertNotEqual(
+                initial_indexdata[key], value,
+                "Expected {} to have changed during move".format(key))
 
         self.assertDictEqual(expected_indexdata, moved_indexdata)
 
@@ -379,15 +508,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(IntegrationTestCase, MoveItemsHelper)
         with freeze(self.MOVE_TIME):
             moved.reindexObject()
             reindexed_moved_indexdata = self.get_catalog_indexdata(moved)
-
-        # Some index data is not up to date, but does not have to be
-        # Other data should be up to date but is not. For example the 'reference'
-        # is not reindexed on purpose for efficiency, but it actually changes
-        # because the reference number changes...
-        not_up_to_date = ['reference']
-        for key in not_up_to_date:
-            self.assertNotEqual(moved_indexdata.pop(key),
-                                reindexed_moved_indexdata.pop(key))
 
         self.assertDictEqual(moved_indexdata, reindexed_moved_indexdata,
                              msg="Some indexdata was not up to date after "
