@@ -317,6 +317,9 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             'reference': 'Client1 1.1 / 4 / 22',
             'sortable_reference': 'client00000001 00000001.00000001 / 00000004 / 00000022',
 
+            # searchable text
+            'metadata': 'Client1 1.1 / 4 / 22 Wichtig Subkeyword',
+
             # internal solr field
             '_version_': moved_solrdata['_version_']
         }
@@ -337,7 +340,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'public_trial',
             u'review_state',
             u'trashed',
-            u'metadata',
             u'checked_out',
             u'portal_type',
             u'allowedRolesAndUsers',
@@ -387,7 +389,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
 
         # Some index data is not up to date, but does not have to be
         # Other data should be up to date but is not.
-        not_up_to_date = ['metadata', '_version_']
+        not_up_to_date = ['_version_']
         for key in not_up_to_date:
             self.assertNotEqual(moved_solrdata.pop(key),
                                 reindexed_moved_solrdata.pop(key))

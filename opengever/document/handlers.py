@@ -52,7 +52,7 @@ def document_moved_or_added(context, event):
         return
 
     if IObjectMovedEvent.providedBy(event):
-        context.reindexObject(idxs=["reference", "sortable_reference"])
+        context.reindexObject(idxs=["reference", "sortable_reference", "metadata"])
 
     if context.REQUEST.get(DISABLE_DOCPROPERTY_UPDATE_FLAG):
         return
