@@ -12,7 +12,6 @@ from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
 from opengever.readonly import is_in_readonly_mode
 from opengever.repository.repositoryroot import IRepositoryRoot
-from opengever.sharing.behaviors import IStandard
 from opengever.sharing.browser.sharing import ROLE_MAPPING
 from opengever.tabbedview.helper import readable_ogds_author
 from persistent.dict import PersistentDict
@@ -84,23 +83,14 @@ def role_mapping_to_str(context, mapping):
     with the help of the ROLE_MAPPING from opengever.sharing.
     """
     skip_roles = [u'Owner', ]
-
     user_roles = []
-    trans_mapping = None
-    for behavior, translations in ROLE_MAPPING:
-        if behavior.providedBy(context):
-            trans_mapping = dict(translations)
-        elif behavior is IStandard:
-            if not trans_mapping:
-                trans_mapping = dict(translations)
 
     for principal, roles in mapping:
         translated_roles = []
         for role in roles:
             if role not in skip_roles:
                 translated_roles.append(
-                    translate(
-                        trans_mapping.get(role), context=context.REQUEST))
+                    translate(ROLE_MAPPING.get(role), context=context.REQUEST))
 
         if len(translated_roles):
             user_roles.append(

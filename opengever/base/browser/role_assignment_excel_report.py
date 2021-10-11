@@ -54,7 +54,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
             yield data
 
     def available_roles(self):
-        return [item[0] for item in ROLE_MAPPING[0][1]]
+        return ROLE_MAPPING.keys()
 
     @property
     def _columns(self):
@@ -62,8 +62,8 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
                     'title': _('label_title', default=u'Title'),
                     'hyperlink': lambda value, obj: obj.get('url')}]
 
-        for item in ROLE_MAPPING[0][1]:
-            columns.append({'id': item[0], 'title': item[1],
+        for role_id, role_title in ROLE_MAPPING.items():
+            columns.append({'id': role_id, 'title': role_title,
                             'transform': lambda value: 'x' if value else ''})
 
         return columns

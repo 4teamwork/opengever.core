@@ -2,6 +2,7 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from Acquisition import aq_base
+from collections import OrderedDict
 from ftw.lawgiver.utils import get_specification_for
 from itertools import chain
 from opengever.base import _ as base_mf
@@ -10,12 +11,12 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
-from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.service import ogds_service
 from opengever.sharing import _
-from opengever.sharing.behaviors import IDossier, IStandard
+from opengever.sharing.behaviors import IDossier
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
@@ -50,23 +51,14 @@ ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
 
 
-ROLE_MAPPING = (
-    (IDossier, (
-        (u'Reader', _('sharing_dossier_reader')),
-        (u'Contributor', _('sharing_dossier_contributor')),
-        (u'Editor', _('sharing_dossier_editor')),
-        (u'Reviewer', _('sharing_dossier_reviewer')),
-        (u'Publisher', _('sharing_dossier_publisher')),
-        (u'DossierManager', _('sharing_dossier_manager')),
-        )),
-
-    (IStandard, (
-        (u'Reader', _('sharing_reader')),
-        (u'Contributor', _('sharing_contributor')),
-        (u'Editor', _('sharing_editor')),
-        (u'Role Manager', _('sharing_role_manager')),
-        )),
-    )
+ROLE_MAPPING = OrderedDict([
+    (u'Reader', _('sharing_dossier_reader')),
+    (u'Contributor', _('sharing_dossier_contributor')),
+    (u'Editor', _('sharing_dossier_editor')),
+    (u'Reviewer', _('sharing_dossier_reviewer')),
+    (u'Publisher', _('sharing_dossier_publisher')),
+    (u'DossierManager', _('sharing_dossier_manager')),
+])
 
 
 class OpengeverSharingView(SharingView):
@@ -170,19 +162,19 @@ class OpengeverSharingView(SharingView):
             # behavior here.
             return super_roles
 
+        if IDossier.providedBy(self.context):
+            available_roles = [u'Reader', u'Contributor', u'Editor', u'Reviewer',
+                               u'Publisher', u'DossierManager']
+        else:
+            available_roles = [u'Reader', u'Contributor', u'Editor',
+                               u'Role Manager']
+
         result = []
-        for key, value in ROLE_MAPPING:
-            if key.providedBy(self.context) or key is IStandard:
-                roles = [r.get('id') for r in super_roles]
-                for role_id, title in value:
-                    if role_id in roles:
-                        result.append(
-                            {'id': role_id,
-                             'title': title, })
+        for role in [r.get('id') for r in super_roles]:
+            if role in available_roles:
+                result.append({'id': role, 'title': ROLE_MAPPING[role]})
 
-                return result
-
-        return super_roles
+        return result
 
     def role_settings(self):
         """The standard role_settings method,
