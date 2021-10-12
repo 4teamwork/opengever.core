@@ -169,6 +169,11 @@
       />
 
   <adapter
+      factory=".indexers.dossier_type"
+      name="dossier_type"
+      />
+
+  <adapter
       factory=".indexers.SearchableTextExtender"
       name="IDossier"
       />

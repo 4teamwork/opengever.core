@@ -88,6 +88,13 @@ def external_reference(obj):
 
 
 @indexer(IDossierMarker)
+def dossier_type(obj):
+    """Return the dossier_type of a dossier."""
+    context = aq_inner(obj)
+    return IDossier(context).dossier_type
+
+
+@indexer(IDossierMarker)
 def blocked_local_roles(obj):
     """Return whether acquisition is blocked or not."""
     return bool(getattr(aq_inner(obj), '__ac_local_roles_block__', False))

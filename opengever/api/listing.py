@@ -27,6 +27,7 @@ OTHER_ALLOWED_FIELDS = set([
     'document_author',
     'document_date',
     'document_type',
+    'dossier_type',
     'email',
     'end',
     'external_reference',
@@ -340,7 +341,6 @@ class ListingGet(SolrQueryBaseService):
         res['b_size'] = rows
         res['items'] = self.prepare_response_items(resp)
         res['facets'] = self.extract_facets_from_response(resp)
-
         return res
 
     def is_field_allowed(self, field):
