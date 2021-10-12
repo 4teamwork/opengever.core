@@ -20,4 +20,18 @@
             <langstring language="de">SPD Fall</langstring>
         </caption>
     </term>
+    <term>
+        <termIdentifier>spd-student</termIdentifier>
+        <caption>
+            <langstring language="de-ch">Klient Schüler</langstring>
+            <langstring language="de">Klient Schüler</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>spd-school</termIdentifier>
+        <caption>
+            <langstring language="de-ch">Klient Schule</langstring>
+            <langstring language="de">Klient Schule</langstring>
+        </caption>
+    </term>
 </vdex>
