@@ -189,6 +189,7 @@ setup(name='opengever.core',
           'z3c.unconfigure',
           'zc.relation',
           'zope.globalrequest',
+          'ZServer',
           # -*- Extra requirements: -*-
       ],
       tests_require=tests_require,
