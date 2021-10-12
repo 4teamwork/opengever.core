@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!-- This profile is deprecated and should not be added to - only here for compatibility purposes! -->
-<metadata>
-    <version>3300</version>
-    <dependencies>
-        <dependency>profile-plonetheme.teamraum:default</dependency>
-    </dependencies>
-</metadata>

@@ -75,7 +75,6 @@ setup(name='opengever.core',
           'opengever.ogds',
           'opengever.policy',
           'opengever.portlets',
-          'plonetheme',
       ],
       include_package_data=True,
       data_files=[
