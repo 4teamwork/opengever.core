@@ -13,5 +13,11 @@
             <langstring language="fr-ch">Commercial</langstring>
         </caption>
     </term>
-
+    <term>
+        <termIdentifier>spd</termIdentifier>
+        <caption>
+            <langstring language="de-ch">SPD Fall</langstring>
+            <langstring language="de">SPD Fall</langstring>
+        </caption>
+    </term>
 </vdex>
