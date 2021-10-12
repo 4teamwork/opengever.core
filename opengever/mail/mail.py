@@ -420,18 +420,24 @@ def extract_email(header_from):
     match = re.findall(EMAILPATTERN, header_from)
     if match:
         return match[0][0]
-    return header_from
 
 
 def get_author_by_email(mail):
     header_from = utils.get_header(mail.msg, 'From')
 
-    email = safe_unicode(extract_email(header_from)).strip()
-    session = create_session()
-    principal = session.query(User).filter(
-        func.lower(User.email) == email).first()
-    if principal:
-        return u'{0} {1}'.format(principal.lastname, principal.firstname)
+    email = extract_email(header_from)
+    if email:
+        email = safe_unicode(email).strip()
+        session = create_session()
+        principal = session.query(User).filter(
+            func.lower(User.email) == email).first()
+        if principal:
+            return u'{0} {1}'.format(principal.lastname, principal.firstname)
+
+    # Remove AD-User information inside the header_from address if it's not an
+    # email, needed for uploaded outlook mails (*.msg).
+    if not email:
+        header_from = re.sub(r'<[^>]*\>', '', header_from)
 
     author = safe_unicode(header_from).strip()
     return author.replace(u'\n', u'').replace(u'\r', u'')
