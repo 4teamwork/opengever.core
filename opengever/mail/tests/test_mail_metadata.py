@@ -9,6 +9,7 @@ from opengever.mail.mail import extract_email
 from opengever.mail.mail import get_author_by_email
 from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.mail.tests import MAIL_DATA
+from opengever.mail.tests import MAIL_DATA_WITH_AD_FROM_HEADER
 from opengever.mail.tests.utils import get_header_date
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -101,6 +102,13 @@ class TestMailMetadataWithBuilder(FunctionalTestCase):
         self.assertEquals(
             get_author_by_email(mail),
             mail.document_author)
+
+    def test_strips_AD_information_FROM_data_if_user_does_not_exist(self):
+        mail = create(Builder("mail")
+                      .with_message(MAIL_DATA_WITH_AD_FROM_HEADER))
+
+        self.assertEquals(u'Muster Helen', get_author_by_email(mail))
+        self.assertEquals(u'Muster Helen', mail.document_author)
 
     def test_mail_catalog_metadata(self):
         mail = self.create_mail()
@@ -272,4 +280,4 @@ class TestEmailRegex(TestCase):
 
     def test_no_match(self):
         header_from = 'example.org'
-        self.assertEquals('example.org', extract_email(header_from))
+        self.assertEquals(None, extract_email(header_from))
