@@ -6,7 +6,7 @@ from opengever.activity.model.subscription import Subscription
 from opengever.meeting.activity.helpers import actor_link
 from opengever.testing import IntegrationTestCase
 from plone import api
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 

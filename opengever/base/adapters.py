@@ -14,7 +14,7 @@ from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces._content import IFolderish
 from zope.annotation.interfaces import IAnnotations
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import getUtility
 from zope.event import notify

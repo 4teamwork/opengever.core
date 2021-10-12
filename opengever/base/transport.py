@@ -17,7 +17,7 @@ from z3c.relationfield.interfaces import IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
 from zope import schema
 from zope.annotation.interfaces import IAnnotations
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import getAdapters
 from zope.component import getUtility

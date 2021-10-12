@@ -20,7 +20,7 @@ from opengever.task.util import change_task_workflow_state
 from plone.dexterity.utils import createContentInContainer
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 import AccessControl

@@ -3,7 +3,7 @@ from plone import api
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import select
 from sqlalchemy.sql.expression import table
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 import logging
 

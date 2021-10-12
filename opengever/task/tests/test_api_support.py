@@ -17,7 +17,7 @@ from operator import attrgetter
 from plone import api
 from plone.uuid.interfaces import IUUID
 from z3c.relationfield import RelationValue
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 import json

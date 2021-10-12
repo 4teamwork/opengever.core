@@ -1,6 +1,6 @@
 from plone.rest import Service
 from plone.restapi.services.locking.locking import lock_info
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 import json
 

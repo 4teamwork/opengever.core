@@ -1,5 +1,5 @@
 from opengever.task.task import ITask
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import provider

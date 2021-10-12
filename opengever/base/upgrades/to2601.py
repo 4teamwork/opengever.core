@@ -5,7 +5,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 

@@ -7,7 +7,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from sqlalchemy.orm.exc import NoResultFound
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 

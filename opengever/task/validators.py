@@ -4,7 +4,7 @@ from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.uuid.interfaces import IUUID
 from z3c.form import validator
 from z3c.relationfield.interfaces import IRelationList
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest

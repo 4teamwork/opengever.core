@@ -8,7 +8,7 @@ from opengever.tabbedview.helper import linked
 from opengever.task import _
 from opengever.task import util
 from z3c.relationfield import RelationValue
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 import json
 

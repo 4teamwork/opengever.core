@@ -4,7 +4,7 @@ from opengever.task.browser.complete import ICompleteSuccessorTaskSchema
 from opengever.task.browser.complete import NoCheckedoutDocsValidator
 from opengever.task.task import ITask
 from plone.uuid.interfaces import IUUID, IAttributeUUID
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.interface import Invalid
 from zope.schema import getFields
 

@@ -32,7 +32,7 @@ from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import Unauthorized
 from zope import schema
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility, getAdapter
 from zope.event import notify
 from zope.i18n import translate

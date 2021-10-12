@@ -17,7 +17,7 @@ from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.restapi.serializer.converters import json_compatible
 from zExceptions import BadRequest
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 import json

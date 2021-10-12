@@ -4,7 +4,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task.browser.delegate.vocabulary import attachable_documents_vocabulary
 from opengever.testing import IntegrationTestCase
 from plone import api
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 

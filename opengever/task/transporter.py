@@ -19,7 +19,7 @@ from persistent.list import PersistentList
 from Products.Five.browser import BrowserView
 from z3c.relationfield import RelationValue
 from zope.annotation.interfaces import IAnnotations
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer

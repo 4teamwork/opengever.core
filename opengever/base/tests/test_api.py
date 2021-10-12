@@ -5,7 +5,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.wopi.lock import create_lock as create_wopi_lock
 from plone.locking.interfaces import ILockable
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 
