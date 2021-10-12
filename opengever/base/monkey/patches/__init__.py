@@ -29,9 +29,9 @@ from .readonly import PatchPloneProtectOnUserLogsIn
 from .readonly import PatchPloneUserAllowed
 from .readonly import PatchPloneUserGetRolesInContext
 from .relation_fields import PatchRelationFieldEventHandlers
-from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
+# from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
-from .scrub_bobo_exceptions import ScrubBoboExceptions
+# from .scrub_bobo_exceptions import ScrubBoboExceptions
 from .session import PatchSessionCookie
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
@@ -68,7 +68,7 @@ PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
 PatchPloneProtectOnUserLogsIn()()
 PatchRelationFieldEventHandlers()()
-PatchResourceRegistriesURLRegex()()
+# PatchResourceRegistriesURLRegex()()
 PatchSessionCookie()()
 PatchTransmogrifyDXSchemaUpdater()()
 PatchWebDAVLockTimeout()()
@@ -76,7 +76,7 @@ PatchWorkflowTool()()
 PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
-ScrubBoboExceptions()()
+# ScrubBoboExceptions()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
