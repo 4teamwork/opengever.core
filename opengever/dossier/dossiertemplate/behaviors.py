@@ -16,6 +16,7 @@ from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.interface import Interface
+from plone.schema import JSONField
 
 
 class IDossierTemplateSchema(model.Schema):
@@ -129,6 +130,11 @@ class IDossierTemplate(model.Schema):
             '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
     )
+
+    process = JSONField(
+        title=u'Process',
+        required=False,
+        default=dict())
 
 
 alsoProvides(IDossierTemplate, IFormFieldProvider)

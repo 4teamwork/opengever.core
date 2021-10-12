@@ -1,10 +1,10 @@
-from opengever.base.vocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -12,6 +12,7 @@ from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
+from plone.schema import JSONField
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -21,7 +22,6 @@ from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
 import logging
-
 
 LOG = logging.getLogger('opengever.dossier')
 
@@ -207,6 +207,10 @@ class IDossier(model.Schema):
         required=False,
     )
 
+    process = JSONField(
+        title=u'Process',
+        required=False,
+        default=dict())
 
     @invariant
     def validate_start_end(data):
