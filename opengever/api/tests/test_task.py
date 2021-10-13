@@ -588,7 +588,7 @@ class TestTaskTransitions(IntegrationTestCase):
             self.assertEqual(1, len(added_task.relatedItems))
             self.assertEqual(self.taskdocument, added_task.relatedItems[0].to_object)
 
-        self.assertItemsEqual(['delegated-task', 'delegated-task-1'],
+        self.assertItemsEqual(['task-15', 'task-16'],
                               [task.id for task in added_tasks])
 
     @browsing
