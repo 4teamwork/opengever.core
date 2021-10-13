@@ -31,7 +31,7 @@
     <element value="collective.dexteritytextindexer.behavior.IDexterityTextIndexer" />
     <element value="opengever.base.behaviors.translated_title.ITranslatedTitle" />
     <element value="ftw.journal.interfaces.IAnnotationsJournalizable" />
-    <element value="plone.app.content.interfaces.INameFromTitle" />
+    <element value="opengever.base.behaviors.namefromtitle.IDefaultNameFromTitle" />
     <element value="opengever.tabbedview.interfaces.ITabbedViewEnabled" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
   </property>

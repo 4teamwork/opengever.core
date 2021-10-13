@@ -56,6 +56,7 @@ class TestDelegateTaskForm(IntegrationTestCase):
         self.assertEqual('robert.ziegler', subtask.responsible)
         self.assertEqual('fa', subtask.responsible_client)
         self.assertEqual('task-state-open', api.content.get_state(subtask))
+        self.assertEqual('task-15', subtask.id)
 
     @browsing
     def test_issuer_is_prefilled_with_current_user(self, browser):
