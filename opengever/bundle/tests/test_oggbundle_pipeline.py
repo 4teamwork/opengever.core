@@ -20,11 +20,13 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from pkg_resources import resource_filename
 from plone import api
+from plone.app.redirector.interfaces import IRedirectionStorage
 from plone.portlets.interfaces import IPortletAssignmentMapping
 from plone.portlets.interfaces import IPortletManager
 from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component import queryUtility
 import json
 import pytz
 import tzlocal
@@ -175,6 +177,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assert_mail3_created()
 
         self.assert_report_data_collected(bundle)
+        self.assert_redirects_registered(dossier)
 
     def assert_reporoot_created(self):
         root = self.portal.get('ordnungssystem-1')
@@ -721,3 +724,13 @@ class TestOggBundlePipeline(IntegrationTestCase):
         tree_portlet_assignment = mapping.get(
             'opengever-portlets-tree-TreePortlet')
         self.assertEqual('ordnungssystem-1', tree_portlet_assignment.root_path)
+
+    def assert_redirects_registered(self, dossier):
+        storage = queryUtility(IRedirectionStorage)
+
+        self.assertEqual(
+            '/'.join(dossier.getPhysicalPath()),
+            storage.get('/plone/ordnungssystem/earlier-path/dossier-12'))
+        self.assertEqual(
+            '/'.join(dossier.getPhysicalPath()),
+            storage.get('/plone/ordnungssystem/umwelt/earlier/dossier-12'))

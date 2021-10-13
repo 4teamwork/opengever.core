@@ -239,6 +239,13 @@
                     "title": "Laufnummer",
                     "description": "Fortlaufend gez\u00e4hlte Nummer eines Dokumentes."
                 },
+                "_old_paths": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Earlier path"
+                },
                 "original_message_path": {
                     "type": [
                         "null",

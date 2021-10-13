@@ -307,6 +307,7 @@ class OGGBundleJSONSchemaBuilder(object):
         self._add_permissions_property()
         self._add_file_properties()
         self._add_sequence_number_property()
+        self._add_old_path_property()
         self._add_mail_properties()
 
         self._filter_fields()
@@ -394,6 +395,12 @@ class OGGBundleJSONSchemaBuilder(object):
             'type': 'integer',
             'title': u'Laufnummer',
             'description': desc,
+        })
+
+    def _add_old_path_property(self):
+        self.ct_schema.add_property('_old_paths', {
+            'type': 'array',
+            'title': u'Earlier path',
         })
 
     def _add_mail_properties(self):
