@@ -588,6 +588,9 @@ class TestTaskTransitions(IntegrationTestCase):
             self.assertEqual(1, len(added_task.relatedItems))
             self.assertEqual(self.taskdocument, added_task.relatedItems[0].to_object)
 
+        self.assertItemsEqual(['delegated-task', 'delegated-task-1'],
+                              [task.id for task in added_tasks])
+
     @browsing
     def test_attachable_documents_vocabulary_lists_contained_and_related_documents(self, browser):
         intids = getUtility(IIntIds)
