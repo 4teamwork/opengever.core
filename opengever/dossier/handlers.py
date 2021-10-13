@@ -81,7 +81,7 @@ def save_reference_number_prefix(obj, event):
     if not prefix_adapter.get_number(obj):
         prefix_adapter.set_number(obj)
 
-    obj.reindexObject(idxs=['reference', 'sortable_reference'])
+    obj.reindexObject(idxs=['reference', 'sortable_reference', 'SearchableText'])
 
 
 def reindex_containing_subdossier_for_contained_objects(dossier, event):
