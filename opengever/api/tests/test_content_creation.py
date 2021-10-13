@@ -1,7 +1,5 @@
-from datetime import datetime
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
-from ftw.testing import freeze
 from opengever.api.add import get_validation_errors
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
@@ -20,7 +18,6 @@ from zope.interface import invariant
 from zope.schema._bootstrapinterfaces import WrongType
 from zope.schema.interfaces import RequiredMissing
 import json
-import pytz
 
 
 class TestSchema(Schema):
@@ -375,17 +372,16 @@ class TestContentCreation(IntegrationTestCase):
             u'title_de': u'Vorl\xe4gen',
             u'title_fr': u'Mod\xe8les',
         }
-        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
-            response = browser.open(
-                self.templates.absolute_url(),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
+        response = browser.open(
+            self.templates.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
         new_object_id = str(response.json['id'])
         new_object = self.templates.restrictedTraverse(new_object_id)
-        self.assertIn('opengever-dossier-templatefolder-2017-10-16-', new_object_id)
+        self.assertEqual('opengever-dossier-templatefolder', new_object_id)
         self.assertEqual(u'Vorl\xe4gen', new_object.title_de)
         self.assertEqual(u'Mod\xe8les', new_object.title_fr)
 
@@ -397,17 +393,16 @@ class TestContentCreation(IntegrationTestCase):
             u'title_de': u'Eing\xe4ngskorb',
             u'title_fr': u'Bo\xeetes de r\xe9ception',
         }
-        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
-            response = browser.open(
-                self.inbox_container.absolute_url(),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
+        response = browser.open(
+            self.inbox_container.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
         new_object_id = str(response.json['id'])
         new_object = self.inbox_container.restrictedTraverse(new_object_id)
-        self.assertIn('opengever-inbox-inbox-2017-10-16-', new_object_id)
+        self.assertEqual('opengever-inbox-inbox', new_object_id)
         self.assertEqual(u'Eing\xe4ngskorb', new_object.title_de)
         self.assertEqual(u'Bo\xeetes de r\xe9ception', new_object.title_fr)
 
@@ -419,17 +414,16 @@ class TestContentCreation(IntegrationTestCase):
             u'title_de': u'Eing\xe4ngskorb',
             u'title_fr': u'Bo\xeetes de r\xe9ception',
         }
-        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
-            response = browser.open(
-                self.portal.absolute_url(),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
+        response = browser.open(
+            self.portal.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
         new_object_id = str(response.json['id'])
         new_object = self.portal.restrictedTraverse(new_object_id)
-        self.assertIn('opengever-inbox-container-2017-10-16-', new_object_id)
+        self.assertEqual('opengever-inbox-container', new_object_id)
         self.assertEqual(u'Eing\xe4ngskorb', new_object.title_de)
         self.assertEqual(u'Bo\xeetes de r\xe9ception', new_object.title_fr)
 
@@ -441,17 +435,16 @@ class TestContentCreation(IntegrationTestCase):
             u'title_de': u'Sitzungen',
             u'title_fr': u'S\xe9ances',
         }
-        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
-            response = browser.open(
-                self.portal.absolute_url(),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
+        response = browser.open(
+            self.portal.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
         new_object_id = str(response.json['id'])
         new_object = self.portal.restrictedTraverse(new_object_id)
-        self.assertIn('opengever-meeting-committeecontainer-2017-10-16-', new_object_id)
+        self.assertEqual('opengever-meeting-committeecontainer-1', new_object_id)
         self.assertEqual(u'Sitzungen', new_object.title_de)
         self.assertEqual(u'S\xe9ances', new_object.title_fr)
 
@@ -463,16 +456,15 @@ class TestContentCreation(IntegrationTestCase):
             u'title_de': u'Kont\xe4kte',
             u'title_fr': u'Contacts',
         }
-        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
-            response = browser.open(
-                self.portal.absolute_url(),
-                data=json.dumps(payload),
-                method='POST',
-                headers=self.api_headers)
+        response = browser.open(
+            self.portal.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
 
         self.assertEqual(201, response.status_code)
         new_object_id = str(response.json['id'])
         new_object = self.portal.restrictedTraverse(new_object_id)
-        self.assertIn('opengever-contact-contactfolder-2017-10-16-', new_object_id)
+        self.assertEqual('opengever-contact-contactfolder', new_object_id)
         self.assertEqual(u'Kont\xe4kte', new_object.title_de)
         self.assertEqual(u'Contacts', new_object.title_fr)

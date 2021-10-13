@@ -1,0 +1,9 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="opengever.inbox.container" meta_type="Dexterity FTI" i18n:domain="opengever.core">
+
+  <!-- Enabled behaviors -->
+  <property name="behaviors" purge="False">
+    <element value="plone.app.content.interfaces.INameFromTitle" remove="True" />
+    <element value="opengever.base.behaviors.namefromtitle.IDefaultNameFromTitle" />
+  </property>
+
+</object>

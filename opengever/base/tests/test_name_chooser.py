@@ -72,14 +72,6 @@ type_to_obj = {
     'opengever.workspace.workspace': 'workspace',
 }
 
-TYPES_WITH_UNIMPLEMENTED_NAME_FROM_TITLE = [
-    'opengever.contact.contactfolder',
-    'opengever.dossier.templatefolder',
-    'opengever.inbox.container',
-    'opengever.inbox.inbox',
-    'opengever.meeting.committeecontainer',
-]
-
 
 def has_name_from_title_behavior(fti):
     for behavior_name in getattr(fti, 'behaviors', []):
@@ -105,17 +97,8 @@ class TestNameFromTitleBehavior(IntegrationTestCase):
     def test_name_from_title_behavior_is_implemented_for_all_expected_types(self):
         self.login(self.manager)
         for portal_type in EXPECTED_TYPES_WITH_NAME_FROM_TITLE:
-            if portal_type in TYPES_WITH_UNIMPLEMENTED_NAME_FROM_TITLE:
-                continue
             obj = getattr(self, type_to_obj[portal_type])
             self.assertEqual(portal_type, obj.portal_type)
             self.assertTrue(
                 INameFromTitle(obj).title,
                 'NameFromTitle is not implemented for {}'.format(portal_type))
-
-        for portal_type in TYPES_WITH_UNIMPLEMENTED_NAME_FROM_TITLE:
-            obj = getattr(self, type_to_obj[portal_type])
-            self.assertEqual(portal_type, obj.portal_type)
-            self.assertFalse(
-                INameFromTitle(obj).title,
-                'NameFromTitle is unexpectedly implemented for {}'.format(portal_type))
