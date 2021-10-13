@@ -114,4 +114,13 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
+  <!-- name from title beahvior -->
+  <plone:behavior
+      title="Default name from title"
+      description=""
+      provides=".namefromtitle.IDefaultNameFromTitle"
+      factory=".namefromtitle.DefaultNameFromTitle"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      />
+
 </configure>
