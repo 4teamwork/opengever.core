@@ -12,7 +12,6 @@ import logging
 
 class TestNightlyRoleAssignmentReports(IntegrationTestCase):
 
-    features = ('nightly-jobs', )
     maxDiff = None
 
     def execute_nightly_jobs(self):

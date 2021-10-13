@@ -84,8 +84,6 @@ class TestIdempotentOperations(TestCase):
 
 class TestNightlyIndexer(SolrIntegrationTestCase):
 
-    features = ('nightly-jobs', )
-
     def run_nightly_jobs(self):
         runner = NightlyJobRunner(force_execution=True)
         runner.execute_pending_jobs()

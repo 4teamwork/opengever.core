@@ -202,6 +202,8 @@ class TestResolverVocabulary(IntegrationTestCase):
 
 class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
+    features = ('!nightly-jobs', )
+
     @browsing
     def test_archive_form_is_omitted_for_sites_without_filing_number_support(self, browser):
         self.login(self.secretariat_user, browser)
@@ -317,6 +319,8 @@ class NightlyResolveJobsTestHelper(ResolveJobsTestHelper):
 
 
 class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHelper):
+
+    features = ('!nightly-jobs', )
 
     @browsing
     def test_all_trashed_documents_are_deleted_when_resolving_a_dossier_if_enabled(self, browser):
@@ -866,7 +870,7 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
 
         # Now run the nightly jobs
         with self.observe_children(self.empty_dossier) as children:
-                self.execute_nightly_jobs(expected=1)
+            self.execute_nightly_jobs(expected=1)
 
         self.assertEquals(1, len(children['added']))
         journal_pdf, = children['added']
@@ -889,7 +893,7 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
 
         # Now run the nightly jobs
         with self.observe_children(self.empty_dossier) as children:
-                self.execute_nightly_jobs(expected=1)
+            self.execute_nightly_jobs(expected=1)
 
         self.assertEquals(0, len(children['added']))
         self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
@@ -1131,6 +1135,8 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
 
 
 class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
+
+    features = ('!nightly-jobs', )
 
     def setUp(self):
         super(TestAutomaticPDFAConversion, self).setUp()

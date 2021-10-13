@@ -11,8 +11,6 @@ import os
 
 class TestNightlyDelivery(TestFilesystemTransportBase):
 
-    features = ('nightly-jobs', )
-
     def setUp(self):
         super(TestNightlyDelivery, self).setUp()
         with self.login(self.records_manager):
