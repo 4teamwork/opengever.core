@@ -299,8 +299,8 @@ Auf der Ebene eines einzelnen Teamraums oder eines Teamraum-Ordners können die 
 -  ``workspace_admin`` (Admin)
 -  ``workspace_member`` (Teammitglied)
 -  ``workspace_guest`` (Gast)
-   
-**Beteiligungen** (participations) in Teamräumen werden über lokale Rollen abgebildet. Um eine Beteiligung eines Benutzers an einem Teamraum zu importieren, genügt es daher die Art der Beteiligung über ein entsprechendes local role assignment im ``_permissions`` property auszudrücken. 
+
+**Beteiligungen** (participations) in Teamräumen werden über lokale Rollen abgebildet. Um eine Beteiligung eines Benutzers an einem Teamraum zu importieren, genügt es daher die Art der Beteiligung über ein entsprechendes local role assignment im ``_permissions`` property auszudrücken.
 
 
 Setzen von Werten
@@ -375,6 +375,11 @@ Dokumente
 Initial-Zustand: ``document-state-draft``
 
 JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
+
+Redirects zu früheren Pfäden
+----------------------------
+Um bspw. bei Migrationen sicherstellen zu können, dass alte Links auf den ursprünglichen Pfad eines Dokuments oder Dossiers nach wie vor funktionieren, können die ursprünglichen Pfade unter dem Key ``_old_paths`` mitgegeben werden. So führen die alten URLs mit einem Redirect zum neu erstellten Objekt.
+
 
 Zusätzliche Validierung
 -----------------------
