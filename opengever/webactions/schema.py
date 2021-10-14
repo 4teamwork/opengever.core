@@ -105,7 +105,7 @@ class IWebActionSchema(Interface):
         description=u'Where the webaction applies.',
         values=[
             'global',
-            # TODO: 'context' (needs more discussion)
+            'context',
             # TODO: 'recursive'
         ],
         required=True)

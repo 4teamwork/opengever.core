@@ -1,3 +1,4 @@
+from BTrees.IIBTree import IITreeSet
 from BTrees.IOBTree import IOBTree
 from BTrees.OIBTree import OIBTree
 from BTrees.OOBTree import OOBTree
@@ -16,6 +17,8 @@ from Products.CMFPlone.interfaces import IPloneSiteRoot
 from Products.CMFPlone.utils import safe_unicode
 from urlparse import parse_qs
 from urlparse import urlparse
+from zExceptions import Forbidden
+from zExceptions import NotFound
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -61,6 +64,7 @@ class WebActionsStorage(object):
     STORAGE_ACTIONS_KEY = 'actions'
     STORAGE_INDEXES_KEY = 'indexes'
     STORAGE_NEXT_ID_KEY = 'next_id'
+    STORAGE_CONTEXT_INTIDS_KEY = 'context_intids'
 
     IDX_UNIQUE_NAME = 'unique_name_to_action_id'
 
@@ -89,6 +93,11 @@ class WebActionsStorage(object):
         if self.STORAGE_INDEXES_KEY not in self._storage:
             self._storage[self.STORAGE_INDEXES_KEY] = OOBTree()
         self._indexes = self._storage[self.STORAGE_INDEXES_KEY]
+
+        # Actual dict of context uids per actionid
+        if self.STORAGE_CONTEXT_INTIDS_KEY not in self._storage:
+            self._storage[self.STORAGE_CONTEXT_INTIDS_KEY] = PersistentMapping()
+        self._context_intids = self._storage[self.STORAGE_CONTEXT_INTIDS_KEY]
 
         # Index: unique_name -> action_id
         if self.IDX_UNIQUE_NAME not in self._indexes:
@@ -139,6 +148,25 @@ class WebActionsStorage(object):
         self.index_action(new_action)
         return action_id
 
+    def add_context_intid(self, action_id, intid):
+        if not self._actions.get(action_id):
+            raise NotFound('Action with action_id {} does not exist'.format(action_id))
+        if self._actions[action_id]['scope'] != 'context':
+            raise Forbidden('Actions can only be activated if they have scope context.')
+        if not self._context_intids.get(action_id):
+            self._context_intids[action_id] = IITreeSet()
+        self._context_intids[action_id].insert(intid)
+
+    def remove_context_intid(self, action_id, intid):
+        self._context_intids[action_id].remove(intid)
+
+    def get_context_intids(self, action_id):
+        return set(self._context_intids.get(action_id, []))
+
+    def list_context_intids(self):
+        return [{'action_id': k, 'context_intids': list(v)}
+                for k, v in self._context_intids.items()]
+
     def get(self, action_id):
         return dict(self._actions[action_id])
 
@@ -176,6 +204,8 @@ class WebActionsStorage(object):
         action = self._actions[action_id]
         self.unindex_action(action)
         del self._actions[action_id]
+        if self._context_intids.get(action_id):
+            del self._context_intids[action_id]
 
     def index_action(self, action):
         action_id = action['action_id']

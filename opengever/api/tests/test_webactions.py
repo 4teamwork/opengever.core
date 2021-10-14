@@ -626,3 +626,122 @@ class TestWebActionsDelete(IntegrationTestCase):
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(url, method='DELETE', headers=self.HEADERS)
+
+
+class TestContextWebActionsPost(IntegrationTestCase):
+
+    @browsing
+    def test_can_activate_context_webaction(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(title=u'My webaction', scope='context'))
+
+        browser.open(self.dossier, view='/@webactions/0', method='POST', headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+
+        browser.open(self.dossier, view='/@actions', method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [u'My webaction'],
+            [action['title'] for action in browser.json['webactions']])
+
+    @browsing
+    def test_cannot_activate_global_webaction(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(title=u'My webaction', scope='global'))
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(self.dossier, view='/@webactions/0',
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {"message": "Actions can only be activated if they have scope context.",
+             "type": "Forbidden"},
+            browser.json)
+
+    @browsing
+    def test_activate_webaction_returns_404_for_non_existent_webaction(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.dossier, view='/@webactions/77',
+                         method='POST', headers=self.api_headers)
+
+    @browsing
+    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.dossier, view='/@webactions/1/1/1/1',
+                         method='POST', headers=self.api_headers)
+
+    @browsing
+    def test_path_param_for_action_id_must_be_integer(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.dossier, view='/@webactions/not-an-integer',
+                         method='POST', headers=self.api_headers)
+
+
+class TestContextWebActionsDelete(IntegrationTestCase):
+
+    @browsing
+    def test_deactivate_webaction(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(title=u'My webaction', scope='context'))
+        create(Builder('webaction').having(title=u'Second webaction', scope='context'))
+
+        browser.open(self.dossier, view='/@webactions/0', method='POST', headers=self.api_headers)
+        browser.open(self.dossier, view='/@webactions/1', method='POST', headers=self.api_headers)
+
+        browser.open(self.dossier, view='/@actions',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [u'My webaction', u'Second webaction'],
+            [action['title'] for action in browser.json['webactions']])
+
+        browser.open(self.dossier, view='/@webactions/0', method='DELETE', headers=self.api_headers)
+
+        browser.open(self.dossier, view='/@actions', method='GET', headers=self.api_headers)
+
+        self.assertEqual([u'Second webaction'], [action['title']
+                                                 for action in browser.json['webactions']])
+
+    @browsing
+    def test_invalid_number_of_path_params_answered_with_bad_request(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.dossier, view='/@webactions/1/1/1/1',
+                         method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_path_param_for_action_id_must_be_integer(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.dossier, view='/@webactions/not-an-integer',
+                         method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_deactivate_webaction_returns_404_for_non_existent_webaction(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.dossier, view='/@webactions/77',
+                         method='DELETE', headers=self.api_headers)
+
+    @browsing
+    def test_deactivate_webaction_raises_when_action_not_activated(self, browser):
+        self.login(self.webaction_manager, browser=browser)
+        create(Builder('webaction').having(scope='context'))
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.dossier, view='/@webactions/0',
+                         method='DELETE', headers=self.api_headers)
+
+        self.assertEqual(
+            {"message": "The webaction is not activated on this context.",
+             "type": "BadRequest"},
+            browser.json)

@@ -336,6 +336,82 @@ Löschen (DELETE)
     +------------------+------------------------------------------------------------------+
 
 
+
+Webaktion aktivieren (POST)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Webaktionen mit dem scope ``context`` müssen zuerst auf dem Objekt, auf dem sie angezeigt werden sollen, aktiviert werden.
+
+.. http:post:: /context/@webactions/(action_id)
+
+   Aktiviert die durch die ``action_id`` identifizierte Webaktion auf dem Kontext.
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      POST /context/@webactions/0 HTTP/1.1
+      Accept: application/json
+
+
+   **Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Content-Type: application/json
+
+.. table::
+
+    +------------------+------------------------------------------------------------------+
+    | Status Code      | Beschreibung                                                     |
+    +==================+==================================================================+
+    | 204 No Content   | WebAction erfolgreich aktiviert.                                 |
+    +------------------+------------------------------------------------------------------+
+    | 401 Unauthorized | Authentisierung oder Autorisierung fehlgeschlagen.               |
+    +------------------+------------------------------------------------------------------+
+    | 404 Not Found    | WebAction mit dieser ``action_id`` konnte nicht gefunden werden. |
+    +------------------+------------------------------------------------------------------+
+
+Webaktion deaktivieren (DELETE)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Aktivierte Webaktionen können auch wieder deaktiviert werden.
+
+.. http:delete:: /context/@webactions/(action_id)
+
+   Deaktiviert die durch die ``action_id`` identifizierte Webaktion auf dem Kontext.
+
+   **Request**:
+
+   .. sourcecode:: http
+
+      DELETE /context/@webactions/0 HTTP/1.1
+      Accept: application/json
+
+
+   **Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Content-Type: application/json
+
+.. table::
+
+    +------------------+------------------------------------------------------------------+
+    | Status Code      | Beschreibung                                                     |
+    +==================+==================================================================+
+    | 204 No Content   | WebAction erfolgreich deaktiviert.                               |
+    +------------------+------------------------------------------------------------------+
+    | 400 Bad Request  | Webaction war nicht aktiviert.                                   |
+    +------------------+------------------------------------------------------------------+
+    | 401 Unauthorized | Authentisierung oder Autorisierung fehlgeschlagen.               |
+    +------------------+------------------------------------------------------------------+
+    | 404 Not Found    | WebAction mit dieser ``action_id`` konnte nicht gefunden werden. |
+    +------------------+------------------------------------------------------------------+
+
+
 .. _webactions-fields:
 
 Eigenschaften von Webaktionen
@@ -417,15 +493,15 @@ Scope
 Über das Feld ``scope`` kann gesteuert werden, bei welchen Objekten die
 Webaktion angeboten wird.
 
-+---------------+---------------------------------------------------------------------+
-| Wert          | Beschreibung                                                        |
-+===============+=====================================================================+
-| ``global``    | Die Webaktion wird grundsätzlich bei allen Objekten angeboten.      |
-+---------------+---------------------------------------------------------------------+
-| ``context``   | Noch nicht implementiert.                                           |
-+---------------+---------------------------------------------------------------------+
-| ``recursive`` | Noch nicht implementiert.                                           |
-+---------------+---------------------------------------------------------------------+
++---------------+------------------------------------------------------------------------------+
+| Wert          | Beschreibung                                                                 |
++===============+==============================================================================+
+| ``global``    | Die Webaktion wird grundsätzlich bei allen Objekten angeboten.               |
++---------------+------------------------------------------------------------------------------+
+| ``context``   | Die Webaktion wird nur bei Objekten angezeigt, bei denen sie aktiviert wurde |
++---------------+------------------------------------------------------------------------------+
+| ``recursive`` | Noch nicht implementiert.                                                    |
++---------------+------------------------------------------------------------------------------+
 
 
 .. _webactions-server-metadata:

@@ -306,6 +306,12 @@
       />
 
   <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           OFS.interfaces.IObjectWillBeRemovedEvent"
+      handler=".handlers.remove_from_context_webactions"
+      />
+
+  <subscriber
       for="opengever.repository.interfaces.IRepositoryFolder
            zope.lifecycleevent.IObjectRemovedEvent"
       handler=".handlers.update_favorited_repositoryfolder"

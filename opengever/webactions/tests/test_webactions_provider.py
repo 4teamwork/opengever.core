@@ -7,6 +7,8 @@ from opengever.webactions.schema import ACTION_PERMISSIONS
 from opengever.webactions.storage import get_storage
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 
 
 class TestWebActionBase(IntegrationTestCase):
@@ -123,6 +125,18 @@ class TestWebActionProvider(TestWebActionBase):
         storage._actions[2]["scope"] = "recursive"
 
         expected_data = {'actions-menu': [self.action2_data]}
+        self.assertDictEqual(expected_data, provider.get_webactions())
+
+    def test_webaction_provider_returns_action_with_scope_context_if_action_activated(self):
+        self.login(self.regular_user)
+        provider = getMultiAdapter((self.dossier, self.request), IWebActionsProvider)
+        storage = get_storage()
+        storage.update(0, {"scope": "context"})
+        storage.update(2, {"scope": "context"})
+        intid = getUtility(IIntIds).getId(self.dossier)
+        storage.add_context_intid(0, intid)
+
+        expected_data = {'actions-menu': [self.action1_data, self.action2_data]}
         self.assertDictEqual(expected_data, provider.get_webactions())
 
     def test_webaction_provider_respects_portal_type(self):

@@ -14,10 +14,16 @@ from opengever.webactions.storage import ALLOWED_QUERY_PLACEHOLDERS
 from opengever.webactions.storage import DEFAULT_QUERY_PARAMS
 from opengever.webactions.storage import get_storage
 from opengever.webactions.storage import WebActionsStorage
+from persistent.mapping import PersistentMapping
+from plone import api
+from zExceptions import NotFound
 from zope.annotation import IAnnotations
+from zope.component import getUtility
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
+from zope.intid.interfaces import IIntIds
 from zope.schema import ValidationError
+from zExceptions import Forbidden
 
 
 class TestWebActionsStorageInitialization(IntegrationTestCase):
@@ -36,6 +42,10 @@ class TestWebActionsStorageInitialization(IntegrationTestCase):
 
         self.assertTrue(storage._actions is storage._storage[WebActionsStorage.STORAGE_ACTIONS_KEY])
         self.assertIsInstance(storage._actions, IOBTree)
+
+        self.assertTrue(storage._context_intids is
+                        storage._storage[WebActionsStorage.STORAGE_CONTEXT_INTIDS_KEY])
+        self.assertIsInstance(storage._context_intids, PersistentMapping)
 
         self.assertTrue(storage._indexes is storage._storage[WebActionsStorage.STORAGE_INDEXES_KEY])
         self.assertIsInstance(storage._indexes, OOBTree)
@@ -115,6 +125,39 @@ class TestWebActionsStorageAdding(IntegrationTestCase):
 
         self.assertEqual(expected, action_from_storage)
         self.assertIsInstance(action_from_storage, dict)
+
+    def test_add_context_intid_for_action_with_scope_global_raises(self):
+        self.login(self.manager)
+
+        create(Builder('webaction').having(scope='global'))
+        storage = get_storage()
+
+        with self.assertRaises(Forbidden) as cm:
+            storage.add_context_intid(0, 12345)
+
+        self.assertEqual(
+            'Actions can only be activated if they have scope context.', str(cm.exception))
+
+    def test_add_context_intid(self):
+        self.login(self.manager)
+
+        create(Builder('webaction').having(scope='context'))
+        storage = get_storage()
+        storage.add_context_intid(0, 12345)
+        storage.add_context_intid(0, 34567)
+
+        self.assertEqual({12345, 34567}, storage.get_context_intids(0))
+
+    def test_add_context_intid_with_invalid_action_id_raises(self):
+        self.login(self.manager)
+
+        create(Builder('webaction').having(scope='context'))
+        storage = get_storage()
+
+        with self.assertRaises(NotFound) as cm:
+            storage.add_context_intid(1, 12345)
+
+        self.assertEqual('Action with action_id 1 does not exist', str(cm.exception))
 
     def test_add_webaction_with_missing_fields_raises(self):
         storage = get_storage()
@@ -446,6 +489,29 @@ class TestWebActionsStorageRetrieval(IntegrationTestCase):
         storage = get_storage()
         self.assertEqual([], storage.list())
 
+    def test_get_context_intids(self):
+        storage = get_storage()
+        create(Builder('webaction').having(scope='context'))
+
+        self.assertEqual(set(), storage.get_context_intids(0))
+        storage.add_context_intid(0, 12345)
+        storage.add_context_intid(0, 34567)
+
+        self.assertEqual({12345, 34567}, storage.get_context_intids(0))
+
+    def test_list_context_intids(self):
+        storage = get_storage()
+        self.assertEqual([], storage.list_context_intids())
+
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(0, 12345)
+        storage.add_context_intid(0, 34567)
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(1, 12345)
+        self.assertEqual([{'action_id': 0, 'context_intids': [12345, 34567]},
+                          {'action_id': 1, 'context_intids': [12345]}],
+                         storage.list_context_intids())
+
 
 class TestWebActionsStorageUpdating(IntegrationTestCase):
 
@@ -714,3 +780,42 @@ class TestWebActionsStorageDeletion(IntegrationTestCase):
         self.assertNotIn(
             u'open-in-external-app-title-action',
             unique_name_index)
+
+    def test_remove_context_intid(self):
+        storage = get_storage()
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(0, 12345)
+        storage.add_context_intid(0, 23456)
+        self.assertEqual({12345, 23456}, storage.get_context_intids(0))
+
+        storage.remove_context_intid(0, 12345)
+        self.assertEqual({23456}, storage.get_context_intids(0))
+
+    def test_remove_context_intid_for_non_existent_webaction_raises_key_error(self):
+        storage = get_storage()
+        with self.assertRaises(KeyError):
+            storage.remove_context_intid(0, 12345)
+
+    def test_remove_context_intid_for_non_existent_intid_raises_key_error(self):
+        storage = get_storage()
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(0, 12345)
+        with self.assertRaises(KeyError):
+            storage.remove_context_intid(0, 34567)
+
+    def test_delete_webaction_removes_context_intids(self):
+        storage = get_storage()
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(0, 12345)
+        self.assertEqual({12345}, storage.get_context_intids(0))
+
+        storage.delete(0)
+        self.assertEqual(set(), storage.get_context_intids(0))
+
+    def test_object_deletion_removes_context_intid(self):
+        self.login(self.manager)
+        storage = get_storage()
+        create(Builder('webaction').having(scope='context'))
+        storage.add_context_intid(0, getUtility(IIntIds).getId(self.document))
+        api.content.delete(obj=self.document)
+        self.assertEqual(set(), storage.get_context_intids(0))
