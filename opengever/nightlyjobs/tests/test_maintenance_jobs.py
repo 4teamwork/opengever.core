@@ -157,7 +157,6 @@ class TestMaintenanceQueuesManager(IntegrationTestCase):
 
 class TestNightlyMaintenanceJobsProvider(IntegrationTestCase):
 
-    features = ('nightly-jobs', )
     maxDiff = None
 
     write_args_dotted_name = "opengever.nightlyjobs.tests.test_maintenance_jobs"\

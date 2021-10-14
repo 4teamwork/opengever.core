@@ -8,7 +8,7 @@ class INightlyJobsSettings(Interface):
     is_feature_enabled = schema.Bool(
         title=u'Enable nightly jobs feature',
         description=u'Whether nightly job execution is enabled',
-        default=False)
+        default=True)
 
     start_time = schema.Timedelta(
         title=u'Nightly jobs window start time',
