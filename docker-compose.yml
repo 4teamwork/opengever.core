@@ -152,7 +152,7 @@ services:
       - all
       - ianus
   389ds:
-    image: 4teamwork/389ds:2.0.4
+    image: 4teamwork/389ds:2.0.10
     ports:
       - "3389:3389"
       - "3636:3636"
