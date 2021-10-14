@@ -56,7 +56,6 @@ ftw.builder==2.0.0
 ftw.bumblebee==3.9.0
 ftw.casauth==1.4.2
 ftw.catalogdoctor==1.2.0
-ftw.chameleon==1.2.0
 ftw.contentmenu==2.4.0
 ftw.contentstats==1.2.0
 ftw.copymovepatches==1.1.1
