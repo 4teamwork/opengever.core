@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- task-transition-delegate now expects UIDs for the documents parameter.
 
 Other Changes
 ^^^^^^^^^^^^^

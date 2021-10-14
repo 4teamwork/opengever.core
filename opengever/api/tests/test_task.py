@@ -599,7 +599,7 @@ class TestTaskTransitions(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertEqual(2, browser.json['items_total'])
         self.assertItemsEqual(
-            [str(intids.getId(el)) for el in [self.document, self.taskdocument]],
+            [el.UID() for el in [self.document, self.taskdocument]],
             [term['token'] for term in browser.json['items']])
 
 

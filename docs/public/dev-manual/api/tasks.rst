@@ -279,6 +279,14 @@ Zusätzliche Metadaten:
 
        :Datentyp: ``Text``
 
+   .. py:attribute:: responsibles
+
+       :Datentyp: ``ChoiceList``
+       :Pflichtfeld: Ja :required:`(*)`
+
+   .. py:attribute:: documents
+
+       :Datentyp: ``Choice``
 
 Des weiteren stehen auch die Statuswechsel für sequentielle Aufgaben zur Verfügung:
 

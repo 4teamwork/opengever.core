@@ -107,5 +107,8 @@ class TestAttachableDocumentsVocabulary(IntegrationTestCase):
         terms = attachable_documents_vocabulary(self.task)
 
         self.assertItemsEqual(
+            [el.UID() for el in [self.document, self.taskdocument]],
+            [term.token for term in terms])
+        self.assertItemsEqual(
             [str(intids.getId(el)) for el in [self.document, self.taskdocument]],
             [term.value for term in terms])
