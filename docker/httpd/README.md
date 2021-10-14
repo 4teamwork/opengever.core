@@ -58,6 +58,12 @@ The name and port of the bumblebee server.
 
 Default: bumblebee:80
 
+### `BUMBLEBEE_PROTOCOL`
+
+URL scheme used for bumblebee backend.
+
+Default: http
+
 ### `PORTAL_HOST`
 
 The name and port of the portal server.

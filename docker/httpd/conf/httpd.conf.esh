@@ -158,7 +158,7 @@ LoadModule proxy_wstunnel_module modules/mod_proxy_wstunnel.so
 #LoadModule session_dbd_module modules/mod_session_dbd.so
 #LoadModule slotmem_shm_module modules/mod_slotmem_shm.so
 #LoadModule slotmem_plain_module modules/mod_slotmem_plain.so
-#LoadModule ssl_module modules/mod_ssl.so
+LoadModule ssl_module modules/mod_ssl.so
 #LoadModule optional_hook_export_module modules/mod_optional_hook_export.so
 #LoadModule optional_hook_import_module modules/mod_optional_hook_import.so
 #LoadModule optional_fn_import_module modules/mod_optional_fn_import.so
@@ -555,6 +555,7 @@ SSLRandomSeed connect builtin
 
 RewriteEngine On
 ProxyTimeout 300
+SSLProxyEngine on
 
 # Deny HEAD requests by Microsoft Office to prevent login popup when clicking on links in Office apps.
 RewriteCond %{REQUEST_METHOD} "HEAD"
@@ -566,13 +567,18 @@ RewriteCond %{REQUEST_METHOD} "GET"
 RewriteCond %{HTTP_USER_AGENT} ;\sms-office(\)|;)
 RewriteRule .* /usr/local/apache2/htdocs/msoffice.html [L]
 
-# Bumblebee websockets
+# Bumblebee
 RewriteCond %{HTTP:UPGRADE} ^websocket$ [NC]
 RewriteCond %{HTTP:CONNECTION} Upgrade$ [NC]
+<% if [ "${BUMBLEBEE_PROTOCOL:-}" == "https" ]; then -%>
+RewriteRule ^/YnVtYmxlYmVl/api/(.*) wss://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/api/$1 [P]
+RewriteRule ^/pdfjs/(.*) https://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/pdfjs/$1 [P,L]
+RewriteRule ^/YnVtYmxlYmVl/(.*) https://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/$1 [P,L]
+<% else -%>
 RewriteRule ^/YnVtYmxlYmVl/api/(.*) ws://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/api/$1 [P]
-# Bumblebee
 RewriteRule ^/pdfjs/(.*) http://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/pdfjs/$1 [P,L]
 RewriteRule ^/YnVtYmxlYmVl/(.*) http://<%= ${BUMBLEBEE_HOST:-bumblebee:80} %>/YnVtYmxlYmVl/$1 [P,L]
+<% fi -%>
 
 # Portal
 RewriteRule ^/portal($|/)(.*) http://<%= ${PORTAL_HOST:-portal-frontend:80} %>/portal$1$2 [P,L,E=preserve_host:yes]
