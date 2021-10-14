@@ -55,6 +55,10 @@ services:
       - "8160:8160"
     environment:
       - STORAGE=zeoclient
+      - MSGCONVERT_URL=http://msgconvert:8080/
+      - SABLON_URL=http://sablon:8080/
+      - PDFLATEX_URL=http://pdflatex:8080/
+      - WEASYPRINT_URL=http://weasyprint:8080/
     depends_on:
       - zeoserver
       - ogds
