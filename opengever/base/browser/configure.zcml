@@ -192,14 +192,6 @@
       />
 
   <browser:page
-      for="*"
-      name="plone_javascript_variables.js"
-      class=".jsvariables.GeverJSVariables"
-      permission="zope.Public"
-      layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      />
-
-  <browser:page
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       name="favorites-view"
       class=".favorites.ManageFavoritesView"
