@@ -250,6 +250,11 @@ class ContextWebActionsPost(WebActionLocator):
         self.request.response.setStatus(204)
         return _no_content_marker
 
+    def _check_ownership(self, action):
+        # Must be overridden because users can activate a web action
+        # even if they are not the owner.
+        return
+
 
 class ContextWebActionsDelete(WebActionLocator):
 
@@ -265,6 +270,11 @@ class ContextWebActionsDelete(WebActionLocator):
 
         self.request.response.setStatus(204)
         return _no_content_marker
+
+    def _check_ownership(self, action):
+        # Must be overridden because users can deactivate a web action
+        # even if they are not the owner.
+        return
 
 
 def serialize_webaction(action):
