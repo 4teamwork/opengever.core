@@ -635,6 +635,7 @@ class TestContextWebActionsPost(IntegrationTestCase):
         self.login(self.webaction_manager, browser=browser)
         create(Builder('webaction').having(title=u'My webaction', scope='context'))
 
+        self.login(self.regular_user, browser=browser)
         browser.open(self.dossier, view='/@webactions/0', method='POST', headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
 
@@ -691,6 +692,7 @@ class TestContextWebActionsDelete(IntegrationTestCase):
         create(Builder('webaction').having(title=u'My webaction', scope='context'))
         create(Builder('webaction').having(title=u'Second webaction', scope='context'))
 
+        self.login(self.regular_user, browser=browser)
         browser.open(self.dossier, view='/@webactions/0', method='POST', headers=self.api_headers)
         browser.open(self.dossier, view='/@webactions/1', method='POST', headers=self.api_headers)
 
