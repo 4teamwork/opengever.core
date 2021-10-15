@@ -30,23 +30,6 @@
       permission="zope.Public"
       />
 
-  <!-- Adds the feature to add a dynamic description to a widget. -->
-  <configure package="plone.app.z3cform">
-    <browser:page
-        name="ploneform-render-widget"
-        for="z3c.form.interfaces.IWidget"
-        layer="z3c.form.interfaces.IFormLayer"
-        class="opengever.base.widgets.GeverRenderWidget"
-        permission="zope.Public"
-        />
-    <browser:page
-        name="ploneform-render-widget"
-        for="z3c.form.interfaces.ISingleCheckBoxWidget"
-        layer="z3c.form.interfaces.IFormLayer"
-        class=".templates.RenderSingleCheckboxWidget"
-        permission="zope.Public"
-        />
-  </configure>
 
   <adapter
       for="zope.annotation.interfaces.IAttributeAnnotatable"
