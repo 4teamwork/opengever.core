@@ -7,7 +7,7 @@ from plone.formwidget.namedfile.interfaces import INamedFileWidget
 from plone.formwidget.namedfile.validator import NamedFileWidgetValidator
 from plone.namedfile.interfaces import INamedField
 from plone.registry.interfaces import IRegistry
-from Products.validation.i18n import safe_unicode
+from plone.dexterity.utils import safe_unicode
 from six import BytesIO
 from z3c.form import validator
 from zope.annotation.interfaces import IAnnotations
