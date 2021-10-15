@@ -1,4 +1,3 @@
-from collective.indexing.monkey import unpatch as unpatch_collective_indexing
 from collective.transmogrifier.transmogrifier import Transmogrifier
 from ftw.solr.interfaces import ISolrConnectionManager
 from opengever.base.interfaces import INoSeparateConnectionForSequenceNumbers
@@ -70,7 +69,7 @@ class BundleImporter(object):
             if self.possibly_unpatch_collective_indexing:
                 # Disable collective indexing as it can lead to too many
                 # subtransactions
-                unpatch_collective_indexing()
+                pass
 
         if self.disable_ldap:
             with DisabledLDAP(self.site):

@@ -2,8 +2,8 @@ from AccessControl.SecurityManagement import getSecurityManager
 from AccessControl.SecurityManagement import newSecurityManager
 from AccessControl.SecurityManagement import setSecurityManager
 from AccessControl.User import UnrestrictedUser as BaseUnrestrictedUser
-from collective.indexing.interfaces import IIndexQueueProcessor
-from collective.indexing.queue import getQueue
+from Products.CMFCore.interfaces import IIndexQueueProcessor
+from Products.CMFCore.indexing import getQueue
 from contextlib import contextmanager
 from opengever.base import is_solr_feature_enabled
 from opengever.base.interfaces import IInternalWorkflowTransition

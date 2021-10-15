@@ -1,4 +1,4 @@
-from collective.indexing.queue import processQueue
+from Products.CMFCore.indexing import processQueue
 from ftw.solr.interfaces import ISolrConnectionManager
 from itertools import izip_longest
 from path import Path

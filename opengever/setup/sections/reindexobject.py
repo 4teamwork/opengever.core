@@ -1,5 +1,5 @@
-from collective.indexing.interfaces import IIndexQueueProcessor
-from collective.indexing.queue import getQueue
+from Products.CMFCore.interfaces import IIndexQueueProcessor
+from Products.CMFCore.indexing import getQueue
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import traverse
