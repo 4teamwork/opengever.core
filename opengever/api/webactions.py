@@ -13,9 +13,11 @@ from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.interface import alsoProvides
 from zope.interface import implements
+from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces import IPublishTraverse
 from zope.schema import Choice
 from zope.schema import List
@@ -229,6 +231,37 @@ class WebActionsDelete(WebActionLocator):
         # We can't have a KeyError here because action has already been
         # verified as existing by locator
         storage.delete(action['action_id'])
+
+        self.request.response.setStatus(204)
+        return _no_content_marker
+
+
+class ContextWebActionsPost(WebActionLocator):
+
+    action_id_required = True
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+        action = self.locate_action()
+        intid = getUtility(IIntIds).getId(self.context)
+        get_storage().add_context_intid(action['action_id'], intid)
+
+        self.request.response.setStatus(204)
+        return _no_content_marker
+
+
+class ContextWebActionsDelete(WebActionLocator):
+
+    action_id_required = True
+
+    def reply(self):
+        action = self.locate_action()
+        intid = getUtility(IIntIds).getId(self.context)
+        try:
+            get_storage().remove_context_intid(action['action_id'], intid)
+        except KeyError:
+            raise BadRequest('The webaction is not activated on this context.')
 
         self.request.response.setStatus(204)
         return _no_content_marker

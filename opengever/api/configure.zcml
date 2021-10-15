@@ -601,6 +601,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@webactions"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      factory=".webactions.ContextWebActionsPost"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@webactions"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
@@ -622,6 +630,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".webactions.WebActionsDelete"
       permission="opengever.webactions.ManageOwnWebActions"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@webactions"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      factory=".webactions.ContextWebActionsDelete"
+      permission="cmf.ModifyPortalContent"
       />
 
   <plone:service

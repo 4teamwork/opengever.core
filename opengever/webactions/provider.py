@@ -11,7 +11,9 @@ from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.memoize.view import memoize_contextless
 from zope.component import adapter
+from zope.component import getUtility
 from zope.interface import implementer
+from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
@@ -85,13 +87,17 @@ class WebActionsProvider(object):
         userid = api.user.get_current().getId()
         return self._user_in_any_of_groups(userid, tuple(action_groups))
 
-    @staticmethod
-    def _action_satisfies_scope(action):
+    def _action_satisfies_scope(self, action):
         # XXX Not sure what the logic will be with the scope argument
         # This will need to be adapted when we implement the other possible
         # scopes
         scope = action.get("scope")
-        return scope == "global"
+        if scope == "global":
+            return True
+        elif scope == "context":
+            intid = getUtility(IIntIds).getId(self.context)
+            return intid in get_storage().get_context_intids(action['action_id'])
+        return False
 
     def _action_should_be_provided_on_context(self, action):
         return (self._action_enabled(action)

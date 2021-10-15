@@ -16,18 +16,22 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.task.task import ITask
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
+from opengever.webactions.storage import get_storage
 from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
+from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.event import notify
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent import ObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
 from zope.sqlalchemy.datamanager import mark_changed
+
 
 reindex_after_copy = ['created']
 
@@ -128,6 +132,20 @@ def remove_favorites(context, event):
     to_delete = Favorite.query.filter_by(oguid=oguid)
     for favorite in to_delete:
         manager.delete(favorite.userid, favorite.favorite_id)
+
+
+def remove_from_context_webactions(context, event):
+    # Skip plone site removals. Unfortunately no deletion-order seems to be
+    # guaranteed, when removing the plone site, so it might happen that the
+    # intid utility is removed before removing content.
+    if IPloneSiteRoot.providedBy(event.object):
+        return
+
+    storage = get_storage()
+    context_intid = getUtility(IIntIds).getId(context)
+    for action in storage.list_context_intids():
+        if context_intid in action['context_intids']:
+            storage.remove_context_intid(action['action_id'], context_intid)
 
 
 def is_title_changed(descriptions):
