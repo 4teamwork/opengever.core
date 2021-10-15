@@ -32,7 +32,7 @@ def update_reference_prefixes(obj, event):
         children = catalog.unrestrictedSearchResults(
             path='/'.join(obj.getPhysicalPath()))
         for child in children:
-            child.getObject().reindexObject(idxs=['reference'])
+            child.getObject().reindexObject(idxs=['reference', 'sortable_reference'])
 
 
 def check_delete_preconditions(repository, event):
