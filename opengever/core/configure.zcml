@@ -19,11 +19,11 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
-  <upgrade-step:directory
+<!--   <upgrade-step:directory
       profile="opengever.core:default"
       directory="upgrades"
       soft_dependencies="opengever.policy.base:default"
-      />
+      /> -->
 
   <profilehook:hook
       profile="opengever.core:default"
