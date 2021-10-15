@@ -39,3 +39,21 @@ class TestReferencePrefixUpdating(SolrIntegrationTestCase):
         self.assertEquals('Client1 1.7 / 1', obj2brain(self.dossier).reference)
         self.assertEquals(u'client00000001 00000001.00000007 / 00000001',
                           solr_data_for(self.dossier, 'sortable_reference'))
+
+    @browsing
+    def test_reference_number_in_searchableText_gets_updated(self, browser):
+        self.login(self.administrator, browser)
+
+        self.assertIn('Client1 1.1 / 1',
+                      solr_data_for(self.dossier, 'SearchableText'))
+        self.assertIn('Client1 1.1 / 1 / 14',
+                      solr_data_for(self.document, 'metadata'))
+
+        browser.open(self.leaf_repofolder, view='edit')
+        browser.fill({'Repository number': u'7'}).save()
+        self.commit_solr()
+
+        self.assertIn('Client1 1.7 / 1',
+                      solr_data_for(self.dossier, 'SearchableText'))
+        self.assertIn('Client1 1.7 / 1 / 14',
+                      solr_data_for(self.document, 'metadata'))

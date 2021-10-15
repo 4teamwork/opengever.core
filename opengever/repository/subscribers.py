@@ -1,3 +1,4 @@
+from opengever.document.behaviors import IBaseDocument
 from opengever.repository.interfaces import IDuringRepositoryDeletion
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
@@ -32,7 +33,14 @@ def update_reference_prefixes(obj, event):
         children = catalog.unrestrictedSearchResults(
             path='/'.join(obj.getPhysicalPath()))
         for child in children:
-            child.getObject().reindexObject(idxs=['reference', 'sortable_reference'])
+            obj = child.getObject()
+            idxs = ['reference', 'sortable_reference']
+            if IBaseDocument.providedBy(obj):
+                idxs.append('metadata')
+            else:
+                idxs.append('SearchableText')
+
+            obj.reindexObject(idxs=idxs)
 
 
 def check_delete_preconditions(repository, event):
