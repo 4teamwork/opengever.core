@@ -4,5 +4,5 @@
     i18n_domain="opengever.base">
 
   <!-- File System Directory Views registration -->
-  <cmf:registerDirectory name="opengever.base_scripts" />
+  <cmf:registerDirectory name="opengever_base_scripts" />
 </configure>
