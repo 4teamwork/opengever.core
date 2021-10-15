@@ -8,9 +8,9 @@ from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import escape_html
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from plone import api
-from plone.app.search.browser import EVER
-from plone.app.search.browser import quote_chars
-from plone.app.search.browser import Search
+from Products.CMFPlone.browser.search import EVER
+from Products.CMFPlone.browser.search import quote_chars
+from Products.CMFPlone.browser.search import Search
 from Products.CMFPlone.browser.navtree import getNavigationRoot
 from Products.CMFPlone.PloneBatch import Batch
 from Products.CMFPlone.utils import safe_unicode
