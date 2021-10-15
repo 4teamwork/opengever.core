@@ -8,8 +8,8 @@ from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
 from operator import attrgetter
 from plone import api
+from plone.i18n.utility import LanguageBinding
 from Products.CMFCore.utils import getToolByName
-from Products.PloneLanguageTool.LanguageTool import LanguageBinding
 from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.intid.interfaces import IIntIds

@@ -1,5 +1,5 @@
 from Products.CMFCore.utils import getToolByName
-from Products.PloneLanguageTool.interfaces import INegotiateLanguage
+from plone.i18n.interfaces import INegotiateLanguage
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 

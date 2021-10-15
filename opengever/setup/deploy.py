@@ -13,7 +13,7 @@ from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.ldap_creds import configure_ldap_credentials
-from plone.app.controlpanel.language import ILanguageSelectionSchema
+from plone.i18n.interfaces import ILanguageSchema
 from plone.registry.interfaces import IRegistry
 from Products.CMFPlone.factory import _DEFAULT_PROFILE
 from Products.CMFPlone.factory import addPloneSite
@@ -232,7 +232,7 @@ class GeverDeployment(object):
 
         # REALLY set the language - the plone4 addPloneSite is really
         # buggy with languages.
-        langCP = getAdapter(self.site, ILanguageSelectionSchema)
+        langCP = getAdapter(self.site, ILanguageSchema)
         langCP.default_language = 'de-ch'
 
     def assign_group_to_role(self, site, config, group_name_key, role_name):
