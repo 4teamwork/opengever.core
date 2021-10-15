@@ -1,5 +1,5 @@
 from AccessControl.interfaces import IRoleManager
-from collective.blueprint.jsonmigrator.blueprint import LocalRoles
+from collective.jsonmigrator.blueprints.local_roles import LocalRoles
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Expression
