@@ -1,4 +1,3 @@
-from collective.z3cform.datetimewidget.interfaces import DatetimeValidationError
 from ftw.datepicker.converter import DateTimeDataConverter
 from opengever.base.date_time import as_utc
 from tzlocal import get_localzone
@@ -31,7 +30,7 @@ class UTCDatetimeDataConverter(DateTimeDataConverter):
             local_dt = get_localzone().localize(value)
             return as_utc(local_dt)
         except ValueError:
-            raise DatetimeValidationError
+            raise
 
 
 class ITableChoice(IChoice):
