@@ -7,7 +7,6 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
@@ -362,7 +361,7 @@ class IAddTaskSchema(ITask):
 class Task(Container, TaskReminderSupport):
     """Provide a container for tasks."""
 
-    implements(ITask, ITabbedviewUploadable, IResponseSupported)
+    implements(ITask, IResponseSupported)
 
     def __init__(self, *args, **kwargs):
         super(Task, self).__init__(*args, **kwargs)

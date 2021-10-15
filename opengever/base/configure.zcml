@@ -81,34 +81,6 @@
       name="complete-role-assignment-reports"
       />
 
-  <configure package="collective.quickupload.browser">
-    <browser:page
-        class="opengever.base.quickupload.OGQuickUploadView"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        for="..interfaces.IQuickUploadCapable"
-        name="quick_upload"
-        permission="cmf.AddPortalContent"
-        />
-
-    <browser:page
-        class="opengever.base.quickupload.OGQuickUploadInit"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        for="*"
-        name="quick_upload_init"
-        permission="cmf.AddPortalContent"
-        />
-
-
-    <browser:page
-        class="opengever.base.quickupload.OGQuickUploadFile"
-        layer="opengever.base.interfaces.IOpengeverBaseLayer"
-        for="*"
-        name="quick_upload_file"
-        attribute="quick_upload_file"
-        permission="cmf.AddPortalContent"
-        />
-  </configure>
-
   <adapter
       name="plone.protect.autocsrf"
       factory=".protect.OGProtectTransform"
@@ -161,11 +133,11 @@
 
   <adapter factory=".configuration.GeverSettingsAdpaterV1" />
 
-  <utility
+<!--   <utility
       name="ZPublisher.HTTPRequest.FileUpload"
       provides="plone.namedfile.interfaces.IStorage"
       factory=".namedfile.FileUploadStorable"
-      />
+      /> -->
 
   <utility
       name="tempfile._TemporaryFileWrapper"
@@ -437,8 +409,6 @@
       />
 
   <utility factory=".sequence.SequenceNumber" />
-
-  <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
 
   <utility
       factory=".interfaces.ReferenceFormatterVocabulary"

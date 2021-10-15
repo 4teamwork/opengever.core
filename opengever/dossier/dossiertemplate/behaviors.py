@@ -1,6 +1,5 @@
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base import _ as base_mf
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.vocabulary import wrap_vocabulary
@@ -69,7 +68,7 @@ class IDossierTemplateSchema(model.Schema):
     )
 
 
-class IDossierTemplateMarker(Interface, ITabbedviewUploadable):
+class IDossierTemplateMarker(Interface):
     """Marker Interface for dossiertemplates.
     """
 

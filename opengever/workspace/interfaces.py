@@ -1,4 +1,3 @@
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from zope import schema
 from zope.interface import Interface
 
@@ -7,11 +6,11 @@ class IWorkspaceRoot(Interface):
     """ Marker interface for Workspace Roots """
 
 
-class IWorkspace(Interface, ITabbedviewUploadable):
+class IWorkspace(Interface):
     """ Marker interface for Workspace """
 
 
-class IWorkspaceFolder(Interface, ITabbedviewUploadable):
+class IWorkspaceFolder(Interface):
     """ Marker interface for Workspace Folders """
 
 

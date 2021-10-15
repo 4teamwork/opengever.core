@@ -3,7 +3,6 @@ from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.dossier import _
 from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
@@ -26,7 +25,7 @@ import logging
 LOG = logging.getLogger('opengever.dossier')
 
 
-class IDossierMarker(Interface, ITabbedviewUploadable):
+class IDossierMarker(Interface):
     """Marker Interface for dossiers.
     """
 

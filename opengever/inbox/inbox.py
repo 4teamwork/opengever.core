@@ -1,4 +1,3 @@
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.inbox import _
 from opengever.ogds.models.service import ogds_service
@@ -8,7 +7,7 @@ from plone.supermodel import model
 from zope import schema
 
 
-class IInbox(model.Schema, ITabbedviewUploadable):
+class IInbox(model.Schema):
     """ Inbox for OpenGever
     """
 

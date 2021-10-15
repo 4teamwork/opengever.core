@@ -4,7 +4,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
-from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
 from opengever.docugate import is_docugate_feature_enabled
@@ -204,8 +203,6 @@ class Document(Item, BaseDocumentMixin):
     """Documents, the main data store of GEVER."""
 
     security = ClassSecurityInfo()
-
-    implements(ITabbedviewUploadable)
 
     # document state's
     removed_state = 'document-state-removed'
