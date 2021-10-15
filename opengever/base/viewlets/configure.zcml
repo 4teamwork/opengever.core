@@ -2,15 +2,6 @@
     xmlns:zope="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser">
 
-  <!-- The personal bar -->
-  <browser:viewlet
-      name="plone.personal_bar"
-      manager="plone.app.layout.viewlets.interfaces.IPortalHeader"
-      class=".personal_bar.PersonalBarViewlet"
-      permission="zope2.View"
-      layer="plonetheme.teamraum.interfaces.IPlonethemeTeamraumLayer"
-      />
-
   <browser:viewlet
       name="opengever.path_bar"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
@@ -58,15 +49,6 @@
       class=".searchbox.SearchBoxViewlet"
       permission="zope2.View"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      />
-
-  <!-- Custom content views -->
-  <browser:viewlet
-      name="opengever.contentviews"
-      manager="plone.app.layout.viewlets.interfaces.IContentViews"
-      permission="zope2.View"
-      layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      class=".contentviews.ModelContentViewsViewlet"
       />
 
   <!-- Expose language as data attribute on span HTML element -->
