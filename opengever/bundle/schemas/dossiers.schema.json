@@ -387,6 +387,13 @@
                     ],
                     "title": "Laufnummer",
                     "description": "Fortlaufend gez\u00e4hlte Nummer eines Dossiers."
+                },
+                "_old_paths": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Earlier path"
                 }
             },
             "required": [

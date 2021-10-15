@@ -83,6 +83,13 @@
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
+                },
+                "_old_paths": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Earlier path"
                 }
             },
             "required": [

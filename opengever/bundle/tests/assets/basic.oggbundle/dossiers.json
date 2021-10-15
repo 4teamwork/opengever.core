@@ -41,6 +41,10 @@
     "retention_period_annotation": null,
     "review_state": "dossier-state-resolved",
     "title": "Hanspeter Müller",
+    "_old_paths": [
+      "ordnungssystem/umwelt/earlier/dossier-12",
+      "ordnungssystem/earlier-path/dossier-12"
+    ],
     "_permissions": {
       "block_inheritance": true,
       "read": [
