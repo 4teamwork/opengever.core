@@ -1,0 +1,5 @@
+<registry>
+
+  <record interface="opengever.workspace.interfaces.IWorkspaceSettings" field="custom_invitation_mail_content" />
+
+</registry>

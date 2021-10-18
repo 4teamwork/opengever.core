@@ -36,6 +36,13 @@ class IWorkspaceSettings(Interface):
         required=False,
     )
 
+    custom_invitation_mail_content = schema.Text(
+        title=u'Invitation mail content',
+        description=u'Mail content for workspace invitation mails, dynamic '
+        'attributes `title`, `user`, `platform` and `accept_url` can be used',
+        required=True,
+    )
+
 
 class IWorkspaceMeetingSettings(Interface):
 
