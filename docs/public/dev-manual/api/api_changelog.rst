@@ -11,7 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@workflow``: Sequential task transitions now accepts ``pass_documents_to_next_task`` transition parameter.
 
 2021.21.0 (2021-10-20)
 ----------------------

@@ -124,6 +124,16 @@ class IApprovedDocuments(Schema):
     )
 
 
+class IPassDocumentsToNextTask(Schema):
+
+    pass_documents_to_next_task = schema.Bool(
+        title=u'Pass documents to the next task.',
+        description=u'Whether all document relations and documents of the '
+                    u'previous task should be passed the next task',
+        default=False,
+        required=False)
+
+
 class NoTeamsInProgressStateValidator(validator.SimpleFieldValidator):
     """Tasks not in the open state are limited:
     - Teams are only allowed if the task/forwarding is in open state.
@@ -161,13 +171,14 @@ validator.WidgetValidatorDiscriminators(
 @adapter(ITask, IBrowserRequest)
 class DefaultTransitionExtender(TransitionExtender):
 
-    schemas = [IResponse, ]
+    schemas = [IResponse, IPassDocumentsToNextTask]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         response = add_simple_response(self.context, transition=transition,
                                        text=transition_params.get('text'))
 
         self.save_related_items(response, transition_params.get('relatedItems'))
+        self.pass_documents_to_next_task(transition, transition_params)
         self.sync_change(transition, transition_params.get('text'), disable_sync)
 
     def save_related_items(self, response, related_items):
@@ -190,6 +201,23 @@ class DefaultTransitionExtender(TransitionExtender):
         if not disable_sync:
             sync_task_response(self.context, getRequest(), 'workflow',
                                transition, text)
+
+    def pass_documents_to_next_task(self, transition, transition_params):
+        if not (
+                getattr(self.context, '_v_transition_opened_next_task', False)
+                and transition_params.get('pass_documents_to_next_task')):
+            return
+
+        next_task = self.context.get_sql_object().get_next_task().oguid.resolve_object()
+        intids = getUtility(IIntIds)
+
+        current_document_ids = [intids.getId(document) for document
+                                in self.context.documents()]
+        next_task_related_items = [item.to_id for item
+                                   in ITask(next_task).relatedItems]
+        ITask(next_task).relatedItems = [
+            RelationValue(document_int_id) for document_int_id
+            in set(current_document_ids + next_task_related_items)]
 
 
 @implementer(ITransitionExtender)
@@ -256,7 +284,7 @@ validator.WidgetValidatorDiscriminators(
 @adapter(ITask, IBrowserRequest)
 class ResolveTransitionExtender(DefaultTransitionExtender):
 
-    schemas = [IResponse, IApprovedDocuments]
+    schemas = [IResponse, IApprovedDocuments, IPassDocumentsToNextTask]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         approved_documents = self.maybe_approve_documents(transition_params)
@@ -267,6 +295,7 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
         )
 
         self.save_related_items(response, transition_params.get('relatedItems'))
+        self.pass_documents_to_next_task(transition, transition_params)
         self.sync_change(transition, transition_params.get('text'), disable_sync)
 
     def maybe_approve_documents(self, transition_params):
@@ -293,13 +322,14 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
 @adapter(ITask, IBrowserRequest)
 class CloseTransitionExtender(DefaultTransitionExtender):
 
-    schemas = [IResponse, ]
+    schemas = [IResponse, IPassDocumentsToNextTask]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         response = add_simple_response(self.context, transition=transition,
                                        text=transition_params.get('text'))
 
         self.save_related_items(response, transition_params.get('relatedItems'))
+        self.pass_documents_to_next_task(transition, transition_params)
         self.sync_change(transition, transition_params.get('text'), disable_sync)
 
 
