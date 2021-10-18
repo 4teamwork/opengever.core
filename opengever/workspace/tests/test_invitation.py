@@ -3,9 +3,11 @@ from ftw.testing import freeze
 from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspace.invitation import valid_email
 from opengever.workspace.participation import serialize_and_sign_payload
 from opengever.workspace.participation.storage import IInvitationStorage
+from plone import api
 from zope.component import getUtility
 import email
 import unittest
@@ -85,3 +87,40 @@ class TestInvitationMail(IntegrationTestCase):
 
         link = "{}/@@my-invitations/accept?invitation={}".format(self.workspace.absolute_url(), payload)
         self.assertIn(link, mail.as_string().decode('quoted-printable'))
+
+    def test_use_customized_mail_content_if_configured(self):
+        self.login(self.workspace_admin)
+
+        custom_mail_template = u"""
+        Guten Tag,
+
+        Sie wurden von {user} zur Teamarbeit im Raum "{title}" eingeladen.
+
+        Mit einem Klick auf den untenstehenden Link gehts los:
+        {accept_url}.
+        """
+        api.portal.set_registry_record(
+            name='custom_invitation_mail_content',
+            interface=IWorkspaceSettings, value=custom_mail_template)
+
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+        self.assertFalse(mailing.has_messages())
+
+        with freeze(datetime(2019, 12, 27)):
+            storage = getUtility(IInvitationStorage)
+            iid = storage.add_invitation(
+                self.workspace, self.regular_user.getProperty('email'),
+                self.workspace_admin.getId(), 'WorkspaceGuest')
+            process_mail_queue()
+
+            self.assertTrue(mailing.has_messages())
+            mails = mailing.get_messages()
+            self.assertEqual(1, len(mails))
+            mail = email.message_from_string(mails[0])
+
+        mail_content = mail.as_string().decode('quoted-printable')
+        expected_customized_content = 'Sie wurden von Hugentobler Fridolin '\
+            'zur Teamarbeit im Raum "A Workspace" eingeladen.'
+        self.assertIn(expected_customized_content, mail_content)

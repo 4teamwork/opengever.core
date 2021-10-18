@@ -1,8 +1,11 @@
 from opengever.activity.mailer import Mailer
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.workspace.interfaces import IWorkspaceSettings
 from opengever.workspace.participation import serialize_and_sign_payload
+from plone import api
 from plone.app.uuid.utils import uuidToObject
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
@@ -41,22 +44,34 @@ class InvitationMailer(Mailer):
             ),
             context=self.request
         )
-        content = translate(
-            _(
-                u'invitation_mail_summary',
-                default=u'Hello,\n'
-                        u'\n'
-                        u'You were invited by ${user} to the workspace "${title}" at ${platform}.\n'
-                        u'\n'
-                        u'Please click the following link if you want to accept the invitation:\n'
-                        u'${accept_url}',
-                mapping={'title': target_workspace.title,
-                         'user': inviter.get_label(with_principal=False),
-                         'platform': get_current_admin_unit().public_url,
-                         'accept_url': accept_url}
-            ),
-            context=self.request
-        )
+
+        content_variables = {
+            'title': target_workspace.title,
+            'user': inviter.get_label(with_principal=False),
+            'platform': get_current_admin_unit().public_url,
+            'accept_url': accept_url}
+
+        custom_mail_content = api.portal.get_registry_record(
+            name='custom_invitation_mail_content',
+            interface=IWorkspaceSettings)
+        if custom_mail_content:
+            content = safe_unicode(custom_mail_content).format(
+                **content_variables)
+        else:
+            content = translate(
+                _(
+                    u'invitation_mail_summary',
+                    default=u'Hello,\n'
+                    u'\n'
+                    u'You were invited by ${user} to the workspace "${title}" at ${platform}.\n'
+                    u'\n'
+                    u'Please click the following link if you want to accept the invitation:\n'
+                    u'${accept_url}',
+                    mapping=content_variables
+                ),
+                context=self.request
+            )
+
         comment_title = translate(
             _(
                 u'invitation_mail_message_title',
