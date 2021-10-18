@@ -26,18 +26,20 @@ def attachable_documents_vocabulary(context):
         contentFilter={'portal_type': ['opengever.document.document',
                                        'ftw.mail.mail']}):
 
-        key = str(intids.getId(doc))
+        value = str(intids.getId(doc))
+        token = doc.UID()
         label = doc.Title()
-        terms.append(SimpleVocabulary.createTerm(key, key, label))
-        ids.append(key)
+        terms.append(SimpleVocabulary.createTerm(value, token, label))
+        ids.append(value)
 
     for relation in getattr(context, 'relatedItems', []):
-        key = str(relation.to_id)
+        value = str(relation.to_id)
+        token = relation.to_object.UID()
         # check if the task doesn't contain the related document allready
-        if key in ids:
+        if value in ids:
             continue
         label = relation.to_object.Title()
-        terms.append(SimpleVocabulary.createTerm(key, key, label))
+        terms.append(SimpleVocabulary.createTerm(value, token, label))
 
     return SimpleVocabulary(terms)
 
