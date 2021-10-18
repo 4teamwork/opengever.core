@@ -17,6 +17,7 @@ from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.dexterity.interfaces import IDexterityFTI
 from plone.registry.interfaces import IRegistry
+from z3c.relationfield.relation import RelationValue
 from zope.component import createObject
 from zope.component import getUtility
 from zope.component import queryUtility
@@ -119,6 +120,16 @@ class TestTaskIntegration(SolrIntegrationTestCase):
 
         view.request.set('ACTUAL_URL', self.task.absolute_url())
         self.assertTrue(view())
+
+    def test_documents_returns_related_documents_and_containing_documents(self):
+        self.login(self.regular_user)
+
+        intids = getUtility(IIntIds)
+        ITask(self.task).relatedItems = [
+            RelationValue(intids.getId(self.document))]
+
+        self.assertIn(self.taskdocument, self.task.listFolderContents())
+        self.assertItemsEqual([self.taskdocument, self.document], self.task.documents())
 
     def test_addresponse(self):
         self.login(self.dossier_responsible)
