@@ -3,7 +3,17 @@
 API Changelog
 =============
 
-2021.21.0 (unreleased)
+2021.22.0 (unreleased)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2021.21.0 (2021-10-20)
 ----------------------
 
 Breaking Changes
@@ -12,8 +22,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
 - ``@webactions``: Support activation and deactivation of context webactions (see :ref:`docs <webactions>`).
+
 
 2021.20.0 (2021-10-06)
 ----------------------
