@@ -1385,7 +1385,7 @@ class TestResolvingDossiersWithFilingNumberSupportRESTAPI(ResolveTestHelperRESTA
         self.assertEqual(400, browser.status_code)
         self.assertEqual(
             {u'error': {
-                u'message': u"[{'field': 'dossier_enddate', 'message': u'Required input is missing.', 'error': RequiredMissing('dossier_enddate')}, {'field': 'filing_action', 'message': u'Required input is missing.', 'error': RequiredMissing('filing_action')}, {'field': 'dossier_enddate', 'message': u'Required input is missing.', 'error': RequiredMissing('dossier_enddate')}, {'field': 'filing_action', 'message': u'Required input is missing.', 'error': RequiredMissing('filing_action')}]",
+                u'message': u"[{'field': 'dossier_enddate', 'message': u'Required input is missing.', 'error': RequiredMissing('dossier_enddate')}, {'field': 'filing_action', 'message': u'Required input is missing.', 'error': RequiredMissing('filing_action')}]",
                 u'type': u'Bad Request'}},
             browser.json)
 

@@ -65,8 +65,8 @@ class TransitionExtender(object):
         values = {}
 
         for schema in self.schemas:
-            schema_data, errors = self._deserialize_schema(schema, transition_params, collect_errors)
-            errors.extend(errors)
+            schema_data, deserialize_errors = self._deserialize_schema(schema, transition_params, collect_errors)
+            errors.extend(deserialize_errors)
             values.update(schema_data)
 
         return values, errors
