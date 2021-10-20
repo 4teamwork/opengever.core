@@ -10,6 +10,36 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.21.0 (2021-10-20)
+----------------------
+
+New features:
+
+
+- Implement webactions with scope context. [tinagerber]
+- Add redirect support for old paths to bundle import. [phgross]
+- Make workspace invitation mail content customizable. [phgross]
+
+
+Bug fixes:
+
+
+- Correct IDs for ContactFolders, InboxContainers, Inboxes, CommitteeContainers and TemplateFolders created over the API. [njohner]
+- Do not bypass NameFromTitle for subtasks created when delegating a task. [njohner]
+- Strip outlooks AD information in mails document_author extraction. [phgross]
+- Fix accepting remote forwarding in new dossier without response text. [njohner]
+- Reindex reference and searchable text when moving documents and dossiers. [njohner]
+- Also update sortable_reference and SearchableText when reference_prefix has changed. [phgross]
+
+
+Other changes:
+
+
+- Enable nightly jobs. [njohner]
+- Use UIDs as tokens for documents when delegating a task. [njohner]
+- Add application/msonenote to OC editable types. [njohner]
+
+
 2021.20.0 (2021-10-06)
 ----------------------
 
