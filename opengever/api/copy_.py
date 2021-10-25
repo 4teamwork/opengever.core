@@ -1,11 +1,13 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from Acquisition import aq_parent
+from opengever.api.utils import get_obj_by_path
 from opengever.base import _
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from plone.restapi.services.copymove.copymove import Copy
 from zope.container.interfaces import INameChooser
 from zope.i18n import translate
+import six
 
 
 class Copy(Copy):
@@ -26,6 +28,28 @@ class Copy(Copy):
             result["target"] = obj.absolute_url()
 
         return results
+
+    def get_object(self, key):
+        """Copied from the baseclass but uses utils get_obj_by_path
+        to fix a traversal bug, when not all path elements are accessible.
+        """
+        if isinstance(key, six.string_types):
+            if key.startswith(self.portal_url):
+                # Resolve by URL
+                key = key[len(self.portal_url) + 1 :]
+                if six.PY2:
+                    key = key.encode("utf8")
+                return get_obj_by_path(self.portal, key)
+            elif key.startswith("/"):
+                if six.PY2:
+                    key = key.encode("utf8")
+                # Resolve by path
+                return get_obj_by_path(self.portal, key.lstrip("/"))
+            else:
+                # Resolve by UID
+                brain = self.catalog(UID=key)
+                if brain:
+                    return brain[0].getObject()
 
     def recursive_rename_and_fix_creator(self, obj):
         for subobj in obj.objectValues():
