@@ -654,3 +654,21 @@ Wird keine Position angegeben, wird die Aufgabe am Ende der Aufgabenliste hinzug
       }
 
 Der Parameter steht nur für Aufgaben innerhalb einer sequenziellen Aufgabe zur Verfügung.
+
+Dokumente automatisch als Verweis der nächsten Aufgabe hinzufügen
+-----------------------------------------------------------------
+Bei Transitionen, welche automatisch das Öffnen der nächsten Aufgabe zur Folge haben (sequentiellen Aufgaben), kann über den Boolean-Parameter ``pass_documents_to_next_task`` gesteuert werden, ob alle Dokumente der aktuellen Aufgabe automatisch als Verweis in der nächsten Aufgabe hinzugefügt werden sollen:
+
+Wird der Parameter nicht verwendet, werden keine Dokumente automatisch als Verweis eingetragen.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /(path)/@workflow/task-transition-open-resolved HTTP/1.1
+      Accept: application/json
+
+      {
+        "text": "Ok, wird gemacht!",
+        "pass_documents_to_next_task": "true"
+      }

@@ -13,7 +13,6 @@ from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
@@ -28,36 +27,8 @@ class Overview(BrowserView, GeverTabMixin):
         'templates/task_reminder_selector.pt')
 
     def documents(self):
-        """Return containing documents and related documents."""
-        def _get_documents():
-            """Return documents in this task and subtasks."""
-            documents = getToolByName(self.context, 'portal_catalog')(
-                portal_type=['opengever.document.document', 'ftw.mail.mail', ],
-                path=dict(
-                    depth=2,
-                    query='/'.join(self.context.getPhysicalPath())),
-                )
-            return [document.getObject() for document in documents]
-
-        def _get_related_documents():
-            """Return related documents in this task."""
-            # Related documents
-            related_documents = []
-
-            for item in self.context.relatedItems:
-                obj = item.to_object
-
-                if obj.portal_type in [
-                        'opengever.document.document',
-                        'ftw.mail.mail',
-                    ]:
-                    obj._v__is_relation = True
-                    related_documents.append(obj)
-
-            return related_documents
-
         # merge and sort the two different lists
-        document_list = _get_documents() + _get_related_documents()
+        document_list = self.context.documents()
         document_list.sort(lambda a, b: cmp(b.modified(), a.modified()))
 
         return IContentListing(document_list)

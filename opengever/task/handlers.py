@@ -112,6 +112,10 @@ def review_state_changed(task, event):
     if task.is_from_sequential_tasktemplate:
         task.open_next_task()
 
+        # We need to know later on the after_transition_hook of the task
+        # transition extender if this review state change opened a next task.
+        task._v_transition_opened_next_task = True
+
 
 def set_initial_state(task, event):
     """When adding a subtask to a sequential task process, the new task should

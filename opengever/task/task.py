@@ -717,6 +717,37 @@ class Task(Container, TaskReminderSupport):
                 obj=self, transition='task-transition-open-planned')
             self.sync()
 
+    def documents(self):
+        """Returns contained documents and related documents."""
+        def _get_documents():
+            """Return documents in this task and subtasks."""
+            documents = getToolByName(self, 'portal_catalog')(
+                portal_type=['opengever.document.document', 'ftw.mail.mail', ],
+                path=dict(
+                    depth=2,
+                    query='/'.join(self.getPhysicalPath())),
+                )
+            return [document.getObject() for document in documents]
+
+        def _get_related_documents():
+            """Return related documents in this task."""
+            # Related documents
+            related_documents = []
+
+            for item in self.relatedItems:
+                obj = item.to_object
+
+                if obj.portal_type in [
+                        'opengever.document.document',
+                        'ftw.mail.mail',
+                    ]:
+                    obj._v__is_relation = True
+                    related_documents.append(obj)
+
+            return related_documents
+
+        return _get_documents() + _get_related_documents()
+
 
 def related_document(context):
     intids = getUtility(IIntIds)
