@@ -137,6 +137,7 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
 
         main_task = self.dossier.listFolderContents()[-1]
         self.assertEquals(u'Verfahren Neuanstellung', main_task.title)
+        self.assertEquals(u'Neuanstellungsprozess MA XY', main_task.text)
         self.assertEquals(self.regular_user.getId(), main_task.responsible)
         self.assertEquals(self.regular_user.getId(), main_task.issuer)
         self.assertEquals('direct-execution', main_task.task_type)

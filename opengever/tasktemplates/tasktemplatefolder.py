@@ -74,7 +74,7 @@ class TaskTemplateFolderTrigger(object):
 
     def create_main_task(self):
         title = self.main_task_overrides.get("title", self.context.title)
-        text = self.main_task_overrides.get("text")
+        text = self.main_task_overrides.get("text", self.context.text)
         deadline = self.main_task_overrides.get("deadline", self.get_main_task_deadline())
         data = dict(
             title=title,

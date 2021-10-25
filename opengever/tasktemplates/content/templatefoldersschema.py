@@ -17,11 +17,17 @@ class ITaskTemplateFolderSchema(model.Schema):
     model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
-        fields=[u'sequence_type'])
+        fields=[u'sequence_type', 'text'])
 
     directives.order_after(sequence_type='IOpenGeverBase.description')
     sequence_type = schema.Choice(
         title=_(u'label_sequence_type', default='Type'),
         vocabulary=sequence_type_vocabulary,
         required=True,
+    )
+
+    directives.order_after(text='sequence_type')
+    text = schema.Text(
+        title=_(u"label_text", default=u"Text"),
+        required=False,
     )
