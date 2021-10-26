@@ -1,5 +1,9 @@
-from opengever.testing import IntegrationTestCase
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.testing import IntegrationTestCase
 import json
 
 
@@ -83,3 +87,34 @@ class TestCopyPasteAPI(IntegrationTestCase):
         self.assertEqual({u'message': u'Checked out documents cannot be copied.',
                           u'type': u'CopyError'},
                          browser.json)
+
+    @browsing
+    def test_copy_document_when_not_all_path_elemnts_are_accessible(self, browser):
+        self.login(self.administrator, browser=browser)
+        subdossier = create(Builder('dossier')
+                            .titled(u'Sub')
+                            .within(self.protected_dossier))
+        RoleAssignmentManager(subdossier).add_or_update_assignments(
+            [SharingRoleAssignment(self.regular_user.id, ['Editor'])])
+        doc = create(Builder('document')
+                     .titled(u'doc')
+                     .within(subdossier))
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                '{}/@copy'.format(self.dossier.absolute_url()),
+                method='POST',
+                data=json.dumps(
+                    {'source': u'/'.join(doc.getPhysicalPath()).replace(u'/plone', u'')}
+                ),
+                headers=self.api_headers)
+
+        self.assertEquals(1, len(children['added']))
+        copy = children["added"].pop()
+
+        self.assertEquals(200, browser.status_code)
+        self.assertEquals(
+            [{u'source': doc.absolute_url(), u'target': copy.absolute_url()}],
+            browser.json)
