@@ -25,6 +25,9 @@ For known actor types use:
 """
 
 from opengever.base.utils import escape_html
+from opengever.contact.models import Organization
+from opengever.contact.models import OrgRole
+from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
 from opengever.ogds.base import _
@@ -415,6 +418,40 @@ class ContactActor(Actor):
 
 
 @implementer(IActor)
+class SQLContactActor(Actor):
+    """XXX: Can be removed when removing the SQLContact module. """
+
+    css_class = 'actor-contact'
+    actor_type = 'sqlcontact'
+
+    def __init__(self, identifier, contact=None):
+        super(SQLContactActor, self).__init__(identifier)
+        self.contact = contact
+
+    def corresponds_to(self, user):
+        return False
+
+    def get_label(self, with_principal=True):
+        return self.contact.get_title(with_former_id=with_principal)
+
+    def get_profile_url(self):
+        return None
+
+    def representatives(self):
+        return []
+
+    def represents(self):
+        return None
+
+    def represents_url(self):
+        return None
+
+    def get_portrait_url(self):
+        return None
+
+
+
+@implementer(IActor)
 class PloneUserActor(Actor):
 
     def __init__(self, identifier, user=None):
@@ -622,6 +659,14 @@ class ActorLookup(object):
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
+    def is_sql_contact(self):
+        sql_contact_prefixes = ['organization:', 'person:', 'org_role:']
+        for prefix in sql_contact_prefixes:
+            if self.identifier.startswith(prefix):
+                return True
+
+        return False
+
     def is_system_actor(self):
         return self.identifier == SYSTEM_ACTOR_ID
 
@@ -640,6 +685,21 @@ class ActorLookup(object):
             contact = contacts[0]
 
         return ContactActor(self.identifier, contact=contact)
+
+    def create_sql_contact_actor(self, contact=None):
+        if not contact:
+            type_, id_ = self.identifier.split(':')
+            if self.identifier.startswith('person'):
+                contact = Person.get(id_)
+            elif self.identifier.startswith('organization'):
+                contact = Organization.get(id_)
+            else:
+                contact = OrgRole.get(id_)
+
+            if not contact:
+                return self.create_null_actor()
+
+        return SQLContactActor(self.identifier, contact=contact)
 
     def is_plone_user(self, user):
         return IPropertiedUser.providedBy(user) or IMemberData.providedBy(user)
@@ -698,6 +758,9 @@ class ActorLookup(object):
 
         elif self.is_contact():
             return self.create_contact_actor()
+
+        elif self.is_sql_contact():
+            return self.create_sql_contact_actor()
 
         elif self.is_team():
             return self.create_team_actor()

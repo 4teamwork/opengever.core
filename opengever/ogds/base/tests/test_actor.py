@@ -5,12 +5,13 @@ from opengever.ogds.base.actor import CommitteeActor
 from opengever.ogds.base.actor import ContactActor
 from opengever.ogds.base.actor import InboxActor
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
-from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_IDS
+from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.actor import InteractiveActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
+from opengever.ogds.base.actor import SQLContactActor
 from opengever.ogds.base.actor import TeamActor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -187,6 +188,53 @@ class TestActorLookup(IntegrationTestCase):
             'Interactive actor must be one of '
             'interactive_actor:responsible, interactive_actor:current_user',
             str(error.exception))
+
+
+class TestSQLContactActor(IntegrationTestCase):
+
+    features = ('contact', )
+
+    def test_person_actor_lookup(self):
+        self.login(self.regular_user)
+        actor = Actor.lookup('person:1')
+
+        self.assertIsInstance(actor, SQLContactActor)
+        self.assertEqual(u'B\xfchler Josef', actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(None, actor.represents())
+
+    def test_organization_actor_lookup(self):
+        self.login(self.regular_user)
+        actor = Actor.lookup('organization:2')
+
+        self.assertIsInstance(actor, SQLContactActor)
+        self.assertEqual(u'Meier AG', actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(None, actor.represents())
+
+    def test_orgrole_actor_lookup(self):
+        self.login(self.regular_user)
+
+        peter = create(Builder('person')
+                       .having(firstname=u'Peter', lastname=u'B\xfchler'))
+        buhler_ag = create(Builder('organization').named(u'Buhler AG'))
+        create(Builder('org_role')
+               .having(person=peter,
+                       organization=buhler_ag,
+                       function=u'CEO'))
+
+        actor = Actor.lookup('org_role:1')
+
+        self.assertIsInstance(actor, SQLContactActor)
+        self.assertEqual(u'B\xfchler Peter - Buhler AG (CEO)',
+                         actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(None, actor.represents())
+
+    def test_sql_contact_actor_lookup_for_not_existing_contact(self):
+        self.login(self.regular_user)
+        actor = Actor.lookup('person:not')
+        self.assertIsInstance(actor, NullActor)
 
 
 class TestActorCorresponding(IntegrationTestCase):
