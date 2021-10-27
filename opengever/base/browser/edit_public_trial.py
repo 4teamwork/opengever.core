@@ -1,12 +1,15 @@
 from opengever.base import _
 from opengever.base.behaviors.classification import IClassification
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.base import DOSSIER_STATES_CLOSED
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.utils import find_parent_dossier
 from opengever.inbox.inbox import IInbox
+from plone import api
 from plone.dexterity.browser.edit import DefaultEditForm
 from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from z3c.form.field import Fields
 from zExceptions import Unauthorized
 
@@ -71,3 +74,18 @@ class EditPublicTrialForm(DefaultEditForm):
             raise Unauthorized('You cannot access this resource.')
 
         super(EditPublicTrialForm, self).update()
+
+
+class IsEditPublicTrialStatusAvailable(BrowserView):
+
+    def __call__(self):
+        if not IBaseDocument.providedBy(self.context):
+            return False
+
+        parent_dossier = self.context.get_parent_dossier()
+        state = api.content.get_state(parent_dossier, default=None)
+        if state not in DOSSIER_STATES_CLOSED:
+            return False
+
+        return can_access_public_trial_edit_form(
+            api.user.get_current(), self.context)

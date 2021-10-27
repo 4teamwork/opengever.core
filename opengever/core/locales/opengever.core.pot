@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-08-02 06:06+0000\n"
+"POT-Creation-Date: 2021-10-27 12:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,11 @@ msgstr ""
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20210310104008_add_edit_items_action/actions.xml
 msgid "Edit metadata"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20211026174552_add_edit_public_trial_status_action/actions.xml
+msgid "Edit public trial status"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
