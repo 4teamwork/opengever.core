@@ -1,1 +1,0 @@
-Fix copying an object with the api where not all path elements are accessible. [phgross]

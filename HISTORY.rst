@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.21.1 (2021-10-27)
+----------------------
+
+Bug fixes:
+
+
+- Fix copying an object with the api where not all path elements are accessible. [phgross]
+- Add minimal support to Actor for SQLContacts. [phgross]
+
+
 2021.21.0 (2021-10-20)
 ----------------------
 
