@@ -378,3 +378,23 @@ Dokument Genehmigungen, welche via Aufgabe erteilt wurden, lassen sich als zusä
             ]
         }
     }
+
+
+Bearbeiten des Öffentlichkeitsstatus
+------------------------------------
+
+Für die Bearbeitung des Öffentlichkeitsstatus eines Dokuments in einem abgeschlossen Geschäft, steht ein separater PATCH Endpoint ``@public-trial-status`` zur Verfügung. Dieser funktioniert identisch zum normalen Bearbeitung eines Dokuments, erlaubt aber ausschliesslich die Bearbeitung der Metadaten ``public_trial`` und ``public_trial_statement``.
+
+  .. sourcecode:: http
+
+    PATCH /ordnungssystem/dossier-23/document-11 HTTP/1.1
+    Accept: application/json
+
+    {
+      "public_trial": "limited-public",
+      "public_trial_statement": "Herr Muster, 03.02.2012, genehmigt."
+    }
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content

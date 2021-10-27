@@ -83,6 +83,10 @@ class IsEditPublicTrialStatusAvailable(BrowserView):
             return False
 
         parent_dossier = self.context.get_parent_dossier()
+        if not parent_dossier:
+            # Document inside a workspace
+            return False
+
         state = api.content.get_state(parent_dossier, default=None)
         if state not in DOSSIER_STATES_CLOSED:
             return False

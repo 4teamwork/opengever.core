@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add additional PATCH endpoint ``public-trial-status``.
 - ``@workflow``: Sequential task transitions now accepts ``pass_documents_to_next_task`` transition parameter.
 
 2021.21.0 (2021-10-20)
