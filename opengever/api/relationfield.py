@@ -1,3 +1,4 @@
+from opengever.api.utils import get_obj_by_path
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.deserializer.relationfield import RelationChoiceFieldDeserializer
@@ -44,11 +45,11 @@ class GeverRelationChoiceFieldDeserializer(RelationChoiceFieldDeserializer):
             portal_url = portal.absolute_url()
             if value.startswith(portal_url):
                 # Resolve by URL
-                obj = self.get_obj_by_path(portal, value[len(portal_url) + 1:])
+                obj = get_obj_by_path(portal, value[len(portal_url) + 1:])
                 resolved_by = "URL"
             elif value.startswith("/"):
                 # Resolve by path
-                obj = self.get_obj_by_path(portal, value.lstrip("/"))
+                obj = get_obj_by_path(portal, value.lstrip("/"))
                 resolved_by = "path"
             else:
                 # Resolve by UID
@@ -66,14 +67,3 @@ class GeverRelationChoiceFieldDeserializer(RelationChoiceFieldDeserializer):
 
         self.field.validate(obj)
         return obj
-
-    def get_obj_by_path(self, portal, path):
-        """restrictedTraverse checks all of the objects along the path are
-        validated with the security machinery. But we only need to know if the
-        user is able to access the given object."""
-        path = path.rstrip('/').split('/')
-        parent = portal.unrestrictedTraverse(path[:-1], None)
-        if not parent:
-            return None
-
-        return parent.restrictedTraverse(path[-1], None)
