@@ -1501,5 +1501,12 @@
       permission="opengever.repository.UnlockReferencePrefix"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@public-trial-status"
+      for="opengever.document.behaviors.IBaseDocument"
+      factory=".public_trial.PublicTrialStatusPatch"
+      permission="zope2.View"
+      />
 
 </configure>
