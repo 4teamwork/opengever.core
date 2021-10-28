@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-29 14:29+0000\n"
+"POT-Creation-Date: 2021-10-28 09:03+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -93,6 +93,11 @@ msgstr "Choose the responsible user's organization / department or select 'Inter
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_task_type"
 msgstr "Choose the task type."
+
+#. Default: "Prefills the comment field of the main task"
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "help_tasktemplatefolder_text"
+msgstr "Used as a description of the main task when the tasktemplate folder is triggered"
 
 #. German translation: Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein.
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -234,6 +239,7 @@ msgstr "Task template"
 #. German translation: Kommentar
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "label_text"
 msgstr "Text"
 

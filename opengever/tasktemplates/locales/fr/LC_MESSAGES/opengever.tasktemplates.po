@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-29 14:29+0000\n"
+"POT-Creation-Date: 2021-10-28 09:03+0000\n"
 "PO-Revision-Date: 2017-12-03 11:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tasktemplates/fr/>\n"
@@ -79,6 +79,11 @@ msgstr "Choix du client du mandataire ou choisissez \"utilisateur interactif\"."
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_task_type"
 msgstr "Choisir le type de tâche."
+
+#. Default: "Prefills the comment field of the main task"
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "help_tasktemplatefolder_text"
+msgstr "Utilisé comme description de la tâche principale lorsque le déroulement standard est enclenchée"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_text"
@@ -194,6 +199,7 @@ msgstr "Modèle de tâches"
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "label_text"
 msgstr "commentaire"
 

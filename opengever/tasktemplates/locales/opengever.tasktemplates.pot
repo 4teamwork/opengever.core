@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-29 14:29+0000\n"
+"POT-Creation-Date: 2021-10-28 09:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,6 +79,11 @@ msgstr ""
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_task_type"
+msgstr ""
+
+#. Default: "Prefills the comment field of the main task"
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
+msgid "help_tasktemplatefolder_text"
 msgstr ""
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -195,6 +200,7 @@ msgstr ""
 
 #. Default: "Text"
 #: ./opengever/tasktemplates/content/tasktemplate.py
+#: ./opengever/tasktemplates/content/templatefoldersschema.py
 msgid "label_text"
 msgstr ""
 
