@@ -17,7 +17,8 @@ class TestTaskReporter(IntegrationTestCase):
         browser.open(view='task_report',
                      data={'view_name': 'mytasks',
                            'task_ids': [self.task.get_sql_object().task_id,
-                                        self.meeting_task.get_sql_object().task_id]})
+                                        self.meeting_task.get_sql_object().task_id,
+                                        self.subtask.get_sql_object().task_id]})
 
         with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
             tmpfile.write(browser.contents)
@@ -28,7 +29,7 @@ class TestTaskReporter(IntegrationTestCase):
         self.assertSequenceEqual(
             [u'Title', u'State',
              u'Deadline', u'Completed on',
-             u'Dossier', u'Issuer',
+             u'Dossier', u'Main task', u'Issuer',
              u'Issuing organization', u'Responsible',
              u'Task type', 'Tenant', u'Sequence number',
              u'Description'],
@@ -38,7 +39,7 @@ class TestTaskReporter(IntegrationTestCase):
         self.assertSequenceEqual(
             [self.task.title,  u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
-             self.dossier.title, u'Ziegler Robert (robert.ziegler)',
+             self.dossier.title, None, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
              u'For your review', u'plone', 1, u'A description'],
             [cell.value for cell in list(workbook.active.rows)[1]])
@@ -47,10 +48,19 @@ class TestTaskReporter(IntegrationTestCase):
         self.assertSequenceEqual(
             [self.meeting_task.title, u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
-             self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
+             self.meeting_dossier.title, None, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
              u'For your review', u'plone', 9, None],
             [cell.value for cell in list(workbook.active.rows)[2]])
+
+        # self.subtask
+        self.assertSequenceEqual(
+            [self.subtask.title,  u'Resolved',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.dossier.title, self.task.title, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'For your review', u'plone', 2, None],
+            [cell.value for cell in list(workbook.active.rows)[3]])
 
     @browsing
     def test_respects_column_tabbedview_settings_if_exists(self, browser):
@@ -114,7 +124,7 @@ class TestTaskReporter(IntegrationTestCase):
         self.assertSequenceEqual(
             [self.task.title,  u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
-             self.dossier.title, u'Ziegler Robert (robert.ziegler)',
+             self.dossier.title, None, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
              u'For your review', u'plone', 1, None],
             [cell.value for cell in task_cells])
@@ -124,7 +134,7 @@ class TestTaskReporter(IntegrationTestCase):
         self.assertSequenceEqual(
             [self.meeting_task.title, u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
-             self.meeting_dossier.title, u'Ziegler Robert (robert.ziegler)',
+             self.meeting_dossier.title, None, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
              u'For your review', u'plone', 9, None],
             [cell.value for cell in list(workbook.active.rows)[2]])

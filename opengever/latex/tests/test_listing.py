@@ -2,11 +2,17 @@ from datetime import date
 from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.pdfgenerator.builder import Builder as PDFBuilder
+from ftw.pdfgenerator.interfaces import ILaTeXView
+from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
 from lxml.cssselect import CSSSelector
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.listing import ILaTexListing
+from opengever.latex.tasklisting import ITaskListingLayer
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
@@ -285,6 +291,31 @@ class TestTaskListings(BaseLatexListingTest):
         task_id = self.task.get_sql_object().id
         browser.login().open(data={'pdf-tasks-listing:method': 1,
                                    'task_ids:list': task_id})
+
+
+class TestTaskListingLaTeXView(IntegrationTestCase):
+
+    def test_task_listing_latex_view_shows_main_task(self):
+        self.login(self.regular_user)
+        subsubtask = create(Builder('task')
+                            .titled(u'My Subsubtask')
+                            .having(issuer=self.dossier_responsible.id,
+                                    responsible=self.regular_user.id,
+                                    responsible_client='fa',
+                                    task_type='information')
+                            .within(self.subtask))
+        provide_request_layer(self.request, ITaskListingLayer)
+        self.request.form['tasks'] = [
+            self.task.absolute_url(), self.subtask.absolute_url(), subsubtask]
+
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
+        view = getMultiAdapter((self.dossier, self.request, layout), ILaTeXView)
+
+        subtask_row = view.get_row_for_item(self.subtask.get_sql_object())
+        subsubtask_row = view.get_row_for_item(subsubtask.get_sql_object())
+        self.assertIn(self.task.Title(), subtask_row)
+        self.assertIn(self.task.Title(), subsubtask_row)
+        self.assertNotIn(self.subtask.Title(), subsubtask_row)
 
 
 class TestJournalListings(BaseLatexListingTest):

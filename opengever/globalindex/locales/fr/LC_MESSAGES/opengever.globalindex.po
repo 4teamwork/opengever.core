@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-05-26 14:29+0000\n"
+"POT-Creation-Date: 2021-10-26 06:53+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/fr/>\n"
@@ -53,6 +53,11 @@ msgstr "Mandant"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_issuing_org_unit"
 msgstr "Donneur d'ordre / mandant"
+
+#. Default: "Main task"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_main_task"
+msgstr "Tâche principale"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_responsible"
