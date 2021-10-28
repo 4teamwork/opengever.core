@@ -317,6 +317,37 @@ class TestTaskListingLaTeXView(IntegrationTestCase):
         self.assertIn(self.task.Title(), subsubtask_row)
         self.assertNotIn(self.subtask.Title(), subsubtask_row)
 
+    def test_task_listing_latex_view_includes_subtasks(self):
+        self.login(self.regular_user)
+        subsubtask = create(Builder('task')
+                            .titled(u'My Subsubtask')
+                            .having(issuer=self.dossier_responsible.id,
+                                    responsible=self.regular_user.id,
+                                    responsible_client='fa',
+                                    task_type='information')
+                            .within(self.subtask))
+        another_subtask = create(Builder('task')
+                                 .titled(u'Another subtask')
+                                 .having(issuer=self.dossier_responsible.id,
+                                         responsible=self.regular_user.id,
+                                         responsible_client='fa',
+                                         task_type='information')
+                                 .within(self.task))
+        provide_request_layer(self.request, ITaskListingLayer)
+        self.request.form['tasks'] = [self.task.absolute_url()]
+        self.request.form['include_subtasks'] = 'true'
+
+        layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
+        view = getMultiAdapter((self.dossier, self.request, layout), ILaTeXView)
+
+        task_row = view.get_row_for_item(self.task.get_sql_object())
+        subtask_row = view.get_row_for_item(self.subtask.get_sql_object())
+        subsubtask_row = view.get_row_for_item(subsubtask.get_sql_object())
+        another_subtask_row = view.get_row_for_item(another_subtask.get_sql_object())
+
+        self.assertEqual([task_row, another_subtask_row, subtask_row,
+                          subsubtask_row], view.get_rows())
+
 
 class TestJournalListings(BaseLatexListingTest):
 

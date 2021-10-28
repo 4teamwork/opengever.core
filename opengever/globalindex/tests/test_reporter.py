@@ -138,3 +138,90 @@ class TestTaskReporter(IntegrationTestCase):
              u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
              u'For your review', u'plone', 9, None],
             [cell.value for cell in list(workbook.active.rows)[2]])
+
+    @browsing
+    def test_include_subtasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='task_report',
+                     data={'view_name': 'mytasks',
+                           'include_subtasks': True,
+                           'tasks': [self.task.absolute_url(),
+                                     self.meeting_task.absolute_url()]})
+
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(browser.contents)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        # self.task
+        self.assertSequenceEqual(
+            [self.task.title,  u'In progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.dossier.title, None, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'For your review', u'plone', 1, None],
+            [cell.value for cell in list(workbook.active.rows)[1]])
+
+        # self.subtask
+        self.assertSequenceEqual(
+            [self.subtask.title,  u'Resolved',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.dossier.title, self.task.title, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'For your review', u'plone', 2, None],
+            [cell.value for cell in list(workbook.active.rows)[2]])
+
+        # self.meeting_task
+        self.assertSequenceEqual(
+            [self.meeting_task.title, u'In progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.meeting_dossier.title, None, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
+             u'For your review', u'plone', 9, None],
+            [cell.value for cell in list(workbook.active.rows)[3]])
+
+        # self.meeting_subtask
+        self.assertSequenceEqual(
+            [self.meeting_subtask.title, u'Resolved',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.meeting_dossier.title, self.meeting_task.title,
+             u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
+             None, u'plone', 10, None],
+            [cell.value for cell in list(workbook.active.rows)[4]])
+
+    @browsing
+    def test_does_not_include_subtasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(view='task_report',
+                     data={'view_name': 'mytasks',
+                           'include_subtasks': False,
+                           'tasks': [self.task.absolute_url(),
+                                     self.meeting_task.absolute_url()]})
+
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(browser.contents)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        # self.task
+        task_cells = list(workbook.active.rows)[1]
+        self.assertSequenceEqual(
+            [self.task.title,  u'In progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.dossier.title, None, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+             u'For your review', u'plone', 1, None],
+            [cell.value for cell in task_cells])
+        self.assertEqual(self.task.absolute_url(), task_cells[0].hyperlink.target)
+
+        # self.meeting_task
+        self.assertSequenceEqual(
+            [self.meeting_task.title, u'In progress',
+             datetime(2016, 11, 1, 0, 0), None,
+             self.meeting_dossier.title, None, u'Ziegler Robert (robert.ziegler)',
+             u'Finanz\xe4mt', u'Ziegler Robert (robert.ziegler)',
+             u'For your review', u'plone', 9, None],
+            [cell.value for cell in list(workbook.active.rows)[2]])
