@@ -149,6 +149,7 @@ def start(zope_layer_dotted_name):
     listener.register_function(zsl.zodb_setup, 'zodb_setup')
     listener.register_function(zsl.zodb_teardown, 'zodb_teardown')
     listener.register_function(zsl.isolate, 'isolate')  # PATCH
+    listener.register_function(lambda: None, 'connectiontest')
 
     robotframework_server.print_urls(zsl.zope_layer, listener)
 
