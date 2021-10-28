@@ -1222,6 +1222,14 @@ Whenever the application needs to support a new version of GEVER, a developer re
 of the testserver, so that compatibility with the new version can be proven.
 
 
+Connectiontest
+~~~~~~~~~~~~~~
+
+The connection from the ``testserverctl`` to the XMLRPC-Server can be tested with ``bin/testserverctl connectiontest``.
+This will result in a "Connection refused" error as long as the testserver is starting and will do nothing when the server is ready for the first ``isolate`` or ``zodb_setup``.
+This can be used as docker healthcheck.
+
+
 Testing Inbound Mail
 --------------------
 
