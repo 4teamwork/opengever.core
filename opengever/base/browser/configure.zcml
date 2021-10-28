@@ -188,6 +188,13 @@
       />
 
   <browser:page
+      for="*"
+      name="is_edit_public_trial_status_available"
+      class=".edit_public_trial.IsEditPublicTrialStatusAvailable"
+      permission="zope2.View"
+      />
+
+  <browser:page
       for="plone.app.layout.navigation.interfaces.INavigationRoot"
       name="personal-preferences"
       class=".personalpreferences.PersonalPreferences"

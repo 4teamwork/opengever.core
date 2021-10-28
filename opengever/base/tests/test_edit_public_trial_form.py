@@ -109,3 +109,40 @@ class TestEditPublicTrialForm(IntegrationTestCase):
         browser.visit(self.document, view='edit_public_trial')
         browser.find('Cancel').click()
         self.assertEquals(self.document.absolute_url(), browser.url)
+
+
+class TestEditPublicTrialStatusAction(IntegrationTestCase):
+    """The complete can_access_public_trial_edit_form method
+    is tested TestEditPublicTrialHelperFunction testcase
+    """
+
+    @browsing
+    def test_action_only_available_for_documents(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('dossier-state-resolved', self.dossier)
+
+        browser.open(
+            '{}/@actions'.format(self.document.absolute_url()),
+            method='GET', headers=self.api_headers)
+        self.assertIn(
+            u'edit-public-trial-status',
+            [action['id'] for action in browser.json['ui_context_actions']])
+
+        browser.open(
+            '{}/@actions'.format(self.dossier.absolute_url()),
+            method='GET', headers=self.api_headers)
+        self.assertNotIn(
+            u'edit-public-trial-status',
+            [action['id'] for action in browser.json['ui_context_actions']])
+
+    @browsing
+    def test_checks_for_dossier_status(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.set_workflow_state('dossier-state-inactive', self.dossier)
+
+        browser.open(
+            '{}/@actions'.format(self.document.absolute_url()),
+            method='GET', headers=self.api_headers)
+        self.assertNotIn(
+            u'edit-public-trial-status',
+            [action['id'] for action in browser.json['ui_context_actions']])
