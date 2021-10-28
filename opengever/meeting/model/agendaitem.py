@@ -180,7 +180,7 @@ class AgendaItem(Base):
             return str(self.decision_number)
 
         title = period.title
-        return '{} / {}'.format(title, self.decision_number)
+        return u'{} / {}'.format(title, self.decision_number)
 
     def get_dossier_reference_number(self):
         if self.has_proposal:

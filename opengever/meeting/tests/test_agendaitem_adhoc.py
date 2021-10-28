@@ -198,6 +198,19 @@ class TestAdHocAgendaItem(IntegrationTestCase):
             self.assertEqual(u'2016 / 2', agenda_item.get_decision_number())
 
     @browsing
+    def test_get_decision_number_does_not_raise_unicode_error(self, browser):
+        with freeze(datetime(2016, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            self.login(self.committee_responsible, browser)
+            self.period.title = u'P\xe9riode'
+            agenda_item = self.schedule_ad_hoc(self.meeting, u'Tisch Traktandum')
+
+            browser.open(self.meeting, view='agenda_items/list')
+            browser.open(browser.json['items'][0]['decide_link'])
+            browser.open(self.meeting, view='agenda_items/list')
+
+            self.assertEqual(u'P\xe9riode / 2', agenda_item.get_decision_number())
+
+    @browsing
     def test_create_ad_hoc_agenda_item_excerpt(self, browser):
         """When creating an excerpt of an agenda item, it should copy the
         proposal document into the meeting dossier for further editing.
