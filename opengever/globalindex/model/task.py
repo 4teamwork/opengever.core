@@ -355,6 +355,12 @@ class Task(Base):
         """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
 
+    @property
+    def has_remote_predecessor(self):
+        if self.predecessor:
+            return self.predecessor.admin_unit_id != self.admin_unit_id
+        return False
+
     def get_previous_task(self):
         """If the task is part of a sequence it returns previous task of the
         sequence otherwise None."""
