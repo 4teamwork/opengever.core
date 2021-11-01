@@ -31,7 +31,7 @@ import json
 
 def complete_task_and_deliver_documents(
         task, transition, docs_to_deliver=None, response_text=None,
-        approved_documents=None):
+        approved_documents=None, pass_documents_to_next_task=None):
     """Delivers the selected documents to the predecesser task and
     complete the task:
 
@@ -45,6 +45,9 @@ def complete_task_and_deliver_documents(
     transition_data = {'text': response_text}
     if approved_documents:
         transition_data['approved_documents'] = approved_documents
+
+    if pass_documents_to_next_task:
+        transition_data['pass_documents_to_next_task'] = pass_documents_to_next_task
 
     util.change_task_workflow_state(task,
                                     transition,
@@ -63,7 +66,8 @@ def complete_task_and_deliver_documents(
 
     data = {'documents': [],
             'text': response_text,
-            'transition': transition}
+            'transition': transition,
+            'pass_documents_to_next_task': pass_documents_to_next_task}
 
     related_ids = []
     if getattr(task, 'relatedItems'):

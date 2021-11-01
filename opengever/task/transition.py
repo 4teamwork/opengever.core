@@ -197,10 +197,10 @@ class DefaultTransitionExtender(TransitionExtender):
                     '', item.title,
                     _(u'label_related_items', default=u"Related Items"))
 
-    def sync_change(self, transition, text, disable_sync):
+    def sync_change(self, transition, text, disable_sync, **kwargs):
         if not disable_sync:
             sync_task_response(self.context, getRequest(), 'workflow',
-                               transition, text)
+                               transition, text, **kwargs)
 
     def pass_documents_to_next_task(self, transition, transition_params):
         if not (
@@ -218,6 +218,8 @@ class DefaultTransitionExtender(TransitionExtender):
         ITask(next_task).relatedItems = [
             RelationValue(document_int_id) for document_int_id
             in set(current_document_ids + next_task_related_items)]
+
+        return transition_params['pass_documents_to_next_task']
 
 
 @implementer(ITransitionExtender)
@@ -295,8 +297,12 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
         )
 
         self.save_related_items(response, transition_params.get('relatedItems'))
-        self.pass_documents_to_next_task(transition, transition_params)
-        self.sync_change(transition, transition_params.get('text'), disable_sync)
+        pass_documents = self.pass_documents_to_next_task(
+            transition, transition_params)
+        self.sync_change(transition,
+                         transition_params.get('text'),
+                         disable_sync,
+                         pass_documents_to_next_task=pass_documents)
 
     def maybe_approve_documents(self, transition_params):
         approved_documents = transition_params.get('approved_documents', [])
@@ -329,8 +335,11 @@ class CloseTransitionExtender(DefaultTransitionExtender):
                                        text=transition_params.get('text'))
 
         self.save_related_items(response, transition_params.get('relatedItems'))
-        self.pass_documents_to_next_task(transition, transition_params)
-        self.sync_change(transition, transition_params.get('text'), disable_sync)
+        pass_documents = self.pass_documents_to_next_task(transition, transition_params)
+        self.sync_change(transition,
+                         transition_params.get('text'),
+                         disable_sync,
+                         pass_documents_to_next_task=pass_documents)
 
 
 @implementer(ITransitionExtender)

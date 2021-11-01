@@ -153,6 +153,36 @@ class TestGlobalindexTask(TestCase):
 
         self.assertTrue(task_with_pred.is_successor)
 
+    def test_has_remote_predecessor(self):
+        predecessor = create(Builder('globalindex_task')
+                             .having(int_id=1, admin_unit_id='fd'))
+        successor = create(Builder('globalindex_task')
+                           .having(int_id=2, admin_unit_id='rk'))
+        successor.predecessor = predecessor
+        self.assertTrue(successor.has_remote_predecessor)
+
+        forwarding = create(Builder('globalindex_task')
+                            .having(int_id=3, admin_unit_id='fd'))
+        task_successor = create(Builder('globalindex_task')
+                                .having(int_id=4, admin_unit_id='fd'))
+        task_successor.predecessor = forwarding
+        self.assertFalse(task_successor.has_remote_predecessor)
+
+    def test_has_sequential_successor(self):
+        task1 = create(Builder('globalindex_task').having(int_id=1))
+        task2 = create(Builder('globalindex_task').having(int_id=2))
+        task3 = create(Builder('globalindex_task').having(int_id=3))
+
+        task1.tasktemplate_successor = task2
+        task2.tasktemplate_successor = task3
+
+        self.assertTrue(task1.has_sequential_successor)
+        self.assertTrue(task2.has_sequential_successor)
+        self.assertFalse(task3.has_sequential_successor)
+
+        task = create(Builder('globalindex_task').having(int_id=4))
+        self.assertFalse(task.has_sequential_successor)
+
     def test_unique_id(self):
         create(
             Builder('globalindex_task')

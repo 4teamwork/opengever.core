@@ -45,6 +45,8 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
 
         model = self.context.get_sql_object()
         result[u'is_remote_task'] = model.is_remote_task
+        result[u'has_remote_predecessor'] = model.has_remote_predecessor
+        result[u'has_sequential_successor'] = model.has_sequential_successor
         result[u'responsible_admin_unit_url'] = model.get_assigned_org_unit().admin_unit.public_url
         return result
 

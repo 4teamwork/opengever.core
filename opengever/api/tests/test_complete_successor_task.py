@@ -9,12 +9,15 @@ from opengever.base.response import IResponseContainer
 from opengever.document.approvals import IApprovalList
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID
+from z3c.relationfield.relation import RelationValue
 from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.interface import alsoProvides
 from zope.intid import IIntIds
 import json
 
@@ -87,7 +90,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         self.assertEqual(
             {u'type': u'BadRequest',
              u'message': u'Unexpected parameter(s) in JSON body: ["unexpected"]. '
-                         u'Supported parameters are: ["transition", "documents", "text", "approved_documents"]'},
+                         u'Supported parameters are: ["transition", "documents", "text", "approved_documents", "pass_documents_to_next_task"]'},
             browser.json)
 
     @browsing
@@ -191,6 +194,48 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         approvals = IApprovalList(doc).get()
         self.assertEqual(1, len(approvals))
         self.assertEqual(IUUID(successor), approvals[0].task_uid)
+
+    @browsing
+    def test_pass_documents_to_next_task_if_selected(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.seq_subtask_1.task_type = 'correction'
+        self.seq_subtask_1.sync()
+
+        successor = accept_task_with_successor(
+            self.dossier,
+            'plone:%s' % self.seq_subtask_1.get_sql_object().int_id,
+            u'I accept this task')
+
+        intids = getUtility(IIntIds)
+        self.seq_subtask_1.relatedItems = [RelationValue(intids.getId(self.document)), ]
+
+        # Need to trick the transition controller into thinking its a remote
+        # request so that it allows the resolve transition on the predecessor
+        with patch('opengever.task.browser.transitioncontroller.'
+                   'RequestChecker.is_remote',
+                   new_callable=PropertyMock) as mock_is_remote:
+            mock_is_remote.return_value = True
+
+            request_body = json.dumps({
+                'transition': 'task-transition-in-progress-resolved',
+                'text': 'I finished this task.',
+                'pass_documents_to_next_task': True,
+            })
+            browser.open(
+                successor.absolute_url() + '/@complete-successor-task',
+                method='POST',
+                data=request_body,
+                headers=self.api_headers)
+
+        # Predecessor and successor should have been closed
+        self.assertEqual('task-state-resolved',
+                         api.content.get_state(self.seq_subtask_1))
+        self.assertEqual('task-state-resolved', api.content.get_state(successor))
+
+        # relatedItems are passed to sequential successor
+        self.assertEqual(1, len(self.seq_subtask_2.relatedItems))
+        self.assertEqual(self.document, self.seq_subtask_2.relatedItems[0].to_object)
 
     @browsing
     def test_complete_successor_task_closes_predecessor(self, browser):

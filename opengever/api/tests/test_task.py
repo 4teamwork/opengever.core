@@ -259,6 +259,26 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         self.assertIn('responsible_admin_unit_url', browser.json)
         self.assertEqual('http://nohost/plone', browser.json['responsible_admin_unit_url'])
 
+    @browsing
+    def test_contains_has_remote_predecessor(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertIn('has_remote_predecessor', browser.json)
+        self.assertFalse(browser.json['has_remote_predecessor'])
+
+    @browsing
+    def test_contains_has_sequential_successor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.seq_subtask_2, method="GET", headers=self.api_headers)
+        self.assertTrue(browser.json['has_sequential_successor'])
+
+        browser.open(self.seq_subtask_3, method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['has_sequential_successor'])
+
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['has_sequential_successor'])
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 

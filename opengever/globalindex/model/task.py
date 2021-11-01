@@ -356,6 +356,26 @@ class Task(Base):
         """
         return self.get_assigned_org_unit().admin_unit != self.get_admin_unit()
 
+    @property
+    def has_remote_predecessor(self):
+        if self.predecessor:
+            return self.predecessor.admin_unit_id != self.admin_unit_id
+        return False
+
+    @property
+    def has_sequential_successor(self):
+        if self.tasktemplate_successor:
+            return True
+
+        # This is the case if `self` is a cross-admin-unit copy of a task
+        # in a sequential chain.
+        # The next sequential task in the chain on the *other* side then is
+        # self.predecessor.tasktemplate_successor
+        elif self.predecessor and self.predecessor.tasktemplate_successor:
+            return True
+
+        return False
+
     def get_previous_task(self):
         """If the task is part of a sequence it returns previous task of the
         sequence otherwise None."""
