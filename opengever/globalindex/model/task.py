@@ -29,6 +29,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import Integer
+from sqlalchemy import literal
 from sqlalchemy import or_
 from sqlalchemy import String
 from sqlalchemy import UniqueConstraint
@@ -505,6 +506,20 @@ class Task(Base):
         """containing subdossier title encoded as utf-8 to mirror the behavior
         of opengever.task.task.Task"""
         return self.containing_subdossier.encode('utf-8')
+
+    def get_main_task(self):
+        if not self.is_subtask:
+            return None
+
+        query = Task.query.restrict().filter(
+            literal(self.physical_path).contains(Task.physical_path))
+        query = query.order_by(func.length(Task.physical_path))
+        return query.first()
+
+    def get_main_task_title(self):
+        main_task = self.get_main_task()
+        if main_task:
+            return main_task.title
 
 
 class TaskQuery(BaseQuery):

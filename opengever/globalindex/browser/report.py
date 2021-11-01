@@ -55,6 +55,8 @@ class TaskReporter(BaseReporterView):
             {'id': 'completed', 'title': _('label_completed'),
              'number_format': DATE_NUMBER_FORMAT},
             {'id': 'containing_dossier', 'title': _('label_dossier')},
+            {'id': 'get_main_task_title', 'callable': True,
+             'title': _('label_main_task', default=u'Main task')},
             {'id': 'issuer', 'title': _('label_issuer'),
              'transform': readable_author},
             {'id': 'issuing_org_unit_label',

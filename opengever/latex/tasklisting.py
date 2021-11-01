@@ -75,6 +75,8 @@ class TaskListingLaTeXView(MakoLaTeXView):
 
         dossier_title = item.containing_dossier or ''
 
+        main_task_title = item.get_main_task_title() or ''
+
         reference = unicode(
             getattr(item, 'reference',
                     getattr(item, 'reference_number', ''))).encode('utf-8')
@@ -87,6 +89,7 @@ class TaskListingLaTeXView(MakoLaTeXView):
             title,
             task_type,
             dossier_title,
+            main_task_title,
             reference,
             issuer,
             responsible_label,

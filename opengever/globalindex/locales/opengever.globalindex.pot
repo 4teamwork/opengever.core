@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-05-26 14:29+0000\n"
+"POT-Creation-Date: 2021-10-26 06:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,11 @@ msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_issuing_org_unit"
+msgstr ""
+
+#. Default: "Main task"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_main_task"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
