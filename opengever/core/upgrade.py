@@ -496,35 +496,61 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
         self.operations = get_operations(self.connection)
 
 
-class NightlyIndexer(object):
+class MaintenanceJobContextManagerMixin(object):
 
-    def __init__(self, idxs, index_in_solr_only=False):
-        self.check_preconditions(idxs, index_in_solr_only)
+    def __init__(self, commit_to_solr=False):
+        self.commit_to_solr = commit_to_solr
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
-        if index_in_solr_only:
-            function_name = self.index_in_solr.__name__
-            self.commit_solr = True
-        else:
-            function_name = self.index_in_catalog.__name__
-            self.commit_solr = False
-
-        function_dotted_name = ".".join((self.__module__,
-                                         self.__class__.__name__,
-                                         function_name))
-        self.job_type = MaintenanceJobType(function_dotted_name,
-                                           idxs=tuple(idxs))
         self.intids = getUtility(IIntIds)
+        self.check_preconditions()
 
     def __enter__(self):
         key, self.queue = self.queue_manager.add_queue(
             self.job_type,
             queue_type=IITreeSet,
             commit_batch_size=1000,
-            commit_to_solr=self.commit_solr)
+            commit_to_solr=self.commit_to_solr)
         return self
 
-    def check_preconditions(self, idxs, index_in_solr_only):
-        if index_in_solr_only and 'SearchableText' in idxs:
+    def add_by_intid(self, intid):
+        self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
+
+    def add_by_obj(self, obj):
+        self.add_by_intid(self.intids.getId(obj))
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if len(self.queue) == 0:
+            self.queue_manager.remove_queue(self.job_type)
+
+    def check_preconditions(self):
+        pass
+
+    @property
+    def job_type(self):
+        raise NotImplementedError()
+
+
+class NightlyIndexer(MaintenanceJobContextManagerMixin):
+
+    def __init__(self, idxs, index_in_solr_only=False):
+        self.idxs = idxs
+        self.index_in_solr_only = index_in_solr_only
+        super(NightlyIndexer, self).__init__(index_in_solr_only)
+
+    @property
+    def job_type(self):
+        if self.index_in_solr_only:
+            function_name = self.index_in_solr.__name__
+        else:
+            function_name = self.index_in_catalog.__name__
+
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         function_name))
+        return MaintenanceJobType(function_dotted_name, idxs=tuple(self.idxs))
+
+    def check_preconditions(self):
+        if self.index_in_solr_only and 'SearchableText' in self.idxs:
             raise ValueError(
                 "Reindexing SearchableText in solr only is not supported")
 
@@ -543,13 +569,3 @@ class NightlyIndexer(object):
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(idxs)
-
-    def add_by_intid(self, intid):
-        self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
-
-    def add_by_obj(self, obj):
-        self.add_by_intid(self.intids.getId(obj))
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if len(self.queue) == 0:
-            self.queue_manager.remove_queue(self.job_type)
