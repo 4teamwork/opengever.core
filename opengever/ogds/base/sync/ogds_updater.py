@@ -516,7 +516,7 @@ class OGDSUpdater(object):
                 continue
             title = groups_plugin.getGroupInfo(groupid).get('title')
             if title is not None:
-                title = title.decode('utf8')
+                title = safe_unicode(title)
             groups[groupid] = {
                 'groupid': groupid.decode('utf8'),
                 'title': title,
