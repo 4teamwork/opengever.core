@@ -10,6 +10,8 @@ from plone.supermodel import model
 from Products.Five.browser import BrowserView
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
+from zope.interface import Invalid
+from zope.interface import invariant
 
 
 class IMeetingMetadata(model.Schema):
@@ -65,6 +67,13 @@ class IMeetingMetadata(model.Schema):
     end = UTCDatetime(
         title=_('label_end', default=u"End"),
         required=False)
+
+    @invariant
+    def validate_start_end(data):
+        if data.end is not None:
+            if data.start >= data.end:
+                raise Invalid(
+                    _(u'Start date must be before end date.'))
 
 
 class DownloadProtocolJson(BrowserView):

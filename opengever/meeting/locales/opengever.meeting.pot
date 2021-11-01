@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-08-29 18:45+0000\n"
+"POT-Creation-Date: 2021-10-28 15:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,6 +208,10 @@ msgstr ""
 
 #: ./opengever/meeting/browser/meetings/unscheduled_proposals.py
 msgid "Scheduled Successfully"
+msgstr ""
+
+#: ./opengever/meeting/browser/meetings/meeting.py
+msgid "Start date must be before end date."
 msgstr ""
 
 #: ./opengever/meeting/browser/meetings/meeting.py
