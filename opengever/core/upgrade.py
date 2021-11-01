@@ -6,6 +6,7 @@ from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.upgrade import UpgradeStep
 from ftw.upgrade.directory.recorder import UpgradeStepRecorder
+from opengever.base.default_values import set_default_value
 from opengever.base.model import create_session
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
@@ -23,6 +24,7 @@ from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.dottedname.resolve import resolve
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
@@ -569,3 +571,36 @@ class NightlyIndexer(MaintenanceJobContextManagerMixin):
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(idxs)
+
+
+class DefaultValuePersister(MaintenanceJobContextManagerMixin):
+
+    def __init__(self, fields):
+        self.fields = fields
+        super(DefaultValuePersister, self).__init__()
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.persist_fields.__name__))
+        fields_tuples = tuple((field.interface.__identifier__, field.getName())
+                              for field in self.fields)
+        return MaintenanceJobType(function_dotted_name,
+                                  fields_tuples=fields_tuples)
+
+    @staticmethod
+    def persist_fields(intid, fields_tuples):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        if not obj:
+            return
+        for interfacename, fieldname in fields_tuples:
+            try:
+                interface = resolve(interfacename)
+            except ImportError:
+                return
+            field = interface.get(fieldname)
+            if not field:
+                return
+            set_default_value(obj, obj.aq_parent, field)
