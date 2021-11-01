@@ -271,6 +271,14 @@ class TestOGDSUpdater(FunctionalTestCase):
         group = ogds_service().fetch_group('my_local_group')
         self.assertEqual(group.title, 'my_local_group')
 
+    def test_import_local_groups_can_handle_non_ascii_characters_in_title(self):
+        self.portal.portal_groups.addGroup('a_local_group', title=u'H\u79d2')
+        updater = IOGDSUpdater(self.portal)
+        updater.import_local_groups()
+
+        group = ogds_service().fetch_group('a_local_group')
+        self.assertEqual(group.title, u'H\u79d2')
+
     def test_deactivates_local_groups(self):
         create(Builder('ogds_group')
                .id('my_local_group').having(is_local=True, active=True))
