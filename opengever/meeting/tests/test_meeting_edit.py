@@ -102,6 +102,14 @@ class TestEditMeeting(IntegrationTestCase):
             self.assertEquals('edit-meeting', plone.view(browser2))
 
     @browsing
+    def test_cannot_set_invalid_end_date(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.meeting, view='edit-meeting')
+        browser.fill({'End': '13.10.1995 08:00'}).save()
+        self.assertEqual('Start date must be before end date.',
+                         browser.css('div.error')[0].text)
+
+    @browsing
     def test_edit_meeting_reports_write_conflicts(self, tab1):
         self.login(self.committee_responsible, tab1)
         with tab1.clone() as tab2:

@@ -37,6 +37,8 @@ from zope import schema
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import IVocabularyFactory
@@ -93,6 +95,13 @@ class IMeetingModel(model.Schema):
     end = UTCDatetime(
         title=_('label_end', default=u"End"),
         required=False)
+
+    @invariant
+    def validate_start_end(data):
+        if data.end is not None:
+            if data.start >= data.end:
+                raise Invalid(
+                    _(u'Start date must be before end date.'))
 
 
 ADD_MEETING_STEPS = (

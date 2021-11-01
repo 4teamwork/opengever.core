@@ -53,6 +53,20 @@ class TestMeeting(IntegrationTestCase):
         self.assertIsNotNone(meeting.modified)
 
     @browsing
+    def test_cannot_set_invalid_end_date(self, browser):
+        self.login(self.committee_responsible, browser)
+        browser.open(self.committee, view='add-meeting')
+        browser.fill({
+            'Title': u'M\xe4\xe4hting',
+            'Start': '01.01.2010 10:00',
+            'End': '01.01.2009 11:00',
+            'Location': 'Somewhere',
+        }).submit()
+
+        self.assertEqual('Start date must be before end date.',
+                         browser.css('div.error')[0].text)
+
+    @browsing
     def test_meeting_title_is_used_as_site_title_and_heading(self, browser):
         self.login(self.committee_responsible, browser)
         browser.open(self.meeting.absolute_url())
