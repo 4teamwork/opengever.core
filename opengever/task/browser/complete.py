@@ -249,7 +249,8 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
         # syncing, so no workflow syncing is necessary.
         util.change_task_workflow_state(
             self.context, data['transition'], text=data['text'],
-            disable_sync=True, added_objects=documents)
+            disable_sync=True, added_objects=documents,
+            pass_documents_to_next_task=data.get('pass_documents_to_next_task', False))
 
         return ok_response()
 

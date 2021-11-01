@@ -35,7 +35,8 @@ class CompleteSuccessorTaskPost(RemoteTaskBaseService):
     """
 
     required_params = ('transition', )
-    optional_params = ('documents', 'text', 'approved_documents')
+    optional_params = ('documents', 'text', 'approved_documents',
+                       'pass_documents_to_next_task')
 
     @staticmethod
     def _resolve_doc_ref_to_intid(doc_ref):
@@ -68,6 +69,7 @@ class CompleteSuccessorTaskPost(RemoteTaskBaseService):
         docs_to_deliver = params.get('documents', [])
         response_text = params.get('text', u'')
         approved_documents = params.get('approved_documents', [])
+        pass_documents_to_next_task = params.get('pass_documents_to_next_task', False)
 
         # Map any supported document reference type to an IntId
         docs_to_deliver = map(self._resolve_doc_ref_to_intid, docs_to_deliver)
@@ -90,7 +92,8 @@ class CompleteSuccessorTaskPost(RemoteTaskBaseService):
             successor_task, transition,
             docs_to_deliver=docs_to_deliver,
             response_text=response_text,
-            approved_documents=approved_documents)
+            approved_documents=approved_documents,
+            pass_documents_to_next_task=pass_documents_to_next_task)
 
         remote_response_body = remote_response.read()
         if remote_response_body.strip() != 'OK':
