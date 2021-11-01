@@ -29,5 +29,7 @@ class ITaskTemplateFolderSchema(model.Schema):
     directives.order_after(text='sequence_type')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
+        description=_('help_tasktemplatefolder_text',
+                      default=u'Prefills the comment field of the main task'),
         required=False,
     )
