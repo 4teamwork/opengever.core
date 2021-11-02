@@ -1,47 +1,33 @@
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
-from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 
 
-class TestTaskIndexers(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestTaskIndexers, self).setUp()
-
-        create(Builder('org_unit')
-               .with_default_groups()
-               .id('org-unit-2')
-               .having(title='Org Unit 2', admin_unit=self.admin_unit))
-
-        self.task = create(Builder("task")
-                           .titled("Test task 1")
-                           .having(task_type='comment'))
+class TestTaskIndexers(IntegrationTestCase):
 
     def test_date_of_completion(self):
-        self.assertEquals(
-            obj2brain(self.task).date_of_completion,
-            datetime(1970, 1, 1))
-
-        self.task.date_of_completion = datetime(2012, 2, 2)
-        self.task.reindexObject()
+        self.login(self.regular_user)
 
         self.assertEquals(
-            obj2brain(self.task).date_of_completion,
-            datetime(2012, 2, 2))
+            datetime(1970, 1, 1),
+            obj2brain(self.subtask).date_of_completion)
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.subtask.date_of_completion = datetime(2021, 11, 3, 12, 3)
+        self.subtask.reindexObject()
+
+        self.assertEquals(
+            datetime(2021, 11, 3, 12, 3),
+            obj2brain(self.subtask).date_of_completion)
 
     def test_is_subtask(self):
-        self.subtask = create(Builder("task").within(self.task)
-                                             .titled("Test task 1")
-                                             .having(task_type='comment'))
+        self.login(self.regular_user)
 
         self.assertFalse(obj2brain(self.task).is_subtask)
-
         self.assertTrue(obj2brain(self.subtask).is_subtask)
 
 
