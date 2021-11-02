@@ -61,3 +61,26 @@ class TestTaskSolrIndexer(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.task, 'watchers')
         self.assertEqual([self.regular_user.getId()], indexed_value)
+
+    def test_is_completed_indexer(self):
+        self.login(self.regular_user)
+
+        self.assertFalse(solr_data_for(self.task, 'is_completed'))
+
+        # closed
+        self.set_workflow_state('task-state-tested-and-closed', self.task)
+        self.task.reindexObject()
+        self.commit_solr()
+        self.assertTrue(solr_data_for(self.task, 'is_completed'))
+
+        # cancelled
+        self.set_workflow_state('task-state-cancelled', self.task)
+        self.task.reindexObject()
+        self.commit_solr()
+        self.assertTrue(solr_data_for(self.task, 'is_completed'))
+
+        # skipped
+        self.set_workflow_state('task-state-skipped', self.task)
+        self.task.reindexObject()
+        self.commit_solr()
+        self.assertTrue(solr_data_for(self.task, 'is_completed'))

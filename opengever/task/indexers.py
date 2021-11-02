@@ -18,6 +18,12 @@ def date_of_completion(obj):
 
 
 @indexer(ITask)
+def is_completed(obj):
+    """Boolean indexer if the task is completed"""
+    return obj.is_in_final_state
+
+
+@indexer(ITask)
 def sequence_number(obj):
     """ Indexer for the sequence_number """
     return obj._sequence_number
