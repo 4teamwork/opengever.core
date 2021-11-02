@@ -8,6 +8,7 @@ from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
+from opengever.workspace.todo import COMPLETE_TODO_TRANSITION
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import Forbidden
@@ -84,6 +85,15 @@ def todo_added(todo, event):
         ToDoAssignedActivity(todo, getRequest()).record()
 
 
+def todo_review_state_changed(todo, event):
+    if event.action == COMPLETE_TODO_TRANSITION:
+        ToDoClosedActivity(todo, getRequest()).record()
+    else:
+        ToDoReopenedActivity(todo, getRequest()).record()
+
+    todo.reindexObject(idxs=['is_completed'])
+
+
 def todo_modified(todo, event):
     if IContainerModifiedEvent.providedBy(event):
         return
@@ -92,12 +102,6 @@ def todo_modified(todo, event):
         workspace = todo.get_containing_workspace()
         WorkspaceWatcherManager(workspace).todo_responsible_modified(todo)
         ToDoAssignedActivity(todo, getRequest()).record()
-
-    if is_attribute_changed(event, "completed", "IToDoSchema"):
-        if todo.completed:
-            ToDoClosedActivity(todo, getRequest()).record()
-        else:
-            ToDoReopenedActivity(todo, getRequest()).record()
 
 
 def response_added(todo, event):

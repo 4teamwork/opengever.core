@@ -35,6 +35,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.testing import assets
 from opengever.testing.helpers import time_based_intids
 from opengever.testing.integration_test_case import FEATURE_FLAGS
+from opengever.workspace.todo import COMPLETED_TODO_STATE
 from operator import methodcaller
 from plone import api
 from plone.app.testing import login
@@ -2257,8 +2258,7 @@ class OpengeverContentFixture(object):
             .titled(u'Fix user login')
             .having(
                 text=u"Authentication is no longer possible.",
-                deadline=date(2016, 9, 1),
-                completed=False)
+                deadline=date(2016, 9, 1))
             .within(self.workspace)
         ))
 
@@ -2267,8 +2267,7 @@ class OpengeverContentFixture(object):
             .titled(u'Go live')
             .having(
                 deadline=date(2016, 12, 1),
-                responsible=self.workspace_member.getId(),
-                completed=False)
+                responsible=self.workspace_member.getId())
             .within(self.todolist_introduction)
         ))
 
@@ -2278,9 +2277,9 @@ class OpengeverContentFixture(object):
             .having(
                 text=u"Do some cleanups",
                 deadline=date(2016, 9, 2),
-                responsible=self.workspace_member.getId(),
-                completed=True)
+                responsible=self.workspace_member.getId())
             .within(self.todolist_introduction)
+            .in_state(COMPLETED_TODO_STATE)
         ))
 
     @contextmanager

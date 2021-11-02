@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- Workspace Todos do no longer provide a completed-field. Completing a todo is now done through a workflow transition. [elioschmutz]
 - The ``completed`` field in the ``@listing`` is now longer supported, use the ``is_completed`` field instead.
 
 Other Changes

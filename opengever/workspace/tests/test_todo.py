@@ -106,7 +106,10 @@ class TestToDo(SolrIntegrationTestCase):
 
         self.assertFalse(solr_data_for(self.todo, 'is_completed'))
 
-        self.todo.completed = True
+        api.content.transition(
+            obj=self.todo,
+            transition='opengever_workspace_todo--TRANSITION--complete--active_completed')
+
         self.todo.reindexObject()
         self.commit_solr()
 
@@ -335,3 +338,27 @@ class TestAPISupportForTodo(IntegrationTestCase):
                 }
             ],
             response.changes)
+
+    @browsing
+    def test_complete_todo(self, browser):
+        self.login(self.workspace_member, browser)
+        self.assertFalse(self.todo.is_completed)
+
+        browser.open(
+            self.todo, method='POST', headers=self.api_headers,
+            view="@workflow/opengever_workspace_todo--TRANSITION--complete--active_completed")
+
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(self.todo.is_completed)
+
+    @browsing
+    def test_open_todo(self, browser):
+        self.login(self.workspace_member, browser)
+        self.assertTrue(self.completed_todo.is_completed)
+
+        browser.open(
+            self.completed_todo, method='POST', headers=self.api_headers,
+            view="@workflow/opengever_workspace_todo--TRANSITION--open--completed_active")
+
+        self.assertEqual(200, browser.status_code)
+        self.assertFalse(self.completed_todo.is_completed)

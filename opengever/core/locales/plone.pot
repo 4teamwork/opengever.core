@@ -18,6 +18,11 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+#. Default: "Completed"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "Completed"
+msgstr ""
+
 msgid "DossierManager"
 msgstr ""
 
@@ -40,10 +45,20 @@ msgstr ""
 msgid "Publisher"
 msgstr ""
 
+#. Default: "complete"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "complete"
+msgstr ""
+
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
+msgstr ""
+
+#. Default: "open"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "open"
 msgstr ""
 
 #. Default: "committee admin"
@@ -394,6 +409,21 @@ msgstr ""
 #. Default: "Active"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--STATUS--active"
+msgstr ""
+
+#. Default: "Completed"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--STATUS--completed"
+msgstr ""
+
+#. Default: "complete"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--TRANSITION--complete--active_completed"
+msgstr ""
+
+#. Default: "open"
+#: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
+msgid "opengever_workspace_todo--TRANSITION--open--completed_active"
 msgstr ""
 
 #. Default: "admin"
