@@ -576,7 +576,7 @@ class NightlyIndexer(MaintenanceJobContextManagerMixin):
 class DefaultValuePersister(MaintenanceJobContextManagerMixin):
 
     def __init__(self, fields):
-        self.fields = fields
+        self.fields = sorted(fields)
         super(DefaultValuePersister, self).__init__()
 
     @property
