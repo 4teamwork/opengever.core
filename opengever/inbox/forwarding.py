@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.inbox import _
+from opengever.inbox import FINAL_FORWARDING_STATES
 from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
@@ -14,6 +15,7 @@ from opengever.task.browser.forms import omit_informed_principals
 from opengever.task.task import ITask
 from opengever.task.task import Task
 from opengever.task.util import update_reponsible_field_data
+from plone import api
 from plone.autoform import directives as form
 from plone.dexterity.browser import add
 from plone.dexterity.browser.edit import DefaultEditForm
@@ -112,6 +114,11 @@ class Forwarding(Task):
                 )
 
         return label
+
+    @property
+    def is_in_final_state(self):
+        current_state = api.content.get_state(self)
+        return current_state in FINAL_FORWARDING_STATES
 
 
 class ForwardingAddForm(add.DefaultAddForm):
