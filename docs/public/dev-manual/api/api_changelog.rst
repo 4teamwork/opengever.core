@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2021.22.0 (unreleased)
+2021.23.0 (unreleased)
 ----------------------
 
 Breaking Changes
@@ -11,8 +11,16 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+
+
+2021.22.0 (2021-11-03)
+----------------------
+
+Other Changes
+^^^^^^^^^^^^^
 - Add additional PATCH endpoint ``public-trial-status``.
 - ``@workflow``: Sequential task transitions now accepts ``pass_documents_to_next_task`` transition parameter.
+
 
 2021.21.0 (2021-10-20)
 ----------------------
@@ -32,6 +40,7 @@ Other Changes
 Other Changes
 ^^^^^^^^^^^^^
 - Add new endpoint ``@accessible-workspaces`` (see :ref:`docs <accessible-workspaces>`)
+
 
 2021.19.0 (2021-09-21)
 ----------------------
