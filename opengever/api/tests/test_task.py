@@ -267,6 +267,19 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         self.assertFalse(browser.json['has_remote_predecessor'])
 
     @browsing
+    def test_contains_is_completed(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+
+        self.assertIn('is_completed', browser.json)
+        self.assertFalse(browser.json['is_completed'])
+
+        self.set_workflow_state('task-state-cancelled', self.task)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+
+        self.assertTrue(browser.json['is_completed'])
+
+    @browsing
     def test_contains_has_sequential_successor(self, browser):
         self.login(self.regular_user, browser=browser)
 
