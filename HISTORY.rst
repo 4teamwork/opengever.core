@@ -10,6 +10,27 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.22.0 (2021-11-03)
+----------------------
+
+New features:
+
+
+- Automatically pass documents from one sequential task to the next if desirded. [njohner]
+- Add additional public-trial-status PATCH endpoint for documents. [phgross]
+- Allow to include subtasks in task reports. [tinagerber]
+
+
+Bug fixes:
+
+
+- Fix copying an object with the api where not all path elements are accessible. [phgross]
+- Add minimal support to Actor for SQLContacts. [phgross]
+- Fix UnicodeEncodeError. [tinagerber]
+- Add validation of the end date for meetings. [tinagerber]
+- Fix UnicodeEncodeError in ogds sync. [tinagerber]
+
+
 2021.21.0 (2021-10-20)
 ----------------------
 
