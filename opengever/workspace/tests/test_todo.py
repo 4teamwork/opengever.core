@@ -362,3 +362,13 @@ class TestAPISupportForTodo(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertFalse(self.completed_todo.is_completed)
+
+    @browsing
+    def test_contains_is_completed(self, browser):
+        self.login(self.workspace_member, browser)
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['is_completed'])
+
+        browser.open(self.completed_todo, method="GET", headers=self.api_headers)
+        self.assertTrue(browser.json['is_completed'])

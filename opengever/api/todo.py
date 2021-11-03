@@ -1,4 +1,5 @@
 from opengever.api.move import Move
+from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.response import AutoResponseChangesTracker
 from opengever.base.response import IResponseContainer
 from opengever.base.response import MOVE_RESPONSE_TYPE
@@ -7,8 +8,21 @@ from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
 from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Interface
+
+
+@implementer(ISerializeToJson)
+@adapter(IToDo, Interface)
+class SerializeToDoToJson(GeverSerializeFolderToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeToDoToJson, self).__call__(*args, **kwargs)
+        result[u'is_completed'] = self.context.is_completed
+
+        return result
 
 
 @adapter(IToDo, Interface)

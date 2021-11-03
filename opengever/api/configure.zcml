@@ -63,6 +63,7 @@
   <adapter factory=".field_deserializers.PersistentDatetimeFieldDeserializer" />
   <adapter factory=".field_deserializers.DateFieldDeserializer" />
   <adapter factory=".field_deserializers.DatetimeFieldDeserializer" />
+  <adapter factory=".todo.SerializeToDoToJson" />
 
   <configure zcml:condition="installed z3c.relationfield">
     <adapter factory=".relationfield.GeverRelationChoiceFieldDeserializer" />
