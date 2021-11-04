@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from opengever.api.utils import get_obj_by_path
 from opengever.base import _
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from plone.restapi.services.copymove.copymove import Copy
 from zope.container.interfaces import INameChooser
@@ -20,13 +21,16 @@ class Copy(Copy):
         self.request[DISABLE_DOCPROPERTY_UPDATE_FLAG] = True
 
         results = super(Copy, self).reply()
-
+        docs_to_update = set()
         for result in results:
             target_id = result["target"].split("/")[-1]
             obj = self.context[target_id]
-            self.recursive_rename_and_fix_creator(obj)
+            self.recursive_rename_and_fix_creator(obj, docs_to_update)
             result["target"] = obj.absolute_url()
 
+        # Update Doc Properties
+        for doc in docs_to_update:
+            _update_docproperties(doc, raise_on_error=False)
         return results
 
     def get_object(self, key):
@@ -36,7 +40,7 @@ class Copy(Copy):
         if isinstance(key, six.string_types):
             if key.startswith(self.portal_url):
                 # Resolve by URL
-                key = key[len(self.portal_url) + 1 :]
+                key = key[len(self.portal_url) + 1:]
                 if six.PY2:
                     key = key.encode("utf8")
                 return get_obj_by_path(self.portal, key)
@@ -51,9 +55,9 @@ class Copy(Copy):
                 if brain:
                     return brain[0].getObject()
 
-    def recursive_rename_and_fix_creator(self, obj):
+    def recursive_rename_and_fix_creator(self, obj, docs_to_update):
         for subobj in obj.objectValues():
-            self.recursive_rename_and_fix_creator(subobj)
+            self.recursive_rename_and_fix_creator(subobj, docs_to_update)
 
         old_id = obj.getId()
         parent = aq_parent(obj)
@@ -61,9 +65,11 @@ class Copy(Copy):
 
         if new_id != old_id:
             if IBaseDocument.providedBy(obj):
-                self.request[DISABLE_DOCPROPERTY_UPDATE_FLAG] = False
-            else:
-                self.request[DISABLE_DOCPROPERTY_UPDATE_FLAG] = True
+                # Store document for later update of the doc properties.
+                # Updating them now would lead to the document not getting stored
+                # in bumblebee if its parent is also renamed, because it's path
+                # will have changed when the task queue is processed.
+                docs_to_update.add(obj)
             parent.manage_renameObject(old_id, new_id)
 
         if old_id.startswith('copy_of'):
