@@ -262,9 +262,11 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
 
         self.assertEqual(400, browser.status_code)
         self.assertEqual(
-            {u'message': u'Cannot trash a locked document',
-             u'type': u'Bad Request'},
-            browser.json['error'])
+            {u'type': u'BadRequest',
+             u'additional_metadata': {},
+             u'translated_message': u'Cannot trash a locked document',
+             u'message': u'msg_trash_locked_doc'},
+            browser.json)
         self.assertFalse(ITrashed.providedBy(self.document))
 
 
