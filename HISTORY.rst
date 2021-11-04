@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.17.4 (2021-11-04)
+----------------------
+
+Other changes:
+
+
+- Include document version in Office Connector metadata. [buchi]
+
+
 2021.17.3 (2021-09-21)
 ----------------------
 
