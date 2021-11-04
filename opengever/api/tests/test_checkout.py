@@ -28,7 +28,13 @@ class TestCheckoutAPI(IntegrationTestCase):
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(self.document.absolute_url() + '/@checkout',
                          method='POST', headers={'Accept': 'application/json'})
-        self.assertIn('Checkout is not allowed', browser.contents)
+
+        self.assertEqual(
+            {u'type': u'Forbidden',
+             u'additional_metadata': {},
+             u'translated_message': u'Checkout is not allowed.',
+             u'message': u'msg_checkout_disallowed'},
+            browser.json)
 
     @browsing
     def test_checkin_document(self, browser):
