@@ -47,9 +47,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.document.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents within the repository cannot be moved to the templates.'},
-                         browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_docs_cant_be_moved_from_repo_to_templates',
+             u'translated_message': u'Documents within the repository cannot be moved to the templates.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_document_within_inbox_cannot_be_moved_to_templates(self, browser):
@@ -60,9 +63,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.inbox_document.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents within the inbox cannot be moved to the templates.'},
-                         browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_docs_cant_be_moved_from_inbox_to_templates',
+             u'translated_message': u'Documents within the inbox cannot be moved to the templates.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_move_document_within_private_folder_is_possible(self, browser):
@@ -91,8 +97,10 @@ class TestMove(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(
-            {u'type': u'Forbidden', u'message':
-             u'Documents within the repository cannot be moved to the private repository.'},
+            {u'additional_metadata': {},
+             u'message': u'msg_docs_cant_be_moved_from_repo_to_private_repo',
+             u'translated_message': u'Documents within the repository cannot be moved to the private repository.',
+             u'type': u'Forbidden'},
             browser.json)
 
     @browsing
@@ -116,8 +124,10 @@ class TestMove(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(
-            {u'type': u'Forbidden', u'message':
-             u'Documents within the inbox cannot be moved to the private repository.'},
+            {u'additional_metadata': {},
+             u'message': u'msg_docs_cant_be_moved_from_inbox_to_private_repo',
+             u'translated_message': u'Documents within the inbox cannot be moved to the private repository.',
+             u'type': u'Forbidden'},
             browser.json)
 
     @browsing
@@ -129,8 +139,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.taskdocument.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a task cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_task_cant_be_moved',
+             u'translated_message': u'Documents inside a task cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_mail_inside_a_task_cannot_be_moved(self, browser):
@@ -142,8 +156,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": mail.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a task cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_task_cant_be_moved',
+             u'translated_message': u'Documents inside a task cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_document_inside_a_proposal_cannot_be_moved(self, browser):
@@ -154,8 +172,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.proposaldocument.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a proposal cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_proposal_cant_be_moved',
+             u'translated_message': u'Documents inside a proposal cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_mail_inside_a_proposal_cannot_be_moved(self, browser):
@@ -167,8 +189,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": mail.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a proposal cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_proposal_cant_be_moved',
+             u'translated_message': u'Documents inside a proposal cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_document_inside_a_closed_dossier_cannot_be_moved(self, browser):
@@ -179,8 +205,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.expired_document.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a closed dossier cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_closed_dossier',
+             u'translated_message': u'Documents inside a closed dossier cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_mail_inside_a_closed_dossier_cannot_be_moved(self, browser):
@@ -192,8 +222,12 @@ class TestMove(IntegrationTestCase):
                          data=json.dumps({"source": self.mail_eml.absolute_url()}),
                          method='POST', headers=self.api_headers)
 
-        self.assertEqual({u'type': u'Forbidden', u'message':
-                          u'Documents inside a closed dossier cannot be moved.'}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_doc_inside_closed_dossier',
+             u'translated_message': u'Documents inside a closed dossier cannot be moved.',
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_moving_dossier_respects_maximum_dossier_depth(self, browser):
@@ -205,7 +239,9 @@ class TestMove(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(
-            {u'message': u'This would exceed maximally allowed dossier depth.',
+            {u'additional_metadata': {},
+             u'message': u'msg_would_exceed_max_dossier_level',
+             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
              u'type': u'Forbidden'},
             browser.json)
 
@@ -231,7 +267,9 @@ class TestMove(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(
-            {u'message': u'This would exceed maximally allowed dossier depth.',
+            {u'additional_metadata': {},
+             u'message': u'msg_would_exceed_max_dossier_level',
+             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
              u'type': u'Forbidden'},
             browser.json)
 

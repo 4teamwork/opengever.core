@@ -119,27 +119,28 @@ class MoveItemsForm(form.Form):
                 try:
                     IMovabilityChecker(obj).validate_movement(destination)
                 except Forbidden as exc:
-                    if exc.message == u'Documents inside a task cannot be moved.':
+                    if exc.message == u'msg_doc_inside_task_cant_be_moved':
                         msg = _(
                             'label_not_movable_since_inside_task',
                             default=u'Document ${name} is inside a task and '
                                     u'therefore not movable. Move the task '
                                     u'instead',
                             mapping=dict(name=obj.title))
-                    elif exc.message == u'Documents inside a proposal cannot be moved.':
+                    elif exc.message == u'msg_doc_inside_task_cant_be_moved':
                         msg = _(
                             'label_not_movable_since_inside_proposal',
                             default=u'Document ${name} is inside a proposal '
                                     u'and therefore not movable. Move the '
                                     u'proposal instead',
                             mapping=dict(name=obj.title))
-                    elif exc.message == u'This would exceed maximally allowed dossier depth.':
+                    elif exc.message == u'msg_would_exceed_max_dossier_level':
                         msg = _(
                             'label_not_movable_since_exceeds_maximum_depth',
                             default=u'Dossier ${name} cannot be moved because '
                             'it would exceed the maximum allowed dossier depth.',
                             mapping=dict(name=obj.title))
                     else:
+                        import pdb; pdb.set_trace()
                         raise Exception(
                             'Failed to determine the reason for unmovable object. '
                             'Did IMovabilityChecker change?'
@@ -383,7 +384,9 @@ class DossierMovabiliyChecker(DefaultMovabilityChecker):
         substructure_depth = self.dossier_structure_depth()
 
         if not target.is_dossier_structure_addable(substructure_depth):
-            raise Forbidden(u'This would exceed maximally allowed dossier depth.')
+            raise Forbidden(
+                _(u'msg_would_exceed_max_dossier_level',
+                  u'This would exceed maximally allowed dossier depth.'))
 
     def dossier_structure_depth(self):
         subdossiers = self.context.get_subdossiers(unrestricted=True)
