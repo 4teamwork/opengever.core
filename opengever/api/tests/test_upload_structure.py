@@ -27,7 +27,7 @@ class TestUploadStructure(SolrIntegrationTestCase):
                          method='POST',
                          headers=self.api_headers)
 
-        self.assertEqual(message, browser.json['message'])
+        self.assertEqual(message, browser.json['translated_message'])
         self.assertEqual(u'BadRequest', browser.json['type'])
 
     @browsing
@@ -108,8 +108,12 @@ class TestUploadStructure(SolrIntegrationTestCase):
                          data=json.dumps(payload),
                          method='POST',
                          headers=self.api_headers)
+
         self.assertEqual(
-            {u'message': u"Property 'files' is required", u'type': u'BadRequest'},
+            {u'additional_metadata': {},
+             u'message': u'msg_prop_file_required',
+             u'translated_message': u"Property 'files' is required",
+             u'type': u'BadRequest'},
             browser.json)
 
     @browsing

@@ -1,6 +1,7 @@
 from collections import defaultdict
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
+from opengever.api import _
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
@@ -165,7 +166,9 @@ class DefaultUploadStructureAnalyser(object):
         allowed = [fti.getId() for fti in self.context.allowedContentTypes()]
         for portal_type in portal_types:
             if portal_type not in allowed:
-                raise TypeNotAddable("Some of the objects cannot be added here")
+                raise TypeNotAddable(
+                    _('msg_some_objects_not_addable',
+                      u'Some of the objects cannot be added here'))
 
 
 class DossierDepthCheckMixin(object):
@@ -184,9 +187,11 @@ class DossierDepthCheckMixin(object):
         max_depth = api.portal.get_registry_record(
             name='maximum_dossier_depth',
             interface=IDossierContainerTypes
-            )
+        )
         if self.current_depth + self.structure["max_container_depth"] > max_depth + 1:
-            raise MaximalDepthExceeded("Maximum dossier depth exceeded")
+            raise MaximalDepthExceeded(
+                _(u'msg_max_dossier_depth_exceeded',
+                  default=u'Maximum dossier depth exceeded'))
 
 
 @adapter(IDossierMarker)
@@ -273,10 +278,15 @@ class UploadStructurePost(Service):
         data = json_body(self.request)
         files = data.get("files", None)
         if not files:
-            raise BadRequest("Property 'files' is required")
+            raise BadRequest(_(u'msg_prop_file_required',
+                               default=u"Property 'files' is required"))
         for file in files:
             if not file:
-                raise BadRequest("Empty filename not supported")
+                raise BadRequest(
+                    _(u'msg_filename_required',
+                      default=u"Empty filename not supported"))
+
+                raise BadRequest("")
         return files
 
     def reply(self):
