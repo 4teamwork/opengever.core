@@ -1466,3 +1466,5 @@ which can be used in upgrade steps:
             indexer.add_by_obj(obj)
 
 This will register the corresponding jobs to the ``NightlyMaintenanceJobsProvider``.
+
+XXX: Test jenkins
