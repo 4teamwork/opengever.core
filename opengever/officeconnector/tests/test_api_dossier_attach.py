@@ -50,6 +50,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'filename': u'Vertraegsentwurf.docx',
             u'title': u'Vertr\xe4gsentwurf',
             u'uuid': u'createtreatydossiers000000000002',
+            u'version': None,
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
@@ -97,6 +98,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'filename': u'Uebersicht der Inaktiven Vertraege von 2016.xlsx',
             u'title': u'\xdcbersicht der Inaktiven Vertr\xe4ge von 2016',
             u'uuid': u'createinactivedossier00000000002',
+            u'version': None,
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
@@ -144,6 +146,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             u'filename': u'Uebersicht der Vertraege vor 2000.doc',
             u'title': u'\xdcbersicht der Vertr\xe4ge vor 2000',
             u'uuid': u'createexpireddossier000000000002',
+            u'version': None,
             }]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEquals(200, browser.status_code)
@@ -200,6 +203,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Vertraegsentwurf.docx',
                 u'title': u'Vertr\xe4gsentwurf',
                 u'uuid': u'createtreatydossiers000000000002',
+                u'version': None,
                 },
             {
                 u'bcc': u'1014013300@example.org',
@@ -211,6 +215,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
                 u'uuid': u'createtasks000000000000000000003',
+                u'version': None,
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
@@ -263,6 +268,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Vertraegsentwurf.docx',
                 u'title': u'Vertr\xe4gsentwurf',
                 u'uuid': u'createtreatydossiers000000000002',
+                u'version': None,
                 },
             {
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -273,6 +279,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
                 u'uuid': u'createtasks000000000000000000003',
+                u'version': None,
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
@@ -325,6 +332,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Vertraegsentwurf.docx',
                 u'title': u'Vertr\xe4gsentwurf',
                 u'uuid': u'createtreatydossiers000000000002',
+                u'version': None,
                 },
             {
                 u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -335,6 +343,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
                 u'filename': u'Feedback zum Vertragsentwurf.docx',
                 u'title': u'Feedback zum Vertragsentwurf',
                 u'uuid': u'createtasks000000000000000000003',
+                u'version': None,
                 },
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)

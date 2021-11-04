@@ -66,6 +66,7 @@ class TestOfficeconnectorTaskAPIWithCheckoutWithRESTAPI(OCIntegrationTestCase):
             u'unlock': u'@unlock',
             u'upload': u'@tus-replace',
             u'uuid': u'createtreatydossiers000000000002',
+            u'version': None,
         }]
         payloads = self.fetch_document_checkout_payloads(browser, raw_token, token)
         self.assertEqual(200, browser.status_code)
