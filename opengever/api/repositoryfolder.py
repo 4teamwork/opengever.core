@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.api import _
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
@@ -41,7 +42,9 @@ class DeserializeRepositoryFolderFromJson(DeserializeFromJson):
             is_valid = PrefixAdapter(parent).is_valid_number(number,
                                                              self.context)
         if not is_valid:
-            msg = "The reference_number {} is already in use.".format(number)
+            msg = _(u'msg_reference_already_in_use',
+                    default=u'The reference_number ${number} is already in use.',
+                    mapping={'number': number})
             error = {
                 "message": msg,
                 "field": "reference_number",
