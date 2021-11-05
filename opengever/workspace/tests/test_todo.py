@@ -101,6 +101,17 @@ class TestToDo(SolrIntegrationTestCase):
         self.assertIn(self.todo.title, indexed_searchable_text)
         self.assertIn(self.todo.text, indexed_searchable_text)
 
+    def test_is_completed_indexer(self):
+        self.login(self.workspace_member)
+
+        self.assertFalse(solr_data_for(self.todo, 'is_completed'))
+
+        self.todo.completed = True
+        self.todo.reindexObject()
+        self.commit_solr()
+
+        self.assertTrue(solr_data_for(self.todo, 'is_completed'))
+
     @browsing
     def test_todo_number_hard_limit(self, browser):
         self.login(self.workspace_member, browser)

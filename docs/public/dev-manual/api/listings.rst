@@ -73,7 +73,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``changed``: Änderungsdatum
 - ``checked_out_fullname``: Anzeigename des Benutzers, der das Dokument ausgechecked hat
 - ``checked_out``: Benutzername des Benutzers, der das Dokument ausgechecked hat
-- ``completed``: Zeigt an ob eine Aufgabe erledigt ist.
+- ``is_completed``: Zeigt an ob eine Aufgabe oder ein Todo erledigt ist.
 - ``containing_dossier``: Titel des Hauptdossier in dem das Element enthalten ist
 - ``containing_subdossier``: Titel des Subdossiers in dem das Dokument enthalten ist
 - ``created``: Erstelldatum
@@ -152,7 +152,7 @@ siehe Tabelle:
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+
     |``checked_out_fullname``  |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+
-    |``completed``             |   nein   |   nein  |     nein     |        nein        |   ja    |   ja    |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |
+    |``is_completed``             |   nein   |   nein  |     nein     |        nein        |   ja    |   ja    |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+
     |``containing_dossier``    |    ja    |    ja   |     nein     |        nein        |   ja    |  nein   |   ja    |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+

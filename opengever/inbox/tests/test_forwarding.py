@@ -207,3 +207,15 @@ class TestForwarding(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding, view='edit')
         self.assertEqual(0, len(browser.css('select#form-widgets-informed_principals')))
+
+    @browsing
+    def test_is_in_final_state(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        self.assertFalse(self.inbox_forwarding.is_in_final_state)
+
+        self.set_workflow_state('forwarding-state-closed', self.inbox_forwarding)
+        self.assertTrue(self.inbox_forwarding.is_in_final_state)
+
+        self.set_workflow_state('forwarding-state-refused', self.inbox_forwarding)
+        self.assertFalse(self.inbox_forwarding.is_in_final_state)

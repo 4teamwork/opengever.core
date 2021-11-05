@@ -153,6 +153,11 @@
       />
 
   <adapter
+      factory=".indexers.is_completed"
+      name="is_completed"
+      />
+
+  <adapter
       factory=".indexers.sequence_number"
       name="sequence_number"
       />

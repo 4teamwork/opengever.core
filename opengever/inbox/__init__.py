@@ -4,3 +4,5 @@ _ = MessageFactory('opengever.inbox')
 
 
 FORWARDING_TASK_TYPE_ID = u'forwarding_task_type'
+
+FINAL_FORWARDING_STATES = ['forwarding-state-closed']

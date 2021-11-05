@@ -8,9 +8,11 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- The ``completed`` field in the ``@listing`` is now longer supported, use the ``is_completed`` field instead.
 
 Other Changes
 ^^^^^^^^^^^^^
+- Tasks provides an additional attribute ``is_completed``.
 
 
 2021.22.0 (2021-11-03)

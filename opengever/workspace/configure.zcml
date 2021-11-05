@@ -97,6 +97,11 @@
       />
 
   <adapter
+      factory=".indexers.is_completed"
+      name="is_completed"
+      />
+
+  <adapter
       factory=".indexers.WorkspaceMeetingSearchableTextExtender"
       name="IWorkspaceMeeting"
       />
