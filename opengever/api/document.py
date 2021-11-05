@@ -1,4 +1,5 @@
 from ftw import bumblebee
+from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.serializer import extend_with_backreferences
 from opengever.api.serializer import GeverSerializeToJson
@@ -17,12 +18,12 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.update import ContentPatch
+from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.interface import Interface
 import os.path
-
 
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
@@ -116,10 +117,8 @@ class DocumentPatch(ContentPatch):
     def reply(self):
         data = json_body(self.request)
 
-        error = self._validate_checked_out(data) or self._validate_proposal_document(data)
-        if error:
-            self.request.response.setStatus(403)
-            return error
+        self._validate_checked_out(data)
+        self._validate_proposal_document(data)
 
         return super(DocumentPatch, self).reply()
 
@@ -133,12 +132,9 @@ class DocumentPatch(ContentPatch):
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
         if not manager.is_checked_out_by_current_user():
-            return {
-                "error": {
-                    "type": "Forbidden",
-                    "message": "Document not checked-out by current user."
-                }
-            }
+            raise Forbidden(
+                _(u'msg_not_checked_out_by_current_user',
+                  default=u'Document not checked-out by current user.'))
 
     def _validate_proposal_document(self, data):
         """Prevent a proposals document being replaced by non-docx file.
@@ -151,37 +147,23 @@ class DocumentPatch(ContentPatch):
 
         value = data['file']
         if not value:
-            return {
-                "error": {
-                    "type": "Forbidden",
-                    "message": "It's not possible to have no file in proposal "
-                               "documents."
-
-                }
-            }
+            raise Forbidden(
+                _(u'msg_needs_file_in_proposal_document',
+                  default=u"It's not possible to have no file in proposal documents."))
 
         content_type = value.get('content-type')
         filename = value.get('filename')
 
         if content_type and content_type != MIME_DOCX:
-            return {
-                "error": {
-                    "type": "Forbidden",
-                    "message": "Mime type must be {} for "
-                               "proposal documents.".format(MIME_DOCX)
-
-                }
-            }
+            raise Forbidden(
+                _(u'msg_docx_mime_type_for_proposal',
+                  default=u'Mime type must be ${docx_mimetype} for proposal documents.',
+                  mapping={'docx_mimetype': MIME_DOCX}))
 
         if not os.path.splitext(filename)[1].lower() == '.docx':
-            return {
-                "error": {
-                    "type": "Forbidden",
-                    "message": "File extension must be .docx for "
-                               "proposal documents."
-
-                }
-            }
+            raise Forbidden(
+                _(u'msg_docx_file_extension_for_proposal',
+                  default=u'File extension must be .docx for proposal documents.'))
 
 
 @implementer(IExpandableElement)
