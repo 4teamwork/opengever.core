@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-03 13:04+0000\n"
+"POT-Creation-Date: 2021-11-05 08:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -281,6 +281,11 @@ msgstr "URL de vidéoconférence"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamraüme"
+
+#. Default: "At least one principal must remain admin."
+#: ./opengever/workspace/participation/browser/manage_participants.py
+msgid "msg_one_must_remain_admin"
+msgstr ""
 
 #. Default: "Comment"
 #: ./opengever/workspace/content_sharing_mailer.py

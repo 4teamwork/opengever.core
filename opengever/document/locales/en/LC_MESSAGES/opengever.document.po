@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-09-08 14:44+0000\n"
+"POT-Creation-Date: 2021-11-05 08:34+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -820,6 +820,46 @@ msgstr "This document is being edited in Office Online by ${creator}."
 #: ./opengever/document/checkout/cancel.py
 msgid "msg_cancel_checkout_on_mail_not_possible"
 msgstr "Could not cancel checkout for document ${title}, emails do not support the checkout process."
+
+#. Default: "Documents inside a closed dossier cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_doc_inside_closed_dossier"
+msgstr "Documents inside a closed dossier cannot be moved."
+
+#. Default: "Documents inside a proposal cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_doc_inside_proposal_cant_be_moved"
+msgstr "Documents inside a proposal cannot be moved."
+
+#. Default: "Documents inside a task cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_doc_inside_task_cant_be_moved"
+msgstr "Documents inside a task cannot be moved."
+
+#. Default: "Documents within the inbox cannot be moved to the private repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_inbox_to_private_repo"
+msgstr "Documents within the inbox cannot be moved to the private repository."
+
+#. Default: "Documents within the inbox cannot be moved to the templates."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_inbox_to_templates"
+msgstr "Documents within the inbox cannot be moved to the templates."
+
+#. Default: "Documents within the repository cannot be moved to the private repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_repo_to_private_repo"
+msgstr "Documents within the repository cannot be moved to the private repository."
+
+#. Default: "Documents within the repository cannot be moved to the templates."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_repo_to_templates"
+msgstr "Documents within the repository cannot be moved to the templates."
+
+#. Default: "Locked documents cannot be moved."
+#: ./opengever/document/move.py
+msgid "msg_locked_doc_cant_be_moved"
+msgstr "Locked documents cannot be moved."
 
 #. German translation: Fehler beim PDF generieren
 #. Default: "PDF generation error"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-09-10 06:35+0000\n"
+"POT-Creation-Date: 2021-11-05 08:34+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -1165,6 +1165,11 @@ msgstr "Changes saved"
 #: ./opengever/dossier/browser/redirect_to_maindossier.py
 msgid "msg_main_dossier_not_found"
 msgstr "Object `${title}` is not stored inside a dossier."
+
+#. Default: "This would exceed maximally allowed dossier depth."
+#: ./opengever/dossier/move_items.py
+msgid "msg_would_exceed_max_dossier_level"
+msgstr "This would exceed the maximally allowed dossier depth."
 
 #. German translation: Es sind nicht alle Dokumente und Aufgaben in Subdossiers abgelegt.
 #: ./opengever/dossier/resolve.py
