@@ -256,7 +256,7 @@ class TestDatetimeDeserialization(IntegrationTestCase):
         self.assertEqual(204, response.status_code)
 
     @browsing
-    def test_datetime_field_deserializer_rejects_year_before_1900(self, browser):
+    def test_utcdatetime_field_deserializer_rejects_year_before_1900(self, browser):
         self.login(self.workspace_member, browser)
         browser.raise_http_errors = False
 

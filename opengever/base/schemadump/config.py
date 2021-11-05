@@ -219,6 +219,8 @@ JSON_SCHEMA_FIELD_TYPES = {
         'type': 'string', 'format': 'date'},
     'Datetime': {
         'type': 'string', 'format': 'datetime'},
+    'UTCDatetime': {
+        'type': 'string', 'format': 'datetime'},
     'Float': {
         'type': 'number'},
     'Int': {

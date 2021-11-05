@@ -1,3 +1,5 @@
+from ftw.datepicker.widget import DatePickerFieldWidget
+from opengever.base.schema import UTCDatetime
 from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.autoform import directives as form
@@ -7,7 +9,6 @@ from plone.supermodel import model
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
-from ftw.datepicker.widget import DatePickerFieldWidget
 
 
 @provider(IFormFieldProvider)
@@ -33,13 +34,13 @@ class IWorkspaceMeetingSchema(model.Schema):
 
     form.widget('start', DatePickerFieldWidget)
     form.order_after(start='responsible')
-    start = schema.Datetime(
+    start = UTCDatetime(
         title=_(u'label_start', default='Start'),
         required=True)
 
     form.widget('end', DatePickerFieldWidget)
     form.order_after(end='start')
-    end = schema.Datetime(
+    end = UTCDatetime(
         title=_(u'label_end', default='End'),
         required=False)
 
