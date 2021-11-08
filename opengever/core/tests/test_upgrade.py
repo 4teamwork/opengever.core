@@ -1,8 +1,14 @@
 from alembic.migration import MigrationContext
+from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.classification import public_trial_default
+from opengever.base.default_values import get_persisted_value_for_field
+from opengever.base.default_values import object_has_value_for_field
+from opengever.core.upgrade import DefaultValuePersister
 from opengever.core.upgrade import IdempotentOperations
 from opengever.core.upgrade import NightlyIndexer
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from sqlalchemy import Column
@@ -174,3 +180,91 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
         self.assertEqual(
             'Reindexing SearchableText in solr only is not supported',
             exc.exception.message)
+
+
+class TestDefaultValuePersister(IntegrationTestCase):
+
+    def run_nightly_jobs(self):
+        runner = NightlyJobRunner(force_execution=True)
+        runner.execute_pending_jobs()
+
+    def test_persists_only_passed_fields(self):
+        intids = getUtility(IIntIds)
+        classification = IClassification.get('classification')
+        privacy_layer = IClassification.get('privacy_layer')
+        public_trial = IClassification.get('public_trial')
+
+        self.login(self.regular_user)
+
+        # Make sure there is no persisted value
+        self.dossier.__dict__.pop('classification')
+        self.dossier.__dict__.pop('privacy_layer')
+        self.dossier.__dict__.pop('public_trial')
+        self.assertFalse(object_has_value_for_field(self.dossier, classification))
+        self.assertFalse(object_has_value_for_field(self.dossier, privacy_layer))
+        self.assertFalse(object_has_value_for_field(self.dossier, public_trial))
+
+        classification_default = IClassification(self.dossier).classification
+
+        with DefaultValuePersister(fields=[classification, public_trial]) as persister:
+            persister.add_by_intid(intids.getId(self.dossier))
+
+        self.run_nightly_jobs()
+
+        self.assertTrue(object_has_value_for_field(self.dossier, classification))
+        self.assertFalse(object_has_value_for_field(self.dossier, privacy_layer))
+        self.assertTrue(object_has_value_for_field(self.dossier, public_trial))
+        self.assertEqual(
+            public_trial_default(),
+            get_persisted_value_for_field(self.dossier, public_trial))
+        self.assertEqual(
+            classification_default,
+            get_persisted_value_for_field(self.dossier, classification))
+
+    def test_does_not_overwrite_already_persisted_values(self):
+        intids = getUtility(IIntIds)
+        public_trial = IClassification.get("public_trial")
+
+        self.login(self.regular_user)
+        self.assertEqual(
+            'private',
+            get_persisted_value_for_field(self.empty_dossier, public_trial))
+        self.assertEqual('unchecked', public_trial_default())
+
+        with DefaultValuePersister(fields=[public_trial]) as persister:
+            persister.add_by_intid(intids.getId(self.dossier))
+
+        self.run_nightly_jobs()
+        self.assertEqual(
+            'private',
+            get_persisted_value_for_field(self.empty_dossier, public_trial))
+
+    def test_persist_fields_handles_inexistant_interface(self):
+        intids = getUtility(IIntIds)
+        self.login(self.regular_user)
+
+        DefaultValuePersister.persist_fields(
+            intids.getId(self.dossier),
+            fields_tuples=(('inexistent.interface', 'classification'),))
+
+    def test_persist_fields_handles_inexistant_field(self):
+        intids = getUtility(IIntIds)
+        self.login(self.regular_user)
+
+        DefaultValuePersister.persist_fields(
+            intids.getId(self.dossier),
+            fields_tuples=((IClassification.__identifier__, 'fieldname'),))
+
+    def test_persist_fields(self):
+        intids = getUtility(IIntIds)
+        classification = IClassification.get('classification')
+        self.login(self.regular_user)
+
+        self.dossier.__dict__.pop('classification')
+        self.assertFalse(object_has_value_for_field(self.dossier, classification))
+
+        DefaultValuePersister.persist_fields(
+            intids.getId(self.dossier),
+            fields_tuples=((IClassification.__identifier__, 'classification'),))
+
+        self.assertTrue(object_has_value_for_field(self.dossier, classification))

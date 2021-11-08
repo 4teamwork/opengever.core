@@ -305,25 +305,29 @@ def set_default_values(content, container, values):
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):
 
-            if field.readonly:
-                continue
+            set_default_value(content, container, field)
 
-            if object_has_value_for_field(content, field):
-                # Only set default if a value hasn't been set on the
-                # object yet
-                continue
 
-            if not is_aq_wrapped(content):
-                # Content isn't AQ wrapped - temporarily wrap it
-                content = content.__of__(container)
+def set_default_value(content, container, field):
+    if field.readonly:
+        return
 
-            # Attempt to find a default value for the field
-            value = determine_default_value(field, container)
-            if value is NO_DEFAULT_MARKER:
-                # No default found, fall back to missing value
-                value = field.missing_value
+    if object_has_value_for_field(content, field):
+        # Only set default if a value hasn't been set on the
+        # object yet
+        return
 
-            field.set(field.interface(content), value)
+    if not is_aq_wrapped(content):
+        # Content isn't AQ wrapped - temporarily wrap it
+        content = content.__of__(container)
+
+    # Attempt to find a default value for the field
+    value = determine_default_value(field, container)
+    if value is NO_DEFAULT_MARKER:
+        # No default found, fall back to missing value
+        value = field.missing_value
+
+    field.set(field.interface(content), value)
 
 
 def inject_title_and_description_defaults(kw, portal_type, container):
