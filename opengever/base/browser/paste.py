@@ -1,6 +1,7 @@
 from opengever.base import _
 from opengever.base.clipboard import Clipboard
 from opengever.document.behaviors import IBaseDocument
+from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from plone import api
 from Products.Five import BrowserView
@@ -77,11 +78,11 @@ class PasteClipboardView(BrowserView):
         """Copy objects but change id afterwards, generating an id with the
         INameChooser adapter.
         """
+        # We do not want to update the docproperties when copying the objects,
+        # we do just once, after renaming is done.
+        getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
+        docs_to_update = set()
         for obj in objs:
-            # We do not want to update the docproperties when copying the objects
-            # but only when renaming the documents
-            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
-
             # Using the plone.api does not work because we need the fix from
             # https://github.com/plone/plone.api/commit/79bec69932ca87a4a5cd675db8b0bd9437dddcdf
             # the following code should be replaced with plone.api after the
@@ -92,12 +93,16 @@ class PasteClipboardView(BrowserView):
             # XXX - ensure the new object is listed as created by the paster
             copied_obj.creators = (api.user.get_current().id, )
             copied_obj.reindexObject(idxs=["Creator"])
-            self.rename_object(copied_obj)
+            self.rename_object(copied_obj, docs_to_update)
 
-    def rename_object(self, copy):
-        return self._recursive_rename(copy)
+        # Update Doc Properties
+        for doc in set(docs_to_update):
+            _update_docproperties(doc, raise_on_error=False)
 
-    def _recursive_rename(self, obj):
+    def rename_object(self, copy, docs_to_update):
+        return self._recursive_rename(copy, docs_to_update)
+
+    def _recursive_rename(self, obj, docs_to_update):
         """Recursively rename object and its children.
 
         Children are renamed/moved postorder, i.e. children are renamed before
@@ -114,15 +119,15 @@ class PasteClipboardView(BrowserView):
           moved as the catalog then treats it as a new entry.
 
         """
-        # We update the docproperties only when renaming a document
-        # not when renaming the containing dossiers
         if IBaseDocument.providedBy(obj):
-            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
-        else:
-            getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, True)
+            # Store document for later update of the doc properties.
+            # Updating them now would lead to the document not getting stored
+            # in bumblebee if its parent is also renamed, because it's path
+            # will have changed when the task queue is processed.
+            docs_to_update.add(obj)
 
         for child in obj.getFolderContents():
-            self._recursive_rename(child.getObject())
+            self._recursive_rename(child.getObject(), docs_to_update)
         return api.content.rename(obj, new_id=self.get_new_id(obj))
 
     def get_new_id(self, obj):

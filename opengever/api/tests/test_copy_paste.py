@@ -1,13 +1,19 @@
+from collective.taskqueue.interfaces import ITaskQueue
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.testing import assets
 from opengever.testing import IntegrationTestCase
+from plone.namedfile.file import NamedBlobFile
+from zope.component import getUtility
 import json
 
 
 class TestCopyPasteAPI(IntegrationTestCase):
+
+    features = ("bumblebee", "doc-properties")
 
     @browsing
     def test_copy_renames_id(self, browser):
@@ -118,3 +124,27 @@ class TestCopyPasteAPI(IntegrationTestCase):
         self.assertEquals(
             [{u'source': doc.absolute_url(), u'target': copy.absolute_url()}],
             browser.json)
+
+    @browsing
+    def test_stores_document_in_bumblebee(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {
+            u'source': self.subsubdossier.absolute_url(),
+        }
+
+        self.subsubdocument.file = NamedBlobFile(
+            assets.load('with_gever_properties.docx'),
+            filename=unicode('with_gever_properties.docx'))
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open(
+                self.leaf_repofolder.absolute_url() + '/@copy',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers,
+            )
+        dossier = children["added"].pop()
+        doc = dossier.values()[0]
+        queue = getUtility(ITaskQueue, 'test-queue')
+        self.assertIn(doc.absolute_url_path() + "/bumblebee_trigger_storing",
+                      (job['url'] for job in queue.queue))
