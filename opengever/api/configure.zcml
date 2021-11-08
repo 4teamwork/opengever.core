@@ -37,6 +37,8 @@
   <adapter factory=".serializer.SerializeOrgUnitModelToJsonSummary" />
   <adapter factory=".serializer.GeverRelationListFieldSerializer" />
 
+  <adapter factory=".deserializer.GeverDeserializeFromJson" />
+
   <adapter factory=".actors.SerializeActorToJson" />
   <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
