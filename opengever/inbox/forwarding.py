@@ -258,9 +258,9 @@ def move_documents_into_forwarding(context, event):
 
     for relation in relations:
         obj = relation.to_object
-        RoleAssignmentManager(obj).clear_by_reference(context)
         clipboard = aq_parent(aq_inner(obj)).manage_cutObjects(obj.id)
         context.manage_pasteObjects(clipboard)
+        RoleAssignmentManager(obj).clear_by_reference(context)
 
     context.relatedItems = []
 
