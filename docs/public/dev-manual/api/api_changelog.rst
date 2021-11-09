@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- Some error messages have been renamed, but the format how an error is returned stays the same, only the response now usually contains a translated error message and may contain additional metadata.
 - Toggling a Workspace Todos review state from active to completed and back can be done thorugh the newly introduced `@toggle` endpiont for todos. [elioschmutz]
 - Workspace Todos do no longer provide a completed-field. Completing a todo is now done through a workflow transition. [elioschmutz]
 - The ``completed`` field in the ``@listing`` is now longer supported, use the ``is_completed`` field instead.
