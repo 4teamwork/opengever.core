@@ -131,6 +131,33 @@ def get_auth_plugin(context):
     return plugin
 
 
+def _parse_flag(request, key):
+    return request.form.get(key, 'true').lower() not in ('n', 'no', 'f', 'false', 'off', '0')
+
+
+def parse_flags(request, action):
+    if action != 'attach':
+        return
+
+    flags = {}
+    if request['REQUEST_METHOD'] == 'GET':
+        flags['attach'] = _parse_flag(request, 'attach')
+        flags['bcc'] = _parse_flag(request, 'set_bcc')
+        flags['links'] = _parse_flag(request, 'links')
+    elif 'BODY' in request:
+        try:
+            data = json.loads(request['BODY'])
+        except ValueError:
+            data = {}
+
+        flags['attach'] = data.get('attach', True) is not False
+        flags['bcc'] = data.get('set_bcc', True) is not False
+        flags['links'] = data.get('links', True) is not False
+
+    flag_list = ['-{}'.format(key) for key, value in flags.items() if not value]
+    return ",".join(flag_list)
+
+
 def create_oc_url(request, context, payload):
     auth_plugin = get_auth_plugin(context)
 
@@ -146,6 +173,8 @@ def create_oc_url(request, context, payload):
     bcc = parse_bcc(request)
 
     documents = parse_documents(request, context, action)
+
+    flags = parse_flags(request, action)
 
     if not documents:
         raise NotFound
@@ -167,6 +196,9 @@ def create_oc_url(request, context, payload):
 
     if bcc:
         payload['bcc'] = bcc
+
+    if flags:
+        payload['flags'] = flags
 
     user_id = api.user.get_current().getId()
 
