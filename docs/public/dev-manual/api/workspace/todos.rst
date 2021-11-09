@@ -87,6 +87,33 @@ Ein erledigtes ToDo wieder öffnen
           "...": "..."
       }
 
+Ein ToDo-Status togglen (öffnen/abschliessen)
+---------------------------------------------
+Der Status eines Todos kann mit dem ``@toggle``-Endpoint umgedreht werden.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST workspaces/workspace-1/todo-1/@toggle HTTP/1.1
+       Accept: application/json
+       Prefer: return=representation
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+         "@id": "workspaces/workspace-1/todo-1/@toggle",
+          "review_state": "opengever_workspace_todo--TRANSITION--open--completed_active",
+          "is_completed": true,
+          "...": "..."
+      }
+
 
 Ein ToDo neu zuweisen
 ---------------------

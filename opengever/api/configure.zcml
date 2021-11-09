@@ -1510,4 +1510,12 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@toggle"
+      for="opengever.workspace.interfaces.IToDo"
+      factory=".todo.ToggleToDoCompleted"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
