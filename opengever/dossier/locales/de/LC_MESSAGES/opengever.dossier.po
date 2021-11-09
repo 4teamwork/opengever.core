@@ -346,7 +346,7 @@ msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier ausschliesslich 
 #. Default: "Choose users and groups which have readable and writing access to the dossier"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_reading_and_writing"
-msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten,  und der Status des Dossiers anzupassen (abschliessen, wieder eröffnen, stornieren und aktivieren)."
+msgstr "Wählen Sie Benutzer und Gruppen aus, welche im Dossier lesend und schreibend Zugriff erhalten sollen. Die Benutzer dieser Gruppe werden entsprechend dazu berechtigt, das Dossier zu bearbeiten, Inhalte zu erstellen und zu bearbeiten, und den Status des Dossiers anzupassen (abschliessen, wieder eröffnen, stornieren und reaktivieren)."
 
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
