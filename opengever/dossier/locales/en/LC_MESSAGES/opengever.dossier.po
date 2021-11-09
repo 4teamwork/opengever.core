@@ -431,7 +431,7 @@ msgstr "Select users and/or groups that should get read-only access to this doss
 #. Default: "Choose users and groups which have readable and writing access to the dossier"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_reading_and_writing"
-msgstr "Select users and/or groups that should get read/write access to this dossier. These users will be able to modify the dossier itself, add and edit content in it, as well as change its status (resolve, reopen, deactivate and activate)."
+msgstr "Select users and/or groups that should get read/write access to this dossier. These users will be able to modify the dossier itself, add and edit content in it, as well as change its status (resolve, reopen, deactivate and reactivate)."
 
 #. German translation: Durch Aktivieren dieser Option stehen bei der Erstellung des Dossiers ab Vorlage nur noch die in der Vorlage angegebenen Schlagwörter zur Auswahl.<br>Der Benutzer kann dadurch auch keine neuen Schlagwörter erfassen.
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
