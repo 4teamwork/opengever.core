@@ -55,6 +55,12 @@
 
   <subscriber
       for="opengever.workspace.interfaces.IToDo
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".subscribers.todo_review_state_changed"
+      />
+
+  <subscriber
+      for="opengever.workspace.interfaces.IToDo
            opengever.base.response.IResponseAddedEvent"
       handler=".subscribers.response_added"
       />
@@ -94,11 +100,6 @@
   <adapter
       factory=".indexers.attendees"
       name="attendees"
-      />
-
-  <adapter
-      factory=".indexers.is_completed"
-      name="is_completed"
       />
 
   <adapter

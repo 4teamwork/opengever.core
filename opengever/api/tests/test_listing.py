@@ -1170,6 +1170,10 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_order=ascending',
         ))
         view = '?'.join(('@listing', query_string))
+
+        self.completed_todo.reindexObject()
+        self.commit_solr()
+
         browser.open(self.workspace, view=view, headers=self.api_headers)
 
         self.assertEqual(
@@ -1307,8 +1311,8 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertEqual(
             [
-                u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-3',
                 u'http://nohost/plone/workspaces/workspace-1/todolist-2',
+                u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-3',
                 u'http://nohost/plone/workspaces/workspace-1/todolist-2/todo-2',
                 u'http://nohost/plone/workspaces/workspace-1/todo-1',
                 u'http://nohost/plone/workspaces/workspace-1/todolist-1',
@@ -1716,8 +1720,8 @@ class TestListingSortFirst(SolrIntegrationTestCase):
 
         self.assertEqual(
             [u'opengever.workspace.folder',
-             u'opengever.workspace.todo',
              u'opengever.workspace.todolist',
+             u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todolist',
@@ -1744,8 +1748,8 @@ class TestListingSortFirst(SolrIntegrationTestCase):
             [u'opengever.workspace.folder',
              u'opengever.document.document',
              u'opengever.document.document',
-             u'opengever.workspace.todo',
              u'opengever.workspace.todolist',
+             u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todo',
              u'opengever.workspace.todolist',

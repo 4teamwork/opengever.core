@@ -1,5 +1,4 @@
 from collective import dexteritytextindexer
-from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from opengever.workspace.workspace import IWorkspaceSchema
 from plone import api
@@ -66,9 +65,3 @@ class WorkspaceMeetingSearchableTextExtender(object):
 @indexer(IWorkspaceMeeting)
 def attendees(obj):
     return obj.attendees
-
-
-@indexer(IToDo)
-def is_completed(obj):
-    """Boolean indexer if the todo is completed"""
-    return obj.completed

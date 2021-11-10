@@ -235,9 +235,9 @@ class TestToDoActivities(IntegrationTestCase):
     def test_closed_activity_is_recorded_when_a_todo_is_closed(self, browser):
         self.login(self.workspace_owner, browser)
 
-        browser.open(self.assigned_todo, method='PATCH',
-                     headers=self.api_headers,
-                     data=json.dumps({'completed': True}))
+        browser.open(
+            self.assigned_todo, method='POST', headers=self.api_headers,
+            view="@workflow/opengever_workspace_todo--TRANSITION--complete--active_completed")
 
         activity = Activity.query.one()
         self.assertEquals('todo-modified', activity.kind)
@@ -253,9 +253,9 @@ class TestToDoActivities(IntegrationTestCase):
     def test_reopened_activity_is_recorded_when_a_todo_is_reopened(self, browser):
         self.login(self.workspace_owner, browser)
 
-        browser.open(self.completed_todo, method='PATCH',
-                     headers=self.api_headers,
-                     data=json.dumps({'completed': False}))
+        browser.open(
+            self.completed_todo, method='POST', headers=self.api_headers,
+            view="@workflow/opengever_workspace_todo--TRANSITION--open--completed_active")
 
         activity = Activity.query.one()
         self.assertEquals('todo-modified', activity.kind)

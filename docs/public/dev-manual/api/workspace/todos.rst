@@ -22,7 +22,6 @@ Ein ToDo erstellen
         "text": "Das wichtige Dokument muss angeschaut werden.",
         "deadline": "2018-10-16"
         "responsible": "john.doe",
-        "completed": false
       }
 
 
@@ -47,21 +46,73 @@ Ein ToDo als erledigt markieren
 
    .. sourcecode:: http
 
-      PATCH workspaces/workspace-1/todo-1 HTTP/1.1
-      Accept: application/json
-      Content-Type: application/json
-
-      {
-        "completed": true
-      }
+       POST workspaces/workspace-1/todo-1/@workflow/opengever_workspace_todo--TRANSITION--complete--active_completed HTTP/1.1
+       Accept: application/json
 
 
 **Beispiel-Response**:
 
    .. sourcecode:: http
 
-      HTTP/1.1 204 No Content
+      HTTP/1.1 200 OK
+      Content-Type: application/json
 
+      {
+          "action": "opengever_workspace_todo--TRANSITION--complete--active_completed",
+          "title": "Completed",
+          "...": "..."
+      }
+
+Ein erledigtes ToDo wieder öffnen
+---------------------------------
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST workspaces/workspace-1/todo-1/@workflow/opengever_workspace_todo--TRANSITION--open--completed_active HTTP/1.1
+       Accept: application/json
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "action": "opengever_workspace_todo--TRANSITION--open--completed_active",
+          "title": "Active",
+          "...": "..."
+      }
+
+Ein ToDo-Status togglen (öffnen/abschliessen)
+---------------------------------------------
+Der Status eines Todos kann mit dem ``@toggle``-Endpoint umgedreht werden.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST workspaces/workspace-1/todo-1/@toggle HTTP/1.1
+       Accept: application/json
+       Prefer: return=representation
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+         "@id": "workspaces/workspace-1/todo-1/@toggle",
+          "review_state": "opengever_workspace_todo--TRANSITION--open--completed_active",
+          "is_completed": true,
+          "...": "..."
+      }
 
 
 Ein ToDo neu zuweisen

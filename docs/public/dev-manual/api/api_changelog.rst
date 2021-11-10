@@ -8,6 +8,8 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- Toggling a Workspace Todos review state from active to completed and back can be done thorugh the newly introduced `@toggle` endpiont for todos. [elioschmutz]
+- Workspace Todos do no longer provide a completed-field. Completing a todo is now done through a workflow transition. [elioschmutz]
 - The ``completed`` field in the ``@listing`` is now longer supported, use the ``is_completed`` field instead.
 
 Other Changes

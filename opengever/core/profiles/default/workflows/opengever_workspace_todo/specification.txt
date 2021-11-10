@@ -23,3 +23,12 @@ General:
 Initial Status: Active
 Status Active:
   A workspace guest can view.
+  A workspace member can complete.
+
+Status Completed:
+  A workspace guest can view.
+  A workspace member can open.
+
+Transitions:
+  complete (Active => Completed)
+  open (Completed => Active)

@@ -8,6 +8,7 @@ from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
+from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
@@ -18,6 +19,14 @@ from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
+
+COMPLETED_TODO_STATE = 'opengever_workspace_todo--STATUS--completed'
+
+ACTIVE_TODO_STATE = 'opengever_workspace_todo--STATUS--active'
+
+COMPLETE_TODO_TRANSITION = 'opengever_workspace_todo--TRANSITION--complete--active_completed'
+
+OPEN_TODO_TRANSITION = 'opengever_workspace_todo--TRANSITION--open--completed_active'
 
 
 @provider(IFormFieldProvider)
@@ -42,11 +51,6 @@ class IToDoSchema(model.Schema):
 
     deadline = schema.Date(
         title=_(u'label_deadline', default='Deadline'),
-        required=False)
-
-    completed = schema.Bool(
-        title=_(u'label_completed', default='Completed'),
-        default=False,
         required=False)
 
     relatedItems = RelationList(
@@ -81,3 +85,11 @@ class ToDo(Container):
                 return parent
             obj = parent
         return None
+
+    @property
+    def is_completed(self):
+        return api.content.get_state(self) == COMPLETED_TODO_STATE
+
+    def toggle(self):
+        transition = OPEN_TODO_TRANSITION if self.is_completed else COMPLETE_TODO_TRANSITION
+        api.content.transition(obj=self, transition=transition)
