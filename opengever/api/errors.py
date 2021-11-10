@@ -11,28 +11,30 @@ class GeverErrorHandling(ErrorHandling):
 
     def render_exception(self, exception):
         result = super(GeverErrorHandling, self).render_exception(exception)
-        message = exception.message
+        try:
+            result = self.extend_with_translation(result, exception.message)
+        except Exception:
+            pass
 
-        # Validation errors
+        return result
+
+    def extend_with_translation(self, result, message):
         if isinstance(message, list):
-            # Special handling for invitations etc.
-            if len(message) and isinstance(message[0], tuple):
-                return result
-
             # Handle TUS error
-            elif len(message) and not message[0].get('field'):
+            if len(message) and not message[0].get('field'):
                 result['additional_metadata'] = {}
                 result['translated_message'] = translate(
                     message[0].get('message'), context=self.request)
                 return result
 
+            # Validation errors
             fields = []
             for error in message:
                 fields.append({
-                    'field': error['field'],
-                    'type': str(error['error']).decode('utf-8'),
+                    'field': error.get('field'),
+                    'type': str(error.get('error', '')).decode('utf-8'),
                     'translated_message': translate(
-                        error['message'], context=self.request)
+                        error.get('message'), context=self.request)
                 })
 
             result['additional_metadata'] = {'fields': fields}
