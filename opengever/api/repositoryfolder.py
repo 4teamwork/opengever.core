@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.api import _
+from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
@@ -8,7 +9,6 @@ from opengever.repository.deleter import RepositoryDeleter
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.restapi.deserializer import json_body
-from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
@@ -21,7 +21,7 @@ from zope.interface import Interface
 
 @implementer(IDeserializeFromJson)
 @adapter(IRepositoryFolder, Interface)
-class DeserializeRepositoryFolderFromJson(DeserializeFromJson):
+class DeserializeRepositoryFolderFromJson(GeverDeserializeFromJson):
 
     def __call__(self, validate_all=False, data=None, create=False):
         if data is None:

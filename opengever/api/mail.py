@@ -1,4 +1,5 @@
 from ftw.mail.mail import IMail
+from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.document import SerializeDocumentToJson
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
 from opengever.mail.exceptions import AlreadyExtractedError
@@ -9,7 +10,6 @@ from plone.app.uuid.utils import uuidToURL
 from plone.namedfile.file import NamedBlobFile
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
-from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
@@ -23,7 +23,7 @@ from zope.interface import Interface
 # field.
 @implementer(IDeserializeFromJson)
 @adapter(IMail, Interface)
-class DeserializeMailFromJson(DeserializeFromJson):
+class DeserializeMailFromJson(GeverDeserializeFromJson):
 
     def __call__(self, validate_all=False, data=None, create=False):
         if data is None:
