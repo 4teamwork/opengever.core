@@ -1202,6 +1202,33 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             browser.json['items'])
 
     @browsing
+    def test_todo_lists_listing(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        query_string = '&'.join((
+            'name=todo_lists',
+            'columns=title',
+            'columns=@type',
+            'sort_on=getObjPositionInParent',
+        ))
+        view = '?'.join(('@listing', query_string))
+
+        browser.open(self.workspace, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-2',
+                    u'@type': u'opengever.workspace.todolist',
+                    u'UID': IUUID(self.todolist_introduction),
+                    u'title': u'Projekteinf\xfchrung'},
+                {
+                    u'@id': u'http://nohost/plone/workspaces/workspace-1/todolist-1',
+                    u'@type': u'opengever.workspace.todolist',
+                    u'UID': IUUID(self.todolist_general),
+                    u'title': u'Allgemeine Informationen'}],
+            browser.json['items'])
+
+    @browsing
     def test_task_templatefolders_listing(self, browser):
         self.enable_languages()
         self.login(self.regular_user, browser=browser)

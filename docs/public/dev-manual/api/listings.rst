@@ -54,6 +54,7 @@ Aktuell werden folgende Auflistungen unterstützt:
 - ``workspace_meetings``: Teamraum Meetings
 - ``tasks``: Aufgaben
 - ``todos``: Teamraum ToDos
+- ``todo_lists``: Teamraum ToDo-Listen
 - ``proposals``: Anträge
 - ``contacts``: Lokale Kontakte
 - ``repository_folders``: Ordnungspositionen
