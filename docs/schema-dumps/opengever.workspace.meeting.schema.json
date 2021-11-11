@@ -16,14 +16,14 @@
             "title": "Beginn",
             "format": "datetime",
             "description": "",
-            "_zope_schema_type": "Datetime"
+            "_zope_schema_type": "UTCDatetime"
         },
         "end": {
             "type": "string",
             "title": "Ende",
             "format": "datetime",
             "description": "",
-            "_zope_schema_type": "Datetime"
+            "_zope_schema_type": "UTCDatetime"
         },
         "location": {
             "type": "string",

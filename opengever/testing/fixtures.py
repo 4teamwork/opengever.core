@@ -2219,7 +2219,7 @@ class OpengeverContentFixture(object):
             .within(self.workspace)
             .titled(u'Besprechung Kl\xe4ranlage')
             .having(
-                start=datetime(2016, 12, 8),
+                start=datetime(2016, 12, 8, tzinfo=pytz.UTC),
                 responsible=self.workspace_member.getId())
         ))
 
