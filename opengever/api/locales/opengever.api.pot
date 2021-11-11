@@ -1,0 +1,123 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2021-11-08 14:06+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.api\n"
+
+#. Default: "Copy of ${title}"
+#: ./opengever/api/copy_.py
+msgid "copy_of"
+msgstr ""
+
+#. Default: "It's not possible to have non-.docx documents as proposal documents."
+#: ./opengever/api/tus.py
+msgid "error_proposal_document_type"
+msgstr ""
+
+#. Default: "Already trashed"
+#: ./opengever/api/trash.py
+msgid "msg_already_trashed"
+msgstr ""
+
+#. Default: "Cancel checkout is not allowed."
+#: ./opengever/api/cancelcheckout.py
+msgid "msg_cancel_checkout_disallowed"
+msgstr ""
+
+#. Default: "Checkin is not allowed."
+#: ./opengever/api/checkin.py
+msgid "msg_checkin_disallowed"
+msgstr ""
+
+#. Default: "Checkout is not allowed."
+#: ./opengever/api/checkout.py
+msgid "msg_checkout_disallowed"
+msgstr ""
+
+#. Default: "File extension must be .docx for proposal documents."
+#: ./opengever/api/document.py
+msgid "msg_docx_file_extension_for_proposal"
+msgstr ""
+
+#. Default: "Mime type must be ${docx_mimetype} for proposal documents."
+#: ./opengever/api/document.py
+msgid "msg_docx_mime_type_for_proposal"
+msgstr ""
+
+#. Default: "Empty filename not supported"
+#: ./opengever/api/upload_structure.py
+msgid "msg_filename_required"
+msgstr ""
+
+#. Default: "Inputs not valid"
+#: ./opengever/api/errors.py
+msgid "msg_inputs_not_valid"
+msgstr ""
+
+#. Default: "Maximum dossier depth exceeded"
+#: ./opengever/api/upload_structure.py
+msgid "msg_max_dossier_depth_exceeded"
+msgstr ""
+
+#. Default: "It's not possible to have no file in proposal documents."
+#: ./opengever/api/document.py
+msgid "msg_needs_file_in_proposal_document"
+msgstr ""
+
+#. Default: "Document not checked-out by current user."
+#: ./opengever/api/document.py
+msgid "msg_not_checked_out_by_current_user"
+msgstr ""
+
+#. Default: "Object is not trashable"
+#: ./opengever/api/trash.py
+msgid "msg_obj_not_trashable"
+msgstr ""
+
+#. Default: "Property 'files' is required"
+#: ./opengever/api/upload_structure.py
+msgid "msg_prop_file_required"
+msgstr ""
+
+#. Default: "The reference_number ${number} is already in use."
+#: ./opengever/api/repositoryfolder.py
+msgid "msg_reference_already_in_use"
+msgstr ""
+
+#. Default: "Resource is locked."
+#: ./opengever/api/update.py
+msgid "msg_resource_locked"
+msgstr ""
+
+#. Default: "Some of the objects cannot be added here"
+#: ./opengever/api/upload_structure.py
+msgid "msg_some_objects_not_addable"
+msgstr ""
+
+#. Default: "Cannot trash a checked-out document"
+#: ./opengever/api/trash.py
+msgid "msg_trash_checked_out_doc"
+msgstr ""
+
+#. Default: "Cannot trash a document that has been returned as excerpt"
+#: ./opengever/api/trash.py
+msgid "msg_trash_doc_returned_as_excerpt"
+msgstr ""
+
+#. Default: "Cannot trash a locked document"
+#: ./opengever/api/trash.py
+msgid "msg_trash_locked_doc"
+msgstr ""

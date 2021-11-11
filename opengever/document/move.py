@@ -1,5 +1,6 @@
 from OFS.CopySupport import ResourceLockedError
 from opengever.base.adapters import DefaultMovabilityChecker
+from opengever.document import _
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.templatefolder.utils import is_within_templates
 from opengever.inbox.utils import is_within_inbox
@@ -15,27 +16,39 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
 
     def validate_movement(self, target):
         if self.context.is_inside_a_task():
-            raise Forbidden(u'Documents inside a task cannot be moved.')
+            raise Forbidden(
+                _(u'msg_doc_inside_task_cant_be_moved',
+                  u'Documents inside a task cannot be moved.'))
         if self.context.is_inside_a_proposal():
-            raise Forbidden(u'Documents inside a proposal cannot be moved.')
+            raise Forbidden(
+                _(u'msg_doc_inside_proposal_cant_be_moved',
+                  u'Documents inside a proposal cannot be moved.'))
         if self.context.is_inside_a_closed_dossier():
-            raise Forbidden(u'Documents inside a closed dossier cannot be moved.')
+            raise Forbidden(
+                _(u'msg_doc_inside_closed_dossier',
+                  default=u'Documents inside a closed dossier cannot be moved.'))
         if ILockable(self.context).locked():
-            raise ResourceLockedError(u'Locked documents cannot be moved.')
+            raise ResourceLockedError(
+                _('msg_locked_doc_cant_be_moved',
+                  default=u'Locked documents cannot be moved.'))
 
         if is_within_repository(self.context):
             if is_within_templates(target):
                 raise Forbidden(
-                    u'Documents within the repository cannot be moved to the templates.')
+                    _(u'msg_docs_cant_be_moved_from_repo_to_templates',
+                      u'Documents within the repository cannot be moved to the templates.'))
             if is_within_private_root(target):
                 raise Forbidden(
-                    u'Documents within the repository cannot be moved to the private repository.')
+                    _(u'msg_docs_cant_be_moved_from_repo_to_private_repo',
+                      u'Documents within the repository cannot be moved to the private repository.'))
             return
 
         if is_within_inbox(self.context):
             if is_within_templates(target):
                 raise Forbidden(
-                    u'Documents within the inbox cannot be moved to the templates.')
+                    _(u'msg_docs_cant_be_moved_from_inbox_to_templates',
+                      u'Documents within the inbox cannot be moved to the templates.'))
             if is_within_private_root(target):
                 raise Forbidden(
-                    u'Documents within the inbox cannot be moved to the private repository.')
+                    _(u'msg_docs_cant_be_moved_from_inbox_to_private_repo',
+                      u'Documents within the inbox cannot be moved to the private repository.'))

@@ -3,7 +3,6 @@ from .cmf_catalog_aware import PatchCMFCatalogAware
 from .cmf_catalog_aware import PatchCMFCatalogAwareHandlers
 from .content_history_viewlet import PatchFullHistory
 from .default_values import PatchBuilderCreate
-from .default_values import PatchDeserializeFromJson
 from .default_values import PatchDexterityContentGetattr
 from .default_values import PatchDexterityDefaultAddForm
 from .default_values import PatchDXCreateContentInContainer
@@ -51,7 +50,6 @@ PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchContentRulesHandlerOnLogin()()
 PatchCopyContainerVerifyObjectPaste()()
-PatchDeserializeFromJson()()
 PatchDexterityContentGetattr()()
 PatchDexterityDefaultAddForm()()
 PatchDXContainerPastePermission()()

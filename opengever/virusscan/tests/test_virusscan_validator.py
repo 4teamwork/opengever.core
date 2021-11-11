@@ -190,10 +190,8 @@ class TestVirusScanValidator(IntegrationTestCase):
 
         self.assertEqual(400, browser.status_code)
         self.assertEqual(0, len(children['added']))
-        self.assertEqual(
-            u"[{'message': 'file_infected', "
-            u"'error': 'ValidationError'}]",
-            browser.json['message'])
+        self.assertEqual(u'Error - Virus detected!',
+                         browser.json['translated_message'])
 
         data['file']['data'] = "No virus"
         with self.observe_children(self.empty_dossier) as children:
@@ -228,10 +226,8 @@ class TestVirusScanValidator(IntegrationTestCase):
                          method='PATCH', headers=self.api_headers)
 
         self.assertEqual(400, browser.status_code)
-        self.assertEqual(
-            u"[{'message': 'file_infected', "
-            u"'error': 'ValidationError'}]",
-            browser.json['message'])
+        self.assertEqual(u'Error - Virus detected!',
+                         browser.json['translated_message'])
 
         data['file']['data'] = "No virus"
         browser.open(self.document, data=json.dumps(data),
@@ -251,10 +247,8 @@ class TestVirusScanValidator(IntegrationTestCase):
                          method='POST', headers=self.api_headers)
 
         self.assertEqual(0, len(children['added']))
-        self.assertEqual(
-            u"[{'message': 'file_infected', "
-            u"'error': 'ValidationError'}]",
-            browser.json['message'])
+        self.assertEqual(u'Error - Virus detected!',
+                         browser.json['translated_message'])
 
         data['archival_file']['data'] = "No virus"
         with self.observe_children(self.empty_dossier) as children:
@@ -293,9 +287,11 @@ class TestVirusScanValidator(IntegrationTestCase):
         self.assertEqual(400, browser.status_code)
         self.assertEqual(0, len(children['added']))
         self.assertEqual(
-            u"[{'message': 'file_infected', "
-            u"'error': 'ValidationError'}]",
-            browser.json['message'])
+            {u'type': u'BadRequest',
+             u'additional_metadata': {},
+             u'translated_message': u'Error - Virus detected!',
+             u'message': u"[{'message': u'file_infected', 'error': 'ValidationError'}]"},
+            browser.json)
 
         data['message']['data'] = "No virus"
         with self.observe_children(self.empty_dossier) as children:
@@ -318,9 +314,11 @@ class TestVirusScanValidator(IntegrationTestCase):
         self.assertEqual(400, browser.status_code)
         self.assertEqual(0, len(children['added']))
         self.assertEqual(
-            u"[{'message': 'file_infected', "
-            u"'error': 'ValidationError'}]",
-            browser.json['message'])
+            {u'type': u'BadRequest',
+             u'additional_metadata': {},
+             u'translated_message': u'Error - Virus detected!',
+             u'message': u"[{'message': u'file_infected', 'error': 'ValidationError'}]"},
+            browser.json)
 
         msg = base64.b64encode(load('testmail.msg'))
         data['message']['data'] = msg

@@ -139,8 +139,15 @@ class TestTeamPost(IntegrationTestCase):
                          data=json.dumps(self.valid_data))
 
         self.assertEquals(
-            {u'message': u"[{'field': 'groupid', 'message': u'Constraint not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]",
-             u'type': u'BadRequest'},
+            {u'type': u'BadRequest',
+             u'additional_metadata': {
+                 u'fields': [
+                     {u'field': u'groupid',
+                      u'translated_message': u'Constraint not satisfied',
+                      u'type': u'not-existing'}]},
+             u'translated_message': u'Inputs not valid',
+             u'message': u"[{'field': 'groupid', 'message': u'Constraint "
+             "not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]"},
             browser.json)
 
     @browsing
@@ -155,8 +162,15 @@ class TestTeamPost(IntegrationTestCase):
                          data=json.dumps(self.valid_data))
 
         self.assertEquals(
-            {u'message': u"[{'field': 'groupid', 'message': u'Required input is missing.', 'error': RequiredMissing('groupid')}]",
-             u'type': u'BadRequest'},
+            {u'type': u'BadRequest',
+             u'additional_metadata': {
+                 u'fields': [
+                     {u'field': u'groupid',
+                      u'translated_message': u'Required input is missing.',
+                      u'type': u'groupid'}]
+             },
+             u'translated_message': u'Inputs not valid',
+             u'message': u"[{'field': 'groupid', 'message': u'Required input is missing.', 'error': RequiredMissing('groupid')}]"},
             browser.json)
 
 
@@ -190,10 +204,14 @@ class TestTeamPatch(IntegrationTestCase):
             browser.open(url, method='PATCH', headers=self.api_headers,
                          data=json.dumps(data))
 
+        self.assertEquals(u'BadRequest', browser.json['type'])
         self.assertEquals(
-            {u'message': u"[{'field': 'groupid', 'message': u'Constraint not satisfied', 'error': ConstraintNotSatisfied(u'not-existing')}]",
-             u'type': u'BadRequest'},
-            browser.json)
+            u'Inputs not valid', browser.json['translated_message'])
+        self.assertEquals(
+            {u'fields': [{u'field': u'groupid',
+                          u'translated_message': u'Constraint not satisfied',
+                          u'type': u'not-existing'}]},
+            browser.json['additional_metadata'])
 
     @browsing
     def test_raises_not_found_for_not_existing_team(self, browser):

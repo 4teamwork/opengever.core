@@ -1,5 +1,6 @@
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.add import FolderPost
+from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.globalindex import translate_review_state
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
@@ -18,7 +19,6 @@ from opengever.task.task_response import ITaskResponse
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from plone.restapi.deserializer import json_body
-from plone.restapi.deserializer.dxcontent import DeserializeFromJson
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
@@ -114,7 +114,7 @@ def deserialize_responsible(data):
 
 @implementer(IDeserializeFromJson)
 @adapter(ITask, Interface)
-class TaskDeserializeFromJson(DeserializeFromJson):
+class TaskDeserializeFromJson(GeverDeserializeFromJson):
     """A task specific deserializer which allows to pass in the
     responsible_client and responsible value in a combined string.
     In the same way as it is exposed by the APIs querysoure endpoint.

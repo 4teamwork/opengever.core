@@ -5,6 +5,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.api">
 
+  <i18n:registerTranslations directory="locales" />
+
   <include file="permissions.zcml" />
 
   <include package="plone.rest" file="meta.zcml" />
@@ -34,6 +36,8 @@
   <adapter factory=".serializer.SerializeAdminUnitModelToJsonSummary" />
   <adapter factory=".serializer.SerializeOrgUnitModelToJsonSummary" />
   <adapter factory=".serializer.GeverRelationListFieldSerializer" />
+
+  <adapter factory=".deserializer.GeverDeserializeFromJson" />
 
   <adapter factory=".actors.SerializeActorToJson" />
   <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />

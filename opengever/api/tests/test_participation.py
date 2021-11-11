@@ -506,13 +506,10 @@ class TestParticipationDelete(IntegrationTestCase):
                 method='DELETE',
                 headers=http_headers()
             )
-        self.assertEqual(
-            browser.json,
-            {
-                u'message': u'At least one principal must remain admin.',
-                u'type': u'BadRequest'
-            }
-        )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'At least one principal must remain admin.',
+                         browser.json[u'translated_message'])
 
     @browsing
     def test_cannot_delete_the_last_folder_admin_role_assignment(self, browser):
@@ -527,13 +524,10 @@ class TestParticipationDelete(IntegrationTestCase):
                 method='DELETE',
                 headers=http_headers()
             )
-        self.assertEqual(
-            browser.json,
-            {
-                u'message': u'At least one principal must remain admin.',
-                u'type': u'BadRequest'
-            }
-        )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'At least one principal must remain admin.',
+                         browser.json[u'translated_message'])
 
     @browsing
     def test_guest_cannot_use_the_endpoint(self, browser):
@@ -698,13 +692,10 @@ class TestParticipationPatch(IntegrationTestCase):
                 data=data,
                 headers=http_headers()
             )
-        self.assertEqual(
-            browser.json,
-            {
-                u'message': u'At least one principal must remain admin.',
-                u'type': u'BadRequest'
-            }
-        )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'At least one principal must remain admin.',
+                         browser.json[u'translated_message'])
 
     @browsing
     def test_cannot_modify_the_last_folder_admin_role_assignment(self, browser):
@@ -724,13 +715,10 @@ class TestParticipationPatch(IntegrationTestCase):
                 data=data,
                 headers=http_headers()
             )
-        self.assertEqual(
-            browser.json,
-            {
-                u'message': u'At least one principal must remain admin.',
-                u'type': u'BadRequest'
-            }
-        )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'At least one principal must remain admin.',
+                         browser.json[u'translated_message'])
 
     @browsing
     def test_modify_a_users_local_role_on_folder(self, browser):

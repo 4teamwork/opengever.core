@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-09-10 06:35+0000\n"
+"POT-Creation-Date: 2021-11-05 08:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -955,6 +955,11 @@ msgstr ""
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py
 msgid "msg_main_dossier_not_found"
+msgstr ""
+
+#. Default: "This would exceed maximally allowed dossier depth."
+#: ./opengever/dossier/move_items.py
+msgid "msg_would_exceed_max_dossier_level"
 msgstr ""
 
 #: ./opengever/dossier/resolve.py

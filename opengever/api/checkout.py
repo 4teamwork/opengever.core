@@ -1,8 +1,9 @@
+from opengever.api import _
 from opengever.document.interfaces import ICheckinCheckoutManager
 from plone.restapi.services import Service
+from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
-
 import plone.protect.interfaces
 
 
@@ -14,11 +15,8 @@ class Checkout(Service):
                                   ICheckinCheckoutManager)
 
         if not manager.is_checkout_allowed():
-            self.request.response.setStatus(403)
-            return {'error': {
-                'type': 'Forbidden',
-                'message': 'Checkout is not allowed.',
-            }}
+            raise Forbidden(_('msg_checkout_disallowed',
+                              default=u'Checkout is not allowed.'))
 
         # Disable CSRF protection
         if 'IDisableCSRFProtection' in dir(plone.protect.interfaces):

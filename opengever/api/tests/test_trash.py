@@ -26,8 +26,9 @@ class TestTrashAPI(IntegrationTestCase):
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.document.absolute_url() + '/@trash',
                          method='POST', headers={'Accept': 'application/json'})
+
         self.assertEqual(
-            browser.json[u'error'][u'message'], u'Already trashed')
+            browser.json['translated_message'], u'Already trashed')
 
     @browsing
     def test_trash_checked_out_document_gives_bad_request(self, browser):
@@ -39,7 +40,7 @@ class TestTrashAPI(IntegrationTestCase):
             browser.open(self.document.absolute_url() + '/@trash',
                          method='POST', headers={'Accept': 'application/json'})
         self.assertEqual(
-            browser.json[u'error'][u'message'],
+            browser.json['translated_message'],
             u'Cannot trash a checked-out document')
 
     @browsing
@@ -53,7 +54,7 @@ class TestTrashAPI(IntegrationTestCase):
             browser.open(excerpt.absolute_url() + '/@trash',
                          method='POST', headers={'Accept': 'application/json'})
         self.assertEqual(
-            browser.json[u'error'][u'message'],
+            browser.json['translated_message'],
             u'Cannot trash a document that has been returned as excerpt')
 
     @browsing
@@ -65,7 +66,7 @@ class TestTrashAPI(IntegrationTestCase):
                          method='POST', headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            browser.json[u'error'][u'message'],
+            browser.json['translated_message'],
             u'Object is not trashable')
 
     @browsing
@@ -88,6 +89,7 @@ class TestTrashAPI(IntegrationTestCase):
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open(self.normal_template, view='/@trash',
                          method='POST', headers={'Accept': 'application/json'})
+
         self.assertEqual(
             browser.json[u'message'],
             u'You are not authorized to access this resource.')

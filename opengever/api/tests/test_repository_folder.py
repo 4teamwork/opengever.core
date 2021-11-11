@@ -24,11 +24,15 @@ class TestRepositoryFolderPost(IntegrationTestCase):
             browser.open(self.repository_root, data=json.dumps(data),
                          method='POST', headers=self.api_headers)
 
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
         self.assertEqual(
-            u"[{'field': 'reference_number', "
-            "'message': 'The reference_number 1 is already in use.', "
-            "'error': 'ValidationError'}]",
-            browser.json['message'])
+            u'Inputs not valid', browser.json[u'translated_message'])
+        self.assertEqual(
+            {u'fields': [
+                {u'field': u'reference_number',
+                 u'translated_message': u'The reference_number 1 is already in use.',
+                 u'type': u'ValidationError'}]},
+            browser.json[u'additional_metadata'])
 
 
 class TestRepositoryFolderPatch(IntegrationTestCase):
@@ -46,11 +50,15 @@ class TestRepositoryFolderPatch(IntegrationTestCase):
             browser.open(self.empty_repofolder, data=json.dumps(data),
                          method='PATCH', headers=self.api_headers)
 
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
         self.assertEqual(
-            u"[{'field': 'reference_number', "
-            "'message': 'The reference_number 1 is already in use.', "
-            "'error': 'ValidationError'}]",
-            browser.json['message'])
+            u'Inputs not valid', browser.json[u'translated_message'])
+        self.assertEqual(
+            {u'fields': [
+                {u'field': u'reference_number',
+                 u'translated_message': u'The reference_number 1 is already in use.',
+                 u'type': u'ValidationError'}]},
+            browser.json[u'additional_metadata'])
 
     @browsing
     def test_patch_allows_unchanged_reference_number_prefix(self, browser):
