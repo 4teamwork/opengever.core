@@ -3,6 +3,7 @@ from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCIntegrationTestCase
+import json
 import jwt
 
 
@@ -19,6 +20,110 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         with browser.expect_http_error(404):
             oc_url = self.fetch_document_attach_oc_url(browser, self.empty_document)
             self.assertIsNone(oc_url)
+
+    @browsing
+    def test_attach_to_mail_sets_flags(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?attach=false&links=true&set_bcc=false',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-attach,-bcc', token['flags'])
+
+    @browsing
+    def test_attach_to_mail_does_not_set_flags(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_to_mail_sets_attach_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?attach=false',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-attach', token['flags'])
+
+    @browsing
+    def test_attach_to_mail_does_not_set_attach_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?attach=true',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_to_mail_sets_bcc_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?set_bcc=false',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-bcc', token['flags'])
+
+    @browsing
+    def test_attach_to_mail_does_not_set_bcc_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?set_bcc=true',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_to_mail_sets_links_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?links=false',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-links', token['flags'])
+
+    @browsing
+    def test_attach_to_mail_does_not_set_links_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url?links=true',
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
 
     @browsing
     def test_attach_to_email_open_with_file(self, browser):
@@ -348,6 +453,133 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
             ]
         payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
         self.assertEqual(payloads, expected_payloads)
+
+    @browsing
+    def test_attach_multiple_documents_sets_flags(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'attach': True, 'links': False, 'set_bcc': False})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-links,-bcc', token['flags'])
+
+    @browsing
+    def test_attach_multiple_documents_does_not_set_flags(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())]})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_multiple_documents_sets_attach_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'attach': False})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-attach', token['flags'])
+
+    @browsing
+    def test_attach_multiple_documents_does_not_set_attach_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'attach': True})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_multiple_documents_sets_bcc_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'set_bcc': False})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-bcc', token['flags'])
+
+    @browsing
+    def test_attach_multiple_documents_does_not_set_bcc_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'set_bcc': True})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
+
+    @browsing
+    def test_attach_multiple_documents_sets_links_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'links': False})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertEqual(u'-links', token['flags'])
+
+    @browsing
+    def test_attach_multiple_documents_does_not_set_links_flag(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=json.dumps({'documents': ['/'.join(self.document.getPhysicalPath())],
+                             'links': True})
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        self.assertIsNone(token.get('flags'))
 
     @browsing
     def test_checkout_checkin_open_without_file(self, browser):
