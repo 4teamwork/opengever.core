@@ -17,6 +17,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@listing``: Add ``todo_lists`` listing (see :ref:`docs <listing-names>`)
 - Tasks provides an additional attribute ``is_completed``.
+- Patch request now returns translated values and error messages.
 
 
 2021.22.0 (2021-11-03)
