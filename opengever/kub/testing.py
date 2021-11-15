@@ -98,4 +98,5 @@ KUB_RESPONSES = {
             "modified": "2021-11-15T14:24:40.986000+01:00"
         }
     ],
+    "http://localhost:8000/api/v1/search?id=invalid-id": [],
 }
