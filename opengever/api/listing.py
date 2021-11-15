@@ -106,7 +106,10 @@ FILTERS = {
     ],
     u'template_folders': [
         u'object_provides:opengever.dossier.templatefolder.interfaces.ITemplateFolder',
-    ]
+    ],
+    u'dispositions': [
+        u'object_provides:opengever.disposition.interfaces.IDisposition',
+    ],
 }
 
 

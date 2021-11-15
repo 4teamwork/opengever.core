@@ -1405,6 +1405,34 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         self.assertEqual(u'Fr\xf6hlich G\xfcnther', browser.json['items'][0].get('creator_fullname'))
 
+    @browsing
+    def test_disposition_listing(self, browser):
+        self.login(self.records_manager, browser=browser)
+        query_string = '&'.join((
+            'name=dispositions',
+            'columns=sequence',
+            'columns=title',
+            'columns=modified',
+            'columns=UID',
+            'columns=review_state',
+            'sort_on=created',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(
+            [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2',
+              u'UID': u'createdispositionwithsip00000001',
+              u'modified': u'2016-08-31T19:09:33+00:00',
+              u'review_state': u'disposition-state-disposed',
+              u'title': u'Angebot 30.12.1997'},
+             {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-1',
+              u'UID': u'createdisposition000000000000001',
+              u'modified': u'2016-08-31T19:07:33+00:00',
+              u'review_state': u'disposition-state-in-progress',
+              u'title': u'Angebot 31.8.2016'}],
+            browser.json['items'])
+
 
 class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 
