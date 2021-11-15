@@ -37,12 +37,6 @@
 
   <subscriber
       for="opengever.workspace.interfaces.IToDo
-           OFS.interfaces.IObjectWillBeAddedEvent"
-      handler=".subscribers.check_todo_add_preconditions"
-      />
-
-  <subscriber
-      for="opengever.workspace.interfaces.IToDo
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.todo_added"
       />

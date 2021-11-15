@@ -14,7 +14,6 @@ from unittest import skip
 from zExceptions import BadRequest
 from zope.schema import getSchemaValidationErrors
 import json
-import opengever.workspace.subscribers
 
 
 class TestToDo(SolrIntegrationTestCase):
@@ -114,31 +113,6 @@ class TestToDo(SolrIntegrationTestCase):
         self.commit_solr()
 
         self.assertTrue(solr_data_for(self.todo, 'is_completed'))
-
-    @browsing
-    def test_todo_number_hard_limit(self, browser):
-        self.login(self.workspace_member, browser)
-
-        catalog = api.portal.get_tool("portal_catalog")
-        todos = catalog.unrestrictedSearchResults(
-                    path=self.workspace.absolute_url_path(),
-                    portal_type='opengever.workspace.todo')
-        opengever.workspace.subscribers.TODO_NUMBER_LIMIT = len(todos) + 1
-
-        browser.visit(self.workspace)
-        factoriesmenu.add('To-do item')
-        form = browser.find_form_by_field('Title')
-        form.fill({'Title': u'Ein ToDo'})
-        form.save()
-
-        assert_no_error_messages(browser)
-
-        browser.visit(self.workspace)
-        factoriesmenu.add('To-do item')
-        form = browser.find_form_by_field('Title')
-        form.fill({'Title': u'Ein anderes ToDo'})
-        with browser.expect_http_error(500):
-            form.save()
 
     def test_todo_supports_responses(self):
         self.login(self.workspace_member)
