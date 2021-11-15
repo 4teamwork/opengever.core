@@ -59,6 +59,7 @@ class TestListingStats(SolrIntegrationTestCase):
                          browser.json['@id'])
 
         expected = [{u'count': 0, u'field': u'listing_name', u'value': u'contacts'},
+                    {u'count': 0, u'field': u'listing_name', u'value': u'dispositions'},
                     {u'count': 12, u'field': u'listing_name', u'value': u'documents'},
                     {u'count': 3, u'field': u'listing_name', u'value': u'dossiers'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'dossiertemplates'},
@@ -148,6 +149,10 @@ class TestListingStats(SolrIntegrationTestCase):
                      u'field': u'listing_name',
                      u'queries': {u'responsible:kathi.barfuss': 0},
                      u'value': u'contacts'},
+                    {u'count': 0,
+                     u'field': u'listing_name',
+                     u'queries': {u'responsible:kathi.barfuss': 0},
+                     u'value': u'dispositions'},
                     {u'count': 12,
                      u'field': u'listing_name',
                      u'queries': {u'responsible:kathi.barfuss': 0},
