@@ -32,3 +32,15 @@ class KuBClient(object):
             {'Authorization': 'Token {}'.format(self.kub_service_token)})
 
         return session
+
+    def query(self, query_str):
+        url = u'{}search?q={}'.format(self.kub_api_url, query_str)
+        res = self.session.get(url)
+        return res.json()
+
+    def get_by_id(self, _id):
+        url = u'{}search?id={}'.format(self.kub_api_url, _id)
+        res = self.session.get(url).json()
+        if len(res) != 1:
+            raise LookupError()
+        return res[0]
