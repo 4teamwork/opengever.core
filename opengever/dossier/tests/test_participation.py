@@ -7,10 +7,13 @@ from opengever.dossier.participations import DupplicateParticipation
 from opengever.dossier.participations import InvalidParticipantId
 from opengever.dossier.participations import InvalidRole
 from opengever.dossier.participations import IParticipationData
+from opengever.dossier.participations import KuBParticipationHandler
 from opengever.dossier.participations import MissingParticipation
 from opengever.dossier.participations import PloneParticipationHandler
 from opengever.dossier.participations import SQLParticipationHandler
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import IntegrationTestCase
+import requests_mock
 
 
 class TestPloneParticipationHanlder(IntegrationTestCase):
@@ -34,7 +37,7 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
 
         self.assertItemsEqual(handler.get_participations(), [kathi])
 
-    def test_updating_participaton(self):
+    def test_updating_participation(self):
         self.login(self.regular_user)
         handler = IParticipationAware(self.empty_dossier)
         handler.add_participation(
@@ -50,7 +53,7 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
         self.assertItemsEqual(
             IParticipationData(participation).roles, ['participation'])
 
-    def test_deleting_participaton(self):
+    def test_deleting_participation(self):
         self.login(self.regular_user)
         handler = IParticipationAware(self.empty_dossier)
         handler.add_participation(
@@ -137,7 +140,7 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
             exc.exception.message)
         self.assertFalse(handler.has_participation(self.valid_id))
 
-    def test_cannot_update_participaton_with_invalid_role(self):
+    def test_cannot_update_participation_with_invalid_role(self):
         self.login(self.regular_user)
         handler = IParticipationAware(self.empty_dossier)
         handler.add_participation(
@@ -155,7 +158,7 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
             IParticipationData(participation).roles,
             ['participation', 'final-drawing'])
 
-    def test_cannot_update_participaton_without_role(self):
+    def test_cannot_update_participation_without_role(self):
         self.login(self.regular_user)
         handler = IParticipationAware(self.empty_dossier)
         handler.add_participation(
@@ -180,6 +183,61 @@ class TestSQLParticipationHanlder(TestPloneParticipationHanlder):
 
     handler_class = SQLParticipationHandler
     valid_id = 'ogds_user:kathi.barfuss'
+
+
+@requests_mock.Mocker()
+class TestKuBParticipationHanlder(KuBIntegrationTestCase, TestPloneParticipationHanlder):
+
+    handler_class = KuBParticipationHandler
+    valid_id = 'person:9af7d7cc-b948-423f-979f-587158c6bc65'
+
+    def test_handler_delegates_to_correct_handler_class(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_handler_delegates_to_correct_handler_class()
+
+    def test_adding_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_adding_participation()
+
+    def test_updating_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_updating_participation()
+
+    def test_deleting_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_deleting_participation()
+
+    def test_only_one_participation_per_participant_is_allowed(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_only_one_participation_per_participant_is_allowed()
+
+    def test_cannot_add_participation_for_invalid_participant(self, mocker):
+        self.mock_get_by_id(mocker, "invalid-id")
+        super(TestKuBParticipationHanlder, self).test_cannot_add_participation_for_invalid_participant()
+
+    def test_cannot_delete_missing_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_delete_missing_participation()
+
+    def test_cannot_update_missing_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_update_missing_participation()
+
+    def test_cannot_add_participation_with_invalid_role(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_add_participation_with_invalid_role()
+
+    def test_cannot_add_participation_without_role(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_add_participation_without_role()
+
+    def test_cannot_update_participation_with_invalid_role(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_update_participation_with_invalid_role()
+
+    def test_cannot_update_participation_without_role(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_id)
+        super(TestKuBParticipationHanlder, self).test_cannot_update_participation_without_role()
 
 
 class TestParticipationAddForm(IntegrationTestCase):

@@ -5,6 +5,8 @@ from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import Participation
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.sources import KuBContactsSourceBinder
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from persistent.dict import PersistentDict
@@ -44,7 +46,9 @@ class ParticipationHandler(object):
 
     def __init__(self, context):
         self.context = context
-        if is_contact_feature_enabled():
+        if is_kub_feature_enabled():
+            self.handler = KuBParticipationHandler(context)
+        elif is_contact_feature_enabled():
             self.handler = SQLParticipationHandler(context)
         else:
             self.handler = PloneParticipationHandler(context)
@@ -149,6 +153,17 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         participation = self._participations.pop(participant_id)
         self.context.reindexObject(idxs=["participations", "UID"])
         notify(events.ParticipationRemoved(self.context, participation))
+
+
+class KuBParticipationHandler(PloneParticipationHandler):
+    """ IParticipationAware behavior / adapter factory.
+    """
+    annotation_key = 'kub_participations'
+
+    def __init__(self, context):
+        self.context = context
+        self.annotations = IAnnotations(self.context)
+        self.participant_source = KuBContactsSourceBinder()(self.context)
 
 
 class SQLParticipationHandler(ParticipationHandlerBase):
