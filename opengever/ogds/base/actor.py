@@ -30,6 +30,8 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.client import KuBClient
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.interfaces import IActor
@@ -450,6 +452,52 @@ class SQLContactActor(Actor):
         return None
 
 
+@implementer(IActor)
+class KuBContactActor(Actor):
+
+    css_class = 'actor-contact'
+    actor_type = 'kubcontact'
+
+    def __init__(self, identifier, contact=None):
+        super(KuBContactActor, self).__init__(identifier)
+        self.contact = contact
+
+    def corresponds_to(self, user):
+        return False
+
+    def get_label(self, with_principal=True):
+        name = self.contact.get("text", "")
+
+        # XXX Primary_email is currently not returned by the KuB search
+        # endpoint. This should change once we have an endpoint to actually
+        # resolve the contact ids.
+        email = self.contact.get("primary_email", "")
+        if with_principal and email:
+            return u'{} ({})'.format(name, email)
+        else:
+            return name
+
+    def get_profile_url(self):
+        # XXX This should be an URL pointing to KUB, e.g.
+        # https://kub.4teamwork.ch/people/baa7c72e-7a3a-4f55-924c-e0c9857b30d1
+        # For now KuB does not return such an URL
+        return None
+
+    def representatives(self):
+        return []
+
+    def represents(self):
+        return self.contact
+
+    def represents_url(self):
+        # XXX This should be an URL pointing to KUB, e.g.
+        # https://kub.4teamwork.ch/people/baa7c72e-7a3a-4f55-924c-e0c9857b30d1
+        # For now KuB does not return such an URL
+        return None
+
+    def get_portrait_url(self):
+        return None
+
 
 @implementer(IActor)
 class PloneUserActor(Actor):
@@ -659,6 +707,12 @@ class ActorLookup(object):
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
+    def is_kub_contact(self):
+        if not is_kub_feature_enabled():
+            return False
+        kub_contact_prefixes = ('organization:', 'person:', 'membership:')
+        return any(map(self.identifier.startswith, kub_contact_prefixes))
+
     def is_sql_contact(self):
         sql_contact_prefixes = ['organization:', 'person:', 'org_role:']
         for prefix in sql_contact_prefixes:
@@ -685,6 +739,15 @@ class ActorLookup(object):
             contact = contacts[0]
 
         return ContactActor(self.identifier, contact=contact)
+
+    def create_kub_contact_actor(self, contact=None):
+        if not contact:
+            try:
+                contact = KuBClient().get_by_id(self.identifier)
+            except LookupError:
+                return self.create_null_actor()
+
+        return KuBContactActor(self.identifier, contact=contact)
 
     def create_sql_contact_actor(self, contact=None):
         if not contact:
@@ -758,6 +821,9 @@ class ActorLookup(object):
 
         elif self.is_contact():
             return self.create_contact_actor()
+
+        elif self.is_kub_contact():
+            return self.create_kub_contact_actor()
 
         elif self.is_sql_contact():
             return self.create_sql_contact_actor()
