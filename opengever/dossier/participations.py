@@ -247,7 +247,7 @@ class IParticipationData(Interface):
 
 @implementer(IParticipationData)
 @adapter(IParticipation)
-class PloneParticipationData(object):
+class PloneOrKuBParticipationData(object):
 
     def __init__(self, participation):
         self._participation = participation
