@@ -10,6 +10,38 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.23.0 (2021-11-17)
+----------------------
+
+New features:
+
+
+- Add flags to office connector url for attach action. [tinagerber]
+- Support dispositions in the @listing endpoint. [phgross]
+
+
+Bug fixes:
+
+
+- Update local roles after moving document when creating forwarding. [njohner]
+- Fix storing document in bumblebee during copy-paste. [njohner]
+- Make workspace meeting start and end timezone aware. [njohner]
+- Make sure preferred language is used for API PATCH requests. [phgross]
+
+
+Other changes:
+
+
+- Implement completing workspace todos with a new two state workflow. [elioschmutz]
+- Introduce '@toggle' endpoint for workspace todos. [elioschmutz]
+- Add new listing for the '@listing' endpoint: todo_lists [elioschmutz]
+- Remove hardlimit of 500 todos per workspace. [elioschmutz]
+- Persist missing preserved_as_paper and IClassification fields default values. [njohner]
+- Add is_completed solr index and provide the field in the listing endpoint. [phgross]
+- Improve description of read/write access for dossier protection. [njohner]
+- Extend API error representation. [phgross]
+
+
 2021.22.0 (2021-11-03)
 ----------------------
 
