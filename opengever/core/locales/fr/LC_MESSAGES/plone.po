@@ -24,7 +24,7 @@ msgstr "Actif"
 #. Default: "Completed"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "Completed"
-msgstr ""
+msgstr "Complété"
 
 msgid "DossierManager"
 msgstr "Administrer"
@@ -51,7 +51,7 @@ msgstr "Reactiver"
 #. Default: "complete"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "complete"
-msgstr ""
+msgstr "Compléter"
 
 #. Default: "deactivate"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
@@ -62,7 +62,7 @@ msgstr "Déactiver"
 #. Default: "open"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "open"
-msgstr ""
+msgstr "Ouvrir"
 
 #. Default: "committee admin"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
@@ -417,17 +417,17 @@ msgstr "Actif"
 #. Default: "Completed"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--STATUS--completed"
-msgstr ""
+msgstr "Complété"
 
 #. Default: "complete"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--TRANSITION--complete--active_completed"
-msgstr ""
+msgstr "compléter"
 
 #. Default: "open"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "opengever_workspace_todo--TRANSITION--open--completed_active"
-msgstr ""
+msgstr "ouvrir"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todolist/specification.txt

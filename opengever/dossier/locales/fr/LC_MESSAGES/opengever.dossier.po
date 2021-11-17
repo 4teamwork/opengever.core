@@ -961,7 +961,7 @@ msgstr "L'objet `${title}`n'est déposé dans aucun dossier."
 #. Default: "This would exceed maximally allowed dossier depth."
 #: ./opengever/dossier/move_items.py
 msgid "msg_would_exceed_max_dossier_level"
-msgstr ""
+msgstr "Cela dépasserait la profondeur maximale de dossiers autorisée."
 
 #: ./opengever/dossier/resolve.py
 msgid "not all documents and tasks are stored in a subdossier."

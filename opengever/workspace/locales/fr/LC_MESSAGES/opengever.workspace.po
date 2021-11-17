@@ -285,7 +285,7 @@ msgstr "Teamraüme"
 #. Default: "At least one principal must remain admin."
 #: ./opengever/workspace/participation/browser/manage_participants.py
 msgid "msg_one_must_remain_admin"
-msgstr ""
+msgstr "Au moins un participant doit être admin."
 
 #. Default: "Comment"
 #: ./opengever/workspace/content_sharing_mailer.py

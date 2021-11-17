@@ -46,7 +46,7 @@ msgstr "L'objet ${obj} a un checkout. Vous ne pouvez pas le supprimer."
 
 #: ./opengever/trash/browser/trash.py
 msgid "could not trash the object ${obj}, it is locked."
-msgstr "L'objet ${obj} est verouillé. Vous ne pouvez pas le supprimer."
+msgstr "L'objet ${obj} est verrouillé. Vous ne pouvez pas le supprimer."
 
 #. Default: "You have not selected any items."
 #: ./opengever/trash/browser/remove_confirmation.py
