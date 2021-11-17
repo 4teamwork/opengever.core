@@ -17,104 +17,104 @@ msgstr ""
 #. Default: "Copy of ${title}"
 #: ./opengever/api/copy_.py
 msgid "copy_of"
-msgstr ""
+msgstr "Copie de ${title}"
 
 #. Default: "It's not possible to have non-.docx documents as proposal documents."
 #: ./opengever/api/tus.py
 msgid "error_proposal_document_type"
-msgstr ""
+msgstr "Seuls les fichiers docx sont autorisés comme documents de requête."
 
 #. Default: "Already trashed"
 #: ./opengever/api/trash.py
 msgid "msg_already_trashed"
-msgstr ""
+msgstr "Déjà dans la corbeille"
 
 #. Default: "Cancel checkout is not allowed."
 #: ./opengever/api/cancelcheckout.py
 msgid "msg_cancel_checkout_disallowed"
-msgstr ""
+msgstr "Annuler le checkout n'est pas autorisé."
 
 #. Default: "Checkin is not allowed."
 #: ./opengever/api/checkin.py
 msgid "msg_checkin_disallowed"
-msgstr ""
+msgstr "Faire le checkin n'est pas autorisé."
 
 #. Default: "Checkout is not allowed."
 #: ./opengever/api/checkout.py
 msgid "msg_checkout_disallowed"
-msgstr ""
+msgstr "Faire le checkout n'est pas autorisé"
 
 #. Default: "File extension must be .docx for proposal documents."
 #: ./opengever/api/document.py
 msgid "msg_docx_file_extension_for_proposal"
-msgstr ""
+msgstr "Un document de requête doit avoir l'extension .docx."
 
 #. Default: "Mime type must be ${docx_mimetype} for proposal documents."
 #: ./opengever/api/document.py
 msgid "msg_docx_mime_type_for_proposal"
-msgstr ""
+msgstr "Un document de requête doit avoir le mimetype ${docx_mimetype}."
 
 #. Default: "Empty filename not supported"
 #: ./opengever/api/upload_structure.py
 msgid "msg_filename_required"
-msgstr ""
+msgstr "Les fichiers sans nom ne sont pas autorisés."
 
 #. Default: "Inputs not valid"
 #: ./opengever/api/errors.py
 msgid "msg_inputs_not_valid"
-msgstr ""
+msgstr "Saisie invalide"
 
 #. Default: "Maximum dossier depth exceeded"
 #: ./opengever/api/upload_structure.py
 msgid "msg_max_dossier_depth_exceeded"
-msgstr ""
+msgstr "Profondeur maximale de dossiers autorisée dépassée."
 
 #. Default: "It's not possible to have no file in proposal documents."
 #: ./opengever/api/document.py
 msgid "msg_needs_file_in_proposal_document"
-msgstr ""
+msgstr "Un document de requête doit avoir un fichier."
 
 #. Default: "Document not checked-out by current user."
 #: ./opengever/api/document.py
 msgid "msg_not_checked_out_by_current_user"
-msgstr ""
+msgstr "L'utilisateur actuel n'a pas fait le checkout de ce document."
 
 #. Default: "Object is not trashable"
 #: ./opengever/api/trash.py
 msgid "msg_obj_not_trashable"
-msgstr ""
+msgstr "L'objet ne peut pas être déplacé dans la corbeille."
 
 #. Default: "Property 'files' is required"
 #: ./opengever/api/upload_structure.py
 msgid "msg_prop_file_required"
-msgstr ""
+msgstr "Le paramètre 'files' est requis."
 
 #. Default: "The reference_number ${number} is already in use."
 #: ./opengever/api/repositoryfolder.py
 msgid "msg_reference_already_in_use"
-msgstr ""
+msgstr "Le numéro de référence ${number} est déjà pris."
 
 #. Default: "Resource is locked."
 #: ./opengever/api/update.py
 msgid "msg_resource_locked"
-msgstr ""
+msgstr "Cet objet est verrouillé."
 
 #. Default: "Some of the objects cannot be added here"
 #: ./opengever/api/upload_structure.py
 msgid "msg_some_objects_not_addable"
-msgstr ""
+msgstr "Certains des objets ne peuvent pas être ajoutés ici."
 
 #. Default: "Cannot trash a checked-out document"
 #: ./opengever/api/trash.py
 msgid "msg_trash_checked_out_doc"
-msgstr ""
+msgstr "Un document en checkout ne peut pas être mis à la corbeille."
 
 #. Default: "Cannot trash a document that has been returned as excerpt"
 #: ./opengever/api/trash.py
 msgid "msg_trash_doc_returned_as_excerpt"
-msgstr ""
+msgstr "Un extrait de protocol ne peut pas être mis à la corbeille."
 
 #. Default: "Cannot trash a locked document"
 #: ./opengever/api/trash.py
 msgid "msg_trash_locked_doc"
-msgstr ""
+msgstr "Un document verrouillé ne peut pas être mis à la corbeille."

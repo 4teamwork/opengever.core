@@ -680,42 +680,42 @@ msgstr "Le document `${title}` n'a pas pu être verrouillé, car les e-mails ne 
 #. Default: "Documents inside a closed dossier cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_closed_dossier"
-msgstr ""
+msgstr "Les documents d'un dossier clôturé ne peuvent pas être déplacés."
 
 #. Default: "Documents inside a proposal cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_proposal_cant_be_moved"
-msgstr ""
+msgstr "Les documents d'une requête ne peuvent pas être déplacés."
 
 #. Default: "Documents inside a task cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_doc_inside_task_cant_be_moved"
-msgstr ""
+msgstr "Les documents d'une tâche ne peuvent pas être déplacés."
 
 #. Default: "Documents within the inbox cannot be moved to the private repository."
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_inbox_to_private_repo"
-msgstr ""
+msgstr "Il est interdit de déplacer des documents de la boîte de réception vers le répertoire personnel."
 
 #. Default: "Documents within the inbox cannot be moved to the templates."
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_inbox_to_templates"
-msgstr ""
+msgstr "Il est interdit de déplacer des documents de la boîte de réception vers les modèles."
 
 #. Default: "Documents within the repository cannot be moved to the private repository."
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_repo_to_private_repo"
-msgstr ""
+msgstr "Il est interdit de déplacer des documents du système de classement vers le répertoire personnel."
 
 #. Default: "Documents within the repository cannot be moved to the templates."
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_repo_to_templates"
-msgstr ""
+msgstr "Il est interdit de déplacer des documents du système de classement vers les modèles."
 
 #. Default: "Locked documents cannot be moved."
 #: ./opengever/document/move.py
 msgid "msg_locked_doc_cant_be_moved"
-msgstr ""
+msgstr "Il est interdit de déplacer des documents verrouillés."
 
 #. Default: "PDF generation error"
 #: ./opengever/document/browser/save_pdf_document_under.py
