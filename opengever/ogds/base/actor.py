@@ -708,10 +708,9 @@ class ActorLookup(object):
         return self.identifier.startswith('contact:')
 
     def is_kub_contact(self):
-        if not is_kub_feature_enabled():
-            return False
         kub_contact_prefixes = ('organization:', 'person:', 'membership:')
-        return any(map(self.identifier.startswith, kub_contact_prefixes))
+        return (any(map(self.identifier.startswith, kub_contact_prefixes)) and
+                is_kub_feature_enabled())
 
     def is_sql_contact(self):
         sql_contact_prefixes = ['organization:', 'person:', 'org_role:']
