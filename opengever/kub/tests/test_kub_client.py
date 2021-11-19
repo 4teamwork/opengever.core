@@ -1,21 +1,50 @@
-from opengever.kub.client import KuBClient
-from opengever.kub.interfaces import IKuBSettings
-from opengever.testing import IntegrationTestCase
-from plone import api
+from opengever.kub.testing import KuBIntegrationTestCase
+from opengever.kub.testing import KUB_RESPONSES
+import requests_mock
 
 
-class TestKubClient(IntegrationTestCase):
+@requests_mock.Mocker()
+class TestKubClient(KuBIntegrationTestCase):
 
-    def setUp(self):
-        super(TestKubClient, self).setUp()
-        api.portal.set_registry_record('base_url', u'kub', IKuBSettings)
-        api.portal.set_registry_record('service_token', u'secret', IKuBSettings)
+    def test_sets_authorization_token(self, mocker):
+        self.assertIn('Authorization', self.client.session.headers)
+        self.assertEqual(u'Token secret', self.client.session.headers['Authorization'])
 
-    def test_sets_authorization_token(self):
-        client = KuBClient()
-        self.assertIn('Authorization', client.session.headers)
-        self.assertEqual(u'Token secret', client.session.headers['Authorization'])
+    def test_kub_api_url(self, mocker):
+        self.assertEqual(u'http://localhost:8000/api/v1/',
+                         self.client.kub_api_url)
 
-    def test_kub_api_url(self):
-        client = KuBClient()
-        self.assertEqual(u'kub/api/v1/', client.kub_api_url)
+    def test_query_returns_persons(self, mocker):
+        query_str = "Julie"
+        url = self.mock_search(mocker, query_str)
+        resp = self.client.query(query_str)
+        self.assertEqual(1, len(resp))
+        self.assertEqual("person", resp[0]["type"])
+        self.assertEqual(KUB_RESPONSES[url], resp)
+
+    def test_query_returns_memberships_and_organizations(self, mocker):
+        query_str = "4Teamwork"
+        url = self.mock_search(mocker, query_str)
+        resp = self.client.query(query_str)
+        self.assertEqual(2, len(resp))
+        self.assertEqual("organization", resp[0]["type"])
+        self.assertEqual("membership", resp[1]["type"])
+        self.assertEqual(KUB_RESPONSES[url], resp)
+
+    def test_get_by_id_handles_persons(self, mocker):
+        url = self.mock_get_by_id(mocker, self.person_jean)
+        resp = self.client.get_by_id(self.person_jean)
+        self.assertEqual("person", resp["type"])
+        self.assertEqual(KUB_RESPONSES[url][0], resp)
+
+    def test_get_by_id_handles_organizations(self, mocker):
+        url = self.mock_get_by_id(mocker, self.org_ftw)
+        resp = self.client.get_by_id(self.org_ftw)
+        self.assertEqual("organization", resp["type"])
+        self.assertEqual(KUB_RESPONSES[url][0], resp)
+
+    def test_get_by_id_handles_memberships(self, mocker):
+        url = self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        resp = self.client.get_by_id(self.memb_jean_ftw)
+        self.assertEqual("membership", resp["type"])
+        self.assertEqual(KUB_RESPONSES[url][0], resp)

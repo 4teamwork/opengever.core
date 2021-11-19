@@ -4,10 +4,12 @@ from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.participations import IParticipationData
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 import json
+import requests_mock
 
 
 class TestParticipationsGet(IntegrationTestCase):
@@ -67,6 +69,92 @@ class TestParticipationsGet(IntegrationTestCase):
                                   ['regard', 'participation', 'final-drawing'])
         handler.add_participation(self.dossier_responsible.getId(),
                                   ['regard'])
+
+        browser.open(self.dossier.absolute_url() + '/@participations?b_size=1',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(1, len(browser.json['items']))
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertEqual(3, len(browser.json['available_roles']))
+        self.assertIn('batching', browser.json)
+
+
+@requests_mock.Mocker()
+class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
+
+    @browsing
+    def test_get_participations(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+        handler = IParticipationAware(self.dossier)
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        handler.add_participation(
+            self.person_jean, ['regard', 'participation', 'final-drawing'])
+
+        self.mock_get_by_id(mocker, self.org_ftw)
+        handler.add_participation(self.org_ftw, ['regard'])
+
+        self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        handler.add_participation(self.memb_jean_ftw, ['participation'])
+
+        participations_url = "{}/@participations".format(self.dossier.absolute_url())
+
+        expected_json = {
+            u'@id': participations_url,
+            u'available_roles': [{u'title': u'Final signature',
+                                  u'token': u'final-drawing'},
+                                 {u'title': u'For your information',
+                                  u'token': u'regard'},
+                                 {u'title': u'Participation',
+                                  u'token': u'participation'}],
+            u'items': [
+                {u'@id': "{}/{}".format(participations_url, self.person_jean),
+                 u'participant_actor': {
+                    u'@id': u'http://nohost/plone/@actors/' + self.person_jean,
+                    u'identifier': self.person_jean},
+                 u'participant_id': self.person_jean,
+                 u'participant_title': u'Dupont Jean',
+                 u'roles': [u'regard', u'participation', u'final-drawing']},
+                {u'@id': "{}/{}".format(participations_url, self.memb_jean_ftw),
+                 u'participant_actor': {
+                    u'@id': u'http://nohost/plone/@actors/' + self.memb_jean_ftw,
+                    u'identifier': self.memb_jean_ftw},
+                 u'participant_id': self.memb_jean_ftw,
+                 u'participant_title': u'Dupont Jean - 4Teamwork (CEO)',
+                 u'roles': [u'participation']},
+                {u'@id': "{}/{}".format(participations_url, self.org_ftw),
+                 u'participant_actor': {
+                    u'@id': u'http://nohost/plone/@actors/' + self.org_ftw,
+                    u'identifier': self.org_ftw},
+                 u'participant_id': self.org_ftw,
+                 u'participant_title': u'4Teamwork',
+                 u'roles': [u'regard']},
+            ],
+            u'items_total': 3}
+
+        browser.open(self.dossier.absolute_url() + '/@participations',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json)
+
+        browser.open(self.dossier, method='GET', headers=self.api_headers)
+        self.assertEqual({u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
+                                  u'vertrage-und-vereinbarungen/dossier-1/@participations'},
+                         browser.json['@components']['participations'])
+        browser.open(self.dossier.absolute_url() + '?expand=participations',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual(expected_json, browser.json['@components']['participations'])
+
+    @browsing
+    def test_response_is_batched(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+        handler = IParticipationAware(self.dossier)
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        handler.add_participation(
+            self.person_jean, ['regard', 'participation', 'final-drawing'])
+
+        self.mock_get_by_id(mocker, self.org_ftw)
+        handler.add_participation(self.org_ftw, ['regard'])
 
         browser.open(self.dossier.absolute_url() + '/@participations?b_size=1',
                      method='GET', headers=self.api_headers)
@@ -234,9 +322,9 @@ class TestParticipationsPost(IntegrationTestCase):
             browser.open(self.dossier.absolute_url() + '/@participations',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({'participant_id': 'chaosqueen',
+                         data=json.dumps({'participant_id': 'invalid-id',
                                           'roles': ['regard']}))
-        self.assertEqual({"message": "chaosqueen is not a valid id",
+        self.assertEqual({"message": "invalid-id is not a valid id",
                           "type": "BadRequest"},
                          browser.json)
 
@@ -306,6 +394,47 @@ class TestParticipationsPostWithContactFeatureEnabled(TestParticipationsPost):
         self.valid_participant_id2 = 'organization:{}'.format(self.organization.id)
 
 
+@requests_mock.Mocker()
+class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, TestParticipationsPost):
+
+    def setUp(self):
+        super(TestParticipationsPostWithKubFeatureEnabled, self).setUp()
+        self.valid_participant_id = self.person_jean
+        self.valid_participant_id2 = self.org_ftw
+
+    def test_post_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        self.mock_get_by_id(mocker, self.valid_participant_id2)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation()
+
+    def test_post_participations_without_roles_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_without_roles_raises_bad_request()
+
+    def test_post_participations_with_invalid_role_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_with_invalid_role_raises_bad_request()
+
+    def test_post_participations_without_participant_id_raises_bad_request(self, mocker):
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_without_participant_id_raises_bad_request()
+
+    def test_post_participations_with_invalid_participant_id_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, 'invalid-id')
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_with_invalid_participant_id_raises_bad_request()
+
+    def test_post_participation_with_existing_participant_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation_with_existing_participant_raises_bad_request()
+
+    def test_post_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation_for_resolved_dossier_raises_unauthorized()
+
+    def test_post_participation_for_inactive_dossier_raises_unauthorized(self, mocker):
+        self.mock_get_by_id(mocker, self.valid_participant_id)
+        super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation_for_inactive_dossier_raises_unauthorized()
+
+
 class TestParticipationsPatch(IntegrationTestCase):
 
     def setUp(self):
@@ -364,11 +493,11 @@ class TestParticipationsPatch(IntegrationTestCase):
     def test_patch_participations_with_invalid_participant_id_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(400):
-            browser.open(self.dossier.absolute_url() + '/@participations/chaosqueen',
+            browser.open(self.dossier.absolute_url() + '/@participations/invalid-id',
                          method='PATCH',
                          headers=self.api_headers,
                          data=json.dumps({'roles': ['regard']}))
-        self.assertEqual({"message": "chaosqueen is not a valid id",
+        self.assertEqual({"message": "invalid-id is not a valid id",
                           "type": "BadRequest"}, browser.json)
 
     @browsing
@@ -442,6 +571,44 @@ class TestParticipationsPatchWithContactFeatureEnabled(TestParticipationsPatch):
         self.participant_title = self.person.get_title()
 
 
+@requests_mock.Mocker()
+class TestParticipationsPatchWithKuBFeatureEnabled(KuBIntegrationTestCase, TestParticipationsPatch):
+
+    def setUp(self):
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).setUp()
+        self.participant_id = self.person_jean
+
+    def test_patch_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation()
+
+    def test_patch_participation_without_participant_id_raises_bad_request(self, mocker):
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_without_participant_id_raises_bad_request()
+
+    def test_patch_participation_when_particpant_has_no_participation_raises_bad_request(self,
+                                                                                         mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_when_particpant_has_no_participation_raises_bad_request()
+
+    def test_patch_participations_with_invalid_participant_id_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, "invalid-id")
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_with_invalid_participant_id_raises_bad_request()
+
+    def test_patch_participations_without_roles_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_without_roles_raises_bad_request()
+
+    def test_patch_participations_with_invalid_role_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_with_invalid_role_raises_bad_request()
+
+    def test_patch_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_for_resolved_dossier_raises_unauthorized()
+
+    def test_patch_participation_for_inactive_dossier_raises_unauthorized(self, mocker):
+        super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_for_inactive_dossier_raises_unauthorized()
+
+
 class TestParticipationsDelete(IntegrationTestCase):
 
     def setUp(self):
@@ -478,9 +645,9 @@ class TestParticipationsDelete(IntegrationTestCase):
     def test_delete_participations_with_invalid_participant_id_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(400):
-            browser.open(self.dossier.absolute_url() + '/@participations/chaosqueen',
+            browser.open(self.dossier.absolute_url() + '/@participations/invalid-id',
                          method='DELETE', headers=self.api_headers)
-        self.assertEqual({"message": "chaosqueen is not a valid id",
+        self.assertEqual({"message": "invalid-id is not a valid id",
                           "type": "BadRequest"}, browser.json)
 
     @browsing
@@ -519,6 +686,33 @@ class TestParticipationsDeleteWithContactFeatureEnabled(TestParticipationsDelete
         create_session().flush()
         self.participant_id = 'person:{}'.format(self.person.id)
         self.participant_title = self.person.get_title()
+
+
+@requests_mock.Mocker()
+class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, TestParticipationsDelete):
+
+    def setUp(self):
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).setUp()
+        self.participant_id = self.person_jean
+
+    def test_delete_participation(self, mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation()
+
+    def test_delete_participation_when_participant_has_no_participation_raises_bad_request(
+            self, mocker):
+        self.mock_get_by_id(mocker, self.participant_id)
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_when_participant_has_no_participation_raises_bad_request()
+
+    def test_delete_participations_with_invalid_participant_id_raises_bad_request(self, mocker):
+        self.mock_get_by_id(mocker, "invalid-id")
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participations_with_invalid_participant_id_raises_bad_request()
+
+    def test_delete_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_for_resolved_dossier_raises_unauthorized()
+
+    def test_delete_participation_for_inactive_dossier_raises_unauthorized(self, mocker):
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_for_inactive_dossier_raises_unauthorized()
 
 
 class TestPossibleParticipantsGet(SolrIntegrationTestCase):
@@ -607,8 +801,8 @@ class TestParticipationsExpansion(IntegrationTestCase):
             u'@id': url,
             u'available_roles': [{u'title': u'Final signature',
                                   u'token': u'final-drawing'},
-                                  {u'title': u'For your information',
-                                   u'token': u'regard'},
+                                 {u'title': u'For your information',
+                                  u'token': u'regard'},
                                  {u'title': u'Participation',
                                   u'token': u'participation'},
                                  ],

@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.kub.testing import KUB_RESPONSES
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import CommitteeActor
 from opengever.ogds.base.actor import ContactActor
@@ -8,6 +10,7 @@ from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_IDS
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.actor import InteractiveActor
+from opengever.ogds.base.actor import KuBContactActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
@@ -18,6 +21,7 @@ from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from unittest import TestCase
+import requests_mock
 
 
 class TestActorLookup(IntegrationTestCase):
@@ -188,6 +192,48 @@ class TestActorLookup(IntegrationTestCase):
             'Interactive actor must be one of '
             'interactive_actor:responsible, interactive_actor:current_user',
             str(error.exception))
+
+
+@requests_mock.Mocker()
+class TestKuBContactActor(KuBIntegrationTestCase):
+
+    def test_person_actor_lookup(self, mocker):
+        url = self.mock_get_by_id(mocker, self.person_jean)
+        self.login(self.regular_user)
+        actor = Actor.lookup(self.person_jean)
+
+        self.assertIsInstance(actor, KuBContactActor)
+        self.assertEqual(u'Dupont Jean', actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(KUB_RESPONSES[url][0], actor.represents())
+
+    def test_organization_actor_lookup(self, mocker):
+        url = self.mock_get_by_id(mocker, self.org_ftw)
+        self.login(self.regular_user)
+        actor = Actor.lookup(self.org_ftw)
+
+        self.assertIsInstance(actor, KuBContactActor)
+        self.assertEqual(u'4Teamwork', actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(KUB_RESPONSES[url][0], actor.represents())
+
+    def test_membership_actor_lookup(self, mocker):
+        url = self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        self.login(self.regular_user)
+        actor = Actor.lookup(self.memb_jean_ftw)
+
+        self.assertIsInstance(actor, KuBContactActor)
+        self.assertEqual(u'Dupont Jean - 4Teamwork (CEO)', actor.get_label())
+        self.assertEqual(None, actor.get_profile_url())
+        self.assertEqual(KUB_RESPONSES[url][0], actor.represents())
+
+    def test_kub_contact_actor_lookup_for_not_existing_contact(self, mocker):
+        contact_id = "invalid-id"
+        self.mock_get_by_id(mocker, contact_id)
+        self.login(self.regular_user)
+        actor = Actor.lookup(contact_id)
+
+        self.assertIsInstance(actor, NullActor)
 
 
 class TestSQLContactActor(IntegrationTestCase):
