@@ -7,17 +7,26 @@ class MakeWorkspaceMeetingsTimezoneAware(UpgradeStep):
     """Make workspace meetings timezone aware.
     """
 
+    deferrable = True
+
     def __call__(self):
         query = {'object_provides': [IWorkspaceMeeting.__identifier__]}
+        to_reindex = []
         for obj in self.objects(query, 'Ensure workspace meeting start and '
                                 'end are timezone aware'):
             self.localize_field(obj, "start")
             self.localize_field(obj, "end")
-            # This is somewhat a hack. By reindexing the full object we change
-            # the modified date, so that when checking whether the metadata has
-            # changed, we never reach the comparison with previous value for
-            # the start and end Fields, which would fail because we are
-            # comparing timezone naive and aware datetimes.
+            # Simply reindexing might fail, as it can lead to comparing
+            # timezone aware and timezone naive datetimes when determining
+            # whether an update of the metadata is necessary. Instead we
+            # we first unindex the objects, then make sure to process the
+            # indexing queue, before reindexing them.
+            to_reindex.append(obj)
+            obj.unindexObject()
+
+        # make a catalog query to make sure to process the indexing queue
+        self.catalog_unrestricted_search(query)
+        for obj in to_reindex:
             obj.reindexObject()
 
     def localize_field(self, obj, fieldname):
