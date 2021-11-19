@@ -15,7 +15,6 @@
     <dependency>profile-ftw.datepicker:default</dependency>
     <dependency>profile-ftw.contentmenu:default</dependency>
     <dependency>profile-ftw.zipexport:default</dependency>
-    <dependency>profile-ftw.tika:default</dependency>
     <dependency>profile-ftw.solr:default</dependency>
     <dependency>profile-ftw.lawgiver:default</dependency>
     <dependency>profile-plone.formwidget.autocomplete:default</dependency>
