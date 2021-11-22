@@ -124,6 +124,20 @@ class TestProtocolJsonData(FunctionalTestCase):
         expected_data['meeting']['date'] = '13.12.2011'
         self.assertDictEqual(expected_data, data)
 
+    def test_protocol_json_includes_documents_manually_added_to_submitted_proposals(self):
+        self.doc3 = create(Builder("document")
+                           .titled(u'Nachtrag')
+                           .within(self.submitted_proposal)
+                           .attach_file_containing("lorem ipsum",
+                                                   name=u"nachtrag.txt"))
+        with freeze(datetime(2018, 5, 4)):
+            data = ProtocolData(self.meeting).get_processed_data()
+
+        expected_data = copy.deepcopy(SAMPLE_MEETING_DATA['agenda_items'][0])
+        expected_data['attachments'].append(
+            {'filename': u'Nachtrag.txt', 'title': u'Nachtrag'})
+        self.assertEqual(expected_data, data["agenda_items"][0])
+
     def test_date_formatting_string_affects_protocol_json(self):
         api.portal.set_registry_record("sablon_date_format_string", u'%Y %m %d', interface=IMeetingSettings)
         with freeze(datetime(2018, 5, 4)):
