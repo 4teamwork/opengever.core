@@ -1,6 +1,8 @@
-from opengever.testing import IntegrationTestCase
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import factoriesmenu
 from opengever.meeting.traverser import MeetingDocumentWithFileTraverser
 from opengever.meeting.traverser import MeetingTraverser
+from opengever.testing import IntegrationTestCase
 
 
 class MeetingTraverserTestImplementation(MeetingTraverser):
@@ -33,8 +35,15 @@ class TestMeetingTraverser(IntegrationTestCase):
 
     features = ('meeting',)
 
-    def test_meeting_traverser_traverses_all_documents(self):
-        self.login(self.committee_responsible)
+    @browsing
+    def test_meeting_traverser_traverses_all_documents(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.open(self.submitted_proposal)
+        factoriesmenu.add(u'Document')
+        browser.fill({
+            u'Title': "Doc added in submitted proposal",
+            u'File': ("Lorem ipsum", 'new.txt', 'text/plain')}).save()
 
         proposal_agenda_item = self.schedule_proposal(
             self.meeting, self.submitted_proposal)
