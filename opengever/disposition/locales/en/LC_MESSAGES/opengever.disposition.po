@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-18 10:36+0000\n"
+"POT-Creation-Date: 2021-11-22 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,11 @@ msgstr "Sequence number"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "edit_transfer_number"
 msgstr "Edit transfer number"
+
+#. Default: "The dossier ${title} is still active."
+#: ./opengever/disposition/validators.py
+msgid "error_dossier_is_active"
+msgstr "The dossier ${title} is still active."
 
 #. German translation: Das Dossier ${title} ist bereits in einem anderen Angebot angeboten.
 #. Default: "The dossier ${title} is already offered in a different disposition."
