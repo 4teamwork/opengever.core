@@ -23,6 +23,12 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
         expired and the dossiers are not part of another disposition.
         """
         for dossier in value:
+            if dossier.is_open():
+                raise Invalid(
+                    _(u'error_dossier_is_active',
+                      default=u'The dossier ${title} is still active.',
+                      mapping={'title': dossier.title}))
+
             if not self.is_retention_period_expired(dossier):
                 raise Invalid(
                     _(u'error_retention_period_not_expired',
@@ -37,6 +43,7 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
                       mapping={'title': dossier.title}))
 
         return super(OfferedDossiersValidator, self).validate(value)
+
     def is_retention_period_expired(self, dossier):
         if self.disregard_retention_period:
             return True

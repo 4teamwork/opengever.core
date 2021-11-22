@@ -50,6 +50,27 @@ class TestDispositionPost(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_check_open_dossiers(self, browser):
+        self.login(self.records_manager, browser)
+
+        data = {
+            "@type": "opengever.disposition.disposition",
+            "title": "Angebot XY",
+            "dossiers": [self.dossier.absolute_url()]}
+
+        with freeze(datetime(2001, 1, 1)):
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(self.repository_root, data=json.dumps(data),
+                             method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'additional_metadata': {},
+             u'translated_message': u'The dossier Vertr\xe4ge mit der kantonalen Finanzverwaltung is still active.',
+             u'message': u'error_dossier_is_active'},
+            browser.json)
+
+    @browsing
     def test_successfull_post(self, browser):
         self.login(self.records_manager, browser)
 
