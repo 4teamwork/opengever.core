@@ -69,7 +69,7 @@ class MeetingTraverser(object):
         return agenda_item.resolve_document()
 
     def _get_agenda_item_attachments(self, agenda_item):
-        return agenda_item.resolve_submitted_documents()
+        return agenda_item.get_documents()
 
     def _get_agenda_item_excerpts(self, agenda_item):
         return agenda_item.get_excerpt_documents()

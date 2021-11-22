@@ -198,7 +198,7 @@ class TestProposalSerialization(IntegrationTestCase):
             browser.json['predecessor_proposal'])
 
 
-class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
+class TestSubmitAdditionalDocuments(IntegrationTestCase):
 
     features = (
         'meeting',
@@ -287,7 +287,10 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
 
         model = self.proposal.load_model()
         self.assertEqual(1, len(model.submitted_documents))
-        previously_submitted = model.resolve_submitted_documents()[0]
+        documents = model.resolve_submitted_proposal().get_documents()
+        self.assertEqual(1, len(documents))
+
+        previously_submitted = documents[0]
 
         data = json.dumps({
             'documents': [self.subdocument.UID(), self.mail_eml.UID()]
@@ -307,8 +310,10 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
 
         self.assertEqual(2, len(children["added"]))
         self.assertEqual(3, len(model.submitted_documents))
+        documents = model.resolve_submitted_proposal().get_documents()
+        self.assertEqual(3, len(documents))
         self.assertItemsEqual(list(children['added']) + [previously_submitted],
-                              model.resolve_submitted_documents())
+                              documents)
 
     @browsing
     def test_submitting_additional_document_already_up_to_date(self, browser):
@@ -333,7 +338,9 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
 
         model = self.proposal.load_model()
         self.assertEqual(1, len(model.submitted_documents))
-        self.assertEqual(model.resolve_submitted_documents()[0].file.data,
+        documents = model.resolve_submitted_proposal().get_documents()
+        self.assertEqual(1, len(documents))
+        self.assertEqual(documents[0].file.data,
                          self.document.file.data)
 
         versioner = Versioner(self.document)
@@ -343,7 +350,9 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
 
         model = self.proposal.load_model()
         self.assertEqual(1, len(model.submitted_documents))
-        self.assertNotEqual(model.resolve_submitted_documents()[0].file.data,
+        documents = model.resolve_submitted_proposal().get_documents()
+        self.assertEqual(1, len(documents))
+        self.assertNotEqual(documents[0].file.data,
                             self.document.file.data)
 
         data = json.dumps({
@@ -361,6 +370,8 @@ class TestSubmitAdditionalDocumentsNJ(IntegrationTestCase):
 
         model = self.proposal.load_model()
         self.assertEqual(1, len(model.submitted_documents))
-        self.assertEqual(model.resolve_submitted_documents()[0].file.data,
+        documents = model.resolve_submitted_proposal().get_documents()
+        self.assertEqual(1, len(documents))
+        self.assertEqual(documents[0].file.data,
                          self.document.file.data)
-        self.assertEqual("New", model.resolve_submitted_documents()[0].file.data)
+        self.assertEqual("New", documents[0].file.data)

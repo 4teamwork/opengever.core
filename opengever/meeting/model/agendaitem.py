@@ -106,7 +106,7 @@ class AgendaItem(Base):
         if not self.has_proposal:
             return
 
-        documents = self.proposal.resolve_submitted_documents()
+        documents = self.get_documents()
         if not documents:
             return
 
@@ -293,11 +293,10 @@ class AgendaItem(Base):
     def has_submitted_documents(self):
         return self.has_proposal and self.proposal.has_submitted_documents()
 
-    def resolve_submitted_documents(self):
+    def get_documents(self):
         if not self.has_proposal:
             return []
-
-        return self.proposal.resolve_submitted_documents()
+        return self.proposal.resolve_submitted_proposal().get_documents()
 
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
