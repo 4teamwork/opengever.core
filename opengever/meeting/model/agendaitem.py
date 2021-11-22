@@ -106,7 +106,7 @@ class AgendaItem(Base):
         if not self.has_proposal:
             return
 
-        documents = self.proposal.resolve_submitted_documents()
+        documents = self.get_documents()
         if not documents:
             return
 
