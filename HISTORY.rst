@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.23.2 (2021-11-22)
+----------------------
+
+Bug fixes:
+
+
+- Include documents manually added to submitted proposal in meeting Zip and protocol data. [njohner]
+
+
 2021.23.1 (2021-11-19)
 ----------------------
 
