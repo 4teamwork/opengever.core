@@ -11,6 +11,7 @@ RUN --mount=type=cache,target=/var/cache/apk apk add --virtual .build-deps \
     libpng-dev \
     libxml2-dev \
     libxslt-dev \
+    python2-dev \
     openldap-dev \
     libffi-dev \
     postgresql-dev \
