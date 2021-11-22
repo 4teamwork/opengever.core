@@ -88,3 +88,18 @@ class TestDispositionPost(IntegrationTestCase):
         self.assertEqual('Angebot XY', disposition.title)
         self.assertEqual('dossier-state-offered',
                          api.content.get_state(self.expired_dossier))
+
+
+class TestDispositionSeriaization(IntegrationTestCase):
+
+    @browsing
+    def test_includes_sip_filename(self, browser):
+        self.login(self.records_manager, browser)
+
+        with freeze(datetime(2001, 1, 1)):
+            browser.open(self.disposition,
+                         method='GET', headers=self.api_headers)
+
+        self.assertEqual(u'Angebot 31.8.2016', browser.json['title'])
+        self.assertEqual(None, browser.json['transfer_number'])
+        self.assertEqual(u'SIP_20010101_PLONE.zip', browser.json['sip_filename'])

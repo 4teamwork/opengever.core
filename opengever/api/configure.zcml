@@ -41,6 +41,7 @@
 
   <adapter factory=".actors.SerializeActorToJson" />
   <adapter factory=".disposition.DeserializeDispositionFromJson" />
+  <adapter factory=".disposition.SerializeDispositionToJson" />
   <adapter factory=".repositoryfolder.DeserializeRepositoryFolderFromJson" />
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />

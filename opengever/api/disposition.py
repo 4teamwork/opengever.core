@@ -1,9 +1,11 @@
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.relationfield import relationfield_value_to_object
+from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.validators import OfferedDossiersValidator
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import ISerializeToJson
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.interface import implementer
@@ -40,3 +42,13 @@ class DeserializeDispositionFromJson(GeverDeserializeFromJson):
 
         return super(DeserializeDispositionFromJson, self).__call__(
             validate_all=validate_all, data=data, create=create)
+
+
+@implementer(ISerializeToJson)
+@adapter(IDispositionSchema, Interface)
+class SerializeDispositionToJson(GeverSerializeFolderToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeDispositionToJson, self).__call__(*args, **kwargs)
+        result[u'sip_filename'] = self.context.get_sip_filename()
+        return result
