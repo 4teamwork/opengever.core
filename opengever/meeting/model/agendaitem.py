@@ -298,12 +298,6 @@ class AgendaItem(Base):
             return []
         return self.proposal.resolve_submitted_proposal().get_documents()
 
-    def resolve_submitted_documents(self):
-        if not self.has_proposal:
-            return []
-
-        return self.proposal.resolve_submitted_documents()
-
     def has_submitted_excerpt_document(self):
         return self.has_proposal and self.proposal.has_submitted_excerpt_document()
 

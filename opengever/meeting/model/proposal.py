@@ -287,9 +287,6 @@ class Proposal(Base):
     def resolve_submitted_proposal(self):
         return self.submitted_oguid.resolve_object()
 
-    def resolve_submitted_documents(self):
-        return [doc.resolve_submitted() for doc in self.submitted_documents]
-
     def has_submitted_documents(self):
         return bool(self.submitted_documents)
 
