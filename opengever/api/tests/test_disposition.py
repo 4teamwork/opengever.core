@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.disposition.interfaces import IAppraisal
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -153,3 +154,89 @@ class TestDispositionSerialization(IntegrationTestCase):
               u'review_state': u'repositoryfolder-state-active',
               u'title': u'1.1. Vertr\xe4ge und Vereinbarungen'}],
             browser.json['dossier_details']['inactive_dossiers'])
+
+
+class TestAppraisalUpdate(IntegrationTestCase):
+
+    @browsing
+    def test_update_appraisal_for_one_dossier(self, browser):
+        self.login(self.records_manager, browser)
+
+        appraisal = IAppraisal(self.disposition)
+        self.assertTrue(appraisal.get(self.offered_dossier_to_archive))
+        data = {
+            self.offered_dossier_to_archive.UID(): False}
+
+        browser.open(u'{}/@appraisal'.format(self.disposition.absolute_url()),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertFalse(appraisal.get(self.offered_dossier_to_archive))
+
+    @browsing
+    def test_update_appraisal_for_multiple_dossier(self, browser):
+        self.login(self.records_manager, browser)
+
+        appraisal = IAppraisal(self.disposition)
+        self.assertTrue(appraisal.get(self.offered_dossier_to_archive))
+        self.assertFalse(appraisal.get(self.offered_dossier_to_destroy))
+
+        data = {
+            self.offered_dossier_to_archive.UID(): False,
+            self.offered_dossier_to_destroy.UID(): True}
+
+        browser.open(u'{}/@appraisal'.format(self.disposition.absolute_url()),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertFalse(appraisal.get(self.offered_dossier_to_archive))
+        self.assertTrue(appraisal.get(self.offered_dossier_to_destroy))
+
+    @browsing
+    def test_notice_the_prefer_header_and_returns_disposition_serialization(self, browser):
+        self.login(self.records_manager, browser)
+
+        data = {self.offered_dossier_to_archive.UID(): False}
+        headers = self.api_headers.copy()
+        headers.update({'Prefer': 'return=representation'})
+        browser.open(u'{}/@appraisal'.format(self.disposition.absolute_url()),
+                     method='PATCH', headers=headers, data=json.dumps(data))
+
+        self.assertEqual(self.disposition.id, browser.json['id'])
+        self.assertEqual(self.disposition.title, browser.json['title'])
+
+        self.assertEqual(
+            [{
+                u'appraisal': False,
+                u'archival_value': {u'title': u'archival worthy',
+                                    u'token': u'archival worthy'},
+                u'archival_value_annotation': None,
+                u'end': u'2000-01-31',
+                u'former_state': u'dossier-state-resolved',
+                u'intid': 1019013300,
+                u'public_trial': {u'title': u'not assessed', u'token': u'unchecked'},
+                u'reference_number': u'Client1 1.1 / 12',
+                u'start': u'2000-01-01',
+                u'title': u'Hannah Baufrau',
+                u'uid': u'createoffereddossiers00000000001',
+                u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-18'}],
+            browser.json['dossier_details']['active_dossiers'][0]['dossiers'])
+
+    @browsing
+    def test_raises_if_uid_is_not_part_of_disposition(self, browser):
+        self.login(self.records_manager, browser)
+
+        data = {self.dossier.UID(): False}
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(u'{}/@appraisal'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.assertEquals(
+            {'additional_metadata': {},
+             'message': 'msg_invalid_uid',
+             'translated_message': 'Dossier with the UID '
+             'createtreatydossiers000000000001 is not part of the disposition',
+             'type': 'BadRequest'},
+            browser.json)

@@ -1525,4 +1525,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@appraisal"
+      for="opengever.disposition.disposition.IDispositionSchema"
+      factory=".disposition.AppraisalPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

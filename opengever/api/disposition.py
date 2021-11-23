@@ -1,12 +1,16 @@
+from opengever.api import _
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition.disposition import IDispositionSchema
+from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.validators import OfferedDossiersValidator
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import queryMultiAdapter
@@ -79,3 +83,31 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
             compatible_data.append(repo_data)
 
         return compatible_data
+
+
+class AppraisalPatch(Service):
+
+    def reply(self):
+        data = json_body(self.request)
+        appraisal = IAppraisal(self.context)
+
+        disposition_dossiers = self.context.get_dossiers()
+        for uid, archive in data.items():
+            dossier = unrestrictedUuidToObject(uid)
+            if not dossier or dossier not in disposition_dossiers:
+                msg = _(
+                    u'msg_invalid_uid',
+                    default=u'Dossier with the UID ${uid} is not part of the disposition',
+                    mapping={'uid': uid})
+                raise BadRequest(msg)
+
+            appraisal.update(dossier=dossier, archive=archive)
+
+        prefer = self.request.getHeader("Prefer")
+        if prefer == "return=representation":
+            self.request.response.setStatus(200)
+            serializer = queryMultiAdapter(
+                (self.context, self.request), ISerializeToJson)
+            return serializer()
+
+        return self.reply_no_content()
