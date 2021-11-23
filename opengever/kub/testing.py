@@ -39,8 +39,8 @@ KUB_RESPONSES = {
             "type": "person",
             "thirdPartyId": None,
             "text": "Dupont Julie",
-            "created": "2021-11-15T12:31:36.571000+01:00",
-            "modified": "2021-11-15T12:31:36.571000+01:00"
+            "created": "2021-11-14T00:00:00+01:00",
+            "modified": "2021-11-14T00:00:00+01:00"
         }
     ],
     "http://localhost:8000/api/v1/search?q=4Teamwork": [
@@ -50,8 +50,8 @@ KUB_RESPONSES = {
             "type": "organization",
             "thirdPartyId": None,
             "text": "4Teamwork",
-            "created": "2021-11-15T14:24:40.986000+01:00",
-            "modified": "2021-11-15T14:24:40.986000+01:00"
+            "created": "2021-11-13T00:00:00+01:00",
+            "modified": "2021-11-13T00:00:00+01:00"
         },
         {
             "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
@@ -59,8 +59,8 @@ KUB_RESPONSES = {
             "type": "membership",
             "thirdPartyId": None,
             "text": "Dupont Jean - 4Teamwork (CEO)",
-            "created": "2021-11-15T14:25:12.517000+01:00",
-            "modified": "2021-11-15T14:25:12.517000+01:00",
+            "created": "2021-11-18T00:00:00+01:00",
+            "modified": "2021-11-18T00:00:00+01:00",
             "organization": "30bab83d-300a-4886-97d4-ff592e88a56a"
         }
     ],
@@ -71,8 +71,8 @@ KUB_RESPONSES = {
             "type": "person",
             "thirdPartyId": None,
             "text": "Dupont Jean",
-            "created": "2021-11-15T12:31:03.461000+01:00",
-            "modified": "2021-11-15T12:31:03.461000+01:00"
+            "created": "2021-11-17T00:00:00+01:00",
+            "modified": "2021-11-17T00:00:00+01:00"
         }
     ],
     "http://localhost:8000/api/v1/search?id=membership:8345fcfe-2d67-4b75-af46-c25b2f387448": [
@@ -82,8 +82,8 @@ KUB_RESPONSES = {
             "type": "membership",
             "thirdPartyId": None,
             "text": "Dupont Jean - 4Teamwork (CEO)",
-            "created": "2021-11-15T14:25:12.517000+01:00",
-            "modified": "2021-11-15T14:25:12.517000+01:00",
+            "created": "2021-11-18T00:00:00+01:00",
+            "modified": "2021-11-18T00:00:00+01:00",
             "organization": "30bab83d-300a-4886-97d4-ff592e88a56a"
         }
     ],
@@ -94,8 +94,8 @@ KUB_RESPONSES = {
             "type": "organization",
             "thirdPartyId": None,
             "text": "4Teamwork",
-            "created": "2021-11-15T14:24:40.986000+01:00",
-            "modified": "2021-11-15T14:24:40.986000+01:00"
+            "created": "2021-11-13T00:00:00+01:00",
+            "modified": "2021-11-13T00:00:00+01:00"
         }
     ],
     "http://localhost:8000/api/v1/search?id=invalid-id": [],
