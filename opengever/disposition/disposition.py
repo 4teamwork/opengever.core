@@ -28,6 +28,8 @@ from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
 from plone.namedfile.file import NamedBlobFile
 from plone.supermodel import model
+from Products.CMFPlone.CatalogTool import num_sort_regex
+from Products.CMFPlone.CatalogTool import zero_fill
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
 from z3c.relationfield.schema import RelationChoice
@@ -44,7 +46,14 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 
+
 DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
+
+
+def sort_on_sortable_title(item):
+    if isinstance(item[0], unicode):
+        return num_sort_regex.sub(zero_fill, item[0])
+    return num_sort_regex.sub(zero_fill, item[0].Title())
 
 
 class DossierDispositionInformation(object):
@@ -232,6 +241,25 @@ class Disposition(Container):
 
         return [DossierDispositionInformation(rel.to_object, self)
                 for rel in self.dossiers]
+
+    def get_grouped_dossier_representations(self):
+        dossiers = self.get_dossier_representations()
+        inactive_dossiers = {}
+        active_dossiers = {}
+
+        for dossier in dossiers:
+            if dossier.was_inactive():
+                self._add_to(inactive_dossiers, dossier)
+            else:
+                self._add_to(active_dossiers, dossier)
+
+        return (
+            sorted(active_dossiers.items(), key=sort_on_sortable_title),
+            sorted(inactive_dossiers.items(), key=sort_on_sortable_title))
+
+    def _add_to(self, mapping, dossier):
+        key = dossier.get_grouping_key()
+        mapping.setdefault(key, []).append(dossier)
 
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:
