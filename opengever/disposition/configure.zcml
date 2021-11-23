@@ -69,4 +69,10 @@
       handler=".handlers.disposition_modified"
       />
 
+  <!-- transitions -->
+  <adapter
+      factory=".transition.AppraiseTransitionExtender"
+      name="disposition-transition-appraise"
+      />
+
 </configure>
