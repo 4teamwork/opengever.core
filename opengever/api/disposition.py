@@ -6,8 +6,11 @@ from opengever.disposition.validators import OfferedDossiersValidator
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
@@ -51,4 +54,28 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeDispositionToJson, self).__call__(*args, **kwargs)
         result[u'sip_filename'] = self.context.get_sip_filename()
+        result[u'dossier_details'] = self.get_dossier_details()
         return result
+
+    def get_dossier_details(self):
+        active_dossiers, inactive_dossiers = \
+            self.context.get_grouped_dossier_representations()
+
+        data = {
+            'active_dossiers': self.jsonify(active_dossiers),
+            'inactive_dossiers': self.jsonify(inactive_dossiers),
+        }
+        return data
+
+    def jsonify(self, data):
+        compatible_data = []
+        for repo, dossiers in data:
+            repo_data = queryMultiAdapter(
+                (repo, getRequest()), ISerializeToJsonSummary)()
+
+            repo_data['dossiers'] = [
+                dossier.jsonify() for dossier in dossiers]
+
+            compatible_data.append(repo_data)
+
+        return compatible_data

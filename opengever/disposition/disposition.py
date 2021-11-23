@@ -27,6 +27,7 @@ from plone import api
 from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
 from plone.namedfile.file import NamedBlobFile
+from plone.restapi.serializer.converters import json_compatible
 from plone.supermodel import model
 from Products.CMFPlone.CatalogTool import num_sort_regex
 from Products.CMFPlone.CatalogTool import zero_fill
@@ -67,6 +68,7 @@ class DossierDispositionInformation(object):
         self.title = dossier.title
         self.intid = getUtility(IIntIds).getId(dossier)
         self.url = dossier.absolute_url()
+        self.uid = dossier.UID()
         self.reference_number = dossier.get_reference_number()
         self.parent = aq_parent(aq_inner(dossier))
         self.start = IDossier(dossier).start
@@ -101,6 +103,21 @@ class DossierDispositionInformation(object):
             'appraisal': self.appraisal,
             'former_state': self.former_state})
 
+    def jsonify(self):
+        return json_compatible({
+            'title': self.title,
+            'intid': self.intid,
+            'appraisal': self.appraisal,
+            'reference_number': self.reference_number,
+            'url': self.url,
+            'uid': self.uid,
+            'start': self.start,
+            'end': self.end,
+            'public_trial': self.public_trial,
+            'archival_value': self.archival_value,
+            'archival_value_annotation': self.archival_value_annotation,
+            'former_state': self.former_state})
+
 
 class RemovedDossierDispositionInformation(DossierDispositionInformation):
 
@@ -111,6 +128,7 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         self.reference_number = dossier_mapping.get('reference_number')
         self.repository_title = dossier_mapping.get('repository_title')
         self.url = None
+        self.uid = None
         self.start = None
         self.end = None
         self.public_trial = None

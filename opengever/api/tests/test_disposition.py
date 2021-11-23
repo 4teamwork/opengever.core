@@ -90,7 +90,7 @@ class TestDispositionPost(IntegrationTestCase):
                          api.content.get_state(self.expired_dossier))
 
 
-class TestDispositionSeriaization(IntegrationTestCase):
+class TestDispositionSerialization(IntegrationTestCase):
 
     @browsing
     def test_includes_sip_filename(self, browser):
@@ -103,3 +103,53 @@ class TestDispositionSeriaization(IntegrationTestCase):
         self.assertEqual(u'Angebot 31.8.2016', browser.json['title'])
         self.assertEqual(None, browser.json['transfer_number'])
         self.assertEqual(u'SIP_20010101_PLONE.zip', browser.json['sip_filename'])
+
+    @browsing
+    def test_provides_dossier_details(self, browser):
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual(['active_dossiers', 'inactive_dossiers'],
+                              browser.json['dossier_details'].keys())
+        self.assertEqual(
+            [
+                {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+                 u'@type': u'opengever.repository.repositoryfolder',
+                 u'description': u'',
+                 u'is_leafnode': True,
+                 u'review_state': u'repositoryfolder-state-active',
+                 u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                 u'dossiers': [{u'appraisal': True,
+                                u'archival_value': u'archival worthy',
+                                u'archival_value_annotation': None,
+                                u'end': u'2000-01-31',
+                                u'former_state': u'dossier-state-resolved',
+                                u'intid': 1019013300,
+                                u'public_trial': u'unchecked',
+                                u'reference_number': u'Client1 1.1 / 12',
+                                u'start': u'2000-01-01',
+                                u'title': u'Hannah Baufrau',
+                                u'url': self.offered_dossier_to_archive.absolute_url()}]
+                }
+            ],
+            browser.json['dossier_details']['active_dossiers'])
+
+        self.assertEqual(
+            [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+              u'@type': u'opengever.repository.repositoryfolder',
+              u'description': u'',
+              u'dossiers': [{u'appraisal': False,
+                             u'archival_value': u'not archival worthy',
+                             u'archival_value_annotation': None,
+                             u'end': u'2000-01-15',
+                             u'former_state': u'dossier-state-inactive',
+                             u'intid': 1019053300,
+                             u'public_trial': u'unchecked',
+                             u'reference_number': u'Client1 1.1 / 14',
+                             u'start': u'2000-01-01',
+                             u'title': u'Hans Baumann',
+                             u'url': self.offered_dossier_to_destroy.absolute_url()}],
+              u'is_leafnode': True,
+              u'review_state': u'repositoryfolder-state-active',
+              u'title': u'1.1. Vertr\xe4ge und Vereinbarungen'}],
+            browser.json['dossier_details']['inactive_dossiers'])
