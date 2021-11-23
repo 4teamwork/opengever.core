@@ -34,6 +34,8 @@ class CreatePolicyCLI(object):
         args.append(template)
 
         args.append('--config={}'.format(init_file))
+        if 'opengever.core.testserver.OPENGEVER_TESTSERVER' in remainder:
+            remainder.remove('opengever.core.testserver.OPENGEVER_TESTSERVER')
         if remainder:
             args.extend(remainder)
 
