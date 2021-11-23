@@ -22,9 +22,13 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
         """Validate if the retention period of all selected dossiers is
         expired and the dossiers are not part of another disposition.
         """
-        super(OfferedDossiersValidator, self).validate(value)
-
         for dossier in value:
+            if dossier.is_open():
+                raise Invalid(
+                    _(u'error_dossier_is_active',
+                      default=u'The dossier ${title} is still active.',
+                      mapping={'title': dossier.title}))
+
             if not self.is_retention_period_expired(dossier):
                 raise Invalid(
                     _(u'error_retention_period_not_expired',
@@ -37,6 +41,8 @@ class OfferedDossiersValidator(validator.SimpleFieldValidator):
                       default=u'The dossier ${title} is already offered in a '
                       'different disposition.',
                       mapping={'title': dossier.title}))
+
+        return super(OfferedDossiersValidator, self).validate(value)
 
     def is_retention_period_expired(self, dossier):
         if self.disregard_retention_period:

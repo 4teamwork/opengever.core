@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.indexes import changed_indexer
+from opengever.disposition.interfaces import IAppraisal
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
@@ -514,6 +515,9 @@ class TestChangedUpdateForDisposition(TestChangedUpdateBase):
 
     def test_changed_is_updated_when_workflow_status_is_changed(self):
         self.login(self.manager)
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.expired_dossier, archive=True)
+
         with freeze(FREEZING_TIME):
             api.content.transition(obj=self.disposition, transition="disposition-transition-appraise")
         self.assert_changed_value(self.disposition, FREEZING_TIME)

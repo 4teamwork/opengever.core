@@ -169,6 +169,25 @@ class TestDispositionWorkflowIntegration(IntegrationTestCase):
         self.assertEquals('disposition-state-appraised',
                           api.content.get_state(self.disposition))
 
+    @browsing
+    def test_appraising_via_api_is_not_possible_if_the_appraisal_is_incomplete(self, browser):
+        self.login(self.archivist, browser)
+        appraisal = IAppraisal(self.disposition)
+        appraisal.update(dossier=self.offered_dossier_to_archive, archive=None)
+
+        url = '{}/@workflow/disposition-transition-appraise'.format(
+            self.disposition.absolute_url())
+
+        with browser.expect_http_error(code=403):
+            browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'type': u'Forbidden',
+             u'additional_metadata': {},
+             u'message': u'msg_appraisal_incomplete',
+             u'translated_message': u'The appraisal is incomplete, appraisal could not be finalized.'},
+            browser.json)
+
     def test_set_all_dossiers_to_archived_state_when_archiving_disposition(self):
         self.login(self.archivist)
         self.assertEquals('dossier-state-offered',
