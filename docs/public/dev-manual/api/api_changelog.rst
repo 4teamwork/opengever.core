@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - @reminders now returns 204 NoContent when no reminder is set.
+- Added API support for dispositions objects.
+
 
 2021.23.0 (2021-11-17)
 ----------------------
