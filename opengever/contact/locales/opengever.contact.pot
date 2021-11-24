@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-11-24 14:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,4 +492,9 @@ msgstr ""
 #. Default: "Telefon"
 #: ./opengever/contact/contact.py
 msgid "telefon"
+msgstr ""
+
+#. Default: "Kub contacts are only supported in the new frontend"
+#: ./opengever/contact/browser/tabbed.py
+msgid "warning_kub_contact_new_ui_only"
 msgstr ""

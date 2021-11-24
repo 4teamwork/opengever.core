@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-13 14:31+0000\n"
+"POT-Creation-Date: 2021-11-24 14:55+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -586,3 +586,8 @@ msgstr "${amount} matches"
 #: ./opengever/contact/contact.py
 msgid "telefon"
 msgstr "Phone"
+
+#. Default: "Kub contacts are only supported in the new frontend"
+#: ./opengever/contact/browser/tabbed.py
+msgid "warning_kub_contact_new_ui_only"
+msgstr "The Contact and Authorities directory is only supported in the new UI."
