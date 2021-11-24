@@ -11,7 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- @reminders now returns 204 NoContent when no reminder is set.
 
 2021.23.0 (2021-11-17)
 ----------------------

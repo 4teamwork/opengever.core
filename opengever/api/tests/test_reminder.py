@@ -37,6 +37,17 @@ class TestTaskReminderAPI(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_get_returns_no_content_when_no_reminder_is_set(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            self.task.absolute_url() + '/@reminder',
+            method='GET',
+            headers=self.http_headers,
+        )
+        self.assertEqual(204, browser.status_code)
+
+    @browsing
     def test_post_adds_task_reminder(self, browser):
         self.login(self.regular_user, browser)
         payload = {'option_type': ReminderOneDayBefore.option_type}

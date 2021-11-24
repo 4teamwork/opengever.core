@@ -27,7 +27,7 @@ class TaskReminderGet(Service):
     def reply(self):
         reminder = self.context.get_reminder()
         if not reminder:
-            raise NotFound
+            return self.reply_no_content()
 
         reminder_data = reminder.serialize(json_compat=True)
         reminder_data['@id'] = '/'.join((self.context.absolute_url(), '@reminder'))
