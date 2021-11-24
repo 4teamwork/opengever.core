@@ -17,7 +17,7 @@
    .. py:attribute:: start
 
        :Feldname: :field-title:`Beginn`
-       :Datentyp: ``Datetime``
+       :Datentyp: ``UTCDatetime``
        :Pflichtfeld: Ja :required:`(*)`
        
        
@@ -27,7 +27,7 @@
    .. py:attribute:: end
 
        :Feldname: :field-title:`Ende`
-       :Datentyp: ``Datetime``
+       :Datentyp: ``UTCDatetime``
        
        
        
