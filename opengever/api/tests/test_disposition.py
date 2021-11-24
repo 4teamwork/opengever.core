@@ -112,6 +112,7 @@ class TestDispositionSerialization(IntegrationTestCase):
 
         self.assertItemsEqual(['active_dossiers', 'inactive_dossiers'],
                               browser.json['dossier_details'].keys())
+
         self.assertEqual(
             [
                 {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
@@ -121,38 +122,47 @@ class TestDispositionSerialization(IntegrationTestCase):
                  u'review_state': u'repositoryfolder-state-active',
                  u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
                  u'dossiers': [{u'appraisal': True,
-                                u'archival_value': u'archival worthy',
+                                u'archival_value': {
+                                    u'title': u'archival worthy',
+                                    u'token': u'archival worthy'},
                                 u'archival_value_annotation': None,
                                 u'end': u'2000-01-31',
                                 u'former_state': u'dossier-state-resolved',
                                 u'intid': 1019013300,
-                                u'public_trial': u'unchecked',
+                                u'public_trial': {
+                                    u'title': u'not assessed',
+                                    u'token': u'unchecked'},
                                 u'reference_number': u'Client1 1.1 / 12',
                                 u'start': u'2000-01-01',
                                 u'title': u'Hannah Baufrau',
+                                u'uid': u'createoffereddossiers00000000001',
                                 u'url': self.offered_dossier_to_archive.absolute_url()}]
-                }
-            ],
+                }],
             browser.json['dossier_details']['active_dossiers'])
 
         self.assertEqual(
-            [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
-              u'@type': u'opengever.repository.repositoryfolder',
-              u'description': u'',
-              u'dossiers': [{u'appraisal': False,
-                             u'archival_value': u'not archival worthy',
-                             u'archival_value_annotation': None,
-                             u'end': u'2000-01-15',
-                             u'former_state': u'dossier-state-inactive',
-                             u'intid': 1019053300,
-                             u'public_trial': u'unchecked',
-                             u'reference_number': u'Client1 1.1 / 14',
-                             u'start': u'2000-01-01',
-                             u'title': u'Hans Baumann',
-                             u'url': self.offered_dossier_to_destroy.absolute_url()}],
-              u'is_leafnode': True,
-              u'review_state': u'repositoryfolder-state-active',
-              u'title': u'1.1. Vertr\xe4ge und Vereinbarungen'}],
+            [
+                {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+                 u'@type': u'opengever.repository.repositoryfolder',
+                 u'description': u'',
+                 u'is_leafnode': True,
+                 u'review_state': u'repositoryfolder-state-active',
+                 u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                 u'dossiers': [{u'appraisal': False,
+                                u'archival_value': {u'title': u'not archival worthy',
+                                                    u'token': u'not archival worthy'},
+                                u'archival_value_annotation': None,
+                                u'end': u'2000-01-15',
+                                u'former_state': u'dossier-state-inactive',
+                                u'intid': 1019053300,
+                                u'public_trial': {u'title': u'not assessed',
+                                                  u'token': u'unchecked'},
+                                u'reference_number': u'Client1 1.1 / 14',
+                                u'start': u'2000-01-01',
+                                u'title': u'Hans Baumann',
+                                u'uid': u'createoffereddossiers00000000003',
+                                u'url': self.offered_dossier_to_destroy.absolute_url()}],
+                }],
             browser.json['dossier_details']['inactive_dossiers'])
 
 
