@@ -13,6 +13,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- @complete-successor-task: ``documents`` payload: now also resolves document references by @id. [elioschmutz]
 - @reminders now returns 204 NoContent when no reminder is set.
 - Added API support for dispositions objects.
 

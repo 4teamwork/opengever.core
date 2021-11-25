@@ -346,6 +346,44 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
             u'transition': u'task-transition-in-progress-resolved'},
             response['responses'][-1])
 
+    @browsing
+    def test_complete_successor_task_accepts_document_urls(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Test setup - create predecessor and accepted successor task pair
+        predecessor, successor = self.prepare_accepted_task_pair()
+
+        # Add documents in successor that are supposed to be delivered back
+        doc = create(Builder('document')
+                     .within(successor)
+                     .titled(u'Statement in response to inquiry'))
+
+        # Need to trick the transition controller into thinking its a remote
+        # request so that it allows the resolve transition on the predecessor
+        with patch('opengever.task.browser.transitioncontroller.'
+                   'RequestChecker.is_remote',
+                   new_callable=PropertyMock) as mock_is_remote:
+            mock_is_remote.return_value = True
+
+            request_body = json.dumps({
+                'transition': 'task-transition-in-progress-resolved',
+                'text': 'I finished this task.',
+                'documents': [doc.absolute_url()]
+            })
+            browser.open(
+                successor.absolute_url() + '/@complete-successor-task',
+                method='POST',
+                data=request_body,
+                headers=self.api_headers)
+
+        self.assertEquals(
+            u'RE: Statement in response to inquiry',
+            predecessor.objectValues()[-1].title)
+
+        # Delivered document is referenced from response on successor
+        self.assertEqual(1, len(self.last_response(successor).added_objects))
+        self.assertEqual(doc, self.last_response(successor).added_objects[0].to_object)
+
     def test_parses_intids_paths_and_oguids_as_doc_references(self):
         self.login(self.regular_user)
 
@@ -358,6 +396,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         self.assertEqual(int_id, resolve(int_id))
         self.assertEqual(int_id, resolve(str(Oguid.for_object(self.document))))
         self.assertEqual(int_id, resolve(self.document.absolute_url_path().replace('/plone', '')))
+        # self.assertEqual(int_id, resolve(self.document.absolute_url()))
 
         with self.assertRaises(BadRequest) as cm:
             resolve('garbage')

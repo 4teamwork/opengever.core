@@ -7,7 +7,7 @@ Der ``@complete-successor-task`` Endpoint auf Aufgaben erlaubt es, eine mandante
 
 Durch das Abschliessen der Nachfolgeaufgabe wird das Backend auch die Vorgänger-Aufgabe auf dem Remote-Mandanten abschliessen, und ggf. die angegebenen Dokumente an die Vorgängeraufgabe zurück übermitteln.
 
-Dokumente, welche zurück übermittelt werden sollen, können über den Parameter ``documents`` angegeben werden. Dieser Parameter erlaubt die Referenzierung von Dokumenten (im selben Dossier wie die Nachfolgeaufgabe) über IntId (``1423795951``), OGUID (``rk:1423795951``) oder Pfad (``/ordnungssystem/dossier-17/document-23``).
+Dokumente, welche zurück übermittelt werden sollen, können über den Parameter ``documents`` angegeben werden. Dieser Parameter erlaubt die Referenzierung von Dokumenten (im selben Dossier wie die Nachfolgeaufgabe) über IntId (``1423795951``), OGUID (``rk:1423795951``), Pfad (``/ordnungssystem/dossier-17/document-23``) oder URL (``https://example.com/ordnungssystem/dossier-17/document-23``).
 
 Optional kann im Parameter ``text`` ein Kommentar zum Abschliessen der Aufgabe angegeben werden.
 
