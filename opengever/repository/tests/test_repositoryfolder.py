@@ -114,7 +114,7 @@ class TestRepositoryFolder(IntegrationTestCase):
     @browsing
     def test_only_repofolder_addable_when_already_contains_repositories(self, browser):
         """A repository folder should not contain other repository folders AND
-        dossiers at the same time.
+        dossiers at the same time, except dispositions.
         Therefore dossiers should not be addable in branch repository folders.
         """
         self.login(self.administrator, browser)
@@ -126,6 +126,14 @@ class TestRepositoryFolder(IntegrationTestCase):
         self.assertEquals(
             ['Repository Folder'],
             factoriesmenu.addable_types())
+
+        # check dispositions always addable
+        self.login(self.records_manager, browser)
+        browser.open(self.branch_repofolder)
+        self.assertEquals(
+            ['Disposition'],
+            factoriesmenu.addable_types())
+
 
     @browsing
     def test_repofolder_not_addable_when_repofolder_is_deactivated(self, browser):
