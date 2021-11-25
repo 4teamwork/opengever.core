@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.behaviors.dossier import IDossier
@@ -36,6 +37,22 @@ class GeverRelationChoiceFieldDeserializer(IntegrationTestCase):
             method='PATCH',
             data=json.dumps(
                 {'relatedDossier': [relative_path]}
+            ),
+            headers=self.api_headers)
+
+        self.assertEquals(
+            [self.empty_dossier],
+            [rel.to_object for rel in IDossier(self.dossier).relatedDossier])
+
+    @browsing
+    def test_relation_by_oguid_is_possible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            self.dossier.absolute_url(),
+            method='PATCH',
+            data=json.dumps(
+                {'relatedDossier': [Oguid.for_object(self.empty_dossier).id]}
             ),
             headers=self.api_headers)
 
