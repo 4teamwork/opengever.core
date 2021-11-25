@@ -6,15 +6,17 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 .. You should *NOT* be adding new change log entries to this file.
    Create a file in the changes directory instead. Use the issue/ticket number
    as filename and add one of .feature, .bugfix, .other as extension to signify
-2021.23.4 (unreleased)
-----------------------
-
-- Nothing changed yet.
-
-
-2021.23.3 (2021-11-25)
 
 .. towncrier release notes start
+
+2021.23.3 (2021-11-25)
+----------------------
+
+Other changes:
+
+
+- Split upgrade with high memory consumption into two. [deiferni]
+
 
 2021.23.2 (2021-11-22)
 ----------------------
