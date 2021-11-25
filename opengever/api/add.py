@@ -16,6 +16,7 @@ from plone.restapi.services.content.utils import add
 from plone.restapi.services.content.utils import create
 from Products.CMFPlone.utils import safe_hasattr
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zExceptions import Unauthorized
 from zope.component import ComponentLookupError
 from zope.component import getMultiAdapter
@@ -206,8 +207,7 @@ class GeverFolderPost(FolderPost):
             self.add_object_to_context()
         except ForbiddenByQuota as exc:
             transaction.abort()
-            self.request.response.setStatus(507)
-            return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
+            raise Forbidden(exc.message)
 
         self.request.response.setStatus(201)
         self.request.response.setHeader("Location", self.obj.absolute_url())

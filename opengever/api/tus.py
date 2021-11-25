@@ -32,9 +32,7 @@ class GeverUploadPatch(UploadPatch):
             noLongerProvides(self.request, IDuringContentCreation)
         except ForbiddenByQuota as exc:
             transaction.abort()
-            self.request.response.setStatus(507)
-            return dict(error=dict(type="ForbiddenByQuota", message=str(exc)))
-
+            raise Forbidden(exc.message)
         return data
 
     def create_or_modify_content(self, tus_upload):
