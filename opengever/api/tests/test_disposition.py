@@ -169,6 +169,43 @@ class TestDispositionSerialization(IntegrationTestCase):
                 }],
             browser.json['dossier_details']['inactive_dossiers'])
 
+    @browsing
+    def test_shows_limited_information_for_removed_content(self, browser):
+        # close disposition (remove dossiers)
+        self.login(self.archivist, browser)
+        api.content.transition(self.disposition_with_sip,
+                               'disposition-transition-archive')
+        self.login(self.records_manager, browser)
+        api.content.transition(self.disposition_with_sip,
+                               'disposition-transition-close')
+
+        browser.open(self.disposition_with_sip,
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {
+                u'active_dossiers': [
+                    {
+                        u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                        u'dossiers': [
+                            {u'appraisal': True,
+                             u'archival_value': None,
+                             u'archival_value_annotation': None,
+                             u'end': None,
+                             u'former_state': u'dossier-state-resolved',
+                             u'intid': 1019033300,
+                             u'public_trial': None,
+                             u'reference_number': u'Client1 1.1 / 13',
+                             u'start': None,
+                             u'title': u'Dossier for SIP',
+                             u'uid': None,
+                             u'url': None}],
+                    }
+                ],
+                u'inactive_dossiers': []
+            },
+            browser.json['dossier_details'])
+
 
 class TestAppraisalUpdate(IntegrationTestCase):
 

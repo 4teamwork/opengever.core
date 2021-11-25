@@ -7,6 +7,7 @@ from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.validators import OfferedDossiersValidator
+from opengever.repository.interfaces import IRepositoryFolder
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IFieldSerializer
@@ -77,15 +78,23 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
     def jsonify(self, data):
         compatible_data = []
         for repo, dossiers in data:
-            repo_data = queryMultiAdapter(
-                (repo, getRequest()), ISerializeToJsonSummary)()
-            repo_data['archival_value'] = self.repo_archival_value(repo)
+            repo_data = self.repo_serialization(repo)
             repo_data['dossiers'] = [
                 dossier.jsonify() for dossier in dossiers]
 
             compatible_data.append(repo_data)
 
         return compatible_data
+
+    def repo_serialization(self, repo):
+        if IRepositoryFolder.providedBy(repo):
+            repo_data = queryMultiAdapter(
+                (repo, getRequest()), ISerializeToJsonSummary)()
+            repo_data['archival_value'] = self.repo_archival_value(repo)
+            return repo_data
+
+        # In a closed disposition
+        return {'title': repo}
 
     def repo_archival_value(self, repo):
         return getMultiAdapter(
