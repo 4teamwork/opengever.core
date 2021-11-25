@@ -140,7 +140,6 @@ class MoveItemsForm(form.Form):
                             'it would exceed the maximum allowed dossier depth.',
                             mapping=dict(name=obj.title))
                     else:
-                        import pdb; pdb.set_trace()
                         raise Exception(
                             'Failed to determine the reason for unmovable object. '
                             'Did IMovabilityChecker change?'
