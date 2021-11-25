@@ -1,8 +1,11 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
+from ftw.testing.freezer import freeze
 from opengever.testing import IntegrationTestCase
 import json
+import pytz
 
 
 class TestWorkspaceMeeting(IntegrationTestCase):
@@ -22,6 +25,111 @@ class TestWorkspaceMeeting(IntegrationTestCase):
         self.assertEqual(1, len(children['added']))
         meeting = children['added'].pop()
         self.assertEqual(meeting.Title(), u'Ein Meeting')
+
+
+class TestWorkspaceMeetingWorkflow(IntegrationTestCase):
+
+    def close_workspace_meeting(self, browser):
+        browser.open(
+            '{}/@workflow/{}'.format(
+                self.workspace_meeting.absolute_url(),
+                'opengever_workspace_meeting--TRANSITION--close--active_closed',
+            ),
+            method='POST', headers=self.api_headers,
+        )
+
+    def reopen_workspace_meeting(self, browser):
+        browser.open(
+            '{}/@workflow/{}'.format(
+                self.workspace_meeting.absolute_url(),
+                'opengever_workspace_meeting--TRANSITION--reopen--closed_active',
+            ),
+            method='POST', headers=self.api_headers,
+        )
+
+    @browsing
+    def test_admin_can_close_workspace_meeting(self, browser):
+        self.login(self.workspace_admin, browser)
+        with freeze(datetime(2020, 9, 4, 10, 30, tzinfo=pytz.UTC)):
+            self.close_workspace_meeting(browser)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json,
+            {
+                u'action': u'opengever_workspace_meeting--TRANSITION--close--active_closed',
+                u'actor': u'fridolin.hugentobler',
+                u'comments': u'',
+                u'review_state': u'opengever_workspace_meeting--STATUS--closed',
+                u'time': u'2020-09-04T10:30:00+00:00',
+                u'title': u'Closed',
+            }
+        )
+
+    @browsing
+    def test_admin_can_reopen_workspace_meeting(self, browser):
+        self.login(self.workspace_admin, browser)
+        with freeze(datetime(2020, 9, 4, 10, 30, tzinfo=pytz.UTC)):
+            self.close_workspace_meeting(browser)
+            self.reopen_workspace_meeting(browser)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            browser.json,
+            {
+                u'action': u'opengever_workspace_meeting--TRANSITION--reopen--closed_active',
+                u'actor': u'fridolin.hugentobler',
+                u'comments': u'',
+                u'review_state': u'opengever_workspace_meeting--STATUS--active',
+                u'time': u'2020-09-04T10:30:00+00:00',
+                u'title': u'Active',
+            }
+        )
+
+    @browsing
+    def test_member_cannot_reopen_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+        self.close_workspace_meeting(browser)
+        with browser.expect_http_error(400):
+            self.reopen_workspace_meeting(browser)
+        self.assertEqual(
+            browser.json,
+            {
+                u'error': {
+                    u'message': u"Invalid transition "
+                                u"'opengever_workspace_meeting--TRANSITION--reopen--closed_active'."
+                                u"\nValid transitions are:\n",
+                    u'type': u'Bad Request',
+                },
+            },
+        )
+
+    def test_add_modify_and_delete_agendaitem_permission(self):
+        workflow = self.portal.portal_workflow['opengever_workspace_meeting']
+
+        self.assertEqual({'acquired': 1, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--active'
+                                         ].getPermissionInfo('Modify portal content'))
+
+        self.assertEqual({'acquired': 0, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--closed'
+                                         ].getPermissionInfo('Modify portal content'))
+
+        self.assertEqual({'acquired': 1, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--active'
+                                         ].getPermissionInfo('Add portal content'))
+
+        self.assertEqual({'acquired': 0, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--closed'
+                                         ].getPermissionInfo('Add portal content'))
+
+        self.assertEqual({'acquired': 1, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--active'
+                                         ].getPermissionInfo(
+            'opengever.workspace: Delete Workspace Meeting Agenda Items'))
+
+        self.assertEqual({'acquired': 0, 'roles': []},
+                         workflow.states['opengever_workspace_meeting--STATUS--closed'
+                                         ].getPermissionInfo(
+            'opengever.workspace: Delete Workspace Meeting Agenda Items'))
 
 
 class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
