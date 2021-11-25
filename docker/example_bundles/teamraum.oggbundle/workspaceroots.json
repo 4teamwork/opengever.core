@@ -7,10 +7,10 @@
     "title_en": "Workspaces",
     "_permissions": {
       "workspaces_creator": [
-        "tr_creators"
+        "tr_workspace_creators"
       ],
       "workspaces_user": [
-        "tr_users"
+        "tr_benutzer"
       ]
     }
   }

@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  ianus-backend:
+    environment:
+      - DJANGO_SECRET_KEY=secret
+      - DJANGO_ALLOWED_HOSTS=localhost
+      - DJANGO_PATH_PREFIX=/portal
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_DATABASE_NAME=ianus
+      - DJANGO_DATABASE_USER=ianus
+      - DJANGO_DATABASE_PASSWORD=secret
+      - DJANGO_DATABASE_HOST=ianus-db
+      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_TWO_FACTOR_REQUIRED=False
+      - DJANGO_OIDC_RP_SIGN_ALGO=HS256
+      - DJANGO_AUTH_LDAP_SERVER_URI=ldap://389ds:3389
+      - DJANGO_AUTH_LDAP_BIND_DN=cn=Directory Manager
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=secret
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,dc=example,dc=com
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,ou=Demo,ou=OneGovGEVER,dc=4teamwork,dc=ch
+      - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
+  389ds:
+    image: 4teamwork/389ds:2.0.10
+    ports:
+      - "3389:3389"
+      - "3636:3636"
+    volumes:
+      - ./var/389ds:/data
+    environment:
+      - SUFFIX_NAME=dc=example,dc=com
+      - DS_DM_PASSWORD=secret
+    profiles:
+      - all
+      - 389ds

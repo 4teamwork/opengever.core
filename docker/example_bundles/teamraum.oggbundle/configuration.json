@@ -15,7 +15,7 @@
         "unit_id": "entenhausen",
         "title": "Entenhausen",
         "admin_unit_id": "entenhausen",
-        "users_group_id": "tr_users",
+        "users_group_id": "tr_benutzer",
         "inbox_group_id": "tr_administrators"
       }
     ]
@@ -24,15 +24,13 @@
     "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
   },
   "ldap": {
-    "users_base": "ou=Users,dc=example,dc=com",
-    "groups_base": "ou=Groups,dc=example,dc=com",
-    "_binduid": "cn=Directory Manager",
-    "_bindpwd": "secret",
+    "users_base": "ou=Users,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch",
+    "groups_base": "ou=Groups,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch",
     "servers": [
         {
-            "host": "389ds",
-            "protocol": "ldap",
-            "port": 3389,
+            "host": "ldap1.4teamwork.ch",
+            "protocol": "ldaps",
+            "port": 636,
             "conn_timeout": 5,
             "op_timeout": 10
         }
