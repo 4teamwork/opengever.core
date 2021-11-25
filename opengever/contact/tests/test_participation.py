@@ -6,10 +6,10 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
-from opengever.contact.interfaces import IContactSettings
 from opengever.contact.models import Participation
-from opengever.core.testing import toggle_feature
+from opengever.kub.interfaces import IKuBSettings
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 from plone import api
 
@@ -219,27 +219,36 @@ class TestParticipationsEndPoint(FunctionalTestCase):
              in browser.json.get('participations')])
 
 
-class TestAddParticipationAction(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestAddParticipationAction, self).setUp()
-        self.dossier = create(Builder('dossier'))
+class TestAddParticipationAction(IntegrationTestCase):
 
     @browsing
     def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_disabled(self, browser):
-        toggle_feature(IContactSettings, enabled=False)
-        browser.login().open(self.dossier)
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
         factoriesmenu.add('Participant')
         self.assertEqual(
-            'http://nohost/plone/dossier-1/add-plone-participation', browser.url)
+            self.dossier.absolute_url() + '/add-plone-participation', browser.url)
 
     @browsing
     def test_redirects_to_plone_implementation_add_form_when_contact_feature_is_enabled(self, browser):
-        toggle_feature(IContactSettings, enabled=True)
-        browser.login().open(self.dossier)
+        self.activate_feature("contact")
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
         factoriesmenu.add('Participant')
         self.assertEqual(
-            'http://nohost/plone/dossier-1/add-sql-participation', browser.url)
+            self.dossier.absolute_url() + '/add-sql-participation', browser.url)
+
+    @browsing
+    def test_redirects_to_folder_with_error_message_when_kub_feature_is_enabled(self, browser):
+        api.portal.set_registry_record(
+            'base_url', u'http://localhost:8000', IKuBSettings)
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier)
+        factoriesmenu.add('Participant')
+        self.assertEqual(
+            ['The Contact and Authorities directory is only supported in the new UI.'],
+            error_messages())
+        self.assertEqual(self.dossier.absolute_url(), browser.url)
 
 
 class TestAddForm(FunctionalTestCase):
