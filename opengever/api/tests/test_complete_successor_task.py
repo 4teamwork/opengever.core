@@ -141,7 +141,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
             request_body = json.dumps({
                 'transition': 'task-transition-in-progress-resolved',
                 'text': 'I finished this task.',
-                'documents': ["/".join(produced_doc.getPhysicalPath())]
+                'documents': [getUtility(IIntIds).getId(produced_doc)]
             })
             with browser.expect_http_error(code=400):
                 browser.open(
@@ -349,12 +349,15 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
     def test_parses_intids_paths_and_oguids_as_doc_references(self):
         self.login(self.regular_user)
 
-        resolve = CompleteSuccessorTaskPost._resolve_doc_ref_to_intid
+        endpoint = getMultiAdapter((self.task, self.request),
+                                   name="POST_application_json_@complete-successor-task")
+
+        resolve = endpoint._resolve_doc_ref_to_intid
         int_id = getUtility(IIntIds).getId(self.document)
 
         self.assertEqual(int_id, resolve(int_id))
         self.assertEqual(int_id, resolve(str(Oguid.for_object(self.document))))
-        self.assertEqual(int_id, resolve('/'.join(self.document.getPhysicalPath())))
+        self.assertEqual(int_id, resolve(self.document.absolute_url_path().replace('/plone', '')))
 
         with self.assertRaises(BadRequest) as cm:
             resolve('garbage')
