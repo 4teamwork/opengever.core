@@ -90,8 +90,10 @@ class RepositoryFolderConstrainTypes(object):
 
         # Filter content types, if required
         if not self.context.is_leaf_node():
-            # only allow same types
-            types = filter(lambda a: a == fti, types)
+            # only allow same types, except dispositions
+            types = filter(
+                lambda a: a == fti or a.id == 'opengever.disposition.disposition',
+                types)
 
         # Finally: remove not enabled resticted content types
         marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
