@@ -7,11 +7,15 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Participation
+from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.kub.interfaces import IKuBSettings
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 from plone import api
+from requests_toolbelt.utils import formdata
+import requests_mock
 
 
 class TestDossierParticipation(FunctionalTestCase):
@@ -610,3 +614,32 @@ class TestRemoveForm(FunctionalTestCase):
         browser.click_on('Cancel')
         self.assertEquals(
             'http://nohost/plone/dossier-1#participations', browser.url)
+
+
+@requests_mock.Mocker()
+class TestRemoveKubParticipation(KuBIntegrationTestCase):
+
+    @browsing
+    def test_deleting_kub_participation_is_not_supported(self, mocker, browser):
+        self.login(self.regular_user, browser)
+        self.mock_get_by_id(mocker, self.person_jean)
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(self.person_jean, roles=['participation'])
+
+        original_template = (
+            'orig_template',
+            '#'.join((self.empty_dossier.absolute_url(), 'participants')))
+        oids = ('oids', self.person_jean)
+        method = ('delete_participants:method', '1')
+        browser.open(
+            self.empty_dossier.absolute_url(),
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            data=formdata.urlencode((original_template, oids, method, )),
+            )
+
+        self.assertEqual(
+            ['The Contact and Authorities directory is only supported in the new UI.'],
+            error_messages())
+        self.assertEqual(
+            [self.person_jean],
+            [part.contact for part in handler.get_participations()])
