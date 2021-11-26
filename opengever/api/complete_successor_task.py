@@ -1,12 +1,10 @@
+from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.remote_task_base import RemoteTaskBaseService
-from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
 from opengever.task.browser.complete_utils import complete_task_and_deliver_documents
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.validators import get_checked_out_documents
-from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
-from Products.CMFDiffTool.utils import safe_utf8
 from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.interface import alsoProvides
@@ -38,25 +36,12 @@ class CompleteSuccessorTaskPost(RemoteTaskBaseService):
     optional_params = ('documents', 'text', 'approved_documents',
                        'pass_documents_to_next_task')
 
-    @staticmethod
-    def _resolve_doc_ref_to_intid(doc_ref):
-        if isinstance(doc_ref, int):
-            # Already an IntId
-            return doc_ref
+    def _resolve_doc_ref_to_intid(self, doc_ref):
+        obj, resolved_by = relationfield_value_to_object(doc_ref, self.context, self.request)
+        if obj is None:
+            raise BadRequest("Unknown document reference: '{}'".format(doc_ref))
 
-        if isinstance(doc_ref, basestring) and '/' in doc_ref:
-            # Path
-            path = safe_utf8(doc_ref)
-            portal = api.portal.get()
-            obj = portal.restrictedTraverse(path)
-            return getUtility(IIntIds).getId(obj)
-
-        if isinstance(doc_ref, basestring) and ':' in doc_ref:
-            # Oguid
-            oguid = Oguid.parse(doc_ref)
-            return oguid.int_id
-
-        raise BadRequest('Unknown document reference: %r' % doc_ref)
+        return getUtility(IIntIds).getId(obj)
 
     def reply(self):
         # Disable CSRF protection

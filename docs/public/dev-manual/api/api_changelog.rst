@@ -8,10 +8,12 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- @complete-successor-task: ``documents`` payload: Now requires relative paths to the siteroot instead physical paths. The physical path is for internal use only. [elioschmutz]
 - Error message and response status code for ForbiddenByQuota errors have changed.
 
 Other Changes
 ^^^^^^^^^^^^^
+- @complete-successor-task: ``documents`` payload: now also resolves document references by @id. [elioschmutz]
 - @reminders now returns 204 NoContent when no reminder is set.
 - Added API support for dispositions objects.
 

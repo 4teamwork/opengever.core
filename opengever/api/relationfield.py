@@ -1,5 +1,6 @@
 from opengever.api.utils import get_obj_by_path
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.oguid import Oguid
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.deserializer.relationfield import RelationChoiceFieldDeserializer
 from plone.restapi.interfaces import IFieldDeserializer
@@ -36,6 +37,9 @@ def relationfield_value_to_object(value, context, request):
         elif value.startswith("/"):
             # Resolve by path
             return get_obj_by_path(portal, value.lstrip("/")), "path"
+        elif Oguid.is_oguid(value):
+            # Resolve by OGUID
+            return Oguid.parse(value).resolve_object(), "oguid"
         else:
             # Resolve by UID
             catalog = getToolByName(context, "portal_catalog")

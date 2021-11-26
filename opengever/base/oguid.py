@@ -6,6 +6,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import re
 
 
 class Oguid(object):
@@ -50,6 +51,11 @@ class Oguid(object):
             raise MalformedOguid(oguid)
         admin_unit_id, int_id = parts[0], int(parts[1])
         return cls(admin_unit_id, int_id)
+
+    @classmethod
+    def is_oguid(cls, oguid):
+        # Matches characters except : and / followed by a colon (:) and any numbers
+        return re.match(r'^[^\:\/]+:{1}\d+$', oguid)
 
     def __init__(self, admin_unit_id, int_id):
         self.admin_unit_id = admin_unit_id

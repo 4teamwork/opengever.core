@@ -33,6 +33,16 @@ class TestOguid(TestCase):
         self.assertNotEqual(Oguid('foo', 3), Oguid('foo', 2))
         self.assertNotEqual(Oguid('bar', 2), Oguid('foo', 2))
 
+    def test_is_oguid(self):
+        self.assertTrue(Oguid.is_oguid('fd:123'))
+        self.assertTrue(Oguid.is_oguid('fd_1:123'))
+
+        self.assertFalse(Oguid.is_oguid('http://example.com'))
+        self.assertFalse(Oguid.is_oguid(':123'))
+        self.assertFalse(Oguid.is_oguid('fd:'))
+        self.assertFalse(Oguid.is_oguid('fd/:123'))
+        self.assertFalse(Oguid.is_oguid('fd:rk:123'))
+
 
 class TestOguidFunctional(IntegrationTestCase):
 
