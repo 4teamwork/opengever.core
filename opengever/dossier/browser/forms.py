@@ -3,6 +3,7 @@ from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.behaviors.utils import omit_classification_group
 from opengever.base.vocabulary import wrap_vocabulary
+from opengever.contact import _ as contact_mf
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -11,6 +12,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.dossier.widget import referenceNumberWidgetFactory
+from opengever.kub import is_kub_feature_enabled
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from plone import api
 from plone.autoform.widgets import ParameterizedWidget
@@ -235,6 +237,12 @@ class DeleteParticipants(BrowserView):
         if not oids:
             msg = _(u'warning_no_participants_selected',
                     default=u'You didn\'t select any participants.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            return self.request.RESPONSE.redirect(self.redirect_url)
+        if is_kub_feature_enabled():
+            msg = contact_mf(
+                u'warning_kub_contact_new_ui_only',
+                default=u'Kub contacts are only supported in the new frontend')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
             return self.request.RESPONSE.redirect(self.redirect_url)
         phandler = IParticipationAware(self.context)
