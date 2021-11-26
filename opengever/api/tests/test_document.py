@@ -283,12 +283,11 @@ class TestDocumentPost(IntegrationTestCase):
                                        name='size_hard_limit', value=1)
 
         with self.observe_children(self.private_dossier) as children:
-            with browser.expect_http_error(code=507, reason='Insufficient Storage'):
+            with browser.expect_http_error(code=403, reason='Forbidden'):
                 data = {'@type': 'opengever.document.document',
                         'file': {'data': 'foo bar', 'filename': 'test.docx'}}
                 browser.open(self.private_dossier, data=json.dumps(data), method='POST',
                              headers=self.api_headers)
-
         self.assertEqual(0, len(children["added"]))
 
 

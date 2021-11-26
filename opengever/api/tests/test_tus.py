@@ -202,7 +202,7 @@ class TestTUSUpload(IntegrationTestCase):
 
         with self.observe_children(self.private_dossier) as children:
             self.assert_tus_upload_fails(
-                self.private_dossier, browser, code=507, reason='Insufficient Storage')
+                self.private_dossier, browser, code=403, reason='Forbidden')
 
         self.assertEqual(0, len(children["added"]))
 

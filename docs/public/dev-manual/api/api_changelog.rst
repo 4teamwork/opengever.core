@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- Error message and response status code for ForbiddenByQuota errors have changed.
 
 Other Changes
 ^^^^^^^^^^^^^
