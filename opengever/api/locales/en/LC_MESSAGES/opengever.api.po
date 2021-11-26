@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-08 14:06+0000\n"
+"POT-Creation-Date: 2021-11-24 14:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,11 @@ msgstr "Empty filename not supported"
 #: ./opengever/api/errors.py
 msgid "msg_inputs_not_valid"
 msgstr "Inputs not valid"
+
+#. Default: "Dossier with the UID ${uid} is not part of the disposition"
+#: ./opengever/api/disposition.py
+msgid "msg_invalid_uid"
+msgstr "Dossier with the UID ${uid} is not part of the disposition"
 
 #. Default: "Maximum dossier depth exceeded"
 #: ./opengever/api/upload_structure.py

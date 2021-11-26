@@ -6,16 +6,8 @@ from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IHistoryStorage
 from plone import api
 from plone.protect.utils import addTokenToUrl
-from Products.CMFPlone.CatalogTool import num_sort_regex
-from Products.CMFPlone.CatalogTool import zero_fill
 from Products.Five.browser import BrowserView
 from zope.i18n import translate
-
-
-def sort_on_sortable_title(item):
-    if isinstance(item[0], unicode):
-        return num_sort_regex.sub(zero_fill, item[0])
-    return num_sort_regex.sub(zero_fill, item[0].Title())
 
 
 class DispositionOverview(BrowserView):
@@ -25,21 +17,8 @@ class DispositionOverview(BrowserView):
         return super(DispositionOverview, self).__call__()
 
     def init_dossiers(self):
-        dossiers = self.context.get_dossier_representations()
-        active_dossiers = {}
-        inactive_dossiers = {}
-
-        for dossier in dossiers:
-            if dossier.was_inactive():
-                self._add_to(inactive_dossiers, dossier)
-            else:
-                self._add_to(active_dossiers, dossier)
-
-        self.active_dossiers = sorted(
-            active_dossiers.items(), key=sort_on_sortable_title)
-
-        self.inactive_dossiers = sorted(
-            inactive_dossiers.items(), key=sort_on_sortable_title)
+        self.active_dossiers, self.inactive_dossiers = \
+            self.context.get_grouped_dossier_representations()
 
     def _add_to(self, mapping, dossier):
         key = dossier.get_grouping_key()

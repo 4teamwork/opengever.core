@@ -7,6 +7,7 @@ from opengever.activity import notification_center
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.classification import IClassification
+from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
@@ -27,7 +28,11 @@ from plone import api
 from plone.autoform.directives import write_permission
 from plone.dexterity.content import Container
 from plone.namedfile.file import NamedBlobFile
+from plone.restapi.interfaces import IFieldSerializer
+from plone.restapi.serializer.converters import json_compatible
 from plone.supermodel import model
+from Products.CMFPlone.CatalogTool import num_sort_regex
+from Products.CMFPlone.CatalogTool import zero_fill
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
 from z3c.relationfield.schema import RelationChoice
@@ -37,6 +42,7 @@ from zipfile import ZIP_DEFLATED
 from zipfile import ZipFile
 from zope import schema
 from zope.annotation import IAnnotations
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -44,7 +50,14 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 
+
 DESTROY_PERMISSION = 'opengever.dossier: Destroy dossier'
+
+
+def sort_on_sortable_title(item):
+    if isinstance(item[0], unicode):
+        return num_sort_regex.sub(zero_fill, item[0])
+    return num_sort_regex.sub(zero_fill, item[0].Title())
 
 
 class DossierDispositionInformation(object):
@@ -55,9 +68,11 @@ class DossierDispositionInformation(object):
     """
 
     def __init__(self, dossier, disposition):
+        self.dossier = dossier
         self.title = dossier.title
         self.intid = getUtility(IIntIds).getId(dossier)
         self.url = dossier.absolute_url()
+        self.uid = dossier.UID()
         self.reference_number = dossier.get_reference_number()
         self.parent = aq_parent(aq_inner(dossier))
         self.start = IDossier(dossier).start
@@ -92,6 +107,39 @@ class DossierDispositionInformation(object):
             'appraisal': self.appraisal,
             'former_state': self.former_state})
 
+    def jsonify(self):
+        return json_compatible({
+            'title': self.title,
+            'intid': self.intid,
+            'appraisal': self.appraisal,
+            'reference_number': self.reference_number,
+            'url': self.url,
+            'uid': self.uid,
+            'start': self.start,
+            'end': self.end,
+            'public_trial': self.serialize_public_trial(),
+            'archival_value': self.serialize_archival_value(),
+            'archival_value_annotation': self.archival_value_annotation,
+            'former_state': self.former_state})
+
+    def serialize_public_trial(self):
+        if not self.public_trial:
+            return
+
+        serializer = getMultiAdapter(
+            (IClassification['public_trial'], self.dossier, getRequest()),
+            IFieldSerializer)
+        return serializer()
+
+    def serialize_archival_value(self):
+        if not self.archival_value:
+            return
+
+        serializer = getMultiAdapter(
+            (ILifeCycle['archival_value'], self.dossier, getRequest()),
+            IFieldSerializer)
+        return serializer()
+
 
 class RemovedDossierDispositionInformation(DossierDispositionInformation):
 
@@ -102,6 +150,7 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         self.reference_number = dossier_mapping.get('reference_number')
         self.repository_title = dossier_mapping.get('repository_title')
         self.url = None
+        self.uid = None
         self.start = None
         self.end = None
         self.public_trial = None
@@ -232,6 +281,25 @@ class Disposition(Container):
 
         return [DossierDispositionInformation(rel.to_object, self)
                 for rel in self.dossiers]
+
+    def get_grouped_dossier_representations(self):
+        dossiers = self.get_dossier_representations()
+        inactive_dossiers = {}
+        active_dossiers = {}
+
+        for dossier in dossiers:
+            if dossier.was_inactive():
+                self._add_to(inactive_dossiers, dossier)
+            else:
+                self._add_to(active_dossiers, dossier)
+
+        return (
+            sorted(active_dossiers.items(), key=sort_on_sortable_title),
+            sorted(inactive_dossiers.items(), key=sort_on_sortable_title))
+
+    def _add_to(self, mapping, dossier):
+        key = dossier.get_grouping_key()
+        mapping.setdefault(key, []).append(dossier)
 
     def update_added_dossiers(self, dossiers):
         for dossier in dossiers:

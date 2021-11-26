@@ -1,13 +1,24 @@
+from opengever.api import _
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition.disposition import IDispositionSchema
+from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.validators import OfferedDossiersValidator
+from opengever.repository.interfaces import IRepositoryFolder
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
+from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
+from zope.globalrequest import getRequest
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.interface import Invalid
@@ -51,4 +62,69 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeDispositionToJson, self).__call__(*args, **kwargs)
         result[u'sip_filename'] = self.context.get_sip_filename()
+        result[u'dossier_details'] = self.get_dossier_details()
         return result
+
+    def get_dossier_details(self):
+        active_dossiers, inactive_dossiers = \
+            self.context.get_grouped_dossier_representations()
+
+        data = {
+            'active_dossiers': self.jsonify(active_dossiers),
+            'inactive_dossiers': self.jsonify(inactive_dossiers),
+        }
+        return data
+
+    def jsonify(self, data):
+        compatible_data = []
+        for repo, dossiers in data:
+            repo_data = self.repo_serialization(repo)
+            repo_data['dossiers'] = [
+                dossier.jsonify() for dossier in dossiers]
+
+            compatible_data.append(repo_data)
+
+        return compatible_data
+
+    def repo_serialization(self, repo):
+        if IRepositoryFolder.providedBy(repo):
+            repo_data = queryMultiAdapter(
+                (repo, getRequest()), ISerializeToJsonSummary)()
+            repo_data['archival_value'] = self.repo_archival_value(repo)
+            return repo_data
+
+        # In a closed disposition
+        return {'title': repo}
+
+    def repo_archival_value(self, repo):
+        return getMultiAdapter(
+            (ILifeCycle['archival_value'], repo, getRequest()),
+            IFieldSerializer)()
+
+
+class AppraisalPatch(Service):
+
+    def reply(self):
+        data = json_body(self.request)
+        appraisal = IAppraisal(self.context)
+
+        disposition_dossiers = self.context.get_dossiers()
+        for uid, archive in data.items():
+            dossier = unrestrictedUuidToObject(uid)
+            if not dossier or dossier not in disposition_dossiers:
+                msg = _(
+                    u'msg_invalid_uid',
+                    default=u'Dossier with the UID ${uid} is not part of the disposition',
+                    mapping={'uid': uid})
+                raise BadRequest(msg)
+
+            appraisal.update(dossier=dossier, archive=archive)
+
+        prefer = self.request.getHeader("Prefer")
+        if prefer == "return=representation":
+            self.request.response.setStatus(200)
+            serializer = queryMultiAdapter(
+                (self.context, self.request), ISerializeToJson)
+            return serializer()
+
+        return self.reply_no_content()

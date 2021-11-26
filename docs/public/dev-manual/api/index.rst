@@ -67,4 +67,5 @@ Inhalt:
    upload_structure.rst
    close_remote_task.rst
    reference_numbers.rst
+   dispositions.rst
    examples/index.rst
