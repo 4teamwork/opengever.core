@@ -68,9 +68,7 @@ USER root
 RUN --mount=type=cache,target=/var/cache/apk apk add \
     libldap \
     libffi \
-    libpq \
-    tzdata \
- && ln -fs /usr/share/zoneinfo/Europe/Zurich /etc/localtime
+    libpq
 
 COPY --from=build-stage /app /app
 
