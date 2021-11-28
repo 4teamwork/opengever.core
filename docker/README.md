@@ -114,6 +114,11 @@ from your bundle. E.g. `configuration.json` and `workspaceroots.json` from
 After importing the bundle you should now be able to access the application
 using the hostname you defined at port 8088.
 
+### Disable Secure Session Cookie
+
+Currently we don't have an HTTPS setup yet. Thus Plone's session cookie secure
+flag needs to be disabled. Got to the properties of the PAS session plugin
+(acl_users/session) and uncheck the "Only Send Cookie Over HTTPS" setting.
 
 ## 389ds
 
