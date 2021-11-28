@@ -54,7 +54,6 @@ services:
       - "8080:8080"
       - "8160:8160"
     environment:
-      - STORAGE=zeoclient
       - MSGCONVERT_URL=http://msgconvert:8080/
       - SABLON_URL=http://sablon:8080/
       - PDFLATEX_URL=http://pdflatex:8080/

@@ -23,7 +23,7 @@ def main():
         'zodb_cache_size': env.get('ZODB_CACHE_SIZE', 100000),
         'zserver_threads': env.get('ZSERVER_THREADS', 1),
         'zeo_address': env.get('ZEO_ADDRESS', 'zeoserver:8100'),
-        'storage': env.get('STORAGE', 'filestorage')
+        'storage': env.get('STORAGE', 'zeoclient')
     }
     if options['verbose_security'] == 'on':
         options['security_implementation'] = 'python'
