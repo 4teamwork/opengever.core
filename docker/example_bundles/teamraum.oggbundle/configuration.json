@@ -16,7 +16,7 @@
         "title": "Entenhausen",
         "admin_unit_id": "entenhausen",
         "users_group_id": "tr_benutzer",
-        "inbox_group_id": "tr_administrators"
+        "inbox_group_id": "administratoren"
       }
     ]
   },
