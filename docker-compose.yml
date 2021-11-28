@@ -7,13 +7,13 @@ services:
       context: .
       dockerfile: ./docker/httpd/Dockerfile
     ports:
-      - "8081:80"
+      - "8088:80"
     depends_on:
       - ogui
       - ogcore
     environment:
       - HTTP_PROTOCOL=http
-      - HTTP_PORT=8081
+      - HTTP_PORT=8088
       - PORTAL_HOST=ianus-frontend
     profiles:
       - all

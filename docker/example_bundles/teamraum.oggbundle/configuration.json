@@ -2,19 +2,19 @@
   "units": {
     "admin_units": [
       {
-        "unit_id": "entenhausen",
-        "title": "Entenhausen",
+        "unit_id": "teamraum",
+        "title": "Teamraum",
         "ip_address": "127.0.0.1",
-        "site_url": "http://teamraum:8081/",
-        "public_url": "http://teamraum:8081/",
-        "abbreviation": "EH"
+        "site_url": "http://teamraum:8088/",
+        "public_url": "http://teamraum:8088/",
+        "abbreviation": "TR"
       }
     ],
     "org_units": [
       {
-        "unit_id": "entenhausen",
-        "title": "Entenhausen",
-        "admin_unit_id": "entenhausen",
+        "unit_id": "teamraum",
+        "title": "Teamraum",
+        "admin_unit_id": "teamraum",
         "users_group_id": "tr_benutzer",
         "inbox_group_id": "administratoren"
       }
