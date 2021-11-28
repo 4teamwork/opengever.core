@@ -153,3 +153,10 @@ services:
     profiles:
       - all
       - ianus
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.4.0/24
