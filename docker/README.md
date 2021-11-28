@@ -120,6 +120,42 @@ Currently we don't have an HTTPS setup yet. Thus Plone's session cookie secure
 flag needs to be disabled. Got to the properties of the PAS session plugin
 (acl_users/session) and uncheck the "Only Send Cookie Over HTTPS" setting.
 
+
+## Building the Docker images
+
+To build all images simply run:
+
+```
+docker-compose --profile all build
+```
+
+There are three images that are built from this repo:
+
+- oghttpd 
+- ogcore
+- ogsolr
+
+### oghttpd
+
+An Apache httpd image serving as reverse proxy with the needed rewrite rules.
+The Apache config is genereated on startup with settings from environment variables.
+The various settings are documented in its own README (see httpd directory).
+
+### ogcore
+
+This image contains the opengever.core Zope instance based on the 4teamwork/plone
+image.
+
+The Python packages are installed using pip. The dependencies are declared in
+the requirements files `requirements-core.txt` and `requirements-deployment.txt`.
+Those files are managed manually and need to be updated if new requirements are
+introduced or versions change.
+
+### ogsolr
+
+A Solr image containing our Solr configuration.
+
+
 ## 389ds
 
 If you want to run your own 389 DS instance either create a `docker-compose.override.yml`
