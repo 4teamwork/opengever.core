@@ -47,7 +47,7 @@ Therefore add a hostname to `/etc/hosts` pointing to your local LAN IP. E.g.
 
 The default configuration uses the TeamraumDEV LDAP branch. You need to provide
 the LDAP credentials using environment variables. The easiest way is to put
-them into the `.ldapbind.env` file.
+them into a `.env` file, which is automatically read by Docker Compose.
 
 The credentials are needed by the Ianus backend and ogcore using different
 environment variable names.

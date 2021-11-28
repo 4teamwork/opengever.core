@@ -25,4 +25,4 @@ _build/
 /sphinx_build.log
 /src/
 /var/
-/.ldapbind.env
+/.env
