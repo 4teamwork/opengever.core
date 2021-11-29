@@ -20,6 +20,8 @@ from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.sources import KuBContactsSourceBinder
 from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.private.dossier import IPrivateDossier
 from plone import api
@@ -335,12 +337,13 @@ class ParticipationIndexHelper(object):
         """
         if participant_id == self.any_participant_marker:
             return translate(_(u'any_participant'), context=getRequest())
-        if is_contact_feature_enabled():
+        if is_kub_feature_enabled():
+            source = KuBContactsSourceBinder()(api.portal.get())
+        elif is_contact_feature_enabled():
             source = ContactsSource(api.portal.get())
-            term = source.getTermByToken(participant_id)
         else:
             source = UsersContactsInboxesSourceBinder()(api.portal.get())
-            term = source.getTermByToken(participant_id)
+        term = source.getTermByToken(participant_id)
         return term.title
 
     def index_value_to_label(self, value):

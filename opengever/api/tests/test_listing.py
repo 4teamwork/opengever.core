@@ -21,10 +21,12 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from zope.component import getMultiAdapter
+import requests_mock
 
 
 class TestListingEndpointWithoutSolr(IntegrationTestCase):
@@ -1693,6 +1695,98 @@ class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCas
         view = view + '&' + role_filter.format('final-drawing')
         browser.open(self.dossier, view=view, headers=self.api_headers)
         self.assertEqual(0, browser.json['items_total'])
+
+
+@requests_mock.Mocker()
+class TestKuBDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase, KuBIntegrationTestCase):
+
+    features = ('bumblebee', 'solr')
+    maxDiff = None
+
+    @browsing
+    def test_dossier_participations_fields(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_get_by_id(mocker, self.org_ftw)
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(
+            self.person_jean, ['participation', 'final-drawing'])
+        handler.add_participation(
+            self.org_ftw, ['regard'])
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns=title',
+            'columns=participations',
+            'columns=participants',
+            'columns=participation_roles',
+            'filters.UID:record:list={}'.format(IUUID(self.dossier))
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        item = browser.json['items'][0]
+        self.assertEqual(self.dossier.absolute_url(), item['@id'])
+        self.assertEqual(IUUID(self.dossier), item['UID'])
+        self.assertItemsEqual(
+            [u'4Teamwork', u'Dupont Jean', u'Any participant'],
+            item['participants'])
+        self.assertItemsEqual(
+            [u'Any role', u'For your information', u'Participation', u'Final signature'],
+            item['participation_roles'])
+        self.assertItemsEqual(
+            [u'4Teamwork|Any role',
+             u'4Teamwork|For your information',
+             u'Dupont Jean|Any role',
+             u'Dupont Jean|Final signature',
+             u'Dupont Jean|Participation',
+             u'Any participant|Participation',
+             u'Any participant|For your information',
+             u'Any participant|Final signature'],
+            item['participations'])
+
+    @browsing
+    def test_dossier_participant_and_roles_filters(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_get_by_id(mocker, self.org_ftw)
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(
+            self.person_jean, ['participation', 'final-drawing', 'regard'])
+
+        handler = IParticipationAware(self.empty_dossier)
+        handler.add_participation(
+            self.org_ftw, ['regard'])
+
+        handler = IParticipationAware(self.meeting_dossier)
+        handler.add_participation(
+            self.org_ftw, ['final-drawing'])
+        self.commit_solr()
+
+        role_filter = 'filters.participation_roles:record:list=any-participant|{}'
+        query_string = '&'.join((
+            'name=dossiers',
+            role_filter.format('regard'))
+        )
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+        self.assertEqual(2, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier), IUUID(self.empty_dossier)],
+            [item['UID'] for item in browser.json['items']])
+
+        participant_filter = 'filters.participants:record:list={}|any-role'
+        view = view + '&' + participant_filter.format(self.person_jean)
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertItemsEqual(
+            [IUUID(self.dossier)],
+            [item['UID'] for item in browser.json['items']])
 
 
 class TestListingSortFirst(SolrIntegrationTestCase):

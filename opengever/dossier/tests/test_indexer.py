@@ -7,6 +7,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.interfaces import IDossierArchiver
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
@@ -18,6 +19,7 @@ from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import Attributes
 from zope.lifecycleevent import ObjectModifiedEvent
+import requests_mock
 
 
 class TestDossierIndexers(SolrIntegrationTestCase):
@@ -396,4 +398,27 @@ class TestDossierParticipationsIndexer(SolrIntegrationTestCase):
             u'person:1|any-role',
             u'person:1|final-drawing',
             u'person:1|participation']
+        self.assertItemsEqual(expected, indexed_value)
+
+
+@requests_mock.Mocker()
+class TestDossierParticipationsIndexerWithBuB(SolrIntegrationTestCase, KuBIntegrationTestCase):
+
+    def test_kub_participations_are_indexed_in_solr(self, mocker):
+        self.login(self.regular_user)
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(
+            self.person_jean, ['participation', 'final-drawing'])
+
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.dossier, 'participations')
+        expected = [
+            u'{}|participation'.format(self.person_jean),
+            u'{}|final-drawing'.format(self.person_jean),
+            u'any-participant|participation',
+            u'any-participant|final-drawing',
+            u'{}|any-role'.format(self.person_jean)]
         self.assertItemsEqual(expected, indexed_value)
