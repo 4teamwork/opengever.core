@@ -21,6 +21,11 @@ msgstr ""
 msgid "Active"
 msgstr "Aktiv"
 
+#. Default: "Closed"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "Closed"
+msgstr "Abgeschlossen"
+
 #. Default: "Completed"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
 msgid "Completed"
@@ -47,6 +52,11 @@ msgstr "Inaktiv"
 
 msgid "Publisher"
 msgstr "Reaktivieren"
+
+#. Default: "close"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "close"
+msgstr "Abschliessen"
 
 #. Default: "complete"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
@@ -349,6 +359,21 @@ msgstr "Teammitglied"
 msgid "opengever_workspace_meeting--STATUS--active"
 msgstr "Aktiv"
 
+#. Default: "Closed"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--STATUS--closed"
+msgstr "Abgeschlossen"
+
+#. Default: "close"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--TRANSITION--close--active_closed"
+msgstr "Abschliessen"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "opengever_workspace_meeting--TRANSITION--reopen--closed_active"
+msgstr "Wieder eröffnen"
+
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_root/specification.txt
 msgid "opengever_workspace_root--ROLE--Administrator"
@@ -464,6 +489,11 @@ msgstr "Aktiv"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "reactivate"
 msgstr "reaktivieren"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+msgid "reopen"
+msgstr "Wieder eröffnen"
 
 msgid "title_can_add"
 msgstr "Hinzufügen"

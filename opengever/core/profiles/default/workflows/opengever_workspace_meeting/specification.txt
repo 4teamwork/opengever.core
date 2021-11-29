@@ -25,3 +25,15 @@ General:
 Initial Status: Active
 Status Active:
   A workspace guest can view.
+  A workspace member can add.
+  A workspace member can edit.
+  A workspace member can delete workspace meeting agenda items.
+  A workspace member can close.
+
+Status Closed:
+  A workspace guest can view.
+  A workspace admin can reopen.
+
+Transitions:
+  close (Active => Closed)
+  reopen (Closed => Active)

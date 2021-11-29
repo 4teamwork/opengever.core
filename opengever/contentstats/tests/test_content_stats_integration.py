@@ -94,6 +94,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'opengever_workspace_document--STATUS--active',
             'opengever_workspace_folder--STATUS--active',
             'opengever_workspace_meeting--STATUS--active',
+            'opengever_workspace_meeting--STATUS--closed',
             'opengever_workspace_todo--STATUS--active',
             'opengever_workspace_todo--STATUS--completed',
             'opengever_workspace_todolist--STATUS--active',
