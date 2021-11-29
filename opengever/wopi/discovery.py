@@ -94,8 +94,11 @@ def actions_by_extension():
 
 
 def editable_extensions():
-    run_discovery()
-    return _WOPI_DISCOVERY['editable-extensions']
+    try:
+        run_discovery()
+        return _WOPI_DISCOVERY['editable-extensions']
+    except KeyError:
+        return set([])
 
 
 def proof_key():
