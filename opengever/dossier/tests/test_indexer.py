@@ -6,11 +6,13 @@ from opengever.dossier.behaviors.customproperties import IDossierCustomPropertie
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
+from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
@@ -422,3 +424,10 @@ class TestDossierParticipationsIndexerWithBuB(SolrIntegrationTestCase, KuBIntegr
             u'any-participant|final-drawing',
             u'{}|any-role'.format(self.person_jean)]
         self.assertItemsEqual(expected, indexed_value)
+
+
+class TestParticipationIndexHelper(IntegrationTestCase):
+
+    def test_participant_id_to_label_handles_invalid_ids(self):
+        helper = ParticipationIndexHelper()
+        self.assertEqual("invalid-id", helper.participant_id_to_label("invalid-id"))

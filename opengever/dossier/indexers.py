@@ -343,8 +343,11 @@ class ParticipationIndexHelper(object):
             source = ContactsSource(api.portal.get())
         else:
             source = UsersContactsInboxesSourceBinder()(api.portal.get())
-        term = source.getTermByToken(participant_id)
-        return term.title
+        try:
+            term = source.getTermByToken(participant_id)
+            return term.title
+        except LookupError:
+            return participant_id
 
     def index_value_to_label(self, value):
         """Returns a translated label of the form 'participant label|role label'
