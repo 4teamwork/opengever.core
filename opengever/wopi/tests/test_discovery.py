@@ -47,10 +47,9 @@ class TestWOPIDiscovery(MockTestCase):
         )
 
     @contextmanager
-    def mock_discovery_request(self):
+    def mock_discovery_request(self, response_file='discovery_xml.txt'):
         with open(
-            os.path.join(os.path.dirname(__file__), 'data',
-                         'discovery_xml.txt')
+            os.path.join(os.path.dirname(__file__), 'data', response_file)
         ) as data_file:
             resp = data_file.read()
         with requests_mock.mock() as mock:
@@ -100,6 +99,12 @@ class TestWOPIDiscovery(MockTestCase):
                 ]
             ),
         )
+
+    def test_editable_extensions_returns_empty_list_if_discovery_is_not_successfull(self):
+        with self.mock_discovery_request(response_file='discovery_without_actions_xml.txt'):
+            extensions = editable_extensions()
+
+        self.assertEqual(extensions, set([]))
 
     def test_editable_extansions_gets_cached(self):
         with self.mock_discovery_request() as mock:
