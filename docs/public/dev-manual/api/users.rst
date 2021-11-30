@@ -366,3 +366,56 @@ Mit dem ``@reactivate-local-group`` Endpoint kann eine lokale, inaktive Gruppe w
 
       HTTP/1.1 204 No content
       Content-Type: application/json
+
+
+KuB Kontakte
+============
+
+Mit dem ``@kub`` Endpoint können Kontakte aus dem KuB geholt werden. Der Endpoint steht nur auf Stufe PloneSiteRoot zur Verfügung und erwartet als Pfad Parameter die UID des Kontaktes:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET /@kub/person:1234abdc HTTP/1.1
+      Accept: application/json
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "addresses": [],
+        "canton": null,
+        "country": "",
+        "countryIdISO2": "",
+        "created": "2021-11-14T00:00:00+01:00",
+        "dateOfBirth": null,
+        "description": "",
+        "emailAddresses": [],
+        "firstName": "Julie",
+        "fullName": "Dupont Julie",
+        "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+        "languageOfCorrespondance": "fr",
+        "maritalStatus": 2,
+        "memberships": [],
+        "modified": "2021-11-14T00:00:00+01:00",
+        "officialName": "Dupont",
+        "organizations": [],
+        "originName": "Paris",
+        "phoneNumbers": [],
+        "primaryEmail": null,
+        "primaryPhoneNumber": null,
+        "salutation": "Frau",
+        "sex": 2,
+        "status": 1,
+        "tags": [],
+        "thirdPartyId": null,
+        "title": "",
+        "urls": []
+      }
