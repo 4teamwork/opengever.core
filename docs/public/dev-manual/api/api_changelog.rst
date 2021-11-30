@@ -8,6 +8,15 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+2021.24.0 (2021-11-30)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
 - @complete-successor-task: ``documents`` payload: Now requires relative paths to the siteroot instead physical paths. The physical path is for internal use only. [elioschmutz]
 - Error message and response status code for ForbiddenByQuota errors have changed.
 
