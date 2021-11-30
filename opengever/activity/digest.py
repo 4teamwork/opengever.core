@@ -95,7 +95,7 @@ class DigestMailer(Mailer):
                   default=u'Daily Digest for ${username}',
                   mapping={'username': user.fullname()}),
                 context=self.request)
-            msg = self.prepare_mail(
+            msg, mail_to, mail_from = self.prepare_mail(
                 subject=subject,
                 to_userid=userid,
                 data={'notifications': self.prepare_data(notifications),
@@ -103,7 +103,7 @@ class DigestMailer(Mailer):
                       'title': title,
                       'today': today})
 
-            self.send_mail(msg)
+            self.send_mail(msg, mail_to, mail_from)
             self.mark_as_sent(notifications)
             self.record_digest(userid)
             logger.info('  Digest sent for %s (%s)' % (userid, user.email))

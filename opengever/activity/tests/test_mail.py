@@ -158,7 +158,11 @@ class TestEmailNotification(IntegrationTestCase):
         self.create_task_via_browser(browser)
         process_mail_queue()
 
-        mail = email.message_from_string(Mailing(self.portal).pop())
+        message, = Mailing(self.portal).get_mailhost().messages
+        self.assertEqual('foo@example.com', message.mto)
+        self.assertEqual('test@localhost', message.mfrom)
+
+        mail = email.message_from_string(message.messageText)
         self.assertEquals('foo@example.com', mail.get('To'))
         self.assertEquals('Ziegler Robert <test@localhost>', get_header(mail, 'From'))
         self.assertEquals('Ziegler Robert <robert.ziegler@gever.local>', get_header(mail, 'Reply-To'))
