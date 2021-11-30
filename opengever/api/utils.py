@@ -33,13 +33,23 @@ REQUEST_TIMEOUT = 408
 GATEWAY_TIMEOUT = 504
 BAD_GATEWAY = 502
 
+default_http_error_code_mapping = {
+    REQUEST_TIMEOUT: {"return_code": GATEWAY_TIMEOUT},
+    GATEWAY_TIMEOUT: {"return_code": GATEWAY_TIMEOUT}
+}
 
-def create_proxy_request_error_handler(logger, http_error_message):
+
+def create_proxy_request_error_handler(
+        logger, default_http_error_message,
+        http_error_code_mappings=default_http_error_code_mapping):
     """Creates a Decorator function to handle requests to a service or external
     aplication.
 
-    We handle HTTP and timeout-errors in a special way. All other request errors
-    are handled by the rest-api with a 500 Internal Server Error.
+    We handle HTTP and timeout-errors in a special way. All other request
+    errors are handled by the rest-api with a 500 Internal Server Error.
+
+    additional_http_error_code_mappings should be a dictionary mapping error
+    codes from service to endpoint.
     """
 
     def request_error_handler(func):
@@ -54,11 +64,14 @@ def create_proxy_request_error_handler(logger, http_error_message):
             service_status_code = exception.response.status_code
             service_error = {'status_code': service_status_code}
 
-            if service_status_code in [REQUEST_TIMEOUT, GATEWAY_TIMEOUT]:
-                status_code = GATEWAY_TIMEOUT
+            if service_status_code in http_error_code_mappings:
+                mapping = http_error_code_mappings[service_status_code]
+                status_code = mapping.get("return_code", BAD_GATEWAY)
+                message = mapping.get("return_message", default_http_error_message)
                 service_error['message'] = str(exception).decode('utf-8')
             else:
                 status_code = BAD_GATEWAY
+                message = default_http_error_message
 
             try:
                 service_error.update(json.loads(exception.response.text))
@@ -68,7 +81,7 @@ def create_proxy_request_error_handler(logger, http_error_message):
 
             obj.request.response.setStatus(status_code)
             response = {
-                u'message': http_error_message,
+                u'message': message,
                 u'type': status_reasons.get(status_code),
                 u'service_error': service_error
             }

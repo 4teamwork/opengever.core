@@ -490,10 +490,8 @@ class KuBContactActor(Actor):
         return self.contact
 
     def represents_url(self):
-        # XXX This should be an URL pointing to KUB, e.g.
-        # https://kub.4teamwork.ch/people/baa7c72e-7a3a-4f55-924c-e0c9857b30d1
-        # For now KuB does not return such an URL
-        return None
+        return '{}/@kub/{}'.format(
+            api.portal.getSite().absolute_url(), self.identifier)
 
     def get_portrait_url(self):
         return None
