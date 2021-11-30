@@ -10,6 +10,40 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.24.0 (2021-11-30)
+----------------------
+
+New features:
+
+
+- Use Gever API error handling for ForbiddenByQuota errors. [tinagerber]
+- Improve API support for disposition objects. [phgross]
+- Add closed state for workspace meetings. [tinagerber]
+- Add KUB configuration and client. [phgross, njohner]
+- Add KuB participations. [phgross, njohner]
+- Handle KuB contacts and participations in classic UI. [njohner]
+- Support KuB participations in listing endpoint. [njohner]
+
+
+Bug fixes:
+
+
+- Fix repositoryfolder addable types constraints, make dispositions always addable. [phgross]
+- @reminders does not raise anymore when no reminder is set. [njohner]
+- Fix create-policy command. [njohner]
+- @complete-successor-task: 'documents' payload now uses relative paths instead the physical path to resolve references  [elioschmutz]
+- Include documents manually added to submitted proposal in meeting Zip and protocol data. [njohner]
+- Make WOPI discovery requests more robust and fail safe. [phgross]
+
+
+Other changes:
+
+
+- Remove ftw.tika dependency and uninstall tika profile. [phgross]
+- Split upgrade with high memory consumption into two. [deiferni]
+- @complete-successor-task: 'documents' payload also accepts urls [elioschmutz]
+
+
 2021.23.3 (2021-11-25)
 ----------------------
 

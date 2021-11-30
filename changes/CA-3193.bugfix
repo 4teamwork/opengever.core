@@ -1,1 +1,0 @@
-@complete-successor-task: 'documents' payload now uses relative paths instead the physical path to resolve references  [elioschmutz]
