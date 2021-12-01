@@ -398,3 +398,40 @@ Für die Bearbeitung des Öffentlichkeitsstatus eines Dokuments in einem abgesch
   .. sourcecode:: http
 
     HTTP/1.1 204 No Content
+
+Dokument über einen XHR-Request als multipart/form-data erstellen
+-----------------------------------------------------------------
+Neben dem ``@tus-upload``-Endpoint gibt es auch die Mögilchkeit, Dokumente über einen normalen XHR-Request als multipart/form-data zu erstellen.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST http://example.com/ordnungssystem/dossier-1/@xhr-upload HTTP/1.1
+    Authorization: [AUTH_DATA]
+    Accept: application/json
+    Content-Type: multipart/form-data; boundary=------------------------b3e801e2d0fb0cc9
+    Content-Length: [NUMBER_OF_BYTES_IN_ENTIRE_REQUEST_BODY]
+
+    --------------------------b3e801e2d0fb0cc9
+    Content-Disposition: form-data; name="title"
+
+    Hello Worlds
+    --------------------------b3e801e2d0fb0cc9
+    Content-Disposition: form-data; name="file"; filename="helloworld.pdf"
+    Content-Type: application/octet-stream
+
+    [FILE_DATA]
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "http://example.com/ordnungssystem/dossier-1/document-1",
+      "...": "..."
+    }

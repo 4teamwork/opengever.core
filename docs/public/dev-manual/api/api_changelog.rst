@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
 
 2021.24.0 (2021-11-30)
 ----------------------
