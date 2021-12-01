@@ -48,7 +48,8 @@ class ContentSharingMailer(Mailer):
             'comment_title': comment_title,
             'comment': comment.splitlines(),
         }
-        msg = self.prepare_mail(subject=subject, to_email=to_email, cc_email=cc_email,
-                                from_userid=sender_id, data=data)
+        msg, mail_to, mail_from = self.prepare_mail(
+            subject=subject, to_email=to_email, cc_email=cc_email,
+            from_userid=sender_id, data=data)
 
-        self.send_mail(msg)
+        self.send_mail(msg, mail_to, mail_from)
