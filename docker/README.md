@@ -111,17 +111,19 @@ Got to http://localhost:8080/ogsite/@@import-bundle and provide the .json files
 from your bundle. E.g. `configuration.json` and `workspaceroots.json` from
 `example_bundles/teamraum.oggbundle`.
 
-After importing the bundle you should now be able to access the application
-using the hostname you defined at port 8088.
-
 ### Disable Secure Session Cookie
 
 Currently we don't have an HTTPS setup yet. Thus Plone's session cookie secure
 flag needs to be disabled. Got to the properties of the PAS session plugin
 (acl_users/session) and uncheck the "Only Send Cookie Over HTTPS" setting.
 
+You should now be able to access the application using the hostnames you
+defined at port 8088 (e.g. http://teamraum:8088 or http://gever:8088).
 
 ## Building the Docker images
+
+Before building the images, you need the source checkouts that are currently
+managed with buildout (mr.developer). Thus you first need to run buildout.
 
 To build all images simply run:
 
