@@ -166,6 +166,7 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
     def add_additional_metadata(self, data):
         data.update({
             '@id': self.context.absolute_url(),
+            'is_completed': self.context.is_completed,
             # XXX deprecated
             'issuer_fullname': display_name(self.context.issuer),
             'issuer_actor': serialize_actor_id_to_json_summary(self.context.issuer),

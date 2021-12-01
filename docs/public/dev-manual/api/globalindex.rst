@@ -28,6 +28,7 @@ Die Felder ``issuer_fullname`` und ``responsible_fullname`` sind überholt und d
           "containing_subdossier": "",
           "created": "2016-08-31T18:27:33",
           "deadline": "2020-01-01",
+          "is_completed": false,
           "is_private": true,
           "is_subtask": false,
           "issuer": "robert.ziegler",

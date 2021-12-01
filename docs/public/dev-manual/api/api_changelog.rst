@@ -12,6 +12,9 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Include is_completed in sql task serialization.
+
+
 2021.24.0 (2021-11-30)
 ----------------------
 

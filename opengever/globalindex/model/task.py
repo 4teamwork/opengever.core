@@ -13,10 +13,12 @@ from opengever.base.query import BaseQuery
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.globalindex.model.reminder_settings import ReminderSetting
+from opengever.inbox import FINAL_FORWARDING_STATES
 from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
+from opengever.task import FINAL_TASK_STATES
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import and_
@@ -160,6 +162,11 @@ class Task(Base):
 
     def is_open(self):
         return self.review_state in self.OPEN_STATES
+
+    @property
+    def is_completed(self):
+        return self.review_state in FINAL_TASK_STATES \
+            or self.review_state in FINAL_FORWARDING_STATES
 
     @property
     def issuer_actor(self):
