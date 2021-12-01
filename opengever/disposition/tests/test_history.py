@@ -75,7 +75,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, Disposed))
         self.assertEquals('dispose', entry.css_class)
         self.assertEquals(
-            u'Disposition offered for archival by {}'.format(self.current_user_link),
+            u'Offered for archival by {}'.format(self.current_user_link),
             translate(entry.msg(), context=self.request))
 
     def test_add_history_entry_when_directly_close_a_disposition(self):
@@ -93,7 +93,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, AppraisedToClosed))
         self.assertEquals('close', entry.css_class)
         self.assertEquals(
-            u'Disposition closed and all dossiers destroyed by {}'.format(
+            u'Offer closed and all dossiers destroyed by {}'.format(
                 self.current_user_link),
             translate(entry.msg(), context=self.request))
 
@@ -132,7 +132,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, Closed))
         self.assertEquals('close', entry.css_class)
         self.assertEquals(
-            u'Disposition closed and all dossiers destroyed by {}'.format(
+            u'Offer closed and all dossiers destroyed by {}'.format(
                 self.current_user_link),
             translate(entry.msg(), context=self.request))
 
@@ -146,7 +146,7 @@ class TestHistoryEntries(IntegrationTestCase):
         self.assertTrue(isinstance(entry, Refused))
         self.assertEquals('refuse', entry.css_class)
         self.assertEquals(
-            u'Disposition refused by {}'.format(self.current_user_link),
+            u'Offer refused by {}'.format(self.current_user_link),
             translate(entry.msg(), context=self.request))
 
     def test_ignores_modified_events_during_dossier_destruction(self):

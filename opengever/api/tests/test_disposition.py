@@ -25,7 +25,7 @@ class TestDispositionPost(IntegrationTestCase):
         self.assertEqual(
             {u'type': u'BadRequest',
              u'additional_metadata': {},
-             u'translated_message': u'The dossier Dossier for SIP is already offered in a different disposition.',
+             u'translated_message': u'The dossier Dossier for SIP is already in another offer.',
              u'message': u'error_offered_in_a_different_disposition'},
             browser.json)
 

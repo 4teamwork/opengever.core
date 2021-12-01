@@ -82,14 +82,14 @@ msgstr "Created"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-added"
-msgstr "Disposition added"
+msgstr "Offer added"
 
 #. German translation: Bewertung finalisiert
 #. Default: "Disposition appraised"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-appraise"
-msgstr "Disposition appraised"
+msgstr "Appraisal finalised"
 
 #. German translation: Archivierung bestätigt
 #. Default: "Disposition archived"
@@ -103,7 +103,7 @@ msgstr "Archival confirmed"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-close"
-msgstr "Disposition closed"
+msgstr "Offer closed"
 
 #. German translation: Zur Archivierung angeboten
 #. Default: "Disposition disposed"
@@ -117,7 +117,7 @@ msgstr "Offered for archival"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-refuse"
-msgstr "Disposition refused"
+msgstr "Offer refused"
 
 #. Default: "Document author changed"
 #: ./opengever/activity/__init__.py
@@ -233,7 +233,7 @@ msgstr "Daily Digest"
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
-msgstr "Dispositions"
+msgstr "Disposals"
 
 #. Default: "Documents"
 #: ./opengever/activity/browser/settings.py

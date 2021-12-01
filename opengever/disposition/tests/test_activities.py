@@ -40,10 +40,10 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.one()
         self.assertEquals('disposition-added', activity.kind)
         self.assertEquals(
-            u'New disposition added by {} on admin unit Hauptmandant'.format(
+            u'New offer added by {} on admin unit Hauptmandant'.format(
                 actor.get_label(with_principal=False)),
             activity.summary)
-        self.assertEquals(u'Disposition added', activity.label)
+        self.assertEquals(u'Offer added', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Angebot 13.49', activity.title)
 
@@ -76,7 +76,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-dispose', activity.kind)
         self.assertEquals(
-            u'Disposition offered for archival by {}'.format(actor.get_link()),
+            u'Offered for archival by {}'.format(actor.get_link()),
             activity.summary)
         self.assertEquals(u'Submit disposition', activity.label)
         self.assertIsNone(activity.description)
@@ -95,7 +95,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-appraised-to-closed', activity.kind)
         self.assertEquals(
-            u'Disposition closed and all dossiers destroyed by {}'.format(
+            u'Offer closed and all dossiers destroyed by {}'.format(
                 actor.get_link()),
             activity.summary)
         self.assertEquals(u'Dispose of dossiers', activity.label)
@@ -128,7 +128,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-close', activity.kind)
         self.assertEquals(
-            u'Disposition closed and all dossiers '
+            u'Offer closed and all dossiers '
             'destroyed by {}'.format(actor.get_link()), activity.summary)
         self.assertEquals(u'Dispose of dossiers', activity.label)
         self.assertIsNone(activity.description)
@@ -144,7 +144,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         activity = Activity.query.all()[-1]
         self.assertEquals('disposition-transition-refuse', activity.kind)
         self.assertEquals(
-            u'Disposition refused by {}'.format(actor.get_link()),
+            u'Offer refused by {}'.format(actor.get_link()),
             activity.summary)
         self.assertEquals(u'Refuse', activity.label)
         self.assertIsNone(activity.description)
