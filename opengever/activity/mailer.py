@@ -7,6 +7,7 @@ from opengever.base.model import get_locale
 from opengever.mail.utils import make_addr_header
 from opengever.ogds.models.service import ogds_service
 from plone import api
+from Products.MailHost.MailHost import _mungeHeaders
 from threading import local
 import transaction
 
@@ -19,8 +20,8 @@ class NotificationMailQueue(local):
     def __init__(self):
         self._queue = []
 
-    def put(self, msg):
-        self._queue.append(msg)
+    def put(self, msg, mail_to, mail_from):
+        self._queue.append((msg, mail_to, mail_from))
 
     def get(self):
         return self._queue.pop()
@@ -37,8 +38,15 @@ def process_mail_queue():
 
     with NotificationErrorHandler():
         while not mail_queue.empty():
-            mail = mail_queue.get()
-            mailhost.send(mail)
+            mail, mail_to, mail_from = mail_queue.get()
+
+            # The MailHost `send` method overwrites the FROM and TO header
+            # in the Message, if you pass in to and from adresses. But we
+            # need to pass in the adresses to avoid problems with long or
+            # fullnames with umlauts. Therefore we directly use the `_send`
+            # method, and use _mungeHeaders only for the message text.
+            messageText, _, _ = _mungeHeaders(mail)
+            mailhost._send(mail_from, mail_to, messageText)
 
 
 class Mailer(object):
@@ -60,7 +68,7 @@ class Mailer(object):
         if process_mail_queue not in txn.getBeforeCommitHooks():
             txn.addBeforeCommitHook(process_mail_queue)
 
-    def send_mail(self, msg):
+    def send_mail(self, msg, mail_to, mail_from):
         """Queue a mail for delivery at the end of the transaction.
 
         We don't immediately call mailhost.send() here, but instead place
@@ -78,7 +86,7 @@ class Mailer(object):
         We therefore defer the dispatching of notification mails until the
         very end of the transaction to work around this issue.
         """
-        mail_queue.put(msg)
+        mail_queue.put(msg, mail_to, mail_from)
 
     def prepare_mail(self, subject=u'', to_userid=None, to_email=None,
                      cc_email=None, from_userid=None, data=None):
@@ -89,6 +97,7 @@ class Mailer(object):
 
         actor = ogds_service().fetch_user(from_userid) if from_userid else None
         noreply_gever_address = api.portal.get().email_from_address
+        from_mail = noreply_gever_address
 
         send_with_actor_from_address = api.portal.get_registry_record(
             name='send_with_actor_from_address', interface=IOGMailSettings)
@@ -110,8 +119,8 @@ class Mailer(object):
                 # This might be caught in spam filters because it's effectively
                 # sender address spoofing, but is sometimes desired by
                 # customers for compatibility with autoresponders.
-                msg['From'] = make_addr_header(actor.fullname(),
-                                               actor.email, 'utf-8')
+                msg['From'] = make_addr_header(actor.fullname(), actor.email, 'utf-8')
+                from_mail = actor.email
         else:
             msg['From'] = make_addr_header(
                 self.default_addr_header, noreply_gever_address, 'utf-8')
@@ -129,7 +138,7 @@ class Mailer(object):
 
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
-        return msg
+        return msg, to_email, from_mail
 
     def get_users_language(self):
         # XXX TODO Right now there is no support to store users preferred

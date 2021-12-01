@@ -88,7 +88,8 @@ class InvitationMailer(Mailer):
             'comment': invitation['comment'].splitlines(),
             'public_url': get_current_admin_unit().public_url,
         }
-        msg = self.prepare_mail(subject=subject, to_email=invitation['recipient_email'],
-                                from_userid=invitation['inviter'], data=data)
+        msg, mail_to, mail_from = self.prepare_mail(
+            subject=subject, to_email=invitation['recipient_email'],
+            from_userid=invitation['inviter'], data=data)
 
-        self.send_mail(msg)
+        self.send_mail(msg, mail_to, mail_from)

@@ -36,13 +36,13 @@ class PloneNotificationMailer(NotificationDispatcher, Mailer):
                 'user %r.' % (notification.notification_id, recipient_user))
             return
 
-        msg = self.prepare_mail(
+        msg, mail_to, mail_from = self.prepare_mail(
             subject=data.get('subject'),
             to_userid=notification.userid,
             from_userid=notification.activity.actor_id,
             data=data
         )
-        self.send_mail(msg)
+        self.send_mail(msg, mail_to, mail_from)
 
     def get_subject(self, notification_data):
         prefix = translate(_(u'subject_prefix', default=u'GEVER Activity'),
