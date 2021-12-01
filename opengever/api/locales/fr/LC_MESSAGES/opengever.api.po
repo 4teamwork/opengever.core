@@ -67,7 +67,7 @@ msgstr "Saisie invalide"
 #. Default: "Dossier with the UID ${uid} is not part of the disposition"
 #: ./opengever/api/disposition.py
 msgid "msg_invalid_uid"
-msgstr ""
+msgstr "Le dossier avec l'UID ${uid} ne fait pas partie de l'offre"
 
 #. Default: "Maximum dossier depth exceeded"
 #: ./opengever/api/upload_structure.py
