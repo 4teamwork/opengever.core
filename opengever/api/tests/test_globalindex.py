@@ -25,6 +25,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'containing_subdossier': u'',
              u'created': u'2016-08-31T18:27:33',
              u'deadline': u'2020-01-01',
+             u'is_completed': False,
              u'is_private': True,
              u'is_subtask': False,
              u'issuer': u'robert.ziegler',

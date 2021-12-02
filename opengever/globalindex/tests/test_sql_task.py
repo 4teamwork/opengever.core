@@ -153,6 +153,44 @@ class TestGlobalindexTask(TestCase):
 
         self.assertTrue(task_with_pred.is_successor)
 
+    def test_is_completed(self):
+        open_task = create(Builder('globalindex_task')
+                           .having(int_id=1, review_state='task-state-open'))
+        self.assertFalse(open_task.is_completed)
+        planned_task = create(Builder('globalindex_task')
+                              .having(int_id=2, review_state='task-state-planned'))
+        self.assertFalse(planned_task.is_completed)
+        in_progress_task = create(Builder('globalindex_task')
+                                  .having(int_id=3, review_state='task-state-in-progress'))
+        self.assertFalse(in_progress_task.is_completed)
+        rejected_task = create(Builder('globalindex_task')
+                               .having(int_id=4, review_state='task-state-rejected'))
+        self.assertFalse(rejected_task.is_completed)
+        resolved_task = create(Builder('globalindex_task')
+                               .having(int_id=5, review_state='task-state-resolved'))
+        self.assertFalse(resolved_task.is_completed)
+
+        closed_task = create(Builder('globalindex_task')
+                             .having(int_id=6, review_state='task-state-tested-and-closed'))
+        self.assertTrue(closed_task.is_completed)
+        cancelled_task = create(Builder('globalindex_task')
+                                .having(int_id=7, review_state='task-state-cancelled'))
+        self.assertTrue(cancelled_task.is_completed)
+        skipped_task = create(Builder('globalindex_task')
+                              .having(int_id=8, review_state='task-state-skipped'))
+        self.assertTrue(skipped_task.is_completed)
+
+        open_forwarding = create(Builder('globalindex_task')
+                                 .having(int_id=9, review_state='forwarding-state-open'))
+        self.assertFalse(open_forwarding.is_completed)
+        refused_forwarding = create(Builder('globalindex_task')
+                                    .having(int_id=10, review_state='forwarding-state-refused'))
+        self.assertFalse(refused_forwarding.is_completed)
+
+        closed_forwarding = create(Builder('globalindex_task')
+                                   .having(int_id=11, review_state='forwarding-state-closed'))
+        self.assertTrue(closed_forwarding.is_completed)
+
     def test_has_remote_predecessor(self):
         predecessor = create(Builder('globalindex_task')
                              .having(int_id=1, admin_unit_id='fd'))
