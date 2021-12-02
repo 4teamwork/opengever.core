@@ -59,6 +59,26 @@ class TestDelegateTaskForm(IntegrationTestCase):
         self.assertEqual('task-15', subtask.id)
 
     @browsing
+    def test_delegate_does_not_set_documents_attribute_on_subtask(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, view='delegate_recipients')
+
+        # step 1
+        form = browser.find_form_by_field('Responsibles')
+        form.find_widget('Responsibles').fill(self.dossier_responsible)
+        browser.css('#form-buttons-save').first.click()
+
+        # step 2
+        browser.css('#form-buttons-save').first.click()
+
+        subtask = self.task.objectValues()[-1]
+        self.assertFalse(
+            hasattr(subtask, 'documents'),
+            'The transition-extender should not pass the documents-property to the dexterity createContent method.'
+            )
+
+    @browsing
     def test_issuer_is_prefilled_with_current_user(self, browser):
         self.login(self.regular_user, browser=browser)
 

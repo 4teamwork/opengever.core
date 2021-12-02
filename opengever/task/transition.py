@@ -439,7 +439,7 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
     def after_transition_hook(self, transition, disable_sync, transition_params):
         create_subtasks(self.context,
                         transition_params.pop('responsibles'),
-                        transition_params.get('documents', []),
+                        transition_params.pop('documents', []),
                         transition_params)
 
 
