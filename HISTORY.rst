@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.22.1 (2021-12-02)
+----------------------
+
+Bug fixes:
+
+
+- Fix sending notification mails from or to users with long mail addresses. [phgross]
+
+
 2021.22.0 (2021-11-03)
 ----------------------
 
