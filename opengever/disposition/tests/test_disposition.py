@@ -40,7 +40,7 @@ class TestDisposition(IntegrationTestCase):
         """Expected format:
         Disposition {adminiunit-abbreviation} {today's date}'.
         """
-        expected = 'Disposition Client1 Jan 01, 2014'
+        expected = 'Offer Client1 Jan 01, 2014'
 
         self.login(self.archivist, browser)
         with freeze(datetime(2014, 1, 1)):
@@ -110,8 +110,8 @@ class TestDisposition(IntegrationTestCase):
         browser.find('Save').click()
 
         self.assertEquals(['There were some errors.'], error_messages())
-        self.assertEquals(['The dossier {} is already offered in a different '
-                           'disposition.'.format(self.offered_dossier_to_archive.Title())],
+        self.assertEquals(['The dossier {} is already in another offer.'
+                           ''.format(self.offered_dossier_to_archive.Title())],
                           browser.css('.fieldErrorBox .error').text)
 
     @browsing
@@ -266,7 +266,7 @@ class TestDispositionEditForm(IntegrationTestCase):
 
         # Download is possible
         self.assertIn(
-            'Download disposition package', browser.css('ul.actions li').text)
+            'Download disposal package', browser.css('ul.actions li').text)
 
     @browsing
     def test_sip_package_is_removed_on_close(self, browser):

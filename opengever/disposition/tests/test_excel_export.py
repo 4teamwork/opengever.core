@@ -75,5 +75,5 @@ class TestDispositionExcelExport(IntegrationTestCase):
         browser.open(self.disposition, view='download_excel')
         fname = eval(browser.headers.get(
             "content-disposition").split(";")[1].split("=")[1])
-        expected = "liste_evaluation_angebot-31-8-2016.xlsx"
+        expected = "liste_evaluations_angebot-31-8-2016.xlsx"
         self.assertEquals(expected, fname)

@@ -31,7 +31,7 @@ msgstr "Tous"
 #. Default: "appraisal_list"
 #: ./opengever/disposition/browser/excel_export.py
 msgid "appraisal_list"
-msgstr "liste_evaluation"
+msgstr "liste_evaluations"
 
 #. Default: "Sequence Number"
 #: ./opengever/disposition/browser/listing.py
@@ -333,4 +333,4 @@ msgstr "Nouvelle offre ajoutée par ${user} dans le mandataire ${admin_unit}"
 #. Default: "Removal protocol for ${disposition}"
 #: ./opengever/disposition/browser/removal_protocol.py
 msgid "title_removal_protocol"
-msgstr "Protocole de supression pour ${disposition}"
+msgstr "Protocole de suppression pour ${disposition}"

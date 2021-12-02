@@ -154,12 +154,12 @@ class TestDispositionOverview(IntegrationTestCase):
         browser.find('Submit disposition').click()
 
         self.assertEquals(['Export appraisal list as an Excel file',
-                           'Download disposition package'],
+                           'Download disposal package'],
                           browser.css('ul.actions li').text)
 
         self.assertEquals(
             os.path.join(self.disposition.absolute_url(), 'ech0160_download'),
-            browser.find('Download disposition package').get('href'))
+            browser.find('Download disposal package').get('href'))
         self.assertEquals(
             os.path.join(self.disposition.absolute_url(), 'download_excel'),
             browser.find('Export appraisal list as an Excel file').get('href'))

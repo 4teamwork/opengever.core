@@ -202,7 +202,7 @@ msgstr "Tageszusammenfassung"
 #. Default: "Dispositions"
 #: ./opengever/activity/browser/settings.py
 msgid "label_dispositions"
-msgstr "Aussonderung"
+msgstr "Aussonderungen"
 
 #. Default: "Documents"
 #: ./opengever/activity/browser/settings.py

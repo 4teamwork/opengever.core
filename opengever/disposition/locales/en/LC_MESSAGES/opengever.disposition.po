@@ -33,7 +33,7 @@ msgstr "All"
 #. Default: "appraisal_list"
 #: ./opengever/disposition/browser/excel_export.py
 msgid "appraisal_list"
-msgstr "appraisal list"
+msgstr "appraisal_list"
 
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
@@ -56,7 +56,7 @@ msgstr "The dossier ${title} is still active."
 #. Default: "The dossier ${title} is already offered in a different disposition."
 #: ./opengever/disposition/validators.py
 msgid "error_offered_in_a_different_disposition"
-msgstr "The dossier ${title} is already offered in a different disposition."
+msgstr "The dossier ${title} is already in another offer."
 
 #. German translation: Die Aufbewahrungsfrist der selektierten Dossiers ist nicht abgelaufen.
 #. Default: "The retention period of the selected dossiers is not expired."
@@ -146,26 +146,26 @@ msgstr "Details:"
 #. Default: "Disposition"
 #: ./opengever/disposition/disposition.py
 msgid "label_disposition"
-msgstr "Disposition"
+msgstr "Offer"
 
 #. German translation: Angebot hinzugefügt
 #. Default: "Disposition added"
 #: ./opengever/disposition/activities.py
 #: ./opengever/disposition/history.py
 msgid "label_disposition_added"
-msgstr "Disposition added"
+msgstr "Offer added"
 
 #. German translation: Angebot bearbeitet
 #. Default: "Disposition edited"
 #: ./opengever/disposition/history.py
 msgid "label_disposition_edited"
-msgstr "Disposition edited"
+msgstr "Offer edited"
 
 #. German translation: Ablieferungspaket herunterladen
 #. Default: "Download disposition package"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_dispositon_package_download"
-msgstr "Download disposition package"
+msgstr "Download disposal package"
 
 #. German translation: Nicht archivieren
 #. Default: "Don't archive"
@@ -333,13 +333,13 @@ msgstr "Archival confirmed by ${user}"
 #. Default: "Disposition closed and all dossiers destroyed by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_close"
-msgstr "Disposition closed and all dossiers destroyed by ${user}"
+msgstr "Offer closed and all dossiers destroyed by ${user}"
 
 #. German translation: Zur Archivierung angeboten durch ${user}
 #. Default: "Disposition disposed for the archive by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_disposed"
-msgstr "Disposition offered for archival by ${user}"
+msgstr "Offered for archival by ${user}"
 
 #. German translation: Editiert durch ${user}
 #. Default: "Edited by ${user}"
@@ -351,7 +351,7 @@ msgstr "Edited by ${user}"
 #. Default: "Disposition refused by ${user}"
 #: ./opengever/disposition/history.py
 msgid "msg_disposition_refuse"
-msgstr "Disposition refused by ${user}"
+msgstr "Offer refused by ${user}"
 
 #. German translation: Aktualisiert durch ${user}
 #. Default: "Updated by ${user}"
@@ -363,7 +363,7 @@ msgstr "Updated by ${user}"
 #. Default: "No SIP Package generated for this disposition."
 #: ./opengever/disposition/browser/ech0160.py
 msgid "msg_no_sip_package_generated"
-msgstr "No SIP package generated yet for this disposition."
+msgstr "No SIP package generated yet for this offer."
 
 #. German translation: SIP Paket erfolgreich generiert.
 #. Default: "SIP Package generated successfully."
@@ -388,7 +388,7 @@ msgstr "Progress"
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
 #: ./opengever/disposition/activities.py
 msgid "summary_disposition_added"
-msgstr "New disposition added by ${user} on admin unit ${admin_unit}"
+msgstr "New offer added by ${user} on admin unit ${admin_unit}"
 
 #. German translation: Löschprotokoll zu ${disposition}
 #. Default: "Removal protocol for ${disposition}"
