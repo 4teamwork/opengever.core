@@ -129,7 +129,7 @@ class TestTaskIntegration(SolrIntegrationTestCase):
             RelationValue(intids.getId(self.document))]
 
         self.assertIn(self.taskdocument, self.task.listFolderContents())
-        self.assertItemsEqual([self.taskdocument, self.document], self.task.documents())
+        self.assertItemsEqual([self.taskdocument, self.document], self.task.task_documents())
 
     def test_addresponse(self):
         self.login(self.dossier_responsible)

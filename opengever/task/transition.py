@@ -212,7 +212,7 @@ class DefaultTransitionExtender(TransitionExtender):
         intids = getUtility(IIntIds)
 
         current_document_ids = [intids.getId(document) for document
-                                in self.context.documents()]
+                                in self.context.task_documents()]
         next_task_related_items = [item.to_id for item
                                    in ITask(next_task).relatedItems]
         ITask(next_task).relatedItems = [

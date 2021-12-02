@@ -717,7 +717,7 @@ class Task(Container, TaskReminderSupport):
                 obj=self, transition='task-transition-open-planned')
             self.sync()
 
-    def documents(self):
+    def task_documents(self):
         """Returns contained documents and related documents."""
         def _get_documents():
             """Return documents in this task and subtasks."""
