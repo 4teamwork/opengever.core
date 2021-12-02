@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.upload_structure import IUploadStructureAnalyser
 from opengever.testing import SolrIntegrationTestCase
@@ -154,6 +156,23 @@ class TestUploadStructure(SolrIntegrationTestCase):
             self.subdossier,
             ['/folder/file.txt'],
             u'Maximum dossier depth exceeded')
+
+    @browsing
+    def test_upload_structure_allows_document_upload_even_max_dossier_depth_is_already_exceeded(self, browser):
+        self.login(self.regular_user, browser)
+
+        subsubdossier = create(Builder('dossier').within(self.subdossier))
+
+        self.assert_upload_structure_raises_bad_request(
+            browser,
+            subsubdossier,
+            ['/folder/file.txt'],
+            u'Maximum dossier depth exceeded')
+
+        self.assert_upload_structure_returns_ok(
+            browser,
+            subsubdossier,
+            ['file.txt'])
 
     @browsing
     def test_upload_structure_ignores_maximal_depth_in_workspace_area(self, browser):
