@@ -1325,6 +1325,14 @@
 
   <plone:service
       method="POST"
+      name="@xhr-upload"
+      for="Products.CMFCore.interfaces.IContentish"
+      factory=".xhr.XHRUploadPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
       name="@save-document-as-pdf"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".save_document_as_pdf.SaveDocumentAsPdfPost"
