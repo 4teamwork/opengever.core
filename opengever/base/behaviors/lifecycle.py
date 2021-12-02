@@ -3,16 +3,13 @@ from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
-from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
-from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.registry.interfaces import IRegistry
 from plone.supermodel import model
 from zope import schema
 from zope.component import getUtility
-from zope.container.interfaces import IContainerModifiedEvent
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
@@ -97,17 +94,6 @@ class ILifeCycle(model.Schema):
 
 
 alsoProvides(ILifeCycle, IFormFieldProvider)
-
-
-def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event) or \
-       IContainerModifiedEvent.providedBy(event):
-        return
-
-    restricted_fields = [ILifeCycle['retention_period']]
-
-    propagate_vocab_restrictions(
-        container, event, restricted_fields, ILifeCycleMarker)
 
 
 # ---------- RETENTION PERIOD -----------

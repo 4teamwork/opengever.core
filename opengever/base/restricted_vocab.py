@@ -1,8 +1,6 @@
 from opengever.base.acquisition import acquire_field_value
 from opengever.base.acquisition import NO_VALUE_FOUND
 from opengever.base.interfaces import IDuringContentCreation
-from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFPlone.utils import safe_callable
@@ -122,47 +120,3 @@ class RestrictedVocabularyFactory(object):
         # NOTE: We deliberately avoid accessing field.default, because doing
         # so would invoke a defaultFactory if present
         return self.field.__dict__.get('default', None)
-
-
-def propagate_vocab_restrictions(container, event, restricted_fields, marker):
-    """Propagate changes to fields with restricted vocabularies down to
-    children of the folderish object (for the children whose field value would
-    now violate the business rule imposed by the restricted vocabulary).
-    """
-    def dottedname(field):
-        return '.'.join((field.interface.__name__, field.__name__))
-
-    changed_fields = []
-    for desc in event.descriptions:
-        for name in desc.attributes:
-            changed_fields.append(name)
-
-    fields_to_check = []
-    for field in restricted_fields:
-        if dottedname(field) in changed_fields:
-            fields_to_check.append(field)
-
-    if not fields_to_check:
-        return
-
-    children = container.portal_catalog(
-        # XXX: Depth should not be limited (Issue #2027)
-        path={'depth': 2,
-              'query': '/'.join(container.getPhysicalPath())},
-        object_provides=(marker.__identifier__,),
-        sort_on="path"
-    )
-
-    for child in children:
-        obj = child.getObject()
-        for field in fields_to_check:
-            voc = field.bind(obj).source
-            value = field.get(field.interface(obj))
-            if value not in voc:
-                # Change the child object's field value to a valid one
-                # acquired from above
-                new_value = acquire_field_value(field, obj.aq_parent)
-                field.set(field.interface(obj), new_value)
-
-                if field.__name__ == "retention_period" and IDossierMarker.providedBy(obj) and IDossier(obj).end:
-                    obj.reindexObject(idxs=["retention_expiration"])

@@ -159,86 +159,32 @@ class TestClassificationVocabulary(IntegrationTestCase):
             set(['confidential', 'classified']),
             set(form_field.options_values))
 
-
-class TestClassificationPropagation(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestClassificationPropagation, self).setUp()
-        self.field = IClassification['classification']
-
-    def get_classification(self, obj):
-        return self.field.get(self.field.interface(obj))
-
-    def set_classification(self, obj, value):
-        self.field.set(self.field.interface(obj), value)
-
     @browsing
-    def test_change_propagates_to_children(self, browser):
+    def test_change_does_not_propagate_to_children(self, browser):
         self.login(self.administrator, browser=browser)
 
         # Start with a loose classification
-        self.set_classification(self.leaf_repofolder, u'unprotected')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        # Dossier should have inherited classification from repofolder
-        self.assertEqual(u'unprotected', self.get_classification(dossier))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.branch_repofolder))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.leaf_repofolder))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.dossier))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.document))
 
         # Make classification more strict
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Classification': 'confidential'}).save()
-
-        # Stricter classification should have propagated to dossier
-        self.assertEqual(u'confidential', self.get_classification(dossier))
-
-    @browsing
-    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier',
-                      'Classification': 'confidential'}).save()
-
-        dossier = browser.context
-        self.assertEqual(u'confidential', self.get_classification(dossier))
-
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Classification': 'unprotected'}).save()
-
-        self.assertEqual(u'confidential', self.get_classification(dossier))
-
-    @browsing
-    def test_propagation_is_depth_limited(self, browser):
-        """Propagation of classification is depth limited to 2 levels.
-        Not sure why this was implemented this way, but here we test for it.
-        """
-        self.login(self.administrator, browser=browser)
-
-        # Start with a loose classification
-        self.set_classification(self.branch_repofolder, u'unprotected')
-        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
-        repofolder3 = create(Builder('repository').within(repofolder2))
-
-        browser.open(repofolder3)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        # Dossier should have inherited classification from repofolder2
-        self.assertEqual(u'unprotected', self.get_classification(dossier))
-
-        # Make classification more strict on top level repofolder
         browser.open(self.branch_repofolder, view='edit')
         browser.fill({'Classification': 'confidential'}).save()
 
-        # Stricter classification should have propagated to repofolder2, but
-        # not dossier (because of depth limitation)
-        self.assertEqual(u'confidential', self.get_classification(repofolder2))
-        self.assertEqual(u'unprotected', self.get_classification(dossier))
+        self.assertEqual(u'confidential',
+                         self.get_classification(self.branch_repofolder))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.leaf_repofolder))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.dossier))
+        self.assertEqual(u'unprotected',
+                         self.get_classification(self.document))
 
 
 class TestPrivacyLayerDefault(IntegrationTestCase):
@@ -381,90 +327,32 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
             set(['privacy_layer_yes']),
             set(form_field.options_values))
 
-
-class TestPrivacyLayerPropagation(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestPrivacyLayerPropagation, self).setUp()
-        self.field = IClassification['privacy_layer']
-
-    def get_privacy_layer(self, obj):
-        return self.field.get(self.field.interface(obj))
-
-    def set_privacy_layer(self, obj, value):
-        self.field.set(self.field.interface(obj), value)
-
     @browsing
-    def test_change_propagates_to_children(self, browser):
+    def test_change_does_not_propagate_to_children(self, browser):
         self.login(self.administrator, browser=browser)
 
-        # Start with a loose privacy layer
-        self.set_privacy_layer(self.leaf_repofolder, u'privacy_layer_no')
+        # Start with a loose classification
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.branch_repofolder))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.leaf_repofolder))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.dossier))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.document))
 
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-
-        dossier = browser.context
-
-        # Dossier should have inherited privacy layer from repofolder
-        self.assertEqual(u'privacy_layer_no', self.get_privacy_layer(dossier))
-
-        # Make privacy layer more strict
-        browser.open(self.leaf_repofolder, view='edit')
+        # Make classification more strict
+        browser.open(self.branch_repofolder, view='edit')
         browser.fill({'Privacy protection': 'privacy_layer_yes'}).save()
 
-        # Stricter privacy layer should have propagated to dossier
-        self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
-
-    @browsing
-    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({
-            'Title': 'My Dossier',
-            'Privacy protection': 'privacy_layer_yes'}).save()
-        dossier = browser.context
-
-        self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
-
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Privacy protection': 'privacy_layer_no'}).save()
-
-        self.assertEqual(u'privacy_layer_yes', self.get_privacy_layer(dossier))
-
-    @browsing
-    def test_propagation_is_depth_limited(self, browser):
-        """Propagation of privacy layer is depth limited to 2 levels.
-        Not sure why this was implemented this way, but here we test for it.
-        """
-        self.login(self.administrator, browser=browser)
-
-        # Start with a loose privacy layer
-        self.set_privacy_layer(self.leaf_repofolder, u'privacy_layer_no')
-        repofolder2 = create(Builder('repository').within(self.leaf_repofolder))
-        repofolder3 = create(Builder('repository').within(repofolder2))
-
-        browser.open(repofolder3)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        # Dossier should have inherited privacy layer from repofolder2
-        self.assertEqual(u'privacy_layer_no', self.get_privacy_layer(dossier))
-
-        # Reduce privacy layer on top level repofolder
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Privacy protection': 'privacy_layer_yes'}).save()
-
-        # Reduced privacy layer should have propagated to repofolder2, but
-        # not dossier (because of depth limitation)
-        self.assertEqual(
-            u'privacy_layer_yes', self.get_privacy_layer(repofolder2))
-        self.assertEqual(
-            u'privacy_layer_no', self.get_privacy_layer(dossier))
+        self.assertEqual(u'privacy_layer_yes',
+                         self.get_privacy_layer(self.branch_repofolder))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.leaf_repofolder))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.dossier))
+        self.assertEqual(u'privacy_layer_no',
+                         self.get_privacy_layer(self.document))
 
 
 class TestPublicTrialField(IntegrationTestCase):

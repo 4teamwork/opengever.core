@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -8,7 +6,6 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import createContentInContainer
-import datetime
 import json
 
 
@@ -458,114 +455,27 @@ class TestRetentionPeriodPropagation(IntegrationTestCase):
         self.field.set(self.field.interface(obj), value)
 
     @browsing
-    def test_change_propagates_to_children(self, browser):
+    def test_change_does_not_propagate_to_children(self, browser):
         self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
 
         # Start with a long retention period
         self.set_retention_period(self.branch_repofolder, 25)
         self.set_retention_period(self.leaf_repofolder, 25)
 
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        value = self.get_retention_period(dossier)
-        # Dossier should have inherited retention period from repofolder
-        self.assertEqual(25, value)
-
-        browser.open(self.leaf_repofolder, view='edit')
-        # Reduce retention period
-        browser.fill({'Retention period (years)': '15'}).save()
-
-        value = self.get_retention_period(dossier)
-        # Reduced retention period should have propagated to dossier
-        self.assertEqual(15, value)
-
-    @browsing
-    def test_retention_expiration_index_is_updated(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-
-        self.set_retention_period(self.leaf_repofolder, 15)
-        self.set_retention_period(self.expired_dossier, 15)
-
-        self.assertEqual(15, self.get_retention_period(self.leaf_repofolder))
-        self.assertEqual(15, self.get_retention_period(self.expired_dossier))
-
-        expected_index = self.dateindex_value_from_datetime(
-            datetime.date(2016, 1, 1))
-        self.assert_index_value(expected_index, 'retention_expiration',
-                                self.expired_dossier)
+        self.assertEqual(25, self.get_retention_period(self.branch_repofolder))
+        self.assertEqual(25, self.get_retention_period(self.leaf_repofolder))
+        self.assertEqual(15, self.get_retention_period(self.dossier))
+        self.assertEqual(15, self.get_retention_period(self.subdossier))
 
         # Reduce retention period
-        browser.open(self.leaf_repofolder, view='edit')
+        browser.open(self.branch_repofolder, view='edit')
         browser.fill({'Retention period (years)': '5'}).save()
 
-        self.assertEqual(5, self.get_retention_period(self.leaf_repofolder))
-        self.assertEqual(5, self.get_retention_period(self.expired_dossier))
-        expected_index = self.dateindex_value_from_datetime(
-            datetime.date(2006, 1, 1))
-        self.assert_index_value(expected_index, 'retention_expiration',
-                                self.expired_dossier)
-
-    @browsing
-    def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-        browser.open(self.leaf_repofolder)
-        self.set_retention_period(self.branch_repofolder, 25)
-        self.set_retention_period(self.leaf_repofolder, 25)
-
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({
-            'Title': 'My Dossier',
-            'Retention period (years)': '5'}).save()
-        dossier = browser.context
-
-        value = self.get_retention_period(dossier)
-        self.assertEqual(5, value)
-
-        browser.open(self.leaf_repofolder, view='edit')
-        browser.fill({'Retention period (years)': '15'}).save()
-
-        value = self.get_retention_period(dossier)
-        self.assertEqual(5, value)
-
-    @browsing
-    def test_propagation_is_depth_limited(self, browser):
-        """Propagation of retention period is depth limited to 2 levels.
-        Not sure why this was implemented this way, but here we test for it.
-        """
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-        # Start with a long retention period
-        self.set_retention_period(self.branch_repofolder, 25)
-        repofolder2 = create(Builder('repository').within(self.branch_repofolder))
-        repofolder3 = create(Builder('repository').within(repofolder2))
-
-        browser.open(repofolder3)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-        dossier = browser.context
-
-        value = self.get_retention_period(dossier)
-        # Dossier should have inherited retention period from repofolder2
-        self.assertEqual(25, value)
-
-        browser.open(self.branch_repofolder, view='edit')
-        # Reduce retention period on top level repofolder
-        browser.fill({'Retention period (years)': '15'}).save()
-
-        # Reduced retention period should have propagated to repofolder2, but
-        # not dossier (because of depth limitation)
-        self.assertEqual(15, self.get_retention_period(repofolder2))
-        self.assertEqual(25, self.get_retention_period(dossier))
+        # Reduced retention period does not propagate to dossier
+        self.assertEqual(5, self.get_retention_period(self.branch_repofolder))
+        self.assertEqual(25, self.get_retention_period(self.leaf_repofolder))
+        self.assertEqual(15, self.get_retention_period(self.dossier))
+        self.assertEqual(15, self.get_retention_period(self.subdossier))
 
 
 class TestArchivalValueDefault(IntegrationTestCase):

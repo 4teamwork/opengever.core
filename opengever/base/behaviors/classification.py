@@ -1,17 +1,14 @@
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
-from opengever.base.restricted_vocab import propagate_vocab_restrictions
 from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
-from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.memoize import ram
 from plone.supermodel import model
 from zope import schema
-from zope.container.interfaces import IContainerModifiedEvent
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.interface import provider
@@ -119,19 +116,6 @@ class IClassificationSettings(Interface):
         required=True,
         default=PUBLIC_TRIAL_UNCHECKED
     )
-
-
-def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event) or \
-       IContainerModifiedEvent.providedBy(event):
-        return
-
-    restricted_fields = [
-        IClassification['classification'],
-        IClassification['privacy_layer']]
-
-    propagate_vocab_restrictions(
-        container, event, restricted_fields, IClassificationMarker)
 
 
 # CLASSIFICATION: Vocabulary and default value

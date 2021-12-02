@@ -82,18 +82,6 @@
       />
 
   <subscriber
-      for="opengever.base.behaviors.classification.IClassificationMarker
-           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".classification.propagate_vocab_restrictions_to_children"
-      />
-
-  <subscriber
-      for="opengever.base.behaviors.lifecycle.ILifeCycleMarker
-           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
-      handler=".lifecycle.propagate_vocab_restrictions_to_children"
-      />
-
-  <subscriber
       for="opengever.base.behaviors.sequence.ISequenceNumberBehavior
            zope.lifecycleevent.interfaces.IObjectCopiedEvent"
       handler=".sequence.new_sequence_number"
