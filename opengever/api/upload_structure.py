@@ -184,6 +184,10 @@ class DossierDepthCheckMixin(object):
         return 0
 
     def check_dossier_depth(self):
+        # It is only a file upload
+        if self.structure["max_container_depth"] == 0:
+            return
+
         max_depth = api.portal.get_registry_record(
             name='maximum_dossier_depth',
             interface=IDossierContainerTypes
