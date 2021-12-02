@@ -147,7 +147,8 @@ def propagate_vocab_restrictions(container, event, restricted_fields, marker):
         # XXX: Depth should not be limited (Issue #2027)
         path={'depth': 2,
               'query': '/'.join(container.getPhysicalPath())},
-        object_provides=(marker.__identifier__,)
+        object_provides=(marker.__identifier__,),
+        sort_on="path"
     )
 
     for child in children:
