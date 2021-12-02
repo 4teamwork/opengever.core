@@ -1,0 +1,1 @@
+Fix propagation of values for restricted vocabularies and reindex retention_expiration when necessary. [njohner]
