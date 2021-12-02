@@ -347,13 +347,14 @@ FIELDS_WITH_MAPPING = [
 date_fields = set([
     'changed',
     'created',
+    'deadline',
     'delivery_date',
     'document_date',
     'end',
     'modified',
     'receipt_date',
+    'retention_expiration',
     'start',
-    'deadline',
     'touched',
 ])
 

@@ -117,6 +117,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``relative_path``: Pfad
 - ``responsible_fullname``: Federführung oder Auftragnehmer (Anzeigename)
 - ``responsible``: Federführung (Benutzername)
+- ``retention_expiration``: Ablauf der Aufbewahrungsfrist
 - ``review_state_label``: Status (Anzeigewert)
 - ``review_state``: Status
 - ``sequence_number``: Laufnummer

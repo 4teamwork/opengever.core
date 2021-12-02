@@ -14,6 +14,7 @@ Other Changes
 - @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
 
 - Include is_completed in sql task serialization.
+- ``@listing``: Add retention_expiration column.
 
 
 2021.24.0 (2021-11-30)

@@ -238,6 +238,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=public_trial',
             'columns=reference',
             'columns=title',
+            'columns=retention_expiration',
             'columns=review_state',
             'columns=relative_path',
             'columns=UID',
@@ -268,6 +269,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'public_trial': u'Nicht gepr\xfcft',
              u'trashed': False,
              u'reference': u'Client1 1.1 / 1',
+             u'retention_expiration': None,
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
              u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'},
             results['items'][-1])
@@ -731,6 +733,22 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         start_dates = list(set(map(lambda x: x['start'], items)))
         self.assertEqual(1, len(start_dates))
         self.assertEqual('2016-01-01T00:00:00Z', start_dates[0])
+
+    @browsing
+    def test_filter_by_retention_expiration(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&columns:list=retention_expiration'
+                '&filters.retention_expiration:record=*TO2016-05-01')
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+
+        self.assertEqual(4, browser.json['items_total'])
+        items = browser.json['items']
+        retention_expirations = list(set(map(lambda x: x['retention_expiration'], items)))
+        self.assertEqual(2, len(retention_expirations))
+        self.assertEqual([u'2013-01-01T00:00:00Z', u'2016-01-01T00:00:00Z'], retention_expirations)
 
     @browsing
     def test_wildcard_is_supported_by_date_filters(self, browser):
