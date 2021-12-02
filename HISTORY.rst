@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2021.22.2 (2021-12-02)
+----------------------
+
+Bug fixes:
+
+
+- - Fix file upload into subdossiers which exceed the current max dossier depth. [phgross]
+
+
 2021.22.1 (2021-12-02)
 ----------------------
 
