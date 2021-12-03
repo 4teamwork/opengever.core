@@ -41,14 +41,25 @@ li > p {
   margin-top: 0.25em;
   margin-bottom: 0.25em;
 }
-table, figure {
+figure {
   page-break-inside: avoid;
+}
+table {
+  margin-top: 10pt;
+  margin-bottom: 15pt;
+  border-collapse: collapse;
+  page-break-inside: auto;
 }
 th {
   text-align: left;
 }
 td, th {
+  padding-left: 10pt;
   padding-right: 10pt;
+  border: 1px solid black;
+}
+table.borderless td, table.borderless th {
+  border: none;
 }
 a {
   text-decoration: none;
@@ -78,7 +89,7 @@ a {
 
   <h1 i18n:translate="heading_meeting_minutes">Meeting Minutes: <span i18n:name="title" tal:replace="context/title">Title</span></h1>
 
-  <table>
+  <table class="borderless" >
     <tr tal:condition="context/location">
       <th><span i18n:translate="label_location">Location</span>:</th>
       <td tal:content="context/location"></td>
