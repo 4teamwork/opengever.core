@@ -1,0 +1,181 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:five="http://namespaces.zope.org/five">
+
+  <meta:provides feature="disable-autoinclude" />
+
+  <include package="Zope2.App" />
+  <include package="Products.Five" />
+  <meta:redefinePermission from="zope2.Public" to="zope.Public" />
+
+  <!-- Load the meta -->
+  <include files="package-includes/*-meta.zcml" />
+  <five:loadProducts file="meta.zcml"/>
+
+  <!-- Load the configuration -->
+  <include files="package-includes/*-configure.zcml" />
+  <five:loadProducts />
+
+  <!-- Load the configuration overrides-->
+  <includeOverrides files="package-includes/*-overrides.zcml" />
+  <five:loadProductsOverrides />
+
+  <securityPolicy
+      component="AccessControl.security.SecurityPolicy" />
+
+  <include package="opengever.setup" file="meta.zcml" />
+  <include package="ftw.tika" file="meta.zcml" />
+  <include package="five.pt" file="meta.zcml" />
+  <include package="plone.resource" file="meta.zcml" />
+  <include package="plone.app.dexterity" file="meta.zcml" />
+  <include package="plone.rest" file="meta.zcml" />
+  <include package="ftw.upgrade" file="meta.zcml" />
+  <include package="ftw.solr" file="meta.zcml" />
+  <include package="ftw.profilehook" file="meta.zcml" />
+  <include package="ftw.lawgiver" file="meta.zcml" />
+  <include package="ftw.inflator" file="meta.zcml" />
+  <include package="collective.vdexvocabulary" file="meta.zcml" />
+  <include package="opengever.activity" file="configure.zcml" />
+  <include package="opengever.advancedsearch" file="configure.zcml" />
+  <include package="opengever.api" file="configure.zcml" />
+  <include package="opengever.base" file="configure.zcml" />
+  <include package="opengever.bumblebee" file="configure.zcml" />
+  <include package="opengever.bundle" file="configure.zcml" />
+  <include package="opengever.contact" file="configure.zcml" />
+  <include package="opengever.contentstats" file="configure.zcml" />
+  <include package="opengever.core" file="configure.zcml" />
+  <include package="opengever.debug" file="configure.zcml" />
+  <include package="opengever.disposition" file="configure.zcml" />
+  <include package="opengever.docugate" file="configure.zcml" />
+  <include package="opengever.document" file="configure.zcml" />
+  <include package="opengever.dossier" file="configure.zcml" />
+  <include package="opengever.ech0147" file="configure.zcml" />
+  <include package="opengever.examplecontent" file="configure.zcml" />
+  <include package="opengever.globalindex" file="configure.zcml" />
+  <include package="opengever.inbox" file="configure.zcml" />
+  <include package="opengever.journal" file="configure.zcml" />
+  <include package="opengever.latex" file="configure.zcml" />
+  <include package="opengever.locking" file="configure.zcml" />
+  <include package="opengever.mail" file="configure.zcml" />
+  <include package="opengever.meeting" file="configure.zcml" />
+  <include package="opengever.officeatwork" file="configure.zcml" />
+  <include package="opengever.officeconnector" file="configure.zcml" />
+  <include package="opengever.oneoffixx" file="configure.zcml" />
+  <include package="opengever.private" file="configure.zcml" />
+  <include package="opengever.propertysheets" file="configure.zcml" />
+  <include package="opengever.quota" file="configure.zcml" />
+  <include package="opengever.readonly" file="configure.zcml" />
+  <include package="opengever.repository" file="configure.zcml" />
+  <include package="opengever.setup" file="configure.zcml" />
+  <include package="opengever.sharing" file="configure.zcml" />
+  <include package="opengever.tabbedview" file="configure.zcml" />
+  <include package="opengever.task" file="configure.zcml" />
+  <include package="opengever.tasktemplates" file="configure.zcml" />
+  <include package="opengever.testing" file="configure.zcml" />
+  <include package="opengever.trash" file="configure.zcml" />
+  <include package="opengever.usermigration" file="configure.zcml" />
+  <include package="opengever.webactions" file="configure.zcml" />
+  <include package="opengever.wopi" file="configure.zcml" />
+  <include package="opengever.workspace" file="configure.zcml" />
+  <include package="opengever.workspaceclient" file="configure.zcml" />
+  <include package="opengever.ogds.base" file="configure.zcml" />
+  <include package="opengever.policy.base" file="configure.zcml" />
+  <include package="opengever.portlets.tree" file="configure.zcml" />
+  <include package="plonetheme.teamraum" file="configure.zcml" />
+  <include package="opengever.maintenance" file="configure.zcml" />
+  <include package="ftw.bumblebee" file="configure.zcml" />
+  <include package="ftw.tika" file="configure.zcml" />
+  <include package="five.pt" file="configure.zcml" />
+  <include package="plone.resource" file="configure.zcml" />
+  <include package="plone.formwidget.namedfile" file="configure.zcml" />
+  <include package="plone.app.dexterity" file="configure.zcml" />
+  <include package="ftw.table" file="configure.zcml" />
+  <include package="ftw.tabbedview" file="configure.zcml" />
+  <include package="ftw.journal" file="configure.zcml" />
+  <include package="z3c.formwidget.query" file="configure.zcml" />
+  <include package="transmogrify.dexterity" file="configure.zcml" />
+  <include package="plone4.csrffixes" file="configure.zcml" />
+  <include package="plone.restapi" file="configure.zcml" />
+  <include package="plone.rest" file="configure.zcml" />
+  <include package="plone.formwidget.contenttree" file="configure.zcml" />
+  <include package="plone.formwidget.autocomplete" file="configure.zcml" />
+  <include package="plone.app.versioningbehavior" file="configure.zcml" />
+  <include package="plone.app.theming" file="configure.zcml" />
+  <include package="plone.app.lockingbehavior" file="configure.zcml" />
+  <include package="plone.app.caching" file="configure.zcml" />
+  <include package="ftw.zipexport" file="configure.zcml" />
+  <include package="ftw.usermigration" file="configure.zcml" />
+  <include package="ftw.upgrade" file="configure.zcml" />
+  <include package="ftw.tokenauth" file="configure.zcml" />
+  <include package="ftw.structlog" file="configure.zcml" />
+  <include package="ftw.solr" file="configure.zcml" />
+  <include package="ftw.showroom" file="configure.zcml" />
+  <include package="ftw.profilehook" file="configure.zcml" />
+  <include package="ftw.pdfgenerator" file="configure.zcml" />
+  <include package="ftw.mobilenavigation" file="configure.zcml" />
+  <include package="ftw.mail" file="configure.zcml" />
+  <include package="ftw.lawgiver" file="configure.zcml" />
+  <include package="ftw.keywordwidget" file="configure.zcml" />
+  <include package="ftw.inflator" file="configure.zcml" />
+  <include package="ftw.dictstorage" file="configure.zcml" />
+  <include package="ftw.datepicker" file="configure.zcml" />
+  <include package="ftw.copymovepatches" file="configure.zcml" />
+  <include package="ftw.contentstats" file="configure.zcml" />
+  <include package="ftw.contentmenu" file="configure.zcml" />
+  <include package="ftw.catalogdoctor" file="configure.zcml" />
+  <include package="ftw.casauth" file="configure.zcml" />
+  <include package="collective.vdexvocabulary" file="configure.zcml" />
+  <include package="collective.usernamelogger" file="configure.zcml" />
+  <include package="collective.quickupload" file="configure.zcml" />
+  <include package="collective.mtrsetup" file="configure.zcml" />
+  <include package="collective.js.timeago" file="configure.zcml" />
+  <include package="collective.jqcookie" file="configure.zcml" />
+  <include package="collective.indexing" file="configure.zcml" />
+  <include package="collective.dexteritytextindexer" file="configure.zcml" />
+  <include package="collective.blueprint.jsonmigrator" file="configure.zcml" />
+  <include package="collective.taskqueue" file="configure.zcml" />
+  <include package="Products.CMFEditions" file="configure.zcml" />
+  <include package="plone.app.openid" file="configure.zcml" />
+  <include package="plone.app.iterate" file="configure.zcml" />
+  <include package="plonetheme.sunburst" file="configure.zcml" />
+  <include package="plonetheme.classic" file="configure.zcml" />
+  <include package="plone.portlet.static" file="configure.zcml" />
+  <include package="plone.batching" file="configure.zcml" />
+  <include package="plone.app.users" file="configure.zcml" />
+  <include package="plone.app.upgrade" file="configure.zcml" />
+  <include package="plone.app.search" file="configure.zcml" />
+  <include package="plone.app.linkintegrity" file="configure.zcml" />
+  <include package="plone.app.jquerytools" file="configure.zcml" />
+  <include package="plone.app.jquery" file="configure.zcml" />
+  <include package="plone.app.discussion" file="configure.zcml" />
+  <include package="plone.app.contentlisting" file="configure.zcml" />
+  <include package="plone.app.collection" file="configure.zcml" />
+  <include package="plone.app.blob" file="configure.zcml" />
+  <include package="archetypes.querywidget" file="configure.zcml" />
+  <include package="Products.CMFDiffTool" file="configure.zcml" />
+  <include package="collective.js.throttledebounce" file="configure.zcml" />
+  <include package="plone.subrequest" file="configure.zcml" />
+  <include package="plone.app.intid" file="configure.zcml" />
+  <include package="plone.app.referenceablebehavior" file="configure.zcml" />
+  <include package="collective.js.jqueryui" file="configure.zcml" />
+  <include package="plone.app.imaging" file="configure.zcml" />
+  <include package="plone.app.querystring" file="configure.zcml" />
+  <include package="plone.stringinterp" file="configure.zcml" />
+  <include package="archetypes.schemaextender" file="configure.zcml" />
+  <include package="plone.outputfilters" file="configure.zcml" />
+  <include package="collective.js.extjs" file="configure.zcml" />
+  <include package="ftw.monitor" file="configure.zcml" />
+  <include package="ftw.zopemaster" file="configure.zcml" />
+  <includeOverrides package="opengever.base" file="overrides.zcml" />
+  <includeOverrides package="opengever.bumblebee" file="overrides.zcml" />
+  <includeOverrides package="opengever.core" file="overrides.zcml" />
+  <includeOverrides package="opengever.latex" file="overrides.zcml" />
+  <includeOverrides package="opengever.mail" file="overrides.zcml" />
+  <includeOverrides package="opengever.readonly" file="overrides.zcml" />
+  <includeOverrides package="opengever.setup" file="overrides.zcml" />
+  <includeOverrides package="plone.app.dexterity" file="overrides.zcml" />
+  <includeOverrides package="ftw.lawgiver" file="overrides.zcml" />
+
+</configure>
+

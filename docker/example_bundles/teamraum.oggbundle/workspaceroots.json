@@ -1,0 +1,17 @@
+[
+  {
+    "guid": "4c2afa47bdeb47d689f675d123369dcf",
+    "review_state": "opengever_workspace_root--STATUS--active",
+    "title_de": "Teamr\u00e4ume",
+    "title_fr": "Espace partag\u00e9",
+    "title_en": "Workspaces",
+    "_permissions": {
+      "workspaces_creator": [
+        "tr_workspace_creators"
+      ],
+      "workspaces_user": [
+        "tr_benutzer"
+      ]
+    }
+  }
+]

@@ -20,6 +20,8 @@ import transaction
 log = logging.getLogger('opengever.bundle.report')
 log.setLevel(logging.INFO)
 
+SKIP_REPORT_KEY = 'skip_report'
+
 
 class ReportSection(object):
     """Create import reports for the current OGGBundle.
@@ -31,7 +33,9 @@ class ReportSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.context = transmogrifier.context
-        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
+        annotations = IAnnotations(transmogrifier)
+        self.bundle = annotations[BUNDLE_KEY]
+        self.skip_report = annotations.get(SKIP_REPORT_KEY, False)
         self.report_dir = None
 
     def __iter__(self):
@@ -41,18 +45,19 @@ class ReportSection(object):
         transaction.commit()
         self.bundle.stats['timings']['migration_finished'] = datetime.now()
 
-        log.info("Creating import reports...")
-        self.report_dir = self.create_report_dir()
+        if not self.skip_report:
+            log.info("Creating import reports...")
+            self.report_dir = self.create_report_dir()
 
-        self.store_as_json(self.bundle.errors, 'errors.json')
-        self.store_as_json(self.bundle.stats, 'stats.json')
+            self.store_as_json(self.bundle.errors, 'errors.json')
+            self.store_as_json(self.bundle.stats, 'stats.json')
 
-        report_data = DataCollector(self.bundle)()
-        self.bundle.report_data = report_data
+            report_data = DataCollector(self.bundle)()
+            self.bundle.report_data = report_data
 
-        self.build_ascii_summary(self.bundle)
-        self.build_xlsx_main_report(self.bundle)
-        self.build_xlsx_validation_report(self.bundle)
+            self.build_ascii_summary(self.bundle)
+            self.build_xlsx_main_report(self.bundle)
+            self.build_xlsx_validation_report(self.bundle)
 
     def create_report_dir(self):
         """Create a directory to store all import report files.

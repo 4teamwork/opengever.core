@@ -25,3 +25,5 @@ _build/
 /sphinx_build.log
 /src/
 /var/
+/.env
+/docker-compose.override.yml

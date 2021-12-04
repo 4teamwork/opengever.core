@@ -77,6 +77,7 @@ class ImportBundleForm(AutoExtensibleForm, Form):
                 no_intermediate_commits=True,
                 possibly_unpatch_collective_indexing=False,
                 no_separate_connection_for_sequence_numbers=False,
+                skip_report=True,
             )
             bundle_importer.run()
 

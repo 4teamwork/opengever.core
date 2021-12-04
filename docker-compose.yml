@@ -1,6 +1,22 @@
-version: "3.8"
+version: "3"
 
 services:
+  httpd:
+    image: 4teamwork/oghttpd:latest
+    build:
+      context: .
+      dockerfile: ./docker/httpd/Dockerfile
+    ports:
+      - "8088:80"
+    depends_on:
+      - ogui
+      - ogcore
+    environment:
+      - HTTP_PROTOCOL=http
+      - HTTP_PORT=8088
+      - PORTAL_HOST=ianus-frontend
+    profiles:
+      - all
   msgconvert:
     image: 4teamwork/msgconvert:latest
     ports:
@@ -23,3 +39,124 @@ services:
       - 3310:3310
     profiles:
       - clamav
+  ogui:
+    image: 4teamwork/ogui:latest
+    profiles:
+      - all
+  ogcore:
+    build:
+      context: .
+      dockerfile: ./docker/core/Dockerfile
+    image: 4teamwork/ogcore:latest
+    volumes:
+      - ./var/ogcore:/data
+    ports:
+      - "8080:8080"
+      - "8160:8160"
+    environment:
+      - PLONE_LDAP_BIND_UID=${PLONE_LDAP_BIND_UID}
+      - PLONE_LDAP_BIND_PWD=${PLONE_LDAP_BIND_PWD}
+      - MSGCONVERT_URL=http://msgconvert:8080/
+      - SABLON_URL=http://sablon:8080/
+      - PDFLATEX_URL=http://pdflatex:8080/
+      - WEASYPRINT_URL=http://weasyprint:8080/
+    depends_on:
+      - zeoserver
+      - ogds
+      - solr
+    profiles:
+      - all
+      - ogcore
+  zeoserver:
+    image: 4teamwork/zeoserver:4.3.20
+    volumes:
+      - ./var/ogcore:/data
+    profiles:
+      - all
+      - ogcore
+  ogds:
+    image: postgres:12-alpine
+    volumes:
+      - ./var/ogds:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=ogds
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=ogds
+    ports:
+      - 15432:5432
+    profiles:
+      - all
+      - ogds
+  solr:
+    image: 4teamwork/ogsolr:latest
+    build:
+      context: .
+      dockerfile: ./docker/solr/Dockerfile
+    command:
+      - solr-precreate
+      - ogsite
+      - /opt/solr/server/solr/configsets/ogsite
+    volumes:
+      - ./var/solr:/var/solr/data
+    ports:
+      - 18983:8983
+    profiles:
+      - all
+      - solr
+  ianus-frontend:
+    image: ghcr.io/4teamwork/ianus-frontend:2021.4.4
+    ports:
+      - "3000:80"
+    depends_on:
+      - ianus-backend
+    environment:
+      - IANUS_BACKEND_HOST=ianus-backend
+      - IANUS_PATH_PREFIX=/portal
+    profiles:
+      - all
+      - ianus
+  ianus-backend:
+    image: ghcr.io/4teamwork/ianus-backend:2021.4.4
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ianus-db
+    environment:
+      - DJANGO_SECRET_KEY=secret
+      - DJANGO_ALLOWED_HOSTS=localhost,teamraum,gever
+      - DJANGO_PATH_PREFIX=/portal
+      - DJANGO_SESSION_COOKIE_SECURE=False
+      - DJANGO_CSRF_COOKIE_SECURE=False
+      - DJANGO_DATABASE_NAME=ianus
+      - DJANGO_DATABASE_USER=ianus
+      - DJANGO_DATABASE_PASSWORD=secret
+      - DJANGO_DATABASE_HOST=ianus-db
+      - DJANGO_DATABASE_PORT=5432
+      - DJANGO_TWO_FACTOR_REQUIRED=False
+      - DJANGO_OIDC_RP_SIGN_ALGO=HS256
+      - DJANGO_AUTH_LDAP_BIND_DN=${DJANGO_AUTH_LDAP_BIND_DN}
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=${DJANGO_AUTH_LDAP_BIND_PASSWORD}
+      - DJANGO_AUTH_LDAP_SERVER_URI=ldaps://ldap1.4teamwork.ch,ldaps://ldap2.4teamwork.ch
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch
+      - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
+    profiles:
+      - all
+      - ianus
+  ianus-db:
+    image: postgres:12-alpine
+    volumes:
+      - ./var/ianus-db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=ianus
+      - POSTGRES_USER=ianus
+      - POSTGRES_PASSWORD=secret
+    profiles:
+      - all
+      - ianus
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.4.0/24

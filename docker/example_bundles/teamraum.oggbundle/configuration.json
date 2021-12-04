@@ -1,0 +1,39 @@
+{
+  "units": {
+    "admin_units": [
+      {
+        "unit_id": "teamraum",
+        "title": "Teamraum",
+        "ip_address": "127.0.0.1",
+        "site_url": "http://teamraum:8088/",
+        "public_url": "http://teamraum:8088/",
+        "abbreviation": "TR"
+      }
+    ],
+    "org_units": [
+      {
+        "unit_id": "teamraum",
+        "title": "Teamraum",
+        "admin_unit_id": "teamraum",
+        "users_group_id": "tr_benutzer",
+        "inbox_group_id": "administratoren"
+      }
+    ]
+  },
+  "registry": {
+    "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
+  },
+  "ldap": {
+    "users_base": "ou=Users,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch",
+    "groups_base": "ou=Groups,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch",
+    "servers": [
+        {
+            "host": "ldap1.4teamwork.ch",
+            "protocol": "ldaps",
+            "port": 636,
+            "conn_timeout": 5,
+            "op_timeout": 10
+        }
+    ]
+  }
+}
