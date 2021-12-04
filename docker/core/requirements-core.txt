@@ -271,7 +271,7 @@ python-dateutil==1.5
 python-docx==0.8.10
 python-editor==1.0.3
 python-gettext==1.0
-python-ldap==2.4.45
+python-ldap==3.4.0
 python-openid==2.2.5
 pytz==2021.3
 PyXB==1.2.5
