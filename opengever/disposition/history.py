@@ -30,7 +30,7 @@ class DispositionHistory(object):
 
     @classmethod
     def get(cls, mapping):
-        description = cls.registry.get(mapping.get('transition'))
+        description = cls.registry.get(mapping.response_type)
         if not description:
             raise ValueError(
                 'No specific entry found for {}'.format(
@@ -43,18 +43,18 @@ class DispositionHistory(object):
 
     @property
     def transition(self):
-        return self.mapping.get('transition')
+        return self.mapping.response_type
 
     @property
     def transition_label(self):
-        return translate(self.mapping.get('transition'),
+        return translate(self.mapping.response_type,
                          domain="plone",
                          context=getRequest())
 
     @property
     def date(self):
         return api.portal.get_localized_time(
-            datetime=self.mapping.get('date'), long_format=True)
+            datetime=self.mapping.created, long_format=True)
 
     def msg(self):
         _('msg_disposition_updated', default=u'Updated by ${user}')
@@ -62,14 +62,14 @@ class DispositionHistory(object):
 
     @property
     def actor_label(self):
-        return Actor.lookup(self.mapping.get('actor_id')).get_label()
+        return Actor.lookup(self.mapping.creator).get_label()
 
     @property
     def _msg_mapping(self):
-        return {'user': Actor.lookup(self.mapping.get('actor_id')).get_link()}
+        return {'user': Actor.lookup(self.mapping.creator).get_link()}
 
     def details(self):
-        return self.mapping.get('dossiers')
+        return self.mapping.dossiers
 
 
 class Added(DispositionHistory):

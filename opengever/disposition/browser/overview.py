@@ -3,7 +3,6 @@ from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
 from opengever.disposition.delivery import DELIVERY_STATUS_LABELS
 from opengever.disposition.delivery import DeliveryScheduler
-from opengever.disposition.interfaces import IHistoryStorage
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
@@ -99,7 +98,7 @@ class DispositionOverview(BrowserView):
         return api.content.get_state(self.context) == 'disposition-state-closed'
 
     def get_history(self):
-        return IHistoryStorage(self.context).get_history()
+        return self.context.get_history()
 
     def get_states(self):
         """Returns a sorted list of all disposition states.

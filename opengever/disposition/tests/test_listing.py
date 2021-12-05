@@ -4,8 +4,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
+from opengever.base.response import IResponseContainer
 from opengever.base.security import elevated_privileges
-from opengever.disposition.interfaces import IHistoryStorage
+from opengever.disposition.response import DispositionResponse
 from opengever.latex.listing import ILaTexListing
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
@@ -167,8 +168,8 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
         self.login(self.records_manager)
 
         with freeze(datetime(2016, 11, 1, 11, 0)):
-            storage = IHistoryStorage(self.disposition)
-            storage.add('edited', api.user.get_current().getId(), [])
+            response = DispositionResponse(response_type='edited')
+            IResponseContainer(self.disposition).add(response)
 
         with freeze(datetime(2016, 11, 6, 12, 33)), elevated_privileges():
             api.content.transition(self.disposition,
@@ -197,8 +198,8 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
     def test_transition_label_for_added_and_edited_entries_is_translated_correctly(self):
         self.login(self.records_manager)
 
-        storage = IHistoryStorage(self.disposition)
-        storage.add('edited', api.user.get_current().getId(), [])
+        response = DispositionResponse(response_type='edited')
+        IResponseContainer(self.disposition).add(response)
 
         rows = self.get_listing_rows(self.disposition,
                                      'disposition_history',

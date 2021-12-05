@@ -1,5 +1,6 @@
 from opengever.activity.base import BaseActivity
 from opengever.disposition import _
+from opengever.disposition.history import DispositionHistory
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from Products.CMFPlone import PloneMessageFactory
@@ -43,16 +44,17 @@ class DispositionStateChangedActivity(BaseActivity):
 
     @property
     def kind(self):
-        return self.entry.transition
+        return self.entry.response_type
 
     @property
     def label(self):
         return self.translate_to_all_languages(
-            PloneMessageFactory(self.entry.transition))
+            PloneMessageFactory(self.entry.response_type))
 
     @property
     def summary(self):
-        return self.translate_to_all_languages(self.entry.msg())
+        history = DispositionHistory.get(self.entry)
+        return self.translate_to_all_languages(history.msg())
 
     @property
     def description(self):

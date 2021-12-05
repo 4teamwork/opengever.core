@@ -6,10 +6,10 @@ from opengever.disposition.history import AppraisedToClosed
 from opengever.disposition.history import Archived
 from opengever.disposition.history import Closed
 from opengever.disposition.history import Disposed
+from opengever.disposition.history import DispositionHistory
 from opengever.disposition.history import Edited
 from opengever.disposition.history import Refused
 from opengever.disposition.interfaces import IAppraisal
-from opengever.disposition.interfaces import IHistoryStorage
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -27,7 +27,7 @@ class TestHistoryEntries(IntegrationTestCase):
     def test_add_history_entry_when_created_a_disposition(self):
         self.login(self.records_manager)
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Added))
         self.assertEquals('add', entry.css_class)
@@ -43,7 +43,7 @@ class TestHistoryEntries(IntegrationTestCase):
                                    self.offered_dossier_to_destroy]})
         browser.find('Save').click()
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Edited))
         self.assertEquals('edit', entry.css_class)
@@ -55,7 +55,7 @@ class TestHistoryEntries(IntegrationTestCase):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraise')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Appraised))
         self.assertEquals('appraise', entry.css_class)
@@ -70,7 +70,7 @@ class TestHistoryEntries(IntegrationTestCase):
             api.content.transition(obj=self.disposition,
                                    transition='disposition-transition-dispose')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Disposed))
         self.assertEquals('dispose', entry.css_class)
@@ -88,7 +88,7 @@ class TestHistoryEntries(IntegrationTestCase):
             api.content.transition(obj=self.disposition,
                                    transition='disposition-transition-appraised-to-closed')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, AppraisedToClosed))
         self.assertEquals('close', entry.css_class)
@@ -107,7 +107,7 @@ class TestHistoryEntries(IntegrationTestCase):
             api.content.transition(obj=self.disposition,
                                    transition='disposition-transition-archive')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Archived))
         self.assertEquals('archive', entry.css_class)
@@ -127,7 +127,7 @@ class TestHistoryEntries(IntegrationTestCase):
             api.content.transition(obj=self.disposition,
                                    transition='disposition-transition-close')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Closed))
         self.assertEquals('close', entry.css_class)
@@ -141,7 +141,7 @@ class TestHistoryEntries(IntegrationTestCase):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-refuse')
 
-        entry = IHistoryStorage(self.disposition).get_history()[0]
+        entry = self.disposition.get_history()[0]
 
         self.assertTrue(isinstance(entry, Refused))
         self.assertEquals('refuse', entry.css_class)
@@ -167,7 +167,7 @@ class TestHistoryEntries(IntegrationTestCase):
             ['disposition-transition-close', 'disposition-transition-archive',
              'disposition-transition-dispose', 'disposition-transition-appraise',
              'added'],
-            [item.transition for item in IHistoryStorage(self.disposition).get_history()]
+            [item.transition for item in self.disposition.get_history()]
         )
 
 

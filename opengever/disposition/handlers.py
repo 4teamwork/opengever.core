@@ -1,8 +1,8 @@
+from opengever.base.response import IResponseContainer
 from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.activities import DispositionStateChangedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
-from opengever.disposition.interfaces import IHistoryStorage
-from plone import api
+from opengever.disposition.response import DispositionResponse
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 
@@ -27,21 +27,20 @@ def disposition_state_changed(context, event):
         context.store_sip_package()
         context.schedule_sip_for_delivery()
 
-    storage = IHistoryStorage(context)
-    storage.add(event.action,
-                api.user.get_current().getId(),
-                context.get_dossier_representations())
+    response = DispositionResponse(response_type=event.action)
+    response.dossiers = [dossier.get_storage_representation() for dossier
+                         in context.get_dossier_representations()]
 
-    DispositionStateChangedActivity(
-        context, getRequest(), storage.get_history()[0]).record()
+    IResponseContainer(context).add(response)
+    DispositionStateChangedActivity(context, getRequest(), response).record()
 
 
 def disposition_added(context, event):
-    storage = IHistoryStorage(context)
-    storage.add('added',
-                api.user.get_current().getId(),
-                context.get_dossier_representations())
+    response = DispositionResponse(response_type='added')
+    response.dossiers = [dossier.get_storage_representation() for dossier
+                         in context.get_dossier_representations()]
 
+    IResponseContainer(context).add(response)
     DispositionAddedActivity(context, getRequest()).record()
 
 
@@ -53,7 +52,8 @@ def disposition_modified(context, event):
     if IDuringDossierDestruction.providedBy(context.REQUEST):
         return
 
-    storage = IHistoryStorage(context)
-    storage.add('edited',
-                api.user.get_current().getId(),
-                context.get_dossier_representations())
+    response = DispositionResponse(response_type='edited')
+    response.dossiers = [dossier.get_storage_representation() for dossier
+                         in context.get_dossier_representations()]
+
+    IResponseContainer(context).add(response)
