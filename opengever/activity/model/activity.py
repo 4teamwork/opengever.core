@@ -35,6 +35,7 @@ class Activity(Base, Translatable):
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
     resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
     resource = relationship("Resource", backref="activities")
+    external_resource_url = Column(String(255), nullable=True)
 
     def __repr__(self):
         return u'<Activity {} on {} >'.format(self.kind, repr(self.resource))

@@ -116,11 +116,13 @@ class NotificationCenter(object):
         return tuple(resource.subscriptions)
 
     def add_activity(self, oguid, kind, title, label, summary, actor_id,
-                     description, notification_recipients=None):
+                     description, notification_recipients=None,
+                     external_resource_url=None):
         """Creates an activity and the related notifications..
         """
         activity = self._add_activity(
-            oguid, kind, title, label, summary, actor_id, description)
+            oguid, kind, title, label, summary, actor_id, description,
+            external_resource_url)
 
         errors = self.create_notifications(activity, notification_recipients)
         return {'activity': activity, 'errors': errors}
@@ -193,7 +195,8 @@ class NotificationCenter(object):
         query = query.join(Notification.activity)
         return query.count()
 
-    def _add_activity(self, oguid, kind, title, label, summary, actor_id, description):
+    def _add_activity(self, oguid, kind, title, label, summary, actor_id,
+                      description, external_resource_url=None):
         """Creates an activity instance and add it to the database.
         """
         if description is None:
@@ -203,7 +206,8 @@ class NotificationCenter(object):
         if not resource:
             resource = self.add_resource(oguid)
 
-        activity = Activity(resource=resource, kind=kind, actor_id=actor_id)
+        activity = Activity(resource=resource, kind=kind, actor_id=actor_id,
+                            external_resource_url=external_resource_url)
 
         # language dependent attributes
         for language, value in label.items():
@@ -284,11 +288,13 @@ class PloneNotificationCenter(NotificationCenter):
         self.remove_watcher_from_resource(obj, actorid, TASK_ISSUER_ROLE)
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description,
-                     notification_recipients=None):
+                     notification_recipients=None, external_resource_url=None):
         oguid = self._get_oguid_for(obj)
         with NotificationErrorHandler() as handler:
             result = super(PloneNotificationCenter, self).add_activity(
-                oguid, kind, title, label, summary, actor_id, description, notification_recipients)
+                oguid, kind, title, label, summary, actor_id, description,
+                notification_recipients,
+                external_resource_url=external_resource_url)
             if result.get('errors'):
                 handler.show_not_notified_message()
             return result
@@ -364,7 +370,7 @@ class DisabledNotificationCenter(NotificationCenter):
         return []
 
     def add_activity(self, obj, kind, title, label, summary, actor_id, description,
-                     notification_recipients=None):
+                     notification_recipients=None, external_resource_url=None):
         pass
 
     def get_users_notifications(self, userid, only_unread=False, limit=None, badge_only=False):
