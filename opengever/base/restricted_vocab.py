@@ -1,8 +1,10 @@
 from opengever.base.acquisition import acquire_field_value
-from Products.CMFCore.interfaces import ISiteRoot
 from opengever.base.acquisition import NO_VALUE_FOUND
 from opengever.base.interfaces import IDuringContentCreation
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from plone.app.dexterity.behaviors.metadata import MetadataBase
+from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFPlone.utils import safe_callable
 import zope.schema.vocabulary
 
@@ -147,7 +149,8 @@ def propagate_vocab_restrictions(container, event, restricted_fields, marker):
         # XXX: Depth should not be limited (Issue #2027)
         path={'depth': 2,
               'query': '/'.join(container.getPhysicalPath())},
-        object_provides=(marker.__identifier__,)
+        object_provides=(marker.__identifier__,),
+        sort_on="path"
     )
 
     for child in children:
@@ -160,3 +163,6 @@ def propagate_vocab_restrictions(container, event, restricted_fields, marker):
                 # acquired from above
                 new_value = acquire_field_value(field, obj.aq_parent)
                 field.set(field.interface(obj), new_value)
+
+                if field.__name__ == "retention_period" and IDossierMarker.providedBy(obj) and IDossier(obj).end:
+                    obj.reindexObject(idxs=["retention_expiration"])

@@ -8,6 +8,7 @@ from opengever.base.interfaces import IRetentionPeriodRegister
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.dexterity.utils import createContentInContainer
+import datetime
 import json
 
 
@@ -482,6 +483,34 @@ class TestRetentionPeriodPropagation(IntegrationTestCase):
         value = self.get_retention_period(dossier)
         # Reduced retention period should have propagated to dossier
         self.assertEqual(15, value)
+
+    @browsing
+    def test_retention_expiration_index_is_updated(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        set_retention_period_restricted(True)
+
+        self.set_retention_period(self.leaf_repofolder, 15)
+        self.set_retention_period(self.expired_dossier, 15)
+
+        self.assertEqual(15, self.get_retention_period(self.leaf_repofolder))
+        self.assertEqual(15, self.get_retention_period(self.expired_dossier))
+
+        expected_index = self.dateindex_value_from_datetime(
+            datetime.date(2016, 1, 1))
+        self.assert_index_value(expected_index, 'retention_expiration',
+                                self.expired_dossier)
+
+        # Reduce retention period
+        browser.open(self.leaf_repofolder, view='edit')
+        browser.fill({'Retention period (years)': '5'}).save()
+
+        self.assertEqual(5, self.get_retention_period(self.leaf_repofolder))
+        self.assertEqual(5, self.get_retention_period(self.expired_dossier))
+        expected_index = self.dateindex_value_from_datetime(
+            datetime.date(2006, 1, 1))
+        self.assert_index_value(expected_index, 'retention_expiration',
+                                self.expired_dossier)
 
     @browsing
     def test_change_doesnt_propagate_if_old_value_still_valid(self, browser):

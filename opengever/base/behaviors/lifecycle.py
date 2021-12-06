@@ -104,10 +104,7 @@ def propagate_vocab_restrictions_to_children(container, event):
        IContainerModifiedEvent.providedBy(event):
         return
 
-    restricted_fields = [
-        ILifeCycle['retention_period'],
-        ILifeCycle['archival_value'],
-        ILifeCycle['custody_period']]
+    restricted_fields = [ILifeCycle['retention_period']]
 
     propagate_vocab_restrictions(
         container, event, restricted_fields, ILifeCycleMarker)
