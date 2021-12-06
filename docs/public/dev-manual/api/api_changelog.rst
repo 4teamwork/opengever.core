@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Disposition serialization contains now responses. [phgross]
 - @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
 
 - Include is_completed in sql task serialization.
