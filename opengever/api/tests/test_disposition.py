@@ -206,6 +206,44 @@ class TestDispositionSerialization(IntegrationTestCase):
             },
             browser.json['dossier_details'])
 
+    @browsing
+    def test_contains_responses_list_with_additional_dossiers_list(self, browser):
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition_with_sip,
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                {u'creator': {u'token': u'ramon.flucht', u'title': u'Flucht Ramon'},
+                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663373000000',
+                 u'created': u'2016-08-31T19:09:33',
+                 u'response_id': 1472663373000000,
+                 u'response_type': u'added',
+                 u'dossiers': [
+                     {u'reference_number': u'Client1 1.1 / 13',
+                      u'title': u'Dossier for SIP',
+                      u'former_state': u'dossier-state-resolved',
+                      u'repository_title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                      u'intid': 1019033300,
+                      u'appraisal': True}],
+                 u'text': u'',
+                 u'changes': []},
+                {u'creator': {u'token': u'ramon.flucht', u'title': u'Flucht Ramon'},
+                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663493000000',
+                 u'created': u'2016-08-31T19:11:33',
+                 u'response_id': 1472663493000000,
+                 u'response_type': u'disposition-transition-dispose',
+                 u'dossiers': [
+                     {u'reference_number': u'Client1 1.1 / 13',
+                      u'title': u'Dossier for SIP',
+                      u'former_state': u'dossier-state-resolved',
+                      u'repository_title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+                      u'intid': 1019033300,
+                      u'appraisal': True}],
+                 u'text': u'',
+                 u'changes': []}],
+            browser.json['responses'])
+
 
 class TestAppraisalUpdate(IntegrationTestCase):
 
