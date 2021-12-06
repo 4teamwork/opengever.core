@@ -276,6 +276,72 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals('fd', resource.admin_unit_id)
         self.assertEquals(123, resource.int_id)
 
+    def test_activity_requires_resource_or_external_resource_url(self):
+        with self.assertRaises(TypeError) as cm:
+            self.center.add_activity(
+                None,
+                'activity_kind_without_resource',
+                {'en': 'Kennzahlen 2014 erfassen'},
+                {'en': 'Task added'},
+                {'en': 'Task bla added by Hugo'},
+                'hugo.boss',
+                {'en': None})
+
+        self.assertEqual(
+            "Either 'resource' or 'external_resource_url' must be specified "
+            "for an activity", str(cm.exception))
+
+    def test_resource_and_external_resource_url_are_mutually_exclusive(self):
+        with self.assertRaises(TypeError) as cm:
+            self.center.add_activity(
+                Oguid('fd', '123'),
+                'activity_kind_without_resource',
+                {'en': 'Kennzahlen 2014 erfassen'},
+                {'en': 'Task added'},
+                {'en': 'Task bla added by Hugo'},
+                'hugo.boss',
+                {'en': None},
+                external_resource_url='http://example.org')
+
+        self.assertEqual(
+            "Arguments 'resource' and 'external_resource_url' are mutually "
+            "exclusive for activities", str(cm.exception))
+
+    def test_activities_without_resource_require_notification_recipients(self):
+        with self.assertRaises(TypeError) as cm:
+            self.center.add_activity(
+                None,
+                'activity_kind_without_resource',
+                {'en': 'Kennzahlen 2014 erfassen'},
+                {'en': 'Task added'},
+                {'en': 'Task bla added by Hugo'},
+                'hugo.boss',
+                {'en': None},
+                external_resource_url='http://example.org')
+
+        self.assertEqual(
+            "Argument 'notification_recipients' must be specified for "
+            "activities without a resource", str(cm.exception))
+
+    def test_can_create_activity_without_resource(self):
+        activity = self.center.add_activity(
+            None,
+            'activity_kind_without_resource',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task added'},
+            {'en': 'Task bla added by Hugo'},
+            'hugo.boss',
+            {'en': None},
+            notification_recipients=['peter'],
+            external_resource_url='http://example.org').get('activity')
+
+        self.assertIsNone(activity.resource)
+        self.assertEqual(activity.external_resource_url, 'http://example.org')
+
+        notification = Notification.query.by_user('peter').first()
+        self.assertEqual(activity, notification.activity)
+        self.assertFalse(notification.is_read)
+
     def test_creates_notifications_for_each_resource_watcher(self):
         create(Builder('ogds_user').id(u'peter'))
         create(Builder('ogds_user').id(u'hugo'))

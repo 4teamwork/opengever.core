@@ -97,6 +97,35 @@ class TestResolveNotificationView(IntegrationTestCase):
         self.assertEquals(self.task.absolute_url(), browser.url)
 
     @browsing
+    def test_redirects_to_external_resource_url_for_activities_without_resource(self, browser):
+        self.login(self.regular_user, browser)
+
+        activity_without_resource = create(
+            Builder('activity')
+            .having(
+                resource=None,
+                external_resource_url='http://example.org',
+            )
+        )
+        create(
+            Builder('notification')
+            .id(42)
+            .having(
+                activity=activity_without_resource,
+                userid=self.regular_user.id,
+            )
+        )
+
+        browser.allow_redirects = False
+        browser.open(
+            self.portal,
+            view='resolve_notification',
+            data={'notification_id': 42})
+
+        self.assertEqual(302, browser.status_code)
+        self.assertEqual('http://example.org', browser.headers['location'])
+
+    @browsing
     def test_preserves_query_string_in_remote_url(self, browser):
         self.login(self.regular_user, browser)
         url = '{}/resolve_notification?notification_id={}&foo=bar'.format(

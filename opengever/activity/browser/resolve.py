@@ -26,9 +26,18 @@ class ResolveNotificationView(ResolveOGUIDView):
         self.redirect()
 
     def redirect(self):
-        """Redirect to the affected resource. If the resource is stored
-        in an other admin_unit than the current one, it redirects to the
-        resolve_oguid view on this admin_unit."""
+        """Redirect to the affected resource.
+
+        If the resource is stored in an other admin_unit than the current one,
+        it redirects to the resolve_oguid view on this admin_unit.
+
+        If there is no resource, it must be an external resource and we
+        redirect to the external_resource_url.
+        """
+        if self.notification.activity.resource is None:
+            external_url = self.notification.activity.external_resource_url
+            return self.request.RESPONSE.redirect(external_url)
+
         oguid = self.notification.activity.resource.oguid
 
         if oguid.is_on_current_admin_unit:

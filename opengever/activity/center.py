@@ -202,9 +202,11 @@ class NotificationCenter(object):
         if description is None:
             description = {}
 
-        resource = self.fetch_resource(oguid)
-        if not resource:
-            resource = self.add_resource(oguid)
+        resource = None
+        if oguid:
+            resource = self.fetch_resource(oguid)
+            if not resource:
+                resource = self.add_resource(oguid)
 
         activity = Activity(resource=resource, kind=kind, actor_id=actor_id,
                             external_resource_url=external_resource_url)
