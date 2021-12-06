@@ -563,6 +563,14 @@
   <plone:service
       method="GET"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".kub.KuBGet"
+      name="@kub"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".actors.ActorsGet"
       name="@actors"
       permission="zope2.View"

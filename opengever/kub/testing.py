@@ -18,14 +18,19 @@ class KuBIntegrationTestCase(IntegrationTestCase):
         api.portal.set_registry_record('service_token', u'secret', IKuBSettings)
         self.client = KuBClient()
 
-    def mock_get_by_id(self, mocker, _id):
+    def mock_get_by_id(self, mocker, _id, **kwargs):
         url = u'{}search?id={}'.format(self.client.kub_api_url, _id)
-        mocker.get(url, json=KUB_RESPONSES[url])
+        mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
-    def mock_search(self, mocker, query_str):
+    def mock_search(self, mocker, query_str, **kwargs):
         url = u'{}search?q={}'.format(self.client.kub_api_url, query_str)
-        mocker.get(url, json=KUB_RESPONSES[url])
+        mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
+        return url
+
+    def mock_get_full_entity_by_id(self, mocker, _id, **kwargs):
+        url = self.client.get_resolve_url(_id)
+        mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
 
@@ -99,4 +104,34 @@ KUB_RESPONSES = {
         }
     ],
     "http://localhost:8000/api/v1/search?id=invalid-id": [],
+    "http://localhost:8000/api/v1/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc": {
+        "addresses": [],
+        "canton": None,
+        "country": "",
+        "countryIdISO2": "",
+        "created": "2021-11-14T00:00:00+01:00",
+        "dateOfBirth": None,
+        "description": "",
+        "emailAddresses": [],
+        "firstName": "Julie",
+        "fullName": "Dupont Julie",
+        "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+        "languageOfCorrespondance": "fr",
+        "maritalStatus": 2,
+        "memberships": [],
+        "modified": "2021-11-14T00:00:00+01:00",
+        "officialName": "Dupont",
+        "organizations": [],
+        "originName": "Paris",
+        "phoneNumbers": [],
+        "primaryEmail": None,
+        "primaryPhoneNumber": None,
+        "salutation": "Frau",
+        "sex": 2,
+        "status": 1,
+        "tags": [],
+        "thirdPartyId": None,
+        "title": "",
+        "urls": []
+    }
 }

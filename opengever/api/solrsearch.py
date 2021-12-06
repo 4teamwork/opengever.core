@@ -2,7 +2,7 @@ from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
-from opengever.api.linked_workspaces import request_error_handler
+from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -269,7 +269,7 @@ class SolrSearchGet(SolrQueryBaseService):
 
 class TeamraumSolrSearchGet(Service):
 
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         # Validation will be done on the remote system
         params = self.request.form.copy()

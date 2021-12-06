@@ -1,5 +1,4 @@
-from functools import wraps
-from opengever.base.sentry import maybe_report_exception
+from opengever.api.utils import create_proxy_request_error_handler
 from opengever.document.behaviors import IBaseDocument
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -11,96 +10,19 @@ from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
-from requests import HTTPError
-from requests import Timeout
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
-from zope.publisher.http import status_reasons
 from zope.publisher.interfaces import IPublishTraverse
-import json
 import logging
-import sys
-import traceback
-
-REQUEST_TIMEOUT = 408
-GATEWAY_TIMEOUT = 504
-BAD_GATEWAY = 502
 
 logger = logging.getLogger('opengever.api: LinkedWorkspaces')
 
-
-def request_error_handler(func):
-    """Decorator function to handle request errors to the teamraum deployment.
-
-    We handle HTTP and timeout-errors in a special way. All other request errors
-    are handled by the rest-api with a 500 Internal Server Error.
-    """
-    def handle_http_error(obj, exception):
-        """Handles general http errors.
-
-        We group these errors in a 502 Bad Gateway error.
-
-        HTTP timeout errors will map to a 504 gateway timeout.
-        """
-        service_status_code = exception.response.status_code
-        service_error = {'status_code': service_status_code}
-
-        if service_status_code in [REQUEST_TIMEOUT, GATEWAY_TIMEOUT]:
-            status_code = GATEWAY_TIMEOUT
-            service_error['message'] = str(exception).decode('utf-8')
-        else:
-            status_code = BAD_GATEWAY
-
-        try:
-            service_error.update(json.loads(exception.response.text))
-        except ValueError:
-            # No response body
-            pass
-
-        obj.request.response.setStatus(status_code)
-        response = {
-            u'message': u'Error while communicating with the teamraum deployment',
-            u'type': status_reasons.get(status_code),
-            u'service_error': service_error
-        }
-        return response
-
-    def handle_timeout_error(obj, exception):
-        """Handles all timeout errors. This can be:
-
-        - ReadTimeout
-        - ConnectTimeout
-
-        We group these errors in a 504 Gateway Timeout error.
-        """
-        obj.request.response.setStatus(GATEWAY_TIMEOUT)
-        return {
-            u'message': str(exception).decode('utf-8'),
-            u'type': type(exception).__name__.decode('utf-8'),
-        }
-
-    def log_exception_to_sentry(obj):
-        e_type, e_value, tb = sys.exc_info()
-        maybe_report_exception(obj, obj.request, e_type, e_value, tb)
-        formatted_traceback = ''.join(traceback.format_exception(e_type, e_value, tb))
-        logger.error('Exception while requesting teamraum deployment:\n%s', formatted_traceback)
-
-    @wraps(func)
-    def handler(obj, *args, **kwargs):
-        try:
-            return func(obj, *args, **kwargs)
-        except HTTPError as exception:
-            log_exception_to_sentry(obj)
-            return handle_http_error(obj, exception)
-        except Timeout as exception:
-            log_exception_to_sentry(obj)
-            return handle_timeout_error(obj, exception)
-
-    return handler
+teamraum_request_error_handler = create_proxy_request_error_handler(
+    logger, u'Error while communicating with the teamraum deployment')
 
 
 class LinkedWorkspacesService(Service):
@@ -125,7 +47,7 @@ class ProxyHypermediaBatch(LinkedWorkspacesService):
     def get_remote_client_reply(self):
         raise NotImplementedError()
 
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         batch = self.get_remote_client_reply()
         proxy_batch = HypermediaBatch(self.request, [None for i in range(batch['items_total'])])
@@ -153,7 +75,7 @@ class LinkedWorkspacesPost(LinkedWorkspacesService):
             raise Unauthorized
         return super(LinkedWorkspacesPost, self).render()
 
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -172,7 +94,7 @@ class LinkToWorkspacePost(LinkedWorkspacesService):
             raise Unauthorized
         return super(LinkToWorkspacePost, self).render()
 
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -194,7 +116,7 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
             raise Unauthorized
         return super(UnlinkWorkspacePost, self).render()
 
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
         data = json_body(self.request)
@@ -209,7 +131,7 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
 class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document to a linked workspace.
     """
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -287,7 +209,7 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document form a linked workspace
     into the context (a dossier).
     """
-    @request_error_handler
+    @teamraum_request_error_handler
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
