@@ -28,7 +28,7 @@ class Overview(BrowserView, GeverTabMixin):
 
     def documents(self):
         # merge and sort the two different lists
-        document_list = self.context.documents()
+        document_list = self.context.task_documents()
         document_list.sort(lambda a, b: cmp(b.modified(), a.modified()))
 
         return IContentListing(document_list)

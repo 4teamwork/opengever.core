@@ -212,7 +212,7 @@ class DefaultTransitionExtender(TransitionExtender):
         intids = getUtility(IIntIds)
 
         current_document_ids = [intids.getId(document) for document
-                                in self.context.documents()]
+                                in self.context.task_documents()]
         next_task_related_items = [item.to_id for item
                                    in ITask(next_task).relatedItems]
         ITask(next_task).relatedItems = [
@@ -439,7 +439,7 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
     def after_transition_hook(self, transition, disable_sync, transition_params):
         create_subtasks(self.context,
                         transition_params.pop('responsibles'),
-                        transition_params.get('documents', []),
+                        transition_params.pop('documents', []),
                         transition_params)
 
 

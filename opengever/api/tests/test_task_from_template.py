@@ -29,8 +29,8 @@ class TestSequentialTaskPassDocumentsToNextTask(IntegrationTestCase):
 
         self.seq_subtask_1.reindexObject()
         self.assertItemsEqual([self.document, self.seq_subtask_1_document],
-                              self.seq_subtask_1.documents())
-        self.assertItemsEqual([], self.seq_subtask_2.documents())
+                              self.seq_subtask_1.task_documents())
+        self.assertItemsEqual([], self.seq_subtask_2.task_documents())
 
     @browsing
     def test_can_pass_documents_to_next_task_with_open_resolved_transition(self, browser):
