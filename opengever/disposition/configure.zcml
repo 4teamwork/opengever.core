@@ -13,7 +13,6 @@
   <include package=".viewlets" />
 
   <adapter factory=".appraisal.Appraisal" />
-  <adapter factory=".history.HistoryStorage" />
   <adapter factory=".validators.OfferedDossiersValidator" />
 
   <adapter

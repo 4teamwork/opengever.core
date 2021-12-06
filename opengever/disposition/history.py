@@ -1,16 +1,8 @@
-from datetime import datetime
 from opengever.disposition import _
-from opengever.disposition.interfaces import IDisposition
-from opengever.disposition.interfaces import IHistoryStorage
 from opengever.ogds.base.actor import Actor
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from plone import api
-from zope.annotation.interfaces import IAnnotations
-from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import implementer
 
 
 class DispositionHistory(object):
@@ -174,41 +166,3 @@ class Refused(DispositionHistory):
             mapping=self._msg_mapping)
 
 DispositionHistory.add_description(Refused)
-
-
-@implementer(IHistoryStorage)
-@adapter(IDisposition)
-class HistoryStorage(object):
-
-    key = 'disposition_history'
-
-    def __init__(self, context):
-        self.context = context
-        self._annotations = IAnnotations(self.context)
-        if self.key not in self._annotations.keys():
-            self._annotations[self.key] = PersistentList()
-
-    @property
-    def _storage(self):
-        return self._annotations[self.key]
-
-    def add(self, transition, actor_id, dossiers):
-        """Adds a new history entry to the storage.
-        transition: string
-        actor_id: user_id as string
-        dossiers: a list of dossier representations.
-        """
-
-        dossier_list = PersistentList(
-            [dossier.get_storage_representation() for dossier in dossiers])
-        self._storage.append(
-            PersistentDict({'transition': transition,
-                            'actor_id': actor_id,
-                            'date': datetime.now(),
-                            'dossiers': dossier_list}))
-
-    def get_history(self):
-        entries = [DispositionHistory.get(mapping)
-                   for mapping in self._storage]
-        entries.reverse()
-        return entries
