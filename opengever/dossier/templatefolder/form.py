@@ -5,11 +5,13 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
+from opengever.contact import _ as contact_mf
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.sources import ContactsSourceBinder
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
+from opengever.kub import is_kub_feature_enabled
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.tabbedview.helper import document_with_icon
 from plone import api
@@ -17,6 +19,7 @@ from plone.autoform import directives as form
 from plone.autoform.form import AutoExtensibleForm
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
+from Products.statusmessages.interfaces import IStatusMessage
 from sqlalchemy import inspect
 from sqlalchemy.exc import NoInspectionAvailable
 from z3c.form import button
@@ -171,6 +174,11 @@ class SelectTemplateDocumentWizardStep(
             self.fields = self.fields.omit('recipient')
         if is_client_ip_in_office_connector_disallowed_ip_ranges():
             self.fields = self.fields.omit('edit_after_creation')
+        if is_kub_feature_enabled():
+            msg = contact_mf(
+                u'warning_kub_contact_new_ui_only',
+                default=u'Kub contacts are only supported in the new frontend')
+            IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
     @property
     def schema(self):
