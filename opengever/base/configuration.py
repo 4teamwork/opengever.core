@@ -25,6 +25,7 @@ from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.kub import is_kub_feature_enabled
 from opengever.mail.interfaces import IMailDownloadSettings
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.nightlyjobs.interfaces import INightlyJobsSettings
@@ -139,7 +140,7 @@ class GeverSettingsAdpaterV1(object):
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa
         features['changed_for_end_date'] = api.portal.get_registry_record('use_changed_for_end_date', interface=IDossierResolveProperties)  # noqa
-        features['contacts'] = api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings)
+        features['contacts'] = self._get_contact_type()
         features['disposition_disregard_retention_period'] = api.portal.get_registry_record('disregard_retention_period', interface=IDispositionSettings)  # noqa
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
         features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
@@ -178,3 +179,10 @@ class GeverSettingsAdpaterV1(object):
 
     def is_filing_number_feature_installed(self):
         return IFilingNumberActivatedLayer.providedBy(getRequest())
+
+    def _get_contact_type(self):
+        if api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings):
+            return "sql"
+        elif is_kub_feature_enabled():
+            return "kub"
+        return "plone"

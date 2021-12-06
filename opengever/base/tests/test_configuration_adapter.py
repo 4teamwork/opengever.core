@@ -1,8 +1,10 @@
 from collections import OrderedDict
 from contextlib import contextmanager
 from opengever.base.interfaces import IGeverSettings
+from opengever.kub.interfaces import IKuBSettings
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
+from plone import api
 import os
 
 
@@ -65,7 +67,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('archival_file_conversion', False),
                 ('archival_file_conversion_blacklist', []),
                 ('changed_for_end_date', True),
-                ('contacts', False),
+                ('contacts', 'plone'),
                 ('disposition_disregard_retention_period', False),
                 ('disposition_transport_filesystem', False),
                 ('disposition_transport_ftps', False),
@@ -169,3 +171,17 @@ class TestConfigurationAdapter(IntegrationTestCase):
         with custom_apps_url('http://example.com/api/apps'):
             configuration = IGeverSettings(self.portal).get_config()
         self.assertEqual(configuration, expected_configuration)
+
+    def test_contact_type(self):
+        contact_type = IGeverSettings(self.portal)._get_contact_type()
+        self.assertEqual("plone", contact_type)
+
+        self.activate_feature("contact")
+        contact_type = IGeverSettings(self.portal)._get_contact_type()
+        self.assertEqual("sql", contact_type)
+
+        self.deactivate_feature("contact")
+        api.portal.set_registry_record(
+            'base_url', u'http://localhost:8000', IKuBSettings)
+        contact_type = IGeverSettings(self.portal)._get_contact_type()
+        self.assertEqual("kub", contact_type)

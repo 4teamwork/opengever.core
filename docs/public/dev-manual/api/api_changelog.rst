@@ -9,6 +9,8 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Contact feature in the ``@config`` endpoint is now one of ``plone``, ``sql`` and ``kub``. [njohner]
+
 Other Changes
 ^^^^^^^^^^^^^
 - Add new endpoint ``@external-activities`` (see :ref:`docs <external-activities>`)
