@@ -1,8 +1,7 @@
 from ftw.testbrowser import browsing
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import IntegrationTestCase
-from plone import api
-from zExceptions import BadRequest
-from zExceptions import NotFound
+import requests_mock
 
 
 class TestGlobalSourcesGet(IntegrationTestCase):
@@ -14,14 +13,15 @@ class TestGlobalSourcesGet(IntegrationTestCase):
         url = '{}/@globalsources'.format(self.portal.absolute_url())
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertEqual(
             [{u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups',
               u'title': u'all_users_and_groups'},
              {u'@id': u'http://nohost/plone/@globalsources/filtered_groups',
               u'title': u'filtered_groups'},
              {u'@id': u'http://nohost/plone/@globalsources/current_admin_unit_org_units',
-              u'title': u'current_admin_unit_org_units'}],
+              u'title': u'current_admin_unit_org_units'},
+             {u'@id': u'http://nohost/plone/@globalsources/contacts',
+              u'title': u'contacts'}],
             browser.json)
 
     @browsing
@@ -57,3 +57,24 @@ class TestGlobalSourcesGet(IntegrationTestCase):
                          u'token': u'robert.ziegler'}],
              u'items_total': 1},
             browser.json)
+
+
+@requests_mock.Mocker()
+class TestGlobalSourcesGetWithKubContacts(KuBIntegrationTestCase):
+
+    @browsing
+    def test_query_contacts(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+        query_str = "Julie"
+        url = self.mock_search(mocker, query_str)
+
+        url = '{}/@globalsources/contacts?query={}'.format(
+            self.portal.absolute_url(), query_str)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(1, len(browser.json['items']))
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(
+            [{u'title': u'Dupont Julie',
+              u'token': u'person:0e623708-2d0d-436a-82c6-c1a9c27b65dc'}],
+            browser.json["items"])
