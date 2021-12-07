@@ -32,7 +32,7 @@ TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 # The following list contains all necessary informations about the notification
 # setting which should be exposed in the notification settings view.
 NOTIFICATION_SETTING_TABS = [
-    {'id': 'watcher',
+    {'id': 'general',
      'roles': [WATCHER_ROLE],
      'settings': [
         'added-as-watcher'

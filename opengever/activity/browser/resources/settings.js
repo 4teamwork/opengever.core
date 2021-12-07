@@ -87,7 +87,9 @@
         {tabId: 'general',
          tabTitle: this.getDataAttribute('tab-title-general'),
          configurations: configurations,
-         activities: this.filterActivitiesByType(values, 'watcher')},
+         activities: this.filterActivitiesByType(values, 'general')},
+
+
         {tabId: 'tasks',
          tabTitle: this.getDataAttribute('tab-title-task'),
          activities: this.filterActivitiesByType(values, 'task')},
