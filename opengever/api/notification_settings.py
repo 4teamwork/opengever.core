@@ -64,7 +64,7 @@ class NotificationSettingsGet(Service):
             'proposal': is_meeting_feature_enabled(),
             'reminder': not is_workspace_feature_enabled(),
             'task': not is_workspace_feature_enabled(),
-            'watcher': not is_workspace_feature_enabled(),
+            'general': not is_workspace_feature_enabled(),
             'workspace': is_workspace_feature_enabled() and is_todo_feature_enabled(),
             'document': True,
         }
