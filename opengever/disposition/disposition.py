@@ -417,3 +417,14 @@ class Disposition(Container):
 
     def get_sip_filename(self):
         return u'{}.zip'.format(self.get_sip_name())
+
+    def sip_download_available(self):
+        if api.user.has_permission(
+                'opengever.disposition: Download SIP Package', obj=self):
+
+            return self.has_sip_package()
+
+        return None
+
+    def removal_protocol_available(self):
+        return api.content.get_state(self) == 'disposition-state-closed'
