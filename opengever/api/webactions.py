@@ -1,5 +1,6 @@
 from opengever.api.validation import get_unknown_fields
 from opengever.api.validation import get_validation_errors
+from opengever.api.validation import scrub_json_payload
 from opengever.webactions.exceptions import ActionAlreadyExists
 from opengever.webactions.schema import IPersistedWebActionSchema
 from opengever.webactions.schema import IWebActionSchema
@@ -19,8 +20,6 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
 from zope.publisher.interfaces import IPublishTraverse
-from zope.schema import Choice
-from zope.schema import List
 
 
 class WebActionLocator(Service):
@@ -116,7 +115,7 @@ class WebActionsPost(Service):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         action_data = json_body(self.request)
-        scrub_json_payload(action_data)
+        scrub_json_payload(action_data, IWebActionSchema)
 
         errors = get_validation_errors(action_data, IWebActionSchema)
         if errors:
@@ -193,7 +192,7 @@ class WebActionsPatch(WebActionLocator):
         if errors:
             raise BadRequest(errors)
 
-        scrub_json_payload(action_delta)
+        scrub_json_payload(action_delta, IWebActionSchema)
 
         # Validate on a copy
         action_copy = action.copy()
@@ -288,47 +287,3 @@ def serialize_webaction(action):
     url = '/'.join((site.absolute_url(), '@webactions/%s' % action['action_id']))
     result.update({'@id': url})
     return result
-
-
-def scrub_json_payload(action_data):
-    """Casts some of the unicode strings in JSON payloads to bytestrings.
-
-    Strings in dicts deserialized from JSON are always unicode. But because
-    some of the fields as defined in the IWebActionSchema are actually ASCII
-    based types (URIs, identifiers that should never contain non-ASCII, etc.)
-    we cast them to bytestrings here before even attempting validation.
-
-    In some cases (top-level ASCII fields) validation would fail outright if
-    we didn't do this, but in more subtle cases (e.g. Choice fields with
-    vocabs that contain ASCII values) this would go unnoticed, and we could
-    end up with a mix of bytestrings vs. unicode for the same field in our
-    storage, depending on how exactly they were set.
-    """
-    def safe_utf8(s):
-        if isinstance(s, unicode):
-            s = s.encode('utf8')
-        return s
-
-    for key, value in action_data.items():
-        if key in IWebActionSchema:
-            field = IWebActionSchema[key]
-
-            # Field itself may be of a bytestring type
-            pytype = getattr(field, '_type', None)
-            if pytype is str and isinstance(value, unicode):
-                action_data[key] = value.encode('utf-8')
-                continue
-
-            # Fields vocabulary terms may be of a bytestring type
-            if isinstance(field, Choice):
-                terms = [t.value for t in field.vocabulary]
-                if isinstance(terms[0], str) and isinstance(value, unicode):
-                    action_data[key] = value.encode('utf-8')
-                    continue
-
-            # Field's value_type may indicate bytestring type
-            if isinstance(field, List):
-                pytype = getattr(field.value_type, '_type', None)
-                if pytype is str and isinstance(value, list):
-                    action_data[key] = [safe_utf8(s) for s in value]
-                    continue
