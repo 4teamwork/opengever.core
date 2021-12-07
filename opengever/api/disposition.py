@@ -1,11 +1,13 @@
 from opengever.api import _
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.relationfield import relationfield_value_to_object
+from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IAppraisal
+from opengever.disposition.response import IDispositionResponse
 from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.restapi.deserializer import json_body
@@ -13,6 +15,7 @@ from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
@@ -128,3 +131,15 @@ class AppraisalPatch(Service):
             return serializer()
 
         return self.reply_no_content()
+
+
+@implementer(ISerializeToJson)
+@adapter(IDispositionResponse, Interface)
+class SerializeDispositionResponseToJson(SerializeResponseToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(SerializeDispositionResponseToJson, self).__call__(
+            *args, **kwargs)
+
+        result['dossiers'] = json_compatible(self.context.dossiers)
+        return result

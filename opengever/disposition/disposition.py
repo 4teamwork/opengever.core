@@ -7,17 +7,18 @@ from opengever.activity import notification_center
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.classification import IClassification
-from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.response import IResponseContainer
+from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.ech0160.sippackage import SIPPackage
+from opengever.disposition.history import DispositionHistory
 from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.interfaces import IDuringDossierDestruction
-from opengever.disposition.interfaces import IHistoryStorage
 from opengever.dossier.base import DOSSIER_STATES_OFFERABLE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -225,7 +226,8 @@ class IDispositionSchema(model.Schema):
 
 
 class Disposition(Container):
-    implements(IDisposition)
+    implements(IDisposition, IResponseSupported)
+
 
     destroyed_key = 'destroyed_dossiers'
 
@@ -252,7 +254,10 @@ class Disposition(Container):
         return [relation.to_object for relation in self.dossiers]
 
     def get_history(self):
-        return IHistoryStorage(self).get_history()
+        history = [DispositionHistory.get(response)
+                   for response in IResponseContainer(self)]
+        history.reverse()
+        return history
 
     def get_destroyed_dossiers(self):
         annotations = IAnnotations(self)

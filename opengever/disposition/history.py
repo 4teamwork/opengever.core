@@ -1,16 +1,8 @@
-from datetime import datetime
 from opengever.disposition import _
-from opengever.disposition.interfaces import IDisposition
-from opengever.disposition.interfaces import IHistoryStorage
 from opengever.ogds.base.actor import Actor
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from plone import api
-from zope.annotation.interfaces import IAnnotations
-from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import implementer
 
 
 class DispositionHistory(object):
@@ -30,7 +22,7 @@ class DispositionHistory(object):
 
     @classmethod
     def get(cls, mapping):
-        description = cls.registry.get(mapping.get('transition'))
+        description = cls.registry.get(mapping.response_type)
         if not description:
             raise ValueError(
                 'No specific entry found for {}'.format(
@@ -43,18 +35,18 @@ class DispositionHistory(object):
 
     @property
     def transition(self):
-        return self.mapping.get('transition')
+        return self.mapping.response_type
 
     @property
     def transition_label(self):
-        return translate(self.mapping.get('transition'),
+        return translate(self.mapping.response_type,
                          domain="plone",
                          context=getRequest())
 
     @property
     def date(self):
         return api.portal.get_localized_time(
-            datetime=self.mapping.get('date'), long_format=True)
+            datetime=self.mapping.created, long_format=True)
 
     def msg(self):
         _('msg_disposition_updated', default=u'Updated by ${user}')
@@ -62,14 +54,14 @@ class DispositionHistory(object):
 
     @property
     def actor_label(self):
-        return Actor.lookup(self.mapping.get('actor_id')).get_label()
+        return Actor.lookup(self.mapping.creator).get_label()
 
     @property
     def _msg_mapping(self):
-        return {'user': Actor.lookup(self.mapping.get('actor_id')).get_link()}
+        return {'user': Actor.lookup(self.mapping.creator).get_link()}
 
     def details(self):
-        return self.mapping.get('dossiers')
+        return self.mapping.dossiers
 
 
 class Added(DispositionHistory):
@@ -174,41 +166,3 @@ class Refused(DispositionHistory):
             mapping=self._msg_mapping)
 
 DispositionHistory.add_description(Refused)
-
-
-@implementer(IHistoryStorage)
-@adapter(IDisposition)
-class HistoryStorage(object):
-
-    key = 'disposition_history'
-
-    def __init__(self, context):
-        self.context = context
-        self._annotations = IAnnotations(self.context)
-        if self.key not in self._annotations.keys():
-            self._annotations[self.key] = PersistentList()
-
-    @property
-    def _storage(self):
-        return self._annotations[self.key]
-
-    def add(self, transition, actor_id, dossiers):
-        """Adds a new history entry to the storage.
-        transition: string
-        actor_id: user_id as string
-        dossiers: a list of dossier representations.
-        """
-
-        dossier_list = PersistentList(
-            [dossier.get_storage_representation() for dossier in dossiers])
-        self._storage.append(
-            PersistentDict({'transition': transition,
-                            'actor_id': actor_id,
-                            'date': datetime.now(),
-                            'dossiers': dossier_list}))
-
-    def get_history(self):
-        entries = [DispositionHistory.get(mapping)
-                   for mapping in self._storage]
-        entries.reverse()
-        return entries
