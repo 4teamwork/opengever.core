@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-25 12:03+0000\n"
+"POT-Creation-Date: 2021-12-07 12:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -129,6 +129,11 @@ msgid "Download ICal"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20211207105652_add_disposition_actions/actions.xml
+msgid "Download disposition package"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20210319175529_add_meeting_minutes_pdf_action/actions.xml
 msgid "Download meeting minutes PDF"
 msgstr ""
@@ -145,6 +150,11 @@ msgstr ""
 #: ./opengever/core/profiles/default/actions.xml
 #: ./opengever/core/upgrades/20211026174552_add_edit_public_trial_status_action/actions.xml
 msgid "Edit public trial status"
+msgstr ""
+
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20211207105652_add_disposition_actions/actions.xml
+msgid "Export appraisal list as excel"
 msgstr ""
 
 #: ./opengever/core/profiles/default/actions.xml
