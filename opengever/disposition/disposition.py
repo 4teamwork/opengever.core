@@ -47,7 +47,6 @@ from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
-from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -229,7 +228,6 @@ class IDispositionSchema(model.Schema):
 
 class Disposition(Container):
     implements(IDisposition, IResponseSupported)
-
 
     destroyed_key = 'destroyed_dossiers'
 
