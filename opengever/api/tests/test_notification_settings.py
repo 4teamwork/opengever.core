@@ -232,12 +232,12 @@ class TestNotificationSettingsGet(IntegrationTestCase):
 
         self.assertEqual({
             u'@id': u'http://nohost/plone/@notification-settings/activities/added-as-watcher',
-            u'badge': {u'regular_watcher': True},
-            u'digest': {u'regular_watcher': False},
+            u'badge': {u'always': True},
+            u'digest': {u'always': False},
             u'group': u'general',
             u'id': u'added-as-watcher',
             u'kind': u'added-as-watcher',
-            u'mail': {u'regular_watcher': False},
+            u'mail': {u'always': False},
             u'personal': False,
             u'title': u'Added as watcher'
         }, browser.json['activities']['items'][0])
@@ -261,7 +261,8 @@ class TestNotificationSettingsGet(IntegrationTestCase):
         self.assertEqual([u'notify_own_actions', u'notify_inbox_actions'],
                          [activity['id'] for activity in browser.json['general']['items']])
 
-        self.assertEqual([
+        self.assertItemsEqual([
+            {u'id': u'always', u'title': u''},
             {u'id': u'dossier_responsible_role', u'title': u'Dossier responsible'},
             {u'id': u'task_reminder_watcher_role', u'title': u'Watcher'},
             {u'id': u'task_issuer', u'title': u'Task issuer'},
@@ -343,12 +344,12 @@ class TestNotificationSettingsPatch(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         NotificationSettings().set_custom_setting(
             'added-as-watcher', self.regular_user.getId(),
-            mail_roles=[u'regular_watcher'])
+            mail_roles=[u'always'])
 
         browser.open(self.portal.absolute_url() + '/@notification-settings',
                      method='GET', headers=self.api_headers)
 
-        self.assertEqual({u'regular_watcher': True}, browser.json['activities']['items'][0]['mail'])
+        self.assertEqual({u'always': True}, browser.json['activities']['items'][0]['mail'])
         self.assertEqual(True, browser.json['activities']['items'][0]['personal'])
 
         browser.open(self.portal.absolute_url() +
@@ -361,7 +362,7 @@ class TestNotificationSettingsPatch(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@notification-settings',
                      method='GET', headers=self.api_headers)
 
-        self.assertEqual({u'regular_watcher': False}, browser.json[
+        self.assertEqual({u'always': False}, browser.json[
                          'activities']['items'][0]['mail'])
         self.assertEqual(False, browser.json['activities']['items'][0]['personal'])
 
@@ -573,12 +574,12 @@ class TestNotificationSettingsPatch(IntegrationTestCase):
         self.assertEquals(200, browser.status_code)
         self.assertEquals(
             {u'@id': url,
-             u'badge': {u'regular_watcher': True},
-             u'digest': {u'regular_watcher': False},
+             u'badge': {u'always': True},
+             u'digest': {u'always': False},
                 u'group': u'general',
                 u'id': kind,
                 u'kind': kind,
-                u'mail': {u'regular_watcher': False},
+                u'mail': {u'always': False},
                 u'personal': False,
                 u'title': u'Added as watcher'},
             browser.json)

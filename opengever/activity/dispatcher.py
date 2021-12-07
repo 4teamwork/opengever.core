@@ -1,6 +1,7 @@
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
 from opengever.activity.notification_settings import NotificationSettings
+from opengever.activity.roles import ALWAYS
 from opengever.base.model import create_session
 from opengever.base.sentry import maybe_report_exception
 from ZODB.POSException import ConflictError
@@ -31,6 +32,9 @@ class NotificationDispatcher(object):
         dispatched_roles = self.get_dispatched_roles_for(notification.activity.kind, userid)
         if not dispatched_roles:
             return False
+
+        if ALWAYS in dispatched_roles:
+            return True
 
         query = create_session().query(Watcher).join(Subscription)
         query = query.filter(

@@ -1,4 +1,5 @@
 from opengever.activity import model
+from opengever.activity.roles import ALWAYS
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -88,7 +89,7 @@ NOTIFICATION_CONFIGURATION = [
         'title': _('added-as-watcher', default=u'Added as watcher'),
         'activities': ['task-watcher-added', 'forwarding-watcher-added', 'document-watcher-added'],
         'default_settings': {
-            'badge_notification_roles': [WATCHER_ROLE],
+            'badge_notification_roles': [ALWAYS],
         },
     },
 
