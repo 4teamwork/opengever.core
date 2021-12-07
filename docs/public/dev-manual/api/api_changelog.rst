@@ -11,9 +11,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-- Disposition serialization contains now responses. [phgross]
+- Include sip_delivery_status in the disposition serialization.
+- Disposition serialization contains now responses.
 - @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
-
 - Include is_completed in sql task serialization.
 - ``@listing``: Add retention_expiration column.
 
