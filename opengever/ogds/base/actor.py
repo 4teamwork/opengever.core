@@ -31,7 +31,7 @@ from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
 from opengever.kub import is_kub_feature_enabled
-from opengever.kub.client import KuBClient
+from opengever.kub.entity import KuBEntity
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.interfaces import IActor
@@ -761,7 +761,7 @@ class ActorLookup(object):
     def create_kub_contact_actor(self, contact=None):
         if not contact:
             try:
-                contact = KuBClient().get_by_id(self.identifier)
+                contact = KuBEntity(self.identifier)
             except LookupError:
                 return self.create_null_actor()
 

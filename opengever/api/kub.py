@@ -1,7 +1,7 @@
 from copy import deepcopy
 from opengever.api.utils import create_proxy_request_error_handler
 from opengever.api.utils import default_http_error_code_mapping
-from opengever.kub.client import KuBClient
+from opengever.kub.entity import KuBEntity
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.interface import implements
@@ -39,8 +39,8 @@ class KuBGet(Service):
     @kub_request_error_handler
     def reply(self):
         _id = self.read_params().decode('utf-8')
-        client = KuBClient()
-        return client.get_full_entity_by_id(_id)
+        entity = KuBEntity(_id, full=True)
+        return entity.serialize()
 
     def read_params(self):
         if len(self.params) != 1:
