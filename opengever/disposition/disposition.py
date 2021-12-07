@@ -14,6 +14,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.delivery import DELIVERY_STATUS_LABELS
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.history import DispositionHistory
@@ -45,6 +46,7 @@ from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.globalrequest import getRequest
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -428,3 +430,12 @@ class Disposition(Container):
 
     def removal_protocol_available(self):
         return api.content.get_state(self) == 'disposition-state-closed'
+
+    def get_delivery_status_infos(self):
+        """Get translated delivery status infos in a template friendly format.
+        """
+        statuses = DeliveryScheduler(self).get_statuses()
+        status_infos = [
+            {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=getRequest())}
+            for n, s in statuses.items()]
+        return status_infos

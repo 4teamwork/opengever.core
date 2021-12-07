@@ -1,12 +1,9 @@
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
-from opengever.disposition.delivery import DELIVERY_STATUS_LABELS
-from opengever.disposition.delivery import DeliveryScheduler
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
-from zope.i18n import translate
 
 
 class DispositionOverview(BrowserView):
@@ -45,15 +42,6 @@ class DispositionOverview(BrowserView):
         wftool = api.portal.get_tool(name='portal_workflow')
         infos = wftool.listActionInfos(object=self.context, check_condition=False)
         return infos
-
-    def get_delivery_status_infos(self):
-        """Get translated delivery status infos in a template friendly format.
-        """
-        statuses = DeliveryScheduler(self.context).get_statuses()
-        status_infos = [
-            {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=self.request)}
-            for n, s in statuses.items()]
-        return status_infos
 
     def get_actions(self):
         return [
