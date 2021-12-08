@@ -19,6 +19,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
 from requests.exceptions import ConnectionError
+from uuid import uuid4
 from zope.component import getGlobalSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
@@ -148,7 +149,21 @@ class TestserverLayer(OpengeverFixture):
         # Commit before creating the solr backup, since collective.indexing
         # flushes on commit.
         transaction.commit()
-        SolrReplicationAPIClient.get_instance().create_backup('fixture')
+
+        # The solr backup API allows creating named backup, but not removing them
+        # nor overwriting existing backups.
+        if SOLR_HOSTNAME == 'localhost':
+            # When solr runs on the same system we can remove backups from the disk.
+            # By doing that we can make sure that we are not blowing up the disk
+            # with old solr backups.
+            self['solr_backup_name'] = 'testserver-fixture'
+        else:
+            # When solr runs on another host (e.g. within docker), we cannot easily
+            # access its disk. So we need to create uniquely named backups and we
+            # cannot clean it up because the API has no such endpoint.
+            self['solr_backup_name'] = 'testserver-{}'.format(str(uuid4()))
+
+        SolrReplicationAPIClient.get_instance().create_backup(self['solr_backup_name'])
 
     def setupLanguageTool(self, portal):
         lang_tool = api.portal.get_tool('portal_languages')
@@ -222,7 +237,7 @@ class TestServerFunctionalTesting(FunctionalTesting):
 
     def testTearDown(self):
         self.context_manager.__exit__(None, None, None)
-        SolrReplicationAPIClient.get_instance().restore_backup('fixture')
+        SolrReplicationAPIClient.get_instance().restore_backup(self['solr_backup_name'])
         SolrReplicationAPIClient.get_instance().await_restored()
         super(TestServerFunctionalTesting, self).testTearDown()
 
