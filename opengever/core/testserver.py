@@ -31,6 +31,7 @@ import pytz
 import transaction
 
 
+SOLR_HOSTNAME = os.environ.get('SOLR_HOSTNAME', 'localhost')
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
@@ -71,7 +72,8 @@ class TestserverLayer(OpengeverFixture):
     def setUpZope(self, app, configurationContext):
         ISOLATION_READINESS.patch_publisher()
         solr = SolrServer.get_instance()
-        solr.configure(SOLR_PORT, SOLR_CORE)
+        solr.configure(SOLR_PORT, SOLR_CORE, hostname=SOLR_HOSTNAME)
+        SolrReplicationAPIClient.get_instance().configure(SOLR_PORT, SOLR_CORE, SOLR_HOSTNAME)
 
         try:
             solr.is_ready()
@@ -83,6 +85,10 @@ class TestserverLayer(OpengeverFixture):
                     " to reuse the running solr instance.".format(SOLR_PORT, SOLR_PORT))
             print 'Using already running solr on port {}'.format(SOLR_PORT)
         except ConnectionError:
+            if SOLR_HOSTNAME != 'localhost' and REUSE_RUNNING_SOLR:
+                raise Exception('Solr is not reachable at {}:{}'.format(
+                    SOLR_HOSTNAME, REUSE_RUNNING_SOLR))
+
             print 'Starting solr on port {}'.format(SOLR_PORT)
             solr.start()
 
@@ -96,10 +102,10 @@ class TestserverLayer(OpengeverFixture):
         solr.await_ready()
         xmlconfig.string(
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
-            '  <solr:connection host="localhost"'
+            '  <solr:connection host="{SOLR_HOSTNAME}"'
             '                   port="{SOLR_PORT}"'
             '                   base="/solr/{SOLR_CORE}" />'
-            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            '</configure>'.format(SOLR_HOSTNAME=SOLR_HOSTNAME, SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
             context=configurationContext)
 
         # Clear solr from potential artefacts of the previous run.

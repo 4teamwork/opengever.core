@@ -28,11 +28,12 @@ class SolrServer(object):
             klass._instance = klass()
         return klass._instance
 
-    def configure(self, port, core):
+    def configure(self, port, core, hostname='localhost'):
         self._configured = True
+        self.hostname = hostname
         self.port = int(port)
         self.core = core
-        SolrReplicationAPIClient.get_instance().configure(port, core)
+        SolrReplicationAPIClient.get_instance().configure(port, core, hostname)
         return self
 
     def start(self):
@@ -87,7 +88,9 @@ class SolrServer(object):
     def is_ready(self):
         """Check whether the solr server is ready to accept connections.
         """
-        response = requests.get(url='http://localhost:{}/solr/{}/admin/ping'.format(self.port, self.core))
+        url = 'http://{}:{}/solr/{}/admin/ping'.format(
+            self.hostname, self.port, self.core)
+        response = requests.get(url=url)
         return response.ok
 
     def await_ready(self, timeout=60, interval=0.1, verbose=False):
@@ -155,11 +158,12 @@ class SolrReplicationAPIClient(object):
             klass._instance = klass()
         return klass._instance
 
-    def configure(self, port, core):
+    def configure(self, port, core, hostname='localhost'):
         self._configured = True
+        self.hostname = hostname
         self.port = int(port)
         self.core = core
-        self.base_url = 'http://localhost:{}/solr/{}'.format(port, core)
+        self.base_url = 'http://{}:{}/solr/{}'.format(self.hostname, port, core)
         return self
 
     def __init__(self):
@@ -317,7 +321,7 @@ if __name__ == '__main__':
     # ./bin/zopepy opengever/core/solr_testing.py
     port = 18988
     core = 'fritz'
-    SolrReplicationAPIClient.get_instance().configure(port, core)
+    SolrReplicationAPIClient.get_instance().configure(port, core, 'localhost')
     server = SolrServer.get_instance().configure(port, core)
 
     server.start()
