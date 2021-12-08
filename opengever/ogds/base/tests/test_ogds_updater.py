@@ -22,7 +22,7 @@ from zope.component import getUtility
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
-BLACKLISTED_USER_COLUMNS = {'last_login'}
+BLACKLISTED_USER_COLUMNS = {'absent', 'absent_from', 'absent_to', 'last_login'}
 BLACKLISTED_GROUP_COLUMNS = {'is_local'}
 
 

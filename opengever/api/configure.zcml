@@ -1558,4 +1558,20 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@out-of-office"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".out_of_office.OutOfOfficeGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@out-of-office"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".out_of_office.OutOfOfficePatch"
+      permission="cmf.SetOwnProperties"
+      />
+
 </configure>
