@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-12-07 13:14+0000\n"
+"POT-Creation-Date: 2021-12-08 16:03+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,6 +161,11 @@ msgstr "Overdue dossier"
 #: ./opengever/activity/roles.py
 msgid "dossier_responsible_role"
 msgstr "Dossier responsible"
+
+#. Default: "External activities"
+#: ./opengever/activity/notification_settings.py
+msgid "external-activity"
+msgstr "External activities"
 
 #. German translation: Weiterleitung hinzugefügt
 #. Default: "Forwarding added"

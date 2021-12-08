@@ -242,11 +242,17 @@ class TestNotificationSettingsGet(IntegrationTestCase):
             u'title': u'Added as watcher'
         }, browser.json['activities']['items'][0])
 
-        self.assertEqual([u'added-as-watcher', u'task-added-or-reassigned',
-                          u'task-transition-modify-deadline', u'task-commented',
-                          u'task-status-modified', u'task-reminder', u'dossier-overdue',
-                          u'document-modified'],
-                         [activity['kind'] for activity in browser.json['activities']['items']])
+        self.assertEqual([
+            u'added-as-watcher',
+            u'external-activity',
+            u'task-added-or-reassigned',
+            u'task-transition-modify-deadline',
+            u'task-commented',
+            u'task-status-modified',
+            u'task-reminder',
+            u'dossier-overdue',
+            u'document-modified',
+        ], [activity['kind'] for activity in browser.json['activities']['items']])
 
         self.assertEqual({
             u'@id': u'http://nohost/plone/@notification-settings/general/notify_inbox_actions',

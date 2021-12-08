@@ -251,6 +251,14 @@ NOTIFICATION_CONFIGURATION = [
             'badge_notification_roles': [WATCHER_ROLE],
         }
     },
+    {
+        'id': 'external-activity',
+        'title': _('external-activity', default=u'External activities'),
+        'activities': ['external-activity'],
+        'default_settings': {
+            'badge_notification_roles': [ALWAYS],
+        }
+    },
 ]
 
 
