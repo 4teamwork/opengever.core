@@ -153,6 +153,44 @@ services:
     profiles:
       - all
       - ianus
+  testserver-solr:
+    image: 4teamwork/ogsolr:latest
+    build:
+      context: .
+      dockerfile: ./docker/solr/Dockerfile
+    command:
+      - solr-precreate
+      - testserver
+      - /opt/solr/server/solr/configsets/ogsite
+    ports:
+      - 18983:8983
+    profiles:
+      - testserver
+  testserver:
+    build:
+      context: .
+      dockerfile: ./docker/testserver/Dockerfile
+    image: 4teamwork/ogtestserver:latest
+    ports:
+      - 55001:55001
+      - 55002:55002
+    environment:
+      - SOLR_HOSTNAME=testserver-solr
+      - TESTSERVER_REUSE_RUNNING_SOLR=8983
+      - SOLR_PORT=8983
+      - MSGCONVERT_URL=http://msgconvert:8080/
+      - SABLON_URL=http://sablon:8080/
+      - PDFLATEX_URL=http://pdflatex:8080/
+      - WEASYPRINT_URL=http://weasyprint:8080/
+    depends_on:
+      - msgconvert
+      - sablon
+      - pdflatex
+      - weasyprint
+      - testserver-solr
+    profiles:
+      - testserver
+
 
 networks:
   default:

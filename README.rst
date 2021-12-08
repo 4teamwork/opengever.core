@@ -1230,6 +1230,12 @@ The connection from the ``testserverctl`` to the XMLRPC-Server can be tested wit
 This will result in a "Connection refused" error as long as the testserver is starting and will do nothing when the server is ready for the first ``isolate`` or ``zodb_setup``.
 This can be used as docker healthcheck.
 
+Testserver in docker
+~~~~~~~~~~~~~~~~~~~~
+
+You can run testserver with docker-compose: ``docker-compose up testserver``.
+See the `testerver docker readme <docker/testserver/README.md>`_.
+
 
 Testing Inbound Mail
 --------------------
