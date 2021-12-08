@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -104,6 +105,23 @@ class TestDispositionSerialization(IntegrationTestCase):
         self.assertEqual(u'Angebot 31.8.2016', browser.json['title'])
         self.assertEqual(None, browser.json['transfer_number'])
         self.assertEqual(u'SIP_20010101_PLONE.zip', browser.json['sip_filename'])
+
+    @browsing
+    def test_includes_translated_sip_delivery_status(self, browser):
+        self.login(self.records_manager, browser)
+
+        browser.open(self.disposition_with_sip, method='GET',
+                     headers=self.api_headers)
+        self.assertEqual([], browser.json['sip_delivery_status'])
+
+        scheduler = DeliveryScheduler(self.disposition_with_sip)
+        scheduler.schedule_delivery_with('filesystem')
+
+        browser.open(self.disposition_with_sip, method='GET',
+                     headers=self.api_headers)
+        self.assertEqual(
+            [{u'status': u'Scheduled for delivery', u'name': u'filesystem'}],
+            browser.json['sip_delivery_status'])
 
     @browsing
     def test_provides_dossier_details(self, browser):

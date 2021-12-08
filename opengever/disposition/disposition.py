@@ -14,6 +14,7 @@ from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
 from opengever.disposition.appraisal import IAppraisal
+from opengever.disposition.delivery import DELIVERY_STATUS_LABELS
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.history import DispositionHistory
@@ -228,7 +229,6 @@ class IDispositionSchema(model.Schema):
 class Disposition(Container):
     implements(IDisposition, IResponseSupported)
 
-
     destroyed_key = 'destroyed_dossiers'
 
     def __init__(self, *args, **kwargs):
@@ -417,3 +417,23 @@ class Disposition(Container):
 
     def get_sip_filename(self):
         return u'{}.zip'.format(self.get_sip_name())
+
+    def sip_download_available(self):
+        if api.user.has_permission(
+                'opengever.disposition: Download SIP Package', obj=self):
+
+            return self.has_sip_package()
+
+        return None
+
+    def removal_protocol_available(self):
+        return api.content.get_state(self) == 'disposition-state-closed'
+
+    def get_delivery_status_infos(self):
+        """Get translated delivery status infos in a template friendly format.
+        """
+        statuses = DeliveryScheduler(self).get_statuses()
+        status_infos = [
+            {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=getRequest())}
+            for n, s in statuses.items()]
+        return status_infos

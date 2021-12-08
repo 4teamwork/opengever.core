@@ -1249,6 +1249,48 @@
       <property name="visible">True</property>
     </object>
 
+    <object name="download-appraisal-list" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Export appraisal list as excel</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/download_excel</property>
+      <property name="icon_expr" />
+      <property name="available_expr">
+        python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.disposition.interfaces.IDisposition')
+      </property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="download-sip" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Download disposition package</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/ech0160_download</property>
+      <property name="icon_expr" />
+      <property name="available_expr">
+        python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.disposition.interfaces.IDisposition') and object.sip_download_available()
+      </property>
+      <property name="permissions">
+        <element value="opengever.disposition: Download SIP Package" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+    <object name="download-removal-protocol" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Download disposition package</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${object_url}/ech0160_download</property>
+      <property name="icon_expr" />
+      <property name="available_expr">
+        python:context.restrictedTraverse('@@plone_interface_info').provides('opengever.disposition.interfaces.IDisposition') and object.removal_protocol_available()
+      </property>
+      <property name="permissions">
+        <element value="View" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
   </object>
 
 </object>

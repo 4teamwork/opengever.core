@@ -65,6 +65,7 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
     def __call__(self, *args, **kwargs):
         result = super(SerializeDispositionToJson, self).__call__(*args, **kwargs)
         result[u'sip_filename'] = self.context.get_sip_filename()
+        result[u'sip_delivery_status'] = self.context.get_delivery_status_infos()
         result[u'dossier_details'] = self.get_dossier_details()
         return result
 

@@ -1,12 +1,9 @@
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.disposition import _
-from opengever.disposition.delivery import DELIVERY_STATUS_LABELS
-from opengever.disposition.delivery import DeliveryScheduler
 from plone import api
 from plone.protect.utils import addTokenToUrl
 from Products.Five.browser import BrowserView
-from zope.i18n import translate
 
 
 class DispositionOverview(BrowserView):
@@ -46,15 +43,6 @@ class DispositionOverview(BrowserView):
         infos = wftool.listActionInfos(object=self.context, check_condition=False)
         return infos
 
-    def get_delivery_status_infos(self):
-        """Get translated delivery status infos in a template friendly format.
-        """
-        statuses = DeliveryScheduler(self.context).get_statuses()
-        status_infos = [
-            {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=self.request)}
-            for n, s in statuses.items()]
-        return status_infos
-
     def get_actions(self):
         return [
             {'id': 'export_appraisal_list',
@@ -67,24 +55,15 @@ class DispositionOverview(BrowserView):
              'label': _('label_dispositon_package_download',
                         default=u'Download disposition package'),
              'url': '{}/ech0160_download'.format(self.context.absolute_url()),
-             'visible': self.sip_download_available(),
+             'visible': self.context.sip_download_available(),
              'class': 'sip_download'},
             {'id': 'removal_protocol',
              'label': _('label_download_removal_protocol',
                         default=u'Download removal protocol'),
              'url': '{}/removal_protocol'.format(self.context.absolute_url()),
-             'visible': self.removal_protocol_available(),
+             'visible': self.context.removal_protocol_available(),
              'class': 'removal_protocol'}
         ]
-
-    def sip_download_available(self):
-        if api.user.has_permission(
-            'opengever.disposition: Download SIP Package',
-                obj=self.context):
-
-            return self.context.has_sip_package()
-
-        return None
 
     def sip_store_available(self):
         return api.user.has_permission(
@@ -93,9 +72,6 @@ class DispositionOverview(BrowserView):
 
     def appraisal_buttons_available(self):
         return api.content.get_state(self.context) == 'disposition-state-in-progress'
-
-    def removal_protocol_available(self):
-        return api.content.get_state(self.context) == 'disposition-state-closed'
 
     def get_history(self):
         return self.context.get_history()
