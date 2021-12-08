@@ -32,6 +32,7 @@ Ein actor ist kein Plone Inhaltstyp, deshalb beinhaltet die Response weniger Inf
         "active": true,
         "actor_type": "user",
         "identifier": "peter.mueller",
+        "is_absent": true,
         "label": "Mueller Peter",
         "portrait_url": "http://example.org/portraits/peter.mueller.png"
         "representatives": [
@@ -81,6 +82,7 @@ Via POST können die Daten von mehreren actors mit einem Request abgefragt werde
             "active": true,
             "actor_type": "user",
             "identifier": "peter.mueller",
+            "is_absent": false,
             "label": "Mueller Peter",
             "portrait_url": "http://example.org/portraits/peter.mueller.png",
             "representatives": [
@@ -99,6 +101,7 @@ Via POST können die Daten von mehreren actors mit einem Request abgefragt werde
             "active": true,
             "actor_type": "inbox",
             "identifier": "inbox:afi",
+            "is_absent": false,
             "label": "Eingangskorb",
             "portrait_url": null,
             "representatives": [

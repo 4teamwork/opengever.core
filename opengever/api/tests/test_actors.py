@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from ftw.testing import freeze
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.base.model import create_session
+from opengever.ogds.models.user import User
+from opengever.testing import IntegrationTestCase
 import json
 
 
@@ -46,6 +50,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'team',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                 u'representatives': [
@@ -81,6 +86,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'inbox',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Inbox: Finanz\xe4mt',
                 u'representatives': [
@@ -112,6 +118,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'contact',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Meier Franz',
                 u'representatives': [],
@@ -138,6 +145,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'committee',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Rechnungspr\xfcfungskommission',
                 u'representatives': [
@@ -172,6 +180,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'user',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
@@ -202,6 +211,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'user',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
@@ -232,6 +242,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'group',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Projekt A',
                 u'representatives': [
@@ -266,6 +277,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': True,
                 u'actor_type': u'user',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'admin',
                 u'representatives': [],
@@ -292,6 +304,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': False,
                 u'actor_type': u'system',
                 u'identifier': actor_id,
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'',
                 u'representatives': [],
@@ -336,6 +349,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'active': False,
                 u'actor_type': u'null',
                 u'identifier': u'foo',
+                u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'foo',
                 u'representatives': [],
@@ -343,6 +357,76 @@ class TestActorsGet(IntegrationTestCase):
             },
             browser.json,
         )
+
+    @browsing
+    def test_is_absent_if_today_is_between_absent_dates(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = self.regular_user.getId()
+        url = "{}/{}".format(self.actors_url, actor_id)
+
+        sql_user = User.query.get(self.regular_user.getId())
+        sql_user.absent_from = datetime(2021, 11, 11).date()
+        sql_user.absent_to = datetime(2021, 12, 15).date()
+        create_session().flush()
+
+        with freeze(datetime(2021, 12, 12)):
+            browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json['is_absent'])
+
+    @browsing
+    def test_is_not_absent_if_today_is_not_between_absent_dates(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = self.regular_user.getId()
+        url = "{}/{}".format(self.actors_url, actor_id)
+
+        sql_user = User.query.get(self.regular_user.getId())
+        sql_user.absent_from = datetime(2021, 11, 11).date()
+        sql_user.absent_to = datetime(2021, 12, 15).date()
+        create_session().flush()
+
+        with freeze(datetime(2021, 10, 12)):
+            browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertFalse(browser.json['is_absent'])
+
+    @browsing
+    def test_is_absent_if_absent_is_true(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = self.regular_user.getId()
+        url = "{}/{}".format(self.actors_url, actor_id)
+
+        sql_user = User.query.get(self.regular_user.getId())
+        sql_user.absent = True
+        create_session().flush()
+
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json['is_absent'])
+
+    @browsing
+    def test_ignores_absent_dates_if_absent_is_true(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = self.regular_user.getId()
+        url = "{}/{}".format(self.actors_url, actor_id)
+
+        sql_user = User.query.get(self.regular_user.getId())
+        sql_user.absent = True
+        sql_user.absent_from = datetime(2021, 11, 11).date()
+        sql_user.absent_to = datetime(2021, 12, 15).date()
+        create_session().flush()
+
+        with freeze(datetime(2021, 10, 12)):
+            browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json['is_absent'])
 
 
 class TestActorsGetListPOST(IntegrationTestCase):
@@ -369,6 +453,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'active': True,
                     u'actor_type': u'team',
                     u'identifier': u'team:1',
+                    u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
@@ -391,6 +476,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'active': True,
                     u'actor_type': u'inbox',
                     u'identifier': u'inbox:fa',
+                    u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Inbox: Finanz\xe4mt',
                     u'representatives': [
@@ -426,6 +512,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'active': True,
                     u'actor_type': u'team',
                     u'identifier': u'team:1',
+                    u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
@@ -448,6 +535,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'active': False,
                     u'actor_type': u'null',
                     u'identifier': u'foo',
+                    u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'foo',
                     u'representatives': [],
