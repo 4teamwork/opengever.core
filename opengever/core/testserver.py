@@ -101,12 +101,24 @@ class TestserverLayer(OpengeverFixture):
         # Solr must be started before registering the connection since ftw.solr
         # will get the schema from solr and cache it.
         solr.await_ready()
+
+        solr_connection_additional_attributes = ''
+        if SOLR_HOSTNAME != 'localhost':
+            # When the testserver does not run on the same host as solr (such as
+            # when running in docker), we need to upload the blobs over HTTP
+            # since solr cannout access the /tmp of the testserver via disk.
+            solr_connection_additional_attributes = 'upload_blobs="true"'
+
         xmlconfig.string(
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
             '  <solr:connection host="{SOLR_HOSTNAME}"'
             '                   port="{SOLR_PORT}"'
-            '                   base="/solr/{SOLR_CORE}" />'
-            '</configure>'.format(SOLR_HOSTNAME=SOLR_HOSTNAME, SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            '                   base="/solr/{SOLR_CORE}"'
+            '                   {attrs} />'
+            '</configure>'.format(SOLR_HOSTNAME=SOLR_HOSTNAME,
+                                  SOLR_PORT=SOLR_PORT,
+                                  SOLR_CORE=SOLR_CORE,
+                                  attrs=solr_connection_additional_attributes),
             context=configurationContext)
 
         # Clear solr from potential artefacts of the previous run.
