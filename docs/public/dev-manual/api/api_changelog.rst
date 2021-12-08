@@ -17,6 +17,9 @@ Other Changes
 - @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
 - Include is_completed in sql task serialization.
 - ``@listing``: Add retention_expiration column.
+- New endpoints ``@my-substitutes`` and ``@substitutes`` are added (see :ref:`substitutes`).
+- A new endpoint ``@out-of-office`` is added (see :ref:`out-of-office`).
+- Include is_absent in actors serialization.
 
 
 2021.24.0 (2021-11-30)
