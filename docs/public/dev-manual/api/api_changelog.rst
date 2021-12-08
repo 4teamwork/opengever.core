@@ -9,6 +9,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Support recipient in ``@document-from-template`` endpoint when KuB feature is enabled.
 - Contact feature in the ``@config`` endpoint is now one of ``plone``, ``sql`` and ``kub``.
 
 Other Changes
