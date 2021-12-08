@@ -1,4 +1,5 @@
 from opengever.kub.client import KuBClient
+from opengever.kub.docprops import KuBEntityDocPropertyProvider
 
 
 class KuBEntity(object):
@@ -18,3 +19,15 @@ class KuBEntity(object):
 
     def serialize(self):
         return self.data
+
+    def is_person(self):
+        return self.get("type") == "person"
+
+    def is_organization(self):
+        return self.get("type") == "organization"
+
+    def is_membership(self):
+        return self.get("type") == "membership"
+
+    def get_doc_property_provider(self):
+        return KuBEntityDocPropertyProvider(self)

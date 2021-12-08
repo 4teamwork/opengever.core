@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from opengever.kub.client import KuBClient
 from opengever.kub.interfaces import IKuBSettings
 from opengever.testing import IntegrationTestCase
@@ -291,5 +292,151 @@ KUB_RESPONSES = {
         "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448",
         "type": "membership",
         "url": "http://localhost:8000/api/v1/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448"
+    },
+    "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65": {
+        "id": "9af7d7cc-b948-423f-979f-587158c6bc65",
+        "salutation": "Herr",
+        "title": "",
+        "firstName": "Jean",
+        "officialName": "Dupont",
+        "fullName": "Dupont Jean",
+        "dateOfBirth": "1992-05-15",
+        "sex": None,
+        "maritalStatus": 2,
+        "country": "",
+        "countryIdISO2": "",
+        "languageOfCorrespondance": "fr",
+        "originName": "Paris",
+        "canton": None,
+        "status": 1,
+        "thirdPartyId": None,
+        "description": "",
+        "tags": [],
+        "addresses": [
+            {
+                "id": "72b3120e-429f-423b-8bb7-31233d89026c",
+                "label": "Home",
+                "isDefault": True,
+                "organisationName": "",
+                "organisationNameAddOn1": "",
+                "organisationNameAddOn2": "",
+                "addressLine1": "",
+                "addressLine2": "",
+                "street": "Teststrasse",
+                "houseNumber": "43",
+                "dwellingNumber": "",
+                "postOfficeBox": "",
+                "postOfficeBoxText": "",
+                "swissZipCode": "9999",
+                "swissZipCodeAddOn": "",
+                "swissZipCodeId": "",
+                "foreignZipCode": "",
+                "locality": "",
+                "town": "Bern",
+                "countryIdISO2": "CH",
+                "countryName": "Schweiz",
+                "thirdPartyId": None,
+                "modified": "2021-11-18T00:00:00+01:00",
+                "created": "2021-11-18T00:00:00+01:00"
+            }
+        ],
+        "emailAddresses": [
+            {
+                "id": "3bc940de-ee8a-43b0-b373-3f1640122021",
+                "label": "Private",
+                "email": "Jean.dupon@example.com",
+                "isDefault": True,
+                "thirdPartyId": None,
+                "modified": "2021-11-18T00:00:00+01:00",
+                "created": "2021-11-18T00:00:00+01:00"
+            }
+        ],
+        "phoneNumbers": [
+            {
+                "id": "e1046ad8-c4d7-4cac-93ac-d7c8298795e5",
+                "label": "Mobile",
+                "phoneNumber": "666 666 66 66",
+                "phoneCategory": 2,
+                "otherPhoneCategory": None,
+                "phoneCategoryText": "Private Mobilnummer",
+                "isDefault": True,
+                "thirdPartyId": None,
+                "modified": "2021-11-18T00:00:00+01:00",
+                "created": "2021-11-18T00:00:00+01:00"
+            },
+            {
+                "id": "c62732e1-114e-4de7-a0b7-842c325bb068",
+                "label": "Work",
+                "phoneNumber": "999 999 99 99",
+                "phoneCategory": 7,
+                "otherPhoneCategory": None,
+                "phoneCategoryText": "Geschäftliche Mobilnummer",
+                "isDefault": False,
+                "thirdPartyId": None,
+                "modified": "2021-11-18T00:00:00+01:00",
+                "created": "2021-11-18T00:00:00+01:00"
+            }
+        ],
+        "urls": [],
+        "memberships": [
+            {
+                "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "organization": {
+                    "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                    "name": "4Teamwork",
+                    "description": "Web application specialist",
+                    "status": 1,
+                    "thirdPartyId": None,
+                    "memberCount": 1,
+                    "modified": "2021-11-13T00:00:00+01:00",
+                    "created": "2021-11-13T00:00:00+01:00"
+                },
+                "role": "CEO",
+                "description": "",
+                "department": "",
+                "thirdPartyId": None,
+                "start": "1990-02-24",
+                "end": None
+            }
+        ],
+        "organizations": [
+            {
+                "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "name": "4Teamwork",
+                "description": "Web application specialist",
+                "status": 1,
+                "thirdPartyId": None,
+                "memberCount": 1,
+                "modified": "2021-11-13T00:00:00+01:00",
+                "created": "2021-11-13T00:00:00+01:00"
+            }
+        ],
+        "primaryEmail": {
+            "id": "3bc940de-ee8a-43b0-b373-3f1640122021",
+            "label": "Private",
+            "email": "Jean.dupon@example.com",
+            "isDefault": True,
+            "thirdPartyId": None,
+            "modified": "2021-11-18T00:00:00+01:00",
+            "created": "2021-11-18T00:00:00+01:00"
+        },
+        "primaryPhoneNumber": {
+            "id": "e1046ad8-c4d7-4cac-93ac-d7c8298795e5",
+            "label": "Mobile",
+            "phoneNumber": "666 666 66 66",
+            "phoneCategory": 2,
+            "otherPhoneCategory": None,
+            "phoneCategoryText": "Private Mobilnummer",
+            "isDefault": True,
+            "thirdPartyId": None,
+            "modified": "2021-11-18T00:00:00+01:00",
+            "created": "2021-11-18T00:00:00+01:00"
+        },
+        "modified": "2021-11-17T00:00:00+01:00",
+        "created": "2021-11-17T00:00:00+01:00",
+        "htmlUrl": "http://localhost:8000/people/9af7d7cc-b948-423f-979f-587158c6bc65",
+        "url": "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65",
+        "typedId": "person:9af7d7cc-b948-423f-979f-587158c6bc65",
+        "type": "person"
     }
 }

@@ -27,3 +27,24 @@ class TestKuBEntity(KuBIntegrationTestCase):
         url = self.mock_get_full_entity_by_id(mocker, self.person_julie)
         entity = KuBEntity(self.person_julie, full=True)
         self.assertDictEqual(KUB_RESPONSES[url], entity.serialize())
+
+    def test_person_entity(self, mocker):
+        self.mock_get_by_id(mocker, self.person_jean)
+        entity = KuBEntity(self.person_jean)
+        self.assertTrue(entity.is_person())
+        self.assertFalse(entity.is_organization())
+        self.assertFalse(entity.is_membership())
+
+    def test_organization_entity(self, mocker):
+        self.mock_get_by_id(mocker, self.org_ftw)
+        entity = KuBEntity(self.org_ftw)
+        self.assertFalse(entity.is_person())
+        self.assertTrue(entity.is_organization())
+        self.assertFalse(entity.is_membership())
+
+    def test_membership_entity(self, mocker):
+        self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        entity = KuBEntity(self.memb_jean_ftw)
+        self.assertFalse(entity.is_person())
+        self.assertFalse(entity.is_organization())
+        self.assertTrue(entity.is_membership())
