@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add new endpoint ``@external-activities`` (see :ref:`docs <external-activities>`)
 - Include sip_delivery_status in the disposition serialization.
 - Disposition serialization contains now responses.
 - @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]

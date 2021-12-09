@@ -1,6 +1,7 @@
 from opengever.activity import _
 from opengever.activity import notification_center
 from opengever.activity import notification_settings
+from opengever.activity.roles import ALWAYS
 from opengever.activity.roles import COMMITTEE_RESPONSIBLE_ROLE
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -33,9 +34,10 @@ TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()
 # setting which should be exposed in the notification settings view.
 NOTIFICATION_SETTING_TABS = [
     {'id': 'general',
-     'roles': [WATCHER_ROLE],
+     'roles': [ALWAYS],
      'settings': [
-        'added-as-watcher'
+        'added-as-watcher',
+        'external-activity',
      ]},
 
     {'id': 'task',

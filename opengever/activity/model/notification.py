@@ -45,12 +45,13 @@ class Notification(Base):
 
     def serialize(self, portal_url):
         data = self.activity.serialize()
+        resource = self.activity.resource
         data.update({
             '@id': self._api_url(portal_url),
             'notification_id': self.notification_id,
             'read': self.is_read,
             'link': self._resolve_notification_link(portal_url),
-            'oguid': str(self.activity.resource.oguid),
+            'oguid': str(resource.oguid) if resource else None,
             })
         return data
 

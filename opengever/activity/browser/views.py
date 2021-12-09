@@ -87,10 +87,14 @@ class NotificationView(BrowserView):
         return json.dumps(data)
 
     def get_link_target(self, notification):
-        oguid = notification.activity.resource.oguid
-        if oguid.is_on_current_admin_unit:
-            return '_self'
+        resource = notification.activity.resource
+        if resource:
+            # On the same admin unit
+            oguid = resource.oguid
+            if oguid.is_on_current_admin_unit:
+                return '_self'
 
+        # Resource on a remote admin unit or external resource
         return '_blank'
 
     def dump_notifications(self, notifications):

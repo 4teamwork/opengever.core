@@ -3,6 +3,9 @@ from zope.i18nmessageid import MessageFactory
 _ = MessageFactory("opengever.activity")
 
 
+# Special pseudo role that anyone always has
+ALWAYS = 'always'
+
 TASK_ISSUER_ROLE = 'task_issuer'
 TASK_RESPONSIBLE_ROLE = 'task_responsible'
 TASK_OLD_RESPONSIBLE_ROLE = 'task_old_responsible'
@@ -17,6 +20,7 @@ TODO_RESPONSIBLE_ROLE = 'todo_responsible_role'
 WORKSPACE_MEMBER_ROLE = 'workspace_member_role'
 
 ROLE_TRANSLATIONS = {
+    ALWAYS: _('always', default=u"Always"),
     TASK_ISSUER_ROLE: _('task_issuer', default=u"Task issuer"),
     TASK_RESPONSIBLE_ROLE: _('task_responsible', default=u"Task responsible"),
     TASK_OLD_RESPONSIBLE_ROLE: _('task_old_responsible', default=u"Task former responsible"),

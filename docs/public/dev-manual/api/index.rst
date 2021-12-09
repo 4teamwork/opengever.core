@@ -35,6 +35,7 @@ Inhalt:
    config.rst
    favorite.rst
    notifications.rst
+   external_activities.rst
    recently_touched.rst
    preview.rst
    webactions.rst

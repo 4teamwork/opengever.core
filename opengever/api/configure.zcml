@@ -1174,6 +1174,14 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@external-activities"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".external_activities.ExternalActivitiesPost"
+      permission="zope2.View"
+      />
+
   <adapter
       factory=".watchers.Watchers"
       name="watchers"

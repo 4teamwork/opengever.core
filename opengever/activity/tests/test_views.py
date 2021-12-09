@@ -169,10 +169,29 @@ class TestListNotifications(IntegrationTestCase):
     @browsing
     def test_link_target_depends_on_resource_location(self, browser):
         self.login(self.regular_user, browser)
+
+        activity_without_resource = create(
+            Builder('activity')
+            .having(
+                resource=None,
+                created=FREEZE_TIME,
+                external_resource_url='http://example.org',
+            )
+        )
+
         create(
             Builder('notification')
             .having(
                 activity=self.activity,
+                userid=self.regular_user.id,
+                is_read=False,
+            )
+        )
+
+        create(
+            Builder('notification')
+            .having(
+                activity=activity_without_resource,
                 userid=self.regular_user.id,
                 is_read=False,
             )
@@ -188,6 +207,10 @@ class TestListNotifications(IntegrationTestCase):
         browser.open(view="notifications/list")
 
         target = browser.json.get('notifications')[0]['target']
+        self.assertEqual(u'_blank', target)
+
+        # External resource
+        target = browser.json.get('notifications')[1]['target']
         self.assertEqual(u'_blank', target)
 
     @browsing

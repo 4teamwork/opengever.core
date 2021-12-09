@@ -3,6 +3,7 @@ from opengever.activity.browser.settings import NOTIFICATION_SETTING_TABS
 from opengever.activity.browser.settings import USER_SETTINGS
 from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.notification_settings import NotificationSettings
+from opengever.activity.roles import ALWAYS
 from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.api.validation import get_validation_errors
 from opengever.meeting import is_meeting_feature_enabled
@@ -75,6 +76,16 @@ class NotificationSettingsGet(Service):
             'notify_inbox_actions': not is_workspace_feature_enabled()
         }
 
+    def translated_roles(self, roles):
+        translations = []
+        for role in roles:
+            title = translate(ROLE_TRANSLATIONS[role], context=self.request)
+            if role == ALWAYS:
+                title = u''
+            translations.append({'id': role, 'title': title})
+
+        return translations
+
     def reply(self):
         group_visibility = self.group_visibility()
         general_settings_visibility = self.general_settings_visibility()
@@ -102,8 +113,7 @@ class NotificationSettingsGet(Service):
 
         return {'@id': '{}/@notification-settings'.format(url),
                 'activities': activities, 'general': general,
-                'translations': [{'id': role, 'title': translate(
-                    ROLE_TRANSLATIONS[role], context=self.request)} for role in roles]}
+                'translations': self.translated_roles(roles)}
 
 
 class IActivityNotificationSetting(Interface):

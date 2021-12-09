@@ -2,8 +2,10 @@ from opengever.api.exceptions import InvalidBase64DataURI
 from opengever.api.exceptions import UnknownField
 from urlparse import urlparse
 from zope.interface.exceptions import Invalid
+from zope.schema import Choice
 from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
+from zope.schema import List
 from zope.schema import URI
 from zope.schema import ValidationError
 from zope.schema.interfaces import RequiredMissing
@@ -133,3 +135,47 @@ def validate_no_unknown_fields(action_data, schema):
     if errors:
         raise ValidationError(
             "WebAction doesn't conform to schema (First error: %s)." % str(errors[0]))
+
+
+def scrub_json_payload(jsondata, schema):
+    """Casts some of the unicode strings in JSON payloads to bytestrings.
+
+    Strings in dicts deserialized from JSON are always unicode. But because
+    some of the fields as defined in the zope schema are actually ASCII
+    based types (URIs, identifiers that should never contain non-ASCII, etc.)
+    we cast them to bytestrings here before even attempting validation.
+
+    In some cases (top-level ASCII fields) validation would fail outright if
+    we didn't do this, but in more subtle cases (e.g. Choice fields with
+    vocabs that contain ASCII values) this would go unnoticed, and we could
+    end up with a mix of bytestrings vs. unicode for the same field in our
+    storage, depending on how exactly they were set.
+    """
+    def safe_utf8(s):
+        if isinstance(s, unicode):
+            s = s.encode('utf8')
+        return s
+
+    for key, value in jsondata.items():
+        if key in schema:
+            field = schema[key]
+
+            # Field itself may be of a bytestring type
+            pytype = getattr(field, '_type', None)
+            if pytype is str and isinstance(value, unicode):
+                jsondata[key] = value.encode('utf-8')
+                continue
+
+            # Fields vocabulary terms may be of a bytestring type
+            if isinstance(field, Choice):
+                terms = [t.value for t in field.vocabulary]
+                if isinstance(terms[0], str) and isinstance(value, unicode):
+                    jsondata[key] = value.encode('utf-8')
+                    continue
+
+            # Field's value_type may indicate bytestring type
+            if isinstance(field, List):
+                pytype = getattr(field.value_type, '_type', None)
+                if pytype is str and isinstance(value, list):
+                    jsondata[key] = [safe_utf8(s) for s in value]
+                    continue

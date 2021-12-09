@@ -33,8 +33,25 @@ class Activity(Base, Translatable):
     kind = Column(String(255), nullable=False)
     actor_id = Column(String(USER_ID_LENGTH), nullable=False)
     created = Column(UTCDateTime(timezone=True), default=utcnow_tz_aware)
-    resource_id = Column(Integer, ForeignKey('resources.id'), nullable=False)
+    resource_id = Column(Integer, ForeignKey('resources.id'), nullable=True)
     resource = relationship("Resource", backref="activities")
+    external_resource_url = Column(String(255), nullable=True)
+
+    def __init__(self, **kwargs):
+        resource = kwargs.get('resource')
+        external_resource_url = kwargs.get('external_resource_url')
+
+        if not (resource or external_resource_url):
+            raise TypeError(
+                "Either 'resource' or 'external_resource_url' must be "
+                "specified for an activity")
+
+        if resource and external_resource_url:
+            raise TypeError(
+                "Arguments 'resource' and 'external_resource_url' are "
+                "mutually exclusive for activities")
+
+        return super(Activity, self).__init__(**kwargs)
 
     def __repr__(self):
         return u'<Activity {} on {} >'.format(self.kind, repr(self.resource))
@@ -46,6 +63,9 @@ class Activity(Base, Translatable):
         notification for the activity's actor if he has enabled the
         notify_own_actions'setting.
         """
+        if not self.resource and not notification_recipients:
+            raise TypeError("Argument 'notification_recipients' must be "
+                            "specified for activities without a resource")
 
         notifications = []
         if notification_recipients:

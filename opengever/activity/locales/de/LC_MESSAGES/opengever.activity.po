@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-06-16 06:03+0000\n"
+"POT-Creation-Date: 2021-12-08 16:03+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,11 @@ msgstr ""
 #: ./opengever/activity/notification_settings.py
 msgid "added-as-watcher"
 msgstr "Als Beobachter hinzugefügt worden"
+
+#. Default: "Always"
+#: ./opengever/activity/roles.py
+msgid "always"
+msgstr "Immer"
 
 #. Default: "Archivist"
 #: ./opengever/activity/roles.py
@@ -138,6 +143,11 @@ msgstr "Überfälliges Dossier"
 #: ./opengever/activity/roles.py
 msgid "dossier_responsible_role"
 msgstr "Federführend"
+
+#. Default: "External activities"
+#: ./opengever/activity/notification_settings.py
+msgid "external-activity"
+msgstr "Externe Aktivitäten"
 
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
