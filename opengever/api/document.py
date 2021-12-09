@@ -48,7 +48,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             obj, 'preview')
         result[u'pdf_url'] = bumblebee_service.get_representation_url(
             obj, 'pdf')
-        result[u'file_extension'] = self.context.get_file_extension()
+        result[u'file_extension'] = obj.get_file_extension()
 
         extend_with_backreferences(
             result, self.context, self.request, 'relatedItems',
