@@ -1,5 +1,6 @@
 from datetime import date
 from datetime import timedelta
+from opengever.activity.browser import resolve_notification_url
 from opengever.activity.dispatcher import NotificationDispatcher
 from opengever.activity.mailer import Mailer
 from opengever.activity.model import Digest
@@ -66,13 +67,23 @@ class DigestMailer(Mailer):
         items = []
         data = self.group_by_resource(notifications).items()
         for resource, notifications in data:
-            activities = [
-                notification.activity.serialize(with_description=True)
-                for notification in notifications]
-            items.append({
-                'title': activities[0]['title'],
-                'url': ResolveOGUIDView.url_for(resource.oguid),
-                'activities': activities})
+            if resource is not None:
+                # GEVER resource with an OGUID - group by resource
+                activities = [
+                    notification.activity.serialize(with_description=True)
+                    for notification in notifications]
+                items.append({
+                    'title': activities[0]['title'],
+                    'url': ResolveOGUIDView.url_for(resource.oguid),
+                    'activities': activities})
+            else:
+                # External resource(s) - list them in "groups" of one
+                for notification in notifications:
+                    activity = notification.activity.serialize(with_description=True)
+                    items.append({
+                        'title': activity['title'],
+                        'url': resolve_notification_url(notification),
+                        'activities': [activity]})
         return items
 
     def send_digests(self):

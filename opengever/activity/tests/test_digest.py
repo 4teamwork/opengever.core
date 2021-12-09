@@ -49,6 +49,41 @@ class TestDigestMail(IntegrationTestCase):
         self.assertItemsEqual(['foo@example.com', 'robert.ziegler@gever.local'],
                               [message.get('To') for message in messages])
 
+    def test_handles_notification_with_external_resources(self):
+        activity_with_external_resource = create(
+            Builder('activity')
+            .having(
+                title=u'Technische Quittung f\xfcr eCH-0147 Export',
+                label=u'eCH-0147 Quittung erhalten',
+                summary=u'Technische Quittung f\xfcr eCH-0147 Export erhalten',
+                description=u'Technische Quittung f\xfcr eCH-0147 Export "Mein Dossier" erhalten',
+                created=pytz.UTC.localize(datetime(2017, 10, 15, 18, 24)),
+                resource=None,
+                external_resource_url='http://example.org',
+            )
+        )
+
+        create(
+            Builder('notification')
+            .having(
+                activity=activity_with_external_resource,
+                is_digest=True,
+                userid=self.regular_user.getId()))
+
+        DigestMailer().send_digests()
+        process_mail_queue()
+
+        messages = [message_from_string(mail)
+                    for mail in Mailing(self.portal).get_messages()]
+
+        # Asserting that the notification URL and metadata for the notification
+        # with an external resource appears in the email's HTML is nearly
+        # impossibly to do robustly, unfortunately. So we just assert that at
+        # least both messages could be produced.
+        self.assertEquals(2, len(messages))
+        self.assertItemsEqual(['foo@example.com', 'robert.ziegler@gever.local'],
+                              [message.get('To') for message in messages])
+
     def test_sends_only_not_yet_sended_notifications(self):
         self.note2.sent_in_digest = True
 
