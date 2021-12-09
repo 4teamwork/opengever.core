@@ -27,6 +27,9 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
       {
         "@id": "http://example.org/fd/kontakte/@ogds-users/peter.mueller",
         "@type": "virtual.ogds.user",
+        "absent": false,
+        "absent_from": null,
+        "absent_to": null,
         "active": true,
         "address1": null,
         "...": "...",

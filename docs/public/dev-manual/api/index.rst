@@ -69,4 +69,6 @@ Inhalt:
    close_remote_task.rst
    reference_numbers.rst
    dispositions.rst
+   out_of_office.rst
+   substitutes.rst
    examples/index.rst

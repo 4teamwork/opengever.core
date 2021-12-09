@@ -53,6 +53,7 @@
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
+  <adapter factory=".substitutes.SerializeSubstituteToJson" />
   <adapter factory=".task.SerializeTaskToJson" />
   <adapter factory=".task.SerializeTaskResponseToJson" />
   <adapter factory=".task.TaskDeserializeFromJson" />
@@ -1556,6 +1557,54 @@
       for="opengever.disposition.disposition.IDispositionSchema"
       factory=".disposition.AppraisalPatch"
       permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="GET"
+      name="@out-of-office"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".out_of_office.OutOfOfficeGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@out-of-office"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".out_of_office.OutOfOfficePatch"
+      permission="cmf.SetOwnProperties"
+      />
+
+  <plone:service
+      method="GET"
+      name="@substitutes"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".substitutes.SubstitutesGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      name="@my-substitutes"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".substitutes.MySubstitutesGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@my-substitutes"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".substitutes.MySubstitutesPost"
+      permission="cmf.SetOwnProperties"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@my-substitutes"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".substitutes.MySubstitutesDelete"
+      permission="cmf.SetOwnProperties"
       />
 
 </configure>

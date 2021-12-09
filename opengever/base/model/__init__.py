@@ -39,6 +39,7 @@ tables = [
     'groups_users',
     'groups',
     'org_units',
+    'substitutes',
     'teams',
     'users',
     'user_settings',

@@ -156,6 +156,27 @@
             "format": "date",
             "description": "",
             "_zope_schema_type": "Date"
+        },
+        "absent": {
+            "type": "boolean",
+            "title": "absent",
+            "description": "",
+            "_zope_schema_type": "Bool",
+            "default": false
+        },
+        "absent_from": {
+            "type": "string",
+            "title": "absent_from",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
+        },
+        "absent_to": {
+            "type": "string",
+            "title": "absent_to",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
         }
     },
     "required": [
@@ -183,6 +204,9 @@
         "zip_code",
         "city",
         "country",
-        "last_login"
+        "last_login",
+        "absent",
+        "absent_from",
+        "absent_to"
     ]
 }

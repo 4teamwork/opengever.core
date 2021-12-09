@@ -55,6 +55,10 @@ class User(Base):
 
     last_login = Column(Date, index=True)
 
+    absent = Column(Boolean, default=False)
+    absent_from = Column(Date)
+    absent_to = Column(Date)
+
     column_names_to_sync = {
         'userid', 'active', 'firstname', 'lastname', 'directorate',
         'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',

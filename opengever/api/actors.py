@@ -44,6 +44,7 @@ class SerializeActorToJson(object):
             'active': self.context.is_active,
             'actor_type': self.context.actor_type,
             'identifier': self.context.identifier,
+            'is_absent': self.context.is_absent,
             'label': self.context.get_label(with_principal=False),
             'portrait_url': self.context.get_portrait_url(),
             'representatives': [

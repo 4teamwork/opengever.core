@@ -48,6 +48,7 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
+from datetime import datetime
 
 
 SYSTEM_ACTOR_ID = '__system__'
@@ -148,6 +149,10 @@ class Actor(object):
     def is_active(self):
         return True
 
+    @property
+    def is_absent(self):
+        return False
+
     def corresponds_to(self, user):
         raise NotImplementedError()
 
@@ -192,6 +197,10 @@ class NullActor(object):
     def is_active(self):
         return False
 
+    @property
+    def is_absent(self):
+        return False
+
     def represents(self):
         return None
 
@@ -232,6 +241,10 @@ class SystemActor(object):
 
     @property
     def is_active(self):
+        return False
+
+    @property
+    def is_absent(self):
         return False
 
     def represents(self):
@@ -561,6 +574,14 @@ class OGDSUserActor(Actor):
         return self.user.active
 
     @property
+    def is_absent(self):
+        if self.user.absent:
+            return True
+        if self.user.absent_from and self.user.absent_to:
+            return self.user.absent_from <= datetime.now().date() <= self.user.absent_to
+        return False
+
+    @property
     def permission_identifier(self):
         return self.identifier
 
@@ -707,8 +728,8 @@ class ActorLookup(object):
 
     def is_kub_contact(self):
         kub_contact_prefixes = ('organization:', 'person:', 'membership:')
-        return (any(map(self.identifier.startswith, kub_contact_prefixes)) and
-                is_kub_feature_enabled())
+        return (any(map(self.identifier.startswith, kub_contact_prefixes))
+                and is_kub_feature_enabled())
 
     def is_sql_contact(self):
         sql_contact_prefixes = ['organization:', 'person:', 'org_role:']

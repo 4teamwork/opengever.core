@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-29 12:29+0000\n"
+"POT-Creation-Date: 2021-12-08 15:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,4 +162,14 @@ msgstr ""
 #. Default: "Show all users"
 #: ./opengever/ogds/base/browser/templates/userdetails.pt
 msgid "link_all_users"
+msgstr ""
+
+#. Default: "This substitute already exists."
+#: ./opengever/ogds/base/substitute.py
+msgid "msg_substitute_already_exists"
+msgstr ""
+
+#. Default: "This substitute does not exist."
+#: ./opengever/ogds/base/substitute.py
+msgid "msg_substitute_does_not_exist"
 msgstr ""

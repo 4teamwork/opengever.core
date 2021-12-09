@@ -54,6 +54,9 @@ class TestOGDSUserGet(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
              u'@type': u'virtual.ogds.user',
+             u'absent': False,
+             u'absent_from': None,
+             u'absent_to': None,
              u'active': True,
              u'address1': u'Kappelenweg 13',
              u'address2': u'Postfach 1234',

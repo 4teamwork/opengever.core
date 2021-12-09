@@ -40,6 +40,7 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.ogds.models.substitute import Substitute
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
@@ -798,6 +799,23 @@ class FavoriteBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('favorite', FavoriteBuilder)
+
+
+class SubstituteBuilder(SqlObjectBuilder):
+
+    mapped_class = Substitute
+    id_argument_name = 'substitution_id'
+
+    def with_substitute(self, user):
+        self.arguments['substitute_userid'] = user.getId()
+        return self
+
+    def for_user(self, user):
+        self.arguments['userid'] = user.getId()
+        return self
+
+
+builder_registry.register('substitute', SubstituteBuilder)
 
 
 class ReminderSettingsBuilder(SqlObjectBuilder):
