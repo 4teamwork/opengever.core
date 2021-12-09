@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -144,6 +145,42 @@ class TestReopenMeeting(IntegrationTestCase):
              u"need to be reopened first."],
             reopener.get_errors()
         )
+
+    def test_only_considers_newer_meetings_from_same_period(self):
+        self.login(self.committee_responsible)
+
+        agenda_item = self.schedule_ad_hoc(self.meeting, 'Foo')
+        self.schedule_paragraph(self.meeting, u'Para')
+        agenda_item.decide()
+        model = self.meeting.model
+        model.close()
+
+        # Create meeting with higher meeting number but in different period
+        period = create(Builder('period').having(
+                title=u'2015',
+                start=date(2015, 1, 1),
+                end=date(2015, 12, 31)).within(self.committee))
+        period.meeting_sequence_number = 20
+
+        meeting_dossier = create(
+            Builder('meeting_dossier')
+            .within(self.leaf_repofolder)
+        )
+        old_meeting = create(
+            Builder('meeting')
+            .having(
+                title=u'8. Sitzung der Rechnungspr\xfcfungskommission',
+                committee=self.committee.load_model(),
+                start=datetime(2015, 9, 12, 19, 30, tzinfo=pytz.UTC),
+            )
+            .link_with(meeting_dossier)
+        )
+        agenda_item = self.schedule_ad_hoc(old_meeting, 'Foo')
+        agenda_item.decide()
+
+        self.assertTrue(old_meeting.meeting_number > self.meeting.model.meeting_number)
+        reopener = ReopenMeeting(self.meeting.model)
+        self.assertEqual([], reopener.get_errors())
 
     @browsing
     def test_browser_reopen_meeting(self, browser):
