@@ -4589,6 +4589,7 @@ table.favorites .ui-sortable-helper { display: table !important; }
 #content .sharing-form .assignments_listing li { list-style-type: none; }
 #content .sharing-form .loading { pointer-events: none; }
 #content .sharing-form .loading:before { margin-right: 5px; font-size: 12px; }
+#content .sharing-form .alert { padding: 10px; background-color: #f44336; /* Red */ color: white; margin-bottom: 15px; margin-top: 15px; }
 
 #content div.wizard { background-color: transparent; }
 #content div.wizard .wizardSteps { display: flex; justify-content: space-between; background-color: #f5f5f5; }

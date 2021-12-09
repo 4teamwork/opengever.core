@@ -82,6 +82,8 @@
       </tr>
     </table>
 
+    <div class="alert" v-if="not_all_visible">{{i18n.not_all_search_results_visible}}</div>
+
     <template v-if="isEditable">
       <input id="inherit_local_roles" type="checkbox" v-model="inherit" />
       <label for="inherit_local_roles">{{i18n.label_inherit_local_roles}}</label>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-12-09 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,14 +54,15 @@ msgstr "Lokale Rolle erfolgreich gespeichert"
 msgid "message_save_failed"
 msgstr "Lokale Rollen konnten nicht gespeichert werden."
 
+#. Default: "Only the 25 first search results are visible."
+#: ./opengever/sharing/browser/sharing.py
+msgid "not_all_search_results_visible"
+msgstr "Es werden nur die 25 ersten Suchresultate dargestellt."
+
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
 msgstr "Suche Benutzer oder Gruppen"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_contributor"
-msgstr "Hinzufügen"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_contributor"
@@ -86,15 +87,3 @@ msgstr "Lesen"
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
 msgstr "Dossiers abschliessen"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_editor"
-msgstr "Bearbeiten"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_reader"
-msgstr "Lesen"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_role_manager"
-msgstr "Rollen verwalten"

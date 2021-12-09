@@ -92,6 +92,9 @@ class OpengeverSharingView(SharingView):
                   default=u'By default, permissions from the container of this '
                   u'item are inherited. If you disable this, only the '
                   u'explicitly defined sharing permissions will be valid.')),
+            'not_all_search_results_visible': self.translate(
+                _(u'not_all_search_results_visible',
+                  default=u'Only the 25 first search results are visible.')),
             'image_link_icon': self.plone_translate('image_link_icon'),
             'image_confirm_icon': self.plone_translate('image_confirm_icon'),
             'principal_search_placeholder': self.translate(

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-12-09 13:15+0000\n"
 "PO-Revision-Date: 2017-12-03 11:34+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-sharing/fr/>\n"
@@ -56,14 +56,15 @@ msgstr "Role local enregistré avec succès"
 msgid "message_save_failed"
 msgstr "Les roles locaux n'ont pas pu être enregistrées."
 
+#. Default: "Only the 25 first search results are visible."
+#: ./opengever/sharing/browser/sharing.py
+msgid "not_all_search_results_visible"
+msgstr "Seuls les 25 premiers résultats de recherche sont visibles."
+
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
 msgstr "Recherche d'utilisateur ou de groupe"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_contributor"
-msgstr "Ajouter"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_contributor"
@@ -88,15 +89,3 @@ msgstr "Lire les dossiers"
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
 msgstr "Clôturer les dossiers"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_editor"
-msgstr "Modifier"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_reader"
-msgstr "Lire"
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_role_manager"
-msgstr "Gérer les rôles"
