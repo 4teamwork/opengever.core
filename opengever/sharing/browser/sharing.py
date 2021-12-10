@@ -34,6 +34,7 @@ from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import normalizeString
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from urllib import urlencode
 from zope.component import getUtilitiesFor
@@ -180,10 +181,42 @@ class OpengeverSharingView(SharingView):
         return result
 
     def role_settings(self):
-        """The standard role_settings method,
-        but pop the AuthenticatedUsers group for not managers.
+        """The standard role_settings method, but:
+        - sort existing settings first, then search results
+        - pop the AuthenticatedUsers group for not managers.
         """
-        results = super(OpengeverSharingView, self).role_settings()
+        existing_settings = self.existing_role_settings()
+        user_results = self.user_search_results()
+        group_results = self.group_search_results()
+
+        # Customization: we sort existing_settings separately from the search results
+        existing_settings.sort(key=lambda x: safe_unicode(x["type"]) + safe_unicode(x["title"]))
+        search_results = user_results + group_results
+        search_results.sort(key=lambda x: safe_unicode(x["type"]) + safe_unicode(x["title"]))
+        results = existing_settings + search_results
+
+        # We may be called when the user does a search instead of an update.
+        # In that case we must not loose the changes the user made and
+        # merge those into the role settings.
+        requested = self.request.form.get('entries', None)
+        if requested is not None:
+            knownroles = [r['id'] for r in self.roles()]
+            settings = {}
+            for entry in requested:
+                roles = [r for r in knownroles
+                         if entry.get('role_%s' % r, False)]
+                settings[(entry['id'], entry['type'])] = roles
+
+            for entry in results:
+                desired_roles = settings.get((entry['id'], entry['type']), None)
+
+                if desired_roles is None:
+                    continue
+                for role in entry["roles"]:
+                    if entry["roles"][role] in [True, False]:
+                        entry["roles"][role] = role in desired_roles
+
+        # Customization: starting here the rest is Gever customization.
         member = self.context.portal_membership.getAuthenticatedMember()
 
         auth_group_index = [r.get('id') for r in results].index('AuthenticatedUsers')
