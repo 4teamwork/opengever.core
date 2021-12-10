@@ -87,6 +87,12 @@ class SubstitutesGet(MySubstitutesGet):
         return self.params[0]
 
 
+class SubstitutionsGet(SubstitutesGet):
+
+    def get_query(self, userid):
+        return SubstituteManager().list_active_substitutions_for(userid)
+
+
 class MySubstitutesPost(Service):
 
     def reply(self):

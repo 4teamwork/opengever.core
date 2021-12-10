@@ -1577,6 +1577,14 @@
 
   <plone:service
       method="GET"
+      name="@substitutions"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".substitutes.SubstitutionsGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       name="@substitutes"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".substitutes.SubstitutesGet"
