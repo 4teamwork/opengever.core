@@ -42,8 +42,8 @@ class MySubstitutesGet(Service):
 
     def reply(self):
         userid = self.get_userid()
-        results = SubstituteManager().list_substitutes_for(userid)
-        batch = SQLHypermediaBatch(self.request, results, 'substitute_userid')
+        query = self.get_query(userid)
+        batch = SQLHypermediaBatch(self.request, query, 'substitute_userid')
 
         serialized_terms = []
         for substitute in batch:
@@ -64,6 +64,9 @@ class MySubstitutesGet(Service):
 
     def get_userid(self):
         return api.user.get_current().getId()
+
+    def get_query(self, userid):
+        return SubstituteManager().list_substitutes_for(userid)
 
 
 class SubstitutesGet(MySubstitutesGet):
