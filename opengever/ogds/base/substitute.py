@@ -28,3 +28,6 @@ class SubstituteManager(object):
 
     def list_substitutes_for(self, userid):
         return Substitute.query.by_userid(userid=userid)
+
+    def list_active_substitutions_for(self, userid):
+        return Substitute.query.by_substitute_userid(userid).by_absent_users()
