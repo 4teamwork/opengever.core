@@ -25,14 +25,14 @@ class SerializeSubstituteToJson(SerializeSQLModelToJsonBase):
 
     def __call__(self):
         data = super(SerializeSubstituteToJson, self).__call__()
-        if '@substitutes' in self.request.URL:
+        if '@my-substitutes' in self.request.URL:
+            data['@id'] = '{}/@my-substitutes/{}'.format(
+                api.portal.get().absolute_url(),
+                self.context.substitute_userid)
+        else:
             data['@id'] = '{}/@substitutes/{}/{}'.format(
                 api.portal.get().absolute_url(),
                 self.context.userid,
-                self.context.substitute_userid)
-        else:
-            data['@id'] = '{}/@my-substitutes/{}'.format(
-                api.portal.get().absolute_url(),
                 self.context.substitute_userid)
 
         return data
