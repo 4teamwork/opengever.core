@@ -6,6 +6,7 @@ from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
 
 
@@ -31,3 +32,6 @@ class Substitute(Base):
     substitution_id = Column("id", Integer, Sequence("substitution_id_seq"), primary_key=True)
     userid = Column(String(USER_ID_LENGTH), ForeignKey(User.userid))
     substitute_userid = Column(String(USER_ID_LENGTH), ForeignKey(User.userid))
+
+    user = relationship("User", foreign_keys=[userid])
+    substitute = relationship("User", foreign_keys=[substitute_userid])
