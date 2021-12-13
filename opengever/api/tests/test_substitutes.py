@@ -59,6 +59,21 @@ class TestSubstitutesGet(IntegrationTestCase):
 
 
 class TestSubstitutionsGet(IntegrationTestCase):
+    def setUp(self):
+        super(TestSubstitutionsGet, self).setUp()
+        # with self.login(self.regular_user):
+        self.set_substitute_and_absence(self.administrator, self.regular_user, False)
+        self.set_substitute_and_absence(self.meeting_user, self.regular_user, True)
+        self.set_substitute_and_absence(self.dossier_responsible, self.regular_user,
+                                        False, '2018-09-01', '2018-10-01')
+        self.set_substitute_and_absence(self.workspace_member, self.regular_user,
+                                        True, '2018-09-01', '2018-10-01')
+        self.set_substitute_and_absence(self.dossier_manager, self.regular_user,
+                                        False, '2025-02-25', '2025-02-28')
+        self.set_substitute_and_absence(self.secretariat_user, self.regular_user,
+                                        False, '2020-10-10', '2022-02-22')
+        self.set_substitute_and_absence(self.committee_responsible, self.secretariat_user, True)
+        create_session().flush()
 
     def set_substitute_and_absence(self, user, substitute, absent, absent_from=None, absent_to=None):
         create(Builder('substitute')
@@ -76,27 +91,26 @@ class TestSubstitutionsGet(IntegrationTestCase):
     def test_get_substitutions(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.set_substitute_and_absence(self.administrator, self.regular_user, False)
-        self.set_substitute_and_absence(self.meeting_user, self.regular_user, True)
-        self.set_substitute_and_absence(self.dossier_responsible, self.regular_user,
-                                        False, '2018-09-01', '2018-10-01')
-        self.set_substitute_and_absence(self.workspace_member, self.regular_user,
-                                        True, '2018-09-01', '2018-10-01')
-        self.set_substitute_and_absence(self.dossier_manager, self.regular_user,
-                                        False, '2025-02-25', '2025-02-28')
-        self.set_substitute_and_absence(self.secretariat_user, self.regular_user,
-                                        False, '2020-10-10', '2022-02-22')
-        self.set_substitute_and_absence(self.committee_responsible, self.secretariat_user, True)
+        with freeze(datetime(2021, 11, 30)):
+            browser.open(self.portal, view='@substitutions/kathi.barfuss',
+                         method='GET', headers=self.api_headers)
 
-        create_session().flush()
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(browser.json['items_total'], 6)
+        self.assertEqual({self.regular_user.getId()},
+                         {item['substitute_userid'] for item in browser.json['items']})
+
+    @browsing
+    def test_get_substitutions_active_substitutions(self, browser):
+        self.login(self.regular_user, browser=browser)
 
         with freeze(datetime(2021, 11, 30)):
-            browser.open(self.portal, view='@substitutions/kathi.barfuss', method='GET',
-                         headers=self.api_headers)
+            browser.open(self.portal, view='@substitutions/kathi.barfuss?actives_only=true',
+                         method='GET', headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
         self.assertEqual({
-            u'@id': u'http://nohost/plone/@substitutions/kathi.barfuss',
+            u'@id': u'http://nohost/plone/@substitutions/kathi.barfuss?actives_only=true',
             u'items': [
                 {u'@id': u'http://nohost/plone/@substitutes/herbert.jager/kathi.barfuss',
                  u'@type': u'virtual.ogds.substitute',

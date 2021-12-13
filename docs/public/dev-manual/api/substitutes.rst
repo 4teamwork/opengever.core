@@ -116,7 +116,7 @@ Ein Stellvertreter des aktuellen Benutzers kann mittels POST Request hinzugefüg
 
 Stellvertreter entfernen
 ------------------------
-Ein bestehender Stellvertretrt des aktuelllen Benutzers kann mittels DELETE Request wieder gelöscht werden. Als Pfad-Parameter wird die User-ID der Stellvertretung erwartet.
+Ein bestehender Stellvertreter des aktuelllen Benutzers kann mittels DELETE Request wieder gelöscht werden. Als Pfad-Parameter wird die User-ID der Stellvertretung erwartet.
 
 
 **Beispiel-Request**:
@@ -137,10 +137,7 @@ Ein bestehender Stellvertretrt des aktuelllen Benutzers kann mittels DELETE Requ
 
 Stellvertretungen eines Benutzers auflisten
 -------------------------------------------
-Mittels eines GET Request können die aktuellen Stellvertretungen eines Benutzers abgefragt werden. Dabei wird die User-ID des Benutzers als Pfad-Parameter erwartet. Es werden alle, also global über den ganzen Mandanten-Verbund, zurückgegeben.
-
-Eine Stellvertretung ist nur dann aktiv für Benutzer B, wenn Benutzer A, der Benutzer B als Stellverterter gewählt hat, abwesend ist.
-
+Mittels eines GET Request können die Stellvertretungen eines Benutzers abgefragt werden. Dabei wird die User-ID des Benutzers als Pfad-Parameter erwartet. Es werden alle, also global über den ganzen Mandanten-Verbund, zurückgegeben.
 
 **Beispiel-Request**:
 
@@ -177,3 +174,12 @@ Eine Stellvertretung ist nur dann aktiv für Benutzer B, wenn Benutzer A, der Be
           ],
           "items_total": 2
       }
+
+Mit dem Parameter ``actives_only`` können nur aktive Stellvertretungen abgefragt werden. Eine Stellvertretung ist dann aktiv für Benutzer B, wenn Benutzer A, der Benutzer B als Stellverterter gewählt hat, abwesend ist.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /@substitutions/peter.mueller?actives_only=true HTTP/1.1
+       Accept: application/json

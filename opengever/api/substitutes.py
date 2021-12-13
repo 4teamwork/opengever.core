@@ -90,7 +90,9 @@ class SubstitutesGet(MySubstitutesGet):
 class SubstitutionsGet(SubstitutesGet):
 
     def get_query(self, userid):
-        return SubstituteManager().list_active_substitutions_for(userid)
+        if self.request.form.get('actives_only') in ('true', '1', 'yes', 'on'):
+            return SubstituteManager().list_active_substitutions_for(userid)
+        return SubstituteManager().list_substitutions_for(userid)
 
 
 class MySubstitutesPost(Service):
