@@ -1,0 +1,1 @@
+Bump ftw.recipe.solr to version 1.3.5. Mitigation for CVE-2021-44228 (log4j vulnerability). [buchi]
