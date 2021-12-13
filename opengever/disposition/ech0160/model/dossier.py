@@ -4,6 +4,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.model import Document
 from opengever.disposition.ech0160.model import NOT_SPECIFIED
+from opengever.disposition.ech0160.model.additional_data import get_additional_data
 from opengever.disposition.ech0160.utils import set_classification_attributes
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
@@ -84,6 +85,10 @@ class Dossier(object):
                 dossier_obj.end)
 
         dossier.schutzfrist = unicode(ILifeCycle(self.obj).custody_period)
+
+        additional_data = get_additional_data(self.obj)
+        if additional_data:
+            dossier.zusatzDaten = additional_data
 
         for d in self.dossiers.values():
             dossier.dossier.append(d.binding())

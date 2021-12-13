@@ -12,6 +12,8 @@ from opengever.disposition.ech0160.model import File
 from opengever.disposition.ech0160.model import Folder
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.testing import IntegrationTestCase
@@ -229,6 +231,29 @@ class TestDossier(IntegrationTestCase):
         self.assertEquals(date(2016, 12, 31),
                           binding.abschlussdatum.datum.date())
 
+    def test_include_propertysheets_in_zusatzdaten(self):
+        self.login(self.manager)
+        create(
+            Builder("property_sheet_schema")
+            .named("businesscase_dossier_schema")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("textline", u"f1", u"Field 1", u"", False)
+        )
+        IDossier(self.inactive_dossier).dossier_type = u"businesscase"
+        IDossierCustomProperties(self.inactive_dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {"f1": "custombusinesscase"},
+            "IDossier.default": {"additional_title": "customtitle"},
+        }
+
+        binding = Dossier(self.inactive_dossier).binding()
+
+        self.assertEquals(
+            [u'additional_title', u'f1'],
+            [prop.name for prop in binding.zusatzDaten.merkmal])
+        self.assertEquals(
+            [u'customtitle', u'custombusinesscase'],
+            [prop.value() for prop in binding.zusatzDaten.merkmal])
+
     def test_add_descendants_adds_all_subdossiers(self):
         self.login(self.regular_user)
 
@@ -319,6 +344,31 @@ class TestDocumentModel(IntegrationTestCase):
         entstehungszeitraum = Document(self.document).binding().entstehungszeitraum
         self.assertEquals(date(2016, 11, 6), entstehungszeitraum.von.datum.date())
         self.assertEquals(date(2017, 12, 6), entstehungszeitraum.bis.datum.date())
+
+    def test_include_propertysheets_in_zusatzdaten(self):
+        self.login(self.manager)
+        create(Builder("property_sheet_schema")
+               .named("document_default_schema")
+               .assigned_to_slots(u"IDocument.default")
+               .with_field("textline", u"f1", u"Field 1", u"", False)
+               .with_field("multiple_choice", u"f2", u"Field 2", u"", False,
+                           values=["one", "two", "three"])
+               .with_field("bool", u"f3", u"Field 3", u"", False))
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocument.default": {"f1": "custom field text",
+                                  "f2": ["one", "three"],
+                                  "f3": False},
+        }
+
+        binding = Document(self.document).binding()
+
+        self.assertEquals(
+            [u'f1', u'f2', u'f3'],
+            [prop.name for prop in binding.zusatzDaten.merkmal])
+        self.assertEquals(
+            [u'custom field text', u'one, three', u'No'],
+            [prop.value() for prop in binding.zusatzDaten.merkmal])
 
 
 class TestFolderAndFileModel(IntegrationTestCase):

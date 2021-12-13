@@ -1,5 +1,6 @@
 from opengever.base.behaviors.changed import IChanged
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.ech0160.model.additional_data import get_additional_data
 from opengever.disposition.ech0160.utils import set_classification_attributes
 from opengever.disposition.ech0160.utils import voc_term_title
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -38,6 +39,10 @@ class Document(object):
             IChanged(self.obj).changed.date())
 
         set_classification_attributes(dokument, self.obj)
+
+        additional_data = get_additional_data(self.obj)
+        if additional_data:
+            dokument.zusatzDaten = additional_data
 
         for file_ref in self.file_refs:
             dokument.dateiRef.append(file_ref)
