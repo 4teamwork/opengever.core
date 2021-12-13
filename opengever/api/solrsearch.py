@@ -34,9 +34,9 @@ class SolrSearchGet(SolrQueryBaseService):
         """Extract breadcrumbs flag and checks if the batchsize is
         not higher than 50 when enabled."""
 
-        show_breadcrumbs = bool(self.request.form.get('breadcrumbs', False))
+        show_breadcrumbs = bool(self.request_payload.get('breadcrumbs', False))
         if show_breadcrumbs:
-            if self.request.form.get('b_size', 0) > 50:
+            if self.request_payload.get('b_size', 0) > 50:
                 raise BadRequest('Breadcrumb flag is only allowed for '
                                  'small batch sizes (max. 50).')
         return show_breadcrumbs
