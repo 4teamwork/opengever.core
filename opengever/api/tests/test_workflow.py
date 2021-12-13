@@ -74,6 +74,28 @@ class TestWorkflowPost(IntegrationTestCase):
         )
 
     @browsing
+    def test_transition_remove_document_can_be_executed(self, browser):
+        self.login(self.manager)
+        # allow `secretariat_user` to remove gever content
+        self.portal.manage_permission(
+            'Remove GEVER content', roles=['Editor'], acquire=True)
+
+        self.login(self.secretariat_user, browser=browser)
+        ITrasher(self.inbox_document).trash()
+
+        browser.open(
+            self.inbox_document.absolute_url() + '/@workflow/document-transition-remove',
+            method='POST', headers=self.api_headers)
+
+        self.assertDictContainsSubset(
+            {u'title': u'Removed',
+             u'actor': u'jurgen.konig',
+             u'action': u'document-transition-remove',
+             u'review_state': u'document-state-removed'},
+            browser.json
+        )
+
+    @browsing
     def test_calling_endpoint_without_transition_gives_400(self, browser):
         self.login(self.regular_user, browser=browser)
 

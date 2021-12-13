@@ -1,6 +1,6 @@
 <dc-workflow
-    workflow_id="opengever_inbox_mail_workflow"
-    title="Mail workflow for mails inside the inbox area"
+    workflow_id="opengever_mail_workflow"
+    title="Mail Workflow"
     description=""
     state_variable="review_state"
     initial_state="mail-state-active"
@@ -25,6 +25,12 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceGuest</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Add portal content"
@@ -38,6 +44,13 @@
       <permission-role>Manager</permission-role>
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceGuest</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="List folder contents"
@@ -53,10 +66,8 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="False">
+        acquired="True">
       <permission-role>Manager</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>Editor</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
@@ -69,6 +80,12 @@
       <permission-role>Reader</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>CommitteeAdministrator</permission-role>
+      <permission-role>CommitteeMember</permission-role>
+      <permission-role>CommitteeResponsible</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceGuest</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="ftw.mail: Add Inbound Mail"
@@ -76,7 +93,7 @@
   </permission-map>
     <permission-map
         name="ftw.mail: Add Mail"
-        acquired="False">
+        acquired="True">
       <permission-role>Manager</permission-role>
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
@@ -150,6 +167,7 @@
         category="workflow"
         icon="">mail-transition-remove</action>
     <guard>
+      <guard-expression>here/is_trashed</guard-expression>
       <guard-permission>Remove GEVER content</guard-permission>
     </guard>
   </transition>
@@ -161,11 +179,26 @@
       before_script=""
       after_script="">
     <action
-        url="%(content_url)s/content_status_modify?workflow_action=mail-transition-remove"
+        url="%(content_url)s/content_status_modify?workflow_action=mail-transition-restore"
         category="workflow"
-        icon="">mail-transition-remove</action>
+        icon="">mail-transition-restore</action>
     <guard>
       <guard-permission>Manage portal content</guard-permission>
     </guard>
   </transition>
+  <variable
+      variable_id="review_history"
+      for_catalog="False"
+      for_status="False"
+      update_always="False">
+    <description>Provides access to workflow history</description>
+    <default>
+
+      <expression>state_change/getHistory</expression>
+    </default>
+    <guard>
+      <guard-permission>Request review</guard-permission>
+      <guard-permission>Review portal content</guard-permission>
+    </guard>
+  </variable>
 </dc-workflow>
