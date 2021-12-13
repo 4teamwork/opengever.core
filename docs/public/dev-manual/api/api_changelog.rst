@@ -9,12 +9,15 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Support recipient in ``@document-from-template`` endpoint when KuB feature is enabled.
+- Contact feature in the ``@config`` endpoint is now one of ``plone``, ``sql`` and ``kub``.
+
 Other Changes
 ^^^^^^^^^^^^^
 - Add new endpoint ``@external-activities`` (see :ref:`docs <external-activities>`)
 - Include sip_delivery_status in the disposition serialization.
 - Disposition serialization contains now responses.
-- @xhr-upload: new endpoint to upload documents as a multipart/form-data xhr request. [elioschmutz]
+- ``@xhr-upload``: new endpoint to upload documents as a multipart/form-data xhr request.
 - Include is_completed in sql task serialization.
 - ``@listing``: Add retention_expiration column.
 - New endpoints ``@my-substitutes`` and ``@substitutes`` are added (see :ref:`substitutes`).
@@ -27,12 +30,12 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-- @complete-successor-task: ``documents`` payload: Now requires relative paths to the siteroot instead physical paths. The physical path is for internal use only. [elioschmutz]
+- @complete-successor-task: ``documents`` payload: Now requires relative paths to the siteroot instead physical paths. The physical path is for internal use only.
 - Error message and response status code for ForbiddenByQuota errors have changed.
 
 Other Changes
 ^^^^^^^^^^^^^
-- @complete-successor-task: ``documents`` payload: now also resolves document references by @id. [elioschmutz]
+- @complete-successor-task: ``documents`` payload: now also resolves document references by @id.
 - @reminders now returns 204 NoContent when no reminder is set.
 - Added API support for dispositions objects.
 - Added ``@kub`` endpoint to resolve KuB entities by their ID.
@@ -43,8 +46,8 @@ Other Changes
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 - Some error messages have been renamed, but the format how an error is returned stays the same, only the response now usually contains a translated error message and may contain additional metadata.
-- Toggling a Workspace Todos review state from active to completed and back can be done thorugh the newly introduced `@toggle` endpiont for todos. [elioschmutz]
-- Workspace Todos do no longer provide a completed-field. Completing a todo is now done through a workflow transition. [elioschmutz]
+- Toggling a Workspace Todos review state from active to completed and back can be done thorugh the newly introduced `@toggle` endpiont for todos.
+- Workspace Todos do no longer provide a completed-field. Completing a todo is now done through a workflow transition.
 - The ``completed`` field in the ``@listing`` is now longer supported, use the ``is_completed`` field instead.
 
 Other Changes

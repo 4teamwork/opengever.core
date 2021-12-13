@@ -1,4 +1,5 @@
 from opengever.api.schema.querysources import GEVERQuerySourcesGet
+from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
 from opengever.ogds.base.sources import AllFilteredGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSourceBinder
@@ -19,6 +20,10 @@ class IGlobalSourceSchema(model.Schema):
 
     current_admin_unit_org_units = schema.Choice(
         source=CurrentAdminUnitOrgUnitsSourceBinder(),
+    )
+
+    contacts = schema.Choice(
+        source=PloneSqlOrKubContactSourceBinder()
     )
 
 

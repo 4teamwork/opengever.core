@@ -1,6 +1,8 @@
 from datetime import date
 from datetime import datetime
 from datetime import timedelta
+from docx import Document
+from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,8 +10,10 @@ from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
+from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.team import Team
@@ -22,6 +26,7 @@ from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 import json
 import pytz
+import requests_mock
 
 
 class TestDocumentFromTemplatePost(IntegrationTestCase):
@@ -156,6 +161,117 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
                          headers=self.api_headers)
+
+    @browsing
+    def test_raises_bad_request_if_recipient_is_passed_and_kub_disabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'recipient': KuBIntegrationTestCase.person_jean}
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as exc:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            'recipient is only supported when KuB feature is active',
+            str(exc.exception))
+
+
+@requests_mock.Mocker()
+class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
+
+    features = (
+        'doc-properties',
+        )
+
+    document_date = datetime(2015, 9, 28, 0, 0)
+
+    expected_doc_properties = [
+        ('Document.ReferenceNumber', 'Client1 1.1 / 1 / 44'),
+        ('Document.SequenceNumber', '44'),
+        ('Dossier.ReferenceNumber', 'Client1 1.1 / 1'),
+        ('Dossier.Title', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'),
+        ('Test', 'Peter'),
+        ('User.FullName', u'K\xf6nig J\xfcrgen'),
+        ('User.ID', 'jurgen.konig'),
+        ('ogg.document.creator.user.email', 'jurgen.konig@gever.local'),
+        ('ogg.document.creator.user.firstname', u'J\xfcrgen'),
+        ('ogg.document.creator.user.lastname', u'K\xf6nig'),
+        ('ogg.document.creator.user.title', u'K\xf6nig J\xfcrgen'),
+        ('ogg.document.creator.user.userid', 'jurgen.konig'),
+        ('ogg.document.document_date', document_date),
+        ('ogg.document.reference_number', 'Client1 1.1 / 1 / 44'),
+        ('ogg.document.sequence_number', '44'),
+        ('ogg.document.title', u'New d\xf6cument'),
+        ('ogg.document.version_number', 0),
+        ('ogg.dossier.external_reference', u'qpr-900-9001-\xf7'),
+        ('ogg.dossier.reference_number', 'Client1 1.1 / 1'),
+        ('ogg.dossier.sequence_number', '1'),
+        ('ogg.dossier.title', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'),
+        ('ogg.user.email', 'jurgen.konig@gever.local'),
+        ('ogg.user.firstname', u'J\xfcrgen'),
+        ('ogg.user.lastname', u'K\xf6nig'),
+        ('ogg.user.title', u'K\xf6nig J\xfcrgen'),
+        ('ogg.user.userid', 'jurgen.konig')]
+
+    @browsing
+    def test_creates_document_from_template_without_recipient(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument'}
+
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+
+        self.assertItemsEqual(self.expected_doc_properties, properties)
+
+    @browsing
+    def test_creates_document_from_template_with_recipient(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'recipient': self.person_jean}
+
+        self.mock_get_full_entity_by_id(mocker, self.person_jean)
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.recipient.contact.description', None),
+            ('ogg.recipient.email.address', 'Jean.dupon@example.com'),
+            ('ogg.recipient.person.academic_title', None),
+            ('ogg.recipient.person.firstname', 'Jean'),
+            ('ogg.recipient.person.lastname', 'Dupont'),
+            ('ogg.recipient.person.salutation', 'Herr'),
+            ('ogg.recipient.phone.number', '666 666 66 66')]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+
+        self.assertItemsEqual(expected_doc_properties, properties)
 
 
 class TestDossierFromTemplatePost(IntegrationTestCase):

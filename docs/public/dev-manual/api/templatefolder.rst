@@ -31,3 +31,8 @@ Der Endpoint erwartet zwei Parameter:
 
 Als Response wird die JSON-Repräsentation des neu erstellten Dokuments geliefert,
 siehe :ref:`Inhaltstypen <content-types>`.
+
+Mit Kontakt- und Behördenverzeichnis
+------------------------------------
+
+Wenn OneGov GEVER mit der Kontakt- und Behördenverzeichnis Applikation verlinkt ist, kann zusätzlich noch ein ``recipient`` mitgegeben werden, dessen Daten als docproperties verwendet werden. Valide ``recipient`` können von ``@globalsources/contacts`` auf Stufe PloneSiteRoot abgefragt werden.

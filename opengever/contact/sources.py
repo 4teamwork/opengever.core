@@ -1,8 +1,12 @@
+from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Contact
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.sources import KuBContactsSourceBinder
+from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.service import ogds_service
 from z3c.formwidget.query.interfaces import IQuerySource
@@ -96,3 +100,19 @@ class ContactsSourceBinder(object):
 
     def __call__(self, context):
         return ContactsSource(context)
+
+
+@implementer(IContextSourceBinder)
+class PloneSqlOrKubContactSourceBinder(object):
+    """A vocabulary factory for currently active contact type.
+    """
+
+    implements(IVocabularyFactory)
+
+    def __call__(self, context):
+        if is_kub_feature_enabled():
+            return KuBContactsSourceBinder()(context)
+        elif is_contact_feature_enabled():
+            return ContactsSourceBinder()(context)
+        else:
+            return UsersContactsInboxesSourceBinder()(context)

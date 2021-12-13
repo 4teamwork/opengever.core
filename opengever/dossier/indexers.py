@@ -4,8 +4,7 @@ from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import ensure_str
-from opengever.contact import is_contact_feature_enabled
-from opengever.contact.sources import ContactsSource
+from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
 from opengever.dossier import _
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
@@ -20,9 +19,6 @@ from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
-from opengever.kub import is_kub_feature_enabled
-from opengever.kub.sources import KuBContactsSourceBinder
-from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.private.dossier import IPrivateDossier
 from plone import api
 from plone.dexterity.interfaces import IDexterityContent
@@ -337,12 +333,7 @@ class ParticipationIndexHelper(object):
         """
         if participant_id == self.any_participant_marker:
             return translate(_(u'any_participant'), context=getRequest())
-        if is_kub_feature_enabled():
-            source = KuBContactsSourceBinder()(api.portal.get())
-        elif is_contact_feature_enabled():
-            source = ContactsSource(api.portal.get())
-        else:
-            source = UsersContactsInboxesSourceBinder()(api.portal.get())
+        source = PloneSqlOrKubContactSourceBinder()(api.portal.get())
         try:
             term = source.getTermByToken(participant_id)
             return term.title

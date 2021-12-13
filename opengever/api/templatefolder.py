@@ -8,6 +8,8 @@ from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.form import CreateDossierContentFromTemplateMixin
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.entity import KuBEntity
 from opengever.task.task import ITask
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
@@ -59,8 +61,16 @@ class DocumentFromTemplatePost(Service):
         if not title:
             raise BadRequest('Missing parameter title')
 
+        recipient_id = data.get('recipient')
+        if recipient_id and not is_kub_feature_enabled():
+            raise BadRequest('recipient is only supported when KuB feature is active')
+        if recipient_id:
+            recipient = (KuBEntity(recipient_id, full=True), )
+        else:
+            recipient = tuple()
+
         command = CreateDocumentFromTemplateCommand(
-            self.context, template, title)
+            self.context, template, title, recipient)
         document = command.execute()
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)

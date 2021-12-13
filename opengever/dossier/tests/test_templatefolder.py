@@ -8,6 +8,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
+from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.contact.interfaces import IContactSettings
 from opengever.document.docprops import TemporaryDocFile
@@ -17,6 +18,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
@@ -643,6 +645,27 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_org_role_properties.items(), properties)
         self.assert_doc_properties_updated_journal_entry_generated(document)
+
+
+class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
+
+    @browsing
+    def test_error_message_is_displayed_when_kub_feature_active(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='document_with_template')
+        self.assertEqual(
+            ['The Contact and Authorities directory is only supported in the new UI.'],
+            error_messages())
+
+        with self.observe_children(self.dossier) as children:
+            browser.fill({
+                'form.widgets.template': self.normal_template.UID(),
+                'Title': 'Test Docx',
+                }).save()
+
+        self.assertEqual(1, len(children['added']))
+        doc = children['added'].pop()
+        self.assertEqual(u'Test Docx', doc.title)
 
 
 class TestDocumentWithTemplateFormWithOfficeConnector(IntegrationTestCase):
