@@ -157,6 +157,26 @@ class TestDocumentSerializer(IntegrationTestCase):
             u'ccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2/preview')
 
     @browsing
+    def test_respects_version_specific_file_extension(self, browser):
+        self.login(self.regular_user, browser)
+
+        versioner = Versioner(self.document)
+        versioner.create_initial_version()
+
+        self.checkout_document(self.document)
+        self.document.file = NamedBlobFile(
+            data='PDF TEST DATA', filename=u'final.pdf')
+        self.checkin_document(self.document)
+
+        url = '{}/@history/0'.format(self.document.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.json.get(u'file_extension'), u'.docx')
+
+        url = '{}/@history/1'.format(self.document.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(browser.json.get(u'file_extension'), u'.pdf')
+
+    @browsing
     def test_document_serialization_contains_tr_connect_links_on_gever_doc(self, browser):
         self.login(self.workspace_member, browser)
 
