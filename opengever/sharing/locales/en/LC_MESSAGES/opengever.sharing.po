@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-14 11:36+0000\n"
+"POT-Creation-Date: 2021-12-09 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,16 +62,16 @@ msgstr "Local roles successfully changed"
 msgid "message_save_failed"
 msgstr "Failed to save local roles."
 
+#. Default: "Only the 25 first search results are visible."
+#: ./opengever/sharing/browser/sharing.py
+msgid "not_all_search_results_visible"
+msgstr "Only the 25 first search results are visible."
+
 #. German translation: Suche Benutzer oder Gruppen
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
 msgstr "Search for users and groups"
-
-#. German translation: Hinzufügen
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_contributor"
-msgstr "Add"
 
 #. German translation: Dossiers hinzufügen
 #: ./opengever/sharing/browser/sharing.py
@@ -102,18 +102,3 @@ msgstr "Read"
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
 msgstr "Resolve dossiers"
-
-#. German translation: Bearbeiten
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_editor"
-msgstr "Edit"
-
-#. German translation: Lesen
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_reader"
-msgstr "Read"
-
-#. German translation: Rollen verwalten
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_role_manager"
-msgstr "Manage roles"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2021-12-09 13:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,13 +57,14 @@ msgstr ""
 msgid "message_save_failed"
 msgstr ""
 
+#. Default: "Only the 25 first search results are visible."
+#: ./opengever/sharing/browser/sharing.py
+msgid "not_all_search_results_visible"
+msgstr ""
+
 #. Default: "Search for Users and Groups"
 #: ./opengever/sharing/browser/sharing.py
 msgid "principal_search_placeholder"
-msgstr ""
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_contributor"
 msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py
@@ -88,16 +89,4 @@ msgstr ""
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
-msgstr ""
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_editor"
-msgstr ""
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_reader"
-msgstr ""
-
-#: ./opengever/sharing/browser/sharing.py
-msgid "sharing_role_manager"
 msgstr ""

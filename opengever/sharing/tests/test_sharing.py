@@ -361,7 +361,7 @@ class TestOpengeverSharing(IntegrationTestCase):
             entry['url'])
 
     @browsing
-    def test_searchs_also_for_group_description_if_configured(self, browser):
+    def test_searches_also_for_group_description_if_configured(self, browser):
         self.login(self.administrator, browser=browser)
 
         group = api.group.get('rk_inbox_users')
@@ -405,6 +405,35 @@ class TestOpengeverSharing(IntegrationTestCase):
         result = browser.json
 
         self.assertIn('batching', result)
+
+    @browsing
+    def test_existing_settings_are_sorted_before_search_result(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.empty_dossier, view='@sharing',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'fa Users Group',
+             u'Fischer J\xfcrgen',
+             u'K\xf6nig J\xfcrgen'],
+            [each["title"] for each in browser.json["entries"]])
+
+        browser.open(self.empty_dossier, view='@sharing?search=in',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'fa Users Group',
+             u'Fischer J\xfcrgen',
+             u'K\xf6nig J\xfcrgen',
+             u'Administrators',
+             u'Site Administrators',
+             u'fa Inbox Users Group',
+             u'rk Inbox Users Group',
+             u'Fr\xfchling F\xe4ivel',
+             u'Hugentobler Fridolin',
+             u'Schr\xf6dinger B\xe9atrice'],
+            [each["title"] for each in browser.json["items"]])
 
 
 class TestRoleAssignmentsGet(IntegrationTestCase):

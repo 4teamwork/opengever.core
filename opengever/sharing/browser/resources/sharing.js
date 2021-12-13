@@ -5,6 +5,7 @@ var sharingApp = {
     i18n: {},
     available_roles: [],
     entries: [],
+    not_all_visible: false,
     inherit: null,
     principal_search: null,
     isEditable: false,
@@ -99,7 +100,9 @@ var sharingApp = {
       this.isSearching = true;
 
       // make sure IE 11 does not cache the fetch request
-      var params = { _t: Date.now().toString(), search: this.principal_search };
+      var params = { _t: Date.now().toString(),
+                     search: this.principal_search,
+                     b_size: this.entries.length + 25};
       if (this.isEditable === false){
         params['ignore_permissions'] = 1
       }
@@ -115,7 +118,7 @@ var sharingApp = {
             return i.disabled !== false && current_ids.indexOf(i.id) === -1;
           }));
         this.inherit = response.data['inherit'];
-
+        this.not_all_visible = response.data['items_total'] > this.entries.length;
         this.isSearching = false;
       }.bind(this));
     },
