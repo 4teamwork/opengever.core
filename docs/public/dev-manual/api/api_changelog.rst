@@ -15,6 +15,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@solrsearch``: Allow POST requests against the endpoint. This allows us to get around the length-limit of GET requests.
 - ``@config``: Add ``is_propertysheets_manager`` key to indicate whether user is allowed to manage property sheets.
 - ``@propertysheets``: Management of property sheets is now also allowed for ``PropertySheetsManager`` role.
 - ``@solrsearch``: Now supports facetting custom property fields.

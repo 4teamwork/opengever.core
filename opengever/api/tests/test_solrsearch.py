@@ -992,3 +992,116 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertIsNone(browser.json.get('stats'))
+
+
+class TestSolrSearchPost(SolrIntegrationTestCase):
+    """The POST endpoint should behave exactly the same as the GET endpoint. We do not
+    copy all the tests of 'TestSolrSearchGet' but rewrite the most important once.
+    """
+    features = ('bumblebee', 'solr')
+
+    @browsing
+    def test_raises_bad_request_if_solr_is_not_enabled(self, browser):
+        self.deactivate_feature('solr')
+
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(400):
+            url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+            browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'message': u'Solr is not enabled on this GEVER installation.',
+             u'type': u'BadRequest'}, browser.json)
+
+    @browsing
+    def test_raises_internal_error_for_invalid_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+        with browser.expect_http_error(500):
+            url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+            browser.open(url, method='POST', data=json.dumps({'q': 'OR'}), headers=self.api_headers)
+
+        self.assertEqual(u'InternalError', browser.json['type'])
+
+    @browsing
+    def test_simple_search_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST',
+                     data=json.dumps({'q': 'wichtig'}),
+                     headers=self.api_headers)
+
+        self.assertEqual(3, browser.json["items_total"])
+        self.assertItemsEqual(
+            [item.absolute_url() for item in
+             (self.document, self.subdocument, self.offered_dossier_to_archive)],
+            [item["@id"] for item in browser.json[u'items']])
+
+    @browsing
+    def test_raw_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST',
+                     data=json.dumps({'q.raw': 'Title:Kommentar'}),
+                     headers=self.api_headers)
+
+        self.assertEqual(1, browser.json["items_total"])
+        self.assertEqual(self.proposaldocument.absolute_url(),
+                         browser.json["items"][0]["@id"])
+
+    @browsing
+    def test_fq_with_multiple_filters(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@solrsearch'.format(self.portal.absolute_url())
+        payload = {
+            'q': 'wichtig',
+            'fq': [
+                'portal_type:opengever.document.document OR ftw.mail.mail',
+                'path_parent:{}'.format(self.subdossier.absolute_url_path().replace("/", "\\/"))
+            ]
+        }
+
+        browser.open(url, method='POST', data=json.dumps(payload), headers=self.api_headers)
+        filtered_items = browser.json["items"]
+        self.assertEqual(1, len(filtered_items))
+        self.assertEqual(self.subdocument.absolute_url(),
+                         filtered_items[0]["@id"])
+
+    @browsing
+    def test_dotted_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.subdossier.absolute_url())
+        payload = {'stats': True, 'stats.field': 'filesize'}
+        browser.open(url, method='POST', data=json.dumps(payload), headers=self.api_headers)
+
+        stats = browser.json['stats']
+        self.assertEqual(
+            stats,
+            {
+                u'filesize': {
+                    u'count': 3,
+                    u'min': 0.0,
+                    u'max': 19.0,
+                    u'sum': 38.0,
+                    u'missing': 2,
+                    u'sumOfSquares': 722.0,
+                    u'stddev': 10.969655114602888,
+                    u'mean': 12.666666666666666
+                }
+            }
+        )
+
+    @browsing
+    def test_fl_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        payload = {'fl': 'UID,Title'}
+        browser.open(url, method='POST', data=json.dumps(payload), headers=self.api_headers)
+
+        self.assertItemsEqual([u'UID', u'Title'],
+                              browser.json['items'][0].keys())
