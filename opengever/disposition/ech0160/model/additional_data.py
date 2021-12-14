@@ -23,6 +23,9 @@ def get_additional_data(obj):
                 value = translate(
                     _(u'label_no', default=u'No'), context=getRequest())
 
+        if isinstance(value, int):
+            value = str(value)
+
         zusatzdaten.merkmal.append(value)
         zusatzdaten.merkmal[-1].name = key
 

@@ -353,21 +353,23 @@ class TestDocumentModel(IntegrationTestCase):
                .with_field("textline", u"f1", u"Field 1", u"", False)
                .with_field("multiple_choice", u"f2", u"Field 2", u"", False,
                            values=["one", "two", "three"])
-               .with_field("bool", u"f3", u"Field 3", u"", False))
+               .with_field("bool", u"f3", u"Field 3", u"", False)
+               .with_field("int", u"f4", u"Field 4", u"", False))
 
         IDocumentCustomProperties(self.document).custom_properties = {
             "IDocument.default": {"f1": "custom field text",
                                   "f2": ["one", "three"],
-                                  "f3": False},
+                                  "f3": False,
+                                  "f4": 1234},
         }
 
         binding = Document(self.document).binding()
 
         self.assertEquals(
-            [u'f1', u'f2', u'f3'],
+            [u'f1', u'f2', u'f3', u'f4'],
             [prop.name for prop in binding.zusatzDaten.merkmal])
         self.assertEquals(
-            [u'custom field text', u'one, three', u'No'],
+            [u'custom field text', u'one, three', u'No', u'1234'],
             [prop.value() for prop in binding.zusatzDaten.merkmal])
 
 
