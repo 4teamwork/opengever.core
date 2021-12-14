@@ -25,14 +25,14 @@ class SerializeSubstituteToJson(SerializeSQLModelToJsonBase):
 
     def __call__(self):
         data = super(SerializeSubstituteToJson, self).__call__()
-        if '@substitutes' in self.request.URL:
+        if '@my-substitutes' in self.request.URL:
+            data['@id'] = '{}/@my-substitutes/{}'.format(
+                api.portal.get().absolute_url(),
+                self.context.substitute_userid)
+        else:
             data['@id'] = '{}/@substitutes/{}/{}'.format(
                 api.portal.get().absolute_url(),
                 self.context.userid,
-                self.context.substitute_userid)
-        else:
-            data['@id'] = '{}/@my-substitutes/{}'.format(
-                api.portal.get().absolute_url(),
                 self.context.substitute_userid)
 
         return data
@@ -42,8 +42,8 @@ class MySubstitutesGet(Service):
 
     def reply(self):
         userid = self.get_userid()
-        results = SubstituteManager().list_substitutes_for(userid)
-        batch = SQLHypermediaBatch(self.request, results, 'substitute_userid')
+        query = self.get_query(userid)
+        batch = SQLHypermediaBatch(self.request, query, 'substitute_userid')
 
         serialized_terms = []
         for substitute in batch:
@@ -65,6 +65,9 @@ class MySubstitutesGet(Service):
     def get_userid(self):
         return api.user.get_current().getId()
 
+    def get_query(self, userid):
+        return SubstituteManager().list_substitutes_for(userid)
+
 
 class SubstitutesGet(MySubstitutesGet):
 
@@ -82,6 +85,14 @@ class SubstitutesGet(MySubstitutesGet):
         if len(self.params) != 1:
             raise BadRequest("Must supply userid as path parameter.")
         return self.params[0]
+
+
+class SubstitutionsGet(SubstitutesGet):
+
+    def get_query(self, userid):
+        if self.request.form.get('actives_only') in ('true', '1', 'yes', 'on'):
+            return SubstituteManager().list_active_substitutions_for(userid)
+        return SubstituteManager().list_substitutions_for(userid)
 
 
 class MySubstitutesPost(Service):
