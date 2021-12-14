@@ -993,6 +993,22 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         self.assertIsNone(browser.json.get('stats'))
 
+    @browsing
+    def test_fq_with_urls(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.portal.absolute_url(),
+            '&'.join([
+                'fq:list=@id:{}'.format(self.document.absolute_url()),
+                'fq:list=url:{}'.format(self.task.absolute_url())
+            ]))
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        search_on_context = browser.json
+
+        self.assertEqual(2, search_on_context['items_total'])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
@@ -1105,3 +1121,19 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
 
         self.assertItemsEqual([u'UID', u'Title'],
                               browser.json['items'][0].keys())
+
+    @browsing
+    def test_fq_with_urls(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.dossier.absolute_url())
+        payload = {
+            'fq': [
+                '@id:{}'.format(self.document.absolute_url()),
+                'url:{}'.format(self.task.absolute_url())
+            ]
+        }
+        browser.open(url, method='POST', data=json.dumps(payload), headers=self.api_headers)
+        search_on_context = browser.json
+
+        self.assertEqual(2, search_on_context['items_total'])

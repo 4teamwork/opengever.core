@@ -138,11 +138,20 @@ Filters
 ~~~~~~~
 ``fq``: Filtern nach einem bestimmten Wert eines Feldes.
 
-Beispiel für ein Suchabfrage gefiltert nach portal_type nur für Dokumente und Dossiers
+Beispiele für gefilterte Suchabfragen
+
+**Filtern nach ``portal_type`` nur für Dokumente und Dossiers**
 
 .. sourcecode:: http
 
   GET /plone/@solrsearch?fq=portal_type:(opengever.document.document%20OR%20opengever.dossier.businesscasedossier) HTTP/1.1
+
+**Filtern nach ``url`` (alias ``@id``)**
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?fq:list=url:http://example.com/dossier-1&fq:list=url:@id:http://example.com/dossier-2 HTTP/1.1
+
 
 
 Fields

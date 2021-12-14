@@ -139,6 +139,25 @@ def relative_path(brain):
     return to_relative_path(brain.getPath())
 
 
+def relative_to_physical_path(relative_path):
+    """A frontend usualy only knows the relative path to the plone site,
+    not the real physical path of an object.
+    But the solr index value contains the physical path of
+    the object. Thus, we need to replace the relative paths with the physical
+    path of an object.
+    """
+    physical_path = api.portal.get().getPhysicalPath()
+    if relative_path:
+        physical_path += (relative_path, )
+
+    return '/'.join(physical_path)
+
+
+def url_to_physical_path(value):
+    portal_url = api.portal.get().absolute_url()
+    return relative_to_physical_path(value.replace(portal_url, '').strip('/'))
+
+
 class SimpleListingField(object):
     """Mapping between a requested field_name, the corresponding index
     in solr, the accessor on the ContentListingObject, and an index used

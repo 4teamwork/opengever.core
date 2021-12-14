@@ -1,3 +1,5 @@
+from ftw.solr.query import ensure_text
+from ftw.solr.query import escape
 from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
 from ftw.solr.query import make_query
@@ -5,6 +7,7 @@ from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
 from opengever.api.solr_query_service import SolrQueryBaseService
+from opengever.api.solr_query_service import url_to_physical_path
 from opengever.base.interfaces import ISearchSettings
 from opengever.workspaceclient.client import WorkspaceClient
 from plone import api
@@ -63,6 +66,7 @@ class SolrSearchGet(SolrQueryBaseService):
 
         self.add_path_parent_filters(filters)
         self.add_path_filters(filters, params)
+        self.add_url_filters(filters)
         self.add_portal_types_filter(filters)
 
         return filters
@@ -104,6 +108,33 @@ class SolrSearchGet(SolrQueryBaseService):
 
         if (requested_parent_paths):
             filters.extend(make_filters(path_parent=requested_parent_paths))
+
+    def add_url_filters(self, filters):
+        """Beside the 'path_parent' and 'path' filter, we provide an 'url' (alias '@id')
+        filter to filter by specific urls.
+
+        Usualy, a frontend does not know the physical path of a resource but it always
+        knows the url (@id) of a resource. So this filter can be used to directly
+        fetching specific objects by their 'url'.
+        """
+        requested_paths = []
+        for query in list(filters):
+            if not (query.startswith("@id:") or query.startswith("url:")):
+                continue
+
+            # extract the @id from the query and unescape
+            url = query.split(":", 1)[1].replace('\\', '')
+            path = url_to_physical_path(url)
+
+            if not path:
+                continue
+
+            filters.remove(query)
+            requested_paths.append(path)
+
+        if (requested_paths):
+            escaped_path_query = escape(u' OR '.join(ensure_text(requested_paths)))
+            filters.append(u'path:({})'.format(escaped_path_query))
 
     def extract_path_filter_value(self, filters):
         """If path is not specified we search in the current context
