@@ -1,3 +1,4 @@
+from ftw.mail.interfaces import IEmailAddress
 from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -22,6 +23,7 @@ class SerializeWorkspaceToJson(GeverSerializeFolderToJson):
         result = super(SerializeWorkspaceToJson, self).__call__(*args, **kwargs)
 
         result[u"can_manage_participants"] = can_manage_member(self.context)
+        result[u'email'] = IEmailAddress(self.request).get_email_for_object(self.context)
 
         user_id = self.context.Creator()
         actor = Actor.lookup(user_id)
