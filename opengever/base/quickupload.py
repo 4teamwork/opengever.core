@@ -112,7 +112,7 @@ class OGQuickUploadCapableFileFactory(object):
                     'success': None}
 
         # Initialize custom properties with default values
-        initialize_customproperties_defaults(obj, IDocumentCustomProperties)
+        initialize_customproperties_defaults(obj)
 
         result = {'success': obj}
         return result

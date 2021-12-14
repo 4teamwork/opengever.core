@@ -32,7 +32,7 @@ class OGCreateMailInContainer(CreateMailInContainer):
         obj = command.execute()
 
         # Initialize custom properties with default values
-        initialize_customproperties_defaults(obj, IDocumentCustomProperties)
+        initialize_customproperties_defaults(obj)
 
         return obj
 

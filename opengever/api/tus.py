@@ -53,8 +53,7 @@ class GeverUploadPatch(UploadPatch):
                 'for %r. Got: %r' % (self.request, exc))
 
         if created_doc:
-            initialize_customproperties_defaults(
-                created_doc, IDocumentCustomProperties)
+            initialize_customproperties_defaults(created_doc)
         return result
 
 
