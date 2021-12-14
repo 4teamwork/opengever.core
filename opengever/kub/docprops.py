@@ -20,6 +20,10 @@ class KuBEntityDocPropertyProvider(object):
             self.membership = entity
 
     @property
+    def membership_person_or_organization(self):
+        return self.membership or self.person or self.organization
+
+    @property
     def person_or_organization(self):
         return self.person or self.organization
 
@@ -40,7 +44,7 @@ class KuBEntityDocPropertyProvider(object):
         return properties
 
     def get_contact_properties(self, prefix):
-        provider = KuBContactDocPropertyProvider(self.person_or_organization)
+        provider = KuBContactDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_person_properties(self, prefix):
