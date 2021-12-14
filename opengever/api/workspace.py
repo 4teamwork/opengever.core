@@ -1,4 +1,3 @@
-from Acquisition import aq_parent
 from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -7,9 +6,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
 from opengever.workspaceclient.interfaces import ILinkedDocuments
-from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.interface import implementer
