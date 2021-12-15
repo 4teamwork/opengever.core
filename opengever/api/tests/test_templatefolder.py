@@ -241,7 +241,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertItemsEqual(self.expected_doc_properties, properties)
 
     @browsing
-    def test_creates_document_from_template_with_recipient(self, mocker, browser):
+    def test_creates_document_from_template_with_kub_recipient(self, mocker, browser):
         self.login(self.secretariat_user, browser)
 
         data = {'template': self.docprops_template.UID(),
@@ -271,6 +271,43 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
 
+        self.assertItemsEqual(expected_doc_properties, properties)
+
+    @browsing
+    def test_creates_document_from_template_with_ogds_recipient(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'recipient': self.regular_user.getId()}
+
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.recipient.address.city', 'Vorkappelen'),
+            ('ogg.recipient.address.country', 'Schweiz'),
+            ('ogg.recipient.address.street', 'Kappelenweg 13, Postfach 1234'),
+            ('ogg.recipient.address.zip_code', '1234'),
+            ('ogg.recipient.contact.description', 'nix'),
+            ('ogg.recipient.contact.title', u'B\xe4rfuss K\xe4thi'),
+            ('ogg.recipient.email.address', 'foo@example.com'),
+            ('ogg.recipient.person.firstname', u'K\xe4thi'),
+            ('ogg.recipient.person.lastname', u'B\xe4rfuss'),
+            ('ogg.recipient.person.salutation', 'Prof. Dr.'),
+            ('ogg.recipient.phone.number', '012 34 56 78'),
+            ('ogg.recipient.url.url', 'http://www.example.com'),
+            ]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
         self.assertItemsEqual(expected_doc_properties, properties)
 
 
