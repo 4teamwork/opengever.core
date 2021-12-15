@@ -167,11 +167,9 @@ class GeverGroupsPatch(Service):
             raise BadRequest('Can only modify local groups.')
         raise_for_unassignable_roles(self.roles)
 
-    def update_ogds_group(self, title, description, users):
+    def update_ogds_group(self, title, users):
         if title:
             self.ogds_group.title = title
-        if description:
-            self.ogds_group.description = description
         if users:
             self.ogds_group.users = map(get_sql_user, users)
 
@@ -220,7 +218,7 @@ class GeverGroupsPatch(Service):
                     with elevated_privileges():
                         self.group.removeMember(userid)
 
-        self.update_ogds_group(title, description, self.group.getGroupMemberIds() if users.items() else None)
+        self.update_ogds_group(title, self.group.getGroupMemberIds() if users.items() else None)
 
         return self.reply_no_content()
 
