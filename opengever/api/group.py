@@ -170,7 +170,7 @@ class GeverGroupsPatch(Service):
     def update_ogds_group(self, title, users):
         if title:
             self.ogds_group.title = title
-        if users:
+        if users is not None:
             self.ogds_group.users = map(get_sql_user, users)
 
     def reply(self):
