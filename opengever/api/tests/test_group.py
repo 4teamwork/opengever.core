@@ -447,6 +447,21 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             [user.userid for user in self.ogds_group.users])
 
     @browsing
+    def test_does_not_override_title_when_no_title_and_no_description_are_set(self, browser):
+        self.login(self.administrator, browser)
+
+        portal_groups = getToolByName(self.portal, "portal_groups")
+        group_data = portal_groups.getGroupById(self.groupid)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', group_data.getProperty('title'))
+
+        payload = {'users': {self.workspace_guest.getId(): True}}
+        browser.open("{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
+                     data=json.dumps(payload), method='PATCH', headers=self.api_headers)
+
+        group_data = portal_groups.getGroupById(self.groupid)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', group_data.getProperty('title'))
+
+    @browsing
     def test_only_local_groups_can_be_updated(self, browser):
         self.login(self.administrator, browser)
         self.ogds_group.is_local = False
