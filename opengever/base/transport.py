@@ -4,6 +4,7 @@ from opengever.base.request import dispatch_json_request
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.task.reminder import Reminder
 from opengever.task.task import ITask
 from plone.dexterity.interfaces import IDexterityContent
@@ -157,6 +158,7 @@ class DexterityObjectCreator(object):
     # XXX use plone.api
     def create_in(self, container):
         obj = createContent(self.portal_type, title=self.title)
+        initialize_customproperties_defaults(obj)
         notify(ObjectCreatedEvent(obj))
 
         # insert data from collectors

@@ -1,8 +1,11 @@
 from datetime import date
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.interfaces import IDataCollector
 from opengever.base.transport import Transporter
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.task.reminder import ReminderOnDate
 from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
@@ -107,3 +110,20 @@ class TestTransporter(IntegrationTestCase):
 
         new_task, = self.empty_dossier.objectValues()
         self.assertFalse(isinstance(new_task.deadline, datetime))
+
+    def test_transport_initialize_customproperties(self):
+        self.login(self.manager)
+
+        # Add custom field with default values
+        create(Builder("property_sheet_schema")
+               .named("documentdefault_schema")
+               .assigned_to_slots(u"IDocument.default")
+               .with_field("textline", u"portal", u"Portal", u"",
+                           False, default_expression='portal/getId'))
+
+        self.login(self.regular_user)
+        transported_doc = Transporter().transport_from(
+            self.empty_dossier, 'plone', '/'.join(self.document.getPhysicalPath()))
+
+        self.assertEqual(
+            {'portal': u'plone'}, get_custom_properties(transported_doc))
