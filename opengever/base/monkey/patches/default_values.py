@@ -475,6 +475,8 @@ class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
         from opengever.base import default_values
         from opengever.base.default_values import get_persisted_value_for_field
         from opengever.base.default_values import NO_DEFAULT_MARKER
+        from opengever.propertysheets.creation_defaults import get_customproperties_defaults
+        from opengever.propertysheets.field import IPropertySheetField
         from transmogrify.dexterity.schemaupdater import _marker as _tm_marker
         from z3c.form.interfaces import NO_VALUE
 
@@ -482,6 +484,10 @@ class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
             """Determine the default to be set for a field that didn't receive
             a value from the pipeline.
             """
+
+            if IPropertySheetField.providedBy(field):
+                return get_customproperties_defaults(field)
+
             default = default_values.determine_default_value(
                 field, obj.aq_parent)
             if default is NO_DEFAULT_MARKER:
