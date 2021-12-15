@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.propertysheets.field import IPropertySheetField
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import obj2brain
@@ -9,7 +10,6 @@ from plone import api
 from plone.dexterity.utils import iterSchemata
 from zope.schema import getFieldsInOrder
 import os.path
-
 
 def get_path(name):
     return os.path.join(os.path.dirname(__file__), 'data', name)
@@ -105,6 +105,9 @@ class TestImport(IntegrationTestCase):
                 value = getattr(field.interface(dossier), name, None)
                 # Allow empty values on non-required fields
                 if not field.required and value is not None:
+                    if IPropertySheetField.providedBy(field):
+                        continue
+
                     self.assertEqual(field._type, type(value), 'Wrong type for value of field: {}'.format(name))
 
     @browsing

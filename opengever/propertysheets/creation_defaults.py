@@ -25,6 +25,9 @@ def initialize_customproperties_defaults(obj, reindex=True):
         custom_prop_defaults = get_customproperties_defaults(
             behavior_iface['custom_properties'])
 
+        if not custom_prop_defaults:
+            return
+
         # Only attempt to set defaults if no actual custom properties exist yet
         if not behavior.custom_properties:
             behavior.custom_properties = custom_prop_defaults

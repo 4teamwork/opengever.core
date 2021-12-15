@@ -1,6 +1,9 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
 from opengever.document.behaviors.related_docs import IRelatedDocuments
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.testing import IntegrationTestCase
 from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
@@ -55,3 +58,17 @@ class TestCreateDocumentCommand(IntegrationTestCase):
             'opengever.document.behaviors.related_docs.IRelatedDocuments.relatedItems',
             IAnnotations(document))
         self.assertIn(relation, IRelatedDocuments(document).relatedItems)
+
+    def test_create_document_from_command_initialize_customproperty_defaults(self):
+        self.login(self.regular_user)
+
+        create(Builder("property_sheet_schema")
+               .named("documentdefault_schema")
+               .assigned_to_slots(u"IDocument.default")
+               .with_field("textline", u"portal", u"Portal", u"",
+                           False, default_expression='portal/getId'))
+
+        command = CreateDocumentCommand(self.dossier, 'testm\xc3\xa4il.txt', 'buh!')
+        document = command.execute()
+
+        self.assertEqual({'portal': u'plone'}, get_custom_properties(document))
