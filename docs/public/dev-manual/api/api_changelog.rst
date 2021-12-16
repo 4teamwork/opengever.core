@@ -15,6 +15,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@solrsearch``: Now supports facetting custom property fields.
 - Add new endpoint ``@external-activities`` (see :ref:`docs <external-activities>`)
 - Include sip_delivery_status in the disposition serialization.
 - Disposition serialization contains now responses.
