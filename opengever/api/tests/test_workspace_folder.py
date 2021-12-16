@@ -19,3 +19,10 @@ class TestWorkspaceFolderSerializer(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
         self.assertIn("trashed", browser.json)
         self.assertTrue(browser.json["trashed"])
+
+    @browsing
+    def test_workspace_folder_serialization_contains_email(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.workspace_folder, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'1018033300@example.org', browser.json['email'])

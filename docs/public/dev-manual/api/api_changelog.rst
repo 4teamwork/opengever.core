@@ -24,6 +24,7 @@ Other Changes
 - A new endpoint ``@out-of-office`` is added (see :ref:`out-of-office`).
 - Include is_absent in actors serialization.
 - A new endpoint ``@substitutions`` is added (see :ref:`get-substitutions`).
+- Include email address in workspace and workspace folder serialization.
 
 
 2021.24.0 (2021-11-30)

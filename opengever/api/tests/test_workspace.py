@@ -44,3 +44,10 @@ class TestWorkspaceSerializer(IntegrationTestCase):
             u'videoconferencing_url', browser.json)
         self.assertIn(
             u'https://meet.jit.si/', browser.json['videoconferencing_url'])
+
+    @browsing
+    def test_workspace_serialization_contains_email(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(self.workspace, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'1018013300@example.org', browser.json[u'email'])
