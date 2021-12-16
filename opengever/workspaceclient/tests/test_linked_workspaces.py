@@ -604,6 +604,27 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(gever_doc, dst_doc)
             self.assertFalse(ILockable(gever_doc).locked())
 
+    def test_copy_document_from_workspace_as_new_version_for_invalid_uid(self):
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing('foo', name=u'foo.doc'))
+
+        ILinkedDocuments(workspace_doc).link_gever_document("invalid")
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            with self.observe_children(self.dossier) as children,\
+                 auto_commit_after_request(manager.client):
+                dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                    self.workspace.UID(), workspace_doc.UID(),
+                    as_new_version=True)
+
+        self.assertEqual(1, len(children['added']))
+        self.assertEqual(children['added'].pop(), dst_doc)
+        self.assertEqual(workspace_doc.file.data, dst_doc.file.data)
+
     def test_copy_unlinked_document_from_workspace_as_new_version(self):
         """Retrieving an unlinked document from a workspace to GEVER should
         always create a copy, even when `as_new_version=True` was given.
