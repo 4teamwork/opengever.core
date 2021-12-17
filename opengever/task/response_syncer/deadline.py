@@ -42,3 +42,18 @@ class ModifyDeadlineResponseSyncerReceiver(BaseResponseSyncerReceiver):
 
         IDeadlineModifier(self.context).update_deadline(
             new_deadline, text, transition)
+
+    def _is_already_done(self, transition, text):
+        """_is_already_done from the BaseResponseSyncerReceiver only checks
+        that text, creator and transition match, but in the case of a deadline
+        modification, the same user can very well modify the deadline with the
+        same comment twice in a row. We therefore also check whether the current
+        deadline also matches the new_deadline being set. This should be enough
+        as the UI does not allow changing the deadline to the same date.
+        """
+        already_done = super(ModifyDeadlineResponseSyncerReceiver, self)._is_already_done(transition, text)
+        if not already_done:
+            return False
+        new_deadline = self.request.get('new_deadline', None)
+        new_deadline = date.fromordinal(int(new_deadline))
+        return self.context.deadline == new_deadline

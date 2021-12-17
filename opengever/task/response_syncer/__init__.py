@@ -128,6 +128,13 @@ class BaseResponseSyncerReceiver(BrowserView):
         if not IInternalOpengeverRequestLayer.providedBy(self.request):
             raise Forbidden()
 
+    def _get_last_response(self):
+        response_container = IResponseContainer(self.context)
+        if len(response_container) == 0:
+            return
+
+        return response_container.list()[-1]
+
     def _is_already_done(self, transition, text):
         """This method returns `True` if this exact request was already
         executed.
@@ -136,11 +143,10 @@ class BaseResponseSyncerReceiver(BrowserView):
         this view is called another time but the changes were already made
         and committed - so we need to return "OK" and do nothing.
         """
-        response_container = IResponseContainer(self.context)
-        if len(response_container) == 0:
+        last_response = self._get_last_response()
+        if last_response is None:
             return False
 
-        last_response = response_container.list()[-1]
         current_user = AccessControl.getSecurityManager().getUser()
 
         if last_response.transition == transition and \
