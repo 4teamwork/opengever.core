@@ -156,6 +156,9 @@ VOCAB_OVERRIDES = {
     'opengever.workspace.workspace_meeting.IWorkspaceMeetingSchema': {
         'responsible': u'<G\xfcltige User-ID>',
     },
+    'opengever.workspace.workspace.IWorkspaceSchema': {
+        'responsible': u'<G\xfcltige ID eines Teamraum Teilnehmers>',
+    },
 }
 
 DEFAULT_OVERRIDES = {

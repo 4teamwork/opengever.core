@@ -4,6 +4,13 @@
     "title": "Teamraum",
     "additionalProperties": false,
     "properties": {
+        "responsible": {
+            "type": "string",
+            "title": "Besitzer",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<G\u00fcltige ID eines Teamraum Teilnehmers>"
+        },
         "videoconferencing_url": {
             "type": "string",
             "title": "Videokonferenz URL",
@@ -41,6 +48,7 @@
         "title"
     ],
     "field_order": [
+        "responsible",
         "videoconferencing_url",
         "external_reference",
         "changed",
