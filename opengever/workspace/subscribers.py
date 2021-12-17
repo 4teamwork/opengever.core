@@ -9,6 +9,7 @@ from opengever.workspace.activities import ToDoReopenedActivity
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
 from opengever.workspace.todo import COMPLETE_TODO_TRANSITION
+from opengever.workspace.workspace import IWorkspaceSchema
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
@@ -18,7 +19,7 @@ def configure_workspace_root(root, event):
     assign_placeful_workflow(root, "opengever_workspace_policy")
 
 
-def assign_admin_role_to_workspace_creator(workspace, event):
+def assign_admin_role_and_responsible_to_workspace_creator(workspace, event):
     """The creator of the workspace should have the Admin role,
     so that the she / he can access the workspace.
     """
@@ -28,6 +29,8 @@ def assign_admin_role_to_workspace_creator(workspace, event):
         # Make sure to not assign any local roles in that case.
         assignment = SharingRoleAssignment(owner_userid, ['WorkspaceAdmin'])
         RoleAssignmentManager(workspace).add_or_update_assignment(assignment)
+
+        IWorkspaceSchema(workspace).responsible = owner_userid
 
 
 def check_delete_preconditions(todolist, event):
