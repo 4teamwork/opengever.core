@@ -185,6 +185,12 @@ class TestSQLParticipationHanlder(TestPloneParticipationHanlder):
     valid_id = 'ogds_user:kathi.barfuss'
 
 
+class TestKuBParticipationHanlderWithOgdsUser(KuBIntegrationTestCase, TestPloneParticipationHanlder):
+
+    handler_class = KuBParticipationHandler
+    valid_id = 'kathi.barfuss'
+
+
 @requests_mock.Mocker()
 class TestKuBParticipationHanlder(KuBIntegrationTestCase, TestPloneParticipationHanlder):
 

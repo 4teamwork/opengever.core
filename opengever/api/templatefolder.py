@@ -3,6 +3,7 @@ from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
+from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.dossiertemplate import is_create_dossier_from_template_available
@@ -10,6 +11,8 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.form import CreateDossierContentFromTemplateMixin
 from opengever.kub import is_kub_feature_enabled
 from opengever.kub.entity import KuBEntity
+from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.models.service import ogds_service
 from opengever.task.task import ITask
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
@@ -65,7 +68,21 @@ class DocumentFromTemplatePost(Service):
         if recipient_id and not is_kub_feature_enabled():
             raise BadRequest('recipient is only supported when KuB feature is active')
         if recipient_id:
-            recipient = (KuBEntity(recipient_id, full=True), )
+            if ActorLookup(recipient_id).is_kub_contact():
+                recipient = (KuBEntity(recipient_id, full=True), )
+            else:
+                contact = OgdsUserToContactAdapter(
+                            ogds_service().find_user(recipient_id))
+                recipient = [contact]
+                if contact.addresses:
+                    recipient.append(contact.addresses[0])
+                if contact.phonenumbers:
+                    recipient.append(contact.phonenumbers[0])
+                if contact.mail_addresses:
+                    recipient.append(contact.mail_addresses[0])
+                if contact.urls:
+                    recipient.append(contact.urls[0])
+                recipient = tuple(recipient)
         else:
             recipient = tuple()
 
