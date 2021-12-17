@@ -1,3 +1,5 @@
+from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
 from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_meeting_feature_enabled
@@ -6,6 +8,7 @@ from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
 from plone.autoform import directives
+from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
@@ -34,6 +37,12 @@ def videoconferencing_url_default():
 @provider(IFormFieldProvider)
 class IWorkspaceSchema(model.Schema):
 
+    form.widget('responsible', KeywordFieldWidget, async=True)
+    responsible = schema.Choice(
+        title=_(u"label_owner", default=u"Owner"),
+        source=ActualWorkspaceMembersSourceBinder(),
+        required=False,
+    )
     videoconferencing_url = schema.TextLine(
         title=_(u'label_videoconferencing_url', default=u'Videoconferencing URL'),
         description=_(u'help_videoconferencing_url',
