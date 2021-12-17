@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.default_values import set_default_values
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from plone.dexterity.interfaces import IDexterityContent
 from plone.restapi.deserializer import json_body
 from plone.restapi.deserializer.dxcontent import DeserializeFromJson
@@ -35,6 +36,7 @@ class GeverDeserializeFromJson(DeserializeFromJson):
         if create:
             container = aq_parent(aq_inner(self.context))
             set_default_values(self.context, container, data)
+            initialize_customproperties_defaults(self.context)
 
         schema_data, errors = self.get_schema_data(data, validate_all)
 

@@ -148,6 +148,9 @@ class TestDossierCustomPropertiesPost(IntegrationTestCase):
 
         self.login(self.regular_user, browser)
         property_data = {
+            u'IDossier.default': {
+                u'location': u'B\xfcren an der Aare'
+            },
             "IDossier.dossier_type.businesscase": {
                 "foo": u"f\xfc"
             }

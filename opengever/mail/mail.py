@@ -266,8 +266,7 @@ class OGMail(Mail, BaseDocumentMixin):
             alsoProvides(doc, IExtractedFromMail)
 
             # Initialize custom properties with default values
-            initialize_customproperties_defaults(
-                doc, IDocumentCustomProperties, reindex=False)
+            initialize_customproperties_defaults(doc, reindex=False)
 
             doc.reindexObject()
 

@@ -2,6 +2,8 @@ from collective.transmogrifier.transmogrifier import Transmogrifier
 from datetime import date
 from datetime import datetime
 from DateTime import DateTime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -14,6 +16,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -101,6 +104,13 @@ class TestOggBundlePipeline(IntegrationTestCase):
         # test its data.
 
         self.login(self.manager)
+
+        # Add custom field with default values
+        create(Builder("property_sheet_schema")
+               .named("documentdefault_schema")
+               .assigned_to_slots(u"IDocument.default")
+               .with_field("textline", u"portal", u"Portal", u"",
+                           False, default_expression='portal/getId'))
 
         # Create the 'bundle_guid' index. In production, this will be done
         # by the "bin/instance import" command in opengever.bundle.console
@@ -512,6 +522,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             IAnnotations(document1)[BUNDLE_GUID_KEY],
             index_data_for(document1)[GUID_INDEX_NAME])
+
+        # customproperty with default
+        self.assertEqual(
+            {'portal': u'plone'}, get_custom_properties(document1))
 
     def assert_document2_created(self, parent):
         document2 = self.find_by_title(parent, u'Entlassung Hanspeter M\xfcller')

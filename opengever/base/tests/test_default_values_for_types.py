@@ -1,3 +1,4 @@
+from copy import deepcopy
 from datetime import date
 from datetime import timedelta
 from ftw.builder import Builder
@@ -112,7 +113,7 @@ DOSSIER_DEFAULTS = {
     'reading_and_writing': [],
     'dossier_manager': None,
     'touched': FROZEN_TODAY,
-    'custom_properties': None,
+    'custom_properties': {'IDossier.default': {'location': u'B\xfcren an der Aare'}},
     'dossier_type': None,
 }
 DOSSIER_FORM_DEFAULTS = {
@@ -814,10 +815,10 @@ class TestDossierDefaults(TestDefaultsBase):
         dossier = browser.context
 
         persisted_values = get_persisted_values_for_obj(dossier)
-        expected = self.get_z3c_form_defaults()
+        expected = deepcopy(self.get_z3c_form_defaults())
 
-        # ignore custom_properties
-        persisted_values['custom_properties'] = None
+        # Add customproperties form missing values
+        expected['custom_properties']['IDossier.default']['additional_title'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -871,10 +872,10 @@ class TestDossierDefaults(TestDefaultsBase):
         dossier = browser.context
 
         persisted_values = get_persisted_values_for_obj(dossier)
-        expected = self.get_z3c_form_defaults()
+        expected = deepcopy(self.get_z3c_form_defaults())
 
-        # ignore custom_properties
-        persisted_values['custom_properties'] = None
+        # Add customproperties form missing values
+        expected['custom_properties']['IDossier.default']['additional_title'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 

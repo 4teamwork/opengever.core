@@ -118,6 +118,7 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
         from zope.component import getUtility
         from zope.event import notify
         from zope.lifecycleevent import ObjectCreatedEvent
+        from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 
         def createContentWithDefaults(portal_type, container, **kw):
             fti = getUtility(IDexterityFTI, name=portal_type)
@@ -160,6 +161,9 @@ class PatchDXCreateContentInContainer(MonkeyPatch):
             content = createContentWithDefaults(portal_type, container, **kw)
             if interfaces is not None:
                 alsoProvides(content, *interfaces)
+
+            initialize_customproperties_defaults(content)
+
             result = addContentToContainer(
                 container, content, checkConstraints=checkConstraints)
             noLongerProvides(container.REQUEST, IDuringContentCreation)
@@ -181,6 +185,7 @@ class PatchInvokeFactory(MonkeyPatch):
     def __call__(self):
         from opengever.base.default_values import inject_title_and_description_defaults  # noqa
         from opengever.base.default_values import set_default_values
+        from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
         from Products.CMFCore.utils import getToolByName
 
         def invokeFactory(self, type_name, id, RESPONSE=None, *args, **kw):
@@ -203,6 +208,7 @@ class PatchInvokeFactory(MonkeyPatch):
 
             # Set default values
             set_default_values(content, self, kw)
+            initialize_customproperties_defaults(content)
 
             noLongerProvides(self.REQUEST, IDuringContentCreation)
             return new_id
@@ -475,6 +481,8 @@ class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
         from opengever.base import default_values
         from opengever.base.default_values import get_persisted_value_for_field
         from opengever.base.default_values import NO_DEFAULT_MARKER
+        from opengever.propertysheets.creation_defaults import get_customproperties_defaults
+        from opengever.propertysheets.field import IPropertySheetField
         from transmogrify.dexterity.schemaupdater import _marker as _tm_marker
         from z3c.form.interfaces import NO_VALUE
 
@@ -482,6 +490,10 @@ class PatchTransmogrifyDXSchemaUpdater(MonkeyPatch):
             """Determine the default to be set for a field that didn't receive
             a value from the pipeline.
             """
+
+            if IPropertySheetField.providedBy(field):
+                return get_customproperties_defaults(field)
+
             default = default_values.determine_default_value(
                 field, obj.aq_parent)
             if default is NO_DEFAULT_MARKER:

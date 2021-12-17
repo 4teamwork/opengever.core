@@ -1,5 +1,8 @@
 from base64 import b64encode
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import path_to_asset
 import json
@@ -281,3 +284,35 @@ class TestDatetimeDeserialization(IntegrationTestCase):
         )
 
         self.assertEqual(204, response.status_code)
+
+
+class TestCustomPropertiesDeserializer(IntegrationTestCase):
+
+    @browsing
+    def test_custom_properties_default_values_are_initialized(self, browser):
+        self.login(self.manager)
+        create(Builder("property_sheet_schema")
+               .named("businesscase_dossier_schema")
+               .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+               .with_field("textline", u"member", u"Member", u"", False, default_expression='member/getId'))
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            data = {"@type": "opengever.dossier.businesscasedossier",
+                    "dossier_type": "businesscase",
+                    "responsible": self.regular_user.id,
+                    "title": "Testdossier A"}
+            browser.open(
+                self.leaf_repofolder.absolute_url(),
+                method='POST',
+                headers=self.api_headers,
+                data=json.dumps(data)
+            )
+
+        self.assertEqual(1, len(children["added"]))
+        dossier = children["added"].pop()
+
+        self.assertEqual(
+            u'kathi.barfuss',
+            get_custom_properties(dossier)['member'])
