@@ -324,27 +324,35 @@ class LinkedWorkspaces(object):
 
         # If the workspace document doesn't have a link to a GEVER document,
         # or is not a regular document with a file,
+        # or cannot be retrieved, for example because it was trashed,
         # always create a copy instead of attempting to create a version.
-        gever_doc_link = document_repr.get('teamraum_connect_links', {}).get('gever_document')
-        gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
-
+        gever_doc = self._get_corresponding_gever_doc(document_repr)
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
             document_repr.get('file')))
 
-        if as_new_version and gever_doc_uid and is_document_with_file:
+        if as_new_version and gever_doc and is_document_with_file:
             retrieval_mode = RETRIEVAL_MODE_VERSION
-            gever_doc = self._retrieve_as_version(document_repr, gever_doc_uid, workspace_title)
+            gever_doc = self._retrieve_as_version(document_repr, gever_doc, workspace_title)
         else:
             retrieval_mode = RETRIEVAL_MODE_COPY
             gever_doc = self._retrieve_as_copy(document_repr, workspace_title)
 
         return gever_doc, retrieval_mode
 
-    def _retrieve_as_version(self, document_repr, gever_doc_uid, workspace_title):
-        catalog = api.portal.get_tool('portal_catalog')
-        gever_doc = catalog(UID=gever_doc_uid)[0].getObject()
+    @staticmethod
+    def _get_corresponding_gever_doc(document_repr):
+        gever_doc_link = document_repr.get('teamraum_connect_links', {}).get('gever_document')
+        gever_doc_uid = gever_doc_link.get('UID') if gever_doc_link else None
+        if not gever_doc_uid:
+            return
 
+        catalog = api.portal.get_tool('portal_catalog')
+        results = catalog(UID=gever_doc_uid)
+        gever_doc = results[0].getObject() if results else None
+        return gever_doc
+
+    def _retrieve_as_version(self, document_repr, gever_doc, workspace_title):
         # Make sure the previous working copy is saved as an initial
         # version. This MUST happen before updating the file.
         Versioner(gever_doc).create_initial_version()
