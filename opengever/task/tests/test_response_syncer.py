@@ -9,6 +9,7 @@ from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
 from opengever.task.response_syncer.comment import CommentResponseSyncerSender
+from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerReceiver
 from opengever.task.response_syncer.deadline import ModifyDeadlineResponseSyncerSender
 from opengever.task.response_syncer.workflow import WorkflowResponseSyncerSender
 from opengever.testing import FunctionalTestCase
@@ -272,7 +273,7 @@ class TestModifyDeadlineResponseSyncerSender(FunctionalTestCase):
             'Updating deadline on remote client admin-unit-1. failed (task-1)',
             str(exception.exception))
 
-    def test_extend_payload_safes_the_deadline_ordinal_number(self):
+    def test_extend_payload_saves_the_deadline_ordinal_number(self):
         sender = ModifyDeadlineResponseSyncerSender(object(), self.request)
 
         new_deadline = datetime.date(2013, 1, 1)
@@ -365,7 +366,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
         self.assertEquals(TEST_USER_ID, task.responsible)
 
     def test_updates_responsible_if_new_value_is_given(self):
-        hugo = create(Builder('ogds_user').id('hugo.boss'))
+        create(Builder('ogds_user').id('hugo.boss'))
         task = create(Builder('task')
                       .in_state('task-state-open')
                       .having(responsible_client='org-unit-1'))
@@ -468,6 +469,49 @@ class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
               'field_title': u'label_deadline',
               'before': datetime.date(2013, 1, 1)}],
             response.changes)
+
+    def test_syncs_deadline_when_same_user_modifies_it_twice(self):
+        task = create(Builder('task')
+                      .having(issuer=TEST_USER_ID,
+                              deadline=datetime.date(2013, 1, 1)))
+
+        self.prepare_request(task, text=u'Lorem Ipsum',
+                             transition='task-transition-modify-deadline',
+                             new_deadline=datetime.date(2013, 10, 1).toordinal())
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+        self.assertEqual(datetime.date(2013, 10, 1), task.deadline)
+
+        self.prepare_request(task, text=u'Lorem Ipsum',
+                             transition='task-transition-modify-deadline',
+                             new_deadline=datetime.date(2013, 11, 1).toordinal())
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        response_container = IResponseContainer(task)
+        self.assertEqual(
+            2, len(response_container),
+            "Should contain two responses as deadline was modified twice.")
+        self.assertEqual(datetime.date(2013, 11, 1), task.deadline)
+
+    def test_do_not_add_the_same_response_twice_but_return_ok_anyway(self):
+        task = create(Builder('task')
+                      .having(issuer=TEST_USER_ID,
+                              deadline=datetime.date(2013, 1, 1)))
+
+        self.prepare_request(task, text=u'Lorem Ipsum',
+                             transition='task-transition-modify-deadline',
+                             new_deadline=datetime.date(2013, 10, 1).toordinal())
+
+        receiver = ModifyDeadlineResponseSyncerReceiver(task, self.request)
+
+        self.assertEquals('OK', receiver())
+        self.assertEquals('OK', receiver())
+
+        response_container = IResponseContainer(task)
+        self.assertEqual(
+            1, len(response_container),
+            "Should not add the same response twice")
 
 
 class TestCommentSyncer(FunctionalTestCase):
