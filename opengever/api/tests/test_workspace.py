@@ -24,15 +24,10 @@ class TestWorkspaceSerializer(IntegrationTestCase):
         browser.open(
             self.workspace, headers={'Accept': 'application/json'}).json
 
-        self.assertDictContainsSubset({
-            'responsible': {
-                u'token': u'gunther.frohlich',
-                u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'
-            },
-            'responsible_fullname': u'Fr\xf6hlich G\xfcnther',
-            },
-            browser.json
-        )
+        self.assertEquals(
+            {u'token': u'gunther.frohlich',
+             u'title': u'Fr\xf6hlich G\xfcnther'},
+            browser.json['responsible'])
 
     @browsing
     def test_workspace_serialization_contains_videoconferencing_url(self, browser):

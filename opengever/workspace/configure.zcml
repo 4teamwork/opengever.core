@@ -26,7 +26,7 @@
   <subscriber
       for="opengever.workspace.interfaces.IWorkspace
            zope.lifecycleevent.interfaces.IObjectCreatedEvent"
-      handler=".subscribers.assign_admin_role_to_workspace_creator"
+      handler=".subscribers.assign_admin_role_and_responsible_to_workspace_creator"
       />
 
   <subscriber

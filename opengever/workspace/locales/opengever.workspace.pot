@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-05 08:53+0000\n"
+"POT-Creation-Date: 2021-12-17 09:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,6 +202,11 @@ msgstr ""
 #. Default: "Organizer"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_organizer"
+msgstr ""
+
+#. Default: "Owner"
+#: ./opengever/workspace/workspace.py
+msgid "label_owner"
 msgstr ""
 
 #. Default: "Related items"

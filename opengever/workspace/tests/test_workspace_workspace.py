@@ -96,6 +96,39 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             [fti.id for fti in self.workspace.allowedContentTypes()])
 
     @browsing
+    def test_workspace_creator_is_set_as_responsible_after_creation(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        browser.open(self.workspace_root, method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({'@type': 'opengever.workspace.workspace',
+                                      'title': u'\xfcberarbeitungsphase'}))
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual({u'token': u'fridolin.hugentobler',
+                          u'title': u'Hugentobler Fridolin'},
+                         browser.json['responsible'])
+
+    @browsing
+    def test_only_workspace_members_are_valid_as_responsibles(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        querysource_url = '{}/@querysources/responsible?query=Peter'.format(
+            self.workspace.absolute_url())
+
+        browser.open(querysource_url, method='GET', headers=self.api_headers)
+        self.assertEqual([{u'title': u'Peter Hans', u'token': u'hans.peter'}],
+                         browser.json['items'])
+
+        # delete workspace_guest
+        url = '{}/@participations/{}'.format(
+            self.workspace.absolute_url(), self.workspace_guest.id)
+        browser.open(url, method='DELETE', headers=self.api_headers)
+
+        browser.open(querysource_url, method='GET', headers=self.api_headers)
+        self.assertEqual([], browser.json['items'])
+
+    @browsing
     def test_security_view_access(self, browser):
         for user in (self.workspace_owner,
                      self.workspace_admin,
