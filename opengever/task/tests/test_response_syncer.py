@@ -229,7 +229,7 @@ class TestWorkflowResponseSyncerSender(FunctionalTestCase):
 
     def test_task_predecessors_are_synced(self):
         task = create(Builder('task')
-                            .in_state('task-state-in-progress'))
+                      .in_state('task-state-in-progress'))
         successor = create(Builder('task')
                            .in_state('task-state-in-progress')
                            .successor_from(task))
@@ -322,8 +322,8 @@ class TestBaseResponseSyncerReceiver(FunctionalTestCase):
 
         receiver = BaseResponseSyncerReceiver(task, self.request)
 
-        self.assertEquals('OK', receiver())
-        self.assertEquals('OK', receiver())
+        self.assertEqual('OK', receiver())
+        self.assertEqual('OK', receiver())
 
         response_container = IResponseContainer(task)
         self.assertEqual(
@@ -351,7 +351,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
 
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('task-state-resolved', api.content.get_state(task))
+        self.assertEqual('task-state-resolved', api.content.get_state(task))
 
     def test_does_not_reset_responsible_if_no_new_value_is_given(self):
         task = create(Builder('task')
@@ -362,8 +362,8 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                              transition= 'task-transition-in-progress-resolved')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('org-unit-1', task.responsible_client)
-        self.assertEquals(TEST_USER_ID, task.responsible)
+        self.assertEqual('org-unit-1', task.responsible_client)
+        self.assertEqual(TEST_USER_ID, task.responsible)
 
     def test_updates_responsible_if_new_value_is_given(self):
         create(Builder('ogds_user').id('hugo.boss'))
@@ -377,8 +377,8 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
                              responsible_client='org-unit-1')
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('org-unit-1', task.responsible_client)
-        self.assertEquals('hugo.boss', task.responsible)
+        self.assertEqual('org-unit-1', task.responsible_client)
+        self.assertEqual('hugo.boss', task.responsible)
 
     def test_remove_task_reminder_of_old_responsible(self):
         create(Builder('ogds_user').id('hugo.boss'))
@@ -421,7 +421,7 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
 
         task.restrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals('task-state-resolved', api.content.get_state(task))
+        self.assertEqual('task-state-resolved', api.content.get_state(task))
 
 
 class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
@@ -445,7 +445,7 @@ class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
 
         task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
 
-        self.assertEquals(task.deadline, datetime.date(2013, 10, 1))
+        self.assertEqual(task.deadline, datetime.date(2013, 10, 1))
 
     def test_according_response_is_added_when_modify_deadline(self):
         task = create(Builder('task')
@@ -461,9 +461,9 @@ class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
         container = IResponseContainer(task)
         response = container.list()[-1]
 
-        self.assertEquals('Lorem Ipsum', response.text)
-        self.assertEquals(TEST_USER_ID, response.creator)
-        self.assertEquals(
+        self.assertEqual('Lorem Ipsum', response.text)
+        self.assertEqual(TEST_USER_ID, response.creator)
+        self.assertEqual(
             [{'after': datetime.date(2013, 10, 1),
               'field_id': 'deadline',
               'field_title': u'label_deadline',
@@ -505,8 +505,8 @@ class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
 
         receiver = ModifyDeadlineResponseSyncerReceiver(task, self.request)
 
-        self.assertEquals('OK', receiver())
-        self.assertEquals('OK', receiver())
+        self.assertEqual('OK', receiver())
+        self.assertEqual('OK', receiver())
 
         response_container = IResponseContainer(task)
         self.assertEqual(
@@ -574,8 +574,8 @@ class TestWorkflowSyncer(FunctionalTestCase):
             'task-transition-resolved-in-progress',
             text=u'Please extend chapter 2.4')
 
-        self.assertEquals('task-state-in-progress',
-                          api.content.get_state(predecessor))
+        self.assertEqual('task-state-in-progress',
+                         api.content.get_state(predecessor))
 
     def test_sync_state_change_on_predecessor_to_successor(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -587,10 +587,10 @@ class TestWorkflowSyncer(FunctionalTestCase):
         wftool.doActionFor(predecessor, 'task-transition-resolved-in-progress',
                            transition_params={'text': u'Please extend chapter 2.4.'})
 
-        self.assertEquals('task-state-in-progress',
-                          api.content.get_state(successor))
-        self.assertEquals('task-state-in-progress',
-                          successor.get_sql_object().review_state)
+        self.assertEqual('task-state-in-progress',
+                         api.content.get_state(successor))
+        self.assertEqual('task-state-in-progress',
+                         successor.get_sql_object().review_state)
 
     def test_adds_corresponding_response(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -603,9 +603,9 @@ class TestWorkflowSyncer(FunctionalTestCase):
                            transition_params={'text': u'\xe4\xe4hhh I am done!'})
 
         response = IResponseContainer(successor).list()[-1]
-        self.assertEquals('task-transition-resolved-in-progress', response.transition)
-        self.assertEquals(u'\xe4\xe4hhh I am done!', response.text)
-        self.assertEquals(TEST_USER_ID, response.creator)
+        self.assertEqual('task-transition-resolved-in-progress', response.transition)
+        self.assertEqual(u'\xe4\xe4hhh I am done!', response.text)
+        self.assertEqual(TEST_USER_ID, response.creator)
 
 
 class TestModifyDeadlineSyncer(FunctionalTestCase):
@@ -625,7 +625,7 @@ class TestModifyDeadlineSyncer(FunctionalTestCase):
             text=u'New deadline',
             new_deadline=datetime.date(2013, 10, 1))
 
-        self.assertEquals(predecessor.deadline, datetime.date(2013, 10, 1))
+        self.assertEqual(predecessor.deadline, datetime.date(2013, 10, 1))
 
     def test_sync_deadline_modification_on_predecessor_to_successor(self):
         predecessor = create(Builder('task').in_state('task-state-resolved'))
@@ -639,4 +639,4 @@ class TestModifyDeadlineSyncer(FunctionalTestCase):
             text=u'New deadline',
             new_deadline=datetime.date(2013, 10, 1))
 
-        self.assertEquals(successor.deadline, datetime.date(2013, 10, 1))
+        self.assertEqual(successor.deadline, datetime.date(2013, 10, 1))
