@@ -216,6 +216,8 @@ class Document(Item, BaseDocumentMixin):
     restore_transition = 'document-transition-restore'
     initialize_transition = 'document-transition-initialize'
 
+    workspace_workflow_id = 'opengever_workspace_document'
+
     # disable file preview creation when modifying or creating document
     buildPreview = False
 
@@ -335,6 +337,9 @@ class Document(Item, BaseDocumentMixin):
         wftool = api.portal.get_tool('portal_workflow')
         chain = wftool.getChainFor(self)
         workflow_id = chain[0]
+        if workflow_id == self.workspace_workflow_id:
+            # There is no shadow state for workspace documents.
+            return self
         wftool.setStatusOf(workflow_id, self, {
             'review_state': self.shadow_state,
             'action': '',
