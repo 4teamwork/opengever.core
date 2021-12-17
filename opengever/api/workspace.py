@@ -25,14 +25,6 @@ class SerializeWorkspaceToJson(GeverSerializeFolderToJson):
         result[u"can_manage_participants"] = can_manage_member(self.context)
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(self.context)
 
-        user_id = self.context.Creator()
-        actor = Actor.lookup(user_id)
-        result["responsible"] = {
-            "title": actor.get_label(),
-            "token": user_id,
-        }
-        result["responsible_fullname"] = actor.get_label(with_principal=False)
-
         return result
 
 
