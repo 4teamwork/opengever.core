@@ -21,7 +21,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_defaults(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": [{"name": "foo", "field_type": "text"}]}
         browser.open(
@@ -48,7 +48,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {
             "fields": [
@@ -117,7 +117,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_all_field_types(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {
             "fields": [
@@ -175,7 +175,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_static_defaults(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {
             "fields": [
@@ -241,6 +241,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_default_factories(self, browser):
+        # PropertySheetsManager is not allowed to modify dynamic defaults
         self.login(self.manager, browser)
 
         data = {
@@ -324,6 +325,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_default_expressions(self, browser):
+        # PropertySheetsManager is not allowed to modify dynamic defaults
         self.login(self.manager, browser)
 
         data = {
@@ -454,6 +456,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             "assignments": ["IDocumentMetadata.document_type.question"],
         }
 
+        # PropertySheetsManager is not allowed to modify dynamic defaults
         self.login(self.manager, browser)
         browser.open(
             view="@propertysheets/meinschema",
@@ -489,7 +492,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {
             "fields": [
@@ -523,7 +526,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_replaces_existing_schema(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
         create(Builder("property_sheet_schema").named("question"))
 
         data = {
@@ -555,7 +558,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_valid_assignment(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {
             "fields": [{"name": "foo", "field_type": "bool"}],
@@ -584,7 +587,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_unique_assignment(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
         create(
             Builder("property_sheet_schema")
             .named("fixture")
@@ -618,7 +621,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_name(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": [{"name": "foo", "field_type": "bool"}]}
         with browser.expect_http_error(400):
@@ -644,7 +647,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_valid_name(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": [{"name": "foo", "field_type": "bool"}]}
         with browser.expect_http_error(400):
@@ -670,7 +673,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_fields(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": []}
         with browser.expect_http_error(400):
@@ -696,7 +699,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_requires_valid_fields_type(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": {"foo": None}}
         with browser.expect_http_error(400):
@@ -722,7 +725,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
     def test_property_sheet_schema_definition_post_prevents_duplicate_field_name(
         self, browser
     ):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         dupe1 = {"name": "dupe", "field_type": "text"}
         dupe2 = {"name": "foo", "field_type": "text"}
@@ -748,7 +751,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_property_sheet_schema_definition_post_invalid_type(self, browser):
-        self.login(self.manager, browser)
+        self.login(self.propertysheets_manager, browser)
 
         data = {"fields": [{"name": "foo", "field_type": "invalid"}]}
         with browser.expect_http_error(400):
@@ -768,7 +771,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(3, len(storage))
 
     @browsing
-    def test_non_managers_cannot_post(self, browser):
+    def test_non_propertysheets_managers_cannot_post(self, browser):
         self.login(self.administrator, browser)
 
         data = {"fields": [{"name": "foo", "field_type": "text"}]}
@@ -782,12 +785,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
     @browsing
     def test_dynamic_defaults_require_manager_role(self, browser):
-        """This test would not *currently* fail if the protection for dynamic
-        defaults wasn't in place, because the entire @propertysheets POST
-        endpoint is restricted to managers anyway. It *would* however fail if
-        that API endpoint was ever opened up (tested manually).
-        """
-        self.login(self.regular_user, browser)
+        self.login(self.propertysheets_manager, browser)
 
         with browser.expect_unauthorized():
             browser.open(

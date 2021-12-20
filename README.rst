@@ -626,6 +626,7 @@ Users
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
 - ``self.member_admin``: ``david.meier``
+- ``self.propertysheets_manager``: ``propertysheets.manager``
 - ``self.reader_user``: ``lucklicher.laser``
 - ``self.records_manager``: ``ramon.flucht``
 - ``self.regular_user``: ``kathi.barfuss``

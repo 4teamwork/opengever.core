@@ -124,10 +124,11 @@ class PatchMembershipToolCreateMemberarea(MonkeyPatch):
 WRITER_ROLES = [
     'Contributor',
     'Editor',
-    'Reviewer',
+    'PropertySheetsManager',
     'Publisher',
-    'WorkspacesCreator',
+    'Reviewer',
     'Role Manager',
+    'WorkspacesCreator',
 ]
 
 
@@ -213,6 +214,7 @@ WRITE_PERMISSIONS = [
     'opengever.private: Add private dossier',
     'opengever.private: Add private folder',
     'opengever.private: Add private root',
+    'opengever.propertysheets: Manage PropertySheets',
     'opengever.repository: Add repositoryfolder',
     'opengever.repository: Add repositoryroot',
     'opengever.task: Add task',

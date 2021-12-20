@@ -14,14 +14,16 @@ class TestUsersGet(IntegrationTestCase):
         browser.open('{}/@users'.format(self.portal.absolute_url()),
                      headers=self.api_headers)
 
-        self.assertEquals(19, len(browser.json))
+        self.assertEqual(20, len(browser.json))
 
     @browsing
     def test_enumarating_users_unauthorized_raises(self, browser):
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open('{}/@users'.format(self.portal.absolute_url()),
                          headers=self.api_headers)
-            self.assertEquals(19, len(browser.json))
+        self.assertEqual(
+            {u'message': u'Unauthorized()', u'type': u'Unauthorized'},
+            browser.json)
 
     @browsing
     def test_accessing_an_other_user_is_possible_for_regular_user(self, browser):

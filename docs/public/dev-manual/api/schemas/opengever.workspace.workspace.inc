@@ -4,6 +4,16 @@
 
 
 
+   .. py:attribute:: responsible
+
+       :Feldname: :field-title:`Besitzer`
+       :Datentyp: ``Choice``
+       
+       
+       
+       :Wertebereich: <Gültige ID eines Teamraum Teilnehmers>
+
+
    .. py:attribute:: videoconferencing_url
 
        :Feldname: :field-title:`Videokonferenz URL`

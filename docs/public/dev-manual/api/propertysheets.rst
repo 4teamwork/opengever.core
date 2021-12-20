@@ -21,9 +21,9 @@ Mittels Property Sheets ist es möglich benutzerdefinierte Schemata mit einem
 oder mehreren Feldern zu definieren damit zusätzliche Properties in GEVER
 strukturiert erfasst werden können.
 
-Im Moment ist das Definieren der zusätzlichen Property Sheets einem ``Manager``
-vorbehalten. Hierzu steht der Service-Endpoint ``@propertysheets`` zur
-Verfügung. Folgende Aufrufe sind möglich:
+Das Erstellen, Bearbeiten oder Löschen von Property Sheets über die API benötigt die Rolle ``PropertySheetsManager``. Das Auflisten / Anzeigen (GET) ist Benutzern mit Leseberechtigung erlaubt.
+
+Zur Verwaltung von Property Sheets steht der Service-Endpoint ``@propertysheets`` zur Verfügung. Folgende Aufrufe sind möglich:
 
 Eine Liste aller bestehender Property Sheets:
 
@@ -164,7 +164,7 @@ immer nur eine dieser Optionen angegeben werden
 - ``default_from_member``: Bestimmen des Defaults mittels eines Properties auf dem Member / User
 
 Optionen für dynamische Default-Werte (alle Optionen ausser ``default``)
-können nur von Benutzern mit Manager-Berechtigungen gesetzt werden.
+können aus Sicherheitsgründen nur von Benutzern mit der Rolle ``Manager`` gesetzt werden - die Rolle ``PropertySheetsManager`` reicht nicht.
 
 
 ``default``
@@ -214,7 +214,7 @@ enthält, welche dynamisch ausgewertet wird um einen Default-Wert zu bestimmen.
 Der ExpressionContext in dem die Expression ausgewertet wird, enthält die
 üblichen Namen. Allerdings sind aufgrund einer Limitierung zur Zeit der
 aktuelle Kontext und der enthaltende Folder nicht verfügbar. ``here`` und
-``object`` sind daher ``None``, und der ``folder`` ist auf das Portal gesetzt.  
+``object`` sind daher ``None``, und der ``folder`` ist auf das Portal gesetzt.
 
 **Beispiel**:
 

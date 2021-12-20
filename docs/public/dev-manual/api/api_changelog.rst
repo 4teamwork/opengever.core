@@ -15,6 +15,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@config``: Add ``is_propertysheets_manager`` key to indicate whether user is allowed to manage property sheets.
+- ``@propertysheets``: Management of property sheets is now also allowed for ``PropertySheetsManager`` role.
 - ``@solrsearch``: Now supports facetting custom property fields.
 - Add new endpoint ``@external-activities`` (see :ref:`docs <external-activities>`)
 - Include sip_delivery_status in the disposition serialization.

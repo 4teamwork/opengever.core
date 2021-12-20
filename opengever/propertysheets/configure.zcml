@@ -7,6 +7,7 @@
     xmlns:z3c="http://namespaces.zope.org/z3c"
     i18n_domain="opengever.propertysheets">
 
+  <include file="permissions.zcml" />
   <i18n:registerTranslations directory="locales" />
 
   <include package=".api" />
