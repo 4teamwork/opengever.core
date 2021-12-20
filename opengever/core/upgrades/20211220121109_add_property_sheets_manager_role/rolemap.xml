@@ -1,0 +1,14 @@
+<rolemap>
+
+  <roles>
+    <role name="PropertySheetsManager" />
+  </roles>
+
+  <permissions>
+    <permission name="opengever.propertysheets: Manage PropertySheets" acquire="False">
+      <role name="Manager" />
+      <role name="PropertySheetsManager" />
+    </permission>
+  </permissions>
+
+</rolemap>

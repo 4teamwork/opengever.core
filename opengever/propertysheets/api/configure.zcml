@@ -23,7 +23,7 @@
       factory=".post.PropertySheetsPost"
       name="@propertysheets"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      permission="cmf.ManagePortal"
+      permission="opengever.propertysheets.ManagePropertySheets"
       />
 
   <plone:service
@@ -32,7 +32,7 @@
       factory=".delete.PropertySheetsDelete"
       name="@propertysheets"
       layer="opengever.base.interfaces.IOpengeverBaseLayer"
-      permission="cmf.ManagePortal"
+      permission="opengever.propertysheets.ManagePropertySheets"
       />
 
 </configure>

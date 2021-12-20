@@ -384,6 +384,13 @@ class OpengeverContentFixture(object):
             user_settings={'_seen_tours': '["*"]'},
         )
 
+        self.propertysheets_manager = self.create_user(
+            'propertysheets_manager',
+            u'PropertySheets',
+            u'Manager',
+            ['PropertySheetsManager'],
+        )
+
         # This user is intended to be used in situations where you need a user
         # which has only the 'Reader' role on some context and one has to build
         # the granting of that themselves

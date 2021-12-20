@@ -9,6 +9,7 @@
     <role name="DossierManager" />
     <role name="Impersonator" />
     <role name="MeetingUser" />
+    <role name="PropertySheetsManager" />
     <role name="Publisher" />
     <role name="Records Manager" />
     <role name="Role Manager" />
@@ -228,6 +229,13 @@
     <permission name="opengever.private: Add private folder" acquire="True">
       <role name="Manager" />
     </permission>
+
+    <!-- PROPERTYSHEETS -->
+    <permission name="opengever.propertysheets: Manage PropertySheets" acquire="False">
+      <role name="Manager" />
+      <role name="PropertySheetsManager" />
+    </permission>
+
 
     <!-- REPOSITORY -->
     <permission name="opengever.repository: Add repositoryfolder" acquire="True">
