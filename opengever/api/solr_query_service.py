@@ -4,6 +4,7 @@ from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.api.utils import recursive_encode
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
@@ -18,7 +19,9 @@ from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
+from plone.memoize.view import memoize
 from plone.restapi.batching import HypermediaBatch
+from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.rfc822.interfaces import IPrimaryFieldInfo
@@ -29,6 +32,7 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import json
 import Missing
 
 
@@ -133,6 +137,25 @@ def to_relative_path(value):
 
 def relative_path(brain):
     return to_relative_path(brain.getPath())
+
+
+def relative_to_physical_path(relative_path):
+    """A frontend usualy only knows the relative path to the plone site,
+    not the real physical path of an object.
+    But the solr index value contains the physical path of
+    the object. Thus, we need to replace the relative paths with the physical
+    path of an object.
+    """
+    physical_path = api.portal.get().getPhysicalPath()
+    if relative_path:
+        physical_path += (relative_path, )
+
+    return '/'.join(physical_path)
+
+
+def url_to_physical_path(value):
+    portal_url = api.portal.get().absolute_url()
+    return relative_to_physical_path(value.replace(portal_url, '').strip('/'))
 
 
 class SimpleListingField(object):
@@ -391,10 +414,22 @@ class SolrQueryBaseService(Service):
         self.response_fields = None
         self.facets = []
 
+    @property
+    @memoize
+    def request_payload(self):
+        """Returns the request payload depending on the http request method.
+        """
+        if self.request.method == 'GET':
+            return self.request.form
+        elif self.request.method == 'POST':
+            # JSON always returns unicode strings. We need to encode the values
+            # to utf-8 to get the same encoding as with a GET reqeust.
+            return recursive_encode(json_body(self.request))
+
     def prepare_solr_query(self):
         """ Extract the requested parameters and prepare the solr query
         """
-        params = self.request.form.copy()
+        params = self.request_payload.copy()
         query = self.extract_query(params)
         filters = self.extract_filters(params)
         start = self.extract_start(params)

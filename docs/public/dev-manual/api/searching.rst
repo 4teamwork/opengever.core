@@ -108,10 +108,13 @@ darzustellen, kann ``metadata_fields=_all`` verwendet werden.
    handelt, zur Verfügung.
 
 
-Solr Suche
-----------
+.. _solr-search-get:
+
+Solr Suche GET
+--------------
 Um direkt eine Suchabfrage an den Solr Service abzusetzen, steht der ``@solrsearch`` Endpoint zur Verfügung. Für die Abfrage kann SOLR API Syntax und dessen Parameter verwendet werden. Der Endpoint liefert ein Liste von Treffern zurück mit den im Parameter ``fl`` definierten Felder. Die folgende Parameter sind zurzeit vom Endpoint unterstützt:
 
+Achtung: Eine URL hat je nach Client/Server/Proxy eine maximale länge. Für grössere Queries muss der Endpoint als POST-Request abgefragt werden.
 
 Query
 ~~~~~
@@ -135,11 +138,20 @@ Filters
 ~~~~~~~
 ``fq``: Filtern nach einem bestimmten Wert eines Feldes.
 
-Beispiel für ein Suchabfrage gefiltert nach portal_type nur für Dokumente und Dossiers
+Beispiele für gefilterte Suchabfragen
+
+**Filtern nach ``portal_type`` nur für Dokumente und Dossiers**
 
 .. sourcecode:: http
 
   GET /plone/@solrsearch?fq=portal_type:(opengever.document.document%20OR%20opengever.dossier.businesscasedossier) HTTP/1.1
+
+**Filtern nach ``url`` (alias ``@id``)**
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?fq:list=url:http://example.com/dossier-1&fq:list=url:@id:http://example.com/dossier-2 HTTP/1.1
+
 
 
 Fields
@@ -270,6 +282,34 @@ Der Endpoint stellt die Standard-Paginierung gem :ref:`Kapitel Paginierung <batc
 Breadcrumbs
 ~~~~~~~~~~~
 Wird eine ``@solrsearch`` Anfrage mit ``breadcrumbs=1`` Parameter ergänzt, so werden die einzelnen Suchtreffer unter dem Key ``breadcrumbs`` mit den Breadcrumb Informationen ergänzt. Diese Ergänzung ist nur bei kleinen Batchsizes (maximal 50) erlaubt.
+
+
+Solr Suche POST
+---------------
+Eine Suche kann auch über einen POST-Request an den ``@solrsearch`` Endpoint abgesetzt werden. Der Hauptvorteil eines POST-Requests ist, dass es keine Limitierung beim Payload gibt. Bei einem GET-Request wird die Länge der URL je nach Client/Server/Proxy limitiert.
+
+Grundsätzlich funktioniert der POST-Endpoint gleich wie der GET-Endpoint. Der Body vom Reqeust wird in JSON geschrieben.
+
+Query
+~~~~~
+Beispiel für eine Suche mit diversen Kriterien als Übersicht für die Verwendung des POST-Endpoints. Genauere Details zu den jeweiligen Parametern finden Sie unter :ref:`Solr Suche GET <solr-search-get>`
+
+.. sourcecode:: http
+
+  POST /plone/@solrsearch HTTP/1.1
+  Content-Type: application/json
+  Accept: application/json
+
+  {
+    "q": "Kurz",
+    "fl": "UID,Title",
+    "fq": [
+      "portal_type:opengever.document.document",
+      "path_parent:/fd/os/dossier-1"
+    ],
+    "facet": true,
+    "facet.field": "responsible"
+  }
 
 
 Teamraum Solr Suche
