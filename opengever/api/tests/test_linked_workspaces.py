@@ -75,10 +75,10 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
         # plone deployment, a conflict error leads to a doubled workspace
         # creation. This happens only in testing environment and can therefore
         # be ignored.
-        linked_workspace = children['added'].pop()
-
         self.assertIn(browser.json.get('@id'),
-                      linked_workspace.absolute_url())
+                      [aa.absolute_url() for aa in children['added']])
+
+        linked_workspace = children['added'].pop()
         self.assertIn(browser.json.get('title'),
                       linked_workspace.title)
         self.assertIn(browser.json.get('external_reference'),
