@@ -29,5 +29,5 @@ class TestAssignedUsers(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(18, browser.json.get('items_total'))
+        self.assertEqual(19, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)

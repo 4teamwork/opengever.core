@@ -320,7 +320,6 @@ class TestGroupSerializer(IntegrationTestCase):
 
         response = browser.json
         del response.get('users')['batching']
-
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@groups/fa_users',
              u'@type': u'virtual.plone.group',
@@ -335,7 +334,7 @@ class TestGroupSerializer(IntegrationTestCase):
                                     u'@type': u'virtual.plone.user',
                                     u'title': u'User Service (service.user)',
                                     u'token': u'service.user'}],
-                        u'items_total': 17}},
+                        u'items_total': 18}},
             response)
 
 
