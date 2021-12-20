@@ -14,6 +14,7 @@ from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.propertysheets.definition import SolrDynamicField
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.task.helper import task_type_helper
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
@@ -382,7 +383,10 @@ class SolrQueryBaseService(Service):
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
         self.solr = getUtility(ISolrSearch)
-        self.solr_fields = set(self.solr.manager.schema.fields.keys())
+        self.solr_fields = set(
+            self.solr.manager.schema.fields.keys()
+            + self.get_custom_property_fields()
+        )
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
         self.facets = []
@@ -502,6 +506,20 @@ class SolrQueryBaseService(Service):
 
     def is_field_allowed(self, field):
         return False
+
+    def get_custom_property_fields(self):
+        solr_fields = []
+
+        storage = PropertySheetSchemaStorage()
+        if not storage:
+            return solr_fields
+
+        for definition in storage.list():
+            if definition is not None:
+                schema = definition.get_solr_dynamic_field_schema()
+                solr_fields.extend(schema.keys())
+
+        return solr_fields
 
     def get_field(self, field_name):
         """return a ListingField for a given field_name"""

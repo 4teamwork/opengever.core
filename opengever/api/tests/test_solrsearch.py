@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.solrsearch import SolrSearchGet
 from opengever.dossier.behaviors.dossier import IDossier
@@ -7,6 +9,7 @@ from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
 from zope.component import getMultiAdapter
+import json
 
 
 class TestMockSolrSearchGet(IntegrationTestCase):
@@ -323,6 +326,199 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         self.assertItemsEqual(
             {u'robert.ziegler': {u'count': 3, u'label': u'robert.ziegler'}},
             facet_counts[u'Creator'])
+
+    @browsing
+    def test_facets_support_custom_properties(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        COLORS = [u"Rot", u"Gr\xfcn", u"Blau"]
+        LABELS = [u"Alpha", u"Beta", u"Gamma", u"Delta"]
+
+        # Create a property sheet definition with all types
+        create(
+            Builder("property_sheet_schema")
+            .named("mysheet")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field(
+                name=u"color",
+                field_type="choice",
+                title=u"Color",
+                description=u"",
+                required=True,
+                values=COLORS,
+            )
+            .with_field(
+                name=u"digital",
+                field_type="bool",
+                title=u"Digital",
+                description=u"",
+                required=True,
+            )
+            .with_field(
+                name=u"labels",
+                field_type="multiple_choice",
+                title=u"Labels",
+                description=u"",
+                required=False,
+                values=LABELS,
+            )
+            .with_field(
+                name=u"age",
+                field_type="int",
+                title=u"Age",
+                description=u"",
+                required=True,
+            )
+            .with_field(
+                name=u"note",
+                field_type="text",
+                title=u"Note",
+                description=u"",
+                required=False,
+            )
+            .with_field(
+                name=u"short_note",
+                field_type="textline",
+                title=u"Short Note",
+                description=u"",
+                required=False,
+            )
+        )
+
+        # Set some properties on documents
+        props1 = {
+            "custom_properties": {
+                "IDocument.default": {
+                    "color": u"Gr\xfcn".encode("unicode_escape"),
+                    "digital": True,
+                    "labels": [u"Alpha"],
+                    "age": 42,
+                    "note": u"Foo\nBar",
+                    "short_note": u"foo bar",
+                },
+            }
+        }
+
+        props2 = {
+            "custom_properties": {
+                "IDocument.default": {
+                    "color": u"Rot".encode("unicode_escape"),
+                    "digital": False,
+                    "labels": [u"Beta"],
+                    "age": 7,
+                    "note": u"Hello",
+                    "short_note": u"Hello",
+                },
+            }
+        }
+
+        props3 = {
+            "custom_properties": {
+                "IDocument.default": {
+                    "color": u"Rot".encode("unicode_escape"),
+                    "digital": False,
+                    "labels": [u"Beta", u"Gamma"],
+                    "age": 7,
+                    "note": u"Hello",
+                    "short_note": u"Hello",
+                },
+            }
+        }
+
+        docs = [
+            (self.document, props1),
+            (self.subdocument, props2),
+            (self.subsubdocument, props3),
+        ]
+        for (obj, props) in docs:
+            browser.open(
+                obj, method="PATCH", data=json.dumps(props),
+                headers=self.api_headers)
+        self.commit_solr()
+
+        # Query facets for all custom property fields
+        url = (u'{}/@solrsearch?facet=on&'
+               u'facet.field=color_custom_field_string&'
+               u'facet.field=digital_custom_field_boolean&'
+               u'facet.field=labels_custom_field_strings&'
+               u'facet.field=age_custom_field_int&'
+               u'facet.field=note_custom_field_string&'  # Won't be faceted
+               u'facet.field=short_note_custom_field_string&'.format(
+                   self.portal.absolute_url()))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertIn(u'facet_counts', browser.json)
+        facet_counts = browser.json['facet_counts']
+
+        # Fields of type `text` can't be facteted
+        self.assertNotIn(u'note_custom_field_string', facet_counts.keys())
+
+        self.assertItemsEqual([
+            u'color_custom_field_string',
+            u'digital_custom_field_boolean',
+            u'labels_custom_field_strings',
+            u'age_custom_field_int',
+            u'short_note_custom_field_string',
+            ], facet_counts.keys())
+
+        expected = {
+            u'color_custom_field_string': {
+                u'Gr\xfcn': {
+                    u'count': 1,
+                    u'label': u'Gr\xfcn',
+                },
+                u'Rot': {
+                    u'count': 2,
+                    u'label': u'Rot',
+                },
+            },
+            u'digital_custom_field_boolean': {
+                u'false': {
+                    u'count': 2,
+                    u'label': u'false',
+                },
+                u'true': {
+                    u'count': 1,
+                    u'label': u'true',
+                },
+            },
+            u'labels_custom_field_strings': {
+                u'Alpha': {
+                    u'count': 1,
+                    u'label': u'Alpha',
+                },
+                u'Beta': {
+                    u'count': 2,
+                    u'label': u'Beta',
+                },
+                u'Gamma': {
+                    u'count': 1,
+                    u'label': u'Gamma',
+                },
+            },
+            u'age_custom_field_int': {
+                u'42': {
+                    u'count': 1,
+                    u'label': u'42',
+                },
+                u'7': {
+                    u'count': 2,
+                    u'label': u'7',
+                },
+            },
+            u'short_note_custom_field_string': {
+                u'Hello': {
+                    u'count': 2,
+                    u'label': u'Hello',
+                },
+                u'foo bar': {
+                    u'count': 1,
+                    u'label': u'foo bar',
+                },
+            },
+        }
+
+        self.assertEqual(expected, facet_counts)
 
     @browsing
     def test_default_start_and_rows(self, browser):

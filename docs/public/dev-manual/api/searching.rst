@@ -214,6 +214,8 @@ Beispiel für ein Suchabfrage mit Facetten für ``responsible`` und ``portal_typ
       "start": 0
     }
 
+Facetten können auch für :ref:`benutzerdefinierte Felder <propertysheets>` abgefragt werden (Ausnahme: Felder vom Typ ``text``). Die Schreibweise der Solr-Felder für Custom Properties, und in welchen Listings sie aufgeführt werden sollen, kann dem ``@listing-custom-fields`` Endpoint entnommen werden.
+
 
 Statistiken
 ~~~~~~~~~~~
