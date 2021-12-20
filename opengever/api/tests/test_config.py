@@ -246,6 +246,20 @@ class TestConfig(IntegrationTestCase):
         self.assertFalse(browser.json.get(u'is_inbox_user'))
 
     @browsing
+    def test_is_propertysheets_manager_is_true_for_users_with_manage_propertysheets_permission(self, browser):
+        self.login(self.propertysheets_manager, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(browser.json.get(u'is_propertysheets_manager'))
+
+    @browsing
+    def test_is_propertysheets_manager_is_false_for_regular_user(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertFalse(browser.json.get(u'is_propertysheets_manager'))
+
+    @browsing
     def test_config_contains_bumblebee_app_id(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)

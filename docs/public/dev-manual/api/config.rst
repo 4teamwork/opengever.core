@@ -99,6 +99,7 @@ GEVER-Mandanten abgefragt werden.
           "inbox_folder_url": "https://dev.onegovgever.ch/fd/eingangskorb/eingangskorb_afi",
           "is_admin": false,
           "is_inbox_user": false,
+          "is_propertysheets_manager": false,
           "is_emm_environment": false,
           "max_dossier_levels": 5,
           "max_repositoryfolder_levels": 3,

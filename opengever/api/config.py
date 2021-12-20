@@ -9,6 +9,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
+from plone import api
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zope.component import queryMultiAdapter
@@ -50,6 +51,8 @@ class ConfigGet(Service):
         ogds_inbox = get_current_org_unit().inbox()
         current_user = ogds_service().fetch_current_user()
         config['is_inbox_user'] = current_user in ogds_inbox.assigned_users()
+        config['is_propertysheets_manager'] = api.user.has_permission(
+            'opengever.propertysheets: Manage PropertySheets')
 
         try:
             primary_root = PrimaryRepositoryRoot(
