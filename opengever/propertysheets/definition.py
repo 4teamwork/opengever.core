@@ -1,4 +1,6 @@
 from copy import deepcopy
+from ftw.solr.converters import to_iso8601
+from ftw.solr.converters import to_unicode
 from opengever.propertysheets.default_expression import attach_expression_default_factory
 from opengever.propertysheets.default_from_member import attach_member_property_default_factory
 from opengever.propertysheets.exceptions import InvalidFieldType
@@ -9,6 +11,7 @@ from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from plone import api
 from plone.restapi.serializer.converters import IJsonCompatible
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.schemaeditor import fields
 from plone.schemaeditor.utils import IEditableSchema
@@ -86,6 +89,15 @@ class SolrDynamicField(object):
             'type': schema['type'],
             'widget': schema.get('widget'),
         }
+
+    def convert_value(self, value):
+        """Jsonify values but use ftw.solrs own to_iso8601 for date fields
+        """
+        solr_type = self.SUPPORTED_TYPES[type(self.field)]
+        if solr_type == 'date':
+            return to_iso8601(value)
+
+        return json_compatible(value)
 
 
 class PropertySheetSchemaDefinition(object):
@@ -315,7 +327,7 @@ class PropertySheetSchemaDefinition(object):
                     'with strings for both keys and values')
 
             # For ease of serialization we store the default_from_member
-            # options as a JSON encoded string. 
+            # options as a JSON encoded string.
             default_from_member = json.dumps(default_from_member)
 
             field.default_from_member = default_from_member

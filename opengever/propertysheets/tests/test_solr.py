@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
@@ -46,6 +47,7 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
                 "num": 122333,
                 "text": u"K\xe4fer\nJ\xe4ger",
                 "textline": u"Kr\xe4he",
+                "date": date(2021, 12, 21),
             }
         }
         self.document.reindexObject()
@@ -63,6 +65,8 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
         self.assertNotIn(u'text_custom_field_string', solr_doc)
         self.assertEqual(
             solr_doc.get(u'textline_custom_field_string'), u"Kr\xe4he")
+        self.assertEqual(
+            solr_doc.get(u'date_custom_field_date'), u'2021-12-21T00:00:00Z')
 
     def test_index_custom_properties_of_dossiers(self):
         self.login(self.manager)

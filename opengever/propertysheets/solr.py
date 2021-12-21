@@ -24,7 +24,7 @@ class CustomPropertiesIndexHandler(DefaultIndexHandler):
         if not adapted:
             return data
 
-        custom_properties = adapted.custom_properties
+        custom_properties = adapted.get_plain_values('custom_properties')
         if not custom_properties:
             return data
 
@@ -41,9 +41,8 @@ class CustomPropertiesIndexHandler(DefaultIndexHandler):
             for solr_field in definition.get_solr_dynamic_fields():
                 name = solr_field.name
                 if name in custom_properties[slot]:
-                    value = custom_properties[slot][name]
+                    value = solr_field.convert_value(custom_properties[slot][name])
                     data[solr_field.solr_field_name] = value
-
         return data
 
 

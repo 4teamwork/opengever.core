@@ -46,6 +46,9 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
             super(CustomPropertiesStorageImpl, self).__getattr__(name)
         )
 
+    def get_plain_values(self, name):
+        return super(CustomPropertiesStorageImpl, self).__getattr__(name)
+
     def __setattr__(self, name, value):
         if name not in self.__dict__['schema']:
             super(CustomPropertiesStorageImpl, self).__setattr__(name, value)

@@ -15,6 +15,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Propertysheets: ``date`` fields are now supported.
 - ``@listing-custom-fields`` endpoint contains now also the widget information.
 - ``@solrsearch``: The results can now be filtered by its ``@id``.
 - ``@solrsearch``: Allow POST requests against the endpoint. This allows us to get around the length-limit of GET requests.
