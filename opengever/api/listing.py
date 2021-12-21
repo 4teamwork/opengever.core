@@ -26,6 +26,7 @@ OTHER_ALLOWED_FIELDS = set([
     'document_author',
     'document_date',
     'document_type',
+    'dossier_type',
     'email',
     'end',
     'external_reference',

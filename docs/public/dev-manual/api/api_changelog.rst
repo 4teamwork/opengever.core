@@ -15,6 +15,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@solrsearch`` and ``@listing``: ``dossier_type`` is added as a new solr index and whitelisted in the ``@listing`` endpoint.
 - Propertysheets: ``date`` fields are now supported.
 - ``@listing-custom-fields`` endpoint contains now also the widget information.
 - ``@solrsearch``: The results can now be filtered by its ``@id``.
