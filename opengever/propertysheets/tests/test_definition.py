@@ -120,6 +120,7 @@ class TestSchemaDefinitionSolrFields(FunctionalTestCase):
                     'name': 'yesorno_custom_field_boolean',
                     'title': u'y/n',
                     'type': u'boolean',
+                    'widget': None
                 }
             },
             definition.get_solr_dynamic_field_schema()
@@ -138,6 +139,7 @@ class TestSchemaDefinitionSolrFields(FunctionalTestCase):
                     'name': 'chooseone_custom_field_string',
                     'title': u'choose',
                     'type': u'string',
+                    'widget': None
                 }
             },
             definition.get_solr_dynamic_field_schema()
@@ -155,6 +157,7 @@ class TestSchemaDefinitionSolrFields(FunctionalTestCase):
                     'name': 'num_custom_field_int',
                     'title': u'A number',
                     'type': u'integer',
+                    'widget': None
                 }
             },
             definition.get_solr_dynamic_field_schema()
@@ -180,6 +183,23 @@ class TestSchemaDefinitionSolrFields(FunctionalTestCase):
                     'name': 'bla_custom_field_string',
                     'title': u'Textline',
                     'type': u'string',
+                    'widget': None
+                }
+            },
+            definition.get_solr_dynamic_field_schema()
+        )
+
+    def test_date_field_solr_dynamic_field_info(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field("date", u"bla", u"Date field", u"", True)
+
+        self.assertEqual(
+            {
+                'bla_custom_field_date': {
+                    'name': 'bla_custom_field_date',
+                    'title': u'Date field',
+                    'type': u'string',
+                    'widget': u'date',
                 }
             },
             definition.get_solr_dynamic_field_schema()

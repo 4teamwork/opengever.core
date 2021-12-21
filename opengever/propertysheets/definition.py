@@ -84,6 +84,7 @@ class SolrDynamicField(object):
             'title': schema['title'],
             'name': self.solr_field_name,
             'type': schema['type'],
+            'widget': schema.get('widget'),
         }
 
 
