@@ -371,7 +371,7 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             [self.empty_dossier])
 
     @browsing
-    def test_adds_journal_pdf_to_main_and_subdossier(self, browser):
+    def test_adds_journal_pdf_to_main_dossier_only(self, browser):
         self.activate_feature('journal-pdf')
         self.login(self.secretariat_user, browser)
 
@@ -395,16 +395,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
         self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
         self.assertFalse(main_journal_pdf.preserved_as_paper)
 
-        self.assertEquals(1, len(sub_children['added']))
-        sub_journal_pdf, = sub_children['added']
-        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12:00 AM',
-                          sub_journal_pdf.title)
-        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12 00 AM.pdf',
-                          sub_journal_pdf.file.filename)
-        self.assertEquals(u'application/pdf',
-                          sub_journal_pdf.file.contentType)
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(sub_journal_pdf))
-        self.assertFalse(sub_journal_pdf.preserved_as_paper)
+        self.assertEquals(
+            0, len(sub_children['added']),
+            'Journal PDF should only be created for main dossier')
 
         self.assert_after_resolve_jobs_pending_in_expected_state(
             [self.empty_dossier, subdossier])
@@ -425,10 +418,9 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             with freeze(datetime(2016, 4, 25)):
                 self.resolve(subdossier, browser)
 
-        self.assertEquals(1, len(sub_children['added']))
-        sub_journal_pdf, = sub_children['added']
-        self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
-                         "End date should be set to dossier end date")
+        self.assertEquals(
+            0, len(sub_children['added']),
+            'Journal PDF should only be created for main dossier')
 
         with self.observe_children(self.empty_dossier) as main_children:
             with freeze(datetime(2016, 9, 1)):
@@ -741,7 +733,7 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
         self.assertNotIn(doc2, children['after'])
 
     @browsing
-    def test_adds_journal_pdf_to_main_and_subdossier(self, browser):
+    def test_adds_journal_pdf_to_main_dossier_only(self, browser):
         self.activate_feature('journal-pdf')
         self.login(self.secretariat_user, browser)
 
@@ -778,16 +770,9 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
         self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
         self.assertFalse(main_journal_pdf.preserved_as_paper)
 
-        self.assertEquals(1, len(sub_children['added']))
-        sub_journal_pdf, = sub_children['added']
-        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12:00 AM',
-                          sub_journal_pdf.title)
-        self.assertEquals(u'Journal of dossier Sub, Apr 25, 2016 12 00 AM.pdf',
-                          sub_journal_pdf.file.filename)
-        self.assertEquals(u'application/pdf',
-                          sub_journal_pdf.file.contentType)
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(sub_journal_pdf))
-        self.assertFalse(sub_journal_pdf.preserved_as_paper)
+        self.assertEquals(
+            0, len(sub_children['added']),
+            'Journal PDF should only be created for main dossier')
 
         self.assert_after_resolve_jobs_pending(
             False, [self.empty_dossier, subdossier])
@@ -820,10 +805,9 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
             with freeze(datetime(2016, 4, 25)):
                 self.execute_nightly_jobs(expected=1)
 
-        self.assertEquals(1, len(sub_children['added']))
-        sub_journal_pdf, = sub_children['added']
-        self.assertEqual(date(2016, 3, 15), sub_journal_pdf.document_date,
-                         "End date should be set to dossier end date")
+        self.assertEquals(
+            0, len(sub_children['added']),
+            'Journal PDF should only be created for main dossier')
 
         self.assert_after_resolve_jobs_pending(
             False, [subdossier])

@@ -330,6 +330,9 @@ class JournalLaTeXListing(LaTexListing):
 
     template = ViewPageTemplateFile('templates/listing.pt')
 
+    def get_dossier_label(self, item):
+        return item.get('reference_number')
+
     def get_actor_label(self, item):
         return Actor.lookup(item.get('actor')).get_label()
 
@@ -348,9 +351,14 @@ class JournalLaTeXListing(LaTexListing):
                    '10%',
                    lambda item: helper.readable_date_time(item, item.get('time'))),
 
+            Column('dossier',
+                   journal_mf('label_dossier', default=u'Dossier'),
+                   '10%',
+                   self.get_dossier_label),
+
             Column('title',
                    journal_mf('label_title', default=u'Title'),
-                   '45%',
+                   '40%',
                    lambda item: title_helper(item, item['action'].get('title'))),
 
             Column('actor',
@@ -360,6 +368,6 @@ class JournalLaTeXListing(LaTexListing):
 
             Column('comments',
                    journal_mf('label_comments', default='Comments'),
-                   '30%',
+                   '25%',
                    self.get_journal_comment)
         ]

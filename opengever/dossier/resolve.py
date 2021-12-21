@@ -440,6 +440,10 @@ class AfterResolveJobs(object):
         if not self.get_property('journal_pdf_enabled'):
             return
 
+        if not IDossierMarker.providedBy(self.context) or self.context.is_subdossier():
+            # Only create journal PDF for main dossiers
+            return
+
         view = self.context.unrestrictedTraverse('pdf-dossier-journal')
         today = api.portal.get_localized_time(
             datetime=datetime.today(), long_format=True)
@@ -451,6 +455,7 @@ class AfterResolveJobs(object):
         kwargs = {
             'preserved_as_paper': False,
         }
+
         dossier = IDossier(self.context)
         if dossier and dossier.end:
             kwargs['document_date'] = dossier.end

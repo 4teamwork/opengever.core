@@ -58,164 +58,244 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
 
     def test_journal_listing(self):
         self.login(self.regular_user)
+
         layout = DefaultLayout(self.dossier, self.request, PDFBuilder())
         dossier_journal = getMultiAdapter(
             (self.dossier, self.request, layout), ILaTeXView)
+
         expected_journal = [
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Dossier added',
-                    'title': u'label_dossier_added',
+                "action": {
+                    "visible": True,
+                    "type": "Dossier added",
+                    "title": u"label_dossier_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Dossier added",
+                    "title": u"label_dossier_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1.1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Dossier added",
+                    "title": u"label_dossier_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1.2",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1.1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Dossier added",
+                    "title": u"label_dossier_added",
                 },
-                'comments': '',
-                'actor': 'franzi.muller',
+                "reference_number": "Client1 1.1 / 1.1.1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task added',
-                    'title': u'label_task_added',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1.1.1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task modified',
-                    'title': u'label_task_modified',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1.1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task modified',
-                    'title': u'label_task_modified',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task added',
-                    'title': u'label_task_added',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task modified',
-                    'title': u'label_task_modified',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task modified',
-                    'title': u'label_task_modified',
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "franzi.muller",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task modified',
-                    'title': u'label_task_modified',
+                "action": {
+                    "visible": True,
+                    "type": "Task added",
+                    "title": u"label_task_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task added',
-                    'title': u'label_task_added',
+                "action": {
+                    "visible": True,
+                    "type": "Task modified",
+                    "title": u"label_task_modified",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task added',
-                    'title': u'label_task_added',
+                "action": {
+                    "visible": True,
+                    "type": "Task modified",
+                    "title": u"label_task_modified",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Task added',
-                    'title': u'label_task_added',
+                "action": {
+                    "visible": True,
+                    "type": "Task added",
+                    "title": u"label_task_added",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
             {
-                'action': {
-                    'visible': True,
-                    'type': 'Document added',
-                    'title': u'label_document_added',
+                "action": {
+                    "visible": True,
+                    "type": "Task modified",
+                    "title": u"label_task_modified",
                 },
-                'comments': '',
-                'actor': 'robert.ziegler',
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Task modified",
+                    "title": u"label_task_modified",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Task modified",
+                    "title": u"label_task_modified",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Task added",
+                    "title": u"label_task_added",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Task added",
+                    "title": u"label_task_added",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Task added",
+                    "title": u"label_task_added",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
+            },
+            {
+                "action": {
+                    "visible": True,
+                    "type": "Document added",
+                    "title": u"label_document_added",
+                },
+                "reference_number": "Client1 1.1 / 1",
+                "actor": "robert.ziegler",
+                "comments": "",
             },
         ]
+
         self.assertEqual(
             expected_journal, strip_timestamps(dossier_journal.get_journal_data()))
 

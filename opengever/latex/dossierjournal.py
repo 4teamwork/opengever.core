@@ -10,6 +10,7 @@ from ftw.pdfgenerator.view import MakoLaTeXView
 from opengever.latex import _
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.listing import ILaTexListing
+from operator import itemgetter
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -75,9 +76,19 @@ class DossierJorunalLaTeXView(MakoLaTeXView):
             'listing': journal_listing.get_listing(self.get_journal_data())}
 
     def get_journal_data(self):
-        if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(self.context)
-            data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-            return deepcopy(data)
+        subdossiers = self.context.get_subdossiers(unrestricted=True, sort_on='path')
+        all_dossiers = [self.context] + [b._unrestrictedGetObject() for b in subdossiers]
 
-        return []
+        all_entries = []
+        for dossier in all_dossiers:
+            if IAnnotationsJournalizable.providedBy(dossier):
+                annotations = IAnnotations(dossier)
+                entries = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+
+                for entry in entries:
+                    entry = deepcopy(entry)
+                    entry['reference_number'] = dossier.get_reference_number()
+                    all_entries.append(entry)
+
+        all_entries.sort(key=itemgetter('time'))
+        return all_entries
