@@ -14,6 +14,11 @@ def DossierTemplateSubjectIndexer(obj):
     return aobj.keywords
 
 
+@indexer(IDossierTemplateMarker)
+def dossier_type(obj):
+    return IDossierTemplate(obj).dossier_type
+
+
 @implementer(dexteritytextindexer.IDynamicTextIndexExtender)
 @adapter(IDossierTemplateMarker)
 class DossierTemplateSearchableTextExtender(object):
