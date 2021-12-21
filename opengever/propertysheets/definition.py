@@ -22,6 +22,7 @@ from zope.dottedname.resolve import resolve
 from zope.globalrequest import getRequest
 from zope.schema import Bool
 from zope.schema import Choice
+from zope.schema import Date
 from zope.schema import getFieldNamesInOrder
 from zope.schema import getFieldsInOrder
 from zope.schema import Int
@@ -49,7 +50,8 @@ class SolrDynamicField(object):
         Int: 'int',
         TextLine: 'string',
         # We currently only support multiple_choice for string values
-        Set: 'strings'
+        Set: 'strings',
+        Date: 'date'
     }
     DYNAMIC_FIELD_IDENT = '_custom_field_'
 
@@ -96,6 +98,7 @@ class PropertySheetSchemaDefinition(object):
     FACTORIES = {
         'bool': fields.BoolFactory,
         'choice': fields.ChoiceFactory,
+        'date': fields.DateFactory,
         'multiple_choice': fields.MultiChoiceFactory,
         'int': fields.IntFactory,
         'text': fields.TextFactory,

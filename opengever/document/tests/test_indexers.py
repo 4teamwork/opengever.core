@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.solr.interfaces import ISolrSearch
@@ -263,6 +264,7 @@ class TestDocumentIndexers(FunctionalTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"date", u"Date", u"", True)
         )
         doc = create(Builder("document").having(document_type=u"question"))
         IDocumentCustomProperties(doc).custom_properties = {
@@ -273,6 +275,7 @@ class TestDocumentIndexers(FunctionalTestCase):
                 "num": 122333,
                 "text": u"K\xe4fer\nJ\xe4ger",
                 "textline": u"Kr\xe4he",
+                "date": date(2021, 12, 21)
             },
         }
         indexed_value = metadata(doc)().decode('utf8')
@@ -283,6 +286,7 @@ class TestDocumentIndexers(FunctionalTestCase):
         self.assertIn(u"Kr\xe4he", indexed_value)
         self.assertIn(u"rot", indexed_value)
         self.assertIn(u"blau", indexed_value)
+        self.assertIn(u"2021-12-21", indexed_value)
 
 
 class SolrDocumentIndexer(SolrIntegrationTestCase):
