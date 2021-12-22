@@ -280,22 +280,32 @@ Endpoints verwendet werden.
                 "buul_custom_field_boolean": {
                     "name": "buul_custom_field_boolean",
                     "title": "J/N",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "widget": null
                 },
                 "choice_custom_field_string": {
                     "name": "choice_custom_field_string",
                     "title": "Auswahl",
-                    "type": "string"
+                    "type": "string",
+                    "widget": null
                 },
                 "num_custom_field_int": {
                     "name": "num_custom_field_int",
                     "title": "Zahl",
-                    "type": "integer"
+                    "type": "integer",
+                    "widget": null
                 },
                 "textline_custom_field_string": {
                     "name": "textline_custom_field_string",
                     "title": "Zeile Text",
-                    "type": "string"
+                    "type": "string",
+                    "widget": null
+                },
+                "date_custom_field_date": {
+                    "name": "date_custom_field_date",
+                    "title": "Datum",
+                    "type": "string",
+                    "widget": "date"
                 }
             }
         }

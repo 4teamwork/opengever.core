@@ -72,6 +72,7 @@ Einzelne Felder werden in folgendem Format erwartet:
 
   - ``bool``
   - ``choice``
+  - ``date``
   - ``multiple_choice``
   - ``int``
   - ``text``

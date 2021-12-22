@@ -30,31 +30,43 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                         u"choose_custom_field_string": {
                             u"name": u"choose_custom_field_string",
                             u"title": u"Choose",
+                            u'widget': None,
                             u"type": u"string"
                         },
                         u'choosemulti_custom_field_strings': {
                             u'name': u'choosemulti_custom_field_strings',
                             u'title': u'Choose multi',
+                            u'widget': None,
                             u'type': u'array'
                         },
                         u"f1_custom_field_string": {
                             u"name": u"f1_custom_field_string",
                             u"title": u"Field 1",
+                            u'widget': None,
                             u"type": u"string"
+                        },
+                        u'date_custom_field_date': {
+                            u'name': u'date_custom_field_date',
+                            u'title': u'Choose a date',
+                            u'widget': u'date',
+                            u'type': u'string'
                         },
                         u"num_custom_field_int": {
                             u"name": u"num_custom_field_int",
                             u"title": u"Number",
+                            u'widget': None,
                             u"type": u"integer"
                         },
                         u"textline_custom_field_string": {
                             u"name": u"textline_custom_field_string",
                             u"title": u"A line of text",
+                            u'widget': None,
                             u"type": u"string"
                         },
                         u"yesorno_custom_field_boolean": {
                             u"name": u"yesorno_custom_field_boolean",
                             u"title": u"Yes or no",
+                            u'widget': None,
                             u"type": u"boolean"
                         }
                     }
@@ -64,11 +76,13 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                         u"additional_title_custom_field_string": {
                             u"name": u"additional_title_custom_field_string",
                             u"title": u"Additional dossier title",
+                            u'widget': None,
                             u"type": u"string"
                         },
                         u'location_custom_field_string': {
                             u'name': u'location_custom_field_string',
                             u'title': u'Location',
+                            u'widget': None,
                             u'type': u'string'
                         },
                     }
@@ -106,7 +120,8 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                         u"yesorno_custom_field_boolean": {
                             u"name": u"yesorno_custom_field_boolean",
                             u"title": u"Y/N (regulations)",
-                            u"type": u"boolean"
+                            u"type": u"boolean",
+                            u"widget": None
                         }
                     }
                 }

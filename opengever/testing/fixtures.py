@@ -516,6 +516,7 @@ class OpengeverContentFixture(object):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"date", u"Choose a date", u"", True)
         )
         create(
             Builder("property_sheet_schema")
