@@ -600,11 +600,12 @@ class DossierContainer(Container):
         if dossier and dossier.end:
             kwargs['document_date'] = dossier.end
 
-        results = api.content.find(object_provides=IDossierJournalPDFMarker,
-                                   depth=1,
-                                   context=self)
-
         with elevated_privileges():
+            results = api.content.find(
+                object_provides=IDossierJournalPDFMarker,
+                depth=1,
+                context=self)
+
             if len(results) > 0:
                 document = results[0].getObject()
                 document.title = translate(title, context=self.REQUEST)
