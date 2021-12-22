@@ -360,7 +360,6 @@ class AfterResolveJobs(object):
         - Remove all shadowed documents.
         - Remove all trashed documents.
         - (Trigger PDF-A conversion).
-        - Generate a PDF output of the journal.
         - For a main dossier, Generate a PDF listing the tasks.
 
         If the feature for nightly jobs is enabled (via registry), we skip
@@ -375,7 +374,6 @@ class AfterResolveJobs(object):
 
         self.trash_shadowed_docs()
         self.purge_trash()
-        self.create_journal_pdf()
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
@@ -427,12 +425,6 @@ class AfterResolveJobs(object):
             with elevated_privileges():
                 api.content.delete(
                     objects=[brain.getObject() for brain in trashed_docs])
-
-    def create_journal_pdf(self):
-        if not self.get_property('journal_pdf_enabled'):
-            return
-
-        self.context.create_or_update_journal_pdf()
 
     def create_tasks_listing_pdf(self):
         """Creates a pdf representation of the dossier tasks, and add it to

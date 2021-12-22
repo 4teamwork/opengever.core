@@ -14,7 +14,6 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.tests.byline_base_test import TestBylineBase
-from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import nightly_after_resolve_job
 from opengever.dossier.behaviors.dossier import IDossier
@@ -248,7 +247,6 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
 
     @browsing
     def test_can_resolve_reactivate_and_resolve_again(self, browser):
-        self.activate_feature('journal-pdf')
         self.activate_feature('tasks-pdf')
         self.login(self.secretariat_user, browser)
 
@@ -366,92 +364,6 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             self.resolve(self.empty_dossier, browser)
 
         self.assertIn(doc1, children['after'])
-
-        self.assert_after_resolve_jobs_pending_in_expected_state(
-            [self.empty_dossier])
-
-    @browsing
-    def test_adds_journal_pdf_to_main_dossier_only(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        subdossier = create(Builder('dossier')
-                            .within(self.empty_dossier)
-                            .titled(u'Sub'))
-
-        with self.observe_children(self.empty_dossier) as main_children:
-            with self.observe_children(subdossier) as sub_children:
-                with freeze(datetime(2016, 4, 25)):
-                    self.resolve(self.empty_dossier, browser)
-
-        self.assertEquals(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
-                          main_journal_pdf.title)
-        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
-                          main_journal_pdf.file.filename)
-        self.assertEquals(u'application/pdf',
-                          main_journal_pdf.file.contentType)
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
-        self.assertFalse(main_journal_pdf.preserved_as_paper)
-
-        self.assertEquals(
-            0, len(sub_children['added']),
-            'Journal PDF should only be created for main dossier')
-
-        self.assert_after_resolve_jobs_pending_in_expected_state(
-            [self.empty_dossier, subdossier])
-
-    @browsing
-    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        subdossier = create(Builder('dossier')
-                            .within(self.empty_dossier)
-                            .having(
-                                start=date(2016, 1, 1),
-                                end=date(2016, 3, 15))
-                            .titled(u'Sub'))
-
-        with self.observe_children(subdossier) as sub_children:
-            with freeze(datetime(2016, 4, 25)):
-                self.resolve(subdossier, browser)
-
-        self.assertEquals(
-            0, len(sub_children['added']),
-            'Journal PDF should only be created for main dossier')
-
-        with self.observe_children(self.empty_dossier) as main_children:
-            with freeze(datetime(2016, 9, 1)):
-                self.resolve(self.empty_dossier, browser)
-
-        self.assertEquals(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
-                         "End should be earliest possible date")
-        self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
-                         "Document date should be earliest possible date")
-
-        self.assert_after_resolve_jobs_pending_in_expected_state(
-            [self.empty_dossier, subdossier])
-
-    @browsing
-    def test_journal_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        with self.observe_children(self.empty_dossier) as children:
-            self.resolve(self.empty_dossier, browser)
-        self.assertEquals(1, len(children['added']))
-        journal_pdf, = children['added']
-        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        self.reactivate(self.empty_dossier, browser)
-        with self.observe_children(self.empty_dossier) as children:
-            self.resolve(self.empty_dossier, browser)
-        self.assertEquals(0, len(children['added']))
-        self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
 
         self.assert_after_resolve_jobs_pending_in_expected_state(
             [self.empty_dossier])
@@ -584,7 +496,7 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             [self.empty_dossier])
 
     @browsing
-    def test_tasks_and_journal_pdf_are_disabled_by_default(self, browser):
+    def test_task_pdf_is_disabled_by_default(self, browser):
         self.login(self.secretariat_user, browser)
 
         with self.observe_children(self.empty_dossier) as children:
@@ -731,159 +643,6 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
 
         self.assertIn(doc1, children['after'])
         self.assertNotIn(doc2, children['after'])
-
-    @browsing
-    def test_adds_journal_pdf_to_main_dossier_only(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        subdossier = create(Builder('dossier')
-                            .within(self.empty_dossier)
-                            .titled(u'Sub'))
-
-        with self.observe_children(self.empty_dossier) as main_children:
-            with self.observe_children(subdossier) as sub_children:
-                with freeze(datetime(2016, 4, 25)):
-                    self.resolve(self.empty_dossier, browser)
-
-        # Nothing happened yet, resolve jobs still flagged as pending
-        self.assertEquals(0, len(main_children['added']))
-        self.assertEquals(0, len(sub_children['added']))
-
-        self.assert_after_resolve_jobs_pending(
-            True, [self.empty_dossier, subdossier])
-
-        # Now run the nightly jobs
-        with self.observe_children(self.empty_dossier) as main_children:
-            with self.observe_children(subdossier) as sub_children:
-                with freeze(datetime(2016, 4, 25)):
-                    self.execute_nightly_jobs(expected=2)
-
-        self.assertEquals(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
-                          main_journal_pdf.title)
-        self.assertEquals(u'Journal of dossier An empty dossier, Apr 25, 2016 12 00 AM.pdf',
-                          main_journal_pdf.file.filename)
-        self.assertEquals(u'application/pdf',
-                          main_journal_pdf.file.contentType)
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
-        self.assertFalse(main_journal_pdf.preserved_as_paper)
-
-        self.assertEquals(
-            0, len(sub_children['added']),
-            'Journal PDF should only be created for main dossier')
-
-        self.assert_after_resolve_jobs_pending(
-            False, [self.empty_dossier, subdossier])
-
-    @browsing
-    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        subdossier = create(Builder('dossier')
-                            .within(self.empty_dossier)
-                            .having(
-                                start=date(2016, 1, 1),
-                                end=date(2016, 3, 15))
-                            .titled(u'Sub'))
-
-        # Resolve subdossier
-        with self.observe_children(subdossier) as sub_children:
-            with freeze(datetime(2016, 4, 25)):
-                self.resolve(subdossier, browser)
-
-        # Nothing happened yet, resolve jobs still flagged as pending
-        self.assertEquals(0, len(sub_children['added']))
-
-        self.assert_after_resolve_jobs_pending(
-            True, [subdossier])
-
-        # Now run the nightly jobs
-        with self.observe_children(subdossier) as sub_children:
-            with freeze(datetime(2016, 4, 25)):
-                self.execute_nightly_jobs(expected=1)
-
-        self.assertEquals(
-            0, len(sub_children['added']),
-            'Journal PDF should only be created for main dossier')
-
-        self.assert_after_resolve_jobs_pending(
-            False, [subdossier])
-
-        # Resolve main dossier
-        with self.observe_children(self.empty_dossier) as main_children:
-            with freeze(datetime(2016, 9, 1)):
-                self.resolve(self.empty_dossier, browser)
-
-        # Nothing happened yet, resolve jobs still flagged as pending
-        self.assertEquals(0, len(main_children['added']))
-
-        self.assert_after_resolve_jobs_pending(
-            True, [self.empty_dossier])
-
-        # Now run the nightly jobs
-        with self.observe_children(self.empty_dossier) as main_children:
-            with freeze(datetime(2016, 4, 25)):
-                self.execute_nightly_jobs(expected=1)
-
-        self.assertEquals(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertEqual(date(2016, 3, 15), IDossier(self.empty_dossier).end,
-                         "End should be earliest possible date")
-        self.assertEqual(date(2016, 3, 15), main_journal_pdf.document_date,
-                         "Document date should be earliest possible date")
-
-        self.assert_after_resolve_jobs_pending(
-            False, [self.empty_dossier])
-
-    @browsing
-    def test_journal_pdf_gets_updated_when_dossier_is_closed_again(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.secretariat_user, browser)
-
-        with self.observe_children(self.empty_dossier) as children:
-            self.resolve(self.empty_dossier, browser)
-
-        # Nothing happened yet, resolve jobs still flagged as pending
-        self.assertEquals(0, len(children['added']))
-
-        self.assert_after_resolve_jobs_pending(
-            True, [self.empty_dossier])
-
-        # Now run the nightly jobs
-        with self.observe_children(self.empty_dossier) as children:
-            self.execute_nightly_jobs(expected=1)
-
-        self.assertEquals(1, len(children['added']))
-        journal_pdf, = children['added']
-        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        self.assert_after_resolve_jobs_pending(
-            False, [self.empty_dossier])
-
-        # Now reactivate and close the dossier again
-        self.reactivate(self.empty_dossier, browser)
-        with self.observe_children(self.empty_dossier) as children:
-            self.resolve(self.empty_dossier, browser)
-
-        # Nothing happened yet, resolve jobs still flagged as pending
-        self.assertEquals(0, len(children['added']))
-        self.assertEquals(0, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        self.assert_after_resolve_jobs_pending(
-            True, [self.empty_dossier])
-
-        # Now run the nightly jobs
-        with self.observe_children(self.empty_dossier) as children:
-            self.execute_nightly_jobs(expected=1)
-
-        self.assertEquals(0, len(children['added']))
-        self.assertEquals(1, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        self.assert_after_resolve_jobs_pending(
-            False, [self.empty_dossier])
 
     @browsing
     def test_adds_tasks_pdf_only_to_main_dossier(self, browser):
