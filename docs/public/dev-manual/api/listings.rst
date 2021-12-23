@@ -87,6 +87,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_author``: Dokumentauthor
 - ``document_date``: Dokumentdatum
 - ``document_type``: Dokumenttyp
+- ``dossier_type``: Dossiertyp
 - ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers
 - ``external_reference``: Externe Referenz für Dossiers oder Fremdzeichen für Dokumente
@@ -178,6 +179,8 @@ siehe Tabelle:
     |``document_date``         |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+----------+
     |``document_type``         |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |      nein      |   nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+----------+
+    |``dossier_type``          |    nein  |   ja    |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       ja        |   nein   |       nein       |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+----------+
     |``end``                   |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |    ja    |       nein       |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+----------------+----------+

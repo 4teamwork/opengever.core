@@ -560,7 +560,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             [item['@id'] for item in browser.json['items']])
 
     @browsing
-    def test_facet_labels_are_transformed_properly(self, browser):
+    def test_document_facet_labels_are_transformed_properly(self, browser):
         self.login(self.regular_user, browser=browser)
 
         view = ('@listing?name=documents&columns:list=title'
@@ -579,6 +579,27 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertItemsEqual(
             {u'contract': {u'count': 1, u'label': u'Contract'}},
             facets[u'document_type'])
+
+    @browsing
+    def test_dossier_facet_labels_are_transformed_properly(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        IDossier(self.dossier).dossier_type = "businesscase"
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&facets:list=dossier_type')
+
+        browser.open(self.repository_root, view=view, method='GET',
+                     headers=self.api_headers)
+
+        self.assertIn(u'facets', browser.json)
+        facets = browser.json['facets']
+        self.assertItemsEqual([u'dossier_type'], facets.keys())
+        self.assertItemsEqual(
+            {u'businesscase': {u'count': 1, u'label': u'Business case'}},
+            facets[u'dossier_type'])
 
     @browsing
     def test_current_context_is_excluded(self, browser):
@@ -1055,6 +1076,24 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         item = browser.json['items'][0]
         self.assertEqual(self.document.absolute_url(), item['@id'])
         self.assertEqual(self.document.title, item['title'])
+
+    @browsing
+    def test_filter_by_dossier_type(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        IDossier(self.dossier).dossier_type = "businesscase"
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        # filtered on dossier_type
+        view = ('@listing?name=dossiers&columns:list=title'
+                '&filters.dossier_type:record:list=businesscase')
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, len(browser.json['items']))
+        item = browser.json['items'][0]
+        self.assertEqual(self.dossier.absolute_url(), item['@id'])
+        self.assertEqual(self.dossier.title, item['title'])
 
     @browsing
     def test_filter_by_depth(self, browser):

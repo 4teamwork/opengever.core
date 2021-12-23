@@ -108,6 +108,11 @@ def has_sametype_children(obj):
     return False
 
 
+@indexer(IDossierMarker)
+def dossier_type(obj):
+    return IDossier(obj).dossier_type
+
+
 TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',
                                            'opengever.meeting.proposal',
                                            'opengever.workspace.folder',

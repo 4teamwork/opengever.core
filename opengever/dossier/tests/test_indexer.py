@@ -6,6 +6,7 @@ from opengever.dossier.behaviors.customproperties import IDossierCustomPropertie
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.kub.testing import KuBIntegrationTestCase
@@ -283,6 +284,34 @@ class TestDossierIndexers(SolrIntegrationTestCase):
         notify(LocalRolesAcquisitionBlocked(self.dossier, ))
 
         self.assert_index_value(True, 'blocked_local_roles', self.dossier)
+
+    def test_dossier_type_indexer(self):
+        self.login(self.regular_user)
+
+        IDossier(self.dossier).dossier_type = None
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        self.assertEqual(solr_data_for(self.dossier, 'dossier_type'), None)
+
+        IDossier(self.dossier).dossier_type = "businesscase"
+        self.dossier.reindexObject()
+        self.commit_solr()
+        self.assertEqual(solr_data_for(self.dossier, 'dossier_type'), "businesscase")
+
+    def test_dossiertemplate_dossier_type_indexer(self):
+        self.login(self.regular_user)
+
+        IDossierTemplate(self.dossiertemplate).dossier_type = None
+        self.dossiertemplate.reindexObject()
+        self.commit_solr()
+
+        self.assertEqual(solr_data_for(self.dossiertemplate, 'dossier_type'), None)
+
+        IDossierTemplate(self.dossiertemplate).dossier_type = "businesscase"
+        self.dossiertemplate.reindexObject()
+        self.commit_solr()
+        self.assertEqual(solr_data_for(self.dossiertemplate, 'dossier_type'), "businesscase")
 
 
 class TestDossierFilingNumberIndexer(SolrIntegrationTestCase):

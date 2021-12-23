@@ -65,6 +65,19 @@ def translate_document_type(document_type):
         return term.title
 
 
+def translate_dossier_type(dossier_type):
+    portal = getSite()
+    voc = wrap_vocabulary(
+        'opengever.dossier.dossier_types',
+        hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types')(portal)
+    try:
+        term = voc.getTerm(dossier_type)
+    except LookupError:
+        return dossier_type
+    else:
+        return term.title
+
+
 def translate_sequence_type(sequence_type):
     return translate(sequence_type_vocabulary.getTerm(sequence_type).title,
                      context=getRequest(),
@@ -331,6 +344,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('creator_fullname', 'Creator', 'creator_fullname'),
     ListingField('description', 'Description'),
     ListingField('document_type', 'document_type', transform=translate_document_type),
+    ListingField('dossier_type', 'dossier_type', transform=translate_dossier_type),
     ListingField('filename', 'filename', filename),
     ListingField('filesize', 'filesize', filesize),
     ListingField('issuer', 'issuer', transform=display_name),
