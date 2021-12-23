@@ -3,8 +3,14 @@ from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.activities import DispositionStateChangedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.response import DispositionResponse
+from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.nightlyjobs.interfaces import INightlyJobProvider
+from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
+from plone import api
+from zope.component import getMultiAdapter
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
+import logging
 
 
 def disposition_state_changed(context, event):
@@ -57,3 +63,24 @@ def disposition_modified(context, event):
                          in context.get_dossier_representations()]
 
     IResponseContainer(context).add(response)
+
+
+def dossier_state_changed(context, event):
+    """Create journal PDF when dossier is offered.
+    """
+    if event.action == 'dossier-transition-offer':
+        if not api.portal.get_registry_record(
+                'journal_pdf_enabled',
+                interface=IDossierResolveProperties):
+            return
+
+        if nightly_jobs_feature_enabled():
+            # Queue nightly job for journal PDF
+            provider = getMultiAdapter(
+                (api.portal.get(), context.REQUEST, logging.getLogger()),
+                INightlyJobProvider,
+                name='create-dossier-journal-pdf')
+            provider.queue_journal_pdf_job(context)
+        else:
+            # Create journal PDF immediately
+            context.create_or_update_journal_pdf()

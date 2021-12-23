@@ -5,7 +5,6 @@ from opengever.base.transition import ITransitionExtender
 from opengever.base.transition import TransitionExtender
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.interfaces import IDossierJournalPDFMarker
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
@@ -361,7 +360,6 @@ class AfterResolveJobs(object):
         - Remove all shadowed documents.
         - Remove all trashed documents.
         - (Trigger PDF-A conversion).
-        - Generate a PDF output of the journal.
         - For a main dossier, Generate a PDF listing the tasks.
 
         If the feature for nightly jobs is enabled (via registry), we skip
@@ -376,7 +374,6 @@ class AfterResolveJobs(object):
 
         self.trash_shadowed_docs()
         self.purge_trash()
-        self.create_journal_pdf()
         if not self.context.is_subdossier() and self.contains_tasks():
             self.create_tasks_listing_pdf()
         self.trigger_pdf_conversion()
@@ -428,54 +425,6 @@ class AfterResolveJobs(object):
             with elevated_privileges():
                 api.content.delete(
                     objects=[brain.getObject() for brain in trashed_docs])
-
-    def create_journal_pdf(self):
-        """Creates a pdf representation of the dossier journal, and add it to
-        the dossier as a normal document.
-
-        If the dossiers has an end date use that date as the document date.
-        This prevents the dossier from entering an invalid state with a
-        document date outside the dossiers start-end range.
-        """
-        if not self.get_property('journal_pdf_enabled'):
-            return
-
-        view = self.context.unrestrictedTraverse('pdf-dossier-journal')
-        today = api.portal.get_localized_time(
-            datetime=datetime.today(), long_format=True)
-        filename = u'Journal {}.pdf'.format(today)
-        title = _(u'title_dossier_journal',
-                  default=u'Journal of dossier ${title}, ${timestamp}',
-                  mapping={'title': self.context.title,
-                           'timestamp': today})
-        kwargs = {
-            'preserved_as_paper': False,
-        }
-        dossier = IDossier(self.context)
-        if dossier and dossier.end:
-            kwargs['document_date'] = dossier.end
-
-        results = api.content.find(object_provides=IDossierJournalPDFMarker,
-                                   depth=1,
-                                   context=self.context)
-
-        with elevated_privileges():
-            if len(results) > 0:
-                document = results[0].getObject()
-                document.title = translate(title, context=self.context.REQUEST)
-                comment = _(u'Updated with a newer generated version from dossier ${title}.',
-                            mapping=dict(title=self.context.title))
-                document.update_file(view.get_data(), create_version=True,
-                                     comment=comment)
-                return
-
-            document = CreateDocumentCommand(
-                self.context, filename, view.get_data(),
-                title=translate(title, context=self.context.REQUEST),
-                content_type='application/pdf',
-                interfaces=[IDossierJournalPDFMarker],
-                **kwargs).execute()
-            document.reindexObject(idxs=['object_provides'])
 
     def create_tasks_listing_pdf(self):
         """Creates a pdf representation of the dossier tasks, and add it to

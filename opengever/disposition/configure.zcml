@@ -30,6 +30,11 @@
       name="deliver-sip-packages"
       />
 
+  <adapter
+      factory=".nightly_jobs.NightlyDossierJournalPDF"
+      name="create-dossier-journal-pdf"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.disposition"
@@ -66,6 +71,12 @@
       for="opengever.disposition.interfaces.IDisposition
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.disposition_modified"
+      />
+
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.dossier_state_changed"
       />
 
   <!-- transitions -->

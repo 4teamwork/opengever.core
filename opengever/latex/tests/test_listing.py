@@ -406,7 +406,7 @@ class TestJournalListings(BaseLatexListingTest):
         cols = table.xpath(CSSSelector('thead th').path)
 
         self.assertEquals(
-            ['Time', 'Title', 'Changed by', 'Comments'],
+            ['Time', 'Dossier', 'Title', 'Changed by', 'Comments'],
             [col.text_content().strip() for col in cols])
 
     def test_shows_label_including_prinicpal_of_actor(self):
@@ -414,9 +414,9 @@ class TestJournalListings(BaseLatexListingTest):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals(u'M\xfcller Peter (peter.mueller)',
-                          rows[0].xpath(CSSSelector('td').path)[2].text)
+                          rows[0].xpath(CSSSelector('td').path)[3].text)
         self.assertEquals(u'B\xf6ss Hugo (hugo.boss)',
-                          rows[1].xpath(CSSSelector('td').path)[2].text)
+                          rows[1].xpath(CSSSelector('td').path)[3].text)
 
     def test_time_is_readable(self):
         table = lxml.html.fromstring(self.listing.template())
@@ -432,7 +432,7 @@ class TestJournalListings(BaseLatexListingTest):
         rows = table.xpath(CSSSelector('tbody tr').path)
 
         self.assertEquals('Lorem ipsum',
-                          rows[3].xpath(CSSSelector('td').path)[3].text)
+                          rows[3].xpath(CSSSelector('td').path)[4].text)
 
     def test_document_sent_comments_are_skipped(self):
         table = lxml.html.fromstring(self.listing.template())
@@ -441,6 +441,6 @@ class TestJournalListings(BaseLatexListingTest):
         document_sent_row = rows[4]
         self.assertEquals(
             'label_document_sent',
-            document_sent_row.xpath(CSSSelector('td').path)[1].text)
+            document_sent_row.xpath(CSSSelector('td').path)[2].text)
         self.assertIsNone(
-            document_sent_row.xpath(CSSSelector('td').path)[3].text)
+            document_sent_row.xpath(CSSSelector('td').path)[4].text)
