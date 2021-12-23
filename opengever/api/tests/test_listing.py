@@ -366,6 +366,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=title',
             'columns=modified',
             'columns=document_author',
+            'columns=document_type_label',
             'columns=containing_dossier',
             'columns=bumblebee_checksum',
             'columns=relative_path',
@@ -375,11 +376,14 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
-        browser.open(self.dossier, view=view, headers=self.api_headers)
+        browser.open(self.dossier, view=view,
+                     headers={'Accept': 'application/json', 'Accept-Language': 'de-ch'})
+
         self.assertEqual(
             {u'reference': u'Client1 1.1 / 1 / 14',
              u'title': u'Vertr\xe4gsentwurf',
              u'document_author': u'test_user_1_',
+             u'document_type_label': u'Vertrag',
              u'external_reference': None,
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
              u'UID': IUUID(self.document),

@@ -129,6 +129,19 @@ def translated_task_type(obj):
     return task_type_helper(obj, obj.get("task_type"))
 
 
+def translated_document_type_label(obj):
+    portal = getSite()
+    voc = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.'
+                                        'IDocumentType.document_types')(portal)
+    try:
+        term = voc.getTerm(obj.get("document_type"))
+    except LookupError:
+        return None
+    return term.title
+
+
 def translated_public_trial(obj):
     try:
         return translate(obj.public_trial, context=getRequest(), domain="opengever.base")
@@ -342,6 +355,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('creator_fullname', 'Creator', 'creator_fullname'),
     ListingField('description', 'Description'),
     ListingField('document_type', 'document_type', transform=translate_document_type),
+    ListingField('document_type_label', 'document_type', accessor=translated_document_type_label),
     ListingField('dossier_type', 'dossier_type', transform=translate_dossier_type),
     ListingField('filename', 'filename', filename),
     ListingField('filesize', 'filesize', filesize),

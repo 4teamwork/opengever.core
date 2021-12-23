@@ -87,6 +87,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_author``: Dokumentauthor
 - ``document_date``: Dokumentdatum
 - ``document_type``: Dokumenttyp
+- ``document_type_label``: Dokumenttyp (Anzeigewert)
 - ``dossier_type``: Dossiertyp
 - ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers

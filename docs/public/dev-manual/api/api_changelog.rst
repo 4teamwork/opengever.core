@@ -34,6 +34,7 @@ Other Changes
 - Include is_absent in actors serialization.
 - A new endpoint ``@substitutions`` is added (see :ref:`get-substitutions`).
 - Include email address in workspace and workspace folder serialization.
+- ``@listing``: Add document_type_label column.
 
 
 2021.24.0 (2021-11-30)
