@@ -5,7 +5,6 @@ from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.utils import recursive_encode
-from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
@@ -32,7 +31,6 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import json
 import Missing
 
 
@@ -129,6 +127,19 @@ def translated_title(obj):
 
 def translated_task_type(obj):
     return task_type_helper(obj, obj.get("task_type"))
+
+
+def translated_document_type_label(obj):
+    portal = getSite()
+    voc = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.'
+                                        'IDocumentType.document_types')(portal)
+    try:
+        term = voc.getTerm(obj.get("document_type"))
+    except LookupError:
+        return None
+    return term.title
 
 
 def translated_public_trial(obj):
@@ -344,6 +355,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('creator_fullname', 'Creator', 'creator_fullname'),
     ListingField('description', 'Description'),
     ListingField('document_type', 'document_type', transform=translate_document_type),
+    ListingField('document_type_label', 'document_type', accessor=translated_document_type_label),
     ListingField('dossier_type', 'dossier_type', transform=translate_dossier_type),
     ListingField('filename', 'filename', filename),
     ListingField('filesize', 'filesize', filesize),
