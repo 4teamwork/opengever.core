@@ -5,7 +5,6 @@ from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.utils import recursive_encode
-from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
@@ -32,7 +31,6 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-import json
 import Missing
 
 
