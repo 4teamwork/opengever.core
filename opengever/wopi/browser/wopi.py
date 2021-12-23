@@ -147,7 +147,7 @@ class WOPIView(BrowserView):
             self.obj.file._blob.committed(), algorithm=u'SHA256')
         data = {
             'BaseFileName': self.obj.file.filename,
-            'OwnerId': self.obj.Creator(),
+            'OwnerId': self.obj.Creator() or self.obj.getOwner().getId(),
             'Size': self.obj.file.size,
             'UserId': member.getId(),
             'Version': self._file_version(),
