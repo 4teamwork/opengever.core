@@ -248,7 +248,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
                 'title': u'New d\xf6cument',
                 'recipient': self.person_jean}
 
-        self.mock_get_full_entity_by_id(mocker, self.person_jean)
+        self.mock_get_by_id(mocker, self.person_jean)
         with freeze(self.document_date), self.observe_children(self.dossier) as children:
             browser.open('{}/@document-from-template'.format(
                          self.dossier.absolute_url()),

@@ -15,8 +15,8 @@ class KuBEntityDocPropertyProvider(object):
         elif entity.is_organization():
             self.organization = entity
         elif entity.is_membership():
-            self.person = KuBEntity("person:" + entity["person"]["id"], full=True)
-            self.organization = KuBEntity("organization:" + entity["organization"]["id"], full=True)
+            self.person = KuBEntity("person:" + entity["person"]["id"])
+            self.organization = KuBEntity("organization:" + entity["organization"]["id"])
             self.membership = entity
 
     @property

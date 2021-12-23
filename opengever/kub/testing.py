@@ -29,11 +29,6 @@ class KuBIntegrationTestCase(IntegrationTestCase):
         mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
-    def mock_get_full_entity_by_id(self, mocker, _id, **kwargs):
-        url = self.client.get_resolve_url(_id)
-        mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
-        return url
-
 
 # These responses are taken from performing these exact requests against
 # the database defined in "fixtures/gever-testing.json" in the KUB repository.

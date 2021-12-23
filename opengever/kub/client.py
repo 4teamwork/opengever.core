@@ -44,11 +44,5 @@ class KuBClient(object):
         resp.raise_for_status()
         return resp.json()
 
-    def get_full_entity_by_id(self, _id):
-        url = self.get_resolve_url(_id)
-        resp = self.session.get(url)
-        resp.raise_for_status()
-        return resp.json()
-
     def get_resolve_url(self, _id):
         return u'{}resolve/{}'.format(self.kub_api_url, _id)

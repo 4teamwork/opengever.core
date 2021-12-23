@@ -15,8 +15,8 @@ class TestKuBEntity(KuBIntegrationTestCase):
                              entity.data)
 
     def test_full_entity_data(self, mocker):
-        url = self.mock_get_full_entity_by_id(mocker, self.person_julie)
-        entity = KuBEntity(self.person_julie, full=True)
+        url = self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
         self.assertDictEqual(KUB_RESPONSES[url], entity.data)
 
     def test_proxies_getitem_to_data(self, mocker):
@@ -26,8 +26,8 @@ class TestKuBEntity(KuBIntegrationTestCase):
             self.assertEqual(json.loads(json.dumps(value)), entity[key])
 
     def test_serialization_returns_kub_data(self, mocker):
-        url = self.mock_get_full_entity_by_id(mocker, self.person_julie)
-        entity = KuBEntity(self.person_julie, full=True)
+        url = self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
         self.assertDictEqual(KUB_RESPONSES[url], entity.serialize())
 
     def test_person_entity(self, mocker):

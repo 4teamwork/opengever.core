@@ -4,12 +4,9 @@ from opengever.kub.docprops import KuBEntityDocPropertyProvider
 
 class KuBEntity(object):
 
-    def __init__(self, type_id, full=False):
+    def __init__(self, type_id):
         self.identifier = type_id
-        if full:
-            self.data = KuBClient().get_full_entity_by_id(self.identifier)
-        else:
-            self.data = KuBClient().get_by_id(self.identifier)
+        self.data = KuBClient().get_by_id(self.identifier)
 
     def __getitem__(self, key):
         return self.data[key]

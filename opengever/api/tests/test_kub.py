@@ -17,7 +17,7 @@ class TestKubEndpoint(KuBIntegrationTestCase):
         self.login(self.regular_user, browser)
 
         def assertErrorHandling(tested_error_code, raised_error_code, raised_http_exception, error_message):
-            self.mock_get_full_entity_by_id(
+            self.mock_get_by_id(
                 mocker, self.person_julie, status_code=tested_error_code)
 
             with self.assertRaises(raised_http_exception):
@@ -65,7 +65,7 @@ class TestKubEndpoint(KuBIntegrationTestCase):
     @browsing
     def test_proxies_to_corresponding_kub_endpoint(self, mocker, browser):
         self.login(self.regular_user, browser)
-        self.mock_get_full_entity_by_id(mocker, self.person_julie)
+        self.mock_get_by_id(mocker, self.person_julie)
         browser.open(api.portal.get(),
                      view='/@kub/{}'.format(self.person_julie),
                      method='GET',
