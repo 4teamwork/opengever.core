@@ -17,7 +17,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.address.street': None,
              'ogg.address.zip_code': None,
              'ogg.contact.description': u'',
-             'ogg.contact.title': None,
+             'ogg.contact.title': u'Dupont Julie',
              'ogg.email.address': None,
              'ogg.person.academic_title': u'',
              'ogg.person.firstname': u'Julie',
@@ -31,13 +31,14 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.mock_get_full_entity_by_id(mocker, self.org_ftw)
         entity = KuBEntity(self.org_ftw, full=True)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
+
         self.assertDictEqual(
-            {'ogg.address.city': None,
-             'ogg.address.country': None,
-             'ogg.address.street': None,
-             'ogg.address.zip_code': None,
+            {'ogg.address.city': u'Bern',
+             'ogg.address.country': u'Schweiz',
+             'ogg.address.street': u'Dammweg',
+             'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'Web application specialist',
-             'ogg.contact.title': None,
+             'ogg.contact.title': u'4Teamwork',
              'ogg.email.address': None,
              'ogg.organization.name': u'4Teamwork',
              'ogg.phone.number': None,
@@ -51,12 +52,12 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         entity = KuBEntity(self.memb_jean_ftw, full=True)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
         self.assertDictEqual(
-            {'ogg.address.city': None,
-             'ogg.address.country': None,
-             'ogg.address.street': None,
-             'ogg.address.zip_code': None,
+            {'ogg.address.city': u'Bern',
+             'ogg.address.country': u'Schweiz',
+             'ogg.address.street': u'Dammweg',
+             'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'',
-             'ogg.contact.title': None,
+             'ogg.contact.title': u'Dupont Jean - 4Teamwork (CEO)',
              'ogg.email.address': u'Jean.dupon@example.com',
              'ogg.organization.name': u'4Teamwork',
              'ogg.orgrole.department': u'',
