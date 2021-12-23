@@ -87,3 +87,11 @@ class TestWOPIView(IntegrationTestCase):
     def test_breadcrumbBrandName_is_portal_title(self):
         self.assertIn(u'BreadcrumbBrandName', self.check_file_info())
         self.assertEqual('Plone site', self.check_file_info()[u'BreadcrumbBrandName'])
+
+    def test_owner_id_falls_back_to_owner_if_creator_is_missing(self):
+        with self.login(self.regular_user):
+            self.document.setCreators('')
+            assert self.document.Creator() == ''
+
+        self.assertIn('OwnerId', self.check_file_info())
+        self.assertEqual('robert.ziegler', self.check_file_info()['OwnerId'])
