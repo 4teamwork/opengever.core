@@ -24,6 +24,7 @@ from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
+from opengever.dossier.vocabularies import count_available_dossier_types
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.kub import is_kub_feature_enabled
 from opengever.mail.interfaces import IMailDownloadSettings
@@ -175,6 +176,8 @@ class GeverSettingsAdpaterV1(object):
         features['workspace_todo'] = api.portal.get_registry_record('is_feature_enabled', interface=IToDoSettings)
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
+        features['multiple_dossier_types'] = count_available_dossier_types() > 1
+
         return features
 
     def is_filing_number_feature_installed(self):
