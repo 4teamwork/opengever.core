@@ -15,6 +15,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@config``: added new property ``multiple_dossier_types`` which will be set to true if there is more than one dossier type available.
 - ``@solrsearch`` and ``@listing``: ``dossier_type`` is added as a new solr index and whitelisted in the ``@listing`` endpoint.
 - Propertysheets: ``date`` fields are now supported.
 - ``@listing-custom-fields`` endpoint contains now also the widget information.

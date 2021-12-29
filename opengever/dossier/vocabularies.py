@@ -3,6 +3,8 @@ from ftw.keywordwidget.vocabularies import KeywordWidgetAddableSourceWrapper
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
+from zope.component import getUtility
+from zope.schema.interfaces import IVocabularyFactory
 
 
 class IRestrictKeywords(Interface):
@@ -39,3 +41,9 @@ class KeywordAddableRestrictableSourceBinder(object):
             KeywordSearchableSource(context),
             restricted,
             allowed_terms)
+
+
+def count_available_dossier_types():
+    """Returns the number of dossier_types available for the current deployment
+    """
+    return len(getUtility(IVocabularyFactory, name="opengever.dossier.dossier_types")(None))

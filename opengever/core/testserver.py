@@ -12,14 +12,19 @@ from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OpengeverFixture
 from opengever.core.testserver_zope2server import ISOLATION_READINESS
+from opengever.dossier.interfaces import IDossierType
 from opengever.testing.helpers import incrementing_intids
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
 from requests.exceptions import ConnectionError
+from zope.component import getGlobalSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import imp
 import os
 import pytz
@@ -126,6 +131,8 @@ class TestserverLayer(OpengeverFixture):
         api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
         activate_bumblebee_feature()
 
+        self.replaceDossierTypesVocabulary()
+
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
         self.get_fixture_class()()
@@ -141,6 +148,25 @@ class TestserverLayer(OpengeverFixture):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de')
         lang_tool.supported_langs = ['de-ch', 'fr-ch']
+
+    def replaceDossierTypesVocabulary(self):
+        """Register testserver-specific dossier-types.
+        It does not work with overrides.zcml for testserver only. So we have to do it manually
+        """
+        def dossier_types_vocabulary_factory(context):
+            return SimpleVocabulary([
+                SimpleTerm('businesscase', title=u'Gesch\xe4ftsfall'),
+                SimpleTerm('project', title='Projektdossier')
+                ])
+
+        utility_name = 'opengever.dossier.dossier_types'
+        gsm = getGlobalSiteManager()
+        gsm.unregisterUtility(provided=IVocabularyFactory, name=utility_name)
+        gsm.registerUtility(dossier_types_vocabulary_factory, provided=IVocabularyFactory, name=utility_name)
+
+        # Do not hide the initial dossier_type.
+        api.portal.set_registry_record(
+            name='hidden_dossier_types', interface=IDossierType, value=[])
 
     def get_fixture_class(self):
         """The fixture of the testserver should be replaceable from the outside.

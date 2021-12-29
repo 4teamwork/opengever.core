@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
+from mock import patch
 from opengever.base.interfaces import IUserSnapSettings
 from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
@@ -74,6 +75,7 @@ class TestConfig(IntegrationTestCase):
                 u'hubspot': False,
                 u'journal_pdf': False,
                 u'meetings': False,
+                u'multiple_dossier_types': False,
                 u'officeatwork': False,
                 u'officeconnector_attach': True,
                 u'officeconnector_checkout': True,
@@ -351,6 +353,17 @@ class TestConfig(IntegrationTestCase):
 
         browser.open(self.config_url, headers=self.api_headers)
         self.assertTrue(browser.json['features']['filing_number'])
+
+    @browsing
+    def test_feature_multiple_dossier_types(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertFalse(browser.json['features']['multiple_dossier_types'])
+
+        with patch('opengever.base.configuration.count_available_dossier_types', return_value=2):
+            browser.open(self.config_url, headers=self.api_headers)
+            self.assertTrue(browser.json['features']['multiple_dossier_types'])
 
     @browsing
     def test_contains_the_current_admin_unit(self, browser):
