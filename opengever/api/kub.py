@@ -39,7 +39,7 @@ class KuBGet(Service):
     @kub_request_error_handler
     def reply(self):
         _id = self.read_params().decode('utf-8')
-        entity = KuBEntity(_id, full=True)
+        entity = KuBEntity(_id)
         return entity.serialize()
 
     def read_params(self):

@@ -1,5 +1,6 @@
-from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.kub.testing import KUB_RESPONSES
+from opengever.kub.testing import KuBIntegrationTestCase
+import json
 import requests_mock
 
 
@@ -35,16 +36,16 @@ class TestKubClient(KuBIntegrationTestCase):
         url = self.mock_get_by_id(mocker, self.person_jean)
         resp = self.client.get_by_id(self.person_jean)
         self.assertEqual("person", resp["type"])
-        self.assertEqual(KUB_RESPONSES[url][0], resp)
+        self.assertEqual(json.loads(json.dumps(KUB_RESPONSES[url])), resp)
 
     def test_get_by_id_handles_organizations(self, mocker):
         url = self.mock_get_by_id(mocker, self.org_ftw)
         resp = self.client.get_by_id(self.org_ftw)
         self.assertEqual("organization", resp["type"])
-        self.assertEqual(KUB_RESPONSES[url][0], resp)
+        self.assertEqual(KUB_RESPONSES[url], resp)
 
     def test_get_by_id_handles_memberships(self, mocker):
         url = self.mock_get_by_id(mocker, self.memb_jean_ftw)
         resp = self.client.get_by_id(self.memb_jean_ftw)
         self.assertEqual("membership", resp["type"])
-        self.assertEqual(KUB_RESPONSES[url][0], resp)
+        self.assertEqual(KUB_RESPONSES[url], resp)

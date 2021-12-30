@@ -1,6 +1,7 @@
-from opengever.kub.testing import KuBIntegrationTestCase
-from opengever.kub.testing import KUB_RESPONSES
 from opengever.kub.entity import KuBEntity
+from opengever.kub.testing import KUB_RESPONSES
+from opengever.kub.testing import KuBIntegrationTestCase
+import json
 import requests_mock
 
 
@@ -10,22 +11,23 @@ class TestKuBEntity(KuBIntegrationTestCase):
     def test_data_contains_kub_response(self, mocker):
         url = self.mock_get_by_id(mocker, self.person_jean)
         entity = KuBEntity(self.person_jean)
-        self.assertDictEqual(KUB_RESPONSES[url][0], entity.data)
+        self.assertDictEqual(json.loads(json.dumps(KUB_RESPONSES[url])),
+                             entity.data)
 
     def test_full_entity_data(self, mocker):
-        url = self.mock_get_full_entity_by_id(mocker, self.person_julie)
-        entity = KuBEntity(self.person_julie, full=True)
+        url = self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
         self.assertDictEqual(KUB_RESPONSES[url], entity.data)
 
     def test_proxies_getitem_to_data(self, mocker):
         url = self.mock_get_by_id(mocker, self.person_jean)
         entity = KuBEntity(self.person_jean)
-        for key, value in KUB_RESPONSES[url][0].items():
-            self.assertEqual(value, entity[key])
+        for key, value in KUB_RESPONSES[url].items():
+            self.assertEqual(json.loads(json.dumps(value)), entity[key])
 
     def test_serialization_returns_kub_data(self, mocker):
-        url = self.mock_get_full_entity_by_id(mocker, self.person_julie)
-        entity = KuBEntity(self.person_julie, full=True)
+        url = self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
         self.assertDictEqual(KUB_RESPONSES[url], entity.serialize())
 
     def test_person_entity(self, mocker):

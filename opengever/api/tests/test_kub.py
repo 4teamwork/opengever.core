@@ -4,6 +4,7 @@ from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.kub.testing import KUB_RESPONSES
 from opengever.kub.testing import KuBIntegrationTestCase
 from plone import api
+import json
 import requests_mock
 
 
@@ -16,7 +17,7 @@ class TestKubEndpoint(KuBIntegrationTestCase):
         self.login(self.regular_user, browser)
 
         def assertErrorHandling(tested_error_code, raised_error_code, raised_http_exception, error_message):
-            self.mock_get_full_entity_by_id(
+            self.mock_get_by_id(
                 mocker, self.person_julie, status_code=tested_error_code)
 
             with self.assertRaises(raised_http_exception):
@@ -64,12 +65,12 @@ class TestKubEndpoint(KuBIntegrationTestCase):
     @browsing
     def test_proxies_to_corresponding_kub_endpoint(self, mocker, browser):
         self.login(self.regular_user, browser)
-        self.mock_get_full_entity_by_id(mocker, self.person_julie)
+        self.mock_get_by_id(mocker, self.person_julie)
         browser.open(api.portal.get(),
                      view='/@kub/{}'.format(self.person_julie),
                      method='GET',
                      headers=self.api_headers)
 
-        uid = self.person_julie.split(":")[1]
-        url = "{}people/{}".format(self.client.kub_api_url, uid)
-        self.assertEqual(KUB_RESPONSES[url], browser.json)
+        url = "{}resolve/{}".format(self.client.kub_api_url, self.person_julie)
+        self.assertEqual(json.loads(json.dumps(KUB_RESPONSES[url])),
+                         browser.json)

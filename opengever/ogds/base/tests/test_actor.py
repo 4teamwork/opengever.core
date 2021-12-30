@@ -21,6 +21,7 @@ from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from unittest import TestCase
+import json
 import requests_mock
 
 
@@ -205,7 +206,8 @@ class TestKuBContactActor(KuBIntegrationTestCase):
         self.assertIsInstance(actor, KuBContactActor)
         self.assertEqual(u'Dupont Jean', actor.get_label())
         self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(KUB_RESPONSES[url][0], actor.represents().data)
+        self.assertEqual(json.loads(json.dumps(KUB_RESPONSES[url])),
+                         actor.represents().data)
 
     def test_organization_actor_lookup(self, mocker):
         url = self.mock_get_by_id(mocker, self.org_ftw)
@@ -215,7 +217,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
         self.assertIsInstance(actor, KuBContactActor)
         self.assertEqual(u'4Teamwork', actor.get_label())
         self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(KUB_RESPONSES[url][0], actor.represents().data)
+        self.assertEqual(KUB_RESPONSES[url], actor.represents().data)
 
     def test_membership_actor_lookup(self, mocker):
         url = self.mock_get_by_id(mocker, self.memb_jean_ftw)
@@ -225,7 +227,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
         self.assertIsInstance(actor, KuBContactActor)
         self.assertEqual(u'Dupont Jean - 4Teamwork (CEO)', actor.get_label())
         self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(KUB_RESPONSES[url][0], actor.represents().data)
+        self.assertEqual(KUB_RESPONSES[url], actor.represents().data)
 
     def test_kub_contact_actor_lookup_for_not_existing_contact(self, mocker):
         contact_id = "invalid-id"

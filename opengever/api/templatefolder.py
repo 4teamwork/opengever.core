@@ -69,7 +69,7 @@ class DocumentFromTemplatePost(Service):
             raise BadRequest('recipient is only supported when KuB feature is active')
         if recipient_id:
             if ActorLookup(recipient_id).is_kub_contact():
-                recipient = (KuBEntity(recipient_id, full=True), )
+                recipient = (KuBEntity(recipient_id), )
             else:
                 contact = OgdsUserToContactAdapter(
                             ogds_service().find_user(recipient_id))
