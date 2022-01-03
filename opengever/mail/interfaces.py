@@ -6,6 +6,18 @@ from zope.interface import Interface, Attribute
 DEFAULT_MAIL_MAX_SIZE = 5
 
 
+class IInboundMailSettings(Interface):
+
+    sender_aliases = schema.Dict(
+        title=u'Sender address aliases',
+        description=u'Maps sender addresses to GEVER users. '
+                    u'Inbound mails from those addresses will '
+                    u'be created with the respective user.',
+        key_type=schema.TextLine(title=u'Aliased from (email)'),
+        value_type=schema.TextLine(title=u'Aliased to (userid)'),
+    )
+
+
 class ISendDocumentConf(Interface):
     max_size = schema.Int(
         title=u'max_size',

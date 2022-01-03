@@ -3,13 +3,135 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
 from ftw.mail.interfaces import IEmailAddress
+from ftw.testbrowser import browsing
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.mail.interfaces import IInboundMailSettings
 from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
 from plone import api
 import email
+
+
+class TestMailInboundSender(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestMailInboundSender, self).setUp()
+        self.login(self.regular_user)
+        emailaddress = IEmailAddress(self.request)
+        self.destination_addr = emailaddress.get_email_for_object(self.dossier)
+        self.logout()
+
+    @browsing
+    def test_rejects_unknown_sender(self, browser):
+        msg_txt = (
+            'To: to@example.org\n'
+            'From: unknown@example.org\n'
+            'Subject: Test')
+
+        browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+        self.assertEqual(
+            '77:Unknown sender. Permission denied.',
+            browser.contents)
+
+    @browsing
+    def test_accepts_known_sender(self, browser):
+        self.login(self.dossier_responsible)
+        sender = self.regular_user.getProperty('email')
+        msg_txt = (
+            'To: %s\n'
+            'From: %s\n'
+            'Subject: Test' % (self.destination_addr, sender))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+
+        self.assertEqual(
+            '0:OK',
+            browser.contents)
+
+        created_mail = children['added'].pop()
+        self.assertEqual(self.regular_user.getId(), created_mail.Creator())
+
+    @browsing
+    def test_aliases_sender_email_to_user(self, browser):
+        self.login(self.dossier_responsible)
+
+        aliased_from = u'finanzen@example.org'
+        aliased_to = self.regular_user.getId().decode('utf-8')
+
+        api.portal.set_registry_record(
+            'sender_aliases',
+            {aliased_from: aliased_to},
+            IInboundMailSettings)
+
+        msg_txt = (
+            'To: %s\n'
+            'From: %s\n'
+            'Subject: Test' % (self.destination_addr, aliased_from))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+
+        self.assertEqual(
+            '0:OK',
+            browser.contents)
+
+        created_mail = children['added'].pop()
+        self.assertEqual(self.regular_user.getId(), created_mail.Creator())
+
+    @browsing
+    def test_sender_alias_email_is_case_insensitive(self, browser):
+        self.login(self.dossier_responsible)
+
+        aliased_from = u'finanzen@example.org'
+        aliased_to = self.regular_user.getId().decode('utf-8')
+
+        api.portal.set_registry_record(
+            'sender_aliases',
+            {aliased_from: aliased_to},
+            IInboundMailSettings)
+
+        msg_txt = (
+            'To: %s\n'
+            'From: %s\n'
+            'Subject: Test' % (self.destination_addr, u'FinANZen@exAmple.org'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+
+        self.assertEqual(
+            '0:OK',
+            browser.contents)
+
+        created_mail = children['added'].pop()
+        self.assertEqual(self.regular_user.getId(), created_mail.Creator())
+
+    @browsing
+    def test_nonexistent_userid_for_aliased_sender_raises_unknown_sender(self, browser):
+        self.login(self.dossier_responsible)
+
+        aliased_from = u'finanzen@example.org'
+        aliased_to = u'doesnt-exist'
+
+        api.portal.set_registry_record(
+            'sender_aliases',
+            {aliased_from: aliased_to},
+            IInboundMailSettings)
+
+        msg_txt = (
+            'To: %s\n'
+            'From: %s\n'
+            'Subject: Test' % (self.destination_addr, aliased_from))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+
+        self.assertEqual(
+            '77:Unknown sender. Permission denied.',
+            browser.contents)
 
 
 class TestMailInbound(FunctionalTestCase):
