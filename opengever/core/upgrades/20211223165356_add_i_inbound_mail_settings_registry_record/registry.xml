@@ -1,0 +1,5 @@
+<registry>
+
+  <records interface="opengever.mail.interfaces.IInboundMailSettings" />
+
+</registry>
