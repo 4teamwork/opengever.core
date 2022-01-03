@@ -193,3 +193,15 @@ class TestSaveDocumentAsPdfPost(IntegrationTestCase):
         self.assertEqual(len(children["added"]), 1)
         created_document = children["added"].pop()
         self.assertEqual(0, IAnnotations(created_document).get(PDF_SAVE_SOURCE_VERSION_KEY))
+
+    @browsing
+    def test_save_document_as_pdf_post_does_not_set_shadow_state_for_workspace_documents(self, browser):
+        self.login(self.workspace_member, browser)
+        with self.observe_children(self.workspace) as children:
+            browser.open(self.workspace, view='@save-document-as-pdf', method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"document_uid": self.workspace_document.UID()}))
+
+        self.assertEqual(len(children["added"]), 1)
+        created_document = children["added"].pop()
+        self.assertFalse(created_document.is_shadow_document())
