@@ -10,6 +10,70 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.1.0 (2022-01-04)
+---------------------
+
+New features:
+
+
+- Add responsible field to the workspace schema. [phgross]
+- Add @xhr-upload endpoint to upload documents with a multipart/form-data xhr request. [elioschmutz]
+- Expose retention_expiration column in @listing endpoint. [tinagerber]
+- Add API Support for the disposition history. [phgross]
+- Provide disposition actions in the @actions endpoint. [phgross]
+- Add @my-substitutes, @subtitutes and @out-of-office API endpoints. [tinagerber]
+- Add @subtitution API endpoint. [tinagerber]
+- Include email address in workspace and workspace folder serialization. [tinagerber]
+- Add support for KuB contacts in document-from-template endpoint. [njohner]
+- Inbound mail: Add support for sender address aliases [lgraf]
+- Add @kub endpoint. [njohner]
+- Include custom properties in the eCH-0160 export. [phgross]
+- Add support for custom property facets to `@solrsearch` endpoint. [lgraf]
+- Add 'dossier_type' index to solr [elioschmutz]
+- Allow 'dossier_type' in the '@listing' endpoint [elioschmutz]
+- Add a new property 'multiple_dossier_types' to the '@config' endpoint. [elioschmutz]
+- Expose document_type_label column in @listing endpoint. [tinagerber]
+- Add new customfield type date.
+- Make sure customproperty default values are initialized, when content is created. [phgross]
+- Allow POST requests against the @solrsearch endpoint. [elioschmutz]
+- The @solrsearch results can now be filtered by its ``@id``. [elioschmutz]
+- Add `@external-activities` endpoint to allow creating activities via API. [lgraf]
+- Extend KuBContactSource with ogds users. [njohner]
+
+
+Bug fixes:
+
+
+- Fix @groups patch endpoint. [tinagerber]
+- Bump docxcompose to 1.3.4 to fix IndexError on custom styled bullet points. [lgraf]
+- Include is_completed in sql task serialization. [tinagerber]
+- Fix soft-delete for inbox documents.
+- Fix propagation of values for restricted vocabularies and reindex retention_expiration when necessary. [njohner]
+- Fix task overview in old ui for tasks created by task delegation. [elioschmutz]
+- Task delegation does no longer set an unwanted documents-property on the subtask. [elioschmutz]
+- Fix file upload into subdossiers which exceed the current max dossier depth. [phgross]
+- Document serializer respects the file_extension of the currently requested version [elioschmutz]
+- Fix batching issues in sharing view. [njohner]
+- Restrict check whether meeting is reopenable to meetings from same period. [njohner]
+- Fix copy document from workspace as new version when gever document is trashed. [njohner]
+- Bump ftw.recipe.solr to version 1.3.6 and use custom Solr distribution containing Log4j 2.17.0. Mitigation for CVE-2021-44228, CVE-2021-45046 and CVE-2021-45105. [buchi]
+- Fix task syncing when deadline is modified twice by same user. [njohner]
+- Fix save PDF under for workspace documents. [njohner]
+
+
+Other changes:
+
+
+- Improve translations of the disposition module. [njohner]
+- Add PropertySheetsManager role and custom permission. [lgraf]
+- Notification settings: Change internal name of "general" tab. [lgraf]
+- Remove value propagation of archival_value and custody_period. [njohner]
+- Improve teamraum meeting PDF style. [njohner]
+- Only create journal PDF for main dossiers (all entries in one file). [lgraf]
+- Create journal PDF when dossier is offered (instead of resolved) [lgraf]
+- Use the newly available resolve endpoint to fetch a Kub entity. [phgross]
+
+
 2021.24.1 (2021-12-01)
 ----------------------
 
