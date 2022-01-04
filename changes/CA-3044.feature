@@ -1,1 +1,1 @@
-- Allow POST requests against the @solrsearch endpoint. [elioschmutz]
+Allow POST requests against the @solrsearch endpoint. [elioschmutz]

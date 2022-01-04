@@ -1,1 +1,1 @@
-- The @solrsearch results can now be filtered by its ``@id``. [elioschmutz]
+The @solrsearch results can now be filtered by its ``@id``. [elioschmutz]
