@@ -231,6 +231,11 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
     def test_dossier_listing(self, browser):
         self.enable_languages()
         self.login(self.regular_user, browser=browser)
+
+        IDossier(self.dossier).dossier_type = "businesscase"
+        self.dossier.reindexObject()
+        self.commit_solr()
+
         query_string = '&'.join((
             'name=dossiers',
             'columns=blocked_local_roles',
@@ -239,6 +244,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=reference',
             'columns=title',
             'columns=retention_expiration',
+            'columns=dossier_type_label',
             'columns=review_state',
             'columns=relative_path',
             'columns=UID',
@@ -265,6 +271,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
              u'blocked_local_roles': False,
+             u'dossier_type_label':u'Gesch\xe4ftsfall',
              u'external_reference': u'qpr-900-9001-\xf7',
              u'public_trial': u'Nicht gepr\xfcft',
              u'trashed': False,
