@@ -502,7 +502,7 @@ class LinkedWorkspaces(object):
         """
         return self._blacklisted_dict(
             serialized_document,
-            ['file', 'archival_file', 'message', 'original_message'])
+            ['file', 'archival_file', 'message', 'original_message', 'relatedItems'])
 
     def _whitelisted_dict(self, dict_obj, whitelist):
         whitelisted_dict = {}
