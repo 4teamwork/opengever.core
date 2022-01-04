@@ -166,9 +166,9 @@ msgstr "Afficher tous les utilisateurs"
 #. Default: "This substitute already exists."
 #: ./opengever/ogds/base/substitute.py
 msgid "msg_substitute_already_exists"
-msgstr ""
+msgstr "Ce suppléant existe déjà."
 
 #. Default: "This substitute does not exist."
 #: ./opengever/ogds/base/substitute.py
 msgid "msg_substitute_does_not_exist"
-msgstr ""
+msgstr "Ce suppléant n'existe pas."

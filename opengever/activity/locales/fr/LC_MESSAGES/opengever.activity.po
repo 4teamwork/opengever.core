@@ -149,7 +149,7 @@ msgstr "Responsable"
 #. Default: "External activities"
 #: ./opengever/activity/notification_settings.py
 msgid "external-activity"
-msgstr ""
+msgstr "Activités externes"
 
 #. Default: "Forwarding added"
 #: ./opengever/activity/__init__.py
