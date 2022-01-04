@@ -3,12 +3,21 @@
 API Changelog
 =============
 
-2021.24.0 (unreleased)
+2022.2.0 (unreleased)
+----------------------
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2022.1.0 (2022-01-04)
 ----------------------
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
 - Workspace serialization does no longer return the key `responsible_fullname`.
 - Support recipient in ``@document-from-template`` endpoint when KuB feature is enabled.
 - Contact feature in the ``@config`` endpoint is now one of ``plone``, ``sql`` and ``kub``.
