@@ -8,6 +8,7 @@ from opengever.document.interfaces import IFileActions
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.trash.trash import ITrashed
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.workspace.interfaces import IDeleter
@@ -271,6 +272,9 @@ class DocumentFileActions(BaseDocumentFileActions):
         # Office Online allows collaborative editing
         # Thus a document is editable by Office Online if it's not checked out and not locked
         # or if it's collaboratively checked out.
+        # If the document is trashed, then it's not editable.
+        if ITrashed.providedBy(self.context):
+            return False
         if self.context.checked_out_by():
             return self.context.is_collaborative_checkout()
         if self.context.is_locked():
