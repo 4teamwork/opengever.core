@@ -4,6 +4,7 @@ from ftw.builder import create
 from mock import patch
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
@@ -287,6 +288,33 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
+
+    def test_copy_document_to_a_workspace_drops_related_items(self):
+        related_document = create(Builder('document')
+                                  .within(self.dossier)
+                                  .with_dummy_content())
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content()
+                          .having(relatedItems=[related_document]))
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.workspace) as children:
+                with auto_commit_after_request(manager.client):
+                    response = manager.copy_document_to_workspace(
+                        document, self.workspace.UID())
+
+            self.assertEqual(1, len(children['added']))
+            workspace_document = children['added'].pop()
+
+            self.assertEqual(workspace_document.absolute_url(),
+                             response.get('@id'))
+            self.assertEqual(workspace_document.title, document.title)
+            self.assertEqual(
+                [], IRelatedDocuments(workspace_document).relatedItems)
 
     def test_copy_msg_mail_to_a_workspace(self):
 
