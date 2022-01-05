@@ -6,6 +6,7 @@ from opengever.document.interfaces import IFileActions
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing.test_case import TestCase
+from opengever.trash.trash import ITrasher
 from opengever.wopi.lock import create_lock
 from opengever.wopi.testing import mock_wopi_discovery
 from plone import api
@@ -102,6 +103,13 @@ class TestOfficeOnlineEditable(IntegrationTestCase):
         manager.checkout(True)
         actions = getMultiAdapter((self.document, self.request), IFileActions)
         self.assertTrue(actions.is_office_online_edit_action_available())
+
+    def test_not_editable_if_document_is_trashed(self):
+        mock_wopi_discovery()
+        self.login(self.regular_user)
+        ITrasher(self.document).trash()
+        actions = getMultiAdapter((self.document, self.request), IFileActions)
+        self.assertFalse(actions.is_office_online_edit_action_available())
 
 
 class TestOfficeConnectorActions(IntegrationTestCase):
