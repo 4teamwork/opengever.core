@@ -142,6 +142,18 @@ def translated_document_type_label(obj):
     return term.title
 
 
+def translated_dossier_type_label(obj):
+    portal = getSite()
+    voc = wrap_vocabulary(
+        'opengever.dossier.dossier_types',
+        hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types')(portal)
+    try:
+        term = voc.getTerm(obj.get("dossier_type"))
+    except LookupError:
+        return None
+    return term.title
+
+
 def translated_public_trial(obj):
     try:
         return translate(obj.public_trial, context=getRequest(), domain="opengever.base")
@@ -357,6 +369,7 @@ FIELDS_WITH_MAPPING = [
     ListingField('document_type', 'document_type', transform=translate_document_type),
     ListingField('document_type_label', 'document_type', accessor=translated_document_type_label),
     ListingField('dossier_type', 'dossier_type', transform=translate_dossier_type),
+    ListingField('dossier_type_label', 'dossier_type', accessor=translated_dossier_type_label),
     ListingField('filename', 'filename', filename),
     ListingField('filesize', 'filesize', filesize),
     ListingField('issuer', 'issuer', transform=display_name),

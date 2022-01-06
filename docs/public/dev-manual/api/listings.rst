@@ -89,6 +89,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_type``: Dokumenttyp
 - ``document_type_label``: Dokumenttyp (Anzeigewert)
 - ``dossier_type``: Dossiertyp
+- ``dossier_type_label``: Dossiertyp (Anzeigewert)
 - ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers
 - ``external_reference``: Externe Referenz für Dossiers oder Fremdzeichen für Dokumente
