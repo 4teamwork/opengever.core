@@ -17,6 +17,7 @@ from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .jsonschema_for_portal_type import PatchGetJsonschemaForPortalType
 from .language_tool import PatchLanguageToolCall
+from .maybe_report_exception import PatchMaybeReportException
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
 from .plone_43rc1_upgrade import PatchPlone43RC1Upgrade
@@ -60,6 +61,8 @@ PatchExtendedPathIndex()()
 PatchFullHistory()()
 PatchGetJsonschemaForPortalType()()
 PatchInvokeFactory()()
+PatchLanguageToolCall()()
+PatchMaybeReportException()()
 PatchMembershipToolCreateMemberarea()()
 PatchMembershipToolSetLoginTimes()()
 PatchNamedfileNamedDataConverter()()
@@ -76,7 +79,6 @@ PatchZ2LogTimezone()()
 PatchZ3CFormChangedField()()
 PatchZ3CFormWidgetUpdate()()
 ScrubBoboExceptions()()
-PatchLanguageToolCall()()
 
 # These three patches implement role and permission filtering during RO mode.
 # We only apply these conditionally when RO mode actually is active.
