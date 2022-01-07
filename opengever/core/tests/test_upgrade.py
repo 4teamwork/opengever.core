@@ -6,6 +6,7 @@ from opengever.base.default_values import object_has_value_for_field
 from opengever.core.upgrade import DefaultValuePersister
 from opengever.core.upgrade import IdempotentOperations
 from opengever.core.upgrade import NightlyIndexer
+from opengever.core.upgrade import NightlyWorkflowSecurityUpdater
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
@@ -268,3 +269,33 @@ class TestDefaultValuePersister(IntegrationTestCase):
             fields_tuples=((IClassification.__identifier__, 'classification'),))
 
         self.assertTrue(object_has_value_for_field(self.dossier, classification))
+
+
+class TestNightlyWorkflowSecurityUpdater(IntegrationTestCase):
+
+    def roles_of_permission(self, obj, permission):
+        return [role['name'] for role in obj.rolesOfPermission(permission)
+                if role['selected'] == 'SELECTED']
+
+    def test_update_workflow_security(self):
+        self.login(self.manager)
+
+        with NightlyWorkflowSecurityUpdater(reindex_security=False) as updater:
+            updater.update(['opengever_mail_workflow', 'opengever_repositoryroot_workflow'])
+
+        objs = [self.mail_eml, self.mail_msg, self.workspace_mail, self.repository_root]
+        expedted_intids = set(map(lambda obj: getUtility(IIntIds).getId(obj), objs))
+
+        runner = NightlyJobRunner(force_execution=True)
+        intids = {job.variable_argument for job in
+                  runner.job_providers['maintenance-jobs'].queues_manager.jobs}
+        self.assertEqual(expedted_intids, intids)
+
+        self.mail_eml.manage_permission('View', roles=['Manager'], acquire=False)
+        self.assertEqual(['Manager'], self.roles_of_permission(self.mail_eml, 'View'))
+
+        runner.execute_pending_jobs()
+        self.assertEqual(['Administrator', 'CommitteeAdministrator', 'CommitteeMember',
+                          'CommitteeResponsible', 'Editor', 'LimitedAdmin', 'Manager',
+                          'Reader', 'WorkspaceAdmin', 'WorkspaceGuest', 'WorkspaceMember'],
+                         self.roles_of_permission(self.mail_eml, 'View'))
