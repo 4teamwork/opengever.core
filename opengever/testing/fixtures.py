@@ -247,6 +247,14 @@ class OpengeverContentFixture(object):
             user_settings={'_seen_tours': '["*"]'},
         )
 
+        self.limited_admin = self.create_user(
+            'limited_admin',
+            u'Maja',
+            u'H\xe4rzig',
+            ['LimitedAdmin', 'APIUser'],
+            user_settings={'_seen_tours': '["*"]'},
+        )
+
         self.member_admin = self.create_user(
             'member_admin',
             u'David',
