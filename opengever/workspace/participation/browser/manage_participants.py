@@ -1,3 +1,4 @@
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -177,7 +178,7 @@ class ManageParticipants(BrowserView):
             if ADMIN_ROLE in assignment.get('roles', []):
                 return
 
-        raise BadRequest(
+        raise NotReportedBadRequest(
             _(u'msg_one_must_remain_admin',
               default=u'At least one principal must remain admin.'))
 
