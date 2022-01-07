@@ -3,6 +3,7 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
 from opengever.api import _
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
@@ -21,7 +22,6 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import getUtility
 from zope.interface import implementer
@@ -128,7 +128,7 @@ class DefaultUploadStructureAnalyser(object):
 
     def check_permission(self):
         if not api.user.has_permission('Add portal content', obj=self.context):
-            raise Forbidden("User is not allowed to add objects here")
+            raise NotReportedForbidden("User is not allowed to add objects here")
 
     def extract_structure(self, files):
         root = {'items': {}}
