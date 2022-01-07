@@ -1,4 +1,5 @@
 from opengever.api import _
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.trash.trash import ITrasher
 from opengever.trash.trash import TrashError
 from plone.restapi.services import Service
@@ -21,17 +22,17 @@ class TrashPost(Service):
             trasher.trash()
         except TrashError as exc:
             if exc.message == 'Already trashed':
-                raise BadRequest(
+                raise NotReportedBadRequest(
                     _(u'msg_already_trashed', default=u'Already trashed'))
             elif exc.message == 'Document checked out':
-                raise BadRequest(
+                raise NotReportedBadRequest(
                     _(u'msg_trash_checked_out_doc',
                       default=u'Cannot trash a checked-out document'))
             elif exc.message == 'The document is locked':
-                raise BadRequest(
+                raise NotReportedBadRequest(
                     _(u'msg_trash_locked_doc', default=u'Cannot trash a locked document'))
             elif exc.message == 'The document has been returned as excerpt':
-                raise BadRequest(
+                raise NotReportedBadRequest(
                     _(u'msg_trash_doc_returned_as_excerpt',
                       default=u'Cannot trash a document that has been returned as excerpt'))
             elif exc.message == 'Not trashable':
