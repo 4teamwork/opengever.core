@@ -2,6 +2,7 @@ from collections import defaultdict
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
 from opengever.api import _
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.interfaces import IDossierContainerTypes
@@ -290,7 +291,6 @@ class UploadStructurePost(Service):
                     _(u'msg_filename_required',
                       default=u"Empty filename not supported"))
 
-                raise BadRequest("")
         return files
 
     def reply(self):
@@ -301,5 +301,5 @@ class UploadStructurePost(Service):
         try:
             upload_checker(files)
         except (MaximalDepthExceeded, TypeNotAddable) as exc:
-            raise BadRequest(exc.message)
+            raise NotReportedBadRequest(exc.message)
         return json_compatible(upload_checker.structure)
