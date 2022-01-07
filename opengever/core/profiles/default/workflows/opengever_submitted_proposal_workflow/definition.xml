@@ -17,6 +17,7 @@
         name="ftw.mail: Add Mail"
         acquired="True">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -24,6 +25,7 @@
         name="opengever.document: Cancel"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Editor</permission-role>
@@ -33,6 +35,7 @@
         name="opengever.document: Checkin"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Editor</permission-role>
@@ -42,6 +45,7 @@
         name="opengever.document: Checkout"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>Editor</permission-role>
@@ -51,6 +55,7 @@
         name="opengever.document: Force Checkin"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
   </state>

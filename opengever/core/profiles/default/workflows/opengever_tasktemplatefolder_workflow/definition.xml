@@ -25,6 +25,7 @@
       <permission-role>Owner</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Add portal content"
@@ -33,6 +34,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Delete objects"
@@ -40,6 +42,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="List folder contents"
@@ -53,6 +56,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Modify portal content"
@@ -61,6 +65,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
@@ -75,6 +80,7 @@
       <permission-role>Owner</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
   </state>
   <state
@@ -89,6 +95,7 @@
       <permission-role>Owner</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Add portal content"
@@ -97,6 +104,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Delete objects"
@@ -104,6 +112,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="List folder contents"
@@ -117,6 +126,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Modify portal content"
@@ -124,6 +134,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
@@ -138,6 +149,7 @@
       <permission-role>Owner</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
   </state>
   <transition

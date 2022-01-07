@@ -25,6 +25,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -45,6 +46,7 @@
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -58,6 +60,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Manage properties"
@@ -80,6 +83,7 @@
       <permission-role>Reader</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -98,6 +102,7 @@
       <permission-role>Member</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
   </state>
   <state

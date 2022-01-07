@@ -29,6 +29,7 @@
         name="Access contents information"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -40,6 +41,7 @@
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Change portal events"
@@ -49,6 +51,7 @@
         name="Copy or Move"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -67,6 +70,7 @@
         name="Modify portal content"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
 
@@ -76,6 +80,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -83,6 +88,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -90,6 +96,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -97,6 +104,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -104,12 +112,14 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
         name="View"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -122,9 +132,11 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map name="opengever.dossier: Protect dossier" acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>DossierManager</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -143,6 +155,7 @@
         name="Access contents information"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -176,6 +189,7 @@
         name="Modify portal content"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
 
@@ -185,6 +199,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -192,6 +207,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -199,6 +215,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -206,6 +223,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -213,12 +231,14 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
         name="View"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -231,6 +251,7 @@
   </permission-map>
   <permission-map name="opengever.dossier: Protect dossier" acquired="False">
     <permission-role>Administrator</permission-role>
+    <permission-role>LimitedAdmin</permission-role>
     <permission-role>Manager</permission-role>
   </permission-map>
     <permission-map

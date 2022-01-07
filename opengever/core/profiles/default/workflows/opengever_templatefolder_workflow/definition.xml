@@ -43,6 +43,7 @@
         name="Access contents information"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
     </permission-map>
@@ -50,6 +51,7 @@
         name="Add portal content"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -57,6 +59,7 @@
         name="Delete objects"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -69,6 +72,7 @@
         name="Copy or Move"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
     </permission-map>
@@ -81,6 +85,7 @@
         name="Modify portal content"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
@@ -89,6 +94,7 @@
         name="Sharing page: Delegate Contributor role"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
     </permission-map>
@@ -96,6 +102,7 @@
         name="Sharing page: Delegate Editor role"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
     </permission-map>
@@ -103,6 +110,7 @@
         name="Sharing page: Delegate Reader role"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
     </permission-map>
@@ -110,6 +118,7 @@
         name="Sharing page: Delegate Reviewer role"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
     </permission-map>
@@ -117,6 +126,7 @@
         name="Sharing page: Delegate roles"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
     </permission-map>
@@ -124,6 +134,7 @@
         name="View"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
     </permission-map>
@@ -131,6 +142,7 @@
         name="opengever.document: Add document"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -139,6 +151,7 @@
         name="opengever.document: Cancel"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -147,6 +160,7 @@
         name="opengever.document: Checkin"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -155,6 +169,7 @@
         name="opengever.document: Checkout"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
@@ -163,12 +178,14 @@
         name="opengever.document: Force Checkin"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map
         name="opengever.dossier: Add templatefolder"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map
@@ -183,6 +200,7 @@
         name="opengever.meeting: Add Meeting Template"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -190,6 +208,7 @@
         name="opengever.meeting: Add Proposal Template"
         acquired="False">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>

@@ -39,6 +39,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -52,6 +53,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
@@ -161,6 +163,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
@@ -174,6 +177,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
@@ -185,6 +189,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
@@ -196,6 +201,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>

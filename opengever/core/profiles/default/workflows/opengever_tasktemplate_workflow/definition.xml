@@ -19,6 +19,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Add portal content"
@@ -26,6 +27,7 @@
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Delete objects"
@@ -33,6 +35,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="List folder contents"
@@ -46,6 +49,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Owner</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="View"
@@ -53,6 +57,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
   </state>
   <variable

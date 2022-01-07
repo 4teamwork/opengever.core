@@ -26,6 +26,7 @@
         acquired="False"
         name="Access contents information">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -34,6 +35,7 @@
         acquired="False"
         name="View">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -96,6 +98,7 @@
         acquired="False"
         name="Access contents information">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -105,6 +108,7 @@
         acquired="False"
         name="View">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -159,6 +163,7 @@
         acquired="False"
         name="Access contents information">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -168,6 +173,7 @@
         acquired="False"
         name="View">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -224,6 +230,7 @@
         acquired="False"
         name="Access contents information">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -233,6 +240,7 @@
         acquired="False"
         name="View">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -289,6 +297,7 @@
         acquired="False"
         name="Access contents information">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -298,6 +307,7 @@
         acquired="False"
         name="View">
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>

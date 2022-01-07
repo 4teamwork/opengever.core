@@ -376,7 +376,7 @@ class TestProtectDossier(IntegrationTestCase):
         self.login(self.dossier_manager)
 
         self.assertItemsEqual(
-            ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
+            ['Administrator', 'Contributor', 'Editor', 'LimitedAdmin', 'Manager', 'Reader',
              'user:fa_users', 'user:{}'.format(self.regular_user.getId()),
              'user:fa_inbox_users', 'user:{}'.format(self.archivist)],
             self.get_allowed_roles_and_users_for(self.dossier))
@@ -388,7 +388,7 @@ class TestProtectDossier(IntegrationTestCase):
         dossier_protector.protect()
 
         self.assertItemsEqual(
-            ['Administrator', 'Contributor', 'Editor', 'Manager', 'Reader',
+            ['Administrator', 'Contributor', 'Editor', 'LimitedAdmin', 'Manager', 'Reader',
              'user:{}'.format(self.dossier_manager.getId()),
              'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))

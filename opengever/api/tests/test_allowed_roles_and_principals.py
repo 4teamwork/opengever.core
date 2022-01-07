@@ -25,6 +25,7 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
                 u'Administrator',
                 u'Contributor',
                 u'Editor',
+                u'LimitedAdmin',
                 u'Manager',
                 u'Reader',
                 u'principal:fa_inbox_users',

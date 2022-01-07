@@ -39,6 +39,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Access previous versions"
@@ -46,6 +47,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map
@@ -106,6 +108,7 @@
         acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
     </permission-map>
     <permission-map
@@ -113,6 +116,7 @@
         acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
     </permission-map>
     <permission-map
@@ -126,6 +130,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV Lock items"
@@ -133,6 +138,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV Unlock items"
@@ -140,6 +146,7 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV access"
@@ -147,12 +154,14 @@
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Cancel"
         acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
     </permission-map>
     <permission-map
@@ -160,6 +169,7 @@
         acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
     </permission-map>
     <permission-map
@@ -167,6 +177,7 @@
         acquired="False">
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
       <permission-role>Editor</permission-role>
     </permission-map>
   </state>
