@@ -1,0 +1,535 @@
+<dc-workflow
+    workflow_id="opengever_proposal_workflow"
+    title="Proposal Workflow"
+    description=""
+    state_variable="review_state"
+    initial_state="proposal-state-active"
+    manager_bypass="False">
+
+  <permission>Access contents information</permission>
+  <permission>Modify portal content</permission>
+  <permission>opengever.document: Add document</permission>
+  <permission>opengever.document: Cancel</permission>
+  <permission>opengever.document: Checkin</permission>
+  <permission>opengever.document: Checkout</permission>
+  <permission>opengever.document: Force Checkin</permission>
+  <permission>opengever.trash: Trash content</permission>
+  <permission>View</permission>
+
+  <state
+      state_id="proposal-state-active"
+      title="proposal-state-active">
+    <exit-transition transition_id="proposal-transition-cancel" />
+    <exit-transition transition_id="proposal-transition-submit" />
+
+    <permission-map
+        acquired="False"
+        name="Access contents information">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+    <permission-map
+        acquired="False"
+        name="View">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+    <permission-map
+        acquired="True"
+        name="Modify portal content"
+        />
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <!-- Never allow the user to add documents; they are added by the system -->
+    <permission-map
+        acquired="False"
+        name="opengever.document: Add document"
+        />
+    <!-- Allow documents to be edited as configured in the dossier workflow by acquiring the settings. -->
+    <permission-map
+        acquired="True"
+        name="Modify portal content"
+        />
+    <permission-map
+        acquired="True"
+        name="opengever.document: Cancel"
+        />
+    <permission-map
+        acquired="True"
+        name="opengever.document: Checkin"
+        />
+    <permission-map
+        acquired="True"
+        name="opengever.document: Checkout"
+        />
+    <permission-map
+        acquired="True"
+        name="opengever.document: Force Checkin"
+        />
+    <!-- Never allow proposal documents to be trashed -->
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Trash content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Untrash content"
+        />
+
+  </state>
+
+  <state
+      state_id="proposal-state-cancelled"
+      title="proposal-state-cancelled">
+    <exit-transition transition_id="proposal-transition-reactivate" />
+
+    <permission-map
+        acquired="False"
+        name="Access contents information">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="View">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="Modify portal content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Add document"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Cancel"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkout"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Force Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Trash content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Untrash content"
+        />
+
+  </state>
+
+  <state
+      state_id="proposal-state-decided"
+      title="proposal-state-decided">
+
+    <permission-map
+        acquired="False"
+        name="Access contents information">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="View">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="Modify portal content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Add document"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Cancel"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkout"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Force Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Trash content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Untrash content"
+        />
+
+  </state>
+
+  <state
+      state_id="proposal-state-scheduled"
+      title="proposal-state-scheduled">
+    <exit-transition transition_id="proposal-transition-decide" />
+    <exit-transition transition_id="proposal-transition-unschedule" />
+
+    <permission-map
+        acquired="False"
+        name="Access contents information">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="View">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="Modify portal content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Add document"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Cancel"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkout"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Force Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Trash content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Untrash content"
+        />
+
+  </state>
+
+  <state
+      state_id="proposal-state-submitted"
+      title="proposal-state-submitted">
+    <exit-transition transition_id="proposal-transition-reject" />
+    <exit-transition transition_id="proposal-transition-schedule" />
+
+    <permission-map
+        acquired="False"
+        name="Access contents information">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="View">
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Reader</permission-role>
+    </permission-map>
+
+    <permission-map
+        name="Sharing page: Delegate roles"
+        acquired="False">
+      <permission-role>Manager</permission-role>
+    </permission-map>
+
+    <permission-map
+        acquired="False"
+        name="Modify portal content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Add document"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Cancel"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Checkout"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.document: Force Checkin"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Trash content"
+        />
+    <permission-map
+        acquired="False"
+        name="opengever.trash: Untrash content"
+        />
+
+  </state>
+
+  <transition
+      transition_id="proposal-transition-cancel"
+      title="proposal-transition-cancel"
+      new_state="proposal-state-cancelled"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-cancel"
+        category="workflow"
+        icon="">proposal-transition-cancel</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-cancel')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-decide"
+      title="proposal-transition-decide"
+      new_state="proposal-state-decided"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+      url=""
+      category=""
+      icon="">proposal-transition-decide</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-decide')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-reactivate"
+      title="proposal-transition-reactivate"
+      new_state="proposal-state-active"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-reactivate"
+        category="workflow"
+        icon="">proposal-transition-reactivate</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reactivate')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-reject"
+      title="proposal-transition-reject"
+      new_state="proposal-state-active"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+      url=""
+      category=""
+      icon="">proposal-transition-reject</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reject')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-schedule"
+      title="proposal-transition-schedule"
+      new_state="proposal-state-scheduled"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+      url=""
+      category=""
+      icon="">proposal-transition-schedule</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-schedule')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-submit"
+      title="proposal-transition-submit"
+      new_state="proposal-state-submitted"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+        url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-submit"
+        category="workflow"
+        icon="">proposal-transition-submit</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-submit')</guard-expression>
+    </guard>
+  </transition>
+
+  <transition
+      transition_id="proposal-transition-unschedule"
+      title="proposal-transition-unschedule"
+      new_state="proposal-state-submitted"
+      trigger="USER"
+      before_script=""
+      after_script="">
+    <action
+      url=""
+      category=""
+      icon="">proposal-transition-unschedule</action>
+    <guard>
+      <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-unschedule')</guard-expression>
+    </guard>
+  </transition>
+
+  <variable
+      variable_id="action"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>Previous transition</description>
+    <default>
+      <expression>transition/getId|nothing</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+
+  <variable
+      variable_id="actor"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>The ID of the user who performed the previous transition</description>
+    <default>
+      <expression>user/getUserName</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+
+  <variable
+      variable_id="comments"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>Comment about the last transition</description>
+    <default>
+      <expression>python:state_change.kwargs.get('comment', '')</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+
+  <variable
+      variable_id="review_history"
+      for_catalog="False"
+      for_status="False"
+      update_always="False">
+    <description>Provides access to workflow history</description>
+    <default>
+      <expression>state_change/getHistory</expression>
+    </default>
+    <guard>
+      <guard-permission>Request review</guard-permission>
+      <guard-permission>Review portal content</guard-permission>
+    </guard>
+  </variable>
+
+  <variable
+      variable_id="time"
+      for_catalog="False"
+      for_status="True"
+      update_always="True">
+    <description>When the previous transition was performed</description>
+    <default>
+      <expression>state_change/getDateTime</expression>
+    </default>
+    <guard>
+  </guard>
+  </variable>
+</dc-workflow>
