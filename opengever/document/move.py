@@ -1,5 +1,5 @@
-from OFS.CopySupport import ResourceLockedError
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
+from opengever.api.not_reported_exceptions import ResourceLockedError as NotReportedResourceLockedError
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.document import _
 from opengever.document.behaviors import IBaseDocument
@@ -29,7 +29,7 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
                 _(u'msg_doc_inside_closed_dossier',
                   default=u'Documents inside a closed dossier cannot be moved.'))
         if ILockable(self.context).locked():
-            raise ResourceLockedError(
+            raise NotReportedResourceLockedError(
                 _('msg_locked_doc_cant_be_moved',
                   default=u'Locked documents cannot be moved.'))
 

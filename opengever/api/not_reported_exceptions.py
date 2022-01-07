@@ -1,5 +1,6 @@
 from zExceptions import BadRequest as _BadRequest
 from zExceptions import Forbidden as _Forbidden
+from OFS.CopySupport import ResourceLockedError as _ResourceLockedError
 
 
 class NotReportedException(Exception):
@@ -22,4 +23,9 @@ class Forbidden(_Forbidden, NotReportedException):
     This class needs to be named Forbidden so that ZPublisher's HTTPResponse
     will set the status code to 403, and so that the API will return BadRequest
     as error type.
+    """
+
+
+class ResourceLockedError(_ResourceLockedError, NotReportedException):
+    """ResourceLockedError that is not reported in sentry.
     """
