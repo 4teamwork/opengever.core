@@ -1,6 +1,7 @@
 from zExceptions import BadRequest as _BadRequest
 from zExceptions import Forbidden as _Forbidden
 from OFS.CopySupport import ResourceLockedError as _ResourceLockedError
+from OFS.CopySupport import CopyError as _CopyError
 
 
 class NotReportedException(Exception):
@@ -28,4 +29,9 @@ class Forbidden(_Forbidden, NotReportedException):
 
 class ResourceLockedError(_ResourceLockedError, NotReportedException):
     """ResourceLockedError that is not reported in sentry.
+    """
+
+
+class CopyError(_CopyError, NotReportedException):
+    """CopyError that is not reported in sentry.
     """
