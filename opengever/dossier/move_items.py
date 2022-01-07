@@ -2,6 +2,7 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from OFS.CopySupport import CopyError, ResourceLockedError
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.base.interfaces import IMovabilityChecker
 from opengever.base.source import RepositoryPathSourceBinder
@@ -383,7 +384,7 @@ class DossierMovabiliyChecker(DefaultMovabilityChecker):
         substructure_depth = self.dossier_structure_depth()
 
         if not target.is_dossier_structure_addable(substructure_depth):
-            raise Forbidden(
+            raise NotReportedForbidden(
                 _(u'msg_would_exceed_max_dossier_level',
                   u'This would exceed maximally allowed dossier depth.'))
 
