@@ -233,7 +233,8 @@ def is_administrator(user=None):
     """
     if not user:
         user = api.user.get_current()
-    return bool(user.has_role('Administrator') or user.has_role('Manager'))
+    return bool(user.has_role('LimitedAdmin') or user.has_role('Administrator')
+                or user.has_role('Manager'))
 
 
 def check_group_plugin_configuration(portal):

@@ -198,3 +198,8 @@ class TestIsAdministrator(IntegrationTestCase):
         self.assertTrue(is_administrator(user=self.administrator))
         self.login(self.administrator)
         self.assertTrue(is_administrator())
+
+    def test_is_administrator_with_limited_admin(self):
+        self.assertTrue(is_administrator(user=self.limited_admin))
+        self.login(self.limited_admin)
+        self.assertTrue(is_administrator())
