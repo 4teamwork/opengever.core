@@ -386,6 +386,24 @@ class TestContentCreation(IntegrationTestCase):
         self.assertEqual(u'Mod\xe8les', new_object.title_fr)
 
     @browsing
+    def test_limited_admin_can_create_template_folder(self, browser):
+        self.login(self.limited_admin, browser)
+        payload = {
+            u'@type': u'opengever.dossier.templatefolder',
+            u'title_de': u'Vorl\xe4gen',
+            u'title_fr': u'Mod\xe8les',
+        }
+        with self.observe_children(self.templates) as children:
+            response = browser.open(
+                self.templates.absolute_url(),
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(201, response.status_code)
+        self.assertEqual(1, len(children['added']))
+
+    @browsing
     def test_inbox_creation(self, browser):
         self.login(self.manager, browser)
         payload = {

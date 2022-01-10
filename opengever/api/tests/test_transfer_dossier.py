@@ -110,6 +110,20 @@ class TestTransferDossierPost(IntegrationTestCase):
         self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
 
     @browsing
+    def test_limited_admin_can_transfer_a_dossier(self, browser):
+        self.login(self.limited_admin, browser=browser)
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         IDossier(self.dossier).responsible)
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+
+    @browsing
     def test_transfer_dossier_changes_responsible_of_all_subdossiers(self, browser):
         self.login(self.administrator, browser=browser)
 

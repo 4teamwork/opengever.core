@@ -72,3 +72,14 @@ class TestSchemaDefinitionDelete(IntegrationTestCase):
                 method="DELETE",
                 headers=self.api_headers,
             )
+
+    @browsing
+    def test_limited_admin_cannot_delete_propertysheets(self, browser):
+        self.login(self.limited_admin, browser)
+
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/sheet",
+                method="DELETE",
+                headers=self.api_headers,
+            )

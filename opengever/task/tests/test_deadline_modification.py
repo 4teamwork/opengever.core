@@ -190,12 +190,20 @@ class TestDeadlineModifierController(IntegrationTestCase):
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 
+        self.login(self.limited_admin)
+        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
+
     def test_modify_is_allowed_for_admin_on_a_in_progress_task_as_agency(self):
         self.login(self.administrator)
 
         self.set_workflow_state('task-state-in-progress', self.task)
 
         modifier = IDeadlineModifier(self.task)
+        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
+        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
+
+        self.login(self.limited_admin)
         self.assertFalse(modifier.is_modify_allowed(include_agency=False))
         self.assertTrue(modifier.is_modify_allowed(include_agency=True))
 

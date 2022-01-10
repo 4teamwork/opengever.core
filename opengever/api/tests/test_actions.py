@@ -1117,6 +1117,14 @@ class TestFolderButtons(FolderActionsTestBase):
             self.get_folder_buttons(browser, self.leaf_repofolder),
         )
 
+        expected_folder_buttons.remove({u'icon': u'', u'id': u'delete', u'title': u'Delete'})
+
+        self.login(self.limited_admin, browser)
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.leaf_repofolder),
+        )
+
     @browsing
     def test_folder_buttons_for_repository_root(self, browser):
         self.login(self.regular_user, browser)
@@ -1167,6 +1175,12 @@ class TestFolderButtons(FolderActionsTestBase):
             {u'icon': u'', u'id': u'pdf_dossierlisting', u'title': u'Print selection (PDF)'},
             {u'icon': u'', u'id': u'pdf_taskslisting', u'title': u'Print selection (PDF)'}]
 
+        self.assertListEqual(
+            expected_folder_buttons,
+            self.get_folder_buttons(browser, self.repository_root),
+        )
+
+        self.login(self.limited_admin, browser)
         self.assertListEqual(
             expected_folder_buttons,
             self.get_folder_buttons(browser, self.repository_root),

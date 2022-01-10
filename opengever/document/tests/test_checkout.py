@@ -55,6 +55,12 @@ class TestCheckinIntegration(IntegrationTestCase):
         with self.assertRaises(Unauthorized):
             manager.checkin(comment="Force checkin")
 
+        # LimitedAdmin can force checkin
+        self.login(self.limited_admin)
+        manager.checkin(comment="Force checkin")
+        self.assertIsNone(manager.get_checked_out_by())
+        manager.checkout()
+
         # Administrator can force checkin
         self.login(self.administrator)
         manager.checkin(comment="Force checkin")

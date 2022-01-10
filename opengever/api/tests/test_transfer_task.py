@@ -32,6 +32,16 @@ class TestTransferTaskPost(IntegrationTestCase):
         self.assertEqual('task-transition-reassign', activity.kind)
 
     @browsing
+    def test_limited_admin_can_transfer_a_task(self, browser):
+        self.login(self.limited_admin, browser=browser)
+        browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                        {"old_userid": self.task.responsible,
+                         "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), self.task.responsible)
+
+    @browsing
     def test_task_transfer_for_forwarding_changes_responsible(self, browser):
         self.login(self.administrator, browser=browser)
         browser.open(self.inbox_forwarding.absolute_url() + '/@transfer-task', method='POST',
@@ -45,6 +55,16 @@ class TestTransferTaskPost(IntegrationTestCase):
         self.assertEqual(self.meeting_user.getId(), sql_forwarding.responsible)
         activity = Activity.query.one()
         self.assertEqual('forwarding-transition-reassign', activity.kind)
+
+    @browsing
+    def test_limited_admin_can_transfer_a_forwarding(self, browser):
+        self.login(self.limited_admin, browser=browser)
+        browser.open(self.inbox_forwarding.absolute_url() + '/@transfer-task', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                        {"old_userid": self.inbox_forwarding.responsible,
+                         "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), self.inbox_forwarding.responsible)
 
     @browsing
     def test_task_transfer_changes_issuer(self, browser):
