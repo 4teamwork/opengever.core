@@ -551,7 +551,7 @@ class Task(Base):
 
 class TaskQuery(BaseQuery):
 
-    roles_allowed_to_see_tasks = ('Manager', 'Administrator', 'Reader')
+    roles_allowed_to_see_tasks = ('Manager', 'Administrator', 'LimitedAdmin', 'Reader')
 
     def restrict(self):
         member = api.user.get_current()

@@ -155,6 +155,12 @@ class TestTaskQueries(IntegrationTestCase):
         sql_task = self.task_in_protected_dossier.get_sql_object()
         self.assertIn(sql_task, Task.query.restrict().all())
 
+    def test_restrict_check_is_skipped_for_limited_admins(self):
+        # Responsible user is able to see
+        self.login(self.limited_admin)
+        sql_task = self.task_in_protected_dossier.get_sql_object()
+        self.assertIn(sql_task, Task.query.restrict().all())
+
     def test_restrict_respects_with_elevated_privileges_context_manager(self):
         self.login(self.regular_user)
         sql_task = self.task_in_protected_dossier.get_sql_object()
