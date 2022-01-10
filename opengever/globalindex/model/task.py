@@ -447,7 +447,7 @@ class Task(Base):
 
         roles = api.user.get_roles(user=member)
 
-        if 'Administrator' in roles or 'Manager' in roles:
+        if {'Administrator', 'LimitedAdmin', 'Manager'} & set(roles):
             return True
 
         principals = set(member.getGroups() + [member.getId()])
