@@ -19,6 +19,7 @@ from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.testing import z2
 from requests.exceptions import ConnectionError
+from uuid import uuid4
 from zope.component import getGlobalSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
@@ -31,6 +32,7 @@ import pytz
 import transaction
 
 
+SOLR_HOSTNAME = os.environ.get('SOLR_HOSTNAME', 'localhost')
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
@@ -71,7 +73,8 @@ class TestserverLayer(OpengeverFixture):
     def setUpZope(self, app, configurationContext):
         ISOLATION_READINESS.patch_publisher()
         solr = SolrServer.get_instance()
-        solr.configure(SOLR_PORT, SOLR_CORE)
+        solr.configure(SOLR_PORT, SOLR_CORE, hostname=SOLR_HOSTNAME)
+        SolrReplicationAPIClient.get_instance().configure(SOLR_PORT, SOLR_CORE, SOLR_HOSTNAME)
 
         try:
             solr.is_ready()
@@ -83,6 +86,10 @@ class TestserverLayer(OpengeverFixture):
                     " to reuse the running solr instance.".format(SOLR_PORT, SOLR_PORT))
             print 'Using already running solr on port {}'.format(SOLR_PORT)
         except ConnectionError:
+            if SOLR_HOSTNAME != 'localhost' and REUSE_RUNNING_SOLR:
+                raise Exception('Solr is not reachable at {}:{}'.format(
+                    SOLR_HOSTNAME, REUSE_RUNNING_SOLR))
+
             print 'Starting solr on port {}'.format(SOLR_PORT)
             solr.start()
 
@@ -94,12 +101,24 @@ class TestserverLayer(OpengeverFixture):
         # Solr must be started before registering the connection since ftw.solr
         # will get the schema from solr and cache it.
         solr.await_ready()
+
+        solr_connection_additional_attributes = ''
+        if SOLR_HOSTNAME != 'localhost':
+            # When the testserver does not run on the same host as solr (such as
+            # when running in docker), we need to upload the blobs over HTTP
+            # since solr cannout access the /tmp of the testserver via disk.
+            solr_connection_additional_attributes = 'upload_blobs="true"'
+
         xmlconfig.string(
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
-            '  <solr:connection host="localhost"'
+            '  <solr:connection host="{SOLR_HOSTNAME}"'
             '                   port="{SOLR_PORT}"'
-            '                   base="/solr/{SOLR_CORE}" />'
-            '</configure>'.format(SOLR_PORT=SOLR_PORT, SOLR_CORE=SOLR_CORE),
+            '                   base="/solr/{SOLR_CORE}"'
+            '                   {attrs} />'
+            '</configure>'.format(SOLR_HOSTNAME=SOLR_HOSTNAME,
+                                  SOLR_PORT=SOLR_PORT,
+                                  SOLR_CORE=SOLR_CORE,
+                                  attrs=solr_connection_additional_attributes),
             context=configurationContext)
 
         # Clear solr from potential artefacts of the previous run.
@@ -142,7 +161,21 @@ class TestserverLayer(OpengeverFixture):
         # Commit before creating the solr backup, since collective.indexing
         # flushes on commit.
         transaction.commit()
-        SolrReplicationAPIClient.get_instance().create_backup('fixture')
+
+        # The solr backup API allows creating named backup, but not removing them
+        # nor overwriting existing backups.
+        if SOLR_HOSTNAME == 'localhost':
+            # When solr runs on the same system we can remove backups from the disk.
+            # By doing that we can make sure that we are not blowing up the disk
+            # with old solr backups.
+            self['solr_backup_name'] = 'testserver-fixture'
+        else:
+            # When solr runs on another host (e.g. within docker), we cannot easily
+            # access its disk. So we need to create uniquely named backups and we
+            # cannot clean it up because the API has no such endpoint.
+            self['solr_backup_name'] = 'testserver-{}'.format(str(uuid4()))
+
+        SolrReplicationAPIClient.get_instance().create_backup(self['solr_backup_name'])
 
     def setupLanguageTool(self, portal):
         lang_tool = api.portal.get_tool('portal_languages')
@@ -216,7 +249,7 @@ class TestServerFunctionalTesting(FunctionalTesting):
 
     def testTearDown(self):
         self.context_manager.__exit__(None, None, None)
-        SolrReplicationAPIClient.get_instance().restore_backup('fixture')
+        SolrReplicationAPIClient.get_instance().restore_backup(self['solr_backup_name'])
         SolrReplicationAPIClient.get_instance().await_restored()
         super(TestServerFunctionalTesting, self).testTearDown()
 
