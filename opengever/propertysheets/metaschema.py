@@ -37,6 +37,7 @@ class IFieldDefinition(model.Schema):
         title=_(u'label_name', default=u'Name'),
         description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
         required=True,
+        max_length=32,
         pattern='^[a-z_0-9]*$',
         constraint=isidentifier,
     )
@@ -50,11 +51,13 @@ class IFieldDefinition(model.Schema):
         title=_(u'label_title', default=u'Title'),
         description=_(u'help_title', default=u'Title'),
         required=False,
+        max_length=48,
     )
     description = schema.TextLine(
         title=_(u'label_description', default=u'Description'),
         description=_(u'help_description', default=u'Description'),
         required=False,
+        max_length=128,
     )
     required = schema.Bool(
         title=_(u'label_required', default=u'Required'),
@@ -123,6 +126,7 @@ class IPropertySheetDefinition(model.Schema):
         title=_(u'label_id', default=u'ID'),
         description=_(u'help_id', default=u'ID of this property sheet'),
         required=False,
+        max_length=32,
         pattern='^[a-z_0-9]*$',
         constraint=isidentifier,
     )

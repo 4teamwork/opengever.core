@@ -243,7 +243,9 @@ class GEVERMultiTypeFieldJsonSchemaProvider(DefaultJsonSchemaProvider):
 class GEVERIdentifierJsonSchemaProvider(ASCIILineJsonSchemaProvider):
 
     def additional(self):
-        return {'pattern': self.field.pattern}
+        data = super(GEVERIdentifierJsonSchemaProvider, self).additional()
+        data.update({'pattern': self.field.pattern})
+        return data
 
     def get_factory(self):
         return 'string'

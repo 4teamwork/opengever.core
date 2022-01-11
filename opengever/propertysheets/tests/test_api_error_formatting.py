@@ -77,6 +77,24 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
         )
 
     @browsing
+    def test_rejects_sheet_id_that_is_too_long(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = deepcopy(self.VALID_SAMPLE_PAYLOAD)
+
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data, sheet_id='x' * 34)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"The name 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' "
+                            u"is invalid.",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
     def test_rejects_sheet_id_that_is_a_python_keyword(self, browser):
         self.login(self.propertysheets_manager, browser)
 
@@ -195,6 +213,30 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
         )
 
     @browsing
+    def test_rejects_field_names_that_are_too_long(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "x" * 34,
+                    "field_type": "bool",
+                    "title": u"Y/N",
+                }
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[('name', TooLong('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 32))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
     def test_rejects_field_name_duplicates(self, browser):
         self.login(self.propertysheets_manager, browser)
 
@@ -242,6 +284,56 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
         self.assertDictContainsSubset(
             {
                 u"message": u"[('field_type', ConstraintNotSatisfied('not-a-field-type'))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_title_that_is_too_long(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "bool",
+                    "title": u"X" * 50,
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[('title', TooLong(u'XXXXXXXXXXXXXXXXXXXXXXXXX"
+                            u"XXXXXXXXXXXXXXXXXXXXXXXXX', 48))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_description_that_is_too_long(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "bool",
+                    "title": u"My title",
+                    "description": u"X" * 130,
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[('description', TooLong(u'%s', 128))]" % ('X' * 130),
                 u"type": u"BadRequest",
             },
             browser.json,
