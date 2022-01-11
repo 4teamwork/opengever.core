@@ -1,3 +1,4 @@
+from opengever.base.schema import Identifier
 from opengever.propertysheets import _
 from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
@@ -26,10 +27,11 @@ def make_field_types_vocabulary(context):
 
 class IFieldDefinition(model.Schema):
 
-    name = schema.TextLine(
+    name = Identifier(
         title=_(u'label_name', default=u'Name'),
         description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
         required=True,
+        pattern='^[a-z_0-9]*$',
     )
     field_type = schema.Choice(
         title=_(u'label_field_type', default=u'Field type'),
@@ -64,6 +66,12 @@ class IFieldDefinition(model.Schema):
 
 class IPropertySheetDefinition(model.Schema):
 
+    id = Identifier(
+        title=_(u'label_id', default=u'ID'),
+        description=_(u'help_id', default=u'ID of this property sheet'),
+        required=False,
+        pattern='^[a-z_0-9]*$',
+    )
     fields = schema.List(
         title=_(u'label_fields', default=u'Fields'),
         description=_(u'help_fields', default=u'Fields'),

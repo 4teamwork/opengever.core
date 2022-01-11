@@ -28,6 +28,14 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             headers=self.api_headers,
         )
 
+        id_schema = {
+            u"additionalProperties": False,
+            u"description": u"ID of this property sheet",
+            u"pattern": u"^[a-z_0-9]*$",
+            u"title": u"ID",
+            u"type": u"string",
+        }
+
         fields_schema = {
             u"additionalProperties": False,
             u"description": u"Fields",
@@ -72,6 +80,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"name": {
                         u"description": u"Field name (alphanumeric, lowercase)",
+                        u"pattern": u"^[a-z_0-9]*$",
                         u"title": u"Name",
                         u"type": u"string",
                     },
@@ -188,10 +197,11 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
         full_schema = {
             u"$schema": u"http://json-schema.org/draft-04/schema#",
             u"additionalProperties": False,
-            u"field_order": [u'fields', u'assignments'],
+            u"field_order": [u'id', u'fields', u'assignments'],
             u"properties": {
                 u"assignments": assignments_schema,
                 u"fields": fields_schema,
+                u"id": id_schema,
             },
             u"required": [u"fields"],
             u"title": u"Propertysheet Meta Schema",
@@ -324,6 +334,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
+                u'ID',
                 u'Felder',
                 u'Slots',
             ],
@@ -359,6 +370,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
+                u'ID dieses Property Sheets',
                 u'Felder',
                 u'F\xfcr welche Arten von Inhalten dieses Property Sheet verf\xfcgbar sein soll',
             ],

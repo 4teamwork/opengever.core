@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-11 12:56+0000\n"
+"POT-Creation-Date: 2022-01-11 20:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,6 +70,11 @@ msgstr ""
 msgid "help_fields"
 msgstr ""
 
+#. Default: "ID of this property sheet"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_id"
+msgstr ""
+
 #. Default: "Field name (alphanumeric, lowercase)"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_name"
@@ -108,6 +113,11 @@ msgstr ""
 #. Default: "Fields"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_fields"
+msgstr ""
+
+#. Default: "ID"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_id"
 msgstr ""
 
 #. Default: "Name"
