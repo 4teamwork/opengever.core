@@ -64,7 +64,8 @@ class MergeDocxExcerptCommand(CreateDocumentCommand):
 
         has_header_template = header_template is not None
 
-        if has_header_template and suffix_template is None:
+        if not has_header_template and suffix_template is None:
+            # No header and no suffix, so no need to merge anything...
             return agenda_item_document.file.data
 
         if has_header_template:
