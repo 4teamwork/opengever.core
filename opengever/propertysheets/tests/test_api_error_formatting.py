@@ -77,6 +77,23 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
         )
 
     @browsing
+    def test_rejects_sheet_id_that_is_a_python_keyword(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = deepcopy(self.VALID_SAMPLE_PAYLOAD)
+
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data, sheet_id='import')
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"The name 'import' is invalid.",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
     def test_rejects_invalid_assignments(self, browser):
         self.login(self.propertysheets_manager, browser)
 
@@ -166,13 +183,13 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 }
             ],
         }
-        with browser.expect_http_error(500):
+        with browser.expect_http_error(400):
             self.post_sheet(browser, data)
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'import' is not a valid identifier.",
-                u"type": u"InvalidFieldTypeDefinition",
+                u"message": u"[('name', ConstraintNotSatisfied('import'))]",
+                u"type": u"BadRequest",
             },
             browser.json,
         )
