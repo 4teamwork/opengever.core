@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-11 10:57+0000\n"
+"POT-Creation-Date: 2022-01-11 12:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,17 +52,77 @@ msgstr "Es sind keine benutzerdefinierten Felder verfügbar."
 msgid "help_assignments"
 msgstr "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll"
 
+#. Default: "Description"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_description"
+msgstr "Beschreibung"
+
+#. Default: "Data type of this field"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_field_type"
+msgstr "Datentyp für dieses Feld"
+
 #. Default: "Fields"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_fields"
 msgstr "Felder"
+
+#. Default: "Field name (alphanumeric, lowercase)"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_name"
+msgstr "Name (Alphanumerisch, nur Kleinbuchstaben)"
+
+#. Default: "Whether or not the field is required"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_required"
+msgstr "Angabe, ob Benutzer dieses Feld zwingend ausfüllen müssen"
+
+#. Default: "Title"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_title"
+msgstr "Titel"
+
+#. Default: "List of values that are allowed for this field"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_values"
+msgstr "Liste der erlaubten Werte für das Feld"
 
 #. Default: "Assignments"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_assignments"
 msgstr "Slots"
 
+#. Default: "Description"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_description"
+msgstr "Beschreibung"
+
+#. Default: "Field type"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_field_type"
+msgstr "Feld-Typ"
+
 #. Default: "Fields"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_fields"
 msgstr "Felder"
+
+#. Default: "Name"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_name"
+msgstr "Name"
+
+#. Default: "Required"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_required"
+msgstr "Pflichtfeld"
+
+#. Default: "Title"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_title"
+msgstr "Titel"
+
+#. Default: "Allowed values"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_values"
+msgstr "Wertebereich"

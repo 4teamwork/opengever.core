@@ -26,17 +26,39 @@ def make_field_types_vocabulary(context):
 
 class IFieldDefinition(model.Schema):
 
-    name = schema.TextLine(required=True)
-    field_type = schema.Choice(
-        required=True, source=make_field_types_vocabulary
+    name = schema.TextLine(
+        title=_(u'label_name', default=u'Name'),
+        description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
+        required=True,
     )
-    title = schema.TextLine(required=False)
-    description = schema.TextLine(required=False)
-    required = schema.Bool(required=False)
+    field_type = schema.Choice(
+        title=_(u'label_field_type', default=u'Field type'),
+        description=_(u'help_field_type', default=u'Data type of this field'),
+        required=True,
+        source=make_field_types_vocabulary,
+    )
+    title = schema.TextLine(
+        title=_(u'label_title', default=u'Title'),
+        description=_(u'help_title', default=u'Title'),
+        required=False,
+    )
+    description = schema.TextLine(
+        title=_(u'label_description', default=u'Description'),
+        description=_(u'help_description', default=u'Description'),
+        required=False,
+    )
+    required = schema.Bool(
+        title=_(u'label_required', default=u'Required'),
+        description=_(u'help_required', default=u'Whether or not the field is required'),
+        required=False,
+    )
     values = schema.List(
+        title=_(u'label_values', default=u'Allowed values'),
+        description=_(u'help_values',
+                      default=u'List of values that are allowed for this field'),
+        required=False,
         default=None,
         value_type=schema.TextLine(),
-        required=False,
     )
 
 
