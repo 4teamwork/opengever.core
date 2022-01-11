@@ -41,6 +41,11 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             u"description": u"Fields",
             u"items": {
                 u"properties": {
+                    u"default": {
+                        u"description": u"Default value for this field",
+                        u"title": u"Default",
+                        u"type": [u"integer", u"array", u"boolean", u"string"],
+                    },
                     u"description": {
                         u"description": u"Description",
                         u"title": u"Description",
@@ -349,6 +354,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Titel',
                 u'Beschreibung',
                 u'Pflichtfeld',
+                u'Default',
                 u'Wertebereich',
             ],
             [prop['title'] for prop in field_properties.values()]
@@ -385,6 +391,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Titel',
                 u'Beschreibung',
                 u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
+                u'Default-Wert f\xfcr dieses Feld',
                 u'Liste der erlaubten Werte f\xfcr das Feld',
             ],
             [prop['description'] for prop in field_properties.values()]
