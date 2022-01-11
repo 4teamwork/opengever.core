@@ -94,7 +94,6 @@
                           "
       admin_unit_id="{{{adminunit.id}}}"
       administrator_group="{{{deployment.administrator_group}}}"
-      workspace_administrator_group="{{{deployment.workspace_administrators_group}}}"
       workspace_creator_group="{{{deployment.workspace_creators_group}}}"
       workspace_user_group="{{{deployment.workspace_users_group}}}"
       mail_domain="{{{deployment.mail_domain}}}"
