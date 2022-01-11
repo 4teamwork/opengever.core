@@ -1,6 +1,7 @@
 from opengever.base.schema import Identifier
 from opengever.propertysheets import _
 from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
+from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from plone.supermodel import model
 from zope import schema
@@ -32,6 +33,7 @@ class IFieldDefinition(model.Schema):
         description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
         required=True,
         pattern='^[a-z_0-9]*$',
+        constraint=isidentifier,
     )
     field_type = schema.Choice(
         title=_(u'label_field_type', default=u'Field type'),
@@ -71,6 +73,7 @@ class IPropertySheetDefinition(model.Schema):
         description=_(u'help_id', default=u'ID of this property sheet'),
         required=False,
         pattern='^[a-z_0-9]*$',
+        constraint=isidentifier,
     )
     fields = schema.List(
         title=_(u'label_fields', default=u'Fields'),
