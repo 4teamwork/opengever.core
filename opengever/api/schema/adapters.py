@@ -1,16 +1,19 @@
 from opengever.api.schema.schema import TYPE_TO_BE_ADDED_KEY
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.schema import IIdentifier
+from opengever.base.schema import IMultiTypeField
 from opengever.base.vocabulary import WrapperBase
 from plone.restapi.types.adapters import ASCIILineJsonSchemaProvider
 from plone.restapi.types.adapters import ChoiceJsonSchemaProvider
 from plone.restapi.types.adapters import CollectionJsonSchemaProvider
+from plone.restapi.types.adapters import DefaultJsonSchemaProvider
 from plone.restapi.types.adapters import ListJsonSchemaProvider
 from plone.restapi.types.adapters import SetJsonSchemaProvider
 from plone.restapi.types.adapters import TupleJsonSchemaProvider
 from plone.restapi.types.interfaces import IJsonSchemaProvider
 from plone.restapi.types.z3crelationadapter import ChoiceslessRelationListSchemaProvider
 from z3c.relationfield.interfaces import IRelationList
+from zope import schema
 from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -208,6 +211,31 @@ def get_source_url(field, context, request, portal_type=None, parent_field=None)
         field_name = parent_field.getName()
 
     return get_vocab_like_url('@sources', field_name, context, request)
+
+
+@adapter(IMultiTypeField, Interface, Interface)
+@implementer(IJsonSchemaProvider)
+class GEVERMultiTypeFieldJsonSchemaProvider(DefaultJsonSchemaProvider):
+
+    JSON_SCHEMA_TYPES = {
+        schema.TextLine.__name__: 'string',
+        schema.Text.__name__: 'string',
+        schema.Int.__name__: 'integer',
+        schema.Bool.__name__: 'boolean',
+        schema.Date.__name__: 'string',
+        schema.List.__name__: 'array',
+        schema.Set.__name__: 'array',
+    }
+
+    def get_type(self):
+        types = [
+            self.JSON_SCHEMA_TYPES[t.__name__]
+            for t in self.field.allowed_types
+        ]
+        return list(set(types))
+
+    def get_factory(self):
+        return None
 
 
 @adapter(IIdentifier, Interface, Interface)

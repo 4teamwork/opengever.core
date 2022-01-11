@@ -248,6 +248,133 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
         )
 
     @browsing
+    def test_rejects_unsupported_types_for_default(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "bool",
+                    "title": u"My title",
+                    "default": 5.5,
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[('default', WrongType(\"Default value 5.5 of "
+                            u"type 'float' not allowed for its field\"))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_invalid_default_value_for_choice(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "choice",
+                    "title": u"My title",
+                    "values": ["alpha", "beta"],
+                    "default": "not-in-vocab",
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[(None, Invalid(\"Invalid default value: u'not-in-vocab'\",))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_invalid_default_value_for_int(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "int",
+                    "title": u"A number",
+                    "default": "not-a-number",
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[(None, Invalid(\"Invalid default value: u'not-a-number'\",))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_invalid_default_value_for_textline(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "textline",
+                    "title": u"A line of text",
+                    "default": 42,
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[(None, Invalid('Invalid default value: 42',))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_invalid_default_value_for_date(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "myfield",
+                    "field_type": "date",
+                    "title": u"A date",
+                    "default": "not-a-date",
+                },
+            ],
+        }
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"message": u"[(None, Invalid(\"Invalid default value: u'not-a-date'\",))]",
+                u"type": u"BadRequest",
+            },
+            browser.json,
+        )
+
+    @browsing
     def test_rejects_missing_values_for_choice(self, browser):
         self.login(self.propertysheets_manager, browser)
 

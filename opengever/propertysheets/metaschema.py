@@ -1,4 +1,5 @@
 from opengever.base.schema import Identifier
+from opengever.base.schema import MultiTypeField
 from opengever.propertysheets import _
 from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
 from opengever.propertysheets.definition import isidentifier
@@ -7,7 +8,11 @@ from plone.supermodel import model
 from zope import schema
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
+from zope.schema import Choice
+from zope.schema import Set
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -56,6 +61,20 @@ class IFieldDefinition(model.Schema):
         description=_(u'help_required', default=u'Whether or not the field is required'),
         required=False,
     )
+    default = MultiTypeField(
+        title=_(u'label_default', default=u'Default'),
+        description=_(u'help_default', default=u'Default value for this field'),
+        required=False,
+        allowed_types=[
+            schema.TextLine,
+            schema.Text,
+            schema.Int,
+            schema.Bool,
+            schema.Date,
+            schema.List,
+            schema.Set,
+        ],
+    )
     values = schema.List(
         title=_(u'label_values', default=u'Allowed values'),
         description=_(u'help_values',
@@ -64,6 +83,38 @@ class IFieldDefinition(model.Schema):
         default=None,
         value_type=schema.TextLine(),
     )
+
+    @invariant
+    def valid_default_value(obj):
+        data = obj.copy()
+
+        # Prefill "soft-required" fields the same as the API endpoint would
+        data.update({
+            'title': data.get('title', u''),
+            'description': data.get('description', u''),
+            'required': data.get('required', False)
+        })
+
+        no_default_marker = object()
+        default = data.pop('default', no_default_marker)
+        if default is no_default_marker:
+            return
+
+        tmp_def = PropertySheetSchemaDefinition.create('tmp')
+        tmp_def.add_field(**data)
+        field = tmp_def.get_fields()[0][1]
+
+        if isinstance(field, Set) and isinstance(field.value_type, Choice):
+            # Multiple choice fields strictly require their default to be
+            # of type 'set' (which can't be expressed in JSON). So if it's
+            # a list, convert it. Otherwise, it's an invalid default anyway,
+            # so we just let zope.schema handle it and raise WrongType.
+            if isinstance(default, list):
+                default = set(default)
+        try:
+            field.validate(default)
+        except Exception:
+            raise Invalid('Invalid default value: %r' % default)
 
 
 class IPropertySheetDefinition(model.Schema):
