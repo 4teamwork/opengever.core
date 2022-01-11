@@ -1,0 +1,1 @@
+Avoid reporting normal API exceptions in sentry. [njohner]

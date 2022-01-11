@@ -15,6 +15,7 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
         from cgi import escape
         from OFS.CopySupport import absattr
         from OFS.CopySupport import CopyError
+        from opengever.api.not_reported_exceptions import CopyError as NotReportedCopyError
         from opengever.document.behaviors import IBaseDocument
         from ZODB.POSException import ConflictError
 
@@ -36,7 +37,7 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
             # We also make sure that we are not pasting a checked-out document
 
             if IBaseDocument.providedBy(object) and object.is_checked_out():
-                raise CopyError('Checked out documents cannot be copied.')
+                raise NotReportedCopyError('Checked out documents cannot be copied.')
 
             if not hasattr(object, 'meta_type'):
                 raise CopyError(MessageDialog(

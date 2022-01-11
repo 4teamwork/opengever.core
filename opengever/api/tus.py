@@ -1,6 +1,6 @@
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
-from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.proposaltemplate import IProposalTemplate
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
@@ -92,7 +92,7 @@ class UploadPatch(GeverUploadPatch):
                     default=u"It's not possible to have non-.docx documents as"
                             " proposal documents.",
                 ), context=self.request),
-                raise BadRequest(msg)
+                raise NotReportedBadRequest(msg)
 
     def is_proposal_upload(self):
         """The upload form context can be, for example, a Dossier."""

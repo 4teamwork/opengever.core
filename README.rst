@@ -1473,3 +1473,9 @@ which can be used in upgrade steps:
             indexer.add_by_obj(obj)
 
 This will register the corresponding jobs to the ``NightlyMaintenanceJobsProvider``.
+
+
+API Error handling
+------------------
+
+Errors, especially client errors, are a normal part of the API. ZPublisher's ``HTTPResponse`` will set the proper error codes while ``Plone.rest`` will serialize these errors back to the client. This allows to simply raise errors such as ``BadRequest`` in the API Services, and the rest will happen automatically. This does not prevent the error from being raised and therefore be handled by ``ftw.raven`` and logged to sentry. Specific exceptions that we know will happen in normal Gever operations should not be reported to sentry, which can be easily achieved by raising an exception inheriting from ``NotReportedException``.
