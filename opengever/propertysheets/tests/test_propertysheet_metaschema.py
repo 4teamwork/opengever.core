@@ -34,8 +34,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             u"items": {
                 u"properties": {
                     u"description": {
-                        u"description": u"",
-                        u"title": u"",
+                        u"description": u"Description",
+                        u"title": u"Description",
                         u"type": u"string",
                     },
                     u"field_type": {
@@ -48,7 +48,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                             [u"date", u"Date"],
                             [u"textline", u"Text line (String)"],
                         ],
-                        u"description": u"",
+                        u"description": u"Data type of this field",
                         u"enum": [
                             u"int",
                             u"multiple_choice",
@@ -67,33 +67,34 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                             u"Date",
                             u"Text line (String)",
                         ],
-                        u"title": u"",
+                        u"title": u"Field type",
                         u"type": u"string",
                     },
                     u"name": {
-                        u"description": u"",
-                        u"title": u"",
+                        u"description": u"Field name (alphanumeric, lowercase)",
+                        u"title": u"Name",
                         u"type": u"string",
                     },
                     u"required": {
-                        u"description": u"",
-                        u"title": u"",
+                        u"description": u"Whether or not the field is required",
+                        u"title": u"Required",
                         u"type": u"boolean",
                     },
                     u"title": {
-                        u"description": u"",
-                        u"title": u"",
+                        u"description": u"Title",
+                        u"title": u"Title",
                         u"type": u"string",
                     },
                     u"values": {
-                        u"description": u"",
+                        u"description": u"List of values that are allowed for "
+                                        u"this field",
                         u"items": {
                             u"description": u"",
                             u"factory": u"Text line (String)",
                             u"title": u"",
                             u"type": u"string",
                         },
-                        u"title": u"",
+                        u"title": u"Allowed values",
                         u"type": u"array",
                         u"uniqueItems": False,
                     },
@@ -306,3 +307,73 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Dossier (Typ: Gesch\xe4ftsfall)',
             ],
             properties['assignments']['items']['enumNames'])
+
+    @browsing
+    def test_field_titles_are_translated(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        headers = self.api_headers.copy()
+        headers.update({'Accept-Language': 'de-ch'})
+
+        browser.open(
+            view="@propertysheet-metaschema",
+            headers=headers,
+        )
+
+        properties = browser.json['properties']
+
+        self.assertItemsEqual(
+            [
+                u'Felder',
+                u'Slots',
+            ],
+            [prop['title'] for prop in properties.values()]
+        )
+
+        field_properties = properties['fields']['items']['properties']
+        self.assertItemsEqual(
+            [
+                u'Name',
+                u'Feld-Typ',
+                u'Titel',
+                u'Beschreibung',
+                u'Pflichtfeld',
+                u'Wertebereich',
+            ],
+            [prop['title'] for prop in field_properties.values()]
+        )
+
+    @browsing
+    def test_field_descriptions_are_translated(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        headers = self.api_headers.copy()
+        headers.update({'Accept-Language': 'de-ch'})
+
+        browser.open(
+            view="@propertysheet-metaschema",
+            headers=headers,
+        )
+
+        properties = browser.json['properties']
+
+        self.assertItemsEqual(
+            [
+                u'Felder',
+                u'F\xfcr welche Arten von Inhalten dieses Property Sheet verf\xfcgbar sein soll',
+            ],
+            [prop['description'] for prop in properties.values()]
+        )
+
+        field_properties = properties['fields']['items']['properties']
+        self.assertItemsEqual(
+            [
+                u'Name (Alphanumerisch, nur Kleinbuchstaben)',
+                u'Datentyp f\xfcr dieses Feld',
+                u'Titel',
+                u'Beschreibung',
+                u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
+                u'Liste der erlaubten Werte f\xfcr das Feld',
+            ],
+            [prop['description'] for prop in field_properties.values()]
+        )

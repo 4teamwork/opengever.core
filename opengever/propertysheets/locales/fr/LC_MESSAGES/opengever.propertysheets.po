@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-11 10:57+0000\n"
+"POT-Creation-Date: 2022-01-11 12:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,9 +52,39 @@ msgstr "Aucun champ personnalisé disponible."
 msgid "help_assignments"
 msgstr ""
 
+#. Default: "Description"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_description"
+msgstr ""
+
+#. Default: "Data type of this field"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_field_type"
+msgstr ""
+
 #. Default: "Fields"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_fields"
+msgstr ""
+
+#. Default: "Field name (alphanumeric, lowercase)"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_name"
+msgstr ""
+
+#. Default: "Whether or not the field is required"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_required"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_title"
+msgstr ""
+
+#. Default: "List of values that are allowed for this field"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_values"
 msgstr ""
 
 #. Default: "Assignments"
@@ -62,7 +92,37 @@ msgstr ""
 msgid "label_assignments"
 msgstr ""
 
+#. Default: "Description"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_description"
+msgstr ""
+
+#. Default: "Field type"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_field_type"
+msgstr ""
+
 #. Default: "Fields"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_fields"
+msgstr ""
+
+#. Default: "Name"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_name"
+msgstr ""
+
+#. Default: "Required"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_required"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_title"
+msgstr ""
+
+#. Default: "Allowed values"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_values"
 msgstr ""
