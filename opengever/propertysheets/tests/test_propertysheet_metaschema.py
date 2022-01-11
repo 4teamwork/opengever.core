@@ -31,6 +31,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
         id_schema = {
             u"additionalProperties": False,
             u"description": u"ID of this property sheet",
+            u'maxLength': 32,
             u"pattern": u"^[a-z_0-9]*$",
             u"title": u"ID",
             u"type": u"string",
@@ -48,6 +49,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"description": {
                         u"description": u"Description",
+                        u"maxLength": 128,
                         u"title": u"Description",
                         u"type": u"string",
                     },
@@ -85,6 +87,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"name": {
                         u"description": u"Field name (alphanumeric, lowercase)",
+                        u'maxLength': 32,
                         u"pattern": u"^[a-z_0-9]*$",
                         u"title": u"Name",
                         u"type": u"string",
@@ -96,6 +99,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"title": {
                         u"description": u"Title",
+                        u"maxLength": 48,
                         u"title": u"Title",
                         u"type": u"string",
                     },
