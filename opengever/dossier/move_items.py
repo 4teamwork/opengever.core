@@ -126,7 +126,7 @@ class MoveItemsForm(form.Form):
                                     u'therefore not movable. Move the task '
                                     u'instead',
                             mapping=dict(name=obj.title))
-                    elif exc.message == u'msg_doc_inside_task_cant_be_moved':
+                    elif exc.message == u'msg_doc_inside_proposal_cant_be_moved':
                         msg = _(
                             'label_not_movable_since_inside_proposal',
                             default=u'Document ${name} is inside a proposal '

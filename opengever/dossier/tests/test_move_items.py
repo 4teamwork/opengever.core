@@ -1082,6 +1082,20 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertNotIn(mail, self.empty_dossier.objectValues())
 
     @browsing
+    def test_document_inside_a_proposal_is_not_movable(self, browser):
+        self.login(self.regular_user, browser)
+        self.activate_feature('meeting')
+        self.move_items(
+            browser, src=self.proposal,
+            obj=self.proposaldocument, target=self.empty_dossier)
+
+        self.assertEqual(
+            'Document {} is inside a proposal and therefore not movable. Please move the proposal instead.'.format(self.proposaldocument.title),
+            error_messages()[0])
+        self.assertIn(self.proposaldocument, self.proposal.objectValues())
+        self.assertNotIn(self.proposaldocument, self.empty_dossier.objectValues())
+
+    @browsing
     def test_document_inside_closed_dossier_is_not_movable(self, browser):
         self.login(self.dossier_manager, browser)
         self.move_items(
