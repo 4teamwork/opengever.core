@@ -1,3 +1,5 @@
+from opengever.propertysheets import _
+from opengever.propertysheets.assignment import make_propertysheet_assignment_vocabulary
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from plone.supermodel import model
 from zope import schema
@@ -26,4 +28,24 @@ class IFieldDefinition(model.Schema):
         default=None,
         value_type=schema.TextLine(),
         required=False,
+    )
+
+
+class IPropertySheetDefinition(model.Schema):
+
+    fields = schema.List(
+        title=_(u'label_fields', default=u'Fields'),
+        description=_(u'help_fields', default=u'Fields'),
+        required=True,
+        value_type=schema.Object(schema=IFieldDefinition),
+    )
+    assignments = schema.List(
+        title=_(u'label_assignments', default=u'Assignments'),
+        description=_(u'help_assignments',
+                      default=u'What type of content this property sheet '
+                              u'will be available for'),
+        required=False,
+        value_type=schema.Choice(
+            source=make_propertysheet_assignment_vocabulary,
+        ),
     )

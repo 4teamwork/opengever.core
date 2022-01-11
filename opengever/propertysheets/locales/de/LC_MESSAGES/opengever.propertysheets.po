@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-27 15:57+0000\n"
+"POT-Creation-Date: 2022-01-11 10:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,5 +27,26 @@ msgid "Custom properties contain some errors."
 msgstr "Die benutzerdefinierten Felder beinhalten Fehler."
 
 #: ./opengever/propertysheets/templates/propertysheet.pt
+#: ./opengever/propertysheets/templates/propertysheet_display.pt
 msgid "No custom properties are available."
 msgstr "Es sind keine benutzerdefinierten Felder verfügbar."
+
+#. Default: "What type of content this property sheet will be available for"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_assignments"
+msgstr "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll"
+
+#. Default: "Fields"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_fields"
+msgstr "Felder"
+
+#. Default: "Assignments"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_assignments"
+msgstr "Slots"
+
+#. Default: "Fields"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_fields"
+msgstr "Felder"
