@@ -1,11 +1,16 @@
 from opengever.propertysheets import _
-from opengever.propertysheets.assignment import make_propertysheet_assignment_vocabulary
+from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from plone.supermodel import model
 from zope import schema
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
+
+
+@provider(IContextSourceBinder)
+def make_propertysheet_assignment_vocabulary(context):
+    return PropertySheetAssignmentVocabulary()(context)
 
 
 @provider(IContextSourceBinder)

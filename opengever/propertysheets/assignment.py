@@ -1,7 +1,6 @@
+from opengever.propertysheets import _
 from zope.component import getUtility
 from zope.interface import implementer
-from zope.interface import provider
-from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -19,38 +18,55 @@ class PropertySheetAssignmentVocabulary(object):
     """Factory for vocabulary of all valid property sheet assignment slots."""
     def __call__(self, context):
         assignment_terms = []
-        for slot_name in get_document_assignment_slots():
-            assignment_terms.append(SimpleTerm(slot_name))
+        for term in get_document_assignment_slots_vocab():
+            assignment_terms.append(term)
 
-        for slot_name in get_dossier_assignment_slots():
-            assignment_terms.append(SimpleTerm(slot_name))
+        for term in get_dossier_assignment_slots_vocab():
+            assignment_terms.append(term)
 
         return SimpleVocabulary(assignment_terms)
 
 
-@provider(IContextSourceBinder)
-def make_propertysheet_assignment_vocabulary(context):
-    return PropertySheetAssignmentVocabulary()(context)
-
-
-def _get_document_type_slots():
+def _get_document_type_terms():
     vocabulary_factory = getUtility(
         IVocabularyFactory, name="opengever.document.document_types"
     )
+    return [term for term in vocabulary_factory(None)]
+
+
+def _get_document_type_slots():
     return [
         document_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
+        for term in _get_document_type_terms()
     ]
 
 
-def get_document_assignment_slots():
-    """"Return a list of all valid assignment slots for documents.
+def get_document_assignment_slots_vocab():
+    """"Return a vocabulary of all valid assignment slots for documents.
 
     This is limited to one slot per possible value of the
     `document_type` field and the default document slot.
     """
+    return [
+        SimpleTerm(
+            value=DOCUMENT_DEFAULT_ASSIGNMENT_SLOT,
+            token=DOCUMENT_DEFAULT_ASSIGNMENT_SLOT,
+            title=_(u'Document')
+        )] + [
+        SimpleTerm(
+            value=document_type_assignment_slot_name(term.value),
+            token=document_type_assignment_slot_name(term.value),
+            title=_(u"Document (Type: ${document_type})",
+                    mapping={'document_type': term.title}),
+        )
+        for term in _get_document_type_terms()
+    ]
 
-    return [DOCUMENT_DEFAULT_ASSIGNMENT_SLOT] + _get_document_type_slots()
+
+def get_document_assignment_slots():
+    """"Return a plain list of document assignment slot names.
+    """
+    return [term.value for term in get_document_assignment_slots_vocab()]
 
 
 def document_type_assignment_slot_name(value):
@@ -60,24 +76,46 @@ def document_type_assignment_slot_name(value):
     )
 
 
-def _get_dossier_type_slots():
+def _get_dossier_type_terms():
     vocabulary_factory = getUtility(
         IVocabularyFactory, name="opengever.dossier.dossier_types"
     )
+    return [term for term in vocabulary_factory(None)]
+
+
+def _get_dossier_type_slots():
     return [
         dossier_type_assignment_slot_name(term.value)
-        for term in vocabulary_factory(None)
+        for term in _get_dossier_type_terms()
     ]
 
 
-def get_dossier_assignment_slots():
-    """"Return a list of all valid assignment slots for dossiers.
+def get_dossier_assignment_slots_vocab():
+    """"Return a vocabulary of all valid assignment slots for dossiers.
 
     This is limited to one slot per possible value of the
     `dossier_type` field and the default dossier slot.
     """
+    return [
+        SimpleTerm(
+            value=DOSSIER_DEFAULT_ASSIGNMENT_SLOT,
+            token=DOSSIER_DEFAULT_ASSIGNMENT_SLOT,
+            title=_(u'Dossier')
+        )] + [
+        SimpleTerm(
+            value=dossier_type_assignment_slot_name(term.value),
+            token=dossier_type_assignment_slot_name(term.value),
+            title=_(u"Dossier (Type: ${dossier_type})",
+                    mapping={'dossier_type': term.title}),
+        )
+        for term in _get_dossier_type_terms()
+    ]
 
-    return [DOSSIER_DEFAULT_ASSIGNMENT_SLOT] + _get_dossier_type_slots()
+
+def get_dossier_assignment_slots():
+    """"Return a plain list of dossier assignment slot names.
+    """
+    return [term.value for term in get_dossier_assignment_slots_vocab()]
 
 
 def dossier_type_assignment_slot_name(value):
