@@ -104,17 +104,44 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                             u"be available for",
             u"items": {
                 u"choices": [
-                    [u"IDocument.default", None],
-                    [u"IDocumentMetadata.document_type.contract", None],
-                    [u"IDocumentMetadata.document_type.directive", None],
-                    [u"IDocumentMetadata.document_type.question", None],
-                    [u"IDocumentMetadata.document_type.offer", None],
-                    [u"IDocumentMetadata.document_type.protocol", None],
-                    [u"IDocumentMetadata.document_type.regulations", None],
-                    [u"IDocumentMetadata.document_type.report", None],
-                    [u"IDocumentMetadata.document_type.request", None],
-                    [u"IDossier.default", None],
-                    [u"IDossier.dossier_type.businesscase", None],
+                    [u"IDocument.default", u"Document"],
+                    [
+                        u"IDocumentMetadata.document_type.contract",
+                        u"Document (Type: Contract)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.directive",
+                        u"Document (Type: Directive)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.question",
+                        u"Document (Type: Inquiry)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.offer",
+                        u"Document (Type: Offer)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.protocol",
+                        u"Document (Type: Protocol)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.regulations",
+                        u"Document (Type: Regulations)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.report",
+                        u"Document (Type: Report)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.request",
+                        u"Document (Type: Request)",
+                    ],
+                    [u"IDossier.default", u"Dossier"],
+                    [
+                        u"IDossier.dossier_type.businesscase",
+                        u"Dossier (Type: Business case)",
+                    ],
                 ],
                 u"enum": [
                     u"IDocument.default",
@@ -130,17 +157,17 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     u"IDossier.dossier_type.businesscase",
                 ],
                 u"enumNames": [
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
-                    None,
+                    u"Document",
+                    u"Document (Type: Contract)",
+                    u"Document (Type: Directive)",
+                    u"Document (Type: Inquiry)",
+                    u"Document (Type: Offer)",
+                    u"Document (Type: Protocol)",
+                    u"Document (Type: Regulations)",
+                    u"Document (Type: Report)",
+                    u"Document (Type: Request)",
+                    u"Dossier",
+                    u"Dossier (Type: Business case)",
                 ],
                 u"type": u"string",
             },
@@ -242,3 +269,32 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             return validate(items, schema, format_checker=FormatChecker())
 
         validate_schema(definition, schema)
+
+    @browsing
+    def test_assignment_vocabularies_are_translated(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        headers = self.api_headers.copy()
+        headers.update({'Accept-Language': 'de-ch'})
+
+        browser.open(
+            view="@propertysheet-metaschema",
+            headers=headers,
+        )
+
+        properties = browser.json['properties']
+        self.assertEqual(
+            [
+                u'Dokument',
+                u'Dokument (Typ: Anfrage)',
+                u'Dokument (Typ: Antrag)',
+                u'Dokument (Typ: Bericht)',
+                u'Dokument (Typ: Offerte)',
+                u'Dokument (Typ: Protokoll)',
+                u'Dokument (Typ: Reglement)',
+                u'Dokument (Typ: Vertrag)',
+                u'Dokument (Typ: Weisung)',
+                u'Dossier',
+                u'Dossier (Typ: Gesch\xe4ftsfall)',
+            ],
+            properties['assignments']['items']['enumNames'])

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-11 10:15+0000\n"
+"POT-Creation-Date: 2022-01-11 10:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,22 @@ msgstr ""
 
 #: ./opengever/propertysheets/widgets.py
 msgid "Custom properties contain some errors."
+msgstr ""
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Document"
+msgstr ""
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Document (Type: ${document_type})"
+msgstr ""
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Dossier"
+msgstr ""
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Dossier (Type: ${dossier_type})"
 msgstr ""
 
 #: ./opengever/propertysheets/templates/propertysheet.pt
