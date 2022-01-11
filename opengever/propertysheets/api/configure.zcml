@@ -10,6 +10,16 @@
 
   <plone:service
       method="GET"
+      accept="application/json,application/schema+json"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".propertysheet_metaschema.PropertysheetMetaSchemaGet"
+      name="@propertysheet-metaschema"
+      permission="zope2.View"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      method="GET"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".get.PropertySheetsGet"
       name="@propertysheets"

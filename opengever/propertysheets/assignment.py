@@ -1,5 +1,7 @@
 from zope.component import getUtility
 from zope.interface import implementer
+from zope.interface import provider
+from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -24,6 +26,11 @@ class PropertySheetAssignmentVocabulary(object):
             assignment_terms.append(SimpleTerm(slot_name))
 
         return SimpleVocabulary(assignment_terms)
+
+
+@provider(IContextSourceBinder)
+def make_propertysheet_assignment_vocabulary(context):
+    return PropertySheetAssignmentVocabulary()(context)
 
 
 def _get_document_type_slots():
