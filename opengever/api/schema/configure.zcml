@@ -97,5 +97,7 @@
   <adapter factory=".adapters.GEVERSetJsonSchemaProvider" />
   <adapter factory=".adapters.GEVERListJsonSchemaProvider" />
   <adapter factory=".adapters.GEVERChoiceslessRelationListSchemaProvider" />
+  <adapter factory=".adapters.GEVERMultiTypeFieldJsonSchemaProvider" />
+  <adapter factory=".adapters.GEVERIdentifierJsonSchemaProvider" />
 
 </configure>

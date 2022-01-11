@@ -1,8 +1,10 @@
-from opengever.api.add import get_schema_validation_errors
+from opengever.api.validation import get_validation_errors
+from opengever.api.validation import scrub_json_payload
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.metaschema import IFieldDefinition
+from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -40,8 +42,12 @@ class PropertySheetsPost(Service):
 
         if len(self.params) != 1:
             raise BadRequest(u"Missing parameter sheet_name.")
+
         sheet_name = self.params.pop()
-        if not isidentifier(sheet_name):
+        id_field = IPropertySheetDefinition['id']
+        try:
+            id_field.bind(sheet_name).validate(sheet_name)
+        except Exception:
             raise BadRequest(u"The name '{}' is invalid.".format(sheet_name))
 
         data = json_body(self.request)
@@ -51,9 +57,14 @@ class PropertySheetsPost(Service):
 
         errors = []
         for field_data in fields:
-            field_errors = get_schema_validation_errors(
-                self.context, field_data, IFieldDefinition
-            )
+
+            scrub_json_payload(field_data, IFieldDefinition)
+            # Allowing unknown fields is necessary in order to allow managers
+            # to set dynamic defaults like `default_factory`, which currently
+            # aren't exposed in the meta schema.
+            field_errors = get_validation_errors(
+                field_data, IFieldDefinition, allow_unknown_fields=True)
+
             if field_errors:
                 errors.extend(field_errors)
 
@@ -101,7 +112,7 @@ class PropertySheetsPost(Service):
         for field_data in fields:
             name = field_data["name"]
             field_type = field_data["field_type"]
-            title = field_data.get("title", name)
+            title = field_data.get("title", name.decode('ascii'))
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
             values = field_data.get("values")

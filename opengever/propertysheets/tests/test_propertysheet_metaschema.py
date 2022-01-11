@@ -28,13 +28,27 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             headers=self.api_headers,
         )
 
+        id_schema = {
+            u"additionalProperties": False,
+            u"description": u"ID of this property sheet",
+            u"pattern": u"^[a-z_0-9]*$",
+            u"title": u"ID",
+            u"type": u"string",
+        }
+
         fields_schema = {
             u"additionalProperties": False,
             u"description": u"Fields",
             u"items": {
                 u"properties": {
+                    u"default": {
+                        u"description": u"Default value for this field",
+                        u"title": u"Default",
+                        u"type": [u"integer", u"array", u"boolean", u"string"],
+                    },
                     u"description": {
                         u"description": u"Description",
+                        u"maxLength": 128,
                         u"title": u"Description",
                         u"type": u"string",
                     },
@@ -72,6 +86,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"name": {
                         u"description": u"Field name (alphanumeric, lowercase)",
+                        u"pattern": u"^[a-z_0-9]*$",
                         u"title": u"Name",
                         u"type": u"string",
                     },
@@ -82,6 +97,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"title": {
                         u"description": u"Title",
+                        u"maxLength": 48,
                         u"title": u"Title",
                         u"type": u"string",
                     },
@@ -188,10 +204,11 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
         full_schema = {
             u"$schema": u"http://json-schema.org/draft-04/schema#",
             u"additionalProperties": False,
-            u"field_order": [u'fields', u'assignments'],
+            u"field_order": [u'id', u'fields', u'assignments'],
             u"properties": {
                 u"assignments": assignments_schema,
                 u"fields": fields_schema,
+                u"id": id_schema,
             },
             u"required": [u"fields"],
             u"title": u"Propertysheet Meta Schema",
@@ -324,6 +341,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
+                u'ID',
                 u'Felder',
                 u'Slots',
             ],
@@ -338,6 +356,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Titel',
                 u'Beschreibung',
                 u'Pflichtfeld',
+                u'Default',
                 u'Wertebereich',
             ],
             [prop['title'] for prop in field_properties.values()]
@@ -359,6 +378,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
+                u'ID dieses Property Sheets',
                 u'Felder',
                 u'F\xfcr welche Arten von Inhalten dieses Property Sheet verf\xfcgbar sein soll',
             ],
@@ -373,6 +393,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Titel',
                 u'Beschreibung',
                 u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
+                u'Default-Wert f\xfcr dieses Feld',
                 u'Liste der erlaubten Werte f\xfcr das Feld',
             ],
             [prop['description'] for prop in field_properties.values()]

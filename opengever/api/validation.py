@@ -8,6 +8,8 @@ from zope.schema import getFieldsInOrder
 from zope.schema import List
 from zope.schema import URI
 from zope.schema import ValidationError
+from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import RequiredMissing
 import binascii
 
@@ -168,7 +170,15 @@ def scrub_json_payload(jsondata, schema):
 
             # Fields vocabulary terms may be of a bytestring type
             if isinstance(field, Choice):
-                terms = [t.value for t in field.vocabulary]
+                if IVocabularyFactory.providedBy(field.vocabulary):
+                    vocabulary = field.vocabulary(None)
+                elif IContextSourceBinder.providedBy(field.vocabulary):
+                    vocabulary = field.vocabulary(None)
+                else:
+                    vocabulary = field.vocabulary
+
+                terms = [t.value for t in vocabulary]
+
                 if isinstance(terms[0], str) and isinstance(value, unicode):
                     jsondata[key] = value.encode('utf-8')
                     continue
