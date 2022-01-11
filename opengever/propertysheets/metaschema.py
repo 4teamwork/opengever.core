@@ -3,8 +3,11 @@ from opengever.propertysheets.assignment import PropertySheetAssignmentVocabular
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from plone.supermodel import model
 from zope import schema
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
+from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
@@ -15,9 +18,10 @@ def make_propertysheet_assignment_vocabulary(context):
 
 @provider(IContextSourceBinder)
 def make_field_types_vocabulary(context):
-    return SimpleVocabulary.fromValues(
-        PropertySheetSchemaDefinition.FACTORIES.keys()
-    )
+    vocab = SimpleVocabulary(
+        [SimpleTerm(k, k, translate(v.title, context=getRequest()))
+         for k, v in PropertySheetSchemaDefinition.FACTORIES.items()])
+    return vocab
 
 
 class IFieldDefinition(model.Schema):
