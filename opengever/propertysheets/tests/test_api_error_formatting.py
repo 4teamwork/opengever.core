@@ -141,13 +141,14 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 }
             ],
         }
-        with browser.expect_http_error(500):
+        with browser.expect_http_error(400):
             self.post_sheet(browser, data)
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'foo-.$$$' is not a valid identifier.",
-                u"type": u"InvalidFieldTypeDefinition",
+                u"message": u"[('name', InvalidIdentifier(\"Value 'foo-.$$$' "
+                            u"does not match pattern '^[a-z_0-9]*$'\"))]",
+                u"type": u"BadRequest",
             },
             browser.json,
         )

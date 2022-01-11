@@ -5,6 +5,8 @@ from tzlocal import get_localzone
 from zope import schema
 from zope.interface import implements
 from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import InvalidValue
+import re
 
 
 class IUTCDatetime(schema.interfaces.IDatetime):
@@ -62,3 +64,32 @@ class TableChoice(schema.Choice):
         self.vocabulary_depends_on = vocabulary_depends_on
         self.show_filter = show_filter
         super(TableChoice, self).__init__(**kwargs)
+
+
+class IIdentifier(schema.interfaces.IASCIILine):
+    pass
+
+
+class InvalidIdentifier(InvalidValue):
+    pass
+
+
+class Identifier(schema.ASCIILine):
+    """Field that enforces an ASCII only bytestring following a strict pattern.
+    """
+
+    implements(IIdentifier)
+
+    def __init__(self, pattern='', **kw):
+        self.pattern = pattern
+        super(Identifier, self).__init__(**kw)
+
+    def _validate(self, value):
+        if not value:
+            return
+
+        if not re.match(self.pattern, value):
+            raise InvalidIdentifier('Value %r does not match pattern %r' % (
+                value, self.pattern))
+
+        super(Identifier, self)._validate(value)

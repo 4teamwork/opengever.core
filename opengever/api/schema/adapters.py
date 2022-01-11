@@ -1,6 +1,8 @@
 from opengever.api.schema.schema import TYPE_TO_BE_ADDED_KEY
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.schema import IIdentifier
 from opengever.base.vocabulary import WrapperBase
+from plone.restapi.types.adapters import ASCIILineJsonSchemaProvider
 from plone.restapi.types.adapters import ChoiceJsonSchemaProvider
 from plone.restapi.types.adapters import CollectionJsonSchemaProvider
 from plone.restapi.types.adapters import ListJsonSchemaProvider
@@ -206,3 +208,14 @@ def get_source_url(field, context, request, portal_type=None, parent_field=None)
         field_name = parent_field.getName()
 
     return get_vocab_like_url('@sources', field_name, context, request)
+
+
+@adapter(IIdentifier, Interface, Interface)
+@implementer(IJsonSchemaProvider)
+class GEVERIdentifierJsonSchemaProvider(ASCIILineJsonSchemaProvider):
+
+    def additional(self):
+        return {'pattern': self.field.pattern}
+
+    def get_factory(self):
+        return 'string'
