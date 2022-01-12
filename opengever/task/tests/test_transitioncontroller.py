@@ -101,6 +101,17 @@ class TestCancelledOpenGuard(IntegrationTestCase):
         self.assertNotIn(
             translated(self.transition), browser.css('.regular_buttons a').text)
 
+    @browsing
+    def test_limited_admin_has_agency_permission(self, browser):
+        self.login(self.limited_admin, browser=browser)
+        self.set_workflow_state('task-state-cancelled', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            translated(self.transition), browser.css('.regular_buttons a').text)
+
     def test_not_available_if_dossier_is_closed(self):
         self.login(self.administrator)
 
@@ -151,6 +162,17 @@ class TestOpenCancelledGuard(IntegrationTestCase):
     @browsing
     def test_administrator_has_agency_permission(self, browser):
         self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-open', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            translated(self.transition), browser.css('.regular_buttons a').text)
+
+    @browsing
+    def test_limited_admin_has_agency_permission(self, browser):
+        self.login(self.limited_admin, browser=browser)
         self.set_workflow_state('task-state-open', self.task)
 
         browser.open(self.task, view='tabbedview_view-overview')
@@ -279,6 +301,11 @@ class TestSkipRejectedGuard(IntegrationTestCase):
 
         # issuer
         self.login(self.secretariat_user)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.seq_subtask_1))
+
+        # limited admin
+        self.login(self.limited_admin)
         self.assertIn(
             self.transition, self.get_workflow_transitions_for(self.seq_subtask_1))
 
@@ -566,6 +593,15 @@ class TestReassign(IntegrationTestCase):
 
     def test_administrator_can_reassign_tasks_in_not_final_states(self):
         self.login(self.administrator)
+        not_final_states = ['task-state-in-progress', 'task-state-open', 'task-state-planned',
+                            'task-state-rejected', 'task-state-resolved']
+
+        for state in not_final_states:
+            self.set_workflow_state(state, self.task)
+            self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+    def test_limited_admin_can_reassign_tasks_in_not_final_states(self):
+        self.login(self.limited_admin)
         not_final_states = ['task-state-in-progress', 'task-state-open', 'task-state-planned',
                             'task-state-rejected', 'task-state-resolved']
 

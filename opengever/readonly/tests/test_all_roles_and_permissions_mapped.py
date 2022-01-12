@@ -15,6 +15,7 @@ NON_WRITER_ROLES = [
     'CommitteeResponsible',
     'DossierManager',
     'Impersonator',
+    'LimitedAdmin',
     'Manager',
     'MeetingUser',
     'Member',

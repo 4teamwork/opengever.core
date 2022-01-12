@@ -623,6 +623,7 @@ Users
 - ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.foreign_contributor``: ``james.bond``
+- ``self.limited_admin``: ``maja.harzig``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
 - ``self.member_admin``: ``david.meier``

@@ -227,6 +227,13 @@ class TestConfig(IntegrationTestCase):
         self.assertTrue(browser.json.get(u'is_admin'))
 
     @browsing
+    def test_is_admin_is_true_for_limited_admins(self, browser):
+        self.login(self.limited_admin, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(browser.json.get(u'is_admin'))
+
+    @browsing
     def test_is_admin_is_false_for_regular_user(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.config_url, headers=self.api_headers)

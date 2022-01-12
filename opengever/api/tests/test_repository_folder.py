@@ -34,6 +34,19 @@ class TestRepositoryFolderPost(IntegrationTestCase):
                  u'type': u'ValidationError'}]},
             browser.json[u'additional_metadata'])
 
+    @browsing
+    def test_limited_admin_cannot_add_repository_folder(self, browser):
+        self.login(self.limited_admin, browser)
+        data = {
+            "@type": "opengever.repository.repositoryfolder",
+            "title_de": "Folder",
+            "title_fr": u"F\xf6lder",
+            "title_en": "Folder",
+        }
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(self.repository_root, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
 
 class TestRepositoryFolderPatch(IntegrationTestCase):
 
@@ -77,3 +90,33 @@ class TestRepositoryFolderPatch(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
         self.assertEqual(current_number, IReferenceNumberPrefix(
             self.empty_repofolder).reference_number_prefix)
+
+    @browsing
+    def test_limited_admin_can_patch_repository_folder(self, browser):
+        self.login(self.limited_admin, browser)
+        data = {
+            "title_de": "Ordner",
+        }
+        browser.open(self.empty_repofolder, data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(u'Ordner', self.empty_repofolder.title_de)
+
+
+class TestRepositoryFolderDelete(IntegrationTestCase):
+
+    @browsing
+    def test_administrator_can_delete_repository_folder(self, browser):
+        self.login(self.administrator, browser)
+
+        with self.observe_children(self.repository_root) as children:
+            browser.open(self.empty_repofolder, method='DELETE', headers=self.api_headers)
+        self.assertEqual(1, len(children["removed"]))
+
+    @browsing
+    def test_limited_admin_cannot_delete_repository_folder(self, browser):
+        self.login(self.limited_admin, browser)
+
+        with browser.expect_http_error(code=403, reason='Forbidden'):
+            browser.open(self.empty_repofolder, method='DELETE', headers=self.api_headers)

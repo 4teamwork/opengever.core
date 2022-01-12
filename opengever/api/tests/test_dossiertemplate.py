@@ -87,6 +87,21 @@ class TestDossierTemplatePost(IntegrationTestCase):
         self.assertItemsEqual(
             'department', IDossierTemplate(template).filing_prefix)
 
+    @browsing
+    def test_limited_admin_can_create_dossiertemplate(self, browser):
+        self.login(self.limited_admin, browser)
+        data = {
+            '@type': 'opengever.dossier.dossiertemplate',
+            'title': 'New dossier template',
+        }
+
+        with self.observe_children(self.templates) as children:
+            browser.open(self.templates, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(1, len(children['added']))
+
 
 class TestDossierTemplatePatch(IntegrationTestCase):
 
@@ -119,6 +134,18 @@ class TestDossierTemplatePatch(IntegrationTestCase):
         self.assertEqual(204, browser.status_code)
         self.assertEqual('New title', self.dossiertemplate.Title())
 
+    @browsing
+    def test_limited_admin_can_patch_dossier_template(self, browser):
+        self.login(self.limited_admin, browser)
+        self.assertEqual('Bauvorhaben klein', self.dossiertemplate.Title())
+
+        data = {'title': 'New title'}
+        browser.open(self.dossiertemplate.absolute_url(), data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('New title', self.dossiertemplate.Title())
+
 
 class TestDossierTemplateDelete(IntegrationTestCase):
 
@@ -134,6 +161,16 @@ class TestDossierTemplateDelete(IntegrationTestCase):
     @browsing
     def test_dossiertemplate_delete(self, browser):
         self.login(self.administrator, browser)
+        with self.observe_children(self.templates) as children:
+            browser.open(self.dossiertemplate.absolute_url(),
+                         method='DELETE', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(1, len(children['removed']))
+
+    @browsing
+    def test_limited_admin_can_delete_dossiertemplate(self, browser):
+        self.login(self.limited_admin, browser)
         with self.observe_children(self.templates) as children:
             browser.open(self.dossiertemplate.absolute_url(),
                          method='DELETE', headers=self.api_headers)

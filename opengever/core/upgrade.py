@@ -6,6 +6,9 @@ from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.upgrade import UpgradeStep
 from ftw.upgrade.directory.recorder import UpgradeStepRecorder
+from ftw.upgrade.helpers import update_security_for
+from ftw.upgrade.utils import SavepointIterator
+from ftw.upgrade.workflow import WorkflowSecurityUpdater
 from opengever.base.default_values import set_default_value
 from opengever.base.model import create_session
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
@@ -604,3 +607,31 @@ class DefaultValuePersister(MaintenanceJobContextManagerMixin):
             if not field:
                 return
             set_default_value(obj, obj.aq_parent, field)
+
+
+class NightlyWorkflowSecurityUpdater(MaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
+
+    def __init__(self, reindex_security):
+        self.reindex_security = reindex_security
+        super(NightlyWorkflowSecurityUpdater, self).__init__()
+
+    def update(self, changed_workflows, savepoints=1000):
+        types = self.get_suspected_types(changed_workflows)
+        objects = SavepointIterator.build(self.lookup_objects(types), savepoints)
+        for obj in objects:
+            if self.obj_has_workflow(obj, changed_workflows):
+                self.add_by_obj(obj)
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.update_security_for.__name__))
+        return MaintenanceJobType(function_dotted_name,
+                                  reindex_security=self.reindex_security)
+
+    @staticmethod
+    def update_security_for(intid, reindex_security):
+        intids = getUtility(IIntIds)
+        obj = intids.queryObject(intid)
+        update_security_for(obj, reindex_security)

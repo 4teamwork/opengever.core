@@ -92,6 +92,11 @@ class IDeploymentDirective(Interface):
         required=False,
         max_length=GROUP_ID_LENGTH)
 
+    limited_admin_group = TextLine(
+        title=u'Limited admin group',
+        required=False,
+        max_length=GROUP_ID_LENGTH)
+
     archivist_group = TextLine(
         title=u'Archivist group',
         required=False,

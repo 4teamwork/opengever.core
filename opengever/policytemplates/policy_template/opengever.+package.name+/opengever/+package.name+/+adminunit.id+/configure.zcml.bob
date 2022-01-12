@@ -75,6 +75,7 @@
                           "
       admin_unit_id="{{{adminunit.id}}}"
       administrator_group="{{{deployment.administrator_group}}}"
+      limited_admin_group="{{{deployment.limited_admin_group}}}"
       rolemanager_group="{{{deployment.rolemanager_group}}}"
       records_manager_group="{{{deployment.records_manager_group}}}"
       archivist_group="{{{deployment.archivist_group}}}"

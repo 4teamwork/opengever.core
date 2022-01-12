@@ -8,6 +8,7 @@
     <role name="CommitteeResponsible" />
     <role name="DossierManager" />
     <role name="Impersonator" />
+    <role name="LimitedAdmin" />
     <role name="MeetingUser" />
     <role name="PropertySheetsManager" />
     <role name="Publisher" />
@@ -48,6 +49,7 @@
       <role name="Contributor" />
       <role name="Editor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="WorkspaceAdmin" />
       <role name="WorkspaceMember" />
     </permission>
@@ -57,10 +59,12 @@
       <role name="Site Administrator" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.bumblebee: Revive Preview" acquire="True">
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Reader" />
     </permission>
@@ -72,11 +76,13 @@
     <permission name="opengever.api: Transfer Assignment" acquire="False">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.api: Manage Role Assignment Reports" acquire="False">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.api: Manage Groups" acquire="False">
@@ -87,6 +93,7 @@
     <!-- CMFEDITIONS -->
     <permission name="CMFEditions: Save new version" acquire="True">
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Editor" />
@@ -98,22 +105,26 @@
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.contact: Edit person" acquire="True">
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.contact: Add team" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.contact: Edit team" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <!-- DISPOSITION -->
@@ -137,11 +148,13 @@
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.document: Force Checkin" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.document: Modify archival file" acquire="True">
@@ -154,6 +167,7 @@
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.dossier: Add templatefolder" acquire="True">
@@ -164,6 +178,7 @@
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <!-- INBOX -->
@@ -182,6 +197,7 @@
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.meeting: Add CommitteeContainer" acquire="True">
@@ -192,17 +208,20 @@
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.meeting: Add Member" acquire="True">
       <role name="Manager" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.meeting: Add Sablon Template" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.meeting: Add Period" acquire="True">
@@ -252,6 +271,7 @@
     <permission name="opengever.repository: Export repository" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.repository: Unlock Reference Prefix" acquire="True">
@@ -268,12 +288,14 @@
 
     <permission name="Sharing page: Delegate Publisher role" acquire="True">
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Role Manager" />
     </permission>
 
     <permission name="Sharing page: Delegate DossierManager role" acquire="True">
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Role Manager" />
     </permission>
@@ -290,6 +312,7 @@
 
     <permission name="opengever.sharing: List Protected Objects" acquire="False">
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
       <role name="Manager" />
     </permission>
 
@@ -303,6 +326,7 @@
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.task: Edit task" acquire="True">
@@ -310,6 +334,7 @@
       <role name="Owner" />
       <role name="Contributor" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <!-- TOKENAUTH -->
@@ -325,11 +350,13 @@
     <permission name="opengever.trash: Trash content" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <permission name="opengever.trash: Untrash content" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />
+      <role name="LimitedAdmin" />
     </permission>
 
     <!-- WEBACTIONS -->

@@ -127,6 +127,17 @@ class TestTeamPost(IntegrationTestCase):
         self.assertEquals('http://nohost/plone/@teams/4', browser.headers.get('Location'))
 
     @browsing
+    def test_limited_admin_can_add_a_team(self, browser):
+        self.login(self.limited_admin, browser=browser)
+
+        url = '{}/@teams'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers,
+                     data=json.dumps(self.valid_data))
+
+        self.assertEquals(201, browser.status_code)
+        self.assertEquals('http://nohost/plone/@teams/4', browser.headers.get('Location'))
+
+    @browsing
     def test_validates_against_input(self, browser):
         self.login(self.administrator, browser=browser)
 
@@ -179,6 +190,22 @@ class TestTeamPatch(IntegrationTestCase):
     @browsing
     def test_update_a_team(self, browser):
         self.login(self.administrator, browser=browser)
+
+        url = '{}/@teams/1'.format(self.portal.absolute_url())
+        data = {'active': 'false',
+                'groupid': {'token': 'projekt_b', 'title': 'Projekt b'}}
+        browser.open(url, method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEquals(200, browser.status_code)
+
+        team = Team.get(1)
+        self.assertFalse(team.active)
+        self.assertEquals('projekt_b', team.groupid)
+
+    @browsing
+    def test_limited_admin_can_update_a_team(self, browser):
+        self.login(self.limited_admin, browser=browser)
 
         url = '{}/@teams/1'.format(self.portal.absolute_url())
         data = {'active': 'false',

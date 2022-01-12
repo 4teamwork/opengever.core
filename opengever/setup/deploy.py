@@ -215,6 +215,8 @@ class GeverDeployment(object):
         self.assign_group_to_role(self.site, self.config,
                                   'administrator_group', 'Administrator')
         self.assign_group_to_role(self.site, self.config,
+                                  'limited_admin_group', 'Administrator')
+        self.assign_group_to_role(self.site, self.config,
                                   'archivist_group', 'Archivist')
         self.assign_group_to_role(self.site, self.config,
                                   'records_manager_group', 'Records Manager')

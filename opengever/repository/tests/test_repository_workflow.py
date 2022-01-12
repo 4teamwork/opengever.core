@@ -33,6 +33,10 @@ class TestRepositoryWorkflow(IntegrationTestCase):
         browser.open(self.repository_root)
         self.assertNotIn('Export as Excel file', editbar.menu_options("Actions"))
 
+        self.login(self.limited_admin, browser)
+        browser.open(self.repository_root)
+        self.assertIn('Export as Excel file', editbar.menu_options("Actions"))
+
         self.login(self.administrator, browser)
         browser.open(self.repository_root)
         self.assertIn('Export as Excel file', editbar.menu_options("Actions"))

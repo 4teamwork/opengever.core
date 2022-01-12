@@ -26,6 +26,10 @@ class TestPrivateFolderWorkflow(IntegrationTestCase):
             self.login(self.administrator, browser=browser)
             browser.open(self.private_folder)
 
+        with self.assertRaises(Unauthorized):
+            self.login(self.limited_admin, browser=browser)
+            browser.open(self.private_folder)
+
     @browsing
     def test_owner_can_add_private_dossiers(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -35,6 +39,13 @@ class TestPrivateFolderWorkflow(IntegrationTestCase):
     @browsing
     def test_admin_cant_access_private_dossier(self, browser):
         self.login(self.administrator, browser=browser)
+
+        with self.assertRaises(Unauthorized):
+            browser.open(self.private_dossier)
+
+    @browsing
+    def test_limited_admin_cant_access_private_dossier(self, browser):
+        self.login(self.limited_admin, browser=browser)
 
         with self.assertRaises(Unauthorized):
             browser.open(self.private_dossier)

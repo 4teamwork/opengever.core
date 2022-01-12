@@ -22,6 +22,7 @@ IGNORED_QUESTIONS = {
         'deployment.rolemanager_group',
         'deployment.records_manager_group',
         'deployment.archivist_group',
+        'deployment.limited_admin_group',
         'setup.enable_activity_feature',
         'setup.enable_meeting_feature',
         'setup.enable_docproperty_feature',
@@ -221,6 +222,7 @@ def post_adminunit_id(configurator, question, answer):
         'deployment.records_manager_group': admin_group,
         'deployment.archivist_group': admin_group,
         'deployment.administrator_group': admin_group,
+        'deployment.limited_admin_group': admin_group,
         'orgunit.users_group': '{}_users'.format(answer),
         'orgunit.inbox_group': inbox_group,
         'orgunit.id': answer.lower()

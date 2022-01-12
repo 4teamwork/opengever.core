@@ -1,0 +1,193 @@
+<rolemap>
+
+  <roles>
+    <role name="LimitedAdmin" />
+  </roles>
+
+  <permissions>
+
+    <permission name="Edit lifecycle and classification" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+    </permission>
+
+    <permission name="ftw.keywordwidget: Add new term" acquire="False">
+      <role name="Manager" />
+      <role name="Site Administrator" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.bumblebee: Revive Preview" acquire="True">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+      <role name="Reader" />
+    </permission>
+
+    <permission name="opengever.api: Transfer Assignment" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.api: Manage Role Assignment Reports" acquire="False">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="CMFEditions: Save new version" acquire="True">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Editor" />
+      <role name="Reviewer" />
+    </permission>
+
+    <permission name="opengever.contact: Add person" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.contact: Edit person" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.contact: Add team" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.contact: Edit team" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.document: Add document" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.document: Force Checkin" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.dossier: Add businesscasedossier" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.dossier: Add dossiertemplate" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Proposal" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Committee" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Member" acquire="True">
+      <role name="Manager" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.meeting: Add Sablon Template" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.repository: Export repository" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="Sharing page: Delegate Publisher role" acquire="True">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
+    <permission name="Sharing page: Delegate DossierManager role" acquire="True">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+      <role name="Role Manager" />
+    </permission>
+
+    <permission name="opengever.sharing: List Protected Objects" acquire="False">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+    </permission>
+
+    <permission name="opengever.task: Add task" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.task: Edit task" acquire="True">
+      <role name="Manager" />
+      <role name="Owner" />
+      <role name="Contributor" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.trash: Trash content" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+    <permission name="opengever.trash: Untrash content" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

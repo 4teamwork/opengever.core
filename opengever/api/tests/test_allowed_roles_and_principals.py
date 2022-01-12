@@ -18,24 +18,25 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
     @browsing
     def test_get_returns_allowed_roles_and_principals(self, browser):
         self.login(self.service_user, browser)
-        browser.open(self.dossier.absolute_url() + '/@allowed-roles-and-principals',
-                     method='GET', headers={'Accept': 'application/json'})
+        url = '{}/@allowed-roles-and-principals'.format(self.dossier.absolute_url())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
-        excepted_json = {
-            u'allowed_roles_and_principals': [
-                u'principal:fa_inbox_users',
+        allowed_roles_and_principals = {
                 u'Administrator',
-                u'principal:fa_users',
-                u'principal:kathi.barfuss',
-                u'Manager',
-                u'Editor',
-                u'Reader',
                 u'Contributor',
-                u'principal:jurgen.fischer'],
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen'
-                    u'/dossier-1/@allowed-roles-and-principals'}
+                u'Editor',
+                u'LimitedAdmin',
+                u'Manager',
+                u'Reader',
+                u'principal:fa_inbox_users',
+                u'principal:fa_users',
+                u'principal:jurgen.fischer',
+                u'principal:kathi.barfuss',
+        }
 
-        self.assertEquals(excepted_json, browser.json)
+        self.assertEqual(url, browser.json['@id'])
+        self.assertEqual(allowed_roles_and_principals,
+                         set(browser.json['allowed_roles_and_principals']))
         self.assertNotIn(u'principal:robert.ziegler',
                          browser.json.get('allowed_roles_and_principals'))
 

@@ -784,6 +784,19 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             )
 
     @browsing
+    def test_limited_admin_cannot_post_propertysheets(self, browser):
+        self.login(self.limited_admin, browser)
+
+        data = {"fields": [{"name": "foo", "field_type": "text"}]}
+        with browser.expect_unauthorized():
+            browser.open(
+                view="@propertysheets/test",
+                method="POST",
+                data=json.dumps(data),
+                headers=self.api_headers,
+            )
+
+    @browsing
     def test_dynamic_defaults_require_manager_role(self, browser):
         self.login(self.propertysheets_manager, browser)
 
