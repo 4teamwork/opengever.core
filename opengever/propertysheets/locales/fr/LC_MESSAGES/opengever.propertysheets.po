@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-06 14:16+0000\n"
+"POT-Creation-Date: 2022-01-12 14:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,101 +48,106 @@ msgid "No custom properties are available."
 msgstr "Aucun champ personnalisé disponible."
 
 #. Default: "What type of content this property sheet will be available for"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_assignments"
 msgstr ""
 
 #. Default: "Default value for this field"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_default"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_description"
 msgstr ""
 
 #. Default: "Data type of this field"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_field_type"
 msgstr ""
 
 #. Default: "Fields"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_fields"
 msgstr ""
 
 #. Default: "ID of this property sheet"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_id"
 msgstr ""
 
 #. Default: "Field name (alphanumeric, lowercase)"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_name"
 msgstr ""
 
 #. Default: "Whether or not the field is required"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_required"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_title"
 msgstr ""
 
 #. Default: "List of values that are allowed for this field"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_values"
 msgstr ""
 
 #. Default: "Assignments"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_assignments"
 msgstr ""
 
 #. Default: "Default"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_default"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_description"
 msgstr ""
 
 #. Default: "Field type"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_field_type"
 msgstr ""
 
 #. Default: "Fields"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_fields"
 msgstr ""
 
 #. Default: "ID"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_id"
 msgstr ""
 
 #. Default: "Name"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_name"
 msgstr ""
 
 #. Default: "Required"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_required"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_title"
 msgstr ""
 
 #. Default: "Allowed values"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_values"
+msgstr ""
+
+#. Default: "The propertysheet form contains an error:\n ${error_string}"
+#: ./opengever/propertysheets/api/error_rendering.py
+msgid "msg_propertysheet_has_errors"
 msgstr ""

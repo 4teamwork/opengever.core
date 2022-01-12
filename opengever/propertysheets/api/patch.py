@@ -1,5 +1,6 @@
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
+from opengever.propertysheets.api.error_rendering import render_error
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.metaschema import IFieldDefinition
@@ -56,7 +57,8 @@ class PropertySheetsPatch(Service):
         if fields:
             errors = self.validate_fields(fields)
             if errors:
-                raise BadRequest(errors)
+                msg = render_error(errors)
+                raise BadRequest(msg)
 
             seen = set()
             duplicates = []
