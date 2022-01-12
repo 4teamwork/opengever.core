@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@schema``: JSON Schemas for propertysheets can now be retrieved with ``GET /@schema/virtual.propertysheet.<sheet_id>``
 - ``@propertysheet-metaschema``: New endpoint to retrieve schema for propertysheet definitions.
 
 

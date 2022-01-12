@@ -356,6 +356,48 @@ Slots nicht überschrieben.
     HTTP/1.1 204 No content
     Content-Type: application/json
 
+
+Schemas für Propertysheets
+--------------------------
+
+JSON Schemas für existierende Propertysheets können über den ``@schema`` Endpoint abgerufen werden. Dazu wird ein ``GET`` Request auf ``@schema/virtual.propertysheet.<sheet_id>`` ausgeführt, wobei ``sheet_id`` die ID / der Name des entsprechenden Sheets ist.
+
+Beispiel (für ein Sheet mit der ID ``question``)
+
+.. sourcecode:: http
+
+  GET /@schema/virtual.propertysheet.question HTTP/1.1
+  Accept: application/json
+
+.. sourcecode:: http
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json+schema
+
+  {
+      "assignments": ["IDocumentMetadata.document_type.question"],
+      "fieldsets": [
+          {
+              "behavior": "plone",
+              "fields": ["yesorno"],
+              "id": "default",
+              "title": "Default"
+          }
+      ],
+      "properties": {
+          "yesorno": {
+              "description": "yes or no",
+              "factory": "Yes/No",
+              "title": "Y/N",
+              "type": "boolean"
+          }
+      },
+      "required": ["yesorno"],
+      "title": "question",
+      "type": "object"
+  }
+
+
 Schema für Propertysheet-Definitionen
 -------------------------------------
 

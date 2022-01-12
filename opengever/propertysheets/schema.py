@@ -8,6 +8,18 @@ from zope.globalrequest import getRequest
 import json
 
 
+def get_jsonschema_for_propertysheet(sheet_id):
+    # Avoid circular import
+    from opengever.propertysheets.storage import PropertySheetSchemaStorage
+    storage = PropertySheetSchemaStorage()
+
+    schema_definition = storage.get(sheet_id)
+    if schema_definition is None:
+        raise KeyError(sheet_id)
+
+    return schema_definition.get_json_schema()
+
+
 def get_property_sheet_schema(schema_class):
     context = None
     request = getRequest()
