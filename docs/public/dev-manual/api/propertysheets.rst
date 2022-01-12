@@ -355,3 +355,242 @@ Slots nicht überschrieben.
 
     HTTP/1.1 204 No content
     Content-Type: application/json
+
+Schema für Propertysheet-Definitionen
+-------------------------------------
+
+Das JSON Schema für eine Propertysheet-Definition kann über den ``@propertysheet-metaschema`` Endpoint abgerufen werden:
+
+  .. sourcecode:: http
+
+    GET /@propertysheet-metaschema HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No content
+    Content-Type: application/json
+
+    {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "title": "Propertysheet Meta Schema",
+        "additionalProperties": false,
+        "properties": {
+            "id": {
+                "type": "string",
+                "title": "ID",
+                "maxLength": 32,
+                "description": "ID dieses Property Sheets",
+                "additionalProperties": false,
+                "pattern": "^[a-z_0-9]*$"
+            },
+            "fields": {
+                "type": "array",
+                "title": "Felder",
+                "description": "Felder",
+                "additionalProperties": false,
+                "items": {
+                    "required": [
+                        "name",
+                        "field_type"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "pattern": "^[a-z_0-9]*$",
+                            "maxLength": 32,
+                            "type": "string",
+                            "description": "Name (Alphanumerisch, nur Kleinbuchstaben)",
+                            "title": "Name"
+                        },
+                        "field_type": {
+                            "description": "Datentyp für dieses Feld",
+                            "title": "Feld-Typ",
+                            "enum": [
+                                "int",
+                                "multiple_choice",
+                                "choice",
+                                "bool",
+                                "text",
+                                "date",
+                                "textline"
+                            ],
+                            "choices": [
+                                [
+                                    "int",
+                                    "Integer"
+                                ],
+                                [
+                                    "multiple_choice",
+                                    "Multiple Choice"
+                                ],
+                                [
+                                    "choice",
+                                    "Choice"
+                                ],
+                                [
+                                    "bool",
+                                    "Yes/No"
+                                ],
+                                [
+                                    "text",
+                                    "Text"
+                                ],
+                                [
+                                    "date",
+                                    "Date"
+                                ],
+                                [
+                                    "textline",
+                                    "Text line (String)"
+                                ]
+                            ],
+                            "enumNames": [
+                                "Integer",
+                                "Multiple Choice",
+                                "Choice",
+                                "Yes/No",
+                                "Text",
+                                "Date",
+                                "Text line (String)"
+                            ],
+                            "type": "string"
+                        },
+                        "title": {
+                            "title": "Titel",
+                            "type": "string",
+                            "description": "Titel",
+                            "maxLength": 48
+                        },
+                        "description": {
+                            "title": "Beschreibung",
+                            "type": "string",
+                            "description": "Beschreibung",
+                            "maxLength": 128
+                        },
+                        "required": {
+                            "type": "boolean",
+                            "description": "Angabe, ob Benutzer dieses Feld zwingend ausfüllen müssen",
+                            "title": "Pflichtfeld"
+                        },
+                        "default": {
+                            "type": [
+                                "integer",
+                                "array",
+                                "boolean",
+                                "string"
+                            ],
+                            "description": "Default-Wert für dieses Feld",
+                            "title": "Default"
+                        },
+                        "values": {
+                            "uniqueItems": false,
+                            "items": {
+                                "title": "",
+                                "type": "string",
+                                "factory": "Text line (String)",
+                                "description": ""
+                            },
+                            "type": "array",
+                            "description": "Liste der erlaubten Werte für das Feld",
+                            "title": "Wertebereich"
+                        }
+                    }
+                },
+                "uniqueItems": false
+            },
+            "assignments": {
+                "type": "array",
+                "title": "Slots",
+                "description": "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll",
+                "additionalProperties": false,
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "IDocument.default",
+                        "IDocumentMetadata.document_type.question",
+                        "IDocumentMetadata.document_type.request",
+                        "IDocumentMetadata.document_type.report",
+                        "IDocumentMetadata.document_type.offer",
+                        "IDocumentMetadata.document_type.protocol",
+                        "IDocumentMetadata.document_type.regulations",
+                        "IDocumentMetadata.document_type.contract",
+                        "IDocumentMetadata.document_type.directive",
+                        "IDossier.default",
+                        "IDossier.dossier_type.businesscase"
+                    ],
+                    "enumNames": [
+                        "Dokument",
+                        "Dokument (Typ: Anfrage)",
+                        "Dokument (Typ: Antrag)",
+                        "Dokument (Typ: Bericht)",
+                        "Dokument (Typ: Offerte)",
+                        "Dokument (Typ: Protokoll)",
+                        "Dokument (Typ: Reglement)",
+                        "Dokument (Typ: Vertrag)",
+                        "Dokument (Typ: Weisung)",
+                        "Dossier",
+                        "Dossier (Typ: Geschäftsfall)"
+                    ],
+                    "choices": [
+                        [
+                            "IDocument.default",
+                            "Dokument"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.question",
+                            "Dokument (Typ: Anfrage)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.request",
+                            "Dokument (Typ: Antrag)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.report",
+                            "Dokument (Typ: Bericht)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.offer",
+                            "Dokument (Typ: Offerte)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.protocol",
+                            "Dokument (Typ: Protokoll)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.regulations",
+                            "Dokument (Typ: Reglement)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.contract",
+                            "Dokument (Typ: Vertrag)"
+                        ],
+                        [
+                            "IDocumentMetadata.document_type.directive",
+                            "Dokument (Typ: Weisung)"
+                        ],
+                        [
+                            "IDossier.default",
+                            "Dossier"
+                        ],
+                        [
+                            "IDossier.dossier_type.businesscase",
+                            "Dossier (Typ: Geschäftsfall)"
+                        ]
+                    ]
+                },
+                "uniqueItems": true
+            }
+        },
+        "required": [
+            "fields"
+        ],
+        "field_order": [
+            "id",
+            "fields",
+            "assignments"
+        ]
+    }
+
+
