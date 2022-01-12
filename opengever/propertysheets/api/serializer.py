@@ -37,9 +37,15 @@ class SerializePropertySheetSchemaDefinitionToJson(object):
             field['description'] = schema_field.description
             field['required'] = schema_field.required
 
-            vocab = getattr(schema_field, 'vocabulary', None)
+            vocab = None
+            if field['field_type'] == 'choice':
+                vocab = getattr(schema_field, 'vocabulary', None)
+
+            elif field['field_type'] == 'multiple_choice':
+                vocab = schema_field.value_type.vocabulary
+
             if vocab:
-                field['values'] = [t.value for t in schema_field.vocabulary]
+                field['values'] = [t.value for t in vocab]
 
             if schema_field.default:
                 field['default'] = schema_field.default
