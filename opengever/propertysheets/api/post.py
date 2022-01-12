@@ -8,9 +8,11 @@ from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
+from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
@@ -80,10 +82,9 @@ class PropertySheetsPost(Service):
         except InvalidSchemaAssignment as exc:
             raise BadRequest(exc.message)
 
-        json_schema = schema_definition.get_json_schema()
         self.request.response.setStatus(201)
-        self.content_type = "application/json+schema"
-        return json_schema
+        serializer = getMultiAdapter((schema_definition, self.request), ISerializeToJson)
+        return serializer()
 
     def validate_fields(self, fields):
         errors = []
