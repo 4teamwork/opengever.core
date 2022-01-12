@@ -45,4 +45,6 @@
       permission="opengever.propertysheets.ManagePropertySheets"
       />
 
+  <adapter factory=".serializer.SerializePropertySheetSchemaDefinitionToJson" />
+
 </configure>

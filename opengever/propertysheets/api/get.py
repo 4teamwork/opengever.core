@@ -1,6 +1,8 @@
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 
@@ -61,6 +63,5 @@ class PropertySheetsGet(Service):
                 "message": u"Sheet '{}' not found.".format(sheet_name),
             }
 
-        json_schema = schema_definition.get_json_schema()
-        self.content_type = "application/json+schema"
-        return json_schema
+        serializer = getMultiAdapter((schema_definition, self.request), ISerializeToJson)
+        return serializer()
