@@ -5,6 +5,9 @@ from tzlocal import get_localzone
 from zope import schema
 from zope.interface import implements
 from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import InvalidValue
+from zope.schema.interfaces import WrongType
+import re
 
 
 class IUTCDatetime(schema.interfaces.IDatetime):
@@ -62,3 +65,74 @@ class TableChoice(schema.Choice):
         self.vocabulary_depends_on = vocabulary_depends_on
         self.show_filter = show_filter
         super(TableChoice, self).__init__(**kwargs)
+
+
+class IMultiTypeField(schema.interfaces.IField):
+    pass
+
+
+class MultiTypeField(schema.Field):
+    """This field may be used to denominate a field that may not be of a fixed
+    type, but must be one of a list of specified types.
+
+    Currently, this is used to still produce a valid JSON schema for a field
+    like 'default', whose acceptable type depends on the actual field it
+    will contain a default value for.
+    """
+
+    implements(IMultiTypeField)
+
+    def __init__(self, allowed_types=None, **kw):
+        self.allowed_types = allowed_types
+        super(MultiTypeField, self).__init__(**kw)
+
+    @property
+    def allowed_pytypes(self):
+        for allowed_type in self.allowed_types:
+            pytype = allowed_type._type
+            if isinstance(pytype, tuple):
+                for nested_type in pytype:
+                    # schema.Int has a _type of (int, float)
+                    yield nested_type
+            else:
+                yield pytype
+
+    def _validate(self, value):
+        if not value:
+            return
+
+        if type(value) not in self.allowed_pytypes:
+            raise WrongType(
+                'Default value %r of type %r not allowed for its '
+                'field' % (value, type(value).__name__))
+
+        super(MultiTypeField, self)._validate(value)
+
+
+class IIdentifier(schema.interfaces.IASCIILine):
+    pass
+
+
+class InvalidIdentifier(InvalidValue):
+    pass
+
+
+class Identifier(schema.ASCIILine):
+    """Field that enforces an ASCII only bytestring following a strict pattern.
+    """
+
+    implements(IIdentifier)
+
+    def __init__(self, pattern='', **kw):
+        self.pattern = pattern
+        super(Identifier, self).__init__(**kw)
+
+    def _validate(self, value):
+        if not value:
+            return
+
+        if not re.match(self.pattern, value):
+            raise InvalidIdentifier('Value %r does not match pattern %r' % (
+                value, self.pattern))
+
+        super(Identifier, self)._validate(value)

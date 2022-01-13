@@ -1,45 +1,19 @@
-from opengever.api.add import get_schema_validation_errors
-from opengever.propertysheets.definition import isidentifier
+from opengever.api.validation import get_validation_errors
+from opengever.api.validation import scrub_json_payload
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
+from opengever.propertysheets.metaschema import IFieldDefinition
+from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
-from plone.supermodel import model
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
-from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implementer
-from zope.interface import provider
 from zope.publisher.interfaces import IPublishTraverse
-from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary
-
-
-@provider(IContextSourceBinder)
-def make_field_types_vocabulary(context):
-    return SimpleVocabulary.fromValues(
-        PropertySheetSchemaDefinition.FACTORIES.keys()
-    )
-
-
-class IFieldDefinition(model.Schema):
-
-    name = schema.TextLine(required=True)
-    field_type = schema.Choice(
-        required=True, source=make_field_types_vocabulary
-    )
-    title = schema.TextLine(required=False)
-    description = schema.TextLine(required=False)
-    required = schema.Bool(required=False)
-    values = schema.List(
-        default=None,
-        value_type=schema.TextLine(),
-        required=False,
-    )
 
 
 @implementer(IPublishTraverse)
@@ -67,8 +41,12 @@ class PropertySheetsPost(Service):
 
         if len(self.params) != 1:
             raise BadRequest(u"Missing parameter sheet_name.")
+
         sheet_name = self.params.pop()
-        if not isidentifier(sheet_name):
+        id_field = IPropertySheetDefinition['id']
+        try:
+            id_field.bind(sheet_name).validate(sheet_name)
+        except Exception:
             raise BadRequest(u"The name '{}' is invalid.".format(sheet_name))
 
         data = json_body(self.request)
@@ -76,21 +54,7 @@ class PropertySheetsPost(Service):
         if not fields or not isinstance(fields, list):
             raise BadRequest(u"Missing or invalid field definitions.")
 
-        errors = []
-        for field_data in fields:
-            field_errors = get_schema_validation_errors(
-                self.context, field_data, IFieldDefinition
-            )
-            if field_errors:
-                errors.extend(field_errors)
-
-            # Require Manager role for any kind of dynamic defaults
-            dynamic_defaults = PropertySheetSchemaDefinition.DYNAMIC_DEFAULT_PROPERTIES
-            if any(p in field_data for p in dynamic_defaults):
-                if not api.user.has_permission('cmf.ManagePortal'):
-                    raise Unauthorized(
-                        'Setting any dynamic defaults requires Manager role')
-
+        errors = self.validate_fields(fields)
         if errors:
             raise BadRequest(errors)
 
@@ -121,6 +85,31 @@ class PropertySheetsPost(Service):
         self.content_type = "application/json+schema"
         return json_schema
 
+    def validate_fields(self, fields):
+        errors = []
+
+        for field_data in fields:
+            # Cast JSON strings to their appropriate Python types (unicode or
+            # bytestring), depending on the schema field (ASCII or Text[Line])
+            scrub_json_payload(field_data, IFieldDefinition)
+
+            # Allowing unknown fields is necessary in order to allow managers
+            # to set dynamic defaults like `default_factory`, which currently
+            # aren't exposed in the meta schema.
+            field_errors = get_validation_errors(
+                field_data, IFieldDefinition, allow_unknown_fields=True)
+
+            if field_errors:
+                errors.extend(field_errors)
+
+            # Require Manager role for any kind of dynamic defaults
+            dynamic_defaults = PropertySheetSchemaDefinition.DYNAMIC_DEFAULT_PROPERTIES
+            if any(p in field_data for p in dynamic_defaults):
+                if not api.user.has_permission('cmf.ManagePortal'):
+                    raise Unauthorized(
+                        'Setting any dynamic defaults requires Manager role')
+        return errors
+
     def create_property_sheet(self, sheet_name, assignments, fields):
         schema_definition = PropertySheetSchemaDefinition.create(
             sheet_name, assignments=assignments
@@ -128,7 +117,7 @@ class PropertySheetsPost(Service):
         for field_data in fields:
             name = field_data["name"]
             field_type = field_data["field_type"]
-            title = field_data.get("title", name)
+            title = field_data.get("title", name.decode('ascii'))
             description = field_data.get("description", u"")
             required = field_data.get("required", False)
             values = field_data.get("values")

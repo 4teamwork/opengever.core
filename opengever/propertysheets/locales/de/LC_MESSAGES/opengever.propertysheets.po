@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-27 15:57+0000\n"
+"POT-Creation-Date: 2022-01-06 14:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,123 @@ msgstr "Benutzerdefinierte Felder"
 msgid "Custom properties contain some errors."
 msgstr "Die benutzerdefinierten Felder beinhalten Fehler."
 
+#: ./opengever/propertysheets/assignment.py
+msgid "Document"
+msgstr "Dokument"
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Document (Type: ${document_type})"
+msgstr "Dokument (Typ: ${document_type})"
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Dossier"
+msgstr "Dossier"
+
+#: ./opengever/propertysheets/assignment.py
+msgid "Dossier (Type: ${dossier_type})"
+msgstr "Dossier (Typ: ${dossier_type})"
+
 #: ./opengever/propertysheets/templates/propertysheet.pt
+#: ./opengever/propertysheets/templates/propertysheet_display.pt
 msgid "No custom properties are available."
 msgstr "Es sind keine benutzerdefinierten Felder verfügbar."
+
+#. Default: "What type of content this property sheet will be available for"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_assignments"
+msgstr "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll"
+
+#. Default: "Default value for this field"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_default"
+msgstr "Default-Wert für dieses Feld"
+
+#. Default: "Description"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_description"
+msgstr "Beschreibung"
+
+#. Default: "Data type of this field"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_field_type"
+msgstr "Datentyp für dieses Feld"
+
+#. Default: "Fields"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_fields"
+msgstr "Felder"
+
+#. Default: "ID of this property sheet"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_id"
+msgstr "ID dieses Property Sheets"
+
+#. Default: "Field name (alphanumeric, lowercase)"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_name"
+msgstr "Name (Alphanumerisch, nur Kleinbuchstaben)"
+
+#. Default: "Whether or not the field is required"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_required"
+msgstr "Angabe, ob Benutzer dieses Feld zwingend ausfüllen müssen"
+
+#. Default: "Title"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_title"
+msgstr "Titel"
+
+#. Default: "List of values that are allowed for this field"
+#: ./opengever/propertysheets/api/post.py
+msgid "help_values"
+msgstr "Liste der erlaubten Werte für das Feld"
+
+#. Default: "Assignments"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_assignments"
+msgstr "Slots"
+
+#. Default: "Default"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_default"
+msgstr "Default"
+
+#. Default: "Description"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_description"
+msgstr "Beschreibung"
+
+#. Default: "Field type"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_field_type"
+msgstr "Feld-Typ"
+
+#. Default: "Fields"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_fields"
+msgstr "Felder"
+
+#. Default: "ID"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_id"
+msgstr "ID"
+
+#. Default: "Name"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_name"
+msgstr "Name"
+
+#. Default: "Required"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_required"
+msgstr "Pflichtfeld"
+
+#. Default: "Title"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_title"
+msgstr "Titel"
+
+#. Default: "Allowed values"
+#: ./opengever/propertysheets/api/post.py
+msgid "label_values"
+msgstr "Wertebereich"

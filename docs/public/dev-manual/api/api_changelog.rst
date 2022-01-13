@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@propertysheet-metaschema``: New endpoint to retrieve schema for propertysheet definitions.
 
 
 2022.1.0 (2022-01-04)
