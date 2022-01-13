@@ -1,7 +1,4 @@
 from opengever.propertysheets.api.base import PropertySheetLocator
-from opengever.propertysheets.storage import PropertySheetSchemaStorage
-from plone.restapi.interfaces import ISerializeToJson
-from zope.component import getMultiAdapter
 
 
 class PropertySheetsGet(PropertySheetLocator):
@@ -25,22 +22,15 @@ class PropertySheetsGet(PropertySheetLocator):
 
         if sheet_definition is not None:
             # Get sheet by id
-            serializer = getMultiAdapter(
-                (sheet_definition, self.request),
-                ISerializeToJson,
-            )
-            return serializer()
-
+            return self.serialize(sheet_definition)
         else:
             # List all sheets
             return self.list()
 
     def list(self):
-        storage = PropertySheetSchemaStorage()
-
         base_url = "{}/@propertysheets".format(self.context.absolute_url())
         result = {"@id": base_url, "items": []}
-        for schema_definition in storage.list():
+        for schema_definition in self.storage.list():
             sheet_definition = {
                 "@id": "{}/{}".format(base_url, schema_definition.name),
                 "@type": "virtual.propertysheet",

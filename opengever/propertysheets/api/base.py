@@ -1,14 +1,32 @@
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 
 
+class PropertySheetAPIBase(object):
+    """Base class for @propertysheets API endpoints.
+    """
+
+    @property
+    def storage(self):
+        return PropertySheetSchemaStorage()
+
+    def serialize(self, sheet_definition):
+        serializer = getMultiAdapter(
+            (sheet_definition, self.request),
+            ISerializeToJson,
+        )
+        return serializer()
+
+
 @implementer(IPublishTraverse)
-class PropertySheetLocator(Service):
+class PropertySheetLocator(PropertySheetAPIBase, Service):
     """Locates a propertysheet definition by its sheet_id.
 
     This is a Service base class for all services that need to look up a

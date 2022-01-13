@@ -4,14 +4,11 @@ from opengever.propertysheets.api.base import PropertySheetLocator
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.metaschema import IFieldDefinition
-from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
-from plone.restapi.interfaces import ISerializeToJson
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
-from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 
 
@@ -27,11 +24,6 @@ class PropertySheetsPost(PropertySheetLocator):
     """
 
     sheet_id_required = True
-
-    def __init__(self, context, request):
-        super(PropertySheetsPost, self).__init__(context, request)
-        self.params = []
-        self.storage = PropertySheetSchemaStorage()
 
     def reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
@@ -70,11 +62,7 @@ class PropertySheetsPost(PropertySheetLocator):
             raise BadRequest(exc.message)
 
         self.request.response.setStatus(201)
-        serializer = getMultiAdapter(
-            (schema_definition, self.request),
-            ISerializeToJson,
-        )
-        return serializer()
+        return self.serialize(schema_definition)
 
     def validate_fields(self, fields):
         errors = []
