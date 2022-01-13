@@ -45,6 +45,15 @@
       permission="opengever.propertysheets.ManagePropertySheets"
       />
 
+  <plone:service
+      method="PATCH"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".patch.PropertySheetsPatch"
+      name="@propertysheets"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="opengever.propertysheets.ManagePropertySheets"
+      />
+
   <adapter factory=".definition_serializer.SerializePropertySheetSchemaDefinitionToJson" />
 
 </configure>

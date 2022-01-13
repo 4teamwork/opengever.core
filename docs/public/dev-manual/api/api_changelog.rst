@@ -13,6 +13,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@propertysheets``: Add PATCH support.
 - ``@propertysheets``: Add ``id`` and ``@type`` to sheet listing.
 - ``@schema``: JSON Schemas for propertysheets can now be retrieved with ``GET /@schema/virtual.propertysheet.<sheet_id>``
 - ``@propertysheet-metaschema``: New endpoint to retrieve schema for propertysheet definitions.
