@@ -222,7 +222,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Sheet 'idonotexist' not found.",
+                u"message": u"Resource not found: http://nohost/plone/@propertysheets/idonotexist",
                 "type": "NotFound",
             },
             browser.json,
@@ -241,7 +241,9 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Must supply either zero or one parameters.",
+                u"message": u"Must supply either exactly one {sheet_id} path "
+                            u"parameter to fetch a specific property sheet, "
+                            u"or no parameter for a listing of all property sheets.",
                 "type": "BadRequest",
             },
             browser.json,

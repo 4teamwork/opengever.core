@@ -1,25 +1,21 @@
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
+from opengever.propertysheets.api.base import PropertySheetLocator
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.metaschema import IFieldDefinition
-from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
-from zope.interface import implementer
-from zope.publisher.interfaces import IPublishTraverse
 
 
-@implementer(IPublishTraverse)
-class PropertySheetsPost(Service):
+class PropertySheetsPost(PropertySheetLocator):
     """
     Add new property sheets or replace existing ones.
 
@@ -29,29 +25,20 @@ class PropertySheetsPost(Service):
         "assignments": ["IDocumentMetadata.document_type.question"]
     }
     """
+
+    sheet_id_required = True
+
     def __init__(self, context, request):
         super(PropertySheetsPost, self).__init__(context, request)
         self.params = []
         self.storage = PropertySheetSchemaStorage()
 
-    def publishTraverse(self, request, name):
-        self.params.append(name)
-        return self
-
     def reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        if len(self.params) != 1:
-            raise BadRequest(u"Missing parameter sheet_name.")
-
-        sheet_name = self.params.pop()
-        id_field = IPropertySheetDefinition['id']
-        try:
-            id_field.bind(sheet_name).validate(sheet_name)
-        except Exception:
-            raise BadRequest(u"The name '{}' is invalid.".format(sheet_name))
-
+        sheet_id = self.get_sheet_id()
         data = json_body(self.request)
+
         fields = data.get("fields")
         if not fields or not isinstance(fields, list):
             raise BadRequest(u"Missing or invalid field definitions.")
@@ -77,7 +64,7 @@ class PropertySheetsPost(Service):
 
         try:
             schema_definition = self.create_property_sheet(
-                sheet_name, assignments, fields
+                sheet_id, assignments, fields
             )
         except InvalidSchemaAssignment as exc:
             raise BadRequest(exc.message)

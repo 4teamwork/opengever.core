@@ -53,7 +53,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u'Missing parameter sheet_name.',
+                u"message": u"Must supply exactly one {sheet_id} path parameter.",
                 u"type": u"BadRequest",
             },
             browser.json,
