@@ -39,9 +39,21 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             {
                 u"@id": u"http://nohost/plone/@propertysheets",
                 u"items": [
-                    {u"@id": u"http://nohost/plone/@propertysheets/schema2"},
-                    {u"@id": u"http://nohost/plone/@propertysheets/schema1"},
-                    {u"@id": u"http://nohost/plone/@propertysheets/dossier_default"},
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/schema2",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "schema2",
+                    },
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/schema1",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "schema1",
+                    },
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/dossier_default",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "dossier_default",
+                    },
                 ],
             },
             browser.json,

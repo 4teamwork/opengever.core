@@ -46,7 +46,9 @@ class PropertySheetsGet(Service):
         result = {"@id": base_url, "items": []}
         for schema_definition in storage.list():
             sheet_definition = {
-                "@id": "{}/{}".format(base_url, schema_definition.name)
+                "@id": "{}/{}".format(base_url, schema_definition.name),
+                "@type": "virtual.propertysheet",
+                "id": schema_definition.name,
             }
             result["items"].append(sheet_definition)
         return result
