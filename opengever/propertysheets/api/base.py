@@ -1,9 +1,15 @@
+from opengever.api.validation import get_validation_errors
+from opengever.api.validation import scrub_json_payload
+from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
@@ -91,3 +97,63 @@ class PropertySheetLocator(PropertySheetAPIBase, Service):
                 raise NotFound
 
             return definition
+
+
+class PropertySheetWriter(PropertySheetLocator):
+    """Base class for @propertysheets endpoints that create or modify sheets.
+    """
+
+    def validate_fields(self, fields):
+        errors = []
+
+        for field_data in fields:
+            # Cast JSON strings to their appropriate Python types (unicode or
+            # bytestring), depending on the schema field (ASCII or Text[Line])
+            scrub_json_payload(field_data, IFieldDefinition)
+
+            # Allowing unknown fields is necessary in order to allow managers
+            # to set dynamic defaults like `default_factory`, which currently
+            # aren't exposed in the meta schema.
+            field_errors = get_validation_errors(
+                field_data, IFieldDefinition, allow_unknown_fields=True)
+
+            if field_errors:
+                errors.extend(field_errors)
+
+            # Require Manager role for any kind of dynamic defaults
+            dynamic_defaults = PropertySheetSchemaDefinition.DYNAMIC_DEFAULT_PROPERTIES
+            if any(p in field_data for p in dynamic_defaults):
+                if not api.user.has_permission('cmf.ManagePortal'):
+                    raise Unauthorized(
+                        'Setting any dynamic defaults requires Manager role')
+        return errors
+
+    def create_property_sheet(self, sheet_id, assignments, fields):
+        schema_definition = PropertySheetSchemaDefinition.create(
+            sheet_id,
+            assignments=assignments,
+        )
+
+        for field_data in fields:
+
+            name = field_data['name']
+            field_type = field_data['field_type']
+            title = field_data.get('title', name.decode('ascii'))
+            description = field_data.get('description', u'')
+            required = field_data.get('required', False)
+
+            kwargs = {
+                'values': field_data.get('values'),
+                'default': field_data.get('default'),
+                'default_factory': field_data.get('default_factory'),
+                'default_expression': field_data.get('default_expression'),
+                'default_from_member': field_data.get('default_from_member'),
+            }
+
+            schema_definition.add_field(
+                field_type, name, title, description, required,
+                **kwargs
+            )
+
+        self.storage.save(schema_definition)
+        return self.storage.get(sheet_id)
