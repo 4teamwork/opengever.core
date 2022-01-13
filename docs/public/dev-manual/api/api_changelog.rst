@@ -5,8 +5,10 @@ API Changelog
 
 2022.2.0 (unreleased)
 ----------------------
+
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@propertysheets/<sheet_id>``: GET and POST responses now return the same JSON format as accepted by POST as input, not the JSON schemas anymore. The JSON schemas can now be retrieved from the ``@schema`` endpoint (see change below).
 
 
 Other Changes

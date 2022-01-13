@@ -32,7 +32,7 @@ Eine Liste aller bestehender Property Sheets:
   GET /@propertysheets HTTP/1.1
 
 
-Schema eines Property Sheets:
+Auslesen der Definition eines Property Sheets:
 
 .. sourcecode:: http
 
@@ -128,26 +128,19 @@ ist im Moment nicht unterstützt.
   Location: /@propertysheets/question
 
   {
-      "assignments": ["IDocumentMetadata.document_type.question"],
-      "fieldsets": [
+      "assignments": [
+          "IDocumentMetadata.document_type.question"
+      ],
+      "fields": [
           {
-              "behavior": "plone",
-              "fields": ["yesorno"],
-              "id": "default",
-              "title": "Default"
+              "description": "yes or no",
+              "field_type": "bool",
+              "name": "yesorno",
+              "required": true,
+              "title": "Y/N"
           }
       ],
-      "properties": {
-          "yesorno": {
-              "description": "yes or no",
-              "factory": "Yes/No",
-              "title": "Y/N",
-              "type": "boolean"
-          }
-      },
-      "required": ["yesorno"],
-      "title": "question",
-      "type": "object"
+      "id": "question"
   }
 
 .. _propertysheet-default-values:
