@@ -5,12 +5,16 @@ API Changelog
 
 2022.2.0 (unreleased)
 ----------------------
+
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@propertysheets/<sheet_id>``: GET and POST responses now return the same JSON format as accepted by POST as input, not the JSON schemas anymore. The JSON schemas can now be retrieved from the ``@schema`` endpoint (see change below).
 
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@propertysheets``: Add ``id`` and ``@type`` to sheet listing.
+- ``@schema``: JSON Schemas for propertysheets can now be retrieved with ``GET /@schema/virtual.propertysheet.<sheet_id>``
 - ``@propertysheet-metaschema``: New endpoint to retrieve schema for propertysheet definitions.
 
 

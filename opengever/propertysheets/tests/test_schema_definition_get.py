@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from jsonschema import Draft4Validator
 from opengever.propertysheets.exportimport import dottedname
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.testing import dummy_default_factory_fr
@@ -40,9 +39,21 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             {
                 u"@id": u"http://nohost/plone/@propertysheets",
                 u"items": [
-                    {u"@id": u"http://nohost/plone/@propertysheets/schema2"},
-                    {u"@id": u"http://nohost/plone/@propertysheets/schema1"},
-                    {u"@id": u"http://nohost/plone/@propertysheets/dossier_default"},
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/schema2",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "schema2",
+                    },
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/schema1",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "schema1",
+                    },
+                    {
+                        u"@id": u"http://nohost/plone/@propertysheets/dossier_default",
+                        u"@type": "virtual.propertysheet",
+                        u"id": "dossier_default",
+                    },
                 ],
             },
             browser.json,
@@ -72,42 +83,28 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
         self.assertEqual(
             {
                 u"assignments": [u"IDocumentMetadata.document_type.question"],
-                u"fieldsets": [
+                u"fields": [
                     {
-                        u"behavior": u"plone",
-                        u"fields": [u"yesorno", u"chooseone"],
-                        u"id": u"default",
-                        u"title": u"Default",
-                    }
-                ],
-                u"properties": {
-                    u"chooseone": {
-                        u"choices": [
-                            [u"one", u"one"],
-                            [u"two", u"two"],
-                            [u"three", u"three"],
-                        ],
                         u"description": u"",
-                        u"enum": [u"one", u"two", u"three"],
-                        u"enumNames": [u"one", u"two", u"three"],
-                        u"factory": u"Choice",
-                        u"title": u"choose",
-                        u"type": u"string",
-                    },
-                    u"yesorno": {
-                        u"description": u"",
-                        u"factory": u"Yes/No",
+                        u"field_type": u"bool",
+                        u"name": u"yesorno",
+                        u"required": False,
                         u"title": u"y/n",
-                        u"type": u"boolean",
                     },
-                },
-                u"title": u"schema",
-                u"type": u"object",
+                    {
+                        u"description": u"",
+                        u"field_type": u"choice",
+                        u"name": u"chooseone",
+                        u"required": False,
+                        u"title": u"choose",
+                        u"values": [u"one", u"two", u"three"],
+                    },
+                ],
+                u"id": u"schema",
             },
             browser.json,
         )
-        self.assertEqual("application/json+schema", browser.mimetype)
-        Draft4Validator.check_schema(browser.json)
+        self.assertEqual("application/json", browser.mimetype)
 
     @browsing
     def test_property_sheet_schema_definition_get_field_with_static_default(self, browser):
@@ -128,8 +125,8 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             headers=self.api_headers,
         )
 
-        prop = browser.json['properties']['language']
-        self.assertEqual(u'fr', prop['default'])
+        field = browser.json['fields'][0]
+        self.assertEqual(u'fr', field['default'])
 
     @browsing
     def test_property_sheet_schema_definition_get_field_with_default_factory(self, browser):
@@ -151,11 +148,11 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             headers=self.api_headers,
         )
 
-        prop = browser.json['properties']['language']
-        self.assertEqual(u'fr', prop['default'])
+        field = browser.json['fields'][0]
+        self.assertNotIn('default', field)
         self.assertEqual(
             dottedname(dummy_default_factory_fr),
-            prop['default_factory'])
+            field['default_factory'])
 
     @browsing
     def test_property_sheet_schema_definition_get_field_with_default_expression(self, browser):
@@ -177,11 +174,11 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             headers=self.api_headers,
         )
 
-        prop = browser.json['properties']['language']
-        self.assertEqual(u'en', prop['default'])
+        field = browser.json['fields'][0]
+        self.assertNotIn('default', field)
         self.assertEqual(
             'portal/language',
-            prop['default_expression'])
+            field['default_expression'])
 
     @browsing
     def test_property_sheet_schema_definition_get_field_with_default_from_member(self, browser):
@@ -206,11 +203,11 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             headers=self.api_headers,
         )
 
-        prop = browser.json['properties']['location']
-        self.assertEqual(u'CH', prop['default'])
+        field = browser.json['fields'][0]
+        self.assertNotIn('default', field)
         self.assertEqual(
             {'property': 'location'},
-            prop['default_from_member'])
+            field['default_from_member'])
 
     @browsing
     def test_property_sheet_schema_definition_get_404(self, browser):

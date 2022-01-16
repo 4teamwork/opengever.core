@@ -1,4 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from jsonschema import Draft4Validator
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -130,6 +133,34 @@ class TestSchemaEndpoint(IntegrationTestCase):
         fieldset = self._get_schema_fieldset(response, "classification")
         self.assertNotIn('classification', fieldset['fields'])
         self.assertNotIn('privacy_layer', fieldset['fields'])
+
+    @browsing
+    def test_schema_endpoint_returns_jsonschema_for_propertysheets(self, browser):
+        """This just tests that the @schema endpoint returns JSON schemas
+        for propertysheets at all.
+
+        Detailed tests for how the JSON schemas are constructed for complex
+        sheets can be found in opengever.propertysheets.tests.test_schema
+        """
+        self.login(self.regular_user, browser)
+
+        sheet_id = 'example'
+        sheet = create(
+            Builder("property_sheet_schema")
+            .named(sheet_id)
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("int", u"number", u"A number", u"", True)
+        )
+
+        browser.open(
+            view='@schema/virtual.propertysheet.%s' % sheet_id,
+            method='GET',
+            headers=self.api_headers,
+        )
+
+        json_schema = sheet.get_json_schema()
+        Draft4Validator.check_schema(json_schema)
+        self.assertEqual(browser.json, json_schema)
 
     def _get_schema_fieldset(self, schema, name):
         for item in schema['fieldsets']:

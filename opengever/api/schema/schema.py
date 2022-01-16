@@ -1,3 +1,4 @@
+from opengever.propertysheets.schema import get_jsonschema_for_propertysheet
 from plone.restapi.services import Service
 from plone.restapi.services.types.get import check_security
 from plone.restapi.types.utils import get_jsonschema_for_portal_type
@@ -44,7 +45,12 @@ class GEVERSchemaGet(Service):
 
         check_security(self.context)
         self.content_type = "application/json+schema"
+
         try:
+            if portal_type.startswith('virtual.'):
+                return self.get_jsonschema_for_virtal_type(
+                    portal_type, self.context, self.request)
+
             return get_jsonschema_for_portal_type(
                 portal_type, self.context, self.request
             )
@@ -55,3 +61,10 @@ class GEVERSchemaGet(Service):
                 "type": "NotFound",
                 "message": 'Type "{}" could not be found.'.format(portal_type),
             }
+
+    def get_jsonschema_for_virtal_type(self, portal_type, context, request):
+        if portal_type.startswith('virtual.propertysheet.'):
+            sheet_id = portal_type.split('virtual.propertysheet.')[-1]
+            return get_jsonschema_for_propertysheet(sheet_id)
+
+        raise KeyError(portal_type)

@@ -71,30 +71,21 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertEqual(
             {
-                u"assignments": [u"IDocumentMetadata.document_type.question"],
-                u"fieldsets": [
+                u"id": u"question",
+                u"fields": [
                     {
-                        u"behavior": u"plone",
-                        u"fields": [u"foo"],
-                        u"id": u"default",
-                        u"title": u"Default",
-                    }
-                ],
-                u"properties": {
-                    u"foo": {
                         u"description": u"yes or no",
-                        u"factory": u"Yes/No",
+                        u"field_type": u"bool",
+                        u"name": u"foo",
+                        u"required": True,
                         u"title": u"Y/N",
-                        u"type": u"boolean",
                     },
-                },
-                u"required": [u"foo"],
-                u"title": u"question",
-                u"type": u"object",
+                ],
+                u"assignments": [u"IDocumentMetadata.document_type.question"],
             },
             browser.json,
         )
-        self.assertEqual("application/json+schema", browser.mimetype)
+        self.assertEqual("application/json", browser.mimetype)
 
         storage = PropertySheetSchemaStorage()
         self.assertEqual(4, len(storage))
