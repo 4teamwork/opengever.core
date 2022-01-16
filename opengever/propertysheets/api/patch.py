@@ -1,4 +1,5 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
+from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -37,10 +38,13 @@ class PropertySheetsPatch(PropertySheetWriter):
         if 'id' in data and data['id'] != sheet_id:
             raise BadRequest("The 'id' of an existing sheet must not be changed.")
 
+        existing_dynamic_defaults = self.get_existing_dynamic_defaults(
+            sheet_definition)
+
         fields = data.get("fields")
 
         if fields:
-            errors = self.validate_fields(fields)
+            errors = self.validate_fields(fields, existing_dynamic_defaults)
             if errors:
                 raise BadRequest(errors)
 
@@ -85,3 +89,20 @@ class PropertySheetsPatch(PropertySheetWriter):
 
         self.request.response.setStatus(200)
         return self.serialize(new_definition)
+
+    def get_existing_dynamic_defaults(self, sheet_definition):
+        sheet = self.serialize(sheet_definition)
+        dynamic_default_types = PSDefinition.DYNAMIC_DEFAULT_PROPERTIES
+        existing_dynamic_defaults = []
+
+        for field in sheet.get('fields', []):
+            for dynamic_default_type in dynamic_default_types:
+                if field.get(dynamic_default_type) is not None:
+                    existing = (
+                        field['name'],
+                        dynamic_default_type,
+                        field.get(dynamic_default_type),
+                    )
+                    existing_dynamic_defaults.append(existing)
+
+        return existing_dynamic_defaults

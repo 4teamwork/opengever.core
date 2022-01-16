@@ -1,6 +1,6 @@
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
-from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
 from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
@@ -103,7 +103,7 @@ class PropertySheetWriter(PropertySheetLocator):
     """Base class for @propertysheets endpoints that create or modify sheets.
     """
 
-    def validate_fields(self, fields):
+    def validate_fields(self, fields, existing_dynamic_defaults=()):
         errors = []
 
         for field_data in fields:
@@ -120,16 +120,30 @@ class PropertySheetWriter(PropertySheetLocator):
             if field_errors:
                 errors.extend(field_errors)
 
-            # Require Manager role for any kind of dynamic defaults
-            dynamic_defaults = PropertySheetSchemaDefinition.DYNAMIC_DEFAULT_PROPERTIES
-            if any(p in field_data for p in dynamic_defaults):
+            self.validate_dynamic_defaults(field_data, existing_dynamic_defaults)
+
+        return errors
+
+    def validate_dynamic_defaults(self, field_data, existing_dynamic_defaults):
+        """Require Manager role for any kind of dynamic defaults, unless
+        it's a PATCH request and they already existed and didn't get modified.
+        """
+        dynamic_default_types = PSDefinition.DYNAMIC_DEFAULT_PROPERTIES
+
+        for name, value in field_data.items():
+            if name not in dynamic_default_types:
+                continue
+            if (field_data['name'], name, value) in existing_dynamic_defaults:
+                # Existing dynamic default that is left unchanged - allowed
+                continue
+            else:
+                # New or modified dynamic default - managers only
                 if not api.user.has_permission('cmf.ManagePortal'):
                     raise Unauthorized(
                         'Setting any dynamic defaults requires Manager role')
-        return errors
 
     def create_property_sheet(self, sheet_id, assignments, fields):
-        schema_definition = PropertySheetSchemaDefinition.create(
+        schema_definition = PSDefinition.create(
             sheet_id,
             assignments=assignments,
         )

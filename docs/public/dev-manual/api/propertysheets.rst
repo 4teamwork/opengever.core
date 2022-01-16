@@ -63,8 +63,7 @@ Löschen eines bestehenden Property Sheets:
 Neue Property Sheets erstellen
 ------------------------------
 
-Neue Property Sheets können mittels POST Request hinzugefügt werden. Im Moment
-sind keine Inkrementellen Updates der Sheets mittels ``PATCH`` unterstützt.
+Neue Property Sheets können mittels POST Request hinzugefügt werden.
 Ein Sheet kann immer nur als gesamte Einheit gespeichert werden. Existiert
 schon ein Sheet mit dem verwendeten Namen, so wird dieses überschrieben.
 
@@ -320,6 +319,8 @@ Beispiel für einen PATCH-Request:
   }
 
 (Die Response auf PATCH Requests enthält die komplette, neue Definition des Propertysheets.)
+
+Das Ändern von :ref:`dynamischen Defaults <propertysheet-default-values>` ist nur für Benutzer mit der ``Manager``-Rolle erlaubt. Wenn jedoch ein dynamischer default für ein Feld bereits existiert, dann kann dieser in einem PATCH request auch von einem Benutzer mit der Rolle ``PropertySheetsManager`` mitgeschickt werden (um ihn zu erhalten), sofern der dynamische Default nicht geändert wird.
 
 
 Serialisierung/Deserialisierung von Custom Properties

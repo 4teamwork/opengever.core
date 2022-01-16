@@ -1,5 +1,8 @@
 from copy import deepcopy
 from ftw.testbrowser import browsing
+from opengever.propertysheets.exportimport import dottedname
+from opengever.propertysheets.testing import dummy_default_factory_42
+from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing import IntegrationTestCase
 import json
 import transaction
@@ -143,6 +146,83 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
             },
             browser.json,
         )
+
+    @browsing
+    def test_can_patch_definition_with_dynamic_defaults(self, browser):
+        """Test that even non-Managers can PATCH property sheet definitions
+        that contain dynamic defaults, as long as the dynamic defaults
+        already existed and don't get modified.
+        """
+        self.login(self.manager, browser)
+        # Create a sheet definition with a dynamic default (as manager)
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"ja oder nein",
+                    "default_factory": dottedname(dummy_default_factory_true),
+                },
+            ],
+            "assignments": ["IDocument.default"],
+        }
+
+        browser.open(
+            view="@propertysheets/question",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        # Now login as a regular PropertySheetsManager, and patch field title
+        self.login(self.propertysheets_manager, browser)
+
+        patch_data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "field_type": u"bool",
+                    "title": u"My new title",
+                    "default_factory": dottedname(dummy_default_factory_true),
+                },
+            ],
+            "assignments": ["IDocument.default"],
+        }
+
+        browser.open(
+            view="@propertysheets/question",
+            method="PATCH",
+            data=json.dumps(patch_data),
+            headers=self.api_headers,
+        )
+        self.assertEquals({
+            u'id': u'question',
+            u'assignments': [u'IDocument.default'],
+            u'fields': [{
+                u'default_factory': dottedname(dummy_default_factory_true),
+                u'description': u'',
+                u'field_type': u'bool',
+                u'name': u'yn',
+                u'required': False,
+                u'title': u'My new title',
+            }],
+        }, browser.json)
+
+        # Changing the dynamic default is not allowed though
+        patch_data['fields'][0]['default_factory'] = dottedname(
+            dummy_default_factory_42)
+
+        with browser.expect_http_error(401):
+            browser.open(
+                view="@propertysheets/question",
+                method="PATCH",
+                data=json.dumps(patch_data),
+                headers=self.api_headers,
+            )
+        self.assertEqual({
+            u'message': u'Setting any dynamic defaults requires Manager role',
+            u'type': u'Unauthorized',
+            }, browser.json)
 
     @unittest.expectedFailure
     @browsing
