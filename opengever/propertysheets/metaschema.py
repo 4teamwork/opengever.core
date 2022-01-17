@@ -35,7 +35,8 @@ class IFieldDefinition(model.Schema):
 
     name = Identifier(
         title=_(u'label_name', default=u'Name'),
-        description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
+        description=_(u'help_name', default=u'Field name (alphanumeric, lowercase, '
+                                            u'no special characters)'),
         required=True,
         max_length=32,
         pattern='^[a-z_0-9]*$',
@@ -124,7 +125,8 @@ class IPropertySheetDefinition(model.Schema):
 
     id = Identifier(
         title=_(u'label_id', default=u'ID'),
-        description=_(u'help_id', default=u'ID of this property sheet'),
+        description=_(u'help_id', default=u'ID of this property sheet (alphanumeric, '
+                                          u'lowercase, no special characters)'),
         required=False,
         max_length=32,
         pattern='^[a-z_0-9]*$',

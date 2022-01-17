@@ -30,7 +30,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         id_schema = {
             u"additionalProperties": False,
-            u"description": u"ID of this property sheet",
+            u"description": u"ID of this property sheet (alphanumeric, "
+                            u"lowercase, no special characters)",
             u'maxLength': 32,
             u"pattern": u"^[a-z_0-9]*$",
             u"title": u"ID",
@@ -86,7 +87,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                         u"type": u"string",
                     },
                     u"name": {
-                        u"description": u"Field name (alphanumeric, lowercase)",
+                        u"description": u"Field name (alphanumeric, lowercase, "
+                                        u"no special characters)",
                         u'maxLength': 32,
                         u"pattern": u"^[a-z_0-9]*$",
                         u"title": u"Name",
@@ -380,7 +382,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'ID dieses Property Sheets',
+                u'ID dieses Property Sheets (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)',
                 u'Felder',
                 u'F\xfcr welche Arten von Inhalten dieses Property Sheet verf\xfcgbar sein soll',
             ],
@@ -390,7 +392,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
         field_properties = properties['fields']['items']['properties']
         self.assertItemsEqual(
             [
-                u'Name (Alphanumerisch, nur Kleinbuchstaben)',
+                u'Name (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)',
                 u'Datentyp f\xfcr dieses Feld',
                 u'Titel',
                 u'Beschreibung',
