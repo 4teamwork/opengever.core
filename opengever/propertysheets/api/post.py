@@ -34,24 +34,9 @@ class PropertySheetsPost(PropertySheetWriter):
 
         assignments = self.get_assignments(data)
 
-        fields = data.get("fields")
-        if not fields or not isinstance(fields, list):
+        fields = self.get_fields(data)
+        if not fields:
             raise BadRequest(u"Missing or invalid field definitions.")
-
-        errors = self.validate_fields(fields)
-        if errors:
-            raise FieldValidationError(errors)
-
-        seen = set()
-        duplicates = []
-        for name in [each["name"] for each in fields]:
-            if name in seen:
-                duplicates.append(name)
-            seen.add(name)
-        if duplicates:
-            raise BadRequest(
-                u"Duplicate fields '{}'.".format("', '".join(duplicates))
-            )
 
         try:
             schema_definition = self.create_property_sheet(

@@ -1,6 +1,5 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
-from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -50,23 +49,7 @@ class PropertySheetsPatch(PropertySheetWriter):
         existing_dynamic_defaults = self.get_existing_dynamic_defaults(
             sheet_definition)
 
-        fields = data.get("fields")
-
-        if fields:
-            errors = self.validate_fields(fields, existing_dynamic_defaults)
-            if errors:
-                raise FieldValidationError(errors)
-
-            seen = set()
-            duplicates = []
-            for name in [each["name"] for each in fields]:
-                if name in seen:
-                    duplicates.append(name)
-                seen.add(name)
-            if duplicates:
-                raise BadRequest(
-                    u"Duplicate fields '{}'.".format("', '".join(duplicates))
-                )
+        fields = self.get_fields(data, existing_dynamic_defaults)
 
         # Get existing sheet definition
         serialized_existing_definition = self.serialize(sheet_definition)

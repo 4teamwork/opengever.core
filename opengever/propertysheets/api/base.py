@@ -4,6 +4,7 @@ from opengever.propertysheets.api.error_serialization import ErrorSerializer
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
 from opengever.propertysheets.exceptions import AssignmentAlreadyInUse
 from opengever.propertysheets.exceptions import AssignmentValidationError
+from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import SheetValidationError
 from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
@@ -112,8 +113,32 @@ class PropertySheetWriter(PropertySheetLocator):
     """Base class for @propertysheets endpoints that create or modify sheets.
     """
 
+    def get_fields(self, data, existing_dynamic_defaults=()):
+        fields = data.get("fields")
+
+        if fields:
+            errors = self.validate_fields(fields, existing_dynamic_defaults)
+            if errors:
+                raise FieldValidationError(errors)
+
+            seen = set()
+            duplicates = []
+            for name in [each["name"] for each in fields]:
+                if name in seen:
+                    duplicates.append(name)
+                seen.add(name)
+            if duplicates:
+                raise BadRequest(
+                    u"Duplicate fields '{}'.".format("', '".join(duplicates))
+                )
+
+        return fields
+
     def validate_fields(self, fields, existing_dynamic_defaults=()):
         errors = []
+
+        if not isinstance(fields, list):
+            raise BadRequest(u"Missing or invalid field definitions.")
 
         for field_no, field_data in enumerate(fields):
             # Cast JSON strings to their appropriate Python types (unicode or
