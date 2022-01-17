@@ -4,6 +4,7 @@ from opengever.propertysheets.api.error_serialization import ErrorSerializer
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
 from opengever.propertysheets.exceptions import AssignmentAlreadyInUse
 from opengever.propertysheets.exceptions import AssignmentValidationError
+from opengever.propertysheets.exceptions import DuplicateField
 from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import SheetValidationError
 from opengever.propertysheets.metaschema import IFieldDefinition
@@ -121,16 +122,21 @@ class PropertySheetWriter(PropertySheetLocator):
             if errors:
                 raise FieldValidationError(errors)
 
+            # Check for duplicate fields
             seen = set()
             duplicates = []
-            for name in [each["name"] for each in fields]:
+            for field_no, field in enumerate(fields):
+                name = field['name']
                 if name in seen:
-                    duplicates.append(name)
+                    duplicates.append((field_no, name))
                 seen.add(name)
+
             if duplicates:
-                raise BadRequest(
-                    u"Duplicate fields '{}'.".format("', '".join(duplicates))
-                )
+                errors = [
+                    (field_no, name, ('name', DuplicateField(name)))
+                    for field_no, name in duplicates
+                ]
+                raise FieldValidationError(errors)
 
         return fields
 

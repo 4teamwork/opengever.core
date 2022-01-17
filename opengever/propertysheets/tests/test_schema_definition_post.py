@@ -742,8 +742,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Duplicate fields 'dupe', 'foo'.",
-                "type": "BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"The form contains errors:",
+                    u"Field 2 ('dupe'):",
+                    u"Parameter 'name': Duplicate field with this name",
+                ]),
             },
             browser.json,
         )

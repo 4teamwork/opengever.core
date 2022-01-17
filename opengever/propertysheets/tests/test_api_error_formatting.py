@@ -336,8 +336,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Duplicate fields 'myfield'.",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 2 ('myfield'):",
+                    u"Parameter 'name': Doppeltes Feld mit diesem Namen",
+                ]),
             },
             browser.json,
         )
@@ -988,8 +992,12 @@ class TestPropertysheetsAPIErrorFormattingPatch(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Duplicate fields 'myfield'.",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 2 ('myfield'):",
+                    u"Parameter 'name': Doppeltes Feld mit diesem Namen",
+                ]),
             },
             browser.json,
         )

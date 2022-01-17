@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 21:25+0000\n"
+"POT-Creation-Date: 2022-01-17 23:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,6 +41,10 @@ msgstr "Dossier"
 #: ./opengever/propertysheets/assignment.py
 msgid "Dossier (Type: ${dossier_type})"
 msgstr "Dossier (Typ: ${dossier_type})"
+
+#: ./opengever/propertysheets/exceptions.py
+msgid "Duplicate field with this name"
+msgstr "Doppeltes Feld mit diesem Namen"
 
 #: ./opengever/propertysheets/templates/propertysheet.pt
 #: ./opengever/propertysheets/templates/propertysheet_display.pt
