@@ -1,5 +1,7 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
+from opengever.propertysheets.exceptions import AssignmentValidationError
+from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -29,6 +31,12 @@ class PropertySheetsPatch(PropertySheetWriter):
     sheet_id_required = True
 
     def reply(self):
+        try:
+            return self._reply()
+        except Exception as exc:
+            return self.serialize_exception(exc)
+
+    def _reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         sheet_definition = self.locate_sheet()
@@ -38,6 +46,14 @@ class PropertySheetsPatch(PropertySheetWriter):
         if 'id' in data and data['id'] != sheet_id:
             raise BadRequest("The 'id' of an existing sheet must not be changed.")
 
+        assignments = data.get("assignments")
+        assignment_errors = self.validate_assignments(assignments, sheet=sheet_definition)
+        if assignment_errors:
+            raise AssignmentValidationError(assignment_errors)
+
+        if assignments is not None:
+            assignments = tuple(assignments)
+
         existing_dynamic_defaults = self.get_existing_dynamic_defaults(
             sheet_definition)
 
@@ -46,7 +62,7 @@ class PropertySheetsPatch(PropertySheetWriter):
         if fields:
             errors = self.validate_fields(fields, existing_dynamic_defaults)
             if errors:
-                raise BadRequest(errors)
+                raise FieldValidationError(errors)
 
             seen = set()
             duplicates = []
@@ -58,10 +74,6 @@ class PropertySheetsPatch(PropertySheetWriter):
                 raise BadRequest(
                     u"Duplicate fields '{}'.".format("', '".join(duplicates))
                 )
-
-        assignments = data.get("assignments")
-        if assignments is not None:
-            assignments = tuple(assignments)
 
         # Get existing sheet definition
         serialized_existing_definition = self.serialize(sheet_definition)

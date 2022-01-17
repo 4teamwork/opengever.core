@@ -155,7 +155,7 @@ class PropertySheetWriter(PropertySheetLocator):
                     raise Unauthorized(
                         'Setting any dynamic defaults requires Manager role')
 
-    def validate_assignments(self, assignments_data):
+    def validate_assignments(self, assignments_data, sheet=None):
         if not assignments_data:
             return
 
@@ -171,6 +171,12 @@ class PropertySheetWriter(PropertySheetLocator):
         # Validate that assignment isn't already in use
         storage = IAnnotations(self.storage.context).get(
             self.storage.ANNOTATIONS_KEY, {})
+
+        already_existing = []
+        if sheet is not None:
+            # PATCH - allow assignments that already existed
+            already_existing = sheet.assignments
+
         used_assignments = {}
         for sheet_id, definition_data in storage.items():
             for assignment in definition_data['assignments']:
@@ -178,7 +184,7 @@ class PropertySheetWriter(PropertySheetLocator):
 
         for new_assignment in assignments_data:
             in_use_by = used_assignments.get(new_assignment)
-            if in_use_by:
+            if in_use_by and new_assignment not in already_existing:
                 exc = AssignmentAlreadyInUse({
                     'assignment': new_assignment,
                     'in_use_by': in_use_by,
