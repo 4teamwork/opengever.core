@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 23:24+0000\n"
+"POT-Creation-Date: 2022-01-17 23:41+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,6 +47,10 @@ msgstr ""
 
 #: ./opengever/propertysheets/exceptions.py
 msgid "Duplicate field with this name"
+msgstr ""
+
+#: ./opengever/propertysheets/exceptions.py
+msgid "Invalid default value"
 msgstr ""
 
 #: ./opengever/propertysheets/templates/propertysheet.pt

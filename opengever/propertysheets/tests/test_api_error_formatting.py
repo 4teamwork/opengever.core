@@ -486,7 +486,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -515,7 +515,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -544,7 +544,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -573,7 +573,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -1142,7 +1142,7 @@ class TestPropertysheetsAPIErrorFormattingPatch(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -1171,7 +1171,7 @@ class TestPropertysheetsAPIErrorFormattingPatch(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -1200,7 +1200,7 @@ class TestPropertysheetsAPIErrorFormattingPatch(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,
@@ -1229,7 +1229,7 @@ class TestPropertysheetsAPIErrorFormattingPatch(IntegrationTestCase):
                 u"translated_message": "\n".join([
                     u"Das Formular enth\xe4lt Fehler:",
                     u"Feld 1 ('myfield'):",
-                    u"Ung\xfcltiger Wert",
+                    u"Ung\xfcltiger Default-Wert",
                 ]),
             },
             browser.json,

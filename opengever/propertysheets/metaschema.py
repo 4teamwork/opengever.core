@@ -4,11 +4,11 @@ from opengever.propertysheets import _
 from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exceptions import InvalidDefaultValue
 from plone.supermodel import model
 from zope import schema
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema import Choice
@@ -117,7 +117,7 @@ class IFieldDefinition(model.Schema):
         try:
             field.validate(default)
         except Exception:
-            raise Invalid('Invalid default value: %r' % default)
+            raise InvalidDefaultValue(default)
 
 
 class IPropertySheetDefinition(model.Schema):

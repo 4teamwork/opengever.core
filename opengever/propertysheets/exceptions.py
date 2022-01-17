@@ -1,5 +1,6 @@
 from opengever.propertysheets import _
 from zExceptions import BadRequest
+from zope.schema.interfaces import InvalidValue
 from zope.schema.interfaces import ValidationError
 
 
@@ -37,3 +38,7 @@ class AssignmentAlreadyInUse(BadRequest):
 
 class DuplicateField(ValidationError):
     __doc__ = _("""Duplicate field with this name""")
+
+
+class InvalidDefaultValue(InvalidValue):
+    __doc__ = _("""Invalid default value""")
