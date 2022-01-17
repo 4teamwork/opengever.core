@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-02-16 11:20+0000\n"
+"POT-Creation-Date: 2022-01-16 21:27+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -482,7 +482,7 @@ msgstr "Error"
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/browser/translated_title.py
+#: ./opengever/base/browser/role_assignment_excel_report.py
 msgid "label_title"
 msgstr "Title"
 
