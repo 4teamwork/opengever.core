@@ -1,14 +1,7 @@
-from opengever.propertysheets.storage import PropertySheetSchemaStorage
-from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.services import Service
-from zExceptions import BadRequest
-from zope.component import getMultiAdapter
-from zope.interface import implementer
-from zope.publisher.interfaces import IPublishTraverse
+from opengever.propertysheets.api.base import PropertySheetLocator
 
 
-@implementer(IPublishTraverse)
-class PropertySheetsGet(Service):
+class PropertySheetsGet(PropertySheetLocator):
     """
     Return a list of all registered sheets or the schema for a single sheet.
 
@@ -22,29 +15,22 @@ class PropertySheetsGet(Service):
     GET http://localhost:8080/fd/@propertysheets/<sheet-name> HTTP/1.1
     """
 
-    def __init__(self, context, request):
-        super(PropertySheetsGet, self).__init__(context, request)
-        self.params = []
-
-    def publishTraverse(self, request, name):
-        self.params.append(name)
-        return self
+    sheet_id_required = False
 
     def reply(self):
-        if not self.params:
-            return self.reply_list_all_sheets()
+        sheet_definition = self.locate_sheet()
 
-        elif len(self.params) == 1:
-            return self.reply_for_sheet()
+        if sheet_definition is not None:
+            # Get sheet by id
+            return self.serialize(sheet_definition)
+        else:
+            # List all sheets
+            return self.list()
 
-        raise BadRequest(u"Must supply either zero or one parameters.")
-
-    def reply_list_all_sheets(self):
-        storage = PropertySheetSchemaStorage()
-
+    def list(self):
         base_url = "{}/@propertysheets".format(self.context.absolute_url())
         result = {"@id": base_url, "items": []}
-        for schema_definition in storage.list():
+        for schema_definition in self.storage.list():
             sheet_definition = {
                 "@id": "{}/{}".format(base_url, schema_definition.name),
                 "@type": "virtual.propertysheet",
@@ -52,21 +38,3 @@ class PropertySheetsGet(Service):
             }
             result["items"].append(sheet_definition)
         return result
-
-    def reply_for_sheet(self):
-        sheet_name = self.params.pop()
-        storage = PropertySheetSchemaStorage()
-
-        schema_definition = storage.get(sheet_name)
-        if schema_definition is None:
-            self.request.response.setStatus(404)
-            return {
-                "type": "NotFound",
-                "message": u"Sheet '{}' not found.".format(sheet_name),
-            }
-
-        serializer = getMultiAdapter(
-            (schema_definition, self.request),
-            ISerializeToJson,
-        )
-        return serializer()

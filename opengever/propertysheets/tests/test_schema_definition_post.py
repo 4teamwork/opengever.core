@@ -625,7 +625,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"Missing parameter sheet_name.",
+                u"message": u"Must supply exactly one {sheet_id} path parameter.",
                 "type": "BadRequest",
             },
             browser.json,

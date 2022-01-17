@@ -39,12 +39,18 @@ Auslesen der Definition eines Property Sheets:
   GET /@propertysheets/<property_sheet_name> HTTP/1.1
 
 
-Hinzufügen eines neuen Property Sheets oder Überschreiben eines bestehenden
-Property Sheets:
+Hinzufügen eines neuen Property Sheets:
 
 .. sourcecode:: http
 
   POST /@propertysheets/<property_sheet_name> HTTP/1.1
+
+
+Mutieren eines bestehenden Property Sheets:
+
+.. sourcecode:: http
+
+  PATCH /@propertysheets/<property_sheet_name> HTTP/1.1
 
 
 Löschen eines bestehenden Property Sheets:
@@ -57,8 +63,7 @@ Löschen eines bestehenden Property Sheets:
 Neue Property Sheets erstellen
 ------------------------------
 
-Neue Property Sheets können mittels POST Request hinzugefügt werden. Im Moment
-sind keine Inkrementellen Updates der Sheets mittels ``PATCH`` unterstützt.
+Neue Property Sheets können mittels POST Request hinzugefügt werden.
 Ein Sheet kann immer nur als gesamte Einheit gespeichert werden. Existiert
 schon ein Sheet mit dem verwendeten Namen, so wird dieses überschrieben.
 
@@ -260,6 +265,62 @@ gesteuert werden, ob Rückgabewerte erlaubt sind, die nicht im Mapping vorkommen
       }
     }
 
+
+Existierende Property Sheets mutieren (PATCH)
+---------------------------------------------
+
+Existierende Property Sheets können über einen ``PATCH`` request mutiert werden. Die PATCH-Semantik besagt grundsätzlich, dass Feldwerte, welche im Request nicht mitgeschickt werden, so belassen werden wie sie sind. Für Propertysheets gilt dies für die äusserste Ebene, nicht aber für verschachtelte Ebenen.
+
+Das heisst, wenn entweder der ``assignments`` Key oder der ``fields`` Key weggelassen werden, behalten diese den vorherigen Wert. Wird aber ein ``fields`` Key mitgeschickt, und enthält weniger Felder als zuvor, werden diese fehlenden Felder *gelöscht*.
+
+Beim Aktualisieren von einzelnen Feldern muss vom Client daher immer die komplette Feld-Liste, wie sie neu aussehen soll, mitgeschickt werden.
+
+Es ist dementsprechend auch nicht möglich, ein Feld umzubenennen. Das Feld kann aber entfernt , und unter einem anderen Namen hinzugefügt werden. Dies führt aber dazu, dass Daten, welche auf Dossiers oder Dokumenten unter dem alten Feldnamen bereits erfasst wurden, verloren gehen und nicht dem neuen Feld zugeordnet sind.
+
+Beispiel für einen PATCH-Request:
+
+
+**Beispiel-Request**:
+
+.. sourcecode:: http
+
+  PATCH http://localhost:8080/fd/@propertysheets/question HTTP/1.1
+  Accept: application/json
+  Content-Type: application/json
+
+  {
+    "assignments": ["IDocument.default"]
+  }
+
+(Ändert die Assignments auf `["IDocument.default"]`. Die Felder werden so belassen wie zuvor.)
+
+
+**Beispiel-Response**:
+
+.. sourcecode:: http
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+      "assignments": [
+          "IDocument.default"
+      ],
+      "fields": [
+          {
+              "description": "yes or no",
+              "field_type": "bool",
+              "name": "yesorno",
+              "required": true,
+              "title": "Y/N"
+          }
+      ],
+      "id": "question"
+  }
+
+(Die Response auf PATCH Requests enthält die komplette, neue Definition des Propertysheets.)
+
+Das Ändern von :ref:`dynamischen Defaults <propertysheet-default-values>` ist nur für Benutzer mit der ``Manager``-Rolle erlaubt. Wenn jedoch ein dynamischer default für ein Feld bereits existiert, dann kann dieser in einem PATCH request auch von einem Benutzer mit der Rolle ``PropertySheetsManager`` mitgeschickt werden (um ihn zu erhalten), sofern der dynamische Default nicht geändert wird.
 
 
 Serialisierung/Deserialisierung von Custom Properties
