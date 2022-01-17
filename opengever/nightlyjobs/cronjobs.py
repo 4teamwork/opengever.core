@@ -2,7 +2,9 @@ from logging.handlers import TimedRotatingFileHandler
 from opengever.base.pathfinder import PathFinder
 from opengever.base.sentry import maybe_report_exception
 from opengever.core.debughelpers import all_plone_sites
+from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
+from opengever.nightlyjobs.browser.nightly_jobs_stats import get_nightly_job_stats
 from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from plone import api
@@ -47,6 +49,12 @@ def setup_logger():
     logger.addHandler(file_handler)
 
     return logger
+
+
+def log_nightly_jobs_stats(app, args):
+    logger = setup_logger()
+    setup_plone(get_first_plone_site(app))
+    logger.info(get_nightly_job_stats())
 
 
 def run_nightly_jobs_handler(app, args):
