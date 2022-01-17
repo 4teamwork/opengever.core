@@ -1,6 +1,9 @@
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
+from opengever.propertysheets.api.error_serialization import ErrorSerializer
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
+from opengever.propertysheets.exceptions import AssignmentAlreadyInUse
+from opengever.propertysheets.exceptions import SheetValidationError
 from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
@@ -10,6 +13,7 @@ from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
@@ -29,6 +33,9 @@ class PropertySheetAPIBase(object):
             ISerializeToJson,
         )
         return serializer()
+
+    def serialize_exception(self, exc):
+        return ErrorSerializer(exc, self.request)()
 
 
 @implementer(IPublishTraverse)
@@ -81,8 +88,9 @@ class PropertySheetLocator(PropertySheetAPIBase, Service):
             id_field = IPropertySheetDefinition['id']
             try:
                 id_field.bind(sheet_id).validate(sheet_id)
-            except Exception:
-                raise BadRequest(u"The name '{}' is invalid.".format(sheet_id))
+            except Exception as exc:
+                errors = [('id', exc)]
+                raise SheetValidationError(errors)
 
             return sheet_id
 
@@ -106,7 +114,7 @@ class PropertySheetWriter(PropertySheetLocator):
     def validate_fields(self, fields, existing_dynamic_defaults=()):
         errors = []
 
-        for field_data in fields:
+        for field_no, field_data in enumerate(fields):
             # Cast JSON strings to their appropriate Python types (unicode or
             # bytestring), depending on the schema field (ASCII or Text[Line])
             scrub_json_payload(field_data, IFieldDefinition)
@@ -117,8 +125,13 @@ class PropertySheetWriter(PropertySheetLocator):
             field_errors = get_validation_errors(
                 field_data, IFieldDefinition, allow_unknown_fields=True)
 
-            if field_errors:
-                errors.extend(field_errors)
+            for field_error in field_errors:
+                # Keep track of position and name of propertysheet fields
+                errors.append((
+                    field_no,
+                    field_data.get('name'),
+                    field_error,
+                ))
 
             self.validate_dynamic_defaults(field_data, existing_dynamic_defaults)
 
@@ -141,6 +154,38 @@ class PropertySheetWriter(PropertySheetLocator):
                 if not api.user.has_permission('cmf.ManagePortal'):
                     raise Unauthorized(
                         'Setting any dynamic defaults requires Manager role')
+
+    def validate_assignments(self, assignments_data):
+        if not assignments_data:
+            return
+
+        errors = []
+
+        # Validate field data
+        assignments_field = IPropertySheetDefinition['assignments']
+        try:
+            assignments_field.bind(assignments_data).validate(assignments_data)
+        except Exception as exc:
+            errors.append(exc)
+
+        # Validate that assignment isn't already in use
+        storage = IAnnotations(self.storage.context).get(
+            self.storage.ANNOTATIONS_KEY, {})
+        used_assignments = {}
+        for sheet_id, definition_data in storage.items():
+            for assignment in definition_data['assignments']:
+                used_assignments[assignment] = sheet_id
+
+        for new_assignment in assignments_data:
+            in_use_by = used_assignments.get(new_assignment)
+            if in_use_by:
+                exc = AssignmentAlreadyInUse({
+                    'assignment': new_assignment,
+                    'in_use_by': in_use_by,
+                })
+                errors.append(exc)
+
+        return errors
 
     def create_property_sheet(self, sheet_id, assignments, fields):
         schema_definition = PSDefinition.create(

@@ -55,5 +55,8 @@
       />
 
   <adapter factory=".definition_serializer.SerializePropertySheetSchemaDefinitionToJson" />
+  <adapter factory=".error_serialization.FieldValidationErrorInfos" />
+  <adapter factory=".error_serialization.AssignmentValidationErrorInfos" />
+  <adapter factory=".error_serialization.SheetValidationErrorInfos" />
 
 </configure>

@@ -1,5 +1,9 @@
+from opengever.propertysheets import _
 from opengever.propertysheets.api.base import PropertySheetWriter
+from opengever.propertysheets.exceptions import AssignmentValidationError
+from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
+from opengever.propertysheets.exceptions import SheetValidationError
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from zExceptions import BadRequest
@@ -20,10 +24,24 @@ class PropertySheetsPost(PropertySheetWriter):
     sheet_id_required = True
 
     def reply(self):
+        try:
+            return self._reply()
+        except Exception as exc:
+            return self.serialize_exception(exc)
+
+    def _reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         sheet_id = self.get_sheet_id()
         data = json_body(self.request)
+
+        assignments = data.get("assignments")
+        assignment_errors = self.validate_assignments(assignments)
+        if assignment_errors:
+            raise AssignmentValidationError(assignment_errors)
+
+        if assignments is not None:
+            assignments = tuple(assignments)
 
         fields = data.get("fields")
         if not fields or not isinstance(fields, list):
@@ -31,7 +49,7 @@ class PropertySheetsPost(PropertySheetWriter):
 
         errors = self.validate_fields(fields)
         if errors:
-            raise BadRequest(errors)
+            raise FieldValidationError(errors)
 
         seen = set()
         duplicates = []
@@ -43,10 +61,6 @@ class PropertySheetsPost(PropertySheetWriter):
             raise BadRequest(
                 u"Duplicate fields '{}'.".format("', '".join(duplicates))
             )
-
-        assignments = data.get("assignments")
-        if assignments is not None:
-            assignments = tuple(assignments)
 
         try:
             schema_definition = self.create_property_sheet(

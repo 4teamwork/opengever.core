@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 21:02+0000\n"
+"POT-Creation-Date: 2022-01-17 21:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,6 +48,11 @@ msgstr ""
 #: ./opengever/propertysheets/templates/propertysheet.pt
 #: ./opengever/propertysheets/templates/propertysheet_display.pt
 msgid "No custom properties are available."
+msgstr ""
+
+#. Default: "(Max: ${max_length} characters. Actual length: ${actual_length} characters)"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "extra_info_max_length"
 msgstr ""
 
 #. Default: "What type of content this property sheet will be available for"
@@ -148,4 +153,24 @@ msgstr ""
 #. Default: "Allowed values"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_values"
+msgstr ""
+
+#. Default: "Assignment '${assignment}' is already in use."
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_assignment_already_in_use"
+msgstr ""
+
+#. Default: "Parameter '${field_key}': "
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_field_error_prefix"
+msgstr ""
+
+#. Default: "Field ${field_no} ('${field_name}'):"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_field_location"
+msgstr ""
+
+#. Default: "The form contains errors:\n${error_string}"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_has_errors"
 msgstr ""

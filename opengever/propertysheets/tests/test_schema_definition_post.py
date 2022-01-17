@@ -507,7 +507,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                "type": "BadRequest",
+                "type": "FieldValidationError",
             },
             browser.json,
         )
@@ -565,8 +565,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The assignment 'fail' is invalid.",
-                "type": "BadRequest",
+                "type": "AssignmentValidationError",
+                u"translated_message": "\n".join([
+                    u"The form contains errors:",
+                    u"Assignments:",
+                    u"Wrong contained type",
+                ]),
             },
             browser.json,
         )
@@ -599,9 +603,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The assignment 'IDocumentMetadata.document_type."
-                            "question' is already in use.",
-                "type": "BadRequest",
+                u"type": u"AssignmentValidationError",
+                u"translated_message": "\n".join([
+                    u"The form contains errors:",
+                    u"Assignments:",
+                    u"Assignment 'IDocumentMetadata.document_type.question' is already in use.",
+                ]),
             },
             browser.json,
         )
@@ -651,8 +658,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'in-val.id' is invalid.",
-                "type": "BadRequest",
+                u"type": u"SheetValidationError",
+                u"translated_message": "\n".join([
+                    u"The form contains errors:",
+                    u"ID:",
+                    u"Invalid identifier",
+                ]),
             },
             browser.json,
         )
@@ -754,7 +765,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
             )
         self.assertDictContainsSubset(
             {
-                "type": "BadRequest",
+                "type": "FieldValidationError",
             },
             browser.json,
         )

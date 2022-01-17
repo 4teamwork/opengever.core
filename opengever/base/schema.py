@@ -1,5 +1,6 @@
 from collective.z3cform.datetimewidget.interfaces import DatetimeValidationError
 from ftw.datepicker.converter import DateTimeDataConverter
+from opengever.base import _
 from opengever.base.date_time import as_utc
 from tzlocal import get_localzone
 from zope import schema
@@ -103,7 +104,7 @@ class MultiTypeField(schema.Field):
 
         if type(value) not in self.allowed_pytypes:
             raise WrongType(
-                'Default value %r of type %r not allowed for its '
+                'Value %r of type %r not allowed for this '
                 'field' % (value, type(value).__name__))
 
         super(MultiTypeField, self)._validate(value)
@@ -114,7 +115,7 @@ class IIdentifier(schema.interfaces.IASCIILine):
 
 
 class InvalidIdentifier(InvalidValue):
-    pass
+    __doc__ = _("""Invalid identifier""")
 
 
 class Identifier(schema.ASCIILine):

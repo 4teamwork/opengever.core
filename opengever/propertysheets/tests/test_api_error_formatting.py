@@ -11,9 +11,6 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
     This is to make sure that errors are produced in a way where they
     contain enough context, and are in an appropriate format for the
     frontend to render them.
-
-    For now, this mainly "documents" what kind of error responses the
-    endpoint sends, before unifying them in a next step.
     """
 
     VALID_SAMPLE_PAYLOAD = {
@@ -27,6 +24,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
             }
         ],
         "assignments": [u"IDossier.default"],
+    }
+
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Accept-Language': 'de-ch',
     }
 
     def post_sheet(self, browser, data, sheet_id='question'):
@@ -70,8 +73,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'invalid-sheet-id-$$$-xyz' is invalid.",
-                u"type": u"BadRequest",
+                u"type": u"SheetValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"ID:",
+                    u"Ung\xfcltiger Bezeichner",
+                ]),
             },
             browser.json,
         )
@@ -87,9 +94,13 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' "
-                            u"is invalid.",
-                u"type": u"BadRequest",
+                u"type": u"SheetValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"ID:",
+                    u"Wert ist zu lang.",
+                    u"(Maximum: 32 Zeichen. Tats\xe4chliche L\xe4nge: 34 Zeichen)",
+                ]),
             },
             browser.json,
         )
@@ -105,8 +116,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The name 'import' is invalid.",
-                u"type": u"BadRequest",
+                u"type": u"SheetValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"ID:",
+                    u"Einschr\xe4nkung ist nicht erf\xfcllt",
+                ]),
             },
             browser.json,
         )
@@ -123,8 +138,58 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"The assignment 'slot-that-doesnt-exist' is invalid.",
-                u"type": u"BadRequest",
+                u"type": u"AssignmentValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Slots:",
+                    u"Falscher Typ f\xfcr Beh\xe4lterinhalt",
+                ]),
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_invalid_assignment_value_type(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = deepcopy(self.VALID_SAMPLE_PAYLOAD)
+        data['assignments'] = [42]
+
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"type": u"AssignmentValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Slots:",
+                    u"Falscher Typ f\xfcr Beh\xe4lterinhalt",
+                ]),
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_rejects_assignments_already_in_use(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = deepcopy(self.VALID_SAMPLE_PAYLOAD)
+
+        # IDossier.default is already used by a fixture object
+        data['assignments'] = [u"IDossier.default"]
+
+        with browser.expect_http_error(400):
+            self.post_sheet(browser, data)
+
+        self.assertDictContainsSubset(
+            {
+                u"type": u"AssignmentValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Slots:",
+                    u"Der Slot 'IDossier.default' ist bereits belegt.",
+                ]),
             },
             browser.json,
         )
@@ -133,7 +198,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
     def test_rejects_missing_fields(self, browser):
         self.login(self.propertysheets_manager, browser)
 
-        data = {"assignments": ["IDossier.default"]}
+        data = {"assignments": ["IDocument.default"]}
 
         with browser.expect_http_error(400):
             self.post_sheet(browser, data)
@@ -150,7 +215,7 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
     def test_rejects_empty_fields(self, browser):
         self.login(self.propertysheets_manager, browser)
 
-        data = {"assignments": ["IDossier.default"], "fields": []}
+        data = {"assignments": ["IDocument.default"], "fields": []}
 
         with browser.expect_http_error(400):
             self.post_sheet(browser, data)
@@ -181,9 +246,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('name', InvalidIdentifier(\"Value 'foo-.$$$' "
-                            u"does not match pattern '^[a-z_0-9]*$'\"))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('foo-.$$$'):",
+                    u"Parameter 'name': Ung\xfcltiger Bezeichner",
+                ]),
             },
             browser.json,
         )
@@ -206,8 +274,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('name', ConstraintNotSatisfied('import'))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('import'):",
+                    u"Parameter 'name': Einschr\xe4nkung ist nicht erf\xfcllt",
+                ]),
             },
             browser.json,
         )
@@ -230,8 +302,13 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('name', TooLong('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 32))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'):",
+                    u"Parameter 'name': Wert ist zu lang.",
+                    u"(Maximum: 32 Zeichen. Tats\xe4chliche L\xe4nge: 34 Zeichen)",
+                ]),
             },
             browser.json,
         )
@@ -283,8 +360,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('field_type', ConstraintNotSatisfied('not-a-field-type'))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Parameter 'field_type': Einschr\xe4nkung ist nicht erf\xfcllt",
+                ]),
             },
             browser.json,
         )
@@ -307,9 +388,13 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('title', TooLong(u'XXXXXXXXXXXXXXXXXXXXXXXXX"
-                            u"XXXXXXXXXXXXXXXXXXXXXXXXX', 48))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Parameter 'title': Wert ist zu lang.",
+                    u"(Maximum: 48 Zeichen. Tats\xe4chliche L\xe4nge: 50 Zeichen)",
+                ]),
             },
             browser.json,
         )
@@ -333,8 +418,13 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('description', TooLong(u'%s', 128))]" % ('X' * 130),
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Parameter 'description': Wert ist zu lang.",
+                    u"(Maximum: 128 Zeichen. Tats\xe4chliche L\xe4nge: 130 Zeichen)",
+                ]),
             },
             browser.json,
         )
@@ -358,9 +448,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('default', WrongType(\"Default value 5.5 of "
-                            u"type 'float' not allowed for its field\"))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Parameter 'default': Objekttyp ist falsch.",
+                ]),
             },
             browser.json,
         )
@@ -385,8 +478,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[(None, Invalid(\"Invalid default value: u'not-in-vocab'\",))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Ung\xfcltiger Wert",
+                ]),
             },
             browser.json,
         )
@@ -410,8 +507,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[(None, Invalid(\"Invalid default value: u'not-a-number'\",))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Ung\xfcltiger Wert",
+                ]),
             },
             browser.json,
         )
@@ -435,8 +536,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[(None, Invalid('Invalid default value: 42',))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Ung\xfcltiger Wert",
+                ]),
             },
             browser.json,
         )
@@ -460,8 +565,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[(None, Invalid(\"Invalid default value: u'not-a-date'\",))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Ung\xfcltiger Wert",
+                ]),
             },
             browser.json,
         )
@@ -536,9 +645,12 @@ class TestPropertysheetsAPIErrorFormatting(IntegrationTestCase):
 
         self.assertDictContainsSubset(
             {
-                u"message": u"[('values', WrongContainedType([WrongType(42, "
-                            u"<type 'unicode'>, '')], 'values'))]",
-                u"type": u"BadRequest",
+                u"type": u"FieldValidationError",
+                u"translated_message": "\n".join([
+                    u"Das Formular enth\xe4lt Fehler:",
+                    u"Feld 1 ('myfield'):",
+                    u"Parameter 'values': Falscher Typ f\xfcr Beh\xe4lterinhalt",
+                ]),
             },
             browser.json,
         )
