@@ -98,8 +98,10 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
             {
                 'title': (u'before', u'after'),
                 'responsible': (
-                    {u'token': u'beatrice.schrodinger', u'title': u'Schr\xf6dinger B\xe9atrice'},
-                    {u'token': u'fridolin.hugentobler', u'title': u'Hugentobler Fridolin'},
+                    {u'token': u'beatrice.schrodinger',
+                     u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)'},
+                    {u'token': u'fridolin.hugentobler',
+                     u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
                 )
             },
             changes_tracker.changes)
@@ -138,8 +140,10 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
             [
                 {
                     'field_id': 'responsible',
-                    'before': {u'token': u'beatrice.schrodinger', u'title': u'Schr\xf6dinger B\xe9atrice'},
-                    'after': {u'token': u'fridolin.hugentobler', u'title': u'Hugentobler Fridolin'},
+                    'before': {u'token': u'beatrice.schrodinger',
+                               u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)'},
+                    'after': {u'token': u'fridolin.hugentobler',
+                              u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
                     'field_title': '',
                 },
                 {

@@ -106,7 +106,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         self.assertEqual(201, browser.status_code)
         self.assertEqual({u'token': u'fridolin.hugentobler',
-                          u'title': u'Hugentobler Fridolin'},
+                          u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
                          browser.json['responsible'])
 
     @browsing
@@ -117,7 +117,7 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
             self.workspace.absolute_url())
 
         browser.open(querysource_url, method='GET', headers=self.api_headers)
-        self.assertEqual([{u'title': u'Peter Hans', u'token': u'hans.peter'}],
+        self.assertEqual([{u'title': u'Peter Hans (hans.peter)', u'token': u'hans.peter'}],
                          browser.json['items'])
 
         # delete workspace_guest
