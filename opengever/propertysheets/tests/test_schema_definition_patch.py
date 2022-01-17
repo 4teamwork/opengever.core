@@ -14,6 +14,27 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
     maxDiff = None
 
     @browsing
+    def test_patch_requires_sheet_id(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        patch_data = {
+            "assignments": [u"IDocumentMetadata.document_type.report"],
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                view="@propertysheets/",
+                method="PATCH",
+                data=json.dumps(patch_data),
+                headers=self.api_headers,
+            )
+
+        self.assertEqual({
+            u'type': u'BadRequest',
+            u'message': u'Must supply exactly one {sheet_id} path parameter.',
+            }, browser.json)
+
+    @browsing
     def test_patch_assignments(self, browser):
         self.login(self.propertysheets_manager, browser)
 

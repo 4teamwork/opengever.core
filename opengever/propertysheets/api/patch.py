@@ -26,7 +26,7 @@ class PropertySheetsPatch(PropertySheetWriter):
     }
     """
 
-    sheet_id_required = False
+    sheet_id_required = True
 
     def reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
