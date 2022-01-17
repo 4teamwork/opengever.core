@@ -1,9 +1,6 @@
-from opengever.propertysheets import _
 from opengever.propertysheets.api.base import PropertySheetWriter
-from opengever.propertysheets.exceptions import AssignmentValidationError
 from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
-from opengever.propertysheets.exceptions import SheetValidationError
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from zExceptions import BadRequest
@@ -35,13 +32,7 @@ class PropertySheetsPost(PropertySheetWriter):
         sheet_id = self.get_sheet_id()
         data = json_body(self.request)
 
-        assignments = data.get("assignments")
-        assignment_errors = self.validate_assignments(assignments)
-        if assignment_errors:
-            raise AssignmentValidationError(assignment_errors)
-
-        if assignments is not None:
-            assignments = tuple(assignments)
+        assignments = self.get_assignments(data)
 
         fields = data.get("fields")
         if not fields or not isinstance(fields, list):

@@ -1,6 +1,5 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
-from opengever.propertysheets.exceptions import AssignmentValidationError
 from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -46,13 +45,7 @@ class PropertySheetsPatch(PropertySheetWriter):
         if 'id' in data and data['id'] != sheet_id:
             raise BadRequest("The 'id' of an existing sheet must not be changed.")
 
-        assignments = data.get("assignments")
-        assignment_errors = self.validate_assignments(assignments, sheet=sheet_definition)
-        if assignment_errors:
-            raise AssignmentValidationError(assignment_errors)
-
-        if assignments is not None:
-            assignments = tuple(assignments)
+        assignments = self.get_assignments(data, sheet_definition)
 
         existing_dynamic_defaults = self.get_existing_dynamic_defaults(
             sheet_definition)

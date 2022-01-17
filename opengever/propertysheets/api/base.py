@@ -3,6 +3,7 @@ from opengever.api.validation import scrub_json_payload
 from opengever.propertysheets.api.error_serialization import ErrorSerializer
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
 from opengever.propertysheets.exceptions import AssignmentAlreadyInUse
+from opengever.propertysheets.exceptions import AssignmentValidationError
 from opengever.propertysheets.exceptions import SheetValidationError
 from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
@@ -154,6 +155,17 @@ class PropertySheetWriter(PropertySheetLocator):
                 if not api.user.has_permission('cmf.ManagePortal'):
                     raise Unauthorized(
                         'Setting any dynamic defaults requires Manager role')
+
+    def get_assignments(self, data, sheet=None):
+        assignments = data.get("assignments")
+        assignment_errors = self.validate_assignments(assignments, sheet=sheet)
+        if assignment_errors:
+            raise AssignmentValidationError(assignment_errors)
+
+        if assignments is not None:
+            assignments = tuple(assignments)
+
+        return assignments
 
     def validate_assignments(self, assignments_data, sheet=None):
         if not assignments_data:
