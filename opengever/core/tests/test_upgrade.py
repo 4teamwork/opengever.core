@@ -194,7 +194,6 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
         self.assert_catalog_data(obj, idx, value)
 
     def test_nightly_indexer_indexes_only_passed_indexes(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         old_creator = self.dossier.Creator()
         new_creator = "New creator"
@@ -203,50 +202,48 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title", "Creator"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", new_creator)
 
     def test_nightly_solr_only_indexer(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         old_creator = self.dossier.Creator()
         new_creator = "New creator"
         self.dossier.creators = (new_creator,)
 
         with NightlyIndexer(idxs=["Title"], index_in_solr_only=True) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title", "Creator"], index_in_solr_only=True) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_data(self.dossier, "Creator", new_creator)
         self.assert_catalog_data(self.dossier, "Creator", old_creator)
 
     def test_nightly_indexer_handles_multiple_jobs(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         self.dossier.title = "New dossier title"
         self.empty_dossier.title = "New empty dossier title"
         self.subdossier.title = "New subdossier title"
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
-            indexer.add_by_intid(intids.getId(self.subdossier))
+            indexer.add_by_obj(self.dossier)
+            indexer.add_by_obj(self.subdossier)
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.empty_dossier))
+            indexer.add_by_obj(self.empty_dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_data(self.dossier, "Title", "New dossier title")

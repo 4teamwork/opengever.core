@@ -581,7 +581,7 @@ class UIDMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
         self._add_by_key(brain.UID)
 
 
-class NightlyIndexer(MaintenanceJobContextManagerMixin):
+class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
 
     def __init__(self, idxs, index_in_solr_only=False):
         self.idxs = idxs
@@ -605,17 +605,15 @@ class NightlyIndexer(MaintenanceJobContextManagerMixin):
             raise ValueError(
                 "Reindexing SearchableText in solr only is not supported")
 
-    @staticmethod
-    def index_in_catalog(intid, idxs):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def index_in_catalog(cls, key, idxs):
+        obj = cls.key_to_obj(key)
         if obj:
             obj.reindexObject(idxs=idxs)
 
-    @staticmethod
-    def index_in_solr(intid, idxs):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def index_in_solr(cls, key, idxs):
+        obj = cls.key_to_obj(key)
         if obj:
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)

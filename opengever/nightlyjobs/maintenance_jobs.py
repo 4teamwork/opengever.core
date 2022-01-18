@@ -173,7 +173,7 @@ class MaintenanceQueuesManager(object):
         assert queue_type in self.supported_queue_types, "Invalid queue type"
 
     def remove_queue(self, job_type):
-        self.get_queues().pop(self.queue_key_for_job_type(job_type))
+        return self.get_queues().pop(self.queue_key_for_job_type(job_type))
 
     def get_queues(self):
         ann = IAnnotations(self.context)

@@ -20,5 +20,5 @@ class AddDossierTypeIndex(UpgradeStep):
 
         with NightlyIndexer(idxs=["dossier_type"],
                             index_in_solr_only=True) as indexer:
-            for obj in self.objects(query, 'Index dossier_type in Solr'):
-                indexer.add_by_obj(obj)
+            for brain in self.brains(query, 'Index dossier_type in Solr'):
+                indexer.add_by_brain(brain)
