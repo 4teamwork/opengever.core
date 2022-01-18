@@ -5,13 +5,18 @@ from opengever.base.default_values import get_persisted_value_for_field
 from opengever.base.default_values import object_has_value_for_field
 from opengever.core.upgrade import DefaultValuePersister
 from opengever.core.upgrade import IdempotentOperations
+from opengever.core.upgrade import IntIdMaintenanceJobContextManagerMixin
 from opengever.core.upgrade import NightlyIndexer
 from opengever.core.upgrade import NightlyWorkflowSecurityUpdater
+from opengever.core.upgrade import UIDMaintenanceJobContextManagerMixin
+from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from sqlalchemy import Column
 from sqlalchemy import create_engine
 from sqlalchemy import Integer
@@ -87,6 +92,86 @@ class TestIdempotentOperations(TestCase):
         self.op.create_table('xuq', Column('foo', Integer, primary_key=True))
         self.refresh_metadata()
         self.assertEqual(['thingy', 'xuq'], self.metadata.tables.keys())
+
+
+class DummyIntIdMaintenanceJobManager(IntIdMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.dummy_function.__name__))
+        return MaintenanceJobType(function_dotted_name)
+
+    @staticmethod
+    def dummy_function(key):
+        return
+
+
+class TestIntIdMaintenanceJobContextManagerMixins(IntegrationTestCase):
+
+    def test_add_by_obj(self):
+        self.login(self.manager)
+        job_manager = DummyIntIdMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_obj(self.dossier)
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        intid = getUtility(IIntIds).getId(self.dossier)
+        self.assertEqual(intid, job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
+
+
+class DummyUIDMaintenanceJobManager(UIDMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.dummy_function.__name__))
+        return MaintenanceJobType(function_dotted_name)
+
+    @staticmethod
+    def dummy_function(key):
+        return
+
+
+class TestUIDMaintenanceJobContextManagerMixins(IntegrationTestCase):
+
+    def test_add_by_obj(self):
+        self.login(self.manager)
+        job_manager = DummyUIDMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_obj(self.dossier)
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        self.assertEqual(self.dossier.UID(), job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
+
+    def test_add_by_brain(self):
+        self.login(self.manager)
+        job_manager = DummyUIDMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_brain(obj2brain(self.dossier))
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        self.assertEqual(self.dossier.UID(), job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
 
 
 class TestNightlyIndexer(SolrIntegrationTestCase):
