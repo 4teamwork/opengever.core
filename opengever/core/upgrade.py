@@ -652,7 +652,7 @@ class DefaultValuePersister(UIDMaintenanceJobContextManagerMixin):
             set_default_value(obj, obj.aq_parent, field)
 
 
-class NightlyWorkflowSecurityUpdater(MaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
+class NightlyWorkflowSecurityUpdater(IntIdMaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
 
     def __init__(self, reindex_security):
         self.reindex_security = reindex_security
@@ -673,8 +673,7 @@ class NightlyWorkflowSecurityUpdater(MaintenanceJobContextManagerMixin, Workflow
         return MaintenanceJobType(function_dotted_name,
                                   reindex_security=self.reindex_security)
 
-    @staticmethod
-    def update_security_for(intid, reindex_security):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def update_security_for(cls, key, reindex_security):
+        obj = cls.key_to_obj(key)
         update_security_for(obj, reindex_security)
