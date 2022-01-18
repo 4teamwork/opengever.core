@@ -107,7 +107,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"values": {
                         u"description": u"List of values that are allowed for "
-                                        u"this field",
+                                        u"this field (one per line)",
                         u"items": {
                             u"description": u"",
                             u"factory": u"Text line (String)",
@@ -398,7 +398,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Beschreibung',
                 u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
                 u'Default-Wert f\xfcr dieses Feld',
-                u'Liste der erlaubten Werte f\xfcr das Feld',
+                u'Liste der erlaubten Werte f\xfcr das Feld (ein Wert pro Zeile)',
             ],
             [prop['description'] for prop in field_properties.values()]
         )

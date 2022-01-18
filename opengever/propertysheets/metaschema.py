@@ -82,7 +82,7 @@ class IFieldDefinition(model.Schema):
     values = schema.List(
         title=_(u'label_values', default=u'Allowed values'),
         description=_(u'help_values',
-                      default=u'List of values that are allowed for this field'),
+                      default=u'List of values that are allowed for this field (one per line)'),
         required=False,
         default=None,
         value_type=schema.TextLine(),
