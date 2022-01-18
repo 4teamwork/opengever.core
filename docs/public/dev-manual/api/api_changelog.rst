@@ -19,6 +19,7 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@propertysheets``: Change error serialization format for PATCH and POST (to be more frontend-friendly).
 - ``@propertysheets/<sheet_id>``: GET and POST responses now return the same JSON format as accepted by POST as input, not the JSON schemas anymore. The JSON schemas can now be retrieved from the ``@schema`` endpoint (see change below).
 
 
