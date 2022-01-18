@@ -173,6 +173,9 @@ class PropertySheetWriter(PropertySheetLocator):
         """Require Manager role for any kind of dynamic defaults, unless
         it's a PATCH request and they already existed and didn't get modified.
         """
+        if api.user.has_permission('cmf.ManagePortal'):
+            return
+
         dynamic_default_types = PSDefinition.DYNAMIC_DEFAULT_PROPERTIES
 
         for name, value in field_data.items():
@@ -181,11 +184,10 @@ class PropertySheetWriter(PropertySheetLocator):
             if (field_data['name'], name, value) in existing_dynamic_defaults:
                 # Existing dynamic default that is left unchanged - allowed
                 continue
-            else:
-                # New or modified dynamic default - managers only
-                if not api.user.has_permission('cmf.ManagePortal'):
-                    raise Unauthorized(
-                        'Setting any dynamic defaults requires Manager role')
+
+            # New or modified dynamic default - managers only
+            raise Unauthorized(
+                'Setting any dynamic defaults requires Manager role')
 
     def get_assignments(self, data, sheet=None):
         assignments = data.get("assignments")
