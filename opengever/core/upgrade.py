@@ -620,7 +620,7 @@ class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
             handler.add(idxs)
 
 
-class DefaultValuePersister(MaintenanceJobContextManagerMixin):
+class DefaultValuePersister(UIDMaintenanceJobContextManagerMixin):
 
     def __init__(self, fields):
         self.fields = sorted(fields)
@@ -636,10 +636,9 @@ class DefaultValuePersister(MaintenanceJobContextManagerMixin):
         return MaintenanceJobType(function_dotted_name,
                                   fields_tuples=fields_tuples)
 
-    @staticmethod
-    def persist_fields(intid, fields_tuples):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def persist_fields(cls, key, fields_tuples):
+        obj = cls.key_to_obj(key)
         if not obj:
             return
         for interfacename, fieldname in fields_tuples:
