@@ -620,3 +620,14 @@ Metadaten
 ---------
 
 Das Erstelldatum von einer Datei wird als ``document_date`` im entsprechendem OGG Objekt verwendet und das Modifikationsdatum der Datei wird als Änderungsdatum verwendent.
+
+Beispiel
+--------
+
+Bundle für partiellen import mit nur Dokumente und Dossier, die in der Ordnungsposition 0.1.1 dann importiert werden können. `input_folder` beinhaltet Ordner und Dateien die als Dossier un Dokumente im Bundle abgebildet werden.
+
+``bin/create-bundle path/to/input_folder path/to/output_folder --dossier-responsible hugo.boss --import-repository-reference 0 1 1``
+
+Import erfolgt dann mit:
+``bin/instance import path/to/output_folder/Sample-2022-01-14_11-02-32.oggbundle --files-base-path path/to/input_folder``
+
