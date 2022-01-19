@@ -10,6 +10,38 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.2.0 (2022-01-19)
+---------------------
+
+New features:
+
+
+- - Expose dossier_type_label column in @listing endpoint. [elioschmutz]
+- Add @propertysheet-metaschema endpoint. [lgraf]
+- Expose propertysheet JSON schemas under `@schema` endpoint. [lgraf]
+- GET @propertysheets: Return same format as POST, instead of JSON schema. [lgraf]
+- Add some extra info to `@propertysheets` listing. [lgraf]
+- Add PATCH support for `@propertysheets` endpoint. [lgraf]
+- Add LimitedAdmin role. [tinagerber]
+- Docker support for testserver. [jone]
+
+
+Bug fixes:
+
+
+- Drop related items when copying document to workspace. [njohner]
+- Disallow edit with office online for trashed documents. [njohner]
+- Correctly handle missing excerpt suffix template when creating protocol excerpt. [njohner]
+- Correctly handle error when trying to move proposal document. [njohner]
+
+
+Other changes:
+
+
+- Avoid reporting normal API exceptions in sentry. [njohner]
+- Drop workspace administrator group from policy templates and setup. [njohner]
+
+
 2022.1.0 (2022-01-04)
 ---------------------
 

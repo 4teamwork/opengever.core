@@ -1,1 +1,0 @@
-- Expose dossier_type_label column in @listing endpoint. [elioschmutz]

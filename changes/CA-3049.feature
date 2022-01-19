@@ -1,1 +1,0 @@
-Add LimitedAdmin role. [tinagerber]
