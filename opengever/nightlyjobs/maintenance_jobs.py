@@ -68,8 +68,8 @@ class MaintenanceJobType(object):
             raise UnhashableArguments()
 
     def __eq__(self, other):
-        return (self.function_dotted_name == other.function_dotted_name and
-                self.fixed_arguments == other.fixed_arguments)
+        return (self.function_dotted_name == other.function_dotted_name
+                and self.fixed_arguments == other.fixed_arguments)
 
     def __repr__(self):
         return u'{}({}, {})'.format(
@@ -114,8 +114,8 @@ class MaintenanceJob(object):
                        self.fixed_arguments.items()]))
 
     def __eq__(self, other):
-        return (self.job_type == other.job_type and
-                self.variable_argument == other.variable_argument)
+        return (self.job_type == other.job_type
+                and self.variable_argument == other.variable_argument)
 
     @property
     def function(self):
