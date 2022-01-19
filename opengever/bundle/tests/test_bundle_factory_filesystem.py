@@ -83,7 +83,7 @@ class TestOggBundleFactoryFilesystem(BaseTestOggBundleFactory):
                          msg="subdossier should contain a document")
 
         document = self.find_item_by_title(documents_in_subdossier, 'Pflanzensippe.docx')
-        self.assertEqual(pjoin(input_path, root_dossier['title'], subdossier['title'], document['title']),
+        self.assertEqual(pjoin(root_dossier['title'], subdossier['title'], document['title']),
                          document['filepath'])
 
     def test_full_bundle_factory(self):

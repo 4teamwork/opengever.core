@@ -44,11 +44,12 @@ class DirectoryNode(object):
 
 class FileNode(object):
 
-    def __init__(self, path, guid, parent_guid):
+    def __init__(self, path, guid, parent_guid, relative_path):
         self.path = path
         self.guid = guid
         self.parent_guid = parent_guid
         self.level = None
+        self.relative_path = relative_path
 
     def is_document(self):
         return True
@@ -145,7 +146,8 @@ class FilesystemWalker(object):
                 # Non-folderish item (i.e. document)
                 node = FileNode(path=path,
                                 guid=self.make_guid(path),
-                                parent_guid=getattr(container, "guid", None))
+                                parent_guid=getattr(container, "guid", None),
+                                relative_path=self.to_relative_path(path))
                 yield node
 
         for name in dirs:
@@ -155,6 +157,9 @@ class FilesystemWalker(object):
                         new_path, followlinks, level=level,
                         parent_guid=getattr(container, "guid", None)):
                     yield node
+
+    def to_relative_path(self, path):
+        return path.split(self.top, 1)[-1].strip(os.path.sep)
 
 
 class OGGBundleItemCreator(object):
@@ -270,7 +275,7 @@ class OGGBundleDocument(OGGBundleItemBase):
     def __init__(self, node):
         super(OGGBundleDocument, self).__init__(node)
         self._data['parent_guid'] = self.node.parent_guid
-        self._data['filepath'] = self.node.path
+        self._data['filepath'] = self.node.relative_path
         self._data['document_date'] = self.creation_date
         self._data['changed'] = self.modification_date
 
