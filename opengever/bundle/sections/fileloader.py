@@ -9,8 +9,8 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
-from opengever.mail.mail import initialize_title
 from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import initialize_title
 from opengever.mail.mail import IOGMail
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from plone import api
@@ -27,6 +27,7 @@ logger = logging.getLogger('opengever.setup.sections.fileloader')
 
 
 INVALID_FILE_EXTENSIONS = ('.exe', '.dll')
+FILES_BASE_PATH_KEY = 'opengever.bundle.files_base_path'
 
 
 class FileLoadingFailed(Exception):
@@ -52,6 +53,7 @@ class FileLoaderSection(object):
 
         self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
         self.bundle_path = IAnnotations(transmogrifier)[BUNDLE_PATH_KEY]
+        self.files_base_path = IAnnotations(transmogrifier).get(FILES_BASE_PATH_KEY) or self.bundle_path
 
         self.bundle.errors['files_not_found'] = []
         self.bundle.errors['files_io_errors'] = []
@@ -144,7 +146,7 @@ class FileLoaderSection(object):
 
     def build_absolute_filepath(self, filepath):
         if not self._is_absolute_path(filepath):
-            filepath = os.path.join(self.bundle_path, filepath)
+            filepath = os.path.join(self.files_base_path, filepath)
 
         if self._is_unc_path(filepath):
             filepath = self._translate_unc_path(filepath)

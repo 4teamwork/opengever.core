@@ -21,7 +21,7 @@ class TestFileNode(TestCase):
         super(TestFileNode, self).tearDown()
 
     def make_node(self, path='/foo', guid='123', parent_guid='456'):
-        return FileNode(path, guid, parent_guid)
+        return FileNode(path, guid, parent_guid, path)
 
     def test_truthy_is_document(self):
         self.assertTrue(self.make_node().is_document())

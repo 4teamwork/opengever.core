@@ -29,7 +29,8 @@ def parse_args(argv):
                         help='Path to the .oggbundle directory')
     parser.add_argument('--no-intermediate-commits', action='store_true',
                         help="Don't to intermediate commits")
-
+    parser.add_argument('--files-base-path',
+                        help="path to folder containing the files.")
     args = parser.parse_args(argv)
     return args
 
@@ -61,6 +62,7 @@ def import_oggbundle(app, args):
         no_intermediate_commits=args.no_intermediate_commits,
         possibly_unpatch_collective_indexing=True,
         no_separate_connection_for_sequence_numbers=True,
+        files_base_path=args.files_base_path,
     )
     importer.run()
 

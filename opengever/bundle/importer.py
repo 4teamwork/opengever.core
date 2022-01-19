@@ -7,6 +7,7 @@ from opengever.bundle.loader import GUID_INDEX_NAME
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.commit import INTERMEDIATE_COMMITS_KEY
+from opengever.bundle.sections.fileloader import FILES_BASE_PATH_KEY
 from opengever.bundle.sections.report import SKIP_REPORT_KEY
 from plone import api
 from zope.annotation import IAnnotations
@@ -25,9 +26,10 @@ class BundleImporter(object):
                  create_guid_index=True, no_intermediate_commits=False,
                  possibly_unpatch_collective_indexing=True,
                  no_separate_connection_for_sequence_numbers=True,
-                 skip_report=False):
+                 skip_report=False, files_base_path=None):
         self.site = site
         self.bundle_path = bundle_path
+        self.files_base_path = files_base_path
 
         self.disable_ldap = disable_ldap
         self.create_guid_index = create_guid_index
@@ -54,6 +56,7 @@ class BundleImporter(object):
         ann[BUNDLE_PATH_KEY] = self.bundle_path
         ann[INTERMEDIATE_COMMITS_KEY] = not self.no_intermediate_commits
         ann[SKIP_REPORT_KEY] = self.skip_report
+        ann[FILES_BASE_PATH_KEY] = self.files_base_path
 
         solr_enabled = api.portal.get_registry_record(
             'opengever.base.interfaces.ISearchSettings.use_solr',
