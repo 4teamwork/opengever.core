@@ -1457,7 +1457,7 @@ Example configuration:
 Nightly Jobs
 ------------
 
-Gever offers a whole infrastructure to execute certain jobs overnight, to avoid excessive load of the instances during working hours. Nightly jobs are executed via a cronjob calling the ``NightlyJobRunner``, which will try to execute all jobs provided by the registered nightly job providers (named multiadapters of INightlyJobProvider).
+Gever offers a whole infrastructure to execute certain jobs overnight, to avoid excessive load of the instances during working hours. Nightly jobs are executed via a cronjob calling the ``NightlyJobRunner``, which will try to execute all jobs provided by the registered nightly job providers (named multiadapters of INightlyJobProvider). The ``nightly-jobs-stats`` view provides information about the status of the nightly job queue.
 
 Reindexing operations as nightly maintenance jobs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

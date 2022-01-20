@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="nightly-jobs-stats"
+      class=".nightly_jobs_stats.NightlyJobsStatsView"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
