@@ -151,6 +151,9 @@ def start(zope_layer_dotted_name):
     listener.register_function(zsl.isolate, 'isolate')  # PATCH
     listener.register_function(lambda: None, 'connectiontest')
 
+    print('Setting up isolation (zodb_setup).')
+    zsl.isolate()
+
     robotframework_server.print_urls(zsl.zope_layer, listener)
 
     try:
