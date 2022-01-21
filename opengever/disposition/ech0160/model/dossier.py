@@ -9,7 +9,9 @@ from opengever.disposition.ech0160.utils import set_classification_attributes
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.meeting.proposal import IProposal
 from opengever.repository.repositoryroot import IRepositoryRoot
+from opengever.task.task import ITask
 from Products.CMFCore.utils import getToolByName
 
 
@@ -42,6 +44,15 @@ class Dossier(object):
                 self.dossiers[obj.UID()] = Dossier(obj)
             elif IBaseDocument.providedBy(obj):
                 self.documents[obj.UID()] = Document(obj)
+            elif ITask.providedBy(obj) or IProposal.providedBy(obj):
+                self._add_task_and_proposal_documents(obj, self.documents)
+
+    def _add_task_and_proposal_documents(self, obj, documents):
+        for item in obj.objectValues():
+            if IBaseDocument.providedBy(item):
+                documents[item.UID()] = Document(item)
+            else:
+                self._add_task_and_proposal_documents(item, documents)
 
     def binding(self):
         dossier = arelda.dossierGeverSIP(id=u'_{}'.format(self.obj.UID()))
