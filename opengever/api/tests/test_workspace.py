@@ -26,7 +26,7 @@ class TestWorkspaceSerializer(IntegrationTestCase):
 
         self.assertEquals(
             {u'token': u'gunther.frohlich',
-             u'title': u'Fr\xf6hlich G\xfcnther'},
+             u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'},
             browser.json['responsible'])
 
     @browsing

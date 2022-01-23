@@ -13,13 +13,13 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
 
         expected_json = {
             u'@id': u'http://nohost/plone/workspaces/workspace-1/@actual-workspace-members',
-            u'items': [{u'title': u'Fr\xf6hlich G\xfcnther',
+            u'items': [{u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
                         u'token': u'gunther.frohlich'},
-                       {u'title': u'Hugentobler Fridolin',
+                       {u'title': u'Hugentobler Fridolin (fridolin.hugentobler)',
                         u'token': u'fridolin.hugentobler'},
-                       {u'title': u'Peter Hans',
+                       {u'title': u'Peter Hans (hans.peter)',
                         u'token': u'hans.peter'},
-                       {u'title': u'Schr\xf6dinger B\xe9atrice',
+                       {u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
                         u'token': u'beatrice.schrodinger'}],
             u'items_total': 4}
         self.assertEqual(expected_json, browser.json)
@@ -32,7 +32,7 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
 
         expected_json = {
             u'@id': u'http://nohost/plone/workspaces/workspace-1/@actual-workspace-members?query=bea',
-            u'items': [{u'title': u'Schr\xf6dinger B\xe9atrice',
+            u'items': [{u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
                         u'token': u'beatrice.schrodinger'}],
             u'items_total': 1}
         self.assertEqual(expected_json, browser.json)
@@ -43,9 +43,11 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
         browser.open(self.workspace, view='@actual-workspace-members', method='GET',
                      headers=self.api_headers)
         self.assertEqual(4, browser.json['items_total'])
-        self.assertNotIn({u'title': u'Kohler Nicole', u'token': u'nicole.kohler'},
+        self.assertNotIn({u'title': u'Kohler Nicole (nicole.kohler)',
+                          u'token': u'nicole.kohler'},
                          browser.json['items'])
-        self.assertNotIn({u'title': u'M\xfcller Fr\xe4nzi', u'token': u'franzi.muller'},
+        self.assertNotIn({u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
+                          u'token': u'franzi.muller'},
                          browser.json['items'])
 
         data = json.dumps({'participant': 'committee_rpk_group', 'role': 'WorkspaceMember'})
@@ -55,9 +57,11 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
         browser.open(self.workspace, view='@actual-workspace-members', method='GET',
                      headers=self.api_headers)
         self.assertEqual(6, browser.json['items_total'])
-        self.assertIn({u'title': u'Kohler Nicole', u'token': u'nicole.kohler'},
+        self.assertIn({u'title': u'Kohler Nicole (nicole.kohler)',
+                       u'token': u'nicole.kohler'},
                       browser.json['items'])
-        self.assertIn({u'title': u'M\xfcller Fr\xe4nzi', u'token': u'franzi.muller'},
+        self.assertIn({u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
+                       u'token': u'franzi.muller'},
                       browser.json['items'])
 
     @browsing
