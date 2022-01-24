@@ -46,6 +46,43 @@ Ein actor ist kein Plone Inhaltstyp, deshalb beinhaltet die Response weniger Inf
         }
       }
 
+Mit dem Parameter ``full_representation`` werden im represents-Feld nicht nur eine URL, sondern alle Details des Aktors zurückgegeben.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET /@actors?full_representation=true HTTP/1.1
+      Accept: application/json
+
+
+**Beispiel-Response**:
+
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "http://example.org/@actors/peter.mueller",
+        "...": "",
+        "represents": {
+            "@id": "http://example.org/@ogds-users/peter.mueller"
+            "@type": "virtual.ogds.user",
+             "absent": false,
+             "active": true,
+             "city": "Thun",
+             "country": "Schweiz",
+             "department": "Finanzdirektion",
+             "department_abbr": "fd",
+             "email": "peter.mueller@4teamwork.ch",
+             "firstname": "Peter",
+             "...":"..."
+        }
+      }
+
+
 Via POST können die Daten von mehreren actors mit einem Request abgefragt werden. Im Request-body wird die Liste von actor ID angegeben:
 
 **Beispiel-Request**:

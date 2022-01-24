@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@actors``: Add ``full_representation`` parameter. (see :ref:`docs <actors>`)
 
 
 2022.2.0 (2022-01-19)

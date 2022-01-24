@@ -33,9 +33,16 @@ class SerializeActorToJson(object):
         self.context = context
         self.request = request
 
-    def __call__(self):
+    def __call__(self, full_representation=False):
         represents_url = self.context.represents_url()
         represents = {'@id': represents_url} if represents_url else None
+
+        if full_representation and self.context.represents():
+            serializer = queryMultiAdapter(
+                (self.context.represents(), self.request), ISerializeToJson)
+            if serializer:
+                represents = serializer()
+                represents['@id'] = represents_url
 
         result = {
             '@id': '{}/@actors/{}'.format(
@@ -76,9 +83,11 @@ class ActorsGet(Service):
 
     def reply(self):
         actorid = self.read_params()
+        full_representation = self.request.form.get(
+            'full_representation', 'false').lower() in ("yes", "y", "true", "t", "1")
         actor = ActorLookup(actorid).lookup()
         serializer = queryMultiAdapter((actor, self.request), ISerializeToJson)
-        return serializer()
+        return serializer(full_representation)
 
     def read_params(self):
         if len(self.params) == 0:
@@ -104,11 +113,12 @@ class ActorsGetListPOST(Service):
     def reply(self):
         data = json_body(self.request)
         actor_ids = data.get('actor_ids', [])
+        full_representation = data.get('full_representation', False)
         items = []
         for actorid in actor_ids:
             actor = ActorLookup(actorid).lookup()
             serializer = queryMultiAdapter((actor, self.request), ISerializeToJson)
-            items.append(serializer())
+            items.append(serializer(full_representation))
 
         result = {}
         result['@id'] = self.request.URL

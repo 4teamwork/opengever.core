@@ -263,6 +263,19 @@ class TestKuBContactActor(KuBIntegrationTestCase):
             },
             browser.json)
 
+    @browsing
+    def test_full_representation_for_kubcontact(self, mocker, browser):
+        self.mock_get_by_id(mocker, self.person_jean)
+        self.login(self.regular_user, browser=browser)
+        url = "{}/@actors/{}?full_representation=true".format(
+            self.portal.absolute_url(), self.person_jean)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@kub/person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'dateOfBirth': u'1992-05-15',
+            u'fullName': u'Dupont Jean'}, browser.json['represents'])
+
 
 class TestSQLContactActor(IntegrationTestCase):
 
