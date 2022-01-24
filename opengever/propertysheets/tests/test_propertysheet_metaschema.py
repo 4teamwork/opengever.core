@@ -30,7 +30,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         id_schema = {
             u"additionalProperties": False,
-            u"description": u"ID of this property sheet",
+            u"description": u"ID of this property sheet (alphanumeric, "
+                            u"lowercase, no special characters)",
             u'maxLength': 32,
             u"pattern": u"^[a-z_0-9]*$",
             u"title": u"ID",
@@ -86,7 +87,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                         u"type": u"string",
                     },
                     u"name": {
-                        u"description": u"Field name (alphanumeric, lowercase)",
+                        u"description": u"Field name (alphanumeric, lowercase, "
+                                        u"no special characters)",
                         u'maxLength': 32,
                         u"pattern": u"^[a-z_0-9]*$",
                         u"title": u"Name",
@@ -105,7 +107,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     },
                     u"values": {
                         u"description": u"List of values that are allowed for "
-                                        u"this field",
+                                        u"this field (one per line)",
                         u"items": {
                             u"description": u"",
                             u"factory": u"Text line (String)",
@@ -380,7 +382,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'ID dieses Property Sheets',
+                u'ID dieses Property Sheets (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)',
                 u'Felder',
                 u'F\xfcr welche Arten von Inhalten dieses Property Sheet verf\xfcgbar sein soll',
             ],
@@ -390,13 +392,13 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
         field_properties = properties['fields']['items']['properties']
         self.assertItemsEqual(
             [
-                u'Name (Alphanumerisch, nur Kleinbuchstaben)',
+                u'Name (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)',
                 u'Datentyp f\xfcr dieses Feld',
                 u'Titel',
                 u'Beschreibung',
                 u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
                 u'Default-Wert f\xfcr dieses Feld',
-                u'Liste der erlaubten Werte f\xfcr das Feld',
+                u'Liste der erlaubten Werte f\xfcr das Feld (ein Wert pro Zeile)',
             ],
             [prop['description'] for prop in field_properties.values()]
         )

@@ -1,6 +1,12 @@
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
+from opengever.propertysheets.api.error_serialization import ErrorSerializer
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition as PSDefinition
+from opengever.propertysheets.exceptions import AssignmentAlreadyInUse
+from opengever.propertysheets.exceptions import AssignmentValidationError
+from opengever.propertysheets.exceptions import DuplicateField
+from opengever.propertysheets.exceptions import FieldValidationError
+from opengever.propertysheets.exceptions import SheetValidationError
 from opengever.propertysheets.metaschema import IFieldDefinition
 from opengever.propertysheets.metaschema import IPropertySheetDefinition
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
@@ -10,6 +16,7 @@ from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zExceptions import Unauthorized
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
@@ -29,6 +36,9 @@ class PropertySheetAPIBase(object):
             ISerializeToJson,
         )
         return serializer()
+
+    def serialize_exception(self, exc):
+        return ErrorSerializer(exc, self.request)()
 
 
 @implementer(IPublishTraverse)
@@ -81,8 +91,9 @@ class PropertySheetLocator(PropertySheetAPIBase, Service):
             id_field = IPropertySheetDefinition['id']
             try:
                 id_field.bind(sheet_id).validate(sheet_id)
-            except Exception:
-                raise BadRequest(u"The name '{}' is invalid.".format(sheet_id))
+            except Exception as exc:
+                errors = [('id', exc)]
+                raise SheetValidationError(errors)
 
             return sheet_id
 
@@ -103,10 +114,39 @@ class PropertySheetWriter(PropertySheetLocator):
     """Base class for @propertysheets endpoints that create or modify sheets.
     """
 
+    def get_fields(self, data, existing_dynamic_defaults=()):
+        fields = data.get("fields")
+
+        if fields:
+            errors = self.validate_fields(fields, existing_dynamic_defaults)
+            if errors:
+                raise FieldValidationError(errors)
+
+            # Check for duplicate fields
+            seen = set()
+            duplicates = []
+            for field_no, field in enumerate(fields):
+                name = field['name']
+                if name in seen:
+                    duplicates.append((field_no, name))
+                seen.add(name)
+
+            if duplicates:
+                errors = [
+                    (field_no, name, ('name', DuplicateField(name)))
+                    for field_no, name in duplicates
+                ]
+                raise FieldValidationError(errors)
+
+        return fields
+
     def validate_fields(self, fields, existing_dynamic_defaults=()):
         errors = []
 
-        for field_data in fields:
+        if not isinstance(fields, list):
+            raise BadRequest(u"Missing or invalid field definitions.")
+
+        for field_no, field_data in enumerate(fields):
             # Cast JSON strings to their appropriate Python types (unicode or
             # bytestring), depending on the schema field (ASCII or Text[Line])
             scrub_json_payload(field_data, IFieldDefinition)
@@ -117,8 +157,13 @@ class PropertySheetWriter(PropertySheetLocator):
             field_errors = get_validation_errors(
                 field_data, IFieldDefinition, allow_unknown_fields=True)
 
-            if field_errors:
-                errors.extend(field_errors)
+            for field_error in field_errors:
+                # Keep track of position and name of propertysheet fields
+                errors.append((
+                    field_no,
+                    field_data.get('name'),
+                    field_error,
+                ))
 
             self.validate_dynamic_defaults(field_data, existing_dynamic_defaults)
 
@@ -128,6 +173,9 @@ class PropertySheetWriter(PropertySheetLocator):
         """Require Manager role for any kind of dynamic defaults, unless
         it's a PATCH request and they already existed and didn't get modified.
         """
+        if api.user.has_permission('cmf.ManagePortal'):
+            return
+
         dynamic_default_types = PSDefinition.DYNAMIC_DEFAULT_PROPERTIES
 
         for name, value in field_data.items():
@@ -136,11 +184,59 @@ class PropertySheetWriter(PropertySheetLocator):
             if (field_data['name'], name, value) in existing_dynamic_defaults:
                 # Existing dynamic default that is left unchanged - allowed
                 continue
-            else:
-                # New or modified dynamic default - managers only
-                if not api.user.has_permission('cmf.ManagePortal'):
-                    raise Unauthorized(
-                        'Setting any dynamic defaults requires Manager role')
+
+            # New or modified dynamic default - managers only
+            raise Unauthorized(
+                'Setting any dynamic defaults requires Manager role')
+
+    def get_assignments(self, data, sheet=None):
+        assignments = data.get("assignments")
+        assignment_errors = self.validate_assignments(assignments, sheet=sheet)
+        if assignment_errors:
+            raise AssignmentValidationError(assignment_errors)
+
+        if assignments is not None:
+            assignments = tuple(assignments)
+
+        return assignments
+
+    def validate_assignments(self, assignments_data, sheet=None):
+        if not assignments_data:
+            return
+
+        errors = []
+
+        # Validate field data
+        assignments_field = IPropertySheetDefinition['assignments']
+        try:
+            assignments_field.bind(assignments_data).validate(assignments_data)
+        except Exception as exc:
+            errors.append(exc)
+
+        # Validate that assignment isn't already in use
+        storage = IAnnotations(self.storage.context).get(
+            self.storage.ANNOTATIONS_KEY, {})
+
+        already_existing = []
+        if sheet is not None:
+            # PATCH - allow assignments that already existed
+            already_existing = sheet.assignments
+
+        used_assignments = {}
+        for sheet_id, definition_data in storage.items():
+            for assignment in definition_data['assignments']:
+                used_assignments[assignment] = sheet_id
+
+        for new_assignment in assignments_data:
+            in_use_by = used_assignments.get(new_assignment)
+            if in_use_by and new_assignment not in already_existing:
+                exc = AssignmentAlreadyInUse({
+                    'assignment': new_assignment,
+                    'in_use_by': in_use_by,
+                })
+                errors.append(exc)
+
+        return errors
 
     def create_property_sheet(self, sheet_id, assignments, fields):
         schema_definition = PSDefinition.create(

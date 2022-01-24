@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-06 14:16+0000\n"
+"POT-Creation-Date: 2022-01-18 10:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,107 +42,142 @@ msgstr "Dossier"
 msgid "Dossier (Type: ${dossier_type})"
 msgstr "Dossier (Typ: ${dossier_type})"
 
+#: ./opengever/propertysheets/exceptions.py
+msgid "Duplicate field with this name"
+msgstr "Doppeltes Feld mit diesem Namen"
+
+#: ./opengever/propertysheets/exceptions.py
+msgid "Invalid default value"
+msgstr "Ungültiger Default-Wert"
+
 #: ./opengever/propertysheets/templates/propertysheet.pt
 #: ./opengever/propertysheets/templates/propertysheet_display.pt
 msgid "No custom properties are available."
 msgstr "Es sind keine benutzerdefinierten Felder verfügbar."
 
+#. Default: "(Max: ${max_length} characters. Actual length: ${actual_length} characters)"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "extra_info_max_length"
+msgstr "(Maximum: ${max_length} Zeichen. Tatsächliche Länge: ${actual_length} Zeichen)"
+
 #. Default: "What type of content this property sheet will be available for"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_assignments"
 msgstr "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll"
 
 #. Default: "Default value for this field"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_default"
 msgstr "Default-Wert für dieses Feld"
 
 #. Default: "Description"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_description"
 msgstr "Beschreibung"
 
 #. Default: "Data type of this field"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_field_type"
 msgstr "Datentyp für dieses Feld"
 
 #. Default: "Fields"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_fields"
 msgstr "Felder"
 
-#. Default: "ID of this property sheet"
-#: ./opengever/propertysheets/api/post.py
+#. Default: "ID of this property sheet (alphanumeric, lowercase, no special characters)"
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_id"
-msgstr "ID dieses Property Sheets"
+msgstr "ID dieses Property Sheets (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)"
 
-#. Default: "Field name (alphanumeric, lowercase)"
-#: ./opengever/propertysheets/api/post.py
+#. Default: "Field name (alphanumeric, lowercase, no special characters)"
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_name"
-msgstr "Name (Alphanumerisch, nur Kleinbuchstaben)"
+msgstr "Name (Alphanumerisch, nur Kleinbuchstaben, keine Sonderzeichen)"
 
 #. Default: "Whether or not the field is required"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_required"
 msgstr "Angabe, ob Benutzer dieses Feld zwingend ausfüllen müssen"
 
 #. Default: "Title"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_title"
 msgstr "Titel"
 
-#. Default: "List of values that are allowed for this field"
-#: ./opengever/propertysheets/api/post.py
+#. Default: "List of values that are allowed for this field (one per line)"
+#: ./opengever/propertysheets/metaschema.py
 msgid "help_values"
-msgstr "Liste der erlaubten Werte für das Feld"
+msgstr "Liste der erlaubten Werte für das Feld (ein Wert pro Zeile)"
 
 #. Default: "Assignments"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_assignments"
 msgstr "Slots"
 
 #. Default: "Default"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_default"
 msgstr "Default"
 
 #. Default: "Description"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_description"
 msgstr "Beschreibung"
 
 #. Default: "Field type"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_field_type"
 msgstr "Feld-Typ"
 
 #. Default: "Fields"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_fields"
 msgstr "Felder"
 
 #. Default: "ID"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_id"
 msgstr "ID"
 
 #. Default: "Name"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_name"
 msgstr "Name"
 
 #. Default: "Required"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_required"
 msgstr "Pflichtfeld"
 
 #. Default: "Title"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_title"
 msgstr "Titel"
 
 #. Default: "Allowed values"
-#: ./opengever/propertysheets/api/post.py
+#: ./opengever/propertysheets/metaschema.py
 msgid "label_values"
 msgstr "Wertebereich"
+
+#. Default: "Assignment '${assignment}' is already in use."
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_assignment_already_in_use"
+msgstr "Der Slot '${assignment}' ist bereits belegt."
+
+#. Default: "Parameter '${field_key}': "
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_field_error_prefix"
+msgstr "Parameter '${field_key}': "
+
+#. Default: "Field ${field_no} ('${field_name}'):"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_field_location"
+msgstr "Feld ${field_no} ('${field_name}'):"
+
+#. Default: "The form contains errors:\n${error_string}"
+#: ./opengever/propertysheets/api/error_serialization.py
+msgid "msg_propertysheet_has_errors"
+msgstr ""
+"Das Formular enthält Fehler:\n"
+"${error_string}"

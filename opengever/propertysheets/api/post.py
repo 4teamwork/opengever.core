@@ -1,4 +1,5 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
+from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -20,33 +21,22 @@ class PropertySheetsPost(PropertySheetWriter):
     sheet_id_required = True
 
     def reply(self):
+        try:
+            return self._reply()
+        except Exception as exc:
+            return self.serialize_exception(exc)
+
+    def _reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         sheet_id = self.get_sheet_id()
         data = json_body(self.request)
 
-        fields = data.get("fields")
-        if not fields or not isinstance(fields, list):
+        assignments = self.get_assignments(data)
+
+        fields = self.get_fields(data)
+        if not fields:
             raise BadRequest(u"Missing or invalid field definitions.")
-
-        errors = self.validate_fields(fields)
-        if errors:
-            raise BadRequest(errors)
-
-        seen = set()
-        duplicates = []
-        for name in [each["name"] for each in fields]:
-            if name in seen:
-                duplicates.append(name)
-            seen.add(name)
-        if duplicates:
-            raise BadRequest(
-                u"Duplicate fields '{}'.".format("', '".join(duplicates))
-            )
-
-        assignments = data.get("assignments")
-        if assignments is not None:
-            assignments = tuple(assignments)
 
         try:
             schema_definition = self.create_property_sheet(

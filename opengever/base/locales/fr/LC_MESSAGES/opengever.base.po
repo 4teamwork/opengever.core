@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-02-16 11:20+0000\n"
+"POT-Creation-Date: 2022-01-17 21:25+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -30,6 +30,10 @@ msgstr "Êtes-vous sûr de vouloir supprimer ces contenus?"
 #: ./opengever/base/browser/reporting_view.py
 msgid "Could not generate the report."
 msgstr "Impossible de générer l'affichage."
+
+#: ./opengever/base/schema.py
+msgid "Invalid identifier"
+msgstr ""
 
 #: ./opengever/base/browser/folder_delete_confirmation.py
 msgid "Items successfully deleted."
@@ -398,7 +402,7 @@ msgstr "Erreur"
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/browser/translated_title.py
+#: ./opengever/base/browser/role_assignment_excel_report.py
 msgid "label_title"
 msgstr "Titre"
 

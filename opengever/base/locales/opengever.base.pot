@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-02-16 11:20+0000\n"
+"POT-Creation-Date: 2022-01-17 21:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,6 +27,10 @@ msgstr ""
 
 #: ./opengever/base/browser/reporting_view.py
 msgid "Could not generate the report."
+msgstr ""
+
+#: ./opengever/base/schema.py
+msgid "Invalid identifier"
 msgstr ""
 
 #: ./opengever/base/browser/folder_delete_confirmation.py
@@ -396,7 +400,7 @@ msgstr ""
 #. Default: "Title"
 #: ./opengever/base/behaviors/base.py
 #: ./opengever/base/browser/favorites.py
-#: ./opengever/base/browser/translated_title.py
+#: ./opengever/base/browser/role_assignment_excel_report.py
 msgid "label_title"
 msgstr ""
 

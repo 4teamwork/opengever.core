@@ -4,11 +4,11 @@ from opengever.propertysheets import _
 from opengever.propertysheets.assignment import PropertySheetAssignmentVocabulary
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.exceptions import InvalidDefaultValue
 from plone.supermodel import model
 from zope import schema
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from zope.interface import Invalid
 from zope.interface import invariant
 from zope.interface import provider
 from zope.schema import Choice
@@ -35,7 +35,8 @@ class IFieldDefinition(model.Schema):
 
     name = Identifier(
         title=_(u'label_name', default=u'Name'),
-        description=_(u'help_name', default=u'Field name (alphanumeric, lowercase)'),
+        description=_(u'help_name', default=u'Field name (alphanumeric, lowercase, '
+                                            u'no special characters)'),
         required=True,
         max_length=32,
         pattern='^[a-z_0-9]*$',
@@ -81,7 +82,7 @@ class IFieldDefinition(model.Schema):
     values = schema.List(
         title=_(u'label_values', default=u'Allowed values'),
         description=_(u'help_values',
-                      default=u'List of values that are allowed for this field'),
+                      default=u'List of values that are allowed for this field (one per line)'),
         required=False,
         default=None,
         value_type=schema.TextLine(),
@@ -117,14 +118,15 @@ class IFieldDefinition(model.Schema):
         try:
             field.validate(default)
         except Exception:
-            raise Invalid('Invalid default value: %r' % default)
+            raise InvalidDefaultValue(default)
 
 
 class IPropertySheetDefinition(model.Schema):
 
     id = Identifier(
         title=_(u'label_id', default=u'ID'),
-        description=_(u'help_id', default=u'ID of this property sheet'),
+        description=_(u'help_id', default=u'ID of this property sheet (alphanumeric, '
+                                          u'lowercase, no special characters)'),
         required=False,
         max_length=32,
         pattern='^[a-z_0-9]*$',

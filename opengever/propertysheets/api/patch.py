@@ -26,9 +26,15 @@ class PropertySheetsPatch(PropertySheetWriter):
     }
     """
 
-    sheet_id_required = False
+    sheet_id_required = True
 
     def reply(self):
+        try:
+            return self._reply()
+        except Exception as exc:
+            return self.serialize_exception(exc)
+
+    def _reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         sheet_definition = self.locate_sheet()
@@ -38,30 +44,12 @@ class PropertySheetsPatch(PropertySheetWriter):
         if 'id' in data and data['id'] != sheet_id:
             raise BadRequest("The 'id' of an existing sheet must not be changed.")
 
+        assignments = self.get_assignments(data, sheet_definition)
+
         existing_dynamic_defaults = self.get_existing_dynamic_defaults(
             sheet_definition)
 
-        fields = data.get("fields")
-
-        if fields:
-            errors = self.validate_fields(fields, existing_dynamic_defaults)
-            if errors:
-                raise BadRequest(errors)
-
-            seen = set()
-            duplicates = []
-            for name in [each["name"] for each in fields]:
-                if name in seen:
-                    duplicates.append(name)
-                seen.add(name)
-            if duplicates:
-                raise BadRequest(
-                    u"Duplicate fields '{}'.".format("', '".join(duplicates))
-                )
-
-        assignments = data.get("assignments")
-        if assignments is not None:
-            assignments = tuple(assignments)
+        fields = self.get_fields(data, existing_dynamic_defaults)
 
         # Get existing sheet definition
         serialized_existing_definition = self.serialize(sheet_definition)
