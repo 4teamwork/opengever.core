@@ -1,9 +1,14 @@
 from copy import deepcopy
 from opengever.api.utils import create_proxy_request_error_handler
 from opengever.api.utils import default_http_error_code_mapping
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.kub.entity import KuBEntity
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import adapter
+from zope.component import queryMultiAdapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 import logging
@@ -17,6 +22,18 @@ http_error_code_mapping[404] = {
 
 kub_request_error_handler = create_proxy_request_error_handler(
     logger, u'Error while communicating with KuB', http_error_code_mapping)
+
+
+@implementer(ISerializeToJson)
+@adapter(KuBEntity, IOpengeverBaseLayer)
+class SerializeKuBEntityToJson(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def __call__(self, full_representation=False):
+        return self.context.serialize()
 
 
 class KuBGet(Service):
@@ -40,7 +57,8 @@ class KuBGet(Service):
     def reply(self):
         _id = self.read_params().decode('utf-8')
         entity = KuBEntity(_id)
-        return entity.serialize()
+        serializer = queryMultiAdapter((entity, self.request), ISerializeToJson)
+        return serializer()
 
     def read_params(self):
         if len(self.params) != 1:
