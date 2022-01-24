@@ -183,6 +183,7 @@ def relative_to_physical_path(relative_path):
     path of an object.
     """
     physical_path = api.portal.get().getPhysicalPath()
+    relative_path = relative_path.strip('/')
     if relative_path:
         physical_path += (relative_path, )
 
@@ -191,7 +192,7 @@ def relative_to_physical_path(relative_path):
 
 def url_to_physical_path(value):
     portal_url = api.portal.get().absolute_url()
-    return relative_to_physical_path(value.replace(portal_url, '').strip('/'))
+    return relative_to_physical_path(value.replace(portal_url, ''))
 
 
 class SimpleListingField(object):

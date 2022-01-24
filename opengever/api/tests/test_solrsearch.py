@@ -227,7 +227,9 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         url = (u'{}/@solrsearch?q=wichtig&fq=portal_type:opengever.document.document&'
                u'fq=path_parent:{}'.format(
                    self.portal.absolute_url(),
-                   self.subdossier.absolute_url_path().replace("/", "\\/")))
+                   self.subdossier.absolute_url()
+                       .replace(self.portal.absolute_url(), '')
+                       .replace("/", "\\/")))
         browser.open(url, method='GET', headers=self.api_headers)
         filtered_items = browser.json["items"]
         self.assertEqual(1, len(filtered_items))
@@ -839,7 +841,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_filter_by_path_parent(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = u'{}/@solrsearch?fq=path_parent:/plone/private/kathi-barfuss'.format(
+        url = u'{}/@solrsearch?fq=path_parent:/private/kathi-barfuss'.format(
             self.portal.absolute_url())
 
         browser.open(url, method='GET', headers=self.api_headers)
@@ -861,8 +863,8 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         url = u'{}/@solrsearch?{}'.format(
             self.portal.absolute_url(),
             '&'.join([
-                'fq:list=path_parent:/plone/private/kathi-barfuss',
-                'fq:list=path_parent:/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2'
+                'fq:list=path_parent:/private/kathi-barfuss',
+                'fq:list=path_parent:/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2'
             ]))
 
         browser.open(url, method='GET', headers=self.api_headers)
@@ -891,7 +893,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
     def test_add_path_parent_filters_replaces_an_existing_path_parent_filter_with_the_internal_phyisical_path(self):
         solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
-        filters = ['path_parent:/plone/ordnungssystem/dossier\\-1']
+        filters = ['path_parent:/ordnungssystem/dossier\\-1']
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual([u'path_parent:(\\/plone\\/ordnungssystem\\/dossier\\-1)'], filters)
@@ -899,24 +901,17 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_add_path_parent_filters_connects_multiple_path_parent_filters_with_an_or_operator(self):
         solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
         filters = [
-            'path_parent:/plone/inbox',
-            'path_parent:/plone/private',
+            'path_parent:/inbox',
+            'path_parent:/private',
             ]
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual(
             [u'path_parent:(\\/plone\\/inbox OR \\/plone\\/private)'], filters)
 
-    def test_add_path_parent_filters_does_nothing_if_the_path_parent_is_not_prefixed_with_the_portal_absolute_path(self):
-        solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
-        filters = ['path_parent:\\/inbox']
-        solrsearch.add_path_parent_filters(filters)
-
-        self.assertEqual(['path_parent:\\/inbox'], filters)
-
     def test_add_path_parent_filters_respects_escaped_filter_values(self):
         solrsearch = getMultiAdapter((self.portal, self.request), name='GET_application_json_@solrsearch')
-        filters = ['path_parent:\\/plone\\/inbox']
+        filters = ['path_parent:\\/inbox']
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual([u'path_parent:(\\/plone\\/inbox)'], filters)
@@ -1076,7 +1071,10 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
             'q': 'wichtig',
             'fq': [
                 'portal_type:opengever.document.document OR ftw.mail.mail',
-                'path_parent:{}'.format(self.subdossier.absolute_url_path().replace("/", "\\/"))
+                'path_parent:{}'.format(
+                    self.subdossier.absolute_url()
+                        .replace(self.portal.absolute_url(), '')
+                        .replace("/", "\\/"))
             ]
         }
 
