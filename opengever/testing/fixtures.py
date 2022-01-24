@@ -2174,6 +2174,7 @@ class OpengeverContentFixture(object):
 
         return committee
 
+    @staticuid()
     def create_workspace_root(self):
         self.workspace_root = self.register('workspace_root', create(
             Builder('workspace_root')
@@ -2185,6 +2186,7 @@ class OpengeverContentFixture(object):
             )
         ))
 
+    @staticuid()
     def create_workspace(self):
         self.workspace = self.register('workspace', create(
             Builder('workspace')
@@ -2255,6 +2257,7 @@ class OpengeverContentFixture(object):
                     outputMimeType='text/x-html-safe'),
             )))
 
+    @staticuid()
     def create_todos(self):
         self.todolist_general = self.register('todolist_general', create(
             Builder('todolist')
