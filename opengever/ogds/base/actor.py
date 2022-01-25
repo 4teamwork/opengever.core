@@ -298,7 +298,7 @@ class InboxActor(Actor):
         return self.org_unit.inbox().assigned_users()
 
     def represents(self):
-        return self.org_unit
+        return get_inbox_for_org_unit(self.org_unit.id())
 
     def represents_url(self):
         inbox = get_inbox_for_org_unit(self.org_unit.id())

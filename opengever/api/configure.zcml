@@ -49,6 +49,7 @@
   <adapter factory=".dossier.SerializeDossierToJson" />
   <adapter factory=".workspace_folder.SerializeWorkspaceFolderToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
+  <adapter factory=".kub.SerializeKuBEntityToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />

@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.kub.testing import KUB_RESPONSES
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import Actor
@@ -236,6 +237,44 @@ class TestKuBContactActor(KuBIntegrationTestCase):
         actor = Actor.lookup(contact_id)
 
         self.assertIsInstance(actor, NullActor)
+
+    @browsing
+    def test_actors_response_for_kubcontact(self, mocker, browser):
+        self.mock_get_by_id(mocker, self.person_jean)
+        self.login(self.regular_user, browser=browser)
+        url = "{}/@actors/{}".format(self.portal.absolute_url(), self.person_jean)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictEqual(
+            {
+                u'@id': url,
+                u'@type': u'virtual.ogds.actor',
+                u'active': True,
+                u'actor_type': u'kubcontact',
+                u'identifier': self.person_jean,
+                u'is_absent': False,
+                u'label': u'Dupont Jean',
+                u'portrait_url': None,
+                u'representatives': [],
+                u'represents': {
+                    u'@id': u'http://nohost/plone/@kub/person:9af7d7cc-b948-423f-979f-587158c6bc65'
+                }
+            },
+            browser.json)
+
+    @browsing
+    def test_full_representation_for_kubcontact(self, mocker, browser):
+        self.mock_get_by_id(mocker, self.person_jean)
+        self.login(self.regular_user, browser=browser)
+        url = "{}/@actors/{}?full_representation=true".format(
+            self.portal.absolute_url(), self.person_jean)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@kub/person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'dateOfBirth': u'1992-05-15',
+            u'fullName': u'Dupont Jean'}, browser.json['represents'])
 
 
 class TestSQLContactActor(IntegrationTestCase):

@@ -71,6 +71,19 @@ class TestActorsGet(IntegrationTestCase):
         )
 
     @browsing
+    def test_full_representation_for_team(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'team:1'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@teams/1',
+            u'@type': u'virtual.ogds.team',
+            u'title': u'Projekt \xdcberbaung Dorfmatte'}, browser.json['represents'])
+
+    @browsing
     def test_actors_response_for_inbox(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
@@ -103,6 +116,19 @@ class TestActorsGet(IntegrationTestCase):
         )
 
     @browsing
+    def test_full_representation_for_inbox(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        actor_id = 'inbox:fa'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa',
+            u'@type': u'opengever.inbox.inbox',
+            u'email': u'1011033300@example.org'}, browser.json['represents'])
+
+    @browsing
     def test_actors_response_for_contact(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -128,6 +154,17 @@ class TestActorsGet(IntegrationTestCase):
             },
             browser.json
         )
+
+    @browsing
+    def test_full_representation_for_contact(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'contact:{}'.format(self.franz_meier.id)
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual({u'@id': u'http://nohost/plone/kontakte/meier-franz'},
+                         browser.json['represents'])
 
     @browsing
     def test_actors_response_for_committee(self, browser):
@@ -165,6 +202,18 @@ class TestActorsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_full_representation_for_committee(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'committee:1'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/opengever-meeting-committeecontainer/committee-1'},
+            browser.json['represents'])
+
+    @browsing
     def test_actors_response_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -194,6 +243,20 @@ class TestActorsGet(IntegrationTestCase):
                 },
             },
             browser.json)
+
+    @browsing
+    def test_full_representation_for_ogds_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'jurgen.konig'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@ogds-users/jurgen.konig',
+            u'@type': u'virtual.ogds.user',
+            u'email': u'jurgen.konig@gever.local'}, browser.json['represents'])
 
     @browsing
     def test_actors_response_for_ogds_user_with_orgunit(self, browser):
@@ -262,6 +325,20 @@ class TestActorsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_full_representation_for_group(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'projekt_a'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
+            u'@type':  u'virtual.ogds.group',
+            u'title': u'Projekt A'}, browser.json['represents'])
+
+    @browsing
     def test_actors_response_for_plone_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -289,6 +366,20 @@ class TestActorsGet(IntegrationTestCase):
         )
 
     @browsing
+    def test_full_representation_for_plone_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'admin'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictContainsSubset({
+            u'@id': u'http://nohost/plone/@users/admin',
+            u'email': None,
+            u'roles': [u'Manager']}, browser.json['represents'])
+
+    @browsing
     def test_actors_response_for_system_actor(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -312,6 +403,16 @@ class TestActorsGet(IntegrationTestCase):
             },
             browser.json
         )
+
+    @browsing
+    def test_full_representation_for_system_actor(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = '__system__'
+        url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(None, browser.json['represents'])
 
     @browsing
     def test_raises_bad_request_when_actor_is_missing(self, browser):
@@ -357,6 +458,13 @@ class TestActorsGet(IntegrationTestCase):
             },
             browser.json,
         )
+
+    @browsing
+    def test_full_representation_for_invalid_actor_id(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.actors_url + "/foo?full_representation=true", headers=self.api_headers)
+
+        self.assertEqual(None, browser.json['represents'])
 
     @browsing
     def test_is_absent_if_today_is_between_absent_dates(self, browser):
