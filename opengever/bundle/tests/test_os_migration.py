@@ -394,8 +394,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': False,
              'uid': self.empty_repofolder.UID()},
             invalid_rows[0])
-
-        self.assertIn("leaf node principle violated", log_list[4])
+        self.assertIn("leaf node principle violated", log_list[6])
 
         self.assertEqual(
             {'is_valid': False,
@@ -419,7 +418,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
             invalid_rows[1])
         self.assertIn(
             "move operation must define new_parent_uid.",
-            log_list[5])
+            log_list[7])
 
         guid = invalid_rows[2]['new_position_guid']
         self.assertEqual(
@@ -444,7 +443,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
             invalid_rows[2])
         self.assertIn(
             "could not find new parent for create operation.",
-            log_list[6])
+            log_list[8])
 
         guid = invalid_rows[3]['new_position_guid']
         self.assertEqual(
@@ -467,8 +466,8 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': False,
              'uid': None},
             invalid_rows[3])
-        self.assertIn("Invalid operation: parent not found.", log_list[7])
-        self.assertIn("leaf node principle violated", log_list[8])
+        self.assertIn("Invalid operation: parent not found.", log_list[9])
+        self.assertIn("leaf node principle violated", log_list[10])
 
         guid = invalid_rows[4]['new_position_guid']
         parent_guid = invalid_rows[4]['new_position_parent_guid']
@@ -492,7 +491,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'repository_depth_violated': True,
              'uid': None},
             invalid_rows[4])
-        self.assertIn("repository depth violated.", log_list[9])
+        self.assertIn("repository depth violated.", log_list[11])
 
         logger.removeHandler(handler)
 
