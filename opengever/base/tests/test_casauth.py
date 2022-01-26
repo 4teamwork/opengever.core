@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_cluster_base_url
 from opengever.base.casauth import get_gever_portal_url
+from opengever.base.casauth import get_user_avatar_url
 from opengever.base.interfaces import IPortalSettings
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
@@ -87,3 +88,13 @@ class TestGEVERPortalURL(IntegrationTestCase):
 
         self.assertEquals(
             'http://example.com/my-special-portal', get_gever_portal_url())
+
+
+class TestUserAvatarUrl(IntegrationTestCase):
+
+    def test_user_avatar_url_contains_the_md5_encoded_username(self):
+        get_current_admin_unit().public_url = 'http://example.com'
+        get_current_admin_unit().unit_id = 'foobar'
+        self.assertEquals(
+            'http://example.com/portal/media/avatars/04f98100995b2f5633210e10f21ee022',
+            get_user_avatar_url('foo.bar'))
