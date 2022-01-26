@@ -2,10 +2,17 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from OFS.Image import Image
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.base.interfaces import AVATAR_SOURCE_AUTO
+from opengever.base.interfaces import AVATAR_SOURCE_PLONE_ONLY
+from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
+from opengever.base.interfaces import IActorSettings
 from opengever.base.model import create_session
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
+from plone import api
+from Products.CMFPlone.tests import dummy
 import json
 
 
@@ -684,3 +691,65 @@ class TestActorsGetListPOST(IntegrationTestCase):
             }
 
         self.assertDictEqual(expected, browser.json)
+
+    @browsing
+    def test_returns_the_plone_portrait_url_with_plone_only_setting(self, browser):
+        m_tool = api.portal.get_tool('portal_memberdata')
+        api.portal.set_registry_record('user_avatar_image_source',
+                                       AVATAR_SOURCE_PLONE_ONLY,
+                                       interface=IActorSettings)
+
+        self.login(self.regular_user, browser=browser)
+        userid = self.regular_user.id
+        url = "{}/{}".format(self.actors_url, userid)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(None, browser.json.get('portrait_url'))
+
+        m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            u'http://nohost/plone/portal_memberdata/portraits/avatar',
+            browser.json.get('portrait_url'))
+
+    @browsing
+    def test_returns_the_portal_portrait_url_with_portal_only_setting(self, browser):
+        m_tool = api.portal.get_tool('portal_memberdata')
+        api.portal.set_registry_record('user_avatar_image_source',
+                                       AVATAR_SOURCE_PORTAL_ONLY,
+                                       interface=IActorSettings)
+
+        self.login(self.regular_user, browser=browser)
+        userid = self.regular_user.id
+        m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)
+
+        url = "{}/{}".format(self.actors_url, userid)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            u'http://nohost/portal/media/avatars/2433f8fd7cd07d9cb6427016c009c2e3',
+            browser.json.get('portrait_url'))
+
+    @browsing
+    def test_returns_the_portal_portrait_url_as_fallback_with_auto_setting(self, browser):
+        m_tool = api.portal.get_tool('portal_memberdata')
+        api.portal.set_registry_record('user_avatar_image_source',
+                                       AVATAR_SOURCE_AUTO,
+                                       interface=IActorSettings)
+
+        self.login(self.regular_user, browser=browser)
+        userid = self.regular_user.id
+        url = "{}/{}".format(self.actors_url, userid)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            u'http://nohost/portal/media/avatars/2433f8fd7cd07d9cb6427016c009c2e3',
+            browser.json.get('portrait_url'))
+
+        m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            u'http://nohost/plone/portal_memberdata/portraits/avatar',
+            browser.json.get('portrait_url'))
