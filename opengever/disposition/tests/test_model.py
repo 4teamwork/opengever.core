@@ -273,9 +273,19 @@ class TestDossier(IntegrationTestCase):
         brains = api.content.find(context=self.dossier, depth=1,
                                   portal_type=['opengever.document.document',
                                                'ftw.mail.mail'])
-        expected_documents = set([brain.getObject() for brain in brains])
+        expected_documents = [brain.getObject() for brain in brains]
 
-        self.assertEquals(expected_documents,
+        # proposal and task documents
+        brains = api.content.find(context=self.dossier, depth=1,
+                                  portal_type=['opengever.meeting.proposal',
+                                               'opengever.task.task'])
+        paths = [brain.getPath() for brain in brains]
+        brains = api.content.find(path=paths,
+                                  portal_type=['opengever.document.document',
+                                               'ftw.mail.mail'])
+        expected_documents += [brain.getObject() for brain in brains]
+
+        self.assertEquals(set(expected_documents),
                           set([doc.obj for doc in model.documents.values()]))
 
     @unittest.skip('Currently not implemented')
@@ -392,9 +402,11 @@ class TestFolderAndFileModel(IntegrationTestCase):
         # self.dossier
         # two subdossiers, self.subdossier and self.subdossier2
         self.assertEquals(2, len(dossier_model.folders))
-        # dossier a contains 4 files, for self.document, self.mail_eml,
-        # self.mail_msg and one automatically generated for self.decided_proposal
-        self.assertEquals(4, len(dossier_model.files))
+        # dossier a contains 9 files. 4 files direcly in the dossier (
+        # self.document, self.mail_eml, self.mail_msg and one automatically
+        # generated for self.decided_proposal), 4 documents inside the
+        # proposal and the self.taskdocument.
+        self.assertEquals(9, len(dossier_model.files))
         subdossier_model = dossier_model.folders[0]
         subdossier2_model = dossier_model.folders[1]
 
