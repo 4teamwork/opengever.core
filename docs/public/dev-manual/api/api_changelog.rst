@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@globalsources``: The ``all_users_and_groups`` source returns now also inactive users.
 
 
 2022.3.0 (2022-02-02)

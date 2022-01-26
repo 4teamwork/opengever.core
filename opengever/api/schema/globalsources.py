@@ -11,7 +11,7 @@ from zope.schema import getFieldsInOrder
 class IGlobalSourceSchema(model.Schema):
 
     all_users_and_groups = schema.Choice(
-        source=AllUsersAndGroupsSourceBinder(),
+        source=AllUsersAndGroupsSourceBinder(only_active_orgunits=False),
     )
 
     filtered_groups = schema.Choice(
