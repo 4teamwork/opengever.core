@@ -12,6 +12,7 @@
   <records interface="opengever.base.interfaces.IRecentlyTouchedSettings" />
   <records interface="opengever.base.interfaces.IOGMailSettings" />
   <records interface="opengever.base.interfaces.IPortalSettings" />
+  <records interface="opengever.base.interfaces.IActorSettings" />
 
   <!-- BUMBLEBEE -->
   <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings" />
