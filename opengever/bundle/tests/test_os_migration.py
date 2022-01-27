@@ -401,8 +401,8 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'leaf_node_violated': False,
              'merge_into': None,
              'new_repo_pos': RepositoryPosition('41', u"Spinn\xe4nnetzregistrar", None),
-             'new_number': '1',
-             'new_parent_position': '4',
+             'new_number': None,
+             'new_parent_position': None,
              'new_parent_uid': None,
              'new_position_guid': None,
              'new_position_parent_guid': None,
@@ -417,7 +417,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
              'uid': self.inactive_repofolder.UID()},
             invalid_rows[1])
         self.assertIn(
-            "move operation must define new_parent_uid.",
+            "Invalid operation: cannot find new parent.",
             log_list[7])
 
         guid = invalid_rows[2]['new_position_guid']
