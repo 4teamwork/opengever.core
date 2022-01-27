@@ -1350,6 +1350,21 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # This will validate that the reference numbers were set correctly
         migrator.run()
 
+    def test_repository_migrator_handles_temporary_dupplicate_position(self):
+        """we move position 1 to 4, and create a new position 1. Because creation
+        happens before move, we have two positions 1 at some point.
+        Second trap here is that position 11 remains 11, i.e. it needs to be moved
+        to the newly created position 1.
+        """
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_handles_temporary_dupplicate_position.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+
     def get_allowed_users(self, obj):
         return filter(lambda x: x.startswith("user:"),
                       self.get_catalog_indexdata(obj)['allowedRolesAndUsers'])
