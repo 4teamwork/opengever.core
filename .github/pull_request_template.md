@@ -35,6 +35,8 @@ _Only applicable should be left and checked._
     - [ ] api-change label added
     - [ ] #delivery channel notified about breaking change
     - [ ] Scrum master is informed
+- Bug fixed:
+  - [ ] Resolved any Sentry issues caused by this bug
 - New functionality:
   - [ ] for `document` also works for `mail`
   - [ ] for `task` also works for `forwarding`
