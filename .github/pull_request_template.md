@@ -21,6 +21,13 @@ _Everything has to be done/checked. Checked but not present means the author dee
 
 _Only applicable should be left and checked._
 
+- Upgrade-Steps:
+  - [ ] SQL Operations do not use imported model (see [docs](https://4teamwork.atlassian.net/wiki/spaces/4TEAM/pages/994344994/Upgrade-Steps))
+  - [ ] Make it deferrable if possible
+  - [ ] Execute as much as possible conditionally
+  - DB-Schema migration
+    - [ ] All changes on a model (columns, etc) are included in a DB-schema migration.
+    - [ ] Constraint names are shorter than 30 characters (`Oracle`)
 - API change:
   - [ ] Documentation is updated
   - [ ] API Changelog entry (see [guide](https://4teamwork.atlassian.net/wiki/spaces/4TEAM/pages/451248812/API+Changelog+Guidelines))
@@ -28,17 +35,13 @@ _Only applicable should be left and checked._
     - [ ] api-change label added
     - [ ] #delivery channel notified about breaking change
     - [ ] Scrum master is informed
+- Bug fixed:
+  - [ ] Resolved any Sentry issues caused by this bug
 - New functionality:
   - [ ] for `document` also works for `mail`
   - [ ] for `task` also works for `forwarding`
 - Further improvements needed:
   - [ ] Create follow-up stories and link them in the PR and Jira issue
-- Upgrade steps (changes in profile):
-  - [ ] Make it deferrable if possible
-  - [ ] Execute as much as possible conditionally
-- DB-Schema migration
-  - [ ] All changes on a model (columns, etc) are included in a DB-schema migration.
-  - [ ] Constraint names are shorter than 30 characters (`Oracle`)
 - [ ] Change could impact client installations, client policies need to be adapted
 - New translations
   - [ ] All msg-strings are unicode
