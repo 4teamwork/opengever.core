@@ -6,6 +6,7 @@ from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
+from opengever.api.solr_query_service import relative_to_physical_path
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.api.solr_query_service import url_to_physical_path
 from opengever.base.interfaces import ISearchSettings
@@ -81,29 +82,19 @@ class SolrSearchGet(SolrQueryBaseService):
         makes it possible to query for multiple path_parents
         """
         requested_parent_paths = []
-        portal = api.portal.get()
-        portal_absolute_url_path = portal.absolute_url_path()
         for query in list(filters):
             if not query.startswith("path_parent:"):
                 continue
 
             # extract the path from the query and unescape
             path = query.split(":", 1)[1].replace('\\', '')
-            if not path.startswith(portal_absolute_url_path):
-                continue
 
             # A frontend does not know anything about the physical path of an object.
-            # We have to take care of this. So we have to remove the absolute
-            # portal path to get the relative path from the plone site root
-            relativePath = path.replace(portal_absolute_url_path, '', 1).strip('/')
+            # We have to take care of this by resolve the relative path to a physical path
+            # which is required by solr.
+            physical_path = relative_to_physical_path(path)
 
-            # And then we can extend the physical portal path with the requested
-            # relative path
-            physicalPath = portal.getPhysicalPath()
-            if relativePath:
-                physicalPath += (relativePath, )
-
-            requested_parent_paths.append('/'.join(physicalPath))
+            requested_parent_paths.append(physical_path)
             filters.remove(query)
 
         if (requested_parent_paths):

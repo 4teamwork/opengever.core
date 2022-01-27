@@ -8,7 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- ``@solrsearch:``: Change ``path_parent`` filter query to no longer expect physical paths but relative paths instead.
 
 Other Changes
 ^^^^^^^^^^^^^

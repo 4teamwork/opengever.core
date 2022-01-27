@@ -305,7 +305,7 @@ Beispiel für eine Suche mit diversen Kriterien als Übersicht für die Verwendu
     "fl": "UID,Title",
     "fq": [
       "portal_type:opengever.document.document",
-      "path_parent:/fd/os/dossier-1"
+      "path_parent:/os/dossier-1"
     ],
     "facet": true,
     "facet.field": "responsible"
