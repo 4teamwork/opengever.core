@@ -101,6 +101,10 @@ class OSMigrationTestMixin(object):
     def get_changed_rows(rows):
         return [row for row in rows if not row['old_repo_pos'] == row['new_repo_pos']]
 
+    @staticmethod
+    def get_guid(obj):
+        return IAnnotations(obj)[BUNDLE_GUID_KEY]
+
     empty_permissions = {'add': [],
                          'block_inheritance': False,
                          'close': [],
@@ -113,13 +117,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
-        'merge_into': None,
+        'need_creation': False,
+        'need_merge': False,
+        'need_move': False,
         'new_number': None,
-        'new_parent_position': None,
-        'new_parent_uid': None,
+        'new_parent_guid': None,
         'new_position_guid': None,
-        'new_position_parent_guid': None,
-        'new_position_parent_position': None,
         'new_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
@@ -133,13 +136,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
-        'merge_into': None,
+        'need_creation': False,
+        'need_merge': False,
+        'need_move': False,
         'new_number': None,
-        'new_parent_position': None,
-        'new_parent_uid': None,
+        'new_parent_guid': None,
         'new_position_guid': None,
-        'new_position_parent_guid': None,
-        'new_position_parent_position': None,
         'new_repo_pos': RepositoryPosition(11,  u'Vertr\xe4ge und Vereinbarungen', None),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(11,  u'Vertr\xe4ge und Vereinbarungen', None),
@@ -153,13 +155,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
-        'merge_into': None,
+        'need_creation': False,
+        'need_merge': False,
+        'need_move': False,
         'new_number': None,
-        'new_parent_position': None,
-        'new_parent_uid': None,
+        'new_parent_guid': None,
         'new_position_guid': None,
-        'new_position_parent_guid': None,
-        'new_position_parent_position': None,
         'new_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
@@ -173,13 +174,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
-        'merge_into': None,
+        'need_creation': False,
+        'need_merge': False,
+        'need_move': False,
         'new_number': None,
-        'new_parent_position': None,
-        'new_parent_uid': None,
+        'new_parent_guid': None,
         'new_position_guid': None,
-        'new_position_parent_guid': None,
-        'new_position_parent_position': None,
         'new_repo_pos': RepositoryPosition(3, u"Spinn\xe4nnetzregistrar", None),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(3, u"Spinn\xe4nnetzregistrar", None),
@@ -188,6 +188,25 @@ class OSMigrationTestMixin(object):
         'repository_depth_violated': False,
         'set_permissions': False,
         'uid': 'createrepositorytree000000000005'}
+
+    default_data = {
+        'is_valid': True,
+        'leaf_node_violated': False,
+        'local_roles_deleted': False,
+        'need_creation': False,
+        'need_merge': False,
+        'need_move': False,
+        'new_number': None,
+        'new_parent_guid': None,
+        'new_position_guid': None,
+        'new_repo_pos': RepositoryPosition(),
+        'new_title': None,
+        'old_repo_pos': RepositoryPosition(),
+        'permissions': empty_permissions,
+        'permissions_disregarded': False,
+        'repository_depth_violated': False,
+        'set_permissions': False,
+        'uid': None}
 
 
 class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
@@ -216,7 +235,6 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         analyser.analyse()
 
         self.assertEqual(6, len(analyser.analysed_rows))
-
         self.assertDictEqual(self.branch_repofolder_data, analyser.analysed_rows[0])
 
         data = deepcopy(self.empty_repofolder_data)
@@ -230,58 +248,28 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         new_branch_guid = analyser.analysed_rows[3]['new_position_guid']
         reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         self.assertIsNotNone(new_branch_guid)
-        self.assertDictEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'local_roles_deleted': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(4, 'Created branch', 'comment 1'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': reporoot_guid,
-             'new_position_parent_position': '',
-             'new_position_guid': new_branch_guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'repository_depth_violated': False,
-             'set_permissions': False,
-             'uid': None},
-            analyser.analysed_rows[3])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(4, 'Created branch', 'comment 1')
+        data['need_creation'] = True
+        data['new_parent_guid'] = reporoot_guid
+        data['new_position_guid'] = new_branch_guid
+        self.assertDictEqual(data, analyser.analysed_rows[3])
 
         guid = analyser.analysed_rows[4]['new_position_guid']
         self.assertIsNotNone(guid)
-        self.assertDictEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'local_roles_deleted': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(41, 'created leaf', 'comment 2'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': new_branch_guid,
-             'new_position_parent_position': None,
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'repository_depth_violated': False,
-             'set_permissions': False,
-             'uid': None},
-            analyser.analysed_rows[4])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(41, 'created leaf', 'comment 2')
+        data['need_creation'] = True
+        data['new_parent_guid'] = new_branch_guid
+        data['new_position_guid'] = guid
+        self.assertDictEqual(data, analyser.analysed_rows[4])
 
-        uid = analyser.analysed_rows[5]['new_parent_uid']
-        self.assertIsNotNone(uid)
         data = deepcopy(self.leaf_repofolder_data)
         data['new_number'] = '2'
-        data['new_parent_position'] = '4'
-        data['new_parent_uid'] = uid
+        data['new_parent_guid'] = new_branch_guid
         data['new_repo_pos'] = RepositoryPosition(42, 'Moved leaf', 'comment for moved one')
         data['new_title'] = u'Moved leaf'
+        data['need_move'] = True
         self.assertDictEqual(data, analyser.analysed_rows[5])
 
     def test_repository_excel_analyser_os_test_migration(self):
@@ -306,57 +294,28 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
 
         guid = analyser.analysed_rows[3]['new_position_guid']
         self.assertIsNotNone(guid)
-
-        self.assertDictEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('01', 'created leaf in branch with new number', 'comment 1'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '2',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            analyser.analysed_rows[3])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition('01', 'created leaf in branch with new number', 'comment 1')
+        data['need_creation'] = True
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        data['new_position_guid'] = guid
+        self.assertDictEqual(data, analyser.analysed_rows[3])
 
         guid = analyser.analysed_rows[4]['new_position_guid']
         self.assertIsNotNone(guid)
-        self.assertDictEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(12, 'created leaf in existing branch', 'comment 2'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '1',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            analyser.analysed_rows[4])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(12, 'created leaf in existing branch', 'comment 2')
+        data['need_creation'] = True
+        data['new_parent_guid'] = self.get_guid(self.branch_repofolder)
+        data['new_position_guid'] = guid
+        self.assertDictEqual(data, analyser.analysed_rows[4])
 
         data = deepcopy(self.leaf_repofolder_data)
         data['new_number'] = u'2'
+        data['need_move'] = True
         data['new_repo_pos'] = RepositoryPosition('02', 'Moved leaf in branch with new number', 'comment for moved one')
         data['new_title'] = u'Moved leaf in branch with new number'
-        data['new_parent_position'] = '0'
-        data['new_parent_uid'] = self.empty_repofolder.UID()
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
         self.assertDictEqual(data, analyser.analysed_rows[5])
 
     def test_repository_excel_analyser_os_test_invalid(self):
@@ -374,124 +333,60 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         invalid_rows = [row for row in analyser.analysed_rows if not row['is_valid']]
         self.assertEqual(5, len(invalid_rows))
 
-        self.assertEqual(
-            {'is_valid': False,
-             'leaf_node_violated': True,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('111', u"Rechnungspr\xfcfungskommission", None),
-             'new_number': '1',
-             'new_parent_position': '11',
-             'new_parent_uid': self.leaf_repofolder.UID(),
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition('2', u"Rechnungspr\xfcfungskommission", None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.empty_repofolder.UID()},
-            invalid_rows[0])
+        data = deepcopy(self.empty_repofolder_data)
+        data['is_valid'] = False
+        data['leaf_node_violated'] = True
+        data['new_repo_pos'] = RepositoryPosition('111', u"Rechnungspr\xfcfungskommission", None)
+        data['new_parent_guid'] = self.get_guid(self.leaf_repofolder)
+        data['need_move'] = True
+        data['new_number'] = '1'
+
+        self.assertEqual(data, invalid_rows[0])
         self.assertIn("leaf node principle violated", log_list[6])
 
-        self.assertEqual(
-            {'is_valid': False,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('41', u"Spinn\xe4nnetzregistrar", None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition('3', u"Spinn\xe4nnetzregistrar", None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.inactive_repofolder.UID()},
-            invalid_rows[1])
+        data = deepcopy(self.inactive_repofolder_data)
+        data['is_valid'] = False
+        data['new_repo_pos'] = RepositoryPosition('41', u"Spinn\xe4nnetzregistrar", None)
+        self.assertEqual(data, invalid_rows[1])
         self.assertIn(
             "Invalid operation: cannot find new parent.",
             log_list[7])
 
-        guid = invalid_rows[2]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': False,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('51', 'New leaf', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': guid,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '5',
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(None, None, None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            invalid_rows[2])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition('51', 'New leaf', None)
+        data['is_valid'] = False
+        data['need_creation'] = True
+        data['new_position_guid'] = invalid_rows[2]['new_position_guid']
+
+        self.assertEqual(data, invalid_rows[2])
         self.assertIn(
             "could not find new parent for create operation.",
             log_list[8])
 
-        guid = invalid_rows[3]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': False,
-             'leaf_node_violated': True,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('112', 'Second new leaf', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': guid,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '11',
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(None, None, None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            invalid_rows[3])
-        self.assertIn("Invalid operation: parent not found.", log_list[9])
-        self.assertIn("leaf node principle violated", log_list[10])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition('112', 'Second new leaf', None)
+        data['is_valid'] = False
+        data['leaf_node_violated'] = True
+        data['need_creation'] = True
+        data['new_position_guid'] = invalid_rows[3]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.leaf_repofolder)
 
-        guid = invalid_rows[4]['new_position_guid']
-        parent_guid = invalid_rows[4]['new_position_parent_guid']
-        self.assertEqual(
-            {'is_valid': False,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('1211', 'fourth level', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': guid,
-             'new_position_parent_guid': parent_guid,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(None, None, None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': True,
-             'uid': None},
-            invalid_rows[4])
-        self.assertIn("repository depth violated.", log_list[11])
+        self.assertEqual(data, invalid_rows[3])
+        self.assertIn("leaf node principle violated", log_list[9])
+
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition('1211', 'fourth level', None)
+        data['is_valid'] = False
+        data['need_creation'] = True
+        data['repository_depth_violated'] = True
+        data['new_position_guid'] = invalid_rows[4]['new_position_guid']
+
+        parent_row = analyser.analysed_rows[-2]
+        self.assertEqual('121', parent_row['new_repo_pos'].position)
+        data['new_parent_guid'] = parent_row['new_position_guid']
+
+        self.assertEqual(data, invalid_rows[4])
+        self.assertIn("repository depth violated.", log_list[10])
 
         logger.removeHandler(handler)
 
@@ -614,26 +509,9 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only change the title of branch_repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(1, u"F\xfchrung", "New description"),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.branch_repofolder.UID()},
-            changed_rows[0])
+        data = deepcopy(self.branch_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(1, u"F\xfchrung", "New description")
+        self.assertEqual(data, changed_rows[0])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
@@ -651,46 +529,15 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only change the refnum of branch_repofolder (and leaf_repofolder)
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(0, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
-             'new_number': '0',
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.branch_repofolder.UID()},
-            changed_rows[0])
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition('01', u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition('11', u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[1])
+
+        data = deepcopy(self.branch_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(0, u"F\xfchrung", u"Alles zum Thema F\xfchrung.")
+        data['new_number'] = '0'
+        self.assertEqual(data, changed_rows[0])
+
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition('01', u'Vertr\xe4ge und Vereinbarungen', None)
+        self.assertEqual(data, changed_rows[1])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
@@ -725,26 +572,10 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only change the title of branch_repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(1, "New title", u"Alles zum Thema F\xfchrung."),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': u'New title',
-             'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.branch_repofolder.UID()},
-            changed_rows[0])
+        data = deepcopy(self.branch_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(1, "New title", u"Alles zum Thema F\xfchrung.")
+        data['new_title'] = u'New title'
+        self.assertEqual(data, changed_rows[0])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
@@ -780,26 +611,12 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only move the leaf_repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(21, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': '1',
-             'new_parent_position': '2',
-             'new_parent_uid': self.empty_repofolder.UID(),
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[0])
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(21, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_move'] = True
+        data['new_number'] = '1'
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        self.assertEqual(data, changed_rows[0])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
@@ -838,21 +655,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only create the new repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        guid = changed_rows[0]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(12, u'New leaf', 'New description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '1',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'permissions':  {
+
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(12, u'New leaf', 'New description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[0]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.branch_repofolder)
+        data['permissions'] = {
                 'add': [u'group1'],
                 'block_inheritance': True,
                 'close': [u'group2', u'group3'],
@@ -860,13 +669,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
                 'manage_dossiers': [],
                 'reactivate': [],
                 'read': [u'group1', u'group2']
-                },
-             'local_roles_deleted': False,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[0])
+                }
+        self.assertEqual(data, changed_rows[0])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
@@ -897,50 +701,20 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only create the new repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
-        branch_guid = changed_rows[0]['new_position_guid']
-        self.assertIsNotNone(branch_guid)
-        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(4, u'New branch', 'New description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': reporoot_guid,
-             'new_position_parent_position': '',
-             'new_position_guid': branch_guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[0])
-        guid = changed_rows[1]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(41, u'New leaf', 'New leaf description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': branch_guid,
-             'new_position_parent_position': None,
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[1])
+
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(4, u'New branch', 'New description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[0]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.repository_root)
+        self.assertEqual(data, changed_rows[0])
+
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(41, u'New leaf', 'New leaf description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[1]['new_position_guid']
+        data['new_parent_guid'] = changed_rows[0]['new_position_guid']
+        self.assertEqual(data, changed_rows[1])
 
         with self.observe_children(self.repository_root) as children:
             migrator = RepositoryMigrator(analyser.analysed_rows)
@@ -983,52 +757,23 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
             '/plone/ordnungssystem/rechnungsprufungskommission',
             self.empty_repofolder.absolute_url_path())
 
-        # We create a new repofolder and move the leaf_repofolder into it
+        # We move repofolder and create one in it
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
 
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None),
-             'new_number': '2',
-             'new_parent_position': '1',
-             'new_parent_uid': self.branch_repofolder.UID(),
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_position_guid': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.empty_repofolder.UID()},
-            changed_rows[0])
+        data = deepcopy(self.empty_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None)
+        data['need_move'] = True
+        data['new_number'] = '2'
+        data['new_parent_guid'] = self.get_guid(self.branch_repofolder)
+        self.assertEqual(data, changed_rows[0])
 
-        guid = changed_rows[1]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(121, u'New leaf', 'New description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': guid,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '2',
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[1])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(121, u'New leaf', 'New description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[1]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        self.assertEqual(data, changed_rows[1])
 
         with self.observe_children(self.branch_repofolder) as branch_children,\
                 self.observe_children(self.repository_root) as root_children:
@@ -1080,50 +825,19 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
 
-        branch_guid = changed_rows[0]['new_position_guid']
-        self.assertIsNotNone(branch_guid)
-        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(4, u'New branch', 'New description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': branch_guid,
-             'new_position_parent_guid': reporoot_guid,
-             'new_position_parent_position': '',
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[0])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(4, u'New branch', 'New description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[0]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.repository_root)
+        self.assertEqual(data, changed_rows[0])
 
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(41, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': '1',
-             'new_parent_position': '4',
-             'new_parent_uid': branch_guid,
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid':  self.leaf_repofolder.UID()},
-            changed_rows[1])
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(41, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_move'] = True
+        data['new_number'] = '1'
+        data['new_parent_guid'] = changed_rows[0]['new_position_guid']
+        self.assertEqual(data, changed_rows[1])
 
         with self.observe_children(self.branch_repofolder) as branch_children,\
                 self.observe_children(self.repository_root) as root_children:
@@ -1173,26 +887,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only move the leaf_repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': '4',
-             'new_parent_position': '',
-             'new_parent_uid': self.repository_root.UID(),
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[0])
+
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_move'] = True
+        data['new_number'] = '4'
+        data['new_parent_guid'] = self.get_guid(self.repository_root)
+        self.assertEqual(data, changed_rows[0])
 
         with self.observe_children(self.branch_repofolder) as branch_children,\
                 self.observe_children(self.repository_root) as root_children:
@@ -1251,46 +952,20 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # incative_repofolder into it
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None),
-             'new_number': '2',
-             'new_parent_position': '1',
-             'new_parent_uid': self.branch_repofolder.UID(),
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", ''),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.empty_repofolder.UID()},
-            changed_rows[0])
-        self.assertDictEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(121, u'Vertr\xe4ge und Vereinbarungen', ''),
-             'new_number': '1',
-             'new_parent_position': '12',
-             'new_parent_uid': self.empty_repofolder.UID(),
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[1])
+
+        data = deepcopy(self.empty_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None)
+        data['need_move'] = True
+        data['new_number'] = '2'
+        data['new_parent_guid'] = self.get_guid(self.branch_repofolder)
+        self.assertEqual(data, changed_rows[0])
+
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(121, u'Vertr\xe4ge und Vereinbarungen', '')
+        data['need_move'] = True
+        data['new_number'] = '1'
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        self.assertEqual(data, changed_rows[1])
 
         with self.observe_children(self.branch_repofolder) as branch_children,\
                 self.observe_children(self.repository_root) as root_children:
@@ -1483,24 +1158,13 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # We only create the new repofolder
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
-        guid = changed_rows[0]['new_position_guid']
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(12, u'New leaf', 'New description'),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': '1',
-             'new_position_guid': guid,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(),
-             'local_roles_deleted': False,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'permissions':  {
+
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(12, u'New leaf', 'New description')
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[0]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.branch_repofolder)
+        data['permissions'] = {
                 'add': [u'group1'],
                 'block_inheritance': True,
                 'close': [u'group2', u'group3'],
@@ -1508,10 +1172,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
                 'manage_dossiers': [],
                 'reactivate': [],
                 'read': [u'group1', u'group2']
-                },
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[0])
+                }
+        self.assertEqual(data, changed_rows[0])
 
         self.assertEqual(
             False, getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
@@ -1555,26 +1217,11 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
 
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': self.empty_repofolder.UID(),
-             'new_repo_pos': RepositoryPosition(2, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[0])
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(2, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_merge'] = True
+        data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        self.assertEqual(data, changed_rows[0])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         self.assertEqual(1, len(migrator.items_to_merge()))
@@ -1625,49 +1272,18 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
 
-        guid = changed_rows[0]['new_position_guid']
-        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': None,
-             'new_repo_pos': RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': guid,
-             'new_position_parent_guid': reporoot_guid,
-             'new_position_parent_position': '',
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(None, None, None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': None},
-            changed_rows[0])
+        data = deepcopy(self.default_data)
+        data['new_repo_pos'] = RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_creation'] = True
+        data['new_position_guid'] = changed_rows[0]['new_position_guid']
+        data['new_parent_guid'] = self.get_guid(self.repository_root)
+        self.assertEqual(data, changed_rows[0])
 
-        self.assertEqual(
-            {'is_valid': True,
-             'leaf_node_violated': False,
-             'merge_into': guid,
-             'new_repo_pos': RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None),
-             'new_number': None,
-             'new_parent_position': None,
-             'new_parent_uid': None,
-             'new_position_guid': None,
-             'new_position_parent_guid': None,
-             'new_position_parent_position': None,
-             'new_title': None,
-             'old_repo_pos': RepositoryPosition(11, u'Vertr\xe4ge und Vereinbarungen', None),
-             'local_roles_deleted': False,
-             'permissions': self.empty_permissions,
-             'permissions_disregarded': False,
-             'set_permissions': False,
-             'repository_depth_violated': False,
-             'uid': self.leaf_repofolder.UID()},
-            changed_rows[1])
+        data = deepcopy(self.leaf_repofolder_data)
+        data['new_repo_pos'] = RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None)
+        data['need_merge'] = True
+        data['new_parent_guid'] = changed_rows[0]['new_position_guid']
+        self.assertEqual(data, changed_rows[1])
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         self.assertEqual(1, len(migrator.items_to_merge()))
