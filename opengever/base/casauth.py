@@ -4,6 +4,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from Products.PluggableAuthService.interfaces.plugins import IChallengePlugin
 from urlparse import urljoin
+import hashlib
 import re
 
 
@@ -58,6 +59,13 @@ def get_cas_server_url():
     cas_auth = acl_users.cas_auth
     url = getattr(cas_auth, 'cas_server_url', None)
     return url
+
+
+def get_user_avatar_url(userid):
+    """Get the avatar url for a specific userid
+    """
+    userhash = hashlib.md5(userid).hexdigest()
+    return '{}/media/avatars/{}'.format(get_gever_portal_url(), userhash)
 
 
 def build_cas_server_url(cas_path):

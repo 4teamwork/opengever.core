@@ -490,3 +490,25 @@ class IWhiteLabelingSettings(Interface):
 
     logo_src = schema.Bytes(title=u'Logo image',
                             description=u'Format must be png, height must be 30px')
+
+
+AVATAR_SOURCE_PLONE_ONLY = 'plone_only'
+AVATAR_SOURCE_PORTAL_ONLY = 'portal_only'
+AVATAR_SOURCE_AUTO = 'auto'
+
+
+def get_user_avatar_image_sources():
+    return SimpleVocabulary.fromValues([
+        AVATAR_SOURCE_PLONE_ONLY,
+        AVATAR_SOURCE_PORTAL_ONLY,
+        AVATAR_SOURCE_AUTO,
+        ])
+
+
+class IActorSettings(Interface):
+
+    user_avatar_image_source = schema.Choice(
+        title=u"User avatar image source",
+        source=get_user_avatar_image_sources(),
+        default=AVATAR_SOURCE_PLONE_ONLY,
+    )

@@ -24,6 +24,11 @@ For known actor types use:
 
 """
 
+from opengever.base.casauth import get_user_avatar_url
+from opengever.base.interfaces import AVATAR_SOURCE_AUTO
+from opengever.base.interfaces import AVATAR_SOURCE_PLONE_ONLY
+from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
+from opengever.base.interfaces import IActorSettings
 from opengever.base.utils import escape_html
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
@@ -544,13 +549,7 @@ class PloneUserActor(Actor):
             api.portal.getSite().absolute_url(), self.identifier)
 
     def get_portrait_url(self):
-        mtool = api.portal.get_tool('portal_membership')
-        portrait = mtool.getPersonalPortrait(self.user.id)
-        portrait_url = portrait.absolute_url()
-        if not portrait_url.endswith('/defaultUser.png'):
-            return portrait_url
-        else:
-            return None
+        return UserAvatar(self.user.id).get_portrait_url()
 
 
 @implementer(IActor)
@@ -596,13 +595,7 @@ class OGDSUserActor(Actor):
             api.portal.get().absolute_url(), self.identifier.split(':')[-1])
 
     def get_portrait_url(self):
-        mtool = api.portal.get_tool('portal_membership')
-        portrait = mtool.getPersonalPortrait(self.user.userid)
-        portrait_url = portrait.absolute_url()
-        if not portrait_url.endswith('/defaultUser.png'):
-            return portrait_url
-        else:
-            return None
+        return UserAvatar(self.user.userid).get_portrait_url()
 
 
 @implementer(IActor)
@@ -864,3 +857,37 @@ class ActorLookup(object):
             return self.create_group_actor(group)
 
         return self.create_null_actor()
+
+
+class UserAvatar(object):
+    """Object to lookup the users avatar url depending on the IAvatarSettings.
+    """
+    def __init__(self, userid):
+        self.userid = userid
+
+    def get_portrait_url(self):
+        avatar_source = self.get_avatar_image_source()
+        if (avatar_source == AVATAR_SOURCE_PLONE_ONLY):
+            return self.get_plone_avatar_url()
+        elif (avatar_source == AVATAR_SOURCE_PORTAL_ONLY):
+            return self.get_portal_avatar_url()
+        elif(avatar_source == AVATAR_SOURCE_AUTO):
+            return self.get_plone_avatar_url() or self.get_portal_avatar_url()
+
+        raise NotImplementedError()
+
+    def get_avatar_image_source(self):
+        return api.portal.get_registry_record('user_avatar_image_source',
+                                              interface=IActorSettings)
+
+    def get_plone_avatar_url(self):
+        mtool = api.portal.get_tool('portal_membership')
+        portrait = mtool.getPersonalPortrait(self.userid)
+        portrait_url = portrait.absolute_url()
+        if not portrait_url.endswith('/defaultUser.png'):
+            return portrait_url
+        else:
+            return None
+
+    def get_portal_avatar_url(self):
+        return get_user_avatar_url(self.userid)
