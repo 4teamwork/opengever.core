@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@solrsearch``: The results can now be filtered by ``@id_parent`` or ``url_parent``.
 - ``@actors``: Add ``full_representation`` parameter. (see :ref:`docs <actors>`)
 
 

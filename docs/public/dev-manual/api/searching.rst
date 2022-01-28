@@ -152,6 +152,14 @@ Beispiele für gefilterte Suchabfragen
 
   GET /plone/@solrsearch?fq:list=url:http://example.com/dossier-1&fq:list=url:@id:http://example.com/dossier-2 HTTP/1.1
 
+**Filtern nach ``url_parent`` (alias ``@id_parent``)**
+
+Gibt alle Inhalte zurück die unterhalb des angegebenen Parents liegen und das parent selbst:
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?fq:list=url_parent:http://example.com/dossier-1&fq:list=@id_parent:http://example.com/dossier-2 HTTP/1.1
+
 
 
 Fields

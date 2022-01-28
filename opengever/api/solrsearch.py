@@ -66,8 +66,9 @@ class SolrSearchGet(SolrQueryBaseService):
             filters = []
 
         self.add_path_parent_filters(filters)
+        self.add_url_path_parent_filters(filters)
         self.add_path_filters(filters, params)
-        self.add_url_filters(filters)
+        self.add_url_path_filters(filters)
         self.add_portal_types_filter(filters)
 
         return filters
@@ -100,8 +101,14 @@ class SolrSearchGet(SolrQueryBaseService):
         if (requested_parent_paths):
             filters.extend(make_filters(path_parent=requested_parent_paths))
 
-    def add_url_filters(self, filters):
-        """Beside the 'path_parent' and 'path' filter, we provide an 'url' (alias '@id')
+    def add_url_path_filters(self, filters):
+        self.add_url_filters(filters, ['@id:', 'url:'], 'path')
+
+    def add_url_path_parent_filters(self, filters):
+        self.add_url_filters(filters, ['@id_parent:', 'url_parent:'], 'path_parent')
+
+    def add_url_filters(self, filters, query_prefix, filter_name,):
+        """Beside the 'path' filter, we provide an 'url' (alias '@id')
         filter to filter by specific urls.
 
         Usualy, a frontend does not know the physical path of a resource but it always
@@ -110,7 +117,7 @@ class SolrSearchGet(SolrQueryBaseService):
         """
         requested_paths = []
         for query in list(filters):
-            if not (query.startswith("@id:") or query.startswith("url:")):
+            if not (any([query.startswith(query_name) for query_name in query_prefix])):
                 continue
 
             # extract the @id from the query and unescape
@@ -125,7 +132,7 @@ class SolrSearchGet(SolrQueryBaseService):
 
         if (requested_paths):
             escaped_path_query = escape(u' OR '.join(ensure_text(requested_paths)))
-            filters.append(u'path:({})'.format(escaped_path_query))
+            filters.append(u'{}:({})'.format(filter_name, escaped_path_query))
 
     def extract_path_filter_value(self, filters):
         """If path is not specified we search in the current context
