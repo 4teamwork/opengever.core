@@ -10,6 +10,7 @@ class MigrateDossierComments(UpgradeStep):
     deferrable = True
 
     def __call__(self):
+        self.install_upgrade_profile()
         query = {'object_provides': IDossierMarker.__identifier__}
         with DossierCommentsMigrator() as comment_migrator:
             for brain in self.brains(query, 'Migtate dossier comments'):

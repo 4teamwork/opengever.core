@@ -1,0 +1,3 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+    <javascript id="++resource++opengever.dossier.resources/edit_note.js" remove="True" />
+</object>

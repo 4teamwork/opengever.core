@@ -32,14 +32,6 @@
       />
 
   <browser:viewlet
-      name="opengever.dossier.comment"
-      for="opengever.meeting.interfaces.IMeetingDossier"
-      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-      class="opengever.dossier.viewlets.comment.BusinessCaseCommentViewlet"
-      permission="zope2.View"
-      />
-
-  <browser:viewlet
       name="opengever.meeting.sablon_template_status"
       manager="plone.app.layout.viewlets.interfaces.IAboveContent"
       class=".info.SablonValidationInfoViewlet"
