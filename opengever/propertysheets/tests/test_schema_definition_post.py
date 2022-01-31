@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -8,6 +9,7 @@ from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.propertysheets.testing import dummy_default_factory_gruen
 from opengever.propertysheets.testing import dummy_default_factory_some_text
 from opengever.propertysheets.testing import dummy_default_factory_some_text_line
+from opengever.propertysheets.testing import dummy_default_factory_today
 from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -145,6 +147,11 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "field_type": u"textline",
                     "title": u"zeile"
                 },
+                {
+                    "name": "birthday",
+                    "field_type": u"date",
+                    "title": u"Birthday",
+                },
             ],
             "assignments": ["IDocumentMetadata.document_type.question"],
         }
@@ -160,7 +167,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         definition = storage.get("meinschema")
 
         self.assertEqual(
-            ["yn", "wahl", "colors", "nummer", "text", "zeiletext"],
+            ["yn", "wahl", "colors", "nummer", "text", "zeiletext", "birthday"],
             definition.get_fieldnames()
         )
 
@@ -276,6 +283,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "title": u"zeile",
                     "default_factory": dottedname(dummy_default_factory_some_text_line),
                 },
+                {
+                    "name": "birthday",
+                    "field_type": u"date",
+                    "title": u"Birthday",
+                    "default_factory": dottedname(dummy_default_factory_today),
+                },
             ],
             "assignments": ["IDocumentMetadata.document_type.question"],
         }
@@ -313,6 +326,10 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(u'Some text line', fields['zeiletext'].default)
         self.assertEqual(dummy_default_factory_some_text_line,
                          fields['zeiletext'].defaultFactory)
+
+        self.assertEqual(date.today(), fields['birthday'].default)
+        self.assertEqual(dummy_default_factory_today,
+                         fields['birthday'].defaultFactory)
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_default_expressions(self, browser):
@@ -360,6 +377,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "title": u"zeile",
                     "default_expression": "python: 'Some text line'",
                 },
+                {
+                    "name": "birthday",
+                    "field_type": u"date",
+                    "title": u"Birthday",
+                    "default_expression": "python: portal.some_date_attribute",
+                },
             ],
             "assignments": ["IDocumentMetadata.document_type.question"],
         }
@@ -403,6 +426,12 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(u'Some text line', fields['zeiletext'].defaultFactory())
         self.assertEqual("python: 'Some text line'",
                          fields['zeiletext'].default_expression)
+
+        self.portal.some_date_attribute = date(2022, 1, 30)
+        self.assertEqual(date(2022, 1, 30), fields['birthday'].default)
+        self.assertEqual(date(2022, 1, 30), fields['birthday'].defaultFactory())
+        self.assertEqual("python: portal.some_date_attribute",
+                         fields['birthday'].default_expression)
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_default_from_member(self, browser):

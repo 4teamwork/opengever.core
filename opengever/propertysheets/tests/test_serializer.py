@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
@@ -23,6 +24,65 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
             self.serializer = getMultiAdapter(
                 (field, self.document, self.request), IFieldSerializer
             )
+
+    def test_serializes_complex_propertysheet(self):
+        self.login(self.regular_user)
+
+        choices = [u'Rot', u'Gr\xfcn', u'Blau']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field("choice", u"choose", u"Choose", u"", True, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
+        )
+
+        self.document.document_type = u'question'
+        IDocumentCustomProperties(self.document).custom_properties = {
+            'IDocumentMetadata.document_type.question': {
+                'yesorno': True,
+                'choose': u'Gr\xfcn',
+                'choosemulti': set([u'Gr\xfcn', u'Rot']),
+                'num': 42,
+                'text': u'B\xfcrgermeister\nLorem Ipsum',
+                'textline': u'B\xfcrgermeister',
+                'birthday': date(2022, 1, 30),
+
+            }
+        }
+
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    u'birthday': u'2022-01-30',
+                    u'choose': {
+                        u'title': u'Gr\xfcn',
+                        u'token': u'Gr\\xfcn',
+                    },
+                    u'choosemulti': [
+                        {
+                            u'title': u'Gr\xfcn',
+                            u'token': u'Gr\\xfcn',
+                        },
+                        {
+                            u'title': u'Rot',
+                            u'token': u'Rot',
+                        },
+                    ],
+                    u'num': 42,
+                    u'text': u'B\xfcrgermeister\nLorem Ipsum',
+                    u'textline': u'B\xfcrgermeister',
+                    u'yesorno': True,
+                }
+            },
+            self.serializer(),
+        )
 
     def test_serializes_choice_fields_as_token_title_object(self):
         self.login(self.regular_user)

@@ -21,6 +21,7 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
             .with_field("multiple_choice", u"choosemulti",
                         u"Choose Multi", u"", True, values=choices)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
         self.dossier.dossier_type = u"businesscase"
 
@@ -31,6 +32,7 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
                     "choose": u"zw\xf6i".encode("unicode_escape"),
                     "choosemulti": ["one", "three"],
                     "textline": u"bl\xe4",
+                    "birthday": "2022-01-30",
                 },
             }
         }
@@ -42,6 +44,7 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
                 "choose": u"zw\xf6i",
                 "choosemulti": ["three", "one"],
                 "textline": u"bl\xe4",
+                "birthday": "2022-01-30",
             },
         }
         self.assertEqual(
@@ -107,7 +110,6 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
             )
 
         self.assertDictContainsSubset({"type": "BadRequest"}, browser.json)
-
 
     @browsing
     def test_allows_empty_data_if_only_non_required_fields_in_selected_assignment(self, browser):
