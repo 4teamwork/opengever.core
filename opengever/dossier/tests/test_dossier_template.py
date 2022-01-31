@@ -34,9 +34,10 @@ class TestDossierTemplateSchema(unittest.TestCase):
             set(),
             idossiertemplateschema_fields.intersection(idossier_fields))
 
-    def test_idossiertemplate_fields_all_match_idossier_fields(self):
+    def test_idossiertemplate_fields_almost_all_match_idossier_fields(self):
         idossiertemplate_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossierTemplate)
+            if fieldname != 'comments'
         }
         idossier_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossier)
@@ -391,7 +392,6 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
         self.assertEqual('Bauvorhaben klein', dossier.title)
         self.assertEqual(u'Lorem ipsum', dossier.description)
         self.assertEqual((u'secret', u'special'), IDossier(dossier).keywords)
-        self.assertEqual('this is very special', IDossier(dossier).comments)
         self.assertEqual('department', IDossier(dossier).filing_prefix)
         self.assertEqual('businesscase', IDossier(dossier).dossier_type)
 

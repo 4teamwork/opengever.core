@@ -7,11 +7,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import toggle_feature
 from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
@@ -348,6 +350,32 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
         subdossier = dossier.listFolderContents()[1]
         self.assertEqual([u'Baumsch\xfctze'],
                          [obj.title for obj in subdossier.listFolderContents()])
+
+    @browsing
+    def test_create_dossier_from_template_creates_responses(self, browser):
+        self.login(self.regular_user, browser)
+        IDossierTemplate(self.subdossiertemplate).comments = u'Ein Kommentar im Subdossier'
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+        self.assertEqual(u'this is very special', IResponseContainer(dossier).list()[0].text)
+        subdossier = dossier.listFolderContents()[1]
+        self.assertEqual(u'Ein Kommentar im Subdossier',
+                         IResponseContainer(subdossier).list()[0].text)
 
     @browsing
     def test_raise_unauthorized_if_dossiertemplate_feature_is_not_available(self, browser):
