@@ -12,6 +12,9 @@ from ftw.upgrade.utils import SavepointIterator
 from ftw.upgrade.workflow import WorkflowSecurityUpdater
 from opengever.base.default_values import set_default_value
 from opengever.base.model import create_session
+from opengever.base.response import COMMENT_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.base.utils import unrestrictedUuidToObject
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
@@ -28,6 +31,7 @@ from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.dottedname.resolve import resolve
@@ -677,3 +681,34 @@ class NightlyWorkflowSecurityUpdater(IntIdMaintenanceJobContextManagerMixin, Wor
     def update_security_for(cls, key, reindex_security):
         obj = cls.key_to_obj(key)
         update_security_for(obj, reindex_security)
+
+
+# For 0220127165920_migrate_dossier_comments
+COMMENTS_KEY = 'opengever.dossier.behaviors.dossier.IDossier.comments'
+
+
+class DossierCommentsMigrator(UIDMaintenanceJobContextManagerMixin):
+
+    def __init__(self):
+        super(DossierCommentsMigrator, self).__init__()
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.migrate_comments.__name__))
+
+        return MaintenanceJobType(function_dotted_name)
+
+    @classmethod
+    def migrate_comments(cls, key):
+        dossier = cls.key_to_obj(key)
+        if not dossier:
+            return
+        annotations = IAnnotations(dossier)
+        if COMMENTS_KEY in annotations and annotations[COMMENTS_KEY]:
+            response = Response(COMMENT_RESPONSE_TYPE)
+            response.text = annotations[COMMENTS_KEY]
+            response.creator = None
+            IResponseContainer(dossier).add(response)
+            del annotations[COMMENTS_KEY]

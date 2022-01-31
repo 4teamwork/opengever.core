@@ -130,7 +130,7 @@ class TestPrivateDossierTabbedViewSolr(SolrIntegrationTestCase):
         browser.open(self.private_dossier, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Dossier structure', 'Comments', 'Linked dossiers',
+            ['Dossier structure', 'Linked dossiers',
              'Newest documents', 'Description', 'Keywords'],
             browser.css('.box h2').text)
 

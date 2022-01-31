@@ -2,7 +2,6 @@
   {
     "guid": "4ed93561c4004c668feb8124b55897fa",
     "parent_guid": "aed9f3db7b3b4713b61a7d7295362ea4",
-    "comments": "Vreni Meier ist ein Tausendsassa",
     "keywords": [],
     "reference_number": "1",
     "relatedDossier": [],
@@ -15,7 +14,6 @@
     "parent_reference": [
       [1, 1]
     ],
-    "comments": "Vreni Meier ist ein Tausendsassa",
     "keywords": [],
     "relatedDossier": [],
     "responsible": "lukas.graf",

@@ -7,6 +7,7 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
+from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
 from opengever.contact.models import Participation
 from opengever.contact.participation import ParticipationWrapper
@@ -39,6 +40,7 @@ from zope.component import queryAdapter
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import implementer
+from zope.interface import implements
 from zope.interface import Interface
 
 
@@ -77,6 +79,7 @@ def as_date(datetime_obj):
 
 class DossierContainer(Container):
     """Provide a container for dossiers."""
+    implements(IResponseSupported)
 
     def _getOb(self, id_, default=_marker):
         """We extend `_getObj` in order to change the context for participation

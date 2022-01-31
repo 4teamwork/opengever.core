@@ -29,7 +29,6 @@
   {
     "guid": "GUID-dossier-A-1.1-1.1.1.1",
     "parent_guid": "GUID-dossier-A-1.1-1.1.1",
-    "comments": "This dossier violates max nesting depth",
     "reference_number": "1",
     "responsible": "lukas.graf",
     "review_state": "dossier-state-active",
