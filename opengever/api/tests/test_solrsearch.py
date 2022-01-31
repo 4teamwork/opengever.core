@@ -1004,6 +1004,32 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         self.assertEqual(2, search_on_context['items_total'])
 
+    @browsing
+    def test_fq_with_url_parents(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.portal.absolute_url(),
+            '&'.join([
+                'fq:list=@id_parent:{}'.format(self.subdossier.absolute_url()),
+                'fq:list=url_parent:{}'.format(self.inbox.absolute_url())
+            ]))
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/document-12',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23'
+            ],
+            [item['@id'] for item in browser.json['items']])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
@@ -1135,3 +1161,29 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
         search_on_context = browser.json
 
         self.assertEqual(2, search_on_context['items_total'])
+
+    @browsing
+    def test_fq_with_url_parents(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        payload = {
+            'fq': [
+                '@id_parent:{}'.format(self.subdossier.absolute_url()),
+                'url_parent:{}'.format(self.inbox.absolute_url())
+            ]
+        }
+        browser.open(url, method='POST', data=json.dumps(payload), headers=self.api_headers)
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/document-12',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-22',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23'
+            ],
+            [item['@id'] for item in browser.json['items']])
