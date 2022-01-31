@@ -19,5 +19,5 @@ class ReindexIsCompletedForTasksAndTodos(UpgradeStep):
 
         with NightlyIndexer(idxs=["is_completed"],
                             index_in_solr_only=True) as indexer:
-            for obj in self.objects(query, 'Index is_completed in Solr'):
-                indexer.add_by_obj(obj)
+            for brain in self.brains(query, 'Index is_completed in Solr'):
+                indexer.add_by_brain(brain)

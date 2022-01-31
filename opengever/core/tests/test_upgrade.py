@@ -5,13 +5,18 @@ from opengever.base.default_values import get_persisted_value_for_field
 from opengever.base.default_values import object_has_value_for_field
 from opengever.core.upgrade import DefaultValuePersister
 from opengever.core.upgrade import IdempotentOperations
+from opengever.core.upgrade import IntIdMaintenanceJobContextManagerMixin
 from opengever.core.upgrade import NightlyIndexer
 from opengever.core.upgrade import NightlyWorkflowSecurityUpdater
+from opengever.core.upgrade import UIDMaintenanceJobContextManagerMixin
+from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
+from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from plone.uuid.interfaces import IUUID
 from sqlalchemy import Column
 from sqlalchemy import create_engine
 from sqlalchemy import Integer
@@ -89,6 +94,86 @@ class TestIdempotentOperations(TestCase):
         self.assertEqual(['thingy', 'xuq'], self.metadata.tables.keys())
 
 
+class DummyIntIdMaintenanceJobManager(IntIdMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.dummy_function.__name__))
+        return MaintenanceJobType(function_dotted_name)
+
+    @staticmethod
+    def dummy_function(key):
+        return
+
+
+class TestIntIdMaintenanceJobContextManagerMixins(IntegrationTestCase):
+
+    def test_add_by_obj(self):
+        self.login(self.manager)
+        job_manager = DummyIntIdMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_obj(self.dossier)
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        intid = getUtility(IIntIds).getId(self.dossier)
+        self.assertEqual(intid, job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
+
+
+class DummyUIDMaintenanceJobManager(UIDMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.dummy_function.__name__))
+        return MaintenanceJobType(function_dotted_name)
+
+    @staticmethod
+    def dummy_function(key):
+        return
+
+
+class TestUIDMaintenanceJobContextManagerMixins(IntegrationTestCase):
+
+    def test_add_by_obj(self):
+        self.login(self.manager)
+        job_manager = DummyUIDMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_obj(self.dossier)
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        self.assertEqual(self.dossier.UID(), job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
+
+    def test_add_by_brain(self):
+        self.login(self.manager)
+        job_manager = DummyUIDMaintenanceJobManager()
+
+        self.assertEqual(0, job_manager.queue_manager.get_jobs_count())
+
+        with job_manager:
+            job_manager.add_by_brain(obj2brain(self.dossier))
+
+        self.assertEqual(1, job_manager.queue_manager.get_jobs_count())
+        job = tuple(job_manager.queue_manager.jobs)[0]
+        self.assertEqual(self.dossier.UID(), job.variable_argument)
+        self.assertEqual(self.dossier,
+                         job_manager.key_to_obj(job.variable_argument))
+
+
 class TestNightlyIndexer(SolrIntegrationTestCase):
 
     def run_nightly_jobs(self):
@@ -109,7 +194,6 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
         self.assert_catalog_data(obj, idx, value)
 
     def test_nightly_indexer_indexes_only_passed_indexes(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         old_creator = self.dossier.Creator()
         new_creator = "New creator"
@@ -118,50 +202,48 @@ class TestNightlyIndexer(SolrIntegrationTestCase):
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title", "Creator"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", new_creator)
 
     def test_nightly_solr_only_indexer(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         old_creator = self.dossier.Creator()
         new_creator = "New creator"
         self.dossier.creators = (new_creator,)
 
         with NightlyIndexer(idxs=["Title"], index_in_solr_only=True) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_and_catalog_data(self.dossier, "Creator", old_creator)
 
         with NightlyIndexer(idxs=["Title", "Creator"], index_in_solr_only=True) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
+            indexer.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_data(self.dossier, "Creator", new_creator)
         self.assert_catalog_data(self.dossier, "Creator", old_creator)
 
     def test_nightly_indexer_handles_multiple_jobs(self):
-        intids = getUtility(IIntIds)
         self.login(self.manager)
         self.dossier.title = "New dossier title"
         self.empty_dossier.title = "New empty dossier title"
         self.subdossier.title = "New subdossier title"
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.dossier))
-            indexer.add_by_intid(intids.getId(self.subdossier))
+            indexer.add_by_obj(self.dossier)
+            indexer.add_by_obj(self.subdossier)
 
         with NightlyIndexer(idxs=["Title"]) as indexer:
-            indexer.add_by_intid(intids.getId(self.empty_dossier))
+            indexer.add_by_obj(self.empty_dossier)
 
         self.run_nightly_jobs()
         self.assert_solr_data(self.dossier, "Title", "New dossier title")
@@ -190,7 +272,6 @@ class TestDefaultValuePersister(IntegrationTestCase):
         runner.execute_pending_jobs()
 
     def test_persists_only_passed_fields(self):
-        intids = getUtility(IIntIds)
         classification = IClassification.get('classification')
         privacy_layer = IClassification.get('privacy_layer')
         public_trial = IClassification.get('public_trial')
@@ -208,7 +289,7 @@ class TestDefaultValuePersister(IntegrationTestCase):
         classification_default = IClassification(self.dossier).classification
 
         with DefaultValuePersister(fields=[classification, public_trial]) as persister:
-            persister.add_by_intid(intids.getId(self.dossier))
+            persister.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
 
@@ -223,7 +304,6 @@ class TestDefaultValuePersister(IntegrationTestCase):
             get_persisted_value_for_field(self.dossier, classification))
 
     def test_does_not_overwrite_already_persisted_values(self):
-        intids = getUtility(IIntIds)
         public_trial = IClassification.get("public_trial")
 
         self.login(self.regular_user)
@@ -233,7 +313,7 @@ class TestDefaultValuePersister(IntegrationTestCase):
         self.assertEqual('unchecked', public_trial_default())
 
         with DefaultValuePersister(fields=[public_trial]) as persister:
-            persister.add_by_intid(intids.getId(self.dossier))
+            persister.add_by_obj(self.dossier)
 
         self.run_nightly_jobs()
         self.assertEqual(
@@ -241,23 +321,20 @@ class TestDefaultValuePersister(IntegrationTestCase):
             get_persisted_value_for_field(self.empty_dossier, public_trial))
 
     def test_persist_fields_handles_inexistant_interface(self):
-        intids = getUtility(IIntIds)
         self.login(self.regular_user)
 
         DefaultValuePersister.persist_fields(
-            intids.getId(self.dossier),
+            IUUID(self.dossier),
             fields_tuples=(('inexistent.interface', 'classification'),))
 
     def test_persist_fields_handles_inexistant_field(self):
-        intids = getUtility(IIntIds)
         self.login(self.regular_user)
 
         DefaultValuePersister.persist_fields(
-            intids.getId(self.dossier),
+            IUUID(self.dossier),
             fields_tuples=((IClassification.__identifier__, 'fieldname'),))
 
     def test_persist_fields(self):
-        intids = getUtility(IIntIds)
         classification = IClassification.get('classification')
         self.login(self.regular_user)
 
@@ -265,7 +342,7 @@ class TestDefaultValuePersister(IntegrationTestCase):
         self.assertFalse(object_has_value_for_field(self.dossier, classification))
 
         DefaultValuePersister.persist_fields(
-            intids.getId(self.dossier),
+            IUUID(self.dossier),
             fields_tuples=((IClassification.__identifier__, 'classification'),))
 
         self.assertTrue(object_has_value_for_field(self.dossier, classification))

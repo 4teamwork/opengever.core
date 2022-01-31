@@ -1,6 +1,7 @@
 from alembic.migration import MigrationContext
 from alembic.operations import Operations
 from BTrees.IIBTree import IITreeSet
+from BTrees.OOBTree import OOTreeSet
 from decorator import decorator
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
@@ -11,11 +12,13 @@ from ftw.upgrade.utils import SavepointIterator
 from ftw.upgrade.workflow import WorkflowSecurityUpdater
 from opengever.base.default_values import set_default_value
 from opengever.base.model import create_session
+from opengever.base.utils import unrestrictedUuidToObject
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
 from plone import api
 from plone.memoize import forever
+from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
@@ -503,25 +506,29 @@ class GeverUpgradeStepRecorder(UpgradeStepRecorder):
 
 class MaintenanceJobContextManagerMixin(object):
 
+    queue_type = None
+
     def __init__(self, commit_to_solr=False):
         self.commit_to_solr = commit_to_solr
         self.queue_manager = MaintenanceQueuesManager(api.portal.get())
-        self.intids = getUtility(IIntIds)
         self.check_preconditions()
 
     def __enter__(self):
         key, self.queue = self.queue_manager.add_queue(
             self.job_type,
-            queue_type=IITreeSet,
+            queue_type=self.queue_type,
             commit_batch_size=1000,
             commit_to_solr=self.commit_to_solr)
         return self
 
-    def add_by_intid(self, intid):
-        self.queue_manager.add_job(MaintenanceJob(self.job_type, intid))
-
     def add_by_obj(self, obj):
-        self.add_by_intid(self.intids.getId(obj))
+        self._add_by_key(self.obj_to_key(obj))
+
+    def _add_by_key(self, key):
+        self.queue_manager.add_job(MaintenanceJob(self.job_type, key))
+
+    def obj_to_key(self, obj):
+        raise NotImplementedError()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if len(self.queue) == 0:
@@ -535,7 +542,46 @@ class MaintenanceJobContextManagerMixin(object):
         raise NotImplementedError()
 
 
-class NightlyIndexer(MaintenanceJobContextManagerMixin):
+class IntIdMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
+    """Storing IntIds in the queue is efficient memory-wise but the object is
+    needed to get its IntId, making the upgrade step itself slower and less
+    memory efficient.
+    """
+    queue_type = IITreeSet
+
+    def __init__(self, commit_to_solr=False):
+        super(IntIdMaintenanceJobContextManagerMixin, self).__init__(commit_to_solr)
+        self.intids = getUtility(IIntIds)
+
+    def obj_to_key(self, obj):
+        return self.intids.getId(obj)
+
+    @staticmethod
+    def key_to_obj(key):
+        intids = getUtility(IIntIds)
+        return intids.queryObject(key)
+
+
+class UIDMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
+    """Storing UUIDs in the queue uses around 4 times as more memory than
+    the IntID, but the UUID can be obtained from the brain, making the upgrade
+    step itself very fast with a low memory footprint.
+    """
+
+    queue_type = OOTreeSet
+
+    def obj_to_key(self, obj):
+        return IUUID(obj)
+
+    @staticmethod
+    def key_to_obj(key):
+        return unrestrictedUuidToObject(key)
+
+    def add_by_brain(self, brain):
+        self._add_by_key(brain.UID)
+
+
+class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
 
     def __init__(self, idxs, index_in_solr_only=False):
         self.idxs = idxs
@@ -559,24 +605,22 @@ class NightlyIndexer(MaintenanceJobContextManagerMixin):
             raise ValueError(
                 "Reindexing SearchableText in solr only is not supported")
 
-    @staticmethod
-    def index_in_catalog(intid, idxs):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def index_in_catalog(cls, key, idxs):
+        obj = cls.key_to_obj(key)
         if obj:
             obj.reindexObject(idxs=idxs)
 
-    @staticmethod
-    def index_in_solr(intid, idxs):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def index_in_solr(cls, key, idxs):
+        obj = cls.key_to_obj(key)
         if obj:
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(idxs)
 
 
-class DefaultValuePersister(MaintenanceJobContextManagerMixin):
+class DefaultValuePersister(UIDMaintenanceJobContextManagerMixin):
 
     def __init__(self, fields):
         self.fields = sorted(fields)
@@ -592,10 +636,9 @@ class DefaultValuePersister(MaintenanceJobContextManagerMixin):
         return MaintenanceJobType(function_dotted_name,
                                   fields_tuples=fields_tuples)
 
-    @staticmethod
-    def persist_fields(intid, fields_tuples):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def persist_fields(cls, key, fields_tuples):
+        obj = cls.key_to_obj(key)
         if not obj:
             return
         for interfacename, fieldname in fields_tuples:
@@ -609,7 +652,7 @@ class DefaultValuePersister(MaintenanceJobContextManagerMixin):
             set_default_value(obj, obj.aq_parent, field)
 
 
-class NightlyWorkflowSecurityUpdater(MaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
+class NightlyWorkflowSecurityUpdater(IntIdMaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
 
     def __init__(self, reindex_security):
         self.reindex_security = reindex_security
@@ -630,8 +673,7 @@ class NightlyWorkflowSecurityUpdater(MaintenanceJobContextManagerMixin, Workflow
         return MaintenanceJobType(function_dotted_name,
                                   reindex_security=self.reindex_security)
 
-    @staticmethod
-    def update_security_for(intid, reindex_security):
-        intids = getUtility(IIntIds)
-        obj = intids.queryObject(intid)
+    @classmethod
+    def update_security_for(cls, key, reindex_security):
+        obj = cls.key_to_obj(key)
         update_security_for(obj, reindex_security)

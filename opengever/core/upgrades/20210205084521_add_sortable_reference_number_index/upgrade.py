@@ -16,5 +16,5 @@ class AddSortableReferenceNumberIndex(UpgradeStep):
         query = {'object_provides': IDexterityContent.__identifier__}
         with NightlyIndexer(idxs=["sortable_reference"],
                             index_in_solr_only=True) as indexer:
-            for obj in self.objects(query, 'Index sortable_reference in Solr'):
-                indexer.add_by_obj(obj)
+            for brain in self.brains(query, 'Index sortable_reference in Solr'):
+                indexer.add_by_brain(brain)
