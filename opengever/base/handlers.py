@@ -47,6 +47,8 @@ def object_copied(context, event):
 
 
 def object_moved_or_added(context, event):
+    object_has_been_copied = getattr(context, '_v_object_has_been_copied', False)
+
     if isinstance(event, ObjectAddedEvent):
         # Don't consider moving or removing an object a "touch". Mass-moves
         # would immediately fill up the touched log, and removals should not
@@ -58,10 +60,18 @@ def object_moved_or_added(context, event):
         # The IObjectCopiedEvent is too early to do that though, because at
         # that point the object doesn't have a full AQ chain yet. We therefore
         # just mark it during IObjectCopiedEvent, and do the reindexing here.
-        if getattr(context, '_v_object_has_been_copied', False):
+        if object_has_been_copied:
             context.reindexObject(idxs=reindex_after_copy)
 
     if IObjectRemovedEvent.providedBy(event):
+        return
+
+    # A new object has been added
+    if event.oldParent is None and not object_has_been_copied:
+        return
+
+    # Object has been renamed
+    if event.oldParent == event.newParent:
         return
 
     # Update object security after moving or copying.
