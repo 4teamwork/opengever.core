@@ -35,7 +35,7 @@ msgstr "Could not generate report."
 
 #: ./opengever/base/schema.py
 msgid "Invalid identifier"
-msgstr ""
+msgstr "Invalid identifier"
 
 #. German translation: Inhalte wurden erfolgreich gelöscht.
 #: ./opengever/base/browser/folder_delete_confirmation.py
