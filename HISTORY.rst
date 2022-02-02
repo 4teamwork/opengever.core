@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.3.0 (2022-02-02)
+---------------------
+
+New features:
+
+
+- Actor portrait_url respects the IActorSettings to choose the portrait_url from plone or the portal. [elioschmutz]
+- Add parameter to include full representation in @actors endpoint. [tinagerber]
+- Add browser view and zopectl command to show nightly jobs stats. [tinagerber]
+- The @solrsearch results can now be filtered by ``@id_parent`` or ``url_parent``. [elioschmutz]
+- Testserver now automatically isolates on startup. [jone]
+
+
+Bug fixes:
+
+
+- Include documents inside task and proposals in the ech0160 export. [phgross]
+
+
+Other changes:
+
+
+- Use relative paths for the @solrsearch path_parent filter query. [elioschmutz]
+- Make error serialization for `@propertysheets` more frontend-friendly. [lgraf]
+- Improve memory usage for upgrade steps using nightly maintenance jobs. [njohner]
+- Bump ftw.upgrade to improve memory and upgrade duration management. [njohner]
+- Return fullname and userid as term title in ActualWorkspaceMemberSource. [tinagerber]
+
+
 2022.2.0 (2022-01-19)
 ---------------------
 
