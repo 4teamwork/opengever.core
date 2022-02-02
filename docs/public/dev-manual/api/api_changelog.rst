@@ -8,6 +8,16 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2022.3.0 (2022-02-02)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
 - ``@solrsearch:``: Change ``path_parent`` filter query to no longer expect physical paths but relative paths instead.
 
 Other Changes
