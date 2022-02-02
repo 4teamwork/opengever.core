@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -42,9 +43,9 @@ class TestDossierCustomPropertiesPatch(IntegrationTestCase):
         expected_properties = {
             "IDossier.dossier_type.businesscase": {
                 "choose": u"zw\xf6i",
-                "choosemulti": ["three", "one"],
+                "choosemulti": set(["one", "three"]),
                 "textline": u"bl\xe4",
-                "birthday": "2022-01-30",
+                "birthday": date(2022, 1, 30),
             },
         }
         self.assertEqual(

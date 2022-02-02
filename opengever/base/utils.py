@@ -179,6 +179,26 @@ def make_persistent(data):
         return data
 
 
+def make_nonpersistent(data):
+    """Recursively turn a nested data structure of persistent lists and dicts
+    into one using plain Python lists and dicts.
+    """
+    if isinstance(data, PersistentDict):
+        new = dict()
+        for key, value in data.items():
+            new[make_nonpersistent(key)] = make_nonpersistent(value)
+        return new
+
+    elif isinstance(data, PersistentList):
+        new = list()
+        for value in data:
+            new.append(make_nonpersistent(value))
+        return new
+
+    else:
+        return data
+
+
 def rewrite_path_list_to_absolute_paths(request):
     """If request contains a paths:list param, rewrite these paths so
     they're always absolute (start with the Plone site).

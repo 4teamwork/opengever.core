@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -18,7 +19,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self, browser
     ):
         self.login(self.manager, browser)
-        
+
         choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
@@ -56,6 +57,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
         self.document.document_type = u"question"
 
@@ -85,6 +87,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
+                u"Birthday",
             ],
             input_labels,
         )
@@ -97,6 +100,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 "Number": "3",
                 "Some lines of text": "Foo\nbar",
                 "A line of text": u"b\xe4\xe4",
+                "Birthday": date(2022, 1, 30),
             }
         )
         browser.click_on("Save")
@@ -108,12 +112,13 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 3,
                     "yesorno": True,
                     "choose": u"zw\xf6i",
-                    "choosemulti": ["three", "one"],
+                    "choosemulti": set(["one", "three"]),
                     "choose_default": u"fr",
                     "choose_default_factory": u"fr",
                     "choose_default_expression": u"en",
                     "choose_default_from_member": u"CH",
                     "textline": u"b\xe4\xe4",
+                    "birthday": date(2022, 1, 30),
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,
@@ -152,6 +157,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
 
         self.login(self.regular_user, browser)
@@ -187,6 +193,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "Number": "3",
                     "Some lines of text": "Foo\nbar",
                     "A line of text": u"b\xe4\xe4",
+                    "Birthday": date(2022, 1, 30),
                 }
             ).save()
 
@@ -205,6 +212,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "choose_default_factory": u"fr",
                     "choose_default_expression": u"en",
                     "textline": u"b\xe4\xe4",
+                    "birthday": date(2022, 1, 30),
                 }
             },
             IDocumentCustomProperties(document).custom_properties,

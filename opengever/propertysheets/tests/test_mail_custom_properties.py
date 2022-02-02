@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -48,8 +49,19 @@ class TestMailCustomPropertiesPatch(IntegrationTestCase):
             data=json.dumps(good_data),
             headers=self.api_headers,
         )
+        expected_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "yesorno": False,
+                "choose": "two",
+                "choosemulti": set(["one", "three"]),
+                "num": 123,
+                "text": u"bl\xe4\nblub",
+                "textline": u"bl\xe4",
+                "birthday": date(2022, 1, 30),
+            },
+        }
         self.assertEqual(
-            good_data["custom_properties"],
+            expected_properties,
             IDocumentCustomProperties(self.mail_eml).custom_properties,
         )
 
