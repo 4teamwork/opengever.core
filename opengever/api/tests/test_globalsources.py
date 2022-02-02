@@ -1,5 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.kub.testing import KuBIntegrationTestCase
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 import requests_mock
 
@@ -55,6 +58,24 @@ class TestGlobalSourcesGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups?query=Rober',
              u'items': [{u'title': u'Ziegler Robert (robert.ziegler)',
                          u'token': u'robert.ziegler'}],
+             u'items_total': 1},
+            browser.json)
+
+    @browsing
+    def test_all_users_and_groups_find_also_inactive_users_not_assigned_to_org_units(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('ogds_user').id('peter.inactive')
+               .having(firstname='Peter', lastname='Inactive', active=False))
+
+        url = '{}/@globalsources/all_users_and_groups?query=inacti'.format(
+            self.portal.absolute_url())
+        browser.open(url, headers=self.api_headers)
+
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups?query=inacti',
+             u'items': [{u'title': u'Inactive Peter (peter.inactive)',
+                         u'token': u'peter.inactive'}],
              u'items_total': 1},
             browser.json)
 

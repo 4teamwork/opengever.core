@@ -954,9 +954,20 @@ class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
     source_classes = [AllFilteredGroupsSourcePrefixed, AllUsersSource]
 
+    def __init__(self, context, only_active_orgunits=True):
+        super(AllUsersAndGroupsSource, self).__init__(context)
+
+        self.source_instances = [source_class(
+            context, only_active_orgunits=only_active_orgunits)
+                                 for source_class in self.source_classes]
+
 
 @implementer(IContextSourceBinder)
 class AllUsersAndGroupsSourceBinder(object):
 
+    def __init__(self, only_active_orgunits=True):
+        self.only_active_orgunits = only_active_orgunits
+
     def __call__(self, context):
-        return AllUsersAndGroupsSource(context)
+        return AllUsersAndGroupsSource(
+            context, only_active_orgunits=self.only_active_orgunits)
