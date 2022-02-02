@@ -216,6 +216,13 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "title": u"zeile",
                     "default": u"some text line",
                 },
+                {
+                    "name": "birthday",
+                    "field_type": u"date",
+                    "title": u"Birthday",
+                    "default": u"2022-01-30",
+                },
+
             ],
             "assignments": ["IDocumentMetadata.document_type.question"],
         }
@@ -236,6 +243,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(42, fields['nummer'].default)
         self.assertEqual(u'some text', fields['text'].default)
         self.assertEqual(u'some text line', fields['zeiletext'].default)
+        self.assertEqual(date(2022, 1, 30), fields['birthday'].default)
 
     @browsing
     def test_property_sheet_schema_definition_post_supports_setting_default_factories(self, browser):
