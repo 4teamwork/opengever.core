@@ -44,11 +44,11 @@ msgstr "Dossier (Type: ${dossier_type})"
 
 #: ./opengever/propertysheets/exceptions.py
 msgid "Duplicate field with this name"
-msgstr ""
+msgstr "Un autre champ avec ce nom existe déjà"
 
 #: ./opengever/propertysheets/exceptions.py
 msgid "Invalid default value"
-msgstr ""
+msgstr "Valeur par défaut invalide"
 
 #: ./opengever/propertysheets/templates/propertysheet.pt
 #: ./opengever/propertysheets/templates/propertysheet_display.pt
@@ -58,7 +58,7 @@ msgstr "Aucun champ personnalisé disponible."
 #. Default: "(Max: ${max_length} characters. Actual length: ${actual_length} characters)"
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "extra_info_max_length"
-msgstr ""
+msgstr "(Maximum: ${max_length} caractères. Longueur actuelle: ${actual_length} characters)"
 
 #. Default: "What type of content this property sheet will be available for"
 #: ./opengever/propertysheets/metaschema.py
@@ -163,19 +163,20 @@ msgstr "Valeurs admises"
 #. Default: "Assignment '${assignment}' is already in use."
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "msg_assignment_already_in_use"
-msgstr ""
+msgstr "L'Assignation '${assignment}' est déjà prise."
 
 #. Default: "Parameter '${field_key}': "
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "msg_propertysheet_field_error_prefix"
-msgstr ""
+msgstr "Paramètre '${field_key}': "
 
 #. Default: "Field ${field_no} ('${field_name}'):"
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "msg_propertysheet_field_location"
-msgstr ""
+msgstr "Champ ${field_no} ('${field_name}'):"
 
 #. Default: "The form contains errors:\n${error_string}"
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "msg_propertysheet_has_errors"
-msgstr ""
+"Le formulaire contient des erreurs:\n"
+"${error_string}"

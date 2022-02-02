@@ -33,7 +33,7 @@ msgstr "Impossible de générer l'affichage."
 
 #: ./opengever/base/schema.py
 msgid "Invalid identifier"
-msgstr ""
+msgstr "Identifiant invalide"
 
 #: ./opengever/base/browser/folder_delete_confirmation.py
 msgid "Items successfully deleted."
