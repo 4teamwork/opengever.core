@@ -5,6 +5,7 @@ from opengever.base.security import elevated_privileges
 from opengever.ogds.base.utils import decode_for_json
 from opengever.ogds.base.utils import encode_after_json
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
+from opengever.propertysheets.field import IPropertySheetField
 from opengever.task.reminder import Reminder
 from opengever.task.task import ITask
 from plone.dexterity.interfaces import IDexterityContent
@@ -218,6 +219,10 @@ class DexterityFieldDataCollector(object):
             subdata = {}
             repr = schemata(self.context)
             for name, field in schema.getFieldsInOrder(schemata):
+                if IPropertySheetField.providedBy(field):
+                    # Custom properties don't get transported
+                    continue
+
                 value = getattr(repr, name, _marker)
                 if value == _marker:
                     value = getattr(self.context, name, None)
@@ -237,6 +242,10 @@ class DexterityFieldDataCollector(object):
             repr = schemata(self.context)
             subdata = data[schemata.getName()]
             for name, field in schema.getFieldsInOrder(schemata):
+                if IPropertySheetField.providedBy(field):
+                    # Custom properties don't get transported
+                    continue
+
                 value = subdata.get(name, _marker)
                 value = self.unpack(name, field, value)
                 if value != _marker:
