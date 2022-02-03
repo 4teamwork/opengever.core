@@ -159,7 +159,7 @@ class TestEmailNotification(IntegrationTestCase):
         process_mail_queue()
 
         message, = Mailing(self.portal).get_mailhost().messages
-        self.assertEqual('foo@example.com', message.mto)
+        self.assertEqual(['foo@example.com'], message.mto)
         self.assertEqual('test@localhost', message.mfrom)
 
         mail = email.message_from_string(message.messageText)

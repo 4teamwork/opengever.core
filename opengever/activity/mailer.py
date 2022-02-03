@@ -86,7 +86,7 @@ class Mailer(object):
         We therefore defer the dispatching of notification mails until the
         very end of the transaction to work around this issue.
         """
-        mail_queue.put(msg, mail_to, mail_from)
+        mail_queue.put(msg, [each.strip() for each in mail_to.split(',')], mail_from)
 
     def prepare_mail(self, subject=u'', to_userid=None, to_email=None,
                      cc_email=None, from_userid=None, data=None):
