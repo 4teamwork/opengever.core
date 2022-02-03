@@ -885,3 +885,28 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                 }),
                 headers=self.api_headers,
             )
+
+    @browsing
+    def test_default_preprocessing_doesnt_choke_on_non_string_types(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "birthday",
+                    "field_type": "date",
+                    "title": "Birthday",
+                    "default": None,
+                }
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+
+        browser.open(
+            view="@propertysheets/foo",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+        self.assertEqual(201, browser.status_code)
+        self.assertNotIn('default', browser.json['fields'][0])
