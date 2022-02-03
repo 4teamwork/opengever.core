@@ -1,0 +1,1 @@
+Suppress creation of todo completion activities during upgrades to avoid failing upgrades. [lgraf]
