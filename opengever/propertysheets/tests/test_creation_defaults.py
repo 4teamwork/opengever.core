@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
@@ -27,7 +28,7 @@ class TestPropertySheetsCreationDefaults(IntegrationTestCase):
 
     def test_dereferences_defaults_declared_as_mutable_kwargs(self):
         self.login(self.regular_user)
-        PropertySheetSchemaStorage().clear()       
+        PropertySheetSchemaStorage().clear()
 
         create(
             Builder('property_sheet_schema')
@@ -110,6 +111,11 @@ class TestPropertySheetsCreationDefaultsForDocument(IntegrationTestCase):
                 required=True,
                 default_from_member={'property': 'email'},
             )
+            .with_field(
+                'date', u'datefield', u'Date with default', u'',
+                required=False,
+                default=date(2022, 1, 31),
+            )
         )
 
         field = IDocumentCustomProperties['custom_properties']
@@ -121,6 +127,7 @@ class TestPropertySheetsCreationDefaultsForDocument(IntegrationTestCase):
                 'location': u'CH',
                 'userid': u'kathi.barfuss',
                 'email': u'foo@example.com',
+                'datefield': date(2022, 1, 31),
             }
         }
         self.assertEqual(expected_defaults, defaults)
@@ -146,7 +153,7 @@ class TestPropertySheetsCreationDefaultsForDossier(IntegrationTestCase):
         defaults = get_customproperties_defaults(field)
         self.assertEqual({}, defaults)
 
-    def test_determine_dossier_defaults(self):       
+    def test_determine_dossier_defaults(self):
         self.login(self.regular_user)
         PropertySheetSchemaStorage().clear()
 
@@ -184,6 +191,11 @@ class TestPropertySheetsCreationDefaultsForDossier(IntegrationTestCase):
                 required=True,
                 default_from_member={'property': 'email'},
             )
+            .with_field(
+                'date', u'datefield', u'Date with default', u'',
+                required=False,
+                default=date(2022, 1, 31),
+            )
         )
 
         field = IDossierCustomProperties['custom_properties']
@@ -195,6 +207,7 @@ class TestPropertySheetsCreationDefaultsForDossier(IntegrationTestCase):
                 'location': u'CH',
                 'userid': u'kathi.barfuss',
                 'email': u'foo@example.com',
+                'datefield': date(2022, 1, 31),
             }
         }
         self.assertEqual(expected_defaults, defaults)

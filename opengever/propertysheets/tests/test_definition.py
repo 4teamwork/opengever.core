@@ -1,3 +1,4 @@
+from datetime import date
 from opengever.propertysheets.definition import isidentifier
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
@@ -6,6 +7,7 @@ from opengever.propertysheets.testing import dummy_default_factory_42
 from opengever.propertysheets.testing import dummy_default_factory_fr
 from opengever.propertysheets.testing import dummy_default_factory_some_text
 from opengever.propertysheets.testing import dummy_default_factory_some_text_line
+from opengever.propertysheets.testing import dummy_default_factory_today
 from opengever.propertysheets.testing import dummy_default_factory_true
 from opengever.testing.test_case import FunctionalTestCase
 from opengever.testing.test_case import TestCase
@@ -563,6 +565,51 @@ class TestSchemaDefinition(FunctionalTestCase):
         member.setProperties({'location': 'St. Gallen'})
         self.assertEqual(u'St. Gallen', field.defaultFactory())
         self.assertEqual(u'St. Gallen', field.default)
+
+    def test_add_date_field(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field("date", u"birthday", u"Birthday", u"", False)
+
+        self.assertEqual(["birthday"], definition.schema_class.names())
+        field = definition.schema_class['birthday']
+        self.assertIsInstance(field, schema.Date)
+
+    def test_add_date_field_with_static_default(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field("date", u"birthday", u"Birthday", u"", False,
+                             default=date(1982, 6, 30))
+
+        field = definition.schema_class['birthday']
+        self.assertEqual(date(1982, 6, 30), field.default)
+
+    def test_add_date_field_rejects_default_with_wrong_type(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        with self.assertRaises(WrongType):
+            definition.add_field("date", u"birthday", u"Birthday", u"", False,
+                                 default=['a string'])
+
+    def test_add_date_field_with_default_factory(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "date", u"birthday", u"Birthday", u"", False,
+            default_factory=dottedname(dummy_default_factory_today))
+
+        field = definition.schema_class['birthday']
+        self.assertEqual(dummy_default_factory_today, field.defaultFactory)
+        self.assertEqual(date.today(), field.default)
+
+    def test_add_date_field_with_default_expression(self):
+        definition = PropertySheetSchemaDefinition.create("foo")
+        definition.add_field(
+            "date", u"birthday", u"Birthday", u"", False,
+            default_expression="portal/some_date_property")
+
+        self.portal.some_date_property = date.today()
+
+        field = definition.schema_class['birthday']
+        self.assertEqual("portal/some_date_property", field.default_expression)
+        self.assertEqual(date.today(), field.defaultFactory())
+        self.assertEqual(date.today(), field.default)
 
     def test_enforces_valid_assignments_as_fieldnames(self):
         definition = PropertySheetSchemaDefinition.create("foo")

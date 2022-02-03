@@ -1,3 +1,4 @@
+from datetime import datetime
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
 from opengever.propertysheets.api.error_serialization import ErrorSerializer
@@ -114,10 +115,33 @@ class PropertySheetWriter(PropertySheetLocator):
     """Base class for @propertysheets endpoints that create or modify sheets.
     """
 
+    def preprocess_static_default(self, field):
+        """Make sure that static defaults for a field match the field's type.
+
+        This is already the case for most field types, because their type has
+        an equivalent type in JSON and can already be expressed using that type.
+
+        But date defaults must be represented as strings in JSON, and therefore
+        must be deserialized before validating and using them.
+        """
+        if field.get('field_type') == 'date':
+            try:
+                field['default'] = datetime.strptime(
+                    field['default'], '%Y-%m-%d').date()
+            except ValueError:
+                # Optimistic parsing - if it's not a valid date, it will
+                # be caught by actual field validation later.
+                pass
+
     def get_fields(self, data, existing_dynamic_defaults=()):
         fields = data.get("fields")
 
         if fields:
+            # Cast static default to proper type before validation
+            for field in fields:
+                if 'default' in field:
+                    self.preprocess_static_default(field)
+
             errors = self.validate_fields(fields, existing_dynamic_defaults)
             if errors:
                 raise FieldValidationError(errors)

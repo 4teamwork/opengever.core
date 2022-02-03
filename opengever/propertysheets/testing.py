@@ -1,3 +1,4 @@
+from datetime import date
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 
@@ -30,3 +31,8 @@ def dummy_default_factory_some_text_line(context):
 @provider(IContextAwareDefaultFactory)
 def dummy_default_factory_gruen(context):
     return set([u'gr\xfcn'])
+
+
+@provider(IContextAwareDefaultFactory)
+def dummy_default_factory_today(context):
+    return date.today()

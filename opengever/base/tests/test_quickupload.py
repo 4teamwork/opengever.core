@@ -65,7 +65,7 @@ class TestOGQuickupload(IntegrationTestCase):
 
         expected_defaults = {
             u'IDocument.default': {
-                u'languages': [u'de', u'en'],
+                u'languages': set([u'de', u'en']),
                 u'notrequired': u'Not required, still has default',
             },
         }

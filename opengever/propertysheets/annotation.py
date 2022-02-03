@@ -1,3 +1,4 @@
+from opengever.base.utils import make_nonpersistent
 from opengever.base.utils import make_persistent
 from opengever.propertysheets.exceptions import BadCustomPropertiesFactoryConfiguration
 from opengever.propertysheets.field import IPropertySheetField
@@ -5,7 +6,6 @@ from persistent.dict import PersistentDict
 from plone.behavior.annotation import AnnotationsFactoryImpl
 from plone.behavior.annotation import AnnotationStorage
 from plone.behavior.interfaces import ISchemaAwareFactory
-from plone.restapi.serializer.converters import json_compatible
 from zope.interface import alsoProvides
 
 
@@ -41,8 +41,9 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
         super(CustomPropertiesStorageImpl, self).__init__(context, schema)
 
     def __getattr__(self, name):
-        """Make sure to convert Persistent to json compatible data."""
-        return json_compatible(
+        """Convert persistent data structures to non-persistent ones.
+        """
+        return make_nonpersistent(
             super(CustomPropertiesStorageImpl, self).__getattr__(name)
         )
 

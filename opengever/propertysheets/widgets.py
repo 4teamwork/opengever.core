@@ -1,7 +1,6 @@
 from opengever.propertysheets import _
 from opengever.propertysheets.field import IPropertySheetField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
-from plone.restapi.serializer.converters import json_compatible
 from z3c.form import interfaces
 from z3c.form.error import MultipleErrors
 from z3c.form.interfaces import IContextAware
@@ -229,8 +228,7 @@ class PropertySheetFieldDataConverter(object):
         self.widget = widget
 
     def toWidgetValue(self, value):
-        """Make sure to convert Persistent to json compatible data."""
-        return json_compatible(value)
+        return value
 
     def toFieldValue(self, value):
         self.field.validate(value)

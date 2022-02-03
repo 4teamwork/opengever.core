@@ -122,6 +122,9 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
         definition.add_field(
             "textline", u"bla", u"Textline", u"Say something short.", True
         )
+        definition.add_field(
+            "date", u"birthday", u"Birthday", u"", True
+        )
 
         json_schema = definition.get_json_schema()
         Draft4Validator.check_schema(json_schema)
@@ -144,12 +147,20 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                        u'num',
                        u'blabla',
                        u'bla',
+                       u'birthday',
                     ],
                     'id': 'default',
                     'title': 'Default',
                 }
             ],
             'properties': {
+                u'birthday': {
+                    u'description': u'',
+                    u'factory': u'Date',
+                    u'title': u'Birthday',
+                    u'type': u'string',
+                    u'widget': u'date',
+                },
                 u'bla': {
                     u'description': u'Say something short.',
                     u'factory': u'Text line (String)',
@@ -322,9 +333,10 @@ class TestPropertySheetJSONSchema(FunctionalTestCase):
                 u'num',
                 u'blabla',
                 u'bla',
+                u'birthday',
             ],
             'title': 'schema',
             'type': 'object',
-        }     
+        }
 
         self.assertEqual(expected, json_schema)

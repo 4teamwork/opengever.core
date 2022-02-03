@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -18,7 +19,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
         self, browser
     ):
         self.login(self.manager, browser)
-        
+
         choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
@@ -56,6 +57,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
         self.document.document_type = u"question"
 
@@ -85,6 +87,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 u"Number",
                 u"Some lines of text",
                 u"A line of text",
+                u"Birthday",
             ],
             input_labels,
         )
@@ -97,6 +100,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                 "Number": "3",
                 "Some lines of text": "Foo\nbar",
                 "A line of text": u"b\xe4\xe4",
+                "Birthday": date(2022, 1, 30),
             }
         )
         browser.click_on("Save")
@@ -108,12 +112,13 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "num": 3,
                     "yesorno": True,
                     "choose": u"zw\xf6i",
-                    "choosemulti": ["three", "one"],
+                    "choosemulti": set(["one", "three"]),
                     "choose_default": u"fr",
                     "choose_default_factory": u"fr",
                     "choose_default_expression": u"en",
                     "choose_default_from_member": u"CH",
                     "textline": u"b\xe4\xe4",
+                    "birthday": date(2022, 1, 30),
                 }
             },
             IDocumentCustomProperties(self.document).custom_properties,
@@ -152,6 +157,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
 
         self.login(self.regular_user, browser)
@@ -187,6 +193,7 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "Number": "3",
                     "Some lines of text": "Foo\nbar",
                     "A line of text": u"b\xe4\xe4",
+                    "Birthday": date(2022, 1, 30),
                 }
             ).save()
 
@@ -205,10 +212,63 @@ class TestPropertySheetWidget(IntegrationTestCase):
                     "choose_default_factory": u"fr",
                     "choose_default_expression": u"en",
                     "textline": u"b\xe4\xe4",
+                    "birthday": date(2022, 1, 30),
                 }
             },
             IDocumentCustomProperties(document).custom_properties,
         )
+
+    @browsing
+    def test_display_widget_rendering_all_field_types(self, browser):
+        self.login(self.manager, browser)
+
+        choices = [u'Rot', u'Gr\xfcn', u'Blau']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", True)
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", True, values=choices)
+            .with_field("int", u"num", u"Number", u"", True)
+            .with_field("text", u"text", u"Some lines of text", u"", True)
+            .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
+        )
+
+        self.document.document_type = u"question"
+        IDocumentCustomProperties(self.document).custom_properties = {
+            'IDocumentMetadata.document_type.question': {
+                'yesorno': True,
+                'choose': u'Gr\xfcn',
+                'choosemulti': set([u'Gr\xfcn', u'Rot']),
+                'num': 42,
+                'text': u'B\xfcrgermeister\nLorem Ipsum',
+                'textline': u'B\xfcrgermeister',
+                'birthday': date(2022, 1, 30),
+            }
+        }
+
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='view')
+        metadata_table = browser.css(".dossier-detail-listing").first
+        customprops = metadata_table.xpath(
+            '//th[text() = "Custom properties"]//following-sibling::td')
+        labels = customprops.xpath('div/label').text
+        values = customprops.xpath('div/label//following-sibling::div').text
+
+        self.assertEqual({
+            '': 'Yes or no',
+            'A line of text': u'B\xfcrgermeister',
+            'Birthday': '1/30/22',
+            'Choose': u'Gr\xfcn',
+            'Choose Multi': u'Gr\xfcn, Rot',
+            'Number': '42',
+            'Some lines of text': u'B\xfcrgermeister Lorem Ipsum',
+        }, dict(zip(labels, values)))
 
     @browsing
     def test_switch_to_previously_set_fields_uses_previous_values(self, browser):

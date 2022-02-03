@@ -1,3 +1,4 @@
+from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -24,6 +25,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             .with_field("int", u"num", u"Number", u"", True)
             .with_field("text", u"text", u"Some lines of text", u"", True)
             .with_field("textline", u"textline", u"A line of text", u"", True)
+            .with_field("date", u"birthday", u"Birthday", u"", True)
         )
         self.document.document_type = u"question"
 
@@ -37,6 +39,7 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
                     "num": 123,
                     "text": u"bl\xe4\nblub",
                     "textline": u"bl\xe4",
+                    "birthday": "2022-01-30",
                 },
             }
         }
@@ -50,10 +53,11 @@ class TestDocumentCustomPropertiesPatch(IntegrationTestCase):
             "IDocumentMetadata.document_type.question": {
                 "yesorno": False,
                 "choose": u"zw\xf6i",
-                "choosemulti": ["three", "one"],
+                "choosemulti": set(["one", "three"]),
                 "num": 123,
                 "text": u"bl\xe4\nblub",
                 "textline": u"bl\xe4",
+                "birthday": date(2022, 1, 30),
             },
         }
         self.assertEqual(
