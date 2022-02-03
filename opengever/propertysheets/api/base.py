@@ -128,7 +128,7 @@ class PropertySheetWriter(PropertySheetLocator):
             try:
                 field['default'] = datetime.strptime(
                     field['default'], '%Y-%m-%d').date()
-            except ValueError:
+            except (ValueError, TypeError):
                 # Optimistic parsing - if it's not a valid date, it will
                 # be caught by actual field validation later.
                 pass
