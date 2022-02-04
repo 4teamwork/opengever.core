@@ -128,8 +128,12 @@ class Mailer(object):
         if to_userid:
             to_email = ogds_service().fetch_user(to_userid).email
         msg['To'] = to_email
+        recipients_email = to_email
+
         if cc_email:
             msg['Cc'] = cc_email
+            recipients_email = ', '.join((recipients_email, cc_email))
+
         msg['Subject'] = Header(subject, 'utf-8')
 
         # Break (potential) description out into a list element per newline
@@ -138,7 +142,7 @@ class Mailer(object):
 
         html = self.prepare_html(data)
         msg.attach(MIMEText(html.encode('utf-8'), 'html', 'utf-8'))
-        return msg, to_email, from_mail
+        return msg, recipients_email, from_mail
 
     def get_users_language(self):
         # XXX TODO Right now there is no support to store users preferred
