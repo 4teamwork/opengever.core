@@ -57,20 +57,19 @@ class TestShareContentPost(IntegrationTestCase):
                      data=data)
         expected_to = [self.archivist.getProperty('email'),
                        self.workspace_guest.getProperty('email')]
-        expected_cc = ', '.join((self.workspace_owner.getProperty('email'),
-                                 self.workspace_admin.getProperty('email')))
+        expected_cc = [self.workspace_owner.getProperty('email'),
+                       self.workspace_admin.getProperty('email')]
 
         process_mail_queue()
 
         self.assertEqual(
-            expected_to,
+            expected_to + expected_cc,
             mailing.get_mailhost().messages[0].mto)
 
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
         self.assertEqual(', '.join(expected_to), mail['To'])
-
-        self.assertEqual(expected_cc, mail['Cc'])
+        self.assertEqual(', '.join(expected_cc), mail['Cc'])
         self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
                          mail['From'])
         self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())
