@@ -92,6 +92,13 @@ class EditOnlineView(BrowserView):
         params_with_values.append('WOPISrc={}&'.format(wopi_src))
         self.urlsrc = '?'.join([url, ''.join(params_with_values)])
 
+        # The WOPI edit page loads frames and images from external sources.
+        self.request.response.setHeader(
+            'Content-Security-Policy',
+            "default-src 'self' 'unsafe-eval' 'unsafe-inline'; "
+            "img-src https: data:; frame-src https:; "
+            "object-src 'none'; frame-ancestors 'none'")
+
         return self.index()
 
     def get_WOPI_language_code(self):
