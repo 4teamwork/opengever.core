@@ -319,12 +319,9 @@ class TestRetentionPeriodVocabulary(IntegrationTestCase):
             form_field.options_values)
 
     @browsing
-    def test_choices_not_limited_by_parent_when_unrestricted(self, browser):
+    def test_choices_not_limited_by_aq_value(self, browser):
         self.login(self.administrator, browser=browser)
 
-        # When is_restriced is False, choices shall not be limited by
-        # an acquired value -  i.e., we always have the full set of choices
-        set_retention_period_restricted(False)
         all_choices = ['5', '10', '15', '20', '25']
 
         for value in all_choices:
@@ -336,81 +333,8 @@ class TestRetentionPeriodVocabulary(IntegrationTestCase):
             self.assertEqual(all_choices, form_field.options_values)
 
     @browsing
-    def test_invalid_acquired_value_falls_back_to_all_choices(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        # If vocab is supposed to be restricted, but we find an invalid value
-        # via acquisition, the vocab should fall back to offering all choices
-        set_retention_period_restricted(True)
-
-        invalid_value = 7
-        self.set_retention_period(self.branch_repofolder, invalid_value)
-        self.set_retention_period(self.leaf_repofolder, invalid_value)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Retention period (years)')
-        self.assertEqual(
-            ['5', '10', '15', '20', '25'],
-            form_field.options_values)
-
-    @browsing
-    def test_falsy_acquisition_value_falls_back_to_all_choices(self, browser):
-        # If vocab is supposed to be restricted, but we find a  value via
-        # acquisition that is falsy, the vocab should offer all choices
-        # XXX: This probably should check for None instead of falsyness
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-
-        falsy_value = 0
-        self.set_retention_period(self.branch_repofolder, falsy_value)
-        self.set_retention_period(self.leaf_repofolder, falsy_value)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Retention period (years)')
-        self.assertEqual(
-            ['5', '10', '15', '20', '25'],
-            form_field.options_values)
-
-    @browsing
-    def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-
-        self.set_retention_period(self.leaf_repofolder, 15)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Retention period (years)')
-        self.assertIn('15', form_field.options_values)
-
-    @browsing
-    def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-
-        self.set_retention_period(self.leaf_repofolder, 15)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Retention period (years)')
-        self.assertSetEqual(
-            set(['5', '10', '15']),
-            set(form_field.options_values))
-
-    @browsing
     def test_acquired_value_is_suggested_as_default(self, browser):
         self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
 
         self.set_retention_period(self.leaf_repofolder, 15)
 
@@ -422,24 +346,6 @@ class TestRetentionPeriodVocabulary(IntegrationTestCase):
         self.assertEqual('15', form_field.value)
         # Default listed first
         self.assertEqual('15', form_field.options_values[0])
-
-    @browsing
-    def test_restriction_works_in_edit_form(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        set_retention_period_restricted(True)
-
-        self.set_retention_period(self.leaf_repofolder, 15)
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-
-        browser.click_on('Edit')
-        form_field = browser.find('Retention period (years)')
-        self.assertSetEqual(
-            set(['5', '10', '15']),
-            set(form_field.options_values))
 
 
 class TestRetentionPeriodPropagation(IntegrationTestCase):

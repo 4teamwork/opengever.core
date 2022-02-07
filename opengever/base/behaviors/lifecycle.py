@@ -3,7 +3,6 @@ from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
-from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.registry.interfaces import IRegistry
@@ -101,28 +100,15 @@ alsoProvides(ILifeCycle, IFormFieldProvider)
 def _get_retention_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
-    choices = []
     nums = getattr(proxy, 'retention_period')
 
-    for i, num in enumerate(nums):
-        num = int(num)
-        pos = int(nums[- i - 1])
-        choices.append((pos, num))
-
-    return choices
+    return [int(num) for num in nums]
 
 
-def _is_retention_period_restricted():
-    registry = getUtility(IRegistry)
-    retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
-    return retention_period_settings.is_restricted
-
-
-retention_period_vf = RestrictedVocabularyFactory(
-    ILifeCycle['retention_period'],
-    _get_retention_period_choices,
-    message_factory=_,
-    restricted=_is_retention_period_restricted)
+def retention_period_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in _get_retention_period_choices()])
 
 
 @provider(IContextAwareDefaultFactory)
