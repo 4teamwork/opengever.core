@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.3.1 (2022-02-07)
+---------------------
+
+Bug fixes:
+
+
+- Fix content-sharing for multiple recipients and cc recipients. [phgross]
+
+
 2022.3.0 (2022-02-02)
 ---------------------
 
