@@ -178,5 +178,6 @@ msgstr "Champ ${field_no} ('${field_name}'):"
 #. Default: "The form contains errors:\n${error_string}"
 #: ./opengever/propertysheets/api/error_serialization.py
 msgid "msg_propertysheet_has_errors"
+msgstr ""
 "Le formulaire contient des erreurs:\n"
 "${error_string}"
