@@ -123,19 +123,16 @@ CLASSIFICATION_UNPROTECTED = u'unprotected'
 CLASSIFICATION_CONFIDENTIAL = u'confidential'
 CLASSIFICATION_CLASSIFIED = u'classified'
 CLASSIFICATION_CHOICES = (
-    # Choice-   # Choice Name
-    # level     #
-    (1, CLASSIFICATION_UNPROTECTED),
-    (2, CLASSIFICATION_CONFIDENTIAL),
-    (3, CLASSIFICATION_CLASSIFIED),
+    CLASSIFICATION_UNPROTECTED,
+    CLASSIFICATION_CONFIDENTIAL,
+    CLASSIFICATION_CLASSIFIED,
 )
 
 
-classification_vf = RestrictedVocabularyFactory(
-    IClassification['classification'],
-    CLASSIFICATION_CHOICES,
-    message_factory=_,
-    restricted=True)
+def classification_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in CLASSIFICATION_CHOICES])
 
 
 @provider(IContextAwareDefaultFactory)

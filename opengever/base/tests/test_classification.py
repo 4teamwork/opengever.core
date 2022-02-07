@@ -106,30 +106,6 @@ class TestClassificationVocabulary(IntegrationTestCase):
             form_field.options_values)
 
     @browsing
-    def test_aq_value_is_contained_in_choices_if_restricted(self, browser):
-        self.login(self.regular_user, browser=browser)
-        self.set_classification(self.leaf_repofolder, u'confidential')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Classification')
-        self.assertIn('confidential', form_field.options_values)
-
-    @browsing
-    def test_vocab_is_restricted_if_indicated_by_aq_value(self, browser):
-        self.login(self.regular_user, browser=browser)
-        self.set_classification(self.leaf_repofolder, u'confidential')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-
-        form_field = browser.find('Classification')
-        self.assertSetEqual(
-            set(['confidential', 'classified']),
-            set(form_field.options_values))
-
-    @browsing
     def test_acquired_value_is_suggested_as_default(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -142,22 +118,6 @@ class TestClassificationVocabulary(IntegrationTestCase):
         self.assertEqual('confidential', form_field.value)
         # Default listed first
         self.assertEqual('confidential', form_field.options_values[0])
-
-    @browsing
-    def test_restriction_works_in_edit_form(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        self.set_classification(self.leaf_repofolder, u'confidential')
-
-        browser.open(self.leaf_repofolder)
-        factoriesmenu.add(u'Business Case Dossier')
-        browser.fill({'Title': 'My Dossier'}).save()
-
-        browser.click_on('Edit')
-        form_field = browser.find('Classification')
-        self.assertSetEqual(
-            set(['confidential', 'classified']),
-            set(form_field.options_values))
 
     @browsing
     def test_change_does_not_propagate_to_children(self, browser):
