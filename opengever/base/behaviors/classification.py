@@ -1,6 +1,5 @@
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
-from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
@@ -150,16 +149,15 @@ IClassification['classification'].defaultFactory = classification_default
 PRIVACY_LAYER_NO = u'privacy_layer_no'
 PRIVACY_LAYER_YES = u'privacy_layer_yes'
 PRIVACY_LAYER_CHOICES = (
-    (1, PRIVACY_LAYER_NO),
-    (2, PRIVACY_LAYER_YES),
+    PRIVACY_LAYER_NO,
+    PRIVACY_LAYER_YES,
 )
 
 
-privacy_layer_vf = RestrictedVocabularyFactory(
-    IClassification['privacy_layer'],
-    PRIVACY_LAYER_CHOICES,
-    message_factory=_,
-    restricted=True)
+def privacy_layer_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in PRIVACY_LAYER_CHOICES])
 
 
 @provider(IContextAwareDefaultFactory)
