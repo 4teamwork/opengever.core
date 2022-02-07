@@ -219,11 +219,6 @@ class SearchableTextExtender(object):
             if filing_no:
                 searchable.append(filing_no.encode('utf-8'))
 
-        # comments
-        comments = getattr(IDossier(self.context), 'comments', None)
-        if comments:
-            searchable.append(comments.encode('utf-8'))
-
         # keywords
         keywords = IDossier(self.context).keywords
         if keywords:

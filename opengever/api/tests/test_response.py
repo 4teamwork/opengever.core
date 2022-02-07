@@ -15,7 +15,11 @@ class TestResponseGETSerialization(IntegrationTestCase):
 
         # Todo
         browser.open(self.todo, method="GET", headers=self.api_headers)
-        self.assertEquals([], browser.json['responses'])
+        self.assertEqual([], browser.json['responses'])
+
+        # Dossier
+        browser.open(self.dossier, method="GET", headers=self.api_headers)
+        self.assertEqual([], browser.json['responses'])
 
         # Document
         self.login(self.regular_user, browser=browser)
@@ -140,6 +144,31 @@ class TestResponsePost(IntegrationTestCase):
              u'text': u'Angebot \xfcberpr\xfcft',
             },
             browser.json)
+
+    @browsing
+    def test_add_response_to_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.assertEqual([], IResponseContainer(self.dossier).list())
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            browser.open(self.dossier, view='@responses', method="POST", headers=self.api_headers,
+                         data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+
+        responses = IResponseContainer(self.dossier).list()
+        self.assertEqual(1, len(responses))
+        self.assertEqual(u'Angebot \xfcberpr\xfcft', responses[0].text)
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
+                     u'dossier-1/@responses/1481272800000000',
+             u'changes': [],
+             u'created': u'2016-12-09T09:40:00',
+             u'creator': {u'title': u'B\xe4rfuss K\xe4thi', u'token': self.regular_user.id},
+             u'response_id': 1481272800000000,
+             u'response_type': u'comment',
+             u'text': u'Angebot \xfcberpr\xfcft'}, browser.json)
 
     @browsing
     def test_data_is_validated(self, browser):

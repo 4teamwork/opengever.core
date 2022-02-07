@@ -75,15 +75,6 @@
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
-                "comments": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "Kommentar",
-                    "description": "",
-                    "_zope_schema_type": "Text"
-                },
                 "responsible": {
                     "type": "string",
                     "title": "Federf\u00fchrend",
@@ -426,7 +417,6 @@
                 "start",
                 "end",
                 "touched",
-                "comments",
                 "responsible",
                 "external_reference",
                 "filing_prefix",

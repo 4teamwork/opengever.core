@@ -32,25 +32,12 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
     document_limit = 10
 
     def boxes(self):
-        can_modify = api.user.has_permission('Modify portal content',
-                                             obj=self.context)
-        has_empty_marker = (not can_modify and not self.get_comments())
-
         return [[self.make_task_box(),
-                 self.make_comment_box(has_empty_marker=has_empty_marker),
                  self.make_participation_box(),
                  self.make_reference_box()],
                 [self.make_document_box(),
                  self.make_description_box(),
                  self.make_keyword_box()]]
-
-    def get_comments(self):
-        return self.context.get_formatted_comments()
-
-    def make_comment_box(self, has_empty_marker=True):
-        return dict(id='comments', content=self.get_comments(),
-                    label=_(u"label_comments", default="Comments"),
-                    has_empty_marker=has_empty_marker, is_html=True)
 
     def make_participation_box(self):
         if is_contact_feature_enabled():
@@ -247,6 +234,14 @@ class DossierTemplateOverview(DossierOverview):
     @property
     def keywords(self):
         return IDossierTemplate(self.context).keywords
+
+    def get_comments(self):
+        return self.context.get_formatted_comments()
+
+    def make_comment_box(self, has_empty_marker=True):
+        return dict(id='comments', content=self.get_comments(),
+                    label=_(u"label_comments", default="Comments"),
+                    has_empty_marker=has_empty_marker, is_html=True)
 
     def make_document_box(self):
         return dict(id='documents', content=self.documents(), href='documents',

@@ -47,7 +47,6 @@ class IDossier(model.Schema):
             u'keywords',
             u'start',
             u'end',
-            u'comments',
             u'external_reference',
             u'responsible',
             u'relatedDossier',
@@ -90,11 +89,6 @@ class IDossier(model.Schema):
         required=False,
         readonly=True,
         default=None,
-    )
-
-    comments = schema.Text(
-        title=_(u'label_comments', default=u'Comments'),
-        required=False,
     )
 
     form.widget('responsible', KeywordFieldWidget, async=True)
@@ -206,7 +200,6 @@ class IDossier(model.Schema):
             hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types'),
         required=False,
     )
-
 
     @invariant
     def validate_start_end(data):

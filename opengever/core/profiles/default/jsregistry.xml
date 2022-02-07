@@ -384,17 +384,6 @@
       cookable="True"
       enabled="on"
       expression=""
-      id="++resource++opengever.dossier.resources/edit_note.js"
-      inline="False"
-      insert-after="++resource++opengever.document/officeconnector.js"
-      />
-
-  <javascript
-      cacheable="True"
-      compression="safe"
-      cookable="True"
-      enabled="on"
-      expression=""
       id="++resource++opengever.tabbedview-resources/statefilter.js"
       insert-after="++resource++ftw.tabbedview-resources/tabbedview.js"
       inline="False"

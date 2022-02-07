@@ -121,7 +121,6 @@ DOSSIER_FORM_DEFAULTS = {
 }
 DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,
-    'comments': None,
     'container_location': None,
     'container_type': None,
     'date_of_cassation': None,

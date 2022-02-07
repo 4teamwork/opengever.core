@@ -396,9 +396,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
     def assert_empty_dossier_created(self, parent):
         dossier = self.find_by_title(parent, "Dossier Peter Schneider")
 
-        self.assertEqual(
-            u'Vreni Meier ist ein Tausendsassa',
-            IDossier(dossier).comments)
         self.assertEqual(tuple(), IDossier(dossier).keywords)
         self.assertEqual(
             'Client1 0.3 / 1', IReferenceNumber(dossier).get_number())
@@ -416,8 +413,6 @@ class TestOggBundlePipeline(IntegrationTestCase):
             self.leaf_repofolder,
             u'Dossier in bestehendem Examplecontent Repository')
 
-        self.assertEqual(u'Vreni Meier ist ein Tausendsassa',
-                         IDossier(dossier).comments)
         self.assertEqual(tuple(), IDossier(dossier).keywords)
         self.assertEqual([], IDossier(dossier).relatedDossier)
         self.assertEqual(u'lukas.graf', IDossier(dossier).responsible)
