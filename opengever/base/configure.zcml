@@ -300,6 +300,11 @@
       />
 
   <subscriber
+      for="ZPublisher.interfaces.IPubEnd"
+      handler=".subscribers.set_security_headers"
+      />
+
+  <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            OFS.interfaces.IObjectWillBeRemovedEvent"
       handler=".handlers.remove_favorites"

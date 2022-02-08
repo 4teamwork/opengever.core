@@ -130,3 +130,35 @@ def scrub_server_version(event):
         if getattr(event.request, 'RESPONSE', None):
             if getattr(event.request.RESPONSE, '_server_version', None):
                 event.request.RESPONSE._server_version = 'Zope'
+
+
+def set_security_headers(event):
+    """Set headers related to security"""
+    response = getattr(getattr(event, 'request', None), 'response', None)
+    if response is not None:
+        # Only load scripts and stylesheets with the correct content type
+        response.setHeader('X-Content-Type-Options', 'nosniff')
+
+        # Enable browser protection for reflected XSS attacks
+        response.setHeader('X-XSS-Protection', '1; mode=block')
+
+        # Keep existing CSP header to allow browser views to set a custom CSP
+        if response.getHeader('Content-Security-Policy') is None:
+            content_type = response.headers.get('content-type', '')
+            if content_type.startswith('text/html'):
+                # Allow resources from current origin, eval, inline js and css
+                # Allow images from current origin and data urls
+                # Disallow plugins and framing
+                response.setHeader(
+                    'Content-Security-Policy',
+                    "default-src 'self' 'unsafe-eval' 'unsafe-inline'; "
+                    "img-src 'self' data:; "
+                    "object-src 'none'; frame-ancestors 'none'")
+            else:
+                # Disallow the loading of any resources and disable framing
+                response.setHeader(
+                    'Content-Security-Policy',
+                    "default-src 'none'; frame-ancestors 'none'")
+
+        # Only send referrer on requests to the same origin
+        response.setHeader('Referrer-Policy', 'same-origin')

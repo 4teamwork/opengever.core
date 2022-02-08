@@ -118,3 +118,11 @@ class TestEditView(IntegrationTestCase):
         browser.open(self.document, view="office_online_edit")
         self.assertEqual(self.document.absolute_url(), browser.url)
         self.assertEqual(['Document is locked.'], error_messages())
+
+    @browsing
+    def test_edit_view_allows_frames_and_images_from_external_sources(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document, view="office_online_edit")
+        csp = browser.headers['Content-Security-Policy']
+        self.assertIn('frame-src https:;', csp)
+        self.assertIn('img-src https: data:;', csp)
