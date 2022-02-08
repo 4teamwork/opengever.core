@@ -110,14 +110,11 @@ class TestClassificationVocabulary(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         self.set_classification(self.leaf_repofolder, u'confidential')
-
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
 
         form_field = browser.find('Classification')
         self.assertEqual('confidential', form_field.value)
-        # Default listed first
-        self.assertEqual('confidential', form_field.options_values[0])
 
     @browsing
     def test_change_does_not_propagate_to_children(self, browser):
@@ -243,8 +240,6 @@ class TestPrivacyLayerVocabulary(IntegrationTestCase):
         form_field = browser.find('Privacy protection')
 
         self.assertEqual('privacy_layer_yes', form_field.value)
-        # Default listed first
-        self.assertEqual('privacy_layer_yes', form_field.options_values[0])
 
     @browsing
     def test_change_does_not_propagate_to_children(self, browser):

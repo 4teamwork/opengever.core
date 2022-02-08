@@ -344,8 +344,6 @@ class TestRetentionPeriodVocabulary(IntegrationTestCase):
         form_field = browser.find('Retention period (years)')
 
         self.assertEqual('15', form_field.value)
-        # Default listed first
-        self.assertEqual('15', form_field.options_values[0])
 
 
 class TestRetentionPeriodPropagation(IntegrationTestCase):
