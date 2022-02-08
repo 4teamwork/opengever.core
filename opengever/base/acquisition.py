@@ -1,3 +1,4 @@
+from opengever.base.default_values import get_persisted_value_for_field
 from plone.app.dexterity.behaviors.metadata import MetadataBase
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.schema.interfaces import ValidationError
@@ -34,13 +35,12 @@ def acquire_field_value(field, container):
             pass
         else:
             try:
-                adpt = interface_(obj)
+                interface_(obj)
             except TypeError:
                 # could not adapt
                 pass
             else:
-                # XXX: Potential for infinite recursion here (Issue #2033)
-                value = field.get(adpt)
+                value = get_persisted_value_for_field(obj, field)
                 try:
                     field.validate(value)
                     return value
