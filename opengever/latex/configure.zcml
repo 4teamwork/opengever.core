@@ -51,6 +51,11 @@
       />
 
   <adapter
+      factory=".listing.CommentsLaTeXListing"
+      name="comments"
+      />
+
+  <adapter
       factory=".dossiercover.DossierCoverLaTeXView"
       provides="ftw.pdfgenerator.interfaces.ILaTeXView"
       />

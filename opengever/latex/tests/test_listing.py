@@ -1,13 +1,16 @@
 from datetime import date
 from DateTime import DateTime
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from lxml.cssselect import CSSSelector
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.base.response import IResponseContainer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.tasklisting import ITaskListingLayer
@@ -17,6 +20,7 @@ from opengever.testing import obj2brain
 from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import json
 import lxml
 
 
@@ -203,6 +207,49 @@ class TestSubDossierListing(BaseLatexListingTest):
              'Resolved',
              '01.11.2013',
              '31.12.2013'], rows[0])
+
+
+class TestCommentsListing(BaseLatexListingTest):
+
+    def setUp(self):
+        super(TestCommentsListing, self).setUp()
+        self.hugo = create(Builder('fixture').with_hugo_boss())
+        self.repo = create(Builder('repository').titled('Repository XY'))
+        self.dossier = create(Builder('dossier')
+                              .having(title=u'Dossier A',
+                                      responsible=self.hugo.userid,
+                                      start=date(2013, 11, 1),
+                                      end=date(2013, 12, 31)))
+        self.api_headers = {'Accept': 'application/json',
+                            'Content-Type': 'application/json'}
+
+        self.listing = getMultiAdapter(
+            (self.dossier, self.dossier.REQUEST, self),
+            ILaTexListing, name='comments')
+
+    @browsing
+    def test_comments_listing(self, browser):
+        with freeze(datetime(2016, 12, 9, 9, 40)) as clock:
+            browser.login().open(self.dossier, view='@responses', method="POST",
+                                 headers=self.api_headers,
+                                 data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+            clock.forward(days=4, hours=3)
+            browser.login().open(self.dossier, view='@responses', method="POST",
+                                 headers=self.api_headers,
+                                 data=json.dumps({'text': u'Angebot korrigiert'}))
+            self.listing.items = IResponseContainer(self.dossier).list()
+            table = lxml.html.fromstring(self.listing.template())
+            rows = table.xpath(CSSSelector('tbody tr').path)
+            cols = table.xpath(CSSSelector('thead th').path)
+
+            self.assertEqual(['Time', 'Created by', 'Comment'], [
+                             col.text_content().strip() for col in cols])
+            self.assert_row_values(
+                ['09.12.2016 09:40', 'Test User (test_user_1_)', u'Angebot \xfcberpr\xfcft'],
+                rows[0])
+            self.assert_row_values(
+                ['13.12.2016 12:40', 'Test User (test_user_1_)', 'Angebot korrigiert'],
+                rows[1])
 
 
 class TestDocumentListing(BaseLatexListingTest):

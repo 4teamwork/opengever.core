@@ -8,6 +8,7 @@ from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.response import IResponseContainer
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _ as _dossier
 from opengever.dossier.behaviors.dossier import IDossier
@@ -60,6 +61,15 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
         args['is_subdossier'] = IDossierMarker.providedBy(parent)
 
         args['participants'] = self.get_participants()
+
+        # comments
+        args['commentstitle'] = translate(
+            _('label_comments', default="Comments"), context=self.request)
+
+        listing = getMultiAdapter((self.context, self.request, self),
+                                  ILaTexListing, name='comments')
+
+        args['comments'] = listing.get_listing(self.get_comments())
 
         # subdossiers
         args['subdossierstitle'] = translate(
@@ -254,6 +264,9 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
                                 IMail.__identifier__]}
 
         return catalog(query)
+
+    def get_comments(self):
+        return IResponseContainer(self.context).list()
 
     def get_sorting(self, tab_name):
         """Read the sort_on and sort_order attributes from the gridstate,
