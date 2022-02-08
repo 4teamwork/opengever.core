@@ -8,6 +8,8 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
+from opengever.propertysheets.assignment import get_dossier_assignment_slots
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from plone import api
 from plone.restapi.interfaces import ISerializeToJsonSummary
@@ -23,6 +25,7 @@ class ConfigGet(Service):
         config = IGeverSettings(self.context).get_config()
         self.add_additional_infos(config)
         self.add_current_unit_infos(config)
+        self.add_propertysheet_infos(config)
         return config
 
     def check_permission(self):
@@ -66,3 +69,9 @@ class ConfigGet(Service):
         admin_unit = get_current_admin_unit()
         config['current_admin_unit'] = queryMultiAdapter(
             (admin_unit, self.request), ISerializeToJsonSummary)()
+
+    def add_propertysheet_infos(self, config):
+        storage = PropertySheetSchemaStorage()
+        dossier_slots = get_dossier_assignment_slots()
+
+        config['has_dossier_propertysheet_registered'] = any([storage.query(slot) for slot in dossier_slots])

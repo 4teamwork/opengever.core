@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@config``: Add ``has_dossier_propertysheet_registered`` attribute.
 - ``@globalsources``: The ``all_users_and_groups`` source returns now also inactive users.
 
 

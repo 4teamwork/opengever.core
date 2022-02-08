@@ -312,4 +312,5 @@ usersnap_api_key
 
     API Schlüssel für Usersnap Integration im neuen Frontend
 
-
+has_dossier_propertysheet_registered
+    Gibt an, ob dieses Deployment eigene Propertysheets für Dossiers definiert oder nicht.

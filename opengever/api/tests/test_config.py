@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from mock import patch
 from opengever.base.interfaces import IUserSnapSettings
 from opengever.private import enable_opengever_private
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from pkg_resources import get_distribution
@@ -267,6 +268,31 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertFalse(browser.json.get(u'is_propertysheets_manager'))
+
+    @browsing
+    def test_has_dossier_propertysheet_registered_is_true_if_the_deployment_defines_dossier_property_sheets(self, browser):
+        self.login(self.manager)
+        create(Builder("property_sheet_schema")
+               .named("businesscase_dossier_schema")
+               .assigned_to_slots(u"IDossier.dossier_type.businesscase"))
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(browser.json.get(u'has_dossier_propertysheet_registered'))
+
+    @browsing
+    def test_has_dossier_propertysheet_registered_is_false_if_the_deployment_does_not_defines_dossier_property_sheets(self, browser):
+        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
+        create(Builder("property_sheet_schema")
+               .named("document_schema")
+               .assigned_to_slots(u"IDocument.default"))
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertFalse(browser.json.get(u'has_dossier_propertysheet_registered'))
 
     @browsing
     def test_config_contains_bumblebee_app_id(self, browser):
