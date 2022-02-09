@@ -1,17 +1,13 @@
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
-from opengever.base.restricted_vocab import propagate_vocab_restrictions
-from opengever.base.restricted_vocab import RestrictedVocabularyFactory
 from opengever.base.utils import language_cache_key
 from plone import api
 from plone.app.dexterity.behaviors import metadata
-from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.memoize import ram
 from plone.supermodel import model
 from zope import schema
-from zope.container.interfaces import IContainerModifiedEvent
 from zope.i18n import translate
 from zope.interface import alsoProvides, Interface
 from zope.interface import provider
@@ -121,37 +117,21 @@ class IClassificationSettings(Interface):
     )
 
 
-def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event) or \
-       IContainerModifiedEvent.providedBy(event):
-        return
-
-    restricted_fields = [
-        IClassification['classification'],
-        IClassification['privacy_layer']]
-
-    propagate_vocab_restrictions(
-        container, event, restricted_fields, IClassificationMarker)
-
-
 # CLASSIFICATION: Vocabulary and default value
 CLASSIFICATION_UNPROTECTED = u'unprotected'
 CLASSIFICATION_CONFIDENTIAL = u'confidential'
 CLASSIFICATION_CLASSIFIED = u'classified'
 CLASSIFICATION_CHOICES = (
-    # Choice-   # Choice Name
-    # level     #
-    (1, CLASSIFICATION_UNPROTECTED),
-    (2, CLASSIFICATION_CONFIDENTIAL),
-    (3, CLASSIFICATION_CLASSIFIED),
+    CLASSIFICATION_UNPROTECTED,
+    CLASSIFICATION_CONFIDENTIAL,
+    CLASSIFICATION_CLASSIFIED,
 )
 
 
-classification_vf = RestrictedVocabularyFactory(
-    IClassification['classification'],
-    CLASSIFICATION_CHOICES,
-    message_factory=_,
-    restricted=True)
+def classification_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in CLASSIFICATION_CHOICES])
 
 
 @provider(IContextAwareDefaultFactory)
@@ -169,16 +149,15 @@ IClassification['classification'].defaultFactory = classification_default
 PRIVACY_LAYER_NO = u'privacy_layer_no'
 PRIVACY_LAYER_YES = u'privacy_layer_yes'
 PRIVACY_LAYER_CHOICES = (
-    (1, PRIVACY_LAYER_NO),
-    (2, PRIVACY_LAYER_YES),
+    PRIVACY_LAYER_NO,
+    PRIVACY_LAYER_YES,
 )
 
 
-privacy_layer_vf = RestrictedVocabularyFactory(
-    IClassification['privacy_layer'],
-    PRIVACY_LAYER_CHOICES,
-    message_factory=_,
-    restricted=True)
+def privacy_layer_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in PRIVACY_LAYER_CHOICES])
 
 
 @provider(IContextAwareDefaultFactory)

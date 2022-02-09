@@ -1,6 +1,5 @@
 from AccessControl.unauthorized import Unauthorized
 from opengever.api.add import GeverFolderPost
-from opengever.base.interfaces import IDuringContentCreation
 from opengever.base.oguid import Oguid
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -26,13 +25,11 @@ from time import time
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
-from zope.schema.interfaces import IVocabularyFactory
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
@@ -300,22 +297,6 @@ class LinkedWorkspaces(object):
         elif document_repr.get('message'):
             data = self.client.request.get(document_repr['message']['download'])
             document_repr['message']['data'] = data.content
-
-        # GEVER can restrict the available vocabulary items for the classifcation
-        # fields. We can't copy a document into gever if its classification is
-        # not at least the classifictaion of the dossier itself.
-        # So if the classification of the teamraum document
-        # is not provided by the gever dossiers classification vocabulary,
-        # we have to reset the classification to the next possible value which
-        # is the value of the dossier itself.
-        alsoProvides(self.context.REQUEST, IDuringContentCreation)
-        classification_vocabulary = getUtility(
-            IVocabularyFactory,
-            'classification_classification_vocabulary')(self.context)
-        noLongerProvides(self.context.REQUEST, IDuringContentCreation)
-
-        if document_repr.get('classification', {}).get('token') not in classification_vocabulary:
-            document_repr['classification'] = {'token': self.context.classification}
 
         # We should avoid setting the id ourselves, can lead to conflicts
         document_repr = self._blacklisted_dict(document_repr, ['id'])

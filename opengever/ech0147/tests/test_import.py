@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.ech0147.interfaces import IECH0147Settings
+from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.propertysheets.field import IPropertySheetField
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -10,6 +11,7 @@ from plone import api
 from plone.dexterity.utils import iterSchemata
 from zope.schema import getFieldsInOrder
 import os.path
+
 
 def get_path(name):
     return os.path.join(os.path.dirname(__file__), 'data', name)
@@ -188,16 +190,16 @@ class TestImportErrorHandling(FunctionalTestCase):
                               title_fr=u'Syst\xe8me de classement',
                               title_en=u'Repository'))
 
-        # Set classification to classified on repositoryfolder,
-        # to make classification value `confidential`, as it's defined in
-        # the ech0147 sample, invalid.
         folder = create(Builder('repository')
                         .having(title_de=u'Vertr\xe4ge und Vereinbarungen',
                                 title_fr=u'Contrats et accords',
-                                title_en=u'Contracts and agreements',
-                                classification='classified')
+                                title_en=u'Contracts and agreements')
                         .within(root))
 
+        # we modify the mapping used so that an invalid value is set for
+        # the classification field on the object being created.
+        mapping_backup = INV_CLASSIFICATION_MAPPING.pop("confidential")
+        INV_CLASSIFICATION_MAPPING["confidential"] = "invalid"
         browser.login().open(folder, view='ech0147_import')
         with open(get_path('message.zip')) as file_:
             browser.forms['form'].fill({'File': file_})
@@ -208,3 +210,5 @@ class TestImportErrorHandling(FunctionalTestCase):
              u'invalid field data.\nField `classification`: Constraint not '
              u'satisfied'],
             browser.css('.error').text)
+
+        INV_CLASSIFICATION_MAPPING["confidential"] = mapping_backup

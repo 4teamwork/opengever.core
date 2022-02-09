@@ -3,16 +3,12 @@ from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.interfaces import IBaseCustodyPeriods
 from opengever.base.interfaces import IRetentionPeriodRegister
-from opengever.base.restricted_vocab import propagate_vocab_restrictions
-from opengever.base.restricted_vocab import RestrictedVocabularyFactory
-from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.registry.interfaces import IRegistry
 from plone.supermodel import model
 from zope import schema
 from zope.component import getUtility
-from zope.container.interfaces import IContainerModifiedEvent
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
@@ -99,44 +95,20 @@ class ILifeCycle(model.Schema):
 alsoProvides(ILifeCycle, IFormFieldProvider)
 
 
-def propagate_vocab_restrictions_to_children(container, event):
-    if ILocalrolesModifiedEvent.providedBy(event) or \
-       IContainerModifiedEvent.providedBy(event):
-        return
-
-    restricted_fields = [ILifeCycle['retention_period']]
-
-    propagate_vocab_restrictions(
-        container, event, restricted_fields, ILifeCycleMarker)
-
-
 # ---------- RETENTION PERIOD -----------
 # Vocabulary
 def _get_retention_period_choices():
     registry = getUtility(IRegistry)
     proxy = registry.forInterface(IRetentionPeriodRegister)
-    choices = []
     nums = getattr(proxy, 'retention_period')
 
-    for i, num in enumerate(nums):
-        num = int(num)
-        pos = int(nums[- i - 1])
-        choices.append((pos, num))
-
-    return choices
+    return [int(num) for num in nums]
 
 
-def _is_retention_period_restricted():
-    registry = getUtility(IRegistry)
-    retention_period_settings = registry.forInterface(IRetentionPeriodRegister)
-    return retention_period_settings.is_restricted
-
-
-retention_period_vf = RestrictedVocabularyFactory(
-    ILifeCycle['retention_period'],
-    _get_retention_period_choices,
-    message_factory=_,
-    restricted=_is_retention_period_restricted)
+def retention_period_vf(context):
+    return SimpleVocabulary([
+        SimpleTerm(choice, title=_(choice))
+        for choice in _get_retention_period_choices()])
 
 
 @provider(IContextAwareDefaultFactory)

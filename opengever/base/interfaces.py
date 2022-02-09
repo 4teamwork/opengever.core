@@ -60,17 +60,11 @@ class IRetentionPeriodRegister(Interface):
         title=u'Retention period',
         description=u'Possible values for retention period in years.',
         default=[u'5',
-                u'10',
-                u'15',
-                u'20',
-                u'25'],
+                 u'10',
+                 u'15',
+                 u'20',
+                 u'25'],
         value_type=schema.TextLine(),)
-
-    is_restricted = schema.Bool(
-        title=u'Is restricted',
-        description=u'Should the retention period, restricted'
-        'by the aquistiion value.',
-        default=False)
 
 
 class IReferenceNumberPrefix(Interface):
