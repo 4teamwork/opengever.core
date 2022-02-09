@@ -1,3 +1,4 @@
+from ftw.upgrade.interfaces import IDuringUpgrade
 from opengever.base.placeful_workflow import assign_placeful_workflow
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -68,10 +69,17 @@ def todo_added(todo, event):
 
 
 def todo_review_state_changed(todo, event):
-    if event.action == COMPLETE_TODO_TRANSITION:
-        ToDoClosedActivity(todo, getRequest()).record()
-    else:
-        ToDoReopenedActivity(todo, getRequest()).record()
+    if not IDuringUpgrade.providedBy(getRequest()):
+        # Don't create activities during upgrades.
+        #
+        # This avoids issues, specifically with
+        # upgrade 20211105114219_add_completed_state_for_todos, where otherwise
+        # we would issue SQL statements that may fail if certain SQL schema
+        # migrations haven't been run yet. See CA-3574 for details.
+        if event.action == COMPLETE_TODO_TRANSITION:
+            ToDoClosedActivity(todo, getRequest()).record()
+        else:
+            ToDoReopenedActivity(todo, getRequest()).record()
 
     todo.reindexObject(idxs=['is_completed'])
 
