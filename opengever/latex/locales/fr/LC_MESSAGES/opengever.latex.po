@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-02-08 14:09+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-latex/fr/>\n"
@@ -15,6 +15,21 @@ msgstr ""
 "Domain: DOMAIN\n"
 "Language: fr\n"
 "X-Generator: Weblate 2.13.1\n"
+
+#. Default: "Comment"
+#: ./opengever/latex/listing.py
+msgid "label_comment"
+msgstr "Commentaire"
+
+#. Default: "Comments"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_comments"
+msgstr "Commentaires"
+
+#. Default: "Created by"
+#: ./opengever/latex/listing.py
+msgid "label_created_by"
+msgstr "Créé par"
 
 #. Default: "Changed by"
 #: ./opengever/latex/listing.py
@@ -83,6 +98,11 @@ msgstr "Fin"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
 msgstr "Mandant"
+
+#. Default: "No"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_no"
+msgstr "Non"
 
 #. Default: "Page"
 #: ./opengever/latex/layouts/default.py
@@ -181,6 +201,11 @@ msgstr "Titre"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
 msgstr "Action"
+
+#. Default: "Yes"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_yes"
+msgstr "Oui"
 
 #. Default: "Repository version"
 #: ./opengever/latex/dossiercover.py

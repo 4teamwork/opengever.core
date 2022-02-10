@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from datetime import date
 from ftw.mail.mail import IMail
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
@@ -8,8 +9,10 @@ from ftw.pdfgenerator.view import MakoLaTeXView
 from ftw.table import helper
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.response import IResponseContainer
 from opengever.document.document import IDocumentSchema
 from opengever.dossier import _ as _dossier
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -18,6 +21,7 @@ from opengever.globalindex.model.task import Task
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.tabbedview.helper import readable_ogds_author
 from Products.CMFCore.utils import getToolByName
@@ -27,6 +31,7 @@ from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import Interface
+from zope.schema import getFields
 
 
 class IDossierDetailsLayer(Interface):
@@ -55,11 +60,21 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
         self.layout.show_contact = False
 
         args = {'dossier_metadata': self.get_dossier_metadata()}
+        args['customfields'] = self.get_custom_fields_data()
 
         parent = aq_parent(aq_inner(self.context))
         args['is_subdossier'] = IDossierMarker.providedBy(parent)
 
         args['participants'] = self.get_participants()
+
+        # comments
+        args['commentstitle'] = translate(
+            _('label_comments', default="Comments"), context=self.request)
+
+        listing = getMultiAdapter((self.context, self.request, self),
+                                  ILaTexListing, name='comments')
+
+        args['comments'] = listing.get_listing(self.get_comments())
 
         # subdossiers
         args['subdossierstitle'] = translate(
@@ -154,6 +169,44 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
             rows.append('\\bf {} & {} \\\\%%'.format(
                 self.convert_plain(label), value))
 
+        return '\n'.join(rows)
+
+    def get_custom_fields_data(self):
+        rows = []
+        adapted = IDossierCustomProperties(self.context, None)
+        if not adapted:
+            return ''
+        custom_properties = adapted.custom_properties
+        if not custom_properties:
+            return ''
+
+        field = getFields(IDossierCustomProperties).get('custom_properties')
+        active_slot = field.get_active_assignment_slot(self.context)
+        for slot in [active_slot, field.default_slot]:
+            if slot not in custom_properties:
+                continue
+            definition = PropertySheetSchemaStorage().query(slot)
+            if not definition:
+                continue
+            for name, field in definition.get_fields():
+                custom_field_value = custom_properties[slot].get(name)
+                if custom_field_value is None:
+                    continue
+                if isinstance(custom_field_value, bool):
+                    custom_field_value = (
+                        translate(_('label_yes', default=u"Yes"), context=self.request)
+                        if custom_field_value
+                        else translate(_('label_no', default=u"No"), context=self.request))
+                elif isinstance(custom_field_value, date):
+                    custom_field_value = helper.readable_date(self.context, custom_field_value)
+                elif isinstance(custom_field_value, set):
+                    if not custom_field_value:
+                        continue
+                    custom_field_value = u', '.join(custom_field_value)
+                elif isinstance(custom_field_value, int):
+                    custom_field_value = str(custom_field_value)
+                rows.append('\\bf {} & {} \\\\%%'.format(self.convert_plain(field.title),
+                                                         self.convert_plain(custom_field_value)))
         return '\n'.join(rows)
 
     def get_reference_number(self):
@@ -254,6 +307,9 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
                                 IMail.__identifier__]}
 
         return catalog(query)
+
+    def get_comments(self):
+        return IResponseContainer(self.context).list()
 
     def get_sorting(self, tab_name):
         """Read the sort_on and sort_order attributes from the gridstate,

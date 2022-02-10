@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-18 13:15+0000\n"
+"POT-Creation-Date: 2022-02-08 14:09+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,21 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#. Default: "Comment"
+#: ./opengever/latex/listing.py
+msgid "label_comment"
+msgstr "Comment"
+
+#. Default: "Comments"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_comments"
+msgstr "Comments"
+
+#. Default: "Created by"
+#: ./opengever/latex/listing.py
+msgid "label_created_by"
+msgstr "Created by"
 
 #. German translation: Geändert von
 #. Default: "Changed by"
@@ -94,6 +109,11 @@ msgstr "End"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
 msgstr "Issuer"
+
+#. Default: "No"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_no"
+msgstr "No"
 
 #. German translation: Seite
 #. Default: "Page"
@@ -210,6 +230,11 @@ msgstr "Title"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
 msgstr "Action"
+
+#. Default: "Yes"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_yes"
+msgstr "Yes"
 
 #. German translation: Version Ordnungssystem
 #. Default: "Repository version"

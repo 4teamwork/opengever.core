@@ -326,6 +326,33 @@ class TaskHistoryLaTeXListing(LaTexListing):
 
 @implementer(ILaTexListing)
 @adapter(Interface, Interface, Interface)
+class CommentsLaTeXListing(LaTexListing):
+
+    def get_actor_label(self, item):
+        return Actor.lookup(item.creator).get_label()
+
+    def get_columns(self):
+        return [
+            Column('created',
+                   _('label_time', default=u'Time'),
+                   '10%',
+                   lambda item: helper.readable_date_time(item, item.created),
+                   "left"),
+
+            Column('creator',
+                   _('label_created_by', default=u'Created by'),
+                   '20%',
+                   self.get_actor_label,
+                   "left"),
+
+            Column('text',
+                   _('label_comment', default=u'Comment'),
+                   '70%'),
+        ]
+
+
+@implementer(ILaTexListing)
+@adapter(Interface, Interface, Interface)
 class JournalLaTeXListing(LaTexListing):
 
     template = ViewPageTemplateFile('templates/listing.pt')

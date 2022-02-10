@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-02-08 14:09+0000\n"
 "PO-Revision-Date: 2013-11-19 16:25+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,21 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#. Default: "Comment"
+#: ./opengever/latex/listing.py
+msgid "label_comment"
+msgstr "Kommentar"
+
+#. Default: "Comments"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_comments"
+msgstr "Kommentare"
+
+#. Default: "Created by"
+#: ./opengever/latex/listing.py
+msgid "label_created_by"
+msgstr "Erstellt von"
 
 #. Default: "Changed by"
 #: ./opengever/latex/listing.py
@@ -81,6 +96,11 @@ msgstr "Ende"
 #: ./opengever/latex/listing.py
 msgid "label_issuer"
 msgstr "Auftraggeber"
+
+#. Default: "No"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_no"
+msgstr "Nein"
 
 #. Default: "Page"
 #: ./opengever/latex/layouts/default.py
@@ -179,6 +199,11 @@ msgstr "Titel"
 #: ./opengever/latex/listing.py
 msgid "label_transition"
 msgstr "Aktion"
+
+#. Default: "Yes"
+#: ./opengever/latex/dossierdetails.py
+msgid "label_yes"
+msgstr "Ja"
 
 #. Default: "Repository version"
 #: ./opengever/latex/dossiercover.py

@@ -15,6 +15,7 @@ from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from ftw.testbrowser import browsing
+import json
 
 
 class TestDossierDetailsPDFView(MockTestCase):
@@ -101,6 +102,57 @@ class TestDossierDetails(FunctionalTestCase):
         self.assertEquals(
             'Regierungsrat / User t\xc3\xa4st (test_user_1_)',
             dossierdetails.get_responsible().encode('utf-8'))
+
+    @browsing
+    def test_custom_fields_on_dossier_details(self, browser):
+        choices = ["one", u"zw\xf6i", "three"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.default")
+            .with_field("choice", u"choose", u"Choose", u"", False, values=choices)
+            .with_field("multiple_choice", u"choosemulti",
+                        u"Choose Multi", u"", False, values=choices)
+            .with_field("textline", u"textline", u"A line of text", u"", False)
+            .with_field("date", u"birthday", u"Birthday", u"", False)
+            .with_field("int", u"num", u"Number", u"", False)
+            .with_field("text", u"text", u"Some lines of text", u"", False)
+            .with_field("bool", u"yesorno", u"Yes or no", u"", False)
+        )
+        repository = create(Builder('repository')
+                            .titled(u'Repository Folder'))
+        property_data = {
+            "IDossier.default": {
+                "choose": u"zw\xf6i".encode("unicode_escape"),
+                "choosemulti": ["one", "three"],
+                "textline": u"bl\xe4",
+                "birthday": "2022-01-30",
+                "num": 12,
+                "text": u"Irgend \xe4 Texscht",
+                "yesorno": True,
+            },
+        }
+        data = {
+            "@type": "opengever.dossier.businesscasedossier",
+            "title": "New Dossier",
+            "responsible": TEST_USER_ID,
+            "custom_properties": property_data,
+        }
+
+        with self.observe_children(repository) as children:
+            browser.login().open(repository, method="POST", data=json.dumps(data),
+                                 headers={'Accept': 'application/json',
+                                          'Content-Type': 'application/json'})
+
+        dossier = children["added"].pop()
+        dossierdetails = self.get_dossierdetails_view(dossier)
+        self.assertEqual('\\bf Choose & zw\xc3\xb6i \\\\%%\n'
+                         '\\bf Choose Multi & three, one \\\\%%\n'
+                         '\\bf A line of text & bl\xc3\xa4 \\\\%%\n'
+                         '\\bf Birthday & 30.01.2022 \\\\%%\n'
+                         '\\bf Number & 12 \\\\%%\n'
+                         '\\bf Some lines of text & Irgend \xc3\xa4 Texscht \\\\%%\n'
+                         '\\bf Yes or no & Yes \\\\%%', dossierdetails.get_custom_fields_data())
 
     def test_repository_path_is_a_reverted_path_seperated_with_slahes(self):
         repositoryroot = create(Builder('repository_root')
