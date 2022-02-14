@@ -17,6 +17,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.browser.participants import role_list_helper
+from opengever.dossier.participations import IParticipationData
 from opengever.globalindex.model.task import Task
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
@@ -270,13 +271,13 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
                           context=self.request)))
 
         # add the participants
-        participants = list(IParticipationAware(
-                self.context).get_participations())
+        participants = IParticipationAware(self.context).get_participations()
 
         for participant in participants:
+            participation_data = IParticipationData(participant)
             rows.append('%s, %s' % (
-                    readable_ogds_author(participant, participant.contact),
-                    role_list_helper(participant, participant.roles)))
+                    participation_data.participant_title,
+                    role_list_helper(participant, participation_data.roles)))
 
         values = ['{', '\\vspace{-\\baselineskip}\\begin{itemize}']
         for row in self.convert_list(rows):

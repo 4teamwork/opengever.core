@@ -77,7 +77,7 @@ class TestCreatorMigrator(FunctionalTestCase):
             self.portal, {'old.user': 'new.user'}, 'move')
         results = migrator.migrate()
 
-        self.assertEquals(
+        self.assertItemsEqual(
             [
                 ('/plone/dossier-1', 'old.user', 'new.user'),
                 ('/plone/dossier-1/document-1', 'old.user', 'new.user'),
