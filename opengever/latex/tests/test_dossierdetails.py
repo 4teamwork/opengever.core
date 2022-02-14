@@ -3,18 +3,18 @@ from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
+from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.latex import dossierdetails
 from opengever.latex.dossierdetails import IDossierDetailsLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
-from opengever.testing import FunctionalTestCase
-from opengever.testing import select_current_org_unit
-from plone.app.testing import TEST_USER_ID
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from ftw.testbrowser import browsing
 import json
 
 
@@ -49,44 +49,21 @@ class TestDossierDetailsPDFView(MockTestCase):
                         request))
 
 
-class TestDossierDetails(FunctionalTestCase):
-    use_default_fixture = False
+class TestDossierDetails(IntegrationTestCase):
 
     def setUp(self):
         super(TestDossierDetails, self).setUp()
-        self.user = create(Builder('ogds_user')
-                           .having(firstname='t\xc3\xa4st'.decode('utf-8'),
-                                   lastname=u'User'))
-        self.admin_unit = create(Builder('admin_unit')
-                                 .as_current_admin_unit()
-                                 .having(title=u'Regierungsrat'))
-        self.org_unit = create(Builder('org_unit')
-                               .having(title=u'Regierungsrat',
-                                       admin_unit=self.admin_unit)
-                               .with_default_groups()
-                               .assign_users([self.user]))
-
-        select_current_org_unit(self.org_unit.id())
+        with self.login(self.regular_user):
+            # responsibles are not set in the fixture
+            for obj in (self.subdossier, self.subsubdossier, self.subdossier2):
+                IDossier(obj).responsible = self.regular_user.id
+                obj.reindexObject(idxs=["responsible"])
 
     @browsing
     def test_dossierdetails_view(self, browser):
-        repositoryroot = create(Builder('repository_root')
-                                .titled(u'Repository'))
-        repository_1 = create(Builder('repository')
-                              .titled(u'Repository Folder')
-                              .within(repositoryroot))
-        repository_1_1 = create(Builder('repository')
-                                .titled(u'Sub Repository Folder')
-                                .within(repository_1))
-        dossier = create(Builder('dossier')
-                         .within(repository_1_1)
-                         .having(responsible=self.user.userid))
-        create(Builder('task')
-               .within(dossier)
-               .having(responsible=self.user.userid,
-                       responsible_client=self.org_unit.id()))
+        self.login(self.regular_user, browser=browser)
 
-        browser.login().visit(dossier, view='pdf-dossier-details')
+        browser.visit(self.dossier, view='pdf-dossier-details')
 
     def get_dossierdetails_view(self, dossier):
         provide_request_layer(dossier.REQUEST, IDossierDetailsLayer)
@@ -95,16 +72,16 @@ class TestDossierDetails(FunctionalTestCase):
             (dossier, dossier.REQUEST, layout), ILaTeXView)
 
     def test_responsible_contains_admin_unit_and_userid(self):
-        dossier = create(Builder('dossier')
-                         .having(responsible=TEST_USER_ID))
-
-        dossierdetails = self.get_dossierdetails_view(dossier)
+        self.login(self.regular_user)
+        dossierdetails = self.get_dossierdetails_view(self.subdossier2)
         self.assertEquals(
-            'Regierungsrat / User t\xc3\xa4st (test_user_1_)',
+            'Hauptmandant / B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss)',
             dossierdetails.get_responsible().encode('utf-8'))
 
     @browsing
     def test_custom_fields_on_dossier_details(self, browser):
+        self.login(self.regular_user, browser)
+        PropertySheetSchemaStorage().clear()
         choices = ["one", u"zw\xf6i", "three"]
         create(
             Builder("property_sheet_schema")
@@ -119,8 +96,7 @@ class TestDossierDetails(FunctionalTestCase):
             .with_field("text", u"text", u"Some lines of text", u"", False)
             .with_field("bool", u"yesorno", u"Yes or no", u"", False)
         )
-        repository = create(Builder('repository')
-                            .titled(u'Repository Folder'))
+
         property_data = {
             "IDossier.default": {
                 "choose": u"zw\xf6i".encode("unicode_escape"),
@@ -135,14 +111,13 @@ class TestDossierDetails(FunctionalTestCase):
         data = {
             "@type": "opengever.dossier.businesscasedossier",
             "title": "New Dossier",
-            "responsible": TEST_USER_ID,
+            "responsible": self.regular_user.getId(),
             "custom_properties": property_data,
         }
 
-        with self.observe_children(repository) as children:
-            browser.login().open(repository, method="POST", data=json.dumps(data),
-                                 headers={'Accept': 'application/json',
-                                          'Content-Type': 'application/json'})
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.login().open(self.leaf_repofolder, method="POST",
+                                 data=json.dumps(data), headers=self.api_headers)
 
         dossier = children["added"].pop()
         dossierdetails = self.get_dossierdetails_view(dossier)
@@ -155,32 +130,20 @@ class TestDossierDetails(FunctionalTestCase):
                          '\\bf Yes or no & Yes \\\\%%', dossierdetails.get_custom_fields_data())
 
     def test_repository_path_is_a_reverted_path_seperated_with_slahes(self):
-        repositoryroot = create(Builder('repository_root')
-                                .titled(u'Repository'))
-        repository_1 = create(Builder('repository')
-                              .titled(u'Repository Folder')
-                              .within(repositoryroot))
-        repository_1_1 = create(Builder('repository')
-                                .titled(u'Sub Repository Folder')
-                                .within(repository_1))
-        dossier = create(Builder('dossier').within(repository_1_1))
-
-        dossierdetails = self.get_dossierdetails_view(dossier)
-
+        self.login(self.regular_user)
+        dossierdetails = self.get_dossierdetails_view(self.dossier)
         self.assertEquals(
-            u'1.1. Sub Repository Folder / 1. Repository Folder',
+            '1.1. Vertr\xc3\xa4ge und Vereinbarungen / 1. F\xc3\xbchrung',
             dossierdetails.get_repository_path())
 
     def test_repository_path_do_not_escape_special_latex_characters(self):
         """The escaping is done by the `get_dossier_metadata` method
         and shouldn't be done twice."""
+        self.login(self.regular_user)
+        self.leaf_repofolder.title_en = u'Foo & Bar'
 
-        repofolder = create(Builder('repository')
-                              .titled(u'Foo & Bar'))
-
-        dossier = create(Builder('dossier').within(repofolder))
-        dossierdetails = self.get_dossierdetails_view(dossier)
+        dossierdetails = self.get_dossierdetails_view(self.dossier)
 
         self.assertEquals(
-            '1. Foo & Bar',
+            '1.1. Foo & Bar / 1. F\xc3\xbchrung',
             dossierdetails.get_repository_path())
