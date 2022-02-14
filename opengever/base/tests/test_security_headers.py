@@ -32,3 +32,14 @@ class TestSecurityHeaders(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         browser.open(self.portal, view='csp-test')
         self.assertEqual(browser.headers['Content-Security-Policy'], 'default-src *')
+
+    @browsing
+    def test_304_response_doesnt_contain_security_headers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.dossier)
+        etag = browser.headers['ETag']
+        browser.open(self.dossier, headers={'If-None-Match': etag})
+        self.assertNotIn('X-Content-Type-Options', browser.headers)
+        self.assertNotIn('X-XSS-Protection', browser.headers)
+        self.assertNotIn('Content-Security-Policy', browser.headers)
+        self.assertNotIn('Referrer-Policy', browser.headers)
