@@ -44,12 +44,12 @@ def role_list_helper(item, value):
         # translate the message
         return translate(value, context=getRequest())
 
-    elif sum([int(isinstance(value, t)) for t in (str, unicode)]):
+    elif any([isinstance(value, t) for t in (str, unicode)]):
         # is it a string or unicode or a subtype of them?
         return translate_participation_role(value)
 
-    elif sum([int(isinstance(value, t)) for t in (list, tuple, set,
-                                                  PersistentList)]):
+    elif any([isinstance(value, t) for t in (list, tuple, set,
+                                             PersistentList)]):
         # if it's a list, lets iterate over it
         translated_values = []
         for role in value:
