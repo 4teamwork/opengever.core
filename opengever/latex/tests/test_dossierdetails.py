@@ -7,6 +7,8 @@ from ftw.testbrowser import browsing
 from ftw.testing import MockTestCase
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.latex import dossierdetails
 from opengever.latex.dossierdetails import IDossierDetailsLayer
 from opengever.latex.layouts.default import DefaultLayout
@@ -16,6 +18,7 @@ from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 import json
+import requests_mock
 
 
 class TestDossierDetailsPDFView(MockTestCase):
@@ -49,27 +52,30 @@ class TestDossierDetailsPDFView(MockTestCase):
                         request))
 
 
-class TestDossierDetails(IntegrationTestCase):
+class TestDossierDetailsBase(IntegrationTestCase):
 
     def setUp(self):
-        super(TestDossierDetails, self).setUp()
+        super(TestDossierDetailsBase, self).setUp()
         with self.login(self.regular_user):
             # responsibles are not set in the fixture
             for obj in (self.subdossier, self.subsubdossier, self.subdossier2):
                 IDossier(obj).responsible = self.regular_user.id
                 obj.reindexObject(idxs=["responsible"])
 
-    @browsing
-    def test_dossierdetails_view(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        browser.visit(self.dossier, view='pdf-dossier-details')
-
     def get_dossierdetails_view(self, dossier):
         provide_request_layer(dossier.REQUEST, IDossierDetailsLayer)
         layout = DefaultLayout(dossier, dossier.REQUEST, PDFBuilder())
         return getMultiAdapter(
             (dossier, dossier.REQUEST, layout), ILaTeXView)
+
+
+class TestDossierDetails(TestDossierDetailsBase):
+
+    @browsing
+    def test_dossierdetails_view(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.visit(self.dossier, view='pdf-dossier-details')
 
     def test_responsible_contains_admin_unit_and_userid(self):
         self.login(self.regular_user)
@@ -147,3 +153,67 @@ class TestDossierDetails(IntegrationTestCase):
         self.assertEquals(
             '1.1. Foo & Bar / 1. F\xc3\xbchrung',
             dossierdetails.get_repository_path())
+
+    def test_handles_plone_participations(self):
+        self.login(self.regular_user)
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(self.regular_user.getId(),
+                                  ['regard', 'participation', 'final-drawing'])
+        handler.add_participation(self.dossier_responsible.getId(), ['regard'])
+
+        dossierdetails = self.get_dossierdetails_view(self.dossier)
+        dossierdetails.get_participants()
+        self.assertEqual(
+            ['{ ',
+             '\\vspace{-\\baselineskip}\\begin{itemize} ',
+             '\\item Ziegler Robert (robert.ziegler), Responsible ',
+             '\\item B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss), For your information, Participation, Final signature ',
+             '\\item Ziegler Robert (robert.ziegler), For your information ',
+             '\\vspace{-\\baselineskip}\\end{itemize} ',
+             '}'],
+            dossierdetails.get_participants().split("\n")
+        )
+
+    def test_handles_sql_participations(self):
+        self.activate_feature('contact')
+
+        self.login(self.regular_user)
+
+        dossierdetails = self.get_dossierdetails_view(self.dossier)
+        dossierdetails.get_participants()
+        self.assertEqual(
+            ['{ ',
+             '\\vspace{-\\baselineskip}\\begin{itemize} ',
+             '\\item Ziegler Robert (robert.ziegler), Responsible ',
+             '\\item Meier AG, Final signature ',
+             '\\item B\xc3\xbchler Josef, Final signature, Participation ',
+             '\\vspace{-\\baselineskip}\\end{itemize} ',
+             '}'],
+            dossierdetails.get_participants().split("\n")
+        )
+
+
+@requests_mock.Mocker()
+class TestDossierDetailsWithKuB(KuBIntegrationTestCase, TestDossierDetailsBase):
+
+    def test_handles_kub_participations(self, mocker):
+        self.activate_feature('contact')
+
+        self.login(self.regular_user)
+
+        self.mock_get_by_id(mocker, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation(
+            'person:9af7d7cc-b948-423f-979f-587158c6bc65', ['regard'])
+
+        dossierdetails = self.get_dossierdetails_view(self.dossier)
+        dossierdetails.get_participants()
+        self.assertEqual(
+            ['{ ',
+             '\\vspace{-\\baselineskip}\\begin{itemize} ',
+             '\\item Ziegler Robert (robert.ziegler), Responsible ',
+             '\\item Dupont Jean, For your information ',
+             '\\vspace{-\\baselineskip}\\end{itemize} ',
+             '}'],
+            dossierdetails.get_participants().split("\n")
+        )
