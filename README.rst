@@ -14,7 +14,7 @@ below are satisfied and run the following steps:
     $ git clone git@github.com:4teamwork/opengever.core.git
     $ cd opengever.core
     $ ln -s development.cfg buildout.cfg
-    $ python bootstrap.py
+    $ python bootstrap.py --setuptools-version 44.1.1 --buildout-version 2.13.3
     $ bin/buildout
 
 Dependencies
