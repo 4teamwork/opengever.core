@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.0 (2022-02-16)
+---------------------
+
+New features:
+
+
+- Remove propagation and restriction of ILifecycle and IClassification fields. [njohner]
+- Replace dossier comments field with IResponseSupported behavior. [tinagerber]
+- Add custom fields to dossier details pdf. [tinagerber]
+- Add comments to dossier details pdf. [tinagerber]
+
+
+Bug fixes:
+
+
+- Don't attempt to transport custom properties across admin units. [lgraf]
+- Custom properties: Don't prematurely make returned values json_compatible(). [lgraf]
+- Custom properties: Fix rendering z3c.form widgets in display mode for date fields. [lgraf]
+- Fix setting static defaults for propertysheet date fields. [lgraf]
+- Include inactive users in the all_users_and_groups source. [phgross]
+- Suppress creation of todo completion activities during upgrades to avoid failing upgrades. [lgraf]
+- Fix content-sharing for multiple recipients and cc recipients. [phgross]
+- Fix dossierdetails for dossier with SQL participations. [njohner]
+
+
+Other changes:
+
+
+- Avoid unnecessary security updates when adding new content or renaming existing content. [buchi]
+- Optimize warmup: reduce warmup time and memory consumption after warmup. [buchi]
+- Set security related HTTP headers. [buchi]
+
+
 2022.3.0 (2022-02-02)
 ---------------------
 

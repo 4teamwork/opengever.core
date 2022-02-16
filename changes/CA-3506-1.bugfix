@@ -1,1 +1,0 @@
-Custom properties: Don't prematurely make returned values json_compatible(). [lgraf]
