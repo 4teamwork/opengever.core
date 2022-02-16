@@ -3,7 +3,17 @@
 API Changelog
 =============
 
-2022.3.0 (unreleased)
+2022.5.0 (unreleased)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2022.4.0 (2022-02-16)
 ---------------------
 
 Breaking Changes
