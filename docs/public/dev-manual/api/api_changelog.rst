@@ -9,6 +9,8 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Dossiers: The ``comments`` field has been dropped, and dossiers now support multiple comments via ``responses``.
+
 Other Changes
 ^^^^^^^^^^^^^
 - ``@globalsources``: The ``all_users_and_groups`` source returns now also inactive users.
