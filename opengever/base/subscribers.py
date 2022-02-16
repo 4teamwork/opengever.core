@@ -136,6 +136,13 @@ def set_security_headers(event):
     """Set headers related to security"""
     response = getattr(getattr(event, 'request', None), 'response', None)
     if response is not None:
+        content_type = response.headers.get('content-type', None)
+
+        # Do not set any headers if the response doesn't have a content type
+        # This is e.g. the case for 304 not modified responses.
+        if content_type is None:
+            return
+
         # Only load scripts and stylesheets with the correct content type
         response.setHeader('X-Content-Type-Options', 'nosniff')
 
@@ -144,7 +151,6 @@ def set_security_headers(event):
 
         # Keep existing CSP header to allow browser views to set a custom CSP
         if response.getHeader('Content-Security-Policy') is None:
-            content_type = response.headers.get('content-type', '')
             if content_type.startswith('text/html'):
                 # Allow resources from current origin, eval, inline js and css
                 # Allow images from current origin and data urls
