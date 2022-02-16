@@ -468,6 +468,32 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         indexed_value = solr_data_for(copied_doc, 'approval_state')
         self.assertEqual(None, indexed_value)
 
+    def test_filename_is_updated_on_create_version_and_revert_to_version(self):
+        self.login(self.regular_user)
+
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'filename')
+        self.assertEqual(u'Vertraegsentwurf.docx', indexed_value)
+
+        self.document.file = NamedBlobFile(data='New', filename=u'Vertraegsentwurf.pdf')
+        versioner.create_version('Second version')
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.document, 'filename')
+        self.assertEqual(u'Vertraegsentwurf.pdf', indexed_value)
+
+        manager = getMultiAdapter((self.document, self.request),
+                                  ICheckinCheckoutManager)
+
+        manager.revert_to_version(0)
+        self.commit_solr()
+        indexed_value = solr_data_for(self.document, 'filename')
+
+        self.assertEqual(u'Vertraegsentwurf.docx', indexed_value)
+
 
 class TestDefaultDocumentIndexer(MockTestCase):
     layer = COMPONENT_UNIT_TESTING
