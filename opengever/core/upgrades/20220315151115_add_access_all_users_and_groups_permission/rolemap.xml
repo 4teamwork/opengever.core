@@ -1,0 +1,11 @@
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.workspace: Access all users and groups" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="WorkspacesCreator" />
+    </permission>
+
+  </permissions>
+</rolemap>

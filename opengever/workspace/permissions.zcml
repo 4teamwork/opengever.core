@@ -26,4 +26,6 @@
 
   <permission id="opengever.workspace.ManageWorkspaces" title="opengever.workspace: Manage Workspaces" />
 
+  <permission id="opengever.workspace.AccessAllUsersAndGroups" title="opengever.workspace: Access all users and groups" />
+
 </configure>
