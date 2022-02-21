@@ -41,15 +41,7 @@ class Navigation(object):
             return result
 
         root = self.find_root(root_interface, content_interfaces)
-
-        query = {'object_provides': content_interfaces,
-                 'path': '/'.join(root.getPhysicalPath()),
-                 'sort_on': 'sortable_title'}
-
-        if self.request.form.get('review_state'):
-            query['review_state'] = self.request.form.get('review_state')
-
-        items = api.content.find(**query)
+        items = self.query_catalog(root, content_interfaces)
 
         if self.request.form.get('include_context'):
             items = self.include_context_branch(items, root.UID(), content_interfaces)
@@ -90,6 +82,16 @@ class Navigation(object):
                 raise BadRequest("No root found for interface: {}".format(
                     root_interface.__identifier__))
         return root
+
+    def query_catalog(self, root, content_interfaces):
+        query = {'object_provides': content_interfaces,
+                 'path': '/'.join(root.getPhysicalPath()),
+                 'sort_on': 'sortable_title'}
+
+        if self.request.form.get('review_state'):
+            query['review_state'] = self.request.form.get('review_state')
+
+        return api.content.find(**query)
 
     def include_context_branch(self, items, root_uid, content_interfaces):
         all_uids = {brain.UID for brain in items}
