@@ -34,6 +34,7 @@ class Navigation(object):
         'filename',
         'has_sametype_children',
         'is_subdossier',
+        'dossier_type',
     ]
 
     def __init__(self, context, request):
@@ -201,6 +202,7 @@ class Navigation(object):
             'is_leafnode': None,
             'is_subdossier': wrapper.is_subdossier,
             'review_state': wrapper.review_state(),
+            'dossier_type': wrapper.dossier_type,
         }
         if wrapper.portal_type == 'opengever.repository.repositoryfolder':
             node['is_leafnode'] = not wrapper.has_sametype_children
