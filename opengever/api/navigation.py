@@ -7,7 +7,6 @@ from opengever.base.solr import OGSolrDocument
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from opengever.repository.repositoryroot import IRepositoryRoot
-from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.serializer.converters import json_compatible
@@ -89,8 +88,13 @@ class Navigation(object):
         if root_interface.providedBy(context):
             root = context
         else:
-            roots = api.content.find(
-                object_provides=root_interface.__identifier__)
+            response = self.solr.search(
+                filters=make_filters(
+                    object_provides=root_interface.__identifier__),
+                sort='path asc',
+            )
+            roots = [OGSolrDocument(d) for d in response.docs]
+
             if roots:
                 root = roots[0].getObject()
             else:
