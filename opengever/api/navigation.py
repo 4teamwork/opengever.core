@@ -31,16 +31,36 @@ class Navigation(object):
         if self.request.form.get('include_root'):
             content_interfaces.append(root_interface)
 
-        context = self.context
-
         result = {
             'navigation': {
-                '@id': '{}/@navigation'.format(context.absolute_url()),
+                '@id': '{}/@navigation'.format(self.context.absolute_url()),
             },
         }
 
         if not expand:
             return result
+
+        root = self.find_root(root_interface, content_interfaces)
+
+        query = {'object_provides': content_interfaces,
+                 'path': '/'.join(root.getPhysicalPath()),
+                 'sort_on': 'sortable_title'}
+
+        if self.request.form.get('review_state'):
+            query['review_state'] = self.request.form.get('review_state')
+
+        items = api.content.find(**query)
+
+        if self.request.form.get('include_context'):
+            items = self.include_context_branch(items, root.UID(), content_interfaces)
+
+        nodes = map(self.brain_to_node, items)
+        result['navigation']['tree'] = make_tree_by_url(nodes)
+
+        return result
+
+    def find_root(self, root_interface, content_interfaces):
+        context = self.context
 
         if root_interface not in content_interfaces:
             while (not root_interface.providedBy(context)
@@ -69,23 +89,7 @@ class Navigation(object):
             else:
                 raise BadRequest("No root found for interface: {}".format(
                     root_interface.__identifier__))
-
-        query = {'object_provides': content_interfaces,
-                 'path': '/'.join(root.getPhysicalPath()),
-                 'sort_on': 'sortable_title'}
-
-        if self.request.form.get('review_state'):
-            query['review_state'] = self.request.form.get('review_state')
-
-        items = api.content.find(**query)
-
-        if self.request.form.get('include_context'):
-            items = self.include_context_branch(items, root.UID(), content_interfaces)
-
-        nodes = map(self.brain_to_node, items)
-        result['navigation']['tree'] = make_tree_by_url(nodes)
-
-        return result
+        return root
 
     def include_context_branch(self, items, root_uid, content_interfaces):
         all_uids = {brain.UID for brain in items}
