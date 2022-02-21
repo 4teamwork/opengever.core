@@ -61,9 +61,6 @@ class Navigation(object):
         root = self.find_root(root_interface, content_interfaces)
         solr_docs = self.query_solr(root, content_interfaces)
 
-        if self.request.form.get('include_context'):
-            solr_docs = self.include_context_branch(solr_docs, root.UID(), content_interfaces)
-
         nodes = map(self.solr_doc_to_node, solr_docs)
         result['navigation']['tree'] = make_tree_by_url(nodes)
 
@@ -111,36 +108,41 @@ class Navigation(object):
         if review_states:
             query['review_state'] = review_states
 
+        filters = make_filters(**query)
+
+        if self.request.form.get('include_context'):
+            # Include context branch's UIDs in the query, by adding them as
+            # a filter that is OR'ed with the main filters (which themselves
+            # are AND'ed together). This is necessary because restrictions
+            # from the main filters must not be applied to the context branch.
+            context_uids = list(self.get_context_branch_uids(root))
+            if context_uids:
+                context_filter = make_filters(UID=context_uids)[0]
+                main_filters = self._join_filters(make_filters(**query), 'AND')
+                filters = self._join_filters([main_filters, context_filter], 'OR')
+
         resp = self.solr.search(
-            filters=make_filters(**query),
+            filters=filters,
             sort='sortable_title asc',
             fl=self.FIELDS)
 
         return [OGSolrDocument(doc) for doc in resp.docs]
 
-    def include_context_branch(self, solr_docs, root_uid, content_interfaces):
-        all_uids = {solr_doc.UID for solr_doc in solr_docs}
-        if self.context.UID() in all_uids:
-            return solr_docs
-
+    def get_context_branch_uids(self, root):
+        """Return UIDs of the current context's chain up to the root.
+        """
         for item in self.context.aq_chain:
             item_uid = item.UID()
-            if item_uid == root_uid:
+            if item_uid == root.UID():
                 break
-            all_uids.add(item_uid)
-
-        # XXX: This is silly. We re-query Solr again with a long list of UID,
-        # just to get back the same resultset plus the nodes from the current
-        # context's branch.
-        resp = self.solr.search(
-            filters=' OR '.join(['UID:%s' % uid for uid in all_uids]),
-            sort='sortable_title asc',
-            fl=self.FIELDS)
-
-        return [OGSolrDocument(doc) for doc in resp.docs]
+            yield item_uid
 
     def _lookup_iface_by_identifier(self, identifier):
         return resolve(identifier) if identifier else None
+
+    def _join_filters(self, filters, op):
+        op = ' %s ' % op
+        return op.join(['(%s)' % flt for flt in filters])
 
     def get_root_interface(self):
         """Lookups the root_interface provided within the request parameter.
