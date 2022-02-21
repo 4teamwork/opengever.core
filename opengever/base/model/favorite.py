@@ -16,6 +16,8 @@ from opengever.base.query import BaseQuery
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.repository.interfaces import IRepositoryFolder
@@ -128,9 +130,14 @@ class Favorite(Base):
         current admin-unit, the unresolved favorite will be returned instead.
         """
         resolved_obj = None
+        dossier_type = None
+
         if resolve:
             try:
                 resolved_obj = self.oguid.resolve_object()
+                if IDossierMarker.providedBy(resolved_obj):
+                    dossier_type = IDossier(resolved_obj).dossier_type
+
             except InvalidOguidIntIdPart:
                 logger.warn('Failed to resolve Oguid %s', self.oguid.id)
 
@@ -149,6 +156,7 @@ class Favorite(Base):
             'admin_unit': AdminUnit.query.get(self.admin_unit_id).title,
             'review_state': self.review_state,
             'is_subdossier': self.is_subdossier,
+            'dossier_type': dossier_type,
             'is_leafnode': self.is_leafnode,
             'resolved': bool(resolved_obj)
         }
