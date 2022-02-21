@@ -5,6 +5,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from opengever.repository.repositoryroot import IRepositoryRoot
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
@@ -146,21 +147,24 @@ class Navigation(object):
         return content_interfaces
 
     def brain_to_node(self, brain):
+        wrapper = IContentListingObject(brain)
+        context_url = self.context.absolute_url()
+
         node = {
-            '@type': brain.portal_type,
-            'text': brain.Title,
-            'description': brain.Description,
-            'url': brain.getURL(),
-            'uid': brain.UID,
-            'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE,
-            'current': self.context.absolute_url() == brain.getURL(),
-            'current_tree': self.context.absolute_url().startswith(brain.getURL()),
+            '@type': wrapper.portal_type,
+            'text': wrapper.Title(),
+            'description': wrapper.Description(),
+            'url': wrapper.getURL(),
+            'uid': wrapper.UID,
+            'active': wrapper.review_state() != REPOSITORY_FOLDER_STATE_INACTIVE,
+            'current': context_url == wrapper.getURL(),
+            'current_tree': context_url.startswith(wrapper.getURL()),
             'is_leafnode': None,
-            'is_subdossier': brain.is_subdossier,
-            'review_state': brain.review_state,
+            'is_subdossier': wrapper.is_subdossier,
+            'review_state': wrapper.review_state(),
         }
-        if brain.portal_type == 'opengever.repository.repositoryfolder':
-            node['is_leafnode'] = not brain.has_sametype_children
+        if wrapper.portal_type == 'opengever.repository.repositoryfolder':
+            node['is_leafnode'] = not wrapper.has_sametype_children
         return json_compatible(node)
 
 
