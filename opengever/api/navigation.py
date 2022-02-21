@@ -128,6 +128,7 @@ class Navigation(object):
         resp = self.solr.search(
             filters=filters,
             sort='sortable_title asc',
+            rows=10000,
             fl=self.FIELDS)
 
         return [OGSolrDocument(doc) for doc in resp.docs]
