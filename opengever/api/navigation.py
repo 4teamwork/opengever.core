@@ -1,6 +1,9 @@
 from Acquisition import aq_parent
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.browser.navigation import make_tree_by_url
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.solr import OGSolrDocument
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -12,6 +15,7 @@ from plone.restapi.services import Service
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import getUtility
 from zope.dottedname.resolve import resolve
 from zope.interface import implementer
 from zope.interface import Interface
@@ -21,9 +25,22 @@ from zope.interface import Interface
 @adapter(Interface, IOpengeverBaseLayer)
 class Navigation(object):
 
+    FIELDS = [
+        'UID',
+        'path',
+        'portal_type',
+        'review_state',
+        'Title',
+        'Description',
+        'filename',
+        'has_sametype_children',
+        'is_subdossier',
+    ]
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.solr = getUtility(ISolrSearch)
 
     def __call__(self, expand=False):
         root_interface = self.get_root_interface()
@@ -42,12 +59,12 @@ class Navigation(object):
             return result
 
         root = self.find_root(root_interface, content_interfaces)
-        items = self.query_catalog(root, content_interfaces)
+        solr_docs = self.query_solr(root, content_interfaces)
 
         if self.request.form.get('include_context'):
-            items = self.include_context_branch(items, root.UID(), content_interfaces)
+            solr_docs = self.include_context_branch(solr_docs, root.UID(), content_interfaces)
 
-        nodes = map(self.brain_to_node, items)
+        nodes = map(self.solr_doc_to_node, solr_docs)
         result['navigation']['tree'] = make_tree_by_url(nodes)
 
         return result
@@ -84,28 +101,43 @@ class Navigation(object):
                     root_interface.__identifier__))
         return root
 
-    def query_catalog(self, root, content_interfaces):
-        query = {'object_provides': content_interfaces,
-                 'path': '/'.join(root.getPhysicalPath()),
-                 'sort_on': 'sortable_title'}
+    def query_solr(self, root, content_interfaces):
+        query = {
+            'object_provides': [i.__identifier__ for i in content_interfaces],
+            'path_parent': '/'.join(root.getPhysicalPath()),
+        }
 
-        if self.request.form.get('review_state'):
-            query['review_state'] = self.request.form.get('review_state')
+        review_states = self.request.form.get('review_state', [])
+        if review_states:
+            query['review_state'] = review_states
 
-        return api.content.find(**query)
+        resp = self.solr.search(
+            filters=make_filters(**query),
+            sort='sortable_title asc',
+            fl=self.FIELDS)
 
-    def include_context_branch(self, items, root_uid, content_interfaces):
-        all_uids = {brain.UID for brain in items}
+        return [OGSolrDocument(doc) for doc in resp.docs]
+
+    def include_context_branch(self, solr_docs, root_uid, content_interfaces):
+        all_uids = {solr_doc.UID for solr_doc in solr_docs}
         if self.context.UID() in all_uids:
-            return items
+            return solr_docs
+
         for item in self.context.aq_chain:
             item_uid = item.UID()
             if item_uid == root_uid:
                 break
             all_uids.add(item_uid)
-        return api.content.find(
-            UID=list(all_uids),
-            sort_on='sortable_title')
+
+        # XXX: This is silly. We re-query Solr again with a long list of UID,
+        # just to get back the same resultset plus the nodes from the current
+        # context's branch.
+        resp = self.solr.search(
+            filters=' OR '.join(['UID:%s' % uid for uid in all_uids]),
+            sort='sortable_title asc',
+            fl=self.FIELDS)
+
+        return [OGSolrDocument(doc) for doc in resp.docs]
 
     def _lookup_iface_by_identifier(self, identifier):
         return resolve(identifier) if identifier else None
@@ -146,8 +178,8 @@ class Navigation(object):
                                  "looked up: {}".format(interface))
         return content_interfaces
 
-    def brain_to_node(self, brain):
-        wrapper = IContentListingObject(brain)
+    def solr_doc_to_node(self, solr_doc):
+        wrapper = IContentListingObject(solr_doc)
         context_url = self.context.absolute_url()
 
         node = {
