@@ -112,7 +112,8 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
     """
 
     def render(self):
-        if not self.context.is_open():
+        if not api.user.has_permission('opengever.workspaceclient: Unlink Workspace',
+                                       obj=self.context):
             raise Unauthorized
         return super(UnlinkWorkspacePost, self).render()
 

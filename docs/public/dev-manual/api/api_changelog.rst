@@ -17,6 +17,7 @@ Other Changes
 - Serialization: Include dossier_type in JSON summary for dossiers.
 - ``@favorites`` GET: Include dossier_type in response.
 - Add new endpoint ``@remove-dossier-reference``
+- ``@unlink-workspace``: Allow unlinking workspaces even if the dossier is closed.
 
 
 2022.4.0 (2022-02-16)

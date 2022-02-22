@@ -1390,14 +1390,13 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
 
-            #self.assert_workspace_actions_available(browser, self.dossier)
-
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-deactivate')
             transaction.commit()
 
             self.assert_workspace_actions(browser, self.dossier,
-                                          [self.list_workspaces_action])
+                                          [self.list_workspaces_action,
+                                           self.unlink_workspace_action])
 
     @browsing
     def test_unlink_actions_available_in_dossier_with_linked_workspaces(self, browser):

@@ -994,6 +994,16 @@ class TestUnlinkWorkspace(FunctionalWorkspaceClientTestCase):
             manager.unlink_workspace(workspace_2.UID())
             self.assertFalse(ILinkedToWorkspace.providedBy(self.dossier))
 
+    def test_unlink_workspace_from_closed_dossier(self):
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.expired_dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with auto_commit_after_request(manager.client):
+                manager.unlink_workspace(self.workspace.UID())
+
+            self.assertEqual([], manager.storage.list())
+
     def test_unlink_is_journalized(self):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
