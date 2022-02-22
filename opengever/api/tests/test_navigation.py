@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from urllib import urlencode
 import Missing
@@ -18,7 +18,7 @@ def flatten_tree(items):
     return flattened_items
 
 
-class TestNavigation(IntegrationTestCase):
+class TestNavigation(SolrIntegrationTestCase):
 
     @browsing
     def test_navigation_contains_respository(self, browser):

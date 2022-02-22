@@ -1,16 +1,20 @@
 from Acquisition import aq_parent
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.browser.navigation import make_tree_by_url
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.solr import OGSolrDocument
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryfolder import REPOSITORY_FOLDER_STATE_INACTIVE
 from opengever.repository.repositoryroot import IRepositoryRoot
-from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zExceptions import BadRequest
 from zope.component import adapter
+from zope.component import getUtility
 from zope.dottedname.resolve import resolve
 from zope.interface import implementer
 from zope.interface import Interface
@@ -20,9 +24,22 @@ from zope.interface import Interface
 @adapter(Interface, IOpengeverBaseLayer)
 class Navigation(object):
 
+    FIELDS = [
+        'UID',
+        'path',
+        'portal_type',
+        'review_state',
+        'Title',
+        'Description',
+        'filename',
+        'has_sametype_children',
+        'is_subdossier',
+    ]
+
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.solr = getUtility(ISolrSearch)
 
     def __call__(self, expand=False):
         root_interface = self.get_root_interface()
@@ -31,16 +48,25 @@ class Navigation(object):
         if self.request.form.get('include_root'):
             content_interfaces.append(root_interface)
 
-        context = self.context
-
         result = {
             'navigation': {
-                '@id': '{}/@navigation'.format(context.absolute_url()),
+                '@id': '{}/@navigation'.format(self.context.absolute_url()),
             },
         }
 
         if not expand:
             return result
+
+        root = self.find_root(root_interface, content_interfaces)
+        solr_docs = self.query_solr(root, content_interfaces)
+
+        nodes = map(self.solr_doc_to_node, solr_docs)
+        result['navigation']['tree'] = make_tree_by_url(nodes)
+
+        return result
+
+    def find_root(self, root_interface, content_interfaces):
+        context = self.context
 
         if root_interface not in content_interfaces:
             while (not root_interface.providedBy(context)
@@ -62,46 +88,66 @@ class Navigation(object):
         if root_interface.providedBy(context):
             root = context
         else:
-            roots = api.content.find(
-                object_provides=root_interface.__identifier__)
+            response = self.solr.search(
+                filters=make_filters(
+                    object_provides=root_interface.__identifier__),
+                sort='path asc',
+            )
+            roots = [OGSolrDocument(d) for d in response.docs]
+
             if roots:
                 root = roots[0].getObject()
             else:
                 raise BadRequest("No root found for interface: {}".format(
                     root_interface.__identifier__))
+        return root
 
-        query = {'object_provides': content_interfaces,
-                 'path': '/'.join(root.getPhysicalPath()),
-                 'sort_on': 'sortable_title'}
+    def query_solr(self, root, content_interfaces):
+        query = {
+            'object_provides': [i.__identifier__ for i in content_interfaces],
+            'path_parent': '/'.join(root.getPhysicalPath()),
+        }
 
-        if self.request.form.get('review_state'):
-            query['review_state'] = self.request.form.get('review_state')
+        review_states = self.request.form.get('review_state', [])
+        if review_states:
+            query['review_state'] = review_states
 
-        items = api.content.find(**query)
+        filters = make_filters(**query)
 
         if self.request.form.get('include_context'):
-            items = self.include_context_branch(items, root.UID(), content_interfaces)
+            # Include context branch's UIDs in the query, by adding them as
+            # a filter that is OR'ed with the main filters (which themselves
+            # are AND'ed together). This is necessary because restrictions
+            # from the main filters must not be applied to the context branch.
+            context_uids = list(self.get_context_branch_uids(root))
+            if context_uids:
+                context_filter = make_filters(UID=context_uids)[0]
+                main_filters = self._join_filters(make_filters(**query), 'AND')
+                filters = self._join_filters([main_filters, context_filter], 'OR')
 
-        nodes = map(self.brain_to_node, items)
-        result['navigation']['tree'] = make_tree_by_url(nodes)
+        resp = self.solr.search(
+            filters=filters,
+            sort='sortable_title asc',
+            rows=10000,
+            fl=self.FIELDS)
 
-        return result
+        return [OGSolrDocument(doc) for doc in resp.docs]
 
-    def include_context_branch(self, items, root_uid, content_interfaces):
-        all_uids = {brain.UID for brain in items}
-        if self.context.UID() in all_uids:
-            return items
+    def get_context_branch_uids(self, root):
+        """Return UIDs of the current context's chain up to the root.
+        """
         for item in self.context.aq_chain:
             item_uid = item.UID()
-            if item_uid == root_uid:
+            if item_uid == root.UID():
                 break
-            all_uids.add(item_uid)
-        return api.content.find(
-            UID=list(all_uids),
-            sort_on='sortable_title')
+            yield item_uid
 
     def _lookup_iface_by_identifier(self, identifier):
         return resolve(identifier) if identifier else None
+
+    def _join_filters(self, filters, op):
+        op = ' %s ' % op
+        return op.join(['(%s)' % flt for flt in filters])
 
     def get_root_interface(self):
         """Lookups the root_interface provided within the request parameter.
@@ -139,22 +185,25 @@ class Navigation(object):
                                  "looked up: {}".format(interface))
         return content_interfaces
 
-    def brain_to_node(self, brain):
+    def solr_doc_to_node(self, solr_doc):
+        wrapper = IContentListingObject(solr_doc)
+        context_url = self.context.absolute_url()
+
         node = {
-            '@type': brain.portal_type,
-            'text': brain.Title,
-            'description': brain.Description,
-            'url': brain.getURL(),
-            'uid': brain.UID,
-            'active': brain.review_state != REPOSITORY_FOLDER_STATE_INACTIVE,
-            'current': self.context.absolute_url() == brain.getURL(),
-            'current_tree': self.context.absolute_url().startswith(brain.getURL()),
+            '@type': wrapper.portal_type,
+            'text': wrapper.Title(),
+            'description': wrapper.Description(),
+            'url': wrapper.getURL(),
+            'uid': wrapper.UID,
+            'active': wrapper.review_state() != REPOSITORY_FOLDER_STATE_INACTIVE,
+            'current': context_url == wrapper.getURL(),
+            'current_tree': context_url.startswith(wrapper.getURL()),
             'is_leafnode': None,
-            'is_subdossier': brain.is_subdossier,
-            'review_state': brain.review_state,
+            'is_subdossier': wrapper.is_subdossier,
+            'review_state': wrapper.review_state(),
         }
-        if brain.portal_type == 'opengever.repository.repositoryfolder':
-            node['is_leafnode'] = not brain.has_sametype_children
+        if wrapper.portal_type == 'opengever.repository.repositoryfolder':
+            node['is_leafnode'] = not wrapper.has_sametype_children
         return json_compatible(node)
 
 
