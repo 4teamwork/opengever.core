@@ -16,7 +16,7 @@ from zope.interface import implementer
 
 
 @implementer(IDeleter)
-class BaseWorkspaceContenteDeleter(object):
+class BaseWorkspaceContentDeleter(object):
     """Deleter adapter used for deleting objects over the REST-API
     """
 
@@ -51,25 +51,25 @@ class BaseWorkspaceContenteDeleter(object):
 
 
 @adapter(IToDo)
-class TodoDeleter(BaseWorkspaceContenteDeleter):
+class TodoDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Todos'
 
 
 @adapter(IToDoList)
-class TodoListDeleter(BaseWorkspaceContenteDeleter):
+class TodoListDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Todos'
 
 
 @adapter(IWorkspaceMeetingAgendaItem)
-class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Workspace Meeting Agenda Items'
 
 
 @adapter(IBaseDocument)
-class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceDocumentDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Documents'
 
@@ -80,7 +80,7 @@ class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
 
 
 @adapter(IWorkspaceFolder)
-class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceFolderDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Workspace Folders'
 
