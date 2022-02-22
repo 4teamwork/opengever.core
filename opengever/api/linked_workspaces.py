@@ -128,6 +128,19 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
         return self.reply_no_content()
 
 
+class RemoveDossierReferencePost(Service):
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+        user_agent = self.request.getHeader("User-Agent")
+        if not user_agent.startswith('opengever.core/'):
+            raise Unauthorized
+        self.context.external_reference = u''
+        self.context.reindexObject(idxs=["external_reference"])
+        return self.reply_no_content()
+
+
 class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     """API Endpoint to copy a document to a linked workspace.
     """

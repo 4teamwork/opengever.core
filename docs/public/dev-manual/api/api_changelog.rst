@@ -16,6 +16,7 @@ Other Changes
 - ``@breadcrumbs`` GET: Include dossier_type in response.
 - Serialization: Include dossier_type in JSON summary for dossiers.
 - ``@favorites`` GET: Include dossier_type in response.
+- Add new endpoint ``@remove-dossier-reference``
 
 
 2022.4.0 (2022-02-16)

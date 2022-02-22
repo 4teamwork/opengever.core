@@ -1097,6 +1097,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@remove-dossier-reference"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".linked_workspaces.RemoveDossierReferencePost"
+      permission="opengever.workspaceclient.UnlinkWorkspace"
+      />
+
+  <plone:service
       method="GET"
       name="@allowed-roles-and-principals"
       for="Products.CMFCore.interfaces.IContentish"
