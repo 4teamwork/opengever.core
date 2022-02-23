@@ -1624,4 +1624,12 @@
       permission="cmf.SetOwnProperties"
       />
 
+  <plone:service
+      method="GET"
+      name="@raw-dossier-types"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".raw_dossier_types.RawDossierTypesGet"
+      permission="zope2.View"
+      />
+
 </configure>

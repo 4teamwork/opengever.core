@@ -74,3 +74,10 @@ beides zugleich.
      ],
      "items_total": 1
    }
+
+Dossier-Typen
+-------------
+
+Für die gängigen Anwendungsfälle können die Dossier-Typen über die oben beschriebenen Vokabular-Endpoints bezogen werden. Für gewisse Zwecke ist es aber nötig, die Dossier-Typen in einer "rohen" Form zu beziehen - dafür kann der ``@raw-dossier-types`` Endpoint verwendet werden.
+
+Dieser Endpoint gibt die Dossier-Typen ungefiltert zurück (auch versteckte / deaktivierte Typen werden aufgeführt), und die Typen werden in der Reihenfolge zurückgegeben, in der sie erfasst wurden (statt alphabetisch sortiert wie bei normalen Vocabularies).
