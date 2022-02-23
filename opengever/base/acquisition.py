@@ -40,7 +40,12 @@ def acquire_field_value(field, container):
                 # could not adapt
                 pass
             else:
-                value = get_persisted_value_for_field(obj, field)
+                try:
+                    value = get_persisted_value_for_field(obj, field)
+                except AttributeError:
+                    # has field, but missing attribute
+                    obj = obj.aq_inner.aq_parent
+                    continue
                 try:
                     field.validate(value)
                     return value
