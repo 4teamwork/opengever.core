@@ -1,0 +1,1 @@
+NightlyWorkflowSecurityUpdater: Gracefully skip objs that can't be resolved. [lgraf]
