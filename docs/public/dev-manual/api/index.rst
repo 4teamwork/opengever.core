@@ -35,6 +35,7 @@ Inhalt:
    metadata.rst
    config.rst
    favorite.rst
+   dashboard.rst
    notifications.rst
    external_activities.rst
    recently_touched.rst

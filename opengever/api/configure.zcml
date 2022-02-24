@@ -1673,4 +1673,12 @@
       permission="cmf.SetOwnProperties"
       />
 
+  <plone:service
+      method="GET"
+      name="@dashboard-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".dashboard.DashboardSettings"
+      permission="zope2.View"
+      />
+
 </configure>
