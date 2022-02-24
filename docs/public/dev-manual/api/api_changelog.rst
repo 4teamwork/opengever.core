@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@raw-dossier-types``: New endpoint that returns dossier types in unaltered order.
+
 
 2022.4.0 (2022-02-16)
 ---------------------

@@ -1,10 +1,29 @@
+from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierType
 from opengever.testing import IntegrationTestCase
+from opengever.testing.assets import path_to_asset
 from plone import api
+from zope.component import getSiteManager
+from zope.interface import implements
+from zope.schema.interfaces import IVocabularyFactory
+
+
+class MockDossierTypes(VdexVocabulary):
+
+    implements(IVocabularyFactory)
+
+    def __init__(self, *args, **kwargs):
+        vdex_filename = path_to_asset('dossier_types.vdex')
+        super(MockDossierTypes, self).__init__(vdex_filename, **kwargs)
+
+    @classmethod
+    def install(cls):
+        sm = getSiteManager()
+        sm.registerUtility(cls(), name='opengever.dossier.dossier_types')
 
 
 class TestDossierType(IntegrationTestCase):
@@ -56,3 +75,39 @@ class TestDossierType(IntegrationTestCase):
 
         self.assertEquals(['Changes saved'], info_messages())
         self.assertEquals('businesscase', IDossier(self.dossier).dossier_type)
+
+    @browsing
+    def test_dossier_types_source(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '/'.join([
+            self.portal.absolute_url(),
+            '@sources',
+            'opengever.dossier.businesscasedossier',
+            'dossier_type',
+        ])
+
+        MockDossierTypes.install()
+        browser.open(url, headers=self.api_headers)
+
+        # Should omit hidden terms and sort alphabetically
+        self.assertEqual([
+            {u'token': u'aaa', u'title': u'AAAAAA'},
+            {u'token': u'zzz', u'title': u'ZZZZZZ'},
+        ], browser.json['items'])
+
+    @browsing
+    def test_raw_dossier_types(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '/'.join([self.portal.absolute_url(), '@raw-dossier-types'])
+
+        MockDossierTypes.install()
+        browser.open(url, headers=self.api_headers)
+
+        # Should include hidden terms and return in unaltered order
+        self.assertEqual([
+            {u'token': u'businesscase', u'title': u'Business case'},
+            {u'token': u'zzz', u'title': u'ZZZZZZ'},
+            {u'token': u'aaa', u'title': u'AAAAAA'},
+        ], browser.json['items'])
