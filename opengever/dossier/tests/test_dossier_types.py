@@ -75,6 +75,7 @@ class TestDossierType(IntegrationTestCase):
         # Should omit hidden terms and sort alphabetically
         self.assertEqual([
             {u'token': u'aaa', u'title': u'AAAAAA'},
+            {u'token': u'project', u'title': u'Project'},
             {u'token': u'zzz', u'title': u'ZZZZZZ'},
         ], browser.json['items'])
 
@@ -90,6 +91,7 @@ class TestDossierType(IntegrationTestCase):
         # Should include hidden terms and return in unaltered order
         self.assertEqual([
             {u'token': u'businesscase', u'title': u'Business case'},
+            {u'token': u'project', u'title': u'Project'},
             {u'token': u'zzz', u'title': u'ZZZZZZ'},
             {u'token': u'aaa', u'title': u'AAAAAA'},
         ], browser.json['items'])

@@ -14,6 +14,17 @@
         </caption>
     </term>
     <term>
+        <termIdentifier>project</termIdentifier>
+        <caption>
+            <langstring language="en">Project</langstring>
+            <langstring language="en-us">Project</langstring>
+            <langstring language="de-ch">Projekt</langstring>
+            <langstring language="de">Projekt</langstring>
+            <langstring language="fr">Projet</langstring>
+            <langstring language="fr-ch">Projet</langstring>
+        </caption>
+    </term>
+    <term>
         <termIdentifier>zzz</termIdentifier>
         <caption>
             <langstring language="en">ZZZZZZ</langstring>
