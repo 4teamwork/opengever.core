@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-11-05 08:34+0000\n"
+"POT-Creation-Date: 2022-02-24 15:59+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -318,6 +318,7 @@ msgid "This subdossier can't be activated, because the main dossiers is not acti
 msgstr "This subdossier can't be activated, because the main dossiers is not active"
 
 #. German translation: Mit einer neuen Version des Dossiers ${title} aktualisiert.
+#: ./opengever/dossier/base.py
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Updated with a fresh version generated from dossier ${title}."
@@ -557,12 +558,6 @@ msgstr "Filing year"
 msgid "heading_archive_form"
 msgstr "File dossier"
 
-#. German translation: Kommentar zu Dossier `${title}`
-#. Default: "${title} notes / comments"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "heading_dossier_note"
-msgstr "Notes for dossier `${title}`"
-
 #. German translation: Element verschieben
 #. Default: "Move Item"
 #: ./opengever/dossier/move_items.py
@@ -614,25 +609,6 @@ msgstr ""
 msgid "help_number_of_containers"
 msgstr "Number of physical containers (for large files)"
 
-#. German translation: Neuen Kommentar erfassen.
-#. Default: "Create a new note"
-#. MARKER: Check whether "Notiz" would be more appropriate in German
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_add_note"
-msgstr "Add a new note"
-
-#. German translation: Es wurde ein Kommentar erfasst!
-#. Default: "There is a note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_edit_note"
-msgstr "Note added."
-
-#. German translation: Kommentar anzeigen.
-#. Default: "View note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_view_note"
-msgstr "View note"
-
 #. German translation: Empfehlung für Titel. Wird beim Erstellen eines Dossiers ab Vorlage als Hilfetext dargestellt.
 #. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -656,12 +632,6 @@ msgstr "Removed participations."
 #: ./opengever/dossier/move_items.py
 msgid "item_moved"
 msgstr "${item} was moved."
-
-#. German translation: Erfassen
-#. Default: "Add Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_add_note"
-msgstr "Add note"
 
 #. German translation: Erlaubte Dossiervorlagen
 #. Default: "Addable dossier templates"
@@ -687,21 +657,9 @@ msgstr "Protected objects"
 msgid "label_by_author"
 msgstr "Responsible: ${author}"
 
-#. German translation: Abbrechen
-#. Default: "Cancel"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_cancel"
-msgstr "Cancel"
-
-#. German translation: Schliessen
-#. Default: "Close"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_close"
-msgstr "Close"
 
 #. German translation: Kommentar
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_comments"
@@ -758,12 +716,6 @@ msgstr "Documents"
 msgid "label_dossier_manager"
 msgstr "Dossier manager"
 
-#. German translation: Kommentar erfassen
-#. Default: "Create Dossier note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_dossier_note_placeholder"
-msgstr "Add dossier note"
-
 #. German translation: Dossier überfällig
 #. Default: "Overdue dossier"
 #: ./opengever/dossier/activities.py
@@ -787,12 +739,6 @@ msgstr "Dossier type"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_edit_after_creation"
 msgstr "Edit after creation"
-
-#. German translation: Bearbeiten
-#. Default: "Edit Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_edit_note"
-msgstr "Edit note"
 
 #. German translation: E-Mail
 #. Default: "E-Mail"
@@ -1045,23 +991,11 @@ msgstr "Roles"
 msgid "label_sablon_templates"
 msgstr "Sablon templates"
 
-#. German translation: Speichern
-#. Default: "Save"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_save"
-msgstr "Save"
-
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Sequence number"
-
-#. German translation: Anzeigen
-#. Default: "Show Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_show_note"
-msgstr "Show note"
 
 #. German translation: Beginn
 #. Default: "Opening Date"
@@ -1148,18 +1082,6 @@ msgstr "URL"
 msgid "label_workflow_state"
 msgstr "State"
 
-#. German translation: Änderungen wurde nicht gespeichert
-#. Default: "Changes not saved"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "message_body_error"
-msgstr "Changes not saved"
-
-#. German translation: Änderungen gespeichert
-#. Default: "Changes saved"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "message_body_info"
-msgstr "Changes saved"
-
 #. German translation: Das Object `${title}` ist nicht in einem Dossier abgelegt.
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py
@@ -1186,12 +1108,6 @@ msgstr "Not all documents have been checked in yet."
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"
 msgstr "not all task are closed"
-
-#. German translation: Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?
-#. Default: "Confirm abbord"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "note_text_confirm_abord"
-msgstr "You have unsaved changes. Do you really want to cancel?"
 
 #. German translation: Nur abschliessen (keine Ablagenummer vergeben)
 #: ./opengever/dossier/filing/form.py
@@ -1242,11 +1158,6 @@ msgstr "Tasks"
 msgid "temporary_former_reference_number"
 msgstr "Temporary former reference number"
 
-#. German translation: Kommentar löschen (Löscht den Kommentar und schliesst das Overlay).
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "text_delete_note"
-msgstr "Delete note (removes the note and closes the overlay)"
-
 #. German translation: Es wurde kein Beginn-Datum gesetzt.
 #: ./opengever/dossier/resolve.py
 msgid "the dossier start date is missing."
@@ -1260,7 +1171,7 @@ msgstr "expired"
 
 #. German translation: Dossier Journal ${title}, ${timestamp}
 #. Default: "Journal of dossier ${title}, ${timestamp}"
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/base.py
 msgid "title_dossier_journal"
 msgstr "Journal of dossier ${title}, ${timestamp}"
 
