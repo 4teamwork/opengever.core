@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Serialization: Include dossier_type in JSON summary for dossiers.
 - ``@favorites`` GET: Include dossier_type in response.
 - ``@raw-dossier-types``: New endpoint that returns dossier types in unaltered order.
 
