@@ -1,3 +1,4 @@
+from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from contextlib import contextmanager
 from datetime import datetime
 from ftw.solr.interfaces import ISolrSearch
@@ -6,13 +7,17 @@ from opengever.base.date_time import as_utc
 from opengever.contact.sources import ContactsSource
 from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
+from opengever.testing.assets import path_to_asset
 from operator import attrgetter
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
+from zope.component import getSiteManager
 from zope.component import getUtility
 from zope.component.hooks import getSite
+from zope.interface import implements
 from zope.intid.interfaces import IIntIds
+from zope.schema.interfaces import IVocabularyFactory
 from zope.security.management import endInteraction
 from zope.security.management import newInteraction
 import logging
@@ -239,3 +244,17 @@ class SolrTestMixin(object):
         response = solr.search(filters=("UID:{}".format(obj.UID())))
         self.assertEqual(1, len(response.docs),
                          "{} not found in solr".format(obj))
+
+
+class MockDossierTypes(VdexVocabulary):
+
+    implements(IVocabularyFactory)
+
+    def __init__(self, *args, **kwargs):
+        vdex_filename = path_to_asset('dossier_types.vdex')
+        super(MockDossierTypes, self).__init__(vdex_filename, **kwargs)
+
+    @classmethod
+    def install(cls):
+        sm = getSiteManager()
+        sm.registerUtility(cls(), name='opengever.dossier.dossier_types')

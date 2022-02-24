@@ -18,6 +18,7 @@ folgenden:
 - ``created`` (Erstellungsdatum)
 - ``creator`` (Ersteller)
 - ``description`` (Beschreibung)
+- ``dossier_type`` (Dossier-Typ, falls Dossier)
 - ``filename`` (Dateiname, falls Dokument)
 - ``filesize`` (Dateigrösse, falls Dokument)
 - ``mimetype`` (Datetyp, falls Dokument)

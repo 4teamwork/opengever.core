@@ -16,6 +16,8 @@ from opengever.contact.utils import get_contactfolder_url
 from opengever.document import is_documentish_portal_type
 from opengever.document.approvals import Approval
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import is_dossierish_portal_type
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
@@ -36,8 +38,8 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
-from plone.restapi.serializer.relationfield import RelationListFieldSerializer
 from plone.restapi.serializer.group import SerializeGroupToJson
+from plone.restapi.serializer.relationfield import RelationListFieldSerializer
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from Products.PlonePAS.interfaces.group import IGroupData
 from Products.ZCatalog.interfaces import ICatalogBrain
@@ -94,6 +96,11 @@ def extend_with_sequence_number(result, context, request):
 def extend_with_is_subdossier(result, context, request):
     if supports_is_subdossier(context):
         result['is_subdossier'] = context.is_subdossier()
+
+
+def extend_with_dossier_type(result, context, request):
+    if IDossierMarker.providedBy(context):
+        result['dossier_type'] = IDossier(context).dossier_type
 
 
 def extend_with_groupurl(result, context, request):
@@ -397,6 +404,7 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
         summary = super(GeverSerializeToJsonSummary, self).__call__(*args, **kwargs)
 
         extend_with_is_subdossier(summary, self.context, self.request)
+        extend_with_dossier_type(summary, self.context, self.request)
 
         if 'oguid' in self.metadata_fields():
             extend_with_oguid(summary, self.context)

@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.api.serializer import extend_with_dossier_type
 from opengever.api.serializer import extend_with_is_subdossier
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.repository.interfaces import IRepositoryFolder
@@ -53,6 +54,7 @@ class Breadcrumbs(object):
                     item['is_leafnode'] = obj.is_leaf_node()
 
                 extend_with_is_subdossier(item, obj, self.request)
+                extend_with_dossier_type(item, obj, self.request)
 
                 items.append(item)
             obj = aq_parent(aq_inner(obj))

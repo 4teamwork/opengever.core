@@ -3,8 +3,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
-from opengever.ogds.models.admin_unit import AdminUnit
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import MockDossierTypes
 from plone.uuid.interfaces import IUUID
 import json
 
@@ -161,6 +162,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'resolved': True,
               u'is_leafnode': None,
               u'is_subdossier': False,
+              u'dossier_type': None,
               u'oguid': u'plone:1014013300',
               u'admin_unit': u'Hauptmandant',
               u'target_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
@@ -232,6 +234,44 @@ class TestFavoritesGet(IntegrationTestCase):
              u'filename': None,
              u'is_leafnode': None,
              u'is_subdossier': False,
+             u'dossier_type': None,
+             u'review_state': u'dossier-state-active',
+             u'position': 23,
+             u'oguid': u'plone:1014013300',
+             u'admin_unit': u'Hauptmandant',
+             u'target_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+             u'tooltip_url': None,
+             u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
+             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
+            browser.json)
+
+    @browsing
+    def test_includes_dossier_type_if_resolved(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.dossier)
+               .having(position=23))
+
+        MockDossierTypes.install()
+        IDossier(self.dossier).dossier_type = 'project'
+
+        url = '{}/@favorites/{}/1?resolve=true'.format(
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEquals(
+            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+             u'uid': IUUID(self.dossier),
+             u'portal_type': u'opengever.dossier.businesscasedossier',
+             u'favorite_id': 1,
+             u'resolved': True,
+             u'filename': None,
+             u'is_leafnode': None,
+             u'is_subdossier': False,
+             u'dossier_type': 'project',
              u'review_state': u'dossier-state-active',
              u'position': 23,
              u'oguid': u'plone:1014013300',

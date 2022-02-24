@@ -16,6 +16,8 @@ from opengever.base.query import BaseQuery
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.bumblebee import is_bumblebeeable
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.repository.interfaces import IRepositoryFolder
@@ -128,13 +130,14 @@ class Favorite(Base):
         current admin-unit, the unresolved favorite will be returned instead.
         """
         resolved_obj = None
+
         if resolve:
             try:
                 resolved_obj = self.oguid.resolve_object()
             except InvalidOguidIntIdPart:
                 logger.warn('Failed to resolve Oguid %s', self.oguid.id)
 
-        return {
+        result = {
             '@id': self.api_url(portal_url),
             'portal_type': self.portal_type,
             'favorite_id': self.favorite_id,
@@ -152,6 +155,11 @@ class Favorite(Base):
             'is_leafnode': self.is_leafnode,
             'resolved': bool(resolved_obj)
         }
+
+        if resolved_obj and IDossierMarker.providedBy(resolved_obj):
+            result['dossier_type'] = IDossier(resolved_obj).dossier_type
+
+        return result
 
     def api_url(self, portal_url):
         return '{}/@favorites/{}/{}'.format(

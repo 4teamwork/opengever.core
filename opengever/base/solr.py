@@ -19,6 +19,10 @@ class OGSolrDocument(SolrDocument):
         return self.get('containing_dossier', None)
 
     @property
+    def dossier_type(self):
+        return self.get('dossier_type', None)
+
+    @property
     def filename(self):
         return self.get('filename', None)
 

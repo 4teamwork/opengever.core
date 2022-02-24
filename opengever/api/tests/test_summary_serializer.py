@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import MockDossierTypes
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from zope.component import getMultiAdapter
 
@@ -90,3 +92,17 @@ class TestGeverSummarySerializer(IntegrationTestCase):
              'review_state': u'mail-state-active',
              'title': u'Die B\xfcrgschaft'},
             serilized_doc)
+
+    @browsing
+    def test_dossier_summary_includes_dossier_type(self, browser):
+        self.login(self.regular_user, browser)
+
+        MockDossierTypes.install()
+        IDossier(self.dossier).dossier_type = 'project'
+
+        serializer = getMultiAdapter(
+            (self.dossier, self.request),
+            ISerializeToJsonSummary)
+
+        serialized_dossier = serializer()
+        self.assertEqual('project', serialized_dossier['dossier_type'])

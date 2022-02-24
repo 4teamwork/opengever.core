@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
+from opengever.testing.helpers import MockDossierTypes
 from plone import api
 from urllib import urlencode
 import Missing
@@ -396,6 +398,29 @@ class TestNavigation(SolrIntegrationTestCase):
             'The dossier "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9" '
             'is a subdossier.',
         )
+
+    @browsing
+    def test_includes_dossier_type(self, browser):
+        self.login(self.regular_user, browser)
+
+        MockDossierTypes.install()
+        IDossier(self.resolvable_dossier).dossier_type = 'project'
+        self.resolvable_dossier.reindexObject(idxs=['dossier_type'])
+        self.commit_solr()
+
+        params = [
+            ('content_interfaces', 'opengever.dossier.businesscase.IBusinessCaseDossier')
+        ]
+        browser.open(
+            self.portal.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+
+        resolvable_dossier_node = browser.json.get('tree')[0]
+
+        self.assertEqual('project', resolvable_dossier_node['dossier_type'])
+        self.assertIsNone(resolvable_dossier_node['nodes'][0]['dossier_type'])
 
     @browsing
     def test_navigation_deals_properly_with_missing_value(self, browser):

@@ -12,6 +12,10 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@navigation``: Include dossier_type in response.
+- ``@breadcrumbs`` GET: Include dossier_type in response.
+- Serialization: Include dossier_type in JSON summary for dossiers.
+- ``@favorites`` GET: Include dossier_type in response.
 - ``@raw-dossier-types``: New endpoint that returns dossier types in unaltered order.
 
 

@@ -96,7 +96,6 @@ class TestDossierSerializer(IntegrationTestCase):
         browser.open(self.dossier, method="GET", headers=self.api_headers)
         self.assertEqual(u"2016-08-31", browser.json["touched"])
 
-
     @browsing
     def test_contains_dossier_backreferences(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -106,6 +105,7 @@ class TestDossierSerializer(IntegrationTestCase):
             [{u'description': u'',
               u'title': self.closed_meeting_dossier.title,
               u'is_subdossier': False, u'is_leafnode': None,
+              u'dossier_type': None,
               u'review_state': u'dossier-state-active',
               u'@id': self.closed_meeting_dossier.absolute_url(),
               u'@type': u'opengever.meeting.meetingdossier'}],
@@ -157,6 +157,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -179,6 +180,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -201,6 +203,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -223,6 +226,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -245,6 +249,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -267,6 +272,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },

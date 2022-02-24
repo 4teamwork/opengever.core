@@ -135,6 +135,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -161,6 +162,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
@@ -179,6 +181,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
                 u'is_leafnode': None,
                 u'is_subdossier': False,
+                u'dossier_type': None,
                 u'review_state': u'dossier-state-active',
                 u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             },
