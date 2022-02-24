@@ -166,11 +166,23 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     Consists of the minimal instruction set with which to perform an attach to
     email action.
     """
-
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
+        self.process_gever_payload(payloads)
 
+        for payload in payloads:
+            document = payload['document']
+            payload['title'] = document.title_or_id()
+            payload['content-type'] = document.get_file().contentType
+            payload['download'] = document.get_download_view_name()
+            payload['filename'] = document.get_filename()
+            del payload['document']
+            notify(FileAttachedToEmailEvent(document))
+
+        return json.dumps(payloads)
+
+    def process_gever_payload(self, payloads):
         dossier_notifications = {}
 
         for payload in payloads:
@@ -187,18 +199,9 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
 
                 dossier_notifications[parent_dossier_uuid].append(document)
 
-            payload['title'] = document.title_or_id()
-            payload['content-type'] = document.get_file().contentType
-            payload['download'] = document.get_download_view_name()
-            payload['filename'] = document.get_filename()
-            del payload['document']
-            notify(FileAttachedToEmailEvent(document))
-
         for uuid, documents in dossier_notifications.iteritems():
             dossier = api.content.get(UID=uuid)
             notify(DossierAttachedToEmailEvent(dossier, documents))
-
-        return json.dumps(payloads)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
