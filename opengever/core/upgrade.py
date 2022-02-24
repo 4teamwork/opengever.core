@@ -680,6 +680,13 @@ class NightlyWorkflowSecurityUpdater(IntIdMaintenanceJobContextManagerMixin, Wor
     @classmethod
     def update_security_for(cls, key, reindex_security):
         obj = cls.key_to_obj(key)
+
+        if obj is None:
+            logger.warn(
+                'NightlyWorkflowSecurityUpdater: Failed to resolve key %r to '
+                'object, skipping' % key)
+            return
+
         update_security_for(obj, reindex_security)
 
 
