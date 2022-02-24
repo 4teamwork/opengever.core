@@ -52,6 +52,7 @@ Breadcrumbs
                   "description": "Alle aktuellen Vertr\\u00e4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\\u00e4ge vor 2016 geh\\u00f6ren ins Archiv.",
                   "is_leafnode": null,
                   "is_subdossier": false,
+                  "dossier_type": null,
                   "review_state": "dossier-state-active",
                   "title": "Vertr\\u00e4ge mit der kantonalen Finanzverwaltung",
               }, {
@@ -60,6 +61,7 @@ Breadcrumbs
                   "description": "",
                   "is_leafnode": null,
                   "is_subdossier": true,
+                  "dossier_type": null,
                   "review_state": "dossier-state-active",
                   "title": "2016",
               }

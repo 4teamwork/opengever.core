@@ -1,5 +1,7 @@
 from ftw.testbrowser import browsing
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.testing.helpers import MockDossierTypes
 from Products.CMFPlone.interfaces import IHideFromBreadcrumbs
 from zope.interface import directlyProvides
 
@@ -105,6 +107,25 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
         # self.subdossier: This is a subdossier.
         self.assertTrue(self.subdossier.is_subdossier())
         self.assertTrue(browser.json['items'][4]['is_subdossier'])
+
+    @browsing
+    def test_dossier_type_in_breadcrumbs(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        MockDossierTypes.install()
+        IDossier(self.dossier).dossier_type = 'project'
+
+        browser.open(self.subdocument.absolute_url() + '/@breadcrumbs',
+                     headers=self.api_headers)
+
+        # self.leaf_repofolder: No dossier_type
+        self.assertNotIn('dossier_type', browser.json['items'][2])
+
+        # self.dossier: Has a dossier type
+        self.assertEqual('project', browser.json['items'][3]['dossier_type'])
+
+        # self.subdossier: Has default dossier type (None).
+        self.assertIsNone(browser.json['items'][4]['dossier_type'])
 
     @browsing
     def test_is_leafnode_in_breadcrumbs(self, browser):
