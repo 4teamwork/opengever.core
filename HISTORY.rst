@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.1 (2022-02-24)
+---------------------
+
+Bug fixes:
+
+
+- Default value acquisition: Skip intermediate objects missing attribute. [lgraf]
+- NightlyWorkflowSecurityUpdater: Gracefully skip objs that can't be resolved. [lgraf]
+
+
 2022.4.0 (2022-02-16)
 ---------------------
 
