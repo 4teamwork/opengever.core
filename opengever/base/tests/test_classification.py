@@ -1,3 +1,4 @@
+from Acquisition import aq_parent
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -79,6 +80,24 @@ class TestClassificationDefault(IntegrationTestCase):
         dossier = browser.context
 
         value = self.get_classification(dossier)
+        self.assertEqual(u'confidential', value)
+
+    @browsing
+    def test_intermediate_obj_with_missing_attr_doesnt_break_default_aq(self, browser):
+        # An intermediate object with the field in its schema, but missing the
+        # actual attribute shouldn't break acquisition of the default
+        self.login(self.regular_user, browser=browser)
+
+        parent_folder = aq_parent(self.leaf_repofolder)
+        self.set_classification(parent_folder, u'confidential')
+
+        del self.leaf_repofolder.classification
+
+        browser.open(self.leaf_repofolder)
+        factoriesmenu.add(u'Business Case Dossier')
+        browser.fill({'Title': 'My Dossier'}).save()
+
+        value = self.get_classification(browser.context)
         self.assertEqual(u'confidential', value)
 
 
