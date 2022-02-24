@@ -128,6 +128,12 @@
                 "businesscase"
             ]
         },
+        "checklist": {
+            "type": "object",
+            "title": "Checkliste",
+            "description": "",
+            "_zope_schema_type": "JSONField"
+        },
         "classification": {
             "type": "string",
             "title": "Klassifikation",
@@ -267,6 +273,7 @@
         "former_reference_number",
         "reference_number",
         "dossier_type",
+        "checklist",
         "classification",
         "privacy_layer",
         "public_trial",

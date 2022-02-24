@@ -657,6 +657,11 @@ msgstr "Protected objects"
 msgid "label_by_author"
 msgstr "Responsible: ${author}"
 
+#. Default: "Checklist"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_checklist"
+msgstr "Checklist"
 
 #. German translation: Kommentar
 #. Default: "Comments"

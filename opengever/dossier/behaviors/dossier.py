@@ -1,10 +1,10 @@
-from opengever.base.vocabulary import wrap_vocabulary
 from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.source import RepositoryPathSourceBinder
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from opengever.dossier.widget import referenceNumberWidgetFactory
@@ -12,6 +12,7 @@ from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.i18n import MessageFactory as pd_mf  # noqa
+from plone.schema import JSONField
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
@@ -20,10 +21,36 @@ from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface import invariant
+import json
 import logging
 
 
 LOG = logging.getLogger('opengever.dossier')
+
+CHECKLIST_SCHEMA = json.dumps(
+    {
+        'type': 'object',
+        'properties': {
+            'items': {
+                'type': 'array',
+                'items': {
+                    'type': 'object',
+                    'properties': {
+                        'title': {
+                            'type': 'string'
+                        },
+                        'state': {
+                            'enum': ['open', 'closed']
+                        }
+                    },
+                    'additionalProperties': False,
+                    'required': ['title', 'state']
+                }
+            }
+        },
+        'additionalProperties': False,
+    }
+)
 
 
 class IDossierMarker(Interface, ITabbedviewUploadable):
@@ -51,6 +78,7 @@ class IDossier(model.Schema):
             u'responsible',
             u'relatedDossier',
             u'dossier_type',
+            u'checklist'
         ],
     )
 
@@ -199,6 +227,12 @@ class IDossier(model.Schema):
             'opengever.dossier.dossier_types',
             hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types'),
         required=False,
+    )
+
+    checklist = JSONField(
+        title=_(u'label_checklist', default=u'Checklist'),
+        required=False,
+        schema=CHECKLIST_SCHEMA,
     )
 
     @invariant

@@ -99,6 +99,7 @@ DOSSIER_REQUIREDS = {
 DOSSIER_DEFAULTS = {
     'archival_value': u'unchecked',
     'changed': FROZEN_NOW,
+    'checklist': None,
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -121,6 +122,7 @@ DOSSIER_FORM_DEFAULTS = {
 }
 DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,
+    'checklist': None,
     'container_location': None,
     'container_type': None,
     'date_of_cassation': None,
@@ -367,6 +369,7 @@ DOSSIER_TEMPLATE_REQUIREDS = {
 }
 DOSSIER_TEMPLATE_DEFAULTS = {
     'changed': FROZEN_NOW,
+    'checklist': None,
     'description': u'',
     'keywords': (),
     'predefined_keywords': True,
@@ -376,6 +379,7 @@ DOSSIER_TEMPLATE_DEFAULTS = {
 DOSSIER_TEMPLATE_FORM_DEFAULTS = {
 }
 DOSSIER_TEMPLATE_MISSING_VALUES = {
+    'checklist': None,
     'dossier_type': None,
     'comments': None,
     'filing_prefix': None,

@@ -6,10 +6,12 @@ from opengever.base.source import SolrObjPathSourceBinder
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
 from opengever.dossier.behaviors import dossiernamefromtitle
+from opengever.dossier.behaviors.dossier import CHECKLIST_SCHEMA
 from opengever.dossier.vocabularies import KeywordAddableRestrictableSourceBinder
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.schema import JSONField
 from plone.supermodel import model
 from z3c.relationfield.schema import RelationChoice, RelationList
 from zope import schema
@@ -85,6 +87,7 @@ class IDossierTemplate(model.Schema):
             u'keywords',
             u'dossier_type',
             u'comments',
+            u'checklist',
         ],
     )
 
@@ -128,6 +131,12 @@ class IDossierTemplate(model.Schema):
             visible_terms_from_registry="opengever.dossier"
             '.interfaces.IDossierContainerTypes.type_prefixes'),
         required=False,
+    )
+
+    checklist = JSONField(
+        title=_(u'label_checklist', default=u'Checklist'),
+        required=False,
+        schema=CHECKLIST_SCHEMA,
     )
 
 

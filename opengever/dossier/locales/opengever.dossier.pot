@@ -531,6 +531,11 @@ msgstr ""
 msgid "label_by_author"
 msgstr ""
 
+#. Default: "Checklist"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_checklist"
+msgstr ""
 
 #. Default: "Comments"
 #: ./opengever/dossier/browser/overview.py
