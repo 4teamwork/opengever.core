@@ -14,6 +14,7 @@ from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
 from opengever.testing import FunctionalTestCase
+from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing.helpers import create_document_version
@@ -339,6 +340,9 @@ class TestReverting(FunctionalTestCase):
         # affected by reverting). The extension on the other hand should
         # get updated.
         self.assertEqual("New title.docx", self.document.get_filename())
+
+        # Indexed file extension should also be updated
+        self.assertEqual(u'.docx', index_data_for(self.document)['file_extension'])
 
     def test_revert_disallowed_for_unprivileded_user(self):
         self.grant('Authenticated')
