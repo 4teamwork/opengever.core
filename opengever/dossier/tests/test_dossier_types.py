@@ -1,29 +1,11 @@
-from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierType
 from opengever.testing import IntegrationTestCase
-from opengever.testing.assets import path_to_asset
+from opengever.testing.helpers import MockDossierTypes
 from plone import api
-from zope.component import getSiteManager
-from zope.interface import implements
-from zope.schema.interfaces import IVocabularyFactory
-
-
-class MockDossierTypes(VdexVocabulary):
-
-    implements(IVocabularyFactory)
-
-    def __init__(self, *args, **kwargs):
-        vdex_filename = path_to_asset('dossier_types.vdex')
-        super(MockDossierTypes, self).__init__(vdex_filename, **kwargs)
-
-    @classmethod
-    def install(cls):
-        sm = getSiteManager()
-        sm.registerUtility(cls(), name='opengever.dossier.dossier_types')
 
 
 class TestDossierType(IntegrationTestCase):
