@@ -67,6 +67,7 @@ class TestConfig(IntegrationTestCase):
                 u'disposition_transport_ftps': False,
                 u'doc_properties': False,
                 u'dossier_templates': False,
+                u'dossier_type_colors': False,
                 u'ech0147_export': False,
                 u'ech0147_import': False,
                 u'favorites': True,
