@@ -155,3 +155,48 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
         with browser.expect_http_error(404):
             oc_url = self.fetch_document_checkout_oc_url(browser, self.mail_eml)
             self.assertIsNone(oc_url)
+
+
+class TestOfficeconnectorMailAPIWithAttachInTeamraum(OCIntegrationTestCase):
+
+    features = ('!officeconnector-checkout', 'officeconnector-attach', 'workspace')
+
+    @browsing
+    def test_attach_to_email(self, browser):
+        self.login(self.workspace_member, browser)
+
+        with freeze(FREEZE_DATE):
+            oc_url = self.fetch_document_attach_oc_url(browser, self.workspace_document)
+
+        self.assertIsNotNone(oc_url)
+        self.assertEqual(200, browser.status_code)
+
+        expected_token = {
+            u"action": u"attach",
+            u"documents": [u"createworkspace00000000000000003"],
+            u"exp": 4121033100,
+            u"sub": u"beatrice.schrodinger",
+            u"url": u"http://nohost/plone/oc_attach",
+        }
+        raw_token = oc_url.split(":")[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+
+        self.assertEqual(expected_token, token)
+
+        expected_payloads = [{
+            u"bcc": u"1018013300@example.org",
+            u"content-type": u"text/plain",
+            u"csrf-token": u"86ecf9b4135514f8c94c61ce336a4b98b4aaed8a",
+            u"document-url": u"http://nohost/plone/workspaces/workspace-1/document-38",
+            u"download": u"download",
+            u"filename": u"Teamraumdokument.txt",
+            u"title": u"Teamraumdokument",
+            u"uuid": u"createworkspace00000000000000003",
+            u'version': None,
+        }]
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(expected_payloads, payloads)
+
+        file_contents = self.download_document(browser, raw_token, payloads[0])
+        self.assertEqual(file_contents, self.workspace_document.get_file().data)

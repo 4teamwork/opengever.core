@@ -8,6 +8,7 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.workspace import is_workspace_feature_enabled
 from plone import api
 from plone.protect import createToken
 from plone.rest import Service
@@ -169,7 +170,11 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
-        self.process_gever_payload(payloads)
+
+        if is_workspace_feature_enabled():
+            self.process_teamraum_payload(payloads)
+        else:
+            self.process_gever_payload(payloads)
 
         for payload in payloads:
             document = payload['document']
@@ -202,6 +207,14 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
         for uuid, documents in dossier_notifications.iteritems():
             dossier = api.content.get(UID=uuid)
             notify(DossierAttachedToEmailEvent(dossier, documents))
+
+    def process_teamraum_payload(self, payloads):
+        for payload in payloads:
+            document = payload['document']
+            parent_container = document.get_parent_workspace_container()
+
+            if parent_container:
+                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_container)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
