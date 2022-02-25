@@ -180,6 +180,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Comments',
+            u'Checklist',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -198,6 +199,7 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Comments',
+            u'Checklist',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )

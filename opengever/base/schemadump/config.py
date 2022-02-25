@@ -248,6 +248,8 @@ JSON_SCHEMA_FIELD_TYPES = {
         'type': 'string', 'format': 'uri'},
     'RichText': {
         'type': 'object'},
+    'JSONField': {
+        'type': 'object'},
 }
 
 PYTHON_TO_JS_TYPES = {

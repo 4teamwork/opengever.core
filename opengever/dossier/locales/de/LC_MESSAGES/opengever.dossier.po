@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-11-05 08:34+0000\n"
+"POT-Creation-Date: 2022-02-24 15:59+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -253,6 +253,7 @@ msgstr "Das Subdossier wurde erfolgreich abgeschlossen."
 msgid "This subdossier can't be activated, because the main dossiers is not active"
 msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossier nicht aktiv ist."
 
+#: ./opengever/dossier/base.py
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Mit einer neuen Version des Dossiers ${title} aktualisiert."
@@ -451,11 +452,6 @@ msgstr "Ablage Jahr"
 msgid "heading_archive_form"
 msgstr "Dossier ablegen"
 
-#. Default: "${title} notes / comments"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "heading_dossier_note"
-msgstr "Kommentar zu Dossier `${title}`"
-
 #. Default: "Move Item"
 #: ./opengever/dossier/move_items.py
 msgid "heading_move_item"
@@ -498,21 +494,6 @@ msgstr ""
 msgid "help_number_of_containers"
 msgstr "Anzahl Behälter, die ein (grosses) Dossier in Papierform enthalten"
 
-#. Default: "Create a new note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_add_note"
-msgstr "Neuen Kommentar erfassen."
-
-#. Default: "There is a note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_edit_note"
-msgstr "Es wurde ein Kommentar erfasst!"
-
-#. Default: "View note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "help_text_view_note"
-msgstr "Kommentar anzeigen."
-
 #. Default: "Recommendation for the title. Will be displayed as a help text if you create a dossier from template"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "help_title_help"
@@ -532,11 +513,6 @@ msgstr "Die Beteiligungen wurde entfernt."
 #: ./opengever/dossier/move_items.py
 msgid "item_moved"
 msgstr "${item} wurde verschoben."
-
-#. Default: "Add Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_add_note"
-msgstr "Erfassen"
 
 #. Default: "Addable dossier templates"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -558,18 +534,13 @@ msgstr "Geschützte Objekte"
 msgid "label_by_author"
 msgstr "Federführend: ${author}"
 
-#. Default: "Cancel"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_cancel"
-msgstr "Abbrechen"
-
-#. Default: "Close"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_close"
-msgstr "Schliessen"
+#. Default: "Checklist"
+#: ./opengever/dossier/behaviors/dossier.py
+#: ./opengever/dossier/dossiertemplate/behaviors.py
+msgid "label_checklist"
+msgstr "Checkliste"
 
 #. Default: "Comments"
-#: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/browser/overview.py
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_comments"
@@ -617,11 +588,6 @@ msgstr "Dokumente"
 msgid "label_dossier_manager"
 msgstr "Dossier-Verwalter"
 
-#. Default: "Create Dossier note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_dossier_note_placeholder"
-msgstr "Kommentar erfassen"
-
 #. Default: "Overdue dossier"
 #: ./opengever/dossier/activities.py
 msgid "label_dossier_overdue_activity"
@@ -642,11 +608,6 @@ msgstr "Dossiertyp"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_edit_after_creation"
 msgstr "Nach dem Hinzufügen bearbeiten"
-
-#. Default: "Edit Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_edit_note"
-msgstr "Bearbeiten"
 
 #. Default: "E-Mail"
 #: ./opengever/dossier/viewlets/byline.py
@@ -859,20 +820,10 @@ msgstr "Rollen"
 msgid "label_sablon_templates"
 msgstr "Sablon Vorlagen"
 
-#. Default: "Save"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_save"
-msgstr "Speichern"
-
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Laufnummer"
-
-#. Default: "Show Note"
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "label_show_note"
-msgstr "Anzeigen"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py
@@ -945,16 +896,6 @@ msgstr "URL"
 msgid "label_workflow_state"
 msgstr "Status"
 
-#. Default: "Changes not saved"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "message_body_error"
-msgstr "Änderungen wurde nicht gespeichert"
-
-#. Default: "Changes saved"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "message_body_info"
-msgstr "Änderungen gespeichert"
-
 #. Default: "The object `${title}` is not stored inside a dossier."
 #: ./opengever/dossier/browser/redirect_to_maindossier.py
 msgid "msg_main_dossier_not_found"
@@ -976,11 +917,6 @@ msgstr "Es sind nicht alle Dokumente eingecheckt"
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"
 msgstr "Es sind nicht alle Aufgaben abgeschlossen"
-
-#. Default: "Confirm abbord"
-#: ./opengever/dossier/viewlets/comment.py
-msgid "note_text_confirm_abord"
-msgstr "Sie haben nicht gespeicherte Änderungen, wollen Sie wirklich abbrechen?"
 
 #: ./opengever/dossier/filing/form.py
 msgid "only resolve, set filing no later"
@@ -1021,10 +957,6 @@ msgstr "Aufgaben"
 msgid "temporary_former_reference_number"
 msgstr "Temporäres früheres Aktenzeichen"
 
-#: ./opengever/dossier/viewlets/templates/note.pt
-msgid "text_delete_note"
-msgstr "Kommentar löschen (Löscht den Kommentar und schliesst das Overlay)."
-
 #: ./opengever/dossier/resolve.py
 msgid "the dossier start date is missing."
 msgstr "Es wurde kein Beginn-Datum gesetzt."
@@ -1035,7 +967,7 @@ msgid "time_expired"
 msgstr "abgelaufen"
 
 #. Default: "Journal of dossier ${title}, ${timestamp}"
-#: ./opengever/dossier/resolve.py
+#: ./opengever/dossier/base.py
 msgid "title_dossier_journal"
 msgstr "Dossier Journal ${title}, ${timestamp}"
 
