@@ -14,6 +14,7 @@ from opengever.core.testing import OpengeverFixture
 from opengever.core.testserver_zope2server import ISOLATION_READINESS
 from opengever.dossier.interfaces import IDossierType
 from opengever.testing.helpers import incrementing_intids
+from opengever.testing.helpers import MockDossierTypes
 from plone import api
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -150,7 +151,7 @@ class TestserverLayer(OpengeverFixture):
         api.portal.set_registry_record('use_solr', True, interface=ISearchSettings)
         activate_bumblebee_feature()
 
-        self.replaceDossierTypesVocabulary()
+        MockDossierTypes.install(getGlobalSiteManager())
 
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
@@ -181,25 +182,6 @@ class TestserverLayer(OpengeverFixture):
         lang_tool = api.portal.get_tool('portal_languages')
         lang_tool.setDefaultLanguage('de')
         lang_tool.supported_langs = ['de-ch', 'fr-ch']
-
-    def replaceDossierTypesVocabulary(self):
-        """Register testserver-specific dossier-types.
-        It does not work with overrides.zcml for testserver only. So we have to do it manually
-        """
-        def dossier_types_vocabulary_factory(context):
-            return SimpleVocabulary([
-                SimpleTerm('businesscase', title=u'Gesch\xe4ftsfall'),
-                SimpleTerm('project', title='Projektdossier')
-                ])
-
-        utility_name = 'opengever.dossier.dossier_types'
-        gsm = getGlobalSiteManager()
-        gsm.unregisterUtility(provided=IVocabularyFactory, name=utility_name)
-        gsm.registerUtility(dossier_types_vocabulary_factory, provided=IVocabularyFactory, name=utility_name)
-
-        # Do not hide the initial dossier_type.
-        api.portal.set_registry_record(
-            name='hidden_dossier_types', interface=IDossierType, value=[])
 
     def get_fixture_class(self):
         """The fixture of the testserver should be replaceable from the outside.

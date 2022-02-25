@@ -255,6 +255,6 @@ class MockDossierTypes(VdexVocabulary):
         super(MockDossierTypes, self).__init__(vdex_filename, **kwargs)
 
     @classmethod
-    def install(cls):
-        sm = getSiteManager()
+    def install(cls, sm=None):
+        sm = sm or getSiteManager()
         sm.registerUtility(cls(), name='opengever.dossier.dossier_types')
