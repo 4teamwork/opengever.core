@@ -92,17 +92,13 @@ services:
     build:
       context: .
       dockerfile: ./docker/solr/Dockerfile
-    command:
-      - solr-precreate
-      - ogsite
-      - /opt/solr/server/solr/configsets/ogsite
+    command: solr-foreground
     volumes:
       - ./var/solr:/var/solr/data
+    environment:
+      - SOLR_CORES=development testing functionaltesting testserver
     ports:
-      - 18983:8983
-    profiles:
-      - all
-      - solr
+      - 8983:8983
   ianus-frontend:
     image: ghcr.io/4teamwork/ianus-frontend:2021.4.4
     ports:
@@ -158,10 +154,9 @@ services:
     build:
       context: .
       dockerfile: ./docker/solr/Dockerfile
-    command:
-      - solr-precreate
-      - testserver
-      - /opt/solr/server/solr/configsets/ogsite
+    command: solr-foreground
+    environment:
+      - SOLR_CORES=testserver
     ports:
       - 18983:8983
     profiles:
