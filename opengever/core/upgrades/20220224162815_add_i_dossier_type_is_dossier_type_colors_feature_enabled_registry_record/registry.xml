@@ -1,0 +1,6 @@
+<registry>
+
+  <record interface="opengever.dossier.interfaces.IDossierType"
+          field="is_dossier_type_colors_feature_enabled" />
+
+</registry>

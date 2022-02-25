@@ -263,3 +263,9 @@ class IDossierType(Interface):
         ),
         default=['businesscase']
     )
+
+    is_dossier_type_colors_feature_enabled = schema.Bool(
+        title=u'Enable dossier type colors feature',
+        description=u'Whether different dossier types should get different '
+                    u'colors or not.',
+        default=False)
