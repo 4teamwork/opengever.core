@@ -243,6 +243,7 @@ WRITE_PERMISSIONS = [
     'opengever.trash: Trash content',
     'opengever.trash: Untrash content',
     'opengever.webactions: Manage own WebActions',
+    'opengever.workspaceclient: Unlink Workspace',
     'opengever.workspace: Delete Todos',
     'opengever.workspace: Delete Documents',
     'opengever.workspace: Delete Workspace Folders',

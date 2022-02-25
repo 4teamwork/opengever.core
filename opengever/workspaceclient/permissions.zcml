@@ -4,4 +4,6 @@
 
   <permission id="opengever.workspaceclient.UseWorkspaceClient" title="opengever.workspaceclient: Use Workspace Client" />
 
+  <permission id="opengever.workspaceclient.UnlinkWorkspace" title="opengever.workspaceclient: Unlink Workspace" />
+
 </configure>

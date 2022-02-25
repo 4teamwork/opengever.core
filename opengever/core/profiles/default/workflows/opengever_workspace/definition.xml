@@ -93,6 +93,7 @@
   <permission>opengever.workspace: Delete Workspace Meeting Agenda Items</permission>
   <permission>opengever.workspace: Modify Workspace</permission>
   <permission>opengever.workspace: Update Content Order</permission>
+  <permission>opengever.workspaceclient: Unlink Workspace</permission>
   <permission>plone.portlet.collection: Add collection portlet</permission>
   <permission>plone.portlet.static: Add static portlet</permission>
   <state state_id="opengever_workspace--STATUS--active" title="Active">
@@ -449,6 +450,12 @@
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
+    <permission-map name="opengever.workspaceclient: Unlink Workspace" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -603,6 +610,12 @@
     <permission-map name="opengever.workspace: Delete Workspace Meeting Agenda Items" acquired="False"/>
     <permission-map name="opengever.workspace: Modify Workspace" acquired="False"/>
     <permission-map name="opengever.workspace: Update Content Order" acquired="False"/>
+    <permission-map name="opengever.workspaceclient: Unlink Workspace" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>

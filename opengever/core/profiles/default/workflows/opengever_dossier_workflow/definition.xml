@@ -35,6 +35,7 @@
   <permission>opengever.meeting: Add Proposal</permission>
   <permission>opengever.meeting: Add Proposal Comment</permission>
   <permission>opengever.dossier: Destroy dossier</permission>
+  <permission>opengever.workspaceclient: Unlink Workspace</permission>
   <permission>Sharing page: Delegate DossierManager role</permission>
   <state
       state_id="dossier-state-active"
@@ -52,6 +53,14 @@
         acquired="False">
       <permission-role>Contributor</permission-role>
       <permission-role>Manager</permission-role>
+    </permission-map>
+    <permission-map
+        name="opengever.workspaceclient: Unlink Workspace"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Access contents information"
@@ -297,6 +306,14 @@
         acquired="False">
     </permission-map>
     <permission-map
+        name="opengever.workspaceclient: Unlink Workspace"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+    </permission-map>
+    <permission-map
         name="Access contents information"
         acquired="False">
       <permission-role>Editor</permission-role>
@@ -468,6 +485,14 @@
         acquired="False">
     </permission-map>
     <permission-map
+        name="opengever.workspaceclient: Unlink Workspace"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
+    </permission-map>
+    <permission-map
         name="Access contents information"
         acquired="False">
       <permission-role>Editor</permission-role>
@@ -637,6 +662,14 @@
     <permission-map
         name="opengever.meeting: Add Proposal Comment"
         acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.workspaceclient: Unlink Workspace"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Access contents information"
@@ -814,6 +847,14 @@
     <permission-map
         name="opengever.meeting: Add Proposal Comment"
         acquired="False">
+    </permission-map>
+    <permission-map
+        name="opengever.workspaceclient: Unlink Workspace"
+        acquired="False">
+      <permission-role>Editor</permission-role>
+      <permission-role>Manager</permission-role>
+      <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Access contents information"
