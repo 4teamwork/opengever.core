@@ -1998,3 +1998,44 @@ class TestUIContextActionsGetForDossiers(UIContextActionsTestBase):
             expected_ui_context_actions,
             self.get_ui_context_actions(browser, self.dossier),
         )
+
+
+class TestUIContextActionsGetForWorkspaces(UIContextActionsTestBase):
+
+    @browsing
+    def test_available_ui_context_actions_for_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        expected_ui_context_actions = []
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
+        )
+
+    @browsing
+    def test_available_ui_context_actions_for_inactive_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+
+        expected_ui_context_actions = [
+            {u'icon': u'', u'id': u'delete_workspace', u'title': u'Delete'},
+        ]
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
+        )
+
+    @browsing
+    def test_available_ui_context_actions_for_linked_inactive_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        self.workspace.external_reference = u'a dossier UID'
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+
+        expected_ui_context_actions = []
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
+        )
