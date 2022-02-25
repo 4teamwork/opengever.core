@@ -5,6 +5,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrasher
+from plone import api
 
 
 class APITestDeleteMixin(object):
@@ -165,6 +166,19 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
         self.assert_can_delete(obj, browser)
 
     @browsing
+    def test_deleting_workspace_requires_delete_workspace_permission(self, browser):
+        with self.login(self.workspace_admin):
+            api.content.transition(
+                self.workspace,
+                'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.login(self.workspace_guest, browser)
+        self.assert_cannot_delete(self.workspace, browser, code=403)
+
+        self.workspace.manage_permission("opengever.workspace: Delete Workspace",
+                                         roles=["WorkspacesUser"])
+        self.assert_can_delete(self.workspace, browser)
+
+    @browsing
     def test_deleting_workspace_folder_checks_permissions_recursively(self, browser):
         self.login(self.workspace_member, browser)
         subfolder = create(Builder("workspace folder").within(self.workspace_folder))
@@ -224,3 +238,33 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
             ITrasher(self.workspace_document).trash()
         self.login(self.workspace_guest, browser)
         self.assert_cannot_delete(self.workspace_document, browser, code=403)
+
+    @browsing
+    def test_admins_cannot_permanently_delete_active_workspaces(self, browser):
+        self.login(self.administrator, browser)
+        self.assert_cannot_delete(self.workspace, browser, code=403)
+
+    @browsing
+    def test_admins_can_permanently_delete_inactive_workspaces(self, browser):
+        self.login(self.administrator, browser)
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.assert_can_delete(self.workspace, browser)
+
+    @browsing
+    def test_workspace_admin_cannot_permanently_delete_inactive_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.assert_cannot_delete(self.workspace, browser, code=403)
+
+    @browsing
+    def test_admins_cannot_delete_linked_workspace(self, browser):
+        self.login(self.administrator, browser)
+        self.workspace.external_reference = u'a dossier UID'
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.assert_cannot_delete(self.workspace, browser, code=403)

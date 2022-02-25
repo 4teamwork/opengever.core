@@ -248,6 +248,7 @@ WRITE_PERMISSIONS = [
     'opengever.workspace: Delete Documents',
     'opengever.workspace: Delete Workspace Folders',
     'opengever.workspace: Delete Workspace Meeting Agenda Items',
+    'opengever.workspace: Delete Workspace',
     'opengever.workspace: Modify Workspace',
     'opengever.workspace: Update Content Order',
 

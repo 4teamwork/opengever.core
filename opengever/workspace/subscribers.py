@@ -9,6 +9,7 @@ from opengever.workspace.activities import ToDoCommentedActivity
 from opengever.workspace.activities import ToDoReopenedActivity
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
+from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.todo import COMPLETE_TODO_TRANSITION
 from opengever.workspace.workspace import IWorkspaceSchema
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -40,6 +41,10 @@ def check_delete_preconditions(todolist, event):
 
     # Ignore plone site deletions
     if IPloneSiteRoot.providedBy(event.object):
+        return
+
+    # Ignore workspace deletions
+    if IWorkspace.providedBy(event.object):
         return
 
     if len(todolist.objectValues()):

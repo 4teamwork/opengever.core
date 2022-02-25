@@ -51,6 +51,7 @@ Status Active:
 Status Inactive:
   A workspace guest can view.
   A workspace admin can reactivate.
+  An admin can delete workspace.
 
 Transitions:
   deactivate (Active => Inactive)

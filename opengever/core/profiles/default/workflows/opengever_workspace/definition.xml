@@ -89,6 +89,7 @@
   <permission>opengever.workspace: Add WorkspaceFolder</permission>
   <permission>opengever.workspace: Delete Documents</permission>
   <permission>opengever.workspace: Delete Todos</permission>
+  <permission>opengever.workspace: Delete Workspace</permission>
   <permission>opengever.workspace: Delete Workspace Folders</permission>
   <permission>opengever.workspace: Delete Workspace Meeting Agenda Items</permission>
   <permission>opengever.workspace: Modify Workspace</permission>
@@ -427,6 +428,7 @@
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
+    <permission-map name="opengever.workspace: Delete Workspace" acquired="False"/>
     <permission-map name="opengever.workspace: Delete Workspace Folders" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -606,6 +608,10 @@
     <permission-map name="opengever.workspace: Add WorkspaceFolder" acquired="False"/>
     <permission-map name="opengever.workspace: Delete Documents" acquired="False"/>
     <permission-map name="opengever.workspace: Delete Todos" acquired="False"/>
+    <permission-map name="opengever.workspace: Delete Workspace" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>Manager</permission-role>
+    </permission-map>
     <permission-map name="opengever.workspace: Delete Workspace Folders" acquired="False"/>
     <permission-map name="opengever.workspace: Delete Workspace Meeting Agenda Items" acquired="False"/>
     <permission-map name="opengever.workspace: Modify Workspace" acquired="False"/>
