@@ -23,7 +23,6 @@ from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSetting
 from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
-from opengever.dossier.interfaces import IDossierType
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.vocabularies import count_available_dossier_types
 from opengever.ech0147.interfaces import IECH0147Settings
@@ -148,7 +147,6 @@ class GeverSettingsAdpaterV1(object):
         features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
-        features['dossier_type_colors'] = api.portal.get_registry_record('is_dossier_type_colors_feature_enabled', interface=IDossierType)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
