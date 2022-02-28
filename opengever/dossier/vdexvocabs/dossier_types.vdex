@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
       orderSignificant="false" language="en">
-
-    <!-- ###################################################################
-    Do not change the order of terms in this file!
-    ########################################################################
-
-    Even though it says 'orderSignificant="false"' at the top, the order of
-    terms in this file matters for the `@raw-dossier-types` endpoint
-    (in order to allow the frontend to assign stable dossier colors).
-
-    When making changes to these dossier types, the following rules apply:
-
-    - New terms must only be appended at the end
-    - Existing terms must not be removed, but should instead be hidden via
-      the IDossier.hidden_dossier_types registry entry
-    - Renames are ok. That type will then keep its existing color.
-
-    ##################################################################### -->
-
     <vocabIdentifier>opengever.dossier.dossier_types</vocabIdentifier>
     <term>
         <termIdentifier>businesscase</termIdentifier>

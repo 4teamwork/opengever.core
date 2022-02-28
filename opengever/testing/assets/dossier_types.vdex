@@ -24,27 +24,4 @@
             <langstring language="fr-ch">Projet</langstring>
         </caption>
     </term>
-    <term>
-        <termIdentifier>zzz</termIdentifier>
-        <caption>
-            <langstring language="en">ZZZZZZ</langstring>
-            <langstring language="en-us">ZZZZZZ</langstring>
-            <langstring language="de-ch">ZZZZZZ</langstring>
-            <langstring language="de">ZZZZZZ</langstring>
-            <langstring language="fr">ZZZZZZ</langstring>
-            <langstring language="fr-ch">ZZZZZZ</langstring>
-        </caption>
-    </term>
-    <term>
-        <termIdentifier>aaa</termIdentifier>
-        <caption>
-            <langstring language="en">AAAAAA</langstring>
-            <langstring language="en-us">AAAAAA</langstring>
-            <langstring language="de-ch">AAAAAA</langstring>
-            <langstring language="de">AAAAAA</langstring>
-            <langstring language="fr">AAAAAA</langstring>
-            <langstring language="fr-ch">AAAAAA</langstring>
-        </caption>
-    </term>
-
 </vdex>

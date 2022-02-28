@@ -16,7 +16,6 @@ Other Changes
 - Serialization: Include dossier_type in JSON summary for dossiers.
 - ``@favorites`` GET: Include dossier_type in response.
 - ``@config``: Add 'dossier_type_colors' feature flag.
-- ``@raw-dossier-types``: New endpoint that returns dossier types in unaltered order.
 
 
 2022.4.0 (2022-02-16)
