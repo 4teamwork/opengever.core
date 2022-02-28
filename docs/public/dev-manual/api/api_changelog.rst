@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@white-labeling-settings``: Add field ``dossier_type_colors``. (see :ref:`white-labeling-settings`)
 - ``@navigation``: Include dossier_type in response.
 - ``@breadcrumbs`` GET: Include dossier_type in response.
 - Serialization: Include dossier_type in JSON summary for dossiers.

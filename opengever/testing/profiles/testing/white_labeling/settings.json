@@ -2,5 +2,8 @@
     "color_scheme_light": {
         "primary": "#d000ff"
     },
+    "dossier_type_colors": {
+        "project": "#fb8c00"
+    },
     "custom_support_markup_de": "<div>Kundensupport</div>"
 }

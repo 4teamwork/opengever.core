@@ -141,7 +141,7 @@ def set_geverui_white_labeling_settings(context):
     settings_file = context.readDataFile('white_labeling/settings.json')
     if settings_file:
         settings = json.loads(settings_file)
-        seperately_treated_fields = ['color_scheme_light', 'logo_src']
+        seperately_treated_fields = ['color_scheme_light', 'dossier_type_colors', 'logo_src']
         white_labeling_fields = [field for field in IWhiteLabelingSettings.names()
                                  if field not in seperately_treated_fields]
         for field in white_labeling_fields:
@@ -152,4 +152,10 @@ def set_geverui_white_labeling_settings(context):
             api.portal.set_registry_record(
                 'color_scheme_light',
                 json.dumps(settings['color_scheme_light'], ensure_ascii=False),
+                interface=IWhiteLabelingSettings)
+
+        if 'dossier_type_colors' in settings:
+            api.portal.set_registry_record(
+                'dossier_type_colors',
+                json.dumps(settings['dossier_type_colors'], ensure_ascii=False),
                 interface=IWhiteLabelingSettings)
