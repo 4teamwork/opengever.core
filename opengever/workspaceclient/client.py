@@ -102,8 +102,8 @@ class WorkspaceClient(object):
         """Removes external_reference on the workspace"""
 
         workspace = self.get_by_uid(uid=workspace_uid)
-        self.request.patch(workspace.get('@id'),
-                           json={'external_reference': None})
+        workspace_url = workspace.get('@id').strip('/')
+        self.request.post(workspace_url + '/@remove-dossier-reference')
         return workspace
 
     def get_by_uid(self, uid, **kwargs):

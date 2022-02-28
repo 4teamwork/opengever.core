@@ -112,7 +112,8 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
     """
 
     def render(self):
-        if not self.context.is_open():
+        if not api.user.has_permission('opengever.workspaceclient: Unlink Workspace',
+                                       obj=self.context):
             raise Unauthorized
         return super(UnlinkWorkspacePost, self).render()
 
@@ -125,6 +126,19 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
             raise BadRequest("Property 'workspace_uid' is required")
 
         ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid)
+        return self.reply_no_content()
+
+
+class RemoveDossierReferencePost(Service):
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+        user_agent = self.request.getHeader("User-Agent")
+        if not user_agent.startswith('opengever.core/'):
+            raise Unauthorized
+        self.context.external_reference = u''
+        self.context.reindexObject(idxs=["external_reference"])
         return self.reply_no_content()
 
 

@@ -4,6 +4,7 @@ from opengever.trash.trash import ITrasher
 from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
+from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
 from opengever.workspace.utils import is_within_workspace_root
@@ -16,7 +17,7 @@ from zope.interface import implementer
 
 
 @implementer(IDeleter)
-class BaseWorkspaceContenteDeleter(object):
+class BaseWorkspaceContentDeleter(object):
     """Deleter adapter used for deleting objects over the REST-API
     """
 
@@ -51,25 +52,25 @@ class BaseWorkspaceContenteDeleter(object):
 
 
 @adapter(IToDo)
-class TodoDeleter(BaseWorkspaceContenteDeleter):
+class TodoDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Todos'
 
 
 @adapter(IToDoList)
-class TodoListDeleter(BaseWorkspaceContenteDeleter):
+class TodoListDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Todos'
 
 
 @adapter(IWorkspaceMeetingAgendaItem)
-class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Workspace Meeting Agenda Items'
 
 
 @adapter(IBaseDocument)
-class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceDocumentDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Documents'
 
@@ -80,7 +81,7 @@ class WorkspaceDocumentDeleter(BaseWorkspaceContenteDeleter):
 
 
 @adapter(IWorkspaceFolder)
-class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
+class WorkspaceFolderDeleter(BaseWorkspaceContentDeleter):
 
     permission = 'opengever.workspace: Delete Workspace Folders'
 
@@ -94,3 +95,14 @@ class WorkspaceFolderDeleter(BaseWorkspaceContenteDeleter):
             if deleter is None:
                 raise Forbidden()
             deleter.verify_may_delete(main=False)
+
+
+@adapter(IWorkspace)
+class WorkspaceDeleter(BaseWorkspaceContentDeleter):
+
+    permission = 'opengever.workspace: Delete Workspace'
+
+    def verify_may_delete(self, main=True):
+        self.check_delete_permission()
+        if self.context.external_reference:
+            raise Forbidden()

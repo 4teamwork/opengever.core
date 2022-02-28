@@ -4,6 +4,7 @@ from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_meeting_feature_enabled
 from opengever.workspace.base import WorkspaceBase
+from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
@@ -13,6 +14,7 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
 from plone.supermodel import model
+from zExceptions import Forbidden
 from zExceptions import Unauthorized
 from zope import schema
 from zope.interface import implements
@@ -76,6 +78,13 @@ class Workspace(WorkspaceBase):
             return True
 
         return filter(filter_type, types)
+
+    def is_deletion_allowed(self):
+        try:
+            IDeleter(self).verify_may_delete()
+            return True
+        except Forbidden:
+            return False
 
 
 class WorkspaceContentPatch(ContentPatch):

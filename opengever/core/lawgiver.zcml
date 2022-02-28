@@ -237,9 +237,11 @@
                    opengever.workspace: Delete Todos,
                    opengever.workspace: Delete Workspace Folders,
                    opengever.workspace: Delete Workspace Meeting Agenda Items,
+                   opengever.workspace: Delete Workspace,
                    opengever.workspace: Manage Workspaces,
                    opengever.workspace: Modify Workspace,
                    opengever.workspace: Update Content Order,
+                   opengever.workspaceclient: Unlink Workspace,
                    opengever.workspaceclient: Use Workspace Client,
                    plone.app.collection: Add Collection,
                    plone.restapi: Access Plone user information,
@@ -337,6 +339,11 @@
         />
 
     <lawgiver:map_permissions
+        action_group="delete workspace"
+        permissions="opengever.workspace: Delete Workspace"
+        />
+
+    <lawgiver:map_permissions
         action_group="delete workspace documents"
         permissions="opengever.workspace: Delete Documents"
         />
@@ -349,6 +356,11 @@
     <lawgiver:map_permissions
         action_group="delete workspace folders"
         permissions="opengever.workspace: Delete Workspace Folders"
+        />
+
+    <lawgiver:map_permissions
+        action_group="unlink workspace"
+        permissions="opengever.workspaceclient: Unlink Workspace"
         />
 
   </lawgiver:workflow>

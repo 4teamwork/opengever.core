@@ -74,6 +74,10 @@ class FolderButtonsAvailabilityView(BrowserView):
         return api.user.has_permission(
             'Add portal content', obj=self.context)
 
+    def _can_unlink_workspace(self):
+        return api.user.has_permission(
+            'opengever.workspaceclient: Unlink Workspace', obj=self.context)
+
     def _can_use_workspace_client(self):
         return (is_workspace_client_feature_available()
                 and api.user.has_permission('opengever.workspaceclient: '
@@ -116,7 +120,7 @@ class FolderButtonsAvailabilityView(BrowserView):
 
     def is_unlink_workspace_available(self):
         return (self._is_main_dossier()
-                and self._can_modify_dossier()
+                and self._can_unlink_workspace()
                 and self._has_linked_workspaces())
 
     def is_move_items_available(self):

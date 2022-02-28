@@ -1,0 +1,20 @@
+<object xmlns:i18n="http://xml.zope.org/namespaces/i18n" name="portal_actions" meta_type="Plone Actions Tool">
+
+  <!-- OBJECT BUTTONS -->
+  <object name="ui_context_actions" meta_type="CMF Action Category">
+
+    <object name="delete_workspace" meta_type="CMF Action" i18n:domain="opengever.core">
+      <property name="title" i18n:translate="">Delete</property>
+      <property name="description" i18n:translate="" />
+      <property name="url_expr">string:${globals_view/getCurrentObjectUrl}/delete_workspace</property>
+      <property name="icon_expr" />
+      <property name="available_expr">python:here.restrictedTraverse('@@plone_interface_info').provides('opengever.workspace.interfaces.IWorkspace') and object.is_deletion_allowed()</property>
+      <property name="permissions">
+        <element value="opengever.workspace: Delete Workspace" />
+      </property>
+      <property name="visible">True</property>
+    </object>
+
+  </object>
+
+</object>

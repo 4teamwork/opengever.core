@@ -4,7 +4,6 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
 from opengever.workspaceclient.interfaces import ILinkedDocuments
-from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from zExceptions import Unauthorized
@@ -130,6 +129,23 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             client.link_to_workspace(self.workspace.UID(), dossier_oguid)
             transaction.commit()
             self.assertEqual(dossier_oguid, self.workspace.external_reference)
+
+            client.unlink_workspace(self.workspace.UID())
+            transaction.commit()
+            self.assertEqual(u'', self.workspace.external_reference)
+
+    def test_unlink_deactivated_workspace(self):
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        with self.workspace_client_env() as client:
+            client.link_to_workspace(self.workspace.UID(), dossier_oguid)
+            transaction.commit()
+            self.assertEqual(dossier_oguid, self.workspace.external_reference)
+
+            self.grant('WorkspaceAdmin', *api.user.get_roles(), on=self.workspace)
+            api.content.transition(
+                self.workspace,
+                'opengever_workspace--TRANSITION--deactivate--active_inactive')
+            transaction.commit()
 
             client.unlink_workspace(self.workspace.UID())
             transaction.commit()

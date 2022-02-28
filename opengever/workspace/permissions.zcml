@@ -22,6 +22,8 @@
 
   <permission id="opengever.workspace.DeleteWorkspaceFolders" title="opengever.workspace: Delete Workspace Folders" />
 
+  <permission id="opengever.workspace.DeleteWorkspace" title="opengever.workspace: Delete Workspace" />
+
   <permission id="opengever.workspace.ManageWorkspaces" title="opengever.workspace: Manage Workspaces" />
 
 </configure>

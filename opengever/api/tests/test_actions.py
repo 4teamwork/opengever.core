@@ -1390,14 +1390,13 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
 
-            #self.assert_workspace_actions_available(browser, self.dossier)
-
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-deactivate')
             transaction.commit()
 
             self.assert_workspace_actions(browser, self.dossier,
-                                          [self.list_workspaces_action])
+                                          [self.list_workspaces_action,
+                                           self.unlink_workspace_action])
 
     @browsing
     def test_unlink_actions_available_in_dossier_with_linked_workspaces(self, browser):
@@ -1998,4 +1997,45 @@ class TestUIContextActionsGetForDossiers(UIContextActionsTestBase):
         self.assertListEqual(
             expected_ui_context_actions,
             self.get_ui_context_actions(browser, self.dossier),
+        )
+
+
+class TestUIContextActionsGetForWorkspaces(UIContextActionsTestBase):
+
+    @browsing
+    def test_available_ui_context_actions_for_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        expected_ui_context_actions = []
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
+        )
+
+    @browsing
+    def test_available_ui_context_actions_for_inactive_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+
+        expected_ui_context_actions = [
+            {u'icon': u'', u'id': u'delete_workspace', u'title': u'Delete'},
+        ]
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
+        )
+
+    @browsing
+    def test_available_ui_context_actions_for_linked_inactive_workspace_as_admin(self, browser):
+        self.login(self.administrator, browser)
+        self.workspace.external_reference = u'a dossier UID'
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+
+        expected_ui_context_actions = []
+        self.assertListEqual(
+            expected_ui_context_actions,
+            self.get_ui_context_actions(browser, self.workspace),
         )

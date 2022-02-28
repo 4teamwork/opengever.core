@@ -23,6 +23,7 @@ Visible roles:
 
 General:
   A workspace member can perform the same actions as a workspace guest.
+  A workspace member can unlink workspace.
   A workspace admin can perform the same actions as a workspace member.
   An admin can always perform the same actions as a workspace admin.
   A systems administrator can always perform the same actions as an admin.
@@ -50,6 +51,7 @@ Status Active:
 Status Inactive:
   A workspace guest can view.
   A workspace admin can reactivate.
+  An admin can delete workspace.
 
 Transitions:
   deactivate (Active => Inactive)
