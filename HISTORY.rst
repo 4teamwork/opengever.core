@@ -10,6 +10,37 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.5.0 (2022-03-01)
+---------------------
+
+New features:
+
+
+- Allow admins to delete deactivated workspaces. [tinagerber]
+- Add dossier_type_colors whitelabeling setting. [tinagebrer]
+- GET `@favorites`: Include dossier_type in response. [lgraf]
+- Serialization: Include dossier_type in JSON summary for dossiers. [lgraf]
+- `@navigation`: Include dossier_type in response. [lgraf]
+- Add checklist field to dossier and dossiertemplate. [tinagerber]
+- Add `@reference-number` API endpoint and expansion for plone site and dexterity content. [deiferni]
+
+
+Bug fixes:
+
+
+- Allow unlinking workspaces even if the workspace is deactivated or dossier is closed. [tinagerber]
+- Default value acquisition: Skip intermediate objects missing attribute. [lgraf]
+- NightlyWorkflowSecurityUpdater: Gracefully skip objs that can't be resolved. [lgraf]
+- Reindex 'filename' when creating a new document version. [lgraf]
+- Properly handle the BCC address in teamraum if sending documents by email. [elioschmutz]
+
+
+Other changes:
+
+
+- Switch `@navigation` endpoint to Solr queries. [lgraf]
+
+
 2022.4.0 (2022-02-16)
 ---------------------
 
