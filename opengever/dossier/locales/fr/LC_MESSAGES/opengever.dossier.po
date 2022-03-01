@@ -536,7 +536,7 @@ msgstr "Responsable: ${author}"
 #: ./opengever/dossier/behaviors/dossier.py
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_checklist"
-msgstr ""
+msgstr "Checklist"
 
 #. Default: "Comments"
 #: ./opengever/dossier/browser/overview.py
