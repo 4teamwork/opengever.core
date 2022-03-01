@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2022.5.0 (unreleased)
+2022.6.0 (unreleased)
 ---------------------
 
 Breaking Changes
@@ -12,6 +12,12 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+
+2022.5.0 (2022-03-01)
+---------------------
+
+Other Changes
+^^^^^^^^^^^^^
 - ``@white-labeling-settings``: Add field ``dossier_type_colors``. (see :ref:`white-labeling-settings`)
 - ``@navigation``: Include dossier_type in response.
 - ``@breadcrumbs`` GET: Include dossier_type in response.
@@ -27,7 +33,6 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
 - Dossiers: The ``comments`` field has been dropped, and dossiers now support multiple comments via ``responses``.
 
 Other Changes
