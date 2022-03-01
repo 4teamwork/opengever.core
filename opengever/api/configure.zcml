@@ -491,6 +491,39 @@
       name="listing-stats"
       />
 
+
+  <plone:service
+      method="GET"
+      for="Products.CMFCore.interfaces.ISiteRoot"
+      factory=".reference_number.ReferenceNumberGet"
+      name="@reference-number"
+      permission="zope2.View"
+      />
+
+  <adapter
+      for="Products.CMFCore.interfaces.ISiteRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      provides="plone.restapi.interfaces.IExpandableElement"
+      factory=".reference_number.ReferenceNumber"
+      name="reference-number"
+      />
+
+  <plone:service
+      method="GET"
+      for="plone.dexterity.interfaces.IDexterityContent"
+      factory=".reference_number.ReferenceNumberGet"
+      name="@reference-number"
+      permission="zope2.View"
+      />
+
+  <adapter
+      for="plone.dexterity.interfaces.IDexterityContent
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      provides="plone.restapi.interfaces.IExpandableElement"
+      factory=".reference_number.ReferenceNumber"
+      name="reference-number"
+      />
+
   <plone:service
       method="GET"
       for="Products.CMFCore.interfaces.IFolderish"

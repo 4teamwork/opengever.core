@@ -19,6 +19,7 @@ Other Changes
 - ``@favorites`` GET: Include dossier_type in response.
 - Add new endpoint ``@remove-dossier-reference``
 - ``@unlink-workspace``: Allow unlinking workspaces even if the dossier is closed.
+- ``@reference-number``: Add new endpoint and expansion parameter to serialize reference number formatted, sortable and raw.
 
 
 2022.4.0 (2022-02-16)
