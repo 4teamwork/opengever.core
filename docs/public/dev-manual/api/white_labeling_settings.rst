@@ -26,6 +26,9 @@ Der ``@white-labeling-settings`` Endpoint liefert eine Übersicht über die Whit
             "en": "<div>Soutien en France</div>",
             "fr": "<div>Support in the United Kingdom</div>",
           },
+          "dossier_type_colors": {
+            "project": "#ac00fb"
+          },
           "logo": {
             "src": "data:image/png;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
           },

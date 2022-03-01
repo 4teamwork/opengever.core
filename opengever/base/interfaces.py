@@ -471,6 +471,10 @@ class IWhiteLabelingSettings(Interface):
         title=u'Color scheme light',
         description=u'In json format, eg. {"primary":"#55ff00"}', default=u'{}')
 
+    dossier_type_colors = schema.TextLine(
+        title=u'Dossier type color',
+        description=u'In json format, eg. {"businesscase":"#55ff00"}', default=u'{}')
+
     show_created_by = schema.Bool(
         title=u'Show created by section',
         description=u'Whether created by section should be shown',

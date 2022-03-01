@@ -1,0 +1,10 @@
+<registry>
+
+  <!-- White Labeling -->
+  <records interface="opengever.base.interfaces.IWhiteLabelingSettings">
+    <value key="dossier_type_colors">{}</value>
+  </records>
+
+</registry>
+
+

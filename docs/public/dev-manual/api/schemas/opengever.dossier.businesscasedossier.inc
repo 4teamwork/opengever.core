@@ -74,16 +74,6 @@
        
 
 
-   .. py:attribute:: comments
-
-       :Feldname: :field-title:`Kommentar`
-       :Datentyp: ``Text``
-       
-       
-       
-       
-
-
    .. py:attribute:: responsible
 
        :Feldname: :field-title:`Federführend`
@@ -182,6 +172,16 @@
        
        
        :Wertebereich: ["businesscase"]
+
+
+   .. py:attribute:: checklist
+
+       :Feldname: :field-title:`Checkliste`
+       :Datentyp: ``JSONField``
+       
+       
+       
+       
 
 
    .. py:attribute:: classification

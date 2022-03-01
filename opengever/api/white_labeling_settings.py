@@ -14,6 +14,8 @@ class WhiteLabelingSettingsGet(Service):
         logo_src = api.portal.get_registry_record('logo_src', interface=IWhiteLabelingSettings)
         color_scheme_light = api.portal.get_registry_record(
             'color_scheme_light', interface=IWhiteLabelingSettings)
+        dossier_type_colors = api.portal.get_registry_record(
+            'dossier_type_colors', interface=IWhiteLabelingSettings)
 
         result = {
             '@id': '{}/@white-labeling-settings'.format(self.context.absolute_url()),
@@ -25,6 +27,7 @@ class WhiteLabelingSettingsGet(Service):
                 'fr': api.portal.get_registry_record('custom_support_markup_fr',
                                                      interface=IWhiteLabelingSettings),
             },
+            'dossier_type_colors': json.loads(dossier_type_colors) if dossier_type_colors else {},
             'logo': {
                 'src': 'data:image/png;base64,' + base64.b64encode(logo_src) if logo_src else None
             },

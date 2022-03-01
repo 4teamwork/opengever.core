@@ -24,6 +24,7 @@ class TestWhiteLabelingSettingsGet(IntegrationTestCase):
             {u'@id': u'http://nohost/plone/@white-labeling-settings',
              u'custom_support_markup':
              {u'de': u'<div>Kundensupport</div>', u'en': None, u'fr': None},
+             u'dossier_type_colors': {u'project': u'#fb8c00'},
              u'logo': {u'src': u'data:image/png;base64,R2V2ZXIgaXN0IGNvb2w='},
                 u'show_created_by': True,
                 u'themes': {u'light': {u'primary': u'#d000ff'}}},
