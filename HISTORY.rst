@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.2 (2022-03-01)
+---------------------
+
+Bug fixes:
+
+
+- Properly handle the BCC address in teamraum if sending documents by email. [elioschmutz]
+
+
 2022.4.1 (2022-02-24)
 ---------------------
 
