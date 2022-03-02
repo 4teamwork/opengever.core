@@ -126,6 +126,25 @@ class TestIntIdMaintenanceJobContextManagerMixins(IntegrationTestCase):
         self.assertEqual(self.dossier,
                          job_manager.key_to_obj(job.variable_argument))
 
+    def test_obj_to_key_returns_existing_intid(self):
+        self.login(self.manager)
+        job_manager = DummyIntIdMaintenanceJobManager()
+        intid = getUtility(IIntIds).getId(self.dossier)
+        self.assertEqual(intid, job_manager.obj_to_key(self.dossier))
+
+    def test_obj_to_key_registers_intid_if_missing(self):
+        self.login(self.manager)
+        job_manager = DummyIntIdMaintenanceJobManager()
+
+        intids = getUtility(IIntIds)
+        intids.unregister(self.dossier)
+        self.assertIsNone(intids.queryId(self.dossier))
+
+        intid = job_manager.obj_to_key(self.dossier)
+
+        self.assertIsNotNone(intids.queryId(self.dossier))
+        self.assertEqual(intid, intids.queryId(self.dossier))
+
 
 class DummyUIDMaintenanceJobManager(UIDMaintenanceJobContextManagerMixin):
 
