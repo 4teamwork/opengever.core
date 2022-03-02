@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.3 (2022-03-02)
+---------------------
+
+Bug fixes:
+
+
+- Fix IntIdMaintenanceJobContextManagerMixin obj_to_key if there is no registered intid. [elioschmutz]
+
+
 2022.4.2 (2022-03-01)
 ---------------------
 
