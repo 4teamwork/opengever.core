@@ -1,0 +1,1 @@
+Fix IntIdMaintenanceJobContextManagerMixin obj_to_key if there is no registered intid. [elioschmutz]

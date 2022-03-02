@@ -558,7 +558,10 @@ class IntIdMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
         self.intids = getUtility(IIntIds)
 
     def obj_to_key(self, obj):
-        return self.intids.getId(obj)
+        int_id = self.intids.queryId(obj)
+        if not int_id:
+            int_id = self.intids.register(obj)
+        return int_id
 
     @staticmethod
     def key_to_obj(key):
