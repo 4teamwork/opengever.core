@@ -14,6 +14,7 @@ from opengever.nightlyjobs.tests.test_nightly_job_provider import DocumentTitleM
 from opengever.nightlyjobs.tests.test_nightly_job_provider import IWantToBeModified
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.app.uuid.utils import uuidToObject
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation import IAnnotations
 from zope.component import adapter
@@ -40,6 +41,20 @@ class TickingDocumentTitleModifierJobProvider(DocumentTitleModifierJobProvider):
     def run_job(self, job, interrupt_if_necessary):
         super(TickingDocumentTitleModifierJobProvider, self).run_job(job, interrupt_if_necessary)
         self.clock.forward(seconds=3600)
+
+
+@adapter(IPloneSiteRoot, IOpengeverBaseLayer, logging.Logger)
+class RaisingDocumentTitleModifierJobProvider(DocumentTitleModifierJobProvider):
+
+    counter = 0
+
+    def execute_job(self, job, interrupt_if_necessary):
+        interrupt_if_necessary()
+        self.counter += 1
+        if self.counter % 2 == 1:
+            raise AttributeError()
+        obj = uuidToObject(job['uid'])
+        obj.title = u'Modified {}'.format(obj.title)
 
 
 class TestNightlyJobRunner(IntegrationTestCase):
@@ -295,6 +310,24 @@ class TestNightlyJobRunner(IntegrationTestCase):
                            "document-title executed 0 out of 1 jobs"
         self.assertEqual(expected_message,
                          runner.format_early_abort_message(exception))
+
+    def test_runner_continues_when_exception_is_raised(self):
+        self.portal.getSiteManager().registerAdapter(RaisingDocumentTitleModifierJobProvider,
+                                                     name='document-title')
+        with self.login(self.regular_user):
+            alsoProvides(self.empty_document, IWantToBeModified)
+            alsoProvides(self.subdocument, IWantToBeModified)
+            alsoProvides(self.subsubdocument, IWantToBeModified)
+            self.empty_document.reindexObject(idxs=["object_provides"])
+            self.subdocument.reindexObject(idxs=["object_provides"])
+            self.subsubdocument.reindexObject(idxs=["object_provides"])
+        self.login(self.manager)
+        runner = self.get_load_controlled_runner()
+        self.assertEqual(4, runner.get_initial_jobs_count())
+
+        runner.execute_pending_jobs(early_check=False)
+        self.assertEqual(2, runner.get_executed_jobs_count())
+        self.assertEqual(2, runner.get_remaining_jobs_count())
 
     def test_nightly_job_runner_updates_last_run_timestamp(self):
         self.login(self.manager)
