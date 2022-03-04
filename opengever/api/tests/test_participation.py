@@ -872,6 +872,14 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
             headers=http_headers(),
             )
 
+        # Posting with participant and role returns the serialized participant
+        self.assertEquals(
+            self.workspace_member.id,
+            browser.json.get('participant').get('id'))
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            browser.json.get('role'))
+
         browser.open(
             self.workspace,
             view='@participations',
@@ -883,6 +891,56 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         self.assertEquals(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
+
+    @browsing
+    def test_add_a_list_of_participants(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        remove_participation(self.workspace, browser, self.workspace_member.id)
+        remove_participation(self.workspace, browser, self.workspace_guest.id)
+
+        self.assertDictEqual(
+            {'fridolin.hugentobler': ['WorkspaceAdmin'],
+             'gunther.frohlich': ['WorkspaceAdmin']},
+            self.workspace.__ac_local_roles__)
+
+        data = {
+            "participants": [
+                {"participant": {"token": self.workspace_member.id},
+                 "role": {"token": 'WorkspaceGuest'}},
+                {"participant": self.workspace_guest.id,
+                 "role": 'WorkspaceMember'}
+            ]
+        }
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+            )
+
+        # Posting with a list of participants returns the list of participants
+        items = browser.json.get('items')
+        self.assertEqual(2, len(items))
+
+        entry = get_entry_by_id(items, self.workspace_member.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+        entry = get_entry_by_id(items, self.workspace_guest.id)
+        self.assertEquals(
+            {u'token': u'WorkspaceMember', u'title': u'Member'},
+            entry.get('role'))
+
+        self.assertDictEqual(
+            {u'beatrice.schrodinger': [u'WorkspaceGuest'],
+             u'fridolin.hugentobler': [u'WorkspaceAdmin'],
+             u'gunther.frohlich': [u'WorkspaceAdmin'],
+             u'hans.peter': [u'WorkspaceMember']},
+            self.workspace.__ac_local_roles__)
 
     @browsing
     def test_let_a_group_participate(self, browser):
@@ -988,6 +1046,33 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=http_headers(),
                 )
+
+    @browsing
+    def test_can_only_pass_one_of_participant_and_participants(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = {
+            "participants": [
+                {"participant": {"token": self.workspace_guest.id},
+                 "role": {"token": 'Manager'}}
+                ],
+            "participant": {"token": self.workspace_member.id},
+            "role": {"token": 'Manager'},
+        }
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations',
+                method='POST',
+                data=json.dumps(data),
+                headers=http_headers(),
+                )
+
+        self.assertEqual(
+            {u'message': u'Cannot specify both participants and participant or role',
+             u'type': u'BadRequest'},
+            browser.json)
 
 
 class TestParticipationPostWorkspaceFolder(IntegrationTestCase):

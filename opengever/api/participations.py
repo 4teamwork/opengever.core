@@ -189,21 +189,44 @@ class ParticipationsPost(ParticipationTraverseService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        token, role = self.validate_data(json_body(self.request))
+        participations = self.validate_data(json_body(self.request))
 
-        self.validate_participation(token, role)
+        results = []
+        container = self.context.get_context_with_local_roles()
+        for token, role in participations:
+            self.validate_participation(token, role)
 
-        assignment = SharingRoleAssignment(token, [role], self.context)
-        RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
+            assignment = SharingRoleAssignment(token, [role], self.context)
+            RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
-        activity_manager = WorkspaceWatcherManager(self.context)
-        activity_manager.new_participant_added(token)
+            activity_manager = WorkspaceWatcherManager(self.context)
+            activity_manager.new_participant_added(token)
+
+            results.append(self.prepare_response_item(self.find_participant(
+                token, container)))
 
         self.request.response.setStatus(201)
-        return self.prepare_response_item(self.find_participant(
-            token, self.context.get_context_with_local_roles()))
+        if getattr(self, "return_list", False):
+            managing_context = self.context.get_context_with_local_roles()
+            return {
+                "@id": '{}/@participations'.format(managing_context.absolute_url()),
+                "items": results}
+        return results[0]
 
     def validate_data(self, data):
+        if 'participants' in data and ('participant' in data or 'role' in data):
+            raise BadRequest('Cannot specify both participants and participant or role')
+
+        if 'participants' in data:
+            self.return_list = True
+            participations = [self.extract_participation(participation) for
+                              participation in data.get("participants")]
+        else:
+            participations = [self.extract_participation(data)]
+
+        return participations
+
+    def extract_participation(self, data):
         participant = data.get('participant')
         if isinstance(participant, dict):
             participant = participant.get("token")
