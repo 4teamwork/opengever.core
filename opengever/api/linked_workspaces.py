@@ -271,3 +271,28 @@ class ListLinkedDocumentUIDsFromWorkspace(Service):
                 if brain.gever_doc_uid]
 
         return {'gever_doc_uids': uids}
+
+
+class AddParticipationsOnWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to add participations on a linked workspace.
+    """
+
+    @teamraum_request_error_handler
+    def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest("Property 'workspace_uid' is required")
+
+        participants = data.get('participants')
+        if not participants:
+            raise BadRequest("Property 'participants' is required")
+
+        items = ILinkedWorkspaces(self.context).add_participations(
+                workspace_uid, participants).get("items", [])
+
+        return {
+            "@id": "{}/@linked-workspace-participations".format(self.context.absolute_url()),
+            "items": items
+        }

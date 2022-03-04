@@ -1138,6 +1138,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@linked-workspace-participations"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.AddParticipationsOnWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
       method="GET"
       name="@allowed-roles-and-principals"
       for="Products.CMFCore.interfaces.IContentish"

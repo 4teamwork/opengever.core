@@ -499,3 +499,11 @@ class LinkedWorkspaces(object):
             blacklisted_dict[key] = dict_obj[key]
 
         return blacklisted_dict
+
+    def add_participations(self, workspace_uid, participations):
+        """ Adds participations on the workspace
+        """
+        workspace_url = self._get_linked_workspace_url(workspace_uid)
+        return self.client.post(
+            '{}/@participations'.format(workspace_url),
+            json={'participants': participations})
