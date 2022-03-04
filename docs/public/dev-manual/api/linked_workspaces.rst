@@ -126,6 +126,67 @@ Eine bestehende Verknüpfung eines Teamraums kann mit dem ``@unlink-workspace`` 
       HTTP/1.1 204 No Content
 
 
+Teilnehmer in einem verknüpften Teamraum setzen
+-----------------------------------------------
+
+Mit dem ``@linked-workspace-participations`` Endpoint können Teilnehmer auf einem verknüpften Teamraum hinzugefügt werden.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/@linked-workspace-participations HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+
+    {
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
+      "participants": [
+        {"participant": "max.muster", "role": "WorkspaceAdmin"},
+        {"participant": "maria.meier", "role": "WorkspaceGuest"}
+      ]
+    }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "/ordnungssystem/dossier-23/@linked-workspace-participations",
+      "items": [
+          {
+            "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
+            "@type": "virtual.participations.user",
+            "is_editable": true,
+            "role": {
+              "title": "Admin",
+              "token": "WorkspaceAdmin"
+            },
+            "participant_actor": {
+              "@id": "http://localhost:8081/fd/@actors/max.muster",
+              "identifier": "max.muster",
+            },
+            "participant": {
+              "@id": "http://localhost:8081/fd/@ogds-users/max.muster",
+              "@type": "virtual.ogds.user",
+              "active": true,
+              "email": "max.muster@example.com",
+              "title": "Max Muster (max.muster)",
+              "id": "max.muster",
+              "is_local": null
+            },
+          },
+          {
+            "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/maria.meier",
+            "...": "..."
+          },
+      ]
+    }
+
+
 Ein GEVER-Dokument in einen verknüpften Teamraum kopieren
 ---------------------------------------------------------
 
