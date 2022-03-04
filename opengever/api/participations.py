@@ -148,8 +148,8 @@ class ParticipationsDelete(ParticipationTraverseService):
         current context.
         """
         if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
-                manager = ManageParticipants(obj, self.request)
-                manager._delete(Actor.lookup(token).actor_type, token)
+            manager = ManageParticipants(obj, self.request)
+            manager._delete(Actor.lookup(token).actor_type, token)
 
         for folder in obj.listFolderContents(
                 contentFilter={'portal_type': 'opengever.workspace.folder'}):
