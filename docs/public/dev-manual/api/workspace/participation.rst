@@ -155,8 +155,6 @@ Beteiligungen hinzufügen:
 -------------------------
 In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) können beteiligungen über einen POST request auf den @participations Endpoint hinzugefügt werden.
 
-**Achtung**: Eine Beteiligung in einem Arbeitsraum kann nur über eine Einladung hinzugefügt werden. Der eingeladene Benutzer muss seine Beteiligung erste bestätigen, bevor der Benutzer effektiv berechtigt wird.
-
 **Beispiel-Request**:
 
    .. sourcecode:: http
