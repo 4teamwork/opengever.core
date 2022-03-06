@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 125
+select = C,E,F,W,T
+ignore = W503,W606
+exclude = bootstrap.py,pyxbgen.py,bindings,skins,monkey,tests,docs
