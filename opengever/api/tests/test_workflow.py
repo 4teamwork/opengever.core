@@ -1,4 +1,7 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.mail.tests import MAIL_DATA
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrasher
 import json
@@ -94,6 +97,30 @@ class TestWorkflowPost(IntegrationTestCase):
              u'review_state': u'document-state-removed'},
             browser.json
         )
+
+    @browsing
+    def test_transition_remove_mail_can_be_executed(self, browser):
+        self.login(self.manager)
+        # allow `secretariat_user` to remove gever content
+        self.portal.manage_permission(
+            'Remove GEVER content', roles=['Editor'], acquire=True)
+
+        mail = create(
+            Builder("mail")
+            .with_message(MAIL_DATA)
+            .within(self.inbox)
+        )
+        self.login(self.secretariat_user, browser=browser)
+        ITrasher(mail).trash()
+
+        browser.open(
+            mail.absolute_url() + '/@workflow/mail-transition-remove',
+            method='POST', headers=self.api_headers)
+
+        self.assertDictEqual(
+            {u'review_state': u'mail-state-removed',
+             u'title': u'mail-state-removed'},
+            browser.json)
 
     @browsing
     def test_calling_endpoint_without_transition_gives_400(self, browser):
