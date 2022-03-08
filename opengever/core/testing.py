@@ -575,7 +575,8 @@ class SolrTestingBase(object):
             '<configure xmlns:solr="http://namespaces.plone.org/solr">'
             '  <solr:connection host="localhost"'
             '                   port="{SOLR_PORT}"'
-            '                   base="/solr/{SOLR_CORE}" />'
+            '                   base="/solr/{SOLR_CORE}"'
+            '                   upload_blobs="true"/>'
             '</configure>'.format(SOLR_PORT=self.solr_port, SOLR_CORE=self.solr_core),
             context=configurationContext)
 
