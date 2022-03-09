@@ -3,11 +3,22 @@
 API Changelog
 =============
 
-2022.3.0 (unreleased)
+2022.4.1 (unreleased)
 ---------------------
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2022.4.0 (2022-02-16)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+- Dossiers: The ``comments`` field has been dropped, and dossiers now support multiple comments via ``responses``.
 
 Other Changes
 ^^^^^^^^^^^^^
