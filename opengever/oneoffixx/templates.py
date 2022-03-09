@@ -15,7 +15,9 @@ def get_whitelisted_oneoffixx_templates(api_client):
 def get_oneoffixx_favorites(api_client):
     return [
         OneOffixxTemplate(template) for template in
-        api_client.get_oneoffixx_favorites()]
+        api_client.get_oneoffixx_favorites()
+        if template.get(u'metaTemplateId') in whitelisted_template_types
+    ]
 
 
 def get_oneoffixx_template_groups(api_client):
