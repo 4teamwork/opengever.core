@@ -16,6 +16,8 @@ from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 import logging
 import psutil
+import sys
+import traceback
 import transaction
 
 
@@ -174,6 +176,14 @@ class NightlyJobRunner(object):
                     message = self.format_early_abort_message(exc)
                     self.log_to_sentry(message)
                     return exc
+                except Exception:
+                    transaction.abort()
+                    e_type, e_value, tb = sys.exc_info()
+                    formatted_traceback = ''.join(traceback.format_exception(e_type, e_value, tb))
+                    message = 'Exception while running nightly job:\n{}'.format(formatted_traceback)
+                    self.log.error(message)
+                    self.log_to_sentry(message)
+                    continue
 
                 provider.maybe_commit(job)
 
