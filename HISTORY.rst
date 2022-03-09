@@ -10,6 +10,18 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.4 (2022-03-09)
+---------------------
+
+Bug fixes:
+
+
+- Handle errors in nightly jobs. [tinagerber]
+- Fix getting OneOffixx favorites for templates that are not whitelisted. [buchi]
+- Add labels to OneOffixx templates whitelist. [buchi]
+- Handle group prefix in principalid in @role-assignment-reports endpoint. [tinagerber]
+
+
 2022.4.3 (2022-03-02)
 ---------------------
 
