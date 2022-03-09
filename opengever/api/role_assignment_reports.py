@@ -110,6 +110,7 @@ class RoleAssignmentReportsPost(RoleAssignmentReportsBase):
 
         if not self.principal_id:
             raise BadRequest("Property 'principal_id' is required")
+        self.principal_id = self.principal_id.split('group:', 1)[-1]
 
 
 class RoleAssignmentReportsDelete(Service):

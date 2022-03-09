@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2022.4.1 (unreleased)
+2022.4.4 (unreleased)
 ---------------------
 
 Breaking Changes
@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@role-assignment-reports``: Handle group prefix in principalid.
 
 
 2022.4.0 (2022-02-16)

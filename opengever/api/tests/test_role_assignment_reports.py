@@ -138,6 +138,27 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
                           u'state': u'in progress'}, browser.json)
 
     @browsing
+    def test_post_role_assignment_reports_can_handle_group_prefix(self, browser):
+        self.login(self.administrator, browser=browser)
+        with freeze(datetime(2020, 4, 18)):
+            browser.open(self.portal.absolute_url() + '/@role-assignment-reports',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"principal_id": {'token': 'group:projekt_a'}}))
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual({u'@id': u'http://nohost/plone/@role-assignment-reports/report_2',
+                          u'@type': u'virtual.report.roleassignmentreport',
+                          u'items': [],
+                          u'items_total': 0,
+                          u'modified': u'2020-04-18T00:00:00+00:00',
+                          u'principal_type': u'group',
+                          u'principal_label': u'Projekt A',
+                          u'principal_id': u'projekt_a',
+                          u'report_id': u'report_2',
+                          u'state': u'in progress'}, browser.json)
+
+    @browsing
     def test_post_role_assignment_reports_with_invalid_principal_id(self, browser):
         self.login(self.administrator, browser=browser)
         with freeze(datetime(2020, 4, 18)):
