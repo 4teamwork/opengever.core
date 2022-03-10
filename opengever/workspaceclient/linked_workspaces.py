@@ -260,10 +260,9 @@ class LinkedWorkspaces(object):
         return response
 
     def _get_document_by_uid(self, workspace_uid, document_uid):
-        linked_documents = self.list_documents_in_linked_workspace(workspace_uid)
-        for document in linked_documents["items"]:
-            if document.get('UID') == document_uid:
-                return document
+        linked_documents = self.list_documents_in_linked_workspace(workspace_uid, UID=document_uid)
+        if linked_documents.get('items_total') == 1:
+            return linked_documents['items'][0]
 
     def copy_document_from_workspace(self, workspace_uid, document_uid, as_new_version=False):
         """Will copy a document from a linked workspace.
