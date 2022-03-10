@@ -155,6 +155,7 @@
         category="workflow"
         icon="">mail-transition-remove</action>
     <guard>
+      <guard-expression>here/is_trashed</guard-expression>
       <guard-permission>Remove GEVER content</guard-permission>
     </guard>
   </transition>
