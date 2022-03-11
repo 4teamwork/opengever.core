@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@role-assignment-reports``: Handle group prefix in principalid.
+- ``@config``: Add ``dossier_checklist`` feature flag.
 
 2022.5.0 (2022-03-01)
 ---------------------

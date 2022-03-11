@@ -263,3 +263,11 @@ class IDossierType(Interface):
         ),
         default=['businesscase']
     )
+
+
+class IDossierChecklistSettings(Interface):
+
+    is_feature_enabled = schema.Bool(
+        title=u'Enable checklist feature',
+        description=u'Whether checklist feature is enabled',
+        default=False)

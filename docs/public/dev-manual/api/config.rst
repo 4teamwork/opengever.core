@@ -65,6 +65,7 @@ GEVER-Mandanten abgefragt werden.
               "disposition_transport_filesystem": false,
               "disposition_transport_ftps": false,
               "doc_properties": true,
+              "dossier_checklist": true,
               "dossier_templates": true,
               "ech0147_export": true,
               "ech0147_import": true,
@@ -176,6 +177,9 @@ features
 
     doc_properties
         Hinzufügen von DocProperties bei aus Vorlagen erstellten Word-Dokumenten
+
+    dossier_checklist
+        Checkliste für Dossier und Dossier-Vorlagen
 
     dossier_templates
         Dossier Vorlagen

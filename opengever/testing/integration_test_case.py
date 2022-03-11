@@ -69,6 +69,7 @@ FEATURE_FLAGS = {
     'disposition-disregard-retention-period': 'opengever.disposition.interfaces.IDispositionSettings.disregard_retention_period',  # noqa
     'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties',
     'docugate': 'opengever.docugate.interfaces.IDocugateSettings.is_feature_enabled',
+    'dossier-checklist': 'opengever.dossier.interfaces.IDossierChecklistSettings.is_feature_enabled',
     'dossiertemplate': 'opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings.is_feature_enabled',
     'ech0147-export': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_export_enabled',
     'ech0147-import': 'opengever.ech0147.interfaces.IECH0147Settings.ech0147_import_enabled',
