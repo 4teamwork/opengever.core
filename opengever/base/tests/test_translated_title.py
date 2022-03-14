@@ -12,6 +12,7 @@ from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
+from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
@@ -371,6 +372,14 @@ class TestTranslatedTitle(SolrIntegrationTestCase):
         self.assertNotIn('title_fr', solr_data)
         self.assertNotIn('title_en', solr_data)
 
+    def test_og_solr_document_returns_none_for_objects_without_translated_title_support(self):
+        self.login(self.regular_user)
+
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+        self.assertEquals(None, og_solr_doc.title_de)
+        self.assertEquals(None, og_solr_doc.title_fr)
+        self.assertEquals(None, og_solr_doc.title_en)
+
     @browsing
     def test_Title_on_brains_returns_title_in_preferred_language(self, browser):
         self.login(self.regular_user)
@@ -379,6 +388,17 @@ class TestTranslatedTitle(SolrIntegrationTestCase):
 
         self.assertEquals('Syst\xc3\xa8me de classement',
                           obj2brain(self.repository_root).Title)
+
+    @browsing
+    def test_Title_on_og_solr_document_returns_title_in_preferred_language(self, browser):
+        self.login(self.regular_user)
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.repository_root))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEquals('Syst\xc3\xa8me de classement',
+                          og_solr_doc.Title)
 
     @browsing
     def test_Title_on_brains_uses_Title_when_type_does_not_support_translated_title(self, browser):
@@ -391,6 +411,24 @@ class TestTranslatedTitle(SolrIntegrationTestCase):
         set_preferred_language(self.portal.REQUEST, 'fr-ch')
         self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
                           obj2brain(self.dossier).Title)
+
+    @browsing
+    def test_Title_on_og_solr_document_uses_Title_when_type_does_not_support_translated_title(self, browser):
+        self.login(self.regular_user)
+
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+                          og_solr_doc.Title)
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+                          og_solr_doc.Title)
 
 
 class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
@@ -581,6 +619,15 @@ class TestTranslatedTitleLanguageSupport(SolrIntegrationTestCase):
             self.assertEquals(
                 self.titles[lang],
                 solr_data['title_{}'.format(lang)])
+
+    def test_all_og_solr_document_values(self):
+        self.login(self.manager)
+
+        solr_doc = OGSolrDocument(solr_data_for(self.repository_root))
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            value = getattr(solr_doc, 'title_{}'.format(lang))
+            self.assertIsInstance(value, unicode)
+            self.assertEquals(self.titles[lang], value)
 
     def test_translated_attribute_can_be_set_to_none(self):
         self.login(self.manager)
