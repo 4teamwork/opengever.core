@@ -22,13 +22,16 @@ Dashboard Konfiguration
       {
           "cards": [
               {
+                  "id": "newest_gever_notifications",
                   "componentName": "NewestGeverNotificationsCard"
               },
               {
+                  "id": "recently_touched_items"
                   "componentName": "RecentlyTouchedItemsCard"
               },
               {
-                  "componentName": "MyDossiersCard"
+                  "id": "my_dossiers"
+                  "componentName": "DossiersCard"
               }
           ]
       }

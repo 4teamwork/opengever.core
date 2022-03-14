@@ -373,22 +373,51 @@ class IOGMailSettings(Interface):
 
 
 DEFAULT_DASHBOARD_CARDS = [
-    {'componentName': 'NewestGeverNotificationsCard'},
-    {'componentName': 'RecentlyTouchedItemsCard'},
-    {'componentName': 'MyDossiersCard'},
-    {'componentName': 'SubstituteDossiersCard'},
-    {'componentName': 'DashboardPendingTasksCard'},
-    {'componentName': 'SubstituteTasksCard'},
-    {'componentName': 'DashboardAllPendingTasksCard'},
-    {'componentName': 'MyProposalsCard',
-     'listingKey': 'proposals',
-     'pivotKey': 'issuer-current-user'},
-    {'componentName': 'MyWatchedTasksCard',
-     'listingKey': 'tasks',
-     'pivotKey': 'watcher-current-user'},
-    {'componentName': 'MyWatchedDocumentsCard',
-     'listingKey': 'documents',
-     'pivotKey': 'watcher-current-user'}]
+    {
+        'id': 'newest_gever_notifications',
+        'componentName': 'NewestGeverNotificationsCard'
+    },
+    {
+        'id': 'recently_touched_items',
+        'componentName': 'RecentlyTouchedItemsCard'
+    },
+    {
+        'id': 'my_dossiers',
+        'componentName': 'MyDossiersCard'
+    },
+    {
+        'id': 'substitute_dossiers',
+        'componentName': 'SubstituteDossiersCard'
+    },
+    {
+        'id': 'dashboard_pending_tasks',
+        'componentName': 'DashboardPendingTasksCard'
+    },
+    {
+        'id': 'substitute_tasks',
+        'componentName': 'SubstituteTasksCard'
+    },
+    {
+        'id': 'dashboard_all_pending_tasks',
+        'componentName': 'DashboardAllPendingTasksCard'
+    },
+    {
+        'id': 'my_proposals',
+        'componentName': 'MyProposalsCard',
+        'listingKey': 'proposals',
+        'pivotKey': 'issuer-current-user'
+    },
+    {
+        'id': 'my_watched_tasks',
+        'componentName': 'MyWatchedTasksCard',
+        'listingKey': 'tasks',
+        'pivotKey': 'watcher-current-user'},
+    {
+        'id': 'my_watched_documents',
+        'componentName': 'MyWatchedDocumentsCard',
+        'listingKey': 'documents',
+        'pivotKey': 'watcher-current-user'
+    }]
 
 
 class IGeverUI(Interface):
@@ -400,7 +429,7 @@ class IGeverUI(Interface):
 
     custom_dashboard_cards = schema.Text(
         title=u'custom dashboard cards',
-        description=u'In json format, eg. [{"componentName": "DossiersCard", "'
+        description=u'In json format, eg. [{"id": "dossiers", "componentName": "DossiersCard", "'
         'title_de": "Falldossiers", "filters": { "dossierType": "Falldossier"'
         ' }}]',
         default=json.dumps(DEFAULT_DASHBOARD_CARDS).decode('utf-8'))
