@@ -77,6 +77,7 @@
   <records interface="opengever.document.interfaces.IDocumentSettings" />
 
   <!-- DOSSIER -->
+  <records interface="opengever.dossier.interfaces.IDossierChecklistSettings" />
   <records interface="opengever.dossier.interfaces.IDossierContainerTypes" />
   <records interface="opengever.dossier.interfaces.IDossierParticipants" />
   <records interface="opengever.dossier.interfaces.ITemplateFolderProperties" />

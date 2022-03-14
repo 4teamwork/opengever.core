@@ -180,7 +180,6 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Comments',
-            u'Checklist',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -188,6 +187,45 @@ class TestDossierTemplate(IntegrationTestCase):
     @browsing
     def test_shown_fields_in_edit_form(self, browser):
         self.maxDiff = None
+        self.login(self.administrator, browser=browser)
+        browser.open(self.dossiertemplate, view="edit")
+        self.assertEqual([
+            u'Title hint',
+            u'Title',
+            u'Description',
+            u'Keywords',
+            u'Prefill keywords',
+            u'Restrict keywords',
+            u'Dossier type',
+            u'Comments',
+            u'Filing number prefix'],
+            browser.css('#content fieldset label').text
+        )
+
+    @browsing
+    def test_shown_fields_in_add_form_if_checklist_feature_enabled(self, browser):
+        self.activate_feature('dossier-checklist')
+        self.login(self.administrator, browser=browser)
+        browser.open(self.templates)
+        factoriesmenu.add('Dossier template')
+
+        self.assertEqual([
+            u'Title hint',
+            u'Title',
+            u'Description',
+            u'Keywords',
+            u'Prefill keywords',
+            u'Restrict keywords',
+            u'Dossier type',
+            u'Comments',
+            u'Checklist',
+            u'Filing number prefix'],
+            browser.css('#content fieldset label').text
+        )
+
+    @browsing
+    def test_shown_fields_in_edit_form_if_checklist_feature_enabled(self, browser):
+        self.activate_feature('dossier-checklist')
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate, view="edit")
         self.assertEqual([

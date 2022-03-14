@@ -21,6 +21,7 @@ from opengever.disposition.interfaces import IFTPSTransportSettings
 from opengever.document.interfaces import IDocumentSettings
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
+from opengever.dossier.interfaces import IDossierChecklistSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import ITemplateFolderProperties
@@ -146,6 +147,7 @@ class GeverSettingsAdpaterV1(object):
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
         features['disposition_transport_ftps'] = api.portal.get_registry_record('enabled', interface=IFTPSTransportSettings)  # noqa
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
+        features['dossier_checklist'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierChecklistSettings)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)

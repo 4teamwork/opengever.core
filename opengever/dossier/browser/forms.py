@@ -5,6 +5,7 @@ from opengever.base.behaviors.utils import omit_classification_group
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.contact import _ as contact_mf
 from opengever.dossier import _
+from opengever.dossier import is_dossier_checklist_feature_enabled
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.participation import IParticipation
@@ -113,6 +114,9 @@ class DossierAddForm(add.DefaultAddForm):
         if not has_active_dossier_types(self.context):
             fields.append('IDossier.dossier_type')
 
+        if not is_dossier_checklist_feature_enabled():
+            fields.append('IDossier.checklist')
+
         hide_fields_from_behavior(self, fields)
 
     @property
@@ -165,6 +169,9 @@ class DossierEditForm(edit.DefaultEditForm):
 
         if not has_active_dossier_types(self.context):
             fields.append('IDossier.dossier_type')
+
+        if not is_dossier_checklist_feature_enabled():
+            fields.append('IDossier.checklist')
 
         hide_fields_from_behavior(self, fields)
 
