@@ -175,6 +175,9 @@
     <field name="sequence_type" type="string" indexed="true" stored="false" />
     <field name="start" type="pdate" indexed="true" stored="false" />
     <field name="task_type" type="string" indexed="true" stored="false" />
+    <field name="title_de" type="text" indexed="true" stored="true"/>
+    <field name="title_en" type="text" indexed="true" stored="true"/>
+    <field name="title_fr" type="text" indexed="true" stored="true"/>
     <field name="trashed" type="boolean" indexed="true" stored="false" />
     <field name="watchers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="participations" type="string" indexed="true" stored="true" multiValued="true"/>
