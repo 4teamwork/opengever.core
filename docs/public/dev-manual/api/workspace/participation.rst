@@ -153,9 +153,7 @@ Ein DELETE Request auf die `@id` einer Beteiligung löscht die entsprechnede Bet
 
 Beteiligungen hinzufügen:
 -------------------------
-In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) können beteiligungen über einen POST request auf den @participations Endpoint hinzugefügt werden.
-
-**Achtung**: Eine Beteiligung in einem Arbeitsraum kann nur über eine Einladung hinzugefügt werden. Der eingeladene Benutzer muss seine Beteiligung erste bestätigen, bevor der Benutzer effektiv berechtigt wird.
+In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) können Beteiligungen über einen POST Request auf den @participations Endpoint hinzugefügt werden. Im Body werden entweder die Attribute ``participant`` und ``role`` erwartet oder ein Liste von Beteiligungen im Attribut ``participants``.
 
 **Beispiel-Request**:
 
@@ -196,8 +194,68 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
         "title": "Maria Meier (maria.meier)",
         "id": "maria.meier",
         "is_local": null
+      }
     }
 
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /workspaces/workspace-1/@participations HTTP/1.1
+       Accept: application/json
+
+       {
+         "participants": [
+            {
+              "participant": "maria.meier",
+              "role": "WorkspaceAdmin"
+            },
+            {
+              "participant": "markus.muller",
+              "role": "WorkspaceGuest"
+            },
+          ]
+        }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+      "@id": "/workspaces/workspace-1/@participations",
+      "items": [
+          {
+            "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/max.muster",
+            "@type": "virtual.participations.user",
+            "is_editable": true,
+            "role": {
+              "title": "Admin",
+              "token": "WorkspaceAdmin"
+            },
+            "participant_actor": {
+              "@id": "http://localhost:8081/fd/@actors/maria.meier",
+              "identifier": "maria.meier",
+            },
+            "participant": {
+              "@id": "http://localhost:8081/fd/@ogds-users/maria.meier",
+              "@type": "virtual.ogds.user",
+              "active": true,
+              "email": "maria.meier@example.com",
+              "title": "Maria Meier (maria.meier)",
+              "id": "maria.meier",
+              "is_local": null
+            },
+          },
+          {
+            "@id": "http://localhost:8080/fd/workspaces/workspace-1/@participations/markus.muller",
+            "...": "..."
+          },
+      ]
+    }
 
 Beteiligungen bearbeiten:
 -------------------------

@@ -1,3 +1,4 @@
+from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -83,10 +84,16 @@ class ParticipationTraverseService(Service):
         """Validates the actor token if it' a avalid actor.
         """
         if Actor.lookup(token).actor_type not in ['user', 'group']:
-            raise BadRequest('The actor is not allowed')
+            raise BadRequest(
+                _(u'disallowed_participant',
+                  default=u'The actor ${actorid} is not allowed',
+                  mapping={'actorid': token}))
 
         if self.find_participant(token, self.context.get_context_with_local_roles()):
-            raise BadRequest('The participant already exists')
+            raise BadRequest(
+                _(u'duplicate_participant',
+                  default='The participant ${actorid} already exists',
+                  mapping={'actorid': token}))
 
         if IWorkspaceFolder.providedBy(self.context):
             if not self.context.has_blocked_local_role_inheritance():
@@ -148,8 +155,8 @@ class ParticipationsDelete(ParticipationTraverseService):
         current context.
         """
         if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
-                manager = ManageParticipants(obj, self.request)
-                manager._delete(Actor.lookup(token).actor_type, token)
+            manager = ManageParticipants(obj, self.request)
+            manager._delete(Actor.lookup(token).actor_type, token)
 
         for folder in obj.listFolderContents(
                 contentFilter={'portal_type': 'opengever.workspace.folder'}):
@@ -189,21 +196,47 @@ class ParticipationsPost(ParticipationTraverseService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        token, role = self.validate_data(json_body(self.request))
+        participations = self.validate_data(json_body(self.request))
 
-        self.validate_participation(token, role)
+        results = []
+        container = self.context.get_context_with_local_roles()
+        for token, role in participations:
+            self.validate_participation(token, role)
 
-        assignment = SharingRoleAssignment(token, [role], self.context)
-        RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
+            assignment = SharingRoleAssignment(token, [role], self.context)
+            RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
-        activity_manager = WorkspaceWatcherManager(self.context)
-        activity_manager.new_participant_added(token)
+            activity_manager = WorkspaceWatcherManager(self.context)
+            activity_manager.new_participant_added(token)
+
+            results.append(self.prepare_response_item(self.find_participant(
+                token, container)))
 
         self.request.response.setStatus(201)
-        return self.prepare_response_item(self.find_participant(
-            token, self.context.get_context_with_local_roles()))
+        if getattr(self, "return_list", False):
+            managing_context = self.context.get_context_with_local_roles()
+            return {
+                "@id": '{}/@participations'.format(managing_context.absolute_url()),
+                "items": results}
+        return results[0]
 
     def validate_data(self, data):
+        if 'participants' in data and ('participant' in data or 'role' in data):
+            raise BadRequest(
+                _(u'one_of_participants_and_participant',
+                  default=u"Cannot specify both 'participants' and "
+                          u"'participant' or 'role'"))
+
+        if 'participants' in data:
+            self.return_list = True
+            participations = [self.extract_participation(participation) for
+                              participation in data.get("participants")]
+        else:
+            participations = [self.extract_participation(data)]
+
+        return participations
+
+    def extract_participation(self, data):
         participant = data.get('participant')
         if isinstance(participant, dict):
             participant = participant.get("token")
@@ -213,10 +246,12 @@ class ParticipationsPost(ParticipationTraverseService):
             role = role.get("token")
 
         if not participant:
-            raise BadRequest('Missing parameter participant')
+            raise BadRequest(_(u'missing_participant',
+                               default=u"Missing parameter 'participant'"))
 
         if not role:
-            raise BadRequest('Missing parameter role')
+            raise BadRequest(_(u'missing_role',
+                               default=u"Missing parameter 'role'"))
 
         return participant, role
 
@@ -224,5 +259,9 @@ class ParticipationsPost(ParticipationTraverseService):
         self.is_actor_allowed_to_participate(token)
 
         if role not in PARTICIPATION_ROLES:
-            raise BadRequest('Role is not availalbe. Available roles are: {}'.format(
-                PARTICIPATION_ROLES.keys()))
+            raise BadRequest(
+                _(u'invalid_role',
+                  default=u'Role ${role} is not available. '
+                          u'Available roles are: ${allowed_roles}',
+                  mapping={'role': role,
+                           'allowed_roles': PARTICIPATION_ROLES.keys()}))

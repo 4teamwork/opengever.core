@@ -2,7 +2,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
-from opengever.base.behaviors.classification import IClassification
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.interfaces import ICheckinCheckoutManager
@@ -207,7 +206,7 @@ class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
                     method='POST',
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'})
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_only_workspace_client_users_can_use_the_api(self, browser):
@@ -391,8 +390,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
-
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_raises_when_document_uid_missing(self, browser):
@@ -944,8 +942,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
-
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
@@ -1313,3 +1310,226 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                  u'message': u"Document can't be copied from workspace "
                              u"because it's currently checked out"},
                 browser.json)
+
+
+class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
+
+    def setUp(self):
+        super(TestAddParticipationsOnWorkspacePost, self).setUp()
+
+        # Create a workspaces users
+        self.workspaces_user = api.user.create(email="foo@example.com",
+                                               username='workspaces.user')
+
+        self.grant('WorkspacesUser', 'WorkspacesCreator',
+                   on=self.workspace_root,
+                   user_id=self.workspaces_user.getId())
+
+        # Grant WorkspaceAdmin to TEST_USER
+        self.grant('WorkspaceAdmin', on=self.workspace)
+
+        # Link the workspace to the dossier
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+    @browsing
+    def test_add_participations_raises_for_missing_workspace_uid(self, browser):
+
+        payload = {
+            'participants': [{"participant": self.workspaces_user.getId(),
+                              "role": "WorkspaceGuest"}],
+            }
+
+        with self.workspace_client_env(), browser.expect_http_error(code=400):
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-participations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertNotIn(u'workspaces.user',
+                         self.workspace.__ac_local_roles__)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'workspace_uid_required',
+             u'translated_message': u"Property 'workspace_uid' is required",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_add_participations_raises_for_missing_participants(self, browser):
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            }
+
+        with self.workspace_client_env(), browser.expect_http_error(code=400):
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-participations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'participant_required',
+             u'translated_message': u"Property 'participants' is required",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_add_participations_raises_if_user_is_not_workspace_admin(self, browser):
+        self.grant('WorkspaceMember', on=self.workspace)
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": self.workspaces_user.getId(),
+                              "role": "WorkspaceGuest"}]
+            }
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(HTTPServerError):
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-participations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                    )
+
+        self.assertEqual(
+            {u'message': u'Error while communicating with the teamraum deployment',
+             u'service_error': {
+                u'message': u'You are not authorized to access this resource.',
+                u'status_code': 401,
+                u'type': u'Unauthorized'},
+             u'type': u'Bad Gateway'},
+            browser.json)
+
+    @browsing
+    def test_add_participations_raises_for_invalid_participant(self, browser):
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": "invalid",
+                              "role": "WorkspaceGuest"}]
+            }
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(HTTPServerError):
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-participations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(502, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Error while communicating with the teamraum deployment',
+             u'service_error': {
+                u'additional_metadata': {},
+                u'message': u'disallowed_participant',
+                u'status_code': 400,
+                u'translated_message': u'The participant invalid is not allowed',
+                u'type': u'BadRequest'},
+             u'type': u'Bad Gateway'},
+            browser.json)
+
+    @browsing
+    def test_add_participations_raises_for_invalid_role(self, browser):
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": self.workspaces_user.getId(),
+                              "role": "invalid"}]
+            }
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(HTTPServerError):
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-participations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual(502, browser.status_code)
+        self.assertEqual(
+            {u'message': u'Error while communicating with the teamraum deployment',
+             u'service_error': {
+                u'additional_metadata': {},
+                u'message': u'invalid_role',
+                u'status_code': 400,
+                u'translated_message': u"Role invalid is not available. "
+                                       u"Available roles are: ['WorkspaceAdmin', "
+                                       u"'WorkspaceMember', 'WorkspaceGuest']",
+                u'type': u'BadRequest'},
+             u'type': u'Bad Gateway'},
+            browser.json)
+
+    @browsing
+    def test_add_participations_handles_multiple_participants(self, browser):
+        # Create second workspaces user
+        workspaces_user2 = api.user.create(email="bar@example.com",
+                                           username='workspaces.user2')
+
+        self.grant('WorkspacesUser',
+                   on=self.workspace_root,
+                   user_id=workspaces_user2.getId())
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": self.workspaces_user.getId(),
+                              "role": "WorkspaceGuest"},
+                             {"participant": workspaces_user2.getId(),
+                              "role": "WorkspaceMember"}],
+            }
+
+        self.assertEqual(
+            {'test_user_1_': ['WorkspaceAdmin']},
+            self.workspace.__ac_local_roles__)
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-participations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        items = browser.json.get("items")
+        self.assertEqual(2, len(items))
+        self.assertEqual("workspaces.user",
+                         items[0]["participant"]["id"])
+        self.assertEqual({u'token': u'WorkspaceGuest', u'title': u'Guest'},
+                         items[0]["role"])
+        self.assertEqual("workspaces.user2",
+                         items[1]["participant"]["id"])
+        self.assertEqual({u'token': u'WorkspaceMember', u'title': u'Member'},
+                         items[1]["role"])
+
+        self.assertEqual(
+            {u'workspaces.user': [u'WorkspaceGuest'],
+             u'workspaces.user2': [u'WorkspaceMember'],
+             'test_user_1_': ['WorkspaceAdmin']},
+            self.workspace.__ac_local_roles__)
