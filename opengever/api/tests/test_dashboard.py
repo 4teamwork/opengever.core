@@ -15,7 +15,8 @@ class TestDashboardSettings(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@dashboard-settings',
                      method='GET', headers=self.api_headers)
 
-        self.assertEquals(DEFAULT_DASHBOARD_CARDS, browser.json['cards'])
+        self.assertEquals([card.get('id') for card in DEFAULT_DASHBOARD_CARDS],
+                          [card.get('id') for card in browser.json['cards']])
 
     @browsing
     def test_returns_customized_dashboard_card_list(self, browser):
@@ -25,7 +26,7 @@ class TestDashboardSettings(IntegrationTestCase):
             {'componentName': 'NewestGeverNotificationsCard'},
             {'componentName': 'RecentlyTouchedItemsCard'},
             {'componentName': 'DossiersCard',
-             'title_de': 'Falldossiers',
+             'title': 'Falldossiers',
              'filters': {
                  'dossierType': 'Falldossier'}}
         ]
@@ -38,3 +39,31 @@ class TestDashboardSettings(IntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         self.assertEquals(custom_dashboard_list, browser.json['cards'])
+
+    @browsing
+    def test_returns_localized_titles(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        custom_dashboard_list = [
+            {'title': 'Falldossier'},
+            {'title_de': 'DE project dossier', 'title_en': 'EN project dossier'}
+        ]
+
+        api.portal.set_registry_record(
+            interface=IGeverUI, name='custom_dashboard_cards',
+            value=json.dumps(custom_dashboard_list).decode('utf-8'))
+
+        browser.open(self.portal.absolute_url() + '/@dashboard-settings',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEquals(['Falldossier', 'EN project dossier'], [card.get('title') for card in browser.json['cards']])
+
+        german_headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Accept-Language': 'de-ch'}
+
+        browser.open(self.portal.absolute_url() + '/@dashboard-settings',
+                     method='GET', headers=german_headers)
+
+        self.assertEquals(['Falldossier', 'DE project dossier'], [card.get('title') for card in browser.json['cards']])
