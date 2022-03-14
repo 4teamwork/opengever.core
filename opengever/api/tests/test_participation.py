@@ -603,7 +603,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
@@ -625,7 +625,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'))
 
@@ -643,7 +643,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
@@ -665,7 +665,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'))
 
@@ -734,7 +734,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
@@ -756,7 +756,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'),
             'Expect to have the WorkspaceMember role')
@@ -769,7 +769,7 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'),
             'Expect to still have the WorkspaceGuest role on the workspace')
@@ -873,10 +873,10 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
             )
 
         # Posting with participant and role returns the serialized participant
-        self.assertEquals(
+        self.assertEqual(
             self.workspace_member.id,
             browser.json.get('participant').get('id'))
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             browser.json.get('role'))
 
@@ -888,7 +888,7 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
@@ -926,12 +926,12 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         self.assertEqual(2, len(items))
 
         entry = get_entry_by_id(items, self.workspace_member.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
         entry = get_entry_by_id(items, self.workspace_guest.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceMember', u'title': u'Member'},
             entry.get('role'))
 
@@ -977,7 +977,7 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
@@ -1117,7 +1117,7 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
-        self.assertEquals(
+        self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))
 
