@@ -206,7 +206,7 @@ class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
                     method='POST',
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'})
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_only_workspace_client_users_can_use_the_api(self, browser):
@@ -390,8 +390,7 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
-
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_raises_when_document_uid_missing(self, browser):
@@ -943,8 +942,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                     headers={'Accept': 'application/json',
                              'Content-Type': 'application/json'},
                 )
-
-        self.assertEqual("Property 'workspace_uid' is required", str(cm.exception))
+        self.assertEqual('workspace_uid_required', str(cm.exception))
 
     @browsing
     def test_raises_when_document_cant_be_looked_up_by_uid(self, browser):
@@ -1358,8 +1356,10 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
                          self.workspace.__ac_local_roles__)
 
         self.assertEqual(
-            {u'type': u'BadRequest',
-             u'message': u"Property 'workspace_uid' is required"},
+            {u'additional_metadata': {},
+             u'message': u'workspace_uid_required',
+             u'translated_message': u"Property 'workspace_uid' is required",
+             u'type': u'BadRequest'},
             browser.json)
 
     @browsing
@@ -1380,8 +1380,10 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
             )
 
         self.assertEqual(
-            {u'type': u'BadRequest',
-             u'message': u"Property 'participants' is required"},
+            {u'additional_metadata': {},
+             u'message': u'participant_required',
+             u'translated_message': u"Property 'participants' is required",
+             u'type': u'BadRequest'},
             browser.json)
 
     @browsing
@@ -1439,9 +1441,12 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
         self.assertEqual(502, browser.status_code)
         self.assertEqual(
             {u'message': u'Error while communicating with the teamraum deployment',
-             u'service_error': {u'message': u'The actor is not allowed',
-                                u'status_code': 400,
-                                u'type': u'BadRequest'},
+             u'service_error': {
+                u'additional_metadata': {},
+                u'message': u'disallowed_participant',
+                u'status_code': 400,
+                u'translated_message': u'The participant invalid is not allowed',
+                u'type': u'BadRequest'},
              u'type': u'Bad Gateway'},
             browser.json)
 
@@ -1470,9 +1475,12 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
         self.assertEqual(
             {u'message': u'Error while communicating with the teamraum deployment',
              u'service_error': {
-                u'message': u"Role is not availalbe. Available roles are: "
-                            u"['WorkspaceAdmin', 'WorkspaceMember', 'WorkspaceGuest']",
+                u'additional_metadata': {},
+                u'message': u'invalid_role',
                 u'status_code': 400,
+                u'translated_message': u"Role invalid is not available. "
+                                       u"Available roles are: ['WorkspaceAdmin', "
+                                       u"'WorkspaceMember', 'WorkspaceGuest']",
                 u'type': u'BadRequest'},
              u'type': u'Bad Gateway'},
             browser.json)

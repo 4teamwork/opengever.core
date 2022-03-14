@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-24 14:12+0000\n"
+"POT-Creation-Date: 2022-03-07 10:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,9 +22,34 @@ msgstr ""
 msgid "copy_of"
 msgstr ""
 
+#. Default: "The actor ${actorid} is not allowed"
+#: ./opengever/api/participations.py
+msgid "disallowed_participant"
+msgstr ""
+
+#. Default: "The participant ${actorid} already exists"
+#: ./opengever/api/participations.py
+msgid "duplicate_participant"
+msgstr ""
+
 #. Default: "It's not possible to have non-.docx documents as proposal documents."
 #: ./opengever/api/tus.py
 msgid "error_proposal_document_type"
+msgstr ""
+
+#. Default: "Role ${role} is not available. Available roles are: ${allowed_roles}"
+#: ./opengever/api/participations.py
+msgid "invalid_role"
+msgstr ""
+
+#. Default: "Missing parameter 'participant'"
+#: ./opengever/api/participations.py
+msgid "missing_participant"
+msgstr ""
+
+#. Default: "Missing parameter 'role'"
+#: ./opengever/api/participations.py
+msgid "missing_role"
 msgstr ""
 
 #. Default: "Already trashed"
@@ -125,4 +150,19 @@ msgstr ""
 #. Default: "Cannot trash a locked document"
 #: ./opengever/api/trash.py
 msgid "msg_trash_locked_doc"
+msgstr ""
+
+#. Default: "Cannot specify both 'participants' and 'participant' or 'role'"
+#: ./opengever/api/participations.py
+msgid "one_of_participants_and_participant"
+msgstr ""
+
+#. Default: "Property 'participants' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "participant_required"
+msgstr ""
+
+#. Default: "Property 'workspace_uid' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "workspace_uid_required"
 msgstr ""

@@ -1,3 +1,4 @@
+from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -83,10 +84,16 @@ class ParticipationTraverseService(Service):
         """Validates the actor token if it' a avalid actor.
         """
         if Actor.lookup(token).actor_type not in ['user', 'group']:
-            raise BadRequest('The actor is not allowed')
+            raise BadRequest(
+                _(u'disallowed_participant',
+                  default=u'The actor ${actorid} is not allowed',
+                  mapping={'actorid': token}))
 
         if self.find_participant(token, self.context.get_context_with_local_roles()):
-            raise BadRequest('The participant already exists')
+            raise BadRequest(
+                _(u'duplicate_participant',
+                  default='The participant ${actorid} already exists',
+                  mapping={'actorid': token}))
 
         if IWorkspaceFolder.providedBy(self.context):
             if not self.context.has_blocked_local_role_inheritance():
@@ -215,7 +222,10 @@ class ParticipationsPost(ParticipationTraverseService):
 
     def validate_data(self, data):
         if 'participants' in data and ('participant' in data or 'role' in data):
-            raise BadRequest('Cannot specify both participants and participant or role')
+            raise BadRequest(
+                _(u'one_of_participants_and_participant',
+                  default=u"Cannot specify both 'participants' and "
+                          u"'participant' or 'role'"))
 
         if 'participants' in data:
             self.return_list = True
@@ -236,10 +246,12 @@ class ParticipationsPost(ParticipationTraverseService):
             role = role.get("token")
 
         if not participant:
-            raise BadRequest('Missing parameter participant')
+            raise BadRequest(_(u'missing_participant',
+                               default=u"Missing parameter 'participant'"))
 
         if not role:
-            raise BadRequest('Missing parameter role')
+            raise BadRequest(_(u'missing_role',
+                               default=u"Missing parameter 'role'"))
 
         return participant, role
 
@@ -247,5 +259,9 @@ class ParticipationsPost(ParticipationTraverseService):
         self.is_actor_allowed_to_participate(token)
 
         if role not in PARTICIPATION_ROLES:
-            raise BadRequest('Role is not availalbe. Available roles are: {}'.format(
-                PARTICIPATION_ROLES.keys()))
+            raise BadRequest(
+                _(u'invalid_role',
+                  default=u'Role ${role} is not available. '
+                          u'Available roles are: ${allowed_roles}',
+                  mapping={'role': role,
+                           'allowed_roles': PARTICIPATION_ROLES.keys()}))

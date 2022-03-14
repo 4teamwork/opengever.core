@@ -1068,9 +1068,11 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
                 data=json.dumps(data),
                 headers=http_headers(),
                 )
-
         self.assertEqual(
-            {u'message': u'Cannot specify both participants and participant or role',
+            {u'additional_metadata': {},
+             u'message': u'one_of_participants_and_participant',
+             u'translated_message': u"Cannot specify both 'participants' and "
+                                    u"'participant' or 'role'",
              u'type': u'BadRequest'},
             browser.json)
 
@@ -1179,8 +1181,9 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
                 )
 
         self.assertEqual('BadRequest', browser.json.get('type'))
-        self.assertIn('Role is not availalbe. Available roles are:',
-                      browser.json.get('message'))
+        self.assertEqual(u'invalid_role', browser.json.get('message'))
+        self.assertIn('Role Manager is not available. Available roles are:',
+                      browser.json.get('translated_message'))
 
     @browsing
     def test_do_not_allow_readding_an_already_existing_user(self, browser):
@@ -1212,8 +1215,12 @@ class TestParticipationPostWorkspaceFolder(IntegrationTestCase):
                 headers=http_headers(),
                 )
 
-        self.assertEqual({"message": "The participant already exists",
-                          "type": "BadRequest"}, browser.json)
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'duplicate_participant',
+             u'translated_message': u'The participant beatrice.schrodinger already exists',
+             u'type': u'BadRequest'},
+            browser.json)
 
     @browsing
     def test_only_users_from_the_upper_context_are_allowed_to_participate_to_a_folder(self, browser):

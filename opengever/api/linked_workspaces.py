@@ -1,3 +1,4 @@
+from opengever.api import _
 from opengever.api.utils import create_proxy_request_error_handler
 from opengever.document.behaviors import IBaseDocument
 from opengever.workspaceclient import is_workspace_client_feature_available
@@ -101,7 +102,8 @@ class LinkToWorkspacePost(LinkedWorkspacesService):
         data = json_body(self.request)
         workspace_uid = data.get('workspace_uid')
         if not workspace_uid:
-            raise BadRequest("Property 'workspace_uid' is required")
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
 
         ILinkedWorkspaces(self.context).link_to_workspace(workspace_uid)
         return self.reply_no_content()
@@ -123,7 +125,8 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
         data = json_body(self.request)
         workspace_uid = data.get('workspace_uid')
         if not workspace_uid:
-            raise BadRequest("Property 'workspace_uid' is required")
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
 
         ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid)
         return self.reply_no_content()
@@ -158,7 +161,8 @@ class CopyDocumentToWorkspacePost(LinkedWorkspacesService):
     def validate_data(self, data):
         workspace_uid = data.get('workspace_uid')
         if not workspace_uid:
-            raise BadRequest("Property 'workspace_uid' is required")
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
 
         document_uid = data.get('document_uid')
         if not document_uid:
@@ -251,7 +255,8 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
     def validate_data(self, data):
         workspace_uid = data.get('workspace_uid')
         if not workspace_uid:
-            raise BadRequest("Property 'workspace_uid' is required")
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
         document_uid = data.get('document_uid')
         if not document_uid:
             raise BadRequest("Property 'document_uid' is required")
@@ -283,11 +288,13 @@ class AddParticipationsOnWorkspacePost(LinkedWorkspacesService):
         data = json_body(self.request)
         workspace_uid = data.get('workspace_uid')
         if not workspace_uid:
-            raise BadRequest("Property 'workspace_uid' is required")
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
 
         participants = data.get('participants')
         if not participants:
-            raise BadRequest("Property 'participants' is required")
+            raise BadRequest(_(u"participant_required",
+                               default=u"Property 'participants' is required"))
 
         items = ILinkedWorkspaces(self.context).add_participations(
                 workspace_uid, participants).get("items", [])

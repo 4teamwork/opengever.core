@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-24 14:12+0000\n"
+"POT-Creation-Date: 2022-03-07 10:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,10 +19,35 @@ msgstr ""
 msgid "copy_of"
 msgstr "Copie de ${title}"
 
+#. Default: "The actor ${actorid} is not allowed"
+#: ./opengever/api/participations.py
+msgid "disallowed_participant"
+msgstr "Le participant ${actorid} n'est pas autorisé"
+
+#. Default: "The participant ${actorid} already exists"
+#: ./opengever/api/participations.py
+msgid "duplicate_participant"
+msgstr "${actorid} est déjà participant"
+
 #. Default: "It's not possible to have non-.docx documents as proposal documents."
 #: ./opengever/api/tus.py
 msgid "error_proposal_document_type"
 msgstr "Seuls les fichiers docx sont autorisés comme documents de requête."
+
+#. Default: "Role ${role} is not available. Available roles are: ${allowed_roles}"
+#: ./opengever/api/participations.py
+msgid "invalid_role"
+msgstr "Le rôle ${role} n'est pas valable. Les rôles valides sont: ${allowed_roles}"
+
+#. Default: "Missing parameter 'participant'"
+#: ./opengever/api/participations.py
+msgid "missing_participant"
+msgstr "Le paramètre 'participant' est requis"
+
+#. Default: "Missing parameter 'role'"
+#: ./opengever/api/participations.py
+msgid "missing_role"
+msgstr "Le paramètre 'role' est requis"
 
 #. Default: "Already trashed"
 #: ./opengever/api/trash.py
@@ -123,3 +148,18 @@ msgstr "Un extrait de protocol ne peut pas être mis à la corbeille."
 #: ./opengever/api/trash.py
 msgid "msg_trash_locked_doc"
 msgstr "Un document verrouillé ne peut pas être mis à la corbeille."
+
+#. Default: "Cannot specify both 'participants' and 'participant' or 'role'"
+#: ./opengever/api/participations.py
+msgid "one_of_participants_and_participant"
+msgstr "Il n'est permis de spécifier que soit 'participants', soit 'participant' ou 'role'"
+
+#. Default: "Property 'participants' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "participant_required"
+msgstr "Le paramètre 'participants' est requis"
+
+#. Default: "Property 'workspace_uid' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "workspace_uid_required"
+msgstr "Le paramètre 'workspace_uid' est requis"
