@@ -383,7 +383,11 @@ DEFAULT_DASHBOARD_CARDS = [
     },
     {
         'id': 'my_dossiers',
-        'componentName': 'MyDossiersCard'
+        'title_de': 'Meine Dossiers',
+        'title_en': 'My dossiers',
+        'title_fr': 'Mes dossiers',
+        'componentName': 'DossiersCard',
+        'myDossiersOnly': True
     },
     {
         'id': 'substitute_dossiers',
