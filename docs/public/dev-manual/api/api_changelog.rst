@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@navigation``: Return translated title in node ``text``.
 - ``@role-assignment-reports``: Handle group prefix in principalid.
 
 2022.5.0 (2022-03-01)
