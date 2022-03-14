@@ -1,7 +1,9 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.vocabulary import voc_term_title
 from opengever.dossier import _
+from opengever.dossier import is_dossier_checklist_feature_enabled
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
@@ -29,6 +31,14 @@ class DossierTemplateAddForm(add.DefaultAddForm):
             return _(u'Add Subdossier')
         return super(DossierTemplateAddForm, self).label
 
+    def updateFields(self):
+        super(DossierTemplateAddForm, self).updateFields()
+        fields = []
+        if not is_dossier_checklist_feature_enabled():
+            fields.append('IDossierTemplate.checklist')
+
+        hide_fields_from_behavior(self, fields)
+
 
 class DossierTemplateAddView(add.DefaultAddView):
     form = DossierTemplateAddForm
@@ -41,6 +51,14 @@ class DossierTemplateEditForm(edit.DefaultEditForm):
         if IDossierTemplateSchema.providedBy(aq_parent(aq_inner(self.context))):
             return _(u'Edit Subdossier')
         return super(DossierTemplateEditForm, self).label
+
+    def updateFields(self):
+        super(DossierTemplateEditForm, self).updateFields()
+        fields = []
+        if not is_dossier_checklist_feature_enabled():
+            fields.append('IDossierTemplate.checklist')
+
+        hide_fields_from_behavior(self, fields)
 
 
 class DossierTemplate(Container):

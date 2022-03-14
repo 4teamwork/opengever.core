@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import FormFieldNotFound
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
@@ -111,6 +112,8 @@ class TestPatchDossierChecklistViaApi(IntegrationTestCase):
 
 class TestPatchDossierChecklistTTW(TestPatchDossierChecklistViaApi):
 
+    features = ('dossier-checklist', )
+
     def assert_checklist_is_valid(self, browser, checklist):
         browser.visit(self.obj, view='edit')
         browser.fill({'Checklist': json.dumps(checklist)})
@@ -124,6 +127,17 @@ class TestPatchDossierChecklistTTW(TestPatchDossierChecklistViaApi):
         browser.find('Save').click()
         self.assertEqual(['There were some errors.'], error_messages())
         self.assertIn('Checklist', browser.css('div.error').text[0])
+
+    @browsing
+    def test_cannot_change_checklist_field_if_feature_is_disabled(self, browser):
+        self.deactivate_feature('dossier-checklist')
+        self.login(self.dossier_responsible, browser=browser)
+        checklist = {
+            u'items': [{u'title': u'St\xe4p 1', u'state': u'open'}]
+        }
+        browser.visit(self.obj, view='edit')
+        with self.assertRaises(FormFieldNotFound):
+            browser.fill({'Checklist': json.dumps(checklist)})
 
 
 class TestPatchDossierTemplateChecklistViaApi(TestPatchDossierChecklistViaApi):
