@@ -1,8 +1,11 @@
 from ftw.solr.contentlisting import SolrContentListing
 from ftw.solr.contentlisting import SolrContentListingObject
 from ftw.solr.document import SolrDocument
+from opengever.base.brain import supports_translated_title
 from opengever.base.contentlisting import OpengeverCatalogContentListingObject
 from opengever.base.interfaces import IOGSolrDocument
+from opengever.base.utils import get_preferred_language_code
+from Products.CMFPlone.utils import safe_unicode
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 
@@ -36,6 +39,34 @@ class OGSolrDocument(SolrDocument):
             return not self.get('has_sametype_children')
         return None
 
+    @property
+    def title_de(self):
+        return self._translated_title('de')
+
+    @property
+    def title_en(self):
+        return self._translated_title('en')
+
+    @property
+    def title_fr(self):
+        return self._translated_title('fr')
+
+    def _translated_title(self, lang):
+        field_name = 'title_%s' % lang
+        # On Catalog brains, title_* attributes are unicode. Mirror this here.
+        return safe_unicode(self.get(field_name))
+
+    @property
+    def Title(self):
+        portal_type = self.get('portal_type')
+        if portal_type and supports_translated_title(portal_type):
+            code = get_preferred_language_code()
+            title = self._translated_title(code)
+            if title:
+                return title.encode('utf-8')
+
+        return self.get('Title')
+
 
 class OGSolrContentListing(SolrContentListing):
 
@@ -53,6 +84,10 @@ class OGSolrContentListingObject(
     def __repr__(self):
         return '<opengever.base.solr.OGSolrContentListingObject at %s>' % (
             self.getPath())
+
+    def Title(self):
+        # Delegate to Title property of our translated title capable OGSolrDocument.
+        return self.doc.Title
 
     def CroppedDescription(self):
         if self.snippets:

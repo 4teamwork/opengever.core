@@ -448,3 +448,36 @@ class TestNavigation(SolrIntegrationTestCase):
         self.assertEqual(
             browser.json['@id'],
             u'http://nohost/plone/@navigation')
+
+    @browsing
+    def test_navigation_titles_are_translated(self, browser):
+        self.login(self.regular_user, browser)
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.supported_langs = ['de-ch', 'fr-ch']
+
+        url = self.portal.absolute_url() + '/@navigation'
+        browser.open(
+            url,
+            headers={
+                'Accept': 'application/json',
+                'Accept-Language': 'fr-ch',
+            },
+        )
+
+        self.assertEqual(browser.status_code, 200)
+
+        tree = browser.json['tree']
+        expected = [
+            u"1. Direction",
+            u"1.1. Contrats et accords",
+            u"2. Commission de v\xe9rification",
+            u"3. Toile d'araign\xe9e",
+        ]
+        actual = [
+            tree[0]['text'],
+            tree[0]['nodes'][0]['text'],
+            tree[1]['text'],
+            tree[2]['text'],
+        ]
+        self.assertEqual(expected, actual)

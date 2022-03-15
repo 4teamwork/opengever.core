@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@navigation``: Return translated title in node ``text``.
 - ``@role-assignment-reports``: Handle group prefix in principalid.
 - ``@config``: Add ``dossier_checklist`` feature flag.
 - ``@participations`` endpoint now also support adding a list of participants. (see :ref:`participation`)

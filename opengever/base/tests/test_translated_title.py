@@ -12,9 +12,12 @@ from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
+from opengever.base.solr import OGSolrDocument
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing import TestCase
 from plone import api
 
@@ -131,14 +134,14 @@ class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase, TranslatedTitleT
         lang_tool.supported_langs = ['de-ch', 'fr-ch']
 
         browser.open(self.repository_root, view='edit')
-        self.assertEquals(
+        self.assertEqual(
             'Title (French)',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
 
         lang_tool.supported_langs = ['fr-ch']
 
         browser.open(self.repository_root, view='edit')
-        self.assertEquals(
+        self.assertEqual(
             'Title',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
 
@@ -245,7 +248,7 @@ class TestSupportTranslatedTitle(IntegrationTestCase):
             supports_translated_title('opengever.contact.contact'))
 
 
-class TestTranslatedTitle(IntegrationTestCase):
+class TestTranslatedTitle(SolrIntegrationTestCase):
 
     def setUp(self):
         super(TestTranslatedTitle, self).setUp()
@@ -265,9 +268,9 @@ class TestTranslatedTitle(IntegrationTestCase):
         statusmessages.assert_no_error_messages()
 
         repository_root = browser.context
-        self.assertEquals(u"Ablage", repository_root.title_de)
-        self.assertEquals(u"Syst\xe8me de classement", repository_root.title_fr)
-        self.assertEquals(u"Repository root", repository_root.title_en)
+        self.assertEqual(u"Ablage", repository_root.title_de)
+        self.assertEqual(u"Syst\xe8me de classement", repository_root.title_fr)
+        self.assertEqual(u"Repository root", repository_root.title_en)
 
     @browsing
     def test_all_title_fields_are_accessible_on_edit_form(self, browser):
@@ -279,9 +282,9 @@ class TestTranslatedTitle(IntegrationTestCase):
         browser.find('Save').click()
         statusmessages.assert_no_error_messages()
 
-        self.assertEquals(u"Ablage 1", self.repository_root.title_de)
-        self.assertEquals(u"Syst\xe8me de classement 1", self.repository_root.title_fr)
-        self.assertEquals(u"Repository root 1", self.repository_root.title_en)
+        self.assertEqual(u"Ablage 1", self.repository_root.title_de)
+        self.assertEqual(u"Syst\xe8me de classement 1", self.repository_root.title_fr)
+        self.assertEqual(u"Repository root 1", self.repository_root.title_en)
 
     @browsing
     def test_Title_returns_title_in_preffered_language_by_default(self, browser):
@@ -289,10 +292,10 @@ class TestTranslatedTitle(IntegrationTestCase):
         browser.open(self.repository_root)
 
         browser.find(u'Français').click()
-        self.assertEquals(u"Syst\xe8me de classement", browser.css('h1').first.text)
+        self.assertEqual(u"Syst\xe8me de classement", browser.css('h1').first.text)
 
         browser.find('Deutsch').click()
-        self.assertEquals("Ordnungssystem", browser.css('h1').first.text)
+        self.assertEqual("Ordnungssystem", browser.css('h1').first.text)
 
     @browsing
     def test_translated_title_returns_title_in_asked_language(self, browser):
@@ -300,7 +303,7 @@ class TestTranslatedTitle(IntegrationTestCase):
 
         set_preferred_language(self.portal.REQUEST, 'de-ch')
 
-        self.assertEquals(
+        self.assertEqual(
             u"Syst\xe8me de classement",
             ITranslatedTitle(self.repository_root).translated_title(language='fr'))
 
@@ -308,7 +311,7 @@ class TestTranslatedTitle(IntegrationTestCase):
     def test_translated_title_returns_title_in_fallback_language_when_asked_language_not_supported(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.assertEquals(
+        self.assertEqual(
             u"Ordnungssystem",
             ITranslatedTitle(self.repository_root).translated_title(language='it'))
 
@@ -319,30 +322,63 @@ class TestTranslatedTitle(IntegrationTestCase):
         browser.open(self.repository_root)
         browser.find('English').click()
 
-        self.assertEquals("Ordnungssystem", browser.css('h1').first.text)
+        self.assertEqual("Ordnungssystem", browser.css('h1').first.text)
 
     def test_catalog_metadata(self):
         self.login(self.regular_user)
 
         brain = obj2brain(self.repository_root)
-        self.assertEquals(u"Ordnungssystem", brain.title_de)
-        self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
-        self.assertEquals(u"Ordnungssystem", brain.title_en)
+        self.assertEqual(u"Ordnungssystem", brain.title_de)
+        self.assertEqual(u'Syst\xe8me de classement', brain.title_fr)
+        self.assertEqual(u"Ordnungssystem", brain.title_en)
 
         self.repository_root.title_en = "Repository"
         self.repository_root.reindexObject()
         brain = obj2brain(self.repository_root)
-        self.assertEquals(u"Ordnungssystem", brain.title_de)
-        self.assertEquals(u'Syst\xe8me de classement', brain.title_fr)
-        self.assertEquals('Repository', brain.title_en)
+        self.assertEqual(u"Ordnungssystem", brain.title_de)
+        self.assertEqual(u'Syst\xe8me de classement', brain.title_fr)
+        self.assertEqual('Repository', brain.title_en)
+
+    def test_solr_stored_values(self):
+        self.login(self.regular_user)
+
+        solr_data = solr_data_for(self.repository_root)
+        self.assertEqual(u"Ordnungssystem", solr_data['title_de'])
+        self.assertEqual(u'Syst\xe8me de classement', solr_data['title_fr'])
+        self.assertEqual(u"Ordnungssystem", solr_data['title_en'])
+
+        self.repository_root.title_en = "Repository"
+        self.repository_root.reindexObject()
+        self.commit_solr()
+
+        solr_data = solr_data_for(self.repository_root)
+        self.assertEqual(u"Ordnungssystem", solr_data['title_de'])
+        self.assertEqual(u'Syst\xe8me de classement', solr_data['title_fr'])
+        self.assertEqual('Repository', solr_data['title_en'])
 
     def test_indexer_returns_none_for_objects_without_translated_title_support(self):
         self.login(self.regular_user)
 
         brain = obj2brain(self.dossier)
-        self.assertEquals(None, brain.title_de)
-        self.assertEquals(None, brain.title_fr)
-        self.assertEquals(None, brain.title_en)
+        self.assertEqual(None, brain.title_de)
+        self.assertEqual(None, brain.title_fr)
+        self.assertEqual(None, brain.title_en)
+
+    def test_solr_data_doesnt_contain_keys_for_objects_without_translated_title_support(self):
+        self.login(self.regular_user)
+
+        solr_data = solr_data_for(self.dossier)
+        self.assertNotIn('title_de', solr_data)
+        self.assertNotIn('title_fr', solr_data)
+        self.assertNotIn('title_en', solr_data)
+
+    def test_og_solr_document_returns_none_for_objects_without_translated_title_support(self):
+        self.login(self.regular_user)
+
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+        self.assertEqual(None, og_solr_doc.title_de)
+        self.assertEqual(None, og_solr_doc.title_fr)
+        self.assertEqual(None, og_solr_doc.title_en)
 
     @browsing
     def test_Title_on_brains_returns_title_in_preferred_language(self, browser):
@@ -350,20 +386,49 @@ class TestTranslatedTitle(IntegrationTestCase):
 
         set_preferred_language(self.portal.REQUEST, 'fr-ch')
 
-        self.assertEquals('Syst\xc3\xa8me de classement',
+        self.assertEqual('Syst\xc3\xa8me de classement',
                           obj2brain(self.repository_root).Title)
+
+    @browsing
+    def test_Title_on_og_solr_document_returns_title_in_preferred_language(self, browser):
+        self.login(self.regular_user)
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.repository_root))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEqual('Syst\xc3\xa8me de classement',
+                          og_solr_doc.Title)
 
     @browsing
     def test_Title_on_brains_uses_Title_when_type_does_not_support_translated_title(self, browser):
         self.login(self.regular_user)
 
         set_preferred_language(self.portal.REQUEST, 'de-ch')
-        self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+        self.assertEqual('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
                           obj2brain(self.dossier).Title)
 
         set_preferred_language(self.portal.REQUEST, 'fr-ch')
-        self.assertEquals('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+        self.assertEqual('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
                           obj2brain(self.dossier).Title)
+
+    @browsing
+    def test_Title_on_og_solr_document_uses_Title_when_type_does_not_support_translated_title(self, browser):
+        self.login(self.regular_user)
+
+        set_preferred_language(self.portal.REQUEST, 'de-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEqual('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+                          og_solr_doc.Title)
+
+        set_preferred_language(self.portal.REQUEST, 'fr-ch')
+        og_solr_doc = OGSolrDocument(solr_data_for(self.dossier))
+
+        self.assertIsInstance(og_solr_doc.Title, str)
+        self.assertEqual('Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
+                          og_solr_doc.Title)
 
 
 class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
@@ -416,7 +481,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
 
         browser.open(self.portal)
         factoriesmenu.add('Repository Root')
-        self.assertEquals(
+        self.assertEqual(
             'Title (French)',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
 
@@ -424,7 +489,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
 
         browser.open(self.portal)
         factoriesmenu.add('Repository Root')
-        self.assertEquals(
+        self.assertEqual(
             'Title',
             browser.css('label[for=form-widgets-ITranslatedTitle-title_fr]').first.text)
 
@@ -505,7 +570,7 @@ class TestTranslatedTitleAddForm(IntegrationTestCase, TranslatedTitleTestMixin):
             browser, self.repository_root, 'Repository Folder')
 
 
-class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
+class TestTranslatedTitleLanguageSupport(SolrIntegrationTestCase):
     """A test which ensure that all language from the SUPPORTED_LANGUAGE
     constant is fully and correctly implemented.
     """
@@ -518,7 +583,7 @@ class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
         self.login(self.manager)
 
         for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
-            self.assertEquals(
+            self.assertEqual(
                 self.titles[lang],
                 getattr(ITranslatedTitle(self.repository_root),
                         'title_{}'.format(lang)))
@@ -532,7 +597,7 @@ class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
                     self.titles[lang].upper())
 
         for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
-            self.assertEquals(
+            self.assertEqual(
                 self.titles[lang].upper(),
                 getattr(ITranslatedTitle(self.repository_root),
                         'title_{}'.format(lang)))
@@ -542,9 +607,27 @@ class TestTranslatedTitleLanguageSupport(IntegrationTestCase):
 
         brain = obj2brain(self.repository_root)
         for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
-            self.assertEquals(
+            self.assertEqual(
                 self.titles[lang],
                 getattr(brain, 'title_{}'.format(lang)))
+
+    def test_all_solr_stored_values(self):
+        self.login(self.manager)
+
+        solr_data = solr_data_for(self.repository_root)
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            self.assertEqual(
+                self.titles[lang],
+                solr_data['title_{}'.format(lang)])
+
+    def test_all_og_solr_document_values(self):
+        self.login(self.manager)
+
+        solr_doc = OGSolrDocument(solr_data_for(self.repository_root))
+        for lang in TranslatedTitle.SUPPORTED_LANGUAGES:
+            value = getattr(solr_doc, 'title_{}'.format(lang))
+            self.assertIsInstance(value, unicode)
+            self.assertEqual(self.titles[lang], value)
 
     def test_translated_attribute_can_be_set_to_none(self):
         self.login(self.manager)
