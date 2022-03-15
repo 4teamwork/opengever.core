@@ -387,7 +387,7 @@ DEFAULT_DASHBOARD_CARDS = [
         'title_en': 'My dossiers',
         'title_fr': 'Mes dossiers',
         'componentName': 'DossiersCard',
-        'myDossiersOnly': True
+        'responsibleToggleFilters': ['myDossiers', 'anyParticipation'],
     },
     {
         'id': 'substitute_dossiers',
