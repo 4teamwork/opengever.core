@@ -12,7 +12,7 @@ RUN --mount=type=cache,target=/root/.cache \
     -c requirements-deployment.txt
 
 HEALTHCHECK --start-period=2m CMD /app/bin/testserverctl connectiontest
-COPY ./bin/testserverctl ./docker/testserver/bin/testserver /app/bin
+COPY ./bin/testserverctl ./docker/testserver/bin/testserver /app/bin/
 COPY ./docker/testserver/docker-entrypoint.sh /app/
 
 USER plone
