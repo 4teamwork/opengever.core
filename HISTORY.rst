@@ -10,6 +10,37 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.6.0 (2022-03-15)
+---------------------
+
+New features:
+
+
+- Add checklist feature flag. [tinagerber]
+- Add new @linked-workspace-participations endpoint. [njohner]
+- Add configuration option for dashboard cards. [phgross]
+
+
+Bug fixes:
+
+
+- Allow all documents of a linked workspace to be copied to a dossier. [tinagerber]
+- Fix IntIdMaintenanceJobContextManagerMixin obj_to_key if there is no registered intid. [elioschmutz]
+- Handle errors in nightly jobs. [tinagerber]
+- Fix getting OneOffixx favorites for templates that are not whitelisted. [buchi]
+- Add labels to OneOffixx templates whitelist. [buchi]
+- Handle group prefix in principalid in @role-assignment-reports endpoint. [tinagerber]
+- Add translated title fields to Solr schema. [lgraf]
+- Add translated title support to OGSolrDocument. [lgraf]
+- Use translated titles in `@navigation` endpoint. [lgraf]
+
+
+Other changes:
+
+
+- Support adding a list of participants in @participations endpoint. [njohner]
+
+
 2022.5.0 (2022-03-01)
 ---------------------
 
