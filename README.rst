@@ -1237,6 +1237,10 @@ Testserver in docker
 You can run testserver with docker-compose: ``docker-compose up testserver``.
 See the `testerver docker readme <docker/testserver/README.md>`_.
 
+If you are using the testserver in another project and want to have a docker-compose file there,
+see the ``docker-compose.testserver.yml`` file for a minimal working example.
+It contains commented example on how insert your custom fixture as volume.
+
 
 Testing Inbound Mail
 --------------------

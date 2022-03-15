@@ -1,0 +1,33 @@
+# This example docker compose file contains a minimal
+# working example of a testserver configuration.
+# This file can be copied to other projects which need
+# the testserver.
+
+services:
+  testserver:
+    image: 4teamwork/ogtestserver:latest
+    ports:
+      - 55001:55001
+      - 55002:55002
+    depends_on:
+      - msgconvert
+      - sablon
+      - pdflatex
+      - weasyprint
+      - testserver-solr
+#    volumes:
+#      - /path/to/fixture.py:/app/opengever/testing/fixtures.py
+  msgconvert:
+    image: 4teamwork/msgconvert:latest
+  sablon:
+    image: 4teamwork/sablon:latest
+  pdflatex:
+    image: 4teamwork/pdflatex:latest
+  weasyprint:
+    image: 4teamwork/weasyprint:latest
+  testserver-solr:
+    image: 4teamwork/ogsolr:latest
+    command:
+      - solr-precreate
+      - testserver
+      - /opt/solr/server/solr/configsets/ogsite
