@@ -1,5 +1,7 @@
 #! /bin/sh
 
+echo "opengever.core" $(grep '^version =' setup.py)
+
 export GEVER_READ_ONLY_MODE="true"
 export FTW_STRUCTLOG_MUTE_SETUP_ERRORS="true"
 export PYTHONUNBUFFERED="1"
