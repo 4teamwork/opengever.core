@@ -6,6 +6,7 @@ from zope.interface import implementer
 from zope.interface import Interface
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import json
 
 
 class IOpengeverBaseLayer(Interface):
@@ -371,12 +372,71 @@ class IOGMailSettings(Interface):
         default=False)
 
 
+DEFAULT_DASHBOARD_CARDS = [
+    {
+        'id': 'newest_gever_notifications',
+        'componentName': 'NewestGeverNotificationsCard'
+    },
+    {
+        'id': 'recently_touched_items',
+        'componentName': 'RecentlyTouchedItemsCard'
+    },
+    {
+        'id': 'my_dossiers',
+        'title_de': 'Meine Dossiers',
+        'title_en': 'My dossiers',
+        'title_fr': 'Mes dossiers',
+        'componentName': 'DossiersCard',
+        'myDossiersOnly': True
+    },
+    {
+        'id': 'substitute_dossiers',
+        'componentName': 'SubstituteDossiersCard'
+    },
+    {
+        'id': 'dashboard_pending_tasks',
+        'componentName': 'DashboardPendingTasksCard'
+    },
+    {
+        'id': 'substitute_tasks',
+        'componentName': 'SubstituteTasksCard'
+    },
+    {
+        'id': 'dashboard_all_pending_tasks',
+        'componentName': 'DashboardAllPendingTasksCard'
+    },
+    {
+        'id': 'my_proposals',
+        'componentName': 'MyProposalsCard',
+        'listingKey': 'proposals',
+        'pivotKey': 'issuer-current-user'
+    },
+    {
+        'id': 'my_watched_tasks',
+        'componentName': 'MyWatchedTasksCard',
+        'listingKey': 'tasks',
+        'pivotKey': 'watcher-current-user'},
+    {
+        'id': 'my_watched_documents',
+        'componentName': 'MyWatchedDocumentsCard',
+        'listingKey': 'documents',
+        'pivotKey': 'watcher-current-user'
+    }]
+
+
 class IGeverUI(Interface):
 
     is_feature_enabled = schema.Bool(
         title=u'Enable new GEVER UI',
         description=u'Whether new GEVER UI is enabled',
         default=False)
+
+    custom_dashboard_cards = schema.Text(
+        title=u'custom dashboard cards',
+        description=u'In json format, eg. [{"id": "dossiers", "componentName": "DossiersCard", "'
+        'title_de": "Falldossiers", "filters": { "dossierType": "Falldossier"'
+        ' }}]',
+        default=json.dumps(DEFAULT_DASHBOARD_CARDS).decode('utf-8'))
 
 
 class IHubSpotSettings(Interface):

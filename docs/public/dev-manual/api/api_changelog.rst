@@ -15,6 +15,7 @@ Other Changes
 - ``@config``: Add ``dossier_checklist`` feature flag.
 - ``@participations`` endpoint now also support adding a list of participants. (see :ref:`participation`)
 - Add new endpoint ``@linked-workspace-participations``. (see :ref:`linked-workspaces`)
+- ``@dashboard-settings``: Add new endpoint to fetch the current dashboard settings.
 
 2022.5.0 (2022-03-01)
 ---------------------

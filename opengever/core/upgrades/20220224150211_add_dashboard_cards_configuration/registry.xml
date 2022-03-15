@@ -1,0 +1,3 @@
+<registry>
+  <record interface="opengever.base.interfaces.IGeverUI" field="custom_dashboard_cards" />
+</registry>
