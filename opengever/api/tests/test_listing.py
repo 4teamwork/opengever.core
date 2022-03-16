@@ -1356,14 +1356,22 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
     def test_task_templates_listing(self, browser):
         self.login(self.regular_user, browser=browser)
         query_string = 'name=tasktemplates'
+        query_string = '&'.join((
+            'name=tasktemplates',
+            'columns=title',
+            'columns=@type',
+            'columns=review_state',
+            'columns=sequence_type',
+        ))
+
         view = '?'.join(('@listing', query_string))
         browser.open(self.templates, view=view, headers=self.api_headers)
         self.assertEqual([{u'@id': u'http://nohost/plone/vorlagen/verfahren-neuanstellung/'
                                    u'opengever-tasktemplates-tasktemplate',
                            u'@type': u'opengever.tasktemplates.tasktemplate',
                            u'UID': u'createspecialtemplates0000000006',
-                           u'description': u'',
                            u'review_state': u'tasktemplate-state-active',
+                           u'sequence_type': None,
                            u'title': u'Arbeitsplatz einrichten.'}], browser.json['items'])
 
     @browsing
