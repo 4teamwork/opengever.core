@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.testbrowser import browser
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
@@ -65,7 +64,7 @@ class TestPloneNotificationCenter(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
     @browsing
-    def test_add_watcher_adds_subscription_for_each_actor(self, member):
+    def test_add_watcher_adds_subscription_for_each_actor(self, browser):
         browser.login().open(self.dossier, view='++add++opengever.task.task')
         browser.fill({'Title': 'Test Task',
                       'Task type': 'comment'})
@@ -104,7 +103,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         self.dossier = create(Builder('dossier').titled(u'Dossier A'))
 
     @browsing
-    def test_successfully_add_activity(self, member):
+    def test_successfully_add_activity(self, browser):
         create(Builder('ogds_user')
                .having(userid='hugo.boss'))
 
@@ -122,7 +121,7 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
         self.assertEquals(['Item created'], info_messages())
 
     @browsing
-    def test_missing_email_address_for_notification_recipient_doesnt_produce_warning(self, member):
+    def test_missing_email_address_for_notification_recipient_doesnt_produce_warning(self, browser):
         create(Builder('ogds_user')
                .having(userid='hugo.boss', email=None)
                .in_group(self.org_unit.users_group))
