@@ -41,6 +41,7 @@ from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
+from opengever.tasktemplates.interfaces import ITaskTemplateSettings
 from opengever.workspace.interfaces import IToDoSettings
 from opengever.workspace.interfaces import IWorkspaceMeetingSettings
 from opengever.workspace.interfaces import IWorkspaceSettings
@@ -172,6 +173,7 @@ class GeverSettingsAdpaterV1(object):
         features['resolver_name'] = api.portal.get_registry_record('resolver_name', interface=IDossierResolveProperties)
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
+        features['tasktemplatefolder_nesting'] = api.portal.get_registry_record('is_tasktemplatefolder_nesting_enabled', interface=ITaskTemplateSettings)  # noqa
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         features['workspace_client'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceClientSettings)  # noqa
         features['workspace_meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceMeetingSettings)  # noqa

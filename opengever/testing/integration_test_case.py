@@ -85,6 +85,7 @@ FEATURE_FLAGS = {
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-proposals-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_proposals_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
+    'tasktemplatefolder_nesting': 'opengever.tasktemplates.interfaces.ITaskTemplateSettings.is_tasktemplatefolder_nesting_enabled',
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',
     'workspace_client': 'opengever.workspace.interfaces.IWorkspaceClientSettings.is_feature_enabled',
     'workspace-meeting': 'opengever.workspace.interfaces.IWorkspaceMeetingSettings.is_feature_enabled',

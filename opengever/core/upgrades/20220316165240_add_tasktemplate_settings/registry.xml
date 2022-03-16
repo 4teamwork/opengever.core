@@ -1,0 +1,4 @@
+<registry>
+  <!-- Tasktemplates -->
+  <records interface="opengever.tasktemplates.interfaces.ITaskTemplateSettings" />
+</registry>

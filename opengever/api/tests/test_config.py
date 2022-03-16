@@ -94,6 +94,7 @@ class TestConfig(IntegrationTestCase):
                 u'sablon_date_format': u'%d.%m.%Y',
                 u'solr': True,
                 u'tasks_pdf': False,
+                u'tasktemplatefolder_nesting': False,
                 u'workspace': False,
                 u'workspace_client': False,
                 u'workspace_meetings': True,
