@@ -539,6 +539,22 @@ class TaskTransitionController(BrowserView):
     def resolved_to_progress_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
+    @action('task-transition-tested-and-closed-in-progress')
+    def closed_to_progress_action(self, transition, c):
+        return self._addresponse_form_url(transition)
+
+
+    @guard('task-transition-tested-and-closed-in-progress')
+    @task_type_category('unidirectional_by_reference')
+    def uniref_closed_to_progress_guard(self, c, include_agency):
+        return False
+
+    @guard('task-transition-tested-and-closed-in-progress')
+    def closed_to_progress_guard(self, c, include_agency):
+        return (c.current_user.is_administrator
+                and c.task.parent_task_is_in_progress)
+
+
     # ------------ helper functions --------------
     def _get_function_for_transition(self, type_, transition):
         """Returns the appropriate function (guard or action) for a
@@ -693,6 +709,19 @@ class TaskChecker(object):
         if query.count() > 0:
             return False
         return True
+
+    @property
+    def parent_task_is_in_progress(self):
+        task = self.task
+        if not task.is_subtask:
+            # There is no parent task
+            return True
+
+        parent_task = Task.query.parent_task_for_task(task)
+        if not parent_task:
+            return True
+
+        return parent_task.review_state == 'task-state-in-progress'
 
     @property
     def has_successors(self):

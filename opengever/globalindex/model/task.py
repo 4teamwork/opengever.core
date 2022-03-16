@@ -695,6 +695,10 @@ class TaskQuery(BaseQuery):
         """Queries all subtask of the given task sql object."""
         return self.subtasks_by_tasks([task])
 
+    def parent_task_for_task(self, task):
+        parent_task_path = '/'.join(task.physical_path.split('/')[:-1])
+        return self.by_path(parent_task_path, task.admin_unit_id)
+
     def in_state(self, states):
         return self.filter(Task.review_state.in_(states))
 
