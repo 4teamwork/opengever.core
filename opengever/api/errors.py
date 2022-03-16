@@ -1,4 +1,4 @@
-from opengever.base import _
+from opengever.api import _
 from plone.rest.errors import ErrorHandling
 from plone.rest.interfaces import IAPIRequest
 from zope.component import adapter
