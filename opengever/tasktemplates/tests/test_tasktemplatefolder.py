@@ -24,6 +24,18 @@ class TestTaskTemplateFolder(IntegrationTestCase):
         self.assertEquals('opengever.tasktemplates.tasktemplatefolder',
                           browser.context.portal_type)
 
+    @browsing
+    def test_adding_subtasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add(u'Task Template Folder')
+        browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.assertEqual(['Item created'], info_messages())
+        self.assertEqual(['Baugesuch'], browser.css('h1').text)
+        self.assertEqual('opengever.tasktemplates.tasktemplatefolder',
+                         browser.context.portal_type)
+
     def test_default_state_is_inactive(self):
         self.login(self.administrator)
         tasktemplatefolder = create(Builder('tasktemplatefolder')

@@ -8,6 +8,7 @@
   <property name="filter_content_types">True</property>
   <property name="allowed_content_types">
     <element value="opengever.tasktemplates.tasktemplate" />
+    <element value="opengever.tasktemplates.tasktemplatefolder" />
   </property>
 
   <!-- Schema interface -->
