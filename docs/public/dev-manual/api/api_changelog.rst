@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@external-activities``: ``notification_recipients`` now also accepts group IDs.
 - ``@external-activities``: Privileged users may now create notifications for other users (see :ref:`external-activities`)
 
 

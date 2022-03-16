@@ -2,6 +2,7 @@ from opengever.activity import notification_center
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
 from opengever.base.model import SUPPORTED_LOCALES
+from opengever.ogds.base.actor import ActorLookup
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -45,6 +46,13 @@ class ExternalActivitiesPost(Service):
 
         activity_data = self.validate(data)
 
+        # Resolve groups to individual users, avoiding duplicates
+        recipients = set()
+        for actor_id in activity_data['notification_recipients']:
+            actor = ActorLookup(actor_id).lookup()
+            for user in actor.representatives():
+                recipients.add(user.userid)
+
         plone_center = notification_center()
         activity_info = plone_center.add_activity(
             obj=None,
@@ -54,7 +62,7 @@ class ExternalActivitiesPost(Service):
             summary=activity_data['summary'],
             actor_id='__system__',
             description=activity_data['description'],
-            notification_recipients=activity_data['notification_recipients'],
+            notification_recipients=recipients,
             external_resource_url=activity_data['resource_url'],
         )
 

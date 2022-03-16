@@ -11,15 +11,23 @@ Externe Aktivität erzeugen (POST)
 
 .. http:post:: /@external-activities
 
-   Erzeugt eine externe Aktivität und damit eine Benachrichtigung an den angegebenen Benutzer.
+   Erzeugt eine externe Aktivität und damit eine Benachrichtigung an die angegebenen Benutzer oder Gruppen.
 
-   Die in ``notification_recipients`` angegebene Liste muss genau dem Benutzer entsprechen, mit welchem der Request authentisiert ist. Es ist also nicht erlaubt, Benachrichtigungen an andere Benutzer auszulösen, sondern nur an sich selbst.
+   Beim Aufrufen einer solchen Benachrichtigung wird der Empfänger zu der in ``resource_url`` angegebenen URL weitergeleitet.
 
-   **Ausnahme**: Benutzer mit der Rolle ``PrivilegedNotificationDispatcher`` dürfen auch Benachrichtigungen an andere Benutzer als sich selbst auslösen.
+   Die in ``notification_recipients`` angegebene Liste muss IDs von Benutzern und/oder Gruppen enthalten, an welche eine Benachrichtigung ausgelöst werden soll.
 
-   Dies setzt dementsprechend voraus, dass die externe Applikation als vertrauenswürdig eingestuft wurde, und GEVER so konfiguriert ist, von dieser Applikation Requests im Kontext des Benutzers zu erlauben.
 
-   Beim Aufrufen einer solchen Benachrichtigung wird der Benutzer zu der in ``resource_url`` angegebenen URL weitergeleitet.
+   .. note::
+
+      API-Benutzer mit normalen Berechtigungen dürfen ausschliesslich Benachrichtigungen **an ihren eigenen Benutzer auslösen** (Schutz vor Missbrauch).
+
+      Dieser Anwendungsfall setzt dementsprechend voraus, dass die externe Applikation als vertrauenswürdig eingestuft wurde, und GEVER so konfiguriert ist, von dieser Applikation Requests im *Kontext des Benutzers* zu erlauben (Impersonation).
+
+      API-Benutzer mit der Rolle ``PrivilegedNotificationDispatcher`` dürfen hingegen Benachrichtigungen an **beliebige Benutzer** auslösen, insbesondere indirekt via Angabe von Gruppen.
+
+      Dieser Anwendungsfall bedingt einen Service-Account für die externe Applikation, welchem die ``PrivilegedNotificationDispatcher`` Rolle zugewiesen wird. Die Anmeldung erfolgt in diesem fall nicht im Kontext des Benutzers, sondern regulär mit dem Service-Account.
+
 
    **Request**:
 
