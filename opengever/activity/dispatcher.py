@@ -83,7 +83,7 @@ class NotificationDispatcher(object):
             except BaseException:
                 e_type, e_value, tb = sys.exc_info()
                 maybe_report_exception(self.context, self.request, e_type, e_value, tb)
-                not_dispatched.append(notifications)
+                not_dispatched.append(notification)
                 formatted_traceback = ''.join(traceback.format_exception(e_type, e_value, tb))
                 logger.error('Exception while dispatch activity (MailDispatcher):\n%s', formatted_traceback)
 
