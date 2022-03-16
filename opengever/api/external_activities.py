@@ -46,10 +46,18 @@ class ExternalActivitiesPost(Service):
 
         activity_data = self.validate(data)
 
+        errors = []
+
         # Resolve groups to individual users, avoiding duplicates
         recipients = set()
         for actor_id in activity_data['notification_recipients']:
             actor = ActorLookup(actor_id).lookup()
+            if actor.actor_type == 'null':
+                errors.append({
+                    'type': 'unresolvable_actor_id',
+                    'msg': 'Could not resolve Actor ID %r to a group or user' % actor_id,
+                    'actor_id': actor_id,
+                })
             for user in actor.representatives():
                 recipients.add(user.userid)
 
@@ -69,9 +77,29 @@ class ExternalActivitiesPost(Service):
         self.request.response.setStatus(201)
 
         result = {}
-        result['activity'] = activity_info['activity'].serialize()
-        if activity_info['errors']:
-            result['errors'] = activity_info['errors']
+        if activity_info:
+            # We may not always get an activity_info back.
+            #
+            # If activity_info is None, it means an exception happened during
+            # activity creation that could *not* be returned as part of
+            # the 'errors' list, but got caught by the NotificationErrorHandler.
+            #
+            # In our case, that most likely would happen when none of the
+            # passed actor_ids could be resolved, and we passed an empty
+            # list to notification_recipients.
+            result['activity'] = activity_info['activity'].serialize()
+
+            not_dispatched = activity_info.get('errors', [])
+            for failed_notification in not_dispatched:
+                userid = failed_notification.userid
+                errors.append({
+                    'type': 'dispatch_failed',
+                    'msg': 'Failed to dispatch notification for user %r' % userid,
+                    'userid': userid,
+                })
+
+        if errors:
+            result['errors'] = errors
 
         return result
 
