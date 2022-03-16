@@ -15,6 +15,8 @@ from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.mailer import process_mail_queue
 from opengever.base.model import create_session
 from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import OPENGEVER_INTEGRATION_TESTING
 from opengever.core.testing import OPENGEVER_SOLR_INTEGRATION_TESTING
 from opengever.document.archival_file import STATE_CONVERTED
@@ -785,9 +787,17 @@ class IntegrationTestCase(TestCase):
     def assert_provides(self, obj, interface=None):
         self.assertTrue(interface.providedBy(obj), '{} should provide {}'.format(obj, interface))
 
+    def set_roles(self, obj, principal, roles):
+        RoleAssignmentManager(obj).add_or_update_assignment(
+            SharingRoleAssignment(principal, roles))
+
 
 class SolrIntegrationTestCase(IntegrationTestCase, SolrTestMixin):
 
     layer = OPENGEVER_SOLR_INTEGRATION_TESTING
 
     features = ('solr', )
+
+    def set_roles(self, *args, **kwargs):
+        super(SolrIntegrationTestCase, self).set_roles(*args, **kwargs)
+        self.commit_solr()
