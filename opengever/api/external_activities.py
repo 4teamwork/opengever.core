@@ -29,10 +29,12 @@ class ExternalActivitiesPost(Service):
 
     def check_authorization(self, data):
         current_userid = api.user.get_current().getId()
-        if data.get('notification_recipients') != [current_userid]:
-            raise Unauthorized(
-                "Insufficient privileges to create external activities with "
-                "notification recipients other than yourself.")
+        recipients = data.get('notification_recipients')
+        if recipients and recipients != [current_userid]:
+            if not api.user.has_permission('opengever.api: Notify Arbitrary Users'):
+                raise Unauthorized(
+                    "Insufficient privileges to create external activities "
+                    "with notification recipients other than yourself.")
 
     def reply(self):
         # Disable CSRF protection

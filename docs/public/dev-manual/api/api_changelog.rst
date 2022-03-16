@@ -11,6 +11,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@external-activities``: Privileged users may now create notifications for other users (see :ref:`external-activities`)
+
 
 2022.6.0 (2022-03-15)
 ---------------------

@@ -10,6 +10,7 @@
     <role name="Impersonator" />
     <role name="LimitedAdmin" />
     <role name="MeetingUser" />
+    <role name="PrivilegedNotificationDispatcher" />
     <role name="PropertySheetsManager" />
     <role name="Publisher" />
     <role name="Records Manager" />
@@ -26,6 +27,11 @@
   </roles>
 
   <permissions>
+
+    <!-- API -->
+    <permission name="opengever.api: Notify Arbitrary Users" acquire="True">
+      <role name="PrivilegedNotificationDispatcher" />
+    </permission>
 
     <!-- BASE -->
     <permission name="Remove GEVER content" acquire="True">

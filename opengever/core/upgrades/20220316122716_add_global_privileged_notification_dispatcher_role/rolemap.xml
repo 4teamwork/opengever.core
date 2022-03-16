@@ -1,0 +1,16 @@
+<rolemap>
+
+  <roles>
+    <role name="PrivilegedNotificationDispatcher" />
+  </roles>
+
+  <permissions>
+
+    <!-- API -->
+    <permission name="opengever.api: Notify Arbitrary Users" acquire="True">
+      <role name="PrivilegedNotificationDispatcher" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity.model import Activity
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -98,7 +99,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         )
 
     @browsing
-    def test_can_only_create_external_activity_for_oneself(self, browser):
+    def test_regular_user_can_only_create_external_activity_for_themselves(self, browser):
         self.login(self.regular_user, browser=browser)
 
         url = "%s/@external-activities" % self.portal.absolute_url()
@@ -120,6 +121,46 @@ class TestExternalActivitiesPost(IntegrationTestCase):
                         u'activities with notification recipients other '
                         u'than yourself.',
         }, browser.json)
+
+    @browsing
+    def test_privileged_user_may_create_activities_for_other_users(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": [self.dossier_responsible.id],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        activity = Activity.query.all()[-1]
+        self.assertDictContainsSubset({
+            u'actor_id': u'__system__',
+            u'actor_label': u'',
+            u'label': u"Foo",
+            u'summary': u"Foo",
+            u'title': u"Foo",
+            }, activity.serialize()
+        )
+
+        self.assertEqual(
+            self.dossier_responsible.id,
+            activity.notifications[0].userid,
+        )
 
     @browsing
     def test_creating_external_activity_with_incomplete_schema_fails(self, browser):
@@ -199,4 +240,3 @@ class TestExternalActivitiesPost(IntegrationTestCase):
             "('description', WrongType([u'a', u'b', u'c'], <type 'dict'>, 'description'))",
             browser.json["message"],
         )
-
