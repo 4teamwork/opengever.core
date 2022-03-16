@@ -117,8 +117,8 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        self.assertEquals([], warning_messages())
-        self.assertEquals(['Item created'], info_messages())
+        self.assertEqual([], warning_messages())
+        self.assertEqual(['Item created'], info_messages())
 
     @browsing
     def test_missing_email_address_for_notification_recipient_doesnt_produce_warning(self, browser):
@@ -136,5 +136,5 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        self.assertEquals([], warning_messages())
-        self.assertEquals(['Item created'], info_messages())
+        self.assertEqual([], warning_messages())
+        self.assertEqual(['Item created'], info_messages())
