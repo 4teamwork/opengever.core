@@ -301,3 +301,17 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_admin.getId(),headers=self.api_headers)
 
         self.assertEqual(u'Fridolin', browser.json.get('firstname'))
+
+    @browsing
+    def test_do_not_expose_groups_for_users_without_permission(self, browser):
+        self.login(self.workspace_guest, browser)
+
+        browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_guest.getId(),headers=self.api_headers)
+
+        self.assertEqual([], browser.json.get('groups'))
+
+        self.login(self.workspace_admin, browser)
+
+        browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_guest.getId(),headers=self.api_headers)
+
+        self.assertEqual(1, len(browser.json.get('groups')))

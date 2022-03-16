@@ -12,6 +12,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.contact.utils import get_contactfolder_url
 from opengever.document import is_documentish_portal_type
 from opengever.document.approvals import Approval
@@ -352,6 +353,10 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
         teams = self.assigned_teams()
         data['groups'] = []
         data['teams'] = []
+
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            return
+
         for group in groups:
             group_serializer = queryMultiAdapter(
                 (group, self.request), ISerializeToJsonSummary)
