@@ -29,6 +29,7 @@ from opengever.base.interfaces import AVATAR_SOURCE_AUTO
 from opengever.base.interfaces import AVATAR_SOURCE_PLONE_ONLY
 from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
 from opengever.base.interfaces import IActorSettings
+from opengever.base.security import TeamraumSecurityHandler
 from opengever.base.utils import escape_html
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
@@ -54,7 +55,6 @@ from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
 from datetime import datetime
-
 
 SYSTEM_ACTOR_ID = '__system__'
 
@@ -780,6 +780,10 @@ class ActorLookup(object):
 
     def load_user(self):
         userid = self.identifier.split(':')[-1]
+
+        if not TeamraumSecurityHandler().can_access_principal(userid):
+            return None
+
         user = ogds_service().fetch_user(userid)
         if not user:
             portal = getSite()
@@ -801,6 +805,9 @@ class ActorLookup(object):
             return self.create_null_actor()
 
     def load_group(self):
+        if not TeamraumSecurityHandler().can_access_principal(self.identifier):
+            return None
+
         return ogds_service().fetch_group(self.identifier)
 
     def create_group_actor(self, group=None):

@@ -6,6 +6,7 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import TeamraumSecurityHandler
 from opengever.ogds.models.group import Group
 from opengever.testing import SolrIntegrationTestCase
+import json
 
 
 class TestTeamraumSecurity(SolrIntegrationTestCase):
@@ -110,6 +111,149 @@ class TestTeamraumSecurity(SolrIntegrationTestCase):
                 group.groupid,
                 self.dossier_responsible.getId()],
             TeamraumSecurityHandler().get_whitelisted_principals())
+
+    @browsing
+    def test_protect_actors_user_lookup(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal.absolute_url() + '/@actors/' + self.workspace_admin.getId(), headers=self.api_headers)
+
+        self.assertDictEqual(
+            {
+                u'@id': 'http://nohost/plone/@actors/fridolin.hugentobler',
+                u'@type': u'virtual.ogds.actor',
+                u'active': False,
+                u'actor_type': u'null',
+                u'identifier': u'fridolin.hugentobler',
+                u'is_absent': False,
+                u'portrait_url': None,
+                u'label': u'fridolin.hugentobler',
+                u'representatives': [],
+                u'represents': None,
+            },
+            browser.json,
+        )
+
+        with self.login(self.workspace_admin):
+            self.set_roles(self.workspace, self.regular_user.getId(), ['WorkspaceMember'])
+
+        browser.open(self.portal.absolute_url() + '/@actors/' + self.workspace_admin.getId(), headers=self.api_headers)
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                u'@type': u'virtual.ogds.actor',
+                u'active': True,
+                u'actor_type': u'user',
+                u'identifier': u'fridolin.hugentobler',
+                u'is_absent': False,
+                u'label': u'Hugentobler Fridolin',
+                u'portrait_url': None,
+                u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                                      u'identifier': u'fridolin.hugentobler'}],
+                u'represents': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler'}
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_protect_actors_group_lookup(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal.absolute_url() + '/@actors/projekt_a', headers=self.api_headers)
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/@actors/projekt_a',
+                u'@type': u'virtual.ogds.actor',
+                u'active': False,
+                u'actor_type': u'null',
+                u'identifier': u'projekt_a',
+                u'is_absent': False,
+                u'label': u'projekt_a',
+                u'portrait_url': None,
+                u'representatives': [],
+                u'represents': None
+            },
+            browser.json,
+        )
+
+        with self.login(self.workspace_admin):
+            self.set_roles(self.workspace, 'projekt_a', ['WorkspaceMember'])
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/@actors/projekt_a',
+                u'@type': u'virtual.ogds.actor',
+                u'active': False,
+                u'actor_type': u'null',
+                u'identifier': u'projekt_a',
+                u'is_absent': False,
+                u'label': u'projekt_a',
+                u'portrait_url': None,
+                u'representatives': [],
+                u'represents': None
+            },
+            browser.json,
+        )
+
+    @browsing
+    def test_protect_actors_list_lookup(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            self.portal.absolute_url() + '/@actors',
+            method="POST",
+            data=json.dumps({'actor_ids': [self.workspace_admin.getId()]}),
+            headers=self.api_headers)
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/@actors',
+                u'items': [
+                    {u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                     u'@type': u'virtual.ogds.actor',
+                     u'active': False,
+                     u'actor_type': u'null',
+                     u'identifier': u'fridolin.hugentobler',
+                     u'is_absent': False,
+                     u'label': u'fridolin.hugentobler',
+                     u'portrait_url': None,
+                     u'representatives': [],
+                     u'represents': None}
+                ]
+            },
+            browser.json,
+        )
+
+        with self.login(self.workspace_admin):
+            self.set_roles(self.workspace, self.regular_user.getId(), ['WorkspaceMember'])
+
+        browser.open(
+            self.portal.absolute_url() + '/@actors',
+            method="POST",
+            data=json.dumps({'actor_ids': [self.workspace_admin.getId()]}),
+            headers=self.api_headers)
+
+        self.assertDictEqual(
+            {
+                u'@id': u'http://nohost/plone/@actors',
+                u'items': [
+                    {u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                     u'@type': u'virtual.ogds.actor',
+                     u'active': True,
+                     u'actor_type': u'user',
+                     u'identifier': u'fridolin.hugentobler',
+                     u'is_absent': False,
+                     u'label': u'Hugentobler Fridolin',
+                     u'portrait_url': None,
+                     u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                                           u'identifier': u'fridolin.hugentobler'}],
+                     u'represents': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler'}}
+                ]
+            },
+            browser.json,
+        )
 
 
 class TestTeamraumSecurityInGever(SolrIntegrationTestCase):
