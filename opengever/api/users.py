@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
@@ -19,6 +20,9 @@ class GeverUsersGet(UsersGet):
     """
 
     def _has_allowed_role(self):
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            return False
+
         # We're not able to check for the `View` permission, because also
         # anonymous users have the `View` permissions (login form).
         current_roles = api.user.get_roles()
@@ -26,6 +30,12 @@ class GeverUsersGet(UsersGet):
             if role in current_roles:
                 return True
         return False
+
+    def _get_user(self, user_id):
+        if not visible_users_and_groups_filter.can_access_principal(user_id):
+            return None
+
+        return super(GeverUsersGet, self)._get_user(user_id)
 
     def has_permission_to_query(self):
         return self._has_allowed_role()

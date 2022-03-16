@@ -257,3 +257,33 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             },
             browser.json,
         )
+
+    @browsing
+    def test_protect_lookup_user(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.portal.absolute_url() + '/@users/' + self.workspace_admin.getId(),headers=self.api_headers)
+
+        with self.login(self.workspace_admin):
+            self.set_roles(self.workspace, self.regular_user.getId(), ['WorkspaceMember'])
+
+        browser.open(self.portal.absolute_url() + '/@users/' + self.workspace_admin.getId(),headers=self.api_headers)
+
+        self.assertEqual(u'Hugentobler Fridolin', browser.json.get('fullname'))
+
+    @browsing
+    def test_enumarating_users_without_permission_is_not_possible(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open('{}/@users'.format(self.portal.absolute_url()),
+                         headers=self.api_headers)
+
+    @browsing
+    def test_query_users_without_permission_is_not_possible(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open('{}/@users?query=max.muster'.format(self.portal.absolute_url()),
+                         headers=self.api_headers)
