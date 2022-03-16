@@ -1170,6 +1170,25 @@ class TestDossierTemplateFeature(IntegrationTestCase):
         self.assertEqual('Dossier templates', browser.css('.formTab #tab-dossiertemplates').first.text)
 
 
+class TestTaskTemplateFoldersTab(SolrIntegrationTestCase):
+
+    @browsing
+    def test_tasktemplatefolders_tab_does_not_show_subtasktemplatefolders(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        self.login(self.administrator, browser=browser)
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add(u'Task Template Folder')
+        browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+        self.commit_solr()
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.templates, view='tabbedview_view-tasktemplatefolders')
+        templates = browser.css('table.listing').first.dicts()
+        self.assertEqual(1, len(templates))
+        self.assertEqual(templates[0]["Title"], self.tasktemplatefolder.Title())
+
+
 class TestTemplateFolderShowroomPreviews(SolrIntegrationTestCase):
 
     features = ('meeting', 'bumblebee',)
