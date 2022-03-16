@@ -10,6 +10,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
+from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
@@ -50,6 +51,16 @@ class TaskTemplateFolder(Container):
             self, dossier, templates, related_documents,
             main_task_overrides, values, start_immediately)
         return trigger.generate()
+
+    def allowedContentTypes(self, *args, **kwargs):
+        types = super(TaskTemplateFolder, self).allowedContentTypes(*args, **kwargs)
+
+        def filter_type(fti):
+            if fti.id == "opengever.tasktemplates.tasktemplatefolder":
+                return is_tasktemplatefolder_nesting_allowed()
+            return True
+
+        return filter(filter_type, types)
 
 
 class TaskTemplateFolderTrigger(object):

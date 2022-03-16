@@ -26,9 +26,16 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                           browser.context.portal_type)
 
     @browsing
-    def test_adding_subtasktemplatefolder(self, browser):
+    def test_adding_subtasktemplatefolder_only_possible_if_feature_is_enabled(self, browser):
         self.login(self.administrator, browser=browser)
+
         browser.open(self.tasktemplatefolder)
+        self.assertNotIn(u'Task Template Folder', factoriesmenu.addable_types())
+
+        self.activate_feature('tasktemplatefolder_nesting')
+        browser.open(self.tasktemplatefolder)
+        self.assertIn(u'Task Template Folder', factoriesmenu.addable_types())
+
         factoriesmenu.add(u'Task Template Folder')
         browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
 
@@ -82,6 +89,8 @@ class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
 
     @browsing
     def test_is_subtasktemplatefolder(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+
         self.login(self.administrator, browser=browser)
         with self.observe_children(self.tasktemplatefolder) as children:
             browser.open(self.tasktemplatefolder)
