@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
+from mock import patch
 from opengever.activity import notification_center
 from opengever.activity.hooks import insert_notification_defaults
 from opengever.activity.roles import WATCHER_ROLE
@@ -138,3 +139,30 @@ class TestNotifactionCenterErrorHandling(FunctionalTestCase):
 
         self.assertEqual([], warning_messages())
         self.assertEqual(['Item created'], info_messages())
+
+    @patch('opengever.activity.mail.PloneNotificationMailer.dispatch_notifications')
+    @browsing
+    def test_exception_during_dispatch_produces_warning(self, patched_dispatch, browser):
+        create(Builder('ogds_user')
+               .having(userid='hugo.boss'))
+
+        def boom(*args, **kwargs):
+            raise Exception('Boom')
+
+        patched_dispatch.side_effect = boom
+
+        browser.login('hugo.boss').open(self.dossier, view='++add++opengever.task.task')
+        browser.fill({'Title': 'Test Task',
+                      'Task type': 'comment'})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill('inbox:org-unit-1')
+        form.find_widget('Issuer').fill(TEST_USER_ID)
+
+        browser.css('#form-buttons-save').first.click()
+
+        self.assertEquals([
+            'A problem has occurred when trying to dispatch a notification. '
+            'The notification therefore was not dispatched (or only partially).'
+            ], warning_messages())
+        self.assertEquals(['Item created'], info_messages())
