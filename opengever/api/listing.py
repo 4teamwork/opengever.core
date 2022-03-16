@@ -38,6 +38,7 @@ OTHER_ALLOWED_FIELDS = set([
     'is_completed',
     'is_subdossier',
     'is_subtask',
+    'is_subtasktemplatefolder',
     'language',
     'lastname',
     'location',

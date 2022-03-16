@@ -7,6 +7,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.tasktemplates.browser.tasktemplates import TaskTemplatesCatalogTableSource
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
+from opengever.testing.helpers import solr_data_for
 from plone import api
 
 
@@ -75,6 +76,27 @@ class TestTaskTemplateFolder(IntegrationTestCase):
             browser.open(self.templates, view='folder_delete_confirmation',
                          data=self.make_path_param(self.tasktemplatefolder))
             browser.click_on('Delete')
+
+
+class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_is_subtasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        with self.observe_children(self.tasktemplatefolder) as children:
+            browser.open(self.tasktemplatefolder)
+            factoriesmenu.add(u'Task Template Folder')
+            browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.commit_solr()
+
+        self.assertEqual(1, len(children["added"]))
+        subtasktemplatefolder = children["added"].pop()
+
+        self.assertFalse(self.tasktemplatefolder.is_subtasktemplatefolder())
+        self.assertFalse(solr_data_for(self.tasktemplatefolder).get('is_subtasktemplatefolder'))
+        self.assertTrue(subtasktemplatefolder.is_subtasktemplatefolder())
+        self.assertTrue(solr_data_for(subtasktemplatefolder).get('is_subtasktemplatefolder'))
 
 
 class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):

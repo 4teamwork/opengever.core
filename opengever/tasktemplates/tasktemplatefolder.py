@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
@@ -8,6 +10,7 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
@@ -32,6 +35,10 @@ class TaskTemplateFolder(Container):
     @property
     def is_sequential(self):
         return self.sequence_type == u'sequential'
+
+    def is_subtasktemplatefolder(self):
+        parent = aq_parent(aq_inner(self))
+        return ITaskTemplateFolderSchema.providedBy(parent)
 
     def trigger(self, dossier, templates, related_documents,
                 values, start_immediately, main_task_overrides=None):
