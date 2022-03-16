@@ -537,6 +537,9 @@ msgstr "Close"
 msgid "task-transition-skipped-open"
 msgstr "Reopen"
 
+msgid "task-transition-tested-and-closed-in-progress"
+msgstr "Request revision"
+
 #. German translation: Aktiv
 msgid "tasktemplate-state-active"
 msgstr "Active"
