@@ -99,9 +99,6 @@ class GEVERWorkflowTransition(WorkflowTransition):
                     message=translate(str(e), context=self.request),
                 )
             )
-        except BadRequest as e:
-            self.request.response.setStatus(400)
-            return dict(error=dict(type="Bad Request", message=str(e)))
 
         with elevated_privileges():
             history = self.wftool.getInfoFor(self.context, "review_history")

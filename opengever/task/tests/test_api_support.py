@@ -181,9 +181,13 @@ class TestAPITransitions(IntegrationTestCase):
             browser.open(url, method='POST', data=json.dumps(data),
                          headers=self.api_headers)
 
+        self.assertEqual(
+            u'The entered deadline is the same as the current one.',
+            browser.json['additional_metadata']["fields"][0]['translated_message'])
+
         self.assertIn(
             'same_deadline_error',
-            browser.json.get('error').get('message'))
+            browser.json.get('message'))
 
     @browsing
     def test_close_successful(self, browser):
@@ -700,8 +704,7 @@ class TestApprovalViaTask(IntegrationTestCase):
                          headers=self.api_headers)
 
         self.assertEqual({
-            u'error': {
-                u'message': u"Param 'approved_documents' is only supported "
-                            u"for tasks of task_type 'approval'.",
-                u'type': u'Bad Request'}},
+            u'message': u"Param 'approved_documents' is only supported "
+                        u"for tasks of task_type 'approval'.",
+            u'type': u'BadRequest'},
             browser.json)
