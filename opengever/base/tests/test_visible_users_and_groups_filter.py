@@ -287,3 +287,17 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open('{}/@users?query=max.muster'.format(self.portal.absolute_url()),
                          headers=self.api_headers)
+
+    @browsing
+    def test_protect_lookup_ogds_user(self, browser):
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_admin.getId(),headers=self.api_headers)
+
+        with self.login(self.workspace_admin):
+            self.set_roles(self.workspace, self.regular_user.getId(), ['WorkspaceMember'])
+
+        browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_admin.getId(),headers=self.api_headers)
+
+        self.assertEqual(u'Fridolin', browser.json.get('firstname'))
