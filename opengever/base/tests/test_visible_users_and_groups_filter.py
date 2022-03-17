@@ -315,3 +315,25 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@ogds-users/' + self.workspace_guest.getId(),headers=self.api_headers)
 
         self.assertEqual(1, len(browser.json.get('groups')))
+
+    @browsing
+    def test_groups_endpoint_is_not_available_for_teamraum_users(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.portal.absolute_url() + '/@groups/projekt_a', headers=self.api_headers)
+
+        self.login(self.workspace_member, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.portal.absolute_url() + '/@groups/projekt_a', headers=self.api_headers)
+
+        self.login(self.workspace_guest, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.portal.absolute_url() + '/@groups/projekt_a', headers=self.api_headers)
+
+        self.login(self.regular_user, browser)
+
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(self.portal.absolute_url() + '/@groups/projekt_a', headers=self.api_headers)
