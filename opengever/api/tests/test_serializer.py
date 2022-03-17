@@ -307,6 +307,16 @@ class TestInboxSerializer(IntegrationTestCase):
         self.assertEqual(u'plone:%s' % int_id, browser.json.get(u'oguid'))
 
 
+class TestTaskTemplateFolderSerializer(IntegrationTestCase):
+
+    @browsing
+    def test_tasktemplatefolder_serialization_contains_is_subtasktemplatefolder(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.tasktemplatefolder, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(False, browser.json.get(u'is_subtasktemplatefolder'))
+
+
 class TestGroupSerializer(IntegrationTestCase):
 
     @browsing
