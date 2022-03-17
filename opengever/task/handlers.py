@@ -5,6 +5,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.globalindex.handlers.task import TaskSqlSyncer
 from opengever.inbox.activities import ForwardingAddedActivity
 from opengever.inbox.forwarding import IForwarding
+from opengever.task import CLOSED_TO_IN_PROGRESS_TRANSITION
 from opengever.task import FINAL_TRANSITIONS
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.browser.transitioncontroller import TaskChecker
@@ -155,6 +156,14 @@ def set_roles_after_modifying(context, event):
         return
 
     LocalRolesSetter(context).set_roles(event)
+
+
+def set_roles_when_reopen_a_closed_task(context, event):
+    """Event handler which makes sure, the local roles are reassigned,
+    after these have been revoked at the closing of the task.
+    """
+    if event.action in CLOSED_TO_IN_PROGRESS_TRANSITION:
+        LocalRolesSetter(context).set_roles(event)
 
 
 def record_added_activity(task, event):
