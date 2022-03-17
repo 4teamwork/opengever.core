@@ -287,7 +287,8 @@ class TaskTransitionResponseAddForm(form.AddForm, AutoExtensibleForm):
                               "task-transition-in-progress-cancelled",
                               "task-transition-open-cancelled",
                               "task-transition-cancelled-open",
-                              "task-transition-rejected-open"]
+                              "task-transition-rejected-open",
+                              "task-transition-tested-and-closed-in-progress"]
 
     def updateActions(self):
         super(TaskTransitionResponseAddForm, self).updateActions()

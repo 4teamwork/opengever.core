@@ -705,3 +705,24 @@ class TestApprovalViaTask(IntegrationTestCase):
                             u"for tasks of task_type 'approval'.",
                 u'type': u'Bad Request'}},
             browser.json)
+
+    @browsing
+    def test_closed_to_open_successfully(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.task)
+
+        url = '{}/@workflow/task-transition-tested-and-closed-in-progress'.format(
+            self.task.absolute_url())
+
+        data = {'text': 'Falsche Aktion'}
+        browser.open(url, method='POST', data=json.dumps(data),
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            'task-state-in-progress', api.content.get_state(self.task))
+        self.assertEqual(
+            'task-state-in-progress', self.task.get_sql_object().review_state)
+
+        response = IResponseContainer(self.task).list()[-1]
+        self.assertEqual('Falsche Aktion', response.text)
+        self.assertEqual('task-transition-tested-and-closed-in-progress', response.transition)

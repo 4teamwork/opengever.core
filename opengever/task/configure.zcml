@@ -313,4 +313,9 @@
       name="task-transition-planned-open"
       />
 
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-tested-and-closed-in-progress"
+      />
+
 </configure>
