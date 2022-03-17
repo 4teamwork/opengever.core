@@ -41,6 +41,13 @@ class TaskTemplateFolder(Container):
         parent = aq_parent(aq_inner(self))
         return ITaskTemplateFolderSchema.providedBy(parent)
 
+    def contains_subtasktemplatefolders(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(self.getPhysicalPath()),
+            object_provides=ITaskTemplateFolderSchema.__identifier__)
+        return len(brains) > 1
+
     def trigger(self, dossier, templates, related_documents,
                 values, start_immediately, main_task_overrides=None):
 

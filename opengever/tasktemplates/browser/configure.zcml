@@ -18,6 +18,14 @@
       />
 
   <browser:page
+      for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema"
+      name="tabbed_view"
+      class=".tabbed.TaskTemplateFolderTabbedView"
+      permission="zope2.View"
+      allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
+      />
+
+  <browser:page
       name="view"
       for="opengever.tasktemplates.content.tasktemplate.ITaskTemplate"
       class=".tasktemplates.View"

@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.tasktemplates.browser.tasktemplates import TaskTemplatesCatalogTableSource
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
@@ -83,6 +84,22 @@ class TestTaskTemplateFolder(IntegrationTestCase):
             browser.open(self.templates, view='folder_delete_confirmation',
                          data=self.make_path_param(self.tasktemplatefolder))
             browser.click_on('Delete')
+
+    @browsing
+    def test_shows_warning_when_contains_sub_tasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        browser.open(self.tasktemplatefolder)
+        self.assertEqual([], warning_messages())
+
+        factoriesmenu.add(u'Task Template Folder')
+        browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.assertEqual(
+            ['Nested TaskTemplateFolders can only be viewed and edited '
+             'correctly in the new UI.'],
+            warning_messages())
 
 
 class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
