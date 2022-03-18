@@ -337,3 +337,32 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
 
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open(self.portal.absolute_url() + '/@groups/projekt_a', headers=self.api_headers)
+
+    @browsing
+    def test_ogds_user_listing_only_returns_whitelisted_users(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal.absolute_url() + '/@ogds-user-listing', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                self.regular_user.getId(),
+            ],
+            [user.get('userid') for user in browser.json.get('items')]
+        )
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        browser.open(self.portal.absolute_url() + '/@ogds-user-listing', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                self.regular_user.getId(),
+                self.workspace_admin.getId(),
+                self.workspace_guest.getId(),
+            ],
+            [user.get('userid') for user in browser.json.get('items')]
+        )
