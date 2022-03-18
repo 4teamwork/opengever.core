@@ -297,7 +297,8 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
         self.login(self.administrator, browser=browser)
 
         for obj in [self.document, self.dossier, self.proposal,
-                    self.leaf_repofolder, self.task, self.workspace]:
+                    self.leaf_repofolder, self.task, self.workspace,
+                    self.tasktemplatefolder]:
             self.assertIsNone(solr_data_for(obj, 'getObjPositionInParent'))
 
         self.assertEqual(1, solr_data_for(self.seq_subtask_2,
@@ -345,6 +346,25 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
             (self.seq_subtask_2.Title(), 1),
             (u'Neue Aufgabe', 2), (self.seq_subtask_3.Title(), 3)],
             [(item['Title'], item['getObjPositionInParent']) for item in browser.json["items"]])
+
+    @browsing
+    def test_get_obj_position_in_parent_for_sub_tasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        browser.open(self.tasktemplatefolder)
+        with self.observe_children(self.tasktemplatefolder) as children:
+            factoriesmenu.add(u'Task Template Folder')
+            browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.commit_solr()
+
+        self.assertEqual(1, len(children['added']))
+        sub_tasktemplatefolders = children['added'].pop()
+        self.assertEqual(
+            1, solr_data_for(sub_tasktemplatefolders, 'getObjPositionInParent'))
+        self.assertEqual(
+            0, solr_data_for(self.tasktemplate, 'getObjPositionInParent'))
 
 
 class TestIsFolderishIndexer(SolrIntegrationTestCase):
