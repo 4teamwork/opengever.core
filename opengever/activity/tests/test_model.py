@@ -5,17 +5,18 @@ from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.tests.base import ActivityTestCase
+from opengever.testing import IntegrationTestCase
 from sqlalchemy.exc import IntegrityError
 import transaction
 
 
-class TestNotification(ActivityTestCase):
+class TestNotification(IntegrationTestCase):
 
     def test_string_representation(self):
         resource = create(Builder('resource').oguid('fd:123'))
         activity = create(Builder('activity').having(
             title=u'Bitte \xc4nderungen nachvollziehen', resource=resource))
-        notification = create(Builder('notification')
+        notification = create(Builder('notification').id(1)
                               .having(activity=activity, userid=u'h\xfcgo.boss'))
 
         self.assertEqual(

@@ -9,6 +9,7 @@ from opengever.activity.model import Notification
 from opengever.activity.model import Resource
 from opengever.activity.model import Subscription
 from opengever.activity.model import Watcher
+from opengever.activity.model.settings import NotificationDefault
 from opengever.activity.notification_settings import UnmappedActivityKind
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
@@ -256,7 +257,7 @@ class TestWatcherHandling(ActivityTestCase):
             Oguid('fd', '234'), WATCHER_ROLE)
 
 
-class TestAddActivity(ActivityTestCase):
+class TestAddActivity(IntegrationTestCase):
 
     def setUp(self):
         super(TestAddActivity, self).setUp()
@@ -437,7 +438,7 @@ class TestAddActivity(ActivityTestCase):
         self.assertEquals(1, Notification.query.by_user('peter').count())
 
 
-class TestNotificationHandling(ActivityTestCase):
+class TestNotificationHandling(IntegrationTestCase):
 
     def setUp(self):
         super(TestNotificationHandling, self).setUp()
@@ -596,7 +597,7 @@ class FakeMailDispatcher(NotificationDispatcher):
         self.notified.append(notification)
 
 
-class TestDispatchers(ActivityTestCase):
+class TestDispatchers(IntegrationTestCase):
 
     def setUp(self):
         super(TestDispatchers, self).setUp()
@@ -618,10 +619,9 @@ class TestDispatchers(ActivityTestCase):
                        role=TASK_RESPONSIBLE_ROLE))
 
     def test_uses_personal_setting_if_exists(self):
-        create(Builder('notification_default_setting')
-               .having(kind='task-added-or-reassigned',
-                       mail_notification_roles=[WATCHER_ROLE,
-                                                TASK_RESPONSIBLE_ROLE]))
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.mail_notification_roles = [WATCHER_ROLE,
+                                           TASK_RESPONSIBLE_ROLE]
 
         create(Builder('notification_setting')
                .having(kind='task-added-or-reassigned', userid='hugo'))
@@ -641,10 +641,9 @@ class TestDispatchers(ActivityTestCase):
             [note.userid for note in self.dispatcher.notified])
 
     def test_uses_notification_default_as_fallback(self):
-        create(Builder('notification_default_setting')
-               .having(kind='task-added-or-reassigned',
-                       mail_notification_roles=[
-                        WATCHER_ROLE, TASK_RESPONSIBLE_ROLE]))
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.mail_notification_roles = [WATCHER_ROLE,
+                                           TASK_RESPONSIBLE_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -658,9 +657,8 @@ class TestDispatchers(ActivityTestCase):
         self.assertEquals(2, len(self.dispatcher.notified))
 
     def test_only_watchers_with_configured_roles_are_dispatched(self):
-        create(Builder('notification_default_setting')
-               .having(kind='task-added-or-reassigned',
-                       mail_notification_roles=[WATCHER_ROLE]))
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.mail_notification_roles = [WATCHER_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -675,6 +673,10 @@ class TestDispatchers(ActivityTestCase):
         self.assertEquals(u'hugo', self.dispatcher.notified[0].userid)
 
     def test_if_setting_for_kind_does_not_exist_dispatcher_is_ignored(self):
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.mail_notification_roles = []
+        setting.batch_notification_roles = []
+
         self.center.add_activity(
             Oguid('fd', '123'),
             'task-added',
@@ -687,9 +689,8 @@ class TestDispatchers(ActivityTestCase):
         self.assertEquals(0, len(self.dispatcher.notified))
 
     def test_badge_dispatcher_sets_badge_flag_depending_on_the_setting(self):
-        create(Builder('notification_default_setting')
-               .having(kind='task-added-or-reassigned',
-                       badge_notification_roles=[TASK_RESPONSIBLE_ROLE]))
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.badge_notification_roles = [TASK_RESPONSIBLE_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),
@@ -707,9 +708,8 @@ class TestDispatchers(ActivityTestCase):
         self.assertTrue(peters_note.is_badge)
 
     def test_digest_dispatcher_sets_digest_flag_depending_on_the_setting(self):
-        create(Builder('notification_default_setting')
-               .having(kind='task-added-or-reassigned',
-                       digest_notification_roles=[TASK_RESPONSIBLE_ROLE]))
+        setting = NotificationDefault.query.filter_by(kind='task-added-or-reassigned').one()
+        setting.digest_notification_roles = [TASK_RESPONSIBLE_ROLE]
 
         self.center.add_activity(
             Oguid('fd', '123'),
