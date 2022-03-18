@@ -1,4 +1,5 @@
 from opengever.api.ogdslistingbase import OGDSListingBaseService
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.ogds.models.group import Group
 from sqlalchemy.sql.expression import true
 
@@ -28,6 +29,8 @@ class OGDSGroupListingGet(OGDSListingBaseService):
     def extend_query_with_filters(self, query, filters):
         query = self.extend_query_with_state_filter(query, filters)
         query = self.extend_query_with_is_local_filter(query, filters)
+        query = self.extend_query_with_visible_users_and_groups_filter(query)
+
         return query
 
     def extend_query_with_state_filter(self, query, filters):
@@ -52,4 +55,11 @@ class OGDSGroupListingGet(OGDSListingBaseService):
         elif is_local is False:
             # is_local can either be null or false.
             query = query.filter(Group.is_local.isnot(true()))
+        return query
+
+    def extend_query_with_visible_users_and_groups_filter(self, query):
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            query = query.filter(self.model_class.groupid.in_(
+                visible_users_and_groups_filter.get_whitelisted_principals()))
+
         return query

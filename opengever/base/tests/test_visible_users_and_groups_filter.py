@@ -366,3 +366,29 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             ],
             [user.get('userid') for user in browser.json.get('items')]
         )
+
+    @browsing
+    def test_ogds_group_listing_only_returns_whitelisted_groups(self, browser):
+        self.login(self.regular_user, browser)
+        group = Group.query.get('projekt_a')
+
+        browser.open(self.portal.absolute_url() + '/@ogds-group-listing', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [],
+            [user.get('group') for user in browser.json.get('items')]
+        )
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, group.groupid, ['WorkspaceGuest'])
+
+        browser.open(self.portal.absolute_url() + '/@ogds-group-listing', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                group.groupid
+            ],
+            [user.get('groupid') for user in browser.json.get('items')]
+        )
