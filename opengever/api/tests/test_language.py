@@ -20,7 +20,7 @@ class TestLanguageToolPatch(IntegrationTestCase):
 
         self.assertEqual(u'BadRequest', browser.json[u'type'])
         self.assertEqual(
-            u'Inputs not valid', browser.json[u'translated_message'])
+            u'Eingaben sind ung\xfcltig', browser.json[u'translated_message'])
 
         self.assertEqual(
             {u'fields': [{
