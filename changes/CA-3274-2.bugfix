@@ -1,0 +1,1 @@
+NotificationDispatcher: Only return failed notification as not_dispatched. [lgraf]

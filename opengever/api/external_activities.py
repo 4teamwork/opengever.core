@@ -2,6 +2,7 @@ from opengever.activity import notification_center
 from opengever.api.validation import get_validation_errors
 from opengever.api.validation import scrub_json_payload
 from opengever.base.model import SUPPORTED_LOCALES
+from opengever.ogds.base.actor import ActorLookup
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -29,10 +30,12 @@ class ExternalActivitiesPost(Service):
 
     def check_authorization(self, data):
         current_userid = api.user.get_current().getId()
-        if data.get('notification_recipients') != [current_userid]:
-            raise Unauthorized(
-                "Insufficient privileges to create external activities with "
-                "notification recipients other than yourself.")
+        recipients = data.get('notification_recipients')
+        if recipients and recipients != [current_userid]:
+            if not api.user.has_permission('opengever.api: Notify Arbitrary Users'):
+                raise Unauthorized(
+                    "Insufficient privileges to create external activities "
+                    "with notification recipients other than yourself.")
 
     def reply(self):
         # Disable CSRF protection
@@ -43,6 +46,21 @@ class ExternalActivitiesPost(Service):
 
         activity_data = self.validate(data)
 
+        errors = []
+
+        # Resolve groups to individual users, avoiding duplicates
+        recipients = set()
+        for actor_id in activity_data['notification_recipients']:
+            actor = ActorLookup(actor_id).lookup()
+            if actor.actor_type == 'null':
+                errors.append({
+                    'type': 'unresolvable_actor_id',
+                    'msg': 'Could not resolve Actor ID %r to a group or user' % actor_id,
+                    'actor_id': actor_id,
+                })
+            for user in actor.representatives():
+                recipients.add(user.userid)
+
         plone_center = notification_center()
         activity_info = plone_center.add_activity(
             obj=None,
@@ -52,16 +70,36 @@ class ExternalActivitiesPost(Service):
             summary=activity_data['summary'],
             actor_id='__system__',
             description=activity_data['description'],
-            notification_recipients=activity_data['notification_recipients'],
+            notification_recipients=recipients,
             external_resource_url=activity_data['resource_url'],
         )
 
         self.request.response.setStatus(201)
 
         result = {}
-        result['activity'] = activity_info['activity'].serialize()
-        if activity_info['errors']:
-            result['errors'] = activity_info['errors']
+        if activity_info:
+            # We may not always get an activity_info back.
+            #
+            # If activity_info is None, it means an exception happened during
+            # activity creation that could *not* be returned as part of
+            # the 'errors' list, but got caught by the NotificationErrorHandler.
+            #
+            # In our case, that most likely would happen when none of the
+            # passed actor_ids could be resolved, and we passed an empty
+            # list to notification_recipients.
+            result['activity'] = activity_info['activity'].serialize()
+
+            not_dispatched = activity_info.get('errors', [])
+            for failed_notification in not_dispatched:
+                userid = failed_notification.userid
+                errors.append({
+                    'type': 'dispatch_failed',
+                    'msg': 'Failed to dispatch notification for user %r' % userid,
+                    'userid': userid,
+                })
+
+        if errors:
+            result['errors'] = errors
 
         return result
 

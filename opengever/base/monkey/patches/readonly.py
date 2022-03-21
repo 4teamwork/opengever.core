@@ -124,6 +124,7 @@ class PatchMembershipToolCreateMemberarea(MonkeyPatch):
 WRITER_ROLES = [
     'Contributor',
     'Editor',
+    'PrivilegedNotificationDispatcher',
     'PropertySheetsManager',
     'Publisher',
     'Reviewer',
@@ -227,6 +228,7 @@ WRITE_PERMISSIONS = [
     'ftw.usermigration: Migrate users',
     'opengever.api: Manage Groups',
     'opengever.api: Manage Role Assignment Reports',
+    'opengever.api: Notify Arbitrary Users',
     'opengever.api: Transfer Assignment',
     'opengever.contact: Edit person',
     'opengever.contact: Edit team',

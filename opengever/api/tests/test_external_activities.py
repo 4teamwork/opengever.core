@@ -1,8 +1,13 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from mock import patch
 from opengever.activity.model import Activity
+from opengever.activity.notification_settings import NotificationSettings
+from opengever.activity.roles import ALWAYS
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
+from plone import api
 import json
 
 
@@ -98,7 +103,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         )
 
     @browsing
-    def test_can_only_create_external_activity_for_oneself(self, browser):
+    def test_regular_user_can_only_create_external_activity_for_themselves(self, browser):
         self.login(self.regular_user, browser=browser)
 
         url = "%s/@external-activities" % self.portal.absolute_url()
@@ -120,6 +125,117 @@ class TestExternalActivitiesPost(IntegrationTestCase):
                         u'activities with notification recipients other '
                         u'than yourself.',
         }, browser.json)
+
+    @browsing
+    def test_privileged_user_may_create_activities_for_other_users(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": [self.dossier_responsible.id],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        activity = Activity.query.all()[-1]
+        self.assertDictContainsSubset({
+            u'actor_id': u'__system__',
+            u'actor_label': u'',
+            u'label': u"Foo",
+            u'summary': u"Foo",
+            u'title': u"Foo",
+            }, activity.serialize()
+        )
+
+        self.assertEqual(
+            self.dossier_responsible.id,
+            activity.notifications[0].userid,
+        )
+
+    @browsing
+    def test_notification_recipients_accepts_and_resolves_groups(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        group = ogds_service().fetch_group('fa_users')
+        self.assertTrue(len(group.users) > 1)
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": [group.groupid],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        activity = Activity.query.all()[-1]
+        self.assertItemsEqual(
+            [user.userid for user in group.users],
+            [notification.userid for notification in activity.notifications],
+        )
+
+    @browsing
+    def test_avoids_duplicate_notifications(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        group = ogds_service().fetch_group('fa_users')
+        duplicate_recipient = ogds_service().fetch_user(self.dossier_responsible.id)
+        self.assertIn(duplicate_recipient, group.users)
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": [
+                group.groupid,
+                duplicate_recipient.userid,
+                duplicate_recipient.userid,
+            ],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        activity = Activity.query.all()[-1]
+        notified_userids = [n.userid for n in activity.notifications]
+        self.assertEqual(1, notified_userids.count(duplicate_recipient.userid))
 
     @browsing
     def test_creating_external_activity_with_incomplete_schema_fails(self, browser):
@@ -200,3 +316,83 @@ class TestExternalActivitiesPost(IntegrationTestCase):
             browser.json["message"],
         )
 
+    @patch('opengever.activity.mail.PloneNotificationMailer.dispatch_notification')
+    @browsing
+    def test_error_handling_for_dispatch_failures(self, patched_dispatch, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        def fail_for_david(notification):
+            if notification.userid == 'david.meier':
+                raise Exception('Boom')
+
+        patched_dispatch.side_effect = fail_for_david
+
+        defaults = NotificationSettings()._get_default_notification_settings()
+        defaults.get('external-activity').mail_notification_roles = [ALWAYS]
+
+        group = ogds_service().fetch_group('fa_users')
+        self.assertTrue(len(group.users) > 1)
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": [group.groupid],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        self.assertEqual([{
+            'type': 'dispatch_failed',
+            'msg': u"Failed to dispatch notification for user u'david.meier'",
+            'userid': 'david.meier',
+            }], browser.json['errors'])
+
+        activity = Activity.query.all()[-1]
+        self.assertItemsEqual(
+            [user.userid for user in group.users],
+            [notification.userid for notification in activity.notifications],
+        )
+
+    @browsing
+    def test_error_handling_for_actor_lookup_failure(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.user.grant_roles(
+            user=self.regular_user,
+            roles=['PrivilegedNotificationDispatcher'],
+        )
+
+        url = "%s/@external-activities" % self.portal.absolute_url()
+
+        activity_data = {
+            "notification_recipients": ['user.that.doesnt.exist'],
+            "title": {"en": "Foo"},
+            "label": {"en": "Foo"},
+            "description": {"en": "Foo"},
+            "summary": {"en": "Foo"},
+            "resource_url": "http://example.org",
+        }
+        browser.open(
+            url,
+            method="POST",
+            data=json.dumps(activity_data),
+            headers=self.api_headers,
+        )
+
+        self.assertEqual([{
+            u'type': u'unresolvable_actor_id',
+            u'msg': u"Could not resolve Actor ID 'user.that.doesnt.exist' to a group or user",
+            u'actor_id': u'user.that.doesnt.exist',
+            }], browser.json['errors'])
