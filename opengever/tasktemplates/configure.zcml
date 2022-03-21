@@ -47,4 +47,18 @@
       name="sequence_type"
       />
 
+  <!-- transitions -->
+  <adapter
+      factory=".transition.TaskTemplateFolderTransitionExtender"
+      name="tasktemplatefolder-transition-inactiv-activ"
+      />
+
+  <adapter
+      factory=".transition.TaskTemplateFolderTransitionExtender"
+      name="tasktemplatefolder-transition-activ-inactiv"
+      />
+
+
+
+
 </configure>

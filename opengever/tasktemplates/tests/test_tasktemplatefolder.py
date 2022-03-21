@@ -101,6 +101,53 @@ class TestTaskTemplateFolder(IntegrationTestCase):
              'correctly in the new UI.'],
             warning_messages())
 
+    @browsing
+    def test_state_transitions_are_recursive(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+        subtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'Verfahren Neuanstellung')
+            .within(self.tasktemplatefolder)
+            .in_state('tasktemplatefolder-state-activ'))
+
+        subsubtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'Verfahren Neuanstellung')
+            .within(subtasktemplatefolder)
+            .in_state('tasktemplatefolder-state-activ'))
+
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(self.tasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(subtasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(subsubtasktemplatefolder))
+
+        # Inactivate
+        url = '{}/@workflow/tasktemplatefolder-transition-activ-inactiv'.format(
+            self.tasktemplatefolder.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual('tasktemplatefolder-state-inactiv',
+                         api.content.get_state(self.tasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-inactiv',
+                         api.content.get_state(subtasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-inactiv',
+                         api.content.get_state(subsubtasktemplatefolder))
+
+        # Activate
+        url = '{}/@workflow/tasktemplatefolder-transition-inactiv-activ'.format(
+            self.tasktemplatefolder.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(self.tasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(subtasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-activ',
+                         api.content.get_state(subsubtasktemplatefolder))
+
 
 class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
 
