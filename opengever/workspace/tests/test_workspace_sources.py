@@ -3,9 +3,70 @@ from ftw.builder import create
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
 from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
+from opengever.ogds.base.sources import AllFilteredGroupsSource
+from opengever.ogds.base.sources import AllGroupsSource
+from opengever.ogds.base.sources import AllUsersAndGroupsSource
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
+from opengever.ogds.base.sources import AllUsersSource
+from opengever.ogds.base.sources import AssignedUsersSource
+from opengever.ogds.base.sources import ContactsSource
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
+from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.testing import IntegrationTestCase
+from zExceptions import Unauthorized
+
+
+class TestWorkspaceSourcesProtection(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    BLACKLIST = [
+        AllEmailContactsAndUsersSource,
+        AllFilteredGroupsSource,
+        AllGroupsSource,
+        AllUsersAndGroupsSource,
+        AllUsersInboxesAndTeamsSource,
+        AllUsersSource,
+        AssignedUsersSource,
+        ContactsSource,
+        CurrentAdminUnitOrgUnitsSource,
+        UsersContactsInboxesSource,
+    ]
+
+    WHITELIST = [
+        ActualWorkspaceGroupsSource,
+        ActualWorkspaceMembersSource,
+        PotentialWorkspaceMembersSource,
+    ]
+
+    def test_whitelisted_teamraum_sources(self):
+        not_whitelisted_sources = []
+
+        for whitelisted_source in self.WHITELIST:
+            try:
+                whitelisted_source(self.portal)
+            except Unauthorized:
+                not_whitelisted_sources.append(whitelisted_source)
+
+        self.assertEqual([], not_whitelisted_sources)
+
+    def test_blacklisted_teamraum_sources(self):
+        self.maxDiff = None
+        not_protected_sources = []
+
+        for blacklisted_source in self.BLACKLIST:
+            try:
+                blacklisted_source(self.portal)
+            except Unauthorized:
+                pass
+            else:
+                not_protected_sources.append(blacklisted_source)
+
+        self.assertEqual([], not_protected_sources)
 
 
 class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
