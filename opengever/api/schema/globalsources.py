@@ -3,6 +3,8 @@ from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
 from opengever.ogds.base.sources import AllFilteredGroupsSourceBinder
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
 from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSourceBinder
+from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
 from plone.supermodel import model
 from zope import schema
 from zope.schema import getFieldsInOrder
@@ -40,13 +42,19 @@ class GlobalSourcesGet(GEVERQuerySourcesGet):
                     "title": fieldname,
                 }
                 for fieldname, field in getFieldsInOrder(IGlobalSourceSchema)
+                if self.is_visible(fieldname)
             ]
 
         # Query a specific globalsource
         fieldname = self.params[0]
         field = IGlobalSourceSchema.get(fieldname)
-        if field is None:
+        if not self.is_visible(fieldname) or field is None:
             return self._error(404, "Not Found",
                                "No such globalsource: %r" % fieldname)
 
         return self.query_and_serialize_results(field, fieldname)
+
+    def is_visible(self, querysource_name):
+        if is_workspace_feature_enabled():
+            return querysource_name in WHITELISTED_TEAMRAUM_PORTAL_TYPES
+        return True

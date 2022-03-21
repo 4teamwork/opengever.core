@@ -80,6 +80,35 @@ class TestGlobalSourcesGet(IntegrationTestCase):
             browser.json)
 
 
+class TestGlobalSourcesGetInTeamraum(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    @browsing
+    def test_globalsources_returns_a_list_of_all_visible_globalsources(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@globalsources'.format(self.portal.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual([], browser.json)
+
+    @browsing
+    def test_raises_not_found_for_not_visible_sources(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@globalsources/all_users_and_groups?query=Rober'.format(
+            self.portal.absolute_url())
+
+        self.deactivate_feature('workspace')
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.activate_feature('workspace')
+        with browser.expect_http_error(404):
+            browser.open(url, headers=self.api_headers)
+
+
 @requests_mock.Mocker()
 class TestGlobalSourcesGetWithKubContacts(KuBIntegrationTestCase):
 
