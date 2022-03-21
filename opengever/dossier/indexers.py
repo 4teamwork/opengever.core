@@ -338,7 +338,7 @@ class ParticipationIndexHelper(object):
             term = source.getTermByToken(participant_id)
             return term.title
         except LookupError:
-            return participant_id
+            return translate(_(u'unknown_id', default=u'Unknown ID'), context=getRequest())
 
     def index_value_to_label(self, value):
         """Returns a translated label of the form 'participant label|role label'
