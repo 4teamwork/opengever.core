@@ -44,6 +44,9 @@ FINAL_TRANSITIONS = [
     'task-transition-planned-skipped']
 
 
+CLOSED_TO_IN_PROGRESS_TRANSITION = 'task-transition-tested-and-closed-in-progress'
+
+
 def is_private_task_feature_enabled():
     return api.portal.get_registry_record(
         'private_task_feature_enabled', interface=ITaskSettings)

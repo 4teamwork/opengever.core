@@ -261,6 +261,9 @@ msgstr ""
 msgid "task-transition-resolved-tested-and-closed"
 msgstr ""
 
+msgid "task-transition-tested-and-closed-in-progress"
+msgstr ""
+
 msgid "transition-add-document"
 msgstr ""
 

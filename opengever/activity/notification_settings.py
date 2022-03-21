@@ -75,6 +75,7 @@ NOTIFICATION_CONFIGURATION = [
                        'task-transition-open-tested-and-closed',
                        'task-transition-resolved-tested-and-closed',
                        'task-transition-rejected-skipped',
+                       'task-transition-tested-and-closed-in-progress',
                        'forwarding-transition-accept',
                        'forwarding-transition-assign-to-dossier',
                        'forwarding-transition-close',

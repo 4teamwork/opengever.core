@@ -22,7 +22,7 @@ class FakeChecker(object):
                  is_remote_request=False,
                  issuing_agency=False, responsible_agency=False,
                  successor_process=False, current_admin_unit_assigned=False,
-                 is_administrator=False):
+                 is_administrator=False, parent_task_is_in_progress=False):
 
         self.current_user = Bunch(
             is_issuer=is_issuer,
@@ -34,7 +34,8 @@ class FakeChecker(object):
         self.task = Bunch(
             all_subtasks_finished=all_subtasks_finished,
             has_successors=has_successors,
-            is_assigned_to_current_admin_unit=current_admin_unit_assigned)
+            is_assigned_to_current_admin_unit=current_admin_unit_assigned,
+            parent_task_is_in_progress=parent_task_is_in_progress)
 
         self.request = Bunch(
             is_remote=is_remote_request,
@@ -715,3 +716,34 @@ class ResolvedInProgress(BaseTransitionGuardTests):
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, checker))
+
+
+class ClosedInProgress(BaseTransitionGuardTests):
+    transition = 'task-transition-tested-and-closed-in-progress'
+
+    def test_available_for_admin(self):
+        checker = FakeChecker(
+            is_administrator=True, parent_task_is_in_progress=True)
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_not_available_for_task_with_tasktype_information(self):
+        self.task_type_category = 'unidirectional_by_reference'
+
+        checker = FakeChecker(
+            is_administrator=True, parent_task_is_in_progress=True)
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_not_available_if_parent_task_is_not_in_progress(self):
+        checker = FakeChecker(
+            is_administrator=True, parent_task_is_in_progress=False)
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_not_available_for_responsible_or_issuer(self):
+        checker = FakeChecker(
+            is_responsible=True, is_issuer=True,
+            is_administrator=False, parent_task_is_in_progress=True)
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))

@@ -137,6 +137,12 @@
 
   <subscriber
       for="opengever.task.task.ITask
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.set_roles_when_reopen_a_closed_task"
+      />
+
+  <subscriber
+      for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".handlers.set_initial_state"
       />
@@ -311,6 +317,11 @@
   <adapter
       factory=".transition.OpenPlannedTransitionExtender"
       name="task-transition-planned-open"
+      />
+
+  <adapter
+      factory=".transition.DefaultTransitionExtender"
+      name="task-transition-tested-and-closed-in-progress"
       />
 
 </configure>

@@ -122,6 +122,22 @@ class TestTaskControllerChecker(IntegrationTestCase):
         self.login(self.secretariat_user)
         self.assertFalse(task_checker.all_subtasks_finished)
 
+    def test_parent_is_in_progress_is_true_if_is_not_a_subtask(self):
+        self.login(self.regular_user)
+        self.assertTrue(
+            get_checker(self.task).task.parent_task_is_in_progress)
+
+    def test_parent_is_in_progress_depends_on_parent_tasks_review_state(self):
+        self.login(self.regular_user)
+
+        self.assertTrue(
+            get_checker(self.subtask).task.parent_task_is_in_progress)
+
+        self.set_workflow_state('task-state-resolved', self.task)
+        self.task.sync()
+        self.assertFalse(
+            get_checker(self.subtask).task.parent_task_is_in_progress)
+
     def test_has_successors(self):
         self.login(self.dossier_responsible)
         self.register_successor(self.task, self.subtask)

@@ -711,6 +711,38 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         api.content.delete(self.document)
         self.assertEqual([], self.task.relatedItems)
 
+    @browsing
+    def test_closed_to_open_readd_localroles(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+
+        # close task
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        storage = RoleAssignmentManager(self.task).storage
+        self.assertEqual([], storage._storage())
+
+        # Request revision by administrator
+        self.login(self.administrator, browser=browser)
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Request revision')
+        browser.fill({'Response': 'Please correct this!'})
+        browser.click_on('Save')
+
+        self.assertEqual(
+            [{'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': 'kathi.barfuss'},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task),
+              'principal': 'fa_inbox_users'}], storage._storage())
+
 
 class TestLocalRolesReindexing(IntegrationTestCase):
 

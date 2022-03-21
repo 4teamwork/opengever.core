@@ -405,6 +405,9 @@ msgstr "Abschliessen"
 msgid "task-transition-skipped-open"
 msgstr "Wieder eröffnen"
 
+msgid "task-transition-tested-and-closed-in-progress"
+msgstr "Überarbeiten"
+
 msgid "tasktemplate-state-active"
 msgstr "Aktiv"
 
