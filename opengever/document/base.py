@@ -163,6 +163,11 @@ class BaseDocumentMixin(object):
         parent = aq_parent(aq_inner(self))
         return IBaseProposal.providedBy(parent)
 
+    def is_proposal_document(self):
+        if self.is_inside_a_proposal():
+            parent = aq_parent(aq_inner(self))
+            return parent.get_proposal_document().UID() == self.UID()
+
     def is_inside_a_task(self):
         parent = aq_parent(aq_inner(self))
         return ITask.providedBy(parent)

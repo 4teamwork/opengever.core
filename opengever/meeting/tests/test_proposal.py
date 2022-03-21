@@ -521,6 +521,18 @@ class TestProposal(IntegrationTestCase):
         self.assertEqual(error, expected_error)
 
     @browsing
+    def test_for_proposal_attachments_docx_is_not_mandatory(self, browser):
+        self.login(self.administrator, browser)
+        document = self.proposal.get_documents()[0]
+
+        self.checkout_document(document)
+        browser.open(document, view='edit')
+        browser.fill({'form.widgets.file.action': 'replace', 'File': ('asdf', 'foo.xlsx' 'application/fake')})
+        browser.find('Save').click()
+
+        statusmessages.assert_message('Changes saved')
+
+    @browsing
     def test_proposal_document_cannot_be_removed(self, browser):
         self.login(self.dossier_responsible, browser)
         document = self.draft_proposal.get_proposal_document()
