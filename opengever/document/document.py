@@ -139,7 +139,7 @@ class UploadValidator(Z3CFormClamavValidator):
         Removing a file is not an option for proposal documents.
         """
         if self.request.form.get('form.widgets.file.action') == 'remove':
-            if self.is_proposal_upload():
+            if self.is_proposal_document_upload():
                 raise Invalid(_(
                     u'error_proposal_no_document',
                     default=(u"It's not possible to have no file in proposal documents.")
@@ -155,7 +155,7 @@ class UploadValidator(Z3CFormClamavValidator):
         if is_email_upload(value.filename):
             self.raise_invalid()
 
-        if self.is_proposal_upload():
+        if self.is_proposal_document_upload():
             if not os.path.splitext(value.filename)[1].lower() == '.docx':
                 raise Invalid(_(
                     u'error_proposal_document_type',
@@ -163,9 +163,9 @@ class UploadValidator(Z3CFormClamavValidator):
                     ))
         super(UploadValidator, self).validate(value)
 
-    def is_proposal_upload(self):
+    def is_proposal_document_upload(self):
         """The upload form context can be, for example, a Dossier."""
-        return getattr(self.context, 'is_inside_a_proposal', lambda: False)()
+        return getattr(self.context, 'is_proposal_document', lambda: False)()
 
     def raise_invalid(self):
         if IDossierMarker.providedBy(self.context):

@@ -82,7 +82,7 @@ class UploadPatch(GeverUploadPatch):
         # if manager.is_locked_by_other():
         #     raise Forbidden("Document is locked.")
 
-        if self.is_proposal_upload() or self.is_proposal_template_upload():
+        if self.is_proposal_document_upload() or self.is_proposal_template_upload():
             tus_upload = self.tus_upload()
             metadata = tus_upload.metadata()
             filename = metadata.get("filename", "")
@@ -94,9 +94,9 @@ class UploadPatch(GeverUploadPatch):
                 ), context=self.request),
                 raise NotReportedBadRequest(msg)
 
-    def is_proposal_upload(self):
+    def is_proposal_document_upload(self):
         """The upload form context can be, for example, a Dossier."""
-        return getattr(self.context, 'is_inside_a_proposal', lambda: False)()
+        return getattr(self.context, 'is_proposal_document', lambda: False)()
 
     def is_proposal_template_upload(self):
         return IProposalTemplate.providedBy(self.context)
