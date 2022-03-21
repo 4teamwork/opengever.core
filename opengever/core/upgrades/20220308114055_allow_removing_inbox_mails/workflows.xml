@@ -1,0 +1,5 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool" purge="False">
+
+  <object name="opengever_inbox_mail_workflow" meta_type="Workflow" />
+
+</object>
