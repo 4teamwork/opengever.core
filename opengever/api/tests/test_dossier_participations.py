@@ -642,13 +642,19 @@ class TestParticipationsDelete(IntegrationTestCase):
             self.participant_id), "type": "BadRequest"}, browser.json)
 
     @browsing
-    def test_delete_participations_with_invalid_participant_id_raises_bad_request(self, browser):
+    def test_can_delete_participations_with_invalid_participant_id(self, browser):
         self.login(self.regular_user, browser=browser)
-        with browser.expect_http_error(400):
-            browser.open(self.dossier.absolute_url() + '/@participations/invalid-id',
-                         method='DELETE', headers=self.api_headers)
-        self.assertEqual({"message": "invalid-id is not a valid id",
-                          "type": "BadRequest"}, browser.json)
+        invalid_id = 'invalid-id'
+        handler = IParticipationAware(self.dossier)
+        participation = handler.create_participation(invalid_id, ['regard'])
+        handler.append_participation(participation)
+        self.dossier.reindexObject(idxs=["participations", "UID"])
+        self.assertTrue(handler.has_participation(invalid_id))
+
+        browser.open(self.dossier.absolute_url() + '/@participations/' + invalid_id,
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(handler.has_participation(invalid_id))
 
     @browsing
     def test_delete_participation_for_resolved_dossier_raises_unauthorized(self, browser):
@@ -687,6 +693,11 @@ class TestParticipationsDeleteWithContactFeatureEnabled(TestParticipationsDelete
         self.participant_id = 'person:{}'.format(self.person.id)
         self.participant_title = self.person.get_title()
 
+    @browsing
+    def test_can_delete_participations_with_invalid_participant_id(self, browser):
+        # This cannot happen for sql contacts
+        pass
+
 
 @requests_mock.Mocker()
 class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, TestParticipationsDelete):
@@ -704,9 +715,9 @@ class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, Test
         self.mock_get_by_id(mocker, self.participant_id)
         super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_when_participant_has_no_participation_raises_bad_request()
 
-    def test_delete_participations_with_invalid_participant_id_raises_bad_request(self, mocker):
+    def test_can_delete_participations_with_invalid_participant_id(self, mocker):
         self.mock_get_by_id(mocker, "invalid-id")
-        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participations_with_invalid_participant_id_raises_bad_request()
+        super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_can_delete_participations_with_invalid_participant_id()
 
     def test_delete_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
         super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_for_resolved_dossier_raises_unauthorized()

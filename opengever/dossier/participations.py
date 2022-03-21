@@ -146,7 +146,6 @@ class PloneParticipationHandler(ParticipationHandlerBase):
         return self._participations and participant_id in self._participations
 
     def remove_participation(self, participant_id):
-        self.validate_participant(participant_id)
         if not self.has_participation(participant_id):
             raise MissingParticipation(
                 u"{} has no participations on this context".format(participant_id))
