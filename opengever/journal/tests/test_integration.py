@@ -288,7 +288,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Participant added',
-            action_title='Participant added: %s with roles %s' % (
+            action_title='Participant added: Unknown ID (%s) with roles %s' % (
                 participant.contact, ', '.join(participant.roles)), )
 
         # Participation-Removed-Event
@@ -296,7 +296,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             dossier,
             action_type='Participant removed',
-            action_title='Participant removed: %s' % (
+            action_title='Participant removed: Unknown ID (%s)' % (
                 participant.contact), )
 
     def test_integration_mail_events(self):

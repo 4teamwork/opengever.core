@@ -221,7 +221,7 @@ class TestParticipationGet(IntegrationTestCase):
                                u'email': None,
                                u'id': u'invalid_participant',
                                u'is_local': None,
-                               u'title': u'invalid_participant'},
+                               u'title': u'Unknown ID (invalid_participant)'},
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}}],
             response.get('items'))
 
