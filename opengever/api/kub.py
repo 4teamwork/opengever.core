@@ -1,27 +1,14 @@
-from copy import deepcopy
-from opengever.api.utils import create_proxy_request_error_handler
-from opengever.api.utils import default_http_error_code_mapping
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.kub.entity import KuBEntity
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import NotFound
 from zope.component import adapter
 from zope.component import queryMultiAdapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
-import logging
-
-logger = logging.getLogger('opengever.api: KuB')
-
-http_error_code_mapping = deepcopy(default_http_error_code_mapping)
-http_error_code_mapping[404] = {
-    "return_code": 404,
-    "return_message": u"Contact was not found in KuB."}
-
-kub_request_error_handler = create_proxy_request_error_handler(
-    logger, u'Error while communicating with KuB', http_error_code_mapping)
 
 
 @implementer(ISerializeToJson)
@@ -39,7 +26,7 @@ class SerializeKuBEntityToJson(object):
 class KuBGet(Service):
     """API Endpoint that returns a single user from ogds.
 
-    GET /@ogds-users/user.id HTTP/1.1
+    GET /@kub/contact_uid HTTP/1.1
     """
 
     implements(IPublishTraverse)
@@ -53,11 +40,13 @@ class KuBGet(Service):
         self.params.append(name)
         return self
 
-    @kub_request_error_handler
     def reply(self):
         _id = self.read_params().decode('utf-8')
-        entity = KuBEntity(_id)
-        serializer = queryMultiAdapter((entity, self.request), ISerializeToJson)
+        try:
+            entity = KuBEntity(_id)
+            serializer = queryMultiAdapter((entity, self.request), ISerializeToJson)
+        except LookupError:
+            raise NotFound
         return serializer()
 
     def read_params(self):
