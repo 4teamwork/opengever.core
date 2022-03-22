@@ -39,6 +39,15 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "gever_url": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "GEVER URL",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -111,6 +120,7 @@
                 "responsible",
                 "videoconferencing_url",
                 "external_reference",
+                "gever_url",
                 "changed",
                 "title",
                 "description"

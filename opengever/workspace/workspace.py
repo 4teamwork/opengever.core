@@ -59,6 +59,13 @@ class IWorkspaceSchema(model.Schema):
         default=u'',
         missing_value=u''
     )
+    directives.omitted('gever_url')
+    gever_url = schema.TextLine(
+        title=_(u'label_gever_url', default=u'GEVER URL'),
+        required=False,
+        default=u'',
+        missing_value=u''
+    )
 
 
 class Workspace(WorkspaceBase):
