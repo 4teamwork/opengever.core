@@ -31,7 +31,6 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         AllUsersAndGroupsSource,
         AllUsersInboxesAndTeamsSource,
         AllUsersSource,
-        AssignedUsersSource,
         ContactsSource,
         CurrentAdminUnitOrgUnitsSource,
         UsersContactsInboxesSource,
@@ -40,6 +39,7 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
     WHITELIST = [
         ActualWorkspaceGroupsSource,
         ActualWorkspaceMembersSource,
+        AssignedUsersSource,
         PotentialWorkspaceMembersSource,
     ]
 
@@ -211,3 +211,37 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(self.workspace_member.id, term.token)
         self.assertEqual(self.workspace_member.id, term.value)
         self.assertEqual(u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)', term.title)
+
+
+class TestAssignedUsersSource(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    def test_contains_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = AssignedUsersSource(self.portal)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertNotIn(self.workspace_guest.getId(), source)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertIn(self.workspace_guest.getId(), source)
+
+    def test_can_search_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = AssignedUsersSource(self.portal)
+
+        self.assertEqual([], source.search('hans'))
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        self.assertEqual(1, len(source.search('hans')))
+        self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
