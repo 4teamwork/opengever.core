@@ -71,6 +71,8 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
 
 class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
 
+    features = ('workspace', )
+
     def test_users_of_all_admin_unit_are_valid(self):
         self.login(self.workspace_admin)
         source = PotentialWorkspaceMembersSource(self.workspace)
@@ -137,6 +139,35 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(0, len(results))
         results = source.search(self.workspace_owner.id)
         self.assertEqual(0, len(results))
+
+    def test_contains_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = PotentialWorkspaceMembersSource(self.portal)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertNotIn(self.workspace_guest.getId(), source)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertIn(self.workspace_guest.getId(), source)
+
+    def test_can_search_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = PotentialWorkspaceMembersSource(self.portal)
+
+        self.assertEqual([], source.search('hans'))
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        self.assertEqual(1, len(source.search('hans')))
+        self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
 
 
 class TestActualWorkspaceMembersSource(IntegrationTestCase):
