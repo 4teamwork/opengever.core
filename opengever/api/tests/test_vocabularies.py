@@ -507,3 +507,26 @@ class TestGetSourcesInTeamraum(IntegrationTestCase):
 
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
+
+
+class TestGetQuerySourcesInTeamraum(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    @browsing
+    def test_only_querysources_of_whitelisted_portal_types_are_allowed(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        portal_type = 'opengever.dossier.businesscasedossier'
+        url = '{}/@querysources/{}/responsible?query=foo'.format(
+            self.portal.absolute_url(), portal_type)
+
+        self.assertNotIn(portal_type, WHITELISTED_TEAMRAUM_PORTAL_TYPES)
+
+        with browser.expect_http_error(reason='Not Found'):
+            browser.open(url, headers=self.api_headers)
+
+        self.deactivate_feature('workspace')
+
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
