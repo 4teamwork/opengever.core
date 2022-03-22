@@ -27,6 +27,10 @@ from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
+ACTIVE_STATE = 'tasktemplatefolder-state-activ'
+INACTIVE_STATE = 'tasktemplatefolder-state-inactiv'
+TRANSITION_ACTIVATE = 'tasktemplatefolder-transition-inactiv-activ'
+
 
 class TaskTemplateFolder(Container):
 

@@ -6,6 +6,8 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.tasktemplates.browser.tasktemplates import TaskTemplatesCatalogTableSource
+from opengever.tasktemplates.tasktemplatefolder import ACTIVE_STATE
+from opengever.tasktemplates.tasktemplatefolder import INACTIVE_STATE
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import solr_data_for
@@ -191,6 +193,39 @@ class TestTaskTemplateFolder(IntegrationTestCase):
             u"\nValid transitions are:\n",
             browser.json['error']['message']
             )
+
+    @browsing
+    def test_subtasktemplatefolders_are_created_in_same_status_as_parent(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        self.assertEqual(ACTIVE_STATE, api.content.get_state(self.tasktemplatefolder))
+
+        # Add subtasktemplatefolder in active tasktemplatefolder
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add(u'Task Template Folder')
+        with self.observe_children(self.tasktemplatefolder) as children:
+            browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.assertEqual(1, len(children["added"]))
+        subtasktemplatefolder = children["added"].pop()
+        self.assertEqual(ACTIVE_STATE, api.content.get_state(subtasktemplatefolder))
+
+        # Inactivate
+        url = '{}/@workflow/tasktemplatefolder-transition-activ-inactiv'.format(
+            self.tasktemplatefolder.absolute_url())
+        browser.open(url, method='POST', headers=self.api_headers)
+        self.assertEqual(INACTIVE_STATE, api.content.get_state(self.tasktemplatefolder))
+
+        # Add subtasktemplatefolder in inactive tasktemplatefolder
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add(u'Task Template Folder')
+        with self.observe_children(self.tasktemplatefolder) as children:
+            browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+
+        self.assertEqual(1, len(children["added"]))
+        subtasktemplatefolder2 = children["added"].pop()
+        self.assertEqual(INACTIVE_STATE, api.content.get_state(subtasktemplatefolder2))
 
 
 class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
