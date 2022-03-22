@@ -103,7 +103,7 @@ class WorkspaceContentPatch(ContentPatch):
     def reply(self):
         data = json_body(self.request)
         if data.keys() != ['ordering']:
-            if data.keys() == ['external_reference']:
+            if data.keys() == ['gever_url', 'external_reference']:
                 if not api.user.has_permission('Modify portal content', obj=self.context):
                     raise Unauthorized()
             else:

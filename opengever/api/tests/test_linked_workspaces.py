@@ -78,10 +78,13 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                       [aa.absolute_url() for aa in children['added']])
 
         linked_workspace = children['added'].pop()
-        self.assertIn(browser.json.get('title'),
-                      linked_workspace.title)
-        self.assertIn(browser.json.get('external_reference'),
-                      Oguid.for_object(self.dossier).id)
+        self.assertEqual(browser.json.get('title'),
+                         linked_workspace.title)
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+            api.portal.get().absolute_url(), dossier_oguid)
+        self.assertEqual(browser.json.get('external_reference'), dossier_oguid)
+        self.assertEqual(expected_gever_url, linked_workspace.gever_url)
 
     @browsing
     def test_raise_not_found_if_feature_is_not_activated(self, browser):
@@ -166,7 +169,12 @@ class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
                          'Content-Type': 'application/json'})
 
         self.assertEqual(204, browser.status_code)
-        self.assertEqual(Oguid.for_object(self.dossier).id, self.workspace.external_reference)
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+            api.portal.get().absolute_url(), dossier_oguid)
+
+        self.assertEqual(dossier_oguid, self.workspace.external_reference)
+        self.assertEqual(expected_gever_url, self.workspace.gever_url)
 
     @browsing
     def test_raises_not_found_if_workspaceclient_feature_not_enabled(self, browser):

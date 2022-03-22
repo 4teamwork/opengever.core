@@ -848,11 +848,13 @@ class TestMoveLinkedWorkspacesDossiers(FunctionalWorkspaceClientTestCase):
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add(self.workspace.UID())
             alsoProvides(self.dossier, ILinkedToWorkspace)
-            self.workspace.reindexObject(idxs=['object_provides'])
-            self.workspace.external_reference = self.dossier.UID()
+            self.dossier.reindexObject(idxs=['object_provides'])
+            self.workspace.external_reference = 'an oguid'
+            self.workspace.gever_url = u'url'
 
             target_dossier = create(Builder('dossier'))
-            api.content.move(source=self.dossier, target=target_dossier)
+            with auto_commit_after_request(manager.client):
+                api.content.move(source=self.dossier, target=target_dossier)
 
             self.assertTrue(ILinkedToWorkspace.providedBy(target_dossier))
             self.assertFalse(ILinkedToWorkspace.providedBy(self.dossier))
@@ -863,6 +865,10 @@ class TestMoveLinkedWorkspacesDossiers(FunctionalWorkspaceClientTestCase):
             target_dossier_adapter = ILinkedWorkspaces(target_dossier)
             self.assertEqual(1, target_dossier_adapter.list()['items_total'])
             self.assertIn(self.workspace.UID(), target_dossier_adapter.storage)
+            gever_url = '{}/@resolve-oguid?oguid={}'.format(
+                api.portal.get().absolute_url(), Oguid.for_object(target_dossier).id)
+            self.assertEqual(Oguid.for_object(target_dossier).id, self.workspace.external_reference)
+            self.assertEqual(gever_url, self.workspace.gever_url)
 
 
 class TestLinkedWorkspacesJournalization(FunctionalWorkspaceClientTestCase):

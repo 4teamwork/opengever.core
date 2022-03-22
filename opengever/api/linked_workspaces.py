@@ -141,6 +141,7 @@ class RemoveDossierReferencePost(Service):
         if not user_agent.startswith('opengever.core/'):
             raise Unauthorized
         self.context.external_reference = u''
+        self.context.gever_url = u''
         self.context.reindexObject(idxs=["external_reference"])
         return self.reply_no_content()
 

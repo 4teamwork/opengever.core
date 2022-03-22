@@ -130,7 +130,9 @@ class LinkedWorkspaces(object):
         This function returns the serialized workspace.
         """
         if isinstance(data, dict):
-            data['external_reference'] = Oguid.for_object(self.context).id
+            oguid = Oguid.for_object(self.context).id
+            data['external_reference'] = oguid
+            data['gever_url'] = self.client.get_gever_url(oguid)
         workspace = self.client.create_workspace(**data)
         self.storage.add(workspace.get('UID'))
         if not ILinkedToWorkspace.providedBy(self.context):
