@@ -1,4 +1,6 @@
 from opengever.base.interfaces import IDuringContentCreation
+from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace import WHITELISTED_TEAMRAUM_VOCABULARIES
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.vocabularies.get import VocabulariesGet
 from zope.component import ComponentLookupError
@@ -27,6 +29,7 @@ class GEVERVocabulariesGet(VocabulariesGet):
                     "title": vocab[0],
                 }
                 for vocab in getUtilitiesFor(IVocabularyFactory)
+                if self.is_visible(vocab[0])
             ]
 
         elif len(self.params) == 1:
@@ -50,6 +53,11 @@ class GEVERVocabulariesGet(VocabulariesGet):
                 "two (portal_type, vocab_name) parameters"
             )
 
+        if not self.is_visible(vocab_name):
+            return self._error(
+                404, "Not Found",
+                "The vocabulary '{}' does not exist".format(vocab_name))
+
         try:
             factory = getUtility(IVocabularyFactory, name=vocab_name)
         except ComponentLookupError:
@@ -65,3 +73,8 @@ class GEVERVocabulariesGet(VocabulariesGet):
         return serializer(
             "{}/@vocabularies/{}".format(self.context.absolute_url(), vocab_name)
         )
+
+    def is_visible(self, vocab_name):
+        if is_workspace_feature_enabled():
+            return vocab_name in WHITELISTED_TEAMRAUM_VOCABULARIES
+        return True

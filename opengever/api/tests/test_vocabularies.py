@@ -6,6 +6,7 @@ from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
+from opengever.workspace import WHITELISTED_TEAMRAUM_VOCABULARIES
 from plone import api
 from plone.dexterity.utils import iterSchemata
 
@@ -134,7 +135,8 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
             NON_SENSITIVE_VOCABUALRIES,
             [vocabulary.get('title') for vocabulary in response],
             'Please validate that the newly introduced vocabularies do not contain '
-            'protectable entries and update the list of NON_SENSITIVE_VOCABUALRIES.')
+            'protectable entries for GEVER nor teamraum and update the list of '
+            'NON_SENSITIVE_VOCABUALRIES.')
 
     def assert_permission_for_non_sensitive_vocabulaires(self, browser, role=None, user=None):
         if not user:
@@ -530,3 +532,35 @@ class TestGetQuerySourcesInTeamraum(IntegrationTestCase):
 
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
+
+
+class TestGetVocabulariesInTeamraum(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    @browsing
+    def test_vocabularies_returns_a_list_of_all_visible_vocabularies(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@vocabularies'.format(self.portal.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertItemsEqual(
+            WHITELISTED_TEAMRAUM_VOCABULARIES,
+            [item.get('title') for item in browser.json])
+
+    @browsing
+    def test_raises_not_found_for_not_visible_vocabularies(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        url = '{}/@vocabularies/plone.app.vocabularies.Users'.format(
+            self.portal.absolute_url())
+
+        self.deactivate_feature('workspace')
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.activate_feature('workspace')
+        with browser.expect_http_error(404):
+            browser.open(url, headers=self.api_headers)
