@@ -23,10 +23,10 @@ class TestTaskTemplateFolder(IntegrationTestCase):
         factoriesmenu.add(u'Task Template Folder')
         browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
 
-        self.assertEquals(['Item created'], info_messages())
-        self.assertEquals(['Baugesuch'], browser.css('h1').text)
-        self.assertEquals('opengever.tasktemplates.tasktemplatefolder',
-                          browser.context.portal_type)
+        self.assertEqual(['Item created'], info_messages())
+        self.assertEqual(['Baugesuch'], browser.css('h1').text)
+        self.assertEqual('opengever.tasktemplates.tasktemplatefolder',
+                         browser.context.portal_type)
 
     @browsing
     def test_adding_subtasktemplatefolder_only_possible_if_feature_is_enabled(self, browser):
@@ -53,8 +53,8 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                                     .titled(u'Verfahren Neuanstellung')
                                     .within(self.templates))
 
-        self.assertEquals('tasktemplatefolder-state-inactiv',
-                          api.content.get_state(tasktemplatefolder))
+        self.assertEqual('tasktemplatefolder-state-inactiv',
+                         api.content.get_state(tasktemplatefolder))
 
     @browsing
     def test_deletion_is_possible_for_administrator(self, browser):
@@ -63,7 +63,7 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                      data=self.make_path_param(self.tasktemplatefolder))
         browser.click_on('Delete')
 
-        self.assertEquals(['Items deleted successfully.'], info_messages())
+        self.assertEqual(['Items deleted successfully.'], info_messages())
         with self.assertRaises(KeyError):
             self.tasktemplatefolder
 
@@ -74,7 +74,7 @@ class TestTaskTemplateFolder(IntegrationTestCase):
                      data=self.make_path_param(self.tasktemplatefolder))
         browser.click_on('Delete')
 
-        self.assertEquals(['Items deleted successfully.'], info_messages())
+        self.assertEqual(['Items deleted successfully.'], info_messages())
         with self.assertRaises(KeyError):
             self.tasktemplatefolder
 
@@ -271,7 +271,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
         self.commit_solr()
 
         # The new task template has been added at the bottom within the container.
-        self.assertEquals(
+        self.assertEqual(
             [
                 'opengever-tasktemplates-tasktemplate',
                 'task-create-user',
@@ -284,7 +284,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
         self.commit_solr()
 
         # Make sure the change of position worked in Plone.
-        self.assertEquals(
+        self.assertEqual(
             [
                 'task-create-user',
                 'opengever-tasktemplates-tasktemplate',
@@ -308,7 +308,7 @@ class TaskTemplatesOrderingInTabbedView(SolrIntegrationTestCase):
         })
 
         # Make sure the items are sorted.
-        self.assertEquals(
+        self.assertEqual(
             [
                 'task-create-user',
                 'opengever-tasktemplates-tasktemplate',
