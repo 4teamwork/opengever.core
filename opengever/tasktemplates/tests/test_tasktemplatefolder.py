@@ -148,6 +148,50 @@ class TestTaskTemplateFolder(IntegrationTestCase):
         self.assertEqual('tasktemplatefolder-state-activ',
                          api.content.get_state(subsubtasktemplatefolder))
 
+    @browsing
+    def test_cannot_activate_subtasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+        subtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'Verfahren Neuanstellung')
+            .within(self.tasktemplatefolder)
+            .in_state('tasktemplatefolder-state-inactiv'))
+
+        # Activate
+        url = '{}/@workflow/tasktemplatefolder-transition-inactiv-activ'.format(
+            subtasktemplatefolder.absolute_url())
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            u"Invalid transition 'tasktemplatefolder-transition-inactiv-activ'."
+            u"\nValid transitions are:\n",
+            browser.json['error']['message']
+            )
+
+    @browsing
+    def test_cannot_inactivate_subtasktemplatefolder(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.activate_feature('tasktemplatefolder_nesting')
+        subtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'Verfahren Neuanstellung')
+            .within(self.tasktemplatefolder)
+            .in_state('tasktemplatefolder-state-activ'))
+
+        # Activate
+        url = '{}/@workflow/tasktemplatefolder-transition-activ-inactiv'.format(
+            subtasktemplatefolder.absolute_url())
+        with browser.expect_http_error(400):
+            browser.open(url, method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            u"Invalid transition 'tasktemplatefolder-transition-activ-inactiv'."
+            u"\nValid transitions are:\n",
+            browser.json['error']['message']
+            )
+
 
 class TestTaskTemplateFolderWithSolr(SolrIntegrationTestCase):
 

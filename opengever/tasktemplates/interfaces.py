@@ -22,6 +22,11 @@ class IDuringTaskTemplateFolderTriggering(Interface):
     """
 
 
+class IDuringTaskTemplateFolderWorkflowTransition(Interface):
+    """Request marker present during workflow transitions of TaskTemplateFolders.
+    """
+
+
 class ITaskTemplateSettings(Interface):
 
     is_tasktemplatefolder_nesting_enabled = schema.Bool(

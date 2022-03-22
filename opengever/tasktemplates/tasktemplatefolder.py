@@ -13,6 +13,7 @@ from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -40,6 +41,13 @@ class TaskTemplateFolder(Container):
     def is_subtasktemplatefolder(self):
         parent = aq_parent(aq_inner(self))
         return ITaskTemplateFolderSchema.providedBy(parent)
+
+    def is_workflow_transition_allowed(self):
+        if IDuringTaskTemplateFolderWorkflowTransition.providedBy(getRequest()):
+            # Transition happens recursively so we need to allow it during
+            # transition of the main TaskTemplateFolder.
+            return True
+        return not self.is_subtasktemplatefolder()
 
     def contains_subtasktemplatefolders(self):
         catalog = api.portal.get_tool('portal_catalog')
