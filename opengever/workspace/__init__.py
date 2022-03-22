@@ -7,6 +7,17 @@ _ = MessageFactory('opengever.workspace')
 
 WHITELISTED_TEAMRAUM_GLOBAL_SOURCES = set()
 
+WHITELISTED_TEAMRAUM_PORTAL_TYPES = {
+    'ftw.mail.mail',
+    'opengever.document.document',
+    'opengever.workspace.folder',
+    'opengever.workspace.meetingagendaitem',
+    'opengever.workspace.root',
+    'opengever.workspace.todo',
+    'opengever.workspace.todolist',
+    'opengever.workspace.workspace',
+}
+
 
 def is_workspace_feature_enabled():
     from opengever.workspace.interfaces import IWorkspaceSettings

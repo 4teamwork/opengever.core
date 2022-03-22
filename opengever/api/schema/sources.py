@@ -1,4 +1,6 @@
 from opengever.base.interfaces import IDuringContentCreation
+from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
+from opengever.workspace import is_workspace_feature_enabled
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from plone.restapi.interfaces import ISerializeToJson
@@ -53,6 +55,16 @@ class GEVERSourcesGet(SourcesGet):
             self.intent = 'add'
             portal_type = self.params[0]
             fieldname = self.params[1]
+
+            # Only allow to access sources of whitelisted portal_types in teamraum.
+            # This ensures that the user can't query an unprotected source which exposes
+            # userinformation.
+            if (is_workspace_feature_enabled() and portal_type not in WHITELISTED_TEAMRAUM_PORTAL_TYPES):
+                return self._error(
+                    404, "Not Found",
+                    "No such field: %r" % fieldname
+                )
+
             schemata = iterSchemataForType(portal_type)
             alsoProvides(self.request, IDuringContentCreation)
 
