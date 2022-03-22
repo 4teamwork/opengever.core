@@ -175,6 +175,14 @@ class IDocumentMetadata(model.Schema):
         required=False,
         )
 
+    form.omitted('gever_url')
+    gever_url = schema.TextLine(
+        title=_(u'label_gever_url', default=u'GEVER URL'),
+        required=False,
+        default=u'',
+        missing_value=u''
+    )
+
     @invariant
     def scan_for_virus(data):
         if data.archival_file:
@@ -184,4 +192,3 @@ class IDocumentMetadata(model.Schema):
 
 
 alsoProvides(IDocumentMetadata, IFormFieldProvider)
-
