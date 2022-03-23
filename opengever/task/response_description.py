@@ -276,7 +276,8 @@ ResponseDescription.add_description(Reopen)
 
 class Revise(ResponseDescription):
 
-    transition = 'task-transition-resolved-in-progress'
+    transitions = ['task-transition-resolved-in-progress',
+                   'task-transition-tested-and-closed-in-progress']
     css_class = 'revise'
 
     def msg(self):
