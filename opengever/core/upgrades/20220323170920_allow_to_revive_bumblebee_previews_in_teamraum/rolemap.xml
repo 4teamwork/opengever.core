@@ -1,0 +1,15 @@
+<rolemap>
+  <permissions>
+
+    <permission name="opengever.bumblebee: Revive Preview" acquire="True">
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Manager" />
+      <role name="Reader" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+      <role name="WorkspaceGuest" />
+    </permission>
+
+  </permissions>
+</rolemap>
