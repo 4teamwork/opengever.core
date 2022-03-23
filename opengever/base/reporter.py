@@ -23,8 +23,10 @@ def value(input_string):
 def readable_author(author):
     """Helper method which returns the author description,
     instead of the userid"""
-
-    return Actor.lookup(author).get_label()
+    actor = Actor.lookup(author)
+    if actor.actor_type == 'null':
+        return author or ''
+    return actor.get_label()
 
 
 def readable_date(date):

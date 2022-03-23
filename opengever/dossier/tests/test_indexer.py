@@ -433,7 +433,7 @@ class TestDossierParticipationsIndexer(SolrIntegrationTestCase):
 
 
 @requests_mock.Mocker()
-class TestDossierParticipationsIndexerWithBuB(SolrIntegrationTestCase, KuBIntegrationTestCase):
+class TestDossierParticipationsIndexerWithKuB(SolrIntegrationTestCase, KuBIntegrationTestCase):
 
     def test_kub_participations_are_indexed_in_solr(self, mocker):
         self.login(self.regular_user)
@@ -459,4 +459,4 @@ class TestParticipationIndexHelper(IntegrationTestCase):
 
     def test_participant_id_to_label_handles_invalid_ids(self):
         helper = ParticipationIndexHelper()
-        self.assertEqual("invalid-id", helper.participant_id_to_label("invalid-id"))
+        self.assertEqual("Unknown ID", helper.participant_id_to_label("invalid-id"))

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-05 08:34+0000\n"
+"POT-Creation-Date: 2022-03-14 15:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1039,6 +1039,11 @@ msgstr ""
 #. Default: "Task list of dossier ${title}, ${timestamp}"
 #: ./opengever/dossier/resolve.py
 msgid "title_dossier_tasks"
+msgstr ""
+
+#. Default: "Unknown ID"
+#: ./opengever/dossier/indexers.py
+msgid "unknown_id"
 msgstr ""
 
 #. Default: "You didn't select any participants."

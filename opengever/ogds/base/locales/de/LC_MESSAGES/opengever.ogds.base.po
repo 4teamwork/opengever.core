@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-12-08 15:51+0000\n"
+"POT-Creation-Date: 2022-03-14 15:22+0000\n"
 "PO-Revision-Date: 2016-07-22 16:54+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/de/>\n"
@@ -172,3 +172,8 @@ msgstr "Dieser Stellvertreter existiert bereits."
 #: ./opengever/ogds/base/substitute.py
 msgid "msg_substitute_does_not_exist"
 msgstr "Dieser Stellvertreter existiert nicht."
+
+#. Default: "Unknown ID"
+#: ./opengever/ogds/base/actor.py
+msgid "unknown_id"
+msgstr "Unbekannte ID"

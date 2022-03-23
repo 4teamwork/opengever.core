@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-11-05 08:34+0000\n"
+"POT-Creation-Date: 2022-03-14 15:22+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -1269,6 +1269,11 @@ msgstr "Journal of dossier ${title}, ${timestamp}"
 #: ./opengever/dossier/resolve.py
 msgid "title_dossier_tasks"
 msgstr "Task list of dossier ${title}, ${timestamp}"
+
+#. Default: "Unknown ID"
+#: ./opengever/dossier/indexers.py
+msgid "unknown_id"
+msgstr "Unknown ID"
 
 #. German translation: Sie haben keine Beteiligungen ausgewählt.
 #. Default: "You didn't select any participants."

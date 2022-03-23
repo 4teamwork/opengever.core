@@ -31,7 +31,7 @@ class TestActorLookup(IntegrationTestCase):
     def test_null_actor(self):
         actor = Actor.lookup('not-existing')
         self.assertIsInstance(actor, NullActor)
-        self.assertEqual('not-existing', actor.get_label())
+        self.assertEqual('Unknown ID (not-existing)', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
         self.assertEqual('not-existing', actor.get_link())
 
