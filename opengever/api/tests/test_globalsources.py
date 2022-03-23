@@ -75,8 +75,10 @@ class TestGlobalSourcesGet(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups?query=inacti',
              u'items': [{u'title': u'Inactive Peter (peter.inactive)',
-                         u'token': u'peter.inactive'}],
-             u'items_total': 1},
+                         u'token': u'peter.inactive'},
+                        {u'title': u'User Inactive (inactive.user)',
+                         u'token': u'inactive.user'}],
+             u'items_total': 2},
             browser.json)
 
 

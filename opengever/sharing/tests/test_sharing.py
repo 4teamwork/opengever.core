@@ -391,7 +391,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
 
         result = browser.json
-        self.assertEqual(21, result['items_total'])
+        self.assertEqual(22, result['items_total'])
         self.assertEqual(3, len(result['items']))
         self.assertIn('batching', result)
 
@@ -432,7 +432,8 @@ class TestOpengeverSharing(IntegrationTestCase):
              u'rk Inbox Users Group',
              u'Fr\xfchling F\xe4ivel',
              u'Hugentobler Fridolin',
-             u'Schr\xf6dinger B\xe9atrice'],
+             u'Schr\xf6dinger B\xe9atrice',
+             u'User Inactive'],
             [each["title"] for each in browser.json["items"]])
 
 

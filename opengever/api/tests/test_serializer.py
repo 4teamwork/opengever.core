@@ -334,7 +334,7 @@ class TestGroupSerializer(IntegrationTestCase):
                                     u'@type': u'virtual.plone.user',
                                     u'title': u'User Service (service.user)',
                                     u'token': u'service.user'}],
-                        u'items_total': 19}},
+                        u'items_total': 20}},
             response)
 
 
