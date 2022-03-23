@@ -1,6 +1,8 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
+from ftw.solr.interfaces import ISolrConnectionManager
+from ftw.solr.interfaces import ISolrIndexHandler
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
@@ -15,6 +17,8 @@ from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getAdapter
+from zope.component import getMultiAdapter
+from zope.component import queryUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 
@@ -93,16 +97,21 @@ def reindex_containing_subdossier_for_contained_objects(dossier, event):
     objects = catalog(path='/'.join(dossier.getPhysicalPath()),
                       portal_type=TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)
 
+    manager = queryUtility(ISolrConnectionManager)
     for obj in objects:
-        obj.getObject().reindexObject(idxs=['containing_subdossier'])
+        handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
+        handler.add(['containing_subdossier'])
 
 
 def reindex_containing_dossier_for_contained_objects(dossier, event):
     """Reindex the containging_dossier index for all the contained obects.
     """
+    manager = queryUtility(ISolrConnectionManager)
+
     for brain in dossier.portal_catalog(path='/'.join(dossier.getPhysicalPath())):
         obj = brain.getObject()
-        obj.reindexObject(idxs=['containing_dossier'])
+        handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
+        handler.add(['containing_dossier'])
 
         if ITask.providedBy(obj):
             sync_task(brain.getObject(), event)
