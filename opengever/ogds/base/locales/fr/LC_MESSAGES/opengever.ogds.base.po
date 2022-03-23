@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-12-08 15:51+0000\n"
+"POT-Creation-Date: 2022-03-14 15:22+0000\n"
 "PO-Revision-Date: 2017-12-03 11:29+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-ogds-base/fr/>\n"
@@ -172,3 +172,8 @@ msgstr "Ce suppléant existe déjà."
 #: ./opengever/ogds/base/substitute.py
 msgid "msg_substitute_does_not_exist"
 msgstr "Ce suppléant n'existe pas."
+
+#. Default: "Unknown ID"
+#: ./opengever/ogds/base/actor.py
+msgid "unknown_id"
+msgstr "ID inconnu"

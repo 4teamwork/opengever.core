@@ -193,7 +193,12 @@ class NullActor(object):
         return None
 
     def get_label(self, with_principal=True):
-        return self.identifier or u''
+        if not self.identifier:
+            return u''
+        label = _(u'unknown_id', default=u'Unknown ID')
+        if not with_principal:
+            return translate(label, context=getRequest())
+        return u"%s (%s)" % (translate(label, context=getRequest()), self.identifier)
 
     def get_link(self, with_icon=False):
         return self.identifier or u''

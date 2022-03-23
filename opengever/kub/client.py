@@ -1,3 +1,4 @@
+from opengever.base.sentry import log_msg_to_sentry
 from opengever.kub.interfaces import IKuBSettings
 from plone import api
 import requests
@@ -41,7 +42,11 @@ class KuBClient(object):
     def get_by_id(self, _id):
         url = self.get_resolve_url(_id)
         resp = self.session.get(url)
-        resp.raise_for_status()
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError as exc:
+            log_msg_to_sentry(exc.message)
+            raise LookupError
         return resp.json()
 
     def get_resolve_url(self, _id):

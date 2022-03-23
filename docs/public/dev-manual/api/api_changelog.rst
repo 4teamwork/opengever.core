@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@kub``: A 404 error is returned if a contact cannot be resolved.
 
 Other Changes
 ^^^^^^^^^^^^^

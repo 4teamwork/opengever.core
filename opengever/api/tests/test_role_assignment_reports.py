@@ -174,7 +174,7 @@ class TestRoleAssignmentReportsPost(IntegrationTestCase):
                           u'items_total': 0,
                           u'modified': u'2020-04-18T00:00:00+00:00',
                           u'principal_type': u'unknown principal',
-                          u'principal_label': u'chaosqueen',
+                          u'principal_label': u'Unknown ID (chaosqueen)',
                           u'principal_id': u'chaosqueen',
                           u'report_id': u'report_2',
                           u'state': u'in progress'}, browser.json)

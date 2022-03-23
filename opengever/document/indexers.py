@@ -167,7 +167,10 @@ def sortable_author(obj):
     """Index to allow users to sort on document_author."""
     author = obj.document_author
     if author:
-        return Actor.user(author).get_label()
+        actor = Actor.user(author)
+        if actor.actor_type == 'null':
+            return author
+        return actor.get_label()
     return ''
 
 
