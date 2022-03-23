@@ -392,3 +392,20 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             ],
             [user.get('groupid') for user in browser.json.get('items')]
         )
+
+    @browsing
+    def test_protect_lookup_ogds_groups(self, browser):
+        self.login(self.regular_user, browser)
+        group = Group.query.get('projekt_a')
+
+        with browser.expect_http_error(code=404, reason='Not Found'):
+            browser.open(self.portal.absolute_url() + '/@ogds-groups/' + group.groupid,headers=self.api_headers)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, group.groupid, ['WorkspaceMember'])
+
+        browser.open(self.portal.absolute_url() + '/@ogds-groups/' + group.groupid,headers=self.api_headers)
+
+        self.assertEqual(u'Projekt A', browser.json.get('title'))
