@@ -233,6 +233,8 @@ class LinkedWorkspaces(object):
             # since there's no file that could be transferred back.
             return self.client.post(workspace_url, json=document_repr)
 
+        document_metadata['gever_url'] = self.client.get_gever_url(Oguid.for_object(document).id)
+
         content_type = document.content_type()
         filename = document.get_filename()
         gever_document_uid = document.UID()
@@ -300,7 +302,7 @@ class LinkedWorkspaces(object):
             document_repr['message']['data'] = data.content
 
         # We should avoid setting the id ourselves, can lead to conflicts
-        document_repr = self._blacklisted_dict(document_repr, ['id'])
+        document_repr = self._blacklisted_dict(document_repr, ['id', 'gever_url'])
 
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
 
