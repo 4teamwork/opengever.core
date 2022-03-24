@@ -12,6 +12,10 @@ def is_workspace_client_feature_enabled():
         'is_feature_enabled', IWorkspaceClientSettings, False)
 
 
+def is_linking_enabled():
+    return api.portal.get_registry_record('is_linking_enabled', IWorkspaceClientSettings)
+
+
 def is_workspace_client_feature_available():
     """The feature is available if:
 

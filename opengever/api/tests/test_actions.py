@@ -1361,6 +1361,20 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             self.assert_workspace_actions_not_available(browser, self.dossier)
 
     @browsing
+    def test_link_to_workspace_action_only_available_if_linking_activated(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            actions = self.get_actions(browser, self.dossier)
+            self.assertIn(self.link_to_workspace_action, actions)
+
+            self.enable_linking(False)
+            transaction.commit()
+
+            actions = self.get_actions(browser, self.dossier)
+            self.assertNotIn(self.link_to_workspace_action, actions)
+
+    @browsing
     def test_workspaces_actions_only_available_if_user_has_permission_to_use_workspace_client(self, browser):
         browser.login()
         with self.workspace_client_env():

@@ -10,6 +10,11 @@ class IWorkspaceClientSettings(Interface):
         description=u'Whether a remote workspace integration is enabled',
         default=False)
 
+    is_linking_enabled = schema.Bool(
+        title=u'Enable linking',
+        description=u'Whether existing workspaces can be linked to a dossier.',
+        default=True)
+
 
 class ILinkedWorkspaces(Interface):
     """Behavior interface to manage remote workspaces

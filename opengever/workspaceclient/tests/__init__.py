@@ -74,6 +74,11 @@ class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
             'is_feature_enabled', enabled, IWorkspaceClientSettings)
         transaction.commit()
 
+    def enable_linking(self, enabled=True):
+        api.portal.set_registry_record(
+            'is_linking_enabled', enabled, IWorkspaceClientSettings)
+        transaction.commit()
+
     @contextmanager
     def workspace_client_env(self, url=DEFAULT_MARKER):
         url = self.portal.absolute_url() if url is DEFAULT_MARKER else url
