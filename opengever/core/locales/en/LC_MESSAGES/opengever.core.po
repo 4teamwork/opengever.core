@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-12-07 12:24+0000\n"
+"POT-Creation-Date: 2022-03-24 14:27+0000\n"
 "PO-Revision-Date: 2017-09-18 15:21+0200\n"
 "Last-Translator: Philippe Gross <p.gross@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -124,6 +124,11 @@ msgstr "Create proposal"
 msgid "Create Task"
 msgstr "Create task"
 
+#: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20220324143655_add_workspace_creation_and_linking_flags/actions.xml
+msgid "Create workspace"
+msgstr "Create workspace"
+
 #. German translation: Dateien für docxcompose herunterladen
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Debug docxcompose"
@@ -131,6 +136,7 @@ msgstr "Download docxcompose debug files"
 
 #. German translation: Löschen
 #: ./opengever/core/profiles/default/actions.xml
+#: ./opengever/core/upgrades/20220222082438_allow_to_delete_workspaces/actions.xml
 msgid "Delete"
 msgstr "Delete"
 

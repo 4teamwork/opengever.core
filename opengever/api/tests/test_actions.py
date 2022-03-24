@@ -1264,6 +1264,11 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'title': u'Copy back documents from workspace',
         u'icon': u''}
 
+    create_linked_workspace_action = {
+        u'id': u'create_linked_workspace',
+        u'title': u'Create workspace',
+        u'icon': u''}
+
     unlink_workspace_action = {
         u'id': u'unlink_workspace',
         u'title': u'Unlink workspace',
@@ -1273,6 +1278,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
                          link_to_workspace_action,
                          copy_documents_to_workspace_action,
                          copy_documents_from_workspace_action,
+                         create_linked_workspace_action,
                          unlink_workspace_action]
 
     def get_actions(self, browser, context):

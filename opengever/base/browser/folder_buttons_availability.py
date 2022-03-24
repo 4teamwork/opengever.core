@@ -112,6 +112,12 @@ class FolderButtonsAvailabilityView(BrowserView):
             and self._can_add_content_to_dossier()
         )
 
+    def is_create_linked_workspace_available(self):
+        return (self._is_main_dossier()
+                and self._is_open_dossier()
+                and self._can_use_workspace_client()
+                and self._can_modify_dossier())
+
     def is_link_to_workspace_available(self):
         return (self._is_main_dossier()
                 and self._is_open_dossier()
