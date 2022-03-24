@@ -174,6 +174,8 @@ class GeverSettingsAdpaterV1(object):
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         features['workspace_client'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceClientSettings)  # noqa
+        features['workspace_creation_restricted'] = api.portal.get_registry_record(
+            'is_creation_restricted', interface=IWorkspaceSettings)
         features['workspace_meetings'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceMeetingSettings)  # noqa
         features['workspace_todo'] = api.portal.get_registry_record('is_feature_enabled', interface=IToDoSettings)
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)

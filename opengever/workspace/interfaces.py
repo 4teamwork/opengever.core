@@ -22,6 +22,11 @@ class IWorkspaceSettings(Interface):
         description=u'Whether workspace integration is enabled',
         default=False)
 
+    is_creation_restricted = schema.Bool(
+        title=u'Restrict creation',
+        description=u'Whether workspace creation is restricted, i.e. only allowed from Gever',
+        default=False)
+
     invitation_group_dn = schema.TextLine(
         title=u'Invitation Group DN',
         description=u'DN of a group where invited users are added on registration',
