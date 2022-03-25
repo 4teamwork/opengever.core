@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -5,6 +6,10 @@ from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroups
 from opengever.ogds.models.group import Group
 from opengever.testing import SolrIntegrationTestCase
 import json
+
+
+def clear_cache(request):
+    setattr(request, VisibleUsersAndGroupsFilter.ALLOWED_USERS_AND_GROUPS_CACHEKEY, None)
 
 
 class TestVisibleUsersAndGroupsFilterInGever(SolrIntegrationTestCase):
@@ -107,12 +112,33 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
         with self.login(self.workspace_admin):
             self.set_roles(workspace_project_a, group.groupid, ['WorkspaceMember'])
 
+        clear_cache(self.request)
+
         self.assertItemsEqual(
             [
                 self.regular_user.getId(),
                 self.workspace_admin.getId(),
                 group.groupid,
                 self.dossier_responsible.getId()],
+            VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
+    def test_whitelisted_principals_are_cached_per_request(self):
+        self.login(self.regular_user)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId()], VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+
+        self.assertItemsEqual(
+            [self.regular_user.getId()], VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
+        clear_cache(self.request)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId(), self.workspace_admin.getId()],
             VisibleUsersAndGroupsFilter().get_whitelisted_principals())
 
     @browsing

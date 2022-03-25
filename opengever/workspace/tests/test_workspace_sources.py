@@ -3,6 +3,7 @@ from ftw.builder import create
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroupsFilter
 from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
 from opengever.ogds.base.sources import ActualWorkspaceMembersSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
@@ -18,6 +19,10 @@ from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
+
+
+def clear_cache_visible_users_and_groups_filter_cache(request):
+    setattr(request, VisibleUsersAndGroupsFilter.ALLOWED_USERS_AND_GROUPS_CACHEKEY, None)
 
 
 class TestWorkspaceSourcesProtection(IntegrationTestCase):
@@ -152,6 +157,8 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
             self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
             self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
 
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
         self.assertIn(self.regular_user.getId(), source)
         self.assertIn(self.workspace_guest.getId(), source)
 
@@ -165,6 +172,8 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
             workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
             self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
             self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
 
         self.assertEqual(1, len(source.search('hans')))
         self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
@@ -260,6 +269,8 @@ class TestAssignedUsersSource(IntegrationTestCase):
             self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
             self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
 
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
         self.assertIn(self.regular_user.getId(), source)
         self.assertIn(self.workspace_guest.getId(), source)
 
@@ -273,6 +284,8 @@ class TestAssignedUsersSource(IntegrationTestCase):
             workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
             self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
             self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
 
         self.assertEqual(1, len(source.search('hans')))
         self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)

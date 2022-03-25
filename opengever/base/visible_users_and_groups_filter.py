@@ -1,6 +1,7 @@
 from opengever.ogds.models.service import ogds_service
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api
+from zope.globalrequest import getRequest
 
 
 class VisibleUsersAndGroupsFilter:
@@ -14,6 +15,7 @@ class VisibleUsersAndGroupsFilter:
     """
 
     ACCESS_ALL_USERS_AND_GROUPS_PERMISSION = 'opengever.workspace: Access all users and groups'
+    ALLOWED_USERS_AND_GROUPS_CACHEKEY = '_visible_users_and_groups_allowed_users_and_groups'
 
     def is_teamraum(self):
         return is_workspace_feature_enabled()
@@ -40,9 +42,17 @@ class VisibleUsersAndGroupsFilter:
         Whitelisted principals are all user and group ids which are participating
         in the same workspaces as the currently logged in user.
         """
-        allowed_users_and_groups = self.extract_allowed_users_and_groups()
-        allowed_users_and_groups += self.extract_group_members(allowed_users_and_groups)
-        allowed_users_and_groups += [api.user.get_current().getId()]
+        request = getRequest()
+
+        allowed_users_and_groups = getattr(
+            request, self.ALLOWED_USERS_AND_GROUPS_CACHEKEY, None)
+
+        if allowed_users_and_groups is None:
+            allowed_users_and_groups = self.extract_allowed_users_and_groups()
+            allowed_users_and_groups += self.extract_group_members(allowed_users_and_groups)
+            allowed_users_and_groups += [api.user.get_current().getId()]
+            setattr(request, self.ALLOWED_USERS_AND_GROUPS_CACHEKEY,
+                    allowed_users_and_groups)
 
         return set(allowed_users_and_groups)
 
