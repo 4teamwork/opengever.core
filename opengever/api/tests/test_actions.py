@@ -1264,6 +1264,11 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
         u'title': u'Copy back documents from workspace',
         u'icon': u''}
 
+    create_linked_workspace_action = {
+        u'id': u'create_linked_workspace',
+        u'title': u'Create workspace',
+        u'icon': u''}
+
     unlink_workspace_action = {
         u'id': u'unlink_workspace',
         u'title': u'Unlink workspace',
@@ -1273,6 +1278,7 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
                          link_to_workspace_action,
                          copy_documents_to_workspace_action,
                          copy_documents_from_workspace_action,
+                         create_linked_workspace_action,
                          unlink_workspace_action]
 
     def get_actions(self, browser, context):
@@ -1353,6 +1359,20 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             self.assert_workspace_actions_not_available(browser, self.dossier)
+
+    @browsing
+    def test_link_to_workspace_action_only_available_if_linking_activated(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            actions = self.get_actions(browser, self.dossier)
+            self.assertIn(self.link_to_workspace_action, actions)
+
+            self.enable_linking(False)
+            transaction.commit()
+
+            actions = self.get_actions(browser, self.dossier)
+            self.assertNotIn(self.link_to_workspace_action, actions)
 
     @browsing
     def test_workspaces_actions_only_available_if_user_has_permission_to_use_workspace_client(self, browser):

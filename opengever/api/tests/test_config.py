@@ -97,6 +97,7 @@ class TestConfig(IntegrationTestCase):
                 u'tasktemplatefolder_nesting': False,
                 u'workspace': False,
                 u'workspace_client': False,
+                u'workspace_creation_restricted': False,
                 u'workspace_meetings': True,
                 u'workspace_todo': True,
             })

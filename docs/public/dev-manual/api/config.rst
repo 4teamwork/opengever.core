@@ -93,6 +93,7 @@ GEVER-Mandanten abgefragt werden.
               "tasks_pdf": false,
               "workspace": false,
               "workspace_client": false,
+              "workspace_creation_restricted": false,
               "workspace_meetings": false,
               "workspace_todo": false,
           },
@@ -258,6 +259,9 @@ features
 
     workspace_client
         Integration von GEVER mit einem Teamraum
+
+    workspace_creation_restricted
+        Direkete Teamraum-Erstellung deaktivieren
 
     workspace_meetings
         Meetings in einem Teamraum

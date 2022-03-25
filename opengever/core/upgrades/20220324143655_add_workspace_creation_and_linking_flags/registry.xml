@@ -1,0 +1,12 @@
+<registry>
+
+  <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
+    <value key="is_creation_restricted">False</value>
+  </records>
+
+  <records interface="opengever.workspaceclient.interfaces.IWorkspaceClientSettings">
+    <value key="is_linking_enabled">True</value>
+  </records>
+
+</registry>
+

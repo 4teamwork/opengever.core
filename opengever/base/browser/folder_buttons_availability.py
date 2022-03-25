@@ -7,6 +7,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrasher
+from opengever.workspaceclient import is_linking_enabled
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
@@ -83,6 +84,9 @@ class FolderButtonsAvailabilityView(BrowserView):
                 and api.user.has_permission('opengever.workspaceclient: '
                                             'Use Workspace Client'))
 
+    def _is_linking_enabled(self):
+        return is_linking_enabled()
+
     def _can_copy_between_workspace_and_dossier(self):
         """Only if the workspace_client_feature is enabled and
         the main dossier is open with linked workspaces.
@@ -112,10 +116,17 @@ class FolderButtonsAvailabilityView(BrowserView):
             and self._can_add_content_to_dossier()
         )
 
+    def is_create_linked_workspace_available(self):
+        return (self._is_main_dossier()
+                and self._is_open_dossier()
+                and self._can_use_workspace_client()
+                and self._can_modify_dossier())
+
     def is_link_to_workspace_available(self):
         return (self._is_main_dossier()
                 and self._is_open_dossier()
                 and self._can_use_workspace_client()
+                and self._is_linking_enabled()
                 and self._can_modify_dossier())
 
     def is_unlink_workspace_available(self):
