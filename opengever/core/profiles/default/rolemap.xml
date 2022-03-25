@@ -73,6 +73,9 @@
       <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Reader" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+      <role name="WorkspaceGuest" />
     </permission>
 
     <permission name="opengever.api: View AllowedRolesAndPrincipals" acquire="False">
