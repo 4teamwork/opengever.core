@@ -111,7 +111,7 @@
       for="opengever.repository.repositoryroot.IRepositoryRoot"
       name="download_excel"
       class=".excel_export.RepositoryRootExcelExport"
-      permission="opengever.repository.AddRepositoryFolder"
+      permission="opengever.repository.ExportRepository"
       />
 
 </configure>
