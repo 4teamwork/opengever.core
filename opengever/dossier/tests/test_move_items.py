@@ -308,8 +308,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
 
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {
-            'containing_dossier': self.empty_dossier.Title(),
-            'containing_subdossier': '',
             'listCreators': ('robert.ziegler', 'kathi.barfuss'),
             'modified': ZOPE_MOVE_TIME,
             'reference': 'Client1 1.1 / 4 / 22',
@@ -467,8 +465,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         # We expect some of the metadata to get modified during pasting
         paste_time_index = self.dateindex_value_from_datetime(self.MOVE_TIME)
         modified_indexdata = {
-            'containing_dossier': self.empty_dossier.Title(),
-            'containing_subdossier': '',
             'modified': paste_time_index,
             'path': moved.absolute_url_path(),
             'reference': 'Client1 1.1 / 4 / 22',
@@ -537,16 +533,13 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
 
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {
-            'containing_dossier': moved.Title(),
             'is_subdossier': False,
             'listCreators': ('robert.ziegler', 'kathi.barfuss'),
             'modified': ZOPE_MOVE_TIME,
             'reference': 'Client1 2 / 1',
         }
 
-        unchanged_metadata = [
-            'containing_subdossier',
-        ]
+        unchanged_metadata = []
         unchanged_metadata += self.common_unchanged_metadata
 
         # Make sure no metadata key is in both lists of unchanged and modified metadata
@@ -711,16 +704,13 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
                 u'Reader',
                 u'user:fa_users',
                 u'user:jurgen.fischer'],
-            'containing_dossier': moved.Title(),
             'is_subdossier': 0,
             'modified': paste_time_index,
             'path': moved.absolute_url_path(),
             'reference': 'Client1 2 / 1',
         }
 
-        unchanged_indexdata = [
-            'containing_subdossier',
-        ]
+        unchanged_indexdata = []
         unchanged_indexdata += self.common_unchanged_indexdata
 
         # Make sure no index is in both lists of unchanged and modified indexdata

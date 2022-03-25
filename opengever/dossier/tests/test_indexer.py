@@ -51,15 +51,16 @@ class TestDossierIndexers(SolrIntegrationTestCase):
 
         self.subdossier.reindexObject()
         self.subdocument.reindexObject()
+        self.commit_solr()
 
         self.assertEquals(
-            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
-            obj2brain(self.subdossier).containing_dossier,
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            solr_data_for(self.subdossier, 'containing_dossier'),
             )
 
         self.assertEquals(
-            'Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
-            obj2brain(self.document).containing_dossier,
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            solr_data_for(self.document, 'containing_dossier'),
             )
 
         # Check if the subscribers catch editing the title of a dossier
@@ -73,15 +74,16 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             self.dossier,
             Attributes(Interface, 'IOpenGeverBase.title'),
             ))
+        self.commit_solr()
 
         self.assertEquals(
-            'Testd\xc3\xb6ssier CHANGED',
-            obj2brain(self.subdossier).containing_dossier,
+            u'Testd\xf6ssier CHANGED',
+            solr_data_for(self.subdossier, 'containing_dossier'),
             )
 
         self.assertEquals(
-            'Testd\xc3\xb6ssier CHANGED',
-            obj2brain(self.document).containing_dossier,
+            u'Testd\xf6ssier CHANGED',
+            solr_data_for(self.document, 'containing_dossier'),
             )
 
     def test_containing_subdossier(self):
@@ -89,15 +91,16 @@ class TestDossierIndexers(SolrIntegrationTestCase):
 
         self.subdossier.reindexObject()
         self.subdocument.reindexObject()
+        self.commit_solr()
 
         self.assertEquals(
-            '',
-            obj2brain(self.subdossier).containing_subdossier,
+            u'',
+            solr_data_for(self.subdossier, 'containing_subdossier'),
             )
 
         self.assertEquals(
-            '2016',
-            obj2brain(self.subdocument).containing_subdossier,
+            u'2016',
+            solr_data_for(self.subdocument, 'containing_subdossier'),
             )
 
         # Check if the subscribers catch editing the title of a subdossier
@@ -110,15 +113,16 @@ class TestDossierIndexers(SolrIntegrationTestCase):
             self.subdossier,
             Attributes(Interface, 'IOpenGeverBase.title'),
             ))
+        self.commit_solr()
 
         self.assertEquals(
             u'',
-            obj2brain(self.subdossier).containing_subdossier,
+            solr_data_for(self.subdossier, 'containing_subdossier'),
             )
 
         self.assertEquals(
-            'Subd\xc3\xb6ssier CHANGED',
-            obj2brain(self.subdocument).containing_subdossier,
+            u'Subd\xf6ssier CHANGED',
+            solr_data_for(self.subdocument, 'containing_subdossier'),
             )
 
     def test_filing_no_is_not_indexed_for_default_dossiers(self):
