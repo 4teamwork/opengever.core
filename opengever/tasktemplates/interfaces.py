@@ -1,3 +1,4 @@
+from zope import schema
 from zope.interface import Interface
 
 
@@ -19,3 +20,16 @@ class IFromParallelTasktemplate(IFromTasktemplateGenerated):
 class IDuringTaskTemplateFolderTriggering(Interface):
     """Request marker present while generating tasks from a task template folder.
     """
+
+
+class IDuringTaskTemplateFolderWorkflowTransition(Interface):
+    """Request marker present during workflow transitions of TaskTemplateFolders.
+    """
+
+
+class ITaskTemplateSettings(Interface):
+
+    is_tasktemplatefolder_nesting_enabled = schema.Bool(
+        title=u'Enable nesting of tasktemplatefolders',
+        description=u'Allow nesting of tasktemplatefolders.',
+        default=False)

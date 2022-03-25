@@ -37,6 +37,12 @@
       handler=".handlers.update_deadline"
       />
 
+  <subscriber
+      for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.update_workflow_state"
+      />
+
   <adapter
       factory=".indexers.period"
       name="period"
@@ -46,5 +52,19 @@
       factory=".indexers.sequence_type"
       name="sequence_type"
       />
+
+  <!-- transitions -->
+  <adapter
+      factory=".transition.TaskTemplateFolderTransitionExtender"
+      name="tasktemplatefolder-transition-inactiv-activ"
+      />
+
+  <adapter
+      factory=".transition.TaskTemplateFolderTransitionExtender"
+      name="tasktemplatefolder-transition-activ-inactiv"
+      />
+
+
+
 
 </configure>

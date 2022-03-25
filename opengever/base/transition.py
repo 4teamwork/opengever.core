@@ -50,7 +50,7 @@ class TransitionExtender(object):
         """Validates the schema and collect the erros.
         """
         values, errors = self._deserialize_values(transition_params,
-                                                 collect_errors=True)
+                                                  collect_errors=True)
         return errors
 
     def deserialize(self, transition_params):

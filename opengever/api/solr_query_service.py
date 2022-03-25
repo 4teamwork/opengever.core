@@ -162,7 +162,11 @@ def translated_public_trial(obj):
 
 
 def translated_sequence_type(obj):
-    return sequence_type_vocabulary.getTerm(obj.sequence_type).title
+    try:
+        term = sequence_type_vocabulary.getTerm(obj.sequence_type)
+    except LookupError:
+        return None
+    return term.title
 
 
 def to_relative_path(value):

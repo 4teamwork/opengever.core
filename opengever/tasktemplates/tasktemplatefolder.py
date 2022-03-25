@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
 from opengever.dossier.behaviors.dossier import IDossier
@@ -8,7 +10,10 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
+from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
@@ -22,6 +27,10 @@ from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 
+ACTIVE_STATE = 'tasktemplatefolder-state-activ'
+INACTIVE_STATE = 'tasktemplatefolder-state-inactiv'
+TRANSITION_ACTIVATE = 'tasktemplatefolder-transition-inactiv-activ'
+
 
 class TaskTemplateFolder(Container):
 
@@ -33,6 +42,24 @@ class TaskTemplateFolder(Container):
     def is_sequential(self):
         return self.sequence_type == u'sequential'
 
+    def is_subtasktemplatefolder(self):
+        parent = aq_parent(aq_inner(self))
+        return ITaskTemplateFolderSchema.providedBy(parent)
+
+    def is_workflow_transition_allowed(self):
+        if IDuringTaskTemplateFolderWorkflowTransition.providedBy(getRequest()):
+            # Transition happens recursively so we need to allow it during
+            # transition of the main TaskTemplateFolder.
+            return True
+        return not self.is_subtasktemplatefolder()
+
+    def contains_subtasktemplatefolders(self):
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(self.getPhysicalPath()),
+            object_provides=ITaskTemplateFolderSchema.__identifier__)
+        return len(brains) > 1
+
     def trigger(self, dossier, templates, related_documents,
                 values, start_immediately, main_task_overrides=None):
 
@@ -43,6 +70,16 @@ class TaskTemplateFolder(Container):
             self, dossier, templates, related_documents,
             main_task_overrides, values, start_immediately)
         return trigger.generate()
+
+    def allowedContentTypes(self, *args, **kwargs):
+        types = super(TaskTemplateFolder, self).allowedContentTypes(*args, **kwargs)
+
+        def filter_type(fti):
+            if fti.id == "opengever.tasktemplates.tasktemplatefolder":
+                return is_tasktemplatefolder_nesting_allowed()
+            return True
+
+        return filter(filter_type, types)
 
 
 class TaskTemplateFolderTrigger(object):

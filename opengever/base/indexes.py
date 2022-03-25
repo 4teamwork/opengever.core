@@ -10,6 +10,7 @@ from opengever.base.model import SORTABLE_TITLE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
@@ -30,6 +31,7 @@ from zope.annotation import IAnnotations
 # one of thoes interfaces.
 CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
     ITaskTemplate,
+    ITaskTemplateFolderSchema,
     IToDo,
     IFromSequentialTasktemplate,
     IToDoList,
@@ -154,5 +156,7 @@ def getObjPositionInParent(obj):
             order = aq_parent(aq_inner(obj)).get_tasktemplate_order()
             if order:
                 return order.index(Oguid.for_object(obj))
+        if ITaskTemplateFolderSchema.providedBy(obj) and not obj.is_subtasktemplatefolder():
+            return
         return ploneGetObjPositionInParent(obj)()
     return None

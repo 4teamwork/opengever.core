@@ -188,6 +188,9 @@
   <!-- TASK -->
   <records interface="opengever.task.interfaces.ITaskSettings" />
 
+  <!-- Tasktemplates -->
+  <records interface="opengever.tasktemplates.interfaces.ITaskTemplateSettings" />
+
   <!-- Teasers -->
   <records interface="opengever.base.interfaces.ITeasersSettings" />
 

@@ -51,7 +51,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '29.02.2020', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Sub'},
             ]
 
-        self.assertEquals(expected_listing, browser.css('table.listing').first.dicts())
+        self.assertEqual(expected_listing, browser.css('table.listing').first.dicts())
 
     @browsing
     def test_form_does_not_list_templates_from_dossiertemplates(self, browser):
@@ -69,7 +69,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '29.02.2020', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Sub'},
             ]
 
-        self.assertEquals(expected_listing, browser.css('table.listing').first.dicts())
+        self.assertEqual(expected_listing, browser.css('table.listing').first.dicts())
 
     @browsing
     def test_form_does_not_inlcude_participants_with_disabled_feature(self, browser):
@@ -96,8 +96,8 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
 
         browser.find('Cancel').click()
 
-        self.assertEquals(self.dossier, browser.context)
-        self.assertEquals('tabbed_view', plone.view())
+        self.assertEqual(self.dossier, browser.context)
+        self.assertEqual('tabbed_view', plone.view())
 
     @browsing
     def test_save_redirects_to_the_dossiers_document_tab(self, browser):
@@ -110,8 +110,8 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             'Edit after creation': False,
             }).save()
 
-        self.assertEquals(self.dossier, browser.context)
-        self.assertEquals(self.dossier.absolute_url() + '#documents', browser.url)
+        self.assertEqual(self.dossier, browser.context)
+        self.assertEqual(self.dossier.absolute_url() + '#documents', browser.url)
 
     @browsing
     def test_new_document_is_titled_with_the_form_value(self, browser):
@@ -123,7 +123,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals('Test Document', document.title)
+        self.assertEqual('Test Document', document.title)
 
     @browsing
     def test_new_document_values_are_filled_with_default_values(self, browser):
@@ -135,8 +135,8 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(date.today(), document.document_date)
-        self.assertEquals(u'privacy_layer_no', document.privacy_layer)
+        self.assertEqual(date.today(), document.document_date)
+        self.assertEqual(u'privacy_layer_no', document.privacy_layer)
 
     @browsing
     def test_file_of_the_new_document_is_a_copy_of_the_template(self, browser):
@@ -149,7 +149,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
 
         document = self.dossier.listFolderContents()[-1]
 
-        self.assertEquals(self.normal_template.file.data, document.file.data)
+        self.assertEqual(self.normal_template.file.data, document.file.data)
         self.assertNotEquals(self.normal_template.file, document.file)
 
     @browsing
@@ -164,7 +164,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -187,7 +187,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             for row in browser.css('table.listing').first.dicts()
             ]
 
-        self.assertEquals(expected_documents, found_documents)
+        self.assertEqual(expected_documents, found_documents)
         self.assertNotIn(u'T\xc3\xb6mpl\xc3\xb6te Leer', found_documents)
 
 
@@ -217,7 +217,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
             'Document.ReferenceNumber': 'Client1 1.1 / 1 / 44',
@@ -298,7 +298,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[-1]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
 
         expected_doc_properties = {
             'Document.ReferenceNumber': 'Client1 1.1 / 1 / 44',
@@ -485,7 +485,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
 
         expected_person_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
@@ -573,7 +573,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
         expected_org_role_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
             'ogg.recipient.person.firstname': 'Peter',
@@ -623,7 +623,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 }).save()
 
         document = self.dossier.listFolderContents()[0]
-        self.assertEquals(u'Test Docx.docx', document.file.filename)
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
 
         expected_org_role_properties = {
             'ogg.recipient.contact.title': u'M\xfcller Peter',
@@ -728,7 +728,7 @@ class TestTemplateFolder(FunctionalTestCase):
         templatefolder = create(Builder('templatefolder'))
         browser.login().open(templatefolder)
 
-        self.assertEquals(
+        self.assertEqual(
             ['Document', 'Task Template Folder', 'Template Folder'],
             factoriesmenu.addable_types())
 
@@ -745,10 +745,10 @@ class TestTemplateFolder(FunctionalTestCase):
         browser.find('Save').click()
 
         browser.find(u'Fran\xe7ais').click()
-        self.assertEquals(u'mod\xe8le', browser.css('h1').first.text)
+        self.assertEqual(u'mod\xe8le', browser.css('h1').first.text)
 
         browser.find('Deutsch').click()
-        self.assertEquals(u'Vorlagen', browser.css('h1').first.text)
+        self.assertEqual(u'Vorlagen', browser.css('h1').first.text)
 
     @browsing
     def test_do_not_show_dossier_templates_tab(self, browser):
@@ -792,7 +792,7 @@ class TestTemplateFolder(FunctionalTestCase):
         self.assertIsNotNone(
             portlet, 'Navigation portlet not added to Templatefolder')
         self.assertEqual(0, portlet.topLevel)
-        self.assertEquals('opengever-dossier-templatefolder', portlet.root)
+        self.assertEqual('opengever-dossier-templatefolder', portlet.root)
 
     @browsing
     def test_portlets_are_inherited_on_sub_templatefolder(self, browser):
@@ -842,14 +842,14 @@ class TestTemplateFolderUtility(FunctionalTestCase):
     def test_get_template_folder_returns_path_of_the_templatefolder(self):
         templatefolder = create(Builder('templatefolder'))
 
-        self.assertEquals(templatefolder, get_template_folder())
+        self.assertEqual(templatefolder, get_template_folder())
 
     def test_get_template_folder_returns_allways_root_templatefolder(self):
         templatefolder = create(Builder('templatefolder'))
         create(Builder('templatefolder')
                .within(templatefolder))
 
-        self.assertEquals(templatefolder, get_template_folder())
+        self.assertEqual(templatefolder, get_template_folder())
 
 
 class TestTemplateFolderListings(SolrIntegrationTestCase):
@@ -883,7 +883,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Keywords',
             ]
 
-        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
+        self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_sablon_template_tab(self, browser):
@@ -905,7 +905,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Keywords',
             ]
 
-        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
+        self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_receipt_delivery_and_subdossier_column_are_hidden_in_proposal_templates_tab(self, browser):
@@ -927,7 +927,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Keywords',
             ]
 
-        self.assertEquals(expected_table_header, browser.css('table.listing').first.lists()[0])
+        self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
     @browsing
     def test_enabled_actions_are_limited_in_document_tab(self, browser):
@@ -1115,14 +1115,14 @@ class TestTemplateDocumentTabsSolr(SolrIntegrationTestCase):
 
         # main templatefolder
         browser.open(self.templates, view='tabbedview_view-documents-gallery')
-        self.assertEquals(
+        self.assertEqual(
             [self.empty_template.title, self.normal_template.title,
              self.asset_template.title, self.docprops_template.title],
             [img.attrib.get('alt') for img in browser.css('img')])
 
         # subtemplatefolder
         browser.open(self.subtemplates, view='tabbedview_view-documents-gallery')
-        self.assertEquals(
+        self.assertEqual(
             [self.subtemplate.title],
             [img.attrib.get('alt') for img in browser.css('img')])
 
@@ -1168,6 +1168,25 @@ class TestDossierTemplateFeature(IntegrationTestCase):
         browser.open(self.templates)
 
         self.assertEqual('Dossier templates', browser.css('.formTab #tab-dossiertemplates').first.text)
+
+
+class TestTaskTemplateFoldersTab(SolrIntegrationTestCase):
+
+    @browsing
+    def test_tasktemplatefolders_tab_does_not_show_subtasktemplatefolders(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        self.login(self.administrator, browser=browser)
+        browser.open(self.tasktemplatefolder)
+        factoriesmenu.add(u'Task Template Folder')
+        browser.fill({'Title': 'Baugesuch', 'Type': 'parallel'}).submit()
+        self.commit_solr()
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.templates, view='tabbedview_view-tasktemplatefolders')
+        templates = browser.css('table.listing').first.dicts()
+        self.assertEqual(1, len(templates))
+        self.assertEqual(templates[0]["Title"], self.tasktemplatefolder.Title())
 
 
 class TestTemplateFolderShowroomPreviews(SolrIntegrationTestCase):

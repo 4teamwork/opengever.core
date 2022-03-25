@@ -11,3 +11,8 @@ def period(obj):
 @indexer(ITaskTemplateFolderSchema)
 def sequence_type(obj):
     return obj.sequence_type
+
+
+@indexer(ITaskTemplateFolderSchema)
+def is_subtasktemplatefolder(obj):
+    return obj.is_subtasktemplatefolder()
