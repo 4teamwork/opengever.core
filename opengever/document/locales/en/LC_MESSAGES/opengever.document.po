@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-11-05 08:34+0000\n"
+"POT-Creation-Date: 2022-03-22 12:50+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -631,6 +631,11 @@ msgstr "File"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_foreign_reference"
 msgstr "Foreign reference"
+
+#. Default: "GEVER URL"
+#: ./opengever/document/behaviors/metadata.py
+msgid "label_gever_url"
+msgstr "GEVER URL"
 
 #. German translation: Schlagwörter
 #. Default: "Keywords"

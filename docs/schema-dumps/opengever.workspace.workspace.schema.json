@@ -24,6 +24,12 @@
             "description": "",
             "_zope_schema_type": "TextLine"
         },
+        "gever_url": {
+            "type": "string",
+            "title": "GEVER URL",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
         "changed": {
             "type": "string",
             "title": "Zuletzt ver\u00e4ndert",
@@ -51,6 +57,7 @@
         "responsible",
         "videoconferencing_url",
         "external_reference",
+        "gever_url",
         "changed",
         "title",
         "description"

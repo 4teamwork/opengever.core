@@ -129,10 +129,14 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             client.link_to_workspace(self.workspace.UID(), dossier_oguid)
             transaction.commit()
             self.assertEqual(dossier_oguid, self.workspace.external_reference)
+            gever_url = '{}/@resolve-oguid?oguid={}'.format(
+                api.portal.get().absolute_url(), dossier_oguid)
+            self.assertEqual(gever_url, self.workspace.gever_url)
 
             client.unlink_workspace(self.workspace.UID())
             transaction.commit()
             self.assertEqual(u'', self.workspace.external_reference)
+            self.assertEqual(u'', self.workspace.gever_url)
 
     def test_unlink_deactivated_workspace(self):
         dossier_oguid = Oguid.for_object(self.dossier).id
@@ -140,6 +144,9 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             client.link_to_workspace(self.workspace.UID(), dossier_oguid)
             transaction.commit()
             self.assertEqual(dossier_oguid, self.workspace.external_reference)
+            gever_url = '{}/@resolve-oguid?oguid={}'.format(
+                api.portal.get().absolute_url(), dossier_oguid)
+            self.assertEqual(gever_url, self.workspace.gever_url)
 
             self.grant('WorkspaceAdmin', *api.user.get_roles(), on=self.workspace)
             api.content.transition(
@@ -150,3 +157,4 @@ class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
             client.unlink_workspace(self.workspace.UID())
             transaction.commit()
             self.assertEqual(u'', self.workspace.external_reference)
+            self.assertEqual(u'', self.workspace.gever_url)

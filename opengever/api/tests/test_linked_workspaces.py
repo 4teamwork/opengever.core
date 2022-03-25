@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
+from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
@@ -78,10 +79,13 @@ class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
                       [aa.absolute_url() for aa in children['added']])
 
         linked_workspace = children['added'].pop()
-        self.assertIn(browser.json.get('title'),
-                      linked_workspace.title)
-        self.assertIn(browser.json.get('external_reference'),
-                      Oguid.for_object(self.dossier).id)
+        self.assertEqual(browser.json.get('title'),
+                         linked_workspace.title)
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+            api.portal.get().absolute_url(), dossier_oguid)
+        self.assertEqual(browser.json.get('external_reference'), dossier_oguid)
+        self.assertEqual(expected_gever_url, linked_workspace.gever_url)
 
     @browsing
     def test_raise_not_found_if_feature_is_not_activated(self, browser):
@@ -166,7 +170,12 @@ class TestLinkToWorkspacesPost(FunctionalWorkspaceClientTestCase):
                          'Content-Type': 'application/json'})
 
         self.assertEqual(204, browser.status_code)
-        self.assertEqual(Oguid.for_object(self.dossier).id, self.workspace.external_reference)
+        dossier_oguid = Oguid.for_object(self.dossier).id
+        expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+            api.portal.get().absolute_url(), dossier_oguid)
+
+        self.assertEqual(dossier_oguid, self.workspace.external_reference)
+        self.assertEqual(expected_gever_url, self.workspace.gever_url)
 
     @browsing
     def test_raises_not_found_if_workspaceclient_feature_not_enabled(self, browser):
@@ -529,6 +538,8 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
                 [],
                 ILinkedDocuments(document).linked_workspace_documents)
 
+            self.assertEqual(u'', IDocumentMetadata(workspace_document).gever_url)
+
     @browsing
     def test_copy_document_with_file_to_a_workspace(self, browser):
         document = create(Builder('document')
@@ -575,6 +586,10 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 {'UID': IUUID(document)},
                 ILinkedDocuments(workspace_document).linked_gever_document)
+
+            expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+                api.portal.get().absolute_url(), Oguid.for_object(document).id)
+            self.assertEqual(expected_gever_url, IDocumentMetadata(workspace_document).gever_url)
 
             # XXX: Because of the way these tests works, setting of the link
             # to the workspace documents on this GEVER document happens in
@@ -632,6 +647,10 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 {'UID': IUUID(mail)},
                 ILinkedDocuments(workspace_mail).linked_gever_document)
+
+            expected_gever_url = '{}/@resolve-oguid?oguid={}'.format(
+                api.portal.get().absolute_url(), Oguid.for_object(mail).id)
+            self.assertEqual(expected_gever_url, IDocumentMetadata(workspace_mail).gever_url)
 
             # XXX: Because of the way these tests works, setting of the link
             # to the workspace documents on this GEVER document happens in
@@ -1132,11 +1151,13 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
 
         workspace_doc = create(Builder('document')
                                .within(self.workspace)
+                               .having(gever_url=u'url')
                                .attach_file_containing(new_content,
                                                        name=new_filename))
 
         ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
         ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+        self.assertEqual(u'url', IDocumentMetadata(workspace_doc).gever_url)
 
         payload = {
             'workspace_uid': IUUID(self.workspace),
@@ -1184,6 +1205,8 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 RETRIEVAL_MODE_VERSION,
                 browser.json.get('teamraum_connect_retrieval_mode'))
+
+            self.assertEqual(u'', IDocumentMetadata(gever_doc).gever_url)
 
     @browsing
     def test_copy_eml_mail_from_a_workspace(self, browser):

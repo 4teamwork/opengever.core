@@ -192,6 +192,15 @@
                     "_zope_schema_type": "Bool",
                     "default": true
                 },
+                "gever_url": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "GEVER URL",
+                    "description": "",
+                    "_zope_schema_type": "TextLine"
+                },
                 "custom_properties": {
                     "type": [
                         "null",
@@ -295,6 +304,7 @@
                 "preserved_as_paper",
                 "archival_file",
                 "archival_file_state",
+                "gever_url",
                 "custom_properties"
             ]
         }

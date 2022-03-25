@@ -79,6 +79,9 @@ class WorkspaceClient(object):
 
         return self.request.post('/workspaces', json=payload).json()
 
+    def get_gever_url(self, oguid):
+        return '{}/@resolve-oguid?oguid={}'.format(api.portal.get().absolute_url(), oguid)
+
     def link_to_workspace(self, workspace_uid, dossier_oguid):
         """ Sets dossier_oguid as external_reference of the workspace
         and returns the serialization of the workspace
@@ -87,7 +90,8 @@ class WorkspaceClient(object):
         if workspace.get('external_reference'):
             raise LookupError("Workspace is already linked to a dossier")
         return self.request.patch(workspace.get('@id'),
-                                  json={'external_reference': dossier_oguid},
+                                  json={'external_reference': dossier_oguid,
+                                        'gever_url': self.get_gever_url(dossier_oguid)},
                                   headers={'Prefer': 'return=representation'}).json()
 
     def update_dossier_uid(self, workspace_uid, new_dossier_oguid):
@@ -96,7 +100,8 @@ class WorkspaceClient(object):
         workspace = self.get_by_uid(uid=workspace_uid)
         return self.request.patch(
             workspace.get('@id'),
-            json={'external_reference': new_dossier_oguid})
+            json={'external_reference': new_dossier_oguid,
+                  'gever_url': self.get_gever_url(new_dossier_oguid)})
 
     def unlink_workspace(self, workspace_uid):
         """Removes external_reference on the workspace"""

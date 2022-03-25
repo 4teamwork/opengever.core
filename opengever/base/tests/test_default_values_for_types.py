@@ -149,6 +149,7 @@ DOCUMENT_DEFAULTS = {
     'digitally_available': True,
     'document_date': FROZEN_TODAY,
     'file': None,  # needs to be updated with NamedBlobFile in actual test
+    'gever_url': u'',
     'keywords': (),
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',
@@ -180,6 +181,7 @@ MAIL_DEFAULTS = {
     'digitally_available': True,
     'document_author': u'from@example.org',
     'document_date': date(2010, 1, 1),
+    'gever_url': u'',
     'keywords': (),
     'preserved_as_paper': True,
     'privacy_layer': u'privacy_layer_no',

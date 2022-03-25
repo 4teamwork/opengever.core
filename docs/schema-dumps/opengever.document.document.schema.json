@@ -155,6 +155,12 @@
             "description": "",
             "_zope_schema_type": "Int"
         },
+        "gever_url": {
+            "type": "string",
+            "title": "GEVER URL",
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        },
         "custom_properties": {
             "type": "object",
             "title": "Benutzerdefinierte Felder",
@@ -182,6 +188,7 @@
         "preserved_as_paper",
         "archival_file",
         "archival_file_state",
+        "gever_url",
         "custom_properties"
     ]
 }

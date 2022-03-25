@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-12-17 09:30+0000\n"
+"POT-Creation-Date: 2022-03-22 12:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,6 +185,11 @@ msgstr "Ende"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_folders"
 msgstr "Ordner"
+
+#. Default: "GEVER URL"
+#: ./opengever/workspace/workspace.py
+msgid "label_gever_url"
+msgstr "GEVER URL"
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
