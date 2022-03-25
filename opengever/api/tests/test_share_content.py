@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
+from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 import email
 import json
@@ -20,7 +21,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         data = json.dumps({
-            'actors_to': [{'token': self.archivist.getId()}],
+            'actors_to': [{'token': self.workspace_guest.getId()}],
             'actors_cc': [{'token': self.workspace_admin.getId()}],
             'comment': u'Check out this fantastic w\xf6rkspace!'
         })
@@ -31,7 +32,7 @@ class TestShareContentPost(IntegrationTestCase):
         process_mail_queue()
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
-        self.assertEqual(self.archivist.getProperty('email'), mail['To'])
+        self.assertEqual(self.workspace_guest.getProperty('email'), mail['To'])
         self.assertEqual(self.workspace_admin.getProperty('email'), mail['Cc'])
         self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
                          mail['From'])
@@ -46,7 +47,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace_folder.absolute_url())
         data = json.dumps({
-            'actors_to': [{'token': self.archivist.getId()},
+            'actors_to': [{'token': self.workspace_admin.getId()},
                           {'token': self.workspace_guest.getId()}],
             'actors_cc': [{'token': self.workspace_admin.getId()},
                           {'token': self.workspace_owner.getId()}],
@@ -55,14 +56,14 @@ class TestShareContentPost(IntegrationTestCase):
 
         browser.open(url, method='POST', headers=self.api_headers,
                      data=data)
-        expected_to = [self.archivist.getProperty('email'),
-                       self.workspace_guest.getProperty('email')]
+        expected_to = [self.workspace_guest.getProperty('email'),
+                       self.workspace_admin.getProperty('email')]
         expected_cc = [self.workspace_owner.getProperty('email'),
                        self.workspace_admin.getProperty('email')]
 
         process_mail_queue()
 
-        self.assertEqual(
+        self.assertItemsEqual(
             expected_to + expected_cc,
             mailing.get_mailhost().messages[0].mto)
 
@@ -80,6 +81,9 @@ class TestShareContentPost(IntegrationTestCase):
         process_mail_queue()
         mailing = Mailing(self.portal)
         mailing.reset()
+
+        group = Group.query.get('projekt_a')
+        self.set_roles(self.workspace, group.groupid, ['WorkspaceMember'])
 
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         data = json.dumps({
@@ -110,7 +114,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         url = '{}/@share-content'.format(self.workspace.absolute_url())
         data = json.dumps({
-            'actors_to': [{'token': self.archivist.getId()}],
+            'actors_to': [{'token': self.workspace_guest.getId()}],
         })
 
         browser.open(url, method='POST', headers=self.api_headers,
@@ -119,7 +123,7 @@ class TestShareContentPost(IntegrationTestCase):
         process_mail_queue()
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
-        self.assertEqual(self.archivist.getProperty('email'), mail['To'])
+        self.assertEqual(self.workspace_guest.getProperty('email'), mail['To'])
         self.assertIsNone(mail.get('Cc'))
         self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
                          mail['From'])

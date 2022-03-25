@@ -1,3 +1,4 @@
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.ogds.models.group import Group
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
@@ -26,6 +27,10 @@ class OGDSGroupsGet(Service):
 
     def reply(self):
         groupid = self.read_params()
+        if not visible_users_and_groups_filter.can_access_principal(groupid):
+            self.request.response.setStatus(404)
+            return
+
         group = Group.query.get(groupid)
         serializer = queryMultiAdapter((group, self.request), ISerializeToJson)
         return serializer()

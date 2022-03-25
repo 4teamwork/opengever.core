@@ -3,12 +3,80 @@ from ftw.builder import create
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
-from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroupsFilter
+from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
 from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
+from opengever.ogds.base.sources import AllFilteredGroupsSource
+from opengever.ogds.base.sources import AllGroupsSource
+from opengever.ogds.base.sources import AllUsersAndGroupsSource
+from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
+from opengever.ogds.base.sources import AllUsersSource
+from opengever.ogds.base.sources import AssignedUsersSource
+from opengever.ogds.base.sources import ContactsSource
+from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
+from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
+from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.testing import IntegrationTestCase
+from zExceptions import Unauthorized
+
+
+def clear_cache_visible_users_and_groups_filter_cache(request):
+    setattr(request, VisibleUsersAndGroupsFilter.ALLOWED_USERS_AND_GROUPS_CACHEKEY, None)
+
+
+class TestWorkspaceSourcesProtection(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    BLACKLIST = [
+        AllEmailContactsAndUsersSource,
+        AllFilteredGroupsSource,
+        AllGroupsSource,
+        AllUsersAndGroupsSource,
+        AllUsersInboxesAndTeamsSource,
+        AllUsersSource,
+        ContactsSource,
+        CurrentAdminUnitOrgUnitsSource,
+        UsersContactsInboxesSource,
+    ]
+
+    WHITELIST = [
+        ActualWorkspaceGroupsSource,
+        ActualWorkspaceMembersSource,
+        AssignedUsersSource,
+        PotentialWorkspaceMembersSource,
+    ]
+
+    def test_whitelisted_teamraum_sources(self):
+        not_whitelisted_sources = []
+
+        for whitelisted_source in self.WHITELIST:
+            try:
+                whitelisted_source(self.portal)
+            except Unauthorized:
+                not_whitelisted_sources.append(whitelisted_source)
+
+        self.assertEqual([], not_whitelisted_sources)
+
+    def test_blacklisted_teamraum_sources(self):
+        self.maxDiff = None
+        not_protected_sources = []
+
+        for blacklisted_source in self.BLACKLIST:
+            try:
+                blacklisted_source(self.portal)
+            except Unauthorized:
+                pass
+            else:
+                not_protected_sources.append(blacklisted_source)
+
+        self.assertEqual([], not_protected_sources)
 
 
 class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def test_users_of_all_admin_unit_are_valid(self):
         self.login(self.workspace_admin)
@@ -76,6 +144,39 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(0, len(results))
         results = source.search(self.workspace_owner.id)
         self.assertEqual(0, len(results))
+
+    def test_contains_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = PotentialWorkspaceMembersSource(self.portal)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertNotIn(self.workspace_guest.getId(), source)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertIn(self.workspace_guest.getId(), source)
+
+    def test_can_search_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = PotentialWorkspaceMembersSource(self.portal)
+
+        self.assertEqual([], source.search('hans'))
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertEqual(1, len(source.search('hans')))
+        self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
 
 
 class TestActualWorkspaceMembersSource(IntegrationTestCase):
@@ -150,3 +251,41 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(self.workspace_member.id, term.token)
         self.assertEqual(self.workspace_member.id, term.value)
         self.assertEqual(u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)', term.title)
+
+
+class TestAssignedUsersSource(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    def test_contains_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = AssignedUsersSource(self.portal)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertNotIn(self.workspace_guest.getId(), source)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertIn(self.regular_user.getId(), source)
+        self.assertIn(self.workspace_guest.getId(), source)
+
+    def test_can_search_only_whitelisted_users_and_groups(self):
+        self.login(self.regular_user)
+        source = AssignedUsersSource(self.portal)
+
+        self.assertEqual([], source.search('hans'))
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, self.workspace_guest.getId(), ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertEqual(1, len(source.search('hans')))
+        self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)

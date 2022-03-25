@@ -2,6 +2,7 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.contact.contact import IContact
 from opengever.contact.service import CONTACT_TYPE
 from opengever.ogds.base import _
@@ -15,6 +16,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.utils import get_workspace_group_ids
 from opengever.workspace.utils import get_workspace_user_ids
 from plone import api
@@ -26,6 +28,7 @@ from sqlalchemy import sql
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import desc
 from z3c.formwidget.query.interfaces import IQuerySource
+from zExceptions import Unauthorized
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
@@ -38,7 +41,12 @@ import re
 @implementer(IQuerySource)
 class BaseQuerySoure(object):
 
+    gever_only = True
+
     def __init__(self, context, **kwargs):
+        if self.gever_only and is_workspace_feature_enabled():
+            raise Unauthorized('Source not allowed in teamraum')
+
         self.context = context
         self.terms = []
 
@@ -494,6 +502,10 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
         return self.getTerm(value)
 
     def getTerm(self, value):
+        if not visible_users_and_groups_filter.can_access_principal(value):
+            raise LookupError(
+                'No row was found with userid: {}'.format(value))
+
         try:
             user = self.base_query.filter(User.userid == value).one()
         except orm.exc.NoResultFound:
@@ -519,6 +531,10 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
 
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))
+
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            query = query.filter(User.userid.in_(
+                visible_users_and_groups_filter.get_whitelisted_principals()))
 
         for user in query:
             self.terms.append(
@@ -548,6 +564,8 @@ class AssignedUsersSource(AllUsersSource):
     """Vocabulary of all users assigned to the current admin unit.
     """
 
+    gever_only = False
+
     @property
     def search_only_active_users(self):
         return True
@@ -555,12 +573,17 @@ class AssignedUsersSource(AllUsersSource):
     @property
     def search_query(self):
         admin_unit = get_current_admin_unit()
-        return create_session().query(User) \
+        query = create_session().query(User) \
             .filter(User.userid == groups_users.columns.userid) \
             .filter(groups_users.columns.groupid == OrgUnit.users_group_id) \
             .filter(OrgUnit.admin_unit_id == admin_unit.unit_id) \
             .filter(OrgUnit.enabled == True)  # noqa
 
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            query = query.filter(User.userid.in_(
+                visible_users_and_groups_filter.get_whitelisted_principals()))
+
+        return query
 
 @implementer(IContextSourceBinder)
 class AssignedUsersSourceBinder(object):
@@ -575,6 +598,8 @@ class PotentialWorkspaceMembersSource(AssignedUsersSource):
     This is also used for checking whether a user can be added to a workspace,
     the base_query therefore also needs to filter out actual members
     """
+
+    gever_only = False
 
     @property
     def base_query(self):
@@ -608,6 +633,8 @@ class ActualWorkspaceMembersSource(AssignedUsersSource):
     for ToDo responsibles, which should remain valid even when a user's
     permissions on a workspace are revoked (invitation deleted).
     """
+
+    gever_only = False
 
     @property
     def search_query(self):
@@ -890,6 +917,8 @@ class AllGroupsSource(BaseSQLModelSource):
 
 
 class ActualWorkspaceGroupsSource(AllGroupsSource):
+
+    gever_only = False
 
     @property
     def search_query(self):
