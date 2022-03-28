@@ -2,8 +2,10 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.api.serializer import extend_with_dossier_type
 from opengever.api.serializer import extend_with_is_subdossier
+from opengever.api.tasktemplatefolder import extend_with_is_subtasktemplatefolder
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
@@ -52,6 +54,9 @@ class Breadcrumbs(object):
                 item['is_leafnode'] = None
                 if IRepositoryFolder.providedBy(obj):
                     item['is_leafnode'] = obj.is_leaf_node()
+
+                if ITaskTemplateFolderSchema.providedBy(obj):
+                    extend_with_is_subtasktemplatefolder(item, obj, self.request)
 
                 extend_with_is_subdossier(item, obj, self.request)
                 extend_with_dossier_type(item, obj, self.request)

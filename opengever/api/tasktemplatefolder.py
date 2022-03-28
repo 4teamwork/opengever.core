@@ -6,11 +6,15 @@ from zope.interface import implementer
 from zope.interface import Interface
 
 
+def extend_with_is_subtasktemplatefolder(result, context, request):
+    result['is_subtasktemplatefolder'] = context.is_subtasktemplatefolder()
+
+
 @implementer(ISerializeToJson)
 @adapter(ITaskTemplateFolderSchema, Interface)
 class SerializeTaskTemplateFolderToJson(GeverSerializeFolderToJson):
 
     def __call__(self, *args, **kwargs):
         result = super(SerializeTaskTemplateFolderToJson, self).__call__(*args, **kwargs)
-        result['is_subtasktemplatefolder'] = self.context.is_subtasktemplatefolder()
+        extend_with_is_subtasktemplatefolder(result, self.context, self.request)
         return result

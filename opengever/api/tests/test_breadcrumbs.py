@@ -169,3 +169,15 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
             ],
             browser.json['@components']['breadcrumbs']['items']
         )
+
+    @browsing
+    def test_is_subtasktemplatefolder_in_breadcrumbs(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.tasktemplate.absolute_url() + '/@breadcrumbs',
+                     headers=self.api_headers)
+
+        self.assertIsNone(getattr(self.templates, 'is_subtasktemplatefolder', None))
+        self.assertNotIn('is_subtasktemplatefolder', browser.json['items'][0])
+
+        self.assertFalse(self.tasktemplatefolder.is_subtasktemplatefolder())
+        self.assertFalse(browser.json['items'][1]['is_subtasktemplatefolder'])
