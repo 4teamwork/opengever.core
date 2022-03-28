@@ -399,6 +399,13 @@ class OpengeverContentFixture(object):
             ['PropertySheetsManager'],
         )
 
+        self.inactive_user = self.create_user(
+            'inactive_user',
+            u'Inactive',
+            u'User',
+            active=False,
+        )
+
         # This user is intended to be used in situations where you need a user
         # which has only the 'Reader' role on some context and one has to build
         # the granting of that themselves
