@@ -10,6 +10,45 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.7.0 (2022-03-29)
+---------------------
+
+New features:
+
+
+- Allow privileged users to notify others via `@external-activities` endpoint. [lgraf]
+- Also accept group IDs in ``@external-activities`` notification_recipients. [lgraf]
+- Add task transition from closed to in progress for administrators. [phgross]
+- Add support for nested TaskTemplateFolders. [njohner]
+- Add feature flag for link_to workspace action. [tinagerber]
+- Add feature flag to restrict workspace creation in UI. [tinagerber]
+- Add label for NullActor. [tinagerber]
+- Improve error handling when interacting with KuB. [tinagerber]
+- Add gever_url field to workspaces, documents and mails. [tinagerber]
+- Improve docker / docker compose support for testserver. [jone]
+
+
+Bug fixes:
+
+
+- NotificationDispatcher: Only return failed notification as not_dispatched. [lgraf]
+- Allow deleting dossier participations of unknown contacts. [tinagerber]
+- Fix removing of inbox mail. [njohner]
+- Fix docx upload validator, make docx mandatory only for the proposal document. [phgross]
+- Allow Administrator and LimitedAdmin to export repository as excel. [njohner]
+
+
+Other changes:
+
+
+- Bump ftw.upgrade to version 3.3.0 to enable exclusive usage of instance0 during updates. [njohner]
+- Add a new global permission "opengever.workspace: Access all users and groups". [elioschmutz]
+- Implements view protection for users and groups in teamraum. [elioschmutz]
+- Improve error handling for workflow transitions over the API. [njohner]
+- Add inactive user to testing fixture. [njohner]
+- Allow normal users to revive bumblebee previews in Teamraum. [njohner]
+
+
 2022.6.0 (2022-03-15)
 ---------------------
 
