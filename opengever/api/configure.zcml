@@ -1100,6 +1100,14 @@
 
   <plone:service
       method="GET"
+      name="@task-template-structure"
+      for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema"
+      factory=".templatefolder.TriggerTaskTemplateStructureGet"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="GET"
       name="@list-documents-in-linked-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.ListDocumentsInLinkedWorkspaceGet"

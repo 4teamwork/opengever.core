@@ -31,6 +31,18 @@ import pytz
 import requests_mock
 
 
+def flatten_tree(obj):
+    flattened_items = []
+
+    def flatten(items):
+        for item in items:
+            flattened_items.append(item)
+            flatten(item.get('items', []))
+
+    flatten([obj])
+    return flattened_items
+
+
 class TestDocumentFromTemplatePost(IntegrationTestCase):
 
     @browsing
@@ -1284,3 +1296,108 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
         self.assertEquals(task1.get_sql_object(),
                           task2.get_sql_object().get_previous_task())
+
+
+class TestTaskTemplateStructure(IntegrationTestCase):
+
+    @browsing
+    def test_returns_recursively_the_full_serialized_objects_of_all_tasktemplates_and_folders(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        self.login(self.administrator, browser=browser)
+
+        subtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'sub-tasktemplate folder 1')
+            .having(sequence_type='parallel')
+            .within(self.tasktemplatefolder)
+        )
+
+        create(
+            Builder('tasktemplate')
+            .titled(u'sub-task 1.1')
+            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
+                    responsible_client='fa',
+                    responsible='robert.ziegler',)
+            .within(subtasktemplatefolder)
+        )
+
+        browser.open(
+            '{}/@task-template-structure'.format(
+                self.tasktemplatefolder.absolute_url()),
+            headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'Verfahren Neuanstellung',
+                u'Arbeitsplatz einrichten.',
+                u'sub-tasktemplate folder 1',
+                u'sub-task 1.1'
+            ],
+            [item.get('title') for item in flatten_tree(browser.json)]
+        )
+
+    @browsing
+    def test_tasktemplates_are_ordered_by_position_in_parent(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        self.login(self.administrator, browser=browser)
+
+        subtasktemplatefolder = create(
+            Builder('tasktemplatefolder')
+            .titled(u'sub-tasktemplate folder 1')
+            .having(sequence_type='parallel')
+            .within(self.tasktemplatefolder)
+        )
+
+        subtasktemplate = create(
+            Builder('tasktemplate')
+            .titled(u'sub-task 1.1')
+            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
+                    responsible_client='fa',
+                    responsible='robert.ziegler',)
+            .within(subtasktemplatefolder)
+        )
+
+        create(
+            Builder('tasktemplate')
+            .titled(u'sub-task 1.2')
+            .having(issuer=INTERACTIVE_ACTOR_CURRENT_USER_ID,
+                    responsible_client='fa',
+                    responsible='robert.ziegler',)
+            .within(subtasktemplatefolder)
+        )
+
+        browser.open(
+            '{}/@task-template-structure'.format(
+                self.tasktemplatefolder.absolute_url()),
+            headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'Verfahren Neuanstellung',
+                u'Arbeitsplatz einrichten.',
+                u'sub-tasktemplate folder 1',
+                u'sub-task 1.1',
+                u'sub-task 1.2',
+            ],
+            [item.get('title') for item in flatten_tree(browser.json)]
+        )
+
+        subtasktemplatefolder.getOrdering().moveObjectsToBottom([subtasktemplate.getId()])
+
+        browser.open(
+            '{}/@task-template-structure'.format(
+                self.tasktemplatefolder.absolute_url()),
+            headers=self.api_headers)
+
+        self.assertEqual(
+            [
+                u'Verfahren Neuanstellung',
+                u'Arbeitsplatz einrichten.',
+                u'sub-tasktemplate folder 1',
+                u'sub-task 1.2',
+                u'sub-task 1.1',
+            ],
+            [item.get('title') for item in flatten_tree(browser.json)]
+        )

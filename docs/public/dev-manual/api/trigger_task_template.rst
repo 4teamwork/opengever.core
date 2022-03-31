@@ -113,3 +113,66 @@ folgende Felder zur Verfügung:
 
             "start_immediately": true
         }
+
+Struktur der Standardabläufe anzeigen
+=====================================
+Über den Endpint ``@task-template-structure`` kann die Struktur des Templatefolders angezeigt werden.
+
+
+
+   **Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      GET /vorlagen/tasktemplate-1/@task-template-structure HTTP/1.1
+      Accept: application/json
+
+   **Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+        "@id": "/vorlagen/tasktemplate-1/@trigger-task-template-structure",
+        "@type": "opengever.tasktemplates.tasktemplatefolder",
+        "UID": "fc1a5fd76afa41f4962f2660887c601c",
+        "items": [
+            {
+                "@id": "/vorlagen/tasktemplate-1/aufgabe-2",
+                "@type": "opengever.tasktemplates.tasktemplate",
+                "UID": "480d0557a3ac43f0be76aa7f2a597aa6",
+                "...": "..."
+            },
+            {
+                "@id": "/vorlagen/tasktemplate-1/aufgabe-1",
+                "@type": "opengever.tasktemplates.tasktemplate",
+                "UID": "1c1752e49f024e4682cb632e40f6d78c",
+                "...": "..."
+            },
+            {
+                "@id": "/vorlagen/tasktemplate-1/@trigger-task-template-structure",
+                "@type": "opengever.tasktemplates.tasktemplatefolder",
+                "UID": "4a8ea261042949efb3abc3e706abf62c",
+                "items": [
+                    {
+                        "@id": "/vorlagen/tasktemplate-1/aufgabengruppe-1-parallel/aufgabe-in-gruppe-1",
+                        "@type": "opengever.tasktemplates.tasktemplate",
+                        "UID": "54a26da5992148ce90f68a428817b065",
+                        "...": "..."
+                    },
+                    {
+                        "@id": "/vorlagen/tasktemplate-1/aufgabengruppe-1-parallel/aufgabe-in-gruppe-2",
+                        "@type": "opengever.tasktemplates.tasktemplate",
+                        "UID": "9090d410f9114628a2edcadaade2dc08",
+                        "...": "..."
+                    }
+                ],
+                "items_total": 2,
+                "...": "..."
+            }
+        ],
+        "items_total": 3,
+        "...": "..."
+      }
