@@ -23,7 +23,7 @@
                 <item value="cn"/>
             </property>
             <property id="users_base" type="str">
-                <item value="ou=Users,ou={{{deployment.ldap_ou}}}"/>
+                <item value="ou=Users,{{{deployment.ldap_ou}}}"/>
             </property>
             <property id="users_scope" type="int">
                 <item value="2"/>
@@ -35,7 +35,7 @@
                 <item value="0"/>
             </property>
             <property id="groups_base" type="str">
-                <item value="ou=Groups,ou={{{deployment.ldap_ou}}}"/>
+                <item value="ou=Groups,{{{deployment.ldap_ou}}}"/>
             </property>
             <property id="groups_scope" type="int">
                 <item value="2"/>
