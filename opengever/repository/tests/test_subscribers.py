@@ -4,6 +4,7 @@ from ftw.testbrowser import browsing
 from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from opengever.trash.remover import Remover
 
 
 class TestReferencePrefixUpdating(SolrIntegrationTestCase):
@@ -57,3 +58,22 @@ class TestReferencePrefixUpdating(SolrIntegrationTestCase):
                       solr_data_for(self.dossier, 'SearchableText'))
         self.assertIn('Client1 1.7 / 1 / 14',
                       solr_data_for(self.document, 'metadata'))
+
+    @browsing
+    def test_reference_number_of_deleted_document_gets_updated(self, browser):
+        self.login(self.manager, browser)
+
+        self.assertEquals('Client1 1.1 / 1.1 / 24',
+                          solr_data_for(self.empty_document, 'reference'))
+        self.trash_documents(self.empty_document)
+        Remover([self.empty_document]).remove()
+
+        self.login(self.administrator, browser)
+
+        browser.open(self.leaf_repofolder, view='edit')
+        browser.fill({'Repository number': u'7'}).save()
+        self.commit_solr()
+
+        self.login(self.manager, browser)
+        self.assertEquals('Client1 1.7 / 1.1 / 24',
+                          solr_data_for(self.empty_document, 'reference'))
