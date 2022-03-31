@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-08-18 08:25+0000\n"
+"POT-Creation-Date: 2022-03-31 15:12+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -1121,6 +1121,11 @@ msgstr "Document ${doc} added by ${user}"
 msgid "transition_add_subtask"
 msgstr "Subtask ${task} added by ${user}"
 
+#. Default: "Subtask ${task} closed by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_close_subtask"
+msgstr "Subtask ${task} closed by ${user}"
+
 #. German translation: Aufgabe akzeptiert
 #. Default: "Task accepted"
 #: ./opengever/task/response_description.py
@@ -1162,6 +1167,11 @@ msgstr "Issuer of task changed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
 msgstr "Task closed"
+
+#. Default: "Subtask closed"
+#: ./opengever/task/response_description.py
+msgid "transition_label_close_subtask"
+msgstr "Subtask closed"
 
 #. German translation: Erstellt durch ${user}.
 #. Default: "Created by ${user}."

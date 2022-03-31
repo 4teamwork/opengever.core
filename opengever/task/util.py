@@ -93,8 +93,8 @@ def get_task_type_title(task_type, language):
 
 
 def add_simple_response(task, text='', field_changes=None, added_objects=None,
-                        successor_oguid=None, supress_events=False,
-                        supress_activity=False, approved_documents=(), **kwargs):
+                        successor_oguid=None, supress_events=False, supress_activity=False,
+                        approved_documents=(), subtask=None, **kwargs):
     """Add a simple response which does (not change the task itself).
     `task`: task context
     `text`: fulltext
@@ -129,6 +129,10 @@ def add_simple_response(task, text='', field_changes=None, added_objects=None,
         for obj in approved_documents:
             iid = intids.getId(obj)
             response.approved_documents.append(RelationValue(iid))
+
+    if subtask:
+        iid = getUtility(IIntIds).getId(subtask)
+        response.subtask = RelationValue(iid)
 
     if successor_oguid:
         response.successor_oguid = successor_oguid

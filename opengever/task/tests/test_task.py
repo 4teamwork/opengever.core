@@ -287,6 +287,56 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         self.assertEqual(intids.getId(document), response.added_objects[0].to_id)
         self.assertEqual('transition-add-document', response.transition)
 
+    def test_closing_an_open_subtask_adds_response_on_parent_task(self):
+        self.login(self.regular_user)
+        subtask = create(
+            Builder("task")
+            .within(self.task)
+            .titled("Subtask")
+            .having(
+                responsible=self.regular_user.getId(),
+                responsible_client=u'fa',
+                task_type=u'information',
+            )
+        )
+
+        api.content.transition(obj=subtask,
+                               transition='task-transition-open-tested-and-closed')
+
+        response = IResponseContainer(self.task).list()[-1]
+        self.assertEqual('transition-close-subtask', response.transition)
+        self.assertEqual(response.subtask.to_object, subtask)
+
+    def test_closing_an_in_progress_subtask_adds_response_on_parent_task(self):
+        self.login(self.regular_user)
+        subtask = create(
+            Builder("task")
+            .within(self.task)
+            .titled("Subtask")
+            .having(
+                responsible=self.regular_user.getId(),
+                responsible_client=u'fa',
+                task_type=u'direct-execution',
+            )
+            .in_progress()
+        )
+
+        api.content.transition(obj=subtask,
+                               transition='task-transition-in-progress-tested-and-closed')
+
+        response = IResponseContainer(self.task).list()[-1]
+        self.assertEqual('transition-close-subtask', response.transition)
+        self.assertEqual(response.subtask.to_object, subtask)
+
+    def test_closing_a_resolved_subtask_adds_response_on_parent_task(self):
+        self.login(self.dossier_responsible)
+        api.content.transition(obj=self.subtask,
+                               transition='task-transition-resolved-tested-and-closed')
+
+        response = IResponseContainer(self.task).list()[-1]
+        self.assertEqual('transition-close-subtask', response.transition)
+        self.assertEqual(response.subtask.to_object, self.subtask)
+
     @browsing
     def test_responsible_client_for_multiple_orgunits(self, browser):
         self.login(self.dossier_responsible, browser=browser)

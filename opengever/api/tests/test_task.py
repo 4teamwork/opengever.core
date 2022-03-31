@@ -53,6 +53,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              u'rendered_text': u'',
              u'response_id': 1472652213000000,
              u'response_type': u'default',
+             u'subtask': None,
              u'successor_oguid': u'',
              u'text': u'',
              u'transition': u'transition-add-subtask'},
@@ -80,6 +81,20 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             [{u'field_id': u'deadline', u'field_title': u'Deadline',
               u'after': u'2023-01-01', u'before': u'2016-11-01'}],
             response['changes'])
+
+    @browsing
+    def test_task_response_contains_subtask(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        api.content.transition(obj=self.subtask,
+                               transition='task-transition-resolved-tested-and-closed')
+
+        browser.open(self.task, method="GET", headers=self.api_headers)
+
+        response = browser.json['responses'][-1]
+        self.assertDictContainsSubset(
+            {u'@id': self.subtask.absolute_url(),
+             u'title': self.subtask.title},
+            response['subtask'])
 
     @browsing
     def test_response_key_contains_empty_list_for_task_without_responses(self, browser):
@@ -116,6 +131,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                  u'title': u'B\xe4rfuss K\xe4thi'},
              u'text': u'Angebot \xfcberpr\xfcft',
              u'transition': u'task-commented',
+             u'subtask': None,
              u'successor_oguid': u'',
              u'rendered_text': u'',
              u'related_items': [],

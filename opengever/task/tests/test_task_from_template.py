@@ -7,6 +7,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.journal.tests.utils import get_journal_entry
+from opengever.journal.tests.utils import get_journal_length
 from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -556,8 +557,7 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
 
         api.content.transition(
             obj=self.seq_subtask_2, transition='task-transition-open-tested-and-closed')
-        last_journal_entry_type = get_journal_entry(self.dossier, -1)['action']['type']
-        self.assertNotEqual(last_journal_entry_type, 'Task modified')
+        length_before_closing_tasks = get_journal_length(self.dossier)
 
         api.content.transition(
             obj=self.seq_subtask_3, transition='task-transition-open-tested-and-closed')
@@ -566,8 +566,11 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
             Oguid.for_object(self.sequential_task)).activities
 
         activity = activities[-1]
-        self.assertEquals(u'task-transition-in-progress-tested-and-closed', activity.kind)
-        self.assertEquals(u'Task closed', activity.label)
+        self.assertEqual(u'task-transition-in-progress-tested-and-closed', activity.kind)
+        self.assertEqual(u'Task closed', activity.label)
+
+        # Two new entries, one for closing the subtask and one for closing the main task
+        self.assertEqual(length_before_closing_tasks + 2, get_journal_length(self.dossier))
 
         last_journal_entry = get_journal_entry(self.dossier, -1)
         self.assertEqual(last_journal_entry['action']['type'], 'Task modified')
