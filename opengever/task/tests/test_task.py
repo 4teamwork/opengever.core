@@ -337,6 +337,27 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         self.assertEqual('transition-close-subtask', response.transition)
         self.assertEqual(response.subtask.to_object, self.subtask)
 
+    def test_cancelling_an_open_subtask_adds_response_on_parent_task(self):
+        self.login(self.dossier_responsible)
+        subtask = create(
+            Builder("task")
+            .within(self.task)
+            .titled("Subtask")
+            .having(
+                issuer=self.dossier_responsible.getId(),
+                responsible=self.regular_user.getId(),
+                responsible_client=u'fa',
+                task_type=u'information',
+            )
+        )
+
+        api.content.transition(obj=subtask,
+                               transition='task-transition-open-cancelled')
+
+        response = IResponseContainer(self.task).list()[-1]
+        self.assertEqual('transition-cancel-subtask', response.transition)
+        self.assertEqual(response.subtask.to_object, subtask)
+
     @browsing
     def test_responsible_client_for_multiple_orgunits(self, browser):
         self.login(self.dossier_responsible, browser=browser)

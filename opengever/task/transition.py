@@ -349,6 +349,19 @@ class CloseTransitionExtender(DefaultTransitionExtender):
 
 @implementer(ITransitionExtender)
 @adapter(ITask, IBrowserRequest)
+class CancelTransitionExtender(DefaultTransitionExtender):
+
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        super(CancelTransitionExtender, self).after_transition_hook(
+            transition, disable_sync, transition_params)
+        parent = aq_parent(aq_inner(self.context))
+        if ITask.providedBy(parent):
+            add_simple_response(parent, transition='transition-cancel-subtask',
+                                subtask=self.context)
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask, IBrowserRequest)
 class ReassignTransitionExtender(DefaultTransitionExtender):
 
     schemas = [IResponse, INewResponsibleSchema]
