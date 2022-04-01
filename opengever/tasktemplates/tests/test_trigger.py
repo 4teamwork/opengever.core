@@ -68,6 +68,28 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser.css('#formfield-form-widgets-tasktemplatefolder').first.options)
 
     @browsing
+    def test_selecting_nested_tasktemplatefolder_returns_and_shows_error_message(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('tasktemplatefolder')
+               .having(title=u'Sub tasktemplatefolder',
+                       type='parallel')
+               .within(self.tasktemplatefolder))
+
+        browser.open(self.dossier, view='add-tasktemplate')
+        self.assertEqual(['Select task template folder'],
+                         browser.css('h1').text)
+
+        browser.fill({'Task template folder': 'Verfahren Neuanstellung'})
+        browser.click_on('Continue')
+
+        self.assertEqual(['Select task template folder'],
+                         browser.css('h1').text)
+        self.assertEqual(
+            ['Nested TaskTemplateFolders are only supported in the new UI.'],
+            error_messages())
+
+    @browsing
     def test_step2_list_all_tasktemplates_of_the_selected_folder_and_preselects_them_correctly(self, browser):
         self.login(self.regular_user, browser=browser)
 
