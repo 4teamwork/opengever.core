@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-10-28 09:03+0000\n"
+"POT-Creation-Date: 2022-04-01 15:20+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -55,6 +55,11 @@ msgstr "Trigger"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "description_start_immediately"
 msgstr "Immediately open the first task after creation."
+
+#. Default: "Nested TaskTemplateFolders are only supported in the new UI."
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "error_nested_tasktemplatefolder"
+msgstr "Nested TaskTemplateFolders are only supported in the new UI."
 
 #. German translation: Allgemein
 #. Default: "Common"
@@ -275,3 +280,8 @@ msgstr "Currently there are no active task template folders."
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
 msgstr "Yes"
+
+#. Default: "Nested TaskTemplateFolders can only be viewed and edited correctly in the new UI."
+#: ./opengever/tasktemplates/browser/tabbed.py
+msgid "warning_nested_tasktemplatefolder"
+msgstr "Nested TaskTemplateFolders can only be viewed and edited correctly in the new UI."
