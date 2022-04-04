@@ -116,11 +116,12 @@ class TaskTemplateFolderTrigger(object):
             responsible=api.user.get_current().getId(),
             responsible_client=get_current_org_unit().id(),
             task_type='direct-execution',
-            deadline=deadline)
+            deadline=deadline,
+            sequence_type=self.context.sequence_type)
 
     def create_main_task(self, data):
         main_task = self.process_creator.add_task(
-            self.dossier, data, sequential=self.context.is_sequential)
+            self.dossier, data)
 
         # set the main_task in to the in progress state
         api.content.transition(obj=main_task,
@@ -175,7 +176,7 @@ class TaskTemplateFolderTrigger(object):
 
     def create_subtask(self, main_task, data, is_first):
         task = self.process_creator.add_task(
-            main_task, data, IFromSequentialTasktemplate.providedBy(main_task))
+            main_task, data)
         self.set_initial_state(task, is_first)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
@@ -226,7 +227,18 @@ class TaskTemplateFolderTrigger(object):
 
 class ProcessCreator(object):
 
-    def add_task(self, container, data, sequential):
+    @staticmethod
+    def is_sequential(sequence_type):
+        return sequence_type == u'sequential'
+
+    def add_task(self, container, data):
+        sequential = False
+        if "sequence_type" in data:
+            if self.is_sequential(data.pop("sequence_type")):
+                sequential = True
+        elif IFromSequentialTasktemplate.providedBy(container):
+            sequential = True
+
         task = createContent('opengever.task.task', **data)
         notify(ObjectCreatedEvent(task))
         task = addContentToContainer(container, task, checkConstraints=True)
