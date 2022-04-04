@@ -97,17 +97,18 @@ class TaskTemplateFolderTrigger(object):
 
     def generate(self):
         self.process_creator = ProcessCreator()
-        main_task = self.create_main_task()
+        main_task_data = self.get_main_task_data()
+        main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         self.create_subtasks(main_task)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
-    def create_main_task(self):
+    def get_main_task_data(self):
         title = self.main_task_overrides.get("title", self.context.title)
         text = self.main_task_overrides.get("text", self.context.text)
         deadline = self.main_task_overrides.get("deadline", self.get_main_task_deadline())
-        data = dict(
+        return dict(
             title=title,
             text=text,
             issuer=api.user.get_current().getId(),
@@ -116,6 +117,7 @@ class TaskTemplateFolderTrigger(object):
             task_type='direct-execution',
             deadline=deadline)
 
+    def create_main_task(self, data):
         main_task = self.process_creator.add_task(
             self.dossier, data, sequential=self.context.is_sequential)
 
