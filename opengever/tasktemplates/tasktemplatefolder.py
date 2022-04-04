@@ -101,7 +101,7 @@ class TaskTemplateFolderTrigger(object):
         main_task = self.process_creator.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         subtasks_data = self.get_subtasks_data()
-        self.create_subtasks(main_task, subtasks_data)
+        self.process_creator.create_subtasks(main_task, subtasks_data)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
@@ -125,26 +125,6 @@ class TaskTemplateFolderTrigger(object):
             subtasks_data.append(self.get_subtask_data(template, self.values.get(template.id)))
         return subtasks_data
 
-    def create_subtasks(self, main_task, subtasks_data):
-        subtasks = []
-        for i, data in enumerate(subtasks_data):
-            subtask = self.create_subtask(main_task, data, is_first=i == 0)
-            subtasks.append(subtask)
-
-        main_task.set_tasktemplate_order(subtasks)
-
-    def set_initial_state(self, task, is_first):
-        """Set the initial states to planned for tasks of a sequential
-        tasktemplatefolder except for the first if start_immediately is True.
-        Tasks of a parallel tasktemplatefolder are skipped.
-        """
-        if not IFromSequentialTasktemplate.providedBy(task):
-            return
-
-        if not self.start_immediately \
-           or not is_first:
-            task.set_to_planned_state()
-
     def get_subtask_data(self, template, values):
         title = values.get("title", template.title)
         text = values.get("text", template.text)
@@ -163,20 +143,6 @@ class TaskTemplateFolderTrigger(object):
         data.update(values)
         self.replace_interactive_actors(data)
         return data
-
-    def create_subtask(self, main_task, data, is_first):
-        task = self.process_creator.add_task(
-            main_task, data)
-        self.set_initial_state(task, is_first)
-        task.reindexObject()
-        task.get_sql_object().sync_with(task)
-
-        # add activity record for subtask
-        if api.content.get_state(task) != TASK_STATE_PLANNED:
-            activity = TaskAddedActivity(task, getRequest())
-            activity.record()
-
-        return task
 
     def get_main_task_deadline(self):
         highest_deadline = max(
@@ -228,6 +194,40 @@ class ProcessCreator(object):
                                transition='task-transition-open-in-progress')
 
         return main_task
+
+    def create_subtasks(self, main_task, subtasks_data):
+        subtasks = []
+        for i, data in enumerate(subtasks_data):
+            subtask = self.create_subtask(main_task, data, is_first=i == 0)
+            subtasks.append(subtask)
+
+        main_task.set_tasktemplate_order(subtasks)
+
+    def create_subtask(self, main_task, data, is_first):
+        task = self.add_task(
+            main_task, data)
+        self.set_initial_state(task, is_first)
+        task.reindexObject()
+        task.get_sql_object().sync_with(task)
+
+        # add activity record for subtask
+        if api.content.get_state(task) != TASK_STATE_PLANNED:
+            activity = TaskAddedActivity(task, getRequest())
+            activity.record()
+
+        return task
+
+    def set_initial_state(self, task, is_first):
+        """Set the initial states to planned for tasks of a sequential
+        tasktemplatefolder except for the first if start_immediately is True.
+        Tasks of a parallel tasktemplatefolder are skipped.
+        """
+        if not IFromSequentialTasktemplate.providedBy(task):
+            return
+
+        if not self.start_immediately \
+           or not is_first:
+            task.set_to_planned_state()
 
     @staticmethod
     def is_sequential(sequence_type):
