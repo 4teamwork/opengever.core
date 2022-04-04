@@ -100,7 +100,8 @@ class TaskTemplateFolderTrigger(object):
         main_task_data = self.get_main_task_data()
         main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        self.create_subtasks(main_task)
+        subtasks_data = self.get_subtasks_data()
+        self.create_subtasks(main_task, subtasks_data)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
@@ -127,16 +128,21 @@ class TaskTemplateFolderTrigger(object):
 
         return main_task
 
-    def create_subtasks(self, main_task):
+    def get_subtasks_data(self):
+        subtasks_data = []
+        for i, template in enumerate(self.selected_templates):
+            subtasks_data.append(self.get_subtask_data(template, self.values.get(template.id)))
+        return subtasks_data
+
+    def create_subtasks(self, main_task, subtasks_data):
         subtasks = []
-        for template in self.selected_templates:
-            subtask = self.create_subtask(
-                main_task, template, self.values.get(template.id))
+        for i, data in enumerate(subtasks_data):
+            subtask = self.create_subtask(main_task, data, is_first=i == 0)
             subtasks.append(subtask)
 
         main_task.set_tasktemplate_order(subtasks)
 
-    def set_initial_state(self, task, template):
+    def set_initial_state(self, task, is_first):
         """Set the initial states to planned for tasks of a sequential
         tasktemplatefolder except for the first if start_immediately is True.
         Tasks of a parallel tasktemplatefolder are skipped.
@@ -145,10 +151,10 @@ class TaskTemplateFolderTrigger(object):
             return
 
         if not self.start_immediately \
-           or template != self.selected_templates[0]:
+           or not is_first:
             task.set_to_planned_state()
 
-    def create_subtask(self, main_task, template, values):
+    def get_subtask_data(self, template, values):
         title = values.get("title", template.title)
         text = values.get("text", template.text)
         deadline = values.get("deadline", date.today() + timedelta(template.deadline))
@@ -165,10 +171,12 @@ class TaskTemplateFolderTrigger(object):
 
         data.update(values)
         self.replace_interactive_actors(data)
+        return data
 
+    def create_subtask(self, main_task, data, is_first):
         task = self.process_creator.add_task(
             main_task, data, IFromSequentialTasktemplate.providedBy(main_task))
-        self.set_initial_state(task, template)
+        self.set_initial_state(task, is_first)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 
