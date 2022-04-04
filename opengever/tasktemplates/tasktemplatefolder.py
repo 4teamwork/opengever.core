@@ -96,9 +96,9 @@ class TaskTemplateFolderTrigger(object):
         self.request = getRequest()
 
     def generate(self):
-        self.process_creator = ProcessCreator()
+        self.process_creator = ProcessCreator(self.dossier)
         main_task_data = self.get_main_task_data()
-        main_task = self.create_main_task(main_task_data)
+        main_task = self.process_creator.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         subtasks_data = self.get_subtasks_data()
         self.create_subtasks(main_task, subtasks_data)
@@ -118,16 +118,6 @@ class TaskTemplateFolderTrigger(object):
             task_type='direct-execution',
             deadline=deadline,
             sequence_type=self.context.sequence_type)
-
-    def create_main_task(self, data):
-        main_task = self.process_creator.add_task(
-            self.dossier, data)
-
-        # set the main_task in to the in progress state
-        api.content.transition(obj=main_task,
-                               transition='task-transition-open-in-progress')
-
-        return main_task
 
     def get_subtasks_data(self):
         subtasks_data = []
@@ -226,6 +216,18 @@ class TaskTemplateFolderTrigger(object):
 
 
 class ProcessCreator(object):
+
+    def __init__(self, dossier):
+        self.dossier = dossier
+
+    def create_main_task(self, data):
+        main_task = self.add_task(self.dossier, data)
+
+        # set the main_task in to the in progress state
+        api.content.transition(obj=main_task,
+                               transition='task-transition-open-in-progress')
+
+        return main_task
 
     @staticmethod
     def is_sequential(sequence_type):
