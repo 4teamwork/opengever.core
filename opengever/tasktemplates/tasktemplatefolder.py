@@ -131,8 +131,6 @@ class TaskTemplateFolderTrigger(object):
         return main_task
 
     def create_subtasks(self, main_task):
-        predecessor = None
-
         subtasks = []
         for template in self.selected_templates:
             subtask = self.create_subtask(
