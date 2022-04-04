@@ -147,7 +147,7 @@ class TaskTemplateFolderTrigger(object):
         tasktemplatefolder except for the first if start_immediately is True.
         Tasks of a parallel tasktemplatefolder are skipped.
         """
-        if not self.context.is_sequential:
+        if not IFromSequentialTasktemplate.providedBy(task):
             return
 
         if not self.start_immediately \
