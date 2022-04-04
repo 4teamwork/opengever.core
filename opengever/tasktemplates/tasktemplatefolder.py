@@ -96,18 +96,12 @@ class TaskTemplateFolderTrigger(object):
         self.request = getRequest()
 
     def generate(self):
+        self.process_creator = ProcessCreator()
         main_task = self.create_main_task()
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         self.create_subtasks(main_task)
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
-
-    def add_task(self, container, data):
-        task = createContent('opengever.task.task', **data)
-        notify(ObjectCreatedEvent(task))
-        task = addContentToContainer(container, task, checkConstraints=True)
-        self.mark_as_generated_from_tasktemplate(task)
-        return task
 
     def create_main_task(self):
         title = self.main_task_overrides.get("title", self.context.title)
@@ -122,7 +116,8 @@ class TaskTemplateFolderTrigger(object):
             task_type='direct-execution',
             deadline=deadline)
 
-        main_task = self.add_task(self.dossier, data)
+        main_task = self.process_creator.add_task(
+            self.dossier, data, sequential=self.context.is_sequential)
 
         # set the main_task in to the in progress state
         api.content.transition(obj=main_task,
@@ -169,7 +164,8 @@ class TaskTemplateFolderTrigger(object):
         data.update(values)
         self.replace_interactive_actors(data)
 
-        task = self.add_task(main_task, data)
+        task = self.process_creator.add_task(
+            main_task, data, IFromSequentialTasktemplate.providedBy(main_task))
         self.set_initial_state(task, template)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
@@ -187,12 +183,6 @@ class TaskTemplateFolderTrigger(object):
         deadline_timedelta = api.portal.get_registry_record(
             'deadline_timedelta', interface=ITaskSettings)
         return date.today() + timedelta(highest_deadline + deadline_timedelta)
-
-    def mark_as_generated_from_tasktemplate(self, task):
-        if self.context.is_sequential:
-            alsoProvides(task, IFromSequentialTasktemplate)
-        else:
-            alsoProvides(task, IFromParallelTasktemplate)
 
     def replace_interactive_actors(self, data):
         data['issuer'] = self.get_interactive_representative(data['issuer'])
@@ -222,3 +212,19 @@ class TaskTemplateFolderTrigger(object):
 
         if predecessor:
             task.set_tasktemplate_predecessor(predecessor)
+
+
+class ProcessCreator(object):
+
+    def add_task(self, container, data, sequential):
+        task = createContent('opengever.task.task', **data)
+        notify(ObjectCreatedEvent(task))
+        task = addContentToContainer(container, task, checkConstraints=True)
+        self.mark_as_generated_from_tasktemplate(task, sequential)
+        return task
+
+    def mark_as_generated_from_tasktemplate(self, task, sequential):
+        if sequential:
+            alsoProvides(task, IFromSequentialTasktemplate)
+        else:
+            alsoProvides(task, IFromParallelTasktemplate)
