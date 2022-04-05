@@ -97,6 +97,7 @@ class TaskTemplateFolderTrigger(object):
 
     def generate(self):
         process_data = {
+            "start_immediately": self.start_immediately,
             "process": self.get_main_task_data(),
         }
         process_data["process"]["items"] = self.get_subtasks_data()
@@ -162,6 +163,7 @@ class ProcessCreator(object):
     def __init__(self, dossier, process_data):
         self.dossier = dossier
         self.process_data = process_data
+        self.start_immediately = self.process_data.pop("start_immediately")
         self.request = getRequest()
 
     def __call__(self):
