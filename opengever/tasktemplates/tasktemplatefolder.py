@@ -158,6 +158,7 @@ class ProcessCreator(object):
         self.process_data = process_data
         self.start_immediately = self.process_data.pop("start_immediately")
         self.request = getRequest()
+        self.first_subtask_created = False
 
     def __call__(self):
         self.preprocess_data()
@@ -165,8 +166,7 @@ class ProcessCreator(object):
         main_task_data = self.process_data["process"]
         main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        subtasks_data = self.process_data["process"]["items"]
-        self.create_subtasks(main_task, subtasks_data)
+        self.create_subtasks(main_task, self.process_data["process"])
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
@@ -204,18 +204,21 @@ class ProcessCreator(object):
 
         return main_task
 
-    def create_subtasks(self, main_task, subtasks_data):
+    def create_subtasks(self, container, data):
         subtasks = []
-        for i, data in enumerate(subtasks_data):
-            subtask = self.create_subtask(main_task, data, is_first=i == 0)
+        for i, subtask_data in enumerate(data["items"]):
+            subtask = self.create_subtask(container, subtask_data)
+            if self.has_children(subtask):
+                self.create_subtasks(subtask, subtask_data)
             subtasks.append(subtask)
 
-        main_task.set_tasktemplate_order(subtasks)
+        container.set_tasktemplate_order(subtasks)
 
-    def create_subtask(self, main_task, data, is_first):
+    def create_subtask(self, main_task, data):
         task = self.add_task(
             main_task, data)
-        self.set_initial_state(task, is_first)
+
+        self.set_initial_state(task, not self.first_subtask_created)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 
@@ -223,6 +226,9 @@ class ProcessCreator(object):
         if api.content.get_state(task) != TASK_STATE_PLANNED:
             activity = TaskAddedActivity(task, getRequest())
             activity.record()
+
+        if not self.first_subtask_created:
+            self.first_subtask_created = True
 
         return task
 
