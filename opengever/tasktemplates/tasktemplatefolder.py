@@ -108,7 +108,7 @@ class TaskTemplateFolderTrigger(object):
     def get_main_task_data(self):
         title = self.main_task_overrides.get("title", self.context.title)
         text = self.main_task_overrides.get("text", self.context.text)
-        deadline = self.main_task_overrides.get("deadline", self.get_main_task_deadline())
+        deadline = self.main_task_overrides.get("deadline")
         return dict(
             title=title,
             text=text,
@@ -143,13 +143,6 @@ class TaskTemplateFolderTrigger(object):
         data.update(values)
         return data
 
-    def get_main_task_deadline(self):
-        highest_deadline = max(
-            [template.deadline for template in self.selected_templates])
-        deadline_timedelta = api.portal.get_registry_record(
-            'deadline_timedelta', interface=ITaskSettings)
-        return date.today() + timedelta(highest_deadline + deadline_timedelta)
-
     def set_tasktemplate_predecessor(self, task, predecessor):
         if not self.context.is_sequential:
             return
@@ -182,8 +175,25 @@ class ProcessCreator(object):
 
     def _recursive_preprocess_data(self, data):
         self.replace_interactive_actors(data)
-        for item in data.get("items", []):
-            self._recursive_preprocess_data(item)
+        if self.has_children(data):
+            longest_deadline = date.today()
+            for item in data.get("items", []):
+                deadline = self._recursive_preprocess_data(item)
+                longest_deadline = max(longest_deadline, deadline)
+
+            if data.get("deadline") is None:
+                data["deadline"] = longest_deadline + self.default_deadline_timedelta
+        return data["deadline"]
+
+    @property
+    def default_deadline_timedelta(self):
+        deadline_timedelta = api.portal.get_registry_record(
+            'deadline_timedelta', interface=ITaskSettings)
+        return timedelta(deadline_timedelta)
+
+    @staticmethod
+    def has_children(data):
+        return bool(data.get("items"))
 
     def create_main_task(self, data):
         main_task = self.add_task(self.dossier, data)
