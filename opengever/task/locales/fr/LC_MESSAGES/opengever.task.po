@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-08-18 08:25+0000\n"
+"POT-Creation-Date: 2022-03-31 17:41+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -940,6 +940,16 @@ msgstr "Document ${doc} ajouté par ${user}"
 msgid "transition_add_subtask"
 msgstr "Sous-tâche ${task} ajoutée par ${user}"
 
+#. Default: "Subtask ${task} cancelled by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_cancel_subtask"
+msgstr "Sous-tâche ${task} annulée par ${user}"
+
+#. Default: "Subtask ${task} closed by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_close_subtask"
+msgstr "Sous-tâche ${task} clôturée par ${user}"
+
 #. Default: "Task accepted"
 #: ./opengever/task/response_description.py
 msgid "transition_label_accept"
@@ -960,10 +970,15 @@ msgstr "Sous-tâche ajoutée à la tâche"
 msgid "transition_label_assign_to_dossier"
 msgstr "Transmission assignée au dossier"
 
+#. Default: "Subtask cancelled"
+#: ./opengever/task/response_description.py
+msgid "transition_label_cancel_subtask"
+msgstr "Tâche annulée"
+
 #. Default: "Task cancelled"
 #: ./opengever/task/response_description.py
 msgid "transition_label_cancelled"
-msgstr "Tâche annulée"
+msgstr "Sous-tâche annulée"
 
 #. Default: "Issuer of task changed"
 #: ./opengever/task/response_description.py
@@ -974,6 +989,11 @@ msgstr "Mandant de la tâche modifié"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
 msgstr "Tâche clôturée"
+
+#. Default: "Subtask closed"
+#: ./opengever/task/response_description.py
+msgid "transition_label_close_subtask"
+msgstr "Sous-tâche clôturée"
 
 #. Default: "Created by ${user}."
 #: ./opengever/task/viewlets/response.py

@@ -216,6 +216,8 @@ class TaskTransitionActivity(BaseTaskResponseActivity):
 
     IGNORED_TRANSITIONS = [
         'transition-add-subtask',
+        'transition-cancel-subtask',
+        'transition-close-subtask',
         'task-transition-reassign',
         'task-transition-change-issuer',
         'forwarding-transition-reassign',

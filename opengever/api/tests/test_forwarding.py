@@ -36,6 +36,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
               u'related_items': [],
               u'text': u'',
               u'mimetype': u'',
+              u'subtask': None,
               u'successor_oguid': u'',
               u'rendered_text': u'',
               u'transition': u'transition-add-document'}],

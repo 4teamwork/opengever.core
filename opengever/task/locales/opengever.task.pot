@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-08-18 08:25+0000\n"
+"POT-Creation-Date: 2022-03-31 17:41+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -936,6 +936,16 @@ msgstr ""
 msgid "transition_add_subtask"
 msgstr ""
 
+#. Default: "Subtask ${task} cancelled by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_cancel_subtask"
+msgstr ""
+
+#. Default: "Subtask ${task} closed by ${user}"
+#: ./opengever/task/response_description.py
+msgid "transition_close_subtask"
+msgstr ""
+
 #. Default: "Task accepted"
 #: ./opengever/task/response_description.py
 msgid "transition_label_accept"
@@ -956,6 +966,11 @@ msgstr ""
 msgid "transition_label_assign_to_dossier"
 msgstr ""
 
+#. Default: "Subtask cancelled"
+#: ./opengever/task/response_description.py
+msgid "transition_label_cancel_subtask"
+msgstr ""
+
 #. Default: "Task cancelled"
 #: ./opengever/task/response_description.py
 msgid "transition_label_cancelled"
@@ -969,6 +984,11 @@ msgstr ""
 #. Default: "Task closed"
 #: ./opengever/task/response_description.py
 msgid "transition_label_close"
+msgstr ""
+
+#. Default: "Subtask closed"
+#: ./opengever/task/response_description.py
+msgid "transition_label_close_subtask"
 msgstr ""
 
 #. Default: "Created by ${user}."

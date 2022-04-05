@@ -270,7 +270,7 @@
       />
 
   <adapter
-      factory=".transition.DefaultTransitionExtender"
+      factory=".transition.CancelTransitionExtender"
       name="task-transition-open-cancelled"
       />
 

@@ -2,6 +2,7 @@ from opengever.base.response import IResponse
 from opengever.base.response import Response
 from persistent.list import PersistentList
 from z3c.relationfield.schema import RelationList
+from z3c.relationfield.schema import Relation
 from zope import schema
 from zope.interface import implements
 from zope.schema import List
@@ -28,6 +29,8 @@ class ITaskResponse(IResponse):
 
     # Documents approved during task resolution
     approved_documents = RelationList(required=False)
+
+    subtask = Relation(required=False)
 
 
 class TaskResponse(Response):

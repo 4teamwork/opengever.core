@@ -1,3 +1,4 @@
+from Acquisition import aq_inner, aq_parent
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
@@ -336,10 +337,27 @@ class CloseTransitionExtender(DefaultTransitionExtender):
 
         self.save_related_items(response, transition_params.get('relatedItems'))
         pass_documents = self.pass_documents_to_next_task(transition, transition_params)
+        parent = aq_parent(aq_inner(self.context))
+        if ITask.providedBy(parent):
+            add_simple_response(parent, transition='transition-close-subtask',
+                                subtask=self.context)
         self.sync_change(transition,
                          transition_params.get('text'),
                          disable_sync,
                          pass_documents_to_next_task=pass_documents)
+
+
+@implementer(ITransitionExtender)
+@adapter(ITask, IBrowserRequest)
+class CancelTransitionExtender(DefaultTransitionExtender):
+
+    def after_transition_hook(self, transition, disable_sync, transition_params):
+        super(CancelTransitionExtender, self).after_transition_hook(
+            transition, disable_sync, transition_params)
+        parent = aq_parent(aq_inner(self.context))
+        if ITask.providedBy(parent):
+            add_simple_response(parent, transition='transition-cancel-subtask',
+                                subtask=self.context)
 
 
 @implementer(ITransitionExtender)

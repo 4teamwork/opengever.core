@@ -472,6 +472,48 @@ class SubTaskAdded(ResponseDescription):
 ResponseDescription.add_description(SubTaskAdded)
 
 
+class SubTaskClosed(ResponseDescription):
+
+    transition = 'transition-close-subtask'
+    css_class = 'close'
+
+    def msg(self):
+        subtask = self.response.subtask.to_object
+        label = subtask.get_sql_object().get_link()
+
+        return _('transition_close_subtask',
+                 u'Subtask ${task} closed by ${user}',
+                 mapping={'user': self.creator_link(),
+                          'task': label})
+
+    def label(self):
+        return _('transition_label_close_subtask', u'Subtask closed')
+
+
+ResponseDescription.add_description(SubTaskClosed)
+
+
+class SubTaskCancelled(ResponseDescription):
+
+    transition = 'transition-cancel-subtask'
+    css_class = 'cancelled'
+
+    def msg(self):
+        subtask = self.response.subtask.to_object
+        label = subtask.get_sql_object().get_link()
+
+        return _('transition_cancel_subtask',
+                 u'Subtask ${task} cancelled by ${user}',
+                 mapping={'user': self.creator_link(),
+                          'task': label})
+
+    def label(self):
+        return _('transition_label_cancel_subtask', u'Subtask cancelled')
+
+
+ResponseDescription.add_description(SubTaskCancelled)
+
+
 class DocumentAdded(ResponseDescription):
 
     transition = 'transition-add-document'
