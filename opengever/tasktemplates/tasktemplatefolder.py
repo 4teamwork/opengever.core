@@ -96,13 +96,12 @@ class TaskTemplateFolderTrigger(object):
         self.request = getRequest()
 
     def generate(self):
-        self.process_creator = ProcessCreator(self.dossier)
-        main_task_data = self.get_main_task_data()
-        main_task = self.process_creator.create_main_task(main_task_data)
-        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        subtasks_data = self.get_subtasks_data()
-        self.process_creator.create_subtasks(main_task, subtasks_data)
-        noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        process_data = {
+            "process": self.get_main_task_data(),
+        }
+        process_data["process"]["items"] = self.get_subtasks_data()
+        self.process_creator = ProcessCreator(self.dossier, process_data)
+        main_task = self.process_creator()
         return main_task
 
     def get_main_task_data(self):
@@ -183,8 +182,19 @@ class TaskTemplateFolderTrigger(object):
 
 class ProcessCreator(object):
 
-    def __init__(self, dossier):
+    def __init__(self, dossier, process_data):
         self.dossier = dossier
+        self.process_data = process_data
+        self.request = getRequest()
+
+    def __call__(self):
+        main_task_data = self.process_data["process"]
+        main_task = self.create_main_task(main_task_data)
+        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        subtasks_data = self.process_data["process"]["items"]
+        self.create_subtasks(main_task, subtasks_data)
+        noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        return main_task
 
     def create_main_task(self, data):
         main_task = self.add_task(self.dossier, data)
