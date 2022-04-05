@@ -99,6 +99,7 @@ class TaskTemplateFolderTrigger(object):
         process_data = {
             "start_immediately": self.start_immediately,
             "process": self.get_main_task_data(),
+            "related_documents": self.related_documents,
         }
         process_data["process"]["items"] = self.get_subtasks_data()
         self.process_creator = ProcessCreator(self.dossier, process_data)
@@ -136,7 +137,6 @@ class TaskTemplateFolderTrigger(object):
             responsible_client=template.responsible_client,
             task_type=template.task_type,
             text=text,
-            relatedItems=self.related_documents,
             deadline=deadline,
         )
 
@@ -159,6 +159,7 @@ class ProcessCreator(object):
         self.start_immediately = self.process_data.pop("start_immediately")
         self.request = getRequest()
         self.first_subtask_created = False
+        self.related_documents = self.process_data.pop("related_documents")
 
     def __call__(self):
         self.preprocess_data()
@@ -216,7 +217,7 @@ class ProcessCreator(object):
 
     def create_subtask(self, main_task, data):
         task = self.add_task(
-            main_task, data)
+            main_task, data, related_documents=self.related_documents)
 
         self.set_initial_state(task, not self.first_subtask_created)
         task.reindexObject()
@@ -248,7 +249,7 @@ class ProcessCreator(object):
     def is_sequential(sequence_type):
         return sequence_type == u'sequential'
 
-    def add_task(self, container, data):
+    def add_task(self, container, data, related_documents=[]):
         sequential = False
         if "sequence_type" in data:
             if self.is_sequential(data.pop("sequence_type")):
@@ -256,7 +257,9 @@ class ProcessCreator(object):
         elif IFromSequentialTasktemplate.providedBy(container):
             sequential = True
 
-        task = createContent('opengever.task.task', **data)
+        task = createContent('opengever.task.task',
+                             relatedItems=related_documents,
+                             **data)
         notify(ObjectCreatedEvent(task))
         task = addContentToContainer(container, task, checkConstraints=True)
         self.mark_as_generated_from_tasktemplate(task, sequential)
