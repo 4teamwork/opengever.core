@@ -102,6 +102,7 @@ class TaskTemplateFolderTrigger(object):
             "related_documents": self.related_documents,
         }
         process_data["process"]["items"] = self.get_subtasks_data()
+        process_data = ProcessDataPreprocessor(self.dossier, process_data)()
         self.process_creator = ProcessCreator(self.dossier, process_data)
         main_task = self.process_creator()
         return main_task
@@ -151,28 +152,19 @@ class TaskTemplateFolderTrigger(object):
             task.set_tasktemplate_predecessor(predecessor)
 
 
-class ProcessCreator(object):
+class ProcessDataPreprocessor(object):
 
     def __init__(self, dossier, process_data):
         self.dossier = dossier
         self.process_data = process_data
-        self.start_immediately = self.process_data.pop("start_immediately")
-        self.request = getRequest()
-        self.first_subtask_created = False
-        self.related_documents = self.process_data.pop("related_documents")
 
     def __call__(self):
-        self.preprocess_data()
-
-        main_task_data = self.process_data["process"]
-        main_task = self.create_main_task(main_task_data)
-        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        self.create_subtasks(main_task, self.process_data["process"])
-        noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        return main_task
-
-    def preprocess_data(self):
         self._recursive_preprocess_data(self.process_data["process"])
+        return self.process_data
+
+    @staticmethod
+    def has_children(data):
+        return bool(data.get("items"))
 
     def _recursive_preprocess_data(self, data):
         self.replace_interactive_actors(data)
@@ -191,6 +183,47 @@ class ProcessCreator(object):
         deadline_timedelta = api.portal.get_registry_record(
             'deadline_timedelta', interface=ITaskSettings)
         return timedelta(deadline_timedelta)
+
+    def replace_interactive_actors(self, data):
+        data['issuer'] = self.get_interactive_representative(data['issuer'])
+        if ActorLookup(data['responsible']).is_interactive_actor():
+            data['responsible_client'] = get_current_org_unit().id()
+            data['responsible'] = self.get_interactive_representative(
+                data['responsible'])
+
+    def get_interactive_representative(self, principal):
+        """The current systems knows two interactive users:
+
+        `responsible`: the reponsible of the main dossier.
+        `current_user`: the currently logged in user.
+        """
+        if principal == INTERACTIVE_ACTOR_RESPONSIBLE_ID:
+            return IDossier(self.dossier.get_main_dossier()).responsible
+
+        elif principal == INTERACTIVE_ACTOR_CURRENT_USER_ID:
+            return api.user.get_current().getId()
+
+        else:
+            return principal
+
+
+class ProcessCreator(object):
+
+    def __init__(self, dossier, process_data):
+        self.dossier = dossier
+        self.process_data = process_data
+        self.start_immediately = self.process_data.pop("start_immediately")
+        self.request = getRequest()
+        self.first_subtask_created = False
+        self.related_documents = self.process_data.pop("related_documents")
+
+    def __call__(self):
+        main_task_data = self.process_data["process"]
+        main_task = self.create_main_task(main_task_data)
+        alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        self.create_subtasks(main_task, self.process_data["process"])
+        noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
+        return main_task
 
     @staticmethod
     def has_children(data):
@@ -270,25 +303,3 @@ class ProcessCreator(object):
             alsoProvides(task, IFromSequentialTasktemplate)
         else:
             alsoProvides(task, IFromParallelTasktemplate)
-
-    def replace_interactive_actors(self, data):
-        data['issuer'] = self.get_interactive_representative(data['issuer'])
-        if ActorLookup(data['responsible']).is_interactive_actor():
-            data['responsible_client'] = get_current_org_unit().id()
-            data['responsible'] = self.get_interactive_representative(
-                data['responsible'])
-
-    def get_interactive_representative(self, principal):
-        """The current systems knows two interactive users:
-
-        `responsible`: the reponsible of the main dossier.
-        `current_user`: the currently logged in user.
-        """
-        if principal == INTERACTIVE_ACTOR_RESPONSIBLE_ID:
-            return IDossier(self.dossier.get_main_dossier()).responsible
-
-        elif principal == INTERACTIVE_ACTOR_CURRENT_USER_ID:
-            return api.user.get_current().getId()
-
-        else:
-            return principal
