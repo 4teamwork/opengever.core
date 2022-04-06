@@ -111,7 +111,10 @@ class ManageParticipants(BrowserView):
             storage.remove_invitation(token)
             return
 
-        elif type_ in ['user', 'group'] and can_manage_member(self.context, Actor.lookup(token)):
+        # A type_ of `null` (NullActor) happens when an inactive user gets
+        # deleted which is no present in the OGDS.
+        # Usually a leftover of a migration
+        elif type_ in ['user', 'group', 'null'] and can_manage_member(self.context, Actor.lookup(token)):
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_SHARING, token)
             self._require_admin_assignment()
@@ -120,6 +123,7 @@ class ManageParticipants(BrowserView):
             manager = WorkspaceWatcherManager(self.context)
             manager.participant_removed(token)
             return
+
         else:
             raise BadRequest('Oh my, something went wrong')
 

@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.restapi.serializer.converters import json_compatible
@@ -587,6 +589,31 @@ class TestParticipationDelete(IntegrationTestCase):
         self.assertIsNone(
             get_entry_by_id(browser.json.get('items'), self.workspace_guest.getId()),
             'Expect to have no local roles anymore for the user in the folder')
+
+    @browsing
+    def test_delete_inactive_user_local_role(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        assignment_manager = RoleAssignmentManager(self.workspace)
+
+        # add local_roles for inactive user
+        assignment_manager.add_or_update(
+            'inactive-user', ['WorkspaceGuest'], ASSIGNMENT_VIA_SHARING)
+
+        browser.open(self.workspace, view='@participations',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            get_entry_by_id(browser.json['items'], 'inactive-user').get('role'))
+
+        browser.open(self.workspace, view='@participations/inactive-user',
+                     method='DELETE', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(
+            [],
+            assignment_manager.get_assignments_by_principal_id('inactive-user'))
 
 
 class TestParticipationPatch(IntegrationTestCase):
