@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@copy-document-from-workspace``: Error responses now include ``translated_message``.
 - ``@external-activities``: ``notification_recipients`` now also accepts group IDs.
 - ``@external-activities``: Privileged users may now create notifications for other users (see :ref:`external-activities`)
 - ``@config``: Add ``workspace_creation_restricted`` feature flag.

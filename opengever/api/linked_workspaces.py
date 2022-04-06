@@ -241,8 +241,11 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
                     workspace_uid, document_uid, as_new_version, trash_tr_document)
         except CopyFromWorkspaceForbidden:
             raise BadRequest(
-                "Document can't be copied from workspace because it's "
-                "currently checked out")
+                _("Document can't be copied from workspace because it's "
+                  "currently checked out"))
+        except LookupError:
+            raise BadRequest(
+                _("Document not in linked workspace"))
 
         serialized = self.serialize_object(destination_document)
         serialized['teamraum_connect_retrieval_mode'] = retrieval_mode

@@ -158,4 +158,5 @@ class WorkspaceClient(object):
         """Trashes the specified teamraum document.
         """
         response = self.request.post(document_url + '/@trash')
+        response.raise_for_status()
         return response

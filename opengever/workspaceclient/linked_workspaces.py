@@ -21,6 +21,7 @@ from plone.dexterity.utils import iterSchemata
 from plone.locking.interfaces import ILockable
 from plone.memoize import ram
 from plone.restapi.interfaces import ISerializeToJson
+from requests import HTTPError
 from time import time
 from zExceptions import BadRequest
 from zope.component import adapter
@@ -30,6 +31,7 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
+import transaction
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
@@ -325,7 +327,15 @@ class LinkedWorkspaces(object):
             gever_doc = self._retrieve_as_copy(document_repr, workspace_title)
 
         if trash_tr_document:
-            self.client.trash_document(document_url)
+            try:
+                self.client.trash_document(document_url)
+            except HTTPError:
+                # Commit txn so that raising BadRequest does not rollback
+                # the already successully transferred document
+                transaction.commit()
+                raise BadRequest(
+                    _("Document was retrieved, but workspace document could "
+                      "not be moved to trash."))
 
         return gever_doc, retrieval_mode
 

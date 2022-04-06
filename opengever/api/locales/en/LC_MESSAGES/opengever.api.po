@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-07 10:25+0000\n"
+"POT-Creation-Date: 2022-04-06 19:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,14 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/api/linked_workspaces.py
+msgid "Document can't be copied from workspace because it's currently checked out"
+msgstr ""
+
+#: ./opengever/api/linked_workspaces.py
+msgid "Document not in linked workspace"
+msgstr ""
 
 #. Default: "Copy of ${title}"
 #: ./opengever/api/copy_.py
