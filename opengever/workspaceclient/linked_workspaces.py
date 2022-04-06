@@ -307,9 +307,9 @@ class LinkedWorkspaces(object):
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
 
         # If the workspace document doesn't have a link to a GEVER document,
-        # or is not a regular document with a file,
-        # or cannot be retrieved, for example because it was trashed,
-        # always create a copy instead of attempting to create a version.
+        # or is not a regular document with a file, or cannot be retrieved,
+        # for example because the GEVER document was trashed, always create
+        # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
