@@ -604,6 +604,75 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 title=u'Document Testdokum\xe4nt copied back from workspace.',
             )
 
+    def test_copy_document_from_a_workspace_and_trash_tr_document(self):
+        document = create(Builder('document')
+                          .within(self.workspace)
+                          .with_dummy_content())
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    # Patch client request to @trash to avoid ConflictErrors
+                    with patch('opengever.workspaceclient.client'
+                               '.WorkspaceClient.trash_document') as trash_document:
+                        dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                            self.workspace.UID(), document.UID(),
+                            trash_tr_document=True)
+
+            # WorkspaceClient should have been instructed to trash the TR doc
+            trash_document.assert_called_with(document.absolute_url())
+
+            self.assertEqual(1, len(children['added']))
+            gever_document = children['added'].pop()
+            self.assertEqual(gever_document, dst_doc)
+
+    def test_copy_document_from_a_workspace_as_version_and_trash_tr_document(self):
+        gever_doc = create(Builder('document')
+                           .within(self.dossier)
+                           .with_dummy_content())
+
+        self.assertIsNone(Versioner(gever_doc).get_current_version_id())
+        self.assertFalse(Versioner(gever_doc).has_initial_version())
+
+        new_content = 'Content produced in Workspace'
+        new_filename = u'workspace.doc'
+
+        workspace_doc = create(Builder('document')
+                               .within(self.workspace)
+                               .attach_file_containing(new_content,
+                                                       name=new_filename))
+
+        ILinkedDocuments(workspace_doc).link_gever_document(IUUID(gever_doc))
+        ILinkedDocuments(gever_doc).link_workspace_document(IUUID(workspace_doc))
+
+        transaction.commit()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+
+            with self.observe_children(self.dossier) as children:
+                with auto_commit_after_request(manager.client):
+                    # Patch client request to @trash to avoid ConflictErrors
+                    with patch('opengever.workspaceclient.client'
+                               '.WorkspaceClient.trash_document') as trash_document:
+                        dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                            self.workspace.UID(), workspace_doc.UID(),
+                            as_new_version=True, trash_tr_document=True)
+
+            # WorkspaceClient should have been instructed to trash the TR doc
+            trash_document.assert_called_with(workspace_doc.absolute_url())
+
+            self.assertEqual(0, len(children['added']))
+            self.assertEqual(gever_doc, dst_doc)
+
+            self.assertTrue(Versioner(gever_doc).has_initial_version())
+            self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
+
     def test_copy_document_from_workspace_as_new_version_unlocks_document(self):
         gever_doc = create(Builder('document')
                            .within(self.dossier)

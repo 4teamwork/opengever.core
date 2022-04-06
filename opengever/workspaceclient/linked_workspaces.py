@@ -268,7 +268,9 @@ class LinkedWorkspaces(object):
         if linked_documents.get('items_total') == 1:
             return linked_documents['items'][0]
 
-    def copy_document_from_workspace(self, workspace_uid, document_uid, as_new_version=False):
+    def copy_document_from_workspace(
+            self, workspace_uid, document_uid,
+            as_new_version=False, trash_tr_document=False):
         """Will copy a document from a linked workspace.
         """
         document = self._get_document_by_uid(workspace_uid, document_uid)
@@ -321,6 +323,9 @@ class LinkedWorkspaces(object):
         else:
             retrieval_mode = RETRIEVAL_MODE_COPY
             gever_doc = self._retrieve_as_copy(document_repr, workspace_title)
+
+        if trash_tr_document:
+            self.client.trash_document(document_url)
 
         return gever_doc, retrieval_mode
 
