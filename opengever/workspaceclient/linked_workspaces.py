@@ -197,7 +197,7 @@ class LinkedWorkspaces(object):
         # Add journal entry to dossier
         title = _(
             u'label_workspace_unlinked',
-            default=u'Unlink workspace ${workspace_title}.',
+            default=u'Unlinked workspace ${workspace_title}.',
             mapping={'workspace_title': workspace.get('title')})
 
         journal_entry_factory(

@@ -1088,7 +1088,7 @@ class TestUnlinkWorkspace(FunctionalWorkspaceClientTestCase):
                 manager.unlink_workspace(self.workspace.UID())
 
             self.assert_journal_entry(self.dossier, 'Unlinked workspace',
-                                      u'Unlink workspace Ein Teamraum.')
+                                      u'Unlinked workspace Ein Teamraum.')
 
     def test_unlink_workspace_unlocks_linked_documents(self):
         with self.workspace_client_env():

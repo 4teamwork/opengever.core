@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-04-06 19:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,3 +53,8 @@ msgstr "Espace de travail ${workspace_title} créé pour ce dossier."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_workspace_linked"
 msgstr "Lié à l'espace de travail ${workspace_title}."
+
+#. Default: "Unlinked workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_workspace_unlinked"
+msgstr ""
