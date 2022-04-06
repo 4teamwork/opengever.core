@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-28 09:03+0000\n"
+"POT-Creation-Date: 2022-04-01 15:20+0000\n"
 "PO-Revision-Date: 2017-12-03 11:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-tasktemplates/fr/>\n"
@@ -49,6 +49,11 @@ msgstr "Enclencher"
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "description_start_immediately"
 msgstr "Commencer la première tâche immédiatement après la création"
+
+#. Default: "Nested TaskTemplateFolders are only supported in the new UI."
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "error_nested_tasktemplatefolder"
+msgstr "Les déroulements standard imbriqués ne sont supportés que dans la nouvelle interface."
 
 #. Default: "Common"
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -229,3 +234,8 @@ msgstr "Aucun déroulement standard actif n'est enregistré pour le moment."
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
 msgstr "Oui"
+
+#. Default: "Nested TaskTemplateFolders can only be viewed and edited correctly in the new UI."
+#: ./opengever/tasktemplates/browser/tabbed.py
+msgid "warning_nested_tasktemplatefolder"
+msgstr "Les déroulements standard imbriqués ne peuvent être affichés et édités correctement que dans la nouvelle interface."

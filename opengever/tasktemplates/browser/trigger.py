@@ -121,6 +121,15 @@ class SelectTaskTemplateFolderWizardStep(BaseWizardStepForm, Form):
         if errors:
             return
 
+        uid = data.get('tasktemplatefolder')
+        tasktemplatefolder = api.content.get(UID=uid)
+        if tasktemplatefolder.contains_subtasktemplatefolders():
+            msg = _(u'error_nested_tasktemplatefolder',
+                    default=u'Nested TaskTemplateFolders are only supported '
+                            u'in the new UI.')
+            api.portal.show_message(msg, self.request, type='error')
+            return
+
         dm = getUtility(IWizardDataStorage)
         dm.update(get_datamanger_key(self.context), data)
 

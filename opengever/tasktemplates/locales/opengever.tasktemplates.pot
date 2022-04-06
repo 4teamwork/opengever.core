@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-28 09:03+0000\n"
+"POT-Creation-Date: 2022-04-01 15:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,6 +49,11 @@ msgstr ""
 #. Default: "Immediately open the first task after creation."
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "description_start_immediately"
+msgstr ""
+
+#. Default: "Nested TaskTemplateFolders are only supported in the new UI."
+#: ./opengever/tasktemplates/browser/trigger.py
+msgid "error_nested_tasktemplatefolder"
 msgstr ""
 
 #. Default: "Common"
@@ -229,4 +234,9 @@ msgstr ""
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 msgid "preselected_yes"
+msgstr ""
+
+#. Default: "Nested TaskTemplateFolders can only be viewed and edited correctly in the new UI."
+#: ./opengever/tasktemplates/browser/tabbed.py
+msgid "warning_nested_tasktemplatefolder"
 msgstr ""

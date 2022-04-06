@@ -14,6 +14,8 @@ class ActiveTasktemplatefoldersVocabulary(object):
     def __call__(self, context):
         terms = []
         for templatefolder in self.get_tasktemplatefolder():
+            if templatefolder.getObject().is_subtasktemplatefolder():
+                continue
             terms.append(SimpleTerm(value=templatefolder.UID,
                                     token=templatefolder.UID,
                                     title=templatefolder.Title))
