@@ -19,9 +19,11 @@ from opengever.ogds.models.service import ogds_service
 from opengever.task.task import ITask
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
+from plone.dexterity.interfaces import IDexterityContainer
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from plone.supermodel import model
@@ -399,3 +401,22 @@ class TriggerTaskTemplatePost(Service):
                 documents.append(RelationValue(getUtility(IIntIds).getId(doc)))
 
         return documents, invalid_urls
+
+
+class TriggerTaskTemplateStructureGet(Service):
+    """
+    """
+    def reply(self):
+        return self.recursive_serialize(self.context)
+
+    def recursive_serialize(self, obj):
+        result = queryMultiAdapter((obj, self.request), ISerializeToJson)()
+
+        if IDexterityContainer.providedBy(obj):
+            items = []
+
+            for child in obj.listFolderContents():
+                items.append(self.recursive_serialize(child))
+
+            result['items'] = items
+        return result

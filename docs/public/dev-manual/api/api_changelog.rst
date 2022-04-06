@@ -15,7 +15,7 @@ Other Changes
 - ``@external-activities``: ``notification_recipients`` now also accepts group IDs.
 - ``@external-activities``: Privileged users may now create notifications for other users (see :ref:`external-activities`)
 - ``@config``: Add ``workspace_creation_restricted`` feature flag.
-
+- Add new endpoint ``@task-template-structure``.
 
 2022.6.0 (2022-03-15)
 ---------------------
