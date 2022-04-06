@@ -212,10 +212,10 @@ class ProcessCreator(object):
     def __init__(self, dossier, process_data):
         self.dossier = dossier
         self.process_data = process_data
-        self.start_immediately = self.process_data.pop("start_immediately")
+        self.start_immediately = self.process_data.get("start_immediately")
         self.request = getRequest()
         self.first_subtask_created = False
-        self.related_documents = self.process_data.pop("related_documents")
+        self.related_documents = self.process_data.get("related_documents", [])
 
     def __call__(self):
         main_task_data = self.process_data["process"]
