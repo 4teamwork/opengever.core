@@ -334,8 +334,8 @@ class LinkedWorkspaces(object):
                 # the already successully transferred document
                 transaction.commit()
                 raise BadRequest(
-                    _("Document was retrieved, but workspace document could "
-                      "not be moved to trash."))
+                    _("Not moved to trash: Document was retrieved, but "
+                      "workspace document could not be moved to trash."))
 
         return gever_doc, retrieval_mode
 

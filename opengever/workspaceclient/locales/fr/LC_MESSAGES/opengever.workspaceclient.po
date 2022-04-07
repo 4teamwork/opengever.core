@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-06 19:47+0000\n"
+"POT-Creation-Date: 2022-04-07 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/workspaceclient/linked_workspaces.py
-msgid "Document was retrieved, but workspace document could not be moved to trash."
+msgid "Not moved to trash: Document was retrieved, but workspace document could not be moved to trash."
 msgstr ""
 
 #. Default: "Document retrieved from teamraum"
