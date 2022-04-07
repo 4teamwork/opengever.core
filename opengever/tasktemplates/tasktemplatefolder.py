@@ -238,14 +238,27 @@ class ProcessCreator(object):
 
         return main_task
 
+    @staticmethod
+    def set_state(task, state):
+        initial_state = api.content.get_state(task)
+        wftool = api.portal.get_tool('portal_workflow')
+        wf_id = wftool.getWorkflowsFor(task)[0].id
+        wftool.setStatusOf(wf_id, task, {'review_state': state})
+        wftool.getWorkflowsFor(task)[0].updateRoleMappingsFor(task)
+        return initial_state
+
     def create_subtasks(self, container, data):
+        # Subtasks can only be added to a task that is in progress.
+        initial_state = self.set_state(container, "task-state-in-progress")
+
         subtasks = []
         for i, subtask_data in enumerate(data["items"]):
             subtask = self.create_subtask(container, subtask_data)
-            if self.has_children(subtask):
+            if self.has_children(subtask_data):
                 self.create_subtasks(subtask, subtask_data)
             subtasks.append(subtask)
 
+        self.set_state(container, initial_state)
         container.set_tasktemplate_order(subtasks)
 
     def create_subtask(self, main_task, data):
