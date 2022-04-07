@@ -1401,3 +1401,15 @@ class TestTaskTemplateStructure(IntegrationTestCase):
             ],
             [item.get('title') for item in flatten_tree(browser.json)]
         )
+
+    @browsing
+    def test_regular_users_can_fetch_task_template_structures(self, browser):
+        self.activate_feature('tasktemplatefolder_nesting')
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(
+            '{}/@task-template-structure'.format(
+                self.tasktemplatefolder.absolute_url()),
+            headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
