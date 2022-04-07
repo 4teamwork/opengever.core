@@ -237,17 +237,17 @@ class SchemaValidationData(object):
     z3c.form.validator.Data class used during form invariants validation.
     """
     def __init__(self, schema, data, context):
-        self.context = context
-        self.data = data
-        self.schema = schema
+        self._Data_data___ = data
+        self._Data_schema___ = schema
+        self.__context__ = context
 
     def __getattr__(self, name):
-        if name in self.data:
-            return self.data.get(name)
-        if hasattr(self.context, name):
-            return getattr(self.context, name)
-        if name in self.schema:
-            return self.schema.get(name).default
+        if name in self._Data_data___:
+            return self._Data_data___.get(name)
+        if hasattr(self.__context__, name):
+            return getattr(self.__context__, name)
+        if name in self._Data_schema___:
+            return self._Data_schema___.get(name).default
         return None
 
 
