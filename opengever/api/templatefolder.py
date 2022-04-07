@@ -403,7 +403,7 @@ class TriggerTaskTemplatePost(Service):
         return documents, invalid_urls
 
 
-class TriggerTaskTemplateStructureGet(Service):
+class TaskTemplateStructureGet(Service):
     """
     """
     def reply(self):

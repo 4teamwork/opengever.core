@@ -135,7 +135,7 @@ Struktur der Standardabläufe anzeigen
       Content-Type: application/json
 
       {
-        "@id": "/vorlagen/tasktemplate-1/@trigger-task-template-structure",
+        "@id": "/vorlagen/tasktemplate-1/@task-template-structure",
         "@type": "opengever.tasktemplates.tasktemplatefolder",
         "UID": "fc1a5fd76afa41f4962f2660887c601c",
         "items": [
@@ -152,7 +152,7 @@ Struktur der Standardabläufe anzeigen
                 "...": "..."
             },
             {
-                "@id": "/vorlagen/tasktemplate-1/@trigger-task-template-structure",
+                "@id": "/vorlagen/tasktemplate-1/@task-template-structure",
                 "@type": "opengever.tasktemplates.tasktemplatefolder",
                 "UID": "4a8ea261042949efb3abc3e706abf62c",
                 "items": [
