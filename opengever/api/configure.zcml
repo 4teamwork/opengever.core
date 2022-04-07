@@ -1103,7 +1103,7 @@
       name="@task-template-structure"
       for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema"
       factory=".templatefolder.TriggerTaskTemplateStructureGet"
-      permission="cmf.AddPortalContent"
+      permission="zope2.View"
       />
 
   <plone:service
