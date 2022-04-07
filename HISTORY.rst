@@ -10,6 +10,18 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.5 (2022-04-07)
+---------------------
+
+Bug fixes:
+
+
+- Fix docx upload validator, make docx mandatory only for the proposal document. [phgross]
+- Fix deleting workspace participations of inactive users. [phgross]
+- Fix reference_prefixes update mechanism for removed documents. [phgross]
+- Allow Administrator and LimitedAdmin to export repository as excel. [njohner]
+
+
 2022.4.4 (2022-03-09)
 ---------------------
 
