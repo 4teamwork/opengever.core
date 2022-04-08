@@ -2,7 +2,9 @@ from opengever.api.add import get_validation_errors
 from opengever.api.task import deserialize_responsible
 from opengever.base.source import DossierPathSourceBinder
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.task import _ as task_mf
 from opengever.task.task import ITask
+from opengever.tasktemplates import _ as tasktemplate_mf
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.tasktemplatefolder import ProcessCreator
 from opengever.tasktemplates.tasktemplatefolder import ProcessDataPreprocessor
@@ -13,14 +15,15 @@ from plone.restapi.interfaces import IFieldDeserializer
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from plone.supermodel import model
+from z3c.relationfield.relation import RelationValue
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zExceptions import BadRequest
 from zope import schema
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
-from opengever.task import _ as task_mf
-from opengever.tasktemplates import _ as tasktemplate_mf
+from zope.intid.interfaces import IIntIds
 
 
 class IProcessSchema(model.Schema):
@@ -131,6 +134,7 @@ class ProcessPost(Service):
         if errors:
             self.raise_bad_request(errors)
 
+        self.make_related_documents_relation_values(data)
         self.fill_task_container_data(data["process"])
 
         data = data_processor.recursive_set_deadlines()
@@ -145,6 +149,13 @@ class ProcessPost(Service):
         # have to make sure to return the correct id.
         result['@id'] = task.absolute_url()
         return result
+
+    def make_related_documents_relation_values(self, data):
+        relations = []
+        for doc in data.get("related_documents"):
+            relations.append(RelationValue(getUtility(IIntIds).getId(doc)))
+
+        data["related_documents"] = relations
 
     def fill_task_container_data(self, data):
         """The task containers have some automatic values for certain fields,
