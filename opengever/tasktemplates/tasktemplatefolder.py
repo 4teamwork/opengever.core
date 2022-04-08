@@ -144,13 +144,6 @@ class TaskTemplateFolderTrigger(object):
         data.update(values)
         return data
 
-    def set_tasktemplate_predecessor(self, task, predecessor):
-        if not self.context.is_sequential:
-            return
-
-        if predecessor:
-            task.set_tasktemplate_predecessor(predecessor)
-
 
 class ProcessDataPreprocessor(object):
 
