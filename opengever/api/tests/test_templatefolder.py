@@ -1427,3 +1427,14 @@ class TestTaskTemplateStructure(IntegrationTestCase):
                 headers=self.api_headers)
 
         self.assertEqual(u'2021-12-15', browser.json.get('items')[0].get('deadline'))
+
+    @browsing
+    def test_include_static_is_private_attribute_for_tasktemplates(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(
+            '{}/@task-template-structure'.format(
+                self.tasktemplatefolder.absolute_url()),
+            headers=self.api_headers)
+
+        self.assertEqual(False, browser.json.get('items')[0].get('is_private'))

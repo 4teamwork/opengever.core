@@ -415,6 +415,7 @@ class TaskTemplateStructureGet(Service):
 
         if ITaskTemplate.providedBy(obj):
             result['deadline'] = json_compatible(obj.get_absolute_deadline())
+            result['is_private'] = False
 
         if IDexterityContainer.providedBy(obj):
             items = []
