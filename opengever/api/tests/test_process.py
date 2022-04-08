@@ -253,6 +253,84 @@ class TestProcessPost(IntegrationTestCase):
                             subtask_container.get_sql_object().get_previous_task())
 
     @browsing
+    def test_created_tasks_are_in_sync_with_sql_object(self, browser):
+        self.login(self.regular_user, browser)
+        data = {
+            "related_documents": [],
+            "start_immediately": True,
+            "process": {
+                "title": "New employee",
+                "text": "A new employee arrives.",
+                "sequence_type": "sequential",
+                "items": [
+                    {
+                        "title": "Assign userid",
+                        "responsible": "fa:{}".format(self.regular_user.id),
+                        "issuer": self.secretariat_user.id,
+                        "deadline": "2022-03-01",
+                        "task_type": "direct-execution",
+                        "is_private": False,
+                    },
+                    {
+                        "title": "Training",
+                        "sequence_type": "parallel",
+                        "items": [
+                            {
+                                "title": "Present Gever",
+                                "responsible": "fa:{}".format(self.regular_user.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-10",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                            {
+                                "title": "Present Teamraum",
+                                "responsible": "fa:{}".format(self.workspace_admin.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-12",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                        ]
+
+                    }
+                ]
+            }
+        }
+
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+            browser.open('{}/@process'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        tasks = [children['added'].pop()]
+        tasks.extend(tasks[0].listFolderContents())
+        tasks.extend(tasks[-1].listFolderContents())
+
+        self.maxDiff = None
+        self.assertEqual(5, len(tasks))
+
+        def get_sql_data(task):
+            model = task.get_sql_object()
+            principals = sorted([(principal.principal, principal.task_id)
+                                 for principal in model._principals])
+            data = {
+                "physical_path": model.physical_path,
+                "title": model.title,
+                "review_state": model.review_state,
+                "_principals": principals,
+            }
+            return data
+
+        for task in tasks:
+            data_before_sync = get_sql_data(task)
+            task.sync()
+            data_after_sync = get_sql_data(task)
+            self.assertDictEqual(data_before_sync, data_after_sync)
+
+    @browsing
     def test_sets_related_documents_on_all_subtasks(self, browser):
         self.login(self.regular_user, browser)
         data = {
