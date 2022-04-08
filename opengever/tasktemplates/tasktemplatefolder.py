@@ -316,7 +316,6 @@ class ProcessCreator(object):
         task = createContent('opengever.task.task',
                              relatedItems=related_documents,
                              **data)
-        notify(ObjectCreatedEvent(task))
         task = addContentToContainer(container, task, checkConstraints=True)
         self.mark_as_generated_from_tasktemplate(task, sequential)
         return task
