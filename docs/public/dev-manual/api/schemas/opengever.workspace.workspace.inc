@@ -34,6 +34,16 @@
        
 
 
+   .. py:attribute:: gever_url
+
+       :Feldname: :field-title:`GEVER URL`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`
