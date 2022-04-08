@@ -17,6 +17,7 @@ from opengever.kub.entity import KuBEntity
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.service import ogds_service
 from opengever.task.task import ITask
+from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
@@ -24,7 +25,7 @@ from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
 from plone.restapi.interfaces import ISerializeToJson
-from plone.restapi.interfaces import ISerializeToJson
+from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from plone.supermodel import model
 from z3c.form.field import Fields
@@ -411,6 +412,9 @@ class TaskTemplateStructureGet(Service):
 
     def recursive_serialize(self, obj):
         result = queryMultiAdapter((obj, self.request), ISerializeToJson)()
+
+        if ITaskTemplate.providedBy(obj):
+            result['deadline'] = json_compatible(obj.get_absolute_deadline())
 
         if IDexterityContainer.providedBy(obj):
             items = []

@@ -1,3 +1,5 @@
+from datetime import date
+from datetime import timedelta
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import util
@@ -100,6 +102,9 @@ class ITaskTemplate(model.Schema):
 
 class TaskTemplate(Item):
     implements(ITaskTemplate)
+
+    def get_absolute_deadline(self):
+        return date.today() + timedelta(days=self.deadline)
 
 
 default_responsible_client = widget.ComputedWidgetAttribute(

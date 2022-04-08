@@ -1,6 +1,9 @@
+from datetime import date
+from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import info_messages
+from ftw.testing import freeze
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
@@ -226,3 +229,11 @@ class TestTaskTemplates(SolrIntegrationTestCase):
             ["10"],
             [cell.text for cell in cells]
         )
+
+    def test_get_absolute_deadline_returns_the_resolved_deadline(self):
+        self.login(self.administrator)
+
+        self.tasktemplate.deadline = 5
+
+        with freeze(datetime(2021, 12, 10)):
+            self.assertEqual(date(2021, 12, 15), self.tasktemplate.get_absolute_deadline())
