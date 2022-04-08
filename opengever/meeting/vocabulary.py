@@ -216,7 +216,7 @@ class ProposalTemplatesForCommitteeVocabulary(object):
         """Return a list of documents from the predecessor proposal.
         The returned documents can additionally be selected as proposal template.
         """
-        if isinstance(context, SchemaValidationData) and "predecessor_proposal" in context.data:
+        if isinstance(context, SchemaValidationData) and "predecessor_proposal" in context._Data_data___:
             # Proposal is being added through the REST-API.
             predecessor = api.content.get(UID=context.predecessor_proposal)
             return [predecessor.get_proposal_document()]
