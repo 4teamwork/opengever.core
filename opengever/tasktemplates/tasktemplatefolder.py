@@ -159,19 +159,34 @@ class ProcessDataPreprocessor(object):
         self.process_data = process_data
 
     def __call__(self):
-        self._recursive_preprocess_data(self.process_data["process"])
+        self.recursive_replace_interactive_actors()
+        self.recursive_set_deadlines()
         return self.process_data
+
+    def recursive_replace_interactive_actors(self):
+        self._recursive_replace_interactive_actors(
+            self.process_data.get("process", {}))
+        return self.process_data
+
+    def _recursive_replace_interactive_actors(self, data):
+        self.replace_interactive_actors(data)
+        if self.has_children(data):
+            for item in data.get("items", []):
+                self._recursive_replace_interactive_actors(item)
 
     @staticmethod
     def has_children(data):
         return bool(data.get("items"))
 
-    def _recursive_preprocess_data(self, data):
-        self.replace_interactive_actors(data)
+    def recursive_set_deadlines(self):
+        self._recursive_set_deadlines(self.process_data.get("process", {}))
+        return self.process_data
+
+    def _recursive_set_deadlines(self, data):
         if self.has_children(data):
             longest_deadline = date.today()
             for item in data.get("items", []):
-                deadline = self._recursive_preprocess_data(item)
+                deadline = self._recursive_set_deadlines(item)
                 longest_deadline = max(longest_deadline, deadline)
 
             if data.get("deadline") is None:
@@ -185,8 +200,10 @@ class ProcessDataPreprocessor(object):
         return timedelta(deadline_timedelta)
 
     def replace_interactive_actors(self, data):
-        data['issuer'] = self.get_interactive_representative(data['issuer'])
-        if ActorLookup(data['responsible']).is_interactive_actor():
+        if ActorLookup(data.get('issuer')).is_interactive_actor():
+            data['issuer'] = self.get_interactive_representative(data['issuer'])
+
+        if ActorLookup(data.get('responsible')).is_interactive_actor():
             data['responsible_client'] = get_current_org_unit().id()
             data['responsible'] = self.get_interactive_representative(
                 data['responsible'])
