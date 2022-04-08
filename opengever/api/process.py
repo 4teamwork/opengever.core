@@ -113,12 +113,19 @@ class ProcessPost(Service):
 
         data = json_body(self.request)
 
+        # Before deserializing the fields we need to replace the interactive
+        # actors, which are not valid as such.
+        data_processor = ProcessDataPreprocessor(self.context, data)
+        data = data_processor.recursive_replace_interactive_actors()
+
+        # We now need to deserialize the fields
+        self.deserialize_data(data)
+
         # use schema validation for basic fields
         errors = get_validation_errors(self.context, data, IProcessSchema)
         if errors:
             self.raise_bad_request(errors)
 
-        data = ProcessDataPreprocessor(self.context, data)()
         self.validate_tasks(data["process"], errors)
 
         if errors:
@@ -126,6 +133,7 @@ class ProcessPost(Service):
 
         self.fill_task_container_data(data["process"])
 
+        data = data_processor.recursive_set_deadlines()
         process_creator = ProcessCreator(self.context, data)
         task = process_creator()
 
