@@ -1099,6 +1099,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@process"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".process.ProcessPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@task-template-structure"
       for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema"
