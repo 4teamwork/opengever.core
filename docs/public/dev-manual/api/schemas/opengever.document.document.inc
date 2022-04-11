@@ -194,6 +194,16 @@
        
 
 
+   .. py:attribute:: gever_url
+
+       :Feldname: :field-title:`GEVER URL`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: custom_properties
 
        :Feldname: :field-title:`Benutzerdefinierte Felder`

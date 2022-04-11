@@ -174,6 +174,16 @@
        
 
 
+   .. py:attribute:: gever_url
+
+       :Feldname: :field-title:`GEVER URL`
+       :Datentyp: ``TextLine``
+       
+       
+       
+       
+
+
    .. py:attribute:: title
 
        :Feldname: :field-title:`Titel`

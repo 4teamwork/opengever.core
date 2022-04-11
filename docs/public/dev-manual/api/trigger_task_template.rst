@@ -1,7 +1,7 @@
 .. _trigger_task_template:
 
-Standardabläufe auslösen
-========================
+Standardabläufe auslösen (deprecated, wurde mit :ref:`@process <process>`. ersetzt)
+===================================================================================
 
 In einem Dossier kann mit dem Endpoint ``@trigger-task-template`` ein
 bestehender Standardablauf ausgelöst werden.
