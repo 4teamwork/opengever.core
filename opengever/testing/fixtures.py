@@ -796,6 +796,7 @@ class OpengeverContentFixture(object):
                 'issuer': INTERACTIVE_ACTOR_RESPONSIBLE_ID,
                 'responsible_client': 'fa',
                 'responsible': 'robert.ziegler',
+                'task_type': 'correction',
                 'deadline': 10,
             })
             .within(self.tasktemplatefolder)
