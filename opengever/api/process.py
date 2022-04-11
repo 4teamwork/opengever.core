@@ -82,29 +82,6 @@ class ITaskContainer(model.Schema):
         required=False,
         )
 
-    relatedItems = RelationList(
-        title=task_mf(u'label_related_items', default=u'Related Items'),
-        default=[],
-        missing_value=[],
-        value_type=RelationChoice(
-            title=u"Related",
-            source=DossierPathSourceBinder(
-                portal_type=("opengever.document.document", "ftw.mail.mail"),
-                navigation_tree_query={
-                    'review_state': {'not': 'document-state-shadow'},
-                    'object_provides': [
-                        'opengever.dossier.behaviors.dossier.IDossierMarker',
-                        'opengever.document.document.IDocumentSchema',
-                        'opengever.task.task.ITask',
-                        'ftw.mail.mail.IMail',
-                        'opengever.meeting.proposal.IProposal',
-                        ],
-                    },
-                ),
-            ),
-        required=False,
-        )
-
 
 class ProcessPost(Service):
     """API Endpoint to create a process.
