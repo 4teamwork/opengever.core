@@ -10,13 +10,16 @@ from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
+from opengever.task.task import ITask
 from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
-from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
+from opengever.tasktemplates.interfaces import IPartOfParallelProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import addContentToContainer
@@ -306,22 +309,26 @@ class ProcessCreator(object):
         return sequence_type == u'sequential'
 
     def add_task(self, container, data, related_documents=[]):
-        sequential = False
-        if "sequence_type" in data:
-            if self.is_sequential(data.pop("sequence_type")):
-                sequential = True
-        elif IFromSequentialTasktemplate.providedBy(container):
-            sequential = True
-
+        sequence_type = data.get("sequence_type")
         task = createContent('opengever.task.task',
                              relatedItems=related_documents,
                              **data)
         task = addContentToContainer(container, task, checkConstraints=True)
-        self.mark_as_generated_from_tasktemplate(task, sequential)
+
+        self.add_marker_interfaces(container, task, sequence_type)
         return task
 
-    def mark_as_generated_from_tasktemplate(self, task, sequential):
-        if sequential:
-            alsoProvides(task, IFromSequentialTasktemplate)
-        else:
-            alsoProvides(task, IFromParallelTasktemplate)
+    def add_marker_interfaces(self, container, task, sequence_type):
+        if sequence_type:
+            # contains interfaces
+            if self.is_sequential(sequence_type):
+                alsoProvides(task, IContainSequentialProcess)
+            else:
+                alsoProvides(task, IContainParallelProcess)
+
+        # part-of interfaces
+        if ITask.providedBy(container):
+            if IContainSequentialProcess.providedBy(container):
+                alsoProvides(task, IPartOfSequentialProcess)
+            elif IContainParallelProcess.providedBy(container):
+                alsoProvides(task, IPartOfParallelProcess)
