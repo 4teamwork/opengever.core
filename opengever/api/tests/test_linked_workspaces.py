@@ -976,8 +976,8 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             browser.login()
-            browser.exception_bubbling = True
-            with self.assertRaises(LookupError) as cm:
+
+            with browser.expect_http_error(400):
                 browser.open(
                     self.dossier.absolute_url() + '/@copy-document-from-workspace',
                     data=json.dumps(payload),
@@ -986,9 +986,12 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-        self.assertEqual(
-            "Document not in linked workspace",
-            str(cm.exception))
+            self.assertEqual(
+                {u'additional_metadata': {},
+                 u'message': u'Document not in linked workspace',
+                 u'translated_message': u'Document not in linked workspace',
+                 u'type': u'BadRequest'},
+                browser.json)
 
     @browsing
     def test_raises_when_document_is_not_within_linked_workspace(self, browser):
@@ -1005,8 +1008,8 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             transaction.commit()
 
             browser.login()
-            browser.exception_bubbling = True
-            with self.assertRaises(LookupError) as cm:
+
+            with browser.expect_http_error(400):
                 browser.open(
                     self.dossier.absolute_url() + '/@copy-document-from-workspace',
                     data=json.dumps(payload),
@@ -1015,7 +1018,12 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                              'Content-Type': 'application/json'},
                 )
 
-        self.assertEqual("Document not in linked workspace", str(cm.exception))
+            self.assertEqual(
+                {u'additional_metadata': {},
+                 u'message': u'Document not in linked workspace',
+                 u'translated_message': u'Document not in linked workspace',
+                 u'type': u'BadRequest'},
+                browser.json)
 
     @browsing
     def test_copy_document_without_file_from_workspace(self, browser):
@@ -1330,8 +1338,11 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(len(children['added']), 0)
             self.assertEqual(
                 {u'type': u'BadRequest',
+                 u'additional_metadata': {},
                  u'message': u"Document can't be copied from workspace "
-                             u"because it's currently checked out"},
+                             u"because it's currently checked out",
+                 u'translated_message': u"Document can't be copied from workspace "
+                                        u"because it's currently checked out"},
                 browser.json)
 
 

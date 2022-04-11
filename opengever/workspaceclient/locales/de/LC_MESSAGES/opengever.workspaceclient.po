@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-04-07 13:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,6 +13,10 @@ msgstr ""
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
+
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "Not moved to trash: Document was retrieved, but workspace document could not be moved to trash."
+msgstr "Nicht in Papierkorb verschoben: Dokument wurde erfolgreich zurückgeführt, aber das Teamraum-Dokument konnte nicht in den Papierkorb verschoben werden."
 
 #. Default: "Document retrieved from teamraum"
 #: ./opengever/workspaceclient/linked_workspaces.py
@@ -53,3 +57,8 @@ msgstr "Teamraum ${workspace_title} zu diesem Dossier eröffnet."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_workspace_linked"
 msgstr "Mit Teamraum ${workspace_title} verknüpft."
+
+#. Default: "Unlinked workspace ${workspace_title}."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "label_workspace_unlinked"
+msgstr "Verknüpfung zu Teamraum ${workspace_title} entfernt."

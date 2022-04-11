@@ -21,6 +21,7 @@ from plone.dexterity.utils import iterSchemata
 from plone.locking.interfaces import ILockable
 from plone.memoize import ram
 from plone.restapi.interfaces import ISerializeToJson
+from requests import HTTPError
 from time import time
 from zExceptions import BadRequest
 from zope.component import adapter
@@ -30,6 +31,7 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
+import transaction
 
 CACHE_TIMEOUT = 24 * 60 * 60
 
@@ -197,7 +199,7 @@ class LinkedWorkspaces(object):
         # Add journal entry to dossier
         title = _(
             u'label_workspace_unlinked',
-            default=u'Unlink workspace ${workspace_title}.',
+            default=u'Unlinked workspace ${workspace_title}.',
             mapping={'workspace_title': workspace.get('title')})
 
         journal_entry_factory(
@@ -268,7 +270,9 @@ class LinkedWorkspaces(object):
         if linked_documents.get('items_total') == 1:
             return linked_documents['items'][0]
 
-    def copy_document_from_workspace(self, workspace_uid, document_uid, as_new_version=False):
+    def copy_document_from_workspace(
+            self, workspace_uid, document_uid,
+            as_new_version=False, trash_tr_document=False):
         """Will copy a document from a linked workspace.
         """
         document = self._get_document_by_uid(workspace_uid, document_uid)
@@ -307,9 +311,9 @@ class LinkedWorkspaces(object):
         workspace_title = self.client.get_by_uid(workspace_uid).get('title')
 
         # If the workspace document doesn't have a link to a GEVER document,
-        # or is not a regular document with a file,
-        # or cannot be retrieved, for example because it was trashed,
-        # always create a copy instead of attempting to create a version.
+        # or is not a regular document with a file, or cannot be retrieved,
+        # for example because the GEVER document was trashed, always create
+        # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
@@ -321,6 +325,17 @@ class LinkedWorkspaces(object):
         else:
             retrieval_mode = RETRIEVAL_MODE_COPY
             gever_doc = self._retrieve_as_copy(document_repr, workspace_title)
+
+        if trash_tr_document:
+            try:
+                self.client.trash_document(document_url)
+            except HTTPError:
+                # Commit txn so that raising BadRequest does not rollback
+                # the already successully transferred document
+                transaction.commit()
+                raise BadRequest(
+                    _("Not moved to trash: Document was retrieved, but "
+                      "workspace document could not be moved to trash."))
 
         return gever_doc, retrieval_mode
 

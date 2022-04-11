@@ -153,3 +153,10 @@ class WorkspaceClient(object):
             }
         )
         return response
+
+    def trash_document(self, document_url):
+        """Trashes the specified teamraum document.
+        """
+        response = self.request.post(document_url + '/@trash')
+        response.raise_for_status()
+        return response

@@ -233,16 +233,19 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        workspace_uid, document_uid, as_new_version = self.validate_data(
+        workspace_uid, document_uid, as_new_version, trash_tr_document = self.validate_data(
             json_body(self.request))
         try:
             destination_document, retrieval_mode = ILinkedWorkspaces(
                 self.context).copy_document_from_workspace(
-                    workspace_uid, document_uid, as_new_version)
+                    workspace_uid, document_uid, as_new_version, trash_tr_document)
         except CopyFromWorkspaceForbidden:
             raise BadRequest(
-                "Document can't be copied from workspace because it's "
-                "currently checked out")
+                _("Document can't be copied from workspace because it's "
+                  "currently checked out"))
+        except LookupError:
+            raise BadRequest(
+                _("Document not in linked workspace"))
 
         serialized = self.serialize_object(destination_document)
         serialized['teamraum_connect_retrieval_mode'] = retrieval_mode
@@ -262,7 +265,8 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         if not document_uid:
             raise BadRequest("Property 'document_uid' is required")
         as_new_version = bool(data.get('as_new_version', False))
-        return workspace_uid, document_uid, as_new_version
+        trash_tr_document = bool(data.get("trash_tr_document", False))
+        return workspace_uid, document_uid, as_new_version, trash_tr_document
 
 
 class ListLinkedDocumentUIDsFromWorkspace(Service):
