@@ -82,6 +82,12 @@ class ITaskContainer(model.Schema):
         required=False,
         )
 
+    deadline = schema.Date(
+        title=task_mf(u"label_deadline", default=u"Deadline"),
+        description=task_mf(u"help_deadline", default=u""),
+        required=False,
+        )
+
 
 class ProcessPost(Service):
     """API Endpoint to create a process.

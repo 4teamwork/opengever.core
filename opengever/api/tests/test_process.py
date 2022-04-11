@@ -253,6 +253,42 @@ class TestProcessPost(IntegrationTestCase):
                             subtask_container.get_sql_object().get_previous_task())
 
     @browsing
+    def test_can_set_deadline_on_task_template_folder(self, browser):
+        self.login(self.regular_user, browser)
+        data = {
+            "related_documents": [],
+            "start_immediately": False,
+            "process": {
+                "title": "New employee",
+                "text": "A new employee arrives.",
+                "sequence_type": "sequential",
+                "deadline": "2022-03-04",
+                "items": [
+                    {
+                        "title": "Assign userid",
+                        "responsible": "fa:{}".format(self.regular_user.id),
+                        "issuer": self.secretariat_user.id,
+                        "deadline": "2022-03-01",
+                        "task_type": "direct-execution",
+                        "is_private": False,
+                    }
+                ]
+            }
+        }
+
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+            browser.open('{}/@process'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        main_task = children['added'].pop()
+        self.assertEqual(date(2022, 3, 4), main_task.deadline)
+        subtask = main_task.listFolderContents()[0]
+        self.assertEqual(date(2022, 3, 1), subtask.deadline)
+
+    @browsing
     def test_created_tasks_are_in_sync_with_sql_object(self, browser):
         self.login(self.regular_user, browser)
         data = {
