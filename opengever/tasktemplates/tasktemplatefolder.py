@@ -234,7 +234,8 @@ class ProcessCreator(object):
         main_task_data = self.process_data["process"]
         main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        self.create_subtasks(main_task, self.process_data["process"])
+        self.create_subtasks(main_task, self.process_data["process"],
+                             main_task_data['sequence_type'])
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
@@ -260,25 +261,26 @@ class ProcessCreator(object):
         wftool.getWorkflowsFor(task)[0].updateRoleMappingsFor(task)
         return initial_state
 
-    def create_subtasks(self, container, data):
+    def create_subtasks(self, container, data, main_sequence_type):
         # Subtasks can only be added to a task that is in progress.
         initial_state = self.set_state(container, "task-state-in-progress")
 
         subtasks = []
         for i, subtask_data in enumerate(data["items"]):
-            subtask = self.create_subtask(container, subtask_data)
+            subtask = self.create_subtask(container, subtask_data, main_sequence_type)
             if self.has_children(subtask_data):
-                self.create_subtasks(subtask, subtask_data)
+                self.create_subtasks(subtask, subtask_data, main_sequence_type)
             subtasks.append(subtask)
 
         self.set_state(container, initial_state)
         container.set_tasktemplate_order(subtasks)
 
-    def create_subtask(self, main_task, data):
+    def create_subtask(self, main_task, data, main_sequence_type):
         task = self.add_task(
             main_task, data, related_documents=self.related_documents)
 
-        self.set_initial_state(task, not self.first_subtask_created)
+        self.set_initial_state(
+            task, not self.first_subtask_created, main_sequence_type)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 
@@ -292,16 +294,16 @@ class ProcessCreator(object):
 
         return task
 
-    def set_initial_state(self, task, is_first):
+    def set_initial_state(self, task, is_first, main_sequence_type):
         """Set the initial states to planned for tasks of a sequential
         tasktemplatefolder except for the first if start_immediately is True.
         Tasks of a parallel tasktemplatefolder are skipped.
         """
-        if not IFromSequentialTasktemplate.providedBy(task):
+        if main_sequence_type != u'sequential' \
+           and not IPartOfSequentialProcess.providedBy(task):
             return
 
-        if not self.start_immediately \
-           or not is_first:
+        if not self.start_immediately or not is_first:
             task.set_to_planned_state()
 
     @staticmethod
