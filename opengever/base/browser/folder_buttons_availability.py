@@ -101,7 +101,7 @@ class FolderButtonsAvailabilityView(BrowserView):
         return linked_workspaces_manager.has_linked_workspaces()
 
     def is_list_workspaces_available(self):
-        return self._is_main_dossier() and self._can_use_workspace_client()
+        return self._is_dossier() and self._can_use_workspace_client()
 
     def is_copy_documents_to_workspace_available(self):
         return (

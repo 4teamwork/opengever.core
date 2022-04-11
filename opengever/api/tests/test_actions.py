@@ -1322,13 +1322,14 @@ class TestWorkspaceClientFolderActions(FunctionalWorkspaceClientTestCase):
                           actions)
 
     @browsing
-    def test_workspace_actions_not_available_in_subdossier_except_copy_to_workspace(self, browser):
+    def test_only_copy_to_workspace_and_list_workspaces_available_in_subdossier(self, browser):
         browser.login()
         subdossier = create(Builder('dossier').within(self.dossier))
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
             self.assert_workspace_actions(browser, subdossier,
-                                          [self.copy_documents_to_workspace_action])
+                                          [self.list_workspaces_action,
+                                           self.copy_documents_to_workspace_action])
 
     @browsing
     def test_copy_documents_actions_not_available_in_dossier_without_linked_workspaces(self, browser):
