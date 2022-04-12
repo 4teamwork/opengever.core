@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@tus-upload``: Only clean up file system data after successful commit.
 - ``@tus-upload``: Allow uploading a file if the document has no file yet.
 
 2022.8.0 (2022-04-12)

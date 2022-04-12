@@ -34,6 +34,7 @@ from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
 from .session import PatchSessionCookie
+from .tus_upload import PatchTUSUploadCleanup
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
 from .webdav_lock_timeout import PatchWebDAVLockTimeout
@@ -73,6 +74,7 @@ PatchRelationFieldEventHandlers()()
 PatchResourceRegistriesURLRegex()()
 PatchSessionCookie()()
 PatchTransmogrifyDXSchemaUpdater()()
+PatchTUSUploadCleanup()()
 PatchWebDAVLockTimeout()()
 PatchWorkflowTool()()
 PatchZ2LogTimezone()()
