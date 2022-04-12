@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.8.0 (2022-04-12)
+---------------------
+
+New features:
+
+
+- Add response to parent task when subtask is closed or cancelled. [tinagerber]
+- Add support for trashing TR documents after retrieving them back to GEVER. [lgraf]
+- Show list_workspaces action also for subdossiers. [tinagerber]
+- Added new `@process` endpoint. [njohner]
+- @task-template-structure endpoint returns the absolute deadline for tasktemplates. [elioschmutz]
+- @task-template-structure endpoint returns the `is_private` attribute for tasktemplates with a static value of False. [elioschmutz]
+- Add a new endpoint @task-template-structure [elioschmutz]
+
+
+Bug fixes:
+
+
+- Fix deleting workspace participations of inactive users. [phgross]
+- Fix reference_prefixes update mechanism for removed documents. [phgross]
+
+
+Other changes:
+
+
+- Improve policy templates LDAP base OU. [njohner]
+
+
 2022.7.0 (2022-03-29)
 ---------------------
 
