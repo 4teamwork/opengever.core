@@ -3,7 +3,15 @@
 API Changelog
 =============
 
-2022.7.0 (unreleased)
+2022.8.0 (unreleased)
+---------------------
+Other Changes
+^^^^^^^^^^^^^
+- ``@copy-document-from-workspace``: Error responses now include ``translated_message``.
+- Add new endpoint ``@task-template-structure``.
+- Add new endpoint ``@process`` (see :ref:`process`).
+
+2022.7.0 (2022-03-29)
 ---------------------
 
 Breaking Changes
@@ -12,12 +20,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-- ``@copy-document-from-workspace``: Error responses now include ``translated_message``.
 - ``@external-activities``: ``notification_recipients`` now also accepts group IDs.
 - ``@external-activities``: Privileged users may now create notifications for other users (see :ref:`external-activities`)
 - ``@config``: Add ``workspace_creation_restricted`` feature flag.
-- Add new endpoint ``@task-template-structure``.
-- Add new endpoint ``@process`` (see :ref:`process`).
 
 2022.6.0 (2022-03-15)
 ---------------------
