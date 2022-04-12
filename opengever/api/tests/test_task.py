@@ -10,7 +10,7 @@ from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.ogds.base.Extensions.plugins import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
@@ -255,12 +255,12 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         lang_tool.setDefaultLanguage('de-ch')
         self.login(self.regular_user, browser=browser)
         parallel_task = create(Builder('task')
-                               .within(self.dossier)
+                               .within(self.task)
                                .having(responsible_client='fa',
                                        responsible=self.regular_user.getId(),
                                        issuer=self.dossier_responsible.getId())
                                .as_parallel_task())
-        browser.open(parallel_task, method="GET", headers=self.api_headers)
+        browser.open(self.task, method="GET", headers=self.api_headers)
         self.assertEqual({u'title': u'Paralleler Ablauf', u'token': u'parallel'},
                          browser.json['sequence_type'])
 
@@ -719,7 +719,7 @@ class TestAddingAdditionalTaskToSequentialProcessPost(IntegrationTestCase):
         self.assertEqual(1, len(subtasks['added']))
         additional_task, = subtasks['added']
 
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(additional_task))
+        self.assertTrue(IPartOfSequentialProcess.providedBy(additional_task))
 
         self.assertEquals(
             additional_task.get_sql_object(),

@@ -110,7 +110,7 @@ def review_state_changed(task, event):
                             'task-transition-rejected-skipped']:
         return
 
-    if task.is_from_sequential_tasktemplate:
+    if task.is_part_of_sequential_process:
         task.open_next_task()
 
         # We need to know later on the after_transition_hook of the task

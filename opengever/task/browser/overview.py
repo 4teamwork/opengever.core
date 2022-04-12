@@ -8,8 +8,9 @@ from opengever.task import _
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import REMINDER_TYPE_REGISTRY
 from opengever.task.task import ITask
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
@@ -135,15 +136,15 @@ class Overview(BrowserView, GeverTabMixin):
         return [each.get_sql_object() for each in tasks]
 
     def get_sequence_type(self):
-        if IFromSequentialTasktemplate.providedBy(self.context):
+        if IContainSequentialProcess.providedBy(self.context):
             return u'sequential'
-        elif IFromParallelTasktemplate.providedBy(self.context):
+        elif IContainParallelProcess.providedBy(self.context):
             return u'parallel'
 
     def get_sequence_type_label(self):
-        if IFromSequentialTasktemplate.providedBy(self.context):
+        if IContainSequentialProcess.providedBy(self.context):
             return _('label_sequential_process', default=u'Sequential process')
-        elif IFromParallelTasktemplate.providedBy(self.context):
+        elif IContainParallelProcess.providedBy(self.context):
             return _('label_parallel_process', default=u'Parallel process')
 
     def get_containing_task(self):
@@ -171,8 +172,7 @@ class Overview(BrowserView, GeverTabMixin):
         return item.get_link(with_responsible_info=False)
 
     def is_part_of_sequential_process(self):
-        return self.context.get_is_subtask() and \
-            IFromSequentialTasktemplate.providedBy(self.context)
+        return IPartOfSequentialProcess.providedBy(self.context)
 
     def next_task_link(self):
         return self.render_task(self.context.get_sql_object().get_next_task())

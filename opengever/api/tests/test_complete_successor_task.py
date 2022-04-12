@@ -9,7 +9,6 @@ from opengever.base.response import IResponseContainer
 from opengever.document.approvals import IApprovalList
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.uuid.interfaces import IUUID

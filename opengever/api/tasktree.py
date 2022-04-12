@@ -6,7 +6,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.solr import OGSolrContentListing
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.task import ITask
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zope.component import adapter
@@ -56,7 +56,7 @@ class TaskTree(object):
     def task_tree(self):
         main_task = self.get_main_task()
         solr = getUtility(ISolrSearch)
-        is_sequential = IFromSequentialTasktemplate.providedBy(main_task)
+        is_sequential = IContainSequentialProcess.providedBy(main_task)
         filters = make_filters(
             path={
                 'query': '/'.join(main_task.getPhysicalPath()),

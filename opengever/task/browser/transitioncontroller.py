@@ -171,7 +171,7 @@ class TaskTransitionController(BrowserView):
     def open_guard(self, transition, c):
         if IInternalWorkflowTransition.providedBy(getRequest()):
             return True
-        if not self.context.is_from_sequential_tasktemplate:
+        if not self.context.is_part_of_sequential_process:
             return False
         return self.context.all_predecessors_are_skipped()
 
@@ -461,7 +461,7 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer of the task
         - The task is part of a task process
         """
-        if not self.context.is_from_sequential_tasktemplate:
+        if not self.context.is_part_of_sequential_process:
             return False
 
         if include_agency:
