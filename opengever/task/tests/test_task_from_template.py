@@ -8,6 +8,7 @@ from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.journal.tests.utils import get_journal_length
+from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import IntegrationTestCase
@@ -324,6 +325,66 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.assertEquals(
             'task-state-open', api.content.get_state(self.subtask))
+
+    def test_starts_parallel_subprocess(self):
+        self.login(self.secretariat_user)
+
+        # make seq_subtask_2 a parallel subprocess
+        alsoProvides(self.seq_subtask_2, IContainParallelProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task2))
+
+    def test_starts_sequential_subprocess(self):
+        self.login(self.secretariat_user)
+
+        # make seq_subtask_2 a sequential subprocess
+        alsoProvides(self.seq_subtask_2, IContainSequentialProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        self.seq_subtask_2.set_tasktemplate_order([subprocess_task1, subprocess_task2])
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(
+            'task-state-planned', api.content.get_state(subprocess_task2))
 
 
 class TestInitialStateForSubtasks(IntegrationTestCase):

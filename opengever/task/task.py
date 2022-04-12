@@ -671,11 +671,36 @@ class Task(Container, TaskReminderSupport):
         # There is no guarantee that the current user has any permissions
         # on next task, we therefore need to use elevated_privileges here.
         with elevated_privileges():
-            with as_internal_workflow_transition():
-                api.content.transition(
-                    obj=next_task, transition='task-transition-planned-open')
+            next_task._open_planned_task()
+            if IContainProcess.providedBy(next_task):
+                next_task._set_in_progres()
+                next_task.start_subprocess()
 
-        next_task.sync()
+    def _open_planned_task(self):
+        with as_internal_workflow_transition():
+            api.content.transition(
+                obj=self, transition='task-transition-planned-open')
+
+        self.sync()
+
+    def _set_in_progres(self):
+        with as_internal_workflow_transition():
+            api.content.transition(
+                obj=self, transition='task-transition-open-in-progress')
+
+        self.sync()
+
+    def start_subprocess(self):
+        if IContainParallelProcess.providedBy(self):
+            for child in self.objectValues():
+                if ITask.providedBy(child):
+                    child._open_planned_task()
+        elif IContainSequentialProcess.providedBy(self):
+            for child in self.objectValues():
+                if ITask.providedBy(child):
+                    child._open_planned_task()
+                    # start only the first task if sequential
+                    return
 
     def close_main_task(self):
         parent = aq_parent(aq_inner(self))
