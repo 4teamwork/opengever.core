@@ -673,7 +673,7 @@ class Task(Container, TaskReminderSupport):
         with elevated_privileges():
             next_task._open_planned_task()
             if IContainProcess.providedBy(next_task):
-                next_task._set_in_progres()
+                next_task._set_in_progress()
                 next_task.start_subprocess()
 
     def _open_planned_task(self):
@@ -683,7 +683,7 @@ class Task(Container, TaskReminderSupport):
 
         self.sync()
 
-    def _set_in_progres(self):
+    def _set_in_progress(self):
         with as_internal_workflow_transition():
             api.content.transition(
                 obj=self, transition='task-transition-open-in-progress')

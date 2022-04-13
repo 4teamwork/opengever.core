@@ -13,6 +13,8 @@ class TestTaskTemplateActivites(IntegrationTestCase):
     def test_record_activity_for_all_subtasks(self, browser):
         self.login(self.regular_user, browser=browser)
 
+        self.tasktemplatefolder.sequence_type = u'parallel'
+
         create(Builder('tasktemplate')
                .titled(u'Notebook einrichten.')
                .having(issuer='responsible',

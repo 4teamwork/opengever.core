@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
+from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
@@ -15,6 +16,7 @@ from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
@@ -29,6 +31,7 @@ from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 from zope.lifecycleevent import ObjectCreatedEvent
+
 
 ACTIVE_STATE = 'tasktemplatefolder-state-activ'
 INACTIVE_STATE = 'tasktemplatefolder-state-inactiv'
@@ -227,7 +230,6 @@ class ProcessCreator(object):
         self.process_data = process_data
         self.start_immediately = self.process_data.get("start_immediately")
         self.request = getRequest()
-        self.first_subtask_created = False
         self.related_documents = self.process_data.get("related_documents", [])
 
     def __call__(self):
@@ -236,6 +238,10 @@ class ProcessCreator(object):
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
         self.create_subtasks(main_task, self.process_data["process"],
                              main_task_data['sequence_type'])
+
+        if self.start_immediately:
+            self.start_first_task(main_task)
+
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
 
@@ -273,14 +279,16 @@ class ProcessCreator(object):
             subtasks.append(subtask)
 
         self.set_state(container, initial_state)
+        container.reindexObject()
+        container.sync()
+
         container.set_tasktemplate_order(subtasks)
 
     def create_subtask(self, main_task, data, main_sequence_type):
         task = self.add_task(
             main_task, data, related_documents=self.related_documents)
 
-        self.set_initial_state(
-            task, not self.first_subtask_created, main_sequence_type)
+        self.set_initial_state(task)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 
@@ -289,22 +297,32 @@ class ProcessCreator(object):
             activity = TaskAddedActivity(task, getRequest())
             activity.record()
 
-        if not self.first_subtask_created:
-            self.first_subtask_created = True
-
         return task
 
-    def set_initial_state(self, task, is_first, main_sequence_type):
-        """Set the initial states to planned for tasks of a sequential
-        tasktemplatefolder except for the first if start_immediately is True.
-        Tasks of a parallel tasktemplatefolder are skipped.
-        """
-        if main_sequence_type != u'sequential' \
-           and not IPartOfSequentialProcess.providedBy(task):
+    def set_initial_state(self, task):
+        # Part of sequential process
+        if IPartOfSequentialProcess.providedBy(task):
+            task.set_to_planned_state()
+
+        if IPartOfParallelProcess.providedBy(task):
+            parent = aq_parent(aq_inner(task))
+            if IPartOfSequentialProcess.providedBy(parent):
+                task.set_to_planned_state()
+
+            elif IContainParallelProcess.providedBy(task):
+                task._set_in_progress()
+
+    def start_first_task(self, main_task):
+        if not IContainSequentialProcess.providedBy(main_task):
             return
 
-        if not self.start_immediately or not is_first:
-            task.set_to_planned_state()
+        oguid = main_task.get_tasktemplate_order()[0]
+        first_task = oguid.resolve_object()
+        first_task._open_planned_task()
+
+        if IContainProcess.providedBy(first_task):
+            first_task._set_in_progress()
+            first_task.start_subprocess()
 
     @staticmethod
     def is_sequential(sequence_type):
