@@ -543,7 +543,6 @@ class TaskTransitionController(BrowserView):
     def closed_to_progress_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
-
     @guard('task-transition-tested-and-closed-in-progress')
     @task_type_category('unidirectional_by_reference')
     def uniref_closed_to_progress_guard(self, c, include_agency):
@@ -553,7 +552,6 @@ class TaskTransitionController(BrowserView):
     def closed_to_progress_guard(self, c, include_agency):
         return (c.current_user.is_administrator
                 and c.task.parent_task_is_in_progress)
-
 
     # ------------ helper functions --------------
     def _get_function_for_transition(self, type_, transition):
