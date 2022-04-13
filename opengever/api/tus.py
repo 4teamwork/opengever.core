@@ -73,7 +73,7 @@ class UploadPatch(GeverUploadPatch):
 
         manager = getMultiAdapter((self.context, self.context.REQUEST),
                                   ICheckinCheckoutManager)
-        if not manager.is_checked_out_by_current_user():
+        if self.context.has_file() and not manager.is_checked_out_by_current_user():
             raise Forbidden("Document not checked out.")
 
         # XXX: Currently not supported by the latest Office Connector 1.10.0

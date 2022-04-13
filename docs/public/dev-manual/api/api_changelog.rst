@@ -11,10 +11,11 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@tus-upload``: Allow uploading a file if the document has no file yet.
 
 2022.8.0 (2022-04-12)
 ---------------------
+
 Other Changes
 ^^^^^^^^^^^^^
 - ``@copy-document-from-workspace``: Error responses now include ``translated_message``.

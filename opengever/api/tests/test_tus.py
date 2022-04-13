@@ -152,6 +152,11 @@ class TestTUSUpload(IntegrationTestCase):
         self.assert_tus_replace_fails(self.document, browser)
 
     @browsing
+    def test_can_upload_file_if_document_has_no_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.assert_tus_replace_succeeds(self.empty_document, browser)
+
+    @browsing
     def test_cannot_replace_document_if_checked_out_by_other(self, browser):
         self.login(self.dossier_responsible, browser)
         self.checkout(self.document, browser)
