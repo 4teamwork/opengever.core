@@ -16,11 +16,11 @@ msgstr ""
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document can't be copied from workspace because it's currently checked out"
-msgstr ""
+msgstr "Le document ne peut pas être copié de l’espace de travail car il est actuellement en check-out"
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"
-msgstr ""
+msgstr "Document absent de l’espace de travail lié"
 
 #. Default: "Copy of ${title}"
 #: ./opengever/api/copy_.py
