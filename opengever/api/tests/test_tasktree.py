@@ -1,5 +1,8 @@
-from opengever.testing import SolrIntegrationTestCase
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
+from opengever.testing import SolrIntegrationTestCase
+import json
 
 
 class TestTaskTree(SolrIntegrationTestCase):
@@ -10,43 +13,128 @@ class TestTaskTree(SolrIntegrationTestCase):
         browser.open(
             self.task, view="@tasktree", method="GET", headers=self.api_headers)
         self.assertEqual(
-            browser.json['children'],
-            [
-                {
-                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
-                    u'@type': u'opengever.task.task',
-                    u'children': [
-                        {
-                            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
-                            u'@type': u'opengever.task.task',
-                            u'children': [],
-                            u'review_state': u'task-state-resolved',
-                            u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                        },
-                    ],
-                    u'review_state': u'task-state-in-progress',
-                    u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
-                },
-            ]
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/@tasktree',
+                u'children': [
+                    {
+                        u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
+                        u'@type': u'opengever.task.task',
+                        u'children': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                                       u'@type': u'opengever.task.task',
+                                       u'children': [],
+                                       u'is_task_addable': False,
+                                       u'is_task_addable_before': False,
+                                       u'review_state': u'task-state-resolved',
+                                       u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'}],
+                        u'is_task_addable': False,
+                        u'is_task_addable_before': False,
+                        u'review_state': u'task-state-in-progress',
+                        u'title': u'Vertragsentwurf \xdcberpr\xfcfen'}]},
+            browser.json
         )
-        self.assertEqual(True, browser.json['is_task_addable_in_main_task'])
 
     @browsing
-    def test_is_task_addable_in_main_task(self, browser):
+    def test_addable_task_attributes(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.seq_subtask_2, view="@tasktree", method="GET", headers=self.api_headers)
-        self.assertTrue(browser.json['is_task_addable_in_main_task'])
+        data = {
+            "related_documents": [],
+            "start_immediately": True,
+            "process": {
+                "title": "New employee",
+                "text": "A new employee arrives.",
+                "sequence_type": "sequential",
+                "items": [
+                    {
+                        "title": "Workout",
+                        "sequence_type": "sequential",
+                        "items": [
+                            {
+                                "title": "Present Gever",
+                                "responsible": "fa:{}".format(self.regular_user.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-10",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                            {
+                                "title": "Present Teamraum",
+                                "responsible": "fa:{}".format(self.workspace_admin.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-12",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                        ]
 
-        self.set_workflow_state('task-state-resolved', self.sequential_task)
-        browser.open(self.seq_subtask_2, view="@tasktree", method="GET", headers=self.api_headers)
-        self.assertFalse(browser.json['is_task_addable_in_main_task'])
+                    },
+                    {
+                        "title": "Training",
+                        "sequence_type": "parallel",
+                        "items": [
+                            {
+                                "title": "Present Gever",
+                                "responsible": "fa:{}".format(self.regular_user.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-10",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                            {
+                                "title": "Present Teamraum",
+                                "responsible": "fa:{}".format(self.workspace_admin.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-12",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                        ]
 
-    @browsing
-    def test_is_task_addable_before(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.sequential_task, view="@tasktree", method="GET", headers=self.api_headers)
-        self.assertFalse(browser.json['children'][0]['children'][0]['is_task_addable_before'])
-        self.assertTrue(browser.json['children'][0]['children'][1]['is_task_addable_before'])
+                    },
+                    {
+                        "title": "Assign userid",
+                        "responsible": "fa:{}".format(self.regular_user.id),
+                        "issuer": self.secretariat_user.id,
+                        "deadline": "2022-03-01",
+                        "task_type": "direct-execution",
+                        "is_private": False,
+                    },
+                ]
+            }
+        }
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+            browser.open('{}/@process'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        main_task = children['added'].pop()
+        self.commit_solr()
+
+        browser.open(main_task, view="@tasktree", method="GET", headers=self.api_headers)
+
+        self.assertTrue(browser.json['children'][0]['is_task_addable'],
+                        "Tasks should be addable on a sequential main task")
+
+        self.assertTrue(browser.json['children'][0]['children'][0]['is_task_addable'],
+                        "Tasks should be addable on sequential subtask containers")
+
+        self.assertFalse(browser.json['children'][0]['children'][1]['is_task_addable'],
+                         "Tasks should not be addable on parallel subtask containers")
+
+        self.assertFalse(browser.json['children'][0]['children'][2]['is_task_addable'],
+                         "Tasks should not be addable on a subtask")
+
+        self.assertFalse(browser.json['children'][0]['is_task_addable_before'],
+                         "No task should be addable before the main task")
+
+        self.assertFalse(browser.json['children'][0]['children'][0]['is_task_addable_before'],
+                         "Tasks should not be addable before an open task of a task sequence")
+
+        self.assertTrue(browser.json['children'][0]['children'][1]['is_task_addable_before'],
+                        "Tasks should be addable before planned tasks of a task sequence")
+
+        self.assertFalse(browser.json['children'][0]['children'][1]['children'][0]['is_task_addable_before'],
+                         "Tasks should not be addable before tasks within parallel tasks")
 
     @browsing
     def test_sequential_tasks_are_sorted_on_obj_position_in_parent(self, browser):
@@ -75,17 +163,17 @@ class TestTaskTree(SolrIntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
                     u'@type': u'opengever.task.task',
-                    u'children': [
-                        {
-                            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
-                            u'@type': u'opengever.task.task',
-                            u'children': [],
-                            u'review_state': u'task-state-resolved',
-                            u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                        },
-                    ],
+                    u'children': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
+                                   u'@type': u'opengever.task.task',
+                                   u'children': [],
+                                   u'is_task_addable': False,
+                                   u'is_task_addable_before': False,
+                                   u'review_state': u'task-state-resolved',
+                                   u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'}],
+                    u'is_task_addable': False,
+                    u'is_task_addable_before': False,
                     u'review_state': u'task-state-in-progress',
-                    u'title': u'Vertragsentwurf \xdcberpr\xfcfen',
-                },
+                    u'title': u'Vertragsentwurf \xdcberpr\xfcfen'
+                }
             ]
         )

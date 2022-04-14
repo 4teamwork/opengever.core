@@ -531,14 +531,17 @@ Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung. Die Aufgaben we
                 "@type": "opengever.task.task",
                 "children": [],
                 "review_state": "task-state-resolved",
+                "is_task_addable": false
+                "is_task_addable_before": false
                 "title": "Eine Unteraufgabe"
               },
             ],
             "review_state": "task-state-in-progress",
+            "is_task_addable": true
+            "is_task_addable_before": false
             "title": "Eine Aufgabe"
           }
         ],
-        "is_task_addable_in_main_task": true
       }
 
 Die Aufgabenhierarchie kann auch direkt über den GET-Request eines Tasks mittels Expansion angefordert werden.

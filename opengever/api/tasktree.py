@@ -7,6 +7,7 @@ from opengever.base.solr import OGSolrContentListing
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
 from zope.component import adapter
@@ -32,18 +33,23 @@ class TaskTree(object):
         if not expand:
             return result
         result['tasktree']['children'] = self.task_tree()
-        result['tasktree']['is_task_addable_in_main_task'] = self.is_task_addable_in_main_task()
         return result
 
-    def is_task_addable_in_main_task(self):
-        main_task = self.get_main_task()
-        for fti in main_task.allowedContentTypes():
-            if fti.id == main_task.portal_type:
+    def is_task_addable_in_container(self, container):
+        if not IContainSequentialProcess.providedBy(container):
+            return False
+
+        for fti in container.allowedContentTypes():
+            if fti.id == container.portal_type:
                 return True
         return False
 
-    def is_task_addable_before(self, obj):
-        return (obj.review_state() == TASK_STATE_PLANNED) and self.is_task_addable_in_main_task()
+    def is_task_addable_before(self, solr_item, parent_context):
+        if IPartOfSequentialProcess.__identifier__ not in solr_item.object_provides \
+                or not parent_context:
+            return False
+        return solr_item.review_state() == TASK_STATE_PLANNED \
+            and self.is_task_addable_in_container(parent_context)
 
     def get_main_task(self):
         main_task = self.context
@@ -52,6 +58,39 @@ class TaskTree(object):
             main_task = parent
             parent = aq_parent(main_task)
         return main_task
+
+    """We need to know if we can add subtasks to a specific task and if it possible
+    to add a new task before a specific task.
+
+    We can't just get out this information from the task objects due to
+    perforamnce reasons. We get all tasks by quering the solr which gives us
+    just solr-items.
+
+    We try to do as much as possible with just those items. But we need to
+    lookup the obejct to check if we can add tasks within the object. Since
+    leaf tasks do never allow adding new tasks, we can restrict the object
+    lookup to IContainProcess-tasks only. This reduces the object lookup to
+    a minimum.
+    """
+    def extend_tree_with_addable_information(self, tree, solr_items_per_url, parent_context=None):
+        solr_item = solr_items_per_url.get(tree.get('@id'))
+        is_task_addable_before = False
+        is_task_addable = False
+        children = tree.get('children')
+        if children:
+            context = solr_item.getObject()
+            is_task_addable_before = self.is_task_addable_before(solr_item, parent_context)
+            is_task_addable = self.is_task_addable_in_container(context)
+
+            for child in children:
+                self.extend_tree_with_addable_information(child, solr_items_per_url, context)
+
+        else:  # is a leafnode, we do not want to get the context of leave-nodes due to performance reasons
+            is_task_addable_before = self.is_task_addable_before(solr_item, parent_context)
+            is_task_addable = False
+
+        tree['is_task_addable_before'] = is_task_addable_before
+        tree['is_task_addable'] = is_task_addable
 
     def task_tree(self):
         main_task = self.get_main_task()
@@ -64,13 +103,14 @@ class TaskTree(object):
             },
             object_provides=ITask.__identifier__,
         )
-        fieldlist = ['Title', 'portal_type', 'path', 'review_state']
+        fieldlist = ['Title', 'portal_type', 'path', 'review_state', 'object_provides']
         sort = 'getObjPositionInParent asc' if is_sequential else 'created asc'
         resp = solr.search(
             filters=filters, start=0, rows=1000, sort=sort,
             fl=fieldlist)
 
         nodes = []
+        solr_items_per_url = {}
         for obj in OGSolrContentListing(resp):
             child = {
                 '@id': obj.getURL(),
@@ -78,11 +118,12 @@ class TaskTree(object):
                 'review_state': obj.review_state(),
                 'title': obj.Title(),
             }
-            if is_sequential:
-                child['is_task_addable_before'] = self.is_task_addable_before(obj)
+            solr_items_per_url[obj.getURL()] = obj
             nodes.append(child)
 
-        return make_tree_by_url(nodes, url_key='@id', children_key='children')
+        tree = make_tree_by_url(nodes, url_key='@id', children_key='children')
+        self.extend_tree_with_addable_information(tree[0], solr_items_per_url)
+        return tree
 
 
 class TaskTreeGet(Service):
