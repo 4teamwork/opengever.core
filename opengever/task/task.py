@@ -679,6 +679,9 @@ class Task(Container, TaskReminderSupport):
         if not parent:
             return
         with elevated_privileges():
+            if api.content.get_state(parent) != 'task-state-in-progress':
+                return
+
             api.content.transition(
                 obj=parent, transition='task-transition-in-progress-tested-and-closed')
 
