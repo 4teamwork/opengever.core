@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.8.1 (2022-04-14)
+---------------------
+
+Other changes:
+
+
+- Add missing french translation. [elioschmutz]
+
+
 2022.8.0 (2022-04-12)
 ---------------------
 
