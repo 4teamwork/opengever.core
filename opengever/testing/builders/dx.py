@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import date
 from DateTime import DateTime
 from dateutil.relativedelta import relativedelta
@@ -16,8 +18,10 @@ from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.task.interfaces import ISuccessorTaskController
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfParallelProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
@@ -222,10 +226,12 @@ class TaskBuilder(GeverDexterityBuilder):
             ISuccessorTaskController(obj).set_predecessor(self.predecessor)
 
         if self._as_sequential_task:
-            alsoProvides(obj, IFromSequentialTasktemplate)
+            alsoProvides(obj, IPartOfSequentialProcess)
+            alsoProvides(aq_parent(aq_inner(obj)), IContainSequentialProcess)
 
         if self._as_parallel_task:
-            alsoProvides(obj, IFromParallelTasktemplate)
+            alsoProvides(obj, IPartOfParallelProcess)
+            alsoProvides(aq_parent(aq_inner(obj)), IContainParallelProcess)
 
         super(TaskBuilder, self).after_create(obj)
 

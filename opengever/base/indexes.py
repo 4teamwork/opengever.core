@@ -11,7 +11,7 @@ from opengever.base.oguid import Oguid
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
@@ -33,7 +33,7 @@ CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
     ITaskTemplate,
     ITaskTemplateFolderSchema,
     IToDo,
-    IFromSequentialTasktemplate,
+    IPartOfSequentialProcess,
     IToDoList,
     IWorkspaceMeetingAgendaItem)
 
@@ -152,7 +152,7 @@ def getObjPositionInParent(obj):
     plone catalogs 'getObjPositionInParent' index.
     """
     if any(iface.providedBy(obj) for iface in CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT):
-        if IFromSequentialTasktemplate.providedBy(obj) and obj.get_is_subtask():
+        if IPartOfSequentialProcess.providedBy(obj) and obj.get_is_subtask():
             order = aq_parent(aq_inner(obj)).get_tasktemplate_order()
             if order:
                 return order.index(Oguid.for_object(obj))

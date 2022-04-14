@@ -1,5 +1,5 @@
 from ftw.testbrowser import browsing
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.interface import alsoProvides
@@ -11,7 +11,7 @@ class TestWorfklowForTasksFromTemplatefolders(IntegrationTestCase):
     def test_cancel(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        alsoProvides(self.task, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
         self.set_workflow_state('task-state-in-progress', self.task)
         self.set_workflow_state('task-state-in-progress', self.subtask)
 

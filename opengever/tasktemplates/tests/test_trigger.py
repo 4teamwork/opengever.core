@@ -9,8 +9,10 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfParallelProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import IntegrationTestCase
 from plone import api
 from requests_toolbelt.utils import formdata
@@ -194,9 +196,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
-        self.assertTrue(IFromParallelTasktemplate.providedBy(main_task))
+        self.assertTrue(IContainParallelProcess.providedBy(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromParallelTasktemplate.providedBy(subtask))
+            self.assertTrue(IPartOfParallelProcess.providedBy(subtask))
 
         # sequential
         self.tasktemplatefolder.sequence_type = u'sequential'
@@ -204,9 +206,9 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(main_task))
+        self.assertTrue(IContainSequentialProcess.providedBy(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromSequentialTasktemplate.providedBy(subtask))
+            self.assertTrue(IPartOfSequentialProcess.providedBy(subtask))
 
     @browsing
     def test_creates_a_subtask_for_each_selected_template(self, browser):

@@ -19,8 +19,10 @@ from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.team import Team
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfParallelProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zExceptions import BadRequest
@@ -900,11 +902,11 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                          headers=self.api_headers)
 
         main_task = children['added'].pop()
-        self.assertTrue(IFromParallelTasktemplate.providedBy(main_task))
+        self.assertTrue(IContainParallelProcess.providedBy(main_task))
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromParallelTasktemplate.providedBy(subtask))
+            self.assertTrue(IPartOfParallelProcess.providedBy(subtask))
             self.assertEqual('task-state-open',
                              api.content.get_state(subtask))
 
@@ -930,11 +932,11 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                          headers=self.api_headers)
 
         main_task = children['added'].pop()
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(main_task))
+        self.assertTrue(IContainSequentialProcess.providedBy(main_task))
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(main_task))
         for subtask in main_task.listFolderContents():
-            self.assertTrue(IFromSequentialTasktemplate.providedBy(subtask))
+            self.assertTrue(IPartOfSequentialProcess.providedBy(subtask))
             self.assertEqual('task-state-planned',
                              api.content.get_state(subtask))
 

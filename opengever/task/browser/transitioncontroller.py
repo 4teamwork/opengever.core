@@ -171,7 +171,7 @@ class TaskTransitionController(BrowserView):
     def open_guard(self, transition, c):
         if IInternalWorkflowTransition.providedBy(getRequest()):
             return True
-        if not self.context.is_from_sequential_tasktemplate:
+        if not self.context.is_part_of_sequential_process:
             return False
         return self.context.all_predecessors_are_skipped()
 
@@ -461,7 +461,7 @@ class TaskTransitionController(BrowserView):
         - The current user is the issuer of the task
         - The task is part of a task process
         """
-        if not self.context.is_from_sequential_tasktemplate:
+        if not self.context.is_part_of_sequential_process:
             return False
 
         if include_agency:
@@ -543,7 +543,6 @@ class TaskTransitionController(BrowserView):
     def closed_to_progress_action(self, transition, c):
         return self._addresponse_form_url(transition)
 
-
     @guard('task-transition-tested-and-closed-in-progress')
     @task_type_category('unidirectional_by_reference')
     def uniref_closed_to_progress_guard(self, c, include_agency):
@@ -553,7 +552,6 @@ class TaskTransitionController(BrowserView):
     def closed_to_progress_guard(self, c, include_agency):
         return (c.current_user.is_administrator
                 and c.task.parent_task_is_in_progress)
-
 
     # ------------ helper functions --------------
     def _get_function_for_transition(self, type_, transition):

@@ -5,8 +5,10 @@ from ftw.testing import freeze
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.team import Team
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfParallelProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.tasktemplates.tasktemplatefolder import ProcessDataPreprocessor
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -226,7 +228,8 @@ class TestProcessPost(IntegrationTestCase):
         # Only state of main task is set to in progress
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(main_task))
-        self.assertEqual('task-state-open',
+        self.assertEqual('task-state-open', api.content.get_state(subtask))
+        self.assertEqual('task-state-planned',
                          api.content.get_state(subtask_container))
 
         # Check deadline propagation
@@ -237,20 +240,15 @@ class TestProcessPost(IntegrationTestCase):
         self.assertEqual(date(2022, 3, 22), main_task.deadline)
 
         # check parallel and sequential interfaces
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(main_task))
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(subtask))
-        self.assertTrue(IFromParallelTasktemplate.providedBy(subtask_container))
-        self.assertTrue(IFromParallelTasktemplate.providedBy(subsubtask1))
-        self.assertTrue(IFromParallelTasktemplate.providedBy(subsubtask2))
+        self.assertTrue(IContainSequentialProcess.providedBy(main_task))
 
-        # Check tasktemplatefolder predecessor
-        # Not set for parallel process
-        self.assertIsNone(subsubtask2.get_sql_object().get_previous_task())
-        # Should be set for sequential but broken for now because the
-        # subtask_container did not inherit the IFromSequentialTasktemplate
-        # from the parent and is therefore not identified as sequential
-        self.assertNotEqual(subtask.get_sql_object(),
-                            subtask_container.get_sql_object().get_previous_task())
+        self.assertTrue(IPartOfSequentialProcess.providedBy(subtask))
+
+        self.assertTrue(IPartOfSequentialProcess.providedBy(subtask_container))
+        self.assertTrue(IContainParallelProcess.providedBy(subtask_container))
+
+        self.assertTrue(IPartOfParallelProcess.providedBy(subsubtask1))
+        self.assertTrue(IPartOfParallelProcess.providedBy(subsubtask2))
 
     @browsing
     def test_can_set_deadline_on_task_template_folder(self, browser):

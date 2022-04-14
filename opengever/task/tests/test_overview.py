@@ -4,7 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.zipexport.zipfilestream import ZipFile
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
@@ -165,7 +165,7 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             browser.css('#sub_taskBox .sequence_type').text)
 
         # parallel
-        alsoProvides(self.task, IFromParallelTasktemplate)
+        alsoProvides(self.task, IContainParallelProcess)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             [u'Parallel workflow'],
@@ -182,7 +182,7 @@ class TestTaskFromTasktemplateFolderOverview(IntegrationTestCase):
             browser.css('#sub_taskBox div').first.get('class'))
 
         # parallel
-        alsoProvides(self.task, IFromParallelTasktemplate)
+        alsoProvides(self.task, IContainParallelProcess)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
             'task-container parallel',

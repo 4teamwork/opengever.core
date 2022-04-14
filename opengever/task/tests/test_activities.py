@@ -28,7 +28,7 @@ from opengever.task.activities import TaskWatcherAddedActivity
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -333,7 +333,7 @@ class TestTaskActivites(FunctionalTestCase):
                       .in_state('task-state-rejected')
                       .within(self.dossier))
 
-        alsoProvides(task, IFromSequentialTasktemplate)
+        alsoProvides(task, IPartOfSequentialProcess)
         transaction.commit()
 
         browser.login().open(task)

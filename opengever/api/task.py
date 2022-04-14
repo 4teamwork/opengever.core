@@ -16,8 +16,8 @@ from opengever.ogds.models.team import Team
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.task import ITask
 from opengever.task.task_response import ITaskResponse
-from opengever.tasktemplates.interfaces import IFromParallelTasktemplate
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IExpandableElement
@@ -60,12 +60,12 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         )()
 
     def _get_sequence_type(self):
-        if IFromSequentialTasktemplate.providedBy(self.context):
+        if IContainSequentialProcess.providedBy(self.context):
             return {'title': translate(u'label_sequential_process',
                                        domain='opengever.task',
                                        context=self.request),
                     'token': 'sequential'}
-        if IFromParallelTasktemplate.providedBy(self.context):
+        if IContainParallelProcess.providedBy(self.context):
             return {'title': translate(u'label_parallel_process',
                                        domain='opengever.task',
                                        context=self.request),

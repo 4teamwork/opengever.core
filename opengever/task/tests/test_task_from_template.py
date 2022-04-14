@@ -8,7 +8,9 @@ from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.journal.tests.utils import get_journal_length
-from opengever.tasktemplates.interfaces import IFromSequentialTasktemplate
+from opengever.tasktemplates.interfaces import IContainParallelProcess
+from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import IntegrationTestCase
 from plone import api
 from urlparse import urlparse
@@ -33,8 +35,9 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-planned'))
 
         self.set_workflow_state('task-state-in-progress', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
         self.task.set_tasktemplate_order([self.subtask, subtask2])
 
         api.content.transition(
@@ -59,8 +62,9 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-planned'))
 
         self.set_workflow_state('task-state-in-progress', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
         self.task.set_tasktemplate_order([self.subtask, subtask2])
         self.subtask.task_type = 'direct-execution'
         api.content.transition(
@@ -115,8 +119,10 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-planned'))
 
         self.set_workflow_state('task-state-planned', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
+
         self.task.set_tasktemplate_order([self.subtask, subtask2])
 
         api.content.transition(
@@ -154,8 +160,9 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-open'))
 
         self.set_workflow_state('task-state-in-progress', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
         self.task.set_tasktemplate_order([self.subtask, subtask2])
 
         api.content.transition(
@@ -188,8 +195,10 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                                   deadline=date(2016, 11, 1))
                           .in_state('task-state-planned'))
 
-        alsoProvides(subtask1, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+        alsoProvides(self.task_in_protected_dossier, IContainSequentialProcess)
+        alsoProvides(subtask1, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
+
         self.task_in_protected_dossier.set_tasktemplate_order([subtask1, subtask2])
 
         api.content.transition(
@@ -214,8 +223,11 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-planned'))
 
         self.set_workflow_state('task-state-in-progress', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
+
         self.task.set_tasktemplate_order([self.subtask, subtask2])
 
         api.content.transition(
@@ -295,8 +307,10 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                           .in_state('task-state-planned'))
 
         self.set_workflow_state('task-state-planned', self.subtask)
-        alsoProvides(self.subtask, IFromSequentialTasktemplate)
-        alsoProvides(subtask2, IFromSequentialTasktemplate)
+
+        alsoProvides(self.task, IContainSequentialProcess)
+        alsoProvides(self.subtask, IPartOfSequentialProcess)
+        alsoProvides(subtask2, IPartOfSequentialProcess)
         self.task.set_tasktemplate_order([self.subtask, subtask2])
 
         wftool = api.portal.get_tool("portal_workflow")
@@ -311,6 +325,66 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.assertEquals(
             'task-state-open', api.content.get_state(self.subtask))
+
+    def test_starts_parallel_subprocess(self):
+        self.login(self.secretariat_user)
+
+        # make seq_subtask_2 a parallel subprocess
+        alsoProvides(self.seq_subtask_2, IContainParallelProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task2))
+
+    def test_starts_sequential_subprocess(self):
+        self.login(self.secretariat_user)
+
+        # make seq_subtask_2 a sequential subprocess
+        alsoProvides(self.seq_subtask_2, IContainSequentialProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        self.seq_subtask_2.set_tasktemplate_order([subprocess_task1, subprocess_task2])
+
+        api.content.transition(
+            obj=self.seq_subtask_1,
+            transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(
+            'task-state-planned', api.content.get_state(subprocess_task2))
 
 
 class TestInitialStateForSubtasks(IntegrationTestCase):
@@ -332,7 +406,7 @@ class TestInitialStateForSubtasks(IntegrationTestCase):
     @browsing
     def test_is_planned_for_sequence_process_subtasks(self, browser):
         self.login(self.regular_user, browser=browser)
-        alsoProvides(self.task, IFromSequentialTasktemplate)
+        alsoProvides(self.task, IContainSequentialProcess)
         self.task.set_tasktemplate_order([self.subtask])
 
         with self.observe_children(self.task) as children:
@@ -407,7 +481,7 @@ class TestAddingAdditionalTaskToSequentialProcess(IntegrationTestCase):
             browser.click_on('Save')
 
         additional_task, = subtasks['added']
-        self.assertTrue(IFromSequentialTasktemplate.providedBy(additional_task))
+        self.assertTrue(IPartOfSequentialProcess.providedBy(additional_task))
 
         self.assertEquals(
             additional_task.get_sql_object(),
@@ -470,7 +544,7 @@ class TestAddingSubtaskToSequentialSubtask(IntegrationTestCase):
         self.assertEquals(1, len(self.seq_subtask_1.objectValues()))
 
         subsubtask = self.seq_subtask_1.objectValues()[0]
-        self.assertFalse(subsubtask.is_from_sequential_tasktemplate)
+        self.assertFalse(subsubtask.is_part_of_sequential_process)
         self.assertIsNone(self.seq_subtask_1.get_tasktemplate_order())
 
 
