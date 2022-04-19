@@ -19,7 +19,6 @@ from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
 from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.browser.modify_deadline import validate_deadline_changed
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.sources import DocumentsFromTaskSourceBinder
 from opengever.task.task import ITask
@@ -246,14 +245,13 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
         center = notification_center()
         center.add_task_responsible(self.context, current_user_id)
         center.remove_task_responsible(self.context, old_responsible)
-
         ITask(self.context).responsible = current_user_id
+        self.context.add_former_responsible(old_responsible)
         response.add_change(
             'responsible',
             old_responsible, ITask(self.context).responsible,
             _(u"label_responsible", default=u"Responsible"))
-        self.context.reindexObject(idxs=["responsible"])
-        self.context.sync()
+        notify(ObjectModifiedEvent(self.context))
 
 
 @implementer(ITransitionExtender)

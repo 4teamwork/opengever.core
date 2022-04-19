@@ -6,6 +6,7 @@ from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.base.model import create_session
 from opengever.base.response import IResponseContainer
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
@@ -108,6 +109,34 @@ class TestTeamTasks(IntegrationTestCase):
                           ITask(self.task).responsible)
         self.assertEquals(self.regular_user.getId(),
                           self.task.get_sql_object().responsible)
+
+    @browsing
+    def test_accept_and_close_a_team_task_sets_and_revokes_local_roles(self, browser):
+        self.login(self.regular_user, browser)
+        task = create(Builder('task')
+                      .within(self.dossier)
+                      .having(responsible_client='fa',
+                              responsible=u'team:1',
+                              task_type='direct-execution',
+                              issuer=self.dossier_responsible.getId()))
+
+        storage = RoleAssignmentManager(task).storage
+        self.assertEqual(['projekt_a', u'fa_inbox_users'],
+                         [item['principal'] for item in storage._storage()])
+
+        browser.open(task, view='tabbedview_view-overview')
+        browser.click_on('Accept')
+        browser.click_on('Save')
+
+        self.assertEqual(['projekt_a', u'fa_inbox_users', u'kathi.barfuss'],
+                         [item['principal'] for item in storage._storage()])
+        self.assertEqual(['team:1'], task.get_former_responsibles())
+
+        browser.open(task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.click_on('Save')
+        self.assertEqual([], storage._storage())
+        self.assertEqual([], task.get_former_responsibles())
 
     @browsing
     def test_responsible_change_is_visible_in_the_response(self, browser):
