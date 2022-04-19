@@ -225,7 +225,7 @@ msgstr "Invitations Teamraum"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "My repository"
-msgstr "Mon dépôt"
+msgstr "Dossier personnel"
 
 #: ./opengever/core/profiles/default/types/opengever.meeting.paragraphtemplate.xml
 msgid "Paragraph Template"
