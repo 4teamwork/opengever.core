@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
+from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.storage import STATE_IN_PROGRESS
@@ -65,10 +66,12 @@ class NightlyRoleAssignmentReports(NightlyJobProviderBase):
                 self.collect_garbage(self.context)
             obj = brain.getObject()
             assignments = RoleAssignmentManager(obj).get_assignments_by_principal_id(principalid)
-            sharing_assignments = [assignment for assignment in assignments
-                                   if assignment.cause == ASSIGNMENT_VIA_SHARING]
-            if sharing_assignments:
-                roles = filter(lambda r: r != 'Owner', sharing_assignments[0].roles)
+            manual_assignments = [
+                assignment for assignment in assignments
+                if assignment.cause in [ASSIGNMENT_VIA_SHARING,
+                                        ASSIGNMENT_VIA_PROTECT_DOSSIER]]
+            if manual_assignments:
+                roles = filter(lambda r: r != 'Owner', manual_assignments[0].roles)
                 if roles:
                     items.append({'UID': obj.UID(), 'roles': roles})
 

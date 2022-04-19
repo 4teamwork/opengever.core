@@ -1,5 +1,6 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.base.nightly_role_assignment_reports import NightlyRoleAssignmentReports
+from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.storage import STATE_IN_PROGRESS
@@ -43,6 +44,9 @@ class TestNightlyRoleAssignmentReports(IntegrationTestCase):
         manager = RoleAssignmentManager(self.leaf_repofolder)
         manager.add_or_update(self.meeting_user.getId(), ['Reviewer'],
                               ASSIGNMENT_VIA_SHARING)
+        manager = RoleAssignmentManager(self.resolvable_dossier)
+        manager.add_or_update(self.meeting_user.getId(), ['Reader'],
+                              ASSIGNMENT_VIA_PROTECT_DOSSIER)
 
         storage = IRoleAssignmentReportsStorage(self.portal)
 
@@ -63,4 +67,6 @@ class TestNightlyRoleAssignmentReports(IntegrationTestCase):
              {'UID': IUUID(self.leaf_repofolder),
               'roles': ['Reviewer']},
              {'UID': IUUID(self.empty_dossier),
-              'roles': ['Editor', 'Contributor', 'Reader']}], report['items'])
+              'roles': ['Editor', 'Contributor', 'Reader']},
+             {'UID': IUUID(self.resolvable_dossier),
+              'roles': ['Reader']}], report['items'])
