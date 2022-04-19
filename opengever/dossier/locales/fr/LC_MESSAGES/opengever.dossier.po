@@ -181,7 +181,7 @@ msgstr "Le dossier ne peut pas être annulé, il contient des requêtes actives.
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained documents are checked in."
-msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui ne sont pas en statut \"checkin\"."
+msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui sont en check-out."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
@@ -910,7 +910,7 @@ msgstr "Pas tous les documents ou tâches ont été classés dans un sous-dossie
 
 #: ./opengever/dossier/resolve.py
 msgid "not all documents are checked in"
-msgstr "Pas tous les documents ont le statut \"checkin\""
+msgstr "Certains documents sont en check-out"
 
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"

@@ -72,7 +72,7 @@ class TestCheckoutAPI(IntegrationTestCase):
         with browser.expect_http_error(code=403, reason='Forbidden'):
             browser.open(self.document.absolute_url() + '/@checkin',
                          method='POST', headers={'Accept': 'application/json'})
-        self.assertIn('Checkin is not allowed', browser.contents)
+        self.assertIn('Check-in is not allowed', browser.contents)
 
     @browsing
     def test_cancel_checkout(self, browser):

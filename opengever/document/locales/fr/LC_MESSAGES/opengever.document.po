@@ -30,30 +30,30 @@ msgstr "Impossible de modifier le document en ce moment car il est verrouillé."
 #: ./opengever/document/checkout/cancel.py
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 msgid "Cancel checkout"
-msgstr "Annuler le checkout"
+msgstr "Annuler le check-out"
 
 #: ./opengever/document/checkout/cancel.py
 msgid "Cancel checkout: ${title}"
-msgstr "Annuler le checkout pour  ${title}"
+msgstr "Annuler le check-out pour  ${title}"
 
 #: ./opengever/document/checkout/checkin.py
 msgid "Checked in: ${title}"
-msgstr "Checkin du document:  ${title}"
+msgstr "Check-in du document:  ${title}"
 
 #: ./opengever/document/browser/edit.py
 #: ./opengever/document/checkout/checkout.py
 msgid "Checked out: ${title}"
-msgstr "Checkout du document:  ${title}"
+msgstr "Check-out du document:  ${title}"
 
 #: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin with comment"
-msgstr "Checkin avec commentaire"
+msgstr "Check-in avec commentaire"
 
 #: ./opengever/document/browser/templates/macros.pt
 #: ./opengever/document/upgrades/profiles/4000/actions.xml
 msgid "Checkin without comment"
-msgstr "Checkin sans commentaire"
+msgstr "Check-in sans commentaire"
 
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt
 msgid "Chosen documents"
@@ -61,24 +61,24 @@ msgstr "Documents sélectionnés"
 
 #: ./opengever/document/checkout/cancel.py
 msgid "Could not cancel checkout on document ${title}."
-msgstr "Annulation du checkout du document ${title} inabouti."
+msgstr "Annulation du check-out du document ${title} inabouti."
 
 #: ./opengever/document/checkout/checkin.py
 msgid "Could not check in ${title}, it is not a document."
-msgstr "${title} n'est pas un document, le checkout n'a donc pas abouti."
+msgstr "${title} n'est pas un document, le check-out n'a donc pas abouti."
 
 #: ./opengever/document/checkout/checkin.py
 msgid "Could not check in document ${title}"
-msgstr "Checkin de ${title} n'a pas abouti"
+msgstr "Check-in de ${title} n'a pas abouti"
 
 #: ./opengever/document/browser/edit.py
 #: ./opengever/document/checkout/checkout.py
 msgid "Could not check out document ${title}."
-msgstr "Checkout de ${title} n'a pas abouti."
+msgstr "Check-out de ${title} n'a pas abouti."
 
 #: ./opengever/document/checkout/checkout.py
 msgid "Could not check out object: ${title}, it is not a document."
-msgstr "${title} n'est pas un document, par consequent checkout n'a pas abouti."
+msgstr "${title} n'est pas un document, par consequent le check-out n'a pas abouti."
 
 #: ./opengever/document/browser/overview.py
 msgid "Current version: ${version}"
@@ -158,12 +158,12 @@ msgstr "Annuler"
 #. Default: "Checkin"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin"
-msgstr "Checkin"
+msgstr "Check-in"
 
 #. Default: "Checkin anyway"
 #: ./opengever/document/checkout/checkin.py
 msgid "button_checkin_anyway"
-msgstr "Checkin malgré tout"
+msgstr "Check-in malgré tout"
 
 #. Default: "Save"
 #: ./opengever/document/forms.py
@@ -174,7 +174,7 @@ msgstr "Enregistrer"
 #: ./opengever/document/checkout/templates/cancelconfirmation.pt
 #: ./opengever/document/checkout/templates/cancelconfirmationform.pt
 msgid "cancel_checkout_confirmation"
-msgstr "Voulez-vous vraiment annuler le checkout? Les changements déjà effectués sur le document seront alors perdus."
+msgstr "Voulez-vous vraiment annuler le check-out? Les changements déjà effectués sur le document seront alors perdus."
 
 #. Default: "copy of"
 #: ./opengever/document/subscribers.py
@@ -247,7 +247,7 @@ msgstr "Remplacer par un nouveau fichier"
 #. Default: "Checkin Documents"
 #: ./opengever/document/checkout/checkin.py
 msgid "heading_checkin_comment_form"
-msgstr "Faire le checkin des documents"
+msgstr "Faire le check-in des documents"
 
 #. Default: "Save as PDF"
 #: ./opengever/document/forms.py
@@ -660,7 +660,7 @@ msgstr "Version"
 #. Default: "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
 #: ./opengever/document/checkout/checkin.py
 msgid "label_warn_checkout_locked"
-msgstr "Quelqu'un travaille actuellement sur ce document. Les modifications seront perdues si vous faites un checkin manuel. Veuillez s'il vous plait permettre au processus d'edition actuel de se terminer."
+msgstr "Quelqu'un travaille actuellement sur ce document. Les modifications seront perdues si vous faites un check-in manuel. Veuillez s'il vous plait permettre au processus d'edition actuel de se terminer."
 
 #. Default: "yes"
 #: ./opengever/document/browser/overview.py
@@ -670,7 +670,7 @@ msgstr "Oui"
 #. Default: "This item is being checked out by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt
 msgid "message_checkout_info"
-msgstr "${creator} a fait un checkout de ce document."
+msgstr "${creator} a fait un check-out de ce document."
 
 #. Default: "This item is being edited in Office Online by ${creator}."
 #: ./opengever/document/checkout/templates/checkedoutviewlet.pt

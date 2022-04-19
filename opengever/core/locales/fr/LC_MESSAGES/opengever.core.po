@@ -32,11 +32,11 @@ msgstr "Annuler"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkin with comment"
-msgstr "Checkin avec commentaire"
+msgstr "Check-in avec commentaire"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkin without comment"
-msgstr "Checkin sans commentaire"
+msgstr "Check-in sans commentaire"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Checkout"
