@@ -226,7 +226,7 @@ msgid "dossier-transition-reactivate"
 msgstr "Rouvrir"
 
 msgid "dossier-transition-resolve"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "forwarding-state-closed"
 msgstr "Clôturé"
