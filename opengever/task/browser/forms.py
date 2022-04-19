@@ -186,6 +186,7 @@ class TaskEditForm(DefaultEditForm):
         data.pop('is_private', None)
 
         if self.is_reassigned(data):
+            self.context.add_former_responsible(self.context.responsible)
             response = self.add_reassign_response(data)
             changes = super(TaskEditForm, self).applyChanges(data)
             TaskReassignActivity(self.context, self.context.REQUEST, response).record()
