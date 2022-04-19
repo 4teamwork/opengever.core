@@ -243,7 +243,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
               'principal': 'fa_inbox_users'}], storage._storage())
 
     @browsing
-    def test_reassigning_task_revokes_responsible_roles_on_task(self, browser):
+    def test_reassigning_task_does_not_revoke_responsible_roles_on_task(self, browser):
         self.login(self.regular_user, browser)
 
         roles = self.task.get_local_roles_for_userid(
@@ -262,10 +262,10 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.fill({'Response': 'For you'})
         browser.click_on('Assign')
 
-        # old responsible's permissions were revoked
+        # old responsible's permissions were not revoked
         roles = self.task.get_local_roles_for_userid(
             self.regular_user.id)
-        self.assertEqual(tuple(), roles)
+        self.assertEqual(('Editor', ), roles)
 
         # new responsible was granted permissions
         roles = self.task.get_local_roles_for_userid(
@@ -304,7 +304,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.assertEqual(('Editor', ), roles)
 
     @browsing
-    def test_reject_task_revokes_responsible_roles_on_task(self, browser):
+    def test_reject_task_does_not_revoke_responsible_roles_on_task(self, browser):
         self.login(self.regular_user, browser)
 
         self.set_workflow_state('task-state-open', self.subtask)
@@ -321,9 +321,11 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         browser.fill({'Response': 'Nope!'})
         browser.click_on('Save')
 
-        # old responsible's permissions were revoked
+        # old responsible's permissions were not revoked
+        # but old responsible is added to former responsibles list
         roles = self.subtask.get_local_roles_for_userid(self.regular_user.id)
-        self.assertEqual(tuple(), roles)
+        self.assertEqual(('Editor',), roles)
+        self.assertEqual([self.regular_user.id], self.subtask.get_former_responsibles())
 
         # The new responsible, which is the issuer was granted permissions
         roles = self.subtask.get_local_roles_for_userid(self.dossier_responsible.id)

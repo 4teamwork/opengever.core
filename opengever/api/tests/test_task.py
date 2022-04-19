@@ -590,6 +590,7 @@ class TestTaskTransitions(IntegrationTestCase):
 
         self.assertEqual('rk', self.task.responsible_client)
         self.assertEqual('james.bond', self.task.responsible)
+        self.assertEqual(['kathi.barfuss'], self.task.get_former_responsibles())
 
     @browsing
     def test_reassign_task_without_combined_responsible_value(self, browser):

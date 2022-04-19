@@ -42,6 +42,7 @@ from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from persistent.dict import PersistentDict
+from persistent.list import PersistentList
 from plone import api
 from plone.autoform import directives as form
 from plone.dexterity.content import Container
@@ -74,6 +75,7 @@ from zope.schema.vocabulary import getVocabularyRegistry
 _marker = object()
 TASKTEMPLATE_PREDECESSOR_KEY = 'tasktemplate_predecessor'
 TASK_PROCESS_ORDER_KEY = 'task_process_order'
+TASK_FORMER_RESPONSIBLES_KEY = 'task_former_responsibles'
 
 
 def deadline_default():
@@ -596,6 +598,18 @@ class Task(Container, TaskReminderSupport):
         term = vocabulary.getTerm(self.task_type)
 
         return term.title
+
+    def get_former_responsibles(self, create_if_missing=False):
+        annotations = IAnnotations(self)
+        if create_if_missing and TASK_FORMER_RESPONSIBLES_KEY not in annotations:
+            annotations[TASK_FORMER_RESPONSIBLES_KEY] = PersistentList()
+
+        return annotations.get(TASK_FORMER_RESPONSIBLES_KEY, [])
+
+    def add_former_responsible(self, respoonsible_id):
+        responsibles = self.get_former_responsibles(create_if_missing=True)
+        if respoonsible_id not in responsibles:
+            responsibles.append(respoonsible_id)
 
     def cancel_subtasks(self):
         for subtask in self.objectValues():

@@ -166,6 +166,20 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEquals(self.regular_user.getId(), self.task.responsible)
 
     @browsing
+    def test_reassign_task_stores_former_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.assertEqual(self.task.get_former_responsibles(), [])
+
+        self.assign_task(self.secretariat_user, u'Thats a job for you.')
+        self.assign_task(self.administrator, u'Thats a job for you.')
+        self.assign_task(self.limited_admin, u'Thats a job for you.')
+
+        self.assertEqual(self.task.get_former_responsibles(),
+                         [self.regular_user.id,
+                          self.secretariat_user.id,
+                          self.administrator.id])
+
+    @browsing
     def test_modify_event_is_fired_but_only_once(self, browser):
         register_event_recorder(IObjectModifiedEvent)
 
@@ -178,7 +192,7 @@ class TestAssignTask(IntegrationTestCase):
         self.assertEqual(self.task, events[0].object)
 
     @browsing
-    def test_revokes_permission_for_former_responsible(self, browser):
+    def test_does_not_revoke_permission_for_former_responsible(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.assign_task(self.secretariat_user, u'Thats a job for you.')
@@ -188,11 +202,15 @@ class TestAssignTask(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'},
+              'principal': 'kathi.barfuss'},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': u'fa_inbox_users'}],
+              'principal': u'fa_inbox_users'},
+             {'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
             manager.storage._storage())
 
     @browsing
@@ -281,7 +299,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             self.secretariat_user.getId(), self.successor.responsible)
 
     @browsing
-    def test_revokes_roles_also_on_predecessor_when_reassigning_successor(self, browser):
+    def test_does_not_revoke_roles_on_predecessor_when_reassigning_successor(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.successor)
@@ -296,15 +314,19 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'},
+              'principal': 'kathi.barfuss'},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': u'fa_inbox_users'}],
+              'principal': u'fa_inbox_users'},
+             {'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.task).id,
+              'principal': 'jurgen.konig'}],
             manager.storage._storage())
 
     @browsing
-    def test_revokes_roles_also_on_successor_when_reassigning_predecessor(self, browser):
+    def test_does_not_revoke_roles_on_successor_when_reassigning_predecessor(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.task)
@@ -319,9 +341,13 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
-              'principal': 'jurgen.konig'},
+              'principal': 'kathi.barfuss'},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
-              'principal': u'fa_inbox_users'}],
+              'principal': u'fa_inbox_users'},
+             {'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.successor).id,
+              'principal': 'jurgen.konig'}],
             manager.storage._storage())

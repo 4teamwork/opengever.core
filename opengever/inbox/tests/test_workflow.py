@@ -157,11 +157,14 @@ class TestInboxWorkflow(IntegrationTestCase):
 
         assignment_manager = RoleAssignmentManager(self.inbox_forwarding)
         assignments = assignment_manager.storage._storage()
-        self.assertEqual(2, len(assignments))
-        user_assignment, inbox_assignment = assignments
-        self.assertEqual(ASSIGNMENT_VIA_TASK, user_assignment["cause"])
-        self.assertEqual(["Editor"], user_assignment["roles"])
-        self.assertEqual(self.secretariat_user.getId(), user_assignment["principal"])
+        self.assertEqual(3, len(assignments))
+        old_assignment, inbox_assignment, new_assignment = assignments
+        self.assertEqual(ASSIGNMENT_VIA_TASK, old_assignment["cause"])
+        self.assertEqual(["Editor"], old_assignment["roles"])
+        self.assertEqual(self.regular_user.getId(), old_assignment["principal"])
+        self.assertEqual(ASSIGNMENT_VIA_TASK, new_assignment["cause"])
+        self.assertEqual(["Editor"], new_assignment["roles"])
+        self.assertEqual(self.secretariat_user.getId(), new_assignment["principal"])
         self.assertEqual(ASSIGNMENT_VIA_TASK_AGENCY, inbox_assignment["cause"])
         self.assertEqual(["Editor"], inbox_assignment["roles"])
         self.assertEqual(u'fa_inbox_users', inbox_assignment["principal"])
@@ -191,12 +194,12 @@ class TestInboxWorkflow(IntegrationTestCase):
         form.find_widget('Responsible').fill(self.meeting_user)
         browser.click_on('Assign')
 
-        self.assertNotIn("user:{}".format(self.regular_user),
-                         index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
-        self.assertNotIn("user:{}".format(self.regular_user),
-                         index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
-        self.assertNotIn("user:{}".format(self.regular_user),
-                         index_data_for(mail)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(self.inbox_forwarding_document)['allowedRolesAndUsers'])
+        self.assertIn("user:{}".format(self.regular_user),
+                      index_data_for(mail)['allowedRolesAndUsers'])
         self.assertIn("user:{}".format(self.meeting_user),
                       index_data_for(self.inbox_forwarding)['allowedRolesAndUsers'])
         self.assertIn("user:{}".format(self.meeting_user),

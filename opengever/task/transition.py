@@ -367,13 +367,6 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
     schemas = [IResponse, INewResponsibleSchema]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        # Revoke local roles for current responsible, except if
-        # revoke_permissions is set to False.
-        # the roles for the new responsible will be assigned afterwards
-        # in set_roles_after_modifying on the ObjectModifiedEvent.
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
         self.context.clear_reminder(self.context.responsible)
 
         responsible_client = transition_params.get('responsible_client')
@@ -399,6 +392,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
                 responsible=responsible, responsible_client=responsible_client)
 
     def change_responsible(self, transition_params):
+        self.context.add_former_responsible(self.context.responsible)
         self.context.responsible_client = transition_params.get('responsible_client')
         self.context.responsible = transition_params.get('responsible')
 
@@ -438,13 +432,7 @@ class RejectTransitionExtender(DefaultTransitionExtender):
             self.context.oguid, self.context.issuer, TASK_RESPONSIBLE_ROLE)
 
     def switch_responsible(self):
-        # Revoke local roles for current responsible, except if
-        # revoke_permissions is set to False.
-        # The roles for the new responsible will be assigned afterwards
-        # in set_roles_after_modifying on the ObjectModifiedEvent.
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
+        self.context.add_former_responsible(self.context.responsible)
         self.context.responsible = ITask(self.context).issuer
 
 
