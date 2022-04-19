@@ -42,6 +42,7 @@ class LocalRolesSetter(object):
         self.globalindex_reindex_task()
         self.revoke_on_related_items()
         self.revoke_on_distinct_parent()
+        self.task.reset_former_responsibles()
 
     def get_permission_identifier(self, actorid):
         actor = Actor.lookup(actorid)
@@ -177,12 +178,18 @@ class LocalRolesSetter(object):
         manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
                       self.inbox_group_id, self.task, reindex)
 
+        for former_responsible in self.task.get_former_responsibles():
+            manager.clear(ASSIGNMENT_VIA_TASK,
+                          self.get_permission_identifier(former_responsible),
+                          self.task, reindex)
+
     def revoke_roles_on_task(self):
         self._revoke_roles(self.task)
 
     def revoke_on_related_items(self):
         for item in getattr(aq_base(self.task), 'relatedItems', []):
             document = item.to_object
+
             self._revoke_roles(document)
 
             if self._is_inside_a_proposal(document):

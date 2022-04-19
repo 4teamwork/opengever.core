@@ -611,6 +611,9 @@ class Task(Container, TaskReminderSupport):
         if respoonsible_id not in responsibles:
             responsibles.append(respoonsible_id)
 
+    def reset_former_responsibles(self):
+        IAnnotations(self)[TASK_FORMER_RESPONSIBLES_KEY] = PersistentList()
+
     def cancel_subtasks(self):
         for subtask in self.objectValues():
             if not ITask.providedBy(subtask):
