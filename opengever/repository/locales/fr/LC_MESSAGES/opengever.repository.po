@@ -35,12 +35,12 @@ msgstr "Déblocage de préfixes de référence inutilisés."
 #. Default: "Allow add businesscase dossier"
 #: ./opengever/repository/repositoryfolder.py
 msgid "allow_add_businesscase_dossier"
-msgstr "Permettre l'ajout de dossiers commerciaux"
+msgstr "Permettre l'ajout de dossiers d'affaire"
 
 #. Default: "Choose if the user is allowed to add businesscase dossiers or only dossiers from a  dossiertemplate."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_allow_add_businesscase_dossier"
-msgstr "Déterminez s'il est permis d'ajouter des dossiers commerciaux à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
+msgstr "Déterminez s'il est permis d'ajouter des dossiers d'affaire à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
 
 #. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
 #: ./opengever/repository/repositoryroot.py
