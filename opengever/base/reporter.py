@@ -125,21 +125,7 @@ class XLSReporter(object):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=self.blank_header_rows + row, column=column)
 
-                if isinstance(obj, dict):
-                    value = obj.get(attr.get('id'), attr.get('default'))
-                else:
-                    if 'default' in attr:
-                        value = getattr(obj, attr.get('id'), attr.get('default'))
-                    else:
-                        value = getattr(obj, attr.get('id'))
-
-                if attr.get('callable'):
-                    value = value()
-                if attr.get('transform'):
-                    value = attr.get('transform')(value)
-                if value == MissingValue:
-                    value = ''
-
+                value = self.get_value(obj, attr)
                 cell.value = value
 
                 if 'hyperlink' in attr:
@@ -151,3 +137,21 @@ class XLSReporter(object):
 
                 if 'fold_by_method' in attr:
                     sheet.row_dimensions[cell.row].outlineLevel = attr.get('fold_by_method')(value)
+
+    def get_value(self, obj, attr):
+        if isinstance(obj, dict):
+            value = obj.get(attr.get('id'), attr.get('default'))
+        else:
+            if 'default' in attr:
+                value = getattr(obj, attr.get('id'), attr.get('default'))
+            else:
+                value = getattr(obj, attr.get('id'))
+
+        if attr.get('callable'):
+            value = value()
+        if attr.get('transform'):
+            value = attr.get('transform')(value)
+        if value == MissingValue:
+            value = ''
+
+        return value
