@@ -1,14 +1,13 @@
 from ftw.table.catalog_source import default_custom_sort
 from ftw.table.interfaces import ICatalogTableSourceConfig
 from ftw.table.interfaces import ITableSource
+from opengever.base.solr import solr_doc_from_uuid
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled
 from opengever.tabbedview import GeverCatalogTableSource
 from opengever.tabbedview.browser.tabs import BaseTabProxy
 from opengever.tabbedview.browser.tabs import Documents
 from operator import attrgetter
-from plone.app.uuid.utils import uuidToCatalogBrain
 from plone.uuid.interfaces import IUUID
-from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone.CatalogTool import sortable_title
 from zope.component import adapter
 from zope.interface import implementer
@@ -64,22 +63,7 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
 
         # get the base query from the config
         query = self.config.get_base_query()
-
-        brains = []
-
-        brains += self.get_containing_documents(query)
-        brains += self.get_related_documents()
-
-        # ordering
-        brains = self.extend_query_with_ordering(brains)
-
-        # filter
-        brains = self.extend_query_with_textfilter(
-            brains,
-            self.config.filter_text,
-            )
-
-        return brains
+        return query
 
     def get_related_documents(self):
         """ Return the related documents from a task
@@ -92,7 +76,7 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
             if obj.portal_type in [
                 'opengever.document.document', 'ftw.mail.mail']:
 
-                brain = uuidToCatalogBrain(IUUID(obj))
+                brain = solr_doc_from_uuid(IUUID(obj))
 
                 if not brain:
                     # the document is trashed
@@ -108,14 +92,7 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
     def get_containing_documents(self, query):
         """ Return the brains of documents created directly in a task
         """
-
-        portal_catalog = getToolByName(self.config.context, 'portal_catalog')
-        brains = portal_catalog(query)
-
-        # We need a list and not a lazy map
-        brains = [brain for brain in brains]
-
-        return brains
+        return super(RelatedDocumentsCatalogTableSource, self).search_results(query)
 
     def extend_query_with_textfilter(self, brains, filter_text):
         """ Add textfiltering on brains
@@ -171,7 +148,22 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
         return ordered_brains
 
     def search_results(self, query):
-        return query
+
+        brains = []
+
+        brains += self.get_containing_documents(query)
+        brains += self.get_related_documents()
+
+        # ordering
+        brains = self.extend_query_with_ordering(brains)
+
+        # filter
+        brains = self.extend_query_with_textfilter(
+            brains,
+            self.config.filter_text,
+            )
+
+        return brains
 
     def _sort_with_transform(
         self, brains, sort_index, sort_reverse, column, transform):
