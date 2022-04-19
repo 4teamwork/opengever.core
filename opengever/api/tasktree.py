@@ -35,7 +35,7 @@ class TaskTree(object):
         result['tasktree']['children'] = self.task_tree()
         return result
 
-    def is_task_addable_in_container(self, container):
+    def is_task_addable_in_sequential_task_container(self, container):
         if not IContainSequentialProcess.providedBy(container):
             return False
 
@@ -49,7 +49,7 @@ class TaskTree(object):
                 or not parent_context:
             return False
         return solr_item.review_state() == TASK_STATE_PLANNED \
-            and self.is_task_addable_in_container(parent_context)
+            and self.is_task_addable_in_sequential_task_container(parent_context)
 
     def get_main_task(self):
         main_task = self.context
@@ -59,35 +59,29 @@ class TaskTree(object):
             parent = aq_parent(main_task)
         return main_task
 
-    """We need to know if we can add subtasks to a specific task and if it possible
-    to add a new task before a specific task.
+    """For sequential processes we allow adding subtasks at specific positions
+    in the process. For this we need to find out whether a given task contains
+    a sequential process and tasks can be added in it, as well as whether a
+    task can be added before a given task.
 
-    We can't just get out this information from the task objects due to
-    perforamnce reasons. We get all tasks by quering the solr which gives us
-    just solr-items.
-
-    We try to do as much as possible with just those items. But we need to
-    lookup the obejct to check if we can add tasks within the object. Since
-    leaf tasks do never allow adding new tasks, we can restrict the object
-    lookup to IContainProcess-tasks only. This reduces the object lookup to
-    a minimum.
+    For performance reasons we avoid retrieving the objects and work only
+    with the solr-items whenever possible. But we need to lookup the obejct
+    to check if we can add tasks to the contained process.
+    This is of course never the case for leaf tasks, so we can restrict
+    the object lookup to IContainProcess-tasks only. This reduces the object
+    lookup to a minimum.
     """
     def extend_tree_with_addable_information(self, tree, solr_items_per_url, parent_context=None):
         solr_item = solr_items_per_url.get(tree.get('@id'))
-        is_task_addable_before = False
+        is_task_addable_before = self.is_task_addable_before(solr_item, parent_context)
         is_task_addable = False
         children = tree.get('children')
         if children:
             context = solr_item.getObject()
-            is_task_addable_before = self.is_task_addable_before(solr_item, parent_context)
-            is_task_addable = self.is_task_addable_in_container(context)
+            is_task_addable = self.is_task_addable_in_sequential_task_container(context)
 
             for child in children:
                 self.extend_tree_with_addable_information(child, solr_items_per_url, context)
-
-        else:  # is a leafnode, we do not want to get the context of leave-nodes due to performance reasons
-            is_task_addable_before = self.is_task_addable_before(solr_item, parent_context)
-            is_task_addable = False
 
         tree['is_task_addable_before'] = is_task_addable_before
         tree['is_task_addable'] = is_task_addable
