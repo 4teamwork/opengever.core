@@ -2,7 +2,7 @@ $(init);
 function init() {
   var FIRST_POLL_INTERVAL = 500;
   var POLL_INTERVAL = 2000;
-  var POLL_TIMEOUT = 60000;
+  var POLL_TIMEOUT = 300000;
 
   var app = new Vue({
     template: '#meeting-zip-export',
