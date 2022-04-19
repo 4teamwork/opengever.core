@@ -649,3 +649,17 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
         last_journal_entry = get_journal_entry(self.dossier, -1)
         self.assertEqual(last_journal_entry['action']['type'], 'Task modified')
         self.assertEqual(last_journal_entry['actor'], self.administrator.getId())
+
+    def test_close_main_task_is_skipped_if_main_task_is_already_closed(self):
+        self.login(self.administrator)
+        self.set_workflow_state(
+            'task-state-tested-and-closed', self.seq_subtask_1)
+        self.set_workflow_state(
+            'task-state-tested-and-closed', self.seq_subtask_2)
+        self.set_workflow_state(
+            'task-state-tested-and-closed', self.sequential_task)
+        self.set_workflow_state('task-state-open', self.seq_subtask_3)
+
+        api.content.transition(
+            obj=self.seq_subtask_3,
+            transition='task-transition-open-tested-and-closed')
