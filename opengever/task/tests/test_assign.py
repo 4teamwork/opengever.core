@@ -14,7 +14,6 @@ from opengever.task.response_syncer.workflow import WorkflowResponseSyncerReceiv
 from opengever.testing import IntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
-from plone import api
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 
@@ -212,31 +211,6 @@ class TestAssignTask(IntegrationTestCase):
               'reference': Oguid.for_object(self.task).id,
               'principal': 'jurgen.konig'}],
             manager.storage._storage())
-
-    @browsing
-    def test_redirects_to_portal_when_current_user_has_no_longer_view_permission(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        api.content.disable_roles_acquisition(obj=self.dossier)
-        self.assign_task(self.secretariat_user, u'Thats a job for you.')
-
-        manager = RoleAssignmentManager(self.task)
-        self.assertEqual(
-            [{'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Editor'],
-              'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'},
-             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Editor'],
-              'reference': Oguid.for_object(self.task).id,
-              'principal': u'fa_inbox_users'}],
-            manager.storage._storage())
-
-        self.assertEqual(self.portal.absolute_url(), browser.url)
-        self.assertEqual(
-            ['Task successfully reassigned. You are no longer permitted to '
-             'access the task.'],
-            info_messages())
 
 
 class TestAssignTaskWithSuccessors(IntegrationTestCase):

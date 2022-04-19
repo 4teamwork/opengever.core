@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-31 17:41+0000\n"
+"POT-Creation-Date: 2022-04-14 11:33+0000\n"
 "PO-Revision-Date: 2017-12-03 11:47+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-task/fr/>\n"
@@ -757,11 +757,6 @@ msgstr "Les autorisations temporaires pour le mandataire et ses suppléants ont 
 #: ./opengever/task/browser/assign.py
 msgid "msg_successfully_reassigned"
 msgstr "Tâche réassignée avec succès."
-
-#. Default: "Task successfully reassigned. You are no longer permitted to access the task."
-#: ./opengever/task/browser/assign.py
-msgid "msg_successfully_reassigned_no_longer_permission"
-msgstr "Tâche réassignée avec succès. Vous n’avez désormais plus accès à cette tâche"
 
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py

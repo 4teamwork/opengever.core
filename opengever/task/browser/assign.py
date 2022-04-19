@@ -155,8 +155,8 @@ class AssignTaskForm(Form):
                     self.context.absolute_url())
 
             self.reassign_task(**data)
-
-            return self.redirect()
+            msg = _(u'msg_successfully_reassigned', default=u'Task successfully reassigned.')
+            api.portal.show_message(msg, request=self.request, type='info')
 
     def create_watcher_and_commit_if_needed(self, new_responsible):
         """If we don't have an entry in the 'watchers' table for the
@@ -190,22 +190,6 @@ class AssignTaskForm(Form):
             session.add(watcher)
             transaction.commit()
             transaction.begin()
-
-    def redirect(self):
-        """Redirects to task if the current user still has View permission,
-        otherwise it redirects to portal.
-        """
-        if api.user.has_permission('View', obj=self.context):
-            msg = _(u'msg_successfully_reassigned',
-                    default=u'Task successfully reassigned.')
-            api.portal.show_message(msg, request=self.request, type='info')
-            return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-        msg = _(u'msg_successfully_reassigned_no_longer_permission',
-                default=u'Task successfully reassigned. You are no '
-                'longer permitted to access the task.')
-        api.portal.show_message(msg, request=self.request, type='info')
-        return self.request.RESPONSE.redirect(api.portal.get().absolute_url())
 
     def reassign_task(self, **kwargs):
         wftool = api.portal.get_tool('portal_workflow')
