@@ -440,20 +440,94 @@ for field in copied_fields:
 FIELDS_WITH_MAPPING.extend(copied_fields)
 
 
-class SolrQueryBaseService(Service):
+class SolrFieldMapper(object):
 
     field_mapping = {field.field_name: field for field in FIELDS_WITH_MAPPING}
 
     default_fields = DEFAULT_FIELDS
     required_response_fields = REQUIRED_RESPONSE_FIELDS
 
+    def __init__(self, solr):
+        self.all_solr_fields = set(
+            solr.manager.schema.fields.keys()
+            + self.get_custom_property_fields()
+        )
+
+    def get(self, field_name):
+        """Return a ListingField for a given field_name.
+        """
+        if field_name in self.field_mapping:
+            return self.field_mapping[field_name]
+        return SimpleListingField(field_name)
+
+    def is_allowed(self, field_name):
+        """Whether or not a field is allowed to be queried.
+        """
+        return False
+
+    def build_field_list(self, requested_fields):
+        """Builds the list of fields to be queried from Solr.
+
+        Based on the given list of requested fields, build the effective list
+        by considering that
+
+        - not all fields are allowed to be queried
+        - some fields need additional fields to be computed
+        - some fields are dynamic (custom properties)
+        - some fields are always required in the response
+
+        In addition, a list of fields that should be present in the response
+        is returned.
+        """
+        if requested_fields is not None:
+            requested_fields = filter(self.is_allowed, requested_fields)
+        else:
+            requested_fields = self.default_fields
+
+        response_fields = (set(requested_fields) | self.required_response_fields)
+
+        dynamic_fields = []
+        requested_solr_fields = set([])
+        for field_name in response_fields:
+            field = self.get(field_name)
+            requested_solr_fields.add(field.index)
+
+            # Certain fields require data from other Solr fields to be computed.
+            requested_solr_fields.update(set(field.additional_required_fields))
+
+            if SolrDynamicField.is_dynamic_field(field_name):
+                dynamic_fields.append(field_name)
+
+        query_field_list = list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
+        response_field_list = response_fields
+        return query_field_list, response_field_list
+
+    def get_custom_property_fields(self):
+        """Get the list of dynamic Solr fields used for custom properties.
+        """
+        solr_fields = []
+
+        storage = PropertySheetSchemaStorage()
+        if not storage:
+            return solr_fields
+
+        for definition in storage.list():
+            if definition is not None:
+                schema = definition.get_solr_dynamic_field_schema()
+                solr_fields.extend(schema.keys())
+
+        return solr_fields
+
+
+class SolrQueryBaseService(Service):
+
+    field_mapper = SolrFieldMapper
+
     def __init__(self, context, request):
         super(SolrQueryBaseService, self).__init__(context, request)
         self.solr = getUtility(ISolrSearch)
-        self.solr_fields = set(
-            self.solr.manager.schema.fields.keys()
-            + self.get_custom_property_fields()
-        )
+        self.fields = self.field_mapper(self.solr)
+
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
         self.facets = []
@@ -520,7 +594,7 @@ class SolrQueryBaseService(Service):
         """
         facet_counts = {}
         for facet_name in self.facets:
-            field = self.get_field(facet_name)
+            field = self.fields.get(facet_name)
             solr_facet_name = field.index
             solr_facet = resp.facets.get(solr_facet_name)
 
@@ -548,26 +622,9 @@ class SolrQueryBaseService(Service):
         of solr fields for the query and for the response.
         """
         requested_fields = self.parse_requested_fields(params)
-        if requested_fields is not None:
-            requested_fields = filter(
-                self.is_field_allowed, requested_fields)
-        else:
-            requested_fields = self.default_fields
-
-        self.response_fields = (set(requested_fields)
-                                | self.required_response_fields)
-
-        dynamic_fields = []
-        requested_solr_fields = set([])
-        for field_name in self.response_fields:
-            field = self.get_field(field_name)
-            requested_solr_fields.add(field.index)
-            # certain fields require data from other solr fields to be computed.
-            requested_solr_fields.update(set(field.additional_required_fields))
-            if SolrDynamicField.is_dynamic_field(field_name):
-                dynamic_fields.append(field_name)
-
-        return list(requested_solr_fields & self.solr_fields) + dynamic_fields
+        query_field_list, response_field_list = self.fields.build_field_list(requested_fields)
+        self.response_fields = response_field_list
+        return query_field_list
 
     def extract_depth(self, params):
         """If depth is not specified we search recursively
@@ -583,43 +640,11 @@ class SolrQueryBaseService(Service):
     def prepare_additional_params(self, params):
         return params
 
-    def is_field_allowed(self, field):
-        return False
-
-    def get_custom_property_fields(self):
-        solr_fields = []
-
-        storage = PropertySheetSchemaStorage()
-        if not storage:
-            return solr_fields
-
-        for definition in storage.list():
-            if definition is not None:
-                schema = definition.get_solr_dynamic_field_schema()
-                solr_fields.extend(schema.keys())
-
-        return solr_fields
-
-    def get_field(self, field_name):
-        """return a ListingField for a given field_name"""
-        if field_name in self.field_mapping:
-            return self.field_mapping[field_name]
-        return SimpleListingField(field_name)
-
-    def get_field_index(self, field_name):
-        return self.get_field(field_name).index
-
-    def get_field_accessor(self, field_name):
-        return self.get_field(field_name).accessor
-
-    def get_field_sort_index(self, field_name):
-        return self.get_field(field_name).sort_index
-
     def _create_list_item(self, doc):
         """Gather requested data from a ContentListingObject in a dict"""
         data = {}
         for field in self.response_fields:
-            accessor = self.get_field_accessor(field)
+            accessor = self.fields.get(field).accessor
             if isinstance(accessor, str):
                 value = getattr(doc, accessor, None)
                 if callable(value):

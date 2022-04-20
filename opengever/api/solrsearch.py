@@ -7,6 +7,7 @@ from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
 from opengever.api.solr_query_service import relative_to_physical_path
+from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.api.solr_query_service import url_to_physical_path
 from opengever.base.interfaces import ISearchSettings
@@ -17,6 +18,7 @@ from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
 
+
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
     'getObject',
@@ -26,9 +28,21 @@ BLACKLISTED_ATTRIBUTES = set([
 ])
 
 
+class SolrSearchFieldMapper(SolrFieldMapper):
+
+    def is_allowed(self, field_name):
+        """Do not allow private or blacklisted attributes.
+        """
+        if field_name.startswith("_") or field_name in BLACKLISTED_ATTRIBUTES:
+            return False
+        return True
+
+
 class SolrSearchGet(SolrQueryBaseService):
     """REST API endpoint for querying Solr
     """
+
+    field_mapper = SolrSearchFieldMapper
 
     def __init__(self, context, request):
         super(SolrSearchGet, self).__init__(context, request)
@@ -230,9 +244,9 @@ class SolrSearchGet(SolrQueryBaseService):
             facet_fields = [facet_fields]
         if facet_fields:
             self.facets = [facet for facet in facet_fields
-                           if self.is_field_allowed(facet)
-                           and self.get_field_index(facet) in self.solr_fields]
-            params['facet.field'] = map(self.get_field_index, self.facets)
+                           if self.fields.is_allowed(facet)
+                           and self.fields.get(facet).index in self.fields.all_solr_fields]
+            params['facet.field'] = [self.fields.get(f).index for f in self.facets]
 
         stats_fields = params.pop('stats.field', [])
         if not isinstance(stats_fields, list):
@@ -240,8 +254,8 @@ class SolrSearchGet(SolrQueryBaseService):
         if stats_fields:
             self.stats_fields = [
                 stats_field for stats_field in stats_fields
-                if self.is_field_allowed(stats_field)
-                and stats_field in self.solr_fields
+                if self.fields.is_allowed(stats_field)
+                and stats_field in self.fields.all_solr_fields
             ]
             params['stats.field'] = self.stats_fields
 
@@ -274,12 +288,6 @@ class SolrSearchGet(SolrQueryBaseService):
         self.extend_with_batching(res, resp)
 
         return res
-
-    def is_field_allowed(self, field):
-        """Do not allow private or blacklisted attributes"""
-        if field.startswith("_") or field in BLACKLISTED_ATTRIBUTES:
-            return False
-        return True
 
     def _create_list_item(self, doc):
         """Extend object data with breadcrumb information if 'breadcrumbs' flag

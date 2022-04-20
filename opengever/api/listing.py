@@ -1,6 +1,7 @@
 from ftw.solr.query import escape
 from ftw.solr.query import make_path_filter
-from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS as DEFAULT_REQUIRED_RESPONSE_FIELDS
+from opengever.api.solr_query_service import REQUIRED_RESPONSE_FIELDS
+from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.dossier.indexers import ParticipationIndexHelper
@@ -11,6 +12,7 @@ from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
+
 
 # Fields with no mapping but allowed in the listing endpoint.
 OTHER_ALLOWED_FIELDS = set([
@@ -115,9 +117,6 @@ FILTERS = {
 }
 
 
-REQUIRED_RESPONSE_FIELDS = DEFAULT_REQUIRED_RESPONSE_FIELDS.union(set(['@id']))
-
-
 def with_active_solr_only(func):
     """Raises an error if solr is not activated
     """
@@ -132,15 +131,29 @@ def with_active_solr_only(func):
     return validate
 
 
+class ListingFieldMapper(SolrFieldMapper):
+
+    required_response_fields = REQUIRED_RESPONSE_FIELDS.union(set(['@id']))
+    other_allowed_fields = OTHER_ALLOWED_FIELDS
+
+    def __init__(self, solr):
+        super(ListingFieldMapper, self).__init__(solr)
+        self.allowed_fields = set(self.field_mapping.keys()) | self.other_allowed_fields
+
+    def is_allowed(self, field_name):
+        return (
+            field_name in self.allowed_fields
+            or SolrDynamicField.is_dynamic_field(field_name)
+        )
+
+
 class ListingGet(SolrQueryBaseService):
     """List of content items"""
 
-    required_response_fields = REQUIRED_RESPONSE_FIELDS
-    other_allowed_fields = OTHER_ALLOWED_FIELDS
+    field_mapper = ListingFieldMapper
 
     def __init__(self, context, request):
         super(ListingGet, self).__init__(context, request)
-        self.allowed_fields = set(self.field_mapping.keys()) | self.other_allowed_fields
 
     def extract_query(self, params):
         term = params.get('search', '').strip()
@@ -178,7 +191,7 @@ class ListingGet(SolrQueryBaseService):
         # Add requested filters
         filters = self.preprocess_filters(filters)
         for key, value in filters.items():
-            field = self.get_field(key)
+            field = self.fields.get(key)
             solr_filter = field.listing_to_solr_filter(value)
             if solr_filter:
                 filter_queries.append(solr_filter)
@@ -212,8 +225,8 @@ class ListingGet(SolrQueryBaseService):
         order on self.default_sort_index
         """
         sort_on = params.get('sort_on', self.default_sort_index)
-        if self.is_field_allowed(sort_on):
-            sort_on = self.get_field_sort_index(sort_on)
+        if self.fields.is_allowed(sort_on):
+            sort_on = self.fields.get(sort_on).sort_index
         else:
             sort_on = self.default_sort_index
 
@@ -317,9 +330,9 @@ class ListingGet(SolrQueryBaseService):
         }
 
         self.facets = [facet for facet in params.get('facets', [])
-                       if self.is_field_allowed(facet)
-                       and self.get_field_index(facet) in self.solr_fields]
-        facet_fields = map(self.get_field_index, self.facets)
+                       if self.fields.is_allowed(facet)
+                       and self.fields.get(facet).index in self.fields.all_solr_fields]
+        facet_fields = [self.fields.get(f).index for f in self.facets]
 
         if facet_fields:
             additional_params["facet"] = "true"
@@ -350,9 +363,3 @@ class ListingGet(SolrQueryBaseService):
         res['facets'] = self.extract_facets_from_response(resp)
 
         return res
-
-    def is_field_allowed(self, field):
-        return (
-            field in self.allowed_fields
-            or SolrDynamicField.is_dynamic_field(field)
-        )
