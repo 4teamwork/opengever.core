@@ -18,6 +18,7 @@ from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.task.interfaces import ISuccessorTaskController
+from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IPartOfParallelProcess
@@ -219,6 +220,8 @@ class TaskBuilder(GeverDexterityBuilder):
 
     def after_create(self, obj):
         wtool = getToolByName(obj, 'portal_workflow')
+        parent = aq_parent(aq_inner(obj))
+
         for transition in self.transitions:
             wtool.doActionFor(obj, transition)
 
@@ -227,11 +230,19 @@ class TaskBuilder(GeverDexterityBuilder):
 
         if self._as_sequential_task:
             alsoProvides(obj, IPartOfSequentialProcess)
-            alsoProvides(aq_parent(aq_inner(obj)), IContainSequentialProcess)
+            obj.reindexObject(idxs=['object_provides'])
+
+            if ITask.providedBy(parent):
+                alsoProvides(parent, IContainSequentialProcess)
+                parent.reindexObject(idxs=['object_provides'])
 
         if self._as_parallel_task:
             alsoProvides(obj, IPartOfParallelProcess)
-            alsoProvides(aq_parent(aq_inner(obj)), IContainParallelProcess)
+            obj.reindexObject(idxs=['object_provides'])
+
+            if ITask.providedBy(parent):
+                alsoProvides(parent, IContainParallelProcess)
+                parent.reindexObject(idxs=['object_provides'])
 
         super(TaskBuilder, self).after_create(obj)
 
