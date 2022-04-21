@@ -90,9 +90,12 @@ class TestCopyPasteAPI(IntegrationTestCase):
                 method='POST',
                 headers=self.api_headers)
 
-        self.assertEqual({u'message': u'Checked out documents cannot be copied.',
-                          u'type': u'CopyError'},
-                         browser.json)
+        self.assertDictEqual(
+            {u'message': u'error_checked_out_cannot_be_copied',
+             u'translated_message': u'Checked out documents cannot be copied.',
+             u'additional_metadata': {},
+             u'type': u'CopyError'},
+            browser.json)
 
     @browsing
     def test_copy_document_when_not_all_path_elemnts_are_accessible(self, browser):

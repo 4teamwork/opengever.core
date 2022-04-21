@@ -18,6 +18,7 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
         from opengever.api.not_reported_exceptions import CopyError as NotReportedCopyError
         from opengever.document.behaviors import IBaseDocument
         from ZODB.POSException import ConflictError
+        from opengever.base import _
 
         def _verifyObjectPaste(self, object, validate_src=1):
             # Verify whether the current user is allowed to paste the
@@ -37,7 +38,9 @@ class PatchCopyContainerVerifyObjectPaste(MonkeyPatch):
             # We also make sure that we are not pasting a checked-out document
 
             if IBaseDocument.providedBy(object) and object.is_checked_out():
-                raise NotReportedCopyError('Checked out documents cannot be copied.')
+                raise NotReportedCopyError(
+                    _(u'error_checked_out_cannot_be_copied',
+                      default=u"Checked out documents cannot be copied."))
 
             if not hasattr(object, 'meta_type'):
                 raise CopyError(MessageDialog(
