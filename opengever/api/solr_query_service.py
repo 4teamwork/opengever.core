@@ -465,19 +465,18 @@ class SolrFieldMapper(object):
         """
         return False
 
-    def build_field_list(self, requested_fields):
-        """Builds the list of fields to be queried from Solr.
+    def get_response_fields(self, requested_fields):
+        """Return a list of response fields for a set of requested fields.
 
-        Based on the given list of requested fields, build the effective list
-        by considering that
+        These fields are named the way the would be in REST API responses,
+        and don't always correspond 1:1 to a Solr index with the same name.
 
-        - not all fields are allowed to be queried
-        - some fields need additional fields to be computed
-        - some fields are dynamic (custom properties)
-        - some fields are always required in the response
+        Examples:
+        - @type (instead of 'portal_type')
+        - @id (queried from Solr as 'path', accessed via 'getURL')
+        - keywords (instead of 'Subject')
 
-        In addition, a list of fields that should be present in the response
-        is returned.
+        If no fields are requested, a set of default fields is returned.
         """
         if requested_fields is not None:
             requested_fields = filter(self.is_allowed, requested_fields)
@@ -485,9 +484,31 @@ class SolrFieldMapper(object):
             requested_fields = self.default_fields
 
         response_fields = (set(requested_fields) | self.required_response_fields)
+        return response_fields
+
+    def get_query_fields(self, requested_fields):
+        """Builds the list of fields to be queried from Solr.
+
+        requested_fields contains a list of fields named the way they appear
+        in REST API responses (@id, @type, keywords, ...).
+
+        The returned list of Solr fields are named exactly as the Solr indexes
+        are (path, portal_type, Subject, ...).
+
+        Based on the given list of requested fields, build the effective list
+        by considering that
+
+        - not all fields are allowed to be queried
+        - field names need to be mapped to Solr indexes
+        - some fields need additional fields to be computed
+        - some fields are dynamic (custom properties)
+        - some fields are always required in the response
+        """
+        response_fields = self.get_response_fields(requested_fields)
 
         dynamic_fields = []
         requested_solr_fields = set([])
+
         for field_name in response_fields:
             field = self.get(field_name)
             requested_solr_fields.add(field.index)
@@ -498,9 +519,7 @@ class SolrFieldMapper(object):
             if SolrDynamicField.is_dynamic_field(field_name):
                 dynamic_fields.append(field_name)
 
-        query_field_list = list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
-        response_field_list = response_fields
-        return query_field_list, response_field_list
+        return list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
 
     def get_custom_property_fields(self):
         """Get the list of dynamic Solr fields used for custom properties.
@@ -622,9 +641,8 @@ class SolrQueryBaseService(Service):
         of solr fields for the query and for the response.
         """
         requested_fields = self.parse_requested_fields(params)
-        query_field_list, response_field_list = self.fields.build_field_list(requested_fields)
-        self.response_fields = response_field_list
-        return query_field_list
+        self.response_fields = self.fields.get_response_fields(requested_fields)
+        return self.fields.get_query_fields(requested_fields)
 
     def extract_depth(self, params):
         """If depth is not specified we search recursively
