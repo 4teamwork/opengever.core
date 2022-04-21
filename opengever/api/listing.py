@@ -134,16 +134,12 @@ def with_active_solr_only(func):
 class ListingFieldMapper(SolrFieldMapper):
 
     required_response_fields = REQUIRED_RESPONSE_FIELDS.union(set(['@id']))
-    other_allowed_fields = OTHER_ALLOWED_FIELDS
-
-    def __init__(self, solr):
-        super(ListingFieldMapper, self).__init__(solr)
-        self.allowed_fields = set(self.field_mapping.keys()) | self.other_allowed_fields
 
     def is_allowed(self, field_name):
+        allowed_fields = set(self.field_mapping.keys()) | OTHER_ALLOWED_FIELDS
         return (
-            field_name in self.allowed_fields
-            or SolrDynamicField.is_dynamic_field(field_name)
+            field_name in allowed_fields
+            or self.is_dynamic(field_name)
         )
 
 

@@ -465,6 +465,11 @@ class SolrFieldMapper(object):
         """
         return False
 
+    def is_dynamic(self, field_name):
+        """Whether or not a field is a dynamic Solr field.
+        """
+        return SolrDynamicField.is_dynamic_field(field_name)
+
     def get_response_fields(self, requested_fields):
         """Return a list of response fields for a set of requested fields.
 
@@ -516,7 +521,7 @@ class SolrFieldMapper(object):
             # Certain fields require data from other Solr fields to be computed.
             requested_solr_fields.update(set(field.additional_required_fields))
 
-            if SolrDynamicField.is_dynamic_field(field_name):
+            if self.is_dynamic(field_name):
                 dynamic_fields.append(field_name)
 
         return list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
