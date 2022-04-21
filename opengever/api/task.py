@@ -32,6 +32,7 @@ from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import Interface
+from opengever.api import _
 
 
 @implementer(ISerializeToJson)
@@ -315,9 +316,16 @@ class TaskPatch(ContentPatch):
 
     def reply(self):
         current_is_private_value = self.context.is_private
+        current_responsible = self.context.responsible
+        current_responsible_client = self.context.responsible_client
         data = super(TaskPatch, self).reply()
 
         if self.context.is_private != current_is_private_value:
             raise BadRequest("It's not allowed to change the is_private option"
                              " of an existing task.")
+
+        if self.context.responsible != current_responsible or \
+           self.context.responsible_client != current_responsible_client:
+            raise BadRequest(_(u"change_responsible_not_allowed",
+                               default=u"It's not allowed to change responsible here. Use \"Reassign\" instead"))
         return data

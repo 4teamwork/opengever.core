@@ -266,6 +266,7 @@ class TestAPITransitions(IntegrationTestCase):
 
         self.assertEqual('inbox:rk', forwarding.responsible)
         self.assertEqual('inbox:fa', copied_forwarding.responsible)
+        self.assertEqual(['inbox:fa'], forwarding.get_former_responsibles())
 
         self.assertEqual('forwarding-state-refused', api.content.get_state(forwarding))
         self.assertEqual('forwarding-state-closed', api.content.get_state(copied_forwarding))

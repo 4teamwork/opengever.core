@@ -389,7 +389,7 @@ class TestTransferTaskInterAdminUnit(IntegrationTestCase):
                 mgr = RoleAssignmentManager(task)
                 old_user_assignments = mgr.get_assignments_by_principal_id(old_userid)
                 new_user_assignments = mgr.get_assignments_by_principal_id(new_userid)
-                self.assertEqual(0, len(old_user_assignments))
+                self.assertEqual(1, len(old_user_assignments))
                 self.assertEqual(1, len(new_user_assignments))
 
                 new_user_assignment = new_user_assignments[0]

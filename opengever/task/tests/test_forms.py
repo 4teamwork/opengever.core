@@ -104,6 +104,19 @@ class TestTaskEditForm(IntegrationTestCase):
             answer.css('h3').text)
 
     @browsing
+    def test_edit_responsible_adds_former_responsible(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.set_workflow_state('task-state-open', self.task)
+        self.assertEqual(self.regular_user.id, self.task.responsible)
+        self.assertEqual([], self.task.get_former_responsibles())
+        browser.open(self.task, view='edit')
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(self.secretariat_user)
+        browser.find('Save').click()
+        self.assertEqual([self.regular_user.id], self.task.get_former_responsibles())
+
+    @browsing
     def test_edit_responsible_records_activity(self, browser):
         self.activate_feature('activity')
         self.login(self.administrator, browser=browser)

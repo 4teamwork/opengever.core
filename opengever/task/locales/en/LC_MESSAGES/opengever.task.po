@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-03-31 17:41+0000\n"
+"POT-Creation-Date: 2022-04-14 11:33+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -902,12 +902,6 @@ msgstr "Temporary permissions for the responsible user (and their deputy) have b
 #: ./opengever/task/browser/assign.py
 msgid "msg_successfully_reassigned"
 msgstr "Task successfully reassigned."
-
-#. German translation: Aufgabe erfolgreich neu zugewiesen. Sie sind nicht länger berechtigt auf die Aufgabe zuzugreifen.
-#. Default: "Task successfully reassigned. You are no longer permitted to access the task."
-#: ./opengever/task/browser/assign.py
-msgid "msg_successfully_reassigned_no_longer_permission"
-msgstr "Task successfully reassigned. You are no longer permitted to access the task."
 
 #. German translation: Kommentiert von ${user}
 #. Default: "Commented by ${user}"

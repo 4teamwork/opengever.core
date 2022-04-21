@@ -11,6 +11,7 @@ from opengever.document.document import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.globalindex.handlers.task import sync_task
 from opengever.meeting.proposal import IBaseProposal
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_org_unit
 from plone import api
 
@@ -41,6 +42,13 @@ class LocalRolesSetter(object):
         self.globalindex_reindex_task()
         self.revoke_on_related_items()
         self.revoke_on_distinct_parent()
+        self.task.reset_former_responsibles()
+
+    def get_permission_identifier(self, actorid):
+        actor = Actor.lookup(actorid)
+        if isinstance(actor.permission_identifier, unicode):
+            return actor.permission_identifier.encode('utf-8')
+        return actor.permission_identifier
 
     @property
     def responsible_permission_identfier(self):
@@ -50,14 +58,7 @@ class LocalRolesSetter(object):
         """
         # cache information
         if not self._permission_identifier:
-            actor = self.task.get_responsible_actor()
-            self._permission_identifier = actor.permission_identifier
-
-            if isinstance(self._permission_identifier, unicode):
-                self._permission_identifier = (
-                    self._permission_identifier.encode('utf-8')
-                    )
-
+            self._permission_identifier = self.get_permission_identifier(self.task.responsible)
         return self._permission_identifier
 
     @property
@@ -170,30 +171,30 @@ class LocalRolesSetter(object):
 
         return maybe_document.is_inside_a_proposal()
 
-    def revoke_roles_on_task(self):
-        manager = RoleAssignmentManager(self.task)
+    def _revoke_roles(self, obj, reindex=True):
+        manager = RoleAssignmentManager(obj)
         manager.clear(ASSIGNMENT_VIA_TASK,
-                      self.responsible_permission_identfier, self.task)
+                      self.responsible_permission_identfier, self.task, reindex)
         manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                      self.inbox_group_id, self.task)
+                      self.inbox_group_id, self.task, reindex)
+
+        for former_responsible in self.task.get_former_responsibles():
+            manager.clear(ASSIGNMENT_VIA_TASK,
+                          self.get_permission_identifier(former_responsible),
+                          self.task, reindex)
+
+    def revoke_roles_on_task(self):
+        self._revoke_roles(self.task)
 
     def revoke_on_related_items(self):
         for item in getattr(aq_base(self.task), 'relatedItems', []):
             document = item.to_object
 
-            manager = RoleAssignmentManager(document)
-            manager.clear(ASSIGNMENT_VIA_TASK,
-                          self.responsible_permission_identfier, self.task)
-            manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                          self.inbox_group_id, self.task)
+            self._revoke_roles(document)
 
             if self._is_inside_a_proposal(document):
                 proposal = document.get_proposal()
-                manager = RoleAssignmentManager(proposal)
-                manager.clear(ASSIGNMENT_VIA_TASK,
-                              self.responsible_permission_identfier, self.task)
-                manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                              self.inbox_group_id, self.task)
+                self._revoke_roles(proposal)
 
     def revoke_on_distinct_parent(self):
         distinct_parent = self.get_distinct_parent()
@@ -208,12 +209,7 @@ class LocalRolesSetter(object):
                              IBaseProposal.__identifier__],
             path='/'.join(distinct_parent.getPhysicalPath()))]
 
-        manager = RoleAssignmentManager(distinct_parent)
-        manager.clear(
-            ASSIGNMENT_VIA_TASK,
-            self.responsible_permission_identfier, self.task, reindex=False)
-        manager.clear(ASSIGNMENT_VIA_TASK_AGENCY,
-                      self.inbox_group_id, self.task, reindex=False)
+        self._revoke_roles(distinct_parent, reindex=False)
 
         for dossier in subdossiers:
             reindex_object_security_without_children(dossier)

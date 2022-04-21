@@ -74,13 +74,7 @@ class ForwardingRefuseTransitionExtender(ForwardingDefaultTransitionExtender):
         return {'location': copy_url}
 
     def switch_responsible(self):
-        # Revoke local roles for current responsible, except if
-        # revoke_permissions is set to False.
-        # The roles for the new responsible will be assigned afterwards
-        # in set_roles_after_modifying on the ObjectModifiedEvent.
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
+        self.context.add_former_responsible(self.context.responsible)
         current_org_unit = get_current_org_unit()
         self.context.responsible_client = current_org_unit.id()
         self.context.responsible = current_org_unit.inbox().id()

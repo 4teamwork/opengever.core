@@ -19,7 +19,6 @@ from opengever.task.browser.delegate.recipients import ISelectRecipientsSchema
 from opengever.task.browser.delegate.utils import create_subtasks
 from opengever.task.browser.modify_deadline import validate_deadline_changed
 from opengever.task.interfaces import IDeadlineModifier
-from opengever.task.localroles import LocalRolesSetter
 from opengever.task.response_syncer import sync_task_response
 from opengever.task.sources import DocumentsFromTaskSourceBinder
 from opengever.task.task import ITask
@@ -246,14 +245,13 @@ class AcceptTransitionExtender(DefaultTransitionExtender):
         center = notification_center()
         center.add_task_responsible(self.context, current_user_id)
         center.remove_task_responsible(self.context, old_responsible)
-
         ITask(self.context).responsible = current_user_id
+        self.context.add_former_responsible(old_responsible)
         response.add_change(
             'responsible',
             old_responsible, ITask(self.context).responsible,
             _(u"label_responsible", default=u"Responsible"))
-        self.context.reindexObject(idxs=["responsible"])
-        self.context.sync()
+        notify(ObjectModifiedEvent(self.context))
 
 
 @implementer(ITransitionExtender)
@@ -367,13 +365,6 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
     schemas = [IResponse, INewResponsibleSchema]
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
-        # Revoke local roles for current responsible, except if
-        # revoke_permissions is set to False.
-        # the roles for the new responsible will be assigned afterwards
-        # in set_roles_after_modifying on the ObjectModifiedEvent.
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
         self.context.clear_reminder(self.context.responsible)
 
         responsible_client = transition_params.get('responsible_client')
@@ -399,6 +390,7 @@ class ReassignTransitionExtender(DefaultTransitionExtender):
                 responsible=responsible, responsible_client=responsible_client)
 
     def change_responsible(self, transition_params):
+        self.context.add_former_responsible(self.context.responsible)
         self.context.responsible_client = transition_params.get('responsible_client')
         self.context.responsible = transition_params.get('responsible')
 
@@ -438,13 +430,7 @@ class RejectTransitionExtender(DefaultTransitionExtender):
             self.context.oguid, self.context.issuer, TASK_RESPONSIBLE_ROLE)
 
     def switch_responsible(self):
-        # Revoke local roles for current responsible, except if
-        # revoke_permissions is set to False.
-        # The roles for the new responsible will be assigned afterwards
-        # in set_roles_after_modifying on the ObjectModifiedEvent.
-        if self.context.revoke_permissions:
-            LocalRolesSetter(self.context).revoke_roles()
-
+        self.context.add_former_responsible(self.context.responsible)
         self.context.responsible = ITask(self.context).issuer
 
 

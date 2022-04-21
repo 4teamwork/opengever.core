@@ -534,22 +534,20 @@ class TestTaskCreation(SolrIntegrationTestCase):
 class TestTaskPatch(IntegrationTestCase):
 
     @browsing
-    def test_edit_responsible_with_responsible_client(self, browser):
+    def test_edit_responsible_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.add_additional_admin_and_org_unit()
-        data = {
-            "responsible": {
-                'token': "rk:james.bond",
-                'title': u'Ratskanzlei: James Bond'
-            }
-        }
+        data = {"responsible": {'token': "fa:nicole.kohler"}}
+        with browser.expect_http_error(400):
+            browser.open(self.task, json.dumps(data),
+                         method="PATCH", headers=self.api_headers)
 
-        browser.open(self.task, json.dumps(data),
-                     method="PATCH", headers=self.api_headers)
-
-        self.assertEqual('rk', self.task.responsible_client)
-        self.assertEqual('james.bond', self.task.responsible)
+        self.assertEqual(
+            {u'type': u'BadRequest',
+             u'additional_metadata': {},
+             u'translated_message': u'It\'s not allowed to change responsible here.'
+                                    u' Use "Reassign" instead',
+             u'message': u'change_responsible_not_allowed'}, browser.json)
 
     @browsing
     def test_changing_is_private_raise_bad_request(self, browser):
@@ -590,6 +588,7 @@ class TestTaskTransitions(IntegrationTestCase):
 
         self.assertEqual('rk', self.task.responsible_client)
         self.assertEqual('james.bond', self.task.responsible)
+        self.assertEqual(['kathi.barfuss'], self.task.get_former_responsibles())
 
     @browsing
     def test_reassign_task_without_combined_responsible_value(self, browser):
