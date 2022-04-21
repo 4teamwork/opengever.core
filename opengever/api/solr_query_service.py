@@ -8,6 +8,7 @@ from opengever.api.utils import recursive_encode
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListing
+from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.utils import get_preferred_language_code
 from opengever.base.utils import safe_int
 from opengever.base.vocabulary import wrap_vocabulary
@@ -250,6 +251,22 @@ class SimpleListingField(object):
 
     def hide_facet(self, facet):
         return False
+
+    def get_value(self, obj):
+        if not isinstance(obj, OGSolrContentListingObject):
+            raise TypeError(
+                "Expected 'obj' to be of type OGSolrContentListingObject - "
+                "got %r instead" % obj)
+
+        accessor = self.accessor
+        if isinstance(accessor, str):
+            value = getattr(obj, accessor, None)
+            if callable(value):
+                value = value()
+        else:
+            value = accessor(obj)
+
+        return value
 
 
 class ListingField(SimpleListingField):
@@ -663,18 +680,13 @@ class SolrQueryBaseService(Service):
     def prepare_additional_params(self, params):
         return params
 
-    def _create_list_item(self, doc):
-        """Gather requested data from a ContentListingObject in a dict"""
+    def _create_list_item(self, obj):
+        """Gather requested data from an OGSolrContentListingObject in a dict.
+        """
         data = {}
-        for field in self.response_fields:
-            accessor = self.fields.get(field).accessor
-            if isinstance(accessor, str):
-                value = getattr(doc, accessor, None)
-                if callable(value):
-                    value = value()
-            else:
-                value = accessor(doc)
-            data[field] = json_compatible(value)
+        for field_name in self.response_fields:
+            value = self.fields.get(field_name).get_value(obj)
+            data[field_name] = json_compatible(value)
         return data
 
     def prepare_response_items(self, resp):
