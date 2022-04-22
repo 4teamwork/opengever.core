@@ -39,6 +39,8 @@ services:
       - 3310:3310
     profiles:
       - clamav
+    environment:
+      - CLAMD_CONF_StreamMaxLength=50M
   ogui:
     image: 4teamwork/ogui:latest
     profiles:
