@@ -722,3 +722,20 @@ class DossierCommentsMigrator(UIDMaintenanceJobContextManagerMixin):
             response.creator = None
             IResponseContainer(dossier).add(response)
             del annotations[COMMENTS_KEY]
+
+
+class NightlyDossierCommentIndexer(NightlyIndexer):
+
+    def check_preconditions(self):
+        # the default NightlyIndexer avoid reindexing the SearchableText only
+        # in solr, but for our case where only dossiers needs reindexing
+        # it's ok.
+        pass
+
+    @classmethod
+    def index_in_solr(cls, key, idxs):
+        obj = cls.key_to_obj(key)
+        if obj and len(IResponseContainer(obj)) > 0:
+            manager = getUtility(ISolrConnectionManager)
+            handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
+            handler.add(idxs)

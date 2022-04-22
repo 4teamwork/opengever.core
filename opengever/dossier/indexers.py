@@ -3,6 +3,7 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.response import IResponseContainer
 from opengever.base.utils import ensure_str
 from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
@@ -230,6 +231,10 @@ class SearchableTextExtender(object):
         searchable_external_reference = IDossier(self.context).external_reference
         if searchable_external_reference:
             searchable.append(searchable_external_reference.encode('utf-8'))
+
+        # comments stored in the response container
+        for response in IResponseContainer(self.context):
+            searchable.append(response.text.encode('utf-8'))
 
         # custom properties
         custom_properties = IDossierCustomProperties(self.context).custom_properties

@@ -2,6 +2,9 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.model import CONTENT_TITLE_LENGTH
+from opengever.base.response import COMMENT_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
+from opengever.base.response import Response
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
@@ -248,6 +251,24 @@ class TestDossierIndexers(SolrIntegrationTestCase):
         self.assertIn(u"Kr\xe4he", indexed_value)
         self.assertIn(u"rot", indexed_value)
         self.assertIn(u"blau", indexed_value)
+
+    def test_dossier_searchable_text_contains_comments(self):
+        self.login(self.regular_user)
+
+        response1 = Response(COMMENT_RESPONSE_TYPE)
+        response1.text = u'Telefongespr\xe4ch mit Herr Meier'
+        IResponseContainer(self.dossier).add(response1)
+
+        response2 = Response(COMMENT_RESPONSE_TYPE)
+        response2.text = u'Abschlussnummer DDD2837'
+        IResponseContainer(self.dossier).add(response2)
+
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
+        self.assertIn(u'Meier', indexed_value)
+        self.assertIn(u'DDD2837', indexed_value)
 
     def test_dossiertemplate_searchable_text_contains_keywords(self):
         self.login(self.regular_user)
