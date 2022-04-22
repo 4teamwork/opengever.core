@@ -1,6 +1,7 @@
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity.base import BaseActivity
 from opengever.document import _
+from opengever.document.versioner import Versioner
 from opengever.ogds.base.actor import Actor
 
 
@@ -64,7 +65,12 @@ class DocumenVersionCreatedActivity(BaseActivity):
 
     @property
     def description(self):
-        return {}
+        versioner = Versioner(self.context)
+        comment = versioner.retrieve_version(versioner.get_current_version_id()).comment
+        return self.translate_to_all_languages(
+            _(u'label_comment_prefixed_with_label',
+              default=u'Comment: ${comment}',
+              mapping={'comment': comment}))
 
 
 class DocumentWatcherAddedActivity(BaseActivity):
