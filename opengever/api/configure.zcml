@@ -104,6 +104,15 @@
       />
 
   <plone:service
+      method="GET"
+      for="zope.interface.Interface"
+      factory=".ui_actions.UIActionsGet"
+      name="@ui-actions"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="PATCH"
       for="opengever.document.document.IDocumentSchema"
       factory=".document.DocumentPatch"

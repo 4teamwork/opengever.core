@@ -40,6 +40,7 @@ Inhalt:
    external_activities.rst
    recently_touched.rst
    preview.rst
+   ui_actions.rst
    webactions.rst
    users.rst
    actors.rst
