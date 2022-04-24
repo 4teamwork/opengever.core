@@ -9,10 +9,10 @@ from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.utils import get_preferred_language_code
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier.indexers import ParticipationIndexHelper
-from opengever.globalindex.browser.report import task_type_helper as task_type_value_helper
 from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.task.helper import task_type_helper
+from opengever.task.helper import task_type_value_helper
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
 from plone.rfc822.interfaces import IPrimaryFieldInfo
