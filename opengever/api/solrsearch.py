@@ -6,11 +6,11 @@ from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
-from opengever.api.solr_query_service import relative_to_physical_path
-from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
-from opengever.api.solr_query_service import url_to_physical_path
 from opengever.base.interfaces import ISearchSettings
+from opengever.base.solr.fields import relative_to_physical_path
+from opengever.base.solr.fields import SolrFieldMapper
+from opengever.base.solr.fields import url_to_physical_path
 from opengever.workspaceclient.client import WorkspaceClient
 from plone import api
 from plone.restapi.services import Service
