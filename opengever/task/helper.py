@@ -3,7 +3,6 @@ from opengever.task.util import getTaskTypeVocabulary
 from plone.api.portal import get_current_language
 from plone.memoize import ram
 from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
 
 
 @ram.cache(lambda m, i, value: '{}-{}'.format(value, get_current_language()))
@@ -26,3 +25,12 @@ def task_type_helper(item, value):
         return value
     else:
         return term.title
+
+
+def task_type_value_helper(value):
+    """Variant of the above helper that doesn't require the `items` argument.
+
+    It's unused anyway, but the above helper is used in places where that
+    function signature is expected, so we keep it for compatibility.
+    """
+    return task_type_helper(None, value)

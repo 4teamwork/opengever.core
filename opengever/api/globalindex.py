@@ -1,11 +1,11 @@
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.base.helpers import display_name
-from opengever.globalindex.browser.report import task_type_helper
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.team import Team
+from opengever.task.helper import task_type_value_helper
 from plone.restapi.interfaces import ISerializeToJson
 from sqlalchemy import Date
 from zope.globalrequest import getRequest
@@ -30,7 +30,7 @@ class GlobalIndexGet(OGDSListingBaseService):
         'issuer': display_name,
         'responsible': display_name,
         'review_state': translate_review_state,
-        'task_type': task_type_helper,
+        'task_type': task_type_value_helper,
     }
 
     default_sort_on = DEFAULT_SORT_INDEX
