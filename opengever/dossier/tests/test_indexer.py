@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.base.behaviors.base import IOpenGeverBase
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.response import COMMENT_RESPONSE_TYPE
@@ -25,6 +26,7 @@ from zope.event import notify
 from zope.interface import Interface
 from zope.lifecycleevent import Attributes
 from zope.lifecycleevent import ObjectModifiedEvent
+import json
 import requests_mock
 
 
@@ -268,6 +270,21 @@ class TestDossierIndexers(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.dossier, 'SearchableText')
         self.assertIn(u'Meier', indexed_value)
+        self.assertIn(u'DDD2837', indexed_value)
+
+    @browsing
+    def test_searchable_text_gets_updated_when_comment_added(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
+        self.assertNotIn(u'DDD2837', indexed_value)
+
+        url = '{}/@responses'.format(self.dossier.absolute_url())
+        browser.open(url, method="POST", headers=self.api_headers,
+                     data=json.dumps({'text': u'DDD2837'}))
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.dossier, 'SearchableText')
         self.assertIn(u'DDD2837', indexed_value)
 
     def test_dossiertemplate_searchable_text_contains_keywords(self):
