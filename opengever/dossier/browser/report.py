@@ -55,6 +55,7 @@ class DossierReporter(SolrReporterView):
         {
             'id': 'reference',
             'is_default': True,
+            'tabbedview_column': 'reference',
         },
     )
 
