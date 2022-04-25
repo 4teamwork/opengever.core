@@ -64,7 +64,12 @@ class BaseReporterView(BrowserView):
                                       IGridStateStorageKeyGenerator)
         key = generator.get_key()
         storage = IDictStorage(tabbedview)
-        return json.loads(storage.get(key, '{}'))
+        state = storage.get(key)
+
+        if not state:
+            return {}
+
+        return json.loads(state)
 
     def get_active_tabbedview_columns(self):
         """Loads corresponding tabbedview grid-state and returns an orderd
