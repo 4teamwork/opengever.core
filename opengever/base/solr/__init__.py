@@ -11,3 +11,18 @@ def solr_doc_from_uuid(uuid):
     if not resp.docs:
         return None
     return OGSolrDocument(resp.docs[0])
+
+
+def batched_solr_results(**kwargs):
+    """Returns all Solr results in batches.
+    """
+    solr = getUtility(ISolrSearch)
+    last_batch = False
+    start = 0
+    rows = kwargs.get('rows', 1000)
+    while not last_batch:
+        resp = solr.unrestricted_search(start=start, **kwargs)
+        yield resp.docs
+        if start + len(resp.docs) >= resp.num_found or not resp.docs:
+            last_batch = True
+        start += rows

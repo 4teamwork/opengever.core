@@ -1,23 +1,22 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
-from ftw.solr.interfaces import ISolrConnectionManager
-from ftw.solr.interfaces import ISolrIndexHandler
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_path_filter
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.solr import OGSolrDocument
+from opengever.base.solr import batched_solr_results
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
-from opengever.task.task import ITask
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
-from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getAdapter
-from zope.component import getMultiAdapter
 from zope.component import queryUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
@@ -93,28 +92,38 @@ def reindex_containing_subdossier_for_contained_objects(dossier, event):
     index of all contained objects (documents, mails and tasks) so they don't
     show an outdated title in the ``subdossier`` column
     """
-    catalog = api.portal.get_tool('portal_catalog')
-    objects = catalog(path='/'.join(dossier.getPhysicalPath()),
-                      portal_type=TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)
+    containing_subdossier_title = dossier.Title()
 
-    manager = queryUtility(ISolrConnectionManager)
-    for obj in objects:
-        handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
-        handler.add(['containing_subdossier'])
+    solr = queryUtility(ISolrSearch)
+    filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
+    filters += [
+        u'portal_type:({})'.format(
+                u' OR '.join(TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)),
+    ]
+    for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
+        for doc in batch:
+            solr.manager.connection.add({
+                "UID": doc['UID'],
+                "containing_subdossier": {"set": containing_subdossier_title},
+            })
 
 
 def reindex_containing_dossier_for_contained_objects(dossier, event):
     """Reindex the containging_dossier index for all the contained obects.
     """
-    manager = queryUtility(ISolrConnectionManager)
+    containing_dossier_title = dossier.Title()
 
-    for brain in dossier.portal_catalog(path='/'.join(dossier.getPhysicalPath())):
-        obj = brain.getObject()
-        handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
-        handler.add(['containing_dossier'])
-
-        if ITask.providedBy(obj):
-            sync_task(brain.getObject(), event)
+    solr = queryUtility(ISolrSearch)
+    filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
+    for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
+        for doc in batch:
+            solr.manager.connection.add({
+                "UID": doc['UID'],
+                "containing_dossier": {"set": containing_dossier_title},
+            })
+            if doc['portal_type'] == 'opengever.task.task':
+                obj = OGSolrDocument(doc).getObject()
+                sync_task(obj, event)
 
 
 def reindex_contained_objects(dossier, event):
