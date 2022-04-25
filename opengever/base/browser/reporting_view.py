@@ -28,19 +28,29 @@ class BaseReporterView(BrowserView):
         return self.filter_and_order_by_tabbedview_settings(self._columns)
 
     def filter_and_order_by_tabbedview_settings(self, excel_columns):
-        excel_columns_by_name = {
-            item.get('sort_index', item.get('id')): item for (item) in excel_columns}
         active_columns = []
         tabbedview_columns = self.get_active_tabbedview_columns()
         if not tabbedview_columns:
             return excel_columns
 
         for col in tabbedview_columns:
-            attribute = excel_columns_by_name.get(col.get('id'))
-            if attribute:
-                active_columns.append(attribute)
+            column = self.excel_column_by_tabbedview_name(excel_columns, col.get('id'))
+            if column:
+                active_columns.append(column)
 
         return active_columns
+
+    def excel_column_by_tabbedview_name(self, excel_columns, tv_col_name):
+        """Get the Excel column matching the given TabbedView column name.
+
+        For Catalog based Excel exports, the Excel column's sort_index is
+        identical to the TabbedView column name.
+        """
+        excel_columns_by_name = {
+            col.get('sort_index', col.get('id')): col
+            for col in excel_columns
+        }
+        return excel_columns_by_name.get(tv_col_name)
 
     def get_grid_state(self, view_name):
         """Load tabbedview gridstate of the logged in users for the given view.
@@ -139,3 +149,18 @@ class SolrReporterView(BaseReporterView):
 
     def get_column_settings(self, column_name):
         return self.column_settings_by_id.get(column_name, {})
+
+    def excel_column_by_tabbedview_name(self, excel_columns, tv_col_name):
+        """Get the Excel column matching the given TabbedView column name.
+
+        For Solr based Excel exports, the corresponding sort_index in Solr
+        usually matches the TabbedView column name. Exceptions from this rule
+        can be controlled using 'tabbedview_column' in the column settings.
+        """
+        excel_columns_by_id = {col['id']: col for col in excel_columns}
+        tabbedview_columns = {
+            c.get('tabbedview_column', c['sort_index']): c['id']
+            for c in self._columns
+        }
+        col_id = tabbedview_columns.get(tv_col_name, tv_col_name)
+        return excel_columns_by_id.get(col_id)
