@@ -289,6 +289,12 @@
       handler=".handlers.purge_reference_number_mappings"
       />
 
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           opengever.base.response.IResponseAddedEvent"
+      handler=".handlers.dossier_comment_added"
+      />
+
   <adapter
       factory=".resolve.ResolveDossierTransitionExtender"
       name="dossier-transition-resolve"

@@ -177,3 +177,11 @@ def move_connected_teamraum_to_main_dossier(obj, event):
 
     linked_workspaces = ILinkedWorkspaces(obj)
     linked_workspaces.move_workspace_links_to_main_dossier()
+
+
+def dossier_comment_added(obj, event):
+    """Dossier comments (responses) are part of the searchableText, so we need
+    to reindex the searchableText if a new response is added.
+    """
+
+    obj.reindexObject(idxs='searchableText')
