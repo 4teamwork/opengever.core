@@ -46,6 +46,28 @@ class TestDossierReporter(SolrIntegrationTestCase):
             [cell.value for cell in rows[2]])
 
     @browsing
+    def test_sorts_rows_according_to_paths_from_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        paths1 = self.make_path_param(self.dossier, self.inactive_dossier)
+        browser.open(view='dossier_report', data=paths1)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        self.assertEqual(self.dossier.title, rows[1][0].value)
+        self.assertEqual(self.inactive_dossier.title, rows[2][0].value)
+
+        paths2 = self.make_path_param(self.inactive_dossier, self.dossier)
+        browser.open(view='dossier_report', data=paths2)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        self.assertEqual(self.inactive_dossier.title, rows[1][0].value)
+        self.assertEqual(self.dossier.title, rows[2][0].value)
+
+    @browsing
     def test_dossier_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 
