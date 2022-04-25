@@ -24,10 +24,10 @@ msgid "Attach remote document"
 msgstr "Copie d'un document de votre service"
 
 msgid "Checkin"
-msgstr "Checkin"
+msgstr "Check-in"
 
 msgid "Checkout"
-msgstr "Checkout"
+msgstr "Check-out"
 
 msgid "Committee Member"
 msgstr "Membre"
@@ -226,7 +226,7 @@ msgid "dossier-transition-reactivate"
 msgstr "Rouvrir"
 
 msgid "dossier-transition-resolve"
-msgstr "Fermer"
+msgstr "Clôturer"
 
 msgid "forwarding-state-closed"
 msgstr "Clôturé"

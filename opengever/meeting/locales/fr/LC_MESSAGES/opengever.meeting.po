@@ -613,7 +613,7 @@ msgstr "Visible uniquement pour les Managers. Ne devrait normalement pas être m
 #. Default: "You are not allowed to checkout the document."
 #: ./opengever/meeting/browser/meetings/agendaitem.py
 msgid "document_checkout_not_allowed"
-msgstr "Vous n'êtes pas autorisé(e) à extraire le document."
+msgstr "Vous n'êtes pas autorisé(e) à effectuer le check-out du document."
 
 #. Default: "Agenda item list"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -674,7 +674,7 @@ msgstr "Seuls les objets contenus dans des dossiers actifs peuvent être déplac
 #. Default: "Cannot change the state because the proposal contains checked out documents."
 #: ./opengever/meeting/proposal_transition_comment.py
 msgid "error_must_checkin_documents_for_transition"
-msgstr "L'état ne peut pas être changé tant que la requête contient des documents qui ont été extraits."
+msgstr "L'état ne peut pas être changé tant que la requête contient des documents en check-out."
 
 #. Default: "You have not selected any items."
 #: ./opengever/meeting/browser/report.py
@@ -1544,7 +1544,7 @@ msgstr "Information"
 #. Default: "The proposal document is being checked out by ${creator}."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt
 msgid "message_checkout_info"
-msgstr "Le document de requête a déjà un checkout par ${creator}."
+msgstr "${creator} a déjà effectué un check-out du document de requête."
 
 #. Default: "The committee ${committee_title} is no longer active."
 #: ./opengever/meeting/browser/templates/proposalinfoviewlet.pt

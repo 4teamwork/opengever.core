@@ -181,7 +181,7 @@ msgstr "Le dossier ne peut pas être annulé, il contient des requêtes actives.
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained documents are checked in."
-msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui ne sont pas en statut \"checkin\"."
+msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents qui sont en check-out."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
@@ -345,7 +345,7 @@ msgstr "Choisissez les utilisateurs ou groupes obtenant accès en lecture seule 
 #. Default: "Choose users and groups which have readable and writing access to the dossier"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_reading_and_writing"
-msgstr "Choisissez les utilisateurs ou groupes obtenant accès en lecture et écriture au dossier. Les utilisateurs de ce groupe seront autorisés à traiter le dossier (y compris le fermer, le rouvrir, l'annuler et le réactiver), ainsi qu'à créer et modifier des contenus."
+msgstr "Choisissez les utilisateurs ou groupes obtenant accès en lecture et écriture au dossier. Les utilisateurs de ce groupe seront autorisés à traiter le dossier (y compris le clôturer, le rouvrir, l'annuler et le réactiver), ainsi qu'à créer et modifier des contenus."
 
 #. Default: "The user can choose only from the defined keywords in a new dossier from template. It also prevents the user for creating new keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -910,7 +910,7 @@ msgstr "Pas tous les documents ou tâches ont été classés dans un sous-dossie
 
 #: ./opengever/dossier/resolve.py
 msgid "not all documents are checked in"
-msgstr "Pas tous les documents ont le statut \"checkin\""
+msgstr "Certains documents sont en check-out"
 
 #: ./opengever/dossier/resolve.py
 msgid "not all task are closed"

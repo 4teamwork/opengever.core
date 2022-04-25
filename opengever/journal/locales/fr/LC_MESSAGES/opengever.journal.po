@@ -71,12 +71,12 @@ msgstr "Document envoyé par le programme de messagerie"
 #. Default: "Document checked in"
 #: ./opengever/journal/handlers.py
 msgid "label_document_checkin"
-msgstr "Document avec checkin"
+msgstr "Check-in du document effectué"
 
 #. Default: "Document checked out"
 #: ./opengever/journal/handlers.py
 msgid "label_document_checkout"
-msgstr "Document avec checkout"
+msgstr "Check-out du document effectué"
 
 #. Default: "Canceled document checkout"
 #: ./opengever/journal/handlers.py

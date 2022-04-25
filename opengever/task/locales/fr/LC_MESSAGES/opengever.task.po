@@ -206,7 +206,7 @@ msgstr "Responsable"
 #. Default: "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
 #: ./opengever/task/validators.py
 msgid "error_checked_out_document"
-msgstr "Les documents suivants (${title}) sont en checkout. Vous devez faire un checkin pour pouvoir les déposer."
+msgstr "Vous devez effectuer le check-in des documents suivants (${title}) avant de pouvoir poursuivre."
 
 #. Default: "Admin unit changes are not allowed if the task or forwarding is already accepted."
 #: ./opengever/task/browser/assign.py

@@ -75,7 +75,7 @@ msgstr "Cancel checkout is not allowed."
 #. Default: "Checkin is not allowed."
 #: ./opengever/api/checkin.py
 msgid "msg_checkin_disallowed"
-msgstr "Checkin is not allowed."
+msgstr "Check-in is not allowed."
 
 #. Default: "Checkout is not allowed."
 #: ./opengever/api/checkout.py
