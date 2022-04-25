@@ -8,6 +8,7 @@ from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.utils import get_preferred_language_code
 from opengever.base.vocabulary import wrap_vocabulary
+from opengever.dossier import _ as dossier_mf
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
@@ -200,13 +201,14 @@ class SimpleListingField(object):
     other solr indexes on the ContentListingObject to get computed
     """
 
-    def __init__(self, field_name):
+    def __init__(self, field_name, title=None):
         self.field_name = field_name
         self.index = field_name
         self.accessor = field_name
         self.sort_index = field_name
         self.transform = None
         self.additional_required_fields = []
+        self.title = title or field_name
 
     def listing_to_solr_filter(self, value):
         """transforms the filter value from the request to
@@ -257,17 +259,21 @@ class SimpleListingField(object):
 
         return value
 
+    def get_title(self):
+        return self.title
+
 
 class ListingField(SimpleListingField):
 
     def __init__(self, field_name, index, accessor=None, sort_index=None,
-                 transform=None, additional_required_fields=[]):
+                 transform=None, additional_required_fields=[], title=None):
         self.field_name = field_name
         self.index = index
         self.accessor = accessor if accessor is not None else index
         self.sort_index = sort_index if sort_index is not None else index
         self.transform = transform
         self.additional_required_fields = additional_required_fields
+        self.title = title or field_name
 
     def index_value_to_label(self, value):
         if self.transform is None:
@@ -452,6 +458,7 @@ FIELDS_WITH_MAPPING = [
     ),
     DateListingField(
         'end',
+        title=dossier_mf(u'label_end', default=u'Closing Date')
     ),
     ListingField(
         'filename',
@@ -515,6 +522,7 @@ FIELDS_WITH_MAPPING = [
         'reference',
         index='reference',
         sort_index='sortable_reference',
+        title=dossier_mf(u'label_reference_number', default=u'Reference Number'),
     ),
     ListingField(
         'reference_number',
@@ -531,6 +539,7 @@ FIELDS_WITH_MAPPING = [
         'responsible',
         index='responsible',
         transform=display_name,
+        title=dossier_mf(u'label_responsible', default=u'Responsible'),
     ),
     ListingField(
         'responsible_fullname',
@@ -544,6 +553,7 @@ FIELDS_WITH_MAPPING = [
         'review_state',
         index='review_state',
         transform=lambda state: translate(state, domain='plone', context=getRequest()),
+        title=dossier_mf(u'label_review_state', default=u'Review state'),
     ),
     ListingField(
         'review_state_label',
@@ -558,6 +568,7 @@ FIELDS_WITH_MAPPING = [
     ),
     DateListingField(
         'start',
+        title=dossier_mf(u'label_start', default=u'Opening Date'),
     ),
     ListingField(
         'task_type',
@@ -578,6 +589,7 @@ FIELDS_WITH_MAPPING = [
         accessor=translated_title,
         sort_index='sortable_title',
         additional_required_fields=['portal_type'],
+        title=dossier_mf(u'label_title', default=u'Title'),
     ),
     DateListingField(
         'touched',

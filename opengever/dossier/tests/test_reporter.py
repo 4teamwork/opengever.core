@@ -4,13 +4,13 @@ from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
 from tempfile import NamedTemporaryFile
 import json
 
 
-class TestDossierReporter(IntegrationTestCase):
+class TestDossierReporter(SolrIntegrationTestCase):
 
     @browsing
     def test_dossier_report(self, browser):

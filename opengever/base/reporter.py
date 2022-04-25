@@ -1,11 +1,15 @@
+from datetime import datetime
 from math import floor
 from Missing import Value as MissingValue
+from opengever.base.solr import OGSolrContentListingObject
+from opengever.base.solr.fields import DateListingField
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from plone.api.portal import get_localized_time
 from StringIO import StringIO
+from zope.globalrequest import getRequest
 from zope.i18n import translate
 
 
@@ -60,6 +64,9 @@ class StringTranslater(object):
     def translate(self, value):
         """ return the translated string"""
 
+        if self.request is None:
+            self.request = getRequest()
+
         if value:
             return translate(value, domain=self.domain, context=self.request)
         return None
@@ -71,7 +78,7 @@ class XLSReporter(object):
 
     def __init__(self, request, attributes, results,
                  sheet_title=u' ', footer=u'', portrait_format=False,
-                 blank_header_rows=0):
+                 blank_header_rows=0, field_mapper=None):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -85,6 +92,7 @@ class XLSReporter(object):
         self.footer = footer
         self.portrait_format = portrait_format
         self.blank_header_rows = blank_header_rows
+        self.field_mapper = field_mapper
 
     def __call__(self):
         workbook = self.prepare_workbook()
@@ -141,6 +149,15 @@ class XLSReporter(object):
     def get_value(self, obj, attr):
         if isinstance(obj, dict):
             value = obj.get(attr.get('id'), attr.get('default'))
+
+        elif isinstance(obj, OGSolrContentListingObject):
+            field_name = attr.get('id')
+            field = self.field_mapper.get(field_name)
+
+            value = field.get_value(obj)
+            if isinstance(field, DateListingField) and value:
+                value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+
         else:
             if 'default' in attr:
                 value = getattr(obj, attr.get('id'), attr.get('default'))
