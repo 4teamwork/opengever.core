@@ -471,6 +471,26 @@ FIELDS_WITH_MAPPING = [
         accessor=filesize,
     ),
     ListingField(
+        'filing_no',
+        index='filing_no',
+        title=dossier_mf(u'filing_no', default=u'Filing number'),
+    ),
+    ListingField(
+        'filing_no_number',
+        index='filing_no',
+        title=dossier_mf(u'filing_no_number'),
+    ),
+    ListingField(
+        'filing_no_year',
+        index='filing_no',
+        title=dossier_mf(u'filing_no_year'),
+    ),
+    ListingField(
+        'filing_no_filing',
+        index='filing_no',
+        title=dossier_mf(u'filing_no_filing'),
+    ),
+    ListingField(
         'issuer',
         index='issuer',
         transform=display_name,
