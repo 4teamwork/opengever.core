@@ -1,9 +1,14 @@
 from ftw.dictstorage.interfaces import IDictStorage
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
 from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.solr import OGSolrDocument
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
+from zope.component import getUtility
 from zope.component import queryMultiAdapter
 import json
 
@@ -75,3 +80,62 @@ class BaseReporterView(BrowserView):
         set_attachment_content_disposition(self.request, self.filename)
 
         return data
+
+
+class SolrReporterView(BaseReporterView):
+
+    field_mapper = None
+
+    def __init__(self, *args, **kwargs):
+        super(SolrReporterView, self).__init__(*args, **kwargs)
+        self.solr = getUtility(ISolrSearch)
+        self.fields = self.field_mapper(self.solr)
+
+    def get_selected_items(self):
+        paths = self.request.get('paths', [])
+        filters = 'path:(%s)' % ' OR '.join(map(escape, paths))
+        fields = [col['id'] for col in self.columns()]
+
+        resp = self.solr.search(
+            filters=filters,
+            sort='path asc',
+            rows=1000,
+            fl=self.fields.get_query_fields(fields))
+
+        return [IContentListingObject(OGSolrDocument(d)) for d in resp.docs]
+
+    @property
+    def _columns(self):
+        requested_cols = self.get_requested_column_names()
+
+        columns = []
+        for requested_col in requested_cols:
+            # Dynamically create a column definition based on field mapper
+            field = self.fields.get(requested_col)
+            column = {
+                'id': field.field_name,
+                'accessor': field.accessor,
+                'sort_index': field.sort_index,
+                'title': field.get_title(),
+            }
+
+            # Update it with overrides from explicit column settings
+            column_settings = self.get_column_settings(requested_col)
+            column.update(column_settings)
+
+            columns.append(column)
+
+        return columns
+
+    def get_requested_column_names(self):
+        return self.get_default_column_names()
+
+    def get_default_column_names(self):
+        return [c['id'] for c in self.column_settings if c.get('is_default')]
+
+    @property
+    def column_settings_by_id(self):
+        return {c['id']: c for c in self.column_settings}
+
+    def get_column_settings(self, column_name):
+        return self.column_settings_by_id.get(column_name, {})
