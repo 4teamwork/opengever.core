@@ -123,6 +123,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         IFilingNumber(self.dossier).filing_no = u'Client1-Leitung-2012-1'
         self.dossier.reindexObject()
+        self.commit_solr()
 
         browser.open(view='dossier_report',
                      data=self.make_path_param(self.dossier))

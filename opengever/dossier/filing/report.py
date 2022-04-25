@@ -1,4 +1,3 @@
-from opengever.dossier import _
 from opengever.dossier.browser.report import DossierReporter
 
 
@@ -38,30 +37,40 @@ def filing_no_number(filing_number):
 class DossierFilingNumberReporter(DossierReporter):
     """DossierReporter addition, which add filing columns to the xls-export.
     """
+
+    filing_columns = (
+        {
+            'id': 'filing_no_filing',
+            'is_default': True,
+            'transform': filing_no_filing,
+        },
+        {
+            'id': 'filing_no_year',
+            'is_default': True,
+            'transform': filing_no_year,
+        },
+        {
+            'id': 'filing_no_number',
+            'is_default': True,
+            'transform': filing_no_number,
+        },
+        {
+            'id': 'filing_no',
+            'is_default': True,
+        },
+    )
+
     @property
-    def _columns(self):
-        filing_columns = [
-            {'id': 'filing_no',
-             'title': _('filing_no_filing'),
-             'transform': filing_no_filing},
+    def column_settings(self):
+        dossier_column_settings = DossierReporter.column_settings
+        cols = [c['id'] for c in dossier_column_settings]
 
-            {'id': 'filing_no',
-             'title': _('filing_no_year'),
-             'transform': filing_no_year},
+        # Try to place filing columns before review_state
+        try:
+            index = cols.index('review_state')
+        except ValueError:
+            index = 4
 
-            {'id': 'filing_no',
-             'title': _('filing_no_number'),
-             'transform': filing_no_number},
-
-            {'id': 'filing_no',
-             'title': _(u'filing_no', default="Filing number")},
-        ]
-        filing_columns.reverse()
-
-        columns = super(DossierFilingNumberReporter, self)._columns
-
-        index = [col.get('id') for col in columns].index('review_state')
-        for column in filing_columns:
-            columns.insert(index, column)
-
-        return columns
+        before = dossier_column_settings[:index]
+        after = dossier_column_settings[index:]
+        return before + self.filing_columns + after
