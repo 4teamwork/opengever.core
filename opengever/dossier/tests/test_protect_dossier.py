@@ -4,13 +4,13 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zope.component import getMultiAdapter
 import json
 
 
-class TestProtectDossier(IntegrationTestCase):
+class TestProtectDossier(SolrIntegrationTestCase):
 
     def test_user_has_no_permission_if_not_dossier_manager(self):
         """ This test is related to the other test. We have to validate

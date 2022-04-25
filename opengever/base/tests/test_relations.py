@@ -1,11 +1,11 @@
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from zc.relation.interfaces import ICatalog
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 
 
-class TestRelations(IntegrationTestCase):
+class TestRelations(SolrIntegrationTestCase):
 
     @browsing
     def test_relation_gets_added_in_zc_catalog_when_dossier_is_added(self, browser):
