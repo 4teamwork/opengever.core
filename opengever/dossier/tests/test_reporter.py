@@ -1,16 +1,19 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
+from io import BytesIO
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
 from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
-from tempfile import NamedTemporaryFile
 import json
 
 
 class TestDossierReporter(SolrIntegrationTestCase):
+
+    def load_workbook(self, data):
+        return load_workbook(BytesIO(data))
 
     @browsing
     def test_dossier_report(self, browser):
@@ -18,14 +21,10 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         browser.open(view='dossier_report',
                      # /plone/ordnungssystem/...
-                     data=self.make_path_param(self.dossier, self.inactive_dossier))
+                     data=self.make_path_param(
+                        self.dossier, self.inactive_dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
@@ -52,14 +51,10 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         browser.open(view='dossier_report',
                      # /ordnungssystem/...
-                     data=self.make_pseudorelative_path_param(self.dossier, self.inactive_dossier))
+                     data=self.make_pseudorelative_path_param(
+                        self.dossier, self.inactive_dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
@@ -86,30 +81,24 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         data = {'view_name': 'mydossiers',
                 'gridstate': json.dumps({
-                    "columns":[
-                        {"id":"path_checkbox","width":30},
-                        {"id":"sortable_title","width":300,"sortable":True},
-                        {"id":"review_state","width":110,"sortable":True},
-                        {"id":"reference","width":110,"sortable":True},
-                        {"id":"end","width":110,"sortable":True},
-                        {"id":"responsible","width":110,"sortable":True},
-                        {"id":"start","width":110,"hidden":True,"sortable":True},
-                        {"id":"Subject","width":110,"sortable":True},
-                        {"id":"dummy","width":1,"hidden":True}],
-                    "sort":{"field":"modified","direction":"ASC"}})}
+                    "columns": [
+                        {"id": "path_checkbox", "width": 30},
+                        {"id": "sortable_title", "width": 300, "sortable": True},
+                        {"id": "review_state", "width": 110, "sortable": True},
+                        {"id": "reference", "width": 110, "sortable": True},
+                        {"id": "end", "width": 110, "sortable": True},
+                        {"id": "responsible", "width": 110, "sortable": True},
+                        {"id": "start", "width": 110, "hidden": True, "sortable": True},
+                        {"id": "Subject", "width": 110, "sortable": True},
+                        {"id": "dummy", "width": 1, "hidden": True}],
+                    "sort": {"field": "modified", "direction": "ASC"}})}
         browser.open(view='@@tabbed_view/setgridstate', data=data)
-
 
         data = self.make_path_param(self.dossier, self.inactive_dossier)
         data['view_name'] = 'mydossiers'
         browser.open(view='dossier_report', data=data)
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
         self.assertSequenceEqual(
             [u'Title', u'Review state', u'Reference number', u'End date',
@@ -128,11 +117,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
         browser.open(view='dossier_report',
                      data=self.make_path_param(self.dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         labels = [cell.value for cell in list(workbook.active.rows)[0]]
         self.assertIn(u'Filing', labels)
