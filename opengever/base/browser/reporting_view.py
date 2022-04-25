@@ -107,17 +107,25 @@ class SolrReporterView(BaseReporterView):
         self.fields = self.field_mapper(self.solr)
 
     def get_selected_items(self):
-        paths = self.request.get('paths', [])
+        paths = self.request.get('paths')
+        if not paths:
+            return []
+
         filters = 'path:(%s)' % ' OR '.join(map(escape, paths))
         fields = [col['id'] for col in self.columns()]
 
         resp = self.solr.search(
             filters=filters,
-            sort='path asc',
             rows=1000,
-            fl=self.fields.get_query_fields(fields))
+            fl=self.fields.get_query_fields(fields) + ['path'])
 
-        return [IContentListingObject(OGSolrDocument(d)) for d in resp.docs]
+        # Sort results according to paths passed in request. Those should be
+        # sorted exactly as the user saw them in the UI (classic and geverui).
+        docs = sorted(
+            [OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
+             for doc in resp.docs], key=lambda doc: paths.index(doc.path)
+        )
+        return [IContentListingObject(doc) for doc in docs]
 
     @property
     def _columns(self):
