@@ -170,5 +170,7 @@ class XLSReporter(object):
             value = attr.get('transform')(value)
         if value == MissingValue:
             value = ''
+        if isinstance(value, (list, set, tuple)):
+            value = ', '.join(value)
 
         return value
