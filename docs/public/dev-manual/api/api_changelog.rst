@@ -3,8 +3,18 @@
 API Changelog
 =============
 
-2022.9.0 (unreleased)
+2022.10.0 (unreleased)
 ---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+2022.9.0 (2022-04-26)
+---------------------
+
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 - ``@tasktree``: Endpoint does no longer return the ``is_task_addable_in_main_task`` but provides a ``is_task_addable`` and ``is_task_addable_before`` attribute for each item.
