@@ -16,7 +16,7 @@ msgstr ""
 
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "Not moved to trash: Document was retrieved, but workspace document could not be moved to trash."
-msgstr ""
+msgstr "Not moved to trash: the document was retrieved, but the workspace document could not be moved to the trash."
 
 #. German translation: Dokument aus Teamraum zurückgeführt.
 #. Default: "Document retrieved from teamraum"
@@ -69,4 +69,4 @@ msgstr "Linked to workspace ${workspace_title}."
 #. Default: "Unlinked workspace ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_workspace_unlinked"
-msgstr ""
+msgstr "Unlinked workspace ${workspace_title}."

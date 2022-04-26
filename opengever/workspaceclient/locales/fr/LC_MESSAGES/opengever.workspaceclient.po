@@ -16,7 +16,7 @@ msgstr ""
 
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "Not moved to trash: Document was retrieved, but workspace document could not be moved to trash."
-msgstr "Non déplacé dans la corbeille: le document a été récupéré, mais le document de l’espace de travail n’a pas pu être déplacé vers la corbeille"
+msgstr "Pas déplacé vers la corbeille: le document a été rapatrié, mais le document de l’espace de travail n’a pas pu être déplacé vers la corbeille."
 
 #. Default: "Document retrieved from teamraum"
 #: ./opengever/workspaceclient/linked_workspaces.py
@@ -61,4 +61,4 @@ msgstr "Lié à l'espace de travail ${workspace_title}."
 #. Default: "Unlinked workspace ${workspace_title}."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "label_workspace_unlinked"
-msgstr "L'espace de travail ${workspace_title} n'est plus lié"
+msgstr "La liaison à l'espace de travail ${workspace_title} a été supprimée"

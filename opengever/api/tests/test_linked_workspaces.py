@@ -989,7 +989,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 {u'additional_metadata': {},
                  u'message': u'Document not in linked workspace',
-                 u'translated_message': u'Document not in linked workspace',
+                 u'translated_message': u'Document is not in a linked workspace.',
                  u'type': u'BadRequest'},
                 browser.json)
 
@@ -1021,7 +1021,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
             self.assertEqual(
                 {u'additional_metadata': {},
                  u'message': u'Document not in linked workspace',
-                 u'translated_message': u'Document not in linked workspace',
+                 u'translated_message': u'Document is not in a linked workspace.',
                  u'type': u'BadRequest'},
                 browser.json)
 
@@ -1342,7 +1342,7 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                  u'message': u"Document can't be copied from workspace "
                              u"because it's currently checked out",
                  u'translated_message': u"Document can't be copied from workspace "
-                                        u"because it's currently checked out"},
+                                        u"because it's currently checked out."},
                 browser.json)
 
 
