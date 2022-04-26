@@ -10,6 +10,37 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.9.0 (2022-04-26)
+---------------------
+
+New features:
+
+
+- When changing the task responsible, the previous responsible's permissions are no longer revoked, but only when the task is completed. [tinagerber]
+- No longer allow to change task responsible via PATCH request. [tinagerber]
+- @process endpoint also accepts a deadline for task folders. [elioschmutz]
+- Add support for nested task process in the sequence handling. [phgross]
+- `@tasktree` endpoint properly handles nested tasks by adding a `is_task_addable` and `is_task_addable_before` attribute for each item. [elioschmutz]
+- Include protect-dossier role assignments, in the role-assignment reports. [phgross]
+
+
+Bug fixes:
+
+
+- Local roles are correctly set and revoked when accepting and closing a team task. [tinagerber]
+- Allow uploading a file with @tus-upload endpoint if the document has no file yet. [tinagerber]
+- TUS upload: Only clean up file system data after successful commit. [lgraf]
+- Make automatic closing of a main task fail safer. [phgross]
+
+
+Other changes:
+
+
+- Bump SQLAlchemy to latest 1.3 version. [phgross]
+- Increase meeting zip export poll timeout to 5 minutes. [tinagerber]
+- Translate error message when trying to copy a checked-out document. [njohner]
+
+
 2022.8.0 (2022-04-12)
 ---------------------
 
