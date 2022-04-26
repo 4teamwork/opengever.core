@@ -128,13 +128,33 @@ class SolrReporterView(BaseReporterView):
         return [IContentListingObject(doc) for doc in docs]
 
     @property
+    def is_frontend_request(self):
+        return 'columns' in self.request
+
+    def columns(self):
+        if self.is_frontend_request:
+            return self.filter_and_order_by_request_columns(self._columns)
+        else:
+            return self.filter_and_order_by_tabbedview_settings(self._columns)
+
+    def filter_and_order_by_request_columns(self, excel_columns):
+        requested_columns = self.get_requested_column_names()
+        return sorted(
+            excel_columns,
+            key=lambda col: requested_columns.index(col['id'])
+        )
+
+    @property
     def _columns(self):
         requested_cols = self.get_requested_column_names()
 
         columns = []
         for requested_col in requested_cols:
             # Dynamically create a column definition based on field mapper
-            field = self.fields.get(requested_col)
+            field = self.fields.get(requested_col, only_allowed=True)
+            if not field:
+                continue
+
             column = {
                 'id': field.field_name,
                 'accessor': field.accessor,
@@ -151,7 +171,7 @@ class SolrReporterView(BaseReporterView):
         return columns
 
     def get_requested_column_names(self):
-        return self.get_default_column_names()
+        return self.request.get('columns', self.get_default_column_names())
 
     def get_default_column_names(self):
         return [c['id'] for c in self.column_settings if c.get('is_default')]
