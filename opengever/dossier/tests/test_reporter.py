@@ -80,10 +80,11 @@ class TestDossierReporter(SolrIntegrationTestCase):
             'review_state',
             'reference',
             'touched',
+            'keywords',
             'description',
         ]})
-
         browser.open(view='dossier_report', data=params)
+
         workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
 
@@ -95,6 +96,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
             u'Review state',
             u'Reference number',
             u'Last modified',
+            u'Keywords',
             u'Description'
         ]
         self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
@@ -107,6 +109,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
             u'Active',
             u'Client1 1.1 / 1',
             datetime(2016, 8, 31, 0, 0),
+            u'Finanzverwaltung, Vertr\xe4ge',
             self.dossier.description
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
