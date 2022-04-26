@@ -545,7 +545,7 @@ class TestTaskPatch(IntegrationTestCase):
         self.assertEqual(
             {u'type': u'BadRequest',
              u'additional_metadata': {},
-             u'translated_message': u'It\'s not allowed to change responsible here.'
+             u'translated_message': u'It is not allowed to change the responsible here.'
                                     u' Use "Reassign" instead',
              u'message': u'change_responsible_not_allowed'}, browser.json)
 

@@ -16,16 +16,16 @@ msgstr ""
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document can't be copied from workspace because it's currently checked out"
-msgstr "Le document ne peut pas être copié de l’espace de travail car il est actuellement en check-out"
+msgstr "Le document ne peut pas être copié de l’espace de travail car il est actuellement en check-out."
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"
-msgstr "Document absent de l’espace de travail lié"
+msgstr "Le document ne se trouve pas dans un espace de travail lié."
 
 #. Default: "It's not allowed to change responsible here. Use \"Reassign\" instead"
 #: ./opengever/api/task.py
 msgid "change_responsible_not_allowed"
-msgstr ""
+msgstr "Il n'est pas permis de changer le mandataire ici. Veuillez réattribuer la tâche."
 
 #. Default: "Copy of ${title}"
 #: ./opengever/api/copy_.py
