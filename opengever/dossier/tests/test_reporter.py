@@ -68,6 +68,50 @@ class TestDossierReporter(SolrIntegrationTestCase):
         self.assertEqual(self.dossier.title, rows[2][0].value)
 
     @browsing
+    def test_supports_explicit_columns_from_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'title',
+            'start',
+            'end',
+            'responsible',
+            'review_state',
+            'reference',
+            'touched',
+            'description',
+        ]})
+
+        browser.open(view='dossier_report', data=params)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Title',
+            u'Start date',
+            u'End date',
+            u'Responsible',
+            u'Review state',
+            u'Reference number',
+            u'Last modified',
+            u'Description'
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            self.dossier.title,
+            datetime(2016, 1, 1),
+            None,
+            u'Ziegler Robert (robert.ziegler)',
+            u'Active',
+            u'Client1 1.1 / 1',
+            datetime(2016, 8, 31, 0, 0),
+            self.dossier.description
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
     def test_dossier_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 

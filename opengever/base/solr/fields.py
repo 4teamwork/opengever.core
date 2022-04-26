@@ -3,6 +3,7 @@ from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.query import escape
+from opengever.base import _ as base_mf
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListingObject
@@ -432,6 +433,7 @@ FIELDS_WITH_MAPPING = [
     ListingField(
         'description',
         index='Description',
+        title=dossier_mf(u'label_description', default=u'Description'),
     ),
     DateListingField(
         'document_date',
@@ -503,6 +505,7 @@ FIELDS_WITH_MAPPING = [
     ListingField(
         'keywords',
         index='Subject',
+        title=dossier_mf(u'label_keywords', default=u'Keywords')
     ),
     ListingField(
         'mimetype',
@@ -613,6 +616,7 @@ FIELDS_WITH_MAPPING = [
     ),
     DateListingField(
         'touched',
+        title=base_mf(u'label_last_modified', default=u'Last modified'),
     ),
 ]
 
@@ -655,9 +659,12 @@ class SolrFieldMapper(object):
             + self.get_custom_property_fields()
         )
 
-    def get(self, field_name):
+    def get(self, field_name, only_allowed=False):
         """Return a ListingField for a given field_name.
         """
+        if only_allowed and not self.is_allowed(field_name):
+            return
+
         if field_name in self.field_mapping:
             return self.field_mapping[field_name]
         return SimpleListingField(field_name)
