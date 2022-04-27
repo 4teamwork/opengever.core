@@ -220,6 +220,44 @@ class TestDossierReporter(SolrIntegrationTestCase):
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 
     @browsing
+    def test_sets_number_format_for_date_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.create_propertysheet_for(self.dossier)
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "birthday": date(2022, 4, 1),
+            }
+        }
+        IDossier(self.dossier).end = date(2033, 1, 1)
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'start',
+            'end',
+            'touched',
+            'birthday_custom_field_date',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_values = [
+            datetime(2016, 1, 1, 0, 0),
+            datetime(2033, 1, 1, 0, 0),
+            datetime(2016, 8, 31, 0, 0),
+            datetime(2022, 4, 1, 0, 0),
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+        self.assertEqual(
+            ['DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
+            [cell.number_format for cell in rows[1]],
+        )
+
+    @browsing
     def test_dossier_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 
