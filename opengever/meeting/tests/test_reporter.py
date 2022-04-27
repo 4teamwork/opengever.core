@@ -1,10 +1,14 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from io import BytesIO
+from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
-from tempfile import NamedTemporaryFile
 
 
-class TestProposalReporter(IntegrationTestCase):
+class TestProposalReporter(SolrIntegrationTestCase):
+
+    def load_workbook(self, data):
+        return load_workbook(BytesIO(data))
 
     @browsing
     def test_empty_proposal_report(self, browser):
@@ -22,17 +26,14 @@ class TestProposalReporter(IntegrationTestCase):
             view='proposal_report',
             data=self.make_path_param(self.proposal, self.draft_proposal))
 
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(browser.contents)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         # One title row and two data rows
         self.assertEquals(3, len(list(workbook.active.rows)))
 
         self.assertSequenceEqual(
             [u'Vertr\xe4ge',
-             u'Aug 31, 2016',
+             datetime(2016, 8, 31, 14, 9, 33),
              u'Submitted',
              u'Ziegler Robert (robert.ziegler)',
              u'Rechnungspr\xfcfungskommission',
@@ -42,7 +43,7 @@ class TestProposalReporter(IntegrationTestCase):
 
         self.assertSequenceEqual(
             [u'Antrag f\xfcr Kreiselbau',
-             u'Aug 31, 2016',
+             datetime(2016, 8, 31, 14, 13, 33),
              u'Active',
              u'Ziegler Robert (robert.ziegler)',
              u'Kommission f\xfcr Verkehr',

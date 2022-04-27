@@ -1,15 +1,22 @@
-from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.reporter import readable_author
-from opengever.base.reporter import readable_date
 from opengever.base.reporter import StringTranslater, XLSReporter
-from opengever.base.reporter import value
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.meeting import _
-from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
+from opengever.api.solr_query_service import SolrFieldMapper
+from opengever.base.browser.reporting_view import SolrReporterView
 
 
-class ProposalReporter(BaseReporterView):
+class ProposalReporterFieldMapper(SolrFieldMapper):
+
+    def is_allowed(self, field_name):
+        return (
+            field_name in self.field_mapping.keys()
+            or self.is_dynamic(field_name)
+        )
+
+
+class ProposalReporter(SolrReporterView):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected proposals (paths in request)
     and their important attributes.
@@ -17,32 +24,45 @@ class ProposalReporter(BaseReporterView):
 
     filename = 'proposal_report.xlsx'
 
-    @property
-    def _columns(self):
-        return [
-            {'id': 'Title', 'sort_index': 'sortable_title',
-             'title': _('label_title', default=u'Title'), 'transform': value},
-            {'id': 'created', 'title': _(u'label_created', default=u'Created'),
-             'transform': readable_date},
-            {'id': 'review_state', 'title': _('label_review_state', default='Review state'),
-             'transform': StringTranslater(self.request, 'plone').translate},
-            {'id': 'issuer', 'title': _(u'label_issuer', default='Issuer'),
-             'transform': readable_author},
-            {'id': 'responsible', 'title': _(u'label_comittee', default='Comittee'),
-             'transform': readable_author},
-            {'id': 'containing_dossier', 'title': _(u'label_dossier', default=u'Dossier')},
-            {'id': 'Description', 'title': _('label_description', default=u'Description')},
-        ]
+    field_mapper = ProposalReporterFieldMapper
 
-    def get_selected_proposals(self):
-        # get the given proposals
-        catalog = getToolByName(self.context, 'portal_catalog')
-        proposals = []
-        for path in self.request.get('paths'):
-            proposals.append(
-                catalog(path={'query': path, 'depth': 0})[0]
-            )
-        return proposals
+    column_settings = [
+        {
+            'id': 'title',
+            'is_default': True,
+        },
+        {
+            'id': 'created',
+            'is_default': True,
+        },
+        {
+            'id': 'review_state',
+            'is_default': True,
+            'alias': 'review_state_label',
+            'transform': StringTranslater(None, 'plone').translate,
+        },
+        {
+            'id': 'issuer',
+            'is_default': True,
+            'title': _(u'label_issuer', default='Issuer'),
+            'transform': readable_author,
+        },
+        {
+            'id': 'responsible',
+            'is_default': True,
+            'title': _(u'label_comittee', default='Comittee'),
+            'transform': readable_author,
+        },
+        {
+            'id': 'containing_dossier',
+            'is_default': True,
+            'title': _(u'label_dossier', default=u'Dossier'),
+        },
+        {
+            'id': 'description',
+            'is_default': True,
+        },
+    ]
 
     def __call__(self):
 
@@ -59,7 +79,7 @@ class ProposalReporter(BaseReporterView):
         # (as sent by the new gever-ui)
         rewrite_path_list_to_absolute_paths(self.request)
 
-        proposals = self.get_selected_proposals()
+        proposals = self.get_selected_items()
 
-        reporter = XLSReporter(self.request, self.columns(), proposals)
+        reporter = XLSReporter(self.request, self.columns(), proposals, field_mapper=self.fields)
         return self.return_excel(reporter)
