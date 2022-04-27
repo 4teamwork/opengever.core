@@ -215,7 +215,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
             u'Gr\xfcn, Rot',
             42,
             u'Woosh!',
-            u'2022-04-01T00:00:00Z',
+            datetime(2022, 4, 1, 0, 0),
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 
