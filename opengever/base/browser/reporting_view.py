@@ -4,7 +4,9 @@ from ftw.solr.query import escape
 from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.solr import OGSolrDocument
+from opengever.base.solr.fields import DateListingField
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
@@ -161,6 +163,9 @@ class SolrReporterView(BaseReporterView):
                 'sort_index': field.sort_index,
                 'title': field.get_title(),
             }
+
+            if isinstance(field, DateListingField):
+                column['number_format'] = DATE_NUMBER_FORMAT
 
             # Update it with overrides from explicit column settings
             column_settings = self.get_column_settings(requested_col)
