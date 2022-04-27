@@ -115,6 +115,36 @@ class TestDossierReporter(SolrIntegrationTestCase):
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 
     @browsing
+    def test_necessary_columns_are_aliased(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        params = self.make_path_param(self.dossier)
+
+        # The frontend uses these names for the 'responsible' and
+        # 'review_state' columns. They should be aliased accordingly in the
+        # DossierReporter column_settings
+        params.update({'columns': [
+            'responsible_fullname',
+            'review_state_label',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Responsible',
+            u'Review state',
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            u'Ziegler Robert (robert.ziegler)',
+            u'Active',
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
     def test_dossier_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 

@@ -45,11 +45,13 @@ class DossierReporter(SolrReporterView):
         {
             'id': 'responsible',
             'is_default': True,
+            'alias': 'responsible_fullname',
             'transform': readable_author,
         },
         {
             'id': 'review_state',
             'is_default': True,
+            'alias': 'review_state_label',
             'transform': StringTranslater(None, 'plone').translate,
         },
         {
