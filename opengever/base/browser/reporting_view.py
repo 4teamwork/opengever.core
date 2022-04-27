@@ -171,7 +171,8 @@ class SolrReporterView(BaseReporterView):
         return columns
 
     def get_requested_column_names(self):
-        return self.request.get('columns', self.get_default_column_names())
+        column_names = self.request.get('columns', self.get_default_column_names())
+        return map(self.canonical_name, column_names)
 
     def get_default_column_names(self):
         return [c['id'] for c in self.column_settings if c.get('is_default')]
@@ -179,6 +180,18 @@ class SolrReporterView(BaseReporterView):
     @property
     def column_settings_by_id(self):
         return {c['id']: c for c in self.column_settings}
+
+    @property
+    def column_aliases(self):
+        return dict(
+            zip(
+                [c.get('alias', c['id']) for c in self.column_settings],
+                [c['id'] for c in self.column_settings]
+            )
+        )
+
+    def canonical_name(self, column_name):
+        return self.column_aliases.get(column_name, column_name)
 
     def get_column_settings(self, column_name):
         return self.column_settings_by_id.get(column_name, {})
