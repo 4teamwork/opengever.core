@@ -1,6 +1,11 @@
+from datetime import date
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from io import BytesIO
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
@@ -14,6 +19,22 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
     def load_workbook(self, data):
         return load_workbook(BytesIO(data))
+
+    def create_propertysheet_for(self, dossier):
+        IDossier(dossier).dossier_type = u"businesscase"
+        choices = [u'Rot', u'Gr\xfcn', u'Blau']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", False)
+            .with_field("choice", u"color", u"Favorite Color", u"", False, values=choices)
+            .with_field("multiple_choice", u"colors", u"Colors", u"", False, values=choices)
+            .with_field("int", u"age", u"Age", u"", False)
+            .with_field("text", u"poem", u"Poem", u"", False)
+            .with_field("textline", u"tagline", u"Tag Line", u"", False)
+            .with_field("date", u"birthday", u"Birthday", u"", False)
+        )
 
     @browsing
     def test_dossier_report(self, browser):
@@ -141,6 +162,60 @@ class TestDossierReporter(SolrIntegrationTestCase):
         expected_values = [
             u'Ziegler Robert (robert.ziegler)',
             u'Active',
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
+    def test_supports_custom_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.create_propertysheet_for(self.dossier)
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "yesorno": True,
+                "color": u'Gr\xfcn',
+                "colors": [u'Rot', u'Gr\xfcn'],
+                "age": 42,
+                # Multiline Text fields are not currently indexed in Solr
+                "poem": "Lorem\nIpsum",
+                "tagline": "Woosh!",
+                "birthday": date(2022, 4, 1),
+            }
+        }
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'yesorno_custom_field_boolean',
+            'color_custom_field_string',
+            'colors_custom_field_strings',
+            'age_custom_field_int',
+            'tagline_custom_field_string',
+            'birthday_custom_field_date',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Yes or no',
+            u'Favorite Color',
+            u'Colors',
+            u'Age',
+            u'Tag Line',
+            u'Birthday',
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            True,
+            u'Gr\xfcn',
+            u'Gr\xfcn, Rot',
+            42,
+            u'Woosh!',
+            u'2022-04-01T00:00:00Z',
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 

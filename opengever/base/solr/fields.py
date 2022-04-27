@@ -12,6 +12,7 @@ from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _ as dossier_mf
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.propertysheets.definition import SolrDynamicField
+from opengever.propertysheets.field import PropertySheetField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.task.helper import task_type_helper
 from opengever.task.helper import task_type_value_helper
@@ -653,10 +654,12 @@ class SolrFieldMapper(object):
     default_fields = DEFAULT_FIELDS
     required_response_fields = REQUIRED_RESPONSE_FIELDS
 
+    propertysheet_field = None
+
     def __init__(self, solr):
         self.all_solr_fields = set(
             solr.manager.schema.fields.keys()
-            + self.get_custom_property_fields()
+            + self.get_all_custom_property_solr_field_names()
         )
 
     def get(self, field_name, only_allowed=False):
@@ -667,6 +670,14 @@ class SolrFieldMapper(object):
 
         if field_name in self.field_mapping:
             return self.field_mapping[field_name]
+
+        if self.is_dynamic(field_name):
+            # Look up field title via custom property field definition
+            if self.propertysheet_field is not None:
+                field = self.get_custom_property_solr_field(field_name)
+                if field:
+                    return SimpleListingField(field_name, title=field['title'])
+
         return SimpleListingField(field_name)
 
     def is_allowed(self, field_name):
@@ -735,18 +746,46 @@ class SolrFieldMapper(object):
 
         return list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
 
-    def get_custom_property_fields(self):
-        """Get the list of dynamic Solr fields used for custom properties.
+    def get_custom_property_solr_field(self, field_name):
+        """Get a single custom property dynamic field by name.
         """
-        solr_fields = []
+        dynamic_solr_fields = self.get_custom_property_solr_fields()
+        matches = [f for f in dynamic_solr_fields if f['name'] == field_name]
+        if matches:
+            assert len(matches) == 1
+            return matches[0]
+
+    def get_custom_property_solr_fields(self, all_slots=False):
+        """Get the list of dynamic Solr fields used for custom properties.
+
+        Across all property sheet definitions, custom property names may not
+        be unique. That's why we return a list here instead of a dict.
+        """
+        dynamic_solr_fields = []
+        valid_slots = ()
+
+        if not all_slots:
+            assert isinstance(self.propertysheet_field, PropertySheetField)
+            valid_slots = self.propertysheet_field.valid_assignment_slots_factory()
+
+        def include(definition):
+            if all_slots:
+                return True
+            return any([a in valid_slots for a in definition.assignments])
 
         storage = PropertySheetSchemaStorage()
-        if not storage:
-            return solr_fields
 
         for definition in storage.list():
             if definition is not None:
-                schema = definition.get_solr_dynamic_field_schema()
-                solr_fields.extend(schema.keys())
+                if include(definition):
+                    schema = definition.get_solr_dynamic_field_schema()
+                    for field in schema.values():
+                        dynamic_solr_fields.append(field)
 
-        return solr_fields
+        return dynamic_solr_fields
+
+    def get_all_custom_property_solr_field_names(self):
+        """Get the list of all dynamic Solr field names used for custom properties.
+        """
+        dynamic_solr_fields = self.get_custom_property_solr_fields(all_slots=True)
+        return [field['name'] for field in dynamic_solr_fields]
