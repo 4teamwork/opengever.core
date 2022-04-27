@@ -1,0 +1,20 @@
+msgid "label_document_delivery_date"
+msgstr ""
+
+msgid "label_document_receipt_date"
+msgstr ""
+
+msgid "label_document_reference_number"
+msgstr ""
+
+msgid "label_document_sequence_number"
+msgstr ""
+
+msgid "label_dossier_title"
+msgstr ""
+
+msgid "label_public_trial"
+msgstr ""
+
+msgid "label_public_trial"
+msgstr ""
