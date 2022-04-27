@@ -1,4 +1,3 @@
-from datetime import datetime
 from DateTime import DateTime
 from math import floor
 from Missing import Value as MissingValue
@@ -12,10 +11,12 @@ from plone.api.portal import get_localized_time
 from StringIO import StringIO
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import dateutil
 import six
 
 
 DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
+DATETIME_NUMBER_FORMAT = 'DD.MM.YYYY HH:MM'
 
 
 def value(input_string):
@@ -166,7 +167,7 @@ class XLSReporter(object):
             if isinstance(value, DateTime):
                 value = value.asdatetime()
             elif isinstance(field, DateListingField) and value:
-                value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+                value = dateutil.parser.parse(value)
 
         else:
             if 'default' in attr:

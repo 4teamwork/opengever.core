@@ -1,5 +1,6 @@
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.base.browser.reporting_view import SolrReporterView
+from opengever.base.reporter import DATETIME_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
@@ -85,6 +86,11 @@ class DocumentReporter(SolrReporterView):
             'alias': 'document_type_label',
             'transform': translate_document_type,
         },
+        {
+            'id': 'changed',
+            'is_default': False,
+            'number_format': DATETIME_NUMBER_FORMAT,
+        }
     ]
 
     def __call__(self):

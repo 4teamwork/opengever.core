@@ -88,6 +88,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         params.update({'columns': [
             'title',
             'reference',
+            'changed',
             'document_author',
             'containing_dossier',
             'containing_subdossier',
@@ -113,6 +114,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         expected_titles = [
             u'Title',
             u'Reference number',
+            u'Last modified',
             u'Author',
             u'Dossier title',
             u'Sequence number',
@@ -133,6 +135,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         expected_values = [
             u'Vertr\xe4gsentwurf',
             u'Client1 1.1 / 1 / 14',
+            datetime(2016, 8, 31, 14, 7, 33),
             u'test-user (test_user_1_)',
             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
             14,
@@ -243,6 +246,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
 
         params = self.make_path_param(self.document)
         params.update({'columns': [
+            'changed',
             'document_date',
             'receipt_date',
             'delivery_date',
@@ -254,6 +258,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         rows = list(workbook.active.rows)
 
         expected_values = [
+            datetime(2016, 8, 31, 14, 7, 33),
             datetime(2010, 1, 3, 0, 0),
             datetime(2010, 1, 3, 0, 0),
             datetime(2010, 1, 3, 0, 0),
@@ -261,7 +266,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
         self.assertEqual(
-            ['DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
+            ['DD.MM.YYYY HH:MM', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
             [cell.number_format for cell in rows[1]],
         )
 
