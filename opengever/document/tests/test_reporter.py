@@ -1,11 +1,14 @@
 from ftw.testbrowser import browsing
+from io import BytesIO
 from opengever.testing import IntegrationTestCase
 from openpyxl import load_workbook
-from tempfile import NamedTemporaryFile
 import json
 
 
 class TestDocumentReporter(IntegrationTestCase):
+
+    def load_workbook(self, data):
+        return load_workbook(BytesIO(data))
 
     @browsing
     def test_empty_document_report(self, browser):
@@ -24,17 +27,14 @@ class TestDocumentReporter(IntegrationTestCase):
             # /plone/ordnungssystem/...
             data=self.make_path_param(self.document, self.mail_eml))
 
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(browser.contents)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         # One title row and two data rows
         self.assertEquals(3, len(list(workbook.active.rows)))
 
         self.assertSequenceEqual(
             [u'Client1 1.1 / 1 / 14',
-             14L,
+             14,
              u'Vertr\xe4gsentwurf',
              u'test-user (test_user_1_)',
              u'Jan 03, 2010',
@@ -47,7 +47,7 @@ class TestDocumentReporter(IntegrationTestCase):
 
         self.assertSequenceEqual(
             [u'Client1 1.1 / 1 / 29',
-             29L,
+             29,
              u'Die B\xfcrgschaft',
              u'Freddy H\xf6lderlin <from@example.org>',
              u'Jan 01, 1999',
@@ -67,17 +67,14 @@ class TestDocumentReporter(IntegrationTestCase):
             # /ordnungssystem/...
             data=self.make_pseudorelative_path_param(self.document, self.mail_eml))
 
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(browser.contents)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         # One title row and two data rows
         self.assertEquals(3, len(list(workbook.active.rows)))
 
         self.assertSequenceEqual(
             [u'Client1 1.1 / 1 / 14',
-             14L,
+             14,
              u'Vertr\xe4gsentwurf',
              u'test-user (test_user_1_)',
              u'Jan 03, 2010',
@@ -90,7 +87,7 @@ class TestDocumentReporter(IntegrationTestCase):
 
         self.assertSequenceEqual(
             [u'Client1 1.1 / 1 / 29',
-             29L,
+             29,
              u'Die B\xfcrgschaft',
              u'Freddy H\xf6lderlin <from@example.org>',
              u'Jan 01, 1999',
@@ -131,10 +128,7 @@ class TestDocumentReporter(IntegrationTestCase):
         data['view_name'] = 'mydocuments'
         browser.open(view='document_report', data=data)
 
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(browser.contents)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         self.assertEquals(
             [u'Sequence number',
