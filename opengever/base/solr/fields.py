@@ -9,6 +9,7 @@ from opengever.base.helpers import display_name
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.utils import get_preferred_language_code
 from opengever.base.vocabulary import wrap_vocabulary
+from opengever.document import _ as document_mf
 from opengever.dossier import _ as dossier_mf
 from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.propertysheets.definition import SolrDynamicField
@@ -401,19 +402,27 @@ FIELDS_WITH_MAPPING = [
     ),
     DateListingField(
         'changed',
+        title=base_mf(u'label_last_modified', default=u'Last modified'),
     ),
     ListingField(
         'checked_out',
         index='checked_out',
         transform=display_name,
+        title=document_mf(u'label_document_checked_out_by'),
     ),
     ListingField(
         'checked_out_fullname',
         index='checked_out',
         accessor='checked_out_fullname',
     ),
+    ListingField(
+        'containing_dossier',
+        index='containing_dossier',
+        title=document_mf(u'label_dossier_title'),
+    ),
     DateListingField(
         'created',
+        title=document_mf('label_created', default='Created'),
     ),
     ListingField(
         'creator',
@@ -424,25 +433,34 @@ FIELDS_WITH_MAPPING = [
         'creator_fullname',
         index='Creator',
         accessor='creator_fullname',
+        title=document_mf('label_creator', default='creator'),
     ),
     DateListingField(
         'deadline',
     ),
     DateListingField(
         'delivery_date',
+        title=document_mf(u'label_document_delivery_date'),
     ),
     ListingField(
         'description',
         index='Description',
         title=dossier_mf(u'label_description', default=u'Description'),
     ),
+    ListingField(
+        'document_author',
+        index='document_author',
+        title=document_mf(u'label_author', default=u'Author'),
+    ),
     DateListingField(
         'document_date',
+        title=document_mf(u'label_document_date', default=u'Document Date'),
     ),
     ListingField(
         'document_type',
         index='document_type',
         transform=translate_document_type,
+        title=document_mf(u'label_document_type', default='Document Type'),
     ),
     ListingField(
         'document_type_label',
@@ -472,6 +490,7 @@ FIELDS_WITH_MAPPING = [
         'filesize',
         index='filesize',
         accessor=filesize,
+        title=document_mf(u'label_filesize', default=u'File size'),
     ),
     ListingField(
         'filing_no',
@@ -538,9 +557,11 @@ FIELDS_WITH_MAPPING = [
         index='public_trial',
         accessor=translated_public_trial,
         transform=translate_public_trial,
+        title=document_mf(u'label_public_trial'),
     ),
     DateListingField(
         'receipt_date',
+        title=document_mf(u'label_document_receipt_date'),
     ),
     ListingField(
         'reference',
@@ -583,6 +604,11 @@ FIELDS_WITH_MAPPING = [
         'review_state_label',
         index='review_state',
         accessor='translated_review_state',
+    ),
+    ListingField(
+        'sequence_number',
+        index='sequence_number',
+        title=document_mf(u'label_document_sequence_number'),
     ),
     ListingField(
         'sequence_type',

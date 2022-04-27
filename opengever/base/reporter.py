@@ -1,4 +1,5 @@
 from datetime import datetime
+from DateTime import DateTime
 from math import floor
 from Missing import Value as MissingValue
 from opengever.base.solr import OGSolrContentListingObject
@@ -11,6 +12,7 @@ from plone.api.portal import get_localized_time
 from StringIO import StringIO
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import six
 
 
 DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
@@ -27,7 +29,10 @@ def value(input_string):
 def readable_author(author):
     """Helper method which returns the author description,
     instead of the userid"""
-    actor = Actor.lookup(author)
+    if author is None:
+        return ''
+
+    actor = Actor.lookup(six.ensure_text(author))
     if actor.actor_type == 'null':
         return author or ''
     return actor.get_label()
@@ -155,7 +160,12 @@ class XLSReporter(object):
             field = self.field_mapper.get(field_name)
 
             value = field.get_value(obj)
-            if isinstance(field, DateListingField) and value:
+
+            # Date handling will need to be revisited once this is rebased
+            # onto the optimize-reindex-of-contained-objects branch
+            if isinstance(value, DateTime):
+                value = value.asdatetime()
+            elif isinstance(field, DateListingField) and value:
                 value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
 
         else:
