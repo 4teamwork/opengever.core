@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-28 15:10+0000\n"
+"POT-Creation-Date: 2022-04-27 16:29+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -259,6 +259,7 @@ msgid "Scheduled Successfully"
 msgstr "Scheduled Successfully"
 
 #: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
 msgid "Start date must be before end date."
 msgstr "Start date must be before end date."
 
@@ -1142,11 +1143,6 @@ msgstr "Create Excerpt"
 msgid "label_create_task_from_proposal"
 msgstr "Create task"
 
-#. Default: "Created"
-#: ./opengever/meeting/browser/report.py
-msgid "label_created"
-msgstr "Created"
-
 #. German translation: Ersteller
 #. Default: "Creator"
 #: ./opengever/meeting/browser/meetings/meeting.py
@@ -1223,7 +1219,6 @@ msgstr "Are you sure you want to delete this agenda item?"
 #. German translation: Beschreibung
 #. Default: "Description"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
-#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Description"
@@ -1612,11 +1607,6 @@ msgstr "Return Excerpt"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr "Returned"
-
-#. Default: "Review state"
-#: ./opengever/meeting/browser/report.py
-msgid "label_review_state"
-msgstr "State"
 
 #. German translation: Rolle
 #. Default: "Role"

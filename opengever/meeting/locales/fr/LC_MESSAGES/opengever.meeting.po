@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-28 15:10+0000\n"
+"POT-Creation-Date: 2022-04-27 16:29+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -214,6 +214,7 @@ msgid "Scheduled Successfully"
 msgstr "Joint à l'ordre du jour avec succès"
 
 #: ./opengever/meeting/browser/meetings/meeting.py
+#: ./opengever/meeting/browser/meetings/protocol.py
 msgid "Start date must be before end date."
 msgstr "La date de début doit être plus récente que la date de fin."
 
@@ -953,11 +954,6 @@ msgstr "Générer un extrait de protocole"
 msgid "label_create_task_from_proposal"
 msgstr "Créer une tâche"
 
-#. Default: "Created"
-#: ./opengever/meeting/browser/report.py
-msgid "label_created"
-msgstr "Créé le"
-
 #. Default: "Creator"
 #: ./opengever/meeting/browser/meetings/meeting.py
 #: ./opengever/meeting/browser/proposalforms.py
@@ -1022,7 +1018,6 @@ msgstr "Êtes-vous sûr de vouloir supprimer cet élément?"
 
 #. Default: "Description"
 #: ./opengever/meeting/browser/meetings/templates/meeting.pt
-#: ./opengever/meeting/browser/report.py
 #: ./opengever/meeting/proposal.py
 msgid "label_description"
 msgstr "Description"
@@ -1348,11 +1343,6 @@ msgstr "Déposer l'extrait de protocole"
 #: ./opengever/meeting/browser/meetings/meeting.py
 msgid "label_returned_excerpt"
 msgstr "Déposé dans le dossier."
-
-#. Default: "Review state"
-#: ./opengever/meeting/browser/report.py
-msgid "label_review_state"
-msgstr "Etat"
 
 #. Default: "Role"
 #: ./opengever/meeting/browser/memberships.py
