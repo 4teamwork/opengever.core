@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-27 16:31+0000\n"
+"POT-Creation-Date: 2022-04-27 17:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -504,6 +504,10 @@ msgstr ""
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
 msgid "label_file"
+msgstr ""
+
+#. Default: "File size"
+msgid "label_filesize"
 msgstr ""
 
 #. Default: "Foreign Reference"

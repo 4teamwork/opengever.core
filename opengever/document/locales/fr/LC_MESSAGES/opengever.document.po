@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-27 16:31+0000\n"
+"POT-Creation-Date: 2022-04-27 17:01+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -507,6 +507,10 @@ msgstr "Erreur"
 #: ./opengever/document/document.py
 msgid "label_file"
 msgstr "Fichier"
+
+#. Default: "File size"
+msgid "label_filesize"
+msgstr ""
 
 #. Default: "Foreign Reference"
 #: ./opengever/document/behaviors/metadata.py
