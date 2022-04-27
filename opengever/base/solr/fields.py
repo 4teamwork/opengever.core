@@ -676,7 +676,11 @@ class SolrFieldMapper(object):
             if self.propertysheet_field is not None:
                 field = self.get_custom_property_solr_field(field_name)
                 if field:
-                    return SimpleListingField(field_name, title=field['title'])
+                    title = field['title']
+                    if field['name'].endswith('_custom_field_date'):
+                        return DateListingField(field_name, title=title)
+
+                    return SimpleListingField(field_name, title=title)
 
         return SimpleListingField(field_name)
 
