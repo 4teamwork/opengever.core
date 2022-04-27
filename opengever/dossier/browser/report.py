@@ -5,10 +5,13 @@ from opengever.base.reporter import readable_author
 from opengever.base.reporter import StringTranslater, XLSReporter
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.dossier import _
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from Products.statusmessages.interfaces import IStatusMessage
 
 
 class DossierReporterFieldMapper(SolrFieldMapper):
+
+    propertysheet_field = IDossierCustomProperties['custom_properties']
 
     def is_allowed(self, field_name):
         return (
