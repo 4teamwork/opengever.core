@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-22 12:50+0000\n"
+"POT-Creation-Date: 2022-04-27 16:31+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -337,7 +337,6 @@ msgstr "Envoyer par programme de messagerie"
 
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr "Auteur"
 
@@ -449,23 +448,18 @@ msgstr "Edité par: ${collaborators}"
 
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_document_date"
 msgstr "Date du document"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr "Date d'entrée"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr "Date de sortie"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
 msgstr "Numéro de référence"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
 msgstr "Numéro courant"
 
@@ -479,7 +473,6 @@ msgstr "Type de document"
 msgid "label_document_watcher_added"
 msgstr "Ajouté en tant qu'observateur du document"
 
-#: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr "Titre du dossier"
 
@@ -581,7 +574,6 @@ msgstr "Aperçu"
 msgid "label_proposal"
 msgstr "Requête"
 
-#: ./opengever/document/browser/report.py
 msgid "label_public_trial"
 msgstr "Statut public"
 
@@ -647,7 +639,6 @@ msgid "label_thumbnail"
 msgstr "Vignette"
 
 #. Default: "Title"
-#: ./opengever/document/browser/report.py
 #: ./opengever/document/document.py
 msgid "label_title"
 msgstr "Titre"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-03-14 15:22+0000\n"
+"POT-Creation-Date: 2022-04-27 16:30+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -509,22 +509,18 @@ msgstr "Action"
 #. German translation: Ablagenummer
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/filing.py
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no"
 msgstr "Filing number"
 
 #. German translation: Ablage
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_filing"
 msgstr "Filing"
 
 #. German translation: Ablagenummer
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_number"
 msgstr "Filing number"
 
 #. German translation: Ablagejahr
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_year"
 msgstr "Filing year"
 
@@ -754,7 +750,6 @@ msgstr "Email"
 #. German translation: Ende
 #. Default: "Closing Date"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/filing/form.py
 msgid "label_end"
 msgstr "End date"
@@ -953,7 +948,6 @@ msgstr "Recipient"
 #. German translation: Aktenzeichen
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_reference_number"
 msgstr "Reference number"
@@ -1005,7 +999,6 @@ msgstr "Sequence number"
 #. German translation: Beginn
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 msgid "label_start"
 msgstr "Start date"
 
@@ -1050,9 +1043,9 @@ msgstr "Template group"
 
 #. German translation: Titel
 #. Default: "Title"
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/dossiertemplate/form.py
 #: ./opengever/dossier/templatefolder/form.py
+#: ./opengever/dossier/templatefolder/tabs.py
 msgid "label_title"
 msgstr "Title"
 
