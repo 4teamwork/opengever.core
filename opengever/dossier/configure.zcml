@@ -50,6 +50,34 @@
       name="opengever.dossier.ValidResolverNamesVocabulary"
       />
 
+  <adapter
+      factory=".actions.DossierListingActions"
+      name="dossiers"
+      for="plone.dexterity.interfaces.IDexterityContainer
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.DossierListingActions"
+      name="dossiers"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.PrivateDossierListingActions"
+      name="dossiers"
+      for="opengever.private.folder.IPrivateFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.PrivateDossierListingActions"
+      name="dossiers"
+      for="opengever.private.dossier.IPrivateDossier
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <!-- JSON endpoint for dossier attributes -->
   <plone:service
       method="GET"
