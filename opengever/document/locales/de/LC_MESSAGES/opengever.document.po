@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-03-22 12:50+0000\n"
+"POT-Creation-Date: 2022-04-27 17:01+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -340,7 +340,6 @@ msgstr "Mit Mailprogramm versenden"
 
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr "Autor"
 
@@ -452,23 +451,18 @@ msgstr "Bearbeitet durch: ${collaborators}"
 
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_document_date"
 msgstr "Dokumentdatum"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr "Eingangsdatum"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr "Ausgangsdatum"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
 msgstr "Aktenzeichen"
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
 msgstr "Laufnummer"
 
@@ -482,7 +476,6 @@ msgstr "Dokumenttyp"
 msgid "label_document_watcher_added"
 msgstr "Als Beobachter des Dokuments hinzugefügt"
 
-#: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr "Dossier-Titel"
 
@@ -517,6 +510,10 @@ msgstr "Fehler"
 #: ./opengever/document/document.py
 msgid "label_file"
 msgstr "Datei"
+
+#. Default: "File size"
+msgid "label_filesize"
+msgstr "Dateigrösse"
 
 #. Default: "Foreign Reference"
 #: ./opengever/document/behaviors/metadata.py
@@ -584,7 +581,6 @@ msgstr "Vorschau"
 msgid "label_proposal"
 msgstr "Antrag"
 
-#: ./opengever/document/browser/report.py
 msgid "label_public_trial"
 msgstr "Öffentlichkeitsstatus"
 
@@ -650,7 +646,6 @@ msgid "label_thumbnail"
 msgstr "Kurzbild"
 
 #. Default: "Title"
-#: ./opengever/document/browser/report.py
 #: ./opengever/document/document.py
 msgid "label_title"
 msgstr "Titel"

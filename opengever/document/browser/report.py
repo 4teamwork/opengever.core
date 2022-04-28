@@ -1,15 +1,28 @@
-from opengever.base.browser.reporting_view import BaseReporterView
+from opengever.api.solr_query_service import SolrFieldMapper
+from opengever.base.browser.reporting_view import SolrReporterView
+from opengever.base.reporter import DATETIME_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
-from opengever.base.reporter import readable_date
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
+from opengever.base.solr.fields import translate_document_type
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.document import _
-from Products.CMFCore.utils import getToolByName
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from Products.statusmessages.interfaces import IStatusMessage
 
 
-class DocumentReporter(BaseReporterView):
+class DocumentReporterFieldMapper(SolrFieldMapper):
+
+    propertysheet_field = IDocumentCustomProperties['custom_properties']
+
+    def is_allowed(self, field_name):
+        return (
+            field_name in self.field_mapping.keys()
+            or self.is_dynamic(field_name)
+        )
+
+
+class DocumentReporter(SolrReporterView):
     """View that generates an excel spreadsheet with the XLSReporter,
     listing the selected documents (paths in request)
     and their important attributes.
@@ -17,48 +30,68 @@ class DocumentReporter(BaseReporterView):
 
     filename = 'document_report.xlsx'
 
-    @property
-    def _columns(self):
-        return [
-            {'id': 'reference',
-             'title': _(u'label_document_reference_number')},
-            {'id': 'sequence_number',
-             'title': _(u'label_document_sequence_number')},
-            {'id': 'Title',
-             'sort_index': 'sortable_title',
-             'title': _(u'label_title', default=u'Title')},
-            {'id': 'document_author',
-             'title': _(u'label_author', default=u'Author'),
-             'sort_index': 'sortable_author',
-             'transform': readable_author},
-            {'id': 'document_date',
-             'title': _(u'label_document_date', default=u'Document Date'),
-             'transform': readable_date},
-            {'id': 'receipt_date',
-             'title': _(u'label_document_receipt_date'),
-             'transform': readable_date},
-            {'id': 'delivery_date',
-             'title': _(u'label_document_delivery_date'),
-             'transform': readable_date},
-            {'id': 'checked_out',
-             'title': _(u'label_document_checked_out_by'),
-             'transform': readable_author},
-            {'id': 'public_trial',
-             'title': _(u'label_public_trial'),
-             'transform': StringTranslater(
-                 self.request, 'opengever.base').translate},
-            {'id': 'containing_dossier',
-             'title': _(u'label_dossier_title')},
-        ]
+    field_mapper = DocumentReporterFieldMapper
 
-    def get_selected_documents(self):
-        catalog = getToolByName(self.context, 'portal_catalog')
-        documents = []
-        for path in self.request.get('paths'):
-            documents.append(
-                catalog(path={'query': path, 'depth': 0})[0]
-                )
-        return documents
+    column_settings = [
+        {
+            'id': 'reference',
+            'is_default': True,
+            'tabbedview_column': 'reference',
+        },
+        {
+            'id': 'sequence_number',
+            'is_default': True,
+        },
+        {
+            'id': 'title',
+            'is_default': True,
+        },
+        {
+            'id': 'document_author',
+            'is_default': True,
+            'transform': readable_author,
+            'tabbedview_column': 'sortable_author',
+        },
+        {
+            'id': 'document_date',
+            'is_default': True,
+        },
+        {
+            'id': 'receipt_date',
+            'is_default': True,
+        },
+        {
+            'id': 'delivery_date',
+            'is_default': True,
+        },
+        {
+            'id': 'checked_out',
+            'is_default': True,
+            'title': _(u'label_document_checked_out_by'),
+            'transform': readable_author,
+            'alias': 'checked_out_fullname',
+        },
+        {
+            'id': 'public_trial',
+            'is_default': True,
+            'transform': StringTranslater(None, 'opengever.base').translate,
+        },
+        {
+            'id': 'containing_dossier',
+            'is_default': True,
+        },
+        {
+            'id': 'document_type',
+            'is_default': False,
+            'alias': 'document_type_label',
+            'transform': translate_document_type,
+        },
+        {
+            'id': 'changed',
+            'is_default': False,
+            'number_format': DATETIME_NUMBER_FORMAT,
+        }
+    ]
 
     def __call__(self):
         if not self.request.get('paths'):
@@ -74,6 +107,6 @@ class DocumentReporter(BaseReporterView):
         # (as sent by the new gever-ui)
         rewrite_path_list_to_absolute_paths(self.request)
 
-        documents = self.get_selected_documents()
-        reporter = XLSReporter(self.request, self.columns(), documents)
+        documents = self.get_selected_items()
+        reporter = XLSReporter(self.request, self.columns(), documents, field_mapper=self.fields)
         return self.return_excel(reporter)

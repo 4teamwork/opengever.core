@@ -9,10 +9,10 @@ from opengever.api.serializer import SerializeSQLModelToJsonBase
 from opengever.api.serializer import SerializeSQLModelToJsonSummaryBase
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.globalindex.browser.report import task_type_helper
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
+from opengever.task.helper import task_type_value_helper
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.task import ITask
 from opengever.task.task_response import ITaskResponse
@@ -176,7 +176,7 @@ class SerializeTaskModelToJson(SerializeSQLModelToJsonBase):
             'responsible_fullname': display_name(self.context.responsible),
             'responsible_actor': serialize_actor_id_to_json_summary(self.context.responsible),
             'review_state_label': translate_review_state(self.context.review_state),
-            'task_type': task_type_helper(self.context.task_type),
+            'task_type': task_type_value_helper(self.context.task_type),
         })
 
     @property
@@ -197,7 +197,7 @@ class SerializeTaskModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
     def add_additional_metadata(self, data):
         data.update({
             'oguid': str(self.context.oguid),
-            'task_type': task_type_helper(self.context.task_type),
+            'task_type': task_type_value_helper(self.context.task_type),
         })
 
     @property

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-03-22 12:50+0000\n"
+"POT-Creation-Date: 2022-04-27 17:01+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -410,7 +410,6 @@ msgstr "Attach to email"
 #. German translation: Autor
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr "Author"
 
@@ -545,29 +544,24 @@ msgstr "Collaborators: ${collaborators}"
 #. German translation: Dokumentdatum
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_document_date"
 msgstr "Document date"
 
 #. German translation: Eingangsdatum
 #. MARKER: receipt-delivery-date-mixup double check!
-#: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr "label_document_delivery_date"
 
 #. German translation: Ausgangsdatum
 #. MARKER: receipt-delivery-date-mixup double check!
-#: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr "label_document_receipt_date"
 
 #. German translation: Aktenzeichen
-#: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
 msgstr "Reference number"
 
 #. German translation: Laufnummer
-#: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
 msgstr "Sequence number"
 
@@ -583,7 +577,6 @@ msgid "label_document_watcher_added"
 msgstr "Added as watcher of document"
 
 #. German translation: Dossier-Titel
-#: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr "Dossier title"
 
@@ -624,6 +617,10 @@ msgstr "Error"
 #: ./opengever/document/document.py
 msgid "label_file"
 msgstr "File"
+
+#. Default: "File size"
+msgid "label_filesize"
+msgstr "File size"
 
 #. German translation: Fremdzeichen
 #. Default: "Foreign Reference"
@@ -705,7 +702,6 @@ msgid "label_proposal"
 msgstr "Proposal"
 
 #. German translation: Öffentlichkeitsstatus
-#: ./opengever/document/browser/report.py
 msgid "label_public_trial"
 msgstr "Disclosure status"
 
@@ -785,7 +781,6 @@ msgstr "Thumbnail"
 
 #. German translation: Titel
 #. Default: "Title"
-#: ./opengever/document/browser/report.py
 #: ./opengever/document/document.py
 msgid "label_title"
 msgstr "Title"

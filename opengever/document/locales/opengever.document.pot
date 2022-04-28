@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-22 12:50+0000\n"
+"POT-Creation-Date: 2022-04-27 17:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -335,7 +335,6 @@ msgstr ""
 
 #. Default: "Author"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_author"
 msgstr ""
 
@@ -447,23 +446,18 @@ msgstr ""
 
 #. Default: "Document Date"
 #: ./opengever/document/behaviors/metadata.py
-#: ./opengever/document/browser/report.py
 msgid "label_document_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_delivery_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_receipt_date"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_reference_number"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_document_sequence_number"
 msgstr ""
 
@@ -477,7 +471,6 @@ msgstr ""
 msgid "label_document_watcher_added"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_dossier_title"
 msgstr ""
 
@@ -511,6 +504,10 @@ msgstr ""
 #: ./opengever/document/browser/overview.py
 #: ./opengever/document/document.py
 msgid "label_file"
+msgstr ""
+
+#. Default: "File size"
+msgid "label_filesize"
 msgstr ""
 
 #. Default: "Foreign Reference"
@@ -579,7 +576,6 @@ msgstr ""
 msgid "label_proposal"
 msgstr ""
 
-#: ./opengever/document/browser/report.py
 msgid "label_public_trial"
 msgstr ""
 
@@ -645,7 +641,6 @@ msgid "label_thumbnail"
 msgstr ""
 
 #. Default: "Title"
-#: ./opengever/document/browser/report.py
 #: ./opengever/document/document.py
 msgid "label_title"
 msgstr ""

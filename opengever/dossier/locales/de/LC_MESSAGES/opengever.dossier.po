@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-03-14 15:22+0000\n"
+"POT-Creation-Date: 2022-04-27 16:30+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -411,19 +411,15 @@ msgstr "Aktion"
 
 #. Default: "Filing number"
 #: ./opengever/dossier/behaviors/filing.py
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_filing"
 msgstr "Ablage"
 
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_number"
 msgstr "Ablagenummer"
 
-#: ./opengever/dossier/filing/report.py
 msgid "filing_no_year"
 msgstr "Ablagejahr"
 
@@ -616,7 +612,6 @@ msgstr "E-Mail"
 
 #. Default: "Closing Date"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/filing/form.py
 msgid "label_end"
 msgstr "Ende"
@@ -783,7 +778,6 @@ msgstr "Empfänger"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_reference_number"
 msgstr "Aktenzeichen"
@@ -827,7 +821,6 @@ msgstr "Laufnummer"
 
 #. Default: "Opening Date"
 #: ./opengever/dossier/behaviors/dossier.py
-#: ./opengever/dossier/browser/report.py
 msgid "label_start"
 msgstr "Beginn"
 
@@ -864,9 +857,9 @@ msgid "label_template_group"
 msgstr "Vorlagengruppe"
 
 #. Default: "Title"
-#: ./opengever/dossier/browser/report.py
 #: ./opengever/dossier/dossiertemplate/form.py
 #: ./opengever/dossier/templatefolder/form.py
+#: ./opengever/dossier/templatefolder/tabs.py
 msgid "label_title"
 msgstr "Titel"
 

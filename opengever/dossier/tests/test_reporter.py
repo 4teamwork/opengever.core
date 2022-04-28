@@ -1,16 +1,40 @@
+from datetime import date
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
+from io import BytesIO
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
-from tempfile import NamedTemporaryFile
 import json
 
 
-class TestDossierReporter(IntegrationTestCase):
+class TestDossierReporter(SolrIntegrationTestCase):
+
+    def load_workbook(self, data):
+        return load_workbook(BytesIO(data))
+
+    def create_propertysheet_for(self, dossier):
+        IDossier(dossier).dossier_type = u"businesscase"
+        choices = [u'Rot', u'Gr\xfcn', u'Blau']
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("bool", u"yesorno", u"Yes or no", u"", False)
+            .with_field("choice", u"color", u"Favorite Color", u"", False, values=choices)
+            .with_field("multiple_choice", u"colors", u"Colors", u"", False, values=choices)
+            .with_field("int", u"age", u"Age", u"", False)
+            .with_field("text", u"poem", u"Poem", u"", False)
+            .with_field("textline", u"tagline", u"Tag Line", u"", False)
+            .with_field("date", u"birthday", u"Birthday", u"", False)
+        )
 
     @browsing
     def test_dossier_report(self, browser):
@@ -18,14 +42,10 @@ class TestDossierReporter(IntegrationTestCase):
 
         browser.open(view='dossier_report',
                      # /plone/ordnungssystem/...
-                     data=self.make_path_param(self.dossier, self.inactive_dossier))
+                     data=self.make_path_param(
+                        self.dossier, self.inactive_dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
@@ -47,19 +67,206 @@ class TestDossierReporter(IntegrationTestCase):
             [cell.value for cell in rows[2]])
 
     @browsing
+    def test_sorts_rows_according_to_paths_from_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        paths1 = self.make_path_param(self.dossier, self.inactive_dossier)
+        browser.open(view='dossier_report', data=paths1)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        self.assertEqual(self.dossier.title, rows[1][0].value)
+        self.assertEqual(self.inactive_dossier.title, rows[2][0].value)
+
+        paths2 = self.make_path_param(self.inactive_dossier, self.dossier)
+        browser.open(view='dossier_report', data=paths2)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        self.assertEqual(self.inactive_dossier.title, rows[1][0].value)
+        self.assertEqual(self.dossier.title, rows[2][0].value)
+
+    @browsing
+    def test_supports_explicit_columns_from_request(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'title',
+            'start',
+            'end',
+            'responsible',
+            'review_state',
+            'reference',
+            'touched',
+            'keywords',
+            'description',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Title',
+            u'Start date',
+            u'End date',
+            u'Responsible',
+            u'Review state',
+            u'Reference number',
+            u'Last modified',
+            u'Keywords',
+            u'Description'
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            self.dossier.title,
+            datetime(2016, 1, 1),
+            None,
+            u'Ziegler Robert (robert.ziegler)',
+            u'Active',
+            u'Client1 1.1 / 1',
+            datetime(2016, 8, 31, 0, 0),
+            u'Finanzverwaltung, Vertr\xe4ge',
+            self.dossier.description
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
+    def test_necessary_columns_are_aliased(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        params = self.make_path_param(self.dossier)
+
+        # The frontend uses these names for the 'responsible' and
+        # 'review_state' columns. They should be aliased accordingly in the
+        # DossierReporter column_settings
+        params.update({'columns': [
+            'responsible_fullname',
+            'review_state_label',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Responsible',
+            u'Review state',
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            u'Ziegler Robert (robert.ziegler)',
+            u'Active',
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
+    def test_supports_custom_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.create_propertysheet_for(self.dossier)
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "yesorno": True,
+                "color": u'Gr\xfcn',
+                "colors": [u'Rot', u'Gr\xfcn'],
+                "age": 42,
+                # Multiline Text fields are not currently indexed in Solr
+                "poem": "Lorem\nIpsum",
+                "tagline": "Woosh!",
+                "birthday": date(2022, 4, 1),
+            }
+        }
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'yesorno_custom_field_boolean',
+            'color_custom_field_string',
+            'colors_custom_field_strings',
+            'age_custom_field_int',
+            'tagline_custom_field_string',
+            'birthday_custom_field_date',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [
+            u'Yes or no',
+            u'Favorite Color',
+            u'Colors',
+            u'Age',
+            u'Tag Line',
+            u'Birthday',
+        ]
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [
+            True,
+            u'Gr\xfcn',
+            u'Gr\xfcn, Rot',
+            42,
+            u'Woosh!',
+            datetime(2022, 4, 1, 0, 0),
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
+    def test_sets_number_format_for_date_fields(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.create_propertysheet_for(self.dossier)
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "birthday": date(2022, 4, 1),
+            }
+        }
+        IDossier(self.dossier).end = date(2033, 1, 1)
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        params = self.make_path_param(self.dossier)
+        params.update({'columns': [
+            'start',
+            'end',
+            'touched',
+            'birthday_custom_field_date',
+        ]})
+        browser.open(view='dossier_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_values = [
+            datetime(2016, 1, 1, 0, 0),
+            datetime(2033, 1, 1, 0, 0),
+            datetime(2016, 8, 31, 0, 0),
+            datetime(2022, 4, 1, 0, 0),
+        ]
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+        self.assertEqual(
+            ['DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
+            [cell.number_format for cell in rows[1]],
+        )
+
+    @browsing
     def test_dossier_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(view='dossier_report',
                      # /ordnungssystem/...
-                     data=self.make_pseudorelative_path_param(self.dossier, self.inactive_dossier))
+                     data=self.make_pseudorelative_path_param(
+                        self.dossier, self.inactive_dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
@@ -86,30 +293,24 @@ class TestDossierReporter(IntegrationTestCase):
 
         data = {'view_name': 'mydossiers',
                 'gridstate': json.dumps({
-                    "columns":[
-                        {"id":"path_checkbox","width":30},
-                        {"id":"sortable_title","width":300,"sortable":True},
-                        {"id":"review_state","width":110,"sortable":True},
-                        {"id":"reference","width":110,"sortable":True},
-                        {"id":"end","width":110,"sortable":True},
-                        {"id":"responsible","width":110,"sortable":True},
-                        {"id":"start","width":110,"hidden":True,"sortable":True},
-                        {"id":"Subject","width":110,"sortable":True},
-                        {"id":"dummy","width":1,"hidden":True}],
-                    "sort":{"field":"modified","direction":"ASC"}})}
+                    "columns": [
+                        {"id": "path_checkbox", "width": 30},
+                        {"id": "sortable_title", "width": 300, "sortable": True},
+                        {"id": "review_state", "width": 110, "sortable": True},
+                        {"id": "reference", "width": 110, "sortable": True},
+                        {"id": "end", "width": 110, "sortable": True},
+                        {"id": "responsible", "width": 110, "sortable": True},
+                        {"id": "start", "width": 110, "hidden": True, "sortable": True},
+                        {"id": "Subject", "width": 110, "sortable": True},
+                        {"id": "dummy", "width": 1, "hidden": True}],
+                    "sort": {"field": "modified", "direction": "ASC"}})}
         browser.open(view='@@tabbed_view/setgridstate', data=data)
-
 
         data = self.make_path_param(self.dossier, self.inactive_dossier)
         data['view_name'] = 'mydossiers'
         browser.open(view='dossier_report', data=data)
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
-
+        workbook = self.load_workbook(browser.contents)
         rows = list(workbook.active.rows)
         self.assertSequenceEqual(
             [u'Title', u'Review state', u'Reference number', u'End date',
@@ -123,15 +324,12 @@ class TestDossierReporter(IntegrationTestCase):
 
         IFilingNumber(self.dossier).filing_no = u'Client1-Leitung-2012-1'
         self.dossier.reindexObject()
+        self.commit_solr()
 
         browser.open(view='dossier_report',
                      data=self.make_path_param(self.dossier))
 
-        data = browser.contents
-        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
-            tmpfile.write(data)
-            tmpfile.flush()
-            workbook = load_workbook(tmpfile.name)
+        workbook = self.load_workbook(browser.contents)
 
         labels = [cell.value for cell in list(workbook.active.rows)[0]]
         self.assertIn(u'Filing', labels)

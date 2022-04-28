@@ -6,30 +6,10 @@ from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
-from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.task.util import getTaskTypeVocabulary
+from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
-from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
 from zope.i18n import translate
-
-
-def task_type_helper(value):
-    """XLS Reporter helper method which returns the translated
-    value stored in the vdex files"""
-
-    if value == FORWARDING_TASK_TYPE_ID:
-        return translate(u'forwarding_task_type', domain='opengever.inbox',
-                         context=getRequest(), default=u'Forwarding')
-
-    voc = getTaskTypeVocabulary(getSite())
-    try:
-        term = voc.getTerm(value)
-    except LookupError:
-        return value
-    else:
-        return term.title
 
 
 def get_link(value, task):
@@ -64,7 +44,7 @@ class TaskReporter(BaseReporterView):
             {'id': 'responsible', 'title': _('label_responsible'),
              'transform': readable_author},
             {'id': 'task_type', 'title': _('label_task_type'),
-             'transform': task_type_helper},
+             'transform': task_type_value_helper},
             {'id': 'admin_unit_id', 'title': _('label_admin_unit_id')},
             {'id': 'sequence_number', 'title': _('label_sequence_number')},
             {'id': 'text', 'title': _('label_description', default=u'Description')},

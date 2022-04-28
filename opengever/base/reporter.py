@@ -1,15 +1,22 @@
+from DateTime import DateTime
 from math import floor
 from Missing import Value as MissingValue
+from opengever.base.solr import OGSolrContentListingObject
+from opengever.base.solr.fields import DateListingField
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from plone.api.portal import get_localized_time
 from StringIO import StringIO
+from zope.globalrequest import getRequest
 from zope.i18n import translate
+import dateutil
+import six
 
 
 DATE_NUMBER_FORMAT = 'DD.MM.YYYY'
+DATETIME_NUMBER_FORMAT = 'DD.MM.YYYY HH:MM'
 
 
 def value(input_string):
@@ -23,7 +30,10 @@ def value(input_string):
 def readable_author(author):
     """Helper method which returns the author description,
     instead of the userid"""
-    actor = Actor.lookup(author)
+    if author is None:
+        return ''
+
+    actor = Actor.lookup(six.ensure_text(author))
     if actor.actor_type == 'null':
         return author or ''
     return actor.get_label()
@@ -60,6 +70,9 @@ class StringTranslater(object):
     def translate(self, value):
         """ return the translated string"""
 
+        if self.request is None:
+            self.request = getRequest()
+
         if value:
             return translate(value, domain=self.domain, context=self.request)
         return None
@@ -71,7 +84,7 @@ class XLSReporter(object):
 
     def __init__(self, request, attributes, results,
                  sheet_title=u' ', footer=u'', portrait_format=False,
-                 blank_header_rows=0):
+                 blank_header_rows=0, field_mapper=None):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -85,6 +98,7 @@ class XLSReporter(object):
         self.footer = footer
         self.portrait_format = portrait_format
         self.blank_header_rows = blank_header_rows
+        self.field_mapper = field_mapper
 
     def __call__(self):
         workbook = self.prepare_workbook()
@@ -125,21 +139,7 @@ class XLSReporter(object):
             for column, attr in enumerate(self.attributes, 1):
                 cell = sheet.cell(row=self.blank_header_rows + row, column=column)
 
-                if isinstance(obj, dict):
-                    value = obj.get(attr.get('id'), attr.get('default'))
-                else:
-                    if 'default' in attr:
-                        value = getattr(obj, attr.get('id'), attr.get('default'))
-                    else:
-                        value = getattr(obj, attr.get('id'))
-
-                if attr.get('callable'):
-                    value = value()
-                if attr.get('transform'):
-                    value = attr.get('transform')(value)
-                if value == MissingValue:
-                    value = ''
-
+                value = self.get_value(obj, attr)
                 cell.value = value
 
                 if 'hyperlink' in attr:
@@ -151,3 +151,37 @@ class XLSReporter(object):
 
                 if 'fold_by_method' in attr:
                     sheet.row_dimensions[cell.row].outlineLevel = attr.get('fold_by_method')(value)
+
+    def get_value(self, obj, attr):
+        if isinstance(obj, dict):
+            value = obj.get(attr.get('id'), attr.get('default'))
+
+        elif isinstance(obj, OGSolrContentListingObject):
+            field_name = attr.get('id')
+            field = self.field_mapper.get(field_name)
+
+            value = field.get_value(obj)
+
+            # Date handling will need to be revisited once this is rebased
+            # onto the optimize-reindex-of-contained-objects branch
+            if isinstance(value, DateTime):
+                value = value.asdatetime()
+            elif isinstance(field, DateListingField) and value:
+                value = dateutil.parser.parse(value)
+
+        else:
+            if 'default' in attr:
+                value = getattr(obj, attr.get('id'), attr.get('default'))
+            else:
+                value = getattr(obj, attr.get('id'))
+
+        if attr.get('callable'):
+            value = value()
+        if attr.get('transform'):
+            value = attr.get('transform')(value)
+        if value == MissingValue:
+            value = ''
+        if isinstance(value, (list, set, tuple)):
+            value = ', '.join(value)
+
+        return value

@@ -36,7 +36,7 @@ class AccessibleWorkspacesGet(SolrQueryBaseService):
 
         query = u'object_provides:opengever.workspace.interfaces.IWorkspace'
 
-        field = self.get_field('allowedRolesAndUsers')
+        field = self.fields.get('allowedRolesAndUsers')
         solr_filter = field.listing_to_solr_filter(allowed_roles_and_users)
 
         solr = getUtility(ISolrSearch)

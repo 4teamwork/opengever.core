@@ -40,3 +40,17 @@ msgstr ""
 
 msgid "additional_attributes"
 msgstr ""
+
+msgid "filing_no_filing"
+msgstr ""
+
+msgid "filing_no_number"
+msgstr ""
+
+msgid "filing_no_year"
+msgstr ""
+
+#. Default: "Review state"
+#: ./opengever/dossier/browser/report.py
+msgid "label_review_state"
+msgstr ""

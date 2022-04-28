@@ -8,11 +8,11 @@ from mock import Mock
 from opengever.activity import notification_center
 from opengever.api.listing import ALLOWED_ORDER_GROUP_FIELDS
 from opengever.api.listing import ListingGet
-from opengever.api.solr_query_service import filename
-from opengever.api.solr_query_service import filesize
-from opengever.api.solr_query_service import filter_escape
 from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr import OGSolrDocument
+from opengever.base.solr.fields import filename
+from opengever.base.solr.fields import filesize
+from opengever.base.solr.fields import filter_escape
 from opengever.document.approvals import APPROVED_IN_CURRENT_VERSION
 from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
