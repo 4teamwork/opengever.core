@@ -570,3 +570,10 @@ class IActorSettings(Interface):
         source=get_user_avatar_image_sources(),
         default=AVATAR_SOURCE_PLONE_ONLY,
     )
+
+
+class IListingActions(Interface):
+    """Adapter to determine listing actions"""
+
+    def get_actions():
+        """Return listing actions"""
