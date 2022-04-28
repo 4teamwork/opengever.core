@@ -48,3 +48,22 @@ class TestDossierListingActions(IntegrationTestCase):
         expected_actions = [u'edit_items', u'export_dossiers', u'pdf_dossierlisting', u'delete']
         self.assertEqual(expected_actions, self.get_actions(self.private_dossier))
         self.assertEqual(expected_actions, self.get_actions(self.private_folder))
+
+
+class TestDossierTemplateListingActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request),
+                                    interface=IListingActions,
+                                    name='dossiertemplates')
+        return adapter.get_actions() if adapter else []
+
+    def test_dossiertemplate_actions_for_templatefolder_and_dossiertemplate(self):
+        self.login(self.regular_user)
+        self.assertEqual([], self.get_actions(self.templates))
+        self.assertEqual([], self.get_actions(self.dossiertemplate))
+
+        self.login(self.administrator)
+        expected_actions = [u'delete']
+        self.assertEqual(expected_actions, self.get_actions(self.templates))
+        self.assertEqual(expected_actions, self.get_actions(self.dossiertemplate))

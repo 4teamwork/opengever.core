@@ -37,3 +37,9 @@ class PrivateDossierListingActions(BaseListingActions):
 
     def is_pdf_dossierlisting_available(self):
         return True
+
+
+class DossierTemplateListingActions(BaseListingActions):
+
+    def is_delete_available(self):
+        return api.user.has_permission('Delete objects', obj=self.context)
