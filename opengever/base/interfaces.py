@@ -577,3 +577,10 @@ class IListingActions(Interface):
 
     def get_actions():
         """Return listing actions"""
+
+
+class IContextActions(Interface):
+    """Adapter to determine context actions"""
+
+    def get_actions():
+        """Return context actions"""
