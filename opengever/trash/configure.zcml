@@ -28,4 +28,28 @@
   <adapter factory=".trash.DocumentTrasher" />
   <adapter factory=".trash.WorkspaceFolderTrasher" />
 
+  <adapter
+      factory=".actions.TrashListingActions"
+      name="trash"
+      />
+
+  <adapter
+      factory=".actions.PrivateDossierTrashListingActions"
+      name="trash"
+      />
+
+  <adapter
+      factory=".actions.WorkspaceTrashListingActions"
+      name="trash"
+      for="opengever.workspace.interfaces.IWorkspace
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.WorkspaceTrashListingActions"
+      name="trash"
+      for="opengever.workspace.interfaces.IWorkspaceFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
 </configure>
