@@ -17,6 +17,11 @@
   <adapter factory=".sequence.TodoSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceMeetingSequenceNumberGenerator" />
 
+  <adapter
+      factory=".actions.WorkspaceFolderListingActions"
+      name="workspace_folders"
+      />
+
   <subscriber
       for="opengever.workspace.interfaces.IWorkspaceRoot
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
