@@ -28,6 +28,26 @@
   <adapter factory=".transition.NoAdminUnitChangeInProgressStateValidator" />
   <adapter factory=".transition.DeadlineChangedValidator" />
 
+
+  <adapter
+      factory=".actions.TaskListingActions"
+      name="tasks"
+      for="plone.dexterity.interfaces.IDexterityContainer
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.TaskListingActions"
+      name="tasks"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.DossierTaskListingActions"
+      name="tasks"
+      />
+
   <browser:page
       name="task_response_delete"
       for="opengever.task.task.ITask"
