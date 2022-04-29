@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.9.1 (2022-04-29)
+---------------------
+
+Bug fixes:
+
+
+- Fix contentType problem when copying mails with teamraum connect. [phgross]
+
+
 2022.9.0 (2022-04-26)
 ---------------------
 
