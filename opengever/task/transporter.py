@@ -259,6 +259,8 @@ class TaskDocumentsTransporter(object):
         intids = getUtility(IIntIds)
 
         for item in data:
+            # Avoid setting creator and created
+            item.pop(u'unicode:dublin-core')
             obj = transporter.create(item, target)
 
             # Set custom initial version comment

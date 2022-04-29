@@ -1,3 +1,5 @@
+from datetime import datetime
+from ftw.testing import freeze
 from opengever.document.versioner import Versioner
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
@@ -5,6 +7,7 @@ from opengever.testing import IntegrationTestCase
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import pytz
 
 
 class TestTransporter(IntegrationTestCase):
@@ -67,3 +70,27 @@ class TestTransporter(IntegrationTestCase):
             self.assertEquals(
                 u'Custom initial version',
                 Versioner(doc).get_custom_initial_version_comment())
+
+    def test_documents_task_transport_does_not_set_dublin_core_fields(self):
+        self.login(self.regular_user)
+        intids = getUtility(IIntIds)
+        ids = [intids.getId(self.document)]
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         self.document.Creator())
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            doc_transporter = getUtility(ITaskDocumentsTransporter)
+            doc_transporter.copy_documents_from_remote_task(
+                self.task.get_sql_object(), self.seq_subtask_1, documents=ids)
+
+        doc = self.seq_subtask_1.getFolderContents()[0].getObject()
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         self.document.Creator())
+        self.assertEqual(self.regular_user.getId(), doc.Creator())
+
+        self.assertEqual('2016/08/31 16:07:33 GMT+2',
+                         str(self.document.created()))
+        self.assertEqual('2017/10/16 02:00:00 GMT+2',
+                         str(doc.created()))

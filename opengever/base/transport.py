@@ -165,7 +165,8 @@ class DexterityObjectCreator(object):
         # insert data from collectors
         collectors = getAdapters((obj.__of__(container),), IDataCollector)
         for name, collector in collectors:
-            collector.insert(self.data[name])
+            if name in self.data:
+                collector.insert(self.data[name])
 
         obj = addContentToContainer(container, obj, checkConstraints=True)
         return obj
