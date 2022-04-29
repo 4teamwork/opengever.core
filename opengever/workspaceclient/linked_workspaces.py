@@ -237,7 +237,6 @@ class LinkedWorkspaces(object):
 
         document_metadata['gever_url'] = self.client.get_gever_url(Oguid.for_object(document).id)
 
-        content_type = document.content_type()
         filename = document.get_filename()
         gever_document_uid = document.UID()
 
@@ -255,7 +254,7 @@ class LinkedWorkspaces(object):
 
         response = self.client.upload_document_copy(
             workspace_url, file_.open(),
-            content_type, filename,
+            file_.contentType, filename,
             document_metadata, gever_document_uid)
 
         workspace_document_uid = response['UID']
