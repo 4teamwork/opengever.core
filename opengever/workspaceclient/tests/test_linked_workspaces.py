@@ -285,6 +285,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(workspace_mail.get_file().open().read(),
                              mail.get_file().open().read())
 
+            self.assertEqual('message/rfc822', workspace_mail.message.contentType)
+
             self.assertItemsEqual(
                 manager._serialized_document_schema_fields(mail),
                 manager._serialized_document_schema_fields(workspace_mail))
