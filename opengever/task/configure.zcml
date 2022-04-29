@@ -48,6 +48,8 @@
       name="tasks"
       />
 
+  <adapter factory=".actions.TaskContextActions" />
+
   <browser:page
       name="task_response_delete"
       for="opengever.task.task.ITask"
