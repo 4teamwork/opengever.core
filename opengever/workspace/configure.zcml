@@ -22,6 +22,8 @@
       name="workspace_folders"
       />
 
+  <adapter factory=".actions.TodoContextActions" />
+
   <subscriber
       for="opengever.workspace.interfaces.IWorkspaceRoot
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
