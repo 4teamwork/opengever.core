@@ -1,6 +1,13 @@
+from ftw.builder import Builder
+from ftw.builder import create
+from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
 from opengever.testing import IntegrationTestCase
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
+from plone import api
 from zope.component import queryMultiAdapter
+import transaction
 
 
 class TestDossierListingActions(IntegrationTestCase):
@@ -67,3 +74,106 @@ class TestDossierTemplateListingActions(IntegrationTestCase):
         expected_actions = [u'delete']
         self.assertEqual(expected_actions, self.get_actions(self.templates))
         self.assertEqual(expected_actions, self.get_actions(self.dossiertemplate))
+
+
+class TestDossierContextActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_dossier_context_actions(self):
+        self.login(self.regular_user)
+        expected_actions = [u'document_with_template', u'edit', u'export_pdf',
+                            u'pdf_dossierdetails', u'zipexport']
+        self.assertEqual(expected_actions, self.get_actions(self.dossier))
+
+    def test_document_from_docugate_available_if_feature_enabled(self):
+        self.login(self.regular_user)
+        self.assertNotIn(u'document_from_docugate', self.get_actions(self.dossier))
+        self.activate_feature('docugate')
+        self.assertIn(u'document_from_docugate', self.get_actions(self.dossier))
+
+    def test_protect_dossier_available_for_dossier_manager(self):
+        self.login(self.dossier_manager)
+        self.assertIn(u'protect_dossier', self.get_actions(self.dossier))
+
+    def test_document_with_oneoffixx_template_available_if_feature_enabled(self):
+        self.login(self.regular_user)
+        self.assertNotIn(u'document_with_oneoffixx_template',
+                         self.get_actions(self.dossier))
+        self.activate_feature('oneoffixx')
+        self.assertIn(u'document_with_oneoffixx_template', self.get_actions(self.dossier))
+
+
+class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def link_workspace(self, obj):
+        manager = ILinkedWorkspaces(obj)
+        manager.storage.add(self.workspace.UID())
+        transaction.commit()
+
+    def test_context_actions_for_dossier_with_linked_workspace(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            expected_actions = [u'copy_documents_from_workspace', u'copy_documents_to_workspace',
+                                u'create_linked_workspace', u'document_with_template', u'edit',
+                                u'export_pdf', u'link_to_workspace', u'list_workspaces',
+                                u'pdf_dossierdetails', u'unlink_workspace', u'zipexport']
+
+            self.assertEqual(expected_actions, self.get_actions(self.dossier))
+
+    def test_context_actions_for_subdossier(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            subdossier = create(Builder('dossier').within(self.dossier))
+            expected_actions = [u'copy_documents_to_workspace', u'document_with_template', u'edit',
+                                u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
+                                u'zipexport']
+
+            self.assertEqual(expected_actions, self.get_actions(subdossier))
+
+    def test_copy_documents_and_unlink_not_available_in_dossier_without_linked_workspaces(self):
+        with self.workspace_client_env():
+            actions = self.get_actions(self.dossier)
+            self.assertNotIn(u'copy_documents_from_workspace', actions)
+            self.assertNotIn(u'copy_documents_to_workspace',  actions)
+            self.assertNotIn(u'unlink_workspace',  actions)
+
+    def test_link_to_workspace_action_only_available_if_linking_activated(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            self.assertIn(u'link_to_workspace', self.get_actions(self.dossier))
+            self.enable_linking(False)
+            self.assertNotIn(u'link_to_workspace', self.get_actions(self.dossier))
+
+    def test_list_workspaces_only_available_if_user_has_permission_to_use_workspace_client(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+
+            self.assertIn(u'list_workspaces', self.get_actions(self.dossier))
+            roles = api.user.get_roles()
+            roles.remove('WorkspaceClientUser')
+            self.grant(*roles)
+            self.assertNotIn(u'list_workspaces', self.get_actions(self.dossier))
+
+    def test_list_workspaces_only_available_if_workspace_client_feature_avtivated(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            self.assertIn(u'list_workspaces', self.get_actions(self.dossier))
+            self.enable_feature(False)
+            self.assertNotIn(u'list_workspaces', self.get_actions(self.dossier))
+
+    def test_context_actions_for_closed_dossier(self):
+        with self.workspace_client_env():
+            self.link_workspace(self.dossier)
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-deactivate')
+            transaction.commit()
+            expected_actions = [u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
+                                u'unlink_workspace', u'zipexport']
+            self.assertEqual(expected_actions, self.get_actions(self.dossier))

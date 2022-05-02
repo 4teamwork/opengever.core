@@ -92,6 +92,8 @@
            opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter factory=".actions.DossierContextActions" />
+
   <!-- JSON endpoint for dossier attributes -->
   <plone:service
       method="GET"
