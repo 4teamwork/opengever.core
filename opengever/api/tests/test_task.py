@@ -265,6 +265,13 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                          browser.json['sequence_type'])
 
     @browsing
+    def test_contains_creator(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertEqual(self.dossier_responsible.getId(),
+                         browser.json['creator']['identifier'])
+
+    @browsing
     def test_contains_is_remote_task(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.task, method="GET", headers=self.api_headers)
