@@ -23,6 +23,7 @@
       />
 
   <adapter factory=".actions.TodoContextActions" />
+  <adapter factory=".actions.WorkspaceMeetingContextActions" />
 
   <subscriber
       for="opengever.workspace.interfaces.IWorkspaceRoot

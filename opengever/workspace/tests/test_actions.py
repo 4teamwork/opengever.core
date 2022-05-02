@@ -29,3 +29,16 @@ class TestTodoContextActions(IntegrationTestCase):
         self.login(self.workspace_member)
         expected_actions = [u'edit', u'share_content']
         self.assertEqual(expected_actions, self.get_actions(self.todo))
+
+
+class TestWorkspaceMeetingContextActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_workspace_meeting_context_actions(self):
+        self.login(self.workspace_member)
+        expected_actions = [u'edit', u'meeting_ical_download', u'meeting_minutes_pdf',
+                            u'share_content']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_meeting))
