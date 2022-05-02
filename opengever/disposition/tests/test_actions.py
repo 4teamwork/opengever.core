@@ -1,15 +1,7 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
-from opengever.base.behaviors.lifecycle import ILifeCycle
-from opengever.base.security import elevated_privileges
+from opengever.base.interfaces import IContextActions
 from opengever.testing import IntegrationTestCase
-import os
-from plone import api
-from zope.component import getUtility
-from zope.intid.interfaces import IIntIds
-from z3c.relationfield.relation import RelationValue
+from zope.component import queryMultiAdapter
 
 
 class TestDispositionActions(IntegrationTestCase):
@@ -73,3 +65,26 @@ class TestDispositionActions(IntegrationTestCase):
         self.assertIn(
             'download-removal-protocol',
             [action['id'] for action in browser.json['ui_context_actions']])
+
+
+class TestDispositionContextActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_disposition_context_actions(self):
+        self.login(self.records_manager)
+        expected_actions = [u'download-appraisal-list', u'edit']
+        self.assertEqual(expected_actions, self.get_actions(self.disposition))
+
+    def test_download_sip_available_if_sip_exist(self):
+        self.login(self.records_manager)
+        self.assertIn(u'download-sip', self.get_actions(self.disposition_with_sip))
+
+    @browsing
+    def test_download_removal_protocol_only_available_for_closed_dispositions(self, browser):
+        self.login(self.records_manager, browser)
+        self.assertNotIn(u'download-removal-protocol', self.get_actions(self.disposition))
+        self.set_workflow_state('disposition-state-closed', self.disposition)
+        self.assertIn(u'download-removal-protocol', self.get_actions(self.disposition))
