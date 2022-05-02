@@ -1,3 +1,4 @@
+from collective.quickupload.browser.quick_upload import get_content_type
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
@@ -6,7 +7,6 @@ from opengever.meeting.proposaltemplate import IProposalTemplate
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.quota.exceptions import ForbiddenByQuota
 from plone.restapi.services.content.tus import UploadPatch
-from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.i18n import translate
@@ -16,7 +16,6 @@ from zope.interface import noLongerProvides
 from zope.publisher.interfaces import IPublishTraverse
 import logging
 import transaction
-
 
 logger = logging.getLogger('opengever.api')
 
@@ -38,6 +37,9 @@ class GeverUploadPatch(UploadPatch):
     def create_or_modify_content(self, tus_upload):
         """Initialize default values for custom properties.
         """
+        # We can't trust the content type provided in the request, so we use
+        # get_content_type from quickupload instead.
+        self.fix_content_type(tus_upload)
         result = super(GeverUploadPatch, self).create_or_modify_content(tus_upload)
 
         # Ugh. create_or_modify_content doesn't return the created object, so
@@ -55,6 +57,11 @@ class GeverUploadPatch(UploadPatch):
         if created_doc:
             initialize_customproperties_defaults(created_doc)
         return result
+
+    def fix_content_type(self, tus_upload):
+        metadata = tus_upload.metadata()
+        content_type = get_content_type(self.context, None, metadata.get("filename", ""))
+        metadata["content-type"] = content_type
 
 
 @implementer(IPublishTraverse)

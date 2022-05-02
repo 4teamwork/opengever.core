@@ -1,3 +1,4 @@
+from base64 import b64encode
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -7,9 +8,10 @@ from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from plone import api
+from Products.CMFCore.utils import getToolByName
+from Products.MimetypesRegistry.MimeTypeItem import MimeTypeItem
 from six import BytesIO
 from unittest import skipIf
-
 
 UPLOAD_DATA = b"abcdefgh"
 UPLOAD_LENGTH = len(UPLOAD_DATA)
@@ -35,7 +37,7 @@ class TestTUSUpload(IntegrationTestCase):
         self.assertEqual(browser.status_code, 201)
         return browser.headers.get('Location')
 
-    def prepare_tus_upload(self, folder, browser, headers=None):
+    def prepare_tus_upload(self, folder, browser, headers=None, upload_metadata=None):
         browser.open(
             folder.absolute_url() + '/@tus-upload',
             method='POST',
@@ -43,7 +45,7 @@ class TestTUSUpload(IntegrationTestCase):
                 "Accept": "application/json",
                 "Tus-Resumable": "1.0.0",
                 "Upload-Length": str(UPLOAD_LENGTH),
-                "Upload-Metadata": UPLOAD_METADATA,
+                "Upload-Metadata": upload_metadata or UPLOAD_METADATA,
             }, **headers or {}),
         )
         self.assertEqual(browser.status_code, 201)
@@ -81,7 +83,7 @@ class TestTUSUpload(IntegrationTestCase):
             )
 
     def assert_tus_upload_fails(self, folder, browser, headers=None, code=403,
-                                 reason='Forbidden'):
+                                reason='Forbidden'):
         location = self.prepare_tus_upload(folder, browser, headers=headers)
         with browser.expect_http_error(code=code, reason=reason):
             browser.open(
@@ -96,8 +98,9 @@ class TestTUSUpload(IntegrationTestCase):
                 data=BytesIO(UPLOAD_DATA),
             )
 
-    def assert_tus_upload_succeeds(self, folder, browser, headers=None):
-        location = self.prepare_tus_upload(folder, browser, headers=headers)
+    def assert_tus_upload_succeeds(self, folder, browser, headers=None, upload_metadata=None):
+        location = self.prepare_tus_upload(folder, browser, headers=headers,
+                                           upload_metadata=upload_metadata)
         browser.open(
             location,
             method='PATCH',
@@ -281,3 +284,31 @@ class TestTUSUpload(IntegrationTestCase):
         self.assertEqual(
             expected_defaults,
             IDocumentCustomProperties(self.document).custom_properties)
+
+    @browsing
+    def test_determines_content_type_from_mimetype_registry(self, browser):
+
+        class test_extension(MimeTypeItem):
+
+            __name__ = "Test"
+            mimetypes = ('test/test',)
+            extensions = ('test',)
+            binary = 0
+
+        self.login(self.regular_user, browser)
+
+        mtype = test_extension()
+        mtr = getToolByName(self.dossier, 'mimetypes_registry')
+        mtr.register(mtype)
+
+        upload_metadata = UPLOAD_METADATA.replace(
+            "filename dGVzdC50eHQ=", "filename {}".format(b64encode("test.test")))
+        doc = self.assert_tus_upload_succeeds(
+            self.dossier, browser, upload_metadata=upload_metadata)
+
+        self.assertEqual('test/test', doc.content_type())
+
+        mtr.unregister(mtype)
+        doc = self.assert_tus_upload_succeeds(
+            self.dossier, browser, upload_metadata=upload_metadata)
+        self.assertEqual('text/plain', doc.content_type())
