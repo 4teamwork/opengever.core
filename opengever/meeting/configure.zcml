@@ -220,6 +220,8 @@
            opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter factory=".actions.ProposalContextActions" />
+
   <adapter
       factory="opengever.meeting.proposaltransition.CancelTransitionExtender"
       name="proposal-transition-cancel"
