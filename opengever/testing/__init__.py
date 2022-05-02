@@ -15,6 +15,7 @@ else:
     from opengever.testing.helpers import localized_datetime
     from opengever.testing.helpers import obj2brain
     from opengever.testing.helpers import obj2paths
+    from opengever.testing.helpers import obj2solr
     from opengever.testing.helpers import set_preferred_language
     from opengever.testing.helpers import solr_data_for
     from opengever.testing.integration_test_case import IntegrationTestCase

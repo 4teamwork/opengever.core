@@ -33,6 +33,7 @@ from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
+from opengever.testing import solr_data_for
 from opengever.testing.helpers import SolrTestMixin
 from opengever.testing.test_case import TestCase
 from opengever.trash.trash import ITrasher
@@ -801,3 +802,16 @@ class SolrIntegrationTestCase(IntegrationTestCase, SolrTestMixin):
     def set_roles(self, *args, **kwargs):
         super(SolrIntegrationTestCase, self).set_roles(*args, **kwargs)
         self.commit_solr()
+
+    def assert_solr_field_value(self, expected_value, field_name, *objects):
+        for obj in objects:
+            solr_data = solr_data_for(obj)
+            self.assertIn(
+                field_name, solr_data,
+                'Field {!r} does not exist.'.format(field_name))
+            if isinstance(expected_value, str):
+                expected_value = expected_value.decode('utf8')
+            self.assertEqual(
+                expected_value, solr_data[field_name],
+                'Unexpected value {!r} for field {!r} of {!r}'.format(
+                    solr_data[field_name], field_name, obj))

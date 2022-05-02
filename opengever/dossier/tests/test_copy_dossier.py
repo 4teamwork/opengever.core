@@ -2,7 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
 from plone import api
@@ -10,7 +10,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 
 
-class TestCopyDossiers(IntegrationTestCase):
+class TestCopyDossiers(SolrIntegrationTestCase):
 
     def test_copying_dossier_purges_child_reference_number_mappings(self):
         self.login(self.dossier_responsible)
@@ -39,21 +39,22 @@ class TestCopyDossiers(IntegrationTestCase):
     def test_indexes_are_updated_when_dossier_is_copied(self):
         self.login(self.dossier_responsible)
 
-        self.assert_index_and_metadata(self.dossier.Title(),
-                                       'containing_dossier', self.subdossier)
-        self.assert_index_value(1, 'is_subdossier', self.subdossier)
+        self.assert_solr_field_value(self.dossier.Title(),
+                                     'containing_dossier', self.subdossier)
+        self.assert_solr_field_value(1, 'is_subdossier', self.subdossier)
 
-        self.assert_index_and_metadata(self.dossier.Title(),
-                                       'containing_dossier', self.subsubdossier)
-        self.assert_index_value(1, 'is_subdossier', self.subsubdossier)
+        self.assert_solr_field_value(self.dossier.Title(),
+                                     'containing_dossier', self.subsubdossier)
+        self.assert_solr_field_value(1, 'is_subdossier', self.subsubdossier)
 
-        self.assert_index_and_metadata(self.dossier.Title(),
-                                       'containing_dossier', self.subdocument)
-        self.assert_index_and_metadata(self.subdossier.Title(),
-                                       'containing_subdossier', self.subdocument)
+        self.assert_solr_field_value(self.dossier.Title(),
+                                     'containing_dossier', self.subdocument)
+        self.assert_solr_field_value(self.subdossier.Title(),
+                                     'containing_subdossier', self.subdocument)
 
         dossier_copy = api.content.copy(
             source=self.subdossier, target=self.leaf_repofolder)
+        self.commit_solr()
 
         subdossier_copy = api.content.find(
             context=dossier_copy, portal_type='opengever.dossier.businesscasedossier',
@@ -63,18 +64,18 @@ class TestCopyDossiers(IntegrationTestCase):
             context=dossier_copy, portal_type='opengever.document.document',
             depth=1)[0].getObject()
 
-        self.assert_index_and_metadata(dossier_copy.Title(),
-                                       'containing_dossier', dossier_copy)
-        self.assert_index_value(0, 'is_subdossier', dossier_copy)
+        self.assert_solr_field_value(dossier_copy.Title(),
+                                     'containing_dossier', dossier_copy)
+        self.assert_solr_field_value(0, 'is_subdossier', dossier_copy)
 
-        self.assert_index_and_metadata(dossier_copy.Title(),
-                                       'containing_dossier', subdossier_copy)
-        self.assert_index_value(1, 'is_subdossier', subdossier_copy)
+        self.assert_solr_field_value(dossier_copy.Title(),
+                                     'containing_dossier', subdossier_copy)
+        self.assert_solr_field_value(1, 'is_subdossier', subdossier_copy)
 
-        self.assert_index_and_metadata(dossier_copy.Title(),
-                                       'containing_dossier', subdocument_copy)
-        self.assert_index_and_metadata('', 'containing_subdossier',
-                                       subdocument_copy)
+        self.assert_solr_field_value(dossier_copy.Title(),
+                                     'containing_dossier', subdocument_copy)
+        self.assert_solr_field_value('', 'containing_subdossier',
+                                     subdocument_copy)
 
     def test_copying_tasks_is_prevented(self):
         self.login(self.dossier_responsible)

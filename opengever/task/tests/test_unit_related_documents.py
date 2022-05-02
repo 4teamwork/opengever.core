@@ -333,7 +333,7 @@ class GetRelatedDocumentsTests(MockTestCase):
         self.expect(self.uuid(ANY)).call(lambda x: x)
 
         self.to_brain = self.mocker.replace(
-            'plone.app.uuid.utils.uuidToCatalogBrain')
+            'opengever.base.solr.solr_doc_from_uuid')
         self.expect(
             self.to_brain(self.doc_rel_4)).call(lambda x: None).count(0, None)
         self.expect(self.to_brain(ANY)).call(lambda x: x).count(0, None)
@@ -422,7 +422,7 @@ class BuildQueryTests(MockTestCase):
 
         self.replay()
 
-        result = self.source.build_query()
+        result = self.source.search_results(self.source.build_query())
 
         self.assertEquals(result, [])
 
@@ -434,7 +434,7 @@ class BuildQueryTests(MockTestCase):
 
         self.replay()
 
-        result = self.source.build_query()
+        result = self.source.search_results(self.source.build_query())
 
         self.assertEquals(result, ['doc1', 'doc2'])
 
@@ -446,7 +446,7 @@ class BuildQueryTests(MockTestCase):
 
         self.replay()
 
-        result = self.source.build_query()
+        result = self.source.search_results(self.source.build_query())
 
         self.assertEquals(result, ['doc1', 'doc2'])
 
@@ -459,6 +459,6 @@ class BuildQueryTests(MockTestCase):
 
         self.replay()
 
-        result = self.source.build_query()
+        result = self.source.search_results(self.source.build_query())
 
         self.assertEquals(result, ['doc1', 'doc2', 'doc3', 'doc4'])

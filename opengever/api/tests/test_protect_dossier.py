@@ -1,10 +1,10 @@
 from ftw.testbrowser import browsing
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
-class TestProtectDossier(IntegrationTestCase):
+class TestProtectDossier(SolrIntegrationTestCase):
 
     @browsing
     def test_do_not_protect_dossier_by_default(self, browser):

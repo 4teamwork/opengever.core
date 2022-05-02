@@ -10,49 +10,6 @@ class TestCatalog(IntegrationTestCase):
         api.content.move(source=self.subdossier, target=self.leaf_repofolder)
         self.assert_index_value(False, 'is_subdossier', self.subdossier)
 
-    def test_containing_dossier_index_and_metadata(self):
-        """The ``containing_dossier`` index contains the title of the main
-        dossier if the object is the main dossier or any parent is the main
-        dossier.
-        """
-        self.login(self.regular_user)
-        self.assert_index_and_metadata(
-            None,
-            'containing_dossier',
-            self.leaf_repofolder)
-
-        self.assert_index_and_metadata(
-            self.dossier.Title(),
-            'containing_dossier',
-            self.dossier,
-            self.document,
-            self.subdossier,
-            self.subdocument,
-            self.task,
-            self.subtask,
-            self.taskdocument)
-
-    def test_containing_subdossier_index_and_metadata(self):
-        """The ``containing_subdossier`` index contains the title of the
-        subdossier if a parent of the object is a subdossier.
-        """
-        self.login(self.regular_user)
-        self.assert_index_and_metadata(
-            '',
-            'containing_subdossier',
-            self.leaf_repofolder,
-            self.dossier,
-            self.subdossier,
-            self.document,
-            self.task,
-            self.subtask,
-            self.taskdocument)
-
-        self.assert_index_and_metadata(
-            self.subdossier.Title(),
-            'containing_subdossier',
-            self.subdocument)
-
 
 class TestFilingCatalog(IntegrationTestCase):
     features = ('filing_number',)

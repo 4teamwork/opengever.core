@@ -6,7 +6,7 @@ from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
@@ -39,7 +39,7 @@ class TestFavoriteTruncateFilename(TestCase):
         )
 
 
-class TestFavoriteModel(IntegrationTestCase):
+class TestFavoriteModel(SolrIntegrationTestCase):
 
     def test_add_favorite(self):
         favorite = Favorite(
@@ -106,7 +106,7 @@ class TestFavoriteModel(IntegrationTestCase):
                          favorite.serialize(self.portal.absolute_url(), resolve=True)['target_url'])
 
 
-class TestManager(IntegrationTestCase):
+class TestManager(SolrIntegrationTestCase):
 
     @browsing
     def test_titles_of_favorites_get_truncated_on_creation(self, browser):
@@ -124,7 +124,7 @@ class TestManager(IntegrationTestCase):
                           Favorite.query.get(fav.favorite_id).title)
 
 
-class TestHandlers(IntegrationTestCase):
+class TestHandlers(SolrIntegrationTestCase):
 
     @browsing
     def test_review_state_of_dossier_gets_updated(self, browser):

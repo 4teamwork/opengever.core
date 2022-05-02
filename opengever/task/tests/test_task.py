@@ -110,12 +110,14 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         # self.taskdocument is contained in self.task
 
         view = self.task.restrictedTraverse('tabbedview_view-relateddocuments')
-        results = [aa.Title for aa in view.table_source.build_query()]
+        results = [aa.Title for aa in view.table_source.search_results(
+            view.table_source.build_query())]
         self.assertTrue(self.document.Title() in results)
 
         # check sorting
         view.request.set('sort', u'sortable_title')
-        results = [aa.Title for aa in view.table_source.build_query()]
+        results = [aa.Title for aa in view.table_source.search_results(
+            view.table_source.build_query())]
         self.assertTrue(results == [self.taskdocument.Title(), self.document.Title()])
 
         view.request.set('ACTUAL_URL', self.task.absolute_url())

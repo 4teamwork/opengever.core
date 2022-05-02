@@ -4,11 +4,11 @@ from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 
 
-class TestDossierTouched(IntegrationTestCase):
+class TestDossierTouched(SolrIntegrationTestCase):
 
     @browsing
     def test_touched_date_is_set_correctly_on_new_dossiers(self, browser):

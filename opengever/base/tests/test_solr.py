@@ -14,7 +14,6 @@ from opengever.testing import SolrFunctionalTestCase
 from plone import api
 import os
 import pkg_resources
-import unittest
 
 
 def get_subclasses(cls):
@@ -128,7 +127,7 @@ class TestSolr(IntegrationTestCase):
                     'catalog only metadata?'.format(metadata))
 
 
-class TestOGSolrDocument(unittest.TestCase):
+class TestOGSolrDocument(IntegrationTestCase):
 
     def test_without_bumblebee_checksum(self):
         doc = OGSolrDocument(data={})

@@ -88,9 +88,6 @@ class TestCopyDocuments(IntegrationTestCase):
                              'created': ZOPE_PASTE_TIME,
                              'modified': ZOPE_PASTE_TIME,
                              'changed': self.PASTE_TIME,
-                             # containing dossier and subdossier
-                             'containing_dossier': self.empty_dossier.Title(),
-                             'containing_subdossier': '',
                              # title and filename
                              'Title': 'Copy of {}'.format(self.subdocument.Title()),
                              'filename': u'Copy of {}'.format(self.subdocument.get_filename()),
@@ -214,9 +211,6 @@ class TestCopyDocuments(IntegrationTestCase):
             'modified': paste_time_index,
             'created': paste_time_index,
 
-            # containing dossier and subdossier
-            'containing_dossier': self.empty_dossier.Title(),
-            'containing_subdossier': '',
             'is_subdossier': 0,  # acquisition is responsible here
         }
 

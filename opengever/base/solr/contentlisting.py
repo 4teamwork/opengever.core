@@ -85,11 +85,17 @@ class OGSolrContentListingObject(
         return '<opengever.base.solr.OGSolrContentListingObject at %s>' % (
             self.getPath())
 
+    def getIcon(self):
+        """Because we use CSS sprites for icons, we don't return an icon here.
+        """
+        return None
+
     def Title(self):
         # Delegate to Title property of our translated title capable OGSolrDocument.
         return self.doc.Title
 
     def CroppedDescription(self):
         if self.snippets:
-            return self.snippets
-        return super(OGSolrContentListingObject, self).CroppedDescription()
+            return self._crop_text(self.snippets, 400)
+        return self._crop_text(
+            super(OGSolrContentListingObject, self).CroppedDescription(), 400)

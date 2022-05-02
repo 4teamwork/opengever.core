@@ -10,6 +10,7 @@ from opengever.disposition.interfaces import IAppraisal
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.trash.trash import ITrasher
 from plone import api
 from zope.component import getMultiAdapter
@@ -43,7 +44,7 @@ class TestChangedBehavior(IntegrationTestCase):
                          pytz.UTC)
 
 
-class TestChangedUpdateBase(IntegrationTestCase):
+class TestChangedUpdateBase(SolrIntegrationTestCase):
 
     def assert_changed_value(self, obj, value):
         self.assertEqual(value, IChanged(obj).changed)

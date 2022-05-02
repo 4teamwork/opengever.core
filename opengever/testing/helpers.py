@@ -4,6 +4,7 @@ from datetime import datetime
 from ftw.solr.interfaces import ISolrSearch
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
+from opengever.base.solr import OGSolrDocument
 from opengever.contact.sources import ContactsSource
 from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
@@ -117,6 +118,15 @@ def obj2brain(obj, unrestricted=False):
         raise Exception('Not in catalog: %s' % obj)
 
     return brains[0]
+
+
+def obj2solr(obj, unrestricted=False):
+    solr = getUtility(ISolrSearch)
+    if unrestricted:
+        response = solr.unrestricted_search(filters=("UID:{}".format(obj.UID())))
+    else:
+        response = solr.search(filters=("UID:{}".format(obj.UID())))
+    return OGSolrDocument(response.docs[0])
 
 
 def index_data_for(obj):
