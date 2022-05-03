@@ -253,11 +253,20 @@ class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
         self.assert_can_delete(self.workspace, browser)
 
     @browsing
-    def test_workspace_admin_cannot_permanently_delete_inactive_workspace(self, browser):
+    def test_workspace_admin_can_permanently_delete_inactive_workspace(self, browser):
         self.login(self.workspace_admin, browser)
         api.content.transition(
             self.workspace,
             'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.assert_can_delete(self.workspace, browser)
+
+    @browsing
+    def test_workspace_member_cannot_permanently_delete_inactive_workspace(self, browser):
+        self.login(self.workspace_admin, browser)
+        api.content.transition(
+            self.workspace,
+            'opengever_workspace--TRANSITION--deactivate--active_inactive')
+        self.login(self.workspace_member, browser)
         self.assert_cannot_delete(self.workspace, browser, code=403)
 
     @browsing
