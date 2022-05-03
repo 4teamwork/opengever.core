@@ -407,3 +407,34 @@ class TestMove(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEqual(1, len(children["added"]))
+
+    @browsing
+    def test_move_document_when_not_all_path_elemnts_are_accessible(self, browser):
+        self.login(self.administrator, browser=browser)
+        subdossier = create(Builder('dossier')
+                            .titled(u'Sub')
+                            .within(self.protected_dossier))
+        RoleAssignmentManager(subdossier).add_or_update_assignments(
+            [SharingRoleAssignment(self.regular_user.id, ['Editor'])])
+        doc = create(Builder('document')
+                     .titled(u'doc')
+                     .within(subdossier))
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                '{}/@move'.format(self.dossier.absolute_url()),
+                method='POST',
+                data=json.dumps(
+                    {'source': u'/'.join(doc.getPhysicalPath()).replace(u'/plone', u'')}
+                ),
+                headers=self.api_headers)
+
+        self.assertEquals(1, len(children['added']))
+        moved = children["added"].pop()
+
+        self.assertEquals(200, browser.status_code)
+        self.assertEquals(
+            [{u'source': doc.absolute_url(), u'target': moved.absolute_url()}],
+            browser.json)
