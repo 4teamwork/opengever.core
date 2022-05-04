@@ -177,3 +177,20 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             expected_actions = [u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
                                 u'unlink_workspace', u'zipexport']
             self.assertEqual(expected_actions, self.get_actions(self.dossier))
+
+
+class TestTemplateContextActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_template_folder_context_actions(self):
+        self.login(self.administrator)
+        expected_actions = [u'delete', u'edit', u'local_roles']
+        self.assertEqual(expected_actions, self.get_actions(self.templates))
+
+    def test_dossier_template_context_actions(self):
+        self.login(self.administrator)
+        expected_actions = [u'delete', u'edit', u'local_roles']
+        self.assertEqual(expected_actions, self.get_actions(self.dossiertemplate))

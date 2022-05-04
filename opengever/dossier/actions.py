@@ -142,3 +142,9 @@ class DossierContextActions(BaseContextActions):
 
     def is_zipexport_available(self):
         return True
+
+
+class TemplateContextActions(BaseContextActions):
+
+    def is_delete_available(self):
+        return api.user.has_permission('Delete objects', obj=self.context)

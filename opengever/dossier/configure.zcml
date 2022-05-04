@@ -93,6 +93,17 @@
       />
 
   <adapter factory=".actions.DossierContextActions" />
+  <adapter
+      factory=".actions.TemplateContextActions"
+      for="opengever.dossier.templatefolder.ITemplateFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.TemplateContextActions"
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
 
   <!-- JSON endpoint for dossier attributes -->
   <plone:service
