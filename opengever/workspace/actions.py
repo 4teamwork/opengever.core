@@ -2,6 +2,7 @@ from opengever.base.context_actions import BaseContextActions
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
 from opengever.workspace.interfaces import IToDo
+from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
@@ -39,6 +40,20 @@ class WorkspaceMeetingContextActions(BaseContextActions):
 
     def is_meeting_minutes_pdf_available(self):
         return True
+
+    def is_share_content_available(self):
+        return True
+
+
+@adapter(IWorkspace, IOpengeverBaseLayer)
+class WorkspaceContextActions(BaseContextActions):
+
+    def is_add_invitation_available(self):
+        return api.user.has_permission('Sharing page: Delegate WorkspaceAdmin role',
+                                       obj=self.context)
+
+    def is_delete_workspace_available(self):
+        return self.context.is_deletion_allowed()
 
     def is_share_content_available(self):
         return True

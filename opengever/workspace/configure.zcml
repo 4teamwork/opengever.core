@@ -23,6 +23,7 @@
       />
 
   <adapter factory=".actions.TodoContextActions" />
+  <adapter factory=".actions.WorkspaceContextActions" />
   <adapter factory=".actions.WorkspaceMeetingContextActions" />
 
   <subscriber
