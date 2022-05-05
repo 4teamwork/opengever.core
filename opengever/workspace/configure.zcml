@@ -24,6 +24,7 @@
 
   <adapter factory=".actions.TodoContextActions" />
   <adapter factory=".actions.WorkspaceContextActions" />
+  <adapter factory=".actions.WorkspaceFolderContextActions" />
   <adapter factory=".actions.WorkspaceMeetingContextActions" />
 
   <subscriber

@@ -1,11 +1,15 @@
 from opengever.base.context_actions import BaseContextActions
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
+from opengever.trash.trash import ITrasher
+from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
+from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
+from zExceptions import Forbidden
 from zope.component import adapter
 
 
@@ -57,3 +61,28 @@ class WorkspaceContextActions(BaseContextActions):
 
     def is_share_content_available(self):
         return True
+
+
+@adapter(IWorkspaceFolder, IOpengeverBaseLayer)
+class WorkspaceFolderContextActions(BaseContextActions):
+
+    def is_delete_workspace_context_available(self):
+        try:
+            IDeleter(self.context).verify_may_delete()
+            return True
+        except Forbidden:
+            return False
+
+    def is_edit_available(self):
+        if ITrasher(self.context).is_trashed():
+            return False
+        return super(WorkspaceFolderContextActions, self).is_edit_available()
+
+    def is_share_content_available(self):
+        return True
+
+    def is_trash_context_available(self):
+        return ITrasher(self.context).verify_may_trash(raise_on_violations=False)
+
+    def is_untrash_context_available(self):
+        return ITrasher(self.context).verify_may_untrash(raise_on_violations=False)

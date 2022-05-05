@@ -1,6 +1,7 @@
 from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
 from opengever.testing import IntegrationTestCase
+from opengever.trash.trash import ITrasher
 from zope.component import queryMultiAdapter
 
 
@@ -71,3 +72,26 @@ class TestWorkspaceContextActions(IntegrationTestCase):
         self.workspace.external_reference = u'dossier-UID'
         self.set_workflow_state('opengever_workspace--STATUS--inactive', self.workspace)
         self.assertNotIn(u'delete_workspace', self.get_actions(self.workspace))
+
+
+class TestWorkspaceFolderContextActions(IntegrationTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_workspace_folder_context_actions(self):
+        self.login(self.workspace_member)
+        expected_actions = [u'edit', u'share_content', u'trash_context']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
+    def test_workspace_folder_context_actions_for_workspace_admins(self):
+        self.login(self.workspace_admin)
+        expected_actions = [u'edit', u'local_roles', u'share_content', u'trash_context']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
+    def test_context_action_for_trashed_workspace_folder(self):
+        self.login(self.workspace_member)
+        ITrasher(self.workspace_folder).trash()
+        expected_actions = [u'delete_workspace_context', u'share_content', u'untrash_context']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
