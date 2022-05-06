@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- A new endpoint ``@ui-actions`` is added (see :ref:`ui_actions`).
 
 2022.9.0 (2022-04-26)
 ---------------------

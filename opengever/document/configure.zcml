@@ -358,4 +358,70 @@
 
   <adapter factory=".approvals.ApprovalList" />
 
+
+  <adapter
+      factory=".actions.DossierDocumentListingActions"
+      name="documents"
+      />
+
+  <adapter
+      factory=".actions.PrivateDossierDocumentListingActions"
+      name="documents"
+      />
+
+  <adapter
+      factory=".actions.PrivateFolderDocumentListingActions"
+      name="documents"
+      />
+
+  <adapter
+      factory=".actions.InboxDocumentListingActions"
+      name="documents"
+      />
+
+  <adapter
+      factory=".actions.RepositoryDocumentListingActions"
+      name="documents"
+      for="opengever.repository.interfaces.IRepositoryFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.RepositoryDocumentListingActions"
+      name="documents"
+      for="opengever.repository.repositoryroot.IRepositoryRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.WorkspaceDocumentListingActions"
+      name="documents"
+      for="opengever.workspace.interfaces.IWorkspace
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.WorkspaceDocumentListingActions"
+      name="documents"
+      for="opengever.workspace.interfaces.IWorkspaceFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.TemplateDocumentListingActions"
+      name="documents"
+      for="opengever.dossier.templatefolder.ITemplateFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.TemplateDocumentListingActions"
+      name="documents"
+      for="opengever.dossier.dossiertemplate.behaviors.IDossierTemplateMarker
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter factory=".actions.BaseDocumentContextActions" />
+  <adapter factory=".actions.DocumentSchemaContextActions" />
+
 </configure>

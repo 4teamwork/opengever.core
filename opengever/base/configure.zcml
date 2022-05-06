@@ -47,6 +47,12 @@
   <adapter factory=".storage.RoleAssignmentReportsStorage" />
 
   <adapter
+      factory=".context_actions.BaseContextActions"
+      for="opengever.inbox.forwarding.IForwarding
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
       factory=".contentlisting.OpengeverCatalogContentListingObject"
       for="opengever.base.interfaces.IOpengeverCatalogBrain"
       />

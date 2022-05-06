@@ -21,6 +21,18 @@
   <include package=".viewlets" />
   <include package=".content" />
 
+  <adapter
+      factory=".actions.TaskTemplateContextActions"
+      for="opengever.tasktemplates.content.templatefoldersschema.ITaskTemplateFolderSchema
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.TaskTemplateContextActions"
+      for="opengever.tasktemplates.content.tasktemplate.ITaskTemplate
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <utility
       factory=".vocabularies.ActiveTasktemplatefoldersVocabulary"
       name="opengever.tasktemplates.active_tasktemplatefolders"

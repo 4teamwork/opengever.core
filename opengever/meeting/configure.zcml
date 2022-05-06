@@ -207,6 +207,22 @@
   <adapter factory=".committee.RepositoryfolderValidator" />
 
   <adapter
+      factory=".actions.ProposalListingActions"
+      name="proposals"
+      for="plone.dexterity.interfaces.IDexterityContainer
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter
+      factory=".actions.ProposalListingActions"
+      name="proposals"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <adapter factory=".actions.ProposalContextActions" />
+
+  <adapter
       factory="opengever.meeting.proposaltransition.CancelTransitionExtender"
       name="proposal-transition-cancel"
       />

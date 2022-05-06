@@ -14,6 +14,23 @@ from z3c.form.field import Fields
 from zExceptions import Unauthorized
 
 
+def is_edit_public_trial_status_available(context):
+    if not IBaseDocument.providedBy(context):
+        return False
+
+    parent_dossier = context.get_parent_dossier()
+    if not parent_dossier:
+        # Document inside a workspace
+        return False
+
+    state = api.content.get_state(parent_dossier, default=None)
+    if state not in DOSSIER_STATES_CLOSED:
+        return False
+
+    return can_access_public_trial_edit_form(
+        api.user.get_current(), context)
+
+
 def can_access_public_trial_edit_form(user, content):
     """Returns True if the user has 'Modify portal content' permission in any
     open dossier state. And the containing dossier is
@@ -79,17 +96,4 @@ class EditPublicTrialForm(DefaultEditForm):
 class IsEditPublicTrialStatusAvailable(BrowserView):
 
     def __call__(self):
-        if not IBaseDocument.providedBy(self.context):
-            return False
-
-        parent_dossier = self.context.get_parent_dossier()
-        if not parent_dossier:
-            # Document inside a workspace
-            return False
-
-        state = api.content.get_state(parent_dossier, default=None)
-        if state not in DOSSIER_STATES_CLOSED:
-            return False
-
-        return can_access_public_trial_edit_form(
-            api.user.get_current(), self.context)
+        return is_edit_public_trial_status_available(self.context)

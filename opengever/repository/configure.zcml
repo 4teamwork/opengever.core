@@ -13,6 +13,9 @@
 
   <adapter factory=".constrains.RepositoryFolderConstrainTypes" />
 
+  <adapter factory=".actions.RepositoryRootContextActions" />
+  <adapter factory=".actions.RepositoryFolderContextActions" />
+
   <adapter
       factory=".indexers.title_de_indexer"
       name="title_de"

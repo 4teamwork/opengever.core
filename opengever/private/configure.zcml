@@ -19,6 +19,7 @@
   <include package=".browser" />
   <include package=".viewlets" />
 
+  <adapter factory=".actions.PrivateDossierContextActions" />
 
   <!-- permissions -->
   <permission id="opengever.private.AddPrivateRoot" title="opengever.private: Add private root" />
