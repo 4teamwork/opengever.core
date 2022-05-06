@@ -170,6 +170,20 @@ class TestProtectDossier(SolrIntegrationTestCase):
         self.assertNotIn('Protect', browser.css('fieldset legend').text)
 
     @browsing
+    def test_limited_admin_cannot_see_protect_dossier_fields(self, browser):
+        self.login(self.limited_admin, browser)
+
+        browser.open(self.dossier, view="@@edit")
+
+        self.assertEqual(
+            0, len(browser.css('select#form-widgets-IProtectDossier-reading')))
+
+        self.assertEqual(
+            0, len(browser.css('select#form-widgets-IProtectDossier-reading_and_writing')))
+
+        self.assertNotIn('Protect', browser.css('fieldset legend').text)
+
+    @browsing
     def test_dossier_manager_can_see_protect_dossier_fields(self, browser):
         self.login(self.dossier_manager, browser)
 
