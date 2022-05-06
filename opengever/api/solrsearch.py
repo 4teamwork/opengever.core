@@ -17,7 +17,7 @@ from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
-
+import re
 
 BLACKLISTED_ATTRIBUTES = set([
     'getDataOrigin',
@@ -26,6 +26,44 @@ BLACKLISTED_ATTRIBUTES = set([
     'SearchableText',
     'allowedRolesAndUsers',
 ])
+
+OPERATORS = re.compile(r" AND| OR| NOT|&&|\|\|", re.UNICODE)
+
+WEIGHTS = {
+    "Title": [10000, 1000],
+    "sequence_number_string": [1000, 100],
+    "reference": [1000, 100],
+    "metadata": [1000, 100],
+    "SearchableText": [100, 50],
+}
+
+# word
+qf = " ".join(
+    ["{}^{}".format(field, word) for field, (_, word) in WEIGHTS.items()])
+# phrase
+pf = " ".join(
+    ["{}^{}".format(field, phrase) for field, (phrase, _) in WEIGHTS.items()])
+# fields to search
+uf = " ".join(WEIGHTS.keys())
+
+
+def build_query(term):
+    if not term:
+        return "*"
+
+    if bool(OPERATORS.search(term)):
+        return term
+
+    # phrase search
+    quote_count = term.count('"')
+    if quote_count > 1 and quote_count % 2 == 0:
+        return term
+
+    # specific column search
+    if ':' in term:
+        return term
+
+    return " ".join(["{}*".format(split) for split in term.split()])
 
 
 class SolrSearchFieldMapper(SolrFieldMapper):
@@ -61,8 +99,17 @@ class SolrSearchGet(SolrQueryBaseService):
 
     def extract_query(self, params):
         if 'q' in params:
-            query = make_query(params['q'])
+            query = {
+                "edismax": {
+                    "query": build_query(params['q']),
+                    "qf": qf,
+                    "pf": pf,
+                    "uf": uf,
+                }
+            }
+
             del params['q']
+
         elif 'q.raw' in params:
             query = params['q.raw']
             del params['q.raw']
