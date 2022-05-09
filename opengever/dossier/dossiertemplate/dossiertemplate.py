@@ -122,10 +122,21 @@ class DossierTemplate(Container):
 
     def get_subdossiers(self, sort_on='sortable_title',
                         sort_order='ascending',
+                        unrestricted=False,
                         **kwargs):
 
-        subdossiers = api.content.find(self, object_provides=IDossierTemplateMarker,
-                                       sort_order=sort_order, sort_on=sort_on)
+        dossier_path = '/'.join(self.getPhysicalPath())
+        query = {
+            'path': dict(query=dossier_path),
+            'object_provides': IDossierTemplateMarker.__identifier__,
+            'sort_on': sort_on,
+            'sort_order': sort_order
+            }
+
+        if unrestricted:
+            subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
+        else:
+            subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
         current_uid = self.UID()
