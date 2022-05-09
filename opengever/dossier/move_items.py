@@ -388,6 +388,9 @@ class DossierMovabiliyChecker(DefaultMovabilityChecker):
         if not IDossierMarker.providedBy(target):
             return
 
+        self.validate_depth(target)
+
+    def validate_depth(self, target):
         # determine depth of structure being moved
         substructure_depth = self.dossier_structure_depth()
 
