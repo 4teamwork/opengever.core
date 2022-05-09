@@ -405,3 +405,17 @@ class DossierMovabiliyChecker(DefaultMovabilityChecker):
             return 1
         max_level = max([len(brain.getPath().split('/')) for brain in subdossiers])
         return max_level - len(self.context.getPhysicalPath()) + 1
+
+
+@adapter(IDossierTemplateMarker)
+class DossierTemplateMovabilityChecker(DossierMovabiliyChecker):
+
+    def validate_movement(self, target):
+        """Avoid exceeding maximum dossier depth
+        """
+        super(DossierTemplateMovabilityChecker, self).validate_movement(target)
+        if not IDossierTemplateMarker.providedBy(target):
+            return
+        if not self.context.is_respect_max_dossier_depth:
+            return
+        self.validate_depth(target)

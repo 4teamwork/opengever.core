@@ -145,6 +145,24 @@ class DossierTemplate(Container):
 
         return subdossiers
 
+    def is_dossier_structure_addable(self, additional_depth=1):
+        """Checks if the maximum dossier depth allows additional_depth levels
+        of subdossiers
+        """
+        max_depth = api.portal.get_registry_record(
+            name='maximum_dossier_depth',
+            interface=IDossierContainerTypes,
+            default=100,
+            )
+
+        depth = 0
+        obj = self
+        while IDossierTemplateMarker.providedBy(obj):
+            depth += 1
+            obj = aq_parent(aq_inner(obj))
+
+        return depth + additional_depth <= max_depth + 1
+
     def get_filing_prefix_label(self):
         return voc_term_title(IDossierTemplate['filing_prefix'],
                               IDossierTemplate(self).filing_prefix)

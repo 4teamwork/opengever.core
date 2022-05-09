@@ -3,6 +3,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -322,3 +323,46 @@ class TestMove(IntegrationTestCase):
              u'translated_message': u'You are not allowed to move this object.',
              u'type': u'Forbidden'},
             browser.json)
+
+    @browsing
+    def test_move_dossiertemplate_to_templatefolder_is_possible(self, browser):
+        self.login(self.administrator, browser)
+        with self.observe_children(self.subtemplates) as children:
+            browser.open(
+                self.subtemplates, view='@move',
+                data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
+                method='POST', headers=self.api_headers,
+            )
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(children["added"]))
+
+    @browsing
+    def test_moving_dossiertemplate_respects_maximum_dossier_depth_if_flag_enabled(self, browser):
+        self.login(self.administrator, browser)
+        api.portal.set_registry_record('respect_max_depth', True,
+                                       interface=IDossierTemplateSettings)
+
+        empty_dossiertemplate = create(Builder('dossiertemplate')
+                                       .within(self.templates))
+        with browser.expect_http_error(code=403):
+            browser.open(empty_dossiertemplate, view='/@move',
+                         data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'msg_would_exceed_max_dossier_level',
+             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        api.portal.set_registry_record('respect_max_depth', False,
+                                       interface=IDossierTemplateSettings)
+
+        with self.observe_children(empty_dossiertemplate) as children:
+            browser.open(empty_dossiertemplate, view='/@move',
+                         data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(children["added"]))
