@@ -53,6 +53,30 @@ class TestAccessibleWorkspacesGet(SolrIntegrationTestCase):
                          u'title': u'A Workspace'}]}, browser.json)
 
     @browsing
+    def test_accessible_workspaces_handles_inactive_users(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        # create an inactive user with no member data
+        inactive_user = create(
+            Builder('ogds_user')
+            .id('inactive_user')
+            .having(active=False)
+        )
+
+        self.set_roles(self.workspace, 'inactive_user', ['WorkspaceMember'])
+        self.commit_solr()
+
+        url = '{}/@accessible-workspaces/{}'.format(self.portal.absolute_url(),
+                                                    inactive_user.userid)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@accessible-workspaces/inactive_user',
+             u'items': [{u'@id': self.workspace.absolute_url(),
+                         u'@type': u'opengever.workspace.workspace',
+                         u'review_state': u'opengever_workspace--STATUS--active',
+                         u'title': u'A Workspace'}]}, browser.json)
+
+    @browsing
     def test_raises_bad_request_when_userid_is_missing(self, browser):
         self.login(self.administrator, browser=browser)
         url = '{}/@accessible-workspaces'.format(self.portal.absolute_url())

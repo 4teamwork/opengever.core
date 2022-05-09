@@ -1,5 +1,6 @@
 from ftw.solr.interfaces import ISolrSearch
 from opengever.api.solr_query_service import SolrQueryBaseService
+from opengever.ogds.models.service import ogds_service
 from plone import api
 from zExceptions import BadRequest
 from zope.component import getUtility
@@ -26,13 +27,17 @@ class AccessibleWorkspacesGet(SolrQueryBaseService):
 
     def reply(self):
         userid = self.read_params().decode('utf-8')
-        user = api.user.get(userid)
-        if not user:
+        ogds_user = ogds_service().fetch_user(userid)
+
+        if not ogds_user:
             raise BadRequest(u'Invalid userid "{}".'.format(userid))
 
         allowed_roles_and_users = [u'user:{}'.format(userid)]
-        allowed_roles_and_users.extend([u'user:{}'.format(group) for group in user.getGroups()])
-        allowed_roles_and_users.extend(user.getRoles())
+
+        user = api.user.get(userid)
+        if user:
+            allowed_roles_and_users.extend([u'user:{}'.format(group) for group in user.getGroups()])
+            allowed_roles_and_users.extend(user.getRoles())
 
         query = u'object_provides:opengever.workspace.interfaces.IWorkspace'
 
