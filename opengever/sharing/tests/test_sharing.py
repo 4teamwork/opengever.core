@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import InsufficientPrivileges
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
@@ -651,3 +652,42 @@ class TestWorkspaceSharing(IntegrationTestCase):
             [u'nicole.kohler', u'fridolin.hugentobler',
              u'hans.peter', u'beatrice.schrodinger', u'gunther.frohlich'],
             [entry['id'] for entry in browser.json.get('items')])
+
+
+class TestSharingViewPermissions(IntegrationTestCase):
+
+    @browsing
+    def test_limited_admin_cannot_access_sharing_view_on_dossier(self, browser):
+        self.login(self.manager, browser=browser)
+        browser.open(self.dossier, view='@@sharing')
+
+        self.login(self.administrator, browser=browser)
+        browser.open(self.dossier, view='@@sharing')
+
+        with self.assertRaises(InsufficientPrivileges):
+            self.login(self.limited_admin, browser=browser)
+            browser.open(self.dossier, view='@@sharing')
+
+    @browsing
+    def test_limited_admin_cannot_access_sharing_view_on_repository_root(self, browser):
+        self.login(self.manager, browser=browser)
+        browser.open(self.repository_root, view='@@sharing')
+
+        self.login(self.administrator, browser=browser)
+        browser.open(self.repository_root, view='@@sharing')
+
+        with self.assertRaises(InsufficientPrivileges):
+            self.login(self.limited_admin, browser=browser)
+            browser.open(self.repository_root, view='@@sharing')
+
+    @browsing
+    def test_limited_admin_cannot_access_sharing_view_on_repository_folder(self, browser):
+        self.login(self.manager, browser=browser)
+        browser.open(self.leaf_repofolder, view='@@sharing')
+
+        self.login(self.administrator, browser=browser)
+        browser.open(self.leaf_repofolder, view='@@sharing')
+
+        with self.assertRaises(InsufficientPrivileges):
+            self.login(self.limited_admin, browser=browser)
+            browser.open(self.leaf_repofolder, view='@@sharing')
