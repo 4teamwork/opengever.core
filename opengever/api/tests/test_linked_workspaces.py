@@ -1100,46 +1100,6 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                 browser.json.get('teamraum_connect_retrieval_mode'))
 
     @browsing
-    def test_copy_document_from_second_batch_from_a_workspace(self, browser):
-        for i in range(25):
-            create(Builder('document')
-                   .within(self.workspace)
-                   .with_dummy_content())
-
-        document = create(Builder('document')
-                          .titled('Another document')
-                          .within(self.workspace)
-                          .with_dummy_content())
-
-        payload = {
-            'workspace_uid': self.workspace.UID(),
-            'document_uid': document.UID(),
-        }
-
-        with self.workspace_client_env():
-            manager = ILinkedWorkspaces(self.dossier)
-            manager.storage.add(self.workspace.UID())
-            transaction.commit()
-            documents_first_batch = manager.list_documents_in_linked_workspace(
-                self.workspace.UID())['items']
-            self.assertNotIn(document.UID(), [doc['UID'] for doc in documents_first_batch])
-
-            browser.login()
-            fix_publisher_test_bug(browser, document)
-            with self.observe_children(self.dossier) as children:
-                browser.open(
-                    self.dossier.absolute_url() + '/@copy-document-from-workspace',
-                    data=json.dumps(payload),
-                    method='POST',
-                    headers={'Accept': 'application/json',
-                             'Content-Type': 'application/json'},
-                )
-
-            self.assertEqual(len(children['added']), 1)
-            document_copy = children['added'].pop()
-            self.assertEqual(document_copy.title, document.title)
-
-    @browsing
     def test_copy_document_from_workspace_as_new_version(self, browser):
         gever_doc = create(Builder('document')
                            .within(self.dossier)
