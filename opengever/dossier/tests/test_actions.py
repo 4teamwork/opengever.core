@@ -67,11 +67,11 @@ class TestDossierTemplateListingActions(IntegrationTestCase):
 
     def test_dossiertemplate_actions_for_templatefolder_and_dossiertemplate(self):
         self.login(self.regular_user)
-        self.assertEqual([], self.get_actions(self.templates))
-        self.assertEqual([], self.get_actions(self.dossiertemplate))
+        self.assertEqual([u'move_items'], self.get_actions(self.templates))
+        self.assertEqual([u'move_items'], self.get_actions(self.dossiertemplate))
 
         self.login(self.administrator)
-        expected_actions = [u'delete']
+        expected_actions = [u'move_items', u'delete']
         self.assertEqual(expected_actions, self.get_actions(self.templates))
         self.assertEqual(expected_actions, self.get_actions(self.dossiertemplate))
 
@@ -192,5 +192,5 @@ class TestTemplateContextActions(IntegrationTestCase):
 
     def test_dossier_template_context_actions(self):
         self.login(self.administrator)
-        expected_actions = [u'delete', u'edit', u'local_roles']
+        expected_actions = [u'delete', u'edit', u'local_roles', u'move_item']
         self.assertEqual(expected_actions, self.get_actions(self.dossiertemplate))

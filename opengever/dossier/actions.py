@@ -54,6 +54,9 @@ class DossierTemplateListingActions(BaseListingActions):
     def is_delete_available(self):
         return api.user.has_permission('Delete objects', obj=self.context)
 
+    def is_move_items_available(self):
+        return True
+
 
 @adapter(IDossierMarker, IOpengeverBaseLayer)
 class DossierContextActions(BaseContextActions):
@@ -158,3 +161,6 @@ class DossierTemplateContextActions(BaseContextActions):
 
     def is_delete_available(self):
         return api.user.has_permission('Delete objects', obj=self.context)
+
+    def is_move_item_available(self):
+        return api.user.has_permission('Copy or Move', obj=self.context)
