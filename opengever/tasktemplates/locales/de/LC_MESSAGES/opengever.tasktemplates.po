@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-04-01 15:20+0000\n"
+"POT-Creation-Date: 2022-05-09 11:00+0000\n"
 "PO-Revision-Date: 2012-02-23 14:39+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -227,6 +227,11 @@ msgstr "Alle Aufgaben aus gewähltem Standardablauf wurden erstellt."
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
 msgstr "Zurzeit sind keine aktiven Standardabläufe hinterlegt."
+
+#. Default: "It's not allowed to move tasktemplatefolders into tasktemplatefolders."
+#: ./opengever/tasktemplates/move.py
+msgid "msg_tasktemplatefolder_nesting_not_allowed"
+msgstr "Es ist nicht erlaubt, Standardabläufe in Standardabläufe zu verschieben."
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py

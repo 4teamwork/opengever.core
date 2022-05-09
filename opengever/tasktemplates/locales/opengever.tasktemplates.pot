@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-01 15:20+0000\n"
+"POT-Creation-Date: 2022-05-09 11:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -229,6 +229,11 @@ msgstr ""
 #. Default: "Currently there are no active task template folders registered."
 #: ./opengever/tasktemplates/browser/trigger.py
 msgid "msg_no_active_tasktemplatefolders"
+msgstr ""
+
+#. Default: "It's not allowed to move tasktemplatefolders into tasktemplatefolders."
+#: ./opengever/tasktemplates/move.py
+msgid "msg_tasktemplatefolder_nesting_not_allowed"
 msgstr ""
 
 #. Default: "Yes"

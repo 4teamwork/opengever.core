@@ -366,3 +366,44 @@ class TestMove(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEqual(1, len(children["added"]))
+
+    @browsing
+    def test_move_tasktemplatefolder_to_templatefolder_is_possible(self, browser):
+        self.login(self.administrator, browser)
+        with self.observe_children(self.subtemplates) as children:
+            browser.open(
+                self.subtemplates, view='@move',
+                data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
+                method='POST', headers=self.api_headers,
+            )
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(children["added"]))
+
+    @browsing
+    def test_can_only_move_tasktemplatefolder_into_tasktemplatefolder_if_nesting_enabled(self,
+                                                                                         browser):
+        self.login(self.administrator, browser)
+        tasktemplatefolder = create(Builder('tasktemplatefolder').within(self.templates))
+
+        with browser.expect_http_error(code=403):
+            browser.open(tasktemplatefolder, view='/@move',
+                         data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u"additional_metadata": {},
+             u"message": u"msg_tasktemplatefolder_nesting_not_allowed",
+             u"translated_message":
+                u"It's not allowed to move tasktemplatefolders into tasktemplatefolders.",
+             u"type": u"Forbidden"},
+            browser.json)
+
+        self.activate_feature('tasktemplatefolder_nesting')
+
+        with self.observe_children(tasktemplatefolder) as children:
+            browser.open(tasktemplatefolder, view='/@move',
+                         data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(children["added"]))

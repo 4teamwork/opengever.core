@@ -67,6 +67,8 @@
       name="tasktemplatefolder-transition-activ-inactiv"
       />
 
+  <adapter factory=".move.TaskTemplateFolderMovabiliyChecker" />
+
 
 
 
