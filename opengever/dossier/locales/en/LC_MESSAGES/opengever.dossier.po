@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-04-27 16:30+0000\n"
+"POT-Creation-Date: 2022-05-09 08:19+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -866,6 +866,11 @@ msgstr "Document ${name} is inside a task and therefore not movable. Please move
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_locked"
 msgstr "Document ${name} is locked and therefore not movable."
+
+#. Default: "Object ${name} cannot be moved because you do not have the permissions."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_no_permissions"
+msgstr "${name} cannot be moved because you do not have the permissions. "
 
 #. German translation: Anzahl Behältnisse
 #. Default: "Number of Containers"

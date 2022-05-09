@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 21:25+0000\n"
+"POT-Creation-Date: 2022-05-06 13:47+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -149,6 +149,7 @@ msgstr "L'action que vous avez effectuée a tout de même essayé d'effectuer un
 
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
+#: ./opengever/base/monkey/patches/verify_object_paste.py
 msgid "error_checked_out_cannot_be_copied"
 msgstr "Les documents en checkout ne peuvent pas être copiés."
 
@@ -461,6 +462,11 @@ msgstr "Information"
 #: ./opengever/base/json_response.py
 msgid "message_title_warning"
 msgstr "Avertissement"
+
+#. Default: "You are not allowed to move this object"
+#: ./opengever/base/adapters.py
+msgid "move_object_disallowed"
+msgstr "Vous n'êtes pas autorisé à déplacer cet objet."
 
 #. Default: "Can't paste items; the clipboard is emtpy"
 #: ./opengever/base/browser/paste.py

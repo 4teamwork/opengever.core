@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 21:25+0000\n"
+"POT-Creation-Date: 2022-05-06 13:47+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -175,6 +175,7 @@ msgstr "However, the action you tried to perform has nevertheless attempted to p
 #. German translation: Ausgecheckte Dokumente können nicht kopiert werden.
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
+#: ./opengever/base/monkey/patches/verify_object_paste.py
 msgid "error_checked_out_cannot_be_copied"
 msgstr "Checked out documents cannot be copied."
 
@@ -556,6 +557,11 @@ msgstr "Information"
 #: ./opengever/base/json_response.py
 msgid "message_title_warning"
 msgstr "Warning"
+
+#. Default: "You are not allowed to move this object"
+#: ./opengever/base/adapters.py
+msgid "move_object_disallowed"
+msgstr "You are not allowed to move this object."
 
 #. German translation: Es können keine Objekte eingefügt werden; die Zwischenablage ist leer.
 #. Default: "Can't paste items; the clipboard is emtpy"

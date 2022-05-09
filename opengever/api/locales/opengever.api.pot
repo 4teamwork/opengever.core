@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-14 06:43+0000\n"
+"POT-Creation-Date: 2022-05-06 13:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,6 +28,11 @@ msgstr ""
 #. Default: "It's not allowed to change responsible here. Use \"Reassign\" instead"
 #: ./opengever/api/task.py
 msgid "change_responsible_not_allowed"
+msgstr ""
+
+#. Default: "You are not allowed to copy this object"
+#: ./opengever/api/copy_.py
+msgid "copy_object_disallowed"
 msgstr ""
 
 #. Default: "Copy of ${title}"

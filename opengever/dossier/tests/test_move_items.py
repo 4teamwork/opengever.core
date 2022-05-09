@@ -9,6 +9,8 @@ from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.move_items import DossierMovabiliyChecker
 from opengever.testing import IntegrationTestCase
@@ -100,6 +102,32 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         self.request.form[
             'orig_template'] = "%s#dossiers" % self.dossier.absolute_url()
         self.assertEquals("%s#dossiers" % self.dossier.absolute_url(), view())
+
+    def test_reader_cannot_move_items(self):
+        self.login(self.manager)
+
+        self.subsubdossier.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.subsubdossier).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor'],
+                                  self.subsubdossier))
+
+        self.assertFalse(api.user.has_permission(
+            "Copy or Move", user=self.regular_user, obj=self.subsubdossier))
+        self.assertFalse(api.user.has_permission(
+            "Copy or Move", user=self.regular_user, obj=self.subsubdocument))
+
+        doc_title = self.subsubdocument.title.encode("utf-8")
+        self.assert_contains(self.subsubdossier, [doc_title])
+        self.assert_does_not_contain(self.empty_dossier, [doc_title])
+
+        with self.login(self.regular_user):
+            self.move_items([self.subsubdocument],
+                            source=self.subsubdossier,
+                            target=self.empty_dossier)
+
+        self.assert_contains(self.subsubdossier, [doc_title])
+        self.assert_does_not_contain(self.empty_dossier, [doc_title])
 
     def test_move_items_to_valid_target(self):
         """ Test integration of move_items method

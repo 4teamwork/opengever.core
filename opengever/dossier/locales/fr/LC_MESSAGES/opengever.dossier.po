@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-27 16:30+0000\n"
+"POT-Creation-Date: 2022-05-09 08:19+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -708,6 +708,11 @@ msgstr "Le document «${name}» est dans une tâche et ne peut pas être déplac
 #: ./opengever/dossier/move_items.py
 msgid "label_not_movable_since_locked"
 msgstr "Le document «${name}» est verrouillé et ne peut pas être déplacé."
+
+#. Default: "Object ${name} cannot be moved because you do not have the permissions."
+#: ./opengever/dossier/move_items.py
+msgid "label_not_movable_since_no_permissions"
+msgstr "${name} ne peut pas être déplacé, parce que vous n'avez pas les droits nécessaires."
 
 #. Default: "Number of Containers"
 #: ./opengever/dossier/behaviors/dossier.py

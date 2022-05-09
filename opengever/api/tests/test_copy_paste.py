@@ -98,7 +98,42 @@ class TestCopyPasteAPI(IntegrationTestCase):
             browser.json)
 
     @browsing
-    def test_copy_document_when_not_all_path_elemnts_are_accessible(self, browser):
+    def test_copying_object_with_read_permissions_is_forbidden(self, browser):
+        self.login(self.manager)
+
+        self.subsubdossier.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.subsubdossier).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor'],
+                                  self.subsubdossier))
+
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@copy',
+                         data=json.dumps({"source": self.subsubdossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'copy_object_disallowed',
+             u'translated_message': u'You are not allowed to copy this object.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@copy',
+                         data=json.dumps({"source": self.subsubdocument.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'copy_object_disallowed',
+             u'translated_message': u'You are not allowed to copy this object.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+    @browsing
+    def test_copy_document_when_not_all_path_elements_are_accessible(self, browser):
         self.login(self.administrator, browser=browser)
         subdossier = create(Builder('dossier')
                             .titled(u'Sub')

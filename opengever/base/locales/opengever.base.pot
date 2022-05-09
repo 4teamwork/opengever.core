@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-17 21:25+0000\n"
+"POT-Creation-Date: 2022-05-06 13:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,6 +147,7 @@ msgstr ""
 
 #. Default: "Checked out documents cannot be copied."
 #: ./opengever/base/browser/copy_items.py
+#: ./opengever/base/monkey/patches/verify_object_paste.py
 msgid "error_checked_out_cannot_be_copied"
 msgstr ""
 
@@ -457,6 +458,11 @@ msgstr ""
 #. Default: "Warning"
 #: ./opengever/base/json_response.py
 msgid "message_title_warning"
+msgstr ""
+
+#. Default: "You are not allowed to move this object"
+#: ./opengever/base/adapters.py
+msgid "move_object_disallowed"
 msgstr ""
 
 #. Default: "Can't paste items; the clipboard is emtpy"

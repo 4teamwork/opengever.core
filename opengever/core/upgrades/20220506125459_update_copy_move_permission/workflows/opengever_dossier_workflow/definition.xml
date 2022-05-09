@@ -136,6 +136,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map name="Sharing page: Delegate DossierManager role" acquired="False"/>
     <permission-map
@@ -144,6 +145,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -151,6 +153,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -158,6 +161,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -165,6 +169,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
@@ -364,6 +369,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -371,6 +377,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -378,6 +385,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -385,6 +393,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -392,6 +401,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
@@ -540,6 +550,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -547,6 +558,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -554,6 +566,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -561,6 +574,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -568,6 +582,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
@@ -717,6 +732,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -724,6 +740,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -731,6 +748,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -738,6 +756,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -745,6 +764,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map
@@ -899,6 +919,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Contributor role"
@@ -906,6 +927,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Editor role"
@@ -913,6 +935,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reader role"
@@ -920,6 +943,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
     <permission-map
         name="Sharing page: Delegate Reviewer role"
@@ -927,6 +951,7 @@
       <permission-role>Manager</permission-role>
       <permission-role>Role Manager</permission-role>
       <permission-role>Administrator</permission-role>
+      <permission-role>LimitedAdmin</permission-role>
     </permission-map>
 
     <permission-map

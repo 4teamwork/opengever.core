@@ -140,6 +140,12 @@ class MoveItemsForm(form.Form):
                             default=u'Dossier ${name} cannot be moved because '
                             'it would exceed the maximum allowed dossier depth.',
                             mapping=dict(name=obj.title))
+                    elif exc.message == u'move_object_disallowed':
+                        msg = _(
+                            'label_not_movable_since_no_permissions',
+                            default=u'Object ${name} cannot be moved because '
+                            'you do not have the permissions.',
+                            mapping=dict(name=obj.title))
                     else:
                         raise Exception(
                             'Failed to determine the reason for unmovable object. '
@@ -247,7 +253,7 @@ class MoveItemForm(MoveItemsForm):
         else:
             msg = _(u'failed_to_move_item',
                     default=u'Failed to move ${item}.',
-                    mapping={'item': failed_objects[0]})
+                    mapping={'item': self.context.title})
             IStatusMessage(self.request).addStatusMessage(
                 msg, type='error')
 
@@ -377,6 +383,8 @@ class DossierMovabiliyChecker(DefaultMovabilityChecker):
     def validate_movement(self, target):
         """Avoid exceeding maximum dossier depth
         """
+        super(DossierMovabiliyChecker, self).validate_movement(target)
+
         if not IDossierMarker.providedBy(target):
             return
 
