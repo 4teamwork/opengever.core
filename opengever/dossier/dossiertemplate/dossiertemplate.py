@@ -122,10 +122,21 @@ class DossierTemplate(Container):
 
     def get_subdossiers(self, sort_on='sortable_title',
                         sort_order='ascending',
+                        unrestricted=False,
                         **kwargs):
 
-        subdossiers = api.content.find(self, object_provides=IDossierTemplateMarker,
-                                       sort_order=sort_order, sort_on=sort_on)
+        dossier_path = '/'.join(self.getPhysicalPath())
+        query = {
+            'path': dict(query=dossier_path),
+            'object_provides': IDossierTemplateMarker.__identifier__,
+            'sort_on': sort_on,
+            'sort_order': sort_order
+            }
+
+        if unrestricted:
+            subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
+        else:
+            subdossiers = self.portal_catalog(query)
 
         # Remove the object itself from the list of subdossiers
         current_uid = self.UID()
@@ -133,6 +144,24 @@ class DossierTemplate(Container):
                        if not s.UID == current_uid]
 
         return subdossiers
+
+    def is_dossier_structure_addable(self, additional_depth=1):
+        """Checks if the maximum dossier depth allows additional_depth levels
+        of subdossiers
+        """
+        max_depth = api.portal.get_registry_record(
+            name='maximum_dossier_depth',
+            interface=IDossierContainerTypes,
+            default=100,
+            )
+
+        depth = 0
+        obj = self
+        while IDossierTemplateMarker.providedBy(obj):
+            depth += 1
+            obj = aq_parent(aq_inner(obj))
+
+        return depth + additional_depth <= max_depth + 1
 
     def get_filing_prefix_label(self):
         return voc_term_title(IDossierTemplate['filing_prefix'],

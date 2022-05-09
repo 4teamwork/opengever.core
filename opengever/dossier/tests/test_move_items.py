@@ -11,8 +11,10 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.move_items import DossierMovabiliyChecker
+from opengever.dossier.move_items import DossierTemplateMovabilityChecker
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import solr_data_for
@@ -1553,3 +1555,48 @@ class TestDossierMovabilityChecker(IntegrationTestCase):
         # a dossier containing a subdossier can be moved into a main dossier
         DossierMovabiliyChecker(self.subdossier).validate_movement(
             self.empty_dossier)
+
+
+class TestDossierTemplateMovabilityChecker(IntegrationTestCase):
+
+    def test_raises_when_dossiertemplate_depth_would_be_exceeded_and_flag_enabled(self):
+        self.login(self.administrator)
+
+        empty_dossiertemplate = create(Builder('dossiertemplate')
+                                       .within(self.templates))
+
+        subsubdossiertemplate = create(Builder('dossiertemplate')
+                                       .within(self.subdossiertemplate))
+
+        api.portal.set_registry_record('respect_max_depth', True,
+                                       interface=IDossierTemplateSettings)
+
+        # Two subdossier level allowed
+        api.portal.set_registry_record(name='maximum_dossier_depth', value=2,
+                                       interface=IDossierContainerTypes)
+
+        # Cannot move self.dossiertemplate into empty_dossiertemplate
+        with self.assertRaises(Forbidden):
+            DossierTemplateMovabilityChecker(self.dossiertemplate).validate_movement(
+                empty_dossiertemplate)
+
+        DossierTemplateMovabilityChecker(self.subdossiertemplate).validate_movement(
+            empty_dossiertemplate)
+
+        # Cannot move empty_dossiertemplate into subsubdossiertemplate
+        with self.assertRaises(Forbidden):
+            DossierTemplateMovabilityChecker(empty_dossiertemplate).validate_movement(
+                subsubdossiertemplate)
+
+        DossierTemplateMovabilityChecker(empty_dossiertemplate).validate_movement(
+            self.subdossiertemplate)
+
+        api.portal.set_registry_record('respect_max_depth', False,
+                                       interface=IDossierTemplateSettings)
+
+        # Can move self.dossiertemplate into empty_dossiertemplate
+        DossierTemplateMovabilityChecker(self.dossiertemplate).validate_movement(
+            empty_dossiertemplate)
+        # Can move empty_dossiertemplate into subsubdossiertemplate
+        DossierTemplateMovabilityChecker(empty_dossiertemplate).validate_movement(
+            subsubdossiertemplate)

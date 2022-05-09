@@ -11,7 +11,7 @@ class TestTaskTemplateContextActions(IntegrationTestCase):
 
     def test_task_template_folder_context_actions(self):
         self.login(self.administrator)
-        expected_actions = [u'delete', u'edit']
+        expected_actions = [u'delete', u'edit', u'move_item']
         self.assertEqual(expected_actions, self.get_actions(self.tasktemplatefolder))
 
     def test_task_template_context_actions(self):
