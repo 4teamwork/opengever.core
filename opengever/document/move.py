@@ -44,6 +44,7 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
                 raise Forbidden(
                     _(u'msg_docs_cant_be_moved_from_repo_to_private_repo',
                       u'Documents within the repository cannot be moved to the private repository.'))
+            return
 
         if is_within_inbox(self.context):
             if is_within_templates(target):
