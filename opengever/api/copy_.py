@@ -1,10 +1,14 @@
 from AccessControl.SecurityManagement import getSecurityManager
 from Acquisition import aq_parent
+from opengever.api import _
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.api.utils import get_obj_by_path
-from opengever.base import _
+from opengever.base import _ as base_mf
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
+from plone import api
+from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Copy
 from zope.container.interfaces import INameChooser
 from zope.i18n import translate
@@ -13,6 +17,8 @@ import six
 
 class Copy(Copy):
     def reply(self):
+        self.check_preconditions()
+
         # Do not prepend document titles with 'Copy of'
         # We will do that after renaming ids, but only for the top level object
         self.request['prevent-copyname-on-document-copy'] = True
@@ -32,6 +38,20 @@ class Copy(Copy):
         for doc in docs_to_update:
             _update_docproperties(doc, raise_on_error=False)
         return results
+
+    def check_preconditions(self):
+        data = json_body(self.request)
+        source = data.get("source", [])
+
+        if not isinstance(source, list):
+            source = [source]
+
+        for item in source:
+            obj = self.get_object(item)
+            if not api.user.has_permission("Copy or Move", obj=obj):
+                raise NotReportedForbidden(
+                    _('copy_object_disallowed',
+                      default=u'You are not allowed to copy this object'))
 
     def get_object(self, key):
         """Copied from the baseclass but uses utils get_obj_by_path
@@ -74,8 +94,9 @@ class Copy(Copy):
 
         if old_id.startswith('copy_of'):
             obj.title = translate(
-                _('copy_of', default='Copy of ${title}',
-                  mapping=dict(title=obj.title)),
+                base_mf('copy_of',
+                        default='Copy of ${title}',
+                        mapping=dict(title=obj.title)),
                 context=self.request,
             )
             obj.reindexObject(idxs=['Title', 'sortable_title'])

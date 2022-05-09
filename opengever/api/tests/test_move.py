@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -285,3 +287,38 @@ class TestMove(IntegrationTestCase):
 
         self.assertEqual(1, len(children["added"]))
         self.assertEqual(resolvable_dossier_title, children["added"].pop().Title())
+
+    @browsing
+    def test_moving_object_with_read_permissions_is_forbidden(self, browser):
+        self.login(self.manager)
+
+        self.subsubdossier.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.subsubdossier).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor'],
+                                  self.subsubdossier))
+
+        self.login(self.regular_user, browser)
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@move',
+                         data=json.dumps({"source": self.subsubdossier.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'move_object_disallowed',
+             u'translated_message': u'You are not allowed to move this object.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        with browser.expect_http_error(code=403):
+            browser.open(self.empty_dossier, view='/@move',
+                         data=json.dumps({"source": self.subsubdocument.absolute_url()}),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'move_object_disallowed',
+             u'translated_message': u'You are not allowed to move this object.',
+             u'type': u'Forbidden'},
+            browser.json)

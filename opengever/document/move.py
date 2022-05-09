@@ -16,6 +16,8 @@ from zope.component import adapter
 class DocumentMovabiliyChecker(DefaultMovabilityChecker):
 
     def validate_movement(self, target):
+        super(DocumentMovabiliyChecker, self).validate_movement(target)
+
         if self.context.is_inside_a_task():
             raise NotReportedForbidden(
                 _(u'msg_doc_inside_task_cant_be_moved',
@@ -42,7 +44,6 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
                 raise Forbidden(
                     _(u'msg_docs_cant_be_moved_from_repo_to_private_repo',
                       u'Documents within the repository cannot be moved to the private repository.'))
-            return
 
         if is_within_inbox(self.context):
             if is_within_templates(target):

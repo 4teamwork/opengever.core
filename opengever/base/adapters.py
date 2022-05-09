@@ -1,4 +1,5 @@
 from Acquisition import aq_base
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base import _
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.utils import split_string_by_numbers
@@ -10,6 +11,7 @@ from opengever.base.protect import unprotected_write
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.repository.events import RepositoryPrefixUnlocked
 from persistent.dict import PersistentDict
+from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces._content import IFolderish
@@ -248,4 +250,8 @@ class DefaultMovabilityChecker(object):
         self.context = context
 
     def validate_movement(self, target):
+        if not api.user.has_permission("Copy or Move", obj=self.context):
+            raise NotReportedForbidden(
+                _('move_object_disallowed',
+                  default=u'You are not allowed to move this object'))
         return

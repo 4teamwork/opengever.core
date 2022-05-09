@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-14 06:43+0000\n"
+"POT-Creation-Date: 2022-05-06 13:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,6 +26,11 @@ msgstr "Le document ne se trouve pas dans un espace de travail lié."
 #: ./opengever/api/task.py
 msgid "change_responsible_not_allowed"
 msgstr "Il n'est pas permis de changer le mandataire ici. Veuillez réattribuer la tâche."
+
+#. Default: "You are not allowed to copy this object"
+#: ./opengever/api/copy_.py
+msgid "copy_object_disallowed"
+msgstr "Vous n'êtes pas autorisé à copier cet objet."
 
 #. Default: "Copy of ${title}"
 #: ./opengever/api/copy_.py
