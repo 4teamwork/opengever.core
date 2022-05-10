@@ -112,27 +112,31 @@ class SolrReporterView(BaseReporterView):
 
     def get_selected_items(self):
         paths = self.request.get('paths')
+
         if not paths:
             return
 
         fields = [col['id'] for col in self.columns()]
 
-        # Sort results according to paths passed in request. Those should be
-        # sorted exactly as the user saw them in the UI (classic and geverui).
-        sort = 'score asc'
-        query = 'path:({})'.format(
-            'OR '.join(['{}^{}'.format(escape(path), score_value)
-                       for score_value, path in enumerate(paths)])
-            )
+        solr_query = {}
+        solr_query['rows'] = self.batch_size
+        solr_query['fl'] = self.fields.get_query_fields(fields) + ['path']
 
-        for batch in batched_solr_results(
-                query=query,
-                rows=self.batch_size,
-                sort=sort,
-                fl=self.fields.get_query_fields(fields) + ['path']):
+        self._extend_selected_items_query_by_paths(solr_query, paths)
+
+        for batch in batched_solr_results(**solr_query):
             for doc in batch:
                 doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
                 yield IContentListingObject(doc)
+
+    def _extend_selected_items_query_by_paths(self, query, paths):
+        # Sort results according to paths passed in request. Those should be
+        # sorted exactly as the user saw them in the UI (classic and geverui).
+        query['sort'] = 'score asc'
+        query['query'] = 'path:({})'.format(
+            'OR '.join(['{}^{}'.format(escape(path), score_value)
+                       for score_value, path in enumerate(paths)])
+            )
 
     @property
     def is_frontend_request(self):
