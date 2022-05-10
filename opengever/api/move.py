@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
+from opengever.api.utils import get_obj_by_path
 from opengever.base.interfaces import IMovabilityChecker
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Move
@@ -7,13 +8,35 @@ from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zope.interface import alsoProvides
 from zope.security import checkPermission
-
 import plone
+import six
 
 
 class Move(Move):
     """Moves existing content objects.
     """
+
+    def get_object(self, key):
+        """Copied from the baseclass but uses utils get_obj_by_path
+        to fix a traversal bug, when not all path elements are accessible.
+        """
+        if isinstance(key, six.string_types):
+            if key.startswith(self.portal_url):
+                # Resolve by URL
+                key = key[len(self.portal_url) + 1:]
+                if six.PY2:
+                    key = key.encode("utf8")
+                return get_obj_by_path(self.portal, key)
+            elif key.startswith("/"):
+                if six.PY2:
+                    key = key.encode("utf8")
+                    # Resolve by path
+                return get_obj_by_path(self.portal, key.lstrip("/"))
+            else:
+                # Resolve by UID
+                brain = self.catalog(UID=key)
+                if brain:
+                    return brain[0].getObject()
 
     # Copied from plone.restapi 1.1.0
     # Disables DeleteObjects permission check
