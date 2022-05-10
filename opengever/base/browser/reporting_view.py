@@ -113,21 +113,27 @@ class SolrReporterView(BaseReporterView):
         if not paths:
             return []
 
-        filters = 'path:(%s)' % ' OR '.join(map(escape, paths))
         fields = [col['id'] for col in self.columns()]
-
-        resp = self.solr.search(
-            filters=filters,
-            rows=1000,
-            fl=self.fields.get_query_fields(fields) + ['path'])
 
         # Sort results according to paths passed in request. Those should be
         # sorted exactly as the user saw them in the UI (classic and geverui).
-        docs = sorted(
-            [OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
-             for doc in resp.docs], key=lambda doc: paths.index(doc.path)
-        )
-        return [IContentListingObject(doc) for doc in docs]
+        sort = 'score asc'
+        query = 'path:({})'.format(
+            'OR '.join(['{}^{}'.format(escape(path), score_value)
+                       for score_value, path in enumerate(paths)])
+            )
+
+        resp = self.solr.search(
+            query=query,
+            rows=1000,
+            sort=sort,
+            fl=self.fields.get_query_fields(fields) + ['path'])
+
+        return [
+            IContentListingObject(
+                OGSolrDocument(doc, fields=self.solr.manager.schema.fields))
+            for doc in resp.docs
+        ]
 
     @property
     def is_frontend_request(self):
