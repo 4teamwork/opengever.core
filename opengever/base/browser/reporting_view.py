@@ -111,7 +111,7 @@ class SolrReporterView(BaseReporterView):
     def get_selected_items(self):
         paths = self.request.get('paths')
         if not paths:
-            return []
+            return
 
         fields = [col['id'] for col in self.columns()]
 
@@ -129,11 +129,9 @@ class SolrReporterView(BaseReporterView):
             sort=sort,
             fl=self.fields.get_query_fields(fields) + ['path'])
 
-        return [
-            IContentListingObject(
-                OGSolrDocument(doc, fields=self.solr.manager.schema.fields))
-            for doc in resp.docs
-        ]
+        for doc in resp.docs:
+            doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
+            yield IContentListingObject(doc)
 
     @property
     def is_frontend_request(self):
