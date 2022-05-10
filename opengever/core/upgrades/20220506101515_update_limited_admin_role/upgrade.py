@@ -6,8 +6,6 @@ class UpdateLimitedAdminRole(UpgradeStep):
     """Update limited admin role.
     """
 
-    deferrable = True
-
     def __call__(self):
         self.install_upgrade_profile()
         with NightlyWorkflowSecurityUpdater(reindex_security=False) as updater:
