@@ -5,6 +5,7 @@ from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
 from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
+from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
 from opengever.base.solr.fields import DateListingField
 from plone import api
@@ -101,6 +102,7 @@ class BaseReporterView(BrowserView):
 
 class SolrReporterView(BaseReporterView):
 
+    batch_size = 1000
     field_mapper = None
 
     def __init__(self, *args, **kwargs):
@@ -123,15 +125,14 @@ class SolrReporterView(BaseReporterView):
                        for score_value, path in enumerate(paths)])
             )
 
-        resp = self.solr.search(
-            query=query,
-            rows=1000,
-            sort=sort,
-            fl=self.fields.get_query_fields(fields) + ['path'])
-
-        for doc in resp.docs:
-            doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
-            yield IContentListingObject(doc)
+        for batch in batched_solr_results(
+                query=query,
+                rows=self.batch_size,
+                sort=sort,
+                fl=self.fields.get_query_fields(fields) + ['path']):
+            for doc in batch:
+                doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
+                yield IContentListingObject(doc)
 
     @property
     def is_frontend_request(self):

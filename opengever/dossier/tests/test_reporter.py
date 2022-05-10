@@ -7,11 +7,13 @@ from io import BytesIO
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.browser.report import DossierReporter
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
 from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
+from zope.component import getMultiAdapter
 import json
 
 
@@ -379,3 +381,27 @@ class TestDossierReporter(SolrIntegrationTestCase):
             filing_no_filing('Client1-Direktion-2011-555'), 'Direktion')
         self.assertEquals(
             filing_no_filing(None), None)
+
+    @browsing
+    def test_export_multiple_batches(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        params = self.make_path_param(self.dossier)
+
+        # The frontend uses these names for the 'responsible' and
+        # 'review_state' columns. They should be aliased accordingly in the
+        # DossierReporter column_settings
+        params.update({'columns': [
+            'responsible_fullname',
+            'review_state_label',
+        ]})
+
+        objs = [self.dossier, self.inactive_dossier]
+        self.request['paths'] = ['/'.join(obj.getPhysicalPath()) for obj in objs]
+        view = getMultiAdapter((self.portal, self.request), name='dossier_report')
+        view.batch_size = 1
+
+        workbook = self.load_workbook(view())
+        rows = list(workbook.active.rows)
+
+        self.assertEqual(1 + len(objs), len(rows)) # One additional row for the header
