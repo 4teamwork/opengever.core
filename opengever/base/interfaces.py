@@ -448,7 +448,9 @@ class IHubSpotSettings(Interface):
 
 
 class IUserSnapSettings(Interface):
-
+    """XXX: Not used anymore, can be deleted once
+    20220510174043_remove_user_snap_settings has been executed for all deployments
+    """
     api_key = schema.TextLine(
         title=u"API key",
         description=u"API key for the usersnap widget.",

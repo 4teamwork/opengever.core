@@ -132,7 +132,6 @@ GEVER-Mandanten abgefragt werden.
                   "introduction"
               ]
           },
-          "usersnap_api_key": "",
           "version": "2020.4.0.dev0"
       }
 
@@ -315,9 +314,3 @@ user_settings
 
     seen_tours
         Gesehene Hilfe-Touren
-
-usersnap_api_key
-
-    API Schlüssel für Usersnap Integration im neuen Frontend
-
-

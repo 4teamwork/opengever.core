@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- Usersnap -->
+  <records interface="opengever.base.interfaces.IUserSnapSettings" remove="True"/>
+
+</registry>

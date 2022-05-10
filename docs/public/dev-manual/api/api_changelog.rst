@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@config`` endpoint does not return ``usersnap_api_key`` anymore.
 
 Other Changes
 ^^^^^^^^^^^^^

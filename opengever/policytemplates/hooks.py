@@ -138,23 +138,6 @@ def init_values(configurator):
     configurator.variables.update(VARIABLE_VALUES[policy_type(configurator)])
 
 
-def apply_dotfile_settings(configurator):
-    """For now, this just reads Usersnap API keys from a dotfile and
-    prefills them as the default for the respective policy type.
-    """
-    ptype = policy_type(configurator)
-
-    if isfile(POLICYTEMPLATE_DOTFILE_PATH):
-        dotfile_settings = json.load(open(POLICYTEMPLATE_DOTFILE_PATH))
-
-        api_key = dotfile_settings.get('usersnap_api_keys', {}).get(ptype)
-        if api_key is None:
-            print "WARNING: No Usersnap API key found for policy type %r in %s" % (
-                ptype, POLICYTEMPLATE_DOTFILE_PATH)
-        else:
-            configurator.defaults['setup.usersnap_api_key'] = api_key
-
-
 def update_defaults(configurator, new_defaults):
     """We only update the defaults if they are not set for the given policy
     """
@@ -310,11 +293,6 @@ def post_maximum_mail_size(configurator, question, answer):
         return ''
 
     return answer
-
-
-def pre_usersnap_api_key(configurator, question):
-    if not configurator.variables['setup.enable_usersnap']:
-        raise SkipQuestion
 
 
 def post_enable_meeting_feature(configurator, question, answer):
