@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.10.0 (2022-05-11)
+----------------------
+
+New features:
+
+
+- Excel export: Support additional columns and custom properties. [lgraf]
+- Add @ui-actions endpoint. [tinagerber]
+- Allow to move dossiertemplates and tasktemplatefolders. [tinagerber]
+- Reader cannot copy or move items anymore. [njohner]
+- Do not copy creator and creation date when transporting task documents. [njohner]
+- Return creator in task serialization. [njohner]
+- Allow workspace admins to delete workspaces. [tinagerber]
+
+
+Bug fixes:
+
+
+- Correctly set content type in tus-upload. [njohner]
+- Fix contentType problem when copying mails with teamraum connect. [phgross]
+- Fix moving an object with the api where not all path elements are accessible. [phgross]
+- Handle inactive users in the @accessible-workspaces endpoint. [njohner]
+- Fix possible watchers query to work for Oracle databases as well. [tinagerber]
+
+
+Other changes:
+
+
+- Improve performance when renaming dossiers. [buchi]
+- LimitedAdmin can no longer set local roles (sharing and dossier protection). [njohner]
+- Remove flaky test. [njohner]
+
+
 2022.9.0 (2022-04-26)
 ---------------------
 

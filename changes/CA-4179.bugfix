@@ -1,1 +1,0 @@
-Fix possible watchers query to work for Oracle databases as well. [tinagerber]
