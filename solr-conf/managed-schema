@@ -184,8 +184,11 @@
     <field name="participations" type="string" indexed="true" stored="true" multiValued="true"/>
 
     <!-- PHVS specific fields -->
-    <field name="language" type="string" indexed="true" stored="true" />
     <field name="location" type="string" indexed="true" stored="true" />
+
+    <!-- language fields -->
+    <field name="language"  type="string"  indexed="true"  stored="true" />
+    <field name="languages" type="string"  indexed="true"  stored="true" multiValued="true"/>
 
     <copyField source="path" dest="path_parent"/>
     <copyField source="sequence_number" dest="sequence_number_string"/>
@@ -195,6 +198,14 @@
     <dynamicField name="*_custom_field_boolean" type="boolean" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_strings" type="string" indexed="true" stored="false" multiValued="true"/>
     <dynamicField name="*_custom_field_date" type="pdate" indexed="true" stored="false"/>
+
+    <dynamicField name="*_en"  type="text_english" indexed="true"
+                  stored="true" multiValued="true"/>
+    <dynamicField name="*_de"  type="text_german" indexed="true"
+                  stored="true" multiValued="true"/>
+
+    <dynamicField name="*_fr"  type="text_french" indexed="true"
+                  stored="true" multiValued="true"/>
 
     <dynamicField name="ignored_*" type="ignored"/>
 
@@ -361,5 +372,86 @@
        <str name="paramkey">param value</str>
      </similarity>
     -->
+
+    <!-- German text - copied from solr example -->
+    <fieldType name="text_german" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
+        <filter class="solr.GermanNormalizationFilterFactory"/>
+        <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/>
+        <filter class="solr.GermanLightStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- French -->
+    <fieldType name="text_french" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- removes l', etc -->
+        <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_fr.txt"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" />
+        <filter class="solr.FrenchLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.FrenchMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="French"/> -->
+      </analyzer>
+    </fieldType>
+
+    <!-- english text - copied from solr example -->
+    <fieldType name="text_english" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- in this example, we will only use synonyms at query time
+             <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+             <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <!-- Case insensitive stop word removal.
+        -->
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+             <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+             <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+
+
+    <!-- <fieldType name="german_text" class="solr.TextField" positionIncrementGap="100"> -->
+    <!--   <analyzer type="index"> -->
+    <!--     <tokenizer class="solr.WhitespaceTokenizerFactory"/> -->
+    <!--     <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/> -->
+    <!--     <filter class="solr.GermanStemFilterFactory"/> -->
+    <!--   </analyzer> -->
+    <!-- </fieldType> -->
+
+        <!-- <tokenizer class="solr.OpenNLPTokenizerFactory" sentenceModel="de-sent.bin" tokenizerModel="de-tokenizer.bin"/> -->
+        <!-- <filter class="solr.OpenNLPLemmatizerFilter" lemmatizerModel="opennlp/en-lemmatizer.bin" /> -->
+
+        <!-- <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/> -->
+
 
 </schema>
