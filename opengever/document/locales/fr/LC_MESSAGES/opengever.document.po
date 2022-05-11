@@ -510,7 +510,7 @@ msgstr "Fichier"
 
 #. Default: "File size"
 msgid "label_filesize"
-msgstr ""
+msgstr "Taille du fichier"
 
 #. Default: "Foreign Reference"
 #: ./opengever/document/behaviors/metadata.py

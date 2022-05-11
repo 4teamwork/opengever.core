@@ -233,7 +233,7 @@ msgstr "Aucun déroulement standard actif n'est enregistré pour le moment."
 #. Default: "It's not allowed to move tasktemplatefolders into tasktemplatefolders."
 #: ./opengever/tasktemplates/move.py
 msgid "msg_tasktemplatefolder_nesting_not_allowed"
-msgstr ""
+msgstr "Il n'est pas autorisé de déplacer un déroulement standard dans un autre déroulement standard."
 
 #. Default: "Yes"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
