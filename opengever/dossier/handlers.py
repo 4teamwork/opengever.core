@@ -5,8 +5,9 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
-from opengever.base.solr import OGSolrDocument
+from opengever.base.security import elevated_privileges
 from opengever.base.solr import batched_solr_results
+from opengever.base.solr import OGSolrDocument
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -100,12 +101,14 @@ def reindex_containing_subdossier_for_contained_objects(dossier, event):
         u'portal_type:({})'.format(
                 u' OR '.join(TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)),
     ]
-    for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
-        for doc in batch:
-            solr.manager.connection.add({
-                "UID": doc['UID'],
-                "containing_subdossier": {"set": containing_subdossier_title},
-            })
+
+    with elevated_privileges():
+        for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
+            for doc in batch:
+                solr.manager.connection.add({
+                    "UID": doc['UID'],
+                    "containing_subdossier": {"set": containing_subdossier_title},
+                })
 
 
 def reindex_containing_dossier_for_contained_objects(dossier, event):
@@ -115,15 +118,17 @@ def reindex_containing_dossier_for_contained_objects(dossier, event):
 
     solr = queryUtility(ISolrSearch)
     filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
-    for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
-        for doc in batch:
-            solr.manager.connection.add({
-                "UID": doc['UID'],
-                "containing_dossier": {"set": containing_dossier_title},
-            })
-            if doc['portal_type'] == 'opengever.task.task':
-                obj = OGSolrDocument(doc).getObject()
-                sync_task(obj, event)
+
+    with elevated_privileges():
+        for batch in batched_solr_results(filters=filters, fl='UID,portal_type,path'):
+            for doc in batch:
+                solr.manager.connection.add({
+                    "UID": doc['UID'],
+                    "containing_dossier": {"set": containing_dossier_title},
+                })
+                if doc['portal_type'] == 'opengever.task.task':
+                    obj = OGSolrDocument(doc).getObject()
+                    sync_task(obj, event)
 
 
 def reindex_contained_objects(dossier, event):

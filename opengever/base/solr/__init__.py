@@ -21,7 +21,7 @@ def batched_solr_results(**kwargs):
     start = 0
     rows = kwargs.get('rows', 1000)
     while not last_batch:
-        resp = solr.unrestricted_search(start=start, **kwargs)
+        resp = solr.search(start=start, **kwargs)
         yield resp.docs
         if start + len(resp.docs) >= resp.num_found or not resp.docs:
             last_batch = True
