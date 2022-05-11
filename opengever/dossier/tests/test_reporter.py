@@ -7,7 +7,6 @@ from io import BytesIO
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
-from opengever.dossier.browser.report import DossierReporter
 from opengever.dossier.filing.report import filing_no_filing
 from opengever.dossier.filing.report import filing_no_number
 from opengever.dossier.filing.report import filing_no_year
@@ -405,3 +404,104 @@ class TestDossierReporter(SolrIntegrationTestCase):
         rows = list(workbook.active.rows)
 
         self.assertEqual(1 + len(objs), len(rows)) # One additional row for the header
+
+    @browsing
+    def test_supports_query_by_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {'listing_name': 'dossiers'}
+
+        # Report
+        browser.open(view='dossier_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=dossiers'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[0].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(19, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_filtering(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'dossiers',
+            'filters.responsible:record:list': self.dossier_responsible.id
+        }
+
+        # Report
+        browser.open(view='dossier_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=dossiers&filters.responsible:record:list={}'.format(
+            self.dossier_responsible.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[0].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(10, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_searching(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'dossiers',
+            'search': self.dossier.title
+        }
+
+        # Report
+        browser.open(view='dossier_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=dossiers&search={}'.format(
+            self.dossier.title.encode('utf-8'))
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[0].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(1, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_ordering(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'dossiers',
+            'sort_order': 'descending',
+            'sort_on': 'is_subdossier'
+        }
+
+        # Report
+        browser.open(view='dossier_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing sorting descending
+        view = '@listing?name=dossiers&sort_order=descending&sort_on=is_subdossier'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        listing_titles_descending = [item.get('title') for item in browser.json.get('items')]
+
+        # Listing sorting ascending
+        view = '@listing?name=dossiers&sort_order=ascending&sort_on=is_subdossier'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        listing_titles_ascending = [item.get('title') for item in browser.json.get('items')]
+
+        report_titles = [row[0].value for row in rows[1:]]
+
+        self.assertEqual(listing_titles_descending, report_titles)
+        self.assertNotEqual(listing_titles_ascending, report_titles)

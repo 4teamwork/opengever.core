@@ -352,3 +352,105 @@ class TestDocumentReporter(SolrIntegrationTestCase):
              u'Checked out by',
              u'Reference number'],
             [cell.value for cell in list(workbook.active.rows)[0]])
+
+    @browsing
+    def test_supports_query_by_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {'listing_name': 'documents'}
+
+        # Report
+        browser.open(view='document_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=documents&b_size=50'
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[2].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(33, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_filtering(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'documents',
+            'filters.keywords:record:list': 'Wichtig'
+        }
+
+        # Report
+        browser.open(view='document_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=documents&filters.keywords:record:list={}'.format(
+            'Wichtig')
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[2].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(2, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_searching(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'documents',
+            'search': self.document.title
+        }
+
+        # Report
+        browser.open(view='document_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing
+        view = '@listing?name=documents&search={}'.format(self.document.title.encode('utf-8'))
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        report_titles = [row[2].value for row in rows[1:]]
+        listing_titles = [item.get('title') for item in browser.json.get('items')]
+
+        self.assertEqual(7, len(report_titles))
+        self.assertEqual(listing_titles, report_titles)
+
+    @browsing
+    def test_supports_query_by_listing_with_ordering(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        payload = {
+            'listing_name': 'documents',
+            'sort_order': 'descending',
+            'sort_on': 'containing_subdossier'
+        }
+
+        # Report
+        browser.open(view='document_report', data=payload)
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Listing sorting descending
+        view = '@listing?name=documents&sort_order=descending&sort_on=containing_subdossier&b_size=50'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        listing_titles_descending = [item.get('title') for item in browser.json.get('items')]
+
+        # Listing sorting ascending
+        view = '@listing?name=documents&sort_order=ascending&sort_on=is_subdossier'.format(
+            self.regular_user.id)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+        listing_titles_ascending = [item.get('title') for item in browser.json.get('items')]
+
+        report_titles = [row[2].value for row in rows[1:]]
+
+        self.assertEqual(listing_titles_descending, report_titles)
+        self.assertNotEqual(listing_titles_ascending, report_titles)

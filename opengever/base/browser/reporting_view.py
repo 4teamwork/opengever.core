@@ -11,6 +11,7 @@ from opengever.base.solr.fields import DateListingField
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListingObject
 from Products.Five.browser import BrowserView
+from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 import json
@@ -112,9 +113,12 @@ class SolrReporterView(BaseReporterView):
 
     def get_selected_items(self):
         paths = self.request.get('paths')
-
-        if not paths:
+        listing_name = self.request.get('listing_name')
+        if not paths and not listing_name:
             return
+
+        if paths and listing_name:
+            raise BadRequest('You can query either by paths or by a listing.')
 
         fields = [col['id'] for col in self.columns()]
 
@@ -122,7 +126,10 @@ class SolrReporterView(BaseReporterView):
         solr_query['rows'] = self.batch_size
         solr_query['fl'] = self.fields.get_query_fields(fields) + ['path']
 
-        self._extend_selected_items_query_by_paths(solr_query, paths)
+        if paths:
+            self._extend_selected_items_query_by_paths(solr_query, paths)
+        elif listing_name:
+            self._extend_selected_items_query_by_listing(solr_query, listing_name)
 
         for batch in batched_solr_results(**solr_query):
             for doc in batch:
@@ -137,6 +144,15 @@ class SolrReporterView(BaseReporterView):
             'OR '.join(['{}^{}'.format(escape(path), score_value)
                        for score_value, path in enumerate(paths)])
             )
+
+    def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
+        listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")
+        listing.listing_name = listing_name
+        query, filters, start, rows, sort, field_list, params = listing.prepare_solr_query(self.request.form)
+
+        solr_query['sort'] = sort
+        solr_query['query'] = query
+        solr_query['filters'] = filters
 
     @property
     def is_frontend_request(self):
