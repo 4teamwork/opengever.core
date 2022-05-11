@@ -38,7 +38,7 @@ class PossibleWatchersSource(AssignedUsersSource):
         current_user = api.user.get_current()
         return query.order_by(case(
             ((User.userid == current_user.getId(), 1), ),
-            else_='2'))
+            else_=2))
 
     def _filter_not_subscribing_watchers(self, query):
         """This function adds the filter clause to only return users without a
