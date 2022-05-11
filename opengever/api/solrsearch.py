@@ -35,6 +35,9 @@ WEIGHTS = {
     "reference": [1000, 100],
     "metadata": [1000, 100],
     "SearchableText": [100, 50],
+    "SearchableText_de": [100, 50],
+    "SearchableText_fr": [100, 50],
+    "SearchableText_en": [100, 50],
 }
 
 # word
@@ -45,25 +48,6 @@ pf = " ".join(
     ["{}^{}".format(field, phrase) for field, (phrase, _) in WEIGHTS.items()])
 # fields to search
 uf = " ".join(WEIGHTS.keys())
-
-
-def build_query(term):
-    if not term:
-        return "*"
-
-    if bool(OPERATORS.search(term)):
-        return term
-
-    # phrase search
-    quote_count = term.count('"')
-    if quote_count > 1 and quote_count % 2 == 0:
-        return term
-
-    # specific column search
-    if ':' in term:
-        return term
-
-    return " ".join(["{}*".format(split) for split in term.split()])
 
 
 class SolrSearchFieldMapper(SolrFieldMapper):
@@ -101,7 +85,7 @@ class SolrSearchGet(SolrQueryBaseService):
         if 'q' in params:
             query = {
                 "edismax": {
-                    "query": build_query(params['q']),
+                    "query": params['q'],
                     "qf": qf,
                     "pf": pf,
                     "uf": uf,
