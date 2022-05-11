@@ -39,10 +39,10 @@ class SolrQueryBaseService(Service):
             # to utf-8 to get the same encoding as with a GET reqeust.
             return recursive_encode(json_body(self.request))
 
-    def prepare_solr_query(self):
+    def prepare_solr_query(self, params):
         """ Extract the requested parameters and prepare the solr query
         """
-        params = self.request_payload.copy()
+        params = params.copy()
         query = self.extract_query(params)
         filters = self.extract_filters(params)
         start = self.extract_start(params)

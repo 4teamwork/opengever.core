@@ -266,7 +266,8 @@ class SolrSearchGet(SolrQueryBaseService):
                 'use_solr', interface=ISearchSettings):
             raise BadRequest('Solr is not enabled on this GEVER installation.')
 
-        query, filters, start, rows, sort, field_list, params = self.prepare_solr_query()
+        query, filters, start, rows, sort, field_list, params = \
+            self.prepare_solr_query(self.request_payload)
 
         resp = self.solr.search(
             query=query, filters=filters, start=start, rows=rows, sort=sort,
