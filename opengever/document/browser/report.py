@@ -94,7 +94,7 @@ class DocumentReporter(SolrReporterView):
     ]
 
     def __call__(self):
-        if not self.request.get('paths'):
+        if not self.request.get('paths') and not self.request.get('listing_name'):
             msg = _(
                 u'error_no_items', default=u'You have not selected any Items')
             IStatusMessage(self.request).addStatusMessage(msg, type='error')
