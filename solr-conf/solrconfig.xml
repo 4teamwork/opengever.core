@@ -807,6 +807,7 @@
       <str name="uprefix">ignored_</str>
       <bool name="ignoreTikaException">true</bool>
     </lst>
+
   </requestHandler>
 
   <requestHandler name="/dataimport" class="solr.DataImportHandler">
@@ -1096,6 +1097,20 @@
     <processor class="solr.RunUpdateProcessorFactory" />
   </updateRequestProcessorChain>
 
+  <updateRequestProcessorChain name="langid">
+    <processor class="org.apache.solr.update.processor.TikaLanguageIdentifierUpdateProcessorFactory">
+      <bool name="enabled">true</bool>
+      <str name="langid.fl">SearchableText,Title</str>
+      <str name="langid.langField">language</str>
+      <str name="langid.map">true</str>
+      <str name="langid.map.fl">SearchableText,Title</str>
+      <str name="langid.map.keepOrig">true</str>
+      <str name="langid.whitelist">en,de,fr</str>
+      <str name="langid.fallback">de</str>
+    </processor>
+    <processor class="solr.LogUpdateProcessorFactory" />
+    <processor class="solr.RunUpdateProcessorFactory" />
+  </updateRequestProcessorChain>
 
   <!-- Deduplication
 
@@ -1204,20 +1219,6 @@
       If you are using the QueryElevationComponent, you may wish to mark documents that get boosted.  The
       EditorialMarkerFactory will do exactly that:
      <transformer name="qecBooster" class="org.apache.solr.response.transform.EditorialMarkerFactory" />
-    -->
-
-  <updateRequestProcessorChain name="langid">
-    <processor class="org.apache.solr.update.processor.TikaLanguageIdentifierUpdateProcessorFactory">
-
-      <str name="langid.fl">SearchableText, Title</str>
-      <str name="langid.langField">language</str>
-      <str name="langid.map">true</str>
-      <str name="langid.map.fl">SearchableText</str>
-      <str name="langid.whitelist">en,de,fr</str>
-      <str name="langid.fallback">de</str>
-    </processor>
-    <processor class="solr.LogUpdateProcessorFactory" />
-    <processor class="solr.RunUpdateProcessorFactory" />
-  </updateRequestProcessorChain>
+  -->
 
 </config>

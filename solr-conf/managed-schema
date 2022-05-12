@@ -104,6 +104,8 @@
     <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
 
     <!-- Plone default fields -->
+    <field name="language"  type="string"  indexed="true"  stored="true" />
+    <field name="languages" type="string"  indexed="true"  stored="true" multiValued="true"/>
     <field name="allowedRolesAndUsers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="created" type="pdate" indexed="true" stored="false" />
     <field name="Creator" type="string" indexed="true" stored="false" />
@@ -119,9 +121,19 @@
     <field name="path_parent" type="descendent_path" indexed="true" stored="true" />
     <field name="portal_type" type="string" indexed="true" stored="false" />
     <field name="review_state" type="string" indexed="true" stored="false" />
+
     <field name="SearchableText" type="text" indexed="true" stored="true"/>
+    <field name="SearchableText_en"  type="text_english" indexed="true" stored="true" />
+    <field name="SearchableText_de"  type="text_german" indexed="true" stored="true" />
+    <field name="SearchableText_fr"  type="text_french" indexed="true" stored="true" />
+
     <field name="sortable_title" type="string" indexed="true" stored="false" />
     <field name="Title" type="text" indexed="true" stored="true"/>
+
+    <field name="Title_en"  type="text_english" indexed="true" stored="true" />
+    <field name="Title_de"  type="text_german" indexed="true" stored="true" />
+    <field name="Title_fr"  type="text_french" indexed="true" stored="true" />
+
     <field name="Subject" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="UID" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <field name="getObjPositionInParent" type="pint" indexed="true" stored="true" />
@@ -186,10 +198,6 @@
     <!-- PHVS specific fields -->
     <field name="location" type="string" indexed="true" stored="true" />
 
-    <!-- language fields -->
-    <field name="language"  type="string"  indexed="true"  stored="true" />
-    <field name="languages" type="string"  indexed="true"  stored="true" multiValued="true"/>
-
     <copyField source="path" dest="path_parent"/>
     <copyField source="sequence_number" dest="sequence_number_string"/>
 
@@ -198,14 +206,6 @@
     <dynamicField name="*_custom_field_boolean" type="boolean" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_strings" type="string" indexed="true" stored="false" multiValued="true"/>
     <dynamicField name="*_custom_field_date" type="pdate" indexed="true" stored="false"/>
-
-    <dynamicField name="*_en"  type="text_english" indexed="true"
-                  stored="true" multiValued="true"/>
-    <dynamicField name="*_de"  type="text_german" indexed="true"
-                  stored="true" multiValued="true"/>
-
-    <dynamicField name="*_fr"  type="text_french" indexed="true"
-                  stored="true" multiValued="true"/>
 
     <dynamicField name="ignored_*" type="ignored"/>
 
@@ -297,6 +297,7 @@
         <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
         <filter class="solr.WordDelimiterGraphFilterFactory"
@@ -373,7 +374,7 @@
      </similarity>
     -->
 
-    <!-- German text - copied from solr example -->
+    <!-- German -->
     <fieldType name="text_german" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -382,6 +383,8 @@
         <filter class="solr.GermanNormalizationFilterFactory"/>
         <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/>
         <filter class="solr.GermanLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.GermanMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="German2"/> -->
       </analyzer>
     </fieldType>
 
@@ -399,7 +402,6 @@
       </analyzer>
     </fieldType>
 
-    <!-- english text - copied from solr example -->
     <fieldType name="text_english" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
@@ -437,21 +439,5 @@
         <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
     </fieldType>
-
-
-
-    <!-- <fieldType name="german_text" class="solr.TextField" positionIncrementGap="100"> -->
-    <!--   <analyzer type="index"> -->
-    <!--     <tokenizer class="solr.WhitespaceTokenizerFactory"/> -->
-    <!--     <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/> -->
-    <!--     <filter class="solr.GermanStemFilterFactory"/> -->
-    <!--   </analyzer> -->
-    <!-- </fieldType> -->
-
-        <!-- <tokenizer class="solr.OpenNLPTokenizerFactory" sentenceModel="de-sent.bin" tokenizerModel="de-tokenizer.bin"/> -->
-        <!-- <filter class="solr.OpenNLPLemmatizerFilter" lemmatizerModel="opennlp/en-lemmatizer.bin" /> -->
-
-        <!-- <filter class="solr.DictionaryCompoundWordTokenFilterFactory" dictionary="germanwords.txt"/> -->
-
 
 </schema>

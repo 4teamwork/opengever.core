@@ -30,11 +30,12 @@ BLACKLISTED_ATTRIBUTES = set([
 OPERATORS = re.compile(r" AND| OR| NOT|&&|\|\|", re.UNICODE)
 
 WEIGHTS = {
-    "Title": [10000, 1000],
+    "Title_de": [10000, 1000],
+    "Title_fr": [10000, 1000],
+    "Title_en": [10000, 1000],
     "sequence_number_string": [1000, 100],
     "reference": [1000, 100],
     "metadata": [1000, 100],
-    "SearchableText": [100, 50],
     "SearchableText_de": [100, 50],
     "SearchableText_fr": [100, 50],
     "SearchableText_en": [100, 50],
