@@ -61,6 +61,12 @@ class IDispositionSettings(Interface):
                     'period.',
         default=False)
 
+    only_attach_original_if_conversion_is_missing = schema.Bool(
+        title=u'Only attach original in SIP Package if conversion is missing',
+        description=u'Whether the original file of a document should only be '
+        'attached in the SIP package if no conversion file exists.',
+        default=False)
+
 
 class IFilesystemTransportSettings(Interface):
 

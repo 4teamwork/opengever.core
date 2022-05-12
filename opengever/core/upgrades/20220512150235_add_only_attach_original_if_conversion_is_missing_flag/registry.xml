@@ -1,0 +1,6 @@
+<registry>
+
+  <record interface="opengever.disposition.interfaces.IDispositionSettings"
+          field="only_attach_original_if_conversion_is_missing" />
+
+</registry>

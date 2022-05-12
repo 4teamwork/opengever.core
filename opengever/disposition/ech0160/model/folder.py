@@ -1,3 +1,4 @@
+from opengever.disposition import only_attach_original_enabled
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.ech0160.model import File
 import os.path
@@ -18,11 +19,18 @@ class Folder(object):
             self.folders.append(Folder(toc, subdossier, self.path))
 
         for doc in dossier.documents.values():
+            conversion_attached = False
             if doc.obj.archival_file:
                 if not doc.obj.is_archival_file_conversion_skipped():
                     self.files.append(File(toc, doc, doc.obj.archival_file))
+                    conversion_attached = True
+
             if doc.obj.get_file():
+                if conversion_attached and only_attach_original_enabled():
+                    continue
+
                 self.files.append(File(toc, doc, doc.obj.get_file()))
+
 
     def binding(self):
         ordner = arelda.ordnerSIP(self.name)

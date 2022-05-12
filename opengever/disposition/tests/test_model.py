@@ -12,6 +12,7 @@ from opengever.disposition.ech0160.model import File
 from opengever.disposition.ech0160.model import Folder
 from opengever.disposition.ech0160.model import Position
 from opengever.disposition.ech0160.model import Repository
+from opengever.disposition.interfaces import IDispositionSettings
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
@@ -478,6 +479,30 @@ class TestFolderAndFileModel(IntegrationTestCase):
         self.assertItemsEqual([self.expired_document.file.filename],
                               [file.filename for file in folder.files])
         self.assertEqual(1, len(document.file_refs))
+
+    def test_only_attach_original_if_conversion_is_missing_flag(self):
+        self.toc = ContentRootFolder('FAKE_PATH')
+        self.toc.next_file = 3239
+
+        self.login(self.regular_user)
+
+        dossier = Dossier(self.expired_dossier)
+        folder = Folder(self.toc, dossier, 'FAKE_PATH')
+
+        self.assertEqual(2, len(folder.files))
+        self.assertItemsEqual([u'test.pdf',
+                               u'Uebersicht der Vertraege vor 2000.doc'],
+                              [file.filename for file in folder.files])
+
+        # enable flag
+        api.portal.set_registry_record(
+            'only_attach_original_if_conversion_is_missing',
+            interface=IDispositionSettings, value=True)
+
+        folder = Folder(self.toc, dossier, 'FAKE_PATH')
+        self.assertEqual(1, len(folder.files))
+        self.assertItemsEqual([u'test.pdf'],
+                              [file.filename for file in folder.files])
 
 
 class TestFileModel(IntegrationTestCase):
