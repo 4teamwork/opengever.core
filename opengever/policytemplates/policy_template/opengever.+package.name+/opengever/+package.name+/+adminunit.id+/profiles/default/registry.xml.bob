@@ -47,12 +47,6 @@
   </records>
 
 {{% endif %}}
-{{% if setup.enable_usersnap %}}
-  <records interface="opengever.base.interfaces.IUserSnapSettings">
-    <value key="api_key">{{{setup.usersnap_api_key}}}</value>
-  </records>
-
-{{% endif %}}
 {{% if setup.hubspot %}}
   <records interface="opengever.base.interfaces.IHubSpotSettings">
     <value key="is_feature_enabled">True</value>

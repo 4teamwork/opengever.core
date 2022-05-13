@@ -194,9 +194,6 @@
   <!-- Teasers -->
   <records interface="opengever.base.interfaces.ITeasersSettings" />
 
-  <!-- Usersnap -->
-  <records interface="opengever.base.interfaces.IUserSnapSettings" />
-
   <!-- White Labeling -->
   <records interface="opengever.base.interfaces.IWhiteLabelingSettings" />
 

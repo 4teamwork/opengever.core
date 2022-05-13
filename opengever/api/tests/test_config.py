@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
 from mock import patch
-from opengever.base.interfaces import IUserSnapSettings
 from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -300,19 +299,6 @@ class TestConfig(IntegrationTestCase):
             u'http://nohost/plone/private/kathi.barfuss',
             browser.json.get(u'private_folder_url')
         )
-
-    @browsing
-    def test_config_contains_usersnap_api_key(self, browser):
-        self.login(self.regular_user, browser)
-
-        browser.open(self.config_url, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'usersnap_api_key'), u'')
-
-        api.portal.set_registry_record('api_key', u'some key', interface=IUserSnapSettings)
-        browser.open(self.config_url, headers=self.api_headers)
-        self.assertEqual(browser.status_code, 200)
-        self.assertEqual(browser.json.get(u'usersnap_api_key'), u'some key')
 
     @browsing
     def test_config_contains_current_inbox_url_if_available(self, browser):
