@@ -181,6 +181,12 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.mark_as_template_document"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"
       handler=".handlers.set_archival_file_state"
       />

@@ -2,6 +2,7 @@ from datetime import datetime
 from ftw.testbrowser import browsing
 from opengever.document.approvals import IApprovalList
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.document.interfaces import ITemplateDocumentMarker
 from opengever.document.versioner import Versioner
 from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.testing import IntegrationTestCase
@@ -309,6 +310,35 @@ class TestDocumentPost(IntegrationTestCase):
                 browser.open(self.private_dossier, data=json.dumps(data), method='POST',
                              headers=self.api_headers)
         self.assertEqual(0, len(children["added"]))
+
+    @browsing
+    def test_document_is_marked_as_template_when_added_in_template_folder(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        with self.observe_children(self.templates) as children:
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': 'foo bar', 'filename': 'test.docx'}}
+            browser.open(self.templates, data=json.dumps(data), method='POST',
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children["added"]))
+        doc = children["added"].pop()
+        self.assertTrue(ITemplateDocumentMarker.providedBy(doc))
+
+    @browsing
+    def test_document_is_not_marked_as_template_when_added_in_template_dossier(self, browser):
+        self.login(self.dossier_responsible, browser)
+        browser.open(self.dossiertemplate)
+
+        with self.observe_children(self.dossiertemplate) as children:
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': 'foo bar', 'filename': 'test.docx'}}
+            browser.open(self.dossiertemplate, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        self.assertEqual(1, len(children["added"]))
+        doc = children["added"].pop()
+        self.assertFalse(ITemplateDocumentMarker.providedBy(doc))
 
 
 class TestDocumentDelete(IntegrationTestCase):
