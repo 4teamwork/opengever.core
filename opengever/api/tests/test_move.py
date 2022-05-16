@@ -47,9 +47,56 @@ class TestMove(IntegrationTestCase):
         self.assert_can_move(browser, self.document, self.subdossier)
 
     @browsing
-    def test_move_document_within_templatefolder_is_possible(self, browser):
+    def test_can_move_document_from_teamplatefolder_to_templatefolder(self, browser):
         self.login(self.administrator, browser)
-        self.assert_can_move(browser, self.dossiertemplatedocument, self.templates)
+        self.assert_can_move(browser, self.normal_template, self.subtemplates)
+
+    @browsing
+    def test_cannot_move_document_from_templates_to_repository(self, browser):
+        self.login(self.administrator, browser)
+        message = u'msg_docs_cant_be_moved_from_templates_to_repository'
+        translated = u'Documents within the templates cannot be moved to the repository.'
+        self.assert_cannot_move(
+            browser, self.normal_template, self.empty_dossier, message, translated)
+
+        self.assert_cannot_move(
+            browser, self.dossiertemplatedocument, self.empty_dossier, message, translated)
+
+    @browsing
+    def test_cannot_move_document_from_templates_to_private_repository(self, browser):
+        self.login(self.administrator, browser)
+        private_folder = create(
+            Builder('private_folder')
+            .having(id=self.administrator.getId())
+            .within(self.private_root)
+        )
+
+        private_dossier = create(
+            Builder('private_dossier')
+            .having(title=u'Mein Dossier 1')
+            .within(private_folder)
+        )
+
+        message = u'msg_docs_cant_be_moved_from_templates_to_private_repo'
+        translated = u'Documents within the templates cannot be moved to the private repository.'
+        self.assert_cannot_move(
+            browser, self.normal_template, private_dossier, message, translated)
+
+    @browsing
+    def test_cannot_move_document_from_teamplatefolder_to_dossier_template(self, browser):
+        self.login(self.administrator, browser)
+        message = u'msg_docs_cant_be_moved_from_template_folder_to_template_dossier'
+        translated = u'Document templates cannot be moved into a dossier template.'
+        self.assert_cannot_move(
+            browser, self.normal_template, self.dossiertemplate, message, translated)
+
+    @browsing
+    def test_cannot_move_document_from_dossier_template_to_teamplatefolder(self, browser):
+        self.login(self.administrator, browser)
+        message = u'msg_docs_cant_be_moved_from_template_dossier_to_template_folder'
+        translated = u'Documents from a dossier template cannot be made into document templates.'
+        self.assert_cannot_move(
+            browser, self.dossiertemplatedocument, self.templates, message, translated)
 
     @browsing
     def test_document_within_repository_cannot_be_moved_to_templates(self, browser):

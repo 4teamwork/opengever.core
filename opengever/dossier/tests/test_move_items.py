@@ -1204,10 +1204,10 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         doc_intid = getUtility(IIntIds).getId(self.dossiertemplatedocument)
 
         self.move_items(browser, src=self.dossiertemplate,
-                        obj=self.dossiertemplatedocument, target=self.templates)
+                        obj=self.dossiertemplatedocument, target=self.subdossiertemplate)
         doc = getUtility(IIntIds).getObject(doc_intid)
 
-        self.assertIn(doc, self.templates.objectValues())
+        self.assertIn(doc, self.subdossiertemplate.objectValues())
 
     @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):
@@ -1490,8 +1490,8 @@ class TestMoveItem(IntegrationTestCase):
         self.login(self.administrator, browser)
         doc_title = self.dossiertemplatedocument.title.encode('utf-8')
         self.assertIn(doc_title, [a.Title for a in self.dossiertemplate.getFolderContents()])
-        self.move_item(browser, self.dossiertemplatedocument, self.templates)
-        self.assertIn(doc_title, [a.Title for a in self.templates.getFolderContents()])
+        self.move_item(browser, self.dossiertemplatedocument, self.subdossiertemplate)
+        self.assertIn(doc_title, [a.Title for a in self.subdossiertemplate.getFolderContents()])
         self.assertNotIn(doc_title, [a.Title for a in self.dossiertemplate.getFolderContents()])
         assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))
 
