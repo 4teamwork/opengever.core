@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from opengever.base.browser.helper import get_css_class
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
@@ -10,7 +8,7 @@ from opengever.document.activities import DocumenVersionCreatedActivity
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.docprops import DocPropertyWriter
 from opengever.document.interfaces import ITemplateDocumentMarker
-from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.templatefolder.utils import is_directly_within_template_folder
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from traceback import format_exc
 from zope.container.interfaces import IContainerModifiedEvent
@@ -71,8 +69,7 @@ def document_moved_or_added(context, event):
 
 
 def mark_as_template_document(context, event):
-    parent = aq_parent(aq_inner(context))
-    if ITemplateFolder.providedBy(parent):
+    if is_directly_within_template_folder(context):
         alsoProvides(context, ITemplateDocumentMarker)
         context.reindexObject(idxs=['object_provides'])
 
