@@ -12,66 +12,61 @@ import json
 
 class TestMove(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestMove, self).setUp()
+    def assert_can_move(self, browser, source, target):
+        uid = source.UID()
+        with self.observe_children(target) as children:
+            browser.open(
+                target,
+                view='@move',
+                data=json.dumps({"source": source.absolute_url()}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(1, len(children["added"]))
+        self.assertEqual(uid, children["added"].pop().UID())
+
+    def assert_cannot_move(self, browser, source, target, message, translated_message):
+        with browser.expect_http_error(code=403):
+            browser.open(target,
+                         view='@move',
+                         data=json.dumps({"source": source.absolute_url()}),
+                         method='POST',
+                         headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': message,
+             u'translated_message': translated_message,
+             u'type': u'Forbidden'},
+            browser.json)
 
     @browsing
     def test_regular_user_can_move_document(self, browser):
         self.login(self.regular_user, browser)
-        doc_id = self.document.getId()
-        browser.open(
-            self.subdossier.absolute_url() + '/@move',
-            data=json.dumps({"source": self.document.absolute_url()}),
-            method='POST',
-            headers={'Accept': 'application/json',
-                     'Content-Type': 'application/json'},
-        )
-        self.assertEqual(200, browser.status_code)
-        self.assertIn(doc_id, self.subdossier)
+        self.assert_can_move(browser, self.document, self.subdossier)
 
     @browsing
     def test_move_document_within_templatefolder_is_possible(self, browser):
         self.login(self.administrator, browser)
-        doc_id = self.dossiertemplatedocument.getId()
-        browser.open(
-            self.templates, view='@move',
-            data=json.dumps({"source": self.dossiertemplatedocument.absolute_url()}),
-            method='POST', headers=self.api_headers,
-        )
-        self.assertEqual(200, browser.status_code)
-        self.assertIn(doc_id, self.templates)
+        self.assert_can_move(browser, self.dossiertemplatedocument, self.templates)
 
     @browsing
     def test_document_within_repository_cannot_be_moved_to_templates(self, browser):
         self.login(self.administrator, browser)
-
-        with browser.expect_http_error(code=403):
-            browser.open(self.templates, view='/@move',
-                         data=json.dumps({"source": self.document.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_docs_cant_be_moved_from_repo_to_templates',
-             u'translated_message': u'Documents within the repository cannot be moved to the templates.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_docs_cant_be_moved_from_repo_to_templates'
+        translated = u'Documents within the repository cannot be moved to the templates.'
+        self.assert_cannot_move(
+            browser, self.document, self.templates, message, translated)
 
     @browsing
     def test_document_within_inbox_cannot_be_moved_to_templates(self, browser):
         self.login(self.administrator, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.templates, view='/@move',
-                         data=json.dumps({"source": self.inbox_document.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_docs_cant_be_moved_from_inbox_to_templates',
-             u'translated_message': u'Documents within the inbox cannot be moved to the templates.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_docs_cant_be_moved_from_inbox_to_templates'
+        translated = u'Documents within the inbox cannot be moved to the templates.'
+        self.assert_cannot_move(
+            browser, self.inbox_document, self.templates, message, translated)
 
     @browsing
     def test_move_document_within_private_folder_is_possible(self, browser):
@@ -80,31 +75,16 @@ class TestMove(IntegrationTestCase):
             Builder('private_dossier')
             .within(self.private_folder))
 
-        doc_id = self.private_document.getId()
-
-        browser.open(
-            dossier, view='@move',
-            data=json.dumps({"source": self.private_document.absolute_url()}),
-            method='POST', headers=self.api_headers,
-        )
-        self.assertEqual(200, browser.status_code)
-        self.assertIn(doc_id, dossier)
+        self.assert_can_move(browser, self.private_document, dossier)
 
     @browsing
     def test_document_within_repository_cannot_be_moved_to_private_dossier(self, browser):
         self.login(self.regular_user, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.private_dossier, view='/@move',
-                         data=json.dumps({"source": self.document.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_docs_cant_be_moved_from_repo_to_private_repo',
-             u'translated_message': u'Documents within the repository cannot be moved to the private repository.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_docs_cant_be_moved_from_repo_to_private_repo'
+        translated = u'Documents within the repository cannot be moved to the private repository.'
+        self.assert_cannot_move(
+            browser, self.document, self.private_dossier, message, translated)
 
     @browsing
     def test_document_within_inbox_cannot_be_moved_to_private_dossier(self, browser):
@@ -121,173 +101,97 @@ class TestMove(IntegrationTestCase):
             .within(private_folder)
         )
 
-        with browser.expect_http_error(code=403):
-            browser.open(private_dossier, view='/@move',
-                         data=json.dumps({"source": self.inbox_document.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_docs_cant_be_moved_from_inbox_to_private_repo',
-             u'translated_message': u'Documents within the inbox cannot be moved to the private repository.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_docs_cant_be_moved_from_inbox_to_private_repo'
+        translated = u'Documents within the inbox cannot be moved to the private repository.'
+        self.assert_cannot_move(
+            browser, self.inbox_document, private_dossier, message, translated)
 
     @browsing
     def test_document_inside_a_task_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.dossier, view='/@move',
-                         data=json.dumps({"source": self.taskdocument.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_task_cant_be_moved',
-             u'translated_message': u'Documents inside a task cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_task_cant_be_moved'
+        translated = u'Documents inside a task cannot be moved.'
+        self.assert_cannot_move(
+            browser, self.taskdocument, self.dossier, message, translated)
 
     @browsing
     def test_mail_inside_a_task_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
         mail = create(Builder('mail').titled('Good news').within(self.task))
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.dossier, view='/@move',
-                         data=json.dumps({"source": mail.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_task_cant_be_moved',
-             u'translated_message': u'Documents inside a task cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_task_cant_be_moved'
+        translated = u'Documents inside a task cannot be moved.'
+        self.assert_cannot_move(
+            browser, mail, self.dossier, message, translated)
 
     @browsing
     def test_document_inside_a_proposal_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.dossier, view='/@move',
-                         data=json.dumps({"source": self.proposaldocument.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_proposal_cant_be_moved',
-             u'translated_message': u'Documents inside a proposal cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_proposal_cant_be_moved'
+        translated = u'Documents inside a proposal cannot be moved.'
+        self.assert_cannot_move(
+            browser, self.proposaldocument, self.dossier, message, translated)
 
     @browsing
     def test_mail_inside_a_proposal_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
         mail = create(Builder('mail').titled('Good news').within(self.proposal))
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.dossier, view='/@move',
-                         data=json.dumps({"source": mail.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_proposal_cant_be_moved',
-             u'translated_message': u'Documents inside a proposal cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_proposal_cant_be_moved'
+        translated = u'Documents inside a proposal cannot be moved.'
+        self.assert_cannot_move(
+            browser, mail, self.dossier, message, translated)
 
     @browsing
     def test_document_inside_a_closed_dossier_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.dossier, view='/@move',
-                         data=json.dumps({"source": self.expired_document.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_closed_dossier',
-             u'translated_message': u'Documents inside a closed dossier cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_closed_dossier'
+        translated = u'Documents inside a closed dossier cannot be moved.'
+        self.assert_cannot_move(
+            browser, self.expired_document, self.dossier, message, translated)
 
     @browsing
     def test_mail_inside_a_closed_dossier_cannot_be_moved(self, browser):
         self.login(self.regular_user, browser)
         self.set_workflow_state('dossier-state-resolved', self.dossier)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.empty_dossier, view='/@move',
-                         data=json.dumps({"source": self.mail_eml.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_doc_inside_closed_dossier',
-             u'translated_message': u'Documents inside a closed dossier cannot be moved.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_doc_inside_closed_dossier'
+        translated = u'Documents inside a closed dossier cannot be moved.'
+        self.assert_cannot_move(
+            browser, self.mail_eml, self.empty_dossier, message, translated)
 
     @browsing
     def test_moving_dossier_respects_maximum_dossier_depth(self, browser):
         self.login(self.regular_user, browser)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.subdossier, view='/@move',
-                         data=json.dumps({"source": self.empty_dossier.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_would_exceed_max_dossier_level',
-             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_would_exceed_max_dossier_level'
+        translated = u'This would exceed the maximally allowed dossier depth.'
+        self.assert_cannot_move(
+            browser, self.empty_dossier, self.subdossier, message, translated)
 
         api.portal.set_registry_record(name='maximum_dossier_depth',
                                        value=2,
                                        interface=IDossierContainerTypes)
 
-        empty_dossier_title = self.empty_dossier.Title()
-        with self.observe_children(self.subdossier) as children:
-            browser.open(self.subdossier, view='/@move',
-                         data=json.dumps({"source": self.empty_dossier.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(1, len(children["added"]))
-        self.assertEqual(empty_dossier_title, children["added"].pop().Title())
+        self.assert_can_move(browser, self.empty_dossier, self.subdossier)
 
     @browsing
     def test_moving_dossier_with_subdossier_respects_maximum_dossier_depth(self, browser):
         self.login(self.regular_user, browser)
-        with browser.expect_http_error(code=403):
-            browser.open(self.empty_dossier, view='/@move',
-                         data=json.dumps({"source": self.resolvable_dossier.absolute_url()}),
-                         method='POST', headers=self.api_headers)
 
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_would_exceed_max_dossier_level',
-             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_would_exceed_max_dossier_level'
+        translated = u'This would exceed the maximally allowed dossier depth.'
+        self.assert_cannot_move(
+            browser, self.resolvable_dossier, self.empty_dossier, message, translated)
 
         api.portal.set_registry_record(name='maximum_dossier_depth',
                                        value=2,
                                        interface=IDossierContainerTypes)
 
-        resolvable_dossier_title = self.resolvable_dossier.Title()
-        with self.observe_children(self.empty_dossier) as children:
-            browser.open(self.empty_dossier, view='/@move',
-                         data=json.dumps({"source": self.resolvable_dossier.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(1, len(children["added"]))
-        self.assertEqual(resolvable_dossier_title, children["added"].pop().Title())
+        self.assert_can_move(browser, self.resolvable_dossier, self.empty_dossier)
 
     @browsing
     def test_moving_object_with_read_permissions_is_forbidden(self, browser):
@@ -300,41 +204,19 @@ class TestMove(IntegrationTestCase):
                                   self.subsubdossier))
 
         self.login(self.regular_user, browser)
-        with browser.expect_http_error(code=403):
-            browser.open(self.empty_dossier, view='/@move',
-                         data=json.dumps({"source": self.subsubdossier.absolute_url()}),
-                         method='POST', headers=self.api_headers)
+        message = u'move_object_disallowed'
+        translated = u'You are not allowed to move this object.'
 
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'move_object_disallowed',
-             u'translated_message': u'You are not allowed to move this object.',
-             u'type': u'Forbidden'},
-            browser.json)
+        self.assert_cannot_move(
+            browser, self.subsubdossier, self.empty_dossier, message, translated)
 
-        with browser.expect_http_error(code=403):
-            browser.open(self.empty_dossier, view='/@move',
-                         data=json.dumps({"source": self.subsubdocument.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'move_object_disallowed',
-             u'translated_message': u'You are not allowed to move this object.',
-             u'type': u'Forbidden'},
-            browser.json)
+        self.assert_cannot_move(
+            browser, self.subsubdocument, self.empty_dossier, message, translated)
 
     @browsing
     def test_move_dossiertemplate_to_templatefolder_is_possible(self, browser):
         self.login(self.administrator, browser)
-        with self.observe_children(self.subtemplates) as children:
-            browser.open(
-                self.subtemplates, view='@move',
-                data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
-                method='POST', headers=self.api_headers,
-            )
-        self.assertEqual(200, browser.status_code)
-        self.assertEqual(1, len(children["added"]))
+        self.assert_can_move(browser, self.dossiertemplate, self.subtemplates)
 
     @browsing
     def test_moving_dossiertemplate_respects_maximum_dossier_depth_if_flag_enabled(self, browser):
@@ -344,40 +226,21 @@ class TestMove(IntegrationTestCase):
 
         empty_dossiertemplate = create(Builder('dossiertemplate')
                                        .within(self.templates))
-        with browser.expect_http_error(code=403):
-            browser.open(empty_dossiertemplate, view='/@move',
-                         data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
-                         method='POST', headers=self.api_headers)
 
-        self.assertEqual(
-            {u'additional_metadata': {},
-             u'message': u'msg_would_exceed_max_dossier_level',
-             u'translated_message': u'This would exceed the maximally allowed dossier depth.',
-             u'type': u'Forbidden'},
-            browser.json)
+        message = u'msg_would_exceed_max_dossier_level'
+        translated = u'This would exceed the maximally allowed dossier depth.'
+        self.assert_cannot_move(
+            browser, self.dossiertemplate, empty_dossiertemplate, message, translated)
 
         api.portal.set_registry_record('respect_max_depth', False,
                                        interface=IDossierTemplateSettings)
 
-        with self.observe_children(empty_dossiertemplate) as children:
-            browser.open(empty_dossiertemplate, view='/@move',
-                         data=json.dumps({"source": self.dossiertemplate.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(200, browser.status_code)
-        self.assertEqual(1, len(children["added"]))
+        self.assert_can_move(browser, self.dossiertemplate, empty_dossiertemplate)
 
     @browsing
     def test_move_tasktemplatefolder_to_templatefolder_is_possible(self, browser):
         self.login(self.administrator, browser)
-        with self.observe_children(self.subtemplates) as children:
-            browser.open(
-                self.subtemplates, view='@move',
-                data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
-                method='POST', headers=self.api_headers,
-            )
-        self.assertEqual(200, browser.status_code)
-        self.assertEqual(1, len(children["added"]))
+        self.assert_can_move(browser, self.tasktemplatefolder, self.subtemplates)
 
     @browsing
     def test_can_only_move_tasktemplatefolder_into_tasktemplatefolder_if_nesting_enabled(self,
@@ -385,28 +248,14 @@ class TestMove(IntegrationTestCase):
         self.login(self.administrator, browser)
         tasktemplatefolder = create(Builder('tasktemplatefolder').within(self.templates))
 
-        with browser.expect_http_error(code=403):
-            browser.open(tasktemplatefolder, view='/@move',
-                         data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(
-            {u"additional_metadata": {},
-             u"message": u"msg_tasktemplatefolder_nesting_not_allowed",
-             u"translated_message":
-                u"It's not allowed to move tasktemplatefolders into tasktemplatefolders.",
-             u"type": u"Forbidden"},
-            browser.json)
+        message = u'msg_tasktemplatefolder_nesting_not_allowed'
+        translated = u"It's not allowed to move tasktemplatefolders into tasktemplatefolders."
+        self.assert_cannot_move(
+            browser, self.tasktemplatefolder, tasktemplatefolder, message, translated)
 
         self.activate_feature('tasktemplatefolder_nesting')
 
-        with self.observe_children(tasktemplatefolder) as children:
-            browser.open(tasktemplatefolder, view='/@move',
-                         data=json.dumps({"source": self.tasktemplatefolder.absolute_url()}),
-                         method='POST', headers=self.api_headers)
-
-        self.assertEqual(200, browser.status_code)
-        self.assertEqual(1, len(children["added"]))
+        self.assert_can_move(browser, self.tasktemplatefolder, tasktemplatefolder)
 
     @browsing
     def test_move_document_when_not_all_path_elemnts_are_accessible(self, browser):
@@ -421,20 +270,4 @@ class TestMove(IntegrationTestCase):
                      .within(subdossier))
 
         self.login(self.regular_user, browser=browser)
-
-        with self.observe_children(self.dossier) as children:
-            browser.open(
-                '{}/@move'.format(self.dossier.absolute_url()),
-                method='POST',
-                data=json.dumps(
-                    {'source': u'/'.join(doc.getPhysicalPath()).replace(u'/plone', u'')}
-                ),
-                headers=self.api_headers)
-
-        self.assertEquals(1, len(children['added']))
-        moved = children["added"].pop()
-
-        self.assertEquals(200, browser.status_code)
-        self.assertEquals(
-            [{u'source': doc.absolute_url(), u'target': moved.absolute_url()}],
-            browser.json)
+        self.assert_can_move(browser, doc, self.dossier)
