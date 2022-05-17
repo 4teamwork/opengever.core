@@ -19,7 +19,7 @@ class MarkTemplateDocumentsWithInterface(UpgradeStep):
 
         for templatefolder_path in templatefolder_paths:
             document_query = {'path': {'query': templatefolder_path, 'depth': 1},
-                              'object_provides': 'opengever.document.behaviors.IBaseDocument'}
+                              'portal_type': 'opengever.document.document'}
             for obj in self.objects(document_query, 'Mark document templates as ITemplateDocumentMarker'):
                 alsoProvides(obj, ITemplateDocumentMarker)
                 obj.reindexObject(idxs=['object_provides'])

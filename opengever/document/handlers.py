@@ -69,6 +69,9 @@ def document_moved_or_added(context, event):
 
 
 def mark_as_template_document(context, event):
+    if context.portal_type != 'opengever.document.document':
+        # we do not want to mark sablon templates and such.
+        return
     if is_directly_within_template_folder(context):
         alsoProvides(context, ITemplateDocumentMarker)
         context.reindexObject(idxs=['object_provides'])
