@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-27 17:01+0000\n"
+"POT-Creation-Date: 2022-05-17 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Language-Code: en\n"
 "Language-Name: English\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: opengever.document\n"
+"Domain: DOMAIN\n"
 
 #: ./opengever/document/upgrades/20170322142153_add_office_connector_multi_attach_action_to_documents/actions.xml
 #: ./opengever/document/upgrades/20170424163920_adjust_sort_order_of_actions/actions.xml
@@ -506,7 +506,6 @@ msgstr ""
 msgid "label_file"
 msgstr ""
 
-#. Default: "File size"
 msgid "label_filesize"
 msgstr ""
 
@@ -708,6 +707,26 @@ msgstr ""
 #. Default: "Documents within the repository cannot be moved to the templates."
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_repo_to_templates"
+msgstr ""
+
+#. Default: "Documents from a dossier template cannot be made into document templates."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_template_dossier_to_template_folder"
+msgstr ""
+
+#. Default: "Document templates cannot be moved into a dossier template."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_template_folder_to_template_dossier"
+msgstr ""
+
+#. Default: "Documents within the templates cannot be moved to the private repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_templates_to_private_repo"
+msgstr ""
+
+#. Default: "Documents within the templates cannot be moved to the repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_templates_to_repository"
 msgstr ""
 
 #. Default: "Locked documents cannot be moved."
