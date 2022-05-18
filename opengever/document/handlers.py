@@ -14,6 +14,7 @@ from traceback import format_exc
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
@@ -74,6 +75,9 @@ def mark_as_template_document(context, event):
         return
     if is_directly_within_template_folder(context):
         alsoProvides(context, ITemplateDocumentMarker)
+        context.reindexObject(idxs=['object_provides'])
+    elif ITemplateDocumentMarker.providedBy(context):
+        noLongerProvides(context, ITemplateDocumentMarker)
         context.reindexObject(idxs=['object_provides'])
 
 
