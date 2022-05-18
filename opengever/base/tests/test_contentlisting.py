@@ -265,15 +265,6 @@ class TestOpengeverContentListing(SolrIntegrationTestCase):
             .translated_review_state(),
         )
 
-    def test_translated_review_state_for_submittedproposal(self):
-        self.login(self.meeting_user)
-
-        self.assertEquals(
-            u'Eingereicht',
-            IContentListingObject(obj2solr(self.submitted_proposal))
-            .translated_review_state(),
-        )
-
     def test_translated_review_state_for_committee(self):
         self.login(self.meeting_user)
 
