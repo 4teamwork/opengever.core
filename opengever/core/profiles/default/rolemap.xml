@@ -417,6 +417,11 @@
       <role name="WorkspacesCreator" />
     </permission>
 
+    <permission name="opengever.ogds.base: Sync the OGDS" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
   </permissions>
 
 </rolemap>

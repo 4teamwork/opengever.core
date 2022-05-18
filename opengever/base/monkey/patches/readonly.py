@@ -212,6 +212,7 @@ WRITE_PERMISSIONS = [
     'opengever.meeting: Add Proposal Comment',
     'opengever.meeting: Add Proposal Template',
     'opengever.meeting: Add Sablon Template',
+    'opengever.ogds.base: Sync the OGDS',
     'opengever.private: Add private dossier',
     'opengever.private: Add private folder',
     'opengever.private: Add private root',
