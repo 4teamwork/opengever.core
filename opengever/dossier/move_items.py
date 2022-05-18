@@ -146,6 +146,18 @@ class MoveItemsForm(form.Form):
                             default=u'Object ${name} cannot be moved because '
                             'you do not have the permissions.',
                             mapping=dict(name=obj.title))
+                    elif exc.message == u'msg_docs_cant_be_moved_from_template_folder_to_template_dossier':
+                        msg = _(
+                            'label_doc_cant_be_moved_from_template_folder_to_template_dossier',
+                            default=u'Document ${name} is a template document and '
+                            'hence cannot be moved into a template dossier.',
+                            mapping=dict(name=obj.title))
+                    elif exc.message == u'msg_docs_cant_be_moved_from_template_dossier_to_template_folder':
+                        msg = _(
+                            'label_doc_cant_be_moved_from_template_dossier_to_template_folder',
+                            default=u'Document ${name} is in a dossier template '
+                            'and hence cannot be made into a template document.',
+                            mapping=dict(name=obj.title))
                     else:
                         raise Exception(
                             'Failed to determine the reason for unmovable object. '

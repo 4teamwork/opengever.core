@@ -1210,6 +1210,37 @@ class TestMoveItemsWithTestbrowser(IntegrationTestCase):
         self.assertIn(doc, self.subdossiertemplate.objectValues())
 
     @browsing
+    def test_cannot_move_template_document_to_template_dossier(self, browser):
+        self.login(self.administrator, browser)
+
+        self.move_items(browser, src=self.templates,
+                        obj=self.normal_template, target=self.dossiertemplate)
+
+        self.assertEqual(
+            [u'Document T\xc3\xb6mpl\xc3\xb6te Normal is a template document '
+             u'and hence cannot be moved into a template dossier.'],
+            error_messages())
+        self.assertIn(self.normal_template,
+                      self.templates.objectValues())
+        self.assertNotIn(self.normal_template,
+                         self.dossiertemplate.objectValues())
+
+    @browsing
+    def test_cannot_move_document_from_dossiertemplate_to_template_folder(self, browser):
+        self.login(self.administrator, browser)
+
+        self.move_items(browser, src=self.dossiertemplate,
+                        obj=self.dossiertemplatedocument, target=self.templates)
+        self.assertEqual(
+            [u'Document Werkst\xe4tte is in a dossier template and hence '
+             u'cannot be made into a template document.'],
+            error_messages())
+        self.assertIn(self.dossiertemplatedocument,
+                      self.dossiertemplate.objectValues())
+        self.assertNotIn(self.dossiertemplatedocument,
+                         self.templates.objectValues())
+
+    @browsing
     def test_paste_action_not_visible_for_closed_dossiers(self, browser):
         self.login(self.dossier_manager, browser)
         paths = ['/'.join(self.document.getPhysicalPath())]
