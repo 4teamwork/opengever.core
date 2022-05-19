@@ -195,6 +195,9 @@ class CreateDossierContentFromTemplateMixin(object):
         self.recursive_reindex(container)
 
     def recursive_reindex(self, obj):
+        # because we have created objects inside the obj, we also
+        # need to reindex obj, not only its children.
+        obj.reindexObject()
         for child_obj in obj.listFolderContents():
             child_obj.reindexObject()
 

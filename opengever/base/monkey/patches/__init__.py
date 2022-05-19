@@ -1,5 +1,4 @@
 from .action_info import PatchActionInfo
-from .cmf_catalog_aware import PatchCMFCatalogAware
 from .cmf_catalog_aware import PatchCMFCatalogAwareHandlers
 from .content_history_viewlet import PatchFullHistory
 from .default_values import PatchBuilderCreate
@@ -48,7 +47,6 @@ PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
 PatchCASAuthSetLoginTimes()()
 PatchCatalogToFilterTrashedDocs()()
-PatchCMFCatalogAware()()
 PatchCMFCatalogAwareHandlers()()
 PatchCMFEditonsHistoryHandlerTool()()
 PatchContentRulesHandlerOnLogin()()
