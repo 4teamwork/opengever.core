@@ -85,6 +85,21 @@ class OGSolrContentListingObject(
         return '<opengever.base.solr.OGSolrContentListingObject at %s>' % (
             self.getPath())
 
+    def __getattr__(self, name):
+        """The original CatalogContentListingObject looks up the real object by
+        calling getObject() if there is no attribute 'name' on the brain.
+
+        A solr document will not return empty fields. So if a field is empty,
+        the default __getattr__ will always lookup the object to check if the
+        value is stored on the object itself.
+
+        This behavior is not desired when dealing with solr docs. It will
+        decrease performance when we list a lot of objects with empty fields.
+        """
+        if name.startswith('_'):
+            raise AttributeError(name)
+        return getattr(self._brain, name)
+
     def getIcon(self):
         """Because we use CSS sprites for icons, we don't return an icon here.
         """

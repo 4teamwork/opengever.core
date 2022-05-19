@@ -173,13 +173,6 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         return self._render_simplelink()
 
     def translated_review_state(self):
-        if self.portal_type in ('opengever.meeting.proposal',
-                                'opengever.meeting.submittedproposal'):
-            # Some meeting content has a custom workflow implementation
-            state = self.get_state().title
-            return translate(
-                state, domain='opengever.meeting', context=self.request)
-
         review_state = self.review_state()
         if review_state:
             return translate(
