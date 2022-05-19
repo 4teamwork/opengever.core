@@ -19,6 +19,7 @@ from opengever.task.helper import task_type_helper
 from opengever.task.helper import task_type_value_helper
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
+from plone.memoize.instance import memoize
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
@@ -776,6 +777,7 @@ class SolrFieldMapper(object):
 
         return list(requested_solr_fields & self.all_solr_fields) + dynamic_fields
 
+    @memoize
     def get_custom_property_solr_field(self, field_name):
         """Get a single custom property dynamic field by name.
         """
