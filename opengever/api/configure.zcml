@@ -19,6 +19,7 @@
   <include package="opengever.webactions" file="permissions.zcml" />
   <include package="opengever.workspace" file="permissions.zcml" />
   <include package="opengever.workspaceclient" file="permissions.zcml" />
+  <include package="opengever.ogds.base" file="permissions.zcml" />
 
   <include package=".schema" />
 
@@ -1705,6 +1706,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".dashboard.DashboardSettings"
       permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      name="@ogds-sync"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".ogdssync.OgdsSync"
+      permission="opengever.ogds.base.SyncOgds"
       />
 
 </configure>

@@ -14,6 +14,8 @@
   <include package=".viewlets" />
   <include package=".sync" />
 
+  <include file="permissions.zcml" />
+
   <i18n:registerTranslations directory="locales" />
 
   <adapter

@@ -58,7 +58,13 @@ def sync_ogds(plone, users=True, groups=True, local_groups=False,
     """
     # Set up logging to a rotating ogds-update.log
     if not disable_logfile:
-        setup_ogds_sync_logfile(logger)
+        try:
+            setup_ogds_sync_logfile(logger)
+        except RuntimeError:
+            # in some cases (testserver and other test builds), the specific
+            # logger cannot be setupped. We can ignore this case and use the
+            # default logfile
+            pass
 
     # We check that the group management is setup correctly. This is not
     # strictly necessary but ensures that this configuration is checked

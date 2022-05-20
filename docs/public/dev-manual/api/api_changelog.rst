@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- A new ``@ogds-sync`` endpoint allows to start an OGDS synchronisation.
 
 2022.10.0 (2022-05-11)
 ----------------------

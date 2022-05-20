@@ -228,6 +228,7 @@
                    opengever.meeting: Add Meeting Template,
                    opengever.meeting: Add Paragraph Template,
                    opengever.meeting: Add Proposal Comment,
+                   opengever.ogds.base: Sync the OGDS,
                    opengever.propertysheets: Manage PropertySheets,
                    opengever.repository: Export repository,
                    opengever.sharing: List Protected Objects,
