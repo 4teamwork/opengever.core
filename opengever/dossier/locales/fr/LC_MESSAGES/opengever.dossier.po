@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-09 08:19+0000\n"
+"POT-Creation-Date: 2022-05-18 06:23+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -570,6 +570,16 @@ msgstr "Description"
 #: ./opengever/dossier/move_items.py
 msgid "label_destination"
 msgstr "Destination (position/dossier)"
+
+#. Default: "Document ${name} is in a dossier template and hence cannot be made into a template document."
+#: ./opengever/dossier/move_items.py
+msgid "label_doc_cant_be_moved_from_template_dossier_to_template_folder"
+msgstr "Le document ${name} se trouve dans un modèle de dossier et ne peut pas être changé en un modèle de document."
+
+#. Default: "Document ${name} is a template document and hence cannot be moved into a template dossier."
+#: ./opengever/dossier/move_items.py
+msgid "label_doc_cant_be_moved_from_template_folder_to_template_dossier"
+msgstr "Le document ${name} est un modèle de document et ne peut pas être déplacé dans un modèle de dossier."
 
 #. Default: "Documents"
 #: ./opengever/dossier/browser/overview.py

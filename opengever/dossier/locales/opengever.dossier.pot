@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-09 08:19+0000\n"
+"POT-Creation-Date: 2022-05-18 06:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -568,6 +568,16 @@ msgstr ""
 #. Default: "Destination"
 #: ./opengever/dossier/move_items.py
 msgid "label_destination"
+msgstr ""
+
+#. Default: "Document ${name} is in a dossier template and hence cannot be made into a template document."
+#: ./opengever/dossier/move_items.py
+msgid "label_doc_cant_be_moved_from_template_dossier_to_template_folder"
+msgstr ""
+
+#. Default: "Document ${name} is a template document and hence cannot be moved into a template dossier."
+#: ./opengever/dossier/move_items.py
+msgid "label_doc_cant_be_moved_from_template_folder_to_template_dossier"
 msgstr ""
 
 #. Default: "Documents"

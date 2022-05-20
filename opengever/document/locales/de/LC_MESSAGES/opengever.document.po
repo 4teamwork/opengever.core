@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-04-27 17:01+0000\n"
+"POT-Creation-Date: 2022-05-17 15:40+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -714,6 +714,26 @@ msgstr "Dokumente im Ordnungssystem können nicht in die private Ablage verschob
 #: ./opengever/document/move.py
 msgid "msg_docs_cant_be_moved_from_repo_to_templates"
 msgstr "Dokumente im Ordnungssystem können nicht in eine Vorlage verschoben werden."
+
+#. Default: "Documents from a dossier template cannot be made into document templates."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_template_dossier_to_template_folder"
+msgstr "Dokumente einer Dossiervorlage können nicht zu Dokumentvorlagen gemacht werden."
+
+#. Default: "Document templates cannot be moved into a dossier template."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_template_folder_to_template_dossier"
+msgstr "Dokumentvorlagen können nicht in eine Dossiervorlage verschoben werden."
+
+#. Default: "Documents within the templates cannot be moved to the private repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_templates_to_private_repo"
+msgstr "Dokumente in den Vorlagen können nicht in die private Ablage verschoben werden."
+
+#. Default: "Documents within the templates cannot be moved to the repository."
+#: ./opengever/document/move.py
+msgid "msg_docs_cant_be_moved_from_templates_to_repository"
+msgstr "Dokumente in den Vorlagen können nicht in das Ordnungssystem verschoben werden."
 
 #. Default: "Locked documents cannot be moved."
 #: ./opengever/document/move.py

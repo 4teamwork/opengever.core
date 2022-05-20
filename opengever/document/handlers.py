@@ -7,10 +7,14 @@ from opengever.document.activities import DocumentTitleChangedActivity
 from opengever.document.activities import DocumenVersionCreatedActivity
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.docprops import DocPropertyWriter
+from opengever.document.interfaces import ITemplateDocumentMarker
+from opengever.dossier.templatefolder.utils import is_directly_within_template_folder
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from traceback import format_exc
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 from zope.lifecycleevent import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectAddedEvent
 from zope.lifecycleevent.interfaces import IObjectMovedEvent
@@ -63,6 +67,18 @@ def document_moved_or_added(context, event):
         _update_docproperties(context, raise_on_error=False)
     else:
         _update_docproperties(context, raise_on_error=False)
+
+
+def mark_as_template_document(context, event):
+    if context.portal_type != 'opengever.document.document':
+        # we do not want to mark sablon templates and such.
+        return
+    if is_directly_within_template_folder(context):
+        alsoProvides(context, ITemplateDocumentMarker)
+        context.reindexObject(idxs=['object_provides'])
+    elif ITemplateDocumentMarker.providedBy(context):
+        noLongerProvides(context, ITemplateDocumentMarker)
+        context.reindexObject(idxs=['object_provides'])
 
 
 def _update_docproperties(document, raise_on_error=False):

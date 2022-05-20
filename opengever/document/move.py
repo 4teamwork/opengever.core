@@ -3,6 +3,8 @@ from opengever.api.not_reported_exceptions import ResourceLockedError as NotRepo
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.document import _
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.templatefolder.interfaces import ITemplateFolder
+from opengever.dossier.templatefolder.utils import is_directly_within_template_folder
 from opengever.dossier.templatefolder.utils import is_within_templates
 from opengever.inbox.utils import is_within_inbox
 from opengever.private.utils import is_within_private_root
@@ -44,9 +46,8 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
                 raise Forbidden(
                     _(u'msg_docs_cant_be_moved_from_repo_to_private_repo',
                       u'Documents within the repository cannot be moved to the private repository.'))
-            return
 
-        if is_within_inbox(self.context):
+        elif is_within_inbox(self.context):
             if is_within_templates(target):
                 raise Forbidden(
                     _(u'msg_docs_cant_be_moved_from_inbox_to_templates',
@@ -55,3 +56,23 @@ class DocumentMovabiliyChecker(DefaultMovabilityChecker):
                 raise Forbidden(
                     _(u'msg_docs_cant_be_moved_from_inbox_to_private_repo',
                       u'Documents within the inbox cannot be moved to the private repository.'))
+
+        elif is_within_templates(self.context):
+            if is_within_repository(target):
+                raise Forbidden(
+                    _(u'msg_docs_cant_be_moved_from_templates_to_repository',
+                      u'Documents within the templates cannot be moved to the repository.'))
+            if is_within_private_root(target):
+                raise Forbidden(
+                    _(u'msg_docs_cant_be_moved_from_templates_to_private_repo',
+                      u'Documents within the templates cannot be moved to the private repository.'))
+            if is_directly_within_template_folder(self.context):
+                if not ITemplateFolder.providedBy(target):
+                    raise Forbidden(
+                        _(u'msg_docs_cant_be_moved_from_template_folder_to_template_dossier',
+                          u'Document templates cannot be moved into a dossier template.'))
+            else:
+                if ITemplateFolder.providedBy(target):
+                    raise Forbidden(
+                        _(u'msg_docs_cant_be_moved_from_template_dossier_to_template_folder',
+                          u'Documents from a dossier template cannot be made into document templates.'))

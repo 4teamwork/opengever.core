@@ -4,6 +4,7 @@ from DateTime import DateTime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from OFS.CopySupport import CopyError
+from opengever.document.interfaces import ITemplateDocumentMarker
 from opengever.testing import IntegrationTestCase
 from plone import api
 import pytz
@@ -283,3 +284,17 @@ class TestCopyDocuments(IntegrationTestCase):
         self.assertDictEqual(copy_indexdata, reindexed_copy_indexdata,
                              msg="Some indexdata was not up to date after "
                                  "a copy/paste operation")
+
+    def test_copied_template_document_is_not_marked_as_template(self):
+        self.login(self.regular_user)
+        self.assertTrue(ITemplateDocumentMarker.providedBy(self.normal_template))
+
+        copy = api.content.copy(source=self.normal_template, target=self.subdossier)
+        self.assertFalse(ITemplateDocumentMarker.providedBy(copy))
+
+    def test_document_copied_into_template_folder_is_marked_as_template_document(self):
+        self.login(self.administrator)
+        self.assertFalse(ITemplateDocumentMarker.providedBy(self.document))
+
+        copy = api.content.copy(source=self.document, target=self.templates)
+        self.assertTrue(ITemplateDocumentMarker.providedBy(copy))
