@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.11.0 (2022-05-24)
+----------------------
+
+New features:
+
+
+- Only allow moving template documents to TemplateFolders. [njohner]
+- Only allow moving documents in DossierTemplates to DossierTemplates. [njohner]
+- Excel export: Remove limit of 1000 items. [elioschmutz]
+- Excel export: Items to export can be addressed by a listing-name and filters. [elioschmutz]
+- Add disposition setting, to only attach the original file if conversion is missing. [phgross]
+
+
+Other changes:
+
+
+- Incresed listing performance when listing objects with empty fields. [elioschmutz]
+- Remove usersnap settings. [njohner]
+
+
 2022.10.0 (2022-05-11)
 ----------------------
 
