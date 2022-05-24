@@ -1,4 +1,6 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ProtectDossierRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.dossier import _
@@ -230,7 +232,9 @@ class DossierProtection(AnnotationsFactoryImpl):
             manager.reset(assignments)
 
     def clear_local_roles(self):
-        RoleAssignmentManager(self.context).clear_all()
+        manager = RoleAssignmentManager(self.context)
+        manager.clear_by_causes(
+            [ASSIGNMENT_VIA_SHARING, ASSIGNMENT_VIA_PROTECT_DOSSIER])
 
     def generate_role_settings(self):
         role_settings = {}

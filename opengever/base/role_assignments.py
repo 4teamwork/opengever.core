@@ -341,6 +341,12 @@ class RoleAssignmentManager(object):
         self.storage.clear_all()
         self._update_local_roles()
 
+    def clear_by_causes(self, causes):
+        for cause in causes:
+            self.storage.clear_by_cause(cause)
+
+        self._update_local_roles()
+
     def clear_by_cause_and_principals(self, cause, principals):
         """Remove all assignments of the given cause and principals.
         """
