@@ -1,5 +1,6 @@
 from datetime import date
 from ftw.testbrowser import browsing
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
@@ -318,3 +319,18 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'userid': u'l\xfccklicher.laser'}],
             browser.json['items'])
         self.assertEqual(1, browser.json['items_total'])
+
+    @browsing
+    def test_filter_by_group_membership(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal,
+                     view='@ogds-user-listing?filters.groupid:record=projekt_a',
+                     headers=self.api_headers)
+
+        self.assertEqual(2, len(browser.json['items']))
+        self.assertEqual(2, browser.json['items_total'])
+        group = ogds_service().fetch_group("projekt_a")
+        self.assertEqual(
+            [user.userid for user in group.users],
+            [user['userid'] for user in browser.json['items']])

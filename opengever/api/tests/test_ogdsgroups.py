@@ -55,6 +55,27 @@ class TestOGDSGroupsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_ogds_groups_users_are_sorted(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal, view='@ogds-groups/projekt_a',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [u'B\xe4rfuss', u'Ziegler'],
+            [each['lastname'] for each in browser.json['items']])
+
+        group = ogds_service().fetch_group("projekt_a")
+        group.users.append(ogds_service().fetch_user(self.workspace_member.getId()))
+
+        browser.open(self.portal, view='@ogds-groups/projekt_a',
+                     headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(
+            [u'B\xe4rfuss', u'Schr\xf6dinger', u'Ziegler'],
+            [each['lastname'] for each in browser.json['items']])
+
+    @browsing
     def test_raises_bad_request_when_groupid_is_missing(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.exception_bubbling = True

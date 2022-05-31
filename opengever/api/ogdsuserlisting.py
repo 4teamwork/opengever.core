@@ -1,6 +1,7 @@
 from datetime import datetime
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 import re
 
@@ -55,6 +56,10 @@ class OGDSUserListingGet(OGDSListingBaseService):
         if last_login_query:
             start_date, end_date = self._convert_date_query_to_dates(last_login_query[0])
             query = query.filter(User.last_login >= start_date, User.last_login <= end_date)
+
+        groupid = filters.get('groupid', None)
+        if groupid:
+            query = query.join(groups_users).filter_by(groupid=groupid)
 
         query = self.extend_query_with_visible_users_and_groups_filter(query)
 

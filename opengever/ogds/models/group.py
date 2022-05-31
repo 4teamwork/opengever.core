@@ -14,7 +14,6 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 
-
 # association table
 groups_users = Table(
     'groups_users', Base.metadata,
@@ -47,7 +46,7 @@ class Group(Base):
     # allowed to be managed over the @groups endpoint.
     is_local = Column(Boolean, default=False, nullable=True)
 
-    users = relation(User, secondary=groups_users,
+    users = relation(User, secondary=groups_users, order_by='User.lastname',
                      backref=backref('groups', order_by='Group.groupid'))
     teams = relationship(Team, back_populates="group")
 
