@@ -46,6 +46,9 @@ class IResponseContainer(Interface):
     def add(self, response):
         """Add the given response to the container list."""
 
+    def delete(self, response_id):
+        """Deletes the response with the given response_id. """
+
     def list(self):
         """Returns a list of all responses."""
 

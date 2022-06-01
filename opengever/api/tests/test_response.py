@@ -270,3 +270,50 @@ class TestResponsePatch(IntegrationTestCase):
                           u'message': u'only_comment_type_can_be_edited'}, browser.json)
 
 
+class TestResponseDelete(IntegrationTestCase):
+
+    @browsing
+    def test_delete_a_response_requires_edit_permission(self, browser):
+        self.login(self.workspace_guest, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            IResponseContainer(self.todo).add(Response())
+
+        with browser.expect_http_error(401):
+            url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+            browser.open(url, method="DELETE", headers=self.api_headers)
+
+    @browsing
+    def test_delete_a_response_sucessful(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            response = Response()
+            response.text = 'Test'
+            response.response_type = COMMENT_RESPONSE_TYPE
+            IResponseContainer(self.todo).add(response)
+
+        self.assertEqual(1, len(IResponseContainer(self.todo).list()))
+
+        url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+        browser.open(url, method="DELETE", headers=self.api_headers)
+
+        self.assertEqual(0, len(IResponseContainer(self.todo).list()))
+
+    @browsing
+    def test_cannot_delete_response_that_is_not_of_type_comment(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            response = Response()
+            response.text = 'Test'
+            response.response_type = u'blah'
+            IResponseContainer(self.todo).add(response)
+
+        with browser.expect_http_error(400):
+            url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+            browser.open(url, method="DELETE", headers=self.api_headers)
+
+        self.assertEqual({
+            u'type': u'BadRequest', u'additional_metadata': {},
+            u'translated_message': u'Only responses of type "Comment" can be deleted.',
+            u'message': u'only_comment_type_can_be_deleted'}, browser.json)

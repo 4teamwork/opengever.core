@@ -934,6 +934,14 @@
       />
 
   <plone:service
+      method="DELETE"
+      name="@responses"
+      for="opengever.base.response.IResponseSupported"
+      factory=".response.ResponseDelete"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="POST"
       name="@upload-document-copy"
       for="opengever.workspace.interfaces.IWorkspace"

@@ -180,3 +180,41 @@ class ResponsePatch(Service):
 
         self.request.response.setStatus(204)
         self.request.response.setHeader("Location", self.context.absolute_url())
+
+
+@implementer(IPublishTraverse)
+class ResponseDelete(Service):
+    """Delete a response.
+    """
+
+    def __init__(self, context, request):
+        super(ResponseDelete, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@responses as parameters
+        self.params.append(name)
+        return self
+
+    @property
+    def _get_response_id(self):
+        if len(self.params) != 1:
+            raise Exception("Must supply exactly one parameter (response id)")
+        return self.params[0]
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        response_container = IResponseContainer(self.context)
+        if self._get_response_id not in response_container:
+            raise NotFound
+
+        response = response_container[self._get_response_id]
+        if response.response_type != COMMENT_RESPONSE_TYPE:
+            raise NotReportedBadRequest(
+                _(u'only_comment_type_can_be_deleted',
+                  default=u'Only responses of type "Comment" can be deleted.'))
+
+        response_container.delete(response.response_id)
+        return self.reply_no_content()
