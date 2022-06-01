@@ -56,6 +56,28 @@ class TestMailInboundSender(IntegrationTestCase):
         self.assertEqual(self.regular_user.getId(), created_mail.Creator())
 
     @browsing
+    def test_sender_email_match_is_exact(self, browser):
+        self.login(self.dossier_responsible)
+
+        # User with similar email adress as regular_user
+        create(Builder('user')
+               .named(u'additional', u'User')
+               .with_email('oo@example.com')
+               .with_userid('additional'))
+
+        msg_txt = (
+            'To: %s\n'
+            'From: %s\n'
+            'Subject: Test' % (self.destination_addr, 'oo@example.com'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.portal, {'mail': msg_txt}, 'mail-inbound')
+
+        self.assertEqual(
+            '77:Unable to create message. Permission denied.',
+            browser.contents)
+
+    @browsing
     def test_aliases_sender_email_to_user(self, browser):
         self.login(self.dossier_responsible)
 

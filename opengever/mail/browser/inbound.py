@@ -54,7 +54,7 @@ class GeverMailInbound(MailInbound):
         acl_users = api.portal.get_tool('acl_users')
         pas_search = getMultiAdapter((self.context, self.request),
                                      name='pas_search')
-        users = pas_search.searchUsers(email=sender_email)
+        users = pas_search.searchUsers(email=sender_email, exact_match=True)
         if len(users) > 0:
             user = acl_users.getUserById(users[0].get('userid'))
             if not hasattr(user, 'aq_base'):

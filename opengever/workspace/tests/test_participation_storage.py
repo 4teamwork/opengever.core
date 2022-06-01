@@ -287,6 +287,27 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                         self.workspace_owner.getId(),
                         'WorkspaceGuest')
 
+    def test_user_search_by_mail_match_exact(self):
+        with self.login(self.manager):
+            create(Builder('user')
+                   .named('foo', 'bar')
+                   .with_roles(['Member'])
+                   .in_groups('fa_users')
+                   .with_email('ttwice@example.com'))
+
+            create(Builder('user')
+                   .named('bar', 'qux')
+                   .with_roles(['Member'])
+                   .in_groups('fa_users')
+                   .with_email('twice@example.com'))
+
+        self.login(self.workspace_admin)
+        getUtility(IInvitationStorage).add_invitation(
+            self.workspace,
+            'twice@example.com',
+            self.workspace_owner.getId(),
+            'WorkspaceGuest')
+
     def add_invitation(self, **options):
         options.setdefault('target', self.workspace)
         options.setdefault('recipient_email', self.workspace_guest.getProperty('email'))
