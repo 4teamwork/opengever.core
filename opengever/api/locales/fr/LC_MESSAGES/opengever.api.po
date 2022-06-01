@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-06 13:48+0000\n"
+"POT-Creation-Date: 2022-05-30 09:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,11 +31,6 @@ msgstr "Il n'est pas permis de changer le mandataire ici. Veuillez réattribuer 
 #: ./opengever/api/copy_.py
 msgid "copy_object_disallowed"
 msgstr "Vous n'êtes pas autorisé à copier cet objet."
-
-#. Default: "Copy of ${title}"
-#: ./opengever/api/copy_.py
-msgid "copy_of"
-msgstr "Copie de ${title}"
 
 #. Default: "The actor ${actorid} is not allowed"
 #: ./opengever/api/participations.py
@@ -171,6 +166,16 @@ msgstr "Un document verrouillé ne peut pas être mis à la corbeille."
 #: ./opengever/api/participations.py
 msgid "one_of_participants_and_participant"
 msgstr "Il n'est permis de spécifier que soit 'participants', soit 'participant' ou 'role'"
+
+#. Default: "Only responses of type \"Comment\" can be deleted."
+#: ./opengever/api/response.py
+msgid "only_comment_type_can_be_deleted"
+msgstr ""
+
+#. Default: "Only responses of type \"Comment\" can be edited."
+#: ./opengever/api/response.py
+msgid "only_comment_type_can_be_edited"
+msgstr ""
 
 #. Default: "Property 'participants' is required"
 #: ./opengever/api/linked_workspaces.py

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-06 13:48+0000\n"
+"POT-Creation-Date: 2022-05-30 09:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,11 +31,6 @@ msgstr "Es ist nicht erlaubt, den Auftragnehmer hier zu ändern. Verwenden Sie s
 #: ./opengever/api/copy_.py
 msgid "copy_object_disallowed"
 msgstr "Sie sind nicht berechtigt, dieses Objekt zu kopieren."
-
-#. Default: "Copy of ${title}"
-#: ./opengever/api/copy_.py
-msgid "copy_of"
-msgstr "Kopie von ${title}"
 
 #. Default: "The actor ${actorid} is not allowed"
 #: ./opengever/api/participations.py
@@ -171,6 +166,16 @@ msgstr "Ein gesperrtes Dokument kann nicht in den Papierkorb verschoben werden"
 #: ./opengever/api/participations.py
 msgid "one_of_participants_and_participant"
 msgstr "Nur einen von 'participants' und 'participant' oder 'role' ist erlaubt"
+
+#. Default: "Only responses of type \"Comment\" can be deleted."
+#: ./opengever/api/response.py
+msgid "only_comment_type_can_be_deleted"
+msgstr "Nur Antworten vom Typ \"Kommentar\" können bearbeitet werden."
+
+#. Default: "Only responses of type \"Comment\" can be edited."
+#: ./opengever/api/response.py
+msgid "only_comment_type_can_be_edited"
+msgstr "Nur Antworten vom Typ \"Kommentar\" können gelöscht werden."
 
 #. Default: "Property 'participants' is required"
 #: ./opengever/api/linked_workspaces.py
