@@ -8,9 +8,12 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+-``@responses``: Responses can no longer be edited if they are not of type comment.
 
 Other Changes
 ^^^^^^^^^^^^^
+-``@responses``: Add DELETE endpoint.
+-``@responses``: Set modifier and modified in PATCH endpoint.
 
 2022.11.0 (2022-05-24)
 ----------------------
