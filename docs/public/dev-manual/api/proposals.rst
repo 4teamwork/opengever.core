@@ -96,6 +96,8 @@ Der Verlauf eines Antrags ist in der GET Repräsentation eines Antrags unter dem
                 "token": "hugo.boss"
             },
             "created": "2019-05-21T13:57:42",
+            "modified": null,
+            "modifier": null,
             "text": "",
           },
           {
@@ -109,6 +111,8 @@ Der Verlauf eines Antrags ist in der GET Repräsentation eines Antrags unter dem
                 "token": "hugo.boss"
             },
             "created": "2019-11-11T16:40:04",
+            "modified": "2020-05-21T13:57:42",
+            "modifier": "kathi.barfuss",
             "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
           },
         ]

@@ -159,7 +159,7 @@ Ein ToDo löschen
 Antworten
 ---------
 
-ToDo Antworten sind ebenfalls via API ersichtlich bzw. können über diese erstellt und bearbeitet werden.
+ToDo Antworten sind ebenfalls via API ersichtlich bzw. können über diese erstellt, bearbeitet und gelöscht werden.
 
 Die API Repräsentation eines ToDos, listet unter dem Attribut ``responses`` alle Antworten auf. Eine GET Request auf eine einzelnes ToDo ist ebenfalls möglich und antwortet mit der gleichen Repräsentation.
 
@@ -205,8 +205,8 @@ Die API Repräsentation eines ToDos, listet unter dem Attribut ``responses`` all
       }
 
 
-Erstellung und Bearbeitung
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Erstellung, Bearbeitung und Löschen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Antworten können mit einem POST Request auf den ``@responses`` Endpoint hinzugefügt werden.
 
@@ -241,7 +241,7 @@ Antworten können mit einem POST Request auf den ``@responses`` Endpoint hinzuge
       }
 
 
-Die Bearbeitung einer Antwort geschieht mittels PATCH Request.
+Die Bearbeitung einer Antwort geschieht mittels PATCH Request. Nur Antworten vom Typ "Kommentar" können bearbeitet werden.
 
 **Beispiel-Request**:
 
@@ -262,3 +262,20 @@ Die Bearbeitung einer Antwort geschieht mittels PATCH Request.
 
       HTTP/1.1 204 Created
       Content-Type: application/json
+
+
+Ein DELETE Request auf eine Antwort vom Typ Kommentar löscht den Kommentar.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      DELETE workspaces/workspace-1/todo-1/@responses/1569875801956269 HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
