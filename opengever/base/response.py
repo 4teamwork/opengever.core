@@ -148,6 +148,10 @@ class IResponse(Interface):
 
     creator = schema.TextLine(required=True)
 
+    modified = schema.Datetime(required=False)
+
+    modifier = schema.TextLine(required=False)
+
     text = schema.Text(required=False, default=u'', missing_value=u'')
 
     changes = schema.List(required=False, value_type=schema.Dict())
@@ -170,6 +174,9 @@ class Response(Persistent):
 
         self.text = u''
         self.changes = PersistentList()
+
+        self.modified = None
+        self.modifier = None
 
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(

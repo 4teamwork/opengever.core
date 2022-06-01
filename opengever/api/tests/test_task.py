@@ -49,6 +49,8 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              u'created': json_compatible(self.subtask.created().utcdatetime()),
              u'creator': {u'title': u'Ziegler Robert', u'token': u'robert.ziegler'},
              u'mimetype': u'',
+             u'modified': None,
+             u'modifier': None,
              u'related_items': [],
              u'rendered_text': u'',
              u'response_id': 1472652213000000,
@@ -129,6 +131,8 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              u'creator': {
                  u'token': self.regular_user.id,
                  u'title': u'B\xe4rfuss K\xe4thi'},
+             u'modified': None,
+             u'modifier': None,
              u'text': u'Angebot \xfcberpr\xfcft',
              u'transition': u'task-commented',
              u'subtask': None,

@@ -1,3 +1,4 @@
+from datetime import datetime
 from opengever.api import _
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.response import COMMENT_RESPONSE_TYPE
@@ -5,6 +6,7 @@ from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.ogds.base.actor import Actor
+from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldSerializer
@@ -173,6 +175,8 @@ class ResponsePatch(Service):
             raise BadRequest("Property 'text' is required")
 
         response.text = text
+        response.modified = datetime.now()
+        response.modifier = api.user.get_current().id
 
         self.request.response.setStatus(204)
         self.request.response.setHeader("Location", self.context.absolute_url())

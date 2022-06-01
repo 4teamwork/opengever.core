@@ -51,6 +51,8 @@ class TestResponseGETSerialization(IntegrationTestCase):
               u'creator': {
                   u'title': u'Schr\xf6dinger B\xe9atrice',
                   u'token': u'beatrice.schrodinger'},
+              u'modified': None,
+              u'modifier': None,
               u'response_id': 1481272800000000,
               u'response_type': u'default',
               u'text': u'Ich bin hier anderer Meinung!',
@@ -64,6 +66,8 @@ class TestResponseGETSerialization(IntegrationTestCase):
               u'creator': {
                   u'title': u'Hugentobler Fridolin',
                   u'token': u'fridolin.hugentobler'},
+              u'modified': None,
+              u'modifier': None,
               u'response_id': 1482564180000000,
               u'response_type': u'default',
               u'text': u'Ok, Danke f\xfcr dein Feedback',
@@ -99,6 +103,8 @@ class TestResponseGET(IntegrationTestCase):
              u'created': u'2016-12-09T09:40:00',
              u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
                           u'token': self.workspace_member.id},
+             u'modified': None,
+             u'modifier': None,
              u'response_id': 1481272800000000,
              u'response_type': u'default',
              u'text': u'Ich bin hier anderer Meinung!',
@@ -142,8 +148,10 @@ class TestResponsePost(IntegrationTestCase):
              u'creator': {
                  u'token': self.workspace_member.id,
                  u'title': u'Schr\xf6dinger B\xe9atrice'},
+             u'modified': None,
+             u'modifier': None,
              u'text': u'Angebot \xfcberpr\xfcft',
-            },
+             },
             browser.json)
 
     @browsing
@@ -167,6 +175,8 @@ class TestResponsePost(IntegrationTestCase):
              u'changes': [],
              u'created': u'2016-12-09T09:40:00',
              u'creator': {u'title': u'B\xe4rfuss K\xe4thi', u'token': self.regular_user.id},
+             u'modified': None,
+             u'modifier': None,
              u'response_id': 1481272800000000,
              u'response_type': u'comment',
              u'text': u'Angebot \xfcberpr\xfcft'}, browser.json)
@@ -200,7 +210,7 @@ class TestResponsePatch(IntegrationTestCase):
 
     @browsing
     def test_edit_a_response_sucessful(self, browser):
-        self.login(self.workspace_member, browser=browser)
+        self.login(self.workspace_admin, browser=browser)
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
             response = Response()
@@ -209,12 +219,16 @@ class TestResponsePatch(IntegrationTestCase):
             IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
-        browser.open(url, method="PATCH", headers=self.api_headers,
-                     data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+        self.login(self.workspace_member, browser=browser)
+        with freeze(datetime(2018, 10, 10, 9, 15)):
+            browser.open(url, method="PATCH", headers=self.api_headers,
+                         data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEquals(1, len(responses))
-        self.assertEquals(u'Angebot \xfcberpr\xfcft', responses[0].text)
+        self.assertEqual(1, len(responses))
+        self.assertEqual(u'Angebot \xfcberpr\xfcft', responses[0].text)
+        self.assertEqual(self.workspace_member.getId(), responses[0].modifier)
+        self.assertEqual(datetime(2018, 10, 10, 9, 15), responses[0].modified)
 
         self.assertEquals(204, browser.status_code)
 
