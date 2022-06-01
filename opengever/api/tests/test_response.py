@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.testing import IntegrationTestCase
@@ -204,6 +205,7 @@ class TestResponsePatch(IntegrationTestCase):
         with freeze(datetime(2016, 12, 9, 9, 40)):
             response = Response()
             response.text = 'Test'
+            response.response_type = COMMENT_RESPONSE_TYPE
             IResponseContainer(self.todo).add(response)
 
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
@@ -223,6 +225,7 @@ class TestResponsePatch(IntegrationTestCase):
         with freeze(datetime(2016, 12, 9, 9, 40)):
             response = Response()
             response.text = 'Test'
+            response.response_type = COMMENT_RESPONSE_TYPE
             IResponseContainer(self.todo).add(response)
         with browser.expect_http_error(400):
             url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
@@ -232,3 +235,24 @@ class TestResponsePatch(IntegrationTestCase):
             {u'message': u"Property 'text' is required", u'type': u'BadRequest'},
             browser.json)
         self.assertEquals('Test', IResponseContainer(self.todo).list()[0].text)
+
+    @browsing
+    def test_cannot_edit_response_that_is_not_of_type_comment(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            response = Response()
+            response.text = 'Test'
+            response.response_type = u'blah'
+            IResponseContainer(self.todo).add(response)
+
+        with browser.expect_http_error(400):
+            url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+            browser.open(url, method="PATCH", headers=self.api_headers,
+                         data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
+
+        self.assertEqual({u'type': u'BadRequest', u'additional_metadata': {},
+                          u'translated_message': u'Only responses of type "Comment" can be edited.',
+                          u'message': u'only_comment_type_can_be_edited'}, browser.json)
+
+

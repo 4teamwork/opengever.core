@@ -1,3 +1,5 @@
+from opengever.api import _
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
@@ -147,7 +149,7 @@ class ResponsePatch(Service):
     @property
     def _get_response_id(self):
         if len(self.params) != 1:
-            raise Exception("Must supply exactly one parameter (user id)")
+            raise Exception("Must supply exactly one parameter (response id)")
         return self.params[0]
 
     def reply(self):
@@ -159,6 +161,10 @@ class ResponsePatch(Service):
             raise NotFound
 
         response = response_container[self._get_response_id]
+        if response.response_type != COMMENT_RESPONSE_TYPE:
+            raise NotReportedBadRequest(
+                _(u'only_comment_type_can_be_edited',
+                  default=u'Only responses of type "Comment" can be edited.'))
 
         data = json_body(self.request)
         text = data.get('text')
