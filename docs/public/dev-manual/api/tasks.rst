@@ -387,6 +387,8 @@ Ein POST Request auf den `@responses` Endpoint erstellt einen Kommentar mit dem 
           "token": "peter.meier"
         },
         "mimetype": "",
+        "modified": null,
+        "modifier": null,
         "related_items": [],
         "rendered_text": "",
         "response_id": 1569875801956269,
@@ -400,7 +402,7 @@ Ein POST Request auf den `@responses` Endpoint erstellt einen Kommentar mit dem 
 Kommentar bearbeiten
 ~~~~~~~~~~~~~~~~~~~~
 
-Ein PATCH Request auf eine Kommentar-Ressource ändert den Kommentar.
+Ein PATCH Request auf eine Antwort vom Typ Kommentar ändert den Kommentar.
 
 **Beispiel-Request**:
 
@@ -421,6 +423,26 @@ Ein PATCH Request auf eine Kommentar-Ressource ändert den Kommentar.
 
       HTTP/1.1 204 Created
       Content-Type: application/json
+
+
+Kommentar löschen
+~~~~~~~~~~~~~~~~~
+
+Ein DELETE Request auf eine Antwort vom Typ Kommentar löscht den Kommentar.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      DELETE http://example.org/ordnungssystem/fuehrung/dossier-1/task-5/@responses/1569875801956269 HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
 
 
 Aufgabenverlauf
@@ -450,6 +472,8 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
             "creator": "zopemaster",
             "created": "2019-05-21T13:57:42+00:00",
             "date_of_completion": null,
+            "modified": null,
+            "modifier": null,
             "related_items": [],
             "reminder_option": null,
             "text": "Lorem ipsum.",
@@ -463,6 +487,8 @@ Der Verlauf einer Aufgabe ist in der GET Repräsentation einer Aufgaben unter de
             "creator": "zopemaster",
             "created": "2019-05-21T14:02:01+00:00",
             "date_of_completion": null,
+            "modified": null,
+            "modifier": null,
             "related_items": [],
             "text": "Suspendisse faucibus, nunc et pellentesque egestas.",
             "transition": "task-transition-open-in-progress"

@@ -46,6 +46,9 @@ class IResponseContainer(Interface):
     def add(self, response):
         """Add the given response to the container list."""
 
+    def delete(self, response_id):
+        """Deletes the response with the given response_id. """
+
     def list(self):
         """Returns a list of all responses."""
 
@@ -148,6 +151,10 @@ class IResponse(Interface):
 
     creator = schema.TextLine(required=True)
 
+    modified = schema.Datetime(required=False)
+
+    modifier = schema.TextLine(required=False)
+
     text = schema.Text(required=False, default=u'', missing_value=u'')
 
     changes = schema.List(required=False, value_type=schema.Dict())
@@ -170,6 +177,9 @@ class Response(Persistent):
 
         self.text = u''
         self.changes = PersistentList()
+
+        self.modified = None
+        self.modifier = None
 
     def add_change(self, field_id, before, after, field_title=''):
         self.changes.append(PersistentDict(
