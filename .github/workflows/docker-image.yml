@@ -27,15 +27,6 @@ jobs:
           repository: collective/collective.js.timeago
           path: src/collective.js.timeago
 
-      - name: Extract metadata from Git reference
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            4teamwork/ogcore
-          tags: |
-            type=pep440,pattern={{version}}
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -48,14 +39,44 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Extract metadata from Git reference
+        id: meta_ogcore
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            4teamwork/ogcore
+          tags: |
+            type=pep440,pattern={{version}}
+
+      - name: Build and push ogcore
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./docker/core/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta_ogcore.outputs.tags }}
+          labels: ${{ steps.meta_ogcore.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata from Git reference for ogtestserver
+        id: meta_ogtestserver
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            4teamwork/ogtestserver
+          tags: |
+            type=pep440,pattern={{version}}
+
+      - name: Build and push ogtestserver
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/testserver/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta_ogtestserver.outputs.tags }}
+          labels: ${{ steps.meta_ogtestserver.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
