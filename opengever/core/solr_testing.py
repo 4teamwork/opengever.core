@@ -29,6 +29,7 @@ class SolrServer(object):
         self.hostname = hostname
         self.port = int(port)
         self.core = core
+        self.container_name = 'opengever_testserver_solr_{}'.format(self.port)
         SolrReplicationAPIClient.get_instance().configure(port, core, hostname)
         return self
 
@@ -48,7 +49,7 @@ class SolrServer(object):
             '-e',
             'SOLR_CORES=testing functionaltesting testserver',
             '--name',
-            'opengever_testserver_solr',
+            self.container_name,
             '4teamwork/ogsolr:latest',
             'solr-foreground',
         ]
@@ -91,7 +92,7 @@ class SolrServer(object):
 
         self._require_configured()
 
-        command = ['docker', 'stop', 'opengever_testserver_solr']
+        command = ['docker', 'stop', self.container_name]
         proc = subprocess.Popen(
             command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
