@@ -75,7 +75,7 @@ def get_workspace_actor_ids(context, actor_type, disregard_block=False, ):
             map(itemgetter(0),
                 filter(lambda args: is_valid_actorid(actor_type, *args), actorroles))))
 
-        if getattr(aq_base(containing_workspace), '__ac_local_roles_block__', None) \
+        if getattr(aq_base(content), '__ac_local_roles_block__', None) \
                 and not disregard_block:
             break
 
