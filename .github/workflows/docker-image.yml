@@ -1,0 +1,82 @@
+name: Build Docker image
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create src directory
+        run: mkdir src
+
+      - name: Checkout opengever.maintenance
+        uses: actions/checkout@v3
+        with:
+          repository: 4teamwork/opengever.maintenance
+          path: src/opengever.maintenance
+
+      - name: Checkout collective.js.timeago
+        uses: actions/checkout@v3
+        with:
+          repository: collective/collective.js.timeago
+          path: src/collective.js.timeago
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata from Git reference
+        id: meta_ogcore
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            4teamwork/ogcore
+          tags: |
+            type=pep440,pattern={{version}}
+
+      - name: Build and push ogcore
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/core/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta_ogcore.outputs.tags }}
+          labels: ${{ steps.meta_ogcore.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata from Git reference for ogtestserver
+        id: meta_ogtestserver
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            4teamwork/ogtestserver
+          tags: |
+            type=pep440,pattern={{version}}
+
+      - name: Build and push ogtestserver
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./docker/testserver/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta_ogtestserver.outputs.tags }}
+          labels: ${{ steps.meta_ogtestserver.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

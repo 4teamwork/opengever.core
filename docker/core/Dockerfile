@@ -2,7 +2,7 @@ FROM 4teamwork/plone:4.3.20 AS build-stage
 
 USER root
 
-RUN --mount=type=cache,target=/var/cache/apk apk add --virtual .build-deps \
+RUN apk add --virtual .build-deps \
     gcc \
     musl-dev \
     libc-dev \
@@ -65,7 +65,7 @@ RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashi
 FROM 4teamwork/plone:4.3.20
 
 USER root
-RUN --mount=type=cache,target=/var/cache/apk apk add \
+RUN apk add \
     libldap \
     libffi \
     libpq
