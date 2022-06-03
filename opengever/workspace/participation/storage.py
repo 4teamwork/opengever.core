@@ -129,7 +129,7 @@ class InvitationStorage(object):
     def _find_user_id_for_email(self, email):
         pas_search = getMultiAdapter((api.portal.get(), getRequest()),
                                      name='pas_search')
-        users = pas_search.searchUsers(email=email)
+        users = pas_search.searchUsers(email=email, exact_match=True)
         if len(users) > 1:
             raise MultipleUsersFound("Found mulitple users for {}".format(email))
         elif len(users) == 0:
