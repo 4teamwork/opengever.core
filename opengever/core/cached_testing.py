@@ -18,7 +18,7 @@ from zope.component.hooks import getSite
 import json
 import os
 import re
-import shutil
+import subprocess
 import transaction
 
 
@@ -414,11 +414,12 @@ class DBCacheManager(object):
         client.await_backuped()
 
         snapshot_filename = 'snapshot.bak-%s' % snapshot_name
-        snapshot_src_path = client.data_dir().joinpath(snapshot_filename)
+        snapshot_src_path = '%s:/var/solr/data/%s/data/%s' % (
+            client.container_name, client.core, snapshot_filename)
         cached_snapshot_path = stack.path.joinpath(snapshot_filename)
 
-        print "Moving Solr snapshot %s to cache %s" % (snapshot_src_path, cached_snapshot_path)
-        shutil.move(snapshot_src_path, cached_snapshot_path)
+        print "Copying Solr snapshot %s to cache %s" % (snapshot_src_path, cached_snapshot_path)
+        subprocess.call(['docker', 'cp', snapshot_src_path, cached_snapshot_path])
 
     def _load_solr(self, stack):
         """Loading Solr is done by copying back the Solr snapshot from the
@@ -439,11 +440,11 @@ class DBCacheManager(object):
         snapshot_filename = 'snapshot.bak-%s' % snapshot_name
 
         cached_snapshot_path = stack.path.joinpath(snapshot_filename)
-        snapshot_dst_path = client.data_dir().joinpath(snapshot_filename)
+        snapshot_dst_path = '%s:/var/solr/data/%s/data/%s' % (
+            client.container_name, client.core, snapshot_filename)
 
         print "Restoring Solr snapshot from cache %s to %s" % (cached_snapshot_path, snapshot_dst_path)
-        snapshot_dst_path.rmtree_p()
-        shutil.copytree(cached_snapshot_path, snapshot_dst_path)
+        subprocess.call(['docker', 'cp', cached_snapshot_path, snapshot_dst_path])
 
         client.restore_backup(snapshot_name)
         client.await_restored()

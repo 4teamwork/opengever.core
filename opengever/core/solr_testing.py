@@ -30,7 +30,8 @@ class SolrServer(object):
         self.port = int(port)
         self.core = core
         self.container_name = 'opengever_testserver_solr_{}'.format(self.port)
-        SolrReplicationAPIClient.get_instance().configure(port, core, hostname)
+        SolrReplicationAPIClient.get_instance().configure(
+            port, core, hostname, container_name=self.container_name)
         return self
 
     def start(self):
@@ -53,6 +54,7 @@ class SolrServer(object):
             '4teamwork/ogsolr:latest',
             'solr-foreground',
         ]
+
         proc = subprocess.Popen(
             command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -166,11 +168,12 @@ class SolrReplicationAPIClient(object):
             klass._instance = klass()
         return klass._instance
 
-    def configure(self, port, core, hostname='localhost'):
+    def configure(self, port, core, hostname='localhost', container_name=None):
         self._configured = True
         self.hostname = hostname
         self.port = int(port)
         self.core = core
+        self.container_name = container_name
         self.base_url = 'http://{}:{}/solr/{}'.format(self.hostname, port, core)
         return self
 
