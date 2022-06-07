@@ -1086,13 +1086,13 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
 
     def test_search_does_not_find_blacklisted_groups(self):
         expected_groups = [
-            u'fa_users',
             u'fa_inbox_users',
-            u'rk_users',
-            u'rk_inbox_users',
+            u'fa_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
+            u'rk_inbox_users',
+            u'rk_users',
             u'committee_rpk_group',
             u'committee_ver_group',
         ]
@@ -1105,11 +1105,11 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
-            u'rk_users',
-            u'rk_inbox_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
+            u'rk_inbox_users',
+            u'rk_users',
             u'committee_rpk_group',
             u'committee_ver_group',
         ]
@@ -1130,10 +1130,54 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
             'white_list_prefix', u'^fa_', ISharingConfiguration
         )
         expected_principals = [
-            u'fa_users',
             u'fa_inbox_users',
+            u'fa_users',
         ]
         self.assertEqual(expected_principals, self.get_groups())
+
+    def test_result_are_ordered_by_user_lastname_firstname_and_group_title(self):
+        fa_users_group = Group.query.filter(Group.groupid=='fa_users').one()
+
+        create(Builder('ogds_user')
+               .id('user1')
+               .having(firstname=u'cccccc-foobar', lastname=u'aaaa')
+               .in_group(fa_users_group))
+
+        create(Builder('ogds_user')
+               .id('user2')
+               .having(firstname=u'bbbbb-foobar', lastname=u'aaaa')
+               .in_group(fa_users_group))
+
+        create(Builder('ogds_user')
+               .id('user3')
+               .having(firstname=u'YYYY-foobar', lastname=u'ZZZZ')
+               .in_group(fa_users_group))
+
+        create(
+            Builder('ogds_group')
+            .having(groupid='b_project_foobar', title="bbbb Folder", users=[])
+            )
+
+        create(
+            Builder('ogds_group')
+            .having(groupid='z_project_foobar', title="zzzz Folder", users=[])
+            )
+
+        create(
+            Builder('ogds_group')
+            .having(groupid='a_project_foobar', title="aaaa Folder", users=[])
+            )
+
+        self.assertEquals(
+            [
+                u'aaaa Folder',
+                u'bbbb Folder',
+                u'zzzz Folder',
+                u'aaaa bbbbb-foobar (user2)',
+                u'aaaa cccccc-foobar (user1)',
+                u'ZZZZ YYYY-foobar (user3)'
+            ],
+            [term.title for term in self.source.search('foobar')])
 
 
 class TestAllFilteredGroupsSource(TestAllGroupsSource):
@@ -1144,13 +1188,13 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
 
     def test_search_does_not_find_blacklisted_groups(self):
         expected_groups = [
-            u'fa_users',
             u'fa_inbox_users',
-            u'rk_users',
-            u'rk_inbox_users',
+            u'fa_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
+            u'rk_inbox_users',
+            u'rk_users',
             u'committee_rpk_group',
             u'committee_ver_group',
         ]
@@ -1163,11 +1207,11 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
-            u'rk_users',
-            u'rk_inbox_users',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
+            u'rk_inbox_users',
+            u'rk_users',
             u'committee_rpk_group',
             u'committee_ver_group',
         ]
@@ -1189,5 +1233,5 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
                                        ISharingConfiguration)
 
         self.assertEqual(
-            [u'fa_users', u'fa_inbox_users'],
+            [u'fa_inbox_users', u'fa_users'],
             [term.value for term in self.source.search('')])
