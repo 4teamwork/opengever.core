@@ -52,12 +52,12 @@ class TestPossibleWorkspaceFolderParticipantsVocabulary(IntegrationTestCase):
             "folder. It should be excluded")
 
 
-class TestActualWorkspaceMembersVocabulary(IntegrationTestCase):
+class TestWorkspaceContentMembersVocabulary(IntegrationTestCase):
 
     def test_vocabulary_list_all_members_of_the_current_workspace(self):
         self.login(self.workspace_member)
         factory = getUtility(IVocabularyFactory,
-                             name='opengever.workspace.ActualWorkspaceMembersVocabulary')
+                             name='opengever.workspace.WorkspaceContentMembersVocabulary')
 
         # Workspace 1
         self.assertItemsEqual(

@@ -22,7 +22,7 @@ from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
 from opengever.sharing.interfaces import IDisabledPermissionCheck
 from opengever.sharing.interfaces import ISharingConfiguration
-from opengever.workspace.utils import get_workspace_user_ids
+from opengever.workspace.utils import get_context_user_members_ids
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.workflow.browser.sharing import merge_search_results
@@ -507,7 +507,8 @@ class WorkspaceSharingView(OpengeverSharingView):
         if utils.is_administrator():
             return all_principals
 
-        workspace_users = set(get_workspace_user_ids(self.context, disregard_block=True))
+        workspace_users = set(get_context_user_members_ids(
+            self.context, disregard_block=True))
         results = [principal for principal in all_principals
                    if principal["id"] in workspace_users]
         return results

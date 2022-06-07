@@ -3,16 +3,16 @@ from opengever.testing import IntegrationTestCase
 import json
 
 
-class TestActualWorkspaceMembersGet(IntegrationTestCase):
+class TestWorkspaceContentMembersGetGet(IntegrationTestCase):
 
     @browsing
-    def test_get_actual_workspace_members(self, browser):
+    def test_get_workspace_content_members(self, browser):
         self.login(self.workspace_member, browser=browser)
-        url = self.workspace.absolute_url() + '/@actual-workspace-members'
+        url = self.workspace.absolute_url() + '/@workspace-content-members'
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {
-            u'@id': u'http://nohost/plone/workspaces/workspace-1/@actual-workspace-members',
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/@workspace-content-members',
             u'items': [{u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)',
                         u'token': u'gunther.frohlich'},
                        {u'title': u'Hugentobler Fridolin (fridolin.hugentobler)',
@@ -25,22 +25,22 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
         self.assertEqual(expected_json, browser.json)
 
     @browsing
-    def test_get_actual_workspace_members_with_query(self, browser):
+    def test_get_workspace_content_members_with_query(self, browser):
         self.login(self.workspace_member, browser=browser)
-        url = self.workspace.absolute_url() + '/@actual-workspace-members?query=bea'
+        url = self.workspace.absolute_url() + '/@workspace-content-members?query=bea'
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {
-            u'@id': u'http://nohost/plone/workspaces/workspace-1/@actual-workspace-members?query=bea',
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/@workspace-content-members?query=bea',
             u'items': [{u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
                         u'token': u'beatrice.schrodinger'}],
             u'items_total': 1}
         self.assertEqual(expected_json, browser.json)
 
     @browsing
-    def test_get_actual_workspace_members_includes_group_users(self, browser):
+    def test_get_workspace_content_members_includes_group_users(self, browser):
         self.login(self.workspace_admin, browser=browser)
-        browser.open(self.workspace, view='@actual-workspace-members', method='GET',
+        browser.open(self.workspace, view='@workspace-content-members', method='GET',
                      headers=self.api_headers)
         self.assertEqual(4, browser.json['items_total'])
         self.assertNotIn({u'title': u'Kohler Nicole (nicole.kohler)',
@@ -54,7 +54,7 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
         browser.open(self.workspace, view='/@participations/committee_rpk_group', method='POST',
                      headers=self.api_headers, data=data)
 
-        browser.open(self.workspace, view='@actual-workspace-members', method='GET',
+        browser.open(self.workspace, view='@workspace-content-members', method='GET',
                      headers=self.api_headers)
         self.assertEqual(6, browser.json['items_total'])
         self.assertIn({u'title': u'Kohler Nicole (nicole.kohler)',
@@ -65,23 +65,23 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
                       browser.json['items'])
 
     @browsing
-    def test_get_actual_workspace_members_includes_groups(self, browser):
+    def test_get_workspace_content_members_includes_groups(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
         data = json.dumps({'participant': 'committee_rpk_group', 'role': 'WorkspaceMember'})
         browser.open(self.workspace, view='/@participations/committee_rpk_group', method='POST',
                      headers=self.api_headers, data=data)
 
-        browser.open(self.workspace, view='@actual-workspace-members?include_groups=true',
+        browser.open(self.workspace, view='@workspace-content-members?include_groups=true',
                      method='GET', headers=self.api_headers)
 
         self.assertEqual({u'token': u'committee_rpk_group', u'title': u'Test Group'},
                          browser.json['items'][-1])
 
     @browsing
-    def test_get_actual_workspace_members_outside_a_workspace(self, browser):
+    def test_get_workspace_content_members_outside_a_workspace(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = self.document.absolute_url() + '/@actual-workspace-members'
+        url = self.document.absolute_url() + '/@workspace-content-members'
         with browser.expect_http_error(400):
             browser.open(url, method='GET', headers=self.api_headers)
 
@@ -93,7 +93,7 @@ class TestActualWorkspaceMembersGet(IntegrationTestCase):
     @browsing
     def test_response_is_batched(self, browser):
         self.login(self.workspace_member, browser=browser)
-        url = self.workspace.absolute_url() + '/@actual-workspace-members?b_size=2'
+        url = self.workspace.absolute_url() + '/@workspace-content-members?b_size=2'
 
         browser.open(url, method='GET', headers=self.api_headers)
 

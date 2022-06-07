@@ -44,30 +44,34 @@ def get_containing_workspace(context):
     return workspace[0] if workspace else None
 
 
-def get_workspace_user_ids(context, disregard_block=False):
-    return get_workspace_actor_ids(context, 'user', disregard_block)
+def get_workspace_user_ids(context):
+    containing_workspace = get_containing_workspace(context)
+    return get_context_user_members_ids(containing_workspace)
 
 
-def get_workspace_group_ids(context):
-    return get_workspace_actor_ids(context, 'group')
+def get_context_user_members_ids(context, disregard_block=False):
+    return get_context_members_ids(context, 'user', disregard_block)
 
 
-def get_workspace_actor_ids(context, actor_type, disregard_block=False, ):
+def get_context_group_members_ids(context):
+    return get_context_members_ids(context, 'group')
+
+
+def get_context_members_ids(context, actor_type, disregard_block=False):
     """ Walks up the Acquisition chain and collects all userids assigned
     to a role with the View permission.
     """
-    containing_workspace = get_containing_workspace(context)
-    if not containing_workspace:
+    if not is_within_workspace(context):
         return []
 
     actor_ids = set([])
-    allowed_roles_to_view = roles_of_permission(containing_workspace, 'View')
+    allowed_roles_to_view = roles_of_permission(context, 'View')
     portal = api.portal.get()
 
     def is_valid_actorid(valid_role_type, actor, roles, role_type, name):
         return role_type == valid_role_type and set(roles) & set(allowed_roles_to_view)
 
-    for content in aq_chain(containing_workspace):
+    for content in aq_chain(context):
         if aq_base(content) == aq_base(portal):
             break
         actorroles = portal.acl_users._getLocalRolesForDisplay(content)

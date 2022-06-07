@@ -92,8 +92,8 @@
       />
 
   <utility
-      factory=".vocabularies.ActualWorkspaceMembersVocabulary"
-      name="opengever.workspace.ActualWorkspaceMembersVocabulary"
+      factory=".vocabularies.WorkspaceContentMembersVocabulary"
+      name="opengever.workspace.WorkspaceContentMembersVocabulary"
       />
 
   <adapter

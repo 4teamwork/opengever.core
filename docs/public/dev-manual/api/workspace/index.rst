@@ -14,6 +14,6 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    role_inheritance
    todos
    todolists
-   actual_workspace_members
+   workspace_content_members
    share_content
    accessible_workspaces

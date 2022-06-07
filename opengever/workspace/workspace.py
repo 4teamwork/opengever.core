@@ -1,5 +1,5 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSourceBinder
 from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_meeting_feature_enabled
@@ -41,7 +41,7 @@ class IWorkspaceSchema(model.Schema):
     directives.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_owner", default=u"Owner"),
-        source=ActualWorkspaceMembersSourceBinder(),
+        source=WorkspaceContentMemberUsersSourceBinder(),
         required=False,
     )
     videoconferencing_url = schema.TextLine(

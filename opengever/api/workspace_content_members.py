@@ -1,5 +1,5 @@
-from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
-from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import WorkspaceContentMemberGroupsSource
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.workspace.utils import is_within_workspace
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.interfaces import ISerializeToJson
@@ -9,16 +9,16 @@ from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 
 
-class ActualWorkspaceMembersGet(Service):
+class WorkspaceContentMembersGet(Service):
     def reply(self):
         if not is_within_workspace(self.context):
             raise BadRequest("'{}' is not within a workspace".format(self.context.getId()))
-        source = ActualWorkspaceMembersSource(self.context)
+        source = WorkspaceContentMemberUsersSource(self.context)
         query = safe_unicode(self.request.form.get('query', ''))
         results = source.search(query)
 
         if self.request.form.get('include_groups'):
-            group_source = ActualWorkspaceGroupsSource(self.context)
+            group_source = WorkspaceContentMemberGroupsSource(self.context)
             group_results = group_source.search(query)
             results.extend(group_results)
 

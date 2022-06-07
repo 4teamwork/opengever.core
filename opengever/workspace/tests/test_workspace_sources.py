@@ -4,8 +4,8 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroupsFilter
-from opengever.ogds.base.sources import ActualWorkspaceGroupsSource
-from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import WorkspaceContentMemberGroupsSource
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
 from opengever.ogds.base.sources import AllGroupsSource
@@ -42,8 +42,8 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
     ]
 
     WHITELIST = [
-        ActualWorkspaceGroupsSource,
-        ActualWorkspaceMembersSource,
+        WorkspaceContentMemberGroupsSource,
+        WorkspaceContentMemberUsersSource,
         AssignedUsersSource,
         PotentialWorkspaceMembersSource,
     ]
@@ -179,11 +179,11 @@ class TestPotentialWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
 
 
-class TestActualWorkspaceMembersSource(IntegrationTestCase):
+class TestWorkspaceContentMemberUsersSource(IntegrationTestCase):
 
     def test_users_of_all_admin_unit_are_valid(self):
         self.login(self.workspace_admin)
-        source = ActualWorkspaceMembersSource(self.workspace)
+        source = WorkspaceContentMemberUsersSource(self.workspace)
 
         admin_unit2 = create(Builder('admin_unit')
                              .id('additional')
@@ -204,7 +204,7 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
 
     def test_users_with_and_without_local_roles_are_valid(self):
         self.login(self.workspace_admin)
-        source = ActualWorkspaceMembersSource(self.workspace)
+        source = WorkspaceContentMemberUsersSource(self.workspace)
         self.assertIn(self.workspace_guest.id, source)
         self.assertIn(self.workspace_member.id, source)
         self.assertIn(self.workspace_admin.id, source)
@@ -217,7 +217,7 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
 
     def test_only_users_with_local_roles_with_view_permissions_are_found_by_search(self):
         self.login(self.workspace_admin)
-        source = ActualWorkspaceMembersSource(self.workspace)
+        source = WorkspaceContentMemberUsersSource(self.workspace)
 
         results = source.search(self.workspace_guest.id)
         self.assertEqual(1, len(results))
@@ -227,7 +227,7 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(0, len(results))
 
         # Assigning WorkspaceGuest to regular_user and check that he is then
-        # found in the ActualWorkspaceMembersSource
+        # found in the WorkspaceContentMemberUsersSource
         RoleAssignmentManager(self.workspace).add_or_update(
             self.regular_user.id, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
         results = source.search(self.regular_user.id)
@@ -235,7 +235,7 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
         self.assertEqual(self.regular_user.id, results[0].value)
 
         # Only local roles that give view permissions are considered for
-        # users found in the ActualWorkspaceMembersSource
+        # users found in the WorkspaceContentMemberUsersSource
         self.workspace.manage_permission('View', roles=[])
         results = source.search(self.regular_user.id)
         self.assertEqual(0, len(results))
@@ -245,7 +245,7 @@ class TestActualWorkspaceMembersSource(IntegrationTestCase):
 
     def test_title_is_fullname_and_userid(self):
         self.login(self.workspace_admin)
-        source = ActualWorkspaceMembersSource(self.workspace)
+        source = WorkspaceContentMemberUsersSource(self.workspace)
 
         term = source.search('beatrice')[0]
         self.assertEqual(self.workspace_member.id, term.token)

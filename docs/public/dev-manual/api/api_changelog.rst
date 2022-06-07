@@ -9,6 +9,7 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 - ``@responses``: Responses can no longer be edited if they are not of type comment.
+- ``@actual-workspace-members`` endpoint is replaced by the ``@workspace-content-members``. (see :ref:`docs <workspace_content_members>`)
 
 Other Changes
 ^^^^^^^^^^^^^
