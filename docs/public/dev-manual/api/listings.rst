@@ -460,7 +460,7 @@ Folgende Parameter werden im Moment unterstützt:
 
 Filtern:
 --------
-Im Moment ist für beide Endpoinst ein Filter nach Status (aktiv/inaktiv) und ein Filter nach dem Zeitpunkt des letzten Logins implementiert.
+Im Moment sind ein Filter nach Status (``filters.state``), ein Filter nach dem Zeitpunkt des letzten Logins ``filters.last_login`` und ein filter nach Gruppenmitgliedschaft ``filters.groupid`` implementiert.
 
 Mit ``filters.state:record:list`` können die gewünschten Status angegeben werden:
 
@@ -479,6 +479,13 @@ Mit ``filters.state:record:list`` können die gewünschten Status angegeben werd
   .. sourcecode:: http
 
     GET /@ogds-user-listing?filters.last_login:record:list=2020-05-27%20TO%20* HTTP/1.1
+    Accept: application/json
+
+**Beispiel: Filtern nach Benutzer welche Teil der Gruppe test-group sind**
+
+  .. sourcecode:: http
+
+    GET /@ogds-user-listing?filters.groupid:record:test-group HTTP/1.1
     Accept: application/json
 
 Auflistung Teams

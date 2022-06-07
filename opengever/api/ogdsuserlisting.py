@@ -1,6 +1,7 @@
 from datetime import datetime
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.user import User
 import re
 
@@ -33,6 +34,15 @@ class OGDSUserListingGet(OGDSListingBaseService):
     default_state_filter = tuple()
     pattern = re.compile(r"^(\d{4}-\d{2}-\d{2}) TO (\d{4}-\d{2}-\d{2})")
 
+    def extract_params(self):
+        sort_on, sort_order, search, filters = super(OGDSUserListingGet, self).extract_params()
+        if self.needs_join_with_groups_users(filters) and sort_on:
+            sort_on = "users.{}".format(sort_on)
+        return sort_on, sort_order, search, filters
+
+    def needs_join_with_groups_users(self, filters):
+        return bool(filters.get('groupid', False))
+
     def _convert_date_query_to_dates(self, date_query):
         search = self.pattern.search(date_query)
         start, end = search.group(1), search.group(2)
@@ -55,6 +65,10 @@ class OGDSUserListingGet(OGDSListingBaseService):
         if last_login_query:
             start_date, end_date = self._convert_date_query_to_dates(last_login_query[0])
             query = query.filter(User.last_login >= start_date, User.last_login <= end_date)
+
+        if self.needs_join_with_groups_users(filters):
+            groupid = filters.get('groupid', None)
+            query = query.join(groups_users).filter_by(groupid=groupid)
 
         query = self.extend_query_with_visible_users_and_groups_filter(query)
 

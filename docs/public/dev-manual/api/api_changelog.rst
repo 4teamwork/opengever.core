@@ -8,12 +8,13 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
--``@responses``: Responses can no longer be edited if they are not of type comment.
+- ``@responses``: Responses can no longer be edited if they are not of type comment.
 
 Other Changes
 ^^^^^^^^^^^^^
--``@responses``: Add DELETE endpoint.
--``@responses``: Set modifier and modified in PATCH endpoint.
+- ``@responses``: Add DELETE endpoint.
+- ``@responses``: Set modifier and modified in PATCH endpoint.
+- ``@ogds-user-listing`` now supports filtering by group membership.
 
 2022.11.0 (2022-05-24)
 ----------------------

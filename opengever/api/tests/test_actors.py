@@ -175,6 +175,7 @@ class TestActorsGet(IntegrationTestCase):
 
     @browsing
     def test_actors_response_for_committee(self, browser):
+        self.maxDiff = None
         self.login(self.regular_user, browser=browser)
 
         actor_id = 'committee:1'
@@ -194,12 +195,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Rechnungspr\xfcfungskommission',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/franzi.muller',
-                        u'identifier': u'franzi.muller',
-                    },
-                    {
                         u'@id': u'http://nohost/plone/@actors/nicole.kohler',
                         u'identifier': u'nicole.kohler',
+                    },
+                    {
+                        u'@id': u'http://nohost/plone/@actors/franzi.muller',
+                        u'identifier': u'franzi.muller',
                     },
                 ],
                 u'represents': {
