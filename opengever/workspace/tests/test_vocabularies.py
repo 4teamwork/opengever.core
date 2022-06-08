@@ -1,7 +1,10 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 import json
@@ -69,3 +72,21 @@ class TestWorkspaceContentMembersVocabulary(IntegrationTestCase):
         self.assertItemsEqual(
             [self.workspace_member.id],
             [term.token for term in factory(context=workspace2)])
+
+    def test_vocabulary_respects_local_roles_block(self):
+        self.login(self.workspace_member)
+        factory = getUtility(IVocabularyFactory,
+                             name='opengever.workspace.WorkspaceContentMembersVocabulary')
+
+        self.assertItemsEqual(
+            [self.workspace_guest.id, self.workspace_member.id,
+             self.workspace_owner.id, self.workspace_admin.id],
+            [term.token for term in factory(context=self.workspace_folder)])
+
+        self.workspace_folder.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.workspace_folder).add_or_update_assignment(
+            SharingRoleAssignment(api.user.get_current().getId(), ['WorkspaceMember']))
+
+        self.assertItemsEqual(
+            [self.workspace_member.id],
+            [term.token for term in factory(context=self.workspace_folder)])

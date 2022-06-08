@@ -243,6 +243,24 @@ class TestWorkspaceContentMemberUsersSource(IntegrationTestCase):
         results = source.search(self.workspace_guest.id)
         self.assertEqual(0, len(results))
 
+    def test_source_is_context_dependent_and_respects_local_roles_block(self):
+        self.login(self.workspace_admin)
+        source = WorkspaceContentMemberUsersSource(self.workspace_folder)
+        results = source.search('')
+        self.assertEqual(4, len(results))
+        self.assertEqual(
+            [self.workspace_owner.id, self.workspace_admin.id,
+             self.workspace_guest.id, self.workspace_member.id],
+            [term.value for term in results])
+
+        self.workspace_folder.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.workspace_folder).add_or_update(
+            self.workspace_admin.id, ['WorkspaceGuest'], ASSIGNMENT_VIA_INVITATION)
+
+        results = source.search('')
+        self.assertEqual(1, len(results))
+        self.assertEqual(self.workspace_admin.id, results[0].value)
+
     def test_title_is_fullname_and_userid(self):
         self.login(self.workspace_admin)
         source = WorkspaceContentMemberUsersSource(self.workspace)
