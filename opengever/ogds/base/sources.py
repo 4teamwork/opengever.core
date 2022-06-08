@@ -1,3 +1,5 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.model import create_session
@@ -643,9 +645,16 @@ class WorkspaceContentMemberUsersSource(AssignedUsersSource):
         return self._extend_query_with_workspace_filter(query)
 
     def _extend_query_with_workspace_filter(self, query):
-
-        userids = list(get_context_user_members_ids(self.context))
-        groupids = list(get_context_group_members_ids(self.context))
+        # When creating content, members need to be determined on the parent
+        # as the roles giving view permissions cannot be determined on the
+        # object being created.
+        request = getRequest()
+        if request.method == "POST" and request.getHeader("Content-Type") == "application/json":
+            member_context = aq_parent(aq_inner(self.context))
+        else:
+            member_context = self.context
+        userids = list(get_context_user_members_ids(member_context))
+        groupids = list(get_context_group_members_ids(member_context))
 
         if userids or groupids:
             query = query.join(groups_users).filter(
