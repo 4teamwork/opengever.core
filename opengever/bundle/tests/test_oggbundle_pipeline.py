@@ -16,6 +16,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
 from opengever.testing import index_data_for
@@ -407,6 +408,20 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(
             IAnnotations(dossier)[BUNDLE_GUID_KEY],
             index_data_for(dossier)[GUID_INDEX_NAME])
+
+        participations = IAnnotations(dossier)['participations']
+        self.assertEqual(
+            ['person:c2a9c298-a769-4c52-affe-0803c11cb571',
+             'organization:e66b4572-5244-491c-bbe8-32295f8da070'],
+            participations.keys())
+
+        self.assertEqual(
+            [['regard', 'participation'], ['regard']],
+            [particpation.roles for particpation in participations.values()])
+        self.assertEqual(
+            ['person:c2a9c298-a769-4c52-affe-0803c11cb571',
+             'organization:e66b4572-5244-491c-bbe8-32295f8da070'],
+            [particpation.contact for particpation in participations.values()])
 
     def assert_dossier2_created(self):
         dossier = self.find_by_title(

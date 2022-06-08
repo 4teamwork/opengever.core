@@ -377,6 +377,27 @@
                         "type": "array"
                     }
                 },
+                "_participations": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "additionalProperties": false,
+                        "type": "object",
+                        "properties": {
+                            "roles": {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            "participant_id": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 },
