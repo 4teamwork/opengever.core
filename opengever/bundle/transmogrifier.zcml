@@ -88,4 +88,9 @@
       name="opengever.bundle.reindex_containers"
       />
 
+  <utility
+      component=".sections.participations.ParticipationSection"
+      name="opengever.bundle.participations"
+      />
+
 </configure>

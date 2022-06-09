@@ -87,9 +87,10 @@ class PloneParticipationHandler(ParticipationHandlerBase):
             raise InvalidParticipantId(
                 u"{} is not a valid id".format(participant_id))
 
-    def add_participation(self, participant_id, roles):
-        self.validate_participant(participant_id)
-        self.validate_roles(roles)
+    def add_participation(self, participant_id, roles, validate=True):
+        if validate:
+            self.validate_participant(participant_id)
+            self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
                 u"There is already a participation for {}".format(participant_id))
@@ -202,8 +203,9 @@ class SQLParticipationHandler(ParticipationHandlerBase):
                 u"{} is not a valid id".format(participant_id))
         return term.value
 
-    def add_participation(self, participant_id, roles):
-        self.validate_roles(roles)
+    def add_participation(self, participant_id, roles, validate=True):
+        if validate:
+            self.validate_roles(roles)
         if self.has_participation(participant_id):
             raise DupplicateParticipation(
                 u"There is already a participation for {}".format(participant_id))

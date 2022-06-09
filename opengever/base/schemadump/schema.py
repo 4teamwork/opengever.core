@@ -304,6 +304,7 @@ class OGGBundleJSONSchemaBuilder(object):
         # Tweak the content type schema for use in OGGBundles
         self._add_review_state_property()
         self._add_guid_properties()
+        self._add_participation_property()
         self._add_permissions_property()
         self._add_file_properties()
         self._add_sequence_number_property()
@@ -358,6 +359,27 @@ class OGGBundleJSONSchemaBuilder(object):
             self.schema._schema['definitions'][self.short_name] = None
 
             self.schema.add_definition('permission', permissions_schema)
+
+    def _add_participation_property(self):
+        if self.portal_type == 'opengever.dossier.businesscasedossier':
+            self.ct_schema.add_property('_participations', {
+                'type': 'array',
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "participant_id": {
+                            "type": "string"
+                        },
+                        "roles": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            })
 
     def _build_permission_subschema(self):
         subschema = JSONSchema(additional_properties=False)
