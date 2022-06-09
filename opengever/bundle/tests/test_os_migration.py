@@ -5,6 +5,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
@@ -1359,6 +1360,72 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
             self.assertObjectConsistency(
                 obj, parent_path=self.repository_root.absolute_url_path(),
                 parent_refnum='Client1 4')
+
+    def test_repository_migrator_modify_permissions(self):
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_modify_permissions.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        self.assertEqual([], self.get_changed_rows(analyser.analysed_rows))
+        self.assertEqual(4, len(analyser.analysed_rows))
+        self.assertEqual(4, len([row for row in analyser.analysed_rows if row["set_permissions"]]))
+
+        self.assertEqual(
+            [{'cause': 3, 'reference': None, 'roles': ['DossierManager'], 'principal': 'faivel.fruhling'}],
+            RoleAssignmentManager(self.branch_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
+
+        self.assertEqual(
+            [],
+            RoleAssignmentManager(self.leaf_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.leaf_repofolder, '__ac_local_roles_block__', False))
+
+        self.assertEqual(
+            [{'cause': 3, 'reference': None, 'roles': ['Contributor', 'Publisher'], 'principal': 'jurgen.fischer'}],
+            RoleAssignmentManager(self.empty_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.empty_repofolder, '__ac_local_roles_block__', False))
+
+        self.assertEqual(
+            [],
+            RoleAssignmentManager(self.inactive_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.inactive_repofolder, '__ac_local_roles_block__', False))
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+
+        # Local roles were removed
+        self.assertEqual(
+            [],
+            RoleAssignmentManager(self.branch_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.branch_repofolder, '__ac_local_roles_block__', False))
+
+        # Local roles added
+        self.assertEqual(
+            [{'cause': 3, 'reference': None, 'roles': ['Reviewer'], 'principal': 'faivel.fruhling'}],
+            RoleAssignmentManager(self.leaf_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertFalse(getattr(self.leaf_repofolder, '__ac_local_roles_block__', False))
+
+        # inheritance was blocked, local roles unchanged
+        self.assertEqual(
+            [{'cause': 3, 'reference': None, 'roles': ['Contributor', 'Publisher'], 'principal': 'jurgen.fischer'}],
+            RoleAssignmentManager(self.empty_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertTrue(getattr(self.empty_repofolder, '__ac_local_roles_block__', False))
+
+        # Local roles added and inheritance blocked
+        self.assertEqual(
+            [{'cause': 3, 'reference': None, 'roles': ['Reader', 'Editor'], 'principal': 'jurgen.fischer'}],
+            RoleAssignmentManager(self.inactive_repofolder).get_assignments_by_cause(ASSIGNMENT_VIA_SHARING)
+            )
+        self.assertTrue(getattr(self.inactive_repofolder, '__ac_local_roles_block__', False))
 
 
 class TestOSMigrationValidation(IntegrationTestCase, OSMigrationTestMixin):
