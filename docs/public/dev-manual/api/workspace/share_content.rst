@@ -34,3 +34,24 @@ Mit dem ``@share-content`` Endpoint können Teamräume und Inhalte von Teamräum
   .. sourcecode:: http
 
     HTTP/1.1 204 No Content
+
+
+Wenn der Parameter ``notify_all`` gesetzt, wird, wird an alle berechtigten Teilnehmer eine E-Mail geschickt.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST /workspaces/workspace-1/todo-1/@share-content HTTP/1.1
+    Accept: application/json
+
+    {
+      "notify_all": true,
+      "comment": "Have you seen this ToDo yet?"
+    }
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content

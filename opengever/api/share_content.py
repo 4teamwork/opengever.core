@@ -1,4 +1,5 @@
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.sources import ActualWorkspaceMembersSource
 from opengever.workspace.content_sharing_mailer import ContentSharingMailer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -11,10 +12,18 @@ from zope.interface import alsoProvides
 
 class ShareContentPost(Service):
 
-    def get_email_adresses(self, actors):
+    def get_email_adresses(self, actors, is_term=False):
         emails = set()
+
+        if is_term:
+            def getToken(actor):
+                return actor.token
+        else:
+            def getToken(actor):
+                return actor['token']
+
         for actor in actors:
-            for representative in ActorLookup(actor['token']).lookup().representatives():
+            for representative in ActorLookup(getToken(actor)).lookup().representatives():
                 if representative.active:
                     emails.add(representative.email)
         return ', '.join(emails)
@@ -22,9 +31,10 @@ class ShareContentPost(Service):
     def extract_data(self):
         data = json_body(self.request)
         self.comment = data.get('comment', u'')
+        self.notify_all = data.get('notify_all', False)
         self.actors_to = data.get('actors_to', [])
-        if not self.actors_to:
-            raise BadRequest("Property 'actors_to' is required")
+        if not (self.actors_to or self.notify_all):
+            raise BadRequest("Property 'notify_all' or 'actors_to' is required")
         self.actors_cc = data.get('actors_cc', [])
 
     def reply(self):
@@ -33,8 +43,14 @@ class ShareContentPost(Service):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
         self.extract_data()
-        emails_to = self.get_email_adresses(self.actors_to)
-        emails_cc = self.get_email_adresses(self.actors_cc)
+
+        if self.notify_all:
+            source = ActualWorkspaceMembersSource(self.context)
+            emails_to = self.get_email_adresses(source.search(''), self.notify_all)
+            emails_cc = []
+        else:
+            emails_to = self.get_email_adresses(self.actors_to)
+            emails_cc = self.get_email_adresses(self.actors_cc)
 
         sender_id = api.user.get_current().getId()
         mailer = ContentSharingMailer()

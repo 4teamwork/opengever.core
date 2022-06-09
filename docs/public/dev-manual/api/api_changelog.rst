@@ -15,6 +15,7 @@ Other Changes
 - ``@responses``: Add DELETE endpoint.
 - ``@responses``: Set modifier and modified in PATCH endpoint.
 - ``@ogds-user-listing`` now supports filtering by group membership.
+- ``@share-content``: Add `notify_all` param to share content with all authorized participants.
 
 2022.11.0 (2022-05-24)
 ----------------------

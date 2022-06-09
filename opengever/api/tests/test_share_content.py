@@ -174,6 +174,66 @@ class TestShareContentPost(IntegrationTestCase):
                          data=data)
 
         self.assertEqual(
-            {"message": "Property 'actors_to' is required",
+            {"message": "Property 'notify_all' or 'actors_to' is required",
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_share_workspace_folder_notifies_all(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+
+        browser.open(self.workspace_folder, view='@share-content', method='POST',
+                     headers=self.api_headers, data=json.dumps({'notify_all': True}))
+
+        expected_to = [self.workspace_owner.getProperty('email'),
+                       self.workspace_admin.getProperty('email'),
+                       self.workspace_guest.getProperty('email'),
+                       self.workspace_member.getProperty('email')]
+
+        process_mail_queue()
+        self.assertItemsEqual(
+            expected_to,
+            mailing.get_mailhost().messages[0].mto)
+
+        self.assertEqual(1, len(mailing.get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        expected_mail_to = '{}, {},\n {}, {}'.format(*expected_to)
+        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['Cc'])
+
+    @browsing
+    def test_share_workspace_ignores_actors_to_and_actors_cc_if_notify_all_is_set(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+
+        data = json.dumps({
+            'actors_to': [{'token': self.workspace_guest.getId()}],
+            'actors_cc': [{'token': self.workspace_admin.getId()}],
+            'comment': u'Check out this fantastic w\xf6rkspace!',
+            'notify_all': True
+        })
+
+        browser.open(self.workspace_folder, view='@share-content', method='POST',
+                     headers=self.api_headers, data=data)
+
+        expected_to = [self.workspace_owner.getProperty('email'),
+                       self.workspace_admin.getProperty('email'),
+                       self.workspace_guest.getProperty('email'),
+                       self.workspace_member.getProperty('email')]
+
+        process_mail_queue()
+        self.assertItemsEqual(
+            expected_to,
+            mailing.get_mailhost().messages[0].mto)
+
+        self.assertEqual(1, len(mailing.get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        expected_mail_to = '{}, {},\n {}, {}'.format(*expected_to)
+        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['Cc'])
+        self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())
