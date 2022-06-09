@@ -585,6 +585,7 @@ class AssignedUsersSource(AllUsersSource):
 
         return query
 
+
 @implementer(IContextSourceBinder)
 class AssignedUsersSourceBinder(object):
 
@@ -913,7 +914,10 @@ class AllGroupsSource(BaseSQLModelSource):
 
     @property
     def search_query(self):
-        return self.base_query
+        return self.base_query.order_by(
+            asc(func.lower(Group.title)),
+            asc(func.lower(Group.groupid))
+        )
 
 
 class ActualWorkspaceGroupsSource(AllGroupsSource):
