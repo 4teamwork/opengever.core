@@ -3,14 +3,10 @@ from ftw.solr.interfaces import ISolrConnectionManager
 from itertools import izip_longest
 from path import Path
 from requests.exceptions import ConnectionError
-from threading import Thread
 from zope.component import getUtility
 import atexit
-import errno
-import io
 import os
 import requests
-import signal
 import subprocess
 import time
 
@@ -33,7 +29,9 @@ class SolrServer(object):
         self.hostname = hostname
         self.port = int(port)
         self.core = core
-        SolrReplicationAPIClient.get_instance().configure(port, core, hostname)
+        self.container_name = 'opengever_testserver_solr_{}'.format(self.port)
+        SolrReplicationAPIClient.get_instance().configure(
+            port, core, hostname, container_name=self.container_name)
         return self
 
     def start(self):
@@ -41,9 +39,30 @@ class SolrServer(object):
         """
         assert not self._running, 'Solr was already started.'
         self._require_configured()
-        self._thread = Thread(target=self._run_server_process)
-        self._thread.daemon = True
-        self._thread.start()
+
+        command = [
+            'docker',
+            'run',
+            '-d',
+            '--rm',
+            '-p',
+            '{}:8983'.format(self.port),
+            '-e',
+            'SOLR_CORES=testing functionaltesting testserver',
+            '--name',
+            self.container_name,
+            '4teamwork/ogsolr:latest',
+            'solr-foreground',
+        ]
+
+        proc = subprocess.Popen(
+            command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        out, err = proc.communicate()
+        if proc.returncode != 0:
+            assert False, "Running Solr with Docker failed. Command returned: {}".format(err)
+
         atexit.register(self.stop)
         self._running = True
         return self
@@ -74,14 +93,16 @@ class SolrServer(object):
             return self
 
         self._require_configured()
-        try:
-            os.kill(self._process.pid, signal.SIGINT)
-        except KeyboardInterrupt:
-            pass
-        except OSError as exc:
-            if exc.errno != errno.ESRCH:
-                raise
-        self._thread.join()
+
+        command = ['docker', 'stop', self.container_name]
+        proc = subprocess.Popen(
+            command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        out, err = proc.communicate()
+        if proc.returncode != 0:
+            assert False, "Stopping of Solr container failed. Command returned: {}".format(err)
+
         self._running = False
         return self
 
@@ -120,17 +141,6 @@ class SolrServer(object):
         self._configured = False
         self._running = False
 
-    def _run_server_process(self):
-        command = [BUILDOUT_DIR.joinpath('bin/solr'), 'fg']
-        env = os.environ.copy()
-        env['SOLR_PORT'] = str(self.port)
-        self._stdout = io.StringIO()
-        self._process = subprocess.Popen(command, stdout=subprocess.PIPE, env=env)
-        while True:
-            if self._process.poll():
-                return
-            self._stdout.writelines((self._process.stdout.readline().decode('utf-8'),))
-
     def _require_configured(self):
         if not self._configured:
             raise ValueError('Configure first with SolrServer.get_instance().configure()')
@@ -158,11 +168,12 @@ class SolrReplicationAPIClient(object):
             klass._instance = klass()
         return klass._instance
 
-    def configure(self, port, core, hostname='localhost'):
+    def configure(self, port, core, hostname='localhost', container_name=None):
         self._configured = True
         self.hostname = hostname
         self.port = int(port)
         self.core = core
+        self.container_name = container_name
         self.base_url = 'http://{}:{}/solr/{}'.format(self.hostname, port, core)
         return self
 

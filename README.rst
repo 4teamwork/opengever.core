@@ -217,22 +217,10 @@ with these contents:
 respective user in our development LDAP tree.
 
 
-Installing and activating Solr
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Solr
+~~~~
 
-Solr is installed automatically during Buildout but needs to be activated in GEVER.
-
-Just start Solr:
-
-.. code::
-
-    $ bin/solr start
-
-Then run the `activate_solr` maintenance script:
-
-.. code::
-
-    $ bin/instance run src/opengever.maintenance/opengever/maintenance/scripts/activate_solr.py
+Solr is provided as a Docker image and started with other services using `docker-compose`. 
 
 
 Activating Solr update chain
@@ -241,7 +229,7 @@ Activating Solr update chain
 The custom Solr update chain allows to propagate document updates to another Solr. This can be enabled for specific portal types.
 A StatelessScriptUpdateProcessor with the name ``sync.chain`` provides a script that is using a JavaScript Script to sync the documents.
 
-To activate the ``sync.chain``, provide an overlayconfig using the ``overlayconfig`` option in the ``ftw.recipe.solr``.
+To activate the ``sync.chain``, create a `configoverlay.json` file in the `conf` directory of the Solr core or if you are using Buildout provide an overlayconfig using the ``overlayconfig`` option in the ``ftw.recipe.solr``.
 See https://github.com/4teamwork/ftw.recipe.solr#supported-options for more information.
 
 In order for the StatelessScriptUpdateProcessor to work, add the following overlayconfig under the solr section in the buildout.cfg.
@@ -394,6 +382,7 @@ for local development by default:
 - `msgconvert <https://github.com/4teamwork/msgconvert>`_
 - `pdflatex <https://github.com/4teamwork/pdflatex>`_
 - Sablon_
+- `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
@@ -406,7 +395,7 @@ To start the services simply run:
 
 .. code::
 
-  docker-compose up
+  docker-compose up -d
 
 
 ``opengever.core`` will use the services if the service URL is configured
@@ -1166,18 +1155,6 @@ The ports used by the testserver can easily be changed through environment varia
 - ``TESTSERVER_CTL_PORT`` - the port of the XMLRPC control server (default: ``55002``).
 - ``SOLR_PORT`` - the port of the Solr server which is controlled by the testserver (default: ``55003``).
 - ``TESTSERVER_REUSE_RUNNING_SOLR`` -  reuse the solr on the given port (default: ``None``).
-
-Special case for local development:
-
-A running solr is blocking all of its cores. Thus, running two solr servers on different ports with the same configuration is not possible. The first running server is blocking the core of the second one. This happens if you try to run the testserver with an `opengever.core` checkout where you already started a solr server manually. This is normally the case while developing.
-
-You can tell the testserver to reuse the already running solr instead of starting an own server. To do this, set the ``SOLR_PORT`` to the running solr and the ``TESTSERVER_REUSE_RUNNING_SOLR`` to the same port.
-
-This will tell the testserver to run a solr on port ``SOLR_PORT`` but reuse the existing server if there is already a running server.
-
-.. code::
-
-   SOLR_PORT=8983 TESTSERVER_REUSE_RUNNING_SOLR=8983 ./bin/testserver
 
 
 Custom fixtures
