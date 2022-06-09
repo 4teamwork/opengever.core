@@ -57,9 +57,9 @@ class PropertySheetFieldSerializer(DefaultFieldSerializer):
                         term = field.vocabulary.getTerm(field_value)
                         data[name] = {"token": term.token, "title": term.title}
                     except LookupError:
-                        # in case of invalid terms we pretend that there is no
-                        # value in storage and drop the field from serialization
-                        del data[name]
+                        # invalid value, but that value was valid sometime in
+                        # the past and should therefore still be serialized.
+                        data[name] = {"token": field_value, "title": field_value}
 
                 elif hasattr(field, 'value_type') and IChoice.providedBy(
                         field.value_type):
@@ -68,11 +68,13 @@ class PropertySheetFieldSerializer(DefaultFieldSerializer):
                     for field_value in field_values:
                         try:
                             term = field.value_type.vocabulary.getTerm(field_value)
-                            tokenized_values.append({"token": term.token, "title": term.title})
+                            tokenized_values.append({"token": term.token,
+                                                     "title": term.title})
                         except LookupError:
-                            # In case of invalid terms we skip them and pretend there
-                            # is no such value
-                            pass
+                            # invalid value, but that value was valid sometime in
+                            # the past and should therefore still be serialized
+                            tokenized_values.append({"token": field_value,
+                                                     "title": field_value})
 
                     data[name] = tokenized_values
 
