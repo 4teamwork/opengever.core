@@ -117,6 +117,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
+        'metadata': {'archival_value': u'unchecked',
+                     'classification': 'unprotected',
+                     'custody_period': 30,
+                     'privacy_layer': 'privacy_layer_no',
+                     'retention_period': 5},
+        'metadata_mismatch': False,
         'need_creation': False,
         'need_merge': False,
         'need_move': False,
@@ -126,7 +132,7 @@ class OSMigrationTestMixin(object):
         'new_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
-        'permissions': empty_permissions,
+        'permissions': dict(empty_permissions.items() + [('manage_dossiers', [u'faivel.fruhling'])]),
         'permissions_disregarded': False,
         'repository_depth_violated': False,
         'set_permissions': False,
@@ -136,6 +142,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
+        'metadata': {'archival_value': u'unchecked',
+                     'classification': 'unprotected',
+                     'custody_period': 30,
+                     'privacy_layer': 'privacy_layer_no',
+                     'retention_period': 5},
+        'metadata_mismatch': False,
         'need_creation': False,
         'need_merge': False,
         'need_move': False,
@@ -155,6 +167,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
+        'metadata': {'archival_value': u'unchecked',
+                     'classification': 'unprotected',
+                     'custody_period': 30,
+                     'privacy_layer': 'privacy_layer_no',
+                     'retention_period': 5},
+        'metadata_mismatch': False,
         'need_creation': False,
         'need_merge': False,
         'need_move': False,
@@ -164,7 +182,9 @@ class OSMigrationTestMixin(object):
         'new_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
         'new_title': None,
         'old_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
-        'permissions': empty_permissions,
+        'permissions': dict(empty_permissions.items() +
+                            [('add', [u'jurgen.fischer']),
+                             ('reactivate', [u'jurgen.fischer'])]),
         'permissions_disregarded': False,
         'repository_depth_violated': False,
         'set_permissions': False,
@@ -174,6 +194,12 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
+        'metadata': {'archival_value': u'unchecked',
+                     'classification': 'unprotected',
+                     'custody_period': 30,
+                     'privacy_layer': 'privacy_layer_no',
+                     'retention_period': 5},
+        'metadata_mismatch': False,
         'need_creation': False,
         'need_merge': False,
         'need_move': False,
@@ -193,6 +219,8 @@ class OSMigrationTestMixin(object):
         'is_valid': True,
         'leaf_node_violated': False,
         'local_roles_deleted': False,
+        'metadata': {},
+        'metadata_mismatch': False,
         'need_creation': False,
         'need_merge': False,
         'need_move': False,
@@ -340,7 +368,6 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         data['new_parent_guid'] = self.get_guid(self.leaf_repofolder)
         data['need_move'] = True
         data['new_number'] = '1'
-
         self.assertEqual(data, invalid_rows[0])
         self.assertIn("leaf node principle violated", log_list[6])
 
@@ -773,6 +800,15 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         data['need_creation'] = True
         data['new_position_guid'] = changed_rows[1]['new_position_guid']
         data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
+        data['metadata'] = {
+            'archival_value': u'archival worthy',
+            'archival_value_annotation': u'Sehr wichtig',
+            'classification': 'confidential',
+            'custody_period': 30,
+            'privacy_layer': 'privacy_layer_yes',
+            'retention_period': 20,
+            'retention_period_annotation': u'Das ist lang'
+            }
         self.assertEqual(data, changed_rows[1])
 
         with self.observe_children(self.branch_repofolder) as branch_children,\
