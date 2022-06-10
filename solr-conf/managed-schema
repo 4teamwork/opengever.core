@@ -102,12 +102,12 @@
     <!-- docValues are enabled by default for long type so we don't need to index the version field  -->
     <field name="_version_" type="plong" indexed="false" stored="false"/>
     <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
+    <field name="_language_"  type="string"  indexed="true"  stored="true" />
 
     <!-- Plone default fields -->
     <field name="allowedRolesAndUsers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="created" type="pdate" indexed="true" stored="false" />
     <field name="Creator" type="string" indexed="true" stored="false" />
-    <field name="Description" type="text" indexed="true" stored="true"/>
     <!-- <field name="effective" type="pdate" indexed="true" stored="false" /> -->
     <!-- <field name="expires" type="pdate" indexed="true" stored="false" /> -->
     <field name="getIcon" type="string" indexed="false" stored="false" />
@@ -119,9 +119,7 @@
     <field name="path_parent" type="descendent_path" indexed="true" stored="true" />
     <field name="portal_type" type="string" indexed="true" stored="false" />
     <field name="review_state" type="string" indexed="true" stored="false" />
-    <field name="SearchableText" type="text" indexed="true" stored="true"/>
     <field name="sortable_title" type="string" indexed="true" stored="false" />
-    <field name="Title" type="text" indexed="true" stored="true"/>
     <field name="Subject" type="string" indexed="true" stored="true" multiValued="true"/>
     <field name="UID" type="string" indexed="true" stored="true" required="true" multiValued="false" />
     <field name="getObjPositionInParent" type="pint" indexed="true" stored="true" />
@@ -176,9 +174,9 @@
     <field name="sequence_type" type="string" indexed="true" stored="false" />
     <field name="start" type="pdate" indexed="true" stored="false" />
     <field name="task_type" type="string" indexed="true" stored="false" />
-    <field name="title_de" type="text" indexed="true" stored="true"/>
-    <field name="title_en" type="text" indexed="true" stored="true"/>
-    <field name="title_fr" type="text" indexed="true" stored="true"/>
+    <field name="title_de" type="text_de" indexed="true" stored="true"/>
+    <field name="title_en" type="text_en" indexed="true" stored="true"/>
+    <field name="title_fr" type="text_fr" indexed="true" stored="true"/>
     <field name="trashed" type="boolean" indexed="true" stored="false" />
     <field name="watchers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="participations" type="string" indexed="true" stored="true" multiValued="true"/>
@@ -186,6 +184,23 @@
     <!-- PHVS specific fields -->
     <field name="language" type="string" indexed="true" stored="true" />
     <field name="location" type="string" indexed="true" stored="true" />
+
+    <!-- Language aware fields -->
+    <field name="Description" type="string" indexed="false" stored="true"/>
+    <field name="Description_de" type="text_de" indexed="true" stored="true"/>
+    <field name="Description_en" type="text_en" indexed="true" stored="true"/>
+    <field name="Description_fr" type="text_fr" indexed="true" stored="true"/>
+    <field name="Description_general" type="text_general" indexed="true" stored="true"/>
+    <field name="SearchableText" type="ignored"/>
+    <field name="SearchableText_de" type="text_de" indexed="true" stored="true"/>
+    <field name="SearchableText_en" type="text_en" indexed="true" stored="true"/>
+    <field name="SearchableText_fr" type="text_fr" indexed="true" stored="true"/>
+    <field name="SearchableText_general" type="text_general" indexed="true" stored="true"/>
+    <field name="Title" type="string" indexed="false" stored="true"/>
+    <field name="Title_de" type="text_de" indexed="true" stored="true"/>
+    <field name="Title_en" type="text_en" indexed="true" stored="true"/>
+    <field name="Title_fr" type="text_fr" indexed="true" stored="true"/>
+    <field name="Title_general" type="text_general" indexed="true" stored="true"/>
 
     <copyField source="path" dest="path_parent"/>
     <copyField source="sequence_number" dest="sequence_number_string"/>
@@ -310,6 +325,111 @@
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
         <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A general text field that has reasonable, generic
+         cross-language defaults: it tokenizes with StandardTokenizer,
+   removes stop words from case-insensitive "stopwords.txt"
+   (empty by default), and down cases.  At query time only, it
+   also applies synonyms. -->
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- A text field with defaults appropriate for English: it
+         tokenizes with StandardTokenizer, removes English stop words
+         (lang/stopwords_en.txt), down cases, protects words from protwords.txt, and
+         finally applies Porter's stemming.  The query time analyzer
+         also applies synonyms from synonyms.txt. -->
+    <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- in this example, we will only use synonyms at query time
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
+        <filter class="solr.FlattenGraphFilterFactory"/>
+        -->
+        <!-- Case insensitive stop word removal.
+        -->
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+              <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
+        <filter class="solr.StopFilterFactory"
+                ignoreCase="true"
+                words="lang/stopwords_en.txt"
+                />
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.EnglishPossessiveFilterFactory"/>
+        <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
+        <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
+              <filter class="solr.EnglishMinimalStemFilterFactory"/>
+        -->
+        <filter class="solr.PorterStemFilterFactory"/>
+      </analyzer>
+    </fieldType>
+
+    <!-- German -->
+    <fieldType name="text_de" class="solr.TextField" positionIncrementGap="100">
+      <analyzer type="index">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
+        <filter class="solr.GermanNormalizationFilterFactory"/>
+        <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
+        <filter class="solr.GermanLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.GermanMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="German2"/> -->
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
+        <filter class="solr.GermanNormalizationFilterFactory"/>
+        <filter class="solr.GermanLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.GermanMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="German2"/> -->
+      </analyzer>
+    </fieldType>
+
+    <!-- French -->
+    <fieldType name="text_fr" class="solr.TextField" positionIncrementGap="100">
+      <analyzer> 
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <!-- removes l', etc -->
+        <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_fr.txt"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" />
+        <filter class="solr.FrenchLightStemFilterFactory"/>
+        <!-- less aggressive: <filter class="solr.FrenchMinimalStemFilterFactory"/> -->
+        <!-- more aggressive: <filter class="solr.SnowballPorterFilterFactory" language="French"/> -->
       </analyzer>
     </fieldType>
 
