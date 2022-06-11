@@ -33,6 +33,7 @@ from zope.interface import implementer
 from zope.interface import noLongerProvides
 import transaction
 
+
 CACHE_TIMEOUT = 24 * 60 * 60
 
 RETRIEVAL_MODE_COPY = 'copy'

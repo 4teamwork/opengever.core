@@ -6,6 +6,7 @@ import re
 import string
 import unicodedata
 
+
 # We share the cache with the plone basenormalizer as there seems
 # to be little reason to cache the unicode tables twice.
 unicode_cache = base_cache

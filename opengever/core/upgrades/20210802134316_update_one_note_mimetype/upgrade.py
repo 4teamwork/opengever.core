@@ -1,5 +1,6 @@
 from ftw.upgrade import UpgradeStep
 
+
 ONENOTE_EXTENSIONS = ['.one']
 
 

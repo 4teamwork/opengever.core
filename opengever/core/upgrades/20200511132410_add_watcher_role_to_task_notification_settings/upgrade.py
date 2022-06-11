@@ -1,12 +1,13 @@
-from opengever.core.upgrade import SchemaMigration
+from opengever.activity.model import NotificationSetting
+from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.core.upgrade import SchemaMigration
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
-from opengever.activity.model import NotificationSetting
-from opengever.activity.notification_settings import NotificationSettings
 import json
+
 
 DEFAULT_SETTINGS = [
     {

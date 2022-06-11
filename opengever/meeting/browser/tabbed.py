@@ -1,5 +1,5 @@
-from opengever.tabbedview import ModelProxyTabbedView
 from opengever.meeting import _
+from opengever.tabbedview import ModelProxyTabbedView
 
 
 class CommitteeTabbedView(ModelProxyTabbedView):

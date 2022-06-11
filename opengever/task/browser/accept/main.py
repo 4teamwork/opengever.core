@@ -7,6 +7,7 @@ step, where the user has to choose the method of participation.
 from opengever.base.browser.wizard import BaseWizardStepForm
 from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.globalindex.handlers.task import sync_task
+from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.ogds.models.service import ogds_service
 from opengever.task import _
 from opengever.task.browser.accept.utils import accept_task_with_response
@@ -26,8 +27,8 @@ from zope.component import getUtility
 from zope.interface import Invalid
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from opengever.inbox import FORWARDING_TASK_TYPE_ID
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class AcceptWizardFormMixin(BaseWizardStepForm):

@@ -14,6 +14,7 @@ from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 
+
 # association table
 groups_users = Table(
     'groups_users', Base.metadata,

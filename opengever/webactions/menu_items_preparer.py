@@ -1,9 +1,9 @@
 from opengever.webactions.interfaces import IWebActionsMenuItemsPreparer
+from opengever.webactions.renderer import WebActionsSafeDataGetter
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from opengever.webactions.renderer import WebActionsSafeDataGetter
 
 
 @implementer(IWebActionsMenuItemsPreparer)

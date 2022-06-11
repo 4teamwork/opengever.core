@@ -3,6 +3,7 @@ from ftw.upgrade import UpgradeStep
 from ZODB.POSException import ConflictError
 import logging
 
+
 logger = logging.getLogger('ftw.upgrade')
 
 

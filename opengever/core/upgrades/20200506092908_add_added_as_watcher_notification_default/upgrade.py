@@ -5,6 +5,7 @@ from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 import json
 
+
 SETTING = {
      'kind': 'added-as-watcher',
      'badge_notification_roles': [WATCHER_ROLE],

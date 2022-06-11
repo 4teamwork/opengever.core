@@ -1,5 +1,5 @@
-from zope.interface import implementer
 from plone.supermodel.parser import ISchemaPolicy
+from zope.interface import implementer
 
 
 @implementer(ISchemaPolicy)

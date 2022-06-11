@@ -1,8 +1,8 @@
-from zope.schema.vocabulary import SimpleVocabulary
 from Products.CMFCore.PortalFolder import PortalFolderBase
 from zope.i18n import translate
-from zope.schema.interfaces import IVocabularyFactory
 from zope.interface import implementer
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 @implementer(IVocabularyFactory)

@@ -3,8 +3,8 @@ from ftw.testbrowser.pages import statusmessages
 from io import StringIO
 from opengever.testing import IntegrationTestCase
 from plonetheme.teamraum.importexport import CustomStylesUtility
-from plonetheme.teamraum.importexport import LOGO_RIGHT_KEY
 from plonetheme.teamraum.importexport import LOGO_KEY
+from plonetheme.teamraum.importexport import LOGO_RIGHT_KEY
 import json
 
 

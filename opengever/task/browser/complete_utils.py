@@ -12,6 +12,7 @@ from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
 import json
 
+
 # XXX: This module is supposed to be temporary. The function below, as
 # well as the code in opengever.task.accept.browser.utils should be moved
 # to a common location.

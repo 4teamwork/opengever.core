@@ -33,7 +33,8 @@ from z3c.form.interfaces import HIDDEN_MODE
 from zExceptions import Unauthorized
 from zope import schema
 from zope.app.intid.interfaces import IIntIds
-from zope.component import getUtility, getAdapter
+from zope.component import getAdapter
+from zope.component import getUtility
 from zope.event import notify
 from zope.i18n import translate
 from zope.interface import provider

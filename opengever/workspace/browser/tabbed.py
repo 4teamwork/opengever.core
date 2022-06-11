@@ -1,5 +1,5 @@
-from opengever.workspace import _
 from opengever.tabbedview import GeverTabbedView
+from opengever.workspace import _
 
 
 class WorkspaceTabbedView(GeverTabbedView):

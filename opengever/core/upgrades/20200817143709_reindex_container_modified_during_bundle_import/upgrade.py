@@ -5,6 +5,7 @@ from plone.dexterity.interfaces import IDexterityContainer
 from zope.component import queryUtility
 import logging
 
+
 LOG = logging.getLogger('ftw.upgrade')
 
 

@@ -17,6 +17,7 @@ from zope.publisher.interfaces import IPublishTraverse
 import logging
 import transaction
 
+
 logger = logging.getLogger('opengever.api')
 
 

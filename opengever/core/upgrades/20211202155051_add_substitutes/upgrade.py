@@ -1,13 +1,13 @@
-from opengever.core.upgrade import SchemaMigration
 from opengever.base.model import USER_ID_LENGTH
+from opengever.core.upgrade import SchemaMigration
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
 from sqlalchemy import ForeignKey
+from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.schema import Sequence
-from sqlalchemy import Integer
 
 
 class AddSubstitutes(SchemaMigration):

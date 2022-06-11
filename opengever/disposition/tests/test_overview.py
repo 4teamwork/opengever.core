@@ -5,11 +5,11 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_SAMPLING
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.security import elevated_privileges
 from opengever.testing import IntegrationTestCase
-import os
 from plone import api
+from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
-from z3c.relationfield.relation import RelationValue
+import os
 
 
 class TestDispositionOverview(IntegrationTestCase):

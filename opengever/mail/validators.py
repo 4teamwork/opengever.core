@@ -1,13 +1,12 @@
-import re
-
+from ftw.mail.mail import IMail
+from opengever.mail import _
+from opengever.mail.interfaces import ISendDocumentConf
 from plone.registry.interfaces import IRegistry
 from z3c.form import validator
 from zope import schema
 from zope.component import queryUtility
+import re
 
-from opengever.mail import _
-from opengever.mail.interfaces import ISendDocumentConf
-from ftw.mail.mail import IMail
 
 EMAIL_REGEX = re.compile(
     r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",

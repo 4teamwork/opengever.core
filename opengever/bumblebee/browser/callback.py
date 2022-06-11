@@ -3,14 +3,14 @@ from ftw.bumblebee.browser.callback import BaseDemandCallbackView
 from opengever.base.security import elevated_privileges
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
-from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_STATUS_KEY
+from opengever.document.browser.save_pdf_document_under import PDF_SAVE_TOKEN_KEY
 from plone import api
 from zExceptions import MethodNotAllowed
 from zExceptions import Unauthorized
 from zope.annotation import IAnnotations
-from zope.lifecycleevent import ObjectModifiedEvent
 from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 
 
 class StoreArchivalFile(BaseConvertCallbackView):

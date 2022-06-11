@@ -8,6 +8,7 @@ from plone import api
 import re
 import unittest
 
+
 URL_WIHOUT_TOKEN_RE = re.compile(r'(.*)([\?, &]_authenticator=.*)')
 
 

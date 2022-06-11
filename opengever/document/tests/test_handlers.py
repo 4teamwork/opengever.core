@@ -302,4 +302,3 @@ class TestHandlers(FunctionalTestCase):
                                   target=self.target_dossier)
 
         self.assertEqual('Copy of Invalid DOCX', copied.title)
-

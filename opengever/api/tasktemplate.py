@@ -1,9 +1,9 @@
+from opengever.api.task import TaskDeserializeFromJson
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from plone.restapi.interfaces import IDeserializeFromJson
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
-from opengever.api.task import TaskDeserializeFromJson
 
 
 @implementer(IDeserializeFromJson)

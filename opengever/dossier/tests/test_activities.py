@@ -1,12 +1,12 @@
 from datetime import date
 from datetime import timedelta
 from opengever.activity import notification_center
-from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.activity.model import Activity
 from opengever.activity.model import Notification
 from opengever.dossier.activities import DossierOverdueActivity
 from opengever.dossier.activities import DossierOverdueActivityGenerator
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.ogds.base.actor import SYSTEM_ACTOR_ID
 from opengever.testing import IntegrationTestCase
 
 

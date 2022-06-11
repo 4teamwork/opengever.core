@@ -72,6 +72,7 @@ from zope.interface import Invalid
 from zope.interface import invariant
 from zope.schema.vocabulary import getVocabularyRegistry
 
+
 _marker = object()
 TASKTEMPLATE_PREDECESSOR_KEY = 'tasktemplate_predecessor'
 TASK_PROCESS_ORDER_KEY = 'task_process_order'

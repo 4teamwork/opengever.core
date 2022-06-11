@@ -3,6 +3,7 @@ from sqlalchemy import String
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 
+
 EMAIL_LENGTH = 255
 EMPTY_ADDRESS_PLACEHOLDER = u'<No Address>'
 

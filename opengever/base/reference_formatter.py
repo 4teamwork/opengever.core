@@ -6,6 +6,7 @@ from zope.interface import implementer
 from zope.interface import Interface
 import re
 
+
 split_numbers_pattern = re.compile('(\\d+)')
 
 

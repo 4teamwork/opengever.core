@@ -9,8 +9,8 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.document.document import IDocumentSchema
 from opengever.document.subscribers import set_digitally_available
-from opengever.mail.mail import initialize_title
 from opengever.mail.mail import initialize_metadata
+from opengever.mail.mail import initialize_title
 from opengever.mail.mail import IOGMail
 from opengever.mail.mail import NO_SUBJECT_TITLE_FALLBACK
 from plone import api

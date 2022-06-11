@@ -1,6 +1,6 @@
+from opengever.oneoffixx.utils import whitelisted_template_types
 from plone.i18n.normalizer.interfaces import IFileNameNormalizer
 from zope.component import getUtility
-from opengever.oneoffixx.utils import whitelisted_template_types
 
 
 def get_whitelisted_oneoffixx_templates(api_client):

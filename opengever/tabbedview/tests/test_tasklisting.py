@@ -1,7 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.globalindex.handlers.task import TaskSqlSyncer
-from opengever.testing import IntegrationTestCase
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
+from opengever.testing import IntegrationTestCase
 
 
 class TestTaskListing(IntegrationTestCase):

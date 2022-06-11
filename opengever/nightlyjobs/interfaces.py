@@ -1,6 +1,6 @@
+from datetime import timedelta
 from zope import schema
 from zope.interface import Interface
-from datetime import timedelta
 
 
 class INightlyJobsSettings(Interface):

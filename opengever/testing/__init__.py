@@ -1,5 +1,6 @@
 import pkg_resources
 
+
 try:
     pkg_resources.get_distribution('ftw.testing')
 

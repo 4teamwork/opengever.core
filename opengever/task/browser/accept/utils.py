@@ -2,6 +2,7 @@ from opengever.activity import notification_center
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
+from opengever.base.response import IResponseContainer
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -10,7 +11,6 @@ from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
-from opengever.base.response import IResponseContainer
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter

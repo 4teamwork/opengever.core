@@ -1,6 +1,6 @@
 from opengever.document import _
-from opengever.propertysheets.assignment import get_document_assignment_slots
 from opengever.propertysheets.assignment import DOCUMENT_DEFAULT_ASSIGNMENT_SLOT
+from opengever.propertysheets.assignment import get_document_assignment_slots
 from opengever.propertysheets.field import PropertySheetField
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model

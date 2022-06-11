@@ -17,7 +17,8 @@ from zope import schema
 from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 class AssignToDossierWizardFormMixin(BaseWizardStepForm):

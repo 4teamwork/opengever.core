@@ -16,8 +16,8 @@ from opengever.meeting.period import Period
 from opengever.meeting.workflow import State
 from opengever.meeting.workflow import Transition
 from opengever.meeting.workflow import Workflow
-from opengever.trash.trash import ITrasher
 from opengever.trash.trash import ITrashed
+from opengever.trash.trash import ITrasher
 from plone import api
 from sqlalchemy import Boolean
 from sqlalchemy import Column

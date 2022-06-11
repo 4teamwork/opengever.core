@@ -1,6 +1,6 @@
 from ftw.dictstorage.sql import DictStorageModel
-from opengever.base.model import create_session
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from z3c.saconfig.interfaces import IScopedSession

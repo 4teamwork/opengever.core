@@ -1,9 +1,9 @@
+from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.service import ogds_service
 from Products.CMFCore.utils import getToolByName
 from zope.globalrequest import getRequest
 from zope.i18n import translate
-from opengever.base.utils import rewrite_path_list_to_absolute_paths
 
 
 def get_selected_items_from_catalog(context, request):

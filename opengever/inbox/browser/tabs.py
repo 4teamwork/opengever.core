@@ -1,11 +1,11 @@
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.utils import get_current_org_unit
+from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 from opengever.tabbedview.browser.tabs import Documents
 from opengever.tabbedview.browser.tabs import Tasks
 from opengever.tabbedview.browser.tabs import Trash
 from opengever.tabbedview.browser.tasklisting import GlobalTaskListingTab
 from opengever.tabbedview.helper import external_edit_link
-from opengever.tabbedview.browser.bumblebee_gallery import BumblebeeGalleryMixin
 
 
 def _get_current_org_unit_id(context):

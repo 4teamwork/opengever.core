@@ -1,6 +1,6 @@
-from opengever.dossier import _
 from opengever.advancedsearch.advanced_search import AdvancedSearchForm
 from opengever.advancedsearch.advanced_search import IAdvancedSearch
+from opengever.dossier import _
 from plone.supermodel import model
 from plone.z3cform.fieldsets.utils import move
 from zope import schema

@@ -2,6 +2,7 @@ from zope.component.hooks import getSite
 from zope.i18nmessageid import MessageFactory
 import os
 
+
 _ = MessageFactory('opengever.readonly')
 
 

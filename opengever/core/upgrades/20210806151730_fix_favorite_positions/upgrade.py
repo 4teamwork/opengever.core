@@ -1,5 +1,5 @@
-from opengever.core.upgrade import SchemaMigration
 from opengever.base.model.favorite import Favorite
+from opengever.core.upgrade import SchemaMigration
 
 
 class FixFavoritePositions(SchemaMigration):

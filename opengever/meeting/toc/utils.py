@@ -1,8 +1,8 @@
 from opengever.base.filename import unidecode
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
-from Products.CMFPlone.utils import safe_unicode
 from plone.registry.interfaces import IRegistry
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import getUtility
 from zope.component import queryAdapter
 import unicodedata

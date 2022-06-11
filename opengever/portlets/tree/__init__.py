@@ -1,4 +1,6 @@
 from zope.i18nmessageid import MessageFactory
+
+
 TreePortletMessageFactory = MessageFactory('opengever.portlets.tree')
 
 def initialize(context):

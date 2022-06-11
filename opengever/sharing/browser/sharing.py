@@ -44,6 +44,7 @@ from zope.i18n import translate
 import json
 import re
 
+
 ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',

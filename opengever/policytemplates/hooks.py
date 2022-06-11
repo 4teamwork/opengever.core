@@ -14,6 +14,7 @@ import json
 import os
 import shutil
 
+
 POLICYTEMPLATE_DOTFILE_PATH = expanduser('~/.opengever/policytemplate.json')
 
 IGNORED_QUESTIONS = {

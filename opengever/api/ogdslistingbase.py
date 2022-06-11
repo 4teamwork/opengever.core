@@ -5,11 +5,11 @@ from opengever.tabbedview.sqlsource import sort_column_exists
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
+from sqlalchemy import func
 from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
-from sqlalchemy import func
 from zope.component import queryMultiAdapter
 from ZPublisher.HTTPRequest import record
 

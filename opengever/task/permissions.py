@@ -2,6 +2,7 @@
 
 from Products.CMFCore import permissions as CMFCorePermissions
 
+
 View = CMFCorePermissions.View
 ModifyPortalContent = CMFCorePermissions.ModifyPortalContent
 AccessContentsInformation = CMFCorePermissions.AccessContentsInformation

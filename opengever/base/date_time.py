@@ -1,17 +1,17 @@
-from datetime import datetime
 from DateTime import DateTime
+from datetime import datetime
 from DateTime.interfaces import IDateTime
-from Products.CMFPlone.utils import log
-from zope.i18n import translate
 from Products.CMFPlone.i18nl10n import _interp_regex
 from Products.CMFPlone.i18nl10n import datetime_formatvariables
-from Products.CMFPlone.i18nl10n import name_formatvariables
-from Products.CMFPlone.i18nl10n import weekdayname_msgid_abbr
-from Products.CMFPlone.i18nl10n import weekdayname_msgid
-from Products.CMFPlone.i18nl10n import monthname_msgid_abbr
 from Products.CMFPlone.i18nl10n import monthname_msgid
-import pytz
+from Products.CMFPlone.i18nl10n import monthname_msgid_abbr
+from Products.CMFPlone.i18nl10n import name_formatvariables
+from Products.CMFPlone.i18nl10n import weekdayname_msgid
+from Products.CMFPlone.i18nl10n import weekdayname_msgid_abbr
+from Products.CMFPlone.utils import log
+from zope.i18n import translate
 import logging
+import pytz
 
 
 def utcnow_tz_aware():

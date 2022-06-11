@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder

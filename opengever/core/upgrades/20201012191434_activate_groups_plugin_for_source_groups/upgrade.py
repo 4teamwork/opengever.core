@@ -3,6 +3,7 @@ from Products.CMFPlone.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 import logging
 
+
 LOG = logging.getLogger('ftw.upgrade')
 
 

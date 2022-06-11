@@ -34,7 +34,8 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.event import notify
 from zope.interface import alsoProvides
-from zope.interface import Interface, Invalid
+from zope.interface import Interface
+from zope.interface import Invalid
 from zope.intid.interfaces import IIntIds
 from zope.schema import getFieldsInOrder
 from zope.schema import Int

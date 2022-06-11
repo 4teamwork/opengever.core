@@ -10,10 +10,10 @@ from zope.component import adapter
 from zope.component import adapts
 from zope.interface import implementer
 from zope.interface import implementer_only
+from zope.schema._bootstrapinterfaces import RequiredMissing
 from zope.schema.interfaces import IFromUnicode
 from zope.schema.interfaces import ITuple
 from ZPublisher.HTTPRequest import FileUpload
-from zope.schema._bootstrapinterfaces import RequiredMissing
 
 
 class IMultiFileUploadWidget(IFileWidget):

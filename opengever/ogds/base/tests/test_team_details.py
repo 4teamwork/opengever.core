@@ -1,6 +1,6 @@
+from ftw.testbrowser import browsing
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
-from ftw.testbrowser import browsing
 
 
 class TestTeamDetails(IntegrationTestCase):

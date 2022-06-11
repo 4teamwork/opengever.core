@@ -5,7 +5,8 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
 from Products.CMFPlone.utils import safe_unicode
 from zope import schema
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 class IOpenGeverBase(model.Schema):

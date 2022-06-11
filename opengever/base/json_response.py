@@ -1,6 +1,6 @@
-import json
-from zope.i18n import translate
 from opengever.base import _
+from zope.i18n import translate
+import json
 
 
 class JSONResponse(object):

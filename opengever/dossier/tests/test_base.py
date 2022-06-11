@@ -537,4 +537,3 @@ class TestDateCalculationsUsingDocumentDate(IntegrationTestCase):
         IDocumentMetadata(self.document).document_date = date(2020, 2, 2)
         self.document.reindexObject(idxs=['document_date'])
         self.assertFalse(self.dossier.has_valid_enddate())
-

@@ -1,6 +1,7 @@
 from BTrees.OOBTree import OOBTree
 from PIL import Image
-from plone.app.blob.download import handleIfModifiedSince, handleRequestRange
+from plone.app.blob.download import handleIfModifiedSince
+from plone.app.blob.download import handleRequestRange
 from plone.i18n.normalizer.interfaces import IUserPreferredFileNameNormalizer
 from plonetheme.teamraum.importexport import CustomStylesUtility
 from plonetheme.teamraum.importexport import DEFAULT_STYLES

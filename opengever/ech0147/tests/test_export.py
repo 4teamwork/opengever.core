@@ -1,9 +1,9 @@
-from opengever.testing import IntegrationTestCase
-from ftw.testbrowser import browsing
-from zipfile import ZipFile
-from StringIO import StringIO
-from zope.annotation.interfaces import IAnnotations
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
+from ftw.testbrowser import browsing
+from opengever.testing import IntegrationTestCase
+from StringIO import StringIO
+from zipfile import ZipFile
+from zope.annotation.interfaces import IAnnotations
 
 
 class TestExport(IntegrationTestCase):

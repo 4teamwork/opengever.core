@@ -15,6 +15,7 @@ from zope.component import getUtility
 from zope.interface import Invalid
 import logging
 
+
 logger = logging.getLogger('opengever.virusscan.uploads')
 
 SCAN_RESULT_BASE_KEY = 'opengever.virusscan.scan_result'

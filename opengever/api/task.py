@@ -1,3 +1,4 @@
+from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.add import FolderPost
 from opengever.api.deserializer import GeverDeserializeFromJson
@@ -32,7 +33,6 @@ from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import implementer
 from zope.interface import Interface
-from opengever.api import _
 
 
 @implementer(ISerializeToJson)

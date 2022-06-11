@@ -10,6 +10,7 @@ from plone.supermodel import model
 from zope.annotation.interfaces import IAnnotations
 import json
 
+
 VALIDATION_DATA = {
     'meeting': SAMPLE_MEETING_DATA,
     'toc': {'toc': []},

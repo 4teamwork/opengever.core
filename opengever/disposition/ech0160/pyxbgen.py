@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
-import pyxb.xmlschema
-import pyxb.binding.generate
-import pyxb.utils.utility
-import pyxb.utils.domutils
-import sys
+import logging
 import optparse
+import pyxb.binding.generate
+import pyxb.utils.domutils
+import pyxb.utils.utility
+import pyxb.xmlschema
+import sys
 import traceback
 
-import logging
+
 logging.basicConfig()
 log_ = logging.getLogger(__name__)
 

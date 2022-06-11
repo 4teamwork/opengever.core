@@ -1,5 +1,6 @@
 from AccessControl import Unauthorized
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.workspace.interfaces import IWorkspaceFolder

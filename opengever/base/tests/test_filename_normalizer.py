@@ -1,5 +1,5 @@
-from opengever.base.model import FILENAME_LENGTH
 from opengever.base.filename import GeverFileNameNormalizer
+from opengever.base.model import FILENAME_LENGTH
 from unittest import TestCase
 import string
 import sys

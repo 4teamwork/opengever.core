@@ -19,7 +19,8 @@ from persistent.dict import PersistentDict
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.Transience.Transience import Increaser
-from z3c.form import button, field
+from z3c.form import button
+from z3c.form import field
 from z3c.form.browser import radio
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE

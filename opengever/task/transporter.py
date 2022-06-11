@@ -1,6 +1,6 @@
 from datetime import date
-from DateTime import DateTime
 from datetime import datetime
+from DateTime import DateTime
 from opengever.base.request import dispatch_json_request
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify

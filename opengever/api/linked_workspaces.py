@@ -20,6 +20,7 @@ from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 import logging
 
+
 logger = logging.getLogger('opengever.api: LinkedWorkspaces')
 
 teamraum_request_error_handler = create_proxy_request_error_handler(

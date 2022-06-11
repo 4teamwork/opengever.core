@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 from opengever.base.response import IResponseContainer
 from opengever.task.adapters import IResponseContainer as OldIResponseContainer
-from opengever.task.task_response import TaskResponse
 from opengever.task.task import ITask
+from opengever.task.task_response import TaskResponse
 from persistent.list import PersistentList
 from zope.annotation.interfaces import IAnnotations
 

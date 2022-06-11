@@ -1,5 +1,6 @@
 from opengever.testing import IntegrationTestCase
 
+
 BUMBLEBEE_NOTIFICATION_URL = 'http://bumblebee/YnVtYmxlYmVl/api/notifications'
 
 

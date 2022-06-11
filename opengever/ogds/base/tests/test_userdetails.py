@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 
 

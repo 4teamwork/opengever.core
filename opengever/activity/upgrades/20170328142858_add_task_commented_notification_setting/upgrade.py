@@ -4,6 +4,7 @@ from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 import json
 
+
 DEFAULT_SETTINGS = [
     {'kind': 'task-commented',
      'mail_notification': False,

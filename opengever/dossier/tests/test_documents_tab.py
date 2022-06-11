@@ -1,6 +1,6 @@
 from ftw.testbrowser import browsing
-from opengever.testing import SolrIntegrationTestCase
 from opengever.base.behaviors.base import IOpenGeverBase
+from opengever.testing import SolrIntegrationTestCase
 
 
 class TestDocumentsTab(SolrIntegrationTestCase):

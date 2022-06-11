@@ -22,7 +22,6 @@ from plone import api
 from plone.autoform.form import AutoExtensibleForm
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as pd_mf
-from plone.dexterity.i18n import MessageFactory as PDMF
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
@@ -341,7 +340,7 @@ class AddDossierFromTemplateWizardStep(WizzardWrappedAddForm):
 
                     self._finishedAdd = True
                     api.portal.show_message(
-                        PDMF(u"Item created"), request=self.request, type="info")
+                        pd_mf(u"Item created"), request=self.request, type="info")
 
             @buttonAndHandler(pd_mf(u'Cancel'), name='cancel')
             def handleCancel(self, action):

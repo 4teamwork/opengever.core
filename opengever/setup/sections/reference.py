@@ -14,7 +14,8 @@ from zope.component import getUtility
 from zope.component import queryAdapter
 from zope.component import queryUtility
 from zope.container.interfaces import INameChooser
-from zope.interface import classProvides, implements
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 
 

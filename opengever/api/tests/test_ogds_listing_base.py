@@ -1,9 +1,9 @@
 from datetime import date
 from ftw.testbrowser import browsing
+from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
-from opengever.api.ogdslistingbase import OGDSListingBaseService
 
 
 class TestOGDSListingBaseService(IntegrationTestCase):

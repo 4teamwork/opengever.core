@@ -1,4 +1,5 @@
 from App.config import getConfiguration
+from argparse import ArgumentTypeError
 from ftw.tokenauth.service_keys.browser.issue import create_json_keyfile
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
@@ -10,7 +11,6 @@ import os
 import string
 import sys
 import transaction
-from argparse import ArgumentTypeError
 
 
 log = logging.getLogger("opengever.setup.serviceuser")

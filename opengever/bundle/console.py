@@ -1,11 +1,11 @@
 # Avoid import error for Products.Archetypes.BaseBTreeFolder
+from Products.Archetypes import atapi  # noqa # isort:skip
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bundle.config.importer import ConfigImporter
 from opengever.bundle.importer import BundleImporter
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from os.path import join as pjoin
-from Products.Archetypes import atapi  # noqa
 from zope.interface import alsoProvides
 import argparse
 import codecs
@@ -15,8 +15,9 @@ import os
 import sys
 import transaction
 
+
 # BBB
-from opengever.bundle.importer import add_guid_index  # noqa
+from opengever.bundle.importer import add_guid_index  # noqa # isort:skip
 
 
 log = logging.getLogger(__name__)

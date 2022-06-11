@@ -1,5 +1,5 @@
-from opengever.base.vocabulary import wrap_vocabulary
 from opengever.base.response import IResponseContainer
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.models.team import Team
 from opengever.task.activities import TaskTransitionActivity

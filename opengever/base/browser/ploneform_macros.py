@@ -2,6 +2,7 @@ from plone.locking.interfaces import IRefreshableLockable
 from Products.Five.browser import BrowserView
 from zope.component import queryAdapter
 
+
 # The ploneform-macros view
 
 

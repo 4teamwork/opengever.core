@@ -1,6 +1,6 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.dossier.behaviors.filing import IFilingNumberMarker
 
 
 class ReindexSearchableTextToIncludeFilingNo(UpgradeStep):

@@ -2,9 +2,9 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
 from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
-from opengever.base.utils import file_checksum
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.repository.repositoryroot import IRepositoryRoot
 from pkg_resources import resource_filename

@@ -6,7 +6,8 @@ from collective.transmogrifier.utils import traverse
 from plone import api
 from plone.app.transmogrifier.reindexobject import ReindexObjectSection
 from zope.component import getUtility
-from zope.interface import classProvides, implements
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 
 

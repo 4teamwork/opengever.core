@@ -8,7 +8,8 @@ from plone.app.textfield import RichText
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Item
 from plone.supermodel import model
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider

@@ -10,14 +10,16 @@ from opengever.document.events import ObjectCheckedOutEvent
 from opengever.document.events import ObjectCheckoutCanceledEvent
 from opengever.document.events import ObjectRevertedToVersion
 from opengever.dossier.behaviors.participation import Participation
-from opengever.dossier.events import ParticipationCreated, ParticipationRemoved
+from opengever.dossier.events import ParticipationCreated
+from opengever.dossier.events import ParticipationRemoved
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.journal.tests.utils import get_journal_length
 from opengever.mail.events import DocumentSent
 from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.sharing.events import LocalRolesModified
-from opengever.trash.trash import TrashedEvent, UntrashedEvent
+from opengever.trash.trash import TrashedEvent
+from opengever.trash.trash import UntrashedEvent
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from Products.CMFCore.utils import getToolByName

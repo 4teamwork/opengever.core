@@ -1,5 +1,5 @@
-from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 from ftw.table.basesource import BaseTableSource
+from opengever.tabbedview.filtered_source import FilteredTableSourceMixin
 
 
 class GeverTableSource(FilteredTableSourceMixin, BaseTableSource):

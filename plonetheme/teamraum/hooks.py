@@ -1,6 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 
+
 SCREEN_ANNOTATION_KEY = "plonetheme.teamraum.originalmediatypesconfiguration"
 
 

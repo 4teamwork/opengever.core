@@ -1,6 +1,6 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base.response import IResponseContainer
 from opengever.base.response import COMMENT_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
 from opengever.meeting.proposal import IBaseProposal
 
 

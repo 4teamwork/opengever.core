@@ -3,6 +3,7 @@ from opengever.workspace.interfaces import IWorkspaceMeetingSettings
 from plone import api
 from zope.i18nmessageid import MessageFactory
 
+
 _ = MessageFactory('opengever.workspace')
 
 WHITELISTED_TEAMRAUM_GLOBAL_SOURCES = set()

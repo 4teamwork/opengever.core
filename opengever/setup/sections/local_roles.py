@@ -3,9 +3,10 @@ from collective.blueprint.jsonmigrator.blueprint import LocalRoles
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Expression
-from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
-from zope.interface import classProvides, implements
+from opengever.base.role_assignments import SharingRoleAssignment
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 
 

@@ -19,6 +19,7 @@ The dependencies are defined like this:
 
 from tarjan import tarjan
 
+
 graph = {
     'controller': ['handlebars', 'messagefactory', 'jquery'],
     'messagefactory': ['jquery', 'notify'],

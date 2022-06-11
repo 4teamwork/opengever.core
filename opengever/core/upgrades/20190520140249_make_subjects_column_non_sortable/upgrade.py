@@ -1,5 +1,5 @@
-from opengever.core.upgrade import SchemaMigration
 from opengever.base.model import create_session
+from opengever.core.upgrade import SchemaMigration
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 import json

@@ -1,4 +1,5 @@
 from opengever.api.batch import SQLHypermediaBatch
+from opengever.api.serializer import SerializeSQLModelToJsonBase
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.ogds.base.substitute import SubstituteManager
 from opengever.ogds.models.substitute import Substitute
@@ -14,7 +15,6 @@ from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
-from opengever.api.serializer import SerializeSQLModelToJsonBase
 
 
 @implementer(ISerializeToJson)

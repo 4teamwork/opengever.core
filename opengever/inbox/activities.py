@@ -1,5 +1,5 @@
-from opengever.ogds.base.actor import Actor
 from opengever.inbox import _
+from opengever.ogds.base.actor import Actor
 from opengever.task import _ as tmf
 from opengever.task.activities import TaskAddedActivity
 from opengever.task.activities import TaskWatcherAddedActivity

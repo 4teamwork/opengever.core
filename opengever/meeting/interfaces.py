@@ -41,4 +41,3 @@ class IMembershipWrapper(ISQLObjectWrapper):
 
 class IMeetingDossier(model.Schema):
     """Marker interface for MeetingDossier"""
-

@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import adapter

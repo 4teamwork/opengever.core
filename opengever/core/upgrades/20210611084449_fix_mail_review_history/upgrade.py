@@ -1,9 +1,8 @@
+from DateTime import DateTime
+from datetime import datetime
 from ftw.upgrade import UpgradeStep
 from plone import api
 from Products.CMFCore.WorkflowCore import WorkflowException
-from datetime import datetime
-from DateTime import DateTime
-
 
 
 class FixMailReviewHistory(UpgradeStep):

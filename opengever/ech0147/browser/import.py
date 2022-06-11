@@ -15,7 +15,8 @@ from plone.registry.interfaces import IRegistry
 from plone.supermodel.model import Schema
 from Products.statusmessages.interfaces import IStatusMessage
 from pyxb import UnrecognizedContentError
-from z3c.form import form, button
+from z3c.form import button
+from z3c.form import form
 from z3c.form.interfaces import IErrorViewSnippet
 from zExceptions import BadRequest
 from zExceptions import NotFound

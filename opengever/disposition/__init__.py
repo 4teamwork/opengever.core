@@ -2,6 +2,7 @@ from opengever.disposition.interfaces import IDispositionSettings
 from plone import api
 from zope.i18nmessageid import MessageFactory
 
+
 _ = MessageFactory('opengever.disposition')
 
 def only_attach_original_enabled():

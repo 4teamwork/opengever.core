@@ -2,9 +2,9 @@ from AccessControl import Unauthorized
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.meeting.tabs.meetinglisting import dossier_link_or_title
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
-from opengever.meeting.tabs.meetinglisting import dossier_link_or_title
 
 
 class TestMeetingListing(IntegrationTestCase):

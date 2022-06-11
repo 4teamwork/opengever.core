@@ -1,5 +1,5 @@
-from datetime import date
 from DateTime import DateTime
+from datetime import date
 from ftw.solr.converters import to_iso8601
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrSearch

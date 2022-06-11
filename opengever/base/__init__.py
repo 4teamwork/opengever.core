@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from opengever.base import monkey  # noqa
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import ISearchSettings
 from plone import api
@@ -6,9 +7,8 @@ from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
 import csv
 
-_ = MessageFactory('opengever.base')
 
-from opengever.base import monkey  # noqa
+_ = MessageFactory('opengever.base')
 
 
 VERSION = 'GEVER Version %(version)s'

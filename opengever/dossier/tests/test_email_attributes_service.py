@@ -1,7 +1,7 @@
 from ftw.mail.interfaces import IEmailAddress
 from ftw.testbrowser import browsing
-from plone import api
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.globalrequest import getRequest
 
 

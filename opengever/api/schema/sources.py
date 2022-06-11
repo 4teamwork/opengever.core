@@ -1,6 +1,6 @@
 from opengever.base.interfaces import IDuringContentCreation
-from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
 from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
 from plone.dexterity.utils import iterSchemata
 from plone.dexterity.utils import iterSchemataForType
 from plone.restapi.interfaces import ISerializeToJson

@@ -1,5 +1,6 @@
-from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browsing
+from opengever.testing import IntegrationTestCase
+
 
 class DossierIdsTestCase(IntegrationTestCase):
 

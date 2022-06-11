@@ -1,5 +1,5 @@
-from datetime import datetime
 from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
@@ -14,8 +14,8 @@ from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import SITE_OWNER_NAME
+from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 

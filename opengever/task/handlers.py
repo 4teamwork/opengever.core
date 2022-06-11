@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import date
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument

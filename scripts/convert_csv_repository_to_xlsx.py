@@ -13,6 +13,7 @@ import csv
 import os
 import sys
 
+
 force_integer = ['retention_period', 'custody_period', 'block_inheritance']
 
 

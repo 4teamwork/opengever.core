@@ -1,7 +1,6 @@
 from ftw.mail.interfaces import IEmailAddress
 from plone import api
 from plone.rest import Service
-
 import json
 
 

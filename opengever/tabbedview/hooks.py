@@ -1,6 +1,6 @@
-from zope.component import getUtility
-from plone.registry.interfaces import IRegistry
 from ftw.tabbedview.interfaces import ITabbedView
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 def installed(site):

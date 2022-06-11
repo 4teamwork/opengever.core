@@ -3,8 +3,9 @@ from ftw.mail.utils import get_header
 from ftw.upgrade import ProgressLogger
 from ftw.upgrade import UpgradeStep
 from plone import api
-import logging
 from ZODB.POSException import ConflictError
+import logging
+
 
 log = logging.getLogger('ftw.upgrade')
 

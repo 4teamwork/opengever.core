@@ -3,8 +3,8 @@ from ftw.builder import create
 from ftw.testbrowser import browser as default_browser
 from ftw.testbrowser import browsing
 from opengever.activity.model import Activity
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.base.response import IResponseContainer
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
 from opengever.testing import FunctionalTestCase
 from Products.CMFCore.utils import getToolByName
 from sqlalchemy import desc

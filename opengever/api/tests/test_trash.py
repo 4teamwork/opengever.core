@@ -1,7 +1,7 @@
 from ftw.testbrowser import browsing
 from opengever.testing import IntegrationTestCase
-from opengever.trash.trash import ITrasher
 from opengever.trash.trash import ITrashed
+from opengever.trash.trash import ITrasher
 
 
 class TestTrashAPI(IntegrationTestCase):

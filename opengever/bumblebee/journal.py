@@ -1,9 +1,9 @@
 from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeJournal
 from logging import getLogger
+from plone.uuid.interfaces import IUUID
 from zope.component import adapter
 from zope.interface import implementer
-from plone.uuid.interfaces import IUUID
 
 
 logger = getLogger('opengever.bumblebee')

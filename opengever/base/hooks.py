@@ -1,7 +1,7 @@
 from opengever.base import model
-from Products.CMFCore.utils import getToolByName
 from opengever.base.config import INDEXES
 from opengever.core.catalog import add_catalog_indexes
+from Products.CMFCore.utils import getToolByName
 import logging
 
 

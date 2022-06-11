@@ -4,7 +4,8 @@ from collective.transmogrifier.utils import traverse
 from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.WorkflowCore import WorkflowException
-from zope.interface import classProvides, implements
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 
 

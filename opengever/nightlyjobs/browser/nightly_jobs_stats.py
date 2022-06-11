@@ -1,7 +1,7 @@
-from Products.Five.browser import BrowserView
 from opengever.nightlyjobs.runner import get_job_counts
 from opengever.nightlyjobs.runner import get_nightly_run_timestamp
 from opengever.nightlyjobs.runner import nightly_run_within_24h
+from Products.Five.browser import BrowserView
 
 
 def get_nightly_job_stats():

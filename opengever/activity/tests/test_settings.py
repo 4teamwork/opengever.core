@@ -1,14 +1,15 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
-from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.model.settings import NotificationSetting
+from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.ogds.models.user_settings import UserSettings
 from opengever.testing import IntegrationTestCase
 import json
+
 
 DEFAULT_CONFIGURATIONS = [{"id": "notify_own_actions", "value": False},
                           {"id": "notify_inbox_actions", "value": True}]

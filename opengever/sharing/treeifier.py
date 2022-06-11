@@ -1,5 +1,5 @@
-from plone import api
 from os.path import dirname
+from plone import api
 
 
 class Treeify(object):

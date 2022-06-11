@@ -99,6 +99,7 @@ from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import IText
 
+
 NO_DEFAULT_MARKER = object()
 
 

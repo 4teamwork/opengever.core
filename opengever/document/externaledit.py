@@ -1,5 +1,6 @@
 from AccessControl import getSecurityManager
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from Products.CMFCore.utils import getToolByName

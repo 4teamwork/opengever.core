@@ -13,7 +13,8 @@ from plone.supermodel import model
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as PMF
 from z3c.form import button
-from z3c.form.browser import radio, checkbox
+from z3c.form.browser import checkbox
+from z3c.form.browser import radio
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE

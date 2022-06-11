@@ -1,7 +1,7 @@
 from opengever.base import handlebars
-from zope.i18nmessageid import MessageFactory
 from path import Path
 from unittest import TestCase
+from zope.i18nmessageid import MessageFactory
 
 
 TEMPLATES_DIR = Path(__file__).joinpath('..', 'templates').abspath()

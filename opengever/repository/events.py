@@ -1,4 +1,5 @@
-from zope.component.interfaces import ObjectEvent, IObjectEvent
+from zope.component.interfaces import IObjectEvent
+from zope.component.interfaces import ObjectEvent
 from zope.interface import implements
 
 

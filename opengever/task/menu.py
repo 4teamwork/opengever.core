@@ -1,8 +1,8 @@
 from opengever.base.menu import FilteredPostFactoryMenuWithWebactions
 from opengever.task import _
 from opengever.task.task import ITask
-from zope.interface import Interface
 from zope.component import adapter
+from zope.interface import Interface
 
 
 @adapter(ITask, Interface)

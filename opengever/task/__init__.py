@@ -2,6 +2,7 @@ from opengever.task.interfaces import ITaskSettings
 from plone import api
 from zope.i18nmessageid import MessageFactory
 
+
 _ = MessageFactory("opengever.task")
 
 

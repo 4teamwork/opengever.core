@@ -5,13 +5,13 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
-from opengever.base.role_assignments import assignments_kept_when_copying
 from opengever.base.role_assignments import ASSIGNMENT_VIA_COMMITTEE_GROUP
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
+from opengever.base.role_assignments import assignments_kept_when_copying
 from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase

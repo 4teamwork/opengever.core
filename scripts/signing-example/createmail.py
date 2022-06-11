@@ -5,11 +5,11 @@
 Requires M2Crypto which is not available by default. Best create a virtualenv
 and install it there, then run this script from within that virtualenv.
 """
-from M2Crypto import BIO
-from M2Crypto import SMIME
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.Utils import formatdate
+from M2Crypto import BIO
+from M2Crypto import SMIME
 
 
 SSL_KEY_FILE = 'key.key'

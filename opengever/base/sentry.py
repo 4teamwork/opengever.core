@@ -3,6 +3,7 @@ from zope.globalrequest import getRequest
 import logging
 import pkg_resources
 
+
 # Conditional imports to ease local development (without ftw.raven)
 try:
     pkg_resources.get_distribution('ftw.raven')

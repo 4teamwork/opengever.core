@@ -1,7 +1,7 @@
-from unittest import TestCase
+from mock import Mock
 from opengever.contact.browser.contacts_tab import linked
 from opengever.contact.browser.contacts_tab import linked_no_icon
-from mock import Mock
+from unittest import TestCase
 
 
 class MockItem(object):

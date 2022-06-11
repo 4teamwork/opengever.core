@@ -1,4 +1,5 @@
 from opengever.api.remote_task_base import RemoteTaskBaseService
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.base.exceptions import MalformedOguid
 from opengever.base.oguid import Oguid
 from opengever.globalindex.model.task import Task
@@ -7,7 +8,6 @@ from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from plone.protect.interfaces import IDisableCSRFProtection
 from zExceptions import BadRequest
 from zope.interface import alsoProvides
-from opengever.base.exceptions import InvalidOguidIntIdPart
 
 
 class AcceptRemoteForwardingPost(RemoteTaskBaseService):

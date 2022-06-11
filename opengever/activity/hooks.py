@@ -1,6 +1,6 @@
 from opengever.activity.model import NotificationDefault
-from opengever.base.model import create_session
 from opengever.activity.notification_settings import NotificationSettings
+from opengever.base.model import create_session
 
 
 def insert_notification_defaults(site):

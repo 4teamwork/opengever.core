@@ -1,9 +1,9 @@
 from ftw.keywordwidget.vocabularies import KeywordSearchableSource
 from ftw.keywordwidget.vocabularies import KeywordWidgetAddableSourceWrapper
+from zope.component import getUtility
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.schema.interfaces import IContextSourceBinder
-from zope.component import getUtility
 from zope.schema.interfaces import IVocabularyFactory
 
 

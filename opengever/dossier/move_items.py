@@ -1,7 +1,8 @@
 from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from OFS.CopySupport import CopyError, ResourceLockedError
+from OFS.CopySupport import CopyError
+from OFS.CopySupport import ResourceLockedError
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.base.interfaces import IMovabilityChecker
@@ -16,14 +17,16 @@ from opengever.globalindex.model.task import Task
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import form, field
+from z3c.form import field
+from z3c.form import form
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zExceptions import Forbidden
 from zope import schema
 from zope.component import adapter
-from zope.interface import Interface, Invalid
+from zope.interface import Interface
+from zope.interface import Invalid
 import z3c.form
 
 

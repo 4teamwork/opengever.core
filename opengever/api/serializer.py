@@ -57,6 +57,7 @@ from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 import logging
 
+
 logger = logging.getLogger('opengever.api.serializer')
 
 

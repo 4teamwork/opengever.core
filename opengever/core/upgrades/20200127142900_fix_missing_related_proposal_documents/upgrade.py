@@ -6,6 +6,7 @@ from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import logging
 
+
 logger = logging.getLogger('opengever.core')
 
 

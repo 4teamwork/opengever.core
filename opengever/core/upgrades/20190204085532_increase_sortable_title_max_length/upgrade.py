@@ -1,8 +1,8 @@
 from collective.indexing.interfaces import IIndexQueueProcessor
 from collective.indexing.queue import getQueue
 from ftw.upgrade import UpgradeStep
-from plone.dexterity.interfaces import IDexterityContent
 from plone import api
+from plone.dexterity.interfaces import IDexterityContent
 from zope.component import getUtility
 
 

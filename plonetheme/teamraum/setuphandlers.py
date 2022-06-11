@@ -1,14 +1,12 @@
-import json
-
 from plone import api
 from plone.app.theming.interfaces import IThemeSettings
 from plone.registry.interfaces import IRegistry
 from plonetheme.teamraum.hooks import SCREEN_ANNOTATION_KEY
+from plonetheme.teamraum.importexport import CustomStylesUtility
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
-
-from plonetheme.teamraum.importexport import CustomStylesUtility
+import json
 
 
 def import_styles_configuration(context):

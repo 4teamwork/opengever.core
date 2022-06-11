@@ -16,7 +16,6 @@ from zope.component import getUtility
 import pytz
 
 
-
 class TestWorspaceParticipationStorage(IntegrationTestCase):
 
     def test_add_and_retrieve_invitation(self):

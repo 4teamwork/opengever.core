@@ -1,5 +1,5 @@
-from opengever.core.upgrade import SQLUpgradeStep
 from opengever.base.oguid import Oguid
+from opengever.core.upgrade import SQLUpgradeStep
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 

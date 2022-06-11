@@ -1,6 +1,6 @@
 from ftw.upgrade import UpgradeStep
-from plone.dexterity.interfaces import IDexterityContent
 from opengever.core.upgrade import NightlyIndexer
+from plone.dexterity.interfaces import IDexterityContent
 
 
 class AddSortableReferenceNumberIndex(UpgradeStep):

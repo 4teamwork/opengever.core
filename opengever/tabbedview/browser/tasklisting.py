@@ -1,5 +1,6 @@
 from ftw.table import helper
-from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from ftw.table.interfaces import ITableSource
+from ftw.table.interfaces import ITableSourceConfig
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.actor import Actor
@@ -20,7 +21,8 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from plone.memoize import ram
 from Products.CMFPlone.utils import safe_unicode
-from sqlalchemy import and_, or_
+from sqlalchemy import and_
+from sqlalchemy import or_
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer

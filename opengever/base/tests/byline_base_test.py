@@ -1,5 +1,5 @@
-from opengever.testing import IntegrationTestCase
 from ftw.testbrowser import browser as default_browser
+from opengever.testing import IntegrationTestCase
 
 
 class TestBylineBase(IntegrationTestCase):
