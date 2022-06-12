@@ -50,8 +50,10 @@ class RepositoryFolderConstrainTypes(object):
         portal_types = getToolByName(self.context, 'portal_types')
         my_type = portal_types.getTypeInfo(self.context)
         result = portal_types.listTypeInfo()
-        return [t for t in result if my_type.allowType(t.getId()) and
-                t.isConstructionAllowed(self.context)]
+        return [
+            t for t in result
+            if my_type.allowType(t.getId()) and t.isConstructionAllowed(self.context)
+        ]
 
     @memoize_contextless
     def allowedContentTypes(self):

@@ -17,13 +17,13 @@ class IFilingNumber(model.Schema):
         u'filing',
         label=_(u'fieldset_filing', default=u'Filing'),
         fields=['filing_no'],
-        )
+    )
 
     form.omitted('filing_no')
     filing_no = schema.TextLine(
         title=_(u'filing_no', default="Filing number"),
         required=False,
-        )
+    )
 
 
 alsoProvides(IFilingNumber, IFormFieldProvider)

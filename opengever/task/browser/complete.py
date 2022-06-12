@@ -89,7 +89,7 @@ class ICompleteSuccessorTaskSchema(Schema):
 
         value_type=schema.Choice(
             source=deliverable_documents_vocabulary,
-            ))
+        ))
 
     text = schema.Text(
         title=_(u'label_response', default=u'Response'),
@@ -226,8 +226,7 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
             u'version_message_resolved_task',
             default=u'Document copied from task (task resolved)')
 
-        if data.get(
-            'transition') == 'task-transition-in-progress-tested-and-closed':
+        if data.get('transition') == 'task-transition-in-progress-tested-and-closed':
             message = _(
                 u'version_message_closed_task',
                 default=u'Document copied from task (task closed)')

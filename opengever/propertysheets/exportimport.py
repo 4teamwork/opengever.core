@@ -47,18 +47,16 @@ class BaseHandler(PSBaseHandler):
         super(BaseHandler, self).__init__(klass)
 
         # default_expression - string with a TALES expression
-        self.fieldAttributes['default_expression'] = \
-            zope.schema.TextLine(
-                __name__='default_expression',
-                title=u"Default from TALES expression"
-            )
+        self.fieldAttributes['default_expression'] = zope.schema.TextLine(
+            __name__='default_expression',
+            title=u"Default from TALES expression",
+        )
 
         # default_from_member - string wth a JSON encoded dict
-        self.fieldAttributes['default_from_member'] = \
-            zope.schema.TextLine(
-                __name__='default_from_member',
-                title=u"Default from Member property"
-            )
+        self.fieldAttributes['default_from_member'] = zope.schema.TextLine(
+            __name__='default_from_member',
+            title=u"Default from Member property",
+        )
 
     def _constructField(self, attributes):
         """Sneak our custom attributes by the zope.schema Field constructors.
@@ -187,7 +185,7 @@ class SafeObjectFromUnicode(ObjectFromUnicode):
 
     def fromUnicode(self, value):
         # Fail gracefully if unable to resolve dotted name for a defaultFactory
-        # (for example, because the function was deleted in the meantime) 
+        # (for example, because the function was deleted in the meantime)
         if getattr(self.context, '__name__') == 'defaultFactory':
             try:
                 obj = resolve(value)

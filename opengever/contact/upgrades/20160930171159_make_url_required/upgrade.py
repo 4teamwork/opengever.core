@@ -25,7 +25,7 @@ class MakeURLRequired(SchemaMigration):
 
         self.execute(url_table.update()
                      .values(url=EMPTY_URL_PLACEHOLDER)
-                     .where(url_table.columns.url == None))
+                     .where(url_table.columns.url.is_(None)))
 
     def make_column_required(self):
         self.op.alter_column(

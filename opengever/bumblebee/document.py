@@ -30,8 +30,8 @@ class DocumentBumblebeeDocument(DXBumblebeeDocument):
         return super(DocumentBumblebeeDocument, self)._handle_update(force=force)
 
     def is_convertable(self):
-        return (self.context.digitally_available and
-                super(DocumentBumblebeeDocument, self).is_convertable())
+        return (self.context.digitally_available
+                and super(DocumentBumblebeeDocument, self).is_convertable())
 
 
 @adapter(IOGMailMarker)

@@ -97,7 +97,7 @@ class UsersListing(BaseListingTab):
                            default=u'Active'),
          'transform': boolean_helper},
 
-        )
+    )
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)

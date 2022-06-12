@@ -36,8 +36,8 @@ NOTIFICATION_SETTING_TABS = [
     {'id': 'general',
      'roles': [ALWAYS],
      'settings': [
-        'added-as-watcher',
-        'external-activity',
+         'added-as-watcher',
+         'external-activity',
      ]},
 
     {'id': 'task',

@@ -32,17 +32,17 @@ class IRelatedDocuments(model.Schema):
                          'opengever.document.document.IDocumentSchema',
                          'ftw.mail.mail.IMail', ]
                 }),
-            ),
+        ),
         required=False,
-        )
+    )
 
     model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
             u'relatedItems',
-            ],
-        )
+        ],
+    )
 
 
 alsoProvides(IRelatedDocuments, IFormFieldProvider)

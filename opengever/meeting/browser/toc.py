@@ -69,8 +69,8 @@ class DownloadAlphabeticalTOC(BrowserView):
             translate(_(u'filename_alphabetical_toc',
                         default=u'Alphabetical Toc ${period} ${committee}',
                         mapping={
-                          'period': period_title,
-                          'committee': committee_title,
+                            'period': period_title,
+                            'committee': committee_title,
                         }),
                       context=getRequest()))
 
@@ -103,8 +103,8 @@ class DownloadRepositoryTOC(DownloadAlphabeticalTOC):
             translate(_(u'filename_repository_toc',
                         default=u'Repository Toc ${period} ${committee}',
                         mapping={
-                          'period': period_title,
-                          'committee': committee_title,
+                            'period': period_title,
+                            'committee': committee_title,
                         }),
                       context=getRequest()))
 
@@ -123,8 +123,8 @@ class DownloadDossierReferenceNumberTOC(DownloadAlphabeticalTOC):
             translate(_(u'filename_dossier_reference_number_toc',
                         default=u'Dossier Reference Number Toc ${period} ${committee}',
                         mapping={
-                          'period': period_title,
-                          'committee': committee_title,
+                            'period': period_title,
+                            'committee': committee_title,
                         }),
                       context=getRequest()))
 
@@ -143,7 +143,7 @@ class DownloadRepositoryReferenceNumberTOC(DownloadAlphabeticalTOC):
             translate(_(u'filename_repository_reference_number_toc',
                         default=u'Repository Reference Number Toc ${period} ${committee}',
                         mapping={
-                          'period': period_title,
-                          'committee': committee_title,
+                            'period': period_title,
+                            'committee': committee_title,
                         }),
                       context=getRequest()))

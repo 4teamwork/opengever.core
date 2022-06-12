@@ -88,7 +88,7 @@ FEATURE_FLAGS = {
     'repositoryfolder-documents-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_documents_tab',
     'repositoryfolder-proposals-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_proposals_tab',
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
-    'tasktemplatefolder_nesting': 'opengever.tasktemplates.interfaces.ITaskTemplateSettings.is_tasktemplatefolder_nesting_enabled',
+    'tasktemplatefolder_nesting': 'opengever.tasktemplates.interfaces.ITaskTemplateSettings.is_tasktemplatefolder_nesting_enabled',  # noqa
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',
     'workspace_client': 'opengever.workspace.interfaces.IWorkspaceClientSettings.is_feature_enabled',
     'workspace-meeting': 'opengever.workspace.interfaces.IWorkspaceMeetingSettings.is_feature_enabled',
@@ -100,7 +100,7 @@ FEATURE_FLAGS = {
     'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
     'private-tasks': 'opengever.task.interfaces.ITaskSettings.private_task_feature_enabled',
     'optional-task-permissions-revoking': 'opengever.task.interfaces.ITaskSettings.optional_task_permissions_revoking_enabled',  # noqa
-    }
+}
 
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
@@ -622,7 +622,7 @@ class IntegrationTestCase(TestCase):
 
         command = CreateGeneratedDocumentCommand(
             meeting.get_dossier(), meeting, AgendaItemListOperations(),
-            )
+        )
         return command.execute()
 
     def as_relation_value(self, obj):

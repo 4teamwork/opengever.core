@@ -58,7 +58,6 @@ class SQLLockable(object):
                     lock_type=self.searialize_lock_type(lock_type))
         self.session.add(lock)
 
-
     def refresh_lock(self, lock_type=STEALABLE_LOCK):
         if not self.locked():
             return
@@ -140,9 +139,11 @@ class SQLLockable(object):
         if not lock_type.stealable:
             return False
         # Can't steal locks of a different type
-        for l in self.lock_info():
-            if not hasattr(l['type'], '__name__') or \
-               l['type'].__name__ != lock_type.__name__:
+        for lock in self.lock_info():
+            if (
+                not hasattr(lock['type'], '__name__')
+                or lock['type'].__name__ != lock_type.__name__
+            ):
                 return False
         # The lock type is stealable, and the object is not marked as
         # non-stelaable, so return True

@@ -30,7 +30,7 @@ class GenerateAgendaItemList(BrowserView):
             self.context,
             meeting,
             self.operations,
-            )
+        )
 
         try:
             command.execute()
@@ -41,7 +41,7 @@ class GenerateAgendaItemList(BrowserView):
                 u'msg_error_agendaitem_list_missing_template',
                 default=(u'There is no agendaitem list template configured, agendaitem list could not be generated.'),
                 mapping=dict(title=meeting.get_title()),
-                )
+            )
             api.portal.show_message(msg, self.request, type='error')
 
         except AgendaItemListAlreadyGenerated:
@@ -49,7 +49,7 @@ class GenerateAgendaItemList(BrowserView):
                 u'msg_error_agendaitem_list_already_generated',
                 default=(u'The agenda item list for meeting ${title} has already been generated.'),
                 mapping=dict(title=meeting.get_title()),
-                )
+            )
             api.portal.show_message(msg, self.request, type='error')
 
         except SablonProcessingFailed:

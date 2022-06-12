@@ -71,8 +71,8 @@ class XLSXNode(object):
         parent = self.reference_number.rsplit('.', 1)[0]
         if self.level and parent not in refnum_to_guid:
             raise InvalidXLSXException(
-                    "Parent position {} for {} does not "
-                    "exist!".format(parent, self.reference_number))
+                "Parent position {} for {} does not "
+                "exist!".format(parent, self.reference_number))
         return parent
 
     def make_guid(self):

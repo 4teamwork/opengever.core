@@ -38,7 +38,7 @@ class MembershipListingTab(FilteredListingTab):
             'filter_membership_active',
             _('active', default=u'Active'),
             default=True)
-        )
+    )
 
     show_selects = False
 

@@ -156,7 +156,7 @@ class LinkedWorkspaces(object):
 
     def link_to_workspace(self, workspace_uid):
         workspace = self.client.link_to_workspace(
-                workspace_uid, Oguid.for_object(self.context).id)
+            workspace_uid, Oguid.for_object(self.context).id)
 
         self.storage.add(workspace.get('UID'))
 

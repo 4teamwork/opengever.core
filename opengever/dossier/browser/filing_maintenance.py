@@ -46,7 +46,7 @@ class FilingNumberMaintenance(BrowserView):
     def print_filing_prefixes(self):
         """Reutrns all filing prefixes and their translations"""
         voca = getVocabularyRegistry().get(
-                self.context, 'opengever.dossier.type_prefixes')
+            self.context, 'opengever.dossier.type_prefixes')
 
         for term in voca:
             self.log('%s: %s' % (term.value, term.title))

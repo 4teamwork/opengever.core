@@ -20,7 +20,7 @@ class IForwardingAssignSchema(IAssignSchema):
         description=task_mf(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
-        )
+    )
 
 
 class AssignForwardingForm(AssignTaskForm):

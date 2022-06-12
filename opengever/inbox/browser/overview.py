@@ -1,5 +1,4 @@
 from opengever.base.browser.boxes_view import BoxesViewMixin
-from opengever.base.browser.helper import get_css_class
 from opengever.globalindex.model.task import Task
 from opengever.inbox import _
 from opengever.ogds.base.utils import get_current_org_unit

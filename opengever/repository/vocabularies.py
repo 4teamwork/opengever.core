@@ -31,8 +31,8 @@ class RestrictedAddableDossiersVocabularyFactory(object):
 
         # find the dexterity FTIs using the IRestrictedDossier behavior
         restricted_types = filter(
-            lambda fti: getattr(fti, 'behaviors', []) and
-                self.marker_behavior in fti.behaviors, types)
+            lambda fti: getattr(fti, 'behaviors', [])
+            and self.marker_behavior in fti.behaviors, types)
 
         # create the terms
         terms = []
@@ -41,7 +41,7 @@ class RestrictedAddableDossiersVocabularyFactory(object):
                               domain=fti.i18n_domain,
                               context=context.REQUEST)
             terms.append(SimpleVocabulary.createTerm(
-                    fti.id, fti.id, title))
+                fti.id, fti.id, title))
 
         # create the vocabulary
         return SimpleVocabulary(terms)

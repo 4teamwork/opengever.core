@@ -54,52 +54,53 @@ def get_types(context):
         'opengever.dossier.behaviors.dossier.IDossierMarker',
         'opengever.dossier.behaviors.dossier.IDossierMarker',
         _('dossier')
-        )
+    )
     )
     types.append(SimpleVocabulary.createTerm(
         'opengever.task.task.ITask',
         'opengever.task.task.ITask',
         _('task')
-        )
+    )
     )
     types.append(SimpleVocabulary.createTerm(
         'opengever.document.behaviors.IBaseDocument',
         'opengever.document.behaviors.IBaseDocument',
         _('document')
-        )
+    )
     )
     return SimpleVocabulary(types)
 
 
-FIELD_MAPPING = {'opengever-dossier-behaviors-dossier-IDossierMarker': [
-                    'start_1',
-                    'start_2',
-                    'end_1',
-                    'end_2',
-                    'reference',
-                    'sequence_number',
-                    'responsible',
-                    'dossier_review_state',
-                ],
-                'opengever-task-task-ITask': [
-                    'issuer',
-                    'deadline_1',
-                    'deadline_2',
-                    'task_type',
-                    'task_review_state',
-                ],
-                'opengever-document-behaviors-IBaseDocument': [
-                    'receipt_date_1',
-                    'receipt_date_2',
-                    'delivery_date_1',
-                    'delivery_date_2',
-                    'document_date_1',
-                    'document_date_2',
-                    'document_author',
-                    'checked_out',
-                    'trashed',
-                ],
-                }
+FIELD_MAPPING = {
+    'opengever-dossier-behaviors-dossier-IDossierMarker': [
+        'start_1',
+        'start_2',
+        'end_1',
+        'end_2',
+        'reference',
+        'sequence_number',
+        'responsible',
+        'dossier_review_state',
+    ],
+    'opengever-task-task-ITask': [
+        'issuer',
+        'deadline_1',
+        'deadline_2',
+        'task_type',
+        'task_review_state',
+    ],
+    'opengever-document-behaviors-IBaseDocument': [
+        'receipt_date_1',
+        'receipt_date_2',
+        'delivery_date_1',
+        'delivery_date_2',
+        'document_date_1',
+        'document_date_2',
+        'document_author',
+        'checked_out',
+        'trashed',
+    ],
+}
 
 
 def strip_parantheses(value):

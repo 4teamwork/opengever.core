@@ -144,7 +144,7 @@ class ICreateDocumentFromOneOffixxTemplate(model.Schema):
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),
              'sort_index': 'sortable_title'},
-            )
+        )
     )
 
     title = schema.TextLine(

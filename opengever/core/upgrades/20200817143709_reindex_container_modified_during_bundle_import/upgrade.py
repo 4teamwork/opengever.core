@@ -1,7 +1,6 @@
 from ftw.solr.browser.maintenance import solr_date
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.upgrade import UpgradeStep
-from plone.dexterity.interfaces import IDexterityContainer
 from zope.component import queryUtility
 import logging
 

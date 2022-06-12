@@ -112,7 +112,7 @@ class ExtractAttachments(BrowserView):
              'column_title': _(u'column_attachment_size',
                                default=u'Size'),
              'transform': human_readable_filesize_helper(self.context)},
-            )
+        )
 
         items = self.context.get_attachments()
 

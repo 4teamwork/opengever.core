@@ -100,7 +100,7 @@ class DocumentEditForm(DefaultEditForm):
             g.fields.get('file')
             for g in self.groups
             if 'file' in g.fields
-            ]
+        ]
 
         if filefields > 0:
             file_field = filefields[0]
@@ -168,7 +168,7 @@ class ISaveAsPdfSchema(Interface):
         source=RepositoryPathSourceBinder(
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                ],
+            ],
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
@@ -178,10 +178,10 @@ class ISaveAsPdfSchema(Interface):
                 'review_state': DOSSIER_STATES_OPEN + [
                     'repositoryfolder-state-active',
                     'repositoryroot-state-active']
-                }
-            ),
+            }
+        ),
         required=True,
-        )
+    )
 
     version_id = Int(
         title=_('version_id', default='Document Version'),

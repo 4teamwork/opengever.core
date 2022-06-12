@@ -46,7 +46,7 @@ def _setup_pas_plugins(site):
                 'module': 'opengever.ogds.base.plugins',
                 'function': 'authenticate_credentials'},
             'interface': plugins.IAuthenticationPlugin}
-        }
+    }
     _setup_scriptable_plugin(acl_users, 'octopus_tentacle_plugin',
                              external_methods)
 

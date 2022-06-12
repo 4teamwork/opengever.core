@@ -18,7 +18,7 @@ from opengever.contact.models.participation_role import ParticipationRole  # noq
 from opengever.contact.models.person import Person  # noqa
 from opengever.contact.models.phonenumber import PhoneNumber  # noqa
 from opengever.contact.models.url import URL  # noqa
-import opengever.contact.models.query  # keep, initializes query classes!
+import opengever.contact.models.query  # noqa keep, initializes query classes!
 
 
 tables = [

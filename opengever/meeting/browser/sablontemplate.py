@@ -20,12 +20,12 @@ SAMPLE_MEETING_DATA = {
         'attachments': [{
             "title": u'Beweisaufn\xe4hme',
             "filename": u"Beweisaufnaehme.txt"
-            }, {
+        }, {
             "title": "Strafbefehl"
-            }, {
+        }, {
             "title": u"L\xf6rem",
             "filename": u"Loerem.eml"
-            }]
+        }]
     }, {
         'description': u'R\xfccktritt Grund',
         'dossier_reference_number': None,
@@ -63,14 +63,14 @@ SAMPLE_MEETING_DATA = {
                      'fullname': u'M\xfcller Franz',
                      'lastname': u'M\xfcller',
                      'role': None},
-                    ],
-        'absentees': [
-                    {'firstname': 'Otto',
-                     'lastname': u'G\xfcnter',
-                     'fullname': u'G\xfcnter Otto',
-                     'role': 'Moderator',
-                     'email': u'guenter@example.com'},
-                    ],
+        ],
+        'absentees': [{
+            'firstname': 'Otto',
+            'lastname': u'G\xfcnter',
+            'fullname': u'G\xfcnter Otto',
+            'role': 'Moderator',
+            'email': u'guenter@example.com',
+        }],
         'other': [u'Hans M\xfcller', u'Heidi Muster']},
     'protocol': {'type': u'Protocol'}}
 

@@ -82,7 +82,7 @@ class IBaseProposal(model.Schema):
         required=True,
         max_length=256,
         defaultFactory=default_title
-        )
+    )
 
     dexteritytextindexer.searchable('description')
     description = schema.Text(
@@ -90,7 +90,7 @@ class IBaseProposal(model.Schema):
         required=False,
         missing_value=u'',
         default=u'',
-        )
+    )
 
     widget('issuer', KeywordFieldWidget, async=True)
     issuer = schema.Choice(
@@ -106,7 +106,7 @@ class IBaseProposal(model.Schema):
         default=None,
         missing_value=None,
         required=False,
-        )
+    )
 
     language = schema.Choice(
         title=_('language', default=u'Language'),
@@ -139,11 +139,11 @@ class IProposal(IBaseProposal):
                         'opengever.task.task.ITask',
                         'opengever.meeting.proposal.IProposal',
                         'ftw.mail.mail.IMail',
-                        ],
-                    }),
-            ),
+                    ],
+                }),
+        ),
         required=False,
-        )
+    )
 
     mode(predecessor_proposal='hidden')
     predecessor_proposal = RelationChoice(
@@ -152,7 +152,7 @@ class IProposal(IBaseProposal):
         missing_value=None,
         required=False,
         source=SolrObjPathSourceBinder(portal_type='opengever.meeting.proposal')
-        )
+    )
 
 
 class ISubmittedProposal(IBaseProposal):
@@ -383,7 +383,7 @@ class SubmittedProposal(ModelContainer, ProposalBase):
             portal_type=['opengever.document.document', 'ftw.mail.mail'],
             path=dict(query='/'.join(self.getPhysicalPath())),
             sort_on='getObjPositionInParent'
-            )
+        )
 
         ignored_documents = [self.get_excerpt()]
         ignored_documents.append(self.get_proposal_document())

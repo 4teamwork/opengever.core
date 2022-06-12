@@ -13,4 +13,4 @@ PUBLIC_PERMISSIONS_MAPPING = {
     'add:opengever.contact.contact': 'opengever.contact: Add contact',
     'add:opengever.repository.repositoryfolder': 'opengever.repository: Add repositoryfolder',
     'add:opengever.repository.repositoryroot': 'opengever.repository: Add repositoryroot',
-    }
+}

@@ -27,11 +27,11 @@ class AssignedInboxTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = [
         'pdf_taskslisting',
-        ]
+    ]
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy),
@@ -48,11 +48,11 @@ class IssuedInboxTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = [
         'pdf_taskslisting',
-        ]
+    ]
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy),

@@ -19,14 +19,14 @@ class IOpenGeverBase(model.Schema):
         fields=[
             u'title',
             u'description',
-            ],
-        )
+        ],
+    )
 
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         required=True
-        )
+    )
 
     dexteritytextindexer.searchable('description')
     description = schema.Text(
@@ -34,7 +34,7 @@ class IOpenGeverBase(model.Schema):
         required=False,
         missing_value=u'',
         default=u'',
-        )
+    )
 
 
 alsoProvides(IOpenGeverBase, IFormFieldProvider)

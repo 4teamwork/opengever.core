@@ -5,7 +5,7 @@ class RepositoryMixin(object):
             for group, roles in self.get_local_roles()
             for role in roles
             if role == rolename
-            ]))
+        ]))
 
     def get_groupnames_with_reader_role(self):
         return self.get_groupnames_with_role('Reader')

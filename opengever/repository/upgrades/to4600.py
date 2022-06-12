@@ -8,8 +8,8 @@ class MigrateRepositoryRootClass(UpgradeStep):
         self.setup_install_profile(
             'profile-opengever.repository.upgrades:4600')
 
-        for obj in self.objects({
-                'portal_type': 'opengever.repository.repositoryroot'},
-                                'Migrate Repositoryroot class'):
-
+        for obj in self.objects(
+            {'portal_type': 'opengever.repository.repositoryroot'},
+            'Migrate Repositoryroot class'
+        ):
             self.migrate_class(obj, RepositoryRoot)

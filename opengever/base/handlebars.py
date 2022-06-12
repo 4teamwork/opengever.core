@@ -34,7 +34,7 @@ def prepare_handlebars_template(path,
     :type path: string or :py:class:`path.Path`
     :param translations: A list of message ID objects used in the template.
     :type translations: list of :py:class:`zope.i18nmessageid.Message`
-    :param \**params: Params to be substituted in the template.
+    :param **params: Params to be substituted in the template.
     :returns: The prepared template for including in the response.
     :rtype: string
     """

@@ -71,7 +71,7 @@ class TeamsListing(BaseListingTab):
          'column_title': _(u'label_active', default=u'Active'),
          'transform': boolean_helper}
 
-        )
+    )
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)

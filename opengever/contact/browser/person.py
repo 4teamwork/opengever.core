@@ -90,7 +90,7 @@ class IPersonModel(model.Schema):
         required=False,
         missing_value=u'',
         default=u'',
-        )
+    )
 
 
 class AddPerson(ModelAddForm):

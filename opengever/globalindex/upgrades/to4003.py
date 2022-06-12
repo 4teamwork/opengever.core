@@ -54,15 +54,21 @@ class AlterSequenceNumberType(SchemaMigration):
                              new_column_name='dossier_sequence_number')
 
     def migrate_mysql(self):
-        self.op.alter_column('tasks', 'sequence_number',
-                     type_=Integer,
-                     existing_type=String(10),
-                     nullable=False,
-                     existing_nullable=True,
-                     existing_autoincrement=False)
+        self.op.alter_column(
+            'tasks',
+            'sequence_number',
+            type_=Integer,
+            existing_type=String(10),
+            nullable=False,
+            existing_nullable=True,
+            existing_autoincrement=False,
+        )
 
-        self.op.alter_column('tasks', 'dossier_sequence_number',
-                     type_=Integer,
-                     existing_type=String(10),
-                     existing_nullable=True,
-                     existing_autoincrement=False)
+        self.op.alter_column(
+            'tasks',
+            'dossier_sequence_number',
+            type_=Integer,
+            existing_type=String(10),
+            existing_nullable=True,
+            existing_autoincrement=False,
+        )

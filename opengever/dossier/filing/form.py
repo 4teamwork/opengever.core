@@ -92,28 +92,28 @@ def get_filing_actions(context):
         # not archived yet or not a valid filing_no
         if filing_no and re.search(FILLING_NO_PATTERN, filing_no):
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING_EXISTING_FILING,
-                    RESOLVE_WITH_EXISTING_NUMBER,
-                    RESOLVE_WITH_EXISTING_NUMBER))
+                METHOD_RESOLVING_EXISTING_FILING,
+                RESOLVE_WITH_EXISTING_NUMBER,
+                RESOLVE_WITH_EXISTING_NUMBER))
 
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING_AND_FILING,
-                    RESOLVE_WITH_NEW_NUMBER,
-                    RESOLVE_WITH_NEW_NUMBER))
+                METHOD_RESOLVING_AND_FILING,
+                RESOLVE_WITH_NEW_NUMBER,
+                RESOLVE_WITH_NEW_NUMBER))
 
         # already archived
         else:
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING_AND_FILING,
-                    RESOLVE_AND_NUMBER, RESOLVE_AND_NUMBER))
+                METHOD_RESOLVING_AND_FILING,
+                RESOLVE_AND_NUMBER, RESOLVE_AND_NUMBER))
 
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_RESOLVING, ONLY_RESOLVE, ONLY_RESOLVE))
+                METHOD_RESOLVING, ONLY_RESOLVE, ONLY_RESOLVE))
     # already resolved
     else:
         if not filing_no:
             values.append(SimpleVocabulary.createTerm(
-                    METHOD_FILING, ONLY_NUMBER, ONLY_NUMBER))
+                METHOD_FILING, ONLY_NUMBER, ONLY_NUMBER))
 
     return SimpleVocabulary(values)
 

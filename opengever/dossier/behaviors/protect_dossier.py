@@ -31,13 +31,13 @@ class IProtectDossier(model.Schema):
         label=_(
             u'fieldset_protect',
             default=u'Protect',
-            ),
+        ),
         fields=[
             'reading',
             'reading_and_writing',
             'dossier_manager',
-            ],
-        )
+        ],
+    )
 
     form.widget(
         'reading',
@@ -45,31 +45,31 @@ class IProtectDossier(model.Schema):
         async=True,
         template_result='usersAndGroups',
         template_selection='usersAndGroups',
-        )
+    )
 
     form.write_permission(
         reading='opengever.dossier.ProtectDossier',
-        )
+    )
 
     reading = schema.List(
         title=_(
             u'label_reading',
             default=u'Reading',
-            ),
+        ),
         description=_(
             u'description_reading',
             default=(
                 u'Choose users and groups which have only readable access to '
                 u'the dossier'
-                ),
             ),
+        ),
         value_type=schema.Choice(
             source=AllUsersAndGroupsSourceBinder(),
-            ),
+        ),
         required=False,
         default=[],
         missing_value=[],
-        )
+    )
 
     form.widget(
         'reading_and_writing',
@@ -77,30 +77,30 @@ class IProtectDossier(model.Schema):
         async=True,
         template_selection='usersAndGroups',
         template_result='usersAndGroups',
-        )
+    )
     form.write_permission(
         reading_and_writing='opengever.dossier.ProtectDossier',
-        )
+    )
 
     reading_and_writing = schema.List(
         title=_(
             u'label_reading_and_writing',
             default=u'Reading and writing',
-            ),
+        ),
         description=_(
             u'description_reading_and_writing',
             default=(
                 u'Choose users and groups which have readable and writing '
                 u'access to the dossier'
-                ),
             ),
+        ),
         value_type=schema.Choice(
             source=AllUsersAndGroupsSourceBinder(),
-            ),
+        ),
         required=False,
         default=[],
         missing_value=[],
-        )
+    )
 
     form.widget(
         'dossier_manager',
@@ -108,28 +108,28 @@ class IProtectDossier(model.Schema):
         async=True,
         template_selection='usersAndGroups',
         template_result='usersAndGroups',
-        )
+    )
 
     form.write_permission(
         dossier_manager='opengever.dossier.ProtectDossier',
-        )
+    )
 
     dossier_manager = schema.Choice(
         title=_(
             u'label_dossier_manager',
             default=u'Dossier manager',
-            ),
+        ),
         description=_(
             u'description_dossier_manager',
             default=(
                 u'This user or group will get the dossier manager role after '
                 u'protecting the dossier.'
-                )
-            ),
+            )
+        ),
         source=AllUsersAndGroupsSourceBinder(),
         required=False,
         missing_value=None,
-        )
+    )
 
     @invariant
     def dossier_manager_filled_if_protection(self):
@@ -147,18 +147,18 @@ class DossierProtection(AnnotationsFactoryImpl):
 
     READING_ROLES = [
         'Reader',
-        ]
+    ]
 
     READING_AND_WRITING_ROLES = READING_ROLES + [
         'Editor',
         'Contributor',
         'Reviewer',
         'Publisher',
-        ]
+    ]
 
     DOSSIER_MANAGER_ROLES = READING_AND_WRITING_ROLES + [
         'DossierManager',
-        ]
+    ]
 
     def __init__(self, context, annotation_schema):
         super(DossierProtection, self).__init__(context, annotation_schema)
@@ -243,19 +243,19 @@ class DossierProtection(AnnotationsFactoryImpl):
             role_settings,
             self.reading,
             self.READING_ROLES,
-            )
+        )
 
         self.extend_role_settings_for_principals(
             role_settings,
             self.reading_and_writing,
             self.READING_AND_WRITING_ROLES,
-            )
+        )
 
         self.extend_role_settings_for_principals(
             role_settings,
             (self.dossier_manager, ),
             self.DOSSIER_MANAGER_ROLES,
-            )
+        )
 
         return role_settings
 

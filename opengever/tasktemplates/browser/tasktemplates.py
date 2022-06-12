@@ -106,7 +106,7 @@ class TaskTemplates(BaseCatalogListingTab):
          'column_title': _(u"label_preselected", default=u"Preselect"),
          'sortable': False,
          'transform': preselected_helper},
-        )
+    )
 
     sort_on = 'draggable'
 

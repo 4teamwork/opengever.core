@@ -83,7 +83,7 @@ def deadline_default():
     offset = api.portal.get_registry_record(
         'deadline_timedelta',
         interface=ITaskSettings,
-        )
+    )
 
     return (datetime.today() + timedelta(days=offset)).date()
 
@@ -106,8 +106,8 @@ class ITask(model.Schema):
             u'deadline',
             u'text',
             u'relatedItems',
-            ],
-        )
+        ],
+    )
 
     model.fieldset(
         u'additional',
@@ -119,8 +119,8 @@ class ITask(model.Schema):
             u'effectiveDuration',
             u'effectiveCost',
             u'date_of_completion',
-            ],
-        )
+        ],
+    )
 
     dexteritytextindexer.searchable('title')
 
@@ -129,7 +129,7 @@ class ITask(model.Schema):
         description=_('help_title', default=u""),
         required=True,
         max_length=256,
-        )
+    )
 
     form.widget('issuer', KeywordFieldWidget, async=True)
 
@@ -137,7 +137,7 @@ class ITask(model.Schema):
         title=_(u"label_issuer", default=u"Issuer"),
         source=UsersContactsInboxesSourceBinder(),
         required=True,
-        )
+    )
 
     form.widget(task_type='z3c.form.browser.radio.RadioFieldWidget')
 
@@ -149,7 +149,7 @@ class ITask(model.Schema):
         default=None,
         missing_value=None,
         source=util.getTaskTypeVocabulary,
-        )
+    )
 
     form.mode(responsible_client='hidden')
 
@@ -157,14 +157,14 @@ class ITask(model.Schema):
         title=_(
             u'label_resonsible_client',
             default=u'Responsible Client',
-            ),
+        ),
         description=_(
             u'help_responsible_client',
             default=u'',
-            ),
+        ),
         vocabulary='opengever.ogds.base.OrgUnitsVocabularyFactory',
         required=True,
-        )
+    )
 
     form.widget('responsible', KeywordFieldWidget, async=True)
 
@@ -173,7 +173,7 @@ class ITask(model.Schema):
         description=_(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
-        )
+    )
 
     form.widget(
         'informed_principals',
@@ -188,11 +188,11 @@ class ITask(model.Schema):
         description=_(u"help_informed_principals", default=u""),
         value_type=schema.Choice(
             source=AllUsersAndGroupsSourceBinder(),
-            ),
+        ),
         required=False,
         missing_value=[],
         default=[]
-        )
+    )
 
     form.widget(deadline=DatePickerFieldWidget)
 
@@ -201,7 +201,7 @@ class ITask(model.Schema):
         description=_(u"help_is_private",
                       default="Deactivates the inbox-group permission."),
         default=False,
-        )
+    )
 
     form.mode(IEditForm, is_private=HIDDEN_MODE)
 
@@ -212,14 +212,14 @@ class ITask(model.Schema):
                       default="Revoke permissions when closing or reassigning task."),
         default=True,
         required=False,
-        )
+    )
 
     deadline = schema.Date(
         title=_(u"label_deadline", default=u"Deadline"),
         description=_(u"help_deadline", default=u""),
         required=True,
         defaultFactory=deadline_default,
-        )
+    )
 
     form.widget(date_of_completion=DatePickerFieldWidget)
     form.mode(IAddForm, date_of_completion=HIDDEN_MODE)
@@ -228,14 +228,14 @@ class ITask(model.Schema):
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
         required=False,
-        )
+    )
 
     dexteritytextindexer.searchable('text')
     text = schema.Text(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required=False,
-        )
+    )
 
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
@@ -253,43 +253,43 @@ class ITask(model.Schema):
                         'opengever.task.task.ITask',
                         'ftw.mail.mail.IMail',
                         'opengever.meeting.proposal.IProposal',
-                        ],
-                    },
-                ),
+                    ],
+                },
             ),
+        ),
         required=False,
-        )
+    )
 
     form.widget(expectedStartOfWork=DatePickerFieldWidget)
 
     expectedStartOfWork = schema.Date(
         title=_(u"label_expectedStartOfWork", default="Start with work"),
         required=False,
-        )
+    )
 
     expectedDuration = schema.Float(
         title=_(u"label_expectedDuration", default="Expected duration", ),
         description=_(u"help_expectedDuration", default="Duration in h"),
         required=False,
-        )
+    )
 
     expectedCost = schema.Float(
         title=_(u"label_expectedCost", default="expected cost"),
         description=_(u"help_expectedCost", default="Cost in CHF"),
         required=False,
-        )
+    )
 
     effectiveDuration = schema.Float(
         title=_(u"label_effectiveDuration", default="effective duration"),
         description=_(u"help_effectiveDuration", default="Duration in h"),
         required=False,
-        )
+    )
 
     effectiveCost = schema.Float(
         title=_(u"label_effectiveCost", default="effective cost"),
         description=_(u"help_effectiveCost", default="Cost in CHF"),
         required=False,
-        )
+    )
 
     form.omitted('predecessor')
     predecessor = schema.TextLine(
@@ -321,13 +321,13 @@ class ITask(model.Schema):
 validator.WidgetValidatorDiscriminators(
     NoCheckedoutDocsValidator,
     field=ITask['relatedItems'],
-    )
+)
 
 
 default_responsible_client = widget.ComputedWidgetAttribute(
     lambda adapter: get_current_org_unit().id(),
     field=ITask['responsible_client'],
-    )
+)
 
 
 class IAddTaskSchema(ITask):
@@ -352,11 +352,11 @@ class IAddTaskSchema(ITask):
         description=_(u"help_responsible", default=""),
         value_type=schema.Choice(
             source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
-            ),
+        ),
         required=True,
         missing_value=[],
         default=[]
-        )
+    )
 
     tasktemplate_position = schema.Int(
         title=_(u"label_tasktemplate_position",
@@ -389,11 +389,11 @@ class Task(Container, TaskReminderSupport):
                 'unidirectional_by_value',
                 'bidirectional_by_reference',
                 'bidirectional_by_value'
-            ]:
+        ]:
             voc = getVocabularyRegistry().get(
                 self,
                 ''.join(('opengever.task.', category,)),
-                )
+            )
 
             if self.task_type in voc:
                 return category
@@ -462,7 +462,7 @@ class Task(Container, TaskReminderSupport):
         return TaskModel.query.by_intid(
             self.int_id,
             get_current_admin_unit().id(),
-            )
+        )
 
     @property
     def safe_title(self):
@@ -474,7 +474,7 @@ class Task(Container, TaskReminderSupport):
         breadcrumbs_view = getMultiAdapter(
             (self, self.REQUEST),
             name='breadcrumbs_view',
-            )
+        )
 
         for elem in breadcrumbs_view.breadcrumbs():
             breadcrumb_titles.append(safe_unicode(elem.get('Title')))
@@ -533,7 +533,7 @@ class Task(Container, TaskReminderSupport):
         adapter = getMultiAdapter(
             (self, getToolByName(self, 'portal_catalog')),
             IIndexer, name='containing_dossier',
-            )
+        )
 
         return adapter()
 
@@ -544,7 +544,7 @@ class Task(Container, TaskReminderSupport):
         adapter = getMultiAdapter(
             (self, getToolByName(self, 'portal_catalog')),
             IIndexer, name='containing_subdossier',
-            )
+        )
 
         return adapter()
 
@@ -775,7 +775,7 @@ class Task(Container, TaskReminderSupport):
                 path=dict(
                     depth=2,
                     query='/'.join(self.getPhysicalPath())),
-                )
+            )
             return [document.getObject() for document in documents]
 
         def _get_related_documents():
@@ -789,7 +789,7 @@ class Task(Container, TaskReminderSupport):
                 if obj.portal_type in [
                         'opengever.document.document',
                         'ftw.mail.mail',
-                    ]:
+                ]:
                     obj._v__is_relation = True
                     related_documents.append(obj)
 
@@ -814,8 +814,8 @@ class DocumentRedirector(BrowserView):
         if referer.endswith('++add++opengever.document.document'):
             return self.context.REQUEST.RESPONSE.redirect(
                 '#'.join((self.context.absolute_url(), 'relateddocuments', )),
-                )
+            )
 
         return self.context.REQUEST.RESPONSE.redirect(
             self.context.absolute_url(),
-            )
+        )

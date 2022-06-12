@@ -36,14 +36,14 @@ import json
 
 
 additional_documents_source = DossierPathSourceBinder(
-                portal_type=("opengever.document.document", "ftw.mail.mail"),
-                navigation_tree_query={
-                    'object_provides':
-                        ['opengever.dossier.behaviors.dossier.IDossierMarker',
-                         'opengever.document.document.IDocumentSchema',
-                         'opengever.task.task.ITask',
-                         'ftw.mail.mail.IMail', ],
-                    })
+    portal_type=("opengever.document.document", "ftw.mail.mail"),
+    navigation_tree_query={
+        'object_provides':
+            ['opengever.dossier.behaviors.dossier.IDossierMarker',
+             'opengever.document.document.IDocumentSchema',
+             'opengever.task.task.ITask',
+             'ftw.mail.mail.IMail', ],
+    })
 
 
 class ISubmitAdditionalDocuments(model.Schema):
@@ -56,9 +56,9 @@ class ISubmitAdditionalDocuments(model.Schema):
         value_type=RelationChoice(
             title=u"Related",
             source=additional_documents_source,
-            ),
+        ),
         required=True,
-        )
+    )
 
 
 class SubmitAdditionalDocuments(AutoExtensibleForm, Form):
@@ -229,7 +229,7 @@ class UpdateSubmittedDocumentView(BrowserView):
                 'path': '/'.join(self.context.getPhysicalPath())[
                     len(portal_path) + 1:],
                 'intid': intids.queryId(self.context)
-                }
+            }
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")

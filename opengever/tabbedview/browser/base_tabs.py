@@ -90,7 +90,7 @@ class GeverTabMixin(object):
                 return cmp(
                     sort_dict.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
                     sort_dict.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
-                    )
+                )
 
             results = list(results)
             results.sort(_sorter, reverse=sort_reverse)
@@ -102,7 +102,7 @@ class GeverTabMixin(object):
                 return cmp(
                     states.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
                     states.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
-                    )
+                )
 
             results = list(results)
             results.sort(_state_sorter, reverse=sort_reverse)
@@ -115,7 +115,7 @@ class GeverTabMixin(object):
                 return cmp(
                     types.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
                     types.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
-                    )
+                )
 
             results = list(results)
             results.sort(_type_sorter, reverse=sort_reverse)
@@ -127,7 +127,7 @@ class GeverTabMixin(object):
                 return cmp(
                     values.get(getattr(a, sort_on, ''), getattr(a, sort_on, '')),
                     values.get(getattr(b, sort_on, ''), getattr(b, sort_on, '')),
-                    )
+                )
 
             results = list(results)
             results.sort(_public_trial_sorter, reverse=sort_reverse)

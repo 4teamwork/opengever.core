@@ -1,5 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 
 
 class AddAndIndexParticipationsSolrField(UpgradeStep):

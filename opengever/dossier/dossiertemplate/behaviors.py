@@ -184,7 +184,7 @@ class IRestrictAddableDossierTemplates(model.Schema):
                     ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
                      'opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema']
                 }),
-            ),
+        ),
         required=False,
     )
 

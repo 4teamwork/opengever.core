@@ -7,7 +7,6 @@ from collective.quickupload.interfaces import IQuickUploadFileFactory
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.command import CreateEmailCommand
-from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.mail.mail import MESSAGE_SOURCE_DRAG_DROP_UPLOAD
 from opengever.mail.utils import is_rfc822_ish_mimetype
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults

@@ -20,7 +20,7 @@ EXPECTED_ENCODINGS = (
     'utf8',
     'iso-8859-1',
     'latin1',
-    )
+)
 
 
 class CookieStorage(DictMixin):

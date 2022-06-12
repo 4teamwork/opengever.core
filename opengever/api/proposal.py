@@ -57,7 +57,7 @@ class SerializeSubmittedProposalToJson(GeverSerializeFolderToJson):
         excerpt = self.context.get_excerpt()
         if excerpt:
             serializer = getMultiAdapter(
-                 (excerpt, self.request), interface=ISerializeToJsonSummary
+                (excerpt, self.request), interface=ISerializeToJsonSummary
             )
             result[u'excerpt'] = serializer()
         else:
@@ -91,7 +91,7 @@ class SerializeProposalToJson(SerializeSubmittedProposalToJson):
         successor_proposals = []
         for successor in self.context.get_successor_proposals():
             serializer = getMultiAdapter(
-                 (successor, self.request), interface=ISerializeToJsonSummary
+                (successor, self.request), interface=ISerializeToJsonSummary
             )
             successor_proposals.append(serializer())
 

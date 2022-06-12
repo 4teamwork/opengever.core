@@ -29,12 +29,12 @@ class IProposalTransitionCommentFormSchema(Interface):
         title=_("label_transition", default="Transition"),
         source=get_proposal_transitions_vocabulary,
         required=True,
-        )
+    )
 
     text = schema.Text(
         title=_('label_comment', default="Comment"),
         required=False,
-        )
+    )
 
 
 class ProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
@@ -126,12 +126,12 @@ class ISubmittedProposalTransitionCommentFormSchema(Interface):
         title=_("label_transition", default="Transition"),
         source=get_submitted_proposal_transition_vocab,
         required=False,
-        )
+    )
 
     text = schema.Text(
         title=_('label_comment', default="Comment"),
         required=False,
-        )
+    )
 
 
 class SubmittedProposalTransitionCommentAddForm(form.AddForm, AutoExtensibleForm):
@@ -233,7 +233,7 @@ class IProposalCommentFormSchema(Interface):
     text = schema.Text(
         title=_('label_comment', default="Comment"),
         required=False,
-        )
+    )
 
 
 class ProposalCommentAddForm(form.AddForm, AutoExtensibleForm):

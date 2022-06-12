@@ -4,7 +4,6 @@ from ftw.table.interfaces import ITableSourceConfig
 from opengever.globalindex.model.task import Task
 from opengever.globalindex.utils import indexed_task_link_helper
 from opengever.ogds.base.actor import Actor
-from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.tabbedview import _
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import SqlTableSource
@@ -21,8 +20,6 @@ from opengever.tabbedview.helper import workflow_state
 from opengever.task.helper import task_type_helper
 from plone.memoize import ram
 from Products.CMFPlone.utils import safe_unicode
-from sqlalchemy import and_
-from sqlalchemy import or_
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
@@ -128,7 +125,7 @@ class GlobalTaskListingTab(BaseListingTab):
          'column_title': _(u'column_sequence_number',
                            default=u'Sequence number')},
 
-        )
+    )
 
     def get_base_query(self):
         raise NotImplementedError()

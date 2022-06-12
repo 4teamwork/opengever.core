@@ -130,8 +130,8 @@ class TableRadioWidget(widget.HTMLInputWidget, SequenceWidget):
                     value=u'--NOVALUE--',
                     checked=u'checked="checked"' if u'--NOVALUE--' in self.value else u'',
                     title=_(u'label_none', default=u'None'),
-                    )
                 )
+            )
 
         term = self.terms.getTerm(item)
 

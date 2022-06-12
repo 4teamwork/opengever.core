@@ -20,7 +20,7 @@ from zope.schema import getFieldsInOrder
 
 BEHAVIOR_INTERFACE_MAPPING = {
     'IDossier': 'IDossierTemplate'
-    }
+}
 
 
 class DossierTemplateAddForm(add.DefaultAddForm):
@@ -131,7 +131,7 @@ class DossierTemplate(Container):
             'object_provides': IDossierTemplateMarker.__identifier__,
             'sort_on': sort_on,
             'sort_order': sort_order
-            }
+        }
 
         if unrestricted:
             subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
@@ -153,7 +153,7 @@ class DossierTemplate(Container):
             name='maximum_dossier_depth',
             interface=IDossierContainerTypes,
             default=100,
-            )
+        )
 
         depth = 0
         obj = self

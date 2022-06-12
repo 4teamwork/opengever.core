@@ -74,6 +74,6 @@ class TaskReporter(BaseReporterView):
             footer='%s %s' % (
                 datetime.now().strftime('%d.%m.%Y %H:%M'),
                 get_current_admin_unit().id())
-            )
+        )
 
         return self.return_excel(reporter)

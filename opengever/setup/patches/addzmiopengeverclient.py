@@ -11,7 +11,7 @@ ADD_PLONE_SITE_HTML = '''
     <input type="submit" value="Install OneGov GEVER" />
   </form>
 </dtml-if>
-'''
+'''  # noqa
 
 main = ObjectManager.manage_main
 orig = main.read()

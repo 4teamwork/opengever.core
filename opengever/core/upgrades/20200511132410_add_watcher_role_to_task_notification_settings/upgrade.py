@@ -1,5 +1,4 @@
 from opengever.activity.model import NotificationSetting
-from opengever.activity.notification_settings import NotificationSettings
 from opengever.activity.roles import TASK_ISSUER_ROLE
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.activity.roles import WATCHER_ROLE

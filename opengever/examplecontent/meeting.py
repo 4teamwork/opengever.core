@@ -161,7 +161,7 @@ class MeetingExampleContentCreator(object):
             u'Genehmigung der Bestellung von Hannah Baufrau als Sachbearbeterin '
             u'einem Besch\xe4ftigungsgrad von 90%')
 
-        proposal2 = create(
+        create(
             Builder('proposal')
             .within(self.dossier_laws_1)
             .having(committee=self.committee_law_model,

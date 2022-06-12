@@ -34,8 +34,8 @@ class IRepositoryFolderSchema(model.Schema):
             u'former_reference',
             u'addable_dossier_types',
             u'allow_add_businesscase_dossier',
-            ],
-        )
+        ],
+    )
 
     description = schema.Text(
         title=_(u'label_description', default=u'Description'),
@@ -45,34 +45,34 @@ class IRepositoryFolderSchema(model.Schema):
         required=False,
         default=u'',
         missing_value=u'',
-        )
+    )
 
     valid_from = schema.Date(
         title=_(u'label_valid_from', default=u'Valid from'),
         required=False,
-        )
+    )
 
     valid_until = schema.Date(
         title=_(u'label_valid_until', default=u'Valid until'),
         required=False,
-        )
+    )
 
     location = schema.TextLine(
         title=_(u'label_location', default=u'Location'),
         required=False,
-        )
+    )
 
     referenced_activity = schema.TextLine(
         title=_(
             u'label_referenced_activity',
             default=u'Referenced activity'),
         required=False,
-        )
+    )
 
     former_reference = schema.TextLine(
         title=_(u'label_former_reference', default=u'Former reference'),
         required=False,
-        )
+    )
 
     form.widget(addable_dossier_types=CheckBoxFieldWidget)
     addable_dossier_types = schema.List(

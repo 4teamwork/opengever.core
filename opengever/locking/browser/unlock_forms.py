@@ -100,7 +100,7 @@ class UnlockSubmittedDocumentForm(UnlockDocumentBaseForm):
         response = ProposalResponse(
             u'document_unlocked',
             document_title=self.context.title,
-            )
+        )
 
         proposal = aq_parent(aq_inner(self.context))
         IResponseContainer(proposal).add(response)

@@ -59,7 +59,7 @@ class ParticipationTraverseService(Service):
                 'title': role.translated_title(self.request),
             },
             'participant_actor': serialize_actor_id_to_json_summary(
-                    participant.get('token')),
+                participant.get('token')),
             'participant': {
                 '@id': serialized_actor.get('@id'),
                 '@type': serialized_actor.get('@type'),

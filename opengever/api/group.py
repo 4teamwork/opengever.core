@@ -38,7 +38,7 @@ def get_sql_user(userid):
     if user is None:
         raise BadRequest(
             "User {} not found in OGDS.".format(userid)
-            )
+        )
     return user
 
 
@@ -162,7 +162,7 @@ class GeverGroupsPatch(Service):
         if not self.group:
             raise BadRequest("Trying to update a non-existing group.")
         if not self.ogds_group:
-            raise BadRequest('Group not found in OGDS.'.format(self._get_group_id))
+            raise BadRequest('Group {} not found in OGDS.'.format(self._get_group_id))
         if not self.ogds_group.is_local:
             raise BadRequest('Can only modify local groups.')
         raise_for_unassignable_roles(self.roles)
@@ -258,7 +258,7 @@ class GeverGroupsDelete(Service):
         if not self.group:
             raise NotFound("Trying to delete a non-existing group.")
         if not self.ogds_group:
-            raise BadRequest('Group not found in OGDS.'.format(self._get_group_id))
+            raise BadRequest('Group {} not found in OGDS.'.format(self._get_group_id))
         if not self.ogds_group.is_local:
             raise BadRequest('Can only delete local groups.')
 

@@ -23,7 +23,7 @@ class CommitteeListingTab(BaseListingTab):
          'column_title': _(u'column_title', default=u'Title'),
          'transform': lambda item, value: item.get_link(),
          },
-        )
+    )
 
     def get_base_query(self):
         return Committee.query.filter_by(

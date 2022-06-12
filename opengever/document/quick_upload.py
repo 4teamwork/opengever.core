@@ -1,5 +1,4 @@
 from Acquisition import aq_inner
-from Acquisition import aq_parent
 from collective.quickupload.interfaces import IQuickUploadFileFactory
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
@@ -36,11 +35,9 @@ class QuickUploadFileUpdater(object):
                     'error': translate(_(
                         u'error_proposal_document_type',
                         default=u"It's not possible to have non-.docx documents as proposal documents.",
-                        ),
-                    context=getRequest(),
-                    ),
+                    ), context=getRequest()),
                     'success': None,
-                    }
+                }
 
         self.context.update_file(data,
                                  content_type=content_type,

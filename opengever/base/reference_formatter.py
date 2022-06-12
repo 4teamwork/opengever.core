@@ -73,7 +73,7 @@ class DottedReferenceFormatter(object):
             reference_number = u'%s %s' % (
                 self.location_prefix(numbers),
                 reference_number,
-                )
+            )
 
         if self.repositoryroot_addendum(numbers):
             reference_number = u'%s %s' % (reference_number, self.repositoryroot_addendum(numbers))
@@ -83,7 +83,7 @@ class DottedReferenceFormatter(object):
                 reference_number = u'%s %s' % (
                     reference_number,
                     self.repository_number(numbers),
-                    )
+                )
             else:
                 reference_number = self.repository_number(numbers)
 
@@ -92,14 +92,14 @@ class DottedReferenceFormatter(object):
                 reference_number,
                 self.repository_dossier_seperator,
                 self.dossier_number(numbers),
-                )
+            )
 
         if self.document_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
                 self.document_number(numbers),
-                )
+            )
 
         return reference_number.encode('utf-8')
 
@@ -180,7 +180,7 @@ class DottedReferenceFormatter(object):
         """
         numbers = {
             'site': [self.get_portal_part()],
-            }
+        }
 
         if reference_list:
             numbers['repository'] = map(str, reference_list[0])
@@ -213,7 +213,7 @@ class GroupedByThreeReferenceFormatter(DottedReferenceFormatter):
         return '.'.join([
             ''.join(aa)
             for aa in self.grouper(parts, 3)
-            ])
+        ])
 
     def grouper(self, iterable, n, fillvalue=u''):
         args = [iter(iterable)] * n
@@ -291,7 +291,7 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
                 reference_number = u'%s %s' % (
                     reference_number,
                     self.repository_number(numbers),
-                    )
+                )
             else:
                 reference_number = self.repository_number(numbers)
 
@@ -300,14 +300,14 @@ class NoClientIdDottedReferenceFormatter(DottedReferenceFormatter):
                 reference_number,
                 self.repository_dossier_seperator,
                 self.dossier_number(numbers),
-                )
+            )
 
         if self.document_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
                 self.document_number(numbers),
-                )
+            )
 
         return reference_number.encode('utf-8')
 
@@ -333,7 +333,7 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
                 reference_number = u'%s %s' % (
                     reference_number,
                     self.repository_number(numbers),
-                    )
+                )
             else:
                 reference_number = self.repository_number(numbers)
 
@@ -342,14 +342,14 @@ class NoClientIdGroupedByThreeFormatter(GroupedByThreeReferenceFormatter):
                 reference_number,
                 self.repository_dossier_seperator,
                 self.dossier_number(numbers),
-                )
+            )
 
         if self.document_number(numbers):
             reference_number = u'%s%s%s' % (
                 reference_number,
                 self.dossier_document_seperator,
                 self.document_number(numbers),
-                )
+            )
 
         return reference_number.encode('utf-8')
 

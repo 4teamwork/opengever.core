@@ -12,4 +12,4 @@ class RemoveDossierInheritanceForWorkspaces(UpgradeStep):
         self.catalog_reindex_objects({
             'object_provides':
             [IWorkspace.__identifier__, IWorkspaceFolder.__identifier__]
-            })
+        })

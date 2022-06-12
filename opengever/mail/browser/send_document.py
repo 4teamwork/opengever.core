@@ -74,7 +74,7 @@ class ISendDocumentSchema(Interface):
         required=False,
         missing_value=(),  # important!
         default=(),
-        )
+    )
 
     extern_receiver = schema.List(
         title=_('extern_receiver', default="Extern receiver"),
@@ -83,17 +83,17 @@ class ISendDocumentSchema(Interface):
                       "Enter manually the addresses, one per each line."),
         value_type=schema.TextLine(title=_('receiver'), ),
         required=False,
-        )
+    )
 
     subject = schema.TextLine(
         title=_(u'label_subject', default=u'Subject'),
         required=True,
-        )
+    )
 
     message = schema.Text(
         title=_(u'label_message', default=u'Message'),
         required=True,
-        )
+    )
 
     documents = RelationList(
         title=_(u'label_documents', default=u'Attachments'),
@@ -110,23 +110,23 @@ class ISendDocumentSchema(Interface):
                          'opengever.document.document.IDocumentSchema',
                          'ftw.mail.mail.IMail',
                          ]}),
-            ),
+        ),
         required=False,
-        )
+    )
 
     documents_as_links = schema.Bool(
         title=_(u'label_documents_as_link',
                 default=u'Send documents only als links'),
         required=True,
         defaultFactory=default_documents_as_links,
-        )
+    )
 
     file_copy_in_dossier = schema.Bool(
         title=_(u'label_file_copy_in_dossier',
                 default=u'File a copy of the sent mail in dossier'),
         required=True,
         default=True,
-        )
+    )
 
     @invariant
     def validateHasEmail(self):
@@ -141,14 +141,14 @@ class ISendDocumentSchema(Interface):
 validator.WidgetValidatorDiscriminators(
     DocumentSizeValidator,
     field=ISendDocumentSchema['documents'],
-    )
+)
 
 # this validator is only relevant for the classic UI and can be removed
 # once we only support the new UI or remove the `send_as_email` action.
 validator.WidgetValidatorDiscriminators(
     AddressValidator,
     field=ISendDocumentSchema['extern_receiver'],
-    )
+)
 
 
 class SendDocumentForm(form.Form):
@@ -243,8 +243,8 @@ class SendDocumentForm(form.Form):
             # let the user know that the mail was sent
             info = _(u'info_mail_sent', 'E-mail has been sent.')
             notify(DocumentSent(
-                    self.context, userid, header_to, data.get('subject'),
-                    data.get('message'), data.get('documents')))
+                self.context, userid, header_to, data.get('subject'),
+                data.get('message'), data.get('documents')))
 
             IStatusMessage(self.request).addStatusMessage(info, type='info')
             # and redirect to default view / tab
@@ -275,8 +275,8 @@ class SendDocumentForm(form.Form):
         # iterate over object list (which can include documents and mails),
         # create attachement parts for them and prepare docs_links
         docs_links = '%s:\r\n' % (translate(
-                _('label_documents', default=u'Attachments'),
-                context=self.request))
+            _('label_documents', default=u'Attachments'),
+            context=self.request))
 
         for obj in objs:
             obj_file = obj.get_file()

@@ -111,7 +111,7 @@ class Forwarding(Task):
                 context=self.REQUEST,
                 domain='opengever.inbox',
                 target_language=language,
-                )
+            )
 
         return label
 
@@ -153,14 +153,14 @@ class ForwardingAddForm(add.DefaultAddForm):
                 _(
                     u'error_no_document_selected',
                     u'Error: Please select at least one document to forward.',
-                    ),
+                ),
                 type=u'error',
-                )
+            )
 
             redir_url = self.request.get(
                 'orig_template',
                 self.context.absolute_url(),
-                )
+            )
 
             self.request.RESPONSE.redirect(redir_url)
 
@@ -172,20 +172,20 @@ class ForwardingAddForm(add.DefaultAddForm):
             self.request.set(
                 'form.widgets.issuer',
                 get_current_org_unit().inbox().id(),
-                )
+            )
 
         # put the default responsible into the request
         if not self.request.get('form.widgets.responsible_client', None):
             org_unit = (
                 get_ou_selector(ignore_anonymous=True).get_current_unit()
-                )
+            )
 
             self.request.set('form.widgets.responsible_client', org_unit.id())
 
             self.request.set(
                 'form.widgets.responsible',
                 [org_unit.inbox().id()],
-                )
+            )
 
         super(ForwardingAddForm, self).update()
 
@@ -240,7 +240,7 @@ def _drop_empty_additional_fieldset(groups):
     assert not groups[1].fields.keys(), (
         "expecting empty group, please check field definitions in "
         "IForwarding and ITask"
-        )
+    )
 
     groups.pop(1)
 
@@ -272,7 +272,7 @@ def set_dates(context, event):
     closing_transitions = [
         'forwarding-transition-close',
         'forwarding-transition-assign-to-dossier',
-        ]
+    ]
 
     if event.action in closing_transitions:
         context.date_of_completion = datetime.now()

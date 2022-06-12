@@ -45,7 +45,7 @@ class IAssignSchema(Schema):
         title=_("label_transition", default="Transition"),
         source=getTransitionVocab,
         required=True,
-        )
+    )
 
     responsible = schema.Choice(
         title=_(u"label_responsible", default=u"Responsible"),
@@ -55,12 +55,12 @@ class IAssignSchema(Schema):
             only_current_orgunit=False,
             include_teams=True),
         required=True,
-        )
+    )
 
     text = schema.Text(
         title=_('label_response', default="Response"),
         required=False,
-        )
+    )
 
 
 def validate_no_teams(context, responsible):

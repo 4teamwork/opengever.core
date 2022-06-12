@@ -78,7 +78,7 @@ class MigrateTaskTable(SchemaMigration):
             row = self.connection.execute(
                 task_table.select().where(
                     task_table.c.id == row.predecessor_id)
-                ).fetchone()
+            ).fetchone()
         return row.admin_unit_id
 
     def migrate_issuing_orgunit_data(self):

@@ -31,7 +31,6 @@ class Folder(object):
 
                 self.files.append(File(toc, doc, doc.obj.get_file()))
 
-
     def binding(self):
         ordner = arelda.ordnerSIP(self.name)
 

@@ -25,7 +25,7 @@ class MakeMailAddressRequired(SchemaMigration):
 
         self.execute(mailaddress_table.update()
                      .values(address=EMPTY_ADDRESS_PLACEHOLDER)
-                     .where(mailaddress_table.columns.address == None))
+                     .where(mailaddress_table.columns.address.is_(None)))
 
     def make_column_required(self):
         self.op.alter_column(

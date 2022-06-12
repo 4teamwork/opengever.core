@@ -417,8 +417,10 @@ class ContactActor(Actor):
 
     def get_label(self, with_principal=True):
         if self.contact.lastname or self.contact.firstname:
-            name = ' '.join(name for name in
-                           (self.contact.lastname, self.contact.firstname) if name)
+            name = ' '.join(
+                name for name in (self.contact.lastname, self.contact.firstname)
+                if name
+            )
         else:
             name = self.contact.id
 

@@ -29,7 +29,7 @@ class AssignToDossierWizardFormMixin(BaseWizardStepForm):
          _(u'step_1', default=u'Step 1')),
 
         ('...', u'...'),
-        )
+    )
 
     label = _(u'title_assign_to_dossier', u'Assign to Dossier')
 
@@ -40,12 +40,12 @@ class AssignToDossierWizardFormMixin(BaseWizardStepForm):
 def method_vocabulary_factory(context):
 
     return SimpleVocabulary([
-            SimpleTerm(value=u'existing_dossier',
-                title=_(u'existing_dossier', default=u'existing dossier',)),
+        SimpleTerm(value=u'existing_dossier',
+                   title=_(u'existing_dossier', default=u'existing dossier',)),
 
-            SimpleTerm(value=u'new_dossier',
-                title=_(u'new_dossier', default=u'new dossier',)),
-            ])
+        SimpleTerm(value=u'new_dossier',
+                   title=_(u'new_dossier', default=u'new dossier',)),
+    ])
 
 
 class IAssignToDossierMethodSchema(Schema):

@@ -16,4 +16,5 @@ class RepositoryTreeBuilder(object):
 
         return repository_root, repository_folder
 
+
 builder_registry.register('repository_tree', RepositoryTreeBuilder)

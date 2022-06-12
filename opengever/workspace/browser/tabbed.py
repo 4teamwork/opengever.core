@@ -8,27 +8,27 @@ class WorkspaceTabbedView(GeverTabbedView):
     folders_tab = {
         'id': 'folders',
         'title': _(u'label_folders', default=u'Folders'),
-        }
+    }
 
     documents_tab = {
         'id': 'documents-proxy',
         'title': _(u'label_documents', default=u'Documents'),
-        }
+    }
 
     todo_tab = {
         'id': 'todos',
         'title': _(u'label_todo', default=u'ToDo'),
-        }
+    }
 
     trash_tab = {
         'id': 'trash',
         'title': _(u'label_trash', default=u'Trash'),
-        }
+    }
 
     journal_tab = {
         'id': 'journal',
         'title': _(u'label_journal', default=u'Journal'),
-        }
+    }
 
     def _get_tabs(self):
         return filter(None, [
@@ -50,7 +50,7 @@ class WorkspaceRootTabbedView(GeverTabbedView):
     workspaces_tab = {
         'id': 'workspaces',
         'title': _(u'label_workspaces', default=u'Workspaces'),
-        }
+    }
 
     def _get_tabs(self):
         return filter(None, [

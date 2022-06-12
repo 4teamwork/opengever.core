@@ -87,10 +87,10 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
 
         # Dossier details title
         args['label_detailssubdossier'] = translate(
-        _('label_detailssubdossier', default="Details Subdossier"), context=self.request)
+            _('label_detailssubdossier', default="Details Subdossier"), context=self.request)
 
         args['label_detailsdossier'] = translate(
-        _('label_detailsdossier', default="Details Dossier"), context=self.request)
+            _('label_detailsdossier', default="Details Dossier"), context=self.request)
 
         # documents
         args['documentstitle'] = translate(
@@ -266,9 +266,9 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
 
         # add the responsible
         rows.append('%s, %s' % (
-                readable_ogds_author(None, dossier.responsible),
-                translate(_dossier(u'label_responsible', 'Responsible'),
-                          context=self.request)))
+            readable_ogds_author(None, dossier.responsible),
+            translate(_dossier(u'label_responsible', 'Responsible'),
+                      context=self.request)))
 
         # add the participants
         participants = IParticipationAware(self.context).get_participations()
@@ -276,8 +276,8 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
         for participant in participants:
             participation_data = IParticipationData(participant)
             rows.append('%s, %s' % (
-                    participation_data.participant_title,
-                    role_list_helper(participant, participation_data.roles)))
+                participation_data.participant_title,
+                role_list_helper(participant, participation_data.roles)))
 
         values = ['{', '\\vspace{-\\baselineskip}\\begin{itemize}']
         for row in self.convert_list(rows):

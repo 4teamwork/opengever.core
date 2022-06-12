@@ -38,7 +38,7 @@ class IECH0147ImportFormSchema(Schema):
             u'help_message',
             default=u'A ZIP file containing an eCH-147 message.'),
         required=True,
-        )
+    )
 
     directives.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(

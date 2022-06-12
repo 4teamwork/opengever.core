@@ -89,7 +89,7 @@ class ISelectDocumentsSchema(Schema):
 
         value_type=schema.Choice(
             source=related_documents_vocabulary,
-            ))
+        ))
 
 
 class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
@@ -159,11 +159,11 @@ class IChooseDossierSchema(Schema):
                     'opengever.repository.repositoryfolder.'
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ],
+                ],
                 'review_state': [
                     'repositoryroot-state-active',
                     'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,
-                }))
+            }))
 
 
 class DossierValidator(SimpleFieldValidator):

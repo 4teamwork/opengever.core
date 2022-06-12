@@ -55,10 +55,11 @@ class MigratePeriodsFromSqlToPlone(SQLUpgradeStep):
         for committee in self.objects(query, msg):
             self.migrate_periods_for_committee(committee)
 
-        LOG.info(u"Migrated {} periods with the following ids from sql to "
-                  "plone: {}".format(
-                    len(self._migrated_period_ids),
-                    repr(self._migrated_period_ids)))
+        LOG.info(
+            u"Migrated {} periods with the following ids from sql to "
+            u"plone: {}".format(
+                len(self._migrated_period_ids),
+                repr(self._migrated_period_ids)))
 
     def migrate_periods_for_committee(self, committee):
         committee_model = committee.load_model()

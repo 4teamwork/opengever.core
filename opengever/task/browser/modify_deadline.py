@@ -21,17 +21,17 @@ class IModifyDeadlineSchema(Schema):
         title=_("label_transition", default="Transition"),
         source=getTransitionVocab,
         required=True,
-        )
+    )
 
     new_deadline = schema.Date(
         title=_(u"label_new_deadline", default=u"New Deadline"),
         required=True,
-        )
+    )
 
     text = schema.Text(
         title=_('label_response', default="Response"),
         required=False,
-        )
+    )
 
 
 def validate_deadline_changed(context, value):

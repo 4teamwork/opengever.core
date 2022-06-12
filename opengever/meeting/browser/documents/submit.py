@@ -37,9 +37,9 @@ class ISubmitAdditionalDocument(model.Schema):
                 'object_provides':
                     ['opengever.dossier.behaviors.dossier.IDossierMarker',
                      'opengever.meeting.proposal.IProposal'],
-                }),
+            }),
         required=True
-        )
+    )
 
 
 class SubmitAdditionalDocument(AutoExtensibleForm, Form):

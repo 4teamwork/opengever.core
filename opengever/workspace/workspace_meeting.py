@@ -23,8 +23,8 @@ class IWorkspaceMeetingSchema(model.Schema):
             u'end',
             u'location',
             u'videoconferencing_url',
-            ],
-        )
+        ],
+    )
 
     form.order_after(responsible='IOpenGeverBase.description')
     responsible = schema.Choice(

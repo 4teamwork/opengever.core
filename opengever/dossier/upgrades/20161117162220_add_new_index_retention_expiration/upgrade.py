@@ -9,7 +9,6 @@ class AddNewIndexRetentionExpiration(UpgradeStep):
         self.install_upgrade_profile()
         self.catalog_add_index('retention_expiration', 'DateIndex')
 
-
     # The calculation of the retention period has been changed, because of
     # that there is another upgrade step `UpdateRetentionPeriodCalculation`
     # which recalculate the retention expiration for every resolved dossier.

@@ -53,4 +53,4 @@ class TasktemplatesVocabulary(object):
             context=tasktemplatefolder,
             portal_type='opengever.tasktemplates.tasktemplate',
             sort_on='getObjPositionInParent'
-            )
+        )

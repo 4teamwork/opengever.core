@@ -64,7 +64,7 @@ class PersonalOverview(TabbedView):
     admin_tabs = [
         {'id': 'alltasks', 'icon': None, 'url': '#', 'class': None},
         {'id': 'allissuedtasks', 'icon': None, 'url': '#', 'class': None},
-        ]
+    ]
 
     def __call__(self):
         """If user is not allowed to view PersonalOverview, redirect him
@@ -180,7 +180,7 @@ class MyDossiers(Dossiers):
     enabled_actions = [
         'pdf_dossierlisting',
         'export_dossiers',
-        ]
+    ]
 
     major_actions = ['pdf_dossierlisting']
 
@@ -247,11 +247,11 @@ class MyTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = [
         'pdf_taskslisting',
-        ]
+    ]
 
     def get_base_query(self):
         userid = api.user.get_current().getId()
@@ -271,7 +271,7 @@ class IssuedTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = ['pdf_taskslisting']
 
@@ -298,7 +298,7 @@ class AllTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = ['pdf_taskslisting']
 
@@ -313,7 +313,7 @@ class AllIssuedTasks(GlobalTaskListingTab):
     enabled_actions = [
         'pdf_taskslisting',
         'export_tasks',
-        ]
+    ]
 
     major_actions = ['pdf_taskslisting']
 

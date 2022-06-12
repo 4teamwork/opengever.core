@@ -63,7 +63,8 @@ def accept_task_with_response(task, response_text, successor_oguid=None):
 
 
 def accept_forwarding_with_successor(
-    context, predecessor_oguid, response_text, dossier=None):
+    context, predecessor_oguid, response_text, dossier=None
+):
 
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
@@ -200,7 +201,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     doc_transporter = getUtility(ITaskDocumentsTransporter)
 
     comment = _(u'version_message_accept_task',
-               default=u'Document copied from task (task accepted)')
+                default=u'Document copied from task (task accepted)')
     intids_mapping = doc_transporter.copy_documents_from_remote_task(
         predecessor, successor, comment=comment)
 

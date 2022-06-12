@@ -1,5 +1,4 @@
 from ftw.testbrowser import browser
-from ftw.testbrowser.pages import factoriesmenu
 from plone.app.testing.interfaces import SITE_OWNER_NAME
 from plone.app.testing.interfaces import SITE_OWNER_PASSWORD
 from threading import Thread
@@ -65,7 +64,10 @@ class TestserverSelftest(object):
             browser.replace_request_header('Accept', 'application/json')
             browser.replace_request_header('Content-Type', 'application/json')
 
-            search_url = self.plone_url + '@solrsearch?fq=path_parent:\\/ordnungssystem\\/rechnungspruefungskommission&fl=path,UID'
+            search_url = (
+                self.plone_url
+                + '@solrsearch?fq=path_parent:\\/ordnungssystem\\/rechnungspruefungskommission&fl=path,UID'
+            )
             browser.open(search_url)
             self.assertEqual(
                 {u'/plone/ordnungssystem/rechnungspruefungskommission': u'createrepositorytree000000000004'},

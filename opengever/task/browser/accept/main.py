@@ -39,7 +39,7 @@ class AcceptWizardFormMixin(BaseWizardStepForm):
          _(u'step_1', default=u'Step 1')),
 
         ('...', u'...'),
-        )
+    )
 
     label = _(u'title_accept_task', u'Accept task')
 
@@ -53,42 +53,42 @@ def method_vocabulary_factory(context):
     # decision it's a forwarding or a task
     if context.task_type == FORWARDING_TASK_TYPE_ID:
         return SimpleVocabulary([
-                SimpleTerm(
-                    value=u'forwarding_participate',
-                    title=_(u'accept_method_forwarding_participate',
-                            default=u"... store in ${client}'s inbox",
-                            mapping={'client': org_unit.label()})),
+            SimpleTerm(
+                value=u'forwarding_participate',
+                title=_(u'accept_method_forwarding_participate',
+                        default=u"... store in ${client}'s inbox",
+                        mapping={'client': org_unit.label()})),
 
-                SimpleTerm(
-                    value=u'existing_dossier',
-                    title=_(u'accept_method_forwarding_existing_dossier',
-                            default=u"... store in  ${client}'s inbox and process in an existing dossier on ${client}",
-                            mapping={'client': org_unit.label()})),
+            SimpleTerm(
+                value=u'existing_dossier',
+                title=_(u'accept_method_forwarding_existing_dossier',
+                        default=u"... store in  ${client}'s inbox and process in an existing dossier on ${client}",
+                        mapping={'client': org_unit.label()})),
 
-                SimpleTerm(
-                    value=u'new_dossier',
-                    title=_(u'accept_method_forwarding_new_dossier',
-                            default=u"... store in  ${client}'s inbox and process in a new dossier on ${client}",
-                            mapping={'client': org_unit.label()}))])
+            SimpleTerm(
+                value=u'new_dossier',
+                title=_(u'accept_method_forwarding_new_dossier',
+                        default=u"... store in  ${client}'s inbox and process in a new dossier on ${client}",
+                        mapping={'client': org_unit.label()}))])
 
     else:
         return SimpleVocabulary([
-                SimpleTerm(
-                    value=u'participate',
-                    title=_(u'accept_method_participate',
-                            default=u"process in issuer's dossier")),
+            SimpleTerm(
+                value=u'participate',
+                title=_(u'accept_method_participate',
+                        default=u"process in issuer's dossier")),
 
-                SimpleTerm(
-                    value=u'existing_dossier',
-                    title=_(u'accept_method_existing_dossier',
-                            default=u'file in existing dossier in ${client}',
-                            mapping={'client': org_unit.label()})),
+            SimpleTerm(
+                value=u'existing_dossier',
+                title=_(u'accept_method_existing_dossier',
+                        default=u'file in existing dossier in ${client}',
+                        mapping={'client': org_unit.label()})),
 
-                SimpleTerm(
-                    value=u'new_dossier',
-                    title=_(u'accept_method_new_dossier',
-                            default=u'file in new dossier in ${client}',
-                            mapping={'client': org_unit.label()}))])
+            SimpleTerm(
+                value=u'new_dossier',
+                title=_(u'accept_method_new_dossier',
+                        default=u'file in new dossier in ${client}',
+                        mapping={'client': org_unit.label()}))])
 
 
 class IChooseMethodSchema(Schema):
@@ -207,8 +207,8 @@ class ChooseMethodStepForm(AcceptWizardFormMixin, Form):
                 dm.push_to_remote_client(dmkey, admin_unit.id())
 
                 url = '/'.join((
-                        admin_unit.public_url,
-                        '@@accept_select_repositoryfolder?oguid=%s' % oguid))
+                    admin_unit.public_url,
+                    '@@accept_select_repositoryfolder?oguid=%s' % oguid))
                 return self.request.RESPONSE.redirect(url)
 
     @buttonAndHandler(_(u'button_cancel', default=u'Cancel'))

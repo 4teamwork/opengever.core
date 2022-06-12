@@ -24,8 +24,8 @@ class IDossierCustomProperties(model.Schema):
         label=_(u'Custom properties'),
         fields=[
             u'custom_properties',
-            ],
-        )
+        ],
+    )
 
 
 alsoProvides(IDossierCustomProperties, IFormFieldProvider)

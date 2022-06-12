@@ -22,8 +22,8 @@ class IDocumentCustomProperties(model.Schema):
         label=_(u'Custom properties'),
         fields=[
             u'custom_properties',
-            ],
-        )
+        ],
+    )
 
 
 alsoProvides(IDocumentCustomProperties, IFormFieldProvider)

@@ -1,5 +1,4 @@
 from BTrees.OOBTree import OOBTree
-from DateTime import DateTime
 from datetime import datetime
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.protect import unprotected_write

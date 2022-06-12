@@ -31,14 +31,14 @@ class RepositoryRootOverview(BrowserView, GeverTabMixin):
         """Returns the amount of tasks recursivley in this context.
         """
         return len(self.catalog(
-                object_provides=['opengever.task.task.ITask'],
-                path='/'.join(self.context.getPhysicalPath())))
+            object_provides=['opengever.task.task.ITask'],
+            path='/'.join(self.context.getPhysicalPath())))
 
     def get_amount_of_documents(self):
         """Returns the amount of documents recursively in this context.
         """
         return len(self.catalog(
-                object_provides=[
-                    'opengever.document.document.IDocumentSchema',
-                    'ftw.mail.mail.IMail'],
-                path='/'.join(self.context.getPhysicalPath())))
+            object_provides=[
+                'opengever.document.document.IDocumentSchema',
+                'ftw.mail.mail.IMail'],
+            path='/'.join(self.context.getPhysicalPath())))

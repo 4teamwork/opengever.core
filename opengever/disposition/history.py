@@ -97,6 +97,7 @@ class Edited(DispositionHistory):
             _('label_disposition_edited', default=u'Disposition edited'),
             context=getRequest())
 
+
 DispositionHistory.add_description(Edited)
 
 
@@ -108,6 +109,7 @@ class Appraised(DispositionHistory):
         return _('msg_disposition_appraised',
                  default=u'Appraisal finalized by ${user}',
                  mapping=self._msg_mapping)
+
 
 DispositionHistory.add_description(Appraised)
 
@@ -121,6 +123,7 @@ class Disposed(DispositionHistory):
                  default=u'Disposition disposed for the archive by ${user}',
                  mapping=self._msg_mapping)
 
+
 DispositionHistory.add_description(Disposed)
 
 
@@ -132,6 +135,7 @@ class Archived(DispositionHistory):
         return _('msg_disposition_archived',
                  default=u'The archiving confirmed by ${user}',
                  mapping=self._msg_mapping)
+
 
 DispositionHistory.add_description(Archived)
 
@@ -146,11 +150,13 @@ class Closed(DispositionHistory):
             default=u'Disposition closed and all dossiers destroyed by ${user}',
             mapping=self._msg_mapping)
 
+
 DispositionHistory.add_description(Closed)
 
 
 class AppraisedToClosed(Closed):
     transition = 'disposition-transition-appraised-to-closed'
+
 
 DispositionHistory.add_description(AppraisedToClosed)
 
@@ -164,5 +170,6 @@ class Refused(DispositionHistory):
             'msg_disposition_refuse',
             default=u'Disposition refused by ${user}',
             mapping=self._msg_mapping)
+
 
 DispositionHistory.add_description(Refused)

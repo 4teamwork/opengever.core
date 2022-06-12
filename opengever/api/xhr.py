@@ -15,7 +15,7 @@ class XHRUploadPost(GeverFolderPost):
         title = form_data.get('title', '').decode('utf-8')
         request_data = {
             '@type': 'ftw.mail.mail' if is_email_upload(self.filename) else 'opengever.document.document'
-            }
+        }
 
         if title:
             request_data['title'] = title

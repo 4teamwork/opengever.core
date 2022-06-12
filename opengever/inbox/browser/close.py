@@ -19,7 +19,7 @@ class IForwardingCloseForm(model.Schema):
         title=task_mf('label_response', default="Response"),
         description=task_mf('help_response', default=""),
         required=False,
-        )
+    )
 
 
 class ForwardingCloseForm(Form):

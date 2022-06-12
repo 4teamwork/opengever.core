@@ -1,7 +1,5 @@
 from AccessControl import getSecurityManager
 from AccessControl import Unauthorized
-from datetime import date
-from datetime import datetime
 from opengever.base.handlers import ObjectTouchedEvent
 from opengever.document import _
 from opengever.document.document import IDocumentSchema
@@ -63,7 +61,7 @@ class CheckinCheckoutManager(object):
         return bool(
             self.check_permission('opengever.document: Checkout')
             and self.check_permission('Modify portal content')
-            )
+        )
 
     def is_not_trashed(self):
         return bool(not ITrashed.providedBy(self.context))
@@ -77,7 +75,7 @@ class CheckinCheckoutManager(object):
             and self.versioner.is_versionable()
             and self.is_checkout_permitted()
             and self.is_not_trashed()
-            )
+        )
 
     def checkout(self, collaborative=False):
         """Checkout the adapted document.
@@ -245,8 +243,8 @@ class CheckinCheckoutManager(object):
                 and bool(
                     current_checkout_id == current_user_id
                     or self.check_permission('Manage portal')
-                    )
-            ):
+                )
+        ):
             return True
 
         return False

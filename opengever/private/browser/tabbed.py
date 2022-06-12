@@ -25,7 +25,7 @@ class PrivateFolderDossiers(Dossiers):
         'pdf_dossierlisting',
         'export_dossiers',
         'folder_delete_confirmation',
-        ]
+    ]
 
 
 class PrivateFolderSubDossiers(SubDossiers):
@@ -35,7 +35,7 @@ class PrivateFolderSubDossiers(SubDossiers):
     def enabled_actions(self):
         return super(PrivateFolderSubDossiers, self).enabled_actions + [
             'folder_delete_confirmation',
-            ]
+        ]
 
 
 class PrivateDossierTabbedView(DossierTabbedView):
@@ -50,7 +50,7 @@ class PrivateDossierTabbedView(DossierTabbedView):
             self.documents_tab,
             self.trash_tab,
             self.journal_tab,
-            ]
+        ]
 
 
 class PrivateDossierDocuments(Documents):
@@ -62,7 +62,7 @@ class PrivateDossierDocuments(Documents):
     def enabled_actions(self):
         return super(PrivateDossierDocuments, self).enabled_actions + [
             'folder_delete_confirmation',
-            ]
+        ]
 
     @property
     def columns(self):

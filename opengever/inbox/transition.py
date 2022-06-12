@@ -13,7 +13,6 @@ from opengever.task.browser.accept.utils import _copy_documents_from_forwarding
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IYearfolderStorer
-from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.transition import DefaultTransitionExtender
 from opengever.task.transition import IResponse
@@ -45,7 +44,7 @@ class IChooseDossierSchema(Schema):
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                 ]
-                }),
+            }),
         required=False)
 
 
@@ -179,7 +178,7 @@ class INewForwardingResponsibleSchema(Schema):
         description=task_mf(u"help_responsible", default=""),
         source=AllUsersInboxesAndTeamsSourceBinder(include_teams=True),
         required=True,
-        )
+    )
 
     responsible_client = schema.Choice(
         title=task_mf(u'label_resonsible_client', default=u'Responsible Client'),

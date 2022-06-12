@@ -191,7 +191,7 @@ class OGGBundleItemBase(object):
             'guid': node.guid,
             'review_state': self.review_state,
             'title': self.node.title
-            }
+        }
 
     def as_dict(self):
         return self._data
@@ -210,12 +210,12 @@ class OGGBundleRepoRoot(OGGBundleItemBase):
         self._data['valid_from'] = getattr(node, 'valid_from', None)
         self._data['valid_until'] = getattr(node, 'valid_until', None)
         self._data['_permissions'] = {
-                'read': [users_group],
-                'add': [users_group],
-                'edit': [users_group],
-                'close': [],
-                'reactivate': [],
-            }
+            'read': [users_group],
+            'add': [users_group],
+            'edit': [users_group],
+            'close': [],
+            'reactivate': [],
+        }
 
 
 class OGGBundleRepoFolder(OGGBundleItemBase):

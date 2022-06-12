@@ -337,8 +337,7 @@ class InitialVersionDataProxy(object):
 
     @property
     def _bumblebee_url(self):
-        return "{}/@@bumblebee-overlay-listing".format(
-            self.url, self.version)
+        return "{}/@@bumblebee-overlay-listing".format(self.url)
 
     @property
     def save_pdf_under_link(self):

@@ -58,12 +58,12 @@ class Task(Base):
         'task-state-tested-and-closed',
         'task-state-resolved',
         'forwarding-state-closed',
-        ]
+    ]
 
     OPEN_STATES = [
         'task-state-open',
         'forwarding-state-open',
-        ]
+    ]
 
     PENDING_STATES = [
         'task-state-open',
@@ -72,7 +72,7 @@ class Task(Base):
         'task-state-rejected',
         'forwarding-state-open',
         'forwarding-state-refused',
-        ]
+    ]
 
     __tablename__ = 'tasks'
     __table_args__ = (UniqueConstraint('admin_unit_id', 'int_id'), {})
@@ -114,13 +114,13 @@ class Task(Base):
         String(UNIT_ID_LENGTH),
         index=True,
         nullable=False,
-        )
+    )
 
     assigned_org_unit = Column(
         String(UNIT_ID_LENGTH),
         index=True,
         nullable=False,
-        )
+    )
 
     predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     successors = relationship(
@@ -128,7 +128,7 @@ class Task(Base):
         foreign_keys=[predecessor_id],
         backref=backref('predecessor', remote_side=task_id),
         cascade="delete",
-        )
+    )
 
     tasktemplate_predecessor_id = Column(Integer, ForeignKey('tasks.id'))
     tasktemplate_successor = relationship(
@@ -143,7 +143,7 @@ class Task(Base):
         'TaskPrincipal',
         backref='task',
         cascade='all, delete-orphan',
-        )
+    )
 
     principals = association_proxy('_principals', 'principal')
 
@@ -211,7 +211,7 @@ class Task(Base):
 
         self.breadcrumb_title = plone_task.get_breadcrumb_title(
             self.MAX_BREADCRUMB_LENGTH,
-            )
+        )
 
         self.physical_path = plone_task.get_physical_path()
         self.review_state = plone_task.get_review_state()
@@ -231,7 +231,7 @@ class Task(Base):
 
         self.containing_dossier = safe_unicode(
             plone_task.get_containing_dossier_title(),
-            )
+        )
 
         self.dossier_sequence_number = plone_task.get_dossier_sequence_number()
         self.assigned_org_unit = plone_task.responsible_client
@@ -239,15 +239,15 @@ class Task(Base):
 
         self.predecessor = self.query_predecessor(
             *plone_task.get_predecessor_ids()
-            )
+        )
 
         self.containing_subdossier = safe_unicode(
             plone_task.get_containing_subdossier(),
-            )
+        )
 
         try:
             predecessor = plone_task.get_tasktemplate_predecessor()
-        except InvalidOguidIntIdPart as e:
+        except InvalidOguidIntIdPart:
             # When moving a dossier with a task_process it is not guaranteed
             # that the objects are moved in the tasktemplate order, so it can
             # happen, that the predecessor does not yet exists. Because the
@@ -329,8 +329,8 @@ class Task(Base):
                 self.review_state,
                 domain='plone',
                 context=api.portal.get().REQUEST,
-                ),
-            )
+            ),
+        )
 
     def get_deadline_label(self, fmt="medium"):
         if not self.deadline:
@@ -471,23 +471,23 @@ class Task(Base):
             return u'<span class="{}">{}</span>'.format(
                 self.get_css_class(),
                 title,
-                )
+            )
 
         url = self.absolute_url()
 
         breadcrumb_titles = u"[{}] > {}".format(
             admin_unit.title,
             escape_html(self.breadcrumb_title),
-            )
+        )
 
         responsible_info = u' <span class="discreet">({})</span>'.format(
             self.get_responsible_label(linked=False),
-            )
+        )
 
         link_content = u'<span class="{}">{}</span>'.format(
             self.get_css_class(),
             title,
-            )
+        )
 
         # If the target is on a different client we need to make a popup
         if self.admin_unit_id != get_current_admin_unit().id():
@@ -503,7 +503,7 @@ class Task(Base):
                 link_target,
                 breadcrumb_titles,
                 link_content,
-                )
+            )
 
         else:
             link = link_content
@@ -720,7 +720,7 @@ class TaskPrincipal(Base):
         Integer,
         ForeignKey('tasks.id'),
         primary_key=True,
-        )
+    )
 
     def __init__(self, principal):
         self.principal = principal

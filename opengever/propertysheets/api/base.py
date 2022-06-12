@@ -157,8 +157,8 @@ class PropertySheetWriter(PropertySheetLocator):
 
             if duplicates:
                 errors = [
-                    (field_no, name, ('name', DuplicateField(name)))
-                    for field_no, name in duplicates
+                    (field_no, name_, ('name', DuplicateField(name_)))
+                    for field_no, name_ in duplicates
                 ]
                 raise FieldValidationError(errors)
 

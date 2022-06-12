@@ -159,6 +159,7 @@ class SkipJournals:
         """
         return [], [], {}
 
+
 InitializeClass(SkipJournals)
 
 

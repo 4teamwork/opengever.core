@@ -10,8 +10,6 @@ from opengever.testing.fixtures import JWT_SECRET
 from os import fstat
 from os.path import basename
 from plone import api
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-from xml.etree import ElementTree as ET
 from zope.component import getMultiAdapter
 import json
 
@@ -37,52 +35,52 @@ class OCIntegrationTestCase(IntegrationTestCase):
     def fetch_document_attach_oc_url(self, browser, document):
         headers = {
             'Accept': 'application/json',
-            }
+        }
 
         url = browser.open(
             document,
             headers=headers,
             view='officeconnector_attach_url',
-            ).json.get('url', None)
+        ).json.get('url', None)
 
         return url
 
     def fetch_document_checkout_oc_url(self, browser, document):
         headers = {
             'Accept': 'application/json',
-            }
+        }
 
         url = browser.open(
             document,
             headers=headers,
             view='officeconnector_checkout_url',
-            ).json.get('url', None)
+        ).json.get('url', None)
 
         return url
 
     def fetch_document_oneoffixx_oc_url(self, browser, document):
         headers = {
             'Accept': 'application/json',
-            }
+        }
 
         url = browser.open(
             document,
             headers=headers,
             view='officeconnector_oneoffixx_url',
-            ).json.get('url', None)
+        ).json.get('url', None)
 
         return url
 
     def fetch_dossier_bcc(self, browser, dossier):
         headers = {
             'Accept': 'application/json',
-            }
+        }
 
         email = browser.open(
             dossier,
             headers=headers,
             view='attributes',
-            ).json.get('email', None)
+        ).json.get('email', None)
 
         return email
 
@@ -90,12 +88,12 @@ class OCIntegrationTestCase(IntegrationTestCase):
         headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            }
+        }
 
         data = json.dumps(dict(
             bcc=bcc,
             documents=['/'.join(doc.getPhysicalPath()) for doc in documents],
-            ))
+        ))
 
         url = browser.open(
             self.portal,
@@ -103,7 +101,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
             headers=headers,
             method='POST',
             view='officeconnector_attach_url',
-            ).json.get('url', None)
+        ).json.get('url', None)
 
         return url
 
@@ -123,7 +121,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 data=data,
                 headers=headers,
                 view='oc_attach',
-                ).json
+            ).json
 
         for payload in payloads:
             self.assertTrue(payload.get('csrf-token'))
@@ -135,7 +133,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 api.content.get(UID=uuid),
                 DOCUMENT_ATTACHED,
                 u'Document attached to email via OfficeConnector',
-                )
+            )
 
         return payloads
 
@@ -155,7 +153,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
             data=data,
             headers=headers,
             view='oc_checkout',
-            ).json
+        ).json
 
         return payloads
 
@@ -175,7 +173,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
             data=data,
             headers=headers,
             view='oc_oneoffixx',
-            ).json
+        ).json
 
         return payloads
 
@@ -223,7 +221,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 payload.get('document-url'),
                 headers=headers,
                 view=payload.get('download'),
-                ).contents
+            ).contents
             self.assertTrue(file_contents)
 
         return file_contents
@@ -239,7 +237,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
                 payload.get('document-url'),
                 headers=headers,
                 view=payload.get('connect-xml'),
-                ).contents
+            ).contents
             self.assertTrue(file_contents)
 
         return file_contents
@@ -280,7 +278,7 @@ class OCIntegrationTestCase(IntegrationTestCase):
             headers = {
                 'Accept': 'application/json',
                 'Authorization': ' '.join(('Bearer', raw_token, )),
-                }
+            }
             browser.open(document, view=payload.get('unlock'), method='POST', headers=headers)
             self.assertEquals(200, browser.status_code)
             self.assertFalse(browser.json.get('locked', True))

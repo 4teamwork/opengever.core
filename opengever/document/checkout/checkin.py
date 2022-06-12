@@ -51,7 +51,7 @@ class CheckinController(object):
         manager = getMultiAdapter(
             (document, self.request),
             ICheckinCheckoutManager,
-            )
+        )
 
         if (manager.is_simple_checkin_allowed() or (
                 manager.is_checkin_allowed() and force)):
@@ -65,7 +65,7 @@ class CheckinController(object):
             msg = _(
                 u'Could not check in document ${title}',
                 mapping=dict(title=document.Title().decode('utf-8')),
-                )
+            )
             IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
 
     def report_cannot_checkin_non_document(self, obj):
@@ -85,13 +85,13 @@ class IContextCheckinCommentSchema(Interface):
         title=_(
             u'label_checkin_journal_comment',
             default=u'Journal Comment',
-            ),
+        ),
         description=_(
             u'help_checkin_journal_comment',
             default=u'Describe, why you checkin the selected documents',
-            ),
+        ),
         required=False,
-        )
+    )
 
 
 class CheckinContextCommentForm(form.Form):
@@ -127,7 +127,7 @@ class CheckinContextCommentForm(form.Form):
             self.context,
             comment=data['comment'],
             force=force
-            )
+        )
 
         return self.redirect()
 
@@ -168,7 +168,7 @@ class CheckinPathsCommentForm(CheckinContextCommentForm):
         self.checkin_controller.checkin_documents(
             self.get_document_paths(),
             comment=data['comment'],
-            )
+        )
 
         return self.redirect()
 
@@ -257,7 +257,7 @@ class CheckinDocumentsWithoutComment(CheckinDocumentWithoutComment):
         try:
             self.checkin_controller.checkin_documents(
                 self.request.get('paths'),
-                )
+            )
         except NoItemsSelected:
             msg = _(u'You have not selected any documents.')
             IStatusMessage(self.request).addStatusMessage(msg, type=u'error')

@@ -9,7 +9,7 @@ from zope.interface import implements
 TINYMCE_BANNED_STYLES = [
     "++theme++plonetheme.teamraum/css/responsive.css",
     "++resource++ftw.mobilenavigation/navigation.css",
-    ]
+]
 
 
 class TinyMCEStyle(BrowserView):

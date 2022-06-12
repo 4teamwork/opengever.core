@@ -225,8 +225,7 @@ DOSSIER_STATE_CHANGED = 'Dossier state changed'
 
 
 def dossier_state_changed(context, event):
-    skip_transactions = [
-        ]
+    skip_transactions = []
     if event.action in skip_transactions:
         return
     newstate = event.workflow.transitions.get(event.action).new_state_id
@@ -493,14 +492,18 @@ def document_sent(context, event):
               mapping={'subject': event.subject.decode('utf-8'), })
 
     comment = translate(
-        _(u'label_document_sent_comment',
-          default=u'Attachments: ${documents} | Receivers: ${receiver} |'
-          ' Message: ${message}',
-          mapping={
+        _(
+            u'label_document_sent_comment',
+            default=u'Attachments: ${documents} | Receivers: ${receiver} | '
+            u'Message: ${message}',
+            mapping={
                 'documents': make_document_event_list(context, objs),
                 'receiver': receiver.decode('utf-8'),
                 'message': message.decode('utf-8'),
-                }), context=context.REQUEST)
+            },
+        ),
+        context=context.REQUEST,
+    )
     journal_entry_factory(
         context, DOCUMENT_SENT, title, visible=True, comment=comment)
 
@@ -516,7 +519,7 @@ def task_added(context, event):
         default=u'Task added: ${title}',
         mapping={
             'title': context.title_or_id(),
-            })
+        })
 
     # journal entry for parent (usually dossier)
     journal_entry_factory(context.aq_inner.aq_parent, TASK_ADDED_EVENT, title)
@@ -557,7 +560,7 @@ def document_trashed(context, event):
         default=u'Object moved to trash: ${title}',
         mapping={
             'title': context.title_or_id(),
-            })
+        })
 
     journal_entry_factory(context, OBJECT_MOVE_TO_TRASH, title)
     journal_entry_factory(
@@ -574,7 +577,7 @@ def document_untrashed(context, event):
         default=u'Object restored: ${title}',
         mapping={
             'title': context.title_or_id(),
-            })
+        })
     journal_entry_factory(context, OBJECT_RESTORE, title)
     journal_entry_factory(context.aq_inner.aq_parent, OBJECT_RESTORE, title)
     return
@@ -644,7 +647,7 @@ def participation_modified(context, event):
             'contact': readable_ogds_author(
                 event.participant,
                 event.participant.contact),
-            })
+        })
     journal_entry_factory(context, PARTICIPANT_MODIFIED, title)
 
 
@@ -659,7 +662,7 @@ def participation_removed(context, event):
             'contact': readable_ogds_author(
                 event.participant,
                 event.participant.contact),
-            })
+        })
 
     journal_entry_factory(context, PARTICIPANT_REMOVED, title)
 

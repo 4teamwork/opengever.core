@@ -25,7 +25,7 @@ class AddMeetingTable(SchemaMigration):
         if self.is_oracle:
             self.create_meeting_table_oracle()
         else:
-           self.create_meeting_table()
+            self.create_meeting_table()
 
         self.create_agenda_item_table()
         self.add_proposal_columns()

@@ -17,16 +17,16 @@ class IMoveProposalItemsSchema(Interface):
             review_state=DOSSIER_STATES_OPEN,
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
-                ],
+            ],
             navigation_tree_query={
                 'object_provides': [
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                 ],
                 'review_state': DOSSIER_STATES_OPEN
-                },
-            ),
+            },
+        ),
         required=True,
-        )
+    )
 
     # We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")

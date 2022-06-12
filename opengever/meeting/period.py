@@ -104,9 +104,9 @@ class PeriodValidator(InvariantsValidator):
 
         overlapping = self.get_overlapping_periods(committee, start, end, exclude)
         if overlapping:
-            errors += (Invalid(
-                _(u"The period's range overlaps the following periods: "
-                  "${periods}",
+            errors += (Invalid(_(
+                u"The period's range overlaps the following periods: "
+                u"${periods}",
                 mapping={'periods': u', '.join(
                     brain.Title for brain in overlapping)})),)
 

@@ -18,7 +18,7 @@ class IntIdEmailAddress(object):
             registry = queryUtility(IRegistry)
             proxy = registry.forInterface(IMailSettings)
             domain = getattr(proxy, 'mail_domain', u'nodomain.com').encode(
-            'utf-8')
+                'utf-8')
 
         id_util = getUtility(IIntIds)
         intid = id_util.queryId(obj)

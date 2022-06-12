@@ -52,7 +52,7 @@ class Notification(Base):
             'read': self.is_read,
             'link': self._resolve_notification_link(portal_url),
             'oguid': str(resource.oguid) if resource else None,
-            })
+        })
         return data
 
     def _resolve_notification_link(self, portal_url):

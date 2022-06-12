@@ -23,7 +23,7 @@ def bool_label(value):
         if value
         else
         translater(_(u'label_false', default='No'))
-        )
+    )
 
 
 class RepositoryRootExcelExport(BrowserView):
@@ -62,51 +62,51 @@ def generate_report(request, context):
     label_repository_number = repository_translater(_(
         u'label_repository_number',
         default=u'Repository number',
-        ))
+    ))
     label_repositoryfolder_title_de = repository_translater(_(
         u'label_repositoryfolder_title_de',
         default=u'Repositoryfolder title (German)',
-        ))
+    ))
     label_repositoryfolder_title_fr = repository_translater(_(
         u'label_repositoryfolder_title_fr',
         default=u'Repositoryfolder title (French)',
-        ))
+    ))
     label_repositoryfolder_title_en = repository_translater(_(
         u'label_repositoryfolder_title_en',
         default=u'Repositoryfolder title (English)',
-        ))
+    ))
     label_repositoryfolder_description = repository_translater(_(
         u'label_repositoryfolder_description',
         default=u'Repositoryfolder description',
-        ))
+    ))
     label_blocked_inheritance = repository_translater(_(
         u'label_blocked_inheritance',
         default=u'Blocked inheritance',
-        ))
+    ))
     label_groupnames_with_reader_role = repository_translater(_(
         u'label_groupnames_with_reader_role',
         default=u'Read dossiers',
-        ))
+    ))
     label_groupnames_with_contributor_role = repository_translater(_(
         u'label_groupnames_with_contributor_role',
         default=u'Create dossiers',
-        ))
+    ))
     label_groupnames_with_editor_role = repository_translater(_(
         u'label_groupnames_with_editor_role',
         default=u'Edit dossiers',
-        ))
+    ))
     label_groupnames_with_reviewer_role = repository_translater(_(
         u'label_groupnames_with_reviewer_role',
         default=u'Close dossiers',
-        ))
+    ))
     label_groupnames_with_publisher_role = repository_translater(_(
         u'label_groupnames_with_publisher_role',
         default=u'Reactivate dossiers',
-        ))
+    ))
     label_groupnames_with_manager_role = repository_translater(_(
         u'label_groupnames_with_manager_role',
         default=u'Manage dossiers',
-        ))
+    ))
 
     column_map = (
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
@@ -131,7 +131,7 @@ def generate_report(request, context):
         {'id': 'get_groupnames_with_reviewer_role', 'title': label_groupnames_with_reviewer_role, 'callable': True},
         {'id': 'get_groupnames_with_publisher_role', 'title': label_groupnames_with_publisher_role, 'callable': True},
         {'id': 'get_groupnames_with_manager_role', 'title': label_groupnames_with_manager_role, 'callable': True},
-        )
+    )
 
     # We sort these by reference number to preserve user experienced ordering
     active_formatter = api.portal.get_registry_record(name='formatter', interface=IReferenceNumberSettings)
@@ -149,4 +149,4 @@ def generate_report(request, context):
         repository_folders,
         sheet_title=repository_translater(u'RepositoryRoot'),
         blank_header_rows=4,
-        )()
+    )()

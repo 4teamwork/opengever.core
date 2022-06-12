@@ -563,7 +563,7 @@ def get_user_avatar_image_sources():
         AVATAR_SOURCE_PLONE_ONLY,
         AVATAR_SOURCE_PORTAL_ONLY,
         AVATAR_SOURCE_AUTO,
-        ])
+    ])
 
 
 class IActorSettings(Interface):

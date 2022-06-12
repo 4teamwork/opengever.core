@@ -48,10 +48,10 @@ def get_templates(context):
     templates = []
     for template_folder in template_folders:
         templates.extend(api.content.find(
-                context=template_folder,
-                depth=1,
-                portal_type="opengever.document.document",
-                sort_on='sortable_title', sort_order='ascending'))
+            context=template_folder,
+            depth=1,
+            portal_type="opengever.document.document",
+            sort_on='sortable_title', sort_order='ascending'))
     templates.sort(key=lambda template: template.Title.lower())
 
     terms = []
@@ -83,7 +83,7 @@ class ICreateDocumentFromTemplate(model.Schema):
             {'column': 'modified',
              'column_title': _(u'label_modified', default=u'Modified'),
              'transform': helper.readable_date}
-            )
+        )
     )
 
     title = schema.TextLine(
@@ -102,7 +102,7 @@ class ICreateDocumentFromTemplate(model.Schema):
         title=_(u'label_edit_after_creation', default='Edit after creation'),
         default=True,
         required=False,
-        )
+    )
 
 
 def get_dm_key(context):

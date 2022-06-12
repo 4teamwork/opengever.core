@@ -37,7 +37,7 @@ class UsersVocabulary(SimpleVocabulary):
 def getTransitionVocab(context):
 
     if AccessControl.getSecurityManager(
-        ).getUser() == AccessControl.SpecialUsers.nobody:
+    ).getUser() == AccessControl.SpecialUsers.nobody:
         return SimpleVocabulary([])
 
     wftool = getToolByName(context, 'portal_workflow')
@@ -46,9 +46,9 @@ def getTransitionVocab(context):
             context.REQUEST.URL.find('++add++opengever.task.task') == -1:
         for tdef in wftool.getTransitionsFor(context):
             transitions.append(SimpleVocabulary.createTerm(
-                    tdef['id'],
-                    tdef['id'],
-                    PMF(tdef['id'], default=tdef['title_or_id'])))
+                tdef['id'],
+                tdef['id'],
+                PMF(tdef['id'], default=tdef['title_or_id'])))
         return SimpleVocabulary(transitions)
 
     else:
@@ -57,9 +57,9 @@ def getTransitionVocab(context):
         for tid in state.transitions:
             tdef = wf.transitions.get(tid, None)
             transitions.append(SimpleVocabulary.createTerm(
-                    tdef.id,
-                    tdef.id,
-                    PMF(tdef.id, default=tdef.title_or_id)))
+                tdef.id,
+                tdef.id,
+                PMF(tdef.id, default=tdef.title_or_id)))
         return SimpleVocabulary(transitions)
 
 

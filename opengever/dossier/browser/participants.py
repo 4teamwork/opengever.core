@@ -77,7 +77,7 @@ def base64_oid_checkbox_helper(item, value):
             'name': 'oids:list',
             'id': 'item-%s' % oid,
             'value': oid,
-            }
+        }
     html = '<input %s />' % ' '.join(['%s="%s"' % (k, v)
                                       for k, v in attrs.items()])
     return html
@@ -113,7 +113,7 @@ class Participants(BaseListingTab):
          'column_title': _(u'column_rolelist', default=u'role_list'),
          'transform': role_list_helper},
 
-        )
+    )
 
     def create_id(self, item):
         if not getattr(item, '_p_oid', False):
@@ -123,12 +123,12 @@ class Participants(BaseListingTab):
     enabled_actions = [
         'delete_participants',
         'add_participant',
-        ]
+    ]
 
     major_actions = [
         'delete_participants',
         'add_participant',
-        ]
+    ]
 
     def get_base_query(self):
         return None
@@ -169,12 +169,10 @@ class ParticipantsTableSource(GeverTableSource):
 
     def extend_query_with_ordering(self, results):
         if self.config.sort_on:
-            sorter = lambda a, b: cmp(getattr(a, self.config.sort_on, ''),
-                                      getattr(b, self.config.sort_on, ''))
-            results.sort(sorter)
-
-        if self.config.sort_on and self.config.sort_reverse:
-            results.reverse()
+            results.sort(
+                key=lambda x: getattr(x, self.config.sort_on, ''),
+                reverse=self.config.sort_reverse,
+            )
 
         return results
 

@@ -47,7 +47,7 @@ class NoCheckedoutDocsValidator(validator.SimpleFieldValidator):
 
             if len(checkedout):
                 raise Invalid(_(
-                        u'error_checked_out_document',
-                        default=u'The documents (${title}) are still checked out. \
-                                Please checkin them in bevore deliver',
-                        mapping={'title': ', '.join(checkedout)}))
+                    u'error_checked_out_document',
+                    default=u'The documents (${title}) are still checked out. '
+                            u'Please check them in first.',
+                    mapping={'title': ', '.join(checkedout)}))

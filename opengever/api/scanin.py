@@ -57,7 +57,7 @@ class ScanIn(Service):
                 status=403,
                 type_='Forbidden',
                 message='The user does not have the required permissions to perform a scan-in via the API.',
-                )
+            )
 
         elif destination == 'private':
             # Try to find a dossier with title 'Scaneingang'
@@ -85,7 +85,7 @@ class ScanIn(Service):
             status=404,
             type_='NotFound',
             message='The scan-in destination does not exist.',
-            )
+        )
 
     def find_inbox(self):
         portal = api.portal.get()

@@ -378,11 +378,11 @@ class ProposalModelBuilder(SqlObjectBuilder):
         for document in documents:
             oguid = Oguid.for_object(document)
             submitted.append(SubmittedDocument(
-                    oguid=oguid,
-                    submitted_oguid=oguid,
-                    submitted_version=document.get_current_version_id(
-                        missing_as_zero=True),
-                ))
+                oguid=oguid,
+                submitted_oguid=oguid,
+                submitted_version=document.get_current_version_id(
+                    missing_as_zero=True),
+            ))
         self.arguments['submitted_documents'] = submitted
         return self
 

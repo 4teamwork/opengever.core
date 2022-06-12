@@ -303,7 +303,7 @@ class AddParticipationsOnWorkspacePost(LinkedWorkspacesService):
                                default=u"Property 'participants' is required"))
 
         items = ILinkedWorkspaces(self.context).add_participations(
-                workspace_uid, participants).get("items", [])
+            workspace_uid, participants).get("items", [])
 
         return {
             "@id": "{}/@linked-workspace-participations".format(self.context.absolute_url()),

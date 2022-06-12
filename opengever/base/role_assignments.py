@@ -317,7 +317,7 @@ class RoleAssignmentManager(object):
     def get_roles_by_principal_id(self, principal_id):
         roles = set()
         for assignment_data in self.storage.get_by_principal(principal_id):
-                roles.update(assignment_data.get('roles', []))
+            roles.update(assignment_data.get('roles', []))
 
         return roles
 
@@ -394,7 +394,7 @@ class RoleAssignmentManager(object):
                 principal, new_roles, verified=True)
 
         self.context.manage_addLocalRoles(
-                userid, ['Owner'], verified=True)
+            userid, ['Owner'], verified=True)
 
         if reindex:
             self.context.reindexObjectSecurity()

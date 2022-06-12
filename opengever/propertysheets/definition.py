@@ -1,6 +1,5 @@
 from copy import deepcopy
 from ftw.solr.converters import to_iso8601
-from ftw.solr.converters import to_unicode
 from opengever.propertysheets.default_expression import attach_expression_default_factory
 from opengever.propertysheets.default_from_member import attach_member_property_default_factory
 from opengever.propertysheets.exceptions import InvalidFieldType

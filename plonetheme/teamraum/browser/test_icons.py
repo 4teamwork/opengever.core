@@ -19,8 +19,7 @@ BAD_TYPES = (
     "Discussion Item", "TempFolder", "ATCurrentAuthorCriterion",
     "ATPathCriterion", "ATRelativePathCriterion", )
 
-ALL_CONTENT_TYPES = {
-    }
+ALL_CONTENT_TYPES = {}
 
 
 class TestIconsView(BrowserView):

@@ -124,7 +124,7 @@ class ICreateDossierFromTemplate(model.Schema):
             {'column': 'modified',
              'column_title': _(u'label_modified', default=u'Modified'),
              'transform': helper.readable_date}
-            )
+        )
     )
 
 

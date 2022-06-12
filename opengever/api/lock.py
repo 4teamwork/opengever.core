@@ -78,13 +78,15 @@ def can_unlock_obj(obj, lock_type):
         return True
 
     userid = api.user.get_current().getId() or None
-    for l in info:
+    for lock in info:
         # There is another lock of a different type
-        if not hasattr(l['type'], '__name__') or \
-           l['type'].__name__ != lock_type.__name__:
+        if (
+            not hasattr(lock['type'], '__name__')
+            or lock['type'].__name__ != lock_type.__name__
+        ):
             return False
         # The lock is in fact held by the current user
-        if l['creator'] == userid:
+        if lock['creator'] == userid:
             return True
         # workspace lock can also be unlocked by users who have not created the lock
         if lock_type.__name__ == LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK:

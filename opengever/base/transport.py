@@ -57,7 +57,7 @@ class Transporter(object):
 
         request_data = {
             REQUEST_KEY: jsondata,
-            }
+        }
         request_data.update(**data)
 
         return dispatch_json_request(
@@ -114,7 +114,7 @@ class ReceiveObject(BrowserView):
             'path': '/'.join(obj.getPhysicalPath())[
                 len(portal_path) + 1:],
             'intid': intids.queryId(obj)
-            }
+        }
 
         # Set correct content type for JSON response
         self.request.response.setHeader("Content-type", "application/json")
@@ -231,8 +231,8 @@ class DexterityFieldDataCollector(object):
                 subdata[name] = value
             if schemata.getName() in data.keys():
                 raise TransportationError((
-                        'Duplacte behavior names are not supported',
-                        schemata.getName()))
+                    'Duplacte behavior names are not supported',
+                    schemata.getName()))
             data[schemata.getName()] = subdata
         return data
 
@@ -260,17 +260,17 @@ class DexterityFieldDataCollector(object):
                 schema.interfaces.IDate,
                 schema.interfaces.ITime,
                 schema.interfaces.IDatetime,
-                ]):
+        ]):
             if value:
                 return str(value)
         elif self._provided_by_one_of(field, [
                 INamedFileField,
-                ]):
+        ]):
             if value:
                 return {
                     'filename': value.filename,
                     'data': base64.encodestring(value.data),
-                    }
+                }
 
         elif self._provided_by_one_of(field, (
                 IRelation,
@@ -293,7 +293,7 @@ class DexterityFieldDataCollector(object):
         if self._provided_by_one_of(field, [
                 schema.interfaces.ITime,
                 schema.interfaces.IDatetime,
-                ]):
+        ]):
             if value:
                 return DateTime.DateTime(value).asdatetime()
 
@@ -352,7 +352,7 @@ class DublinCoreMetaDataCollector(object):
         return {
             'creator': self.context.Creator(),
             'created': str(self.context.created()),
-            }
+        }
 
     def insert(self, data):
 

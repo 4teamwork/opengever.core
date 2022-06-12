@@ -147,7 +147,7 @@ class CustomStyles(BrowserView):
             '0 1px 0 %s inset, 0 0 0 1px %s' % (
                 self.get_value_for('css.gnav_shadowinset'),
                 self.get_value_for('css.gnav_shadowtop'),
-                ),
+            ),
             '')
         self.add_gradient('#navi-wrapper',
                           self.get_value_for('css.gnav_grad_start'),
@@ -159,7 +159,7 @@ class CustomStyles(BrowserView):
                 self.get_value_for('css.gnav_active_shadowinset'),
                 self.get_value_for('css.gnav_active_shadowtop')),
             ''
-            )
+        )
         self.add_gradient('#portal-globalnav li.selected a',
                           self.get_value_for('css.gnav_active_start'),
                           self.get_value_for('css.gnav_active_end'))
@@ -170,7 +170,7 @@ class CustomStyles(BrowserView):
                 self.get_value_for('css.gnav_hover_shadowinset'),
                 self.get_value_for('css.gnav_hover_shadowtop')),
             ''
-            )
+        )
         self.add_gradient('#portal-globalnav a:hover',
                           self.get_value_for('css.gnav_hover_start'),
                           self.get_value_for('css.gnav_hover_end'))
@@ -181,7 +181,8 @@ class CustomStyles(BrowserView):
             {'background-color': self.get_value_for('css.gnav_hover_start')})
         # mobile navigation (slide)
         self.add_style(
-            '#slider-container .slideNavi ul.globalnav li, #slider-container .slideNavi ul.globalnav a, div.slideNavi.loading',
+            '#slider-container .slideNavi ul.globalnav li, #slider-container '
+            '.slideNavi ul.globalnav a, div.slideNavi.loading',
             {'background-color': self.get_value_for('css.gnav_hover_start')})
 
         # mobile usermenu
@@ -204,9 +205,10 @@ class CustomStyles(BrowserView):
             }""" % self.get_value_for('css.gnav_hover_start'))
 
         # header
-        self.add_style('#header-wrapper, #columns-wrapper',
-                       {'background-color': self.get_value_for(
-                    'css.header_background')})
+        self.add_style(
+            '#header-wrapper, #columns-wrapper',
+            {'background-color': self.get_value_for(
+                'css.header_background')})
 
         self.add_style('#header',
                        {'height': self.get_value_for('css.header_height')})
@@ -229,20 +231,21 @@ class CustomStyles(BrowserView):
 
         # if headerbox anzeigen
         if self.get_value_for('css.show_headerbox'):
-            if self.get_value_for(
-                'css.headerbox_background').startswith('rgba'):
+            if self.get_value_for('css.headerbox_background').startswith('rgba'):
                 # fix for IE
                 self.add_style('div.headerTop',
                                {'background-color': '#fff'})
-            self.add_style('div.headerTop',
-                           {'margin-top': self.get_value_for(
-                        'css.headerbox_spacetop'),
-                            'background': self.get_value_for(
-                        'css.headerbox_background'),
-                            'margin-left': '1%',
-                            'margin-right': '1%',
-                            'width': '98%',
-                            'border-radius': '4px'})
+            self.add_style(
+                'div.headerTop',
+                {
+                    'margin-top': self.get_value_for('css.headerbox_spacetop'),
+                    'background': self.get_value_for('css.headerbox_background'),
+                    'margin-left': '1%',
+                    'margin-right': '1%',
+                    'width': '98%',
+                    'border-radius': '4px',
+                }
+            )
             self.add_style('#portal-personaltools',
                            {'padding-right': '1em'})
 
@@ -270,8 +273,7 @@ class CustomStyles(BrowserView):
 
         # content
         self.add_style('#columns-wrapper, .contentWrapper',
-                       {'background-color': self.get_value_for(
-                    'css.content_background')})
+                       {'background-color': self.get_value_for('css.content_background')})
 
         self.add_style('.fixedWidth',
                        {'width': self.get_value_for('css.content_width')})
@@ -319,7 +321,7 @@ class CustomStyles(BrowserView):
         self.add_style(
             '#login-box',
             {'background-color': self.get_value_for(
-                    'css.login_background')})
+                'css.login_background')})
 
         # additional css
         if self.get_value_for('css.additional_css'):
@@ -367,8 +369,8 @@ class CustomStyles(BrowserView):
                 "%s {\n  %s\n}" % (
                     selector,
                     '\n  '.join(['%s:%s;' % (k, v) for k, v in rows.items() if v]),
-                    )
                 )
+            )
 
     def add_boxshadow(self, selector, dimension, color):
         """Adds a box shadow to the selector, using dimension and color.
@@ -379,9 +381,7 @@ class CustomStyles(BrowserView):
   box-shadow: %(dimension)s %(color)s;
   -moz-box-shadow: %(dimension)s %(color)s;
   -webkit-box-shadow: %(dimension)s %(color)s;
-}""" % {'selector': selector,
-        'dimension': dimension,
-        'color': color})
+}""" % {'selector': selector, 'dimension': dimension, 'color': color})
 
     def add_gradient(self, selector, color_a, color_b):
         """Adds a linear gradient to a specified selector using color_a
@@ -402,7 +402,4 @@ class CustomStyles(BrowserView):
   filter: progid:DXImageTransform.Microsoft.gradient(\
 startColorstr='%(color_a)s', endColorstr='%(color_b)s', GradientType=0);
 }
-""" % {'selector': selector,
-       'color_a': color_a,
-       'color_b': color_b}
-                )
+""" % {'selector': selector, 'color_a': color_a, 'color_b': color_b})

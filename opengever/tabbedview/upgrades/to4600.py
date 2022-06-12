@@ -20,6 +20,6 @@ class ResetProposallistingTabbbedviewTabsForNewRows(SchemaMigration):
         query = query.filter(or_(
             DictStorageModel.key.like('{}%'.format(CONFIG_KEY_MEETING)),
             DictStorageModel.key.like('{}%'.format(CONFIG_KEY_DOSSIER))
-            ))
+        ))
 
         query.delete(synchronize_session='fetch')

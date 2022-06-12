@@ -63,8 +63,8 @@ class ICommittee(model.Schema):
             'agenda_item_header_template',
             'agenda_item_suffix_template',
             'protocol_suffix_template',
-            ],
-        )
+        ],
+    )
 
     model.fieldset(
         u'excerpt',
@@ -72,8 +72,8 @@ class ICommittee(model.Schema):
         fields=[
             'excerpt_header_template',
             'excerpt_suffix_template',
-            ],
-        )
+        ],
+    )
 
     repository_folder = RelationChoice(
         title=_(u'Linked repository folder'),
@@ -220,7 +220,7 @@ class ICommitteeModel(Interface):
         title=_(u"label_title", default=u"Title"),
         required=True,
         max_length=256,
-        )
+    )
 
     group_id = schema.Choice(
         title=_('label_committee_responsible', default="Committeeresponsible"),

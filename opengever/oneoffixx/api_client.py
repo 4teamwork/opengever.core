@@ -261,7 +261,7 @@ class OneoffixxAPIClient(object):
             'impersonateAs': impersonate_as,
             'timestamp': timestamp,
             'hash': checksum.hexdigest().upper(),
-            }
+        }
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
         try:

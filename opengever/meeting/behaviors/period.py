@@ -64,8 +64,8 @@ class IPeriodSchema(model.Schema):
         title=_(u'label_decision_sequence_number',
                 default=u'Sequence number for decisions'),
         description=_(u'description_decision_sequence_number',
-                     default=u'Only visible for managers. Only change this if '
-                              'you know what you are doing!'),
+                      default=u'Only visible for managers. Only change this if '
+                              u'you know what you are doing!'),
         required=True,
         default=0,
     )
@@ -75,8 +75,8 @@ class IPeriodSchema(model.Schema):
         title=_(u'label_meeting_sequence_number',
                 default=u'Sequence number for meetings'),
         description=_(u'description_meeting_sequence_number',
-                     default=u'Only visible for managers. Only change this if '
-                              'you know what you are doing!'),
+                      default=u'Only visible for managers. Only change this if '
+                              u'you know what you are doing!'),
         required=True,
         default=0,
     )

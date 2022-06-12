@@ -12,7 +12,6 @@ from opengever.base.model import create_session
 from opengever.base.model.favorite import Favorite
 from opengever.document.base import BaseDocumentMixin
 from opengever.document.behaviors import metadata as ogmetadata
-from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.dossier import _ as dossier_mf
 from opengever.mail import _

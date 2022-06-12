@@ -109,7 +109,7 @@ class BaseDocumentFileActions(object):
         return (
             trasher.verify_may_trash(raise_on_violations=False)
             and not self.context.is_inside_a_template_folder()
-            )
+        )
 
     def is_untrash_context_action_available(self):
         trasher = ITrasher(self.context)

@@ -105,7 +105,7 @@ class ProposalListingTab(FilteredListingTab):
         DecidedProposalFilter(
             'filter_proposals_decided',
             _('decided', default=u'Decided'))
-        )
+    )
 
     sort_on = ''
     show_selects = False

@@ -40,6 +40,7 @@ class ObjectSyncerProgressLogger(ProgressLogger):
         self._counter = 0
 
     security.declarePrivate('__call__')
+
     def __call__(self):
         self._counter += 1
         if not self.should_be_logged():

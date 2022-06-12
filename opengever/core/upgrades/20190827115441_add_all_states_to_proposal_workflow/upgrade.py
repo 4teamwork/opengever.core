@@ -47,10 +47,10 @@ class AddAllStatesToProposalWorkflow(SQLUpgradeStep):
         oguid = Oguid.for_object(proposal)
 
         row = self.execute(
-                proposals_table.select()
-                .where(proposals_table.c.admin_unit_id == oguid.admin_unit_id)
-                .where(proposals_table.c.int_id == oguid.int_id)
-            ).fetchone()
+            proposals_table.select()
+            .where(proposals_table.c.admin_unit_id == oguid.admin_unit_id)
+            .where(proposals_table.c.int_id == oguid.int_id)
+        ).fetchone()
         model_state = row.workflow_state
 
         state_before = self.wf_tool.getStatusOf(wf_id, proposal)

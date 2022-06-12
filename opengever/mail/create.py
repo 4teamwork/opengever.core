@@ -1,6 +1,5 @@
 from ftw.mail.create import CreateMailInContainer
 from opengever.base.command import CreateEmailCommand
-from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.mail.mail import MESSAGE_SOURCE_MAILIN
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 import email

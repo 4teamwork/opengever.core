@@ -20,7 +20,7 @@ class AddSubstitutes(SchemaMigration):
             Column("id", Integer, Sequence("substitution_id_seq"), primary_key=True),
             Column('userid', String(USER_ID_LENGTH), ForeignKey(User.userid)),
             Column('substitute_userid', String(USER_ID_LENGTH), ForeignKey(User.userid))
-            )
+        )
 
         self.ensure_sequence_exists('substitution_id_seq')
 

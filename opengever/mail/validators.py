@@ -9,7 +9,7 @@ import re
 
 
 EMAIL_REGEX = re.compile(
-    r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",
+    r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",  # noqa
     re.IGNORECASE)
 
 
@@ -26,13 +26,12 @@ class DocumentSizeValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         if value:
-            if self.request.get(
-                'form.widgets.documents_as_links') != ['selected']:
+            if self.request.get('form.widgets.documents_as_links') != ['selected']:
                 registry = queryUtility(IRegistry)
                 reg_proxy = registry.forInterface(ISendDocumentConf)
                 total = 0
                 for obj in value:
-                    #check if its a mail
+                    # check if its a mail
                     if IMail.providedBy(obj):
                         total += obj.message.getSize()
                     elif obj.file:

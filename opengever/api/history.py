@@ -64,11 +64,11 @@ class GeverHistoryGet(HistoryGet):
         actor = Actor.lookup(actorid)
 
         initial_version['actor'] = {
-                "@id": "{}/@users/{}".format(site_url, actorid),
-                "id": actorid,
-                "fullname": actor.get_label(with_principal=False),
-                "username": None,
-            }
+            "@id": "{}/@users/{}".format(site_url, actorid),
+            "id": actorid,
+            "fullname": actor.get_label(with_principal=False),
+            "username": None,
+        }
 
         return json_compatible(history)
 

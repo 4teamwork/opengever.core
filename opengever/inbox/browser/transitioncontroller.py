@@ -19,8 +19,8 @@ class ForwardingTransitionController(TaskTransitionController):
             return False
 
         if include_agency:
-            return (c.current_user.is_responsible or
-                    c.current_user.is_administrator)
+            return (c.current_user.is_responsible
+                    or c.current_user.is_administrator)
 
         return c.current_user.is_responsible
 
@@ -41,9 +41,9 @@ class ForwardingTransitionController(TaskTransitionController):
 
         if c.task.is_assigned_to_current_admin_unit:
             if include_agency:
-                return (c.current_user.is_responsible or
-                        c.current_user.in_responsible_orgunits_inbox_group or
-                        c.current_user.is_administrator)
+                return (c.current_user.is_responsible
+                        or c.current_user.in_responsible_orgunits_inbox_group
+                        or c.current_user.is_administrator)
 
             return c.current_user.is_responsible
 

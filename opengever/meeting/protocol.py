@@ -33,8 +33,8 @@ class ProtocolData(object):
         self.data['_sablon'] = {
             'properties': {
                 'start_page_number': self.meeting.protocol_start_page_number
-                }
             }
+        }
 
     def add_base(self):
         self.data['mandant'] = {
@@ -72,7 +72,7 @@ class ProtocolData(object):
         absentees = []
         for absentee in self.meeting.absentees:
             membership = Membership.query.fetch_for_meeting(
-                    self.meeting, absentee)
+                self.meeting, absentee)
             absentees.append(self.get_member_data(absentee, membership))
         return absentees
 

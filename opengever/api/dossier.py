@@ -26,7 +26,7 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
 
         # XXX deprecated
         result[u"responsible_fullname"] = self.context.get_responsible_actor(
-            ).get_label(with_principal=False)
+        ).get_label(with_principal=False)
 
         result[u'responsible_actor'] = serialize_actor_id_to_json_summary(
             IDossier(self.context).responsible)

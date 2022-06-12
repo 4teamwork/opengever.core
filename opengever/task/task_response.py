@@ -5,7 +5,6 @@ from z3c.relationfield.schema import Relation
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
-from zope.schema import List
 
 
 class ITaskResponse(IResponse):

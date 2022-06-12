@@ -47,7 +47,7 @@ class DocPropertyCollector(object):
             properties.update(obj_properties)
 
         creator_properties = queryAdapter(self.get_document_creator(),
-                                                 IDocPropertyProvider)
+                                          IDocPropertyProvider)
         if creator_properties:
             properties.update(creator_properties.get_properties(
                 prefix=('document', 'creator',)))

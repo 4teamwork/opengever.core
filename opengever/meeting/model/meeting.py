@@ -85,7 +85,7 @@ class CancelTransition(Transition):
 
         msg = _(u'msg_meeting_successfully_cancelled',
                 default=u'The meeting ${title} has been successfully '
-                         'cancelled.',
+                        u'cancelled.',
                 mapping=dict(title=model.get_title()))
         api.portal.show_message(msg, api.portal.get().REQUEST)
 
@@ -462,7 +462,8 @@ class Meeting(Base, SQLFormSupport):
 
         meeting_dossier = self.get_dossier()
         if not api.user.get_current().checkPermission(
-            'opengever.document: Add document', meeting_dossier):
+            'opengever.document: Add document', meeting_dossier
+        ):
             raise MissingMeetingDossierPermissions
 
         ad_hoc_document = CreateDocumentCommand(

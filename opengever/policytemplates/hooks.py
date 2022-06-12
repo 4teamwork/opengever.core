@@ -1,4 +1,3 @@
-from mrbob.bobexceptions import SkipQuestion
 from mrbob.hooks import to_boolean
 from mrbob.hooks import to_integer
 from mrbob.hooks import validate_choices
@@ -8,9 +7,7 @@ from opengever.dossier.interfaces import DEFAULT_DOSSIER_DEPTH
 from opengever.mail.interfaces import DEFAULT_MAIL_MAX_SIZE
 from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
 from os.path import expanduser
-from os.path import isfile
 from pkg_resources import resource_filename
-import json
 import os
 import shutil
 
@@ -45,7 +42,7 @@ IGNORED_QUESTIONS = {
         'setup.repositoryfolder_tasks_tab',
         'setup.repositoryfolder_proposals_tab',
         'setup.bumblebee_auto_refresh',
-        ],
+    ],
     'gever': [
         'deployment.workspace_creators_group',
         'deployment.workspace_users_group',
@@ -53,18 +50,18 @@ IGNORED_QUESTIONS = {
         'base.workspace_secret',
         'setup.enable_workspace_meeting_feature',
         'setup.enable_todo_feature'
-        ]
-    }
+    ]
+}
 
 IGNORED_DIRECTORIES = {
     'teamraum': ['default_content'],
     'gever': ['workspaces_content']
-    }
+}
 
 IGNORED_FILES = {
     'teamraum': ['hooks.py.bob'],
     'gever': []
-    }
+}
 
 VARIABLE_VALUES = {
     'teamraum': {
@@ -74,9 +71,9 @@ VARIABLE_VALUES = {
         'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,
         'setup.officeconnector_attach': True,
         'setup.officeconnector_checkout': True,
-        },
+    },
     'gever': {}
-    }
+}
 
 DEFAULT_VALUES = {
     'teamraum': {
@@ -106,7 +103,6 @@ def initialize(configurator, question):
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
     init_defaults(configurator)
     init_values(configurator)
-    apply_dotfile_settings(configurator)
     filter_questions(configurator)
     add_ignored_directories(configurator)
     add_ignored_files(configurator)
@@ -124,7 +120,7 @@ def filter_questions(configurator):
 def add_ignored_directories(configurator):
     configurator.ignored_directories.extend(
         IGNORED_DIRECTORIES[policy_type(configurator)]
-        )
+    )
 
 
 def add_ignored_files(configurator):
@@ -153,11 +149,11 @@ def post_package_name(configurator, question, answer):
     domain_default = '{}.{}.ch'.format(
         answer,
         'onegovgever' if configurator.variables['is_gever'] else 'teamraum'
-        )
+    )
     bumblebee_app_id_default = u'{}_{}'.format(
         'gever' if configurator.variables['is_gever'] else 'teamraum',
         answer
-        )
+    )
     new_defaults = {
         'package.url': 'https://github.com/4teamwork/opengever.{}'.format(
             answer),
@@ -176,20 +172,20 @@ def post_package_name(configurator, question, answer):
 def post_package_title(configurator, question, answer):
     update_defaults(configurator, {
         'adminunit.title': answer
-        })
+    })
     return answer
 
 
 def post_adminunit_title(configurator, question, answer):
     update_defaults(configurator, {
         'orgunit.title': answer
-        })
+    })
     if configurator.variables['is_teamraum']:
         # Teamraum does not support more than one orgunit, so there is
         # no reason to have a discrepency between orgunit and adminunit
         configurator.variables.update({
             'orgunit.title': answer
-            })
+        })
     return answer
 
 
@@ -217,7 +213,7 @@ def post_adminunit_id(configurator, question, answer):
         # no reason to have a discrepency between orgunit and adminunit
         configurator.variables.update({
             'orgunit.id': answer.lower()
-            })
+        })
     configurator.variables['adminunit.ac_cookie_name'] = answer.replace('-', '_')
     configurator.variables['adminunit.id_capitalized'] = answer.capitalize()
     configurator.variables['adminunit.id_upper'] = answer.upper()

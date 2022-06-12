@@ -11,6 +11,18 @@ from opengever.activity.model.watcher import Watcher
 
 from opengever.activity.model import query  # isort:skip
 
+__all__ = [
+    'Activity',
+    'ActivityTranslation',
+    'Digest',
+    'Notification',
+    'Resource',
+    'Subscription',
+    'NotificationDefault',
+    'NotificationSetting',
+    'Watcher',
+    'query',
+]
 
 tables = [
     'activities',

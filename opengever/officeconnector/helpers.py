@@ -18,14 +18,14 @@ def is_officeconnector_attach_feature_enabled():
     return api.portal.get_registry_record(
         'attach_to_outlook_enabled',
         interface=IOfficeConnectorSettings,
-        )
+    )
 
 
 def is_officeconnector_checkout_feature_enabled():
     return api.portal.get_registry_record(
         'direct_checkout_and_edit_enabled',
         interface=IOfficeConnectorSettings,
-        )
+    )
 
 
 def is_client_ip_in_office_connector_disallowed_ip_ranges():
@@ -42,7 +42,7 @@ def is_client_ip_in_office_connector_disallowed_ip_ranges():
     blacklisted_ip_ranges = api.portal.get_registry_record(
         'office_connector_disallowed_ip_ranges',
         interface=IOfficeConnectorSettings,
-        )
+    )
     return is_in_ip_range(client_ip, blacklisted_ip_ranges)
 
 
@@ -61,7 +61,7 @@ def parse_documents(request, context, action):
             and ('BODY' not in request
                  or isinstance(json.loads(request['BODY']), list)
                  or action in ['docugate', 'oneoffixx'])
-        ):
+    ):
         # Feature enabled for the wrong content type
         if not IBaseDocument.providedBy(context):
             raise NotFound
@@ -102,7 +102,7 @@ def get_auth_plugin(context):
             if acl_users_candidate._verifyUser(
                     acl_users_candidate.plugins,
                     user_id=api.user.get_current().id,
-                ):
+            ):
                 acl_users = acl_users_candidate
                 break
 
@@ -186,7 +186,7 @@ def create_oc_url(request, context, payload):
     payload['url'] = '/'.join((
         api.portal.get().absolute_url(),
         'oc_' + payload['action'],
-        ))
+    ))
 
     # Create a multi-document payload
     payload['documents'] = []

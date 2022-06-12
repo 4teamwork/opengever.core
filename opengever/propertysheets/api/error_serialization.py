@@ -173,8 +173,8 @@ class ErrorInfosBase(object):
                   default=u'(Max: ${max_length} characters. '
                           u'Actual length: ${actual_length} characters)',
                   mapping={
-                    'max_length': max_length,
-                    'actual_length': len(value),
+                      'max_length': max_length,
+                      'actual_length': len(value),
                   }),
                 context=self.request,
             )

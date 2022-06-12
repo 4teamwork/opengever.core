@@ -115,7 +115,7 @@ class SavePDFDocumentUnder(BrowserView):
             'label_error': translate(
                 _(u'label_error', default=u'Error'),
                 context=self.request),
-            })
+        })
 
     def destination_document_url(self):
         return self.destination_document.absolute_url()

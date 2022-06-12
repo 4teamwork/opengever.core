@@ -3,7 +3,6 @@ from opengever.base.viewlets.byline import BylineBase
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task import _
-from opengever.task import is_private_task_feature_enabled
 from opengever.task.task import ITask
 from Products.CMFPlone import PloneMessageFactory as PMF
 from zope.component import getUtility

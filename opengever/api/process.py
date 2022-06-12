@@ -74,19 +74,19 @@ class ITaskContainer(model.Schema):
         description=task_mf('help_title', default=u""),
         required=True,
         max_length=256,
-        )
+    )
 
     text = schema.Text(
         title=task_mf(u"label_text", default=u"Text"),
         description=task_mf(u"help_text", default=u""),
         required=False,
-        )
+    )
 
     deadline = schema.Date(
         title=task_mf(u"label_deadline", default=u"Deadline"),
         description=task_mf(u"help_deadline", default=u""),
         required=False,
-        )
+    )
 
 
 class ProcessPost(Service):

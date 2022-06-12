@@ -268,10 +268,10 @@ class TaskSuccessors(object):
 
     def __call__(self, expand=False):
         result = {
-                "successors": {
-                    "@id": "{}/@successors".format(self.context.absolute_url())
-                }
+            "successors": {
+                "@id": "{}/@successors".format(self.context.absolute_url())
             }
+        }
         if not expand:
             return result
 

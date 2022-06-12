@@ -90,7 +90,7 @@ class DefaultUploadStructureAnalyser(object):
         quoted_filenames = ['"{}"'.format(el) for el in normalized_filenames.values()]
         filters.append(
             u'filename:({})'.format(' or '.join(quoted_filenames))
-            )
+        )
 
         resp = solr.search(
             filters=filters,

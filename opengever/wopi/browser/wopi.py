@@ -142,7 +142,7 @@ class WOPIView(BrowserView):
         modified_dt = self.obj.modified().asdatetime()
         modified_iso9601 = (
             modified_dt.replace(tzinfo=None) - modified_dt.utcoffset()
-            ).isoformat() + 'Z'
+        ).isoformat() + 'Z'
         _alg, sha256_checksum = file_checksum(
             self.obj.file._blob.committed(), algorithm=u'SHA256')
         data = {

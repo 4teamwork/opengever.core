@@ -1,4 +1,4 @@
-import patches
+import patches  # noqa
 
 
 DEVELOPMENT_USERS_GROUP = "og_demo-ftw_users"
