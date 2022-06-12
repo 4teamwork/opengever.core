@@ -7,7 +7,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.meeting import _
-from opengever.meeting.model import Meeting
+from opengever.meeting.model.meeting import Meeting
 from opengever.meeting.model.member import Member
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.model.proposal import Proposal

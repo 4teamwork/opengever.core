@@ -1,6 +1,6 @@
 from opengever.disposition import only_attach_original_enabled
 from opengever.disposition.ech0160.bindings import arelda
-from opengever.disposition.ech0160.model import File
+from opengever.disposition.ech0160.model.file import File
 import os.path
 
 

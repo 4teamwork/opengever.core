@@ -2,7 +2,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.response import IResponse
 from opengever.base.response import Response
 from opengever.meeting import _
-from opengever.meeting.model import Meeting
+from opengever.meeting.model.meeting import Meeting
 from opengever.ogds.base.actor import Actor
 from persistent.dict import PersistentDict
 from plone.restapi.interfaces import IFieldDeserializer

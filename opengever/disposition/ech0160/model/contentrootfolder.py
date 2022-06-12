@@ -1,4 +1,4 @@
-from opengever.disposition.ech0160.model import Folder
+from opengever.disposition.ech0160.model.folder import Folder
 import os.path
 
 

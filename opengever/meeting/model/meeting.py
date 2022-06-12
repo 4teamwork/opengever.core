@@ -15,7 +15,7 @@ from opengever.meeting.browser.meetings.transitions import MeetingTransitionCont
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
 from opengever.meeting.exceptions import SablonProcessingFailed
-from opengever.meeting.model import AgendaItem
+from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.model.membership import Membership
 from opengever.meeting.period import Period
 from opengever.meeting.workflow import State

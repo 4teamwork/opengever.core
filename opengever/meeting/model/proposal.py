@@ -13,7 +13,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
-from opengever.meeting.model import AgendaItem
+from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.workflow import State
