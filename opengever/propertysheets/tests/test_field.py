@@ -229,6 +229,44 @@ class TestPropertySheetField(FunctionalTestCase):
             }
         )
 
+    def test_multiple_choice_validation_fails_for_invalid_field_data(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "multiple_choice", "choose", u"Choose", u"", False, values=['xx']
+            )
+        )
+        self.request["some_request_key"] = [u"question"]
+
+        with self.assertRaises(ValidationError):
+            self.field.validate(
+                {
+                    "IDocumentMetadata.document_type.question": {
+                        "choose": set(['yy']),
+                    }
+                }
+            )
+
+    def test_multiple_choice_validation_with_good_data(self):
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "multiple_choice", "choose", u"Choose", u"", True, values=['xx']
+            )
+        )
+        self.request["some_request_key"] = [u"question"]
+        self.field.validate(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": set(['xx']),
+                }
+            }
+        )
+
     def test_successful_field_validation_with_active_slot_from_request_key(
         self,
     ):

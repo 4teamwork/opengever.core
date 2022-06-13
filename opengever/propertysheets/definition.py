@@ -160,6 +160,9 @@ class PropertySheetSchemaDefinition(object):
         """
         if isinstance(field, Choice):
             field._init_field = False
+        elif isinstance(field, Set) and isinstance(field.value_type, Choice):
+            # For multiple choice fields
+            field.value_type._init_field = False
 
     def __eq__(self, other):
         if isinstance(other, PropertySheetSchemaDefinition):
