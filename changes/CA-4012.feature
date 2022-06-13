@@ -1,1 +1,1 @@
-Support serialization of invalid values for custom choice fields. [njohner]
+Allow current value in single or multiple choice fields. [njohner]
