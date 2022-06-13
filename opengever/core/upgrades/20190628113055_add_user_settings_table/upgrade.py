@@ -18,7 +18,7 @@ class AddUserSettingsTable(SchemaMigration):
                    ForeignKey(User.userid), primary_key=True),
             Column('notify_own_actions', Boolean, default=False, nullable=False),
             Column('notify_inbox_actions', Boolean, default=True, nullable=False)
-            )
+        )
 
         # On some deployments, these columns had been added to the users table,
         # we drop them if necessary.

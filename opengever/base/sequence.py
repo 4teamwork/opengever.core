@@ -10,7 +10,8 @@ from ZODB.DemoStorage import DemoStorage
 from ZODB.POSException import ConflictError
 from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
-from zope.component import getUtility, getAdapter
+from zope.component import getAdapter
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 import logging

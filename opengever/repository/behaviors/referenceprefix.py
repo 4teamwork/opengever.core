@@ -4,7 +4,8 @@ from opengever.base.interfaces import IReferenceNumberPrefix as PrefixAdapter
 from opengever.repository import _
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
-from z3c.form import validator, error
+from z3c.form import error
+from z3c.form import validator
 from z3c.form.interfaces import IAddForm
 from zope import schema
 from zope.container.interfaces import IContainerModifiedEvent
@@ -37,8 +38,8 @@ class IReferenceNumberPrefix(model.Schema):
         label=_(u'fieldset_common', default=u'Common'),
         fields=[
             u'reference_number_prefix',
-            ],
-        )
+        ],
+    )
 
     # In technical contexts, this field / concept is still called
     # "reference number prefix", even though that's incorrect. In any user
@@ -54,7 +55,7 @@ class IReferenceNumberPrefix(model.Schema):
             default=u'Repository number'),
         required=False,
         defaultFactory=reference_number_prefix_default,
-        )
+    )
 
 
 alsoProvides(IReferenceNumberPrefix, IFormFieldProvider)
@@ -79,7 +80,7 @@ class ReferenceNumberPrefixValidator(validator.SimpleFieldValidator):
 validator.WidgetValidatorDiscriminators(
     ReferenceNumberPrefixValidator,
     field=IReferenceNumberPrefix['reference_number_prefix'],
-    )
+)
 
 ReferenceNumberPrefixErrorMessage = error.ErrorViewMessage(
     _('error_sibling_reference_number_existing',

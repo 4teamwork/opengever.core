@@ -36,7 +36,7 @@ class ActivateBehaviors(UpgradeStep):
             behaviors.remove('plone.app.content.interfaces.INameFromTitle')
 
         for behavior in NEW_BEHAVIORS:
-            if not behavior in behaviors:
+            if behavior not in behaviors:
                 behaviors.append(behavior)
 
         fti._updateProperty('behaviors', tuple(behaviors))
@@ -100,8 +100,8 @@ class ActivateBehaviors(UpgradeStep):
             # Don't overwrite existing values.
             if hasattr(aq_base(mail), fieldname):
                 # Existing value - skip unless it's a broken tuple
-                if not (isinstance(field, zope.schema._field.Tuple) and
-                        getattr(mail, fieldname) is None):
+                if not (isinstance(field, zope.schema._field.Tuple)
+                        and getattr(mail, fieldname) is None):
                     continue
 
             default_adapter = queryMultiAdapter(

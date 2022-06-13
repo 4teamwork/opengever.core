@@ -10,7 +10,7 @@ sablon_template_source = SolrObjPathSourceBinder(
             ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
              'opengever.meeting.sablontemplate.ISablonTemplate',
              ],
-        }
+    }
 )
 
 
@@ -21,7 +21,7 @@ proposal_template_source = SolrObjPathSourceBinder(
             ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
              'opengever.meeting.proposaltemplate.IProposalTemplate',
              ],
-        }
+    }
 )
 
 
@@ -34,7 +34,7 @@ all_open_dossiers_source = RepositoryPathSourceBinder(
             'opengever.repository.repositoryfolder.'
             'IRepositoryFolderSchema',
             'opengever.dossier.behaviors.dossier.IDossierMarker',
-            ],
+        ],
         'review_state': [
             'repositoryroot-state-active',
             'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,

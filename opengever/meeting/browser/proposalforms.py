@@ -115,9 +115,9 @@ class IAddProposalSupplementaryFields(Schema):
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
                     'opengever.meeting.proposal.IProposal',
                     'opengever.task.task.ITask',
-                    ],
+                ],
             }),
-        )
+    )
 
     proposal_template = TableChoice(
         title=_('label_proposal_template', default=u'Proposal template'),
@@ -150,7 +150,7 @@ class IAddProposalSupplementaryFields(Schema):
             raise Invalid(_(
                 u'error_template_or_document_required_for_creation',
                 default=u'Either a proposal template or a proposal document is required.',
-                ))
+            ))
 
     @invariant
     def proposal_document_must_be_docx(data):
@@ -161,7 +161,7 @@ class IAddProposalSupplementaryFields(Schema):
                 raise Invalid(_(
                     u'error_only_docx_files_allowed_as_proposal_documents',
                     default=u'Only .docx files allowed as proposal documents.',
-                    ))
+                ))
 
 
 def get_selected_template(data):

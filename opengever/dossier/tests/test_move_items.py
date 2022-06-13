@@ -1,6 +1,6 @@
 from copy import deepcopy
-from datetime import datetime
 from DateTime import DateTime
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.solr.converters import to_iso8601

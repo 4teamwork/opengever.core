@@ -41,8 +41,8 @@ class AddClassifiactionBehavior(UpgradeStep):
             # Don't overwrite existing values.
             if hasattr(aq_base(mail), fieldname):
                 # Existing value - skip unless it's a broken tuple
-                if not (isinstance(field, zope.schema._field.Tuple) and
-                        getattr(mail, fieldname) is None):
+                if not (isinstance(field, zope.schema._field.Tuple)
+                        and getattr(mail, fieldname) is None):
                     continue
 
             default_adapter = queryMultiAdapter(

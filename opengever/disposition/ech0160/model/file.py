@@ -1,5 +1,5 @@
-from opengever.disposition.ech0160.bindings import arelda
 from opengever.base.utils import file_checksum
+from opengever.disposition.ech0160.bindings import arelda
 import binascii
 import os.path
 

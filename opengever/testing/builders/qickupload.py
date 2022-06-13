@@ -35,6 +35,7 @@ class QuickuploadMailBuilder(PloneObjectBuilder):
         self.with_message(assets.load(filename), unicode(filename))
         return self
 
+
 builder_registry.register('quickuploaded_mail', QuickuploadMailBuilder)
 
 
@@ -73,5 +74,6 @@ class QuickuploadDocumentBuilder(PloneObjectBuilder):
             extension = os.path.splitext(filename)[1]
             content_type = mimetypes.types_map.get(extension)
         return self
+
 
 builder_registry.register('quickuploaded_document', QuickuploadDocumentBuilder)

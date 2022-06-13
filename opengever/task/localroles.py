@@ -66,7 +66,7 @@ class LocalRolesSetter(object):
         if self._inbox_group_id is None:
             self._inbox_group = (
                 self.task.get_responsible_org_unit().inbox_group.groupid
-                )
+            )
 
         return self._inbox_group
 

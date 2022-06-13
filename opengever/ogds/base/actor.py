@@ -24,13 +24,14 @@ For known actor types use:
 
 """
 
+from datetime import datetime
 from opengever.base.casauth import get_user_avatar_url
 from opengever.base.interfaces import AVATAR_SOURCE_AUTO
 from opengever.base.interfaces import AVATAR_SOURCE_PLONE_ONLY
 from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
 from opengever.base.interfaces import IActorSettings
-from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.base.utils import escape_html
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
@@ -54,7 +55,6 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import implementer
-from datetime import datetime
 
 
 SYSTEM_ACTOR_ID = '__system__'
@@ -417,8 +417,10 @@ class ContactActor(Actor):
 
     def get_label(self, with_principal=True):
         if self.contact.lastname or self.contact.firstname:
-            name = ' '.join(name for name in
-                           (self.contact.lastname, self.contact.firstname) if name)
+            name = ' '.join(
+                name for name in (self.contact.lastname, self.contact.firstname)
+                if name
+            )
         else:
             name = self.contact.id
 

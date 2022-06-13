@@ -616,7 +616,7 @@ def json_loads(data):
         if isinstance(thing, unicode) and thing.startswith(u'b:'):
             return thing[2:].encode('utf-8')
         elif isinstance(thing, unicode):
-            raise ValueError('No "u:" or "b:" prefixes: {!}'.format(thing))
+            raise ValueError('No "u:" or "b:" prefixes: {}!'.format(thing))
         elif isinstance(thing, (int, long, float, bool, NoneType)):
             return thing
         elif isinstance(thing, list):

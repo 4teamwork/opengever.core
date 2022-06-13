@@ -66,8 +66,10 @@ class DossierContextActions(BaseContextActions):
         self.can_use_workspace_client = self._can_use_workspace_client()
 
     def _can_use_workspace_client(self):
-        return is_workspace_client_feature_available() and \
-                api.user.has_permission('opengever.workspaceclient: Use Workspace Client')
+        return (
+            is_workspace_client_feature_available()
+            and api.user.has_permission('opengever.workspaceclient: Use Workspace Client')
+        )
 
     def is_copy_documents_from_workspace_available(self):
         if not self.can_use_workspace_client:

@@ -1,5 +1,5 @@
-from opengever.core.upgrade import SQLUpgradeStep
 from opengever.base.oguid import Oguid
+from opengever.core.upgrade import SQLUpgradeStep
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 
@@ -26,10 +26,10 @@ class CopyProposalLanguageFromModelToPloneContent(SQLUpgradeStep):
             oguid = Oguid.for_object(proposal)
 
             row = self.execute(
-                    proposals_table.select()
-                    .where(proposals_table.c.admin_unit_id == oguid.admin_unit_id)
-                    .where(proposals_table.c.int_id == oguid.int_id)
-                ).fetchone()
+                proposals_table.select()
+                .where(proposals_table.c.admin_unit_id == oguid.admin_unit_id)
+                .where(proposals_table.c.int_id == oguid.int_id)
+            ).fetchone()
             proposal.language = row.language
 
         for submitted_proposal in self.objects(
@@ -38,8 +38,8 @@ class CopyProposalLanguageFromModelToPloneContent(SQLUpgradeStep):
             oguid = Oguid.for_object(submitted_proposal)
 
             row = self.execute(
-                    proposals_table.select()
-                    .where(proposals_table.c.submitted_admin_unit_id == oguid.admin_unit_id)
-                    .where(proposals_table.c.submitted_int_id == oguid.int_id)
-                ).fetchone()
+                proposals_table.select()
+                .where(proposals_table.c.submitted_admin_unit_id == oguid.admin_unit_id)
+                .where(proposals_table.c.submitted_int_id == oguid.int_id)
+            ).fetchone()
             submitted_proposal.language = row.language

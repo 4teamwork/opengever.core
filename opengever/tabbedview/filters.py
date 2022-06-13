@@ -187,7 +187,7 @@ class SubjectFilter(object):
             'facet.limit': -1,  # do not limit the number of facet-terms
             'rows': 0,  # do not return documents found by the query
             'facet.mincount': 1  # exclude facet-terms with no document
-            }
+        }
 
     def _extract_facets_from_solr_response(self, response):
         facets = response.body.get('facet_counts').get('facet_fields').get('Subject')

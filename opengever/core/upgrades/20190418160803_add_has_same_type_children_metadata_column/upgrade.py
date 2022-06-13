@@ -12,7 +12,7 @@ class AddHasSameTypeChildrenMetadataColumn(UpgradeStep):
         self.install_upgrade_profile()
         query = {
             'object_provides': IDexterityContainer.__identifier__,
-            }
+        }
         # To avoid reindexing the whole objects, we pick any index that exists
         # for all objects and is fast to compute
         self.catalog_reindex_objects(query, idxs=['UID', 'has_sametype_children'])

@@ -16,7 +16,7 @@ class CheckinCheckoutController(BrowserView):
             manager = queryMultiAdapter(
                 (self.context, self.request),
                 ICheckinCheckoutManager,
-                )
+            )
 
             if manager:
                 return manager.is_checkout_allowed()
@@ -29,7 +29,7 @@ class CheckinCheckoutController(BrowserView):
         manager = queryMultiAdapter(
             (self.context, self.request),
             ICheckinCheckoutManager,
-            )
+        )
 
         if manager:
             return manager.is_checkin_allowed()
@@ -42,7 +42,7 @@ class CheckinCheckoutController(BrowserView):
         manager = queryMultiAdapter(
             (self.context, self.request),
             ICheckinCheckoutManager,
-            )
+        )
 
         if manager:
             return manager.is_cancel_allowed()
@@ -54,7 +54,7 @@ class CheckinCheckoutController(BrowserView):
         manager = queryMultiAdapter(
             (self.context, self.request),
             ICheckinCheckoutManager,
-            )
+        )
 
         if manager:
             return manager.is_locked()

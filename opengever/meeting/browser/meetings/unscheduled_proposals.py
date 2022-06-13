@@ -52,10 +52,13 @@ class UnscheduledProposalsView(BrowserView):
     def __call__(self):
         """Schedule the current proposal on the current meeting.
         """
-        proposals = map(lambda proposal: {
-            'link': proposal.get_submitted_link(include_icon=False),
-            'description': proposal.get_submitted_description(),
-            'schedule_url': self.schedule_url(proposal)},
-                        self.context.get_unscheduled_proposals())
+        proposals = map(
+            lambda proposal: {
+                'link': proposal.get_submitted_link(include_icon=False),
+                'description': proposal.get_submitted_description(),
+                'schedule_url': self.schedule_url(proposal),
+            },
+            self.context.get_unscheduled_proposals(),
+        )
 
         return JSONResponse(self.request).data(items=proposals).dump()

@@ -60,7 +60,7 @@ class ITaskCommentResponseFormSchema(Interface):
     text = schema.Text(
         title=_('label_response', default="Response"),
         required=True,
-        )
+    )
 
 
 class ITaskTransitionResponseFormSchema(Interface):
@@ -70,18 +70,18 @@ class ITaskTransitionResponseFormSchema(Interface):
         title=_("label_transition", default="Transition"),
         source=util.getTransitionVocab,
         required=False,
-        )
+    )
 
     text = schema.Text(
         title=_('label_response', default="Response"),
         required=False,
-        )
+    )
 
     date_of_completion = schema.Date(
         title=_(u"label_date_of_completion", default=u"Date of completion"),
         description=_(u"help_date_of_completion", default=u""),
         required=False,
-        )
+    )
 
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
@@ -91,10 +91,10 @@ class ITaskTransitionResponseFormSchema(Interface):
             title=u"Related",
             source=DossierPathSourceBinder(
                 portal_type=("opengever.document.document", "ftw.mail.mail"),
-                ),
             ),
+        ),
         required=False,
-        )
+    )
 
     reminder_option = schema.Choice(
         title=_("label_reminder", default="Reminder"),
@@ -104,13 +104,13 @@ class ITaskTransitionResponseFormSchema(Interface):
         source="opengever.task.reminder.TaskReminderOptionsVocabulary",
         required=False,
         defaultFactory=get_current_user_reminder
-        )
+    )
 
     reminder_option_date = schema.Date(
         title=_(u"lable_reminder_choose_date", default=u"Choose remind date"),
         required=False,
         defaultFactory=get_remind_on_date
-        )
+    )
 
     @invariant
     def reminder_option_date_validator(data):

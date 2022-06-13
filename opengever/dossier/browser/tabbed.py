@@ -13,32 +13,32 @@ class DossierTabbedView(GeverTabbedView):
     overview_tab = {
         'id': 'overview',
         'title': _(u'label_overview', default=u'Overview'),
-        }
+    }
 
     documents_tab = {
         'id': 'documents-proxy',
         'title': _(u'label_documents', default=u'Documents'),
-        }
+    }
 
     tasks_tab = {
         'id': 'tasks',
         'title': _(u'label_tasks', default=u'Tasks'),
-        }
+    }
 
     trash_tab = {
         'id': 'trash',
         'title': _(u'label_trash', default=u'Trash'),
-        }
+    }
 
     journal_tab = {
         'id': 'journal',
         'title': _(u'label_journal', default=u'Journal'),
-        }
+    }
 
     info_tab = {
         'id': 'sharing',
         'title': _(u'label_info', default=u'Info'),
-        }
+    }
 
     def is_subdossier_visible(self):
         """Depending on the `respect_max_depth' property we check if
@@ -56,7 +56,7 @@ class DossierTabbedView(GeverTabbedView):
             return {
                 'id': 'subdossiers',
                 'title': _(u'label_subdossiers', default=u'Subdossiers'),
-                }
+            }
 
         return None
 
@@ -66,7 +66,7 @@ class DossierTabbedView(GeverTabbedView):
             return {
                 'id': 'proposals',
                 'title': _(u'label_proposals', default=u'Proposals'),
-                }
+            }
         return None
 
     @property
@@ -75,12 +75,12 @@ class DossierTabbedView(GeverTabbedView):
             return {
                 'id': 'participations',
                 'title': _(u'label_participations', default=u'Participations'),
-                }
+            }
 
         return {
             'id': 'participants',
             'title': _(u'label_participants', default=u'Participants'),
-            }
+        }
 
     @property
     def blocked_local_roles_tab(self):
@@ -88,7 +88,7 @@ class DossierTabbedView(GeverTabbedView):
             return {
                 'id': 'blocked-local-roles',
                 'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
-                }
+            }
 
         return None
 
@@ -113,13 +113,13 @@ class TemplateFolderTabbedView(GeverTabbedView):
     template_tab = {
         'id': 'documents-proxy',
         'title': _(u'label_documents', default=u'Documents'),
-        }
+    }
 
     tasktemplate_folders_tab = {
         'id': 'tasktemplatefolders',
         'title': _(u'label_tasktemplate_folders',
                    default=u'Tasktemplate Folders'),
-        }
+    }
 
     @property
     def sablon_tab(self):
@@ -127,7 +127,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'sablontemplates-proxy',
                 'title': _(u'label_sablon_templates', default=u'Sablon Templates'),
-                }
+            }
 
         return None
 
@@ -137,7 +137,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'proposaltemplates-proxy',
                 'title': _(u'label_proposal_templates', default=u'Proposal Templates'),
-                }
+            }
 
         return None
 
@@ -147,7 +147,7 @@ class TemplateFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'dossiertemplates',
                 'title': _(u'label_dossier_templates', default=u'Dossier templates'),
-                }
+            }
 
         return None
 

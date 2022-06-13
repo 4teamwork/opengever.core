@@ -69,7 +69,7 @@ class Contacts(BaseCatalogListingTab):
         {'column': 'phone_office',
          'column_title': _(u'label_phone_office',
                            default=u'Phone office')},
-        )
+    )
 
     sort_on = 'lastname'
     sort_order = ''

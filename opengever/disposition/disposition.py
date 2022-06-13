@@ -214,7 +214,7 @@ class IDispositionSchema(model.Schema):
                      'opengever.repository.interfaces.IRepositoryFolder',
                      'opengever.dossier.behaviors.dossier.IDossierMarker'],
                 }),
-            ),
+        ),
         required=True,
     )
 

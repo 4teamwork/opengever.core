@@ -47,9 +47,9 @@ def translate_task_type(task_type):
 def translate_document_type(document_type):
     portal = getSite()
     voc = wrap_vocabulary(
-            'opengever.document.document_types',
-            visible_terms_from_registry='opengever.document.interfaces.'
-                                        'IDocumentType.document_types')(portal)
+        'opengever.document.document_types',
+        visible_terms_from_registry='opengever.document.interfaces.'
+                                    'IDocumentType.document_types')(portal)
     try:
         term = voc.getTerm(document_type)
     except LookupError:
@@ -127,9 +127,9 @@ def translated_task_type(obj):
 def translated_document_type_label(obj):
     portal = getSite()
     voc = wrap_vocabulary(
-            'opengever.document.document_types',
-            visible_terms_from_registry='opengever.document.interfaces.'
-                                        'IDocumentType.document_types')(portal)
+        'opengever.document.document_types',
+        visible_terms_from_registry='opengever.document.interfaces.'
+                                    'IDocumentType.document_types')(portal)
     try:
         term = voc.getTerm(obj.get("document_type"))
     except LookupError:

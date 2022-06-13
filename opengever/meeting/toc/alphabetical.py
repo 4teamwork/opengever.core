@@ -88,14 +88,14 @@ class AlphabeticalToc(object):
             meeting = agenda_item.meeting
             unordered_items.append(processor.process(
                 {
-                 'title': agenda_item.get_title(),
-                 'description': agenda_item.get_description(),
-                 'dossier_reference_number': agenda_item.get_dossier_reference_number(),
-                 'repository_folder_title': agenda_item.get_repository_folder_title(),
-                 'decision_number': agenda_item.decision_number,
-                 'has_proposal': agenda_item.has_proposal,
-                 'meeting_date': meeting.start,
-                 'meeting_start_page_number': meeting.protocol_start_page_number,
+                    'title': agenda_item.get_title(),
+                    'description': agenda_item.get_description(),
+                    'dossier_reference_number': agenda_item.get_dossier_reference_number(),
+                    'repository_folder_title': agenda_item.get_repository_folder_title(),
+                    'decision_number': agenda_item.decision_number,
+                    'has_proposal': agenda_item.has_proposal,
+                    'meeting_date': meeting.start,
+                    'meeting_start_page_number': meeting.protocol_start_page_number,
                 }, data_fields, transforms))
         sorted_items = self.sort_items(unordered_items)
         grouped_results = self.group_items(sorted_items)

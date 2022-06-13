@@ -138,7 +138,7 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
             'additional_classes': ['function-download-copy'],
             'viewname': self.context.get_download_view_name(),
             'include_token': True,
-            }
+        }
 
         requested_version_id = self.request.get('version_id')
 
@@ -150,7 +150,7 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
                 kwargs['url_extension'] = (
                     '?version_id={}'
                     .format(requested_version_id)
-                    )
+                )
 
         return dc_helper.get_html_tag(**kwargs)
 

@@ -122,7 +122,7 @@ class IECH0147ExportFormSchema(Schema):
                      'opengever.repository.interfaces.IRepositoryFolder',
                      'opengever.dossier.behaviors.dossier.IDossierMarker'],
                 }),
-            ),
+        ),
         required=False,
     )
 

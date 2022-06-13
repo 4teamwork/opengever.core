@@ -1,1 +1,1 @@
-from opengever.base.monkey import patches    # noqa
+from opengever.base.monkey import patches  # noqa

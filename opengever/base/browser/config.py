@@ -1,7 +1,7 @@
 from opengever.base.handlebars import prepare_handlebars_template
+from opengever.base.interfaces import IGeverSettings
 from path import Path
 from Products.Five.browser import BrowserView
-from opengever.base.interfaces import IGeverSettings
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
 

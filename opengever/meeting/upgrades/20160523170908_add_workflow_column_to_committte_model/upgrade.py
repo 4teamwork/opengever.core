@@ -5,7 +5,6 @@ from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 
 
-
 # copied from opengever.globalindex.model.WORKFLOW_STATE_LENGTH
 WORKFLOW_STATE_LENGTH = 255
 DEFAULT_STATE_ID = 'active'

@@ -28,7 +28,7 @@ TO_DELETE = (
     '{}.relatedDossier'.format(iold),
     '{}.former_reference_number'.format(iold),
     '{}.reference_number'.format(iold)
-    )
+)
 
 
 class MigrateIDossierTemplateFieldsStorage(UpgradeStep):

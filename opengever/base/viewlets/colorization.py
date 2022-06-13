@@ -1,7 +1,6 @@
-from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from opengever.base.colorization import get_color
 from plone.app.layout.viewlets.common import ViewletBase
-import os
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 
 class ColorizationViewlet(ViewletBase):

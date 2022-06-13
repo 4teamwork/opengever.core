@@ -17,6 +17,7 @@ class DeploymentDirective(object):
         title = args[0]
         registry.update_deployments(title, kwargs)
 
+
 deployment_directive = DeploymentDirective()
 
 
@@ -30,5 +31,6 @@ class LDAPDirective(object):
 
         title = args[0]
         registry.update_ldaps(title, kwargs)
+
 
 ldap_directive = LDAPDirective()

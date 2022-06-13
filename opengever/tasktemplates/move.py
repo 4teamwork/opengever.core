@@ -1,9 +1,9 @@
-from zope.component import adapter
-from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
-from opengever.base.adapters import DefaultMovabilityChecker
-from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
+from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.tasktemplates import _
+from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
+from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
+from zope.component import adapter
 
 
 @adapter(ITaskTemplateFolderSchema)

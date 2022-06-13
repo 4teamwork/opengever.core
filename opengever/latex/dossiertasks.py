@@ -4,9 +4,9 @@ from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import IPDFAssembler
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
+from opengever.base.response import IResponseContainer
 from opengever.latex import _
 from opengever.latex.listing import ILaTexListing
-from opengever.base.response import IResponseContainer
 from opengever.task.task import ITask
 from plone import api
 from zope.component import adapter
@@ -79,16 +79,17 @@ class DossierTasksLaTeXView(MakoLaTeXView):
             if deadline:
                 deadline = deadline.strftime(self.strftimestring)
 
-            task_data_list.append(
-              {'title': self.convert_plain(task.title),
-               'description': self.convert_plain(task.text or ""),
-               'sequence_number': task.get_sequence_number(),
-               'type': self.convert_plain(task.get_task_type_label()),
-               'completion_date': completion_date,
-               'deadline': deadline,
-               'responsible': self.convert_plain(task.get_responsible_actor().get_label()),
-               'issuer': self.convert_plain(task.get_issuer_actor().get_label()),
-               'history': task_history.get_listing(response_container)})
+            task_data_list.append({
+                'title': self.convert_plain(task.title),
+                'description': self.convert_plain(task.text or ""),
+                'sequence_number': task.get_sequence_number(),
+                'type': self.convert_plain(task.get_task_type_label()),
+                'completion_date': completion_date,
+                'deadline': deadline,
+                'responsible': self.convert_plain(task.get_responsible_actor().get_label()),
+                'issuer': self.convert_plain(task.get_issuer_actor().get_label()),
+                'history': task_history.get_listing(response_container),
+            })
 
         return {'task_data_list': task_data_list,
                 'label': title}

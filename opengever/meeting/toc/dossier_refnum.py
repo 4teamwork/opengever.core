@@ -1,7 +1,7 @@
 from opengever.meeting import _
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
-from opengever.meeting.toc.utils import to_human_sortable_key
 from opengever.meeting.toc.utils import normalise_string
+from opengever.meeting.toc.utils import to_human_sortable_key
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 

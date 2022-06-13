@@ -6,8 +6,8 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import create_document_version
-from opengever.wopi.testing import mock_wopi_discovery
 from opengever.wopi.lock import create_lock as create_wopi_lock
+from opengever.wopi.testing import mock_wopi_discovery
 from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from plone.namedfile.file import NamedBlobFile

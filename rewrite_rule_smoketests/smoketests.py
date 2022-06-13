@@ -1,15 +1,3 @@
-from os.path import abspath
-from os.path import dirname
-from requests.cookies import create_cookie
-from urllib import quote
-from urlparse import urlparse
-from urlparse import urlunparse
-
-
-# Hack to allow script to use relative imports when run with bin/zopepy
-import sys
-sys.path.append(abspath(dirname(__file__)))
-
 from assertions import assert_equal  # noqa
 from assertions import assert_in  # noqa
 from auth import login_and_store  # noqa
@@ -19,11 +7,22 @@ from colors import red  # noqa
 from config import AdminUnit  # noqa
 from config import Cluster  # noqa
 from config import CLUSTERS_TO_TEST  # noqa
+from os.path import abspath
+from os.path import dirname
 from registry import logged_in  # noqa
 from registry import on_admin_unit  # noqa
 from registry import on_cluster  # noqa
 from registry import tests_by_type  # noqa
+from requests.cookies import create_cookie
 from runner import SmokeTestRunner  # noqa
+from urllib import quote
+from urlparse import urlparse
+from urlparse import urlunparse
+# Hack to allow script to use relative imports when run with bin/zopepy
+import sys
+
+
+sys.path.append(abspath(dirname(__file__)))
 
 
 @on_cluster

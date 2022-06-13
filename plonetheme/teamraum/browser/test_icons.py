@@ -1,12 +1,14 @@
-from zope.publisher.browser import BrowserView
-from plone.memoize.instance import memoize
+from Acquisition import aq_inner
+from Acquisition import aq_parent
+from operator import itemgetter
 from plone.i18n.normalizer.interfaces import IIDNormalizer
-from zope.component import getMultiAdapter, queryUtility
-from Acquisition import aq_inner, aq_parent
+from plone.memoize.instance import memoize
 from Products.CMFCore.Expression import createExprContext
 from Products.CMFCore.utils import getToolByName
+from zope.component import getMultiAdapter
+from zope.component import queryUtility
 from zope.i18n import translate
-from operator import itemgetter
+from zope.publisher.browser import BrowserView
 
 
 BAD_TYPES = (
@@ -17,8 +19,7 @@ BAD_TYPES = (
     "Discussion Item", "TempFolder", "ATCurrentAuthorCriterion",
     "ATPathCriterion", "ATRelativePathCriterion", )
 
-ALL_CONTENT_TYPES = {
-    }
+ALL_CONTENT_TYPES = {}
 
 
 class TestIconsView(BrowserView):

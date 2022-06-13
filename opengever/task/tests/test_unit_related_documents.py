@@ -1,12 +1,11 @@
 # coding=UTF-8
+from ftw.table.catalog_source import default_custom_sort
 from ftw.testing import MockTestCase
 from mocker import ANY
-from opengever.task.browser.related_documents import \
-    RelatedDocumentsCatalogTableSource
 from opengever.core.testing import COMPONENT_UNIT_TESTING
+from opengever.task.browser.related_documents import RelatedDocumentsCatalogTableSource
 from plone.uuid.interfaces import IUUID
 from zope.interface import Interface
-from ftw.table.catalog_source import default_custom_sort
 
 
 class ExtendQueryWithOrdering(MockTestCase):

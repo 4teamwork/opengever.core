@@ -15,6 +15,7 @@ from zope.component import getUtility
 from zope.interface import Invalid
 import logging
 
+
 logger = logging.getLogger('opengever.virusscan.uploads')
 
 SCAN_RESULT_BASE_KEY = 'opengever.virusscan.scan_result'
@@ -51,9 +52,9 @@ def validateStream(filename, filelike, request):
 
     if result:
         message = _(
-                u'file_infected',
-                default=u"Validation failed, file is virus-infected."
-            )
+            u'file_infected',
+            default=u"Validation failed, file is virus-infected."
+        )
         logger.warning(u"{} filename: {}".format(message, safe_unicode(filename)))
         raise Invalid(message)
 

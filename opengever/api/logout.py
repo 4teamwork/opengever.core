@@ -1,5 +1,5 @@
-from Products.CMFCore.utils import getToolByName
 from plone.restapi.services.auth.logout import Logout
+from Products.CMFCore.utils import getToolByName
 
 
 class GeverLogout(Logout):

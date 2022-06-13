@@ -6,7 +6,8 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
 from zope import schema
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 class IChanged(model.Schema):

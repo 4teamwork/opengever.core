@@ -1,8 +1,8 @@
+from opengever.contact import _ as contact_mf
 from opengever.contact import is_contact_feature_enabled
 from opengever.kub import is_kub_feature_enabled
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
-from opengever.contact import _ as contact_mf
 
 
 class ParticipationAddView(BrowserView):

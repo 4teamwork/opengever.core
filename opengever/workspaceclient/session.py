@@ -1,10 +1,10 @@
 from opengever.workspaceclient.keys import key_registry
 import jwt
+import os
 import pkg_resources
 import requests
 import threading
 import time
-import os
 
 
 SESSION_STORAGE = threading.local()

@@ -1,6 +1,6 @@
-from unittest import TestCase
-from opengever.bundle.xlsx import XLSXWalker
 from opengever.bundle.tests import assets
+from opengever.bundle.xlsx import XLSXWalker
+from unittest import TestCase
 
 
 class TestXLSXWalker(TestCase):

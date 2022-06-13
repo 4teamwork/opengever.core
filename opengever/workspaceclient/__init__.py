@@ -3,6 +3,7 @@ from plone import api
 from zope.i18nmessageid import MessageFactory
 import logging
 
+
 logger = logging.getLogger('opengever.workspaceclient')
 _ = MessageFactory("opengever.workspaceclient")
 

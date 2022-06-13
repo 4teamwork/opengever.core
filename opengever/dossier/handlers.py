@@ -99,7 +99,7 @@ def reindex_containing_subdossier_for_contained_objects(dossier, event):
     filters = make_path_filter('/'.join(dossier.getPhysicalPath()), depth=-1)
     filters += [
         u'portal_type:({})'.format(
-                u' OR '.join(TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)),
+            u' OR '.join(TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX)),
     ]
 
     with elevated_privileges():
@@ -144,7 +144,7 @@ def reindex_contained_objects(dossier, event):
         attr
         for descr in event.descriptions
         for attr in descr.attributes
-        )
+    )
     if 'IOpenGeverBase.title' not in attrs:
         return
 

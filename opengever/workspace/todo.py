@@ -20,6 +20,7 @@ from zope import schema
 from zope.interface import implements
 from zope.interface import provider
 
+
 COMPLETED_TODO_STATE = 'opengever_workspace_todo--STATUS--completed'
 
 ACTIVE_TODO_STATE = 'opengever_workspace_todo--STATUS--active'

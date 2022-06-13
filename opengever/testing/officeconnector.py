@@ -1,6 +1,7 @@
 from ftw.testbrowser import LIB_REQUESTS
 from xml.etree import ElementTree
 
+
 WEBDAV_TIMEOUT = 'Infinite, Second-4100000000'
 DAV_NAMESPACES = {'D': 'DAV:'}
 

@@ -99,6 +99,7 @@ from zope.schema._bootstrapinterfaces import IContextAwareDefaultFactory
 from zope.schema.interfaces import ISequence
 from zope.schema.interfaces import IText
 
+
 NO_DEFAULT_MARKER = object()
 
 
@@ -299,8 +300,6 @@ def set_default_values(content, container, values):
                  into consideration when determining whether defaults should
                  apply or not.
     """
-    # Canonicalize field names to short form (no prefix)
-    fields_with_value = [k.split('.')[-1] for k in values.keys()]
 
     for schema in iterSchemata(content):
         for name, field in getFieldsInOrder(schema):

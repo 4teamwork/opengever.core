@@ -1,6 +1,6 @@
-from Products.Five import BrowserView
-from Products.CMFCore.utils import getToolByName
 from opengever.document.interfaces import ICheckinCheckoutManager
+from Products.CMFCore.utils import getToolByName
+from Products.Five import BrowserView
 from zope.component import getMultiAdapter
 
 

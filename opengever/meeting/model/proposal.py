@@ -13,7 +13,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting.activity.activities import ProposalDecideActivity
 from opengever.meeting.activity.activities import ProposalScheduledActivity
-from opengever.meeting.model import AgendaItem
+from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposalhistory import ProposalResponse
 from opengever.meeting.workflow import State
@@ -121,7 +121,7 @@ class Proposal(Base):
         STATE_SCHEDULED,
         STATE_DECIDED,
         STATE_CANCELLED,
-        ], [
+    ], [
         Reject('submitted', 'pending',
                title=_('reject', default='Reject')),
         Transition('submitted', 'scheduled',
@@ -130,7 +130,7 @@ class Proposal(Base):
                    title=_('un-schedule', default='Remove from schedule')),
         Transition('scheduled', 'decided',
                    title=_('decide', default='Decide')),
-        ])
+    ])
 
     # temporary mapping for plone workflow state to model workflow state
     WORKFLOW_STATE_TO_SQL_STATE = {

@@ -1,11 +1,15 @@
-from z3c.form.browser import widget
-from z3c.form.widget import FieldWidget, Widget
-from z3c.form.interfaces import IFieldWidget, IFormLayer, ITextWidget, IAddForm
-from zope.interface import implementsOnly, implementer
-from zope.component import adapter
-
-from opengever.dossier import _
 from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier import _
+from z3c.form.browser import widget
+from z3c.form.interfaces import IAddForm
+from z3c.form.interfaces import IFieldWidget
+from z3c.form.interfaces import IFormLayer
+from z3c.form.interfaces import ITextWidget
+from z3c.form.widget import FieldWidget
+from z3c.form.widget import Widget
+from zope.component import adapter
+from zope.interface import implementer
+from zope.interface import implementsOnly
 
 
 class IReferenceNumberWidget(ITextWidget):

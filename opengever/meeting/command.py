@@ -204,7 +204,7 @@ class CreateGeneratedDocumentCommand(CreateDocumentCommand):
             self.document_operations.get_filename(self.meeting),
             self.generate_file_data(),
             MIME_DOCX
-            )
+        )
 
         document = super(CreateGeneratedDocumentCommand, self).execute()
         self.add_database_entry(document)
@@ -484,7 +484,7 @@ class UpdateSubmittedDocumentCommand(object):
         IResponseContainer(self.proposal).add(response)
         history_data = advancedjson.dumps({
             'submitted_version': submitted_version,
-            })
+        })
 
         ProposalDocumentUpdatedActivity(
             self.proposal, self.proposal.REQUEST,
@@ -575,7 +575,7 @@ class CopyProposalDocumentCommand(object):
             u'document_submitted',
             document_title=self.document.title,
             submitted_version=submitted_version,
-            )
+        )
         IResponseContainer(self.proposal).add(response)
 
         if self.record_activity:
@@ -584,11 +584,11 @@ class CopyProposalDocumentCommand(object):
 
         history_data = advancedjson.dumps({
             'response': response.serialize(),
-            })
+        })
 
         activity = advancedjson.dumps({
             'record_activity': self.record_activity,
-            })
+        })
 
         return SubmitDocumentCommand(
             self.document, target_admin_unit_id, target_path,

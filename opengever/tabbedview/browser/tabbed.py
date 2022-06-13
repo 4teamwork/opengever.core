@@ -27,7 +27,7 @@ class GeverTabbedView(TabbedView):
             'icon': None,
             'url': '#',
             'class': None
-            }
+        }
 
     def _fill_with_defaults(self, tabs):
         finished_tabs = []

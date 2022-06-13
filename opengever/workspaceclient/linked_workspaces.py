@@ -33,6 +33,7 @@ from zope.interface import implementer
 from zope.interface import noLongerProvides
 import transaction
 
+
 CACHE_TIMEOUT = 24 * 60 * 60
 
 RETRIEVAL_MODE_COPY = 'copy'
@@ -155,7 +156,7 @@ class LinkedWorkspaces(object):
 
     def link_to_workspace(self, workspace_uid):
         workspace = self.client.link_to_workspace(
-                workspace_uid, Oguid.for_object(self.context).id)
+            workspace_uid, Oguid.for_object(self.context).id)
 
         self.storage.add(workspace.get('UID'))
 

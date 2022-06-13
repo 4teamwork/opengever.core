@@ -26,7 +26,7 @@ class ModelConstructor(object):
 
     def create_model(self, item):
         item_type = item.get('_type')
-        if not item_type in SUPPORTED_MODELS:
+        if item_type not in SUPPORTED_MODELS:
             return
 
         data = self.get_data(item)

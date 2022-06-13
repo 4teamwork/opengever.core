@@ -1,6 +1,7 @@
 from plone.app.layout.viewlets import common as base
 from zope.component import getMultiAdapter
 
+
 HTML_TAG = '<span id="ploneLanguage" data-lang="%s"></span>'
 
 

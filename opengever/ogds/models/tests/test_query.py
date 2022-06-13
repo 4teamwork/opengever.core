@@ -1,6 +1,6 @@
+from opengever.ogds.models.tests.base import OGDSTestCase
 from opengever.ogds.models.user import User
 from sqlalchemy.orm.exc import NoResultFound
-from opengever.ogds.models.tests.base import OGDSTestCase
 
 
 class TestQueryBase(OGDSTestCase):

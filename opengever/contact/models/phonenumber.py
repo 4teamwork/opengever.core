@@ -14,7 +14,7 @@ class PhoneNumber(Base):
     __tablename__ = 'phonenumbers'
 
     phone_number_id = Column('id', Integer, Sequence('phonenumber_id_seq'),
-                        primary_key=True)
+                             primary_key=True)
     contact_id = Column('contact_id', Integer, ForeignKey('contacts.id'))
     contact = relationship("Contact", back_populates="phonenumbers")
 

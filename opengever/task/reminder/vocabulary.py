@@ -1,8 +1,8 @@
-from zope.schema.vocabulary import SimpleTerm
-from zope.schema.interfaces import IVocabularyFactory
-from zope.interface import implementer
-from zope.schema.vocabulary import SimpleVocabulary
 from opengever.task.reminder.model import REMINDER_TYPE_REGISTRY
+from zope.interface import implementer
+from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 
 @implementer(IVocabularyFactory)

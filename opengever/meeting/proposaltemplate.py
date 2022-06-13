@@ -2,8 +2,8 @@ from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.meeting import _
 from plone.autoform.interfaces import IFormFieldProvider
-from plone.supermodel import model
 from plone.namedfile.field import NamedBlobFile
+from plone.supermodel import model
 from z3c.form.validator import SimpleFieldValidator
 from z3c.form.validator import WidgetValidatorDiscriminators
 from zope.interface import Invalid

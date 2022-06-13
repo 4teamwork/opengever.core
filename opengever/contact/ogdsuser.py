@@ -186,14 +186,15 @@ class OgdsUserToContactAdapter(BaseAdapter):
     def addresses(self):
         index = 1
         address_adapter = AddressAdapter(
-                self.id,
-                index,
-                self.get_title(with_former_id=False),
-                u", ".join(filter(None, [self.ogds_user.address1,
-                                         self.ogds_user.address2])),
-                self.ogds_user.zip_code,
-                self.ogds_user.city,
-                self.ogds_user.country,)
+            self.id,
+            index,
+            self.get_title(with_former_id=False),
+            u", ".join(filter(None, [self.ogds_user.address1,
+                                     self.ogds_user.address2])),
+            self.ogds_user.zip_code,
+            self.ogds_user.city,
+            self.ogds_user.country,
+        )
 
         if not address_adapter.has_data:
             return []

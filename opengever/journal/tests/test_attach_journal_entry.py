@@ -6,7 +6,6 @@ from ftw.testing import freeze
 from opengever.journal.handlers import document_attached_to_email
 from opengever.journal.handlers import dossier_attached_to_email
 from opengever.testing import FunctionalTestCase
-
 import transaction
 
 

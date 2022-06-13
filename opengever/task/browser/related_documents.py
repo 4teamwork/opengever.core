@@ -73,8 +73,7 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
         for item in self.config.context.relatedItems:
             obj = item.to_object
 
-            if obj.portal_type in [
-                'opengever.document.document', 'ftw.mail.mail']:
+            if obj.portal_type in ['opengever.document.document', 'ftw.mail.mail']:
 
                 brain = solr_doc_from_uuid(IUUID(obj))
 
@@ -161,12 +160,13 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
         brains = self.extend_query_with_textfilter(
             brains,
             self.config.filter_text,
-            )
+        )
 
         return brains
 
     def _sort_with_transform(
-        self, brains, sort_index, sort_reverse, column, transform):
+        self, brains, sort_index, sort_reverse, column, transform
+    ):
         """ Sort the brains with a given transform-method
         """
         ordered_brains = []
@@ -253,4 +253,4 @@ class RelatedDocuments(Documents):
             'path': {'query': '/'.join(self.context.getPhysicalPath()),
                      'depth': 2},
             'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
-            }
+        }

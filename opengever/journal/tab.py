@@ -136,7 +136,7 @@ class JournalTableSource(GeverTableSource):
             annotations = IAnnotations(context)
             data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
         elif IWorkflowHistoryJournalizable.providedBy(context):
-            raise NotImplemented
+            raise NotImplementedError
 
         # XXX - a performance hack to replace deepcopy(data)
         # This only works as persistent objects are guaranteed to be picklable

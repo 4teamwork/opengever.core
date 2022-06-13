@@ -1,5 +1,5 @@
-from Products.CMFCore.utils import getToolByName
 from ftw.upgrade import UpgradeStep
+from Products.CMFCore.utils import getToolByName
 
 
 class AdjustTransitionUrls(UpgradeStep):

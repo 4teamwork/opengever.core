@@ -5,7 +5,8 @@ from zope.component import getAdapters
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.schema.interfaces import IVocabularyFactory
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import json
 
 
@@ -562,7 +563,7 @@ def get_user_avatar_image_sources():
         AVATAR_SOURCE_PLONE_ONLY,
         AVATAR_SOURCE_PORTAL_ONLY,
         AVATAR_SOURCE_AUTO,
-        ])
+    ])
 
 
 class IActorSettings(Interface):

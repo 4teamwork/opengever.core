@@ -284,9 +284,10 @@ class MeetingView(BrowserView):
                 api.user.has_permission('Modify portal content', obj=meeting_dossier) and not
                 self.model.is_closed()):
             self.error_title = _("Insufficient privileges on meeting dossier")
-            self.error_message = _("no_edit_permissions_on_meeting_dossier",
-                  default="User does not have permission to edit the meeting "
-                          "dossier:")
+            self.error_message = _(
+                "no_edit_permissions_on_meeting_dossier",
+                default="User does not have permission to edit the meeting dossier:",
+            )
             self.link_to_error = linked(meeting_dossier,
                                         meeting_dossier.Title())
             return self.error_template()
@@ -310,11 +311,13 @@ class MeetingView(BrowserView):
             localized_start = api.portal.get_localized_time(
                 self.model.start.date())
             self.error_title = _("Missing period")
-            self.error_message = _("no_period_for_meeting_date",
-                  default="There is no period available for the meeting "
-                          "date ${start}. You should either change the "
-                          "meeting date or add a new period to the committee:",
-                  mapping={'start': localized_start})
+            self.error_message = _(
+                "no_period_for_meeting_date",
+                default="There is no period available for the meeting "
+                "date ${start}. You should either change the "
+                "meeting date or add a new period to the committee:",
+                mapping={'start': localized_start},
+            )
             self.link_to_error = linked(committee,
                                         committee.Title(),
                                         with_tooltip=False)

@@ -143,7 +143,7 @@ class SolrReporterView(BaseReporterView):
         query['query'] = 'path:({})'.format(
             'OR '.join(['{}^{}'.format(escape(path), score_value)
                        for score_value, path in enumerate(paths)])
-            )
+        )
 
     def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
         listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")

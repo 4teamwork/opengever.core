@@ -9,7 +9,8 @@ from plone.memoize import ram
 from plone.supermodel import model
 from zope import schema
 from zope.i18n import translate
-from zope.interface import alsoProvides, Interface
+from zope.interface import alsoProvides
+from zope.interface import Interface
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
 from zope.schema.vocabulary import SimpleTerm

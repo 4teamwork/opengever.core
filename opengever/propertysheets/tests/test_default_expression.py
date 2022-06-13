@@ -1,6 +1,6 @@
 from opengever.propertysheets.default_expression import tales_expr_default_factory
-from plone import api
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestTalesExpressionDefaultFactory(IntegrationTestCase):

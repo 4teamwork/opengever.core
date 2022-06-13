@@ -1,4 +1,5 @@
 from datetime import date
+from email.message import Message
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.mail import inbound
@@ -18,7 +19,6 @@ from opengever.testing.sql import create_ogds_user
 from plone.registry.interfaces import IRegistry
 from unittest import TestCase
 from zope.component import getUtility
-from email.message import Message
 
 
 def get_preserved_as_paper_default():

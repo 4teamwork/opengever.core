@@ -1,6 +1,8 @@
 from ftw.upgrade import UpgradeStep
-from opengever.base.adapters import CHILD_REF_KEY, PREFIX_REF_KEY
-from opengever.base.adapters import REPOSITORY_FOLDER_KEY, DOSSIER_KEY
+from opengever.base.adapters import CHILD_REF_KEY
+from opengever.base.adapters import DOSSIER_KEY
+from opengever.base.adapters import PREFIX_REF_KEY
+from opengever.base.adapters import REPOSITORY_FOLDER_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList

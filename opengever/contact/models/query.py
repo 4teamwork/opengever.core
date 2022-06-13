@@ -1,4 +1,6 @@
 from opengever.base.oguid import Oguid
+from opengever.base.query import BaseQuery
+from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.models import Contact
 from opengever.contact.models import ContactParticipation
 from opengever.contact.models import OgdsUserParticipation
@@ -7,8 +9,6 @@ from opengever.contact.models import OrgRole
 from opengever.contact.models import OrgRoleParticipation
 from opengever.contact.models import Participation
 from opengever.contact.models import Person
-from opengever.base.query import BaseQuery
-from opengever.base.query import extend_query_with_textfilter
 from sqlalchemy import or_
 from sqlalchemy.orm import contains_eager
 

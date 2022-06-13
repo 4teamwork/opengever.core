@@ -26,9 +26,9 @@ def get_proposal_transitions_vocabulary(context):
     transitions = []
     for tdef in wftool.getTransitionsFor(context):
         transitions.append(SimpleVocabulary.createTerm(
-                tdef['id'],
-                tdef['id'],
-                pmf(tdef['id'], default=tdef['title_or_id'])))
+            tdef['id'],
+            tdef['id'],
+            pmf(tdef['id'], default=tdef['title_or_id'])))
     return SimpleVocabulary(transitions)
 
 
@@ -288,7 +288,7 @@ class LanguagesVocabulary(object):
             SimpleVocabulary.createTerm(*LanguagesVocabulary.parse_language_to_term(language))
             for language in ltool.listAvailableLanguageInformation()
             if language.get('code') in supported_language_codes
-            ])
+        ])
 
     @staticmethod
     def parse_language_to_term(language):

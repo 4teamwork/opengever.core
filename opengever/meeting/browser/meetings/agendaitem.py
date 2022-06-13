@@ -117,7 +117,7 @@ def return_jsonified_exceptions(func):
             return JSONResponse(getRequest()).error(
                 _(u'invalid_agenda_item_state',
                   default=u'The agenda item is in an invalid state for '
-                           'this action.'),
+                          u'this action.'),
                 status=403).dump()
 
         except Forbidden:
@@ -398,8 +398,10 @@ class AgendaItemsView(BrowserView):
 
         if meeting_state != self.meeting.get_state():
             response.redirect(self.context.absolute_url())
-            msg = _(u'agenda_item_meeting_held',
-                default=u"Agendaitem has been decided and the meeting has been held.")
+            msg = _(
+                u'agenda_item_meeting_held',
+                default=u"Agendaitem has been decided and the meeting has been held."
+            )
             api.portal.show_message(message=msg, request=self.request, type='info')
 
         return response.dump()
@@ -501,8 +503,8 @@ class AgendaItemsView(BrowserView):
         description = safe_unicode(self.request.get('description'))
         if not title:
             return JSONResponse(self.request).error(
-                    _('empty_proposal', default=u"Proposal must not be empty.")
-                ).proceed().dump()
+                _('empty_proposal', default=u"Proposal must not be empty.")
+            ).proceed().dump()
 
         template = safe_unicode(self.request.get('template_id'))
         self.meeting.schedule_ad_hoc(title, template_id=template,

@@ -1,6 +1,6 @@
 from ftw.upgrade import UpgradeStep
-from plone import api
 from opengever.base.interfaces import IReferenceNumber
+from plone import api
 
 
 KEY = 'repository_title'

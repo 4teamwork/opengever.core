@@ -1,6 +1,6 @@
-import logging
 from opengever.core.catalog import add_catalog_indexes
 from opengever.mail.config import INDEXES
+import logging
 
 
 def installed(site):

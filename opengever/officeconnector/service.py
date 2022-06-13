@@ -43,17 +43,17 @@ class OfficeConnectorURL(Service):
                 u"Unfortunately it's not currently possible to attach this "
                 u'many documents. Please try again with fewer documents '
                 u'selected.'
-                ),
-            )
+            ),
+        )
 
         return json.dumps(dict(
             error=dict(
                 message=translate(
                     message,
                     context=self.request,
-                    )
                 )
-            ))
+            )
+        ))
 
 
 class OfficeConnectorAttachURL(OfficeConnectorURL):
@@ -148,8 +148,8 @@ class OfficeConnectorPayload(Service):
                         'document': document,
                         'uuid': uuid,
                         'version': document.get_current_version_id(),
-                        }
-                    )
+                    }
+                )
 
             return payloads
 
@@ -294,7 +294,7 @@ class OfficeConnectorOneOffixxPayload(OfficeConnectorPayload):
             authorized = api.user.has_permission(
                 'Modify portal content',
                 obj=payload['document'],
-                )
+            )
 
             if authorized:
                 document = payload['document']

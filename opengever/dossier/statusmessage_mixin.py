@@ -1,5 +1,6 @@
-from plone import api
 from opengever.dossier import _
+from plone import api
+
 
 MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
 

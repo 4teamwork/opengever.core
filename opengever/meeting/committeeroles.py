@@ -1,5 +1,5 @@
-from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import CommitteeGroupAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 
 
 class CommitteeRoles(object):

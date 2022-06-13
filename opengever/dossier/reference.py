@@ -1,4 +1,5 @@
-from Acquisition import aq_parent, aq_inner
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.reference import BasicReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossierMarker

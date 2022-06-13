@@ -2,7 +2,8 @@ from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.base.browser.reporting_view import SolrReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_author
-from opengever.base.reporter import StringTranslater, XLSReporter
+from opengever.base.reporter import StringTranslater
+from opengever.base.reporter import XLSReporter
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.dossier import _
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties

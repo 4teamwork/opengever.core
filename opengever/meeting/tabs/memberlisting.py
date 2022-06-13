@@ -35,7 +35,7 @@ class MemberListingTab(BaseListingTab):
             {'column': 'email',
              'column_title': _(u'column_email', default=u'E-Mail'),
              },
-            )
+        )
 
     def get_firstname_link(self, item, value):
         return item.get_firstname_link(self.context)

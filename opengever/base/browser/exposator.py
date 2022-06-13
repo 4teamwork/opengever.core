@@ -15,7 +15,7 @@ $(function() {
     $('#portal-breadcrumbs').append('<span style="float:right"><a href="javascript:window.close()">Fenster schliessen</a></span');
 });
 </script>
-'''
+'''  # noqa
 
     def render(self):
         html = []

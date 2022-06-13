@@ -7,6 +7,7 @@ from zope.component import adapter
 from zope.component import getAdapter
 from zope.interface import implementer
 
+
 COUNTER_START = 1
 COUNTER_ADDITION_VALUE = 1
 

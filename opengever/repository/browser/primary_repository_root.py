@@ -4,7 +4,7 @@ from zope.publisher.interfaces import NotFound
 import re
 
 
-num_sort_regex = re.compile('\d+')
+num_sort_regex = re.compile(r'\d+')
 
 
 def zero_fill(matchobj):

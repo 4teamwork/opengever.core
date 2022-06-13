@@ -22,7 +22,7 @@ class OGDSControlPanel(TabbedView):
          'icon': None,
          'url': '#',
          'class': None},
-        ]
+    ]
 
     def get_tabs(self):
         return self.tabs

@@ -1,4 +1,7 @@
-from BTrees.IIBTree import IISet, intersection, union, difference
+from BTrees.IIBTree import difference
+from BTrees.IIBTree import IISet
+from BTrees.IIBTree import intersection
+from BTrees.IIBTree import union
 from opengever.base.monkey.patching import MonkeyPatch
 
 

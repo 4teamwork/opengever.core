@@ -60,7 +60,7 @@ class MyInvitationsGet(Service):
                 'inviter_fullname': invitation.get('inviter'),
                 'comment': invitation.get('comment'),
                 'created': json_compatible(invitation.get('created')),
-                })
+            })
 
         result['items'] = items
         return result
@@ -85,7 +85,7 @@ class WorkspaceInvitationsPost(ParticipationTraverseService):
         if not invitation:
             raise BadRequest(
                 "There is no invitation for the current user with "
-                "the id: ".format(iid))
+                "the id: {}".format(iid))
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)

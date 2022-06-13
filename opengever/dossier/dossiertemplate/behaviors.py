@@ -13,7 +13,8 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.schema import JSONField
 from plone.supermodel import model
-from z3c.relationfield.schema import RelationChoice, RelationList
+from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -183,7 +184,7 @@ class IRestrictAddableDossierTemplates(model.Schema):
                     ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
                      'opengever.dossier.dossiertemplate.behaviors.IDossierTemplateSchema']
                 }),
-            ),
+        ),
         required=False,
     )
 

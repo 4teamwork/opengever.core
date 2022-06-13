@@ -20,7 +20,7 @@ it!), as defined in ldap_plugin.xml with <ldapplugin id="..." />.
 
 It then configures username and password on the respective LDAP plugin with
 the credentials from that file - so the ldap_plugin.xml needs to contain
-*everything* necessary to configure the plugin, excepct the `_binduid` and 
+*everything* necessary to configure the plugin, excepct the `_binduid` and
 `_bindpwd`.
 """
 
@@ -53,8 +53,10 @@ def get_ldap_credentials(hostname):
 
 def configure_ldap_credentials(context):
     site = getToolByName(context, 'portal_url').getPortalObject()
-    ldap_plugins = [obj for obj in site.acl_users.objectValues()
-                        if ILDAPMultiPlugin.providedBy(obj)]
+    ldap_plugins = [
+        obj for obj in site.acl_users.objectValues()
+        if ILDAPMultiPlugin.providedBy(obj)
+    ]
     for ldap_plugin in ldap_plugins:
         ldap_uf = ldap_plugin.acl_users
         servers = ldap_uf.getServers()
@@ -72,14 +74,14 @@ def configure_ldap_credentials(context):
 
             update_credentials(ldap_uf, binduid, bindpwd)
 
-            logger.info("Sucessfully configured LDAP credentials for '%s' (%s)." % (
-                ldap_plugin.id,
-                hostname))
+            logger.info(
+                "Sucessfully configured LDAP credentials for '%s' (%s).",
+                ldap_plugin.id, hostname)
         else:
             creds_file_path = get_credentials_file_path(hostname)
             logger.warn("No LDAP credentials file found for '%s' (%s)! "
-                        "Make sure '%s' exists and has the proper format." % (
-                        ldap_plugin.id, hostname, creds_file_path))
+                        "Make sure '%s' exists and has the proper format.",
+                        ldap_plugin.id, hostname, creds_file_path)
 
 
 def update_credentials(ldap_uf, binduid, bindpwd):

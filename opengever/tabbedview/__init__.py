@@ -1,7 +1,6 @@
-from zope.i18nmessageid import MessageFactory
+from zope.i18nmessageid import MessageFactory  # isort:skip
 
 _ = MessageFactory('opengever.tabbedview')
-
 
 from opengever.tabbedview.basesource import GeverTableSource  # noqa
 from opengever.tabbedview.browser.base_tabs import BaseCatalogListingTab  # noqa

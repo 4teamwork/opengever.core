@@ -1,9 +1,10 @@
-from opengever.core.testing import COMPONENT_UNIT_TESTING
 from ftw.testing import MockTestCase
+from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.task.browser.complete import ICompleteSuccessorTaskSchema
 from opengever.task.browser.complete import NoCheckedoutDocsValidator
 from opengever.task.task import ITask
-from plone.uuid.interfaces import IUUID, IAttributeUUID
+from plone.uuid.interfaces import IAttributeUUID
+from plone.uuid.interfaces import IUUID
 from zope.app.intid.interfaces import IIntIds
 from zope.interface import Invalid
 from zope.schema import getFields

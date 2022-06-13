@@ -1,8 +1,8 @@
+from ftw.usermigration.browser import migration
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.usermigration.localroles import migrate_localroles
-from ftw.usermigration.browser import migration
 
 
 class TestMigrateLocalRoles(IntegrationTestCase):

@@ -40,7 +40,7 @@ class DocumentReadFile(filerepresentation.DefaultReadFile):
             return StringIO(self.filefield.data)
 
     def _getMessage(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     @property
     def encoding(self):

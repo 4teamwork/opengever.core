@@ -252,11 +252,14 @@ class NightlyJobRunner(object):
         return self._is_memory_full(load)
 
     def format_early_abort_message(self, exc):
-        info = "\n".join("{} executed {} out of {} jobs".format(
-                            provider_name,
-                            self.get_executed_jobs_count(provider_name),
-                            self.get_initial_jobs_count(provider_name))
-                         for provider_name, provider in self.job_providers.items())
+        info = "\n".join(
+            "{} executed {} out of {} jobs".format(
+                provider_name,
+                self.get_executed_jobs_count(provider_name),
+                self.get_initial_jobs_count(provider_name),
+            )
+            for provider_name, provider in self.job_providers.items()
+        )
         return "{}\n{}".format(repr(exc), info)
 
     def log_to_sentry(self, message):

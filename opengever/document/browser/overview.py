@@ -264,7 +264,7 @@ class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
                 '?submitted_document_id={}').format(
                     self.context.absolute_url(),
                     submitted_document.document_id
-                    )
+        )
 
     def linked_documents(self):
         """Returns a list documents related to the context document.
@@ -277,7 +277,7 @@ class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
             self.context.related_items(
                 bidirectional=True,
                 documents_only=True,
-                ),
+            ),
             key=lambda obj: obj.Title()
         )]
 

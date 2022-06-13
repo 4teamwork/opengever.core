@@ -1,5 +1,6 @@
 import os
 
+
 COLORS = {
     'red': '#C3375A',
     'yellow': '#EBD21E',

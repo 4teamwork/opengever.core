@@ -1,6 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.repository.interfaces import IRepositoryFolder
 
 
 class AddABooleanIndexForBlockedLocalRoles(UpgradeStep):

@@ -40,9 +40,9 @@ from opengever.meeting.proposal import ISubmittedProposal
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
-from opengever.ogds.models.substitute import Substitute
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.substitute import Substitute
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
@@ -378,11 +378,11 @@ class ProposalModelBuilder(SqlObjectBuilder):
         for document in documents:
             oguid = Oguid.for_object(document)
             submitted.append(SubmittedDocument(
-                    oguid=oguid,
-                    submitted_oguid=oguid,
-                    submitted_version=document.get_current_version_id(
-                        missing_as_zero=True),
-                ))
+                oguid=oguid,
+                submitted_oguid=oguid,
+                submitted_version=document.get_current_version_id(
+                    missing_as_zero=True),
+            ))
         self.arguments['submitted_documents'] = submitted
         return self
 

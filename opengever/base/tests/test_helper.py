@@ -1,6 +1,6 @@
+from opengever.base.browser.helper import get_css_class
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import obj2brain
-from opengever.base.browser.helper import get_css_class
 
 
 class TestCssClassHelpers(IntegrationTestCase):

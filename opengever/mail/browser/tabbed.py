@@ -13,17 +13,17 @@ class MailTabbedView(GeverTabbedView):
     overview_tab = {
         'id': 'overview',
         'title': _(u'label_overview', default=u'Overview'),
-        }
+    }
 
     journal_tab = {
         'id': 'journal',
         'title': _(u'label_journal', default=u'Journal'),
-        }
+    }
 
     sharing_tab = {
         'id': 'sharing',
         'title': _(u'label_sharing', default=u'Sharing'),
-        }
+    }
 
     def __init__(self, context, request):
         """Slap a warning onto the overview of a trashed mail.

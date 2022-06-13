@@ -36,16 +36,16 @@ class QuotaWarningViewlet(ViewletBase):
                 'message': _(
                     u'The quota of your private folder has exceeded, you can '
                     u'not add any new files or mails.',
-                    ),
-                }
+                ),
+            }
 
         elif warning_type == SOFT_LIMIT_EXCEEDED:
             return {
                 'type': 'warning',
                 'message': _(
                     u'The quota of your private folder will exceed soon.',
-                    ),
-                }
+                ),
+            }
 
         return None
 

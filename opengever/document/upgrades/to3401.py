@@ -1,6 +1,6 @@
 from ftw.upgrade import UpgradeStep
-from zope.annotation import IAnnotations
 from z3c.relationfield.interfaces import IHasRelations
+from zope.annotation import IAnnotations
 
 
 OLD_KEY = 'opengever.document.behaviors.IRelatedDocuments.relatedItems'

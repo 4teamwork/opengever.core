@@ -61,7 +61,7 @@ class MeetingDocumentZipper(MeetingDocumentWithFileTraverser):
                 _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
                   mapping={u'number': agenda_item_number}),
                 context=getRequest(),
-                ),
+            ),
             safe_unicode(self.get_filename(document)))
         )
 
@@ -71,11 +71,11 @@ class MeetingDocumentZipper(MeetingDocumentWithFileTraverser):
                 _(u'title_agenda_item', default=u'Agenda item ${agenda_item_number}',
                   mapping={u'number': agenda_item_number}),
                 context=getRequest(),
-                ),
+            ),
             translate(
                 _(u'attachments', default=u'Attachments'),
                 context=getRequest(),
-                ),
+            ),
             str(attachment_number),
             safe_unicode(self.get_filename(document)))
         )

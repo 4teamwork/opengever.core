@@ -64,11 +64,16 @@ class DossierJorunalLaTeXView(MakoLaTeXView):
                                           ILaTexListing, name='journal')
 
         title = translate(
-                    _('label_dossier_journal',
-                      default=u'Journal of dossier "${title} (${reference_number})"',
-                      mapping={'title': self.context.title,
-                               'reference_number': self.context.get_reference_number()}),
-                    context=self.request)
+            _(
+                'label_dossier_journal',
+                default=u'Journal of dossier "${title} (${reference_number})"',
+                mapping={
+                    'title': self.context.title,
+                    'reference_number': self.context.get_reference_number(),
+                },
+            ),
+            context=self.request,
+        )
         title = self.convert_plain(title)
 
         return {

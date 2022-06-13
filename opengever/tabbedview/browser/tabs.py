@@ -195,12 +195,12 @@ class Documents(BaseCatalogListingTab):
          'transform': linked_subjects,
          'sortable': False,
          'groupable': False},
-        )
+    )
 
     major_actions = [
         'create_task',
         'create_proposal',
-        ]
+    ]
 
     bumblebee_template = ViewPageTemplateFile(
         'generic_with_bumblebee_viewchooser.pt')
@@ -288,7 +288,7 @@ class Dossiers(BaseCatalogListingTab):
          'transform': linked_subjects,
          'sortable': False,
          'groupable': False},
-        )
+    )
 
     search_options = {'is_subdossier': False}
 

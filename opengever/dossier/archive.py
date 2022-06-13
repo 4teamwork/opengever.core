@@ -19,7 +19,8 @@ from persistent.dict import PersistentDict
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.CMFCore.utils import getToolByName
 from Products.Transience.Transience import Increaser
-from z3c.form import button, field
+from z3c.form import button
+from z3c.form import field
 from z3c.form.browser import radio
 from z3c.form.form import Form
 from z3c.form.interfaces import INPUT_MODE
@@ -59,7 +60,6 @@ class ArchiveForm(Form, DossierResolutionStatusmessageMixin):
 
         action = data.get('filing_action')
         filing_year = data.get('filing_year')
-        filing_no = None
         filing_prefix = data.get('filing_prefix')
         end_date = data.get('dossier_enddate')
 
@@ -160,14 +160,14 @@ class Archiver(object):
         """Generate the complete filing number and
         set the number and prefix on the dossier."""
 
-        prefix_title = self._get_term_title(prefix,
-            'opengever.dossier.type_prefixes')
+        prefix_title = self._get_term_title(
+            prefix, 'opengever.dossier.type_prefixes')
 
         # key
         key = '%s-%s' % (prefix_title, year)
         # assemble filing_no
-        filing_no = '%s-%s-%s-%s' % (self._get_admin_unit_title(), prefix_title,
-            year, self._get_sequence(key))
+        filing_no = '%s-%s-%s-%s' % (
+            self._get_admin_unit_title(), prefix_title, year, self._get_sequence(key))
 
         return filing_no
 
@@ -186,7 +186,7 @@ class Archiver(object):
                 self._get_term_title(
                     IDossier(self.context).filing_prefix,
                     'opengever.dossier.type_prefixes'),
-                )
+            )
             if searchable:
                 # cut the -? away
                 value = value[:-2]
@@ -200,8 +200,8 @@ class Archiver(object):
     def _get_term_title(self, prefix, vocabulary):
         """ Get the value and not the key from the prefix vocabulary.
         """
-        return getVocabularyRegistry().get(self.context,
-            vocabulary).by_token.get(prefix).title
+        return getVocabularyRegistry().get(
+            self.context, vocabulary).by_token.get(prefix).title
 
     def _get_sequence(self, key):
         """compute the filing sequence"""

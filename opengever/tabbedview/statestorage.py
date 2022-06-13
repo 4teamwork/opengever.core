@@ -1,5 +1,5 @@
-from opengever.tabbedview.interfaces import ITabbedViewProxy
 from ftw.tabbedview.statestorage import DefaultGridStateStorageKeyGenerator
+from opengever.tabbedview.interfaces import ITabbedViewProxy
 
 
 class GeverGridStateStorageKeyGenerator(DefaultGridStateStorageKeyGenerator):

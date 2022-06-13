@@ -1,7 +1,8 @@
 from ftw.upgrade import UpgradeStep
-from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.base.default_values import object_has_value_for_field
 from opengever.core.upgrade import DefaultValuePersister
+from opengever.document.behaviors.metadata import IDocumentMetadata
+
 
 preserved_as_paper = IDocumentMetadata.get("preserved_as_paper")
 

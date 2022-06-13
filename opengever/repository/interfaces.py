@@ -1,6 +1,7 @@
 from zope import schema
 from zope.interface import Interface
 
+
 DEFAULT_REPOSITORY_DEPTH = 3
 
 

@@ -1,5 +1,5 @@
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.service import ogds_service
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.creation.unit import UnitCreator
 from opengever.setup.exception import GeverSetupException

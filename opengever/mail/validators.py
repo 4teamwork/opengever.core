@@ -1,16 +1,15 @@
-import re
-
+from ftw.mail.mail import IMail
+from opengever.mail import _
+from opengever.mail.interfaces import ISendDocumentConf
 from plone.registry.interfaces import IRegistry
 from z3c.form import validator
 from zope import schema
 from zope.component import queryUtility
+import re
 
-from opengever.mail import _
-from opengever.mail.interfaces import ISendDocumentConf
-from ftw.mail.mail import IMail
 
 EMAIL_REGEX = re.compile(
-    r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",
+    r"^(\w&.%#$&'\*+-/=?^_`{}|~]+!)*[\w&.%#$&'\*+-/=?^_`{}|~]+@(([0-9a-z]([0-9a-z-]*[0-9a-z])?\.)+[a-z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$",  # noqa
     re.IGNORECASE)
 
 
@@ -27,13 +26,12 @@ class DocumentSizeValidator(validator.SimpleFieldValidator):
 
     def validate(self, value):
         if value:
-            if self.request.get(
-                'form.widgets.documents_as_links') != ['selected']:
+            if self.request.get('form.widgets.documents_as_links') != ['selected']:
                 registry = queryUtility(IRegistry)
                 reg_proxy = registry.forInterface(ISendDocumentConf)
                 total = 0
                 for obj in value:
-                    #check if its a mail
+                    # check if its a mail
                     if IMail.providedBy(obj):
                         total += obj.message.getSize()
                     elif obj.file:

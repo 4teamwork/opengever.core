@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-04-14 11:33+0000\n"
+"POT-Creation-Date: 2022-06-13 05:29+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -202,7 +202,7 @@ msgstr ""
 msgid "delegate_label_responsibles"
 msgstr ""
 
-#. Default: "The documents (${title}) are still checked out.                                 Please checkin them in bevore deliver"
+#. Default: "The documents (${title}) are still checked out. Please check them in first."
 #: ./opengever/task/validators.py
 msgid "error_checked_out_document"
 msgstr ""

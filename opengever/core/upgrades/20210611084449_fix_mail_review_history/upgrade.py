@@ -1,9 +1,7 @@
+from DateTime import DateTime
 from ftw.upgrade import UpgradeStep
 from plone import api
 from Products.CMFCore.WorkflowCore import WorkflowException
-from datetime import datetime
-from DateTime import DateTime
-
 
 
 class FixMailReviewHistory(UpgradeStep):
@@ -14,18 +12,17 @@ class FixMailReviewHistory(UpgradeStep):
 
     def __call__(self):
         wftool = api.portal.get_tool('portal_workflow')
-        catalog = api.portal.get_tool('portal_catalog')
 
         # The problem has been fixed on 20 Now 2014 with the commit
         # 3cf26ce1edf9bb665d0df6719d95b9aad32d3d53, so we calculate two
         # additional years to make sure the change has been installed in
         # production
         query = {'portal_type': 'ftw.mail.mail',
-                 'created': {'query': DateTime(2016, 11, 20), 'range':'max'}}
+                 'created': {'query': DateTime(2016, 11, 20), 'range': 'max'}}
 
         for mail in self.objects(query, 'Fix mail review_history'):
             try:
-                history = wftool.getInfoFor(mail, "review_history")
+                wftool.getInfoFor(mail, "review_history")
             except WorkflowException:
                 continue
 

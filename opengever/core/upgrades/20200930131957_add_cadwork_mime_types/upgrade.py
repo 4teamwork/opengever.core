@@ -1,5 +1,6 @@
 from ftw.upgrade import UpgradeStep
 
+
 CADWORK_EXTENSIONS = [
     '.2d',
     '.2dc',

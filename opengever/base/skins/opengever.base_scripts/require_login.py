@@ -11,6 +11,7 @@
 from AccessControl import Unauthorized
 from zExceptions import NotFound
 
+
 portal = context.portal_url.getPortalObject()
 portal_url = portal.absolute_url().rstrip('/') + '/'
 request = context.REQUEST

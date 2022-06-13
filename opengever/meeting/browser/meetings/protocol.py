@@ -32,7 +32,7 @@ class IMeetingMetadata(model.Schema):
         title=_('label_secretary', default=u'Secretary'),
         source=AllUsersSourceBinder(),
         required=False,
-        )
+    )
 
     form.widget(participants=CheckBoxFieldWidget)
     participants = schema.List(

@@ -3,9 +3,9 @@ from AccessControl.SecurityManagement import setSecurityManager
 from contextlib import contextmanager
 from contextlib import nested
 from datetime import date
-from DateTime import DateTime
 from datetime import datetime
 from datetime import timedelta
+from DateTime import DateTime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator

@@ -524,9 +524,9 @@ class CommitteeBuilder(GeverDexterityBuilder):
 
         today = date.today()
         create(Builder('period').within(obj).having(
-              title=unicode(today.year),
-              start=date(today.year, 1, 1),
-              end=date(today.year, 12, 31)))
+            title=unicode(today.year),
+            start=date(today.year, 1, 1),
+            end=date(today.year, 12, 31)))
 
 
 builder_registry.register('committee', CommitteeBuilder)

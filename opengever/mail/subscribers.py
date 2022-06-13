@@ -40,9 +40,9 @@ def extracted_attachment_deleted(doc, event):
         for info in related_obj.get_attachments():
             if info.get("extracted_document_uid") == uid:
                 related_obj._modify_attachment_info(
-                     info.get("position"),
-                     extracted=False,
-                     extracted_document_uid=None)
+                    info.get("position"),
+                    extracted=False,
+                    extracted_document_uid=None)
                 return
     raise SourceMailNotFound("Source Mail not found when Extracted attachment moved.")
 

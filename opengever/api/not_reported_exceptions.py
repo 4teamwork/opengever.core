@@ -1,7 +1,7 @@
+from OFS.CopySupport import CopyError as _CopyError
+from OFS.CopySupport import ResourceLockedError as _ResourceLockedError
 from zExceptions import BadRequest as _BadRequest
 from zExceptions import Forbidden as _Forbidden
-from OFS.CopySupport import ResourceLockedError as _ResourceLockedError
-from OFS.CopySupport import CopyError as _CopyError
 
 
 class NotReportedException(Exception):

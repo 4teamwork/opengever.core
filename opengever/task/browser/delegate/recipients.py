@@ -5,14 +5,14 @@ from opengever.task import _
 from opengever.task.browser.delegate import vocabulary
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from opengever.task.browser.delegate.utils import encode_data
-from plone.autoform.widgets import ParameterizedWidget
 from plone.autoform import directives as form
-from z3c.form.form import Form
+from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
+from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
 

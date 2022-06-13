@@ -1,14 +1,15 @@
-from Products.PythonScripts.standard import url_quote
-from Products.CMFCore.utils import getToolByName
-from zope.interface import implements
-from Products.Five.browser import BrowserView
 from Acquisition import aq_inner
+from Products.CMFCore.utils import getToolByName
+from Products.Five.browser import BrowserView
+from Products.PythonScripts.standard import url_quote
 from Products.TinyMCE.browser.interfaces.style import ITinyMCEStyle
+from zope.interface import implements
+
 
 TINYMCE_BANNED_STYLES = [
     "++theme++plonetheme.teamraum/css/responsive.css",
     "++resource++ftw.mobilenavigation/navigation.css",
-    ]
+]
 
 
 class TinyMCEStyle(BrowserView):

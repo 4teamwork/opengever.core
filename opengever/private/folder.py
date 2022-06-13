@@ -5,6 +5,7 @@ from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from plone import api
 from plone.dexterity.content import Container
 
+
 PRIVATE_FOLDER_DEFAULT_ROLES = [
     'Owner', 'Reader', 'Contributor', 'Editor', 'Reviewer', 'Publisher']
 

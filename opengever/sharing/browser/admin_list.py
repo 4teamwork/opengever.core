@@ -40,9 +40,9 @@ class BlockedLocalRolesList(BrowserView):
             'object_provides': (
                 IRepositoryFolder.__identifier__,
                 IDossierMarker.__identifier__,
-                ),
+            ),
             'blocked_local_roles': True,
-            }
+        }
 
         # Get the repository folders sorted by reference number
         active_formatter = api.portal.get_registry_record(
@@ -58,30 +58,30 @@ class BlockedLocalRolesList(BrowserView):
                 _(
                     u'label_blocked_local_roles',
                     default=u'Protected Objects',
-                    ),
+                ),
                 context=getRequest(),
-                ))
+            ))
 
             title_element = u''.join((u'<h1>', title, u'</h1>', ))
 
             tree = Treeify(
                 dossier_container_brains,
                 context_path, node_updater,
-                )
+            )
 
             # XXX - Preserving the reference number tree order.
             # Sorting here was easier than figuring out the treeifying.
             iterable_children = sorted(
                 tree(self.context).get('children', ()),
                 key=lambda child: child.get('title', ''),
-                )
+            )
 
             rendered_tree = self._build_html_tree(iterable_children)
 
             garnished_tree = ''.join((
                 title_element,
                 rendered_tree,
-                ))
+            ))
 
             return garnished_tree
 
@@ -89,9 +89,9 @@ class BlockedLocalRolesList(BrowserView):
             _(
                 u'label_no_blocked_local_roles',
                 default=u'No protected objects were found within this scope.',
-                ),
+            ),
             context=getRequest(),
-            ))
+        ))
 
         title_element = u''.join((u'<h1>', title, u'</h1>', ))
 
@@ -104,7 +104,7 @@ class BlockedLocalRolesList(BrowserView):
             output = u''.join((
                 output,
                 u'<li class="treeItem visualNoMarker">\n',
-                ))
+            ))
 
             title = escape_html(node.get('title'))
             reference = escape_html(node.get('reference'))
@@ -117,7 +117,7 @@ class BlockedLocalRolesList(BrowserView):
                     anchor = (
                         u'#blocked-local-roles' if sub_children
                         else u'#sharing'
-                        )
+                    )
                     target_url = u''.join((url.decode('UTF-8'), anchor, ))
 
                     output = u''.join((
@@ -128,8 +128,8 @@ class BlockedLocalRolesList(BrowserView):
                             target_url,
                             title.decode('UTF-8'),
                             reference,
-                            ),
-                        ))
+                        ),
+                    ))
                 else:
                     output = u''.join((
                         output,
@@ -138,8 +138,8 @@ class BlockedLocalRolesList(BrowserView):
                             css_class,
                             title.decode('UTF-8'),
                             reference,
-                            ),
-                        ))
+                        ),
+                    ))
 
             if sub_children:
                 output = u''.join((
@@ -147,8 +147,8 @@ class BlockedLocalRolesList(BrowserView):
                     u'<ul class="level{}">\n{}\n</ul>\n'.format(
                         str(level),
                         self._build_html_tree(sub_children, level + 1),
-                        ),
-                    ))
+                    ),
+                ))
 
             output.join((output, u'</li>\n', ))
 

@@ -13,6 +13,7 @@ from zope.annotation import IAnnotations
 from zope.component import adapter
 from zope.interface import implementer
 
+
 PRINCIPAL_TYPE_GROUP = 'group'
 PRINCIPAL_TYPE_UNKNOWN = 'unknown principal'
 PRINCIPAL_TYPE_USER = 'user'

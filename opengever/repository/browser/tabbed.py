@@ -13,17 +13,17 @@ class RepositoryRootTabbedView(GeverTabbedView):
     overview_tab = {
         'id': 'overview',
         'title': _(u'label_overview', default=u'Overview'),
-        }
+    }
 
     dossiers_tab = {
         'id': 'dossiers',
         'title': _(u'label_dossiers', default=u'Dossiers'),
-        }
+    }
 
     info_tab = {
         'id': 'sharing',
         'title': _(u'label_info', default=u'Info'),
-        }
+    }
 
     @property
     def dispositions_tab(self):
@@ -31,7 +31,7 @@ class RepositoryRootTabbedView(GeverTabbedView):
             return {
                 'id': 'dispositions',
                 'title': _(u'label_dispositions', default=u'Dispositions'),
-                }
+            }
         return None
 
     @property
@@ -40,7 +40,7 @@ class RepositoryRootTabbedView(GeverTabbedView):
             return {
                 'id': 'journal',
                 'title': _(u'label_journal', default=u'Journal'),
-                }
+            }
         return None
 
     @property
@@ -49,7 +49,7 @@ class RepositoryRootTabbedView(GeverTabbedView):
             return {
                 'id': 'blocked-local-roles',
                 'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
-                }
+            }
         return None
 
     def _get_tabs(self):
@@ -69,12 +69,12 @@ class RepositoryFolderTabbedView(GeverTabbedView):
     dossiers_tab = {
         'id': 'dossiers',
         'title': _(u'label_dossiers', default=u'Dossiers'),
-        }
+    }
 
     info_tab = {
         'id': 'sharing',
         'title': _(u'label_info', default=u'Info'),
-        }
+    }
 
     @property
     def blocked_local_roles_tab(self):
@@ -82,7 +82,7 @@ class RepositoryFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'blocked-local-roles',
                 'title': _(u'label_blocked_local_roles', default=u'Protected Objects'),
-                }
+            }
         return None
 
     @property
@@ -92,7 +92,7 @@ class RepositoryFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'documents-proxy',
                 'title': _(u'label_documents', default=u'Documents'),
-                }
+            }
         return None
 
     @property
@@ -102,7 +102,7 @@ class RepositoryFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'tasks',
                 'title': _(u'label_tasks', default=u'Tasks'),
-                }
+            }
         return None
 
     @property
@@ -115,7 +115,7 @@ class RepositoryFolderTabbedView(GeverTabbedView):
             return {
                 'id': 'proposals',
                 'title': _(u'label_proposals', default=u'Proposals'),
-                }
+            }
         return None
 
     def _get_tabs(self):

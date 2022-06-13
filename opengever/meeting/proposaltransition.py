@@ -17,7 +17,7 @@ class IText(Schema):
     text = schema.Text(
         title=_('label_comment', default="Comment"),
         required=False,
-        )
+    )
 
 
 @implementer(ITransitionExtender)

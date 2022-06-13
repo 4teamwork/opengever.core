@@ -1,11 +1,13 @@
 from opengever.base import _
 from opengever.base.browser.helper import get_css_class
-from opengever.base.interfaces import IReferenceNumber, ISequenceNumber
+from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISequenceNumber
 from plone.app.layout.viewlets import content
 from plone.memoize.instance import memoize
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component import getUtility, getAdapter
+from zope.component import getUtility
 from zope.i18nmessageid import MessageFactory
 
 

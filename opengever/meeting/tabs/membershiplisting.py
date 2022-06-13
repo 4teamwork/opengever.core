@@ -3,16 +3,16 @@ from Acquisition import aq_parent
 from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.meeting import _
+from opengever.meeting.model import Member
 from opengever.meeting.model import Membership
 from opengever.tabbedview import FilteredListingTab
+from opengever.tabbedview import SqlTableSource
 from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
-from opengever.tabbedview import SqlTableSource
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import Interface
-from opengever.meeting.model import Member
 
 
 class IMembershipTableSourceConfig(ITableSourceConfig):
@@ -38,7 +38,7 @@ class MembershipListingTab(FilteredListingTab):
             'filter_membership_active',
             _('active', default=u'Active'),
             default=True)
-        )
+    )
 
     show_selects = False
 

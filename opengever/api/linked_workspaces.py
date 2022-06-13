@@ -20,6 +20,7 @@ from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 import logging
 
+
 logger = logging.getLogger('opengever.api: LinkedWorkspaces')
 
 teamraum_request_error_handler = create_proxy_request_error_handler(
@@ -302,7 +303,7 @@ class AddParticipationsOnWorkspacePost(LinkedWorkspacesService):
                                default=u"Property 'participants' is required"))
 
         items = ILinkedWorkspaces(self.context).add_participations(
-                workspace_uid, participants).get("items", [])
+            workspace_uid, participants).get("items", [])
 
         return {
             "@id": "{}/@linked-workspace-participations".format(self.context.absolute_url()),

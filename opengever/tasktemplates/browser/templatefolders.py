@@ -1,6 +1,7 @@
 from ftw.table import helper
 from opengever.tabbedview import BaseCatalogListingTab
-from opengever.tabbedview.helper import linked, translated_string
+from opengever.tabbedview.helper import linked
+from opengever.tabbedview.helper import translated_string
 from opengever.tasktemplates import _
 
 

@@ -1,5 +1,6 @@
 from BTrees.OOBTree import OOBTree
-from plone.app.blob.field import BlobWrapper, ReuseBlob
+from plone.app.blob.field import BlobWrapper
+from plone.app.blob.field import ReuseBlob
 from plone.app.blob.interfaces import IBlobbable
 from Products.CMFCore.utils import getToolByName
 from StringIO import StringIO

@@ -1,5 +1,4 @@
 from opengever.propertysheets.api.base import PropertySheetWriter
-from opengever.propertysheets.exceptions import FieldValidationError
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body

@@ -77,4 +77,3 @@ class TestArchivalFileForm(IntegrationTestCase):
         browser.visit(self.document, view='edit_archival_file')
         browser.find('Cancel').click()
         self.assertEquals(self.document.absolute_url(), browser.url)
-

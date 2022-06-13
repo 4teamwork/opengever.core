@@ -1,4 +1,3 @@
-from opengever.workspace.participation import PARTICIPATION_ROLES
 from zope import schema
 from zope.interface import Interface
 import re
@@ -35,4 +34,4 @@ class IWorkspaceInvitationSchema(Interface):
         required=False,
         missing_value=u'',
         default=u'',
-        )
+    )

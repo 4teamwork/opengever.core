@@ -5,7 +5,8 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.supermodel import model
 from Products.CMFPlone.utils import safe_unicode
 from zope import schema
-from zope.interface import Interface, alsoProvides
+from zope.interface import alsoProvides
+from zope.interface import Interface
 
 
 class IOpenGeverBase(model.Schema):
@@ -18,14 +19,14 @@ class IOpenGeverBase(model.Schema):
         fields=[
             u'title',
             u'description',
-            ],
-        )
+        ],
+    )
 
     dexteritytextindexer.searchable('title')
     title = schema.TextLine(
         title=_(u'label_title', default=u'Title'),
         required=True
-        )
+    )
 
     dexteritytextindexer.searchable('description')
     description = schema.Text(
@@ -33,7 +34,7 @@ class IOpenGeverBase(model.Schema):
         required=False,
         missing_value=u'',
         default=u'',
-        )
+    )
 
 
 alsoProvides(IOpenGeverBase, IFormFieldProvider)

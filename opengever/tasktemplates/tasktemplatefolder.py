@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
-from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
@@ -26,11 +25,9 @@ from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
-from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
-from zope.lifecycleevent import ObjectCreatedEvent
 
 
 ACTIVE_STATE = 'tasktemplatefolder-state-activ'

@@ -16,9 +16,9 @@ def int2bytes(n):
     return struct.pack('>I', n)
 
 
-def long2bytes(l):
+def long2bytes(n):
     """Converts a long integer into a bytestring in big-endian byte order."""
-    return struct.pack('>Q', l)
+    return struct.pack('>Q', n)
 
 
 def generate_key(modulus, exp):

@@ -1,6 +1,6 @@
 from opengever.meeting import _
-from opengever.meeting.toc.dossier_refnum import to_human_sortable_key
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
+from opengever.meeting.toc.dossier_refnum import to_human_sortable_key
 from opengever.meeting.toc.utils import normalise_string
 from opengever.meeting.toc.utils import repo_refnum
 from zope.globalrequest import getRequest

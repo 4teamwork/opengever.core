@@ -1,8 +1,8 @@
 from ftw.bumblebee.service import BumblebeeServiceV3
+from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from plone import api
 from zope.component import adapter
-from opengever.base.interfaces import IOpengeverBaseLayer
 
 
 @adapter(IOpengeverBaseLayer)

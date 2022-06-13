@@ -103,7 +103,7 @@ class SolrQueryBaseService(Service):
                 facet_counts[field.field_name][facet] = {
                     "count": count,
                     "label": field.index_value_to_label(facet)
-                    }
+                }
 
         return facet_counts
 

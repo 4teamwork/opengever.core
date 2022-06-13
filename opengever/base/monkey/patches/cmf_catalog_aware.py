@@ -4,10 +4,10 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from plone import api
 from Products.CMFCore.utils import _getAuthenticatedUser
 from zope.globalrequest import getRequest
+from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import noLongerProvides
-from zope.i18n import translate
 
 
 class IDisableCatalogIndexing(Interface):

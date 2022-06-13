@@ -1,5 +1,5 @@
-from Acquisition import aq_parent
 from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from opengever.testing import IntegrationTestCase

@@ -5,7 +5,6 @@ from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
 from opengever.base.solr import OGSolrContentListing
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.models import Participation
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier

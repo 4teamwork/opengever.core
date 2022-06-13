@@ -124,10 +124,12 @@ class TeamraumThemeControlpanel(BrowserView):
          value="%(default)s"
          />%(afterfield)s
 </div>
-""" % {'fieldid': fieldid,
-       'field_key': field_key,
-       'label': translated_label,
-       'default': default,
-       'help': translated_help,
-       'afterfield': afterfield,
-       'cssclass': cssclass}
+""" % {
+            'fieldid': fieldid,
+            'field_key': field_key,
+            'label': translated_label,
+            'default': default,
+            'help': translated_help,
+            'afterfield': afterfield,
+            'cssclass': cssclass,
+        }

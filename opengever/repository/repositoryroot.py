@@ -30,17 +30,17 @@ class IRepositoryRoot(model.Schema):
     valid_from = schema.Date(
         title=_(u'label_valid_from', default=u'Valid from'),
         required=False,
-        )
+    )
 
     valid_until = schema.Date(
         title=_(u'label_valid_until', default=u'Valid until'),
         required=False,
-        )
+    )
 
     version = schema.TextLine(
         title=_(u'label_version', default=u'Version'),
         required=False,
-        )
+    )
 
     form.write_permission(reference_number_addendum='cmf.ManagePortal')
     reference_number_addendum = schema.TextLine(

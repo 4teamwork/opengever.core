@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.repository.interfaces import IRepositoryFolder
-from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 
 
 class IndexBlockedLocalRolesInSolrForRepositoryFoldersAndDossiers(UpgradeStep):

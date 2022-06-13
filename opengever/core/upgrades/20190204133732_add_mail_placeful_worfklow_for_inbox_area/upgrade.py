@@ -23,11 +23,11 @@ class AddMailPlacefulWorfklowForInboxArea(UpgradeStep):
             full_objects=True)
 
         review_state_mapping = {
-                    ('opengever_mail_workflow',
-                     'opengever_inbox_mail_workflow'): {
-                         'mail-state-active': 'mail-state-active',
-                         'mail-state-removed': 'mail-state-removed'}
-                    }
+            ('opengever_mail_workflow', 'opengever_inbox_mail_workflow'): {
+                'mail-state-active': 'mail-state-active',
+                'mail-state-removed': 'mail-state-removed',
+            }
+        }
 
         with WorkflowChainUpdater(mails_in_inboxes, review_state_mapping):
             self.install_upgrade_profile()

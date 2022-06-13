@@ -39,7 +39,10 @@ class FixSharingPermissions(UpgradeStep):
         portal = getSite()
         query = {'portal_type': 'opengever.document.document', 'path': path}
         brains = tuple(self.catalog.unrestrictedSearchResults(query))
-        lookup = lambda brain: portal.unrestrictedTraverse(brain.getPath())
+
+        def lookup(brain):
+            return portal.unrestrictedTraverse(brain.getPath())
+
         generator = SizedGenerator(
             (lookup(brain) for brain in brains), len(brains))
         objects = SavepointIterator.build(

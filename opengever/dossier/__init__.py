@@ -1,6 +1,7 @@
 from plone import api
 from zope.i18nmessageid import MessageFactory
 
+
 _ = MessageFactory("opengever.dossier")
 
 

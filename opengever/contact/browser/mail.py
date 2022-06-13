@@ -138,7 +138,7 @@ class MailAddressesView(BrowserView):
             return _(
                 u'error_no_label_and_email',
                 u'Please specify a label and an email address.'
-                )
+            )
 
         elif not label:
             return _(

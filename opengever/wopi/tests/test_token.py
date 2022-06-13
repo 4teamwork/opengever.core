@@ -1,7 +1,7 @@
 from ftw.testing import MockTestCase
-from plone.keyring.interfaces import IKeyManager
 from opengever.wopi.token import create_access_token
 from opengever.wopi.token import validate_access_token
+from plone.keyring.interfaces import IKeyManager
 from time import time
 
 

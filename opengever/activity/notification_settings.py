@@ -365,7 +365,7 @@ class NotificationSettings(object):
             setattr(self, '_default_notification_settings', {
                 default.kind: default for default
                 in model.NotificationDefault.query
-                })
+            })
 
         return self._default_notification_settings
 

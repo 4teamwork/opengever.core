@@ -1,7 +1,7 @@
 import logging
 import os.path
-import sys
 import re
+import sys
 
 
 logger = logging.getLogger("opengever.releaser")

@@ -12,6 +12,7 @@ from zope.interface import alsoProvides
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
 
+
 ROLE_ASSIGNMENT_REPORT_TYPE = 'virtual.report.roleassignmentreport'
 
 

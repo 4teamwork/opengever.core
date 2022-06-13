@@ -23,6 +23,7 @@ from ZPublisher.Iterators import filestream_iterator
 import json
 import os
 
+
 logger = getLogger('opengever.meeting')
 
 
@@ -151,8 +152,7 @@ class DemandMeetingZip(BrowserView):
             'msg_some_documents_remain_unconverted': translate(
                 _(u'msg_some_documents_remain_unconverted',
                   default=u'Some documents could not be converted to PDF, '
-                           'their original files will be included in the '
-                           'Zip.'),
+                  u'their original files will be included in the Zip.'),
                 context=self.request),
             'msg_zip_ready_for_download': translate(
                 _(u'msg_zip_ready_for_download',
@@ -169,13 +169,13 @@ class DemandMeetingZip(BrowserView):
             'msg_zip_creation_in_progress': translate(
                 _(u'msg_zip_creation_in_progress',
                   default=u'A Zip file with PDFs for all documents of this '
-                           'meeting is being generated.'),
+                  u'meeting is being generated.'),
                 context=self.request),
             'desc_pdf_zip_contents': translate(
                 _(u'desc_pdf_zip_contents',
                   default=u'The zip contains a PDF file for each document in '
-                           'this meeting and a JSON file which allows it to '
-                           'be imported by the meeting app.'),
+                  u'this meeting and a JSON file which allows it to '
+                  u'be imported by the meeting app.'),
                 context=self.request),
             'label_button_download_zip': translate(
                 _(u'label_button_download_zip',

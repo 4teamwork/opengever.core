@@ -19,7 +19,7 @@ class RenameTemplateDossierToTemplateFolder(UpgradeStep):
         review_state_mapping = {
             ('opengever_templatedossier_workflow', 'opengever_templatefolder_workflow'): {
                 'templatedossier-state-active': 'templatefolder-state-active'}
-            }
+        }
 
         # Save current ITemplateDossierProperties settings
         create_doc_properties = api.portal.get_registry_record(

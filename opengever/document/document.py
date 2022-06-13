@@ -64,7 +64,7 @@ IVersionable.setTaggedValue(FIELDSETS_KEY, [
     Fieldset('common', fields=[
              'changeNote',
              ])
-    ])
+])
 
 
 # omit the changeNote from all forms because it's not possible to create a new
@@ -89,8 +89,8 @@ class IDocumentSchema(model.Schema):
         fields=[
             u'title',
             u'file',
-            ],
-        )
+        ],
+    )
 
     dexteritytextindexer.searchable('title')
     form.order_before(title='IDocumentMetadata.description')
@@ -104,7 +104,7 @@ class IDocumentSchema(model.Schema):
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
         required=False,
-        )
+    )
 
     @invariant
     def title_or_file_required(data):
@@ -143,7 +143,7 @@ class UploadValidator(Z3CFormClamavValidator):
                 raise Invalid(_(
                     u'error_proposal_no_document',
                     default=(u"It's not possible to have no file in proposal documents.")
-                    ))
+                ))
         if not value:
             return
 
@@ -160,7 +160,7 @@ class UploadValidator(Z3CFormClamavValidator):
                 raise Invalid(_(
                     u'error_proposal_document_type',
                     default=(u"It's not possible to have non-.docx documents as proposal documents.")
-                    ))
+                ))
         super(UploadValidator, self).validate(value)
 
     def is_proposal_document_upload(self):
@@ -191,13 +191,13 @@ class UploadValidator(Z3CFormClamavValidator):
                      u"send it to ${mailaddress} or drag it to the dossier "
                      u"(Dragn'n'Drop)."),
             mapping={'mailaddress': mail_address}
-            ))
+        ))
 
 
 validator.WidgetValidatorDiscriminators(
     UploadValidator,
     field=IDocumentSchema['file'],
-    )
+)
 
 
 class Document(Item, BaseDocumentMixin):
@@ -515,7 +515,7 @@ class Document(Item, BaseDocumentMixin):
                     timeout=1000)
         elif action == "oneoffixx" and is_oneoffixx_feature_enabled():
             redirector.redirect(create_oc_url(
-                    request,
-                    self,
-                    dict(action=action),
-                ))
+                request,
+                self,
+                dict(action=action),
+            ))

@@ -3,8 +3,8 @@ from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from logging import getLogger
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
-from opengever.document.versioner import Versioner
 from opengever.document import _
+from opengever.document.versioner import Versioner
 from pkg_resources import resource_filename
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -16,6 +16,7 @@ from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import json
+
 
 logger = getLogger('opengever.document')
 
@@ -114,7 +115,7 @@ class SavePDFDocumentUnder(BrowserView):
             'label_error': translate(
                 _(u'label_error', default=u'Error'),
                 context=self.request),
-            })
+        })
 
     def destination_document_url(self):
         return self.destination_document.absolute_url()

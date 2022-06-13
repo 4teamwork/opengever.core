@@ -3,6 +3,7 @@ from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import STEALABLE_LOCK
 from webdav.LockItem import LockItem
 
+
 WOPI_MARKER = 'WOPI_'
 
 

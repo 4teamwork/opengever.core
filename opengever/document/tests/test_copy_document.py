@@ -1,6 +1,6 @@
 from copy import deepcopy
-from datetime import datetime
 from DateTime import DateTime
+from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from OFS.CopySupport import CopyError

@@ -3,6 +3,7 @@ from plone import api
 from plone.app.content.interfaces import INameFromTitle
 from zope.dottedname.resolve import resolve
 
+
 # Please update the content creation in the test below, when a new type needs
 # to be added here!
 EXPECTED_TYPES_WITH_NAME_FROM_TITLE = [

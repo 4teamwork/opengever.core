@@ -91,8 +91,8 @@ class ISelectRepositoryfolderSchema(Schema):
                     'opengever.repository.repositoryroot.IRepositoryRoot',
                     'opengever.repository.repositoryfolder.'
                     'IRepositoryFolderSchema',
-                    ]
-                }))
+                ]
+            }))
 
 
 class RepositoryfolderValidator(BaseRepositoryfolderValidator):

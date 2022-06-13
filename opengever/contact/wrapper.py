@@ -1,6 +1,6 @@
 from opengever.base.wrapper import SQLWrapperBase
-from opengever.contact.interfaces import IPerson
 from opengever.contact.interfaces import IOrganization
+from opengever.contact.interfaces import IPerson
 from zope.interface import implements
 
 

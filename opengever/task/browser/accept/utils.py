@@ -2,6 +2,7 @@ from opengever.activity import notification_center
 from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
+from opengever.base.response import IResponseContainer
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -10,7 +11,6 @@ from opengever.inbox.yearfolder import get_current_yearfolder
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import _
-from opengever.base.response import IResponseContainer
 from opengever.task.exceptions import TaskRemoteRequestError
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
@@ -63,7 +63,8 @@ def accept_task_with_response(task, response_text, successor_oguid=None):
 
 
 def accept_forwarding_with_successor(
-    context, predecessor_oguid, response_text, dossier=None):
+    context, predecessor_oguid, response_text, dossier=None
+):
 
     # the predessecor (the forwarding on the remote client)
     predecessor = Task.query.by_oguid(predecessor_oguid)
@@ -200,7 +201,7 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     doc_transporter = getUtility(ITaskDocumentsTransporter)
 
     comment = _(u'version_message_accept_task',
-               default=u'Document copied from task (task accepted)')
+                default=u'Document copied from task (task accepted)')
     intids_mapping = doc_transporter.copy_documents_from_remote_task(
         predecessor, successor, comment=comment)
 

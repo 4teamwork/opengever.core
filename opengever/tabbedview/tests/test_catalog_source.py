@@ -7,6 +7,7 @@ from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 import pkg_resources
 
+
 pkg_path = pkg_resources.get_distribution('opengever.core').location
 
 

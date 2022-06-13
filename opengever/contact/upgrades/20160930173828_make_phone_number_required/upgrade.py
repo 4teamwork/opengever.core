@@ -20,12 +20,12 @@ class MakePhoneNumberRequired(SchemaMigration):
         """Fill empty phone_number with a placeholder.
         """
         phonenumbers_table = table('phonenumbers',
-                                  column("id"),
-                                  column("phone_number"))
+                                   column("id"),
+                                   column("phone_number"))
 
         self.execute(phonenumbers_table.update()
                      .values(phone_number=EMPTY_PHONE_NUMBER_PLACEHOLDER)
-                     .where(phonenumbers_table.columns.phone_number == None))
+                     .where(phonenumbers_table.columns.phone_number.is_(None)))
 
     def make_column_required(self):
         self.op.alter_column(

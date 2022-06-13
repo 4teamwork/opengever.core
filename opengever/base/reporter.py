@@ -56,7 +56,7 @@ def approximate_column_width(cells):
     return heuristic_for_11pt_calibri(max(
         len(unicode(cell.value)) if cell.value else 0
         for cell in cells
-        ))
+    ))
 
 
 class StringTranslater(object):
@@ -120,7 +120,7 @@ class XLSReporter(object):
         column_widths = {
             get_column_letter(i + 1): approximate_column_width(col)
             for i, col in enumerate(sheet.columns)
-            }
+        }
 
         for index, width in column_widths.iteritems():
             sheet.column_dimensions[index].width = width

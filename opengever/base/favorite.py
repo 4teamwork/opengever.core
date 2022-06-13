@@ -92,4 +92,4 @@ class FavoriteManager(object):
         return '-'.join([
             str(len(favorites)),
             max(fav.modified.strftime('%s') for fav in favorites)
-            ])
+        ])

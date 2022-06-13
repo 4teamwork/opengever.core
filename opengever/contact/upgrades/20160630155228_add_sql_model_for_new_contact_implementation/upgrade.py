@@ -1,5 +1,5 @@
-from opengever.core.upgrade import SchemaMigration
 from opengever.base.types import UnicodeCoercingText
+from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer

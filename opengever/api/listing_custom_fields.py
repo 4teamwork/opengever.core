@@ -1,7 +1,7 @@
-from plone.restapi.services import Service
-from opengever.propertysheets.assignment import get_dossier_assignment_slots
 from opengever.propertysheets.assignment import get_document_assignment_slots
+from opengever.propertysheets.assignment import get_dossier_assignment_slots
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from plone.restapi.services import Service
 
 
 LISTING_TO_SLOTS = {

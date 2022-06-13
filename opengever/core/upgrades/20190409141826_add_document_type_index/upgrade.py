@@ -22,7 +22,7 @@ class AddDocumentTypeIndex(UpgradeStep):
 
         query = {
             'object_provides': IBaseDocument.__identifier__,
-            }
+        }
 
         for obj in self.objects(query, "Index document type."):
             catalog.reindexObject(obj, idxs=['document_type'],

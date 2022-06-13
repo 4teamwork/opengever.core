@@ -1,6 +1,6 @@
+from DateTime import DateTime
 from datetime import date
 from datetime import datetime
-from DateTime import DateTime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.ogds.models.user import User

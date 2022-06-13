@@ -42,8 +42,7 @@ class ResponseView(ViewletBase, Base):
             responses.append(info)
 
         # sorting on date
-        responses.sort(lambda a, b: cmp(b['response'].created,
-                                    a['response'].created))
+        responses.sort(key=lambda x: x['response'].created, reverse=True)
 
         return responses
 

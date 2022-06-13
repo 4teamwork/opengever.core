@@ -5,6 +5,7 @@ from Products.PlonePAS.interfaces.group import IGroupManagement
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
 import logging
 
+
 LOG = logging.getLogger('ftw.upgrade')
 
 

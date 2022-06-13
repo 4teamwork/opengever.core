@@ -28,8 +28,8 @@ def mock_wopi_discovery(extensions=None, public_key=None):
     if public_key is not None:
         modulus = b64encode(int2bytes(public_key.public_numbers().n, 256))
         discovery._WOPI_DISCOVERY['proof-key'] = {
-             '@exponent': 'AQAB',
-             '@modulus': modulus,
-             '@oldexponent': 'AQAB',
-             '@oldmodulus': modulus,
+            '@exponent': 'AQAB',
+            '@modulus': modulus,
+            '@oldexponent': 'AQAB',
+            '@oldmodulus': modulus,
         }

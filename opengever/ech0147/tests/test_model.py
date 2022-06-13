@@ -4,7 +4,6 @@ from opengever.ech0147.model import Dossier
 from opengever.ech0147.model import MessageT1
 from opengever.testing import IntegrationTestCase
 from plone import api
-
 import unittest
 
 

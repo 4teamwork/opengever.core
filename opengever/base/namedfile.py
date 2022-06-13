@@ -9,14 +9,14 @@ MAXCHUNKSIZE = 1 << 16
 
 
 def _chunked_transfer(data, blob):
-        data.seek(0)
+    data.seek(0)
 
-        fp = blob.open('w')
+    fp = blob.open('w')
+    block = data.read(MAXCHUNKSIZE)
+    while block:
+        fp.write(block)
         block = data.read(MAXCHUNKSIZE)
-        while block:
-            fp.write(block)
-            block = data.read(MAXCHUNKSIZE)
-        fp.close()
+    fp.close()
 
 
 # IStorage utility for good old ZPublisher.HTTPRequest.FileUpload

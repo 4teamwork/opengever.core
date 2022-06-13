@@ -13,6 +13,7 @@ from Products.MimetypesRegistry.MimeTypeItem import MimeTypeItem
 from six import BytesIO
 from unittest import skipIf
 
+
 UPLOAD_DATA = b"abcdefgh"
 UPLOAD_LENGTH = len(UPLOAD_DATA)
 UPLOAD_METADATA = 'filename dGVzdC50eHQ=,content-type dGV4dC9wbGFpbg==,@type b3BlbmdldmVyLmRvY3VtZW50LmRvY3VtZW50'

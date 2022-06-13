@@ -62,54 +62,54 @@ class Overview(BrowserView, GeverTabMixin):
             {
                 'label': _('label_task_title', u'Task title'),
                 'value': task.title,
-                },
+            },
             {
                 'label': _('label_parent_dossier_title'),
                 'value': task.containing_dossier,
-                },
+            },
             {
                 'label': _(u"label_text", default=u"Text"),
                 'value': _format_description(task.text),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u'label_task_type', default=u'Task Type'),
                 'value': self.context.get_task_type_label(),
-                },
+            },
             {
                 'label': _('label_workflow_state'),
                 'value': task.get_state_label(),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u"label_deadline", default=u"Deadline"),
                 'value': task.get_deadline_label(fmt="long"),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u"label_reminder", default=u"Reminder"),
                 'css_class': "taskReminderSelector",
                 'value': self.task_reminder_sleector_template(self),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u"label_issuer", default=u"Issuer"),
                 'css_class': "issuer",
                 'value': task.get_issuer_label(),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u"label_responsible", default=u"Responsible"),
                 'value': task.get_responsible_label(),
                 'is_html': True,
-                },
+            },
             {
                 'label': _(u"label_date_of_completion",
                            default=u"Date of completion"),
                 'value': _format_date(task.get_completed()),
-                },
+            },
 
-            ]
+        ]
 
         return items
 
@@ -199,7 +199,7 @@ class Overview(BrowserView, GeverTabMixin):
             'sort_order': -1,
             'selected': reminder_option is None,
             'showSpinner': False,
-            })
+        })
 
         for option in REMINDER_TYPE_REGISTRY.values():
             # XXX: Once the sort_order has been eliminated, this place should

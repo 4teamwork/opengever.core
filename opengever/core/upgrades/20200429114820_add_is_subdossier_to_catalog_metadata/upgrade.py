@@ -1,6 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 
 
 class AddIsSubdossierToCatalogMetadata(UpgradeStep):

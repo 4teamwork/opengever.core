@@ -9,7 +9,6 @@ from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
 from plone.autoform import directives
-from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
@@ -39,7 +38,7 @@ def videoconferencing_url_default():
 @provider(IFormFieldProvider)
 class IWorkspaceSchema(model.Schema):
 
-    form.widget('responsible', KeywordFieldWidget, async=True)
+    directives.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_owner", default=u"Owner"),
         source=ActualWorkspaceMembersSourceBinder(),

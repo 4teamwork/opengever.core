@@ -17,14 +17,14 @@ POLICY_ID = "opengever_inbox_policy"
 
 REVIEW_STATE_MAPPING = {
     ('opengever_mail_workflow', 'opengever_inbox_mail_workflow'): {
-         'mail-state-active': 'mail-state-active',
-         'mail-state-removed': 'mail-state-removed'
+        'mail-state-active': 'mail-state-active',
+        'mail-state-removed': 'mail-state-removed',
     },
     ('opengever_document_workflow', 'opengever_inbox_document_workflow'): {
-         'document-state-draft': 'document-state-draft',
-         'document-state-removed': 'document-state-removed',
-         'document-state-shadow': 'document-state-shadow'
-    }
+        'document-state-draft': 'document-state-draft',
+        'document-state-removed': 'document-state-removed',
+        'document-state-shadow': 'document-state-shadow',
+    },
 }
 
 WORKFLOW_NAMES = list(itertools.chain(*REVIEW_STATE_MAPPING.keys()))

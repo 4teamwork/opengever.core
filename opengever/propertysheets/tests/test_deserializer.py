@@ -101,4 +101,3 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
             },
             deserialized_data,
         )
-

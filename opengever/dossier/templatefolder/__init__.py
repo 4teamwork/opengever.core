@@ -3,6 +3,9 @@ from opengever.dossier.templatefolder.templatefolder import TemplateFolder  # ke
 from plone import api
 
 
+__all__ = ['ITemplateFolder', 'TemplateFolder', 'get_template_folder']
+
+
 def get_template_folder():
     catalog = api.portal.get_tool('portal_catalog')
     result = catalog(

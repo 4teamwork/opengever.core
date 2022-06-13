@@ -57,6 +57,7 @@ from zope.interface import Interface
 from zope.intid.interfaces import IIntIds
 import logging
 
+
 logger = logging.getLogger('opengever.api.serializer')
 
 
@@ -295,7 +296,7 @@ class SerializeTeamModelToJson(SerializeSQLModelToJsonBase):
         data['org_unit_title'] = self.context.org_unit.title
 
         group_serializer = queryMultiAdapter(
-                (self.context.group, self.request), ISerializeToJsonSummary)
+            (self.context.group, self.request), ISerializeToJsonSummary)
         data['group'] = group_serializer()
 
 
@@ -335,7 +336,7 @@ class GeverSerializeGroupToJson(SerializeGroupToJson):
                 '@type': 'virtual.plone.user',
                 'token': userid,
                 'title': Actor.lookup(userid).get_label()
-                })
+            })
 
         data.get('users')['items'] = user_items
         return data
@@ -476,7 +477,7 @@ class SerializeSQLModelToJsonSummaryBase(object):
             self.base_url,
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)
-            )
+        )
 
     def add_additional_metadata(self, data):
         pass
@@ -499,7 +500,7 @@ class SerializeContactModelToJsonSummaryBase(SerializeSQLModelToJsonSummaryBase)
             base_url,
             self.endpoint_name,
             getattr(self.context, self.id_attribute_name)
-            )
+        )
 
 
 @implementer(ISerializeToJsonSummary)

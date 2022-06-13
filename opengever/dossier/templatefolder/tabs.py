@@ -197,7 +197,7 @@ class TemplateFolderDossierTemplates(BaseCatalogListingTab):
          'column_title': _(u'label_description', default=u'Description')},
 
 
-        )
+    )
 
     enabled_actions = ['folder_delete_confirmation']
     major_actions = []

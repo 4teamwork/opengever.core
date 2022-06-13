@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.behaviors.utils import hide_fields_from_behavior
 from opengever.base.behaviors.utils import omit_classification_group

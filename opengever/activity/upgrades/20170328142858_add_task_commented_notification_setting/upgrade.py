@@ -4,6 +4,7 @@ from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 import json
 
+
 DEFAULT_SETTINGS = [
     {'kind': 'task-commented',
      'mail_notification': False,
@@ -40,7 +41,7 @@ class AddTaskCommentedNotificationSetting(SchemaMigration):
             values = dict(kind=item['kind'],
                           mail_notification=item['mail_notification'],
                           mail_notification_roles=json.dumps(
-                                    item['mail_notification_roles']))
+                              item['mail_notification_roles']))
             if self.supports_sequences:
                 values['id'] = self.execute(seq)
 

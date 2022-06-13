@@ -6,10 +6,10 @@ from plone.i18n.locales import languages
 from zope.i18nmessageid import MessageFactory
 import csv
 
+
 _ = MessageFactory('opengever.base')
 
-from opengever.base import monkey  # noqa
-
+from opengever.base import monkey  # noqa, isort:skip
 
 VERSION = 'GEVER Version %(version)s'
 

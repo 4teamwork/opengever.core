@@ -42,6 +42,7 @@ class ResponseLogger(object):
         logging.root.removeHandler(self.handler)
 
     security.declarePrivate('write')
+
     def write(self, line):
         if isinstance(line, unicode):
             line = line.encode('utf8')
@@ -50,6 +51,7 @@ class ResponseLogger(object):
         self.response.flush()
 
     security.declarePrivate('writelines')
+
     def writelines(self, lines):
         for line in lines:
             self.write(line)
@@ -149,6 +151,7 @@ class CreateDeployment(BrowserView):
         return deployment
 
     security.declarePrivate('install_with_ajax_stream')
+
     def install_with_ajax_stream(self):
         """Installs the selected gever deployment and streams the log into
         the HTTP response.

@@ -18,6 +18,6 @@ class DelegateWizardFormMixin(BaseWizardStepForm):
 
         ('delegate_metadata',
          _(u'step_2', default=u'Step 2')),
-        )
+    )
 
     label = _(u'title_delegate_task', u'Delegate task')

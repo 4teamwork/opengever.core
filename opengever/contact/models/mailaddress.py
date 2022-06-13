@@ -30,7 +30,7 @@ class MailAddress(Base):
             'address': self.address,
             'delete_url': self.get_delete_url(),
             'update_url': self.get_update_url(),
-            }
+        }
 
     def get_delete_url(self):
         return self.contact.get_url(

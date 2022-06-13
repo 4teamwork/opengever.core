@@ -25,18 +25,18 @@ class CustomPropertiesStorageImpl(AnnotationsFactoryImpl):
         # These are safeguards against bad configuration for the moment.
         if schema.names() != [self.CUSTOM_PROPERTIES_NAME]:
             raise BadCustomPropertiesFactoryConfiguration(
-                    u"Custom properties factory must be assigned to a schema "
-                    u"with only a '{}' field.".format(
-                        self.CUSTOM_PROPERTIES_NAME
-                    )
+                u"Custom properties factory must be assigned to a schema "
+                u"with only a '{}' field.".format(
+                    self.CUSTOM_PROPERTIES_NAME
                 )
+            )
 
         field = schema[self.CUSTOM_PROPERTIES_NAME]
         if not IPropertySheetField.providedBy(field):
             raise BadCustomPropertiesFactoryConfiguration(
-                    u"The schema must contain a field providing "
-                    u"'IPropertySheetField'"
-                )
+                u"The schema must contain a field providing "
+                u"'IPropertySheetField'"
+            )
 
         super(CustomPropertiesStorageImpl, self).__init__(context, schema)
 

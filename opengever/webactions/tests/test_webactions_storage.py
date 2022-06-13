@@ -16,6 +16,7 @@ from opengever.webactions.storage import get_storage
 from opengever.webactions.storage import WebActionsStorage
 from persistent.mapping import PersistentMapping
 from plone import api
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.annotation import IAnnotations
 from zope.component import getUtility
@@ -23,7 +24,6 @@ from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
 from zope.intid.interfaces import IIntIds
 from zope.schema import ValidationError
-from zExceptions import Forbidden
 
 
 class TestWebActionsStorageInitialization(IntegrationTestCase):

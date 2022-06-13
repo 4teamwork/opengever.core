@@ -1,13 +1,13 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from Products.CMFCore.utils import getToolByName
-from Products.CMFPlone.interfaces import IConstrainTypes
-from Products.CMFPlone.interfaces.constrains import ENABLED
-from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from plone.memoize.view import memoize_contextless
 from plone.registry.interfaces import IRegistry
+from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.interfaces import IConstrainTypes
+from Products.CMFPlone.interfaces.constrains import ENABLED
+from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.component import adapts
 from zope.component import queryUtility
 from zope.globalrequest import getRequest
@@ -50,8 +50,10 @@ class RepositoryFolderConstrainTypes(object):
         portal_types = getToolByName(self.context, 'portal_types')
         my_type = portal_types.getTypeInfo(self.context)
         result = portal_types.listTypeInfo()
-        return [t for t in result if my_type.allowType(t.getId()) and
-                t.isConstructionAllowed(self.context)]
+        return [
+            t for t in result
+            if my_type.allowType(t.getId()) and t.isConstructionAllowed(self.context)
+        ]
 
     @memoize_contextless
     def allowedContentTypes(self):

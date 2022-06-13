@@ -1,7 +1,8 @@
 from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from OFS.CopySupport import CopyError, ResourceLockedError
+from OFS.CopySupport import CopyError
+from OFS.CopySupport import ResourceLockedError
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.adapters import DefaultMovabilityChecker
 from opengever.base.interfaces import IMovabilityChecker
@@ -16,14 +17,16 @@ from opengever.globalindex.model.task import Task
 from plone.z3cform import layout
 from Products.CMFCore.utils import getToolByName
 from Products.statusmessages.interfaces import IStatusMessage
-from z3c.form import form, field
+from z3c.form import field
+from z3c.form import form
 from z3c.form import validator
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from zExceptions import Forbidden
 from zope import schema
 from zope.component import adapter
-from zope.interface import Interface, Invalid
+from zope.interface import Interface
+from zope.interface import Invalid
 import z3c.form
 
 
@@ -36,7 +39,7 @@ class IMoveItemsSchema(Interface):
             object_provides=[
                 'opengever.dossier.behaviors.dossier.IDossierMarker',
                 'opengever.repository.repositoryfolder.IRepositoryFolderSchema'
-                ],
+            ],
             navigation_tree_query={
                 'object_provides': [
                     'opengever.repository.repositoryroot.IRepositoryRoot',
@@ -46,14 +49,14 @@ class IMoveItemsSchema(Interface):
                 'review_state': DOSSIER_STATES_OPEN + [
                     'repositoryfolder-state-active',
                     'repositoryroot-state-active']
-                },
+            },
             review_state=DOSSIER_STATES_OPEN + [
                 'repositoryfolder-state-active',
                 'repositoryroot-state-active',
             ],
-            ),
+        ),
         required=True,
-        )
+    )
     # We Use TextLine here because Tuple and List have no hidden_mode.
     request_paths = schema.TextLine(title=u"request_paths")
 
@@ -68,10 +71,10 @@ class IMoveTemplateItemsSchema(IMoveItemsSchema):
                 'object_provides': [
                     ITemplateFolder.__identifier__,
                     IDossierTemplateMarker.__identifier__,
-                    ]}
-            ),
+                ]}
+        ),
         required=True,
-        )
+    )
 
 
 class MoveItemsForm(form.Form):
@@ -216,7 +219,8 @@ class MoveItemsForm(form.Form):
         self,
         copied_items,
         failed_objects,
-        failed_resource_locked_objects, ):
+        failed_resource_locked_objects,
+    ):
         """ Create statusmessages with errors and infos af the move-process
         """
         if copied_items:

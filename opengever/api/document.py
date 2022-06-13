@@ -25,6 +25,7 @@ from zope.interface import implementer
 from zope.interface import Interface
 import os.path
 
+
 MIME_DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 
 

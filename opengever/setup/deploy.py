@@ -25,6 +25,7 @@ from zope.component import getAdapter
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 
+
 # these profiles will be installed automatically
 EXTENSION_PROFILES = (
     'plonetheme.classic:default',

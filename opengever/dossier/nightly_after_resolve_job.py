@@ -3,6 +3,7 @@ from opengever.dossier.resolve import AfterResolveJobs
 from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from plone import api
 
+
 MAX_CONVERSION_REQUESTS_PER_NIGHT = 10000
 
 # Track total number of conversion requests sent per nightly run

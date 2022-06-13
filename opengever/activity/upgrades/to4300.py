@@ -1,6 +1,6 @@
 from opengever.core.upgrade import SchemaMigration
-from sqlalchemy import Column
 from sqlalchemy import Boolean
+from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 

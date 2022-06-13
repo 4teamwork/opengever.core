@@ -1,5 +1,5 @@
-from Products.ZCatalog.ZCatalog import ZCatalog
 from plone import api
+from Products.ZCatalog.ZCatalog import ZCatalog
 
 
 CONTACT_TYPE = 'opengever.contact.contact'

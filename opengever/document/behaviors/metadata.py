@@ -4,7 +4,6 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.vocabularies import KeywordSearchableAndAddableSourceBinder
 from ftw.keywordwidget.widget import KeywordFieldWidget
-from ftw.mail.mail import IMail
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.document import _
 from opengever.document.interfaces import IDocumentSettings
@@ -14,12 +13,10 @@ from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.namedfile.field import NamedBlobFile
 from plone.supermodel import model
-from z3c.form import validator
 from z3c.form.browser import checkbox
 from zope import schema
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
-from zope.interface import Invalid
 from zope.interface import invariant
 
 
@@ -56,8 +53,8 @@ class IDocumentMetadata(model.Schema):
             u'preserved_as_paper',
             u'thumbnail',
             u'preview',
-            ],
-        )
+        ],
+    )
 
     model.fieldset(
         u'archive_file',
@@ -70,7 +67,7 @@ class IDocumentMetadata(model.Schema):
         title=_(u'label_description', default=u'Description'),
         required=False,
         missing_value=u'',
-        )
+    )
 
     form.widget('keywords', KeywordFieldWidget, new_terms_as_unicode=True, async=True)
     keywords = schema.Tuple(
@@ -88,7 +85,7 @@ class IDocumentMetadata(model.Schema):
         title=_(u'label_foreign_reference', default='Foreign Reference'),
         description=_('help_foreign_reference', default=''),
         required=False,
-        )
+    )
 
     # workaround because ftw.datepicker wasn't working
     form.widget(document_date=DatePickerFieldWidget)
@@ -97,7 +94,7 @@ class IDocumentMetadata(model.Schema):
         description=_(u'help_document_date', default=''),
         required=False,
         defaultFactory=document_date_default,
-        )
+    )
 
     # workaround because ftw.datepicker wasn't working
     form.widget(receipt_date=DatePickerFieldWidget)
@@ -105,7 +102,7 @@ class IDocumentMetadata(model.Schema):
         title=_(u'label_receipt_date', default='Date of receipt'),
         description=_(u'help_receipt_date', default=''),
         required=False,
-        )
+    )
 
     # workaround because ftw.datepicker wasn't working
     form.widget(delivery_date=DatePickerFieldWidget)
@@ -113,7 +110,7 @@ class IDocumentMetadata(model.Schema):
         title=_(u'label_delivery_date', default='Date of delivery'),
         description=_(u'help_delivery_date', default=''),
         required=False,
-        )
+    )
 
     document_type = schema.Choice(
         title=_(u'label_document_type', default='Document Type'),
@@ -123,7 +120,7 @@ class IDocumentMetadata(model.Schema):
                                         'interfaces.IDocumentType.'
                                         'document_types'),
         required=False,
-        )
+    )
 
     dexteritytextindexer.searchable('document_author')
     document_author = schema.TextLine(
@@ -132,13 +129,13 @@ class IDocumentMetadata(model.Schema):
                       default="Surname firstname or a userid"
                       "(would be automatically resolved to fullname)"),
         required=False,
-        )
+    )
 
     form.mode(digitally_available='hidden')
     digitally_available = schema.Bool(
         title=_(u'label_digitally_available', default='Digital Available'),
         required=False,
-        )
+    )
 
     form.widget(preserved_as_paper=checkbox.SingleCheckBoxFieldWidget)
     preserved_as_paper = schema.Bool(
@@ -146,7 +143,7 @@ class IDocumentMetadata(model.Schema):
         description=_(u'help_preserved_as_paper', default=''),
         required=False,
         defaultFactory=preserved_as_paper_default,
-        )
+    )
 
     form.read_permission(archival_file='opengever.document.ModifyArchivalFile')
     form.write_permission(archival_file='opengever.document.ModifyArchivalFile')
@@ -166,14 +163,14 @@ class IDocumentMetadata(model.Schema):
     thumbnail = NamedBlobFile(
         title=_(u'label_thumbnail', default='Thumbnail'),
         required=False,
-        )
+    )
 
     form.omitted('preview')
     preview = NamedBlobFile(
         title=_(u'label_preview', default='Preview'),
         description=_(u'help_preview', default=''),
         required=False,
-        )
+    )
 
     form.omitted('gever_url')
     gever_url = schema.TextLine(

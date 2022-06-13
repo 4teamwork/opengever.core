@@ -1,8 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.tasktemplates.move import TaskTemplateFolderMovabiliyChecker
 from opengever.testing import IntegrationTestCase
 from zExceptions import Forbidden
-from ftw.builder import Builder
-from ftw.builder import create
 
 
 class TestTaskTemplateFolderMovabilityChecker(IntegrationTestCase):

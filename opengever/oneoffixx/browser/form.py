@@ -19,6 +19,7 @@ from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
 
+
 FAVORITES_FAKE_ID = '__favorites__'
 
 
@@ -143,7 +144,7 @@ class ICreateDocumentFromOneOffixxTemplate(model.Schema):
             {'column': 'title',
              'column_title': _(u'label_title', default=u'Title'),
              'sort_index': 'sortable_title'},
-            )
+        )
     )
 
     title = schema.TextLine(

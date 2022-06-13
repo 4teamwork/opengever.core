@@ -1,6 +1,7 @@
 from zope import schema
 from zope.component.interfaces import IObjectEvent
-from zope.interface import Interface, Attribute
+from zope.interface import Attribute
+from zope.interface import Interface
 
 
 DEFAULT_MAIL_MAX_SIZE = 5
@@ -29,7 +30,7 @@ class ISendDocumentConf(Interface):
         title=u'documents_as_links default_value',
         description=u'Send documents as links default value',
         default=False,
-        )
+    )
 
 
 class IDocumentSent(IObjectEvent):

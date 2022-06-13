@@ -68,7 +68,7 @@ class MeetingListingTab(FilteredListingTab):
             'filter_meeting_active',
             _('active', default=u'Active'),
             default=True)
-        )
+    )
 
     model = Meeting
     sort_on = 'start_datetime'

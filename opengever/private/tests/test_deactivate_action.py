@@ -1,7 +1,7 @@
-import unittest
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from opengever.testing import IntegrationTestCase
+import unittest
 
 
 class TestDeleteActionInPrivateFolderTabbedViews(IntegrationTestCase):

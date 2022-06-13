@@ -48,10 +48,12 @@ class BaseTaskActivity(BaseActivity):
         else:
             cropped_dossier_title = self.dossier_title
 
-        return {code: u"{dossier_title} - {task_title}".format(
-                    dossier_title=cropped_dossier_title,
-                    task_title=task_title[code])
-                for code in self._get_supported_languages()}
+        return {
+            code: u"{dossier_title} - {task_title}".format(
+                dossier_title=cropped_dossier_title, task_title=task_title[code]
+            )
+            for code in self._get_supported_languages()
+        }
 
 
 class TaskAddedActivity(BaseTaskActivity):
@@ -121,12 +123,12 @@ class TaskAddedActivity(BaseTaskActivity):
              self.context.get_issuer_actor().get_label()],
             [_('label_informed_principals', u'Info at'),
              ", ".join(informed_principals) or '-'],
-            ]
+        ]
         if self.context.get_is_subtask():
             parent = aq_parent(aq_inner(self.context))
             data.insert(
                 4, [_('label_containing_task', u'Containing tasks'), parent.title]
-                )
+            )
         return data
 
     def before_recording(self):

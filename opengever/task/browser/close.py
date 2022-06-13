@@ -7,12 +7,12 @@ from opengever.base.browser.wizard.interfaces import IWizardDataStorage
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
+from opengever.base.response import IResponseContainer
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.utils import ok_response
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.globalindex.model.task import Task
 from opengever.task import _
-from opengever.base.response import IResponseContainer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.util import change_task_workflow_state
@@ -89,7 +89,7 @@ class ISelectDocumentsSchema(Schema):
 
         value_type=schema.Choice(
             source=related_documents_vocabulary,
-            ))
+        ))
 
 
 class SelectDocumentsStepForm(CloseTaskWizardStepFormMixin, Form):
@@ -159,11 +159,11 @@ class IChooseDossierSchema(Schema):
                     'opengever.repository.repositoryfolder.'
                     'IRepositoryFolderSchema',
                     'opengever.dossier.behaviors.dossier.IDossierMarker',
-                    ],
+                ],
                 'review_state': [
                     'repositoryroot-state-active',
                     'repositoryfolder-state-active'] + DOSSIER_STATES_OPEN,
-                }))
+            }))
 
 
 class DossierValidator(SimpleFieldValidator):

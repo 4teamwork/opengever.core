@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.dossier.utils import get_main_dossier
 from opengever.task.task import ITask
 from Products.Five import BrowserView

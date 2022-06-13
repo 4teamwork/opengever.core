@@ -3,7 +3,6 @@ from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.document.document import IDocumentSchema
-from opengever.ogds.base.actor import Actor
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
 from opengever.workspaceclient.interfaces import ILinkedDocuments

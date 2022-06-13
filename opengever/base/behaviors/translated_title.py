@@ -88,8 +88,8 @@ class ITranslatedTitle(model.Schema):
             u'title_de',
             u'title_fr',
             u'title_en',
-            ],
-        )
+        ],
+    )
 
     form.order_before(title_de='inbox_group')
     form.order_before(title_de='protocol_header_template')

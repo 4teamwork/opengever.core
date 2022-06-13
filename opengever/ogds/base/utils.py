@@ -15,11 +15,12 @@ from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 
+
 EXPECTED_ENCODINGS = (
     'utf8',
     'iso-8859-1',
     'latin1',
-    )
+)
 
 
 class CookieStorage(DictMixin):

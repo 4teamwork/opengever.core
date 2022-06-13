@@ -1,6 +1,6 @@
 from ftw.builder import builder_registry
-from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 
 
 class PropertySheetSchemaBuilder(object):

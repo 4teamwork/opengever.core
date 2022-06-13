@@ -1,7 +1,8 @@
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from zope.annotation import IAnnotations
-from zope.interface import classProvides, implements
+from zope.interface import classProvides
+from zope.interface import implements
 import logging
 import transaction
 

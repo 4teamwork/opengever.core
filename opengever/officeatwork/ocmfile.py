@@ -1,5 +1,6 @@
-import json
 from opengever.base.behaviors.utils import set_attachment_content_disposition
+import json
+
 
 OCM_MIMETYPE = 'application/x-officeconnector'
 OCM_FILE_EXTENSION = 'ocm'

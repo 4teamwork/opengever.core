@@ -47,7 +47,7 @@ class CreateDocumentCommand(BaseObjectCreatorCommand):
         self.additional_args.update({
             self.primary_field_name: NamedBlobFile(
                 data=data, filename=filename, contentType=content_type)
-            })
+        })
 
 
 class CreateEmailCommand(CreateDocumentCommand):

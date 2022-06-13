@@ -94,7 +94,7 @@ class EditingDocument(BrowserView):
                 msg = _(u"Can't edit the document at moment, "
                         "beacuse it's locked.")
                 IStatusMessage(
-                        self.request).addStatusMessage(msg, type='error')
+                    self.request).addStatusMessage(msg, type='error')
 
                 return self.request.RESPONSE.redirect(
                     get_redirect_url(self.context))

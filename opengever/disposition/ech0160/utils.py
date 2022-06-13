@@ -6,8 +6,8 @@ def set_classification_attributes(binding, obj):
     classification = IClassification(obj)
     binding.klassifizierungskategorie = voc_term_title(
         IClassification['classification'], classification.classification)
-    binding.datenschutz = (True if classification.privacy_layer ==
-                           'privacy_layer_yes' else False)
+    binding.datenschutz = (
+        True if classification.privacy_layer == 'privacy_layer_yes' else False)
     binding.oeffentlichkeitsstatus = voc_term_title(
         IClassification['public_trial'], classification.public_trial)
     binding.oeffentlichkeitsstatusBegruendung = (

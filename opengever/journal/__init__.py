@@ -1,4 +1,4 @@
 from zope.i18nmessageid import MessageFactory
 
-_ = MessageFactory('opengever.journal')
 
+_ = MessageFactory('opengever.journal')

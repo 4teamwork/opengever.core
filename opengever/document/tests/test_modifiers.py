@@ -1,5 +1,5 @@
-from DateTime import DateTime
 from datetime import datetime
+from DateTime import DateTime
 from ftw.testing import freeze
 from opengever.base.archeologist import Archeologist
 from opengever.document.interfaces import ICheckinCheckoutManager

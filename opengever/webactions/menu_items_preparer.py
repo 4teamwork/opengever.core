@@ -1,9 +1,9 @@
 from opengever.webactions.interfaces import IWebActionsMenuItemsPreparer
+from opengever.webactions.renderer import WebActionsSafeDataGetter
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IBrowserRequest
-from opengever.webactions.renderer import WebActionsSafeDataGetter
 
 
 @implementer(IWebActionsMenuItemsPreparer)
@@ -44,19 +44,19 @@ class WebActionsActionsMenuItemsPreparer(BaseWebActionsMenuItemsPreparer):
 
     def prepare_webaction(self, action):
         return {
-                'title': action["title"],
-                'description': '',
-                'action': action["target_url"],
-                'selected': False,
-                'icon': None,
-                'extra': {
-                    # JS event handlers register with an ID selector.
-                    'id': "webaction-" + str(action["action_id"]),
-                    'separator': None,
-                    'class': 'actionicon-object_webaction',
-                },
-                'submenu': None,
-               }
+            'title': action["title"],
+            'description': '',
+            'action': action["target_url"],
+            'selected': False,
+            'icon': None,
+            'extra': {
+                # JS event handlers register with an ID selector.
+                'id': "webaction-" + str(action["action_id"]),
+                'separator': None,
+                'class': 'actionicon-object_webaction',
+            },
+            'submenu': None,
+        }
 
     def _post_formatting(self, actions):
         if len(actions) > 0:
@@ -70,12 +70,12 @@ class WebActionsUserMenuItemsPreparer(BaseWebActionsMenuItemsPreparer):
 
     def prepare_webaction(self, action):
         return {
-                'title': action["title"],
-                'category': 'webactions',
-                'url': action["target_url"],
-                'separator': None,
-                'id': "webaction-" + str(action["action_id"])
-               }
+            'title': action["title"],
+            'category': 'webactions',
+            'url': action["target_url"],
+            'separator': None,
+            'id': "webaction-" + str(action["action_id"])
+        }
 
     def _post_formatting(self, actions):
         if len(actions) > 0:
@@ -93,16 +93,16 @@ class WebActionsAddMenuItemsPreparer(WebActionsActionsMenuItemsPreparer):
             klass = "{} {}".format(klass, action.get("icon_name"))
 
         return {
-                'title': action["title"],
-                'description': '',
-                'action': action["target_url"],
-                'selected': False,
-                'icon': action.get("icon_data"),
-                'extra': {
-                    # JS event handlers register with an ID selector.
-                    'id': "webaction-" + str(action["action_id"]),
-                    'separator': None,
-                    'class': klass,
-                },
-                'submenu': None,
-               }
+            'title': action["title"],
+            'description': '',
+            'action': action["target_url"],
+            'selected': False,
+            'icon': action.get("icon_data"),
+            'extra': {
+                # JS event handlers register with an ID selector.
+                'id': "webaction-" + str(action["action_id"]),
+                'separator': None,
+                'class': klass,
+            },
+            'submenu': None,
+        }

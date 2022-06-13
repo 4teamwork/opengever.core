@@ -33,10 +33,10 @@ class SolrObjPathSource(ObjPathSource):
             })
 
         super(SolrObjPathSource, self).__init__(
-                context, selectable_filter,
-                navigation_tree_query=navigation_tree_query,
-                default=default,
-                defaultFactory=defaultFactory)
+            context, selectable_filter,
+            navigation_tree_query=navigation_tree_query,
+            default=default,
+            defaultFactory=defaultFactory)
 
         self.solr = getUtility(ISolrSearch)
         # Validate that filters are also usable with solr. Do so always and
@@ -150,7 +150,7 @@ class RepositoryPathSourceBinder(SolrObjPathSourceBinder):
                 IPloneSiteRoot.providedBy(parent)
                 or (primary_root and primary_root.absolute_url() == parent.absolute_url())
                 or (not primary_root and parent.portal_type == 'opengever.repository.repositoryroot')
-                ):
+        ):
 
             parent = aq_parent(aq_inner(parent))
             root_path = '/'.join(parent.getPhysicalPath())

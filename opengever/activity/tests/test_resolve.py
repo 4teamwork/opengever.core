@@ -3,10 +3,10 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.activity.browser import resolve_notification_url
 from opengever.activity.model import Notification
+from opengever.activity.model import Resource
 from opengever.base.oguid import Oguid
 from opengever.testing import IntegrationTestCase
 from plone import api
-from opengever.activity.model import Resource
 
 
 class TestResolveNotificationView(IntegrationTestCase):

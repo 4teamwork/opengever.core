@@ -39,7 +39,7 @@ class WorkflowResponseSyncerSender(BaseResponseSyncerSender):
             'task-transition-resolved-tested-and-closed',
             'task-transition-tested-and-closed-in-progress',
             'task-transition-reassign',
-            ]
+        ]
 
 
 class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):

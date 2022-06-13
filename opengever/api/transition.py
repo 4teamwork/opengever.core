@@ -237,7 +237,6 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         # For now we also extract these, but we don't do anything with them
         # in the case of resolving a dossier.
         comment = data.get('comment', '')
-        include_children = data.get('include_children', False)
         publication_dates = self.parse_publication_dates(data)
         args = [self.context], comment, publication_dates
 

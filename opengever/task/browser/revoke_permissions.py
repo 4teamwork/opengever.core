@@ -1,3 +1,4 @@
+from opengever.task import _
 from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task.localroles import LocalRolesSetter
@@ -5,7 +6,6 @@ from opengever.task.task import ITask
 from plone import api
 from Products.Five.browser import BrowserView
 from zExceptions import Unauthorized
-from opengever.task import _
 
 
 class RevokePermissions(BrowserView):

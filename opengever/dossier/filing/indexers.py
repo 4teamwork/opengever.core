@@ -1,5 +1,5 @@
-from opengever.dossier.interfaces import IDossierArchiver
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
+from opengever.dossier.interfaces import IDossierArchiver
 from plone.indexer import indexer
 
 

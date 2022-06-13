@@ -60,7 +60,6 @@ def row_for(obj, browser=default_browser, query_info=None):
                            browser=browser, query_info=query_info)
 
 
-
 @QueryInfo.build
 def row_by_path(path, browser=default_browser, query_info=None):
     """Return the row representing an object identified by path.

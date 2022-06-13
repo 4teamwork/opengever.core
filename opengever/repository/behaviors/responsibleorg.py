@@ -12,7 +12,7 @@ class IResponsibleOrgUnit(model.Schema):
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
         fields=['responsible_org_unit'],
-        )
+    )
 
     responsible_org_unit = schema.TextLine(
         title=_(
@@ -21,7 +21,7 @@ class IResponsibleOrgUnit(model.Schema):
         description=u'',
         max_length=UNIT_ID_LENGTH,
         required=False,
-        )
+    )
 
 
 alsoProvides(IResponsibleOrgUnit, IFormFieldProvider)

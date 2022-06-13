@@ -78,7 +78,7 @@ class DocumentFromTemplatePost(Service):
                 recipient = (KuBEntity(recipient_id), )
             else:
                 contact = OgdsUserToContactAdapter(
-                            ogds_service().find_user(recipient_id))
+                    ogds_service().find_user(recipient_id))
                 recipient = [contact]
                 if contact.addresses:
                     recipient.append(contact.addresses[0])

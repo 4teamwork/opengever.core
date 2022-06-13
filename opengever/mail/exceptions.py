@@ -1,5 +1,5 @@
-from ftw.mail.exceptions import MailInboundException
 from ftw.mail.config import EXIT_CODES
+from ftw.mail.exceptions import MailInboundException
 
 
 class AlreadyExtractedError(Exception):

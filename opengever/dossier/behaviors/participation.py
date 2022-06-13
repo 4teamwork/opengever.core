@@ -38,7 +38,7 @@ class IParticipation(model.Schema):
         description=_(u'help_contact', default=u''),
         source=UsersContactsInboxesSourceBinder(),
         required=True,
-        )
+    )
 
     roles = schema.List(
         title=_(u'label_roles', default=u'Roles'),
@@ -47,11 +47,11 @@ class IParticipation(model.Schema):
                 'opengever.dossier.participation_roles',
                 visible_terms_from_registry='opengever.dossier'
                 '.interfaces.IDossierParticipants.roles'),
-            ),
+        ),
         required=True,
         missing_value=[],
         default=[],
-        )
+    )
 
 
 class Participation(Persistent):

@@ -1,4 +1,5 @@
-from ftw.table.interfaces import ITableSource, ITableSourceConfig
+from ftw.table.interfaces import ITableSource
+from ftw.table.interfaces import ITableSourceConfig
 from opengever.base.model import create_session
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.user import User
@@ -96,7 +97,7 @@ class UsersListing(BaseListingTab):
                            default=u'Active'),
          'transform': boolean_helper},
 
-        )
+    )
 
     def get_base_query(self):
         """Returns the base search query (sqlalchemy)

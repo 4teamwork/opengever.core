@@ -53,7 +53,7 @@ class IManualJournalEntry(model.Schema):
                      'opengever.task.task.ITask',
                      'ftw.mail.mail.IMail']
                 }),
-            ),
+        ),
         required=False,
     )
 

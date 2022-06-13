@@ -289,7 +289,7 @@ class MergeNotificationSettings(SchemaMigration):
             mail_roles=merged_settings.get('mail_notification_roles', []),
             badge_roles=merged_settings.get('badge_notification_roles', []),
             digest_roles=merged_settings.get('digest_notification_roles', []),
-            )
+        )
 
     def get_custom_settings_for_activities_query(self, userid, activities):
         """ Returns a query for all custom notification settings for a

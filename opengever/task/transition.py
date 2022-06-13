@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from opengever.activity import notification_center
 from opengever.activity.roles import TASK_RESPONSIBLE_ROLE
 from opengever.base.source import DossierPathSourceBinder
@@ -46,7 +47,7 @@ class IResponse(Schema):
     text = schema.Text(
         title=_('label_response', default="Response"),
         required=False,
-        )
+    )
 
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),
@@ -64,9 +65,9 @@ class IResponse(Schema):
                         'ftw.mail.mail.IMail',
                         'opengever.meeting.proposal.IProposal',
                     ],
-                    },
-                ),
+                },
             ),
+        ),
         required=False,
     )
 
@@ -85,7 +86,7 @@ class INewInformedPrincipals(Schema):
         description=_(u"help_informed_principals", default=u""),
         value_type=schema.Choice(
             source=AllUsersAndGroupsSourceBinder(),
-            ),
+        ),
         required=False,
         missing_value=[],
         default=[]
@@ -117,7 +118,7 @@ class IApprovedDocuments(Schema):
         description=_(u"help_approved_documents", default=u""),
         value_type=schema.Choice(
             source=DocumentsFromTaskSourceBinder(),
-            ),
+        ),
         required=False,
         missing_value=[],
         default=[]

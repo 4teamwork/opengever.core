@@ -47,11 +47,11 @@ class UpdateFeedbackLinkInFooter(UpgradeStep):
                 yield assignment
 
     def _get_all_portlet_assignments(self, context, manager_name):
-            manager = queryUtility(
-                IPortletManager, context=context, name=manager_name,)
+        manager = queryUtility(
+            IPortletManager, context=context, name=manager_name,)
 
-            mapping = queryMultiAdapter(
-                (context, manager), IPortletAssignmentMapping, default={})
+        mapping = queryMultiAdapter(
+            (context, manager), IPortletAssignmentMapping, default={})
 
-            for name, assignment in mapping.items():
-                yield assignment
+        for name, assignment in mapping.items():
+            yield assignment

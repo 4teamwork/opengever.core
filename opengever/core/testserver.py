@@ -64,6 +64,7 @@ class SQLiteBackup(object):
         sqlite_testing.truncate_tables()
         create_session().bind.raw_connection().connection.executescript(self.backup_data)
 
+
 sqlite_backup = SQLiteBackup()
 
 
@@ -182,7 +183,7 @@ class TestserverLayer(OpengeverFixture):
             return SimpleVocabulary([
                 SimpleTerm('businesscase', title=u'Gesch\xe4ftsfall'),
                 SimpleTerm('project', title='Projektdossier')
-                ])
+            ])
 
         utility_name = 'opengever.dossier.dossier_types'
         gsm = getGlobalSiteManager()

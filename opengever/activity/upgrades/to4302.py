@@ -12,7 +12,7 @@ class AlterActivityCreatedColumn(SchemaMigration):
 
     def alter_created_column(self):
         self.op.alter_column(
-            table_name = 'activities',
-            column_name = 'created',
-            type_ = DateTime(timezone=True),
+            table_name='activities',
+            column_name='created',
+            type_=DateTime(timezone=True),
         )

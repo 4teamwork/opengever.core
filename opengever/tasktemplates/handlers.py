@@ -1,4 +1,5 @@
-from Acquisition import aq_inner, aq_parent
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import timedelta
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask

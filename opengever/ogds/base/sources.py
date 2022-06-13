@@ -243,8 +243,6 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         """Should raise LookupError if term could not be found.
         Check zope.schema.interfaces.IVocabularyTokenized
         """
-        orgunit_id, userid = (None, None)
-
         if not token:
             raise LookupError('A token "unit_id:userid" is required.')
         try:
@@ -990,9 +988,10 @@ class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
     def __init__(self, context, only_active_orgunits=True):
         super(AllUsersAndGroupsSource, self).__init__(context)
 
-        self.source_instances = [source_class(
-            context, only_active_orgunits=only_active_orgunits)
-                                 for source_class in self.source_classes]
+        self.source_instances = [
+            source_class(context, only_active_orgunits=only_active_orgunits)
+            for source_class in self.source_classes
+        ]
 
 
 @implementer(IContextSourceBinder)

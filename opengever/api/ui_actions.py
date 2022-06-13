@@ -1,9 +1,9 @@
+from opengever.base.interfaces import IContextActions
+from opengever.base.interfaces import IListingActions
 from opengever.webactions.renderer import WebActionsSafeDataGetter
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zope.component import queryMultiAdapter
-from opengever.base.interfaces import IListingActions
-from opengever.base.interfaces import IContextActions
 
 
 class UIActionsGet(Service):

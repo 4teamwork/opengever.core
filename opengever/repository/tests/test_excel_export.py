@@ -2,8 +2,8 @@ from opengever.repository.browser.excel_export import generate_report
 from opengever.setup.sections.xlssource import XlsSource
 from opengever.testing import IntegrationTestCase
 from plone import api
-from tempfile import NamedTemporaryFile
 from tempfile import mkdtemp
+from tempfile import NamedTemporaryFile
 import os
 
 

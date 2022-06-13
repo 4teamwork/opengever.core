@@ -95,7 +95,7 @@ class TaskListingLaTeXView(MakoLaTeXView):
             responsible_label,
             deadline,
             review_state,
-            ]
+        ]
 
     def get_row_for_item(self, item):
         return self.convert_list_to_row(self.get_data_for_item(item))

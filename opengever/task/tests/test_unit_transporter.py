@@ -1,10 +1,10 @@
-from datetime import date
 from DateTime import DateTime
+from datetime import date
 from datetime import datetime
 from opengever.task.transporter import IResponseTransporter
+from opengever.testing import IntegrationTestCase
 from z3c.relationfield import RelationValue
 import json
-from opengever.testing import IntegrationTestCase
 
 
 class TestResponseTransporterSerialization(IntegrationTestCase):
