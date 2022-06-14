@@ -5,6 +5,10 @@ from opengever.propertysheets.default_from_member import attach_member_property_
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
 from opengever.propertysheets.exceptions import InvalidSchemaAssignment
+from opengever.propertysheets.helpers import add_current_value_to_allowed_terms
+from opengever.propertysheets.helpers import is_choice_field
+from opengever.propertysheets.helpers import is_multiple_choice_field
+from opengever.propertysheets.interfaces import IDuringPropertySheetFieldDeserialization
 from opengever.propertysheets.schema import get_property_sheet_schema
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
@@ -160,6 +164,9 @@ class PropertySheetSchemaDefinition(object):
         """
         if isinstance(field, Choice):
             field._init_field = False
+        elif isinstance(field, Set) and isinstance(field.value_type, Choice):
+            # For multiple choice fields
+            field.value_type._init_field = False
 
     def __eq__(self, other):
         if isinstance(other, PropertySheetSchemaDefinition):
@@ -386,6 +393,11 @@ class PropertySheetSchemaDefinition(object):
 
         for name, field in self.get_fields():
             value = data_to_validate.pop(name, None)
+            if is_choice_field(field) or is_multiple_choice_field(field):
+                request = getRequest()
+                if IDuringPropertySheetFieldDeserialization.providedBy(request):
+                    add_current_value_to_allowed_terms(field, request.context)
+
             field.validate(value)
 
         # prevent setting arbitrary properties, don't allow remainders

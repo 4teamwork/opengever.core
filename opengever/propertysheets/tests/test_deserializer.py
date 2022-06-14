@@ -5,6 +5,7 @@ from opengever.testing import IntegrationTestCase
 from plone.restapi.interfaces import IFieldDeserializer
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
+from zope.schema.interfaces import ConstraintNotSatisfied
 
 
 class TestPropertySheetFieldDeserializer(IntegrationTestCase):
@@ -26,7 +27,7 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
         create(
             Builder("property_sheet_schema")
             .named("schema1")
-            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
             )
@@ -34,14 +35,14 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
 
         deserialized_data = self.deserializer(
             {
-                "IDocumentMetadata.document_type.question": {
+                "IDocumentMetadata.document_type.contract": {
                     "choose": {"title": "two", "token": "two"}
                 }
             }
         )
         self.assertEqual(
             {
-                "IDocumentMetadata.document_type.question": {
+                "IDocumentMetadata.document_type.contract": {
                     "choose": "two",
                 },
             },
@@ -55,18 +56,18 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
         create(
             Builder("property_sheet_schema")
             .named("schema1")
-            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
             .with_field(
                 "choice", u"choose", u"Choose", u"", True, values=choices
             )
         )
 
         deserialized_data = self.deserializer(
-            {"IDocumentMetadata.document_type.question": {"choose": "two"}}
+            {"IDocumentMetadata.document_type.contract": {"choose": "two"}}
         )
         self.assertEqual(
             {
-                "IDocumentMetadata.document_type.question": {
+                "IDocumentMetadata.document_type.contract": {
                     "choose": "two",
                 },
             },
@@ -80,7 +81,7 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
         create(
             Builder("property_sheet_schema")
             .named("schema1")
-            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
             .with_field(
                 "multiple_choice", u"choose", u"Choose", u"", False, values=choices
             )
@@ -88,16 +89,105 @@ class TestPropertySheetFieldDeserializer(IntegrationTestCase):
 
         deserialized_data = self.deserializer(
             {
-                "IDocumentMetadata.document_type.question": {
+                "IDocumentMetadata.document_type.contract": {
                     "choose": None
                 }
             }
         )
         self.assertEqual(
             {
-                "IDocumentMetadata.document_type.question": {
+                "IDocumentMetadata.document_type.contract": {
                     "choose": set([]),
                 },
             },
             deserialized_data,
         )
+
+    def test_deserializes_current_invalid_value_for_choice_field(self):
+        self.login(self.regular_user)
+
+        choices = ["one", "two", "five"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+        )
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            u"IDocumentMetadata.document_type.contract": {u"choose": "once_valid"}
+        }
+        deserialized_data = self.deserializer(
+            {
+                "IDocumentMetadata.document_type.contract": {
+                    "choose": "once_valid"
+                }
+            }
+        )
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.contract": {
+                    "choose": 'once_valid',
+                },
+            },
+            deserialized_data,
+        )
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            u"IDocumentMetadata.document_type.contract": {u"choose": "one"}
+        }
+
+        with self.assertRaises(ConstraintNotSatisfied):
+            self.deserializer(
+                {
+                    "IDocumentMetadata.document_type.contract": {
+                        "choose": "once_valid"
+                    }
+                }
+            )
+
+    def test_deserializes_current_invalid_value_for_multiple_choice_field(self):
+        self.login(self.regular_user)
+
+        choices = ["one", "two", "five"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.contract")
+            .with_field(
+                "multiple_choice", u"choose", u"Choose", u"", False, values=choices
+            )
+        )
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            u"IDocumentMetadata.document_type.contract": {u"choose": ["once_valid", "two"]}
+        }
+        deserialized_data = self.deserializer(
+            {
+                "IDocumentMetadata.document_type.contract": {
+                    "choose": ["once_valid", "one"]
+                }
+            }
+        )
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.contract": {
+                    "choose": set(["once_valid", "one"]),
+                },
+            },
+            deserialized_data,
+        )
+
+        IDocumentCustomProperties(self.document).custom_properties = {
+            u"IDocumentMetadata.document_type.contract": {u"choose": ["two"]}
+        }
+        with self.assertRaises(ConstraintNotSatisfied):
+            self.deserializer(
+                {
+                    "IDocumentMetadata.document_type.contract": {
+                        "choose": ["once_valid", "one"]
+                    }
+                }
+            )

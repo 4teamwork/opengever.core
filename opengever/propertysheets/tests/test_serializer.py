@@ -147,7 +147,52 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
             self.serializer(),
         )
 
-    def test_skips_invalid_vocabulary_values_during_serialization(self):
+    def test_does_not_skip_invalid_vocabulary_values_during_serialization(self):
+        self.login(self.regular_user)
+
+        choices = ["just one"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+            .with_field(
+                "multiple_choice", u"multichoose", u"Multi Choose", u"", True, values=choices
+            )
+        )
+        self.document.document_type = u"question"
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "choose": "invalid choice",
+                "multichoose": ["just one", "invalid choice"]
+            }
+        }
+
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": {
+                        "title": u"invalid choice",
+                        "token": u"invalid choice"
+                    },
+                    "multichoose": [
+                        {
+                            "title": u"just one",
+                            "token": u"just one"
+                        },
+                        {
+                            "title": u"invalid choice",
+                            "token": u"invalid choice"
+                        },
+                    ]
+                }
+            },
+            self.serializer(),
+        )
+
+    def test_correctly_serializes_none_values_for_choice_fields(self):
         self.login(self.regular_user)
 
         choices = ["just one"]
@@ -162,12 +207,17 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
         self.document.document_type = u"question"
         IDocumentCustomProperties(self.document).custom_properties = {
             "IDocumentMetadata.document_type.question": {
-                "choose": "invalid choice",
+                "choose": None,
             }
         }
 
         self.assertEqual(
-            {"IDocumentMetadata.document_type.question": {}}, self.serializer()
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": None,
+                }
+            },
+            self.serializer(),
         )
 
     def test_greafcully_returns_incorrect_toplevel_data_structure(self):
