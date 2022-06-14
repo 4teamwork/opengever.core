@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from Acquisition.interfaces import IAcquirer
+from opengever.api.interfaces import IDuringFolderPost
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
 from opengever.meeting.browser.proposalforms import get_selected_template
@@ -91,6 +92,7 @@ class FolderPost(Service):
         return serialized_obj
 
     def reply(self):
+        alsoProvides(self.request, IDuringFolderPost)
         self.extract_data()
 
         # Disable CSRF protection

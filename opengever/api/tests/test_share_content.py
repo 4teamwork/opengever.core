@@ -3,8 +3,11 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.mailing import Mailing
 from opengever.activity.mailer import process_mail_queue
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
+from plone import api
 import email
 import json
 
@@ -201,6 +204,34 @@ class TestShareContentPost(IntegrationTestCase):
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
         expected_mail_to = '{}, {},\n {}, {}'.format(*expected_to)
+        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['Cc'])
+
+    @browsing
+    def test_share_workspace_folder_notify_all_respects_local_roles_block(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        self.workspace_folder.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.workspace_folder).add_or_update_assignment(
+            SharingRoleAssignment(api.user.get_current().getId(), ['WorkspaceMember']))
+
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+
+        browser.open(self.workspace_folder, view='@share-content', method='POST',
+                     headers=self.api_headers, data=json.dumps({'notify_all': True}))
+
+        expected_to = [self.workspace_member.getProperty('email')]
+
+        process_mail_queue()
+        self.assertItemsEqual(
+            expected_to,
+            mailing.get_mailhost().messages[0].mto)
+
+        self.assertEqual(1, len(mailing.get_messages()))
+        mail = email.message_from_string(Mailing(self.portal).pop())
+        expected_mail_to = '{}'.format(*expected_to)
         self.assertEqual(expected_mail_to, mail['To'])
         self.assertIsNone(mail['Cc'])
 

@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.api.interfaces import IDuringFolderPost
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
@@ -649,7 +650,7 @@ class WorkspaceContentMemberUsersSource(AssignedUsersSource):
         # as the roles giving view permissions cannot be determined on the
         # object being created.
         request = getRequest()
-        if request.method == "POST" and request.getHeader("Content-Type") == "application/json":
+        if IDuringFolderPost.providedBy(request):
             member_context = aq_parent(aq_inner(self.context))
         else:
             member_context = self.context
