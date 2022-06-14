@@ -48,7 +48,7 @@ class PropertySheetFieldSerializer(DefaultFieldSerializer):
                 continue
 
             for name, field in definition.get_fields():
-                if name not in data:
+                if data.get(name) is None:
                     continue
 
                 if IChoice.providedBy(field):

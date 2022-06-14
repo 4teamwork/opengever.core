@@ -192,6 +192,34 @@ class TestPropertySheetFieldSerializer(IntegrationTestCase):
             self.serializer(),
         )
 
+    def test_correctly_serializes_none_values_for_choice_fields(self):
+        self.login(self.regular_user)
+
+        choices = ["just one"]
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field(
+                "choice", u"choose", u"Choose", u"", True, values=choices
+            )
+        )
+        self.document.document_type = u"question"
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.question": {
+                "choose": None,
+            }
+        }
+
+        self.assertEqual(
+            {
+                "IDocumentMetadata.document_type.question": {
+                    "choose": None,
+                }
+            },
+            self.serializer(),
+        )
+
     def test_greafcully_returns_incorrect_toplevel_data_structure(self):
         self.login(self.regular_user)
 
