@@ -4,8 +4,6 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroupsFilter
-from opengever.ogds.base.sources import WorkspaceContentMemberGroupsSource
-from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
 from opengever.ogds.base.sources import AllGroupsSource
@@ -17,6 +15,8 @@ from opengever.ogds.base.sources import ContactsSource
 from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import PotentialWorkspaceMembersSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
+from opengever.ogds.base.sources import WorkspaceContentMemberGroupsSource
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
 

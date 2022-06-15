@@ -2,8 +2,8 @@ from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
-import json
 from plone import api
+import json
 
 
 class TestWorkspaceContentMembersGetGet(IntegrationTestCase):
