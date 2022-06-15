@@ -1,4 +1,4 @@
-from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.ogds.models.user import User
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.participation import PARTICIPATION_ROLES
@@ -63,12 +63,12 @@ class PossibleWorkspaceFolderParticipantsVocabulary(object):
 
 
 @implementer(IVocabularyFactory)
-class ActualWorkspaceMembersVocabulary(object):
+class WorkspaceContentMembersVocabulary(object):
     """ Vocabulary of all users assigned to the current workspace.
     """
     def __call__(self, context):
         terms = []
-        query = ActualWorkspaceMembersSource(context).search_query
+        query = WorkspaceContentMemberUsersSource(context).search_query
         query = query.filter(User.active == True)  # noqa
         query = query.order_by(asc(func.lower(User.lastname)),
                                asc(func.lower(User.firstname)))

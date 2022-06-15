@@ -29,7 +29,7 @@ class IWorkspaceMeetingSchema(model.Schema):
     form.order_after(responsible='IOpenGeverBase.description')
     responsible = schema.Choice(
         title=_('label_organizer', default='Organizer'),
-        vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
+        vocabulary='opengever.workspace.WorkspaceContentMembersVocabulary',
         required=True)
 
     form.widget('start', DatePickerFieldWidget)
@@ -57,7 +57,7 @@ class IWorkspaceMeetingSchema(model.Schema):
     attendees = schema.List(
         title=_(u"label_attendees", default=u"Attendees"),
         value_type=schema.Choice(
-            vocabulary='opengever.workspace.ActualWorkspaceMembersVocabulary',
+            vocabulary='opengever.workspace.WorkspaceContentMembersVocabulary',
         ),
         required=False,
         missing_value=list(),

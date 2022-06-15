@@ -206,9 +206,8 @@ class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
             ], browser.json.get('attendees'))
 
     @browsing
-    def test_only_actual_workspace_members_can_participate_to_a_meeting_workspace_meeting(self, browser):
+    def test_only_actual_workspace_members_can_participate_to_a_workspace_meeting(self, browser):
         self.login(self.workspace_member, browser)
-
         with browser.expect_http_error(code=400):
             browser.open(
                 self.workspace, method='POST', headers=self.api_headers,

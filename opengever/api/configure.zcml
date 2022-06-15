@@ -1198,9 +1198,9 @@
 
   <plone:service
       method="GET"
-      name="@actual-workspace-members"
+      name="@workspace-content-members"
       for="*"
-      factory=".actual_workspace_members.ActualWorkspaceMembersGet"
+      factory=".workspace_content_members.WorkspaceContentMembersGet"
       permission="zope2.View"
       />
 

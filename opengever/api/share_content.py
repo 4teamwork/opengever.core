@@ -1,5 +1,5 @@
 from opengever.ogds.base.actor import ActorLookup
-from opengever.ogds.base.sources import ActualWorkspaceMembersSource
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.workspace.content_sharing_mailer import ContentSharingMailer
 from opengever.workspace.utils import is_within_workspace
 from plone import api
@@ -45,7 +45,7 @@ class ShareContentPost(Service):
         self.extract_data()
 
         if self.notify_all:
-            source = ActualWorkspaceMembersSource(self.context)
+            source = WorkspaceContentMemberUsersSource(self.context)
             emails_to = self.get_email_adresses(source.search(''), self.notify_all)
             emails_cc = []
         else:

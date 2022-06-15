@@ -4,7 +4,7 @@ from collective import dexteritytextindexer
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from opengever.base.response import IResponseSupported
 from opengever.base.source import WorkspacePathSourceBinder
-from opengever.ogds.base.sources import ActualWorkspaceMembersSourceBinder
+from opengever.ogds.base.sources import WorkspaceContentMemberUsersSourceBinder
 from opengever.workspace import _
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
@@ -46,7 +46,7 @@ class IToDoSchema(model.Schema):
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_('label_responsible', default='Responsible'),
-        source=ActualWorkspaceMembersSourceBinder(),
+        source=WorkspaceContentMemberUsersSourceBinder(),
         required=False,
     )
 

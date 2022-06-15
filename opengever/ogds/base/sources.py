@@ -1,5 +1,8 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
+from opengever.api.interfaces import IDuringFolderPost
 from opengever.base.model import create_session
 from opengever.base.query import extend_query_with_textfilter
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
@@ -17,7 +20,8 @@ from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.workspace import is_workspace_feature_enabled
-from opengever.workspace.utils import get_workspace_group_ids
+from opengever.workspace.utils import get_context_group_members_ids
+from opengever.workspace.utils import get_context_user_members_ids
 from opengever.workspace.utils import get_workspace_user_ids
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
@@ -625,9 +629,9 @@ class PotentialWorkspaceMembersSourceBinder(object):
         return PotentialWorkspaceMembersSource(context)
 
 
-class ActualWorkspaceMembersSource(AssignedUsersSource):
+class WorkspaceContentMemberUsersSource(AssignedUsersSource):
     """Vocabulary of all users assigned to the current admin unit and
-    members of the current workspace.
+    members of the current context.
     The base query is not overwritten here, as this is used as source
     for ToDo responsibles, which should remain valid even when a user's
     permissions on a workspace are revoked (invitation deleted).
@@ -642,9 +646,16 @@ class ActualWorkspaceMembersSource(AssignedUsersSource):
         return self._extend_query_with_workspace_filter(query)
 
     def _extend_query_with_workspace_filter(self, query):
-
-        userids = list(get_workspace_user_ids(self.context))
-        groupids = list(get_workspace_group_ids(self.context))
+        # When creating content, members need to be determined on the parent
+        # as the roles giving view permissions cannot be determined on the
+        # object being created.
+        request = getRequest()
+        if IDuringFolderPost.providedBy(request):
+            member_context = aq_parent(aq_inner(self.context))
+        else:
+            member_context = self.context
+        userids = list(get_context_user_members_ids(member_context))
+        groupids = list(get_context_group_members_ids(member_context))
 
         if userids or groupids:
             query = query.join(groups_users).filter(
@@ -656,10 +667,10 @@ class ActualWorkspaceMembersSource(AssignedUsersSource):
 
 
 @implementer(IContextSourceBinder)
-class ActualWorkspaceMembersSourceBinder(object):
+class WorkspaceContentMemberUsersSourceBinder(object):
 
     def __call__(self, context):
-        return ActualWorkspaceMembersSource(context)
+        return WorkspaceContentMemberUsersSource(context)
 
 
 class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
@@ -918,17 +929,17 @@ class AllGroupsSource(BaseSQLModelSource):
         )
 
 
-class ActualWorkspaceGroupsSource(AllGroupsSource):
+class WorkspaceContentMemberGroupsSource(AllGroupsSource):
 
     gever_only = False
 
     @property
     def search_query(self):
-        query = super(ActualWorkspaceGroupsSource, self).search_query
+        query = super(WorkspaceContentMemberGroupsSource, self).search_query
         return self._extend_query_with_workspace_filter(query)
 
     def _extend_query_with_workspace_filter(self, query):
-        groupids = list(get_workspace_group_ids(self.context))
+        groupids = list(get_context_group_members_ids(self.context))
         if groupids:
             query = query.filter(Group.groupid.in_(groupids))
         else:
