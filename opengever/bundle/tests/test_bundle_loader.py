@@ -51,7 +51,9 @@ class TestBundleLoader(TestCase):
              ('document', 'Nonexistent document referenced via UNC-Path with Umlaut'),
              ('document', 'Dokument in bestehendem Examplecontent Dossier'),
              ('mail', 'Mail in bestehendem Examplecontent Dossier'),
-             ('mail', 'Signiertes Mail.')],
+             ('mail', 'Signiertes Mail.'),
+             ('User', 'peter.muster'),
+             ('User', 'james.green')],
             [(get_portal_type(i), get_title(i)) for i in list(bundle)])
 
     def test_loaded_items_contain_bytestrings(self):

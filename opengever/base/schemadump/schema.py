@@ -3,6 +3,7 @@ from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.schemadump.config import ALLOWED_REVIEW_STATES
 from opengever.base.schemadump.config import DEFAULT_MANAGEABLE_ROLES
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
+from opengever.base.schemadump.config import GEVER_SQL_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
@@ -328,13 +329,15 @@ class OGGBundleJSONSchemaBuilder(object):
             required=True,
         )
 
-    def _add_guid_properties(self):
+    def _add_guid_properties(self, with_parent_reference=True):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
 
         if self.portal_type not in ROOT_TYPES:
             # Everything except repository roots or workspace roots
             # supports a parent_guid or a parent_reference.
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
+            if not with_parent_reference:
+                return
 
             array_of_ints = {
                 "type": "array",
@@ -439,6 +442,40 @@ class OGGBundleJSONSchemaBuilder(object):
             self.ct_schema.drop_property(field_name)
 
 
+class OGGBundleJSONSchemaSQLBuilder(OGGBundleJSONSchemaBuilder):
+    """Builds a JSON Schema representation of a single OGGBundle SQL type.
+    """
+
+    def __init__(self, portal_type):
+        self.portal_type = portal_type
+        self.short_name = GEVER_SQL_TYPES_TO_OGGBUNDLE_TYPES[portal_type]
+
+        # Bundle schema (array of items)
+        self.schema = None
+        # Content type schema (item, i.e. GEVER type)
+        self.ct_schema = None
+
+    def build_schema(self):
+        # The OGGBundle JSON schemas all are flat arrays of items, where the
+        # actual items' schemas are (more or less) the GEVER content types'
+        # schemas, stored in #/definitions/<short_name>
+        self.schema = JSONSchema(type_='array')
+        self.schema._schema['items'] = {
+            "$ref": "#/definitions/%s" % self.short_name}
+
+        # Build the standard content type schema
+        self.ct_schema = JSONSchemaBuilder(self.portal_type).build_schema()
+
+        # Tweak the content type schema for use in OGGBundles
+        self._add_guid_properties(with_parent_reference=False)
+        self._filter_fields()
+        self.ct_schema.make_optional_properties_nullable()
+
+        # Finally add the CT schema under #/definitions/<short_name>
+        self.schema.add_definition(self.short_name, self.ct_schema)
+        return self.schema
+
+
 class JSONSchemaDumpWriter(DirectoryHelperMixin):
     """Collects JSON Schema representations of common GEVER types and dumps
     them to the file system.
@@ -479,6 +516,12 @@ def build_all_bundle_schemas():
     """
     for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
         builder = OGGBundleJSONSchemaBuilder(portal_type)
+        schema = builder.build_schema()
+        filename = '%ss.schema.json' % short_name
+        yield filename, schema
+
+    for portal_type, short_name in GEVER_SQL_TYPES_TO_OGGBUNDLE_TYPES.items():
+        builder = OGGBundleJSONSchemaSQLBuilder(portal_type)
         schema = builder.build_schema()
         filename = '%ss.schema.json' % short_name
         yield filename, schema

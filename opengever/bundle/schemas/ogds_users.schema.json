@@ -1,0 +1,302 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/ogds_user"
+    },
+    "definitions": {
+        "ogds_user": {
+            "type": "object",
+            "title": "User",
+            "additionalProperties": false,
+            "properties": {
+                "userid": {
+                    "type": "string",
+                    "title": "userid",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "active": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
+                    "title": "active",
+                    "description": "",
+                    "_zope_schema_type": "Bool",
+                    "default": true
+                },
+                "firstname": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "firstname",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "lastname": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "lastname",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "directorate": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "directorate",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "directorate_abbr": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "directorate_abbr",
+                    "maxLength": 50,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "department": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "department",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "department_abbr": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "department_abbr",
+                    "maxLength": 50,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "email": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "email",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "email2": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "email2",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "url": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "url",
+                    "maxLength": 100,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "phone_office": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "phone_office",
+                    "maxLength": 30,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "phone_fax": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "phone_fax",
+                    "maxLength": 30,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "phone_mobile": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "phone_mobile",
+                    "maxLength": 30,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "salutation": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "salutation",
+                    "maxLength": 30,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "description": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "description",
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "address1": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "address1",
+                    "maxLength": 100,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "address2": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "address2",
+                    "maxLength": 100,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "zip_code": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "zip_code",
+                    "maxLength": 10,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "city": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "city",
+                    "maxLength": 100,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "country": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "country",
+                    "maxLength": 20,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "last_login": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "last_login",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "absent": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
+                    "title": "absent",
+                    "description": "",
+                    "_zope_schema_type": "Bool",
+                    "default": false
+                },
+                "absent_from": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "absent_from",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "absent_to": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "absent_to",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
+                "guid": {
+                    "type": "string"
+                },
+                "parent_guid": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                }
+            },
+            "required": [
+                "userid",
+                "guid"
+            ],
+            "field_order": [
+                "userid",
+                "active",
+                "firstname",
+                "lastname",
+                "directorate",
+                "directorate_abbr",
+                "department",
+                "department_abbr",
+                "email",
+                "email2",
+                "url",
+                "phone_office",
+                "phone_fax",
+                "phone_mobile",
+                "salutation",
+                "description",
+                "address1",
+                "address2",
+                "zip_code",
+                "city",
+                "country",
+                "last_login",
+                "absent",
+                "absent_from",
+                "absent_to"
+            ]
+        }
+    }
+}

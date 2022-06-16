@@ -24,6 +24,7 @@ BUNDLE_JSON_TYPES = OrderedDict([
     ('workspacefolders.json', 'opengever.workspace.folder'),
     ('dossiers.json', 'opengever.dossier.businesscasedossier'),
     ('documents.json', 'opengever.document.document'),   # document or mail
+    ('ogds_users.json', '_opengever.ogds.models.user.User'),   # ogds user
 ])
 
 # This (almost) inverted dict is used in rare cases where we've already lost
@@ -37,6 +38,7 @@ PORTAL_TYPES_TO_JSON_NAME = OrderedDict([
     ('opengever.dossier.businesscasedossier', 'dossiers.json'),
     ('opengever.document.document', 'documents.json'),
     ('ftw.mail.mail', 'documents.json'),
+    ('_opengever.ogds.models.user.User', 'ogds_users.json'),
 ])
 
 GUID_INDEX_NAME = 'bundle_guid'
