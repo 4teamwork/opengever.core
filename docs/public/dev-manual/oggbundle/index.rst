@@ -11,6 +11,8 @@ Changelog:
 +---------------+--------------+-------------+--------------------------------------------------------+
 | **Version**   | **Datum**    | **Autor**   | **Kommentar**                                          |
 +===============+==============+=============+========================================================+
+| 1.2           | 16.06.2022   | PG          | Import von OGDS Usern                                  |
++---------------+--------------+-------------+--------------------------------------------------------+
 | 1.1           | 10.08.2020   | LG          | Import von Teamräumen                                  |
 +---------------+--------------+-------------+--------------------------------------------------------+
 | 1.0           | 16.10.2017   | LG, PG      | Referenzierung von bestehendem Inhalt via Aktenzeichen |
@@ -47,6 +49,8 @@ Importierbare Inhaltstypen
 | **Dokumente**                | Ja          |
 +------------------------------+-------------+
 | **Mails**                    | Ja          |
++------------------------------+-------------+
+| **OGDS Users**               | Ja          |
 +------------------------------+-------------+
 | Kontakte                     | Nein \*     |
 +------------------------------+-------------+
@@ -160,6 +164,16 @@ Siehe untenstehende Erläuterungen im Abschnitt :ref:`files/ <files>` zu Details
 JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
 
 .. _files:
+
+ogds_users.json
+~~~~~~~~~~~~~~~~
+
+Diese Datei beinhaltet die Benutzer welche ins OGDS importiert werden sollen. In der Regel sind es ehemalige, nicht mehr aktive Benutzer welche so importiert werden können.
+
+Der Wert ``guid`` muss der ``userid`` entsprechen.
+
+JSON Schema: :ref:`ogds_users.schema.json <ogds_users_schema_json>`
+
 
 files/
 ~~~~~~
@@ -596,6 +610,22 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
        Schema anzeigen
 
     .. literalinclude:: ../../../../opengever/bundle/schemas/workspacefolders.schema.json
+       :language: json
+
+----------
+
+.. _ogds_users_schema_json:
+
+:download:`ogds_users.schema.json <../../../../opengever/bundle/schemas/ogds_users.schema.json>`
+
+
+.. container:: collapsible
+
+    .. container:: header
+
+       Schema anzeigen
+
+    .. literalinclude:: ../../../../opengever/bundle/schemas/ogds_users.schema.json
        :language: json
 
 
