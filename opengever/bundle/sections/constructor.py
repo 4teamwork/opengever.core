@@ -258,8 +258,9 @@ class ConstructorSection(object):
         for item in self.previous:
             if item['_type'] in GEVER_SQL_TYPES:
                 obj = self._construct_sql_object(item)
-                self.bundle.constructed_guids.add(item['guid'])
-                logger.info(u'Constructed %r' % obj)
+                if obj:
+                    self.bundle.constructed_guids.add(item['guid'])
+                    logger.info(u'Constructed %r' % obj)
 
                 yield item
                 continue
@@ -290,6 +291,12 @@ class ConstructorSection(object):
         model, primary_key = GEVER_SQL_TYPES_TO_MODEL[item['_type']]
         data = {k: v for (k, v) in item.items()
                 if not k.startswith('_') and k != 'guid'}
+
+        if model.get(item['guid']):
+            logger.warning(
+                u'Could not create object with guid {}. Object already '
+                'exists'.format(item['guid']))
+            return
 
         obj = model(**data)
         session = create_session()
