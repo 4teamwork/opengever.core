@@ -38,7 +38,7 @@ TYPES_WITHOUT_REFERENCE_NUMBER = (
 
 
 GEVER_SQL_TYPES_TO_MODEL = {
-    '_opengever.ogds.models.user.User': User,
+    '_opengever.ogds.models.user.User': (User, 'userid'),
 }
 
 
@@ -287,7 +287,7 @@ class ConstructorSection(object):
             yield item
 
     def _construct_sql_object(self, item):
-        model = GEVER_SQL_TYPES_TO_MODEL[item['_type']]
+        model, primary_key = GEVER_SQL_TYPES_TO_MODEL[item['_type']]
         data = {k: v for (k, v) in item.items()
                 if not k.startswith('_') and k != 'guid'}
 

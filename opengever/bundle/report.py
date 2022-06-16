@@ -10,6 +10,7 @@ from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
 from opengever.base.schemadump.config import SHORTNAMES_BY_ROLE
 from opengever.bundle.loader import BUNDLE_JSON_TYPES
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.bundle.sections.constructor import GEVER_SQL_TYPES_TO_MODEL
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.utils import get_current_admin_unit
 from openpyxl import Workbook
@@ -17,6 +18,7 @@ from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from os.path import basename
 from plone import api
+from sqlalchemy import inspect
 from zope.annotation import IAnnotations
 import logging
 
@@ -32,10 +34,10 @@ class DataCollector(object):
     def __init__(self, bundle):
         self.bundle = bundle
         self.au_abbreviation = get_current_admin_unit().abbreviation
+        self.catalog = api.portal.get_tool('portal_catalog')
 
     def __call__(self):
         data = {'metadata': {}, 'permissions': {}}
-        catalog = api.portal.get_tool('portal_catalog')
 
         portal_types = BUNDLE_JSON_TYPES.values()
         portal_types.append('ftw.mail.mail')
@@ -45,25 +47,40 @@ class DataCollector(object):
             data['permissions'][portal_type] = []
             log.info("Collecting %s" % portal_type)
 
-            brains = catalog.unrestrictedSearchResults(
-                portal_type=portal_type,
-                bundle_guid=tuple(self.bundle.constructed_guids))
-
-            for brain in brains:
-                obj = brain.getObject()
-                guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
-
-                item_info = self.get_item_metadata(obj, guid)
-                data['metadata'][portal_type].append(item_info)
-
-                if portal_type not in (
-                        'opengever.document.document', 'ftw.mail.mail'):
-                    permission_info = self.get_permissions(obj, guid)
-                    if permission_info:
-                        data['permissions'][portal_type].extend(
-                            permission_info)
+            if portal_type in GEVER_SQL_TYPES_TO_MODEL.keys():
+                self.collect_sql_data(portal_type, data)
+            else:
+                self.collect_plone_data(portal_type, data)
 
         return data
+
+    def collect_sql_data(self, portal_type, data):
+        model, primary_key = GEVER_SQL_TYPES_TO_MODEL[portal_type]
+        attributes = [col.key for col in inspect(model).mapper.column_attrs]
+        query = model.query.filter(
+            getattr(model, primary_key).in_(self.bundle.constructed_guids))
+        for obj in query:
+            item_info = {attr: getattr(obj, attr) for attr in attributes}
+            data['metadata'][portal_type].append(item_info)
+
+    def collect_plone_data(self, portal_type, data):
+        brains = self.catalog.unrestrictedSearchResults(
+            portal_type=portal_type,
+            bundle_guid=tuple(self.bundle.constructed_guids))
+
+        for brain in brains:
+            obj = brain.getObject()
+            guid = IAnnotations(obj).get(BUNDLE_GUID_KEY)
+
+            item_info = self.get_item_metadata(obj, guid)
+            data['metadata'][portal_type].append(item_info)
+
+            if portal_type not in (
+                    'opengever.document.document', 'ftw.mail.mail'):
+                permission_info = self.get_permissions(obj, guid)
+                if permission_info:
+                    data['permissions'][portal_type].extend(
+                        permission_info)
 
     def get_file_field(self, obj):
         if obj.portal_type == 'opengever.document.document':
