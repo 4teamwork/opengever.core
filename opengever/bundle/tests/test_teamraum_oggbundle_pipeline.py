@@ -280,7 +280,8 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
                 'opengever.workspace.folder',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
-                'ftw.mail.mail']),
+                'ftw.mail.mail',
+                '_opengever.ogds.models.user.User']),
             set(metadata.keys()))
 
         workspaceroots = metadata['opengever.workspace.root']
@@ -291,6 +292,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         dossiers = metadata['opengever.dossier.businesscasedossier']
         documents = metadata['opengever.document.document']
         mails = metadata['ftw.mail.mail']
+        ogds_users = metadata['_opengever.ogds.models.user.User']
 
         self.assertEqual(1, len(workspaceroots))
         self.assertEqual(1, len(workspaces))
@@ -300,3 +302,4 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(0, len(dossiers))
         self.assertEqual(1, len(documents))
         self.assertEqual(1, len(mails))
+        self.assertEqual(0, len(ogds_users))

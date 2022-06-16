@@ -30,7 +30,7 @@ class TestBundleLoader(TestCase):
 
     def test_loads_correct_number_of_items(self):
         bundle = self.load_bundle()
-        self.assertEqual(16, len(list(bundle)))
+        self.assertEqual(18, len(list(bundle)))
 
     def test_loads_items_in_correct_order(self):
         bundle = self.load_bundle()
@@ -46,7 +46,7 @@ class TestBundleLoader(TestCase):
              ('document', 'Bewerbung Hanspeter M\xc3\xbcller'),
              ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
              ('mail', 'Ein Mail'),
-             ('mail', ''),
+             ('mail', None),
              ('document', 'Document referenced via UNC-Path'),
              ('document', 'Nonexistent document referenced via UNC-Path with Umlaut'),
              ('document', 'Dokument in bestehendem Examplecontent Dossier'),
@@ -73,6 +73,8 @@ class TestBundleLoader(TestCase):
     def test_inserts_portal_type(self):
         bundle = self.load_bundle()
         self.assertEqual([
+            ('User', 'james.green'),
+            ('User', 'peter.muster'),
             ('businesscasedossier', 'Dossier Peter Schneider'),
             ('businesscasedossier',
              'Dossier in bestehendem Examplecontent Repository'),
@@ -82,7 +84,7 @@ class TestBundleLoader(TestCase):
             ('document', 'Dokument in bestehendem Examplecontent Dossier'),
             ('document', 'Entlassung Hanspeter M\xc3\xbcller'),
             ('document', 'Nonexistent document referenced via UNC-Path with Umlaut'),
-            ('mail', ''),
+            ('mail', None),
             ('mail', 'Ein Mail'),
             ('mail', 'Mail in bestehendem Examplecontent Dossier'),
             ('mail', 'Signiertes Mail.'),

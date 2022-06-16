@@ -17,6 +17,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.ogds.models.user import User
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
 from opengever.testing import index_data_for
@@ -186,6 +187,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assert_document4_created(dossier)
         self.assert_document5_created()
         self.assert_mail3_created()
+        self.assert_ogds_users_created()
 
         self.assert_report_data_collected(bundle)
         self.assert_redirects_registered(dossier)
@@ -706,6 +708,23 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(mail)[BUNDLE_GUID_KEY],
             index_data_for(mail)[GUID_INDEX_NAME])
 
+    def assert_ogds_users_created(self):
+        peter = User.query.get('peter.muster')
+        self.assertFalse(peter.active)
+        self.assertEqual('Peter', peter.firstname)
+        self.assertEqual('Muster', peter.lastname)
+        self.assertEqual('peter.muster@example.com', peter.email)
+        self.assertEqual('Lorem ipsum.', peter.description)
+        self.assertEqual('012 345 67 89', peter.phone_office)
+
+        james = User.query.get('james.green')
+        self.assertFalse(james.active)
+        self.assertEqual('James', james.firstname)
+        self.assertEqual('Green', james.lastname)
+        self.assertEqual('james.green@example.com', james.email)
+        self.assertEqual('Lorem ipsum.', james.description)
+        self.assertEqual('+41 XXX XX XX', james.phone_office)
+
     def assert_report_data_collected(self, bundle):
         report_data = bundle.report_data
         metadata = report_data['metadata']
@@ -719,7 +738,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
                 'opengever.workspace.folder',
                 'opengever.dossier.businesscasedossier',
                 'opengever.document.document',
-                'ftw.mail.mail']),
+                'ftw.mail.mail',
+                '_opengever.ogds.models.user.User']),
             set(metadata.keys()))
 
         reporoots = metadata['opengever.repository.repositoryroot']
@@ -730,6 +750,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         dossiers = metadata['opengever.dossier.businesscasedossier']
         documents = metadata['opengever.document.document']
         mails = metadata['ftw.mail.mail']
+        ogds_users = metadata['_opengever.ogds.models.user.User']
 
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
@@ -739,6 +760,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(3, len(dossiers))
         self.assertEqual(5, len(documents))
         self.assertEqual(4, len(mails))
+        self.assertEqual(2, len(ogds_users))
 
     def assert_navigation_portlet_assigned(self, root):
         manager = getUtility(
