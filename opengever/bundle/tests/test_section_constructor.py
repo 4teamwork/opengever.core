@@ -7,6 +7,7 @@ from opengever.bundle.sections.constructor import ConstructorSection
 from opengever.bundle.sections.constructor import InvalidType
 from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.annotation import IAnnotations
@@ -248,3 +249,27 @@ class TestConstructor(IntegrationTestCase):
 
         self.assertEqual(u'My Mail', content.title)
         self.assertEqual('ftw.mail.mail', content.portal_type)
+
+    def test_journal_entry_made_as_creator(self):
+        item = {
+            u"guid": "12345xy",
+            u"parent_guid": "123_parent",
+            u"_type": u"opengever.dossier.businesscasedossier",
+            u"_creator": self.regular_user.id,
+            u"title": u"Dossier",
+        }
+
+        section = self.setup_section(previous=[item])
+        section.bundle.item_by_guid['123_parent'] = {
+            '_path': '/'.join(self.leaf_repofolder.getPhysicalPath()[2:])
+        }
+        list(section)
+
+        portal = api.portal.get()
+        content = portal.restrictedTraverse(item['_path'])
+
+        entry = get_journal_entry(content)
+
+        self.assertEqual(u'Dossier', content.title)
+        self.assertEqual('Dossier added', entry['action']['type'])
+        self.assertEqual(self.regular_user.id, entry['actor'])

@@ -11,6 +11,7 @@ from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.journal import ManualJournalActor
 from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.utils import createContentInContainer
@@ -272,7 +273,12 @@ class ConstructorSection(object):
 
             container, parent_path = parent
             try:
-                obj = self._construct_object(container, item)
+                if item.get('_creator'):
+                    with ManualJournalActor(item.get('_creator')):
+                        obj = self._construct_object(container, item)
+                else:
+                    obj = self._construct_object(container, item)
+
                 self.bundle.constructed_guids.add(item['guid'])
                 self.bundle.containers_to_reindex.add(parent_path)
                 logger.info(u'Constructed %r' % obj)
