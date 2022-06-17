@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-30 09:50+0000\n"
+"POT-Creation-Date: 2022-06-16 14:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,6 +46,11 @@ msgstr "The participant ${actorid} already exists"
 #: ./opengever/api/tus.py
 msgid "error_proposal_document_type"
 msgstr "Only docx documents are allowed as proposal documents."
+
+#. Default: "State ${state} does not exist."
+#: ./opengever/api/attendees_presence_states.py
+msgid "invalid_presence_state"
+msgstr "State ${state} does not exist."
 
 #. Default: "Role ${role} is not available. Available roles are: ${allowed_roles}"
 #: ./opengever/api/participations.py
@@ -181,6 +186,11 @@ msgstr "Only responses of type \"Comment\" can be edited."
 #: ./opengever/api/linked_workspaces.py
 msgid "participant_required"
 msgstr "Property 'participants' is required"
+
+#. Default: "User with userid ${userid} is not a participant in this meeting."
+#: ./opengever/api/attendees_presence_states.py
+msgid "userid_not_in_attendees"
+msgstr "User with userid ${userid} is not a participant in this meeting."
 
 #. Default: "Property 'workspace_uid' is required"
 #: ./opengever/api/linked_workspaces.py
