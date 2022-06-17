@@ -304,6 +304,7 @@ class OGGBundleJSONSchemaBuilder(object):
 
         # Tweak the content type schema for use in OGGBundles
         self._add_review_state_property()
+        self._add_creator_property()
         self._add_guid_properties()
         self._add_participation_property()
         self._add_permissions_property()
@@ -327,6 +328,13 @@ class OGGBundleJSONSchemaBuilder(object):
             {'type': 'string',
              'enum': ALLOWED_REVIEW_STATES[self.portal_type]},
             required=True,
+        )
+
+    def _add_creator_property(self):
+        self.ct_schema.add_property(
+            '_creator',
+            {'type': 'string'},
+            required=False,
         )
 
     def _add_guid_properties(self, with_parent_reference=True):

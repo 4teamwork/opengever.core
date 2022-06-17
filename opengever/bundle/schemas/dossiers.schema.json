@@ -356,6 +356,12 @@
                         "dossier-state-resolved"
                     ]
                 },
+                "_creator": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "guid": {
                     "type": "string"
                 },
