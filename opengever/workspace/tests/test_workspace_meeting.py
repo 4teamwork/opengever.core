@@ -213,6 +213,9 @@ class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
         expected_states = {u'hans.peter': u'present', u'fridolin.hugentobler': u'present'}
         self.assertEqual(expected_states, storage.get_all())
 
+        browser.open(meeting, method='GET', headers=self.api_headers)
+        self.assertEqual(expected_states, browser.json['attendees_presence_states'])
+
     @browsing
     def test_presence_states_after_modifying_attendees(self, browser):
         self.login(self.workspace_member, browser)

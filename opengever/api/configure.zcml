@@ -53,6 +53,7 @@
   <adapter factory=".kub.SerializeKuBEntityToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
+  <adapter factory=".workspace_meeting.SerializeWorkspaceMeetingToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
   <adapter factory=".substitutes.SerializeSubstituteToJson" />
