@@ -11,6 +11,20 @@
             "_zope_schema_type": "Choice",
             "_vocabulary": "<G\u00fcltige User-ID>"
         },
+        "chair": {
+            "type": "string",
+            "title": "Sitzungsleitung",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<G\u00fcltige User-ID>"
+        },
+        "secretary": {
+            "type": "string",
+            "title": "Protokollf\u00fchrung",
+            "description": "",
+            "_zope_schema_type": "Choice",
+            "_vocabulary": "<G\u00fcltige User-ID>"
+        },
         "start": {
             "type": "string",
             "title": "Beginn",
@@ -71,6 +85,8 @@
     ],
     "field_order": [
         "responsible",
+        "chair",
+        "secretary",
         "start",
         "end",
         "location",

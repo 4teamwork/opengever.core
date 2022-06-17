@@ -32,6 +32,16 @@ class IWorkspaceMeetingSchema(model.Schema):
         vocabulary='opengever.workspace.WorkspaceContentMembersVocabulary',
         required=True)
 
+    chair = schema.Choice(
+        title=_('label_chair', default='Chair'),
+        vocabulary='opengever.workspace.WorkspaceContentMembersVocabulary',
+        required=False)
+
+    secretary = schema.Choice(
+        title=_('label_secretary', default='Secretary'),
+        vocabulary='opengever.workspace.WorkspaceContentMembersVocabulary',
+        required=False)
+
     form.widget('start', DatePickerFieldWidget)
     form.order_after(start='responsible')
     start = UTCDatetime(

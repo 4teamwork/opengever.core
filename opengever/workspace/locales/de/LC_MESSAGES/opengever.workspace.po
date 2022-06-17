@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-22 12:17+0000\n"
+"POT-Creation-Date: 2022-06-17 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,6 +150,12 @@ msgstr ""
 msgid "label_attendees"
 msgstr "Teilnehmer"
 
+#. Default: "Chair"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_chair"
+msgstr "Sitzungsleitung"
+
 #. Default: "Date"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
 msgid "label_date"
@@ -228,6 +234,12 @@ msgstr "Verweise"
 #: ./opengever/workspace/todo.py
 msgid "label_responsible"
 msgstr "Verantwortlich"
+
+#. Default: "Secretary"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_secretary"
+msgstr "Protokollführung"
 
 #. Default: "Start"
 #: ./opengever/workspace/workspace_meeting.py
