@@ -96,6 +96,16 @@ msgstr ""
 msgid "WorkspaceMember"
 msgstr ""
 
+#. Default: "absent"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "absent"
+msgstr ""
+
+#. Default: "excused"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "excused"
+msgstr ""
+
 #. Default: "Common"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "fieldset_common"
@@ -304,6 +314,11 @@ msgstr ""
 #. Default: "At least one principal must remain admin."
 #: ./opengever/workspace/participation/browser/manage_participants.py
 msgid "msg_one_must_remain_admin"
+msgstr ""
+
+#. Default: "present"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "present"
 msgstr ""
 
 #. Default: "Comment"

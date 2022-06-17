@@ -93,6 +93,16 @@ msgstr "Invité"
 msgid "WorkspaceMember"
 msgstr "Membre du team"
 
+#. Default: "absent"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "absent"
+msgstr "absent"
+
+#. Default: "excused"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "excused"
+msgstr "excusé"
+
 #. Default: "Common"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "fieldset_common"
@@ -308,6 +318,11 @@ msgstr "Teamraüme"
 #: ./opengever/workspace/participation/browser/manage_participants.py
 msgid "msg_one_must_remain_admin"
 msgstr "Au moins un participant doit être admin."
+
+#. Default: "present"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "present"
+msgstr "présent"
 
 #. Default: "Comment"
 #: ./opengever/workspace/content_sharing_mailer.py

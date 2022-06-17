@@ -2,13 +2,27 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from opengever.base.schema import UTCDatetime
 from opengever.workspace import _
 from opengever.workspace.interfaces import IWorkspaceMeeting
+from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
+from persistent.mapping import PersistentMapping
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.dexterity.content import Container
 from plone.supermodel import model
 from zope import schema
+from zope.annotation.interfaces import IAnnotations
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import implements
 from zope.interface import provider
+
+
+ATTENDEES_STATE_ABSENT = u'absent'
+ATTENDEES_STATE_EXCUSED = u'excused'
+ATTENDEES_STATE_PRESENT = u'present'
+ALLOWED_ATTENDEES_PRESENCE_STATES = {
+    ATTENDEES_STATE_ABSENT: _(u'absent', default=u'absent'),
+    ATTENDEES_STATE_EXCUSED: _(u'excused', default=u'excused'),
+    ATTENDEES_STATE_PRESENT: _(u'present', default=u'present')}
 
 
 @provider(IFormFieldProvider)
@@ -77,3 +91,34 @@ class IWorkspaceMeetingSchema(model.Schema):
 
 class WorkspaceMeeting(Container):
     implements(IWorkspaceMeeting)
+
+
+@implementer(IWorkspaceMeetingAttendeesPresenceStateStorage)
+@adapter(IWorkspaceMeeting)
+class WorkspaceMeetingAttendeesPresenceStateStorage(object):
+
+    ANNOTATIONS_KEY = 'opengever.workspace.meetings.attendees_presence_states'
+
+    def __init__(self, context):
+        self.context = context
+
+    def _storage(self, create_if_missing=False):
+        ann = IAnnotations(self.context)
+        if self.ANNOTATIONS_KEY not in ann.keys() and create_if_missing:
+            ann[self.ANNOTATIONS_KEY] = PersistentMapping()
+
+        return ann.get(self.ANNOTATIONS_KEY, {})
+
+    def add_or_update(self, userid, state):
+        self._storage(True)[userid] = state
+
+    def delete(self, userid):
+        if self._storage().get(userid):
+            del self._storage()[userid]
+
+    def get_all(self):
+        states = dict(self._storage())
+        for userid in self.context.attendees:
+            if userid not in states:
+                states[userid] = ATTENDEES_STATE_PRESENT
+        return states

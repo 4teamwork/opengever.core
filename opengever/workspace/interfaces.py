@@ -84,3 +84,20 @@ class IWorkspaceMeetingAgendaItem(Interface):
 class IDeleter(Interface):
     """Interface for the Deleter adapter.
     """
+
+
+class IWorkspaceMeetingAttendeesPresenceStateStorage(Interface):
+    """Attendees presence state storage adapter.
+    """
+
+    def add_or_update(self, userid, state):
+        """ Add or update the presence state of the attendee with the given userid
+        """
+
+    def delete(self, userid):
+        """ Delete the presence state of the attendee with the given userid
+        """
+
+    def get_all(self):
+        """ Get the presence states of all attendees
+        """

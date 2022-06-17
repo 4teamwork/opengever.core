@@ -16,6 +16,7 @@
   <adapter factory=".sequence.TodoListSequenceNumberGenerator" />
   <adapter factory=".sequence.TodoSequenceNumberGenerator" />
   <adapter factory=".sequence.WorkspaceMeetingSequenceNumberGenerator" />
+  <adapter factory=".workspace_meeting.WorkspaceMeetingAttendeesPresenceStateStorage" />
 
   <adapter
       factory=".actions.WorkspaceFolderListingActions"
