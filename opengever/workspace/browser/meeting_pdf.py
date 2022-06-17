@@ -1,10 +1,14 @@
 from DateTime import DateTime
 from logging import getLogger
 from opengever.base.helpers import display_name
+from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
+from opengever.workspace.workspace_meeting import ALLOWED_ATTENDEES_PRESENCE_STATES
 from os import environ
+from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
+from zope.i18n import translate
 import requests
 
 
@@ -43,11 +47,14 @@ class MeetingMinutesPDFView(BrowserView):
         data['generator'] = portal_state.portal_title()
         data['print_date'] = DateTime()
         data['responsible'] = display_name(self.context.responsible)
+        data['chair'] = display_name(self.context.chair)
+        data['secretary'] = display_name(self.context.secretary)
         data['attendees'] = []
-
+        presence_states = IWorkspaceMeetingAttendeesPresenceStateStorage(self.context).get_all()
         for attendee in self.context.attendees:
-            data['attendees'].append(display_name(attendee))
-
+            state = translate(ALLOWED_ATTENDEES_PRESENCE_STATES[presence_states[attendee]],
+                              context=self.request)
+            data['attendees'].append(u'{} ({})'.format(display_name(attendee), safe_unicode(state)))
         data['agenda_items'] = []
         agenda_items = self.context.getFolderContents(
             {'portal_type': 'opengever.workspace.meetingagendaitem'})
