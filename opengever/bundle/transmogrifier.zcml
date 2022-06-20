@@ -98,4 +98,9 @@
       name="opengever.bundle.manual_journal_actor"
       />
 
+  <utility
+      component=".sections.creator.SetCreatorSection"
+      name="opengever.bundle.set_creator"
+      />
+
 </configure>

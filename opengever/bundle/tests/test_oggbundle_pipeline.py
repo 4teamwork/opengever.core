@@ -425,6 +425,8 @@ class TestOggBundlePipeline(IntegrationTestCase):
              'organization:e66b4572-5244-491c-bbe8-32295f8da070'],
             [particpation.contact for particpation in participations.values()])
 
+        # creator is journal actor
+        self.assertEqual('philippe.gross', dossier.Creator())
         entry = get_journal_entry(dossier)
         self.assertEqual('philippe.gross', entry['actor'])
 
@@ -541,6 +543,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
         # customproperty with default
         self.assertEqual(
             {'portal': u'plone'}, get_custom_properties(document1))
+
+        # creator
+        self.assertEqual('elio.schmutz', document1.Creator())
 
         # journal entry
         entry = get_journal_entry(document1)
