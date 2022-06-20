@@ -11,6 +11,8 @@ Changelog:
 +---------------+--------------+-------------+--------------------------------------------------------+
 | **Version**   | **Datum**    | **Autor**   | **Kommentar**                                          |
 +===============+==============+=============+========================================================+
+| 1.3           | 20.06.2022   | PG          | Ergänzt: Ersteller                                     |
++---------------+--------------+-------------+--------------------------------------------------------+
 | 1.2           | 16.06.2022   | PG          | Import von OGDS Usern                                  |
 +---------------+--------------+-------------+--------------------------------------------------------+
 | 1.1           | 10.08.2020   | LG          | Import von Teamräumen                                  |
@@ -389,6 +391,13 @@ Dokumente
 Initial-Zustand: ``document-state-draft``
 
 JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
+
+
+Ersteller
+---------
+
+Der Ersteller eines Objekts lässt sich für alle Inhalte mit dem Property ``_creator`` setzen. Auch die entsprechenden Journaleinträge, werden im Namen des Erstellers eines jeweiligen Objektes erfasst.
+
 
 Redirects zu früheren Pfäden
 ----------------------------
