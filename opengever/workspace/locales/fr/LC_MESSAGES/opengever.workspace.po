@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-03-22 12:17+0000\n"
+"POT-Creation-Date: 2022-06-17 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,6 +93,16 @@ msgstr "Invité"
 msgid "WorkspaceMember"
 msgstr "Membre du team"
 
+#. Default: "absent"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "absent"
+msgstr "absent"
+
+#. Default: "excused"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "excused"
+msgstr "excusé"
+
 #. Default: "Common"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "fieldset_common"
@@ -149,6 +159,12 @@ msgstr ""
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_attendees"
 msgstr "Participants"
+
+#. Default: "Chair"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_chair"
+msgstr ""
 
 #. Default: "Date"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
@@ -229,6 +245,12 @@ msgstr "Renvois"
 msgid "label_responsible"
 msgstr "Responsable"
 
+#. Default: "Secretary"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_secretary"
+msgstr ""
+
 #. Default: "Start"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_start"
@@ -296,6 +318,11 @@ msgstr "Teamraüme"
 #: ./opengever/workspace/participation/browser/manage_participants.py
 msgid "msg_one_must_remain_admin"
 msgstr "Au moins un participant doit être admin."
+
+#. Default: "present"
+#: ./opengever/workspace/workspace_meeting.py
+msgid "present"
+msgstr "présent"
 
 #. Default: "Comment"
 #: ./opengever/workspace/content_sharing_mailer.py

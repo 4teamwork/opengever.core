@@ -14,6 +14,26 @@
        :Wertebereich: <Gültige User-ID>
 
 
+   .. py:attribute:: chair
+
+       :Feldname: :field-title:`Sitzungsleitung`
+       :Datentyp: ``Choice``
+       
+       
+       
+       :Wertebereich: <Gültige User-ID>
+
+
+   .. py:attribute:: secretary
+
+       :Feldname: :field-title:`Protokollführung`
+       :Datentyp: ``Choice``
+       
+       
+       
+       :Wertebereich: <Gültige User-ID>
+
+
    .. py:attribute:: start
 
        :Feldname: :field-title:`Beginn`

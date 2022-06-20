@@ -17,3 +17,4 @@ Hier werden alle Teamraum-Schnittstellen beschrieben, welche von OneGov GEVER un
    workspace_content_members
    share_content
    accessible_workspaces
+   attendees_presence_states

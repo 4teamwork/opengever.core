@@ -17,6 +17,7 @@ Other Changes
 - ``@responses``: Set modifier and modified in PATCH endpoint.
 - ``@ogds-user-listing`` now supports filtering by group membership.
 - ``@share-content``: Add `notify_all` param to share content with all authorized participants.
+- A new endpoint ``@attendees-presence-states`` is added (see :ref:`docs <attendees_presence_states>`).
 
 2022.11.0 (2022-05-24)
 ----------------------

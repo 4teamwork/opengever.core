@@ -102,6 +102,14 @@ a {
       <th><span i18n:translate="label_responsible">Responsible</span>:</th>
       <td tal:content="options/responsible"></td>
     </tr>
+    <tr tal:condition="options/chair">
+      <th><span i18n:translate="label_chair">Chair</span>:</th>
+      <td tal:content="options/chair"></td>
+    </tr>
+    <tr tal:condition="options/secretary">
+      <th><span i18n:translate="label_secretary">Secretary</span>:</th>
+      <td tal:content="options/secretary"></td>
+    </tr>
     <tr tal:condition="options/attendees" class="attendees">
       <th><span i18n:translate="label_attendees">Attendees</span>:</th>
       <td>

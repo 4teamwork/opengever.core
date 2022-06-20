@@ -154,7 +154,9 @@ VOCAB_OVERRIDES = {
         'language': u'<Ein g\xfcltiger Sprach-Code (de, en, fr...)>'
     },
     'opengever.workspace.workspace_meeting.IWorkspaceMeetingSchema': {
+        'chair': u'<G\xfcltige User-ID>',
         'responsible': u'<G\xfcltige User-ID>',
+        'secretary': u'<G\xfcltige User-ID>',
     },
     'opengever.workspace.workspace.IWorkspaceSchema': {
         'responsible': u'<G\xfcltige ID eines Teamraum Teilnehmers>',

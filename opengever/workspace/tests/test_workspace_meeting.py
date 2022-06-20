@@ -4,6 +4,7 @@ from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing.freezer import freeze
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
 import json
 import pytz
 
@@ -189,21 +190,50 @@ class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
         self.assertEqual(u'\xc4 new title', self.workspace_meeting.title)
 
     @browsing
-    def test_workspace_meeting_can_have_attendees(self, browser):
+    def test_create_workspace_meeting_with_attendees(self, browser):
         self.login(self.workspace_member, browser)
-        browser.open(
-            self.workspace, method='POST', headers=self.api_headers,
-            data=json.dumps({'title': 'Ein Meeting',
-                             'responsible': self.workspace_member.getId(),
-                             'attendees': [self.workspace_guest.getId(), self.workspace_admin.getId()],
-                             'start': '2020-10-10T23:56:00',
-                             '@type': 'opengever.workspace.meeting'}))
+        with self.observe_children(self.workspace) as children:
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'title': 'Ein Meeting',
+                                 'responsible': self.workspace_member.getId(),
+                                 'attendees': [self.workspace_guest.getId(),
+                                               self.workspace_admin.getId()],
+                                 'start': '2020-10-10T23:56:00',
+                                 '@type': 'opengever.workspace.meeting'}))
 
         self.assertEqual(
             [
                 {u'token': u'hans.peter', u'title': u'Peter Hans'},
                 {u'token': u'fridolin.hugentobler', u'title': u'Hugentobler Fridolin'}
             ], browser.json.get('attendees'))
+
+        meeting = children['added'].pop()
+        storage = IWorkspaceMeetingAttendeesPresenceStateStorage(meeting)
+        expected_states = {u'hans.peter': u'present', u'fridolin.hugentobler': u'present'}
+        self.assertEqual(expected_states, storage.get_all())
+
+        browser.open(meeting, method='GET', headers=self.api_headers)
+        self.assertEqual(expected_states, browser.json['attendees_presence_states'])
+
+    @browsing
+    def test_presence_states_after_modifying_attendees(self, browser):
+        self.login(self.workspace_member, browser)
+        storage = IWorkspaceMeetingAttendeesPresenceStateStorage(self.workspace_meeting)
+        browser.open(self.workspace_meeting, method='PATCH', headers=self.api_headers,
+                     data=json.dumps({'attendees': [
+                         self.workspace_guest.getId(), self.workspace_admin.getId()]}))
+
+        storage.add_or_update(self.workspace_guest.getId(), u'excused')
+        self.assertEqual({u'hans.peter': u'excused', u'fridolin.hugentobler': u'present'},
+                         storage.get_all())
+
+        browser.open(self.workspace_meeting, method='PATCH', headers=self.api_headers,
+                     data=json.dumps({'attendees': [
+                         self.workspace_member.getId(), self.workspace_guest.getId()]}))
+
+        self.assertEqual({u'hans.peter': u'excused', u'beatrice.schrodinger': u'present'},
+                         storage.get_all())
 
     @browsing
     def test_only_actual_workspace_members_can_participate_to_a_workspace_meeting(self, browser):

@@ -53,6 +53,7 @@
   <adapter factory=".kub.SerializeKuBEntityToJson" />
   <adapter factory=".mail.SerializeMailToJson" />
   <adapter factory=".workspace.SerializeWorkspaceToJson" />
+  <adapter factory=".workspace_meeting.SerializeWorkspaceMeetingToJson" />
   <adapter factory=".response.ResponseDefaultFieldSerializer" />
   <adapter factory=".response.SerializeResponseToJson" />
   <adapter factory=".substitutes.SerializeSubstituteToJson" />
@@ -1722,6 +1723,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdssync.OgdsSync"
       permission="opengever.ogds.base.SyncOgds"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@attendees-presence-states"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting"
+      factory=".attendees_presence_states.AttendeesPreseneceStatesPatch"
+      permission="cmf.ModifyPortalContent"
       />
 
 </configure>
