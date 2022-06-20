@@ -16,7 +16,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.models.user import User
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.repository.behaviors.referenceprefix import IReferenceNumberPrefix  # noqa
@@ -425,6 +425,9 @@ class TestOggBundlePipeline(IntegrationTestCase):
              'organization:e66b4572-5244-491c-bbe8-32295f8da070'],
             [particpation.contact for particpation in participations.values()])
 
+        entry = get_journal_entry(dossier)
+        self.assertEqual('philippe.gross', entry['actor'])
+
     def assert_dossier2_created(self):
         dossier = self.find_by_title(
             self.leaf_repofolder,
@@ -538,6 +541,10 @@ class TestOggBundlePipeline(IntegrationTestCase):
         # customproperty with default
         self.assertEqual(
             {'portal': u'plone'}, get_custom_properties(document1))
+
+        # journal entry
+        entry = get_journal_entry(document1)
+        self.assertEqual('elio.schmutz', entry['actor'])
 
     def assert_document2_created(self, parent):
         document2 = self.find_by_title(parent, u'Entlassung Hanspeter M\xfcller')

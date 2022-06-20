@@ -93,4 +93,9 @@
       name="opengever.bundle.participations"
       />
 
+  <utility
+      component=".sections.manual_journal_entries.ManualJournalEntrySection"
+      name="opengever.bundle.manual_journal_actor"
+      />
+
 </configure>
