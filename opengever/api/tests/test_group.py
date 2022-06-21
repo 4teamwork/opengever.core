@@ -442,6 +442,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         self.assertEqual(204, response.status_code)
         self.assertEqual(u'new title', self.ogds_group.title)
+        self.ogds_group.session.expire(self.ogds_group)
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id, self.workspace_guest.id],
             [user.userid for user in self.ogds_group.users])
@@ -463,6 +464,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             method='PATCH',
             headers=self.api_headers)
 
+        self.ogds_group.session.expire(self.ogds_group)
         self.assertEqual(204, response.status_code)
         self.assertEqual([], self.ogds_group.users)
 
@@ -543,7 +545,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         self.assertEqual(
             browser.json[u'message'],
-            "User {} not found in OGDS.".format(userid))
+            "Users ['{}'] not found in OGDS.".format(userid))
         self.assertEqual(browser.json[u'type'], u'BadRequest')
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id],
@@ -555,6 +557,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
             data=json.dumps(payload),
             method='PATCH',
             headers=self.api_headers)
+        self.ogds_group.session.expire(self.ogds_group)
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id, userid],
             [user.userid for user in self.ogds_group.users])
