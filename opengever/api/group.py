@@ -11,6 +11,7 @@ from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy import or_
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.component import queryMultiAdapter
@@ -72,7 +73,10 @@ class GeverGroupsPost(Service):
                 "The group name you entered is too long: "
                 "maximal length is {}".format(GROUP_ID_LENGTH))
 
-        if Group.query.filter(Group.groupid == groupname).count() != 0:
+        if (
+            Group.query.filter(Group.groupid == groupname).filter(or_(
+                Group.active.is_(True), Group.is_local.is_(False))).count() != 0
+        ):
             raise BadRequest('Group {} already exists in OGDS.'.format(groupname))
 
         raise_for_unassignable_roles(roles)
@@ -120,10 +124,15 @@ class GeverGroupsPost(Service):
         # Add group to ogds
         session = create_session()
 
-        ogds_group = Group(groupname, is_local=True, title=title)
+        ogds_group = session.query(Group).get(groupname)
+        if ogds_group is None:
+            ogds_group = Group(groupname, is_local=True, title=title)
+        ogds_group.active = True
+
         for userid in users:
             user = get_sql_user(userid)
             ogds_group.users.append(user)
+
         session.add(ogds_group)
 
         self.request.response.setStatus(201)
