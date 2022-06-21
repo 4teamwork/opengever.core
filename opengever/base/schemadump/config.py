@@ -133,6 +133,11 @@ GEVER_SQL_TYPES = [
     '_opengever.ogds.models.group.Group',
 ]
 
+GEVER_SQL_TYPES_TO_OGGBUNDLE_TYPES = {
+    '_opengever.ogds.models.user.User': 'ogds_user',
+}
+
+
 SEQUENCE_NUMBER_LABELS = {
     'opengever.document.document': u'Fortlaufend gez\xe4hlte Nummer eines Dokumentes.',  # noqa
     'opengever.dossier.businesscasedossier': u'Fortlaufend gez\xe4hlte Nummer eines Dossiers.',  # noqa

@@ -1,0 +1,22 @@
+[
+  {
+    "guid": "peter.muster",
+    "userid": "peter.muster",
+    "firstname": "Peter",
+    "lastname": "Muster",
+    "active": false,
+    "phone_office": "012 345 67 89",
+    "email": "peter.muster@example.com",
+    "description": "Lorem ipsum."
+  },
+  {
+    "guid": "james.green",
+    "userid": "james.green",
+    "firstname": "James",
+    "lastname": "Green",
+    "active": false,
+    "phone_office": "+41 XXX XX XX",
+    "email": "james.green@example.com",
+    "description": "Lorem ipsum."
+  }
+]

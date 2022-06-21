@@ -5,10 +5,13 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_NAMES
 from opengever.base.interfaces import IDontIssueDossierReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.model import create_session
+from opengever.base.schemadump.config import GEVER_SQL_TYPES
 from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation import IAnnotations
@@ -32,6 +35,11 @@ TYPES_WITHOUT_REFERENCE_NUMBER = (
     'opengever.meeting.submittedproposal',
     'opengever.disposition.disposition',
 )
+
+
+GEVER_SQL_TYPES_TO_MODEL = {
+    '_opengever.ogds.models.user.User': (User, 'userid'),
+}
 
 
 class InvalidType(Exception):
@@ -248,6 +256,15 @@ class ConstructorSection(object):
 
     def __iter__(self):
         for item in self.previous:
+            if item['_type'] in GEVER_SQL_TYPES:
+                obj = self._construct_sql_object(item)
+                if obj:
+                    self.bundle.constructed_guids.add(item['guid'])
+                    logger.info(u'Constructed %r' % obj)
+
+                yield item
+                continue
+
             parent = self.resolve_parent_pointer(item)
             if parent is None:
                 # Failed to resolve parent, warnings have been logged
@@ -269,3 +286,19 @@ class ConstructorSection(object):
             item['_path'] = '/'.join(obj.getPhysicalPath()[2:])
 
             yield item
+
+    def _construct_sql_object(self, item):
+        model, primary_key = GEVER_SQL_TYPES_TO_MODEL[item['_type']]
+        data = {k: v for (k, v) in item.items()
+                if not k.startswith('_') and k != 'guid'}
+
+        if model.get(item['guid']):
+            logger.warning(
+                u'Could not create object with guid {}. Object already '
+                'exists'.format(item['guid']))
+            return
+
+        obj = model(**data)
+        session = create_session()
+        session.add(obj)
+        return obj

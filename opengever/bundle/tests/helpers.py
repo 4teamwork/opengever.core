@@ -3,9 +3,11 @@
 
 
 def get_title(item):
-    title = item.get('title_de')
+    title = item.get('title_de', item.get('title'))
     if not title:
-        title = item['title']
+        # fallback for ogds_users
+        title = item.get('userid')
+
     return title
 
 
