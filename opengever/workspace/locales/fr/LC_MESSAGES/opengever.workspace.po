@@ -164,7 +164,7 @@ msgstr "Participants"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_chair"
-msgstr ""
+msgstr "Président"
 
 #. Default: "Date"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
@@ -249,7 +249,7 @@ msgstr "Responsable"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_secretary"
-msgstr ""
+msgstr "Secrétaire"
 
 #. Default: "Start"
 #: ./opengever/workspace/workspace_meeting.py
