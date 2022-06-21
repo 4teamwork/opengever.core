@@ -401,6 +401,7 @@
       <analyzer type="index">
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
+        <filter class="solr.HyphenationCompoundWordTokenFilterFactory" hyphenator="lang/hyph_de.xml" dictionary="lang/compound_stems_de.txt"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" />
         <filter class="solr.GermanNormalizationFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
