@@ -10,6 +10,37 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.12.0 (2022-06-21)
+----------------------
+
+New features:
+
+
+- Sort group users by last name and allow filtering users by group membership in ogdsuserlisting. [njohner]
+- Allow current value in single or multiple choice fields. [njohner]
+- Support importing dossier participations in bundle import. [phgross]
+- Add param ``notify_all` to share content with all authorized participants in @share-content endpoint. [tinagerber]
+- Add DELETE @responses API endpoint. [tinagerber]
+- Add modified and modifier field to response schema. [tinagerber]
+- Add chair, secretary and attendees presence state to workspace meeting. [tinagerber]
+
+
+Bug fixes:
+
+
+- Fix workspace member vocabularies for workspace folders and other contents. [njohner]
+- Fix multiple choice field validation for custom properties. [njohner]
+- No longer clear task permissions when protecting a dossier. [phgross]
+- Fix search by mailaddress in workspace invitations and mail-in. [phgross]
+- Order AllGroupsSource groups by title. [elioschmutz]
+
+
+Other changes:
+
+
+- Bump ftw.bumblebee to version 3.10.0 which allows to configure the bumblebee API prefix. [buchi]
+
+
 2022.11.0 (2022-05-24)
 ----------------------
 
