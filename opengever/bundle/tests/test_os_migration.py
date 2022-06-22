@@ -5,6 +5,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.indexes import sortable_title
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
@@ -1062,6 +1063,16 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         # This will validate that the reference numbers were set correctly
         migrator.run()
 
+        self.assertEqual(
+            [{'active': True, 'prefix': u'2', 'title': u'Rechnungspr\xfcfungskommission'},
+             {'active': True, 'prefix': u'3', 'title': u'Spinn\xe4nnetzregistrar'}],
+            IReferenceNumberPrefix(self.repository_root).get_number_mapping())
+
+        branch_repofolder = self.portal.unrestrictedTraverse("/plone/ordnungssystem/rechnungsprufungskommission/fuhrung")
+        self.assertEqual(
+            [{'active': True, 'prefix': u'2', 'title': u'Vertr\xe4ge und Vereinbarungen'}],
+            IReferenceNumberPrefix(branch_repofolder).get_number_mapping())
+
     def test_repository_migrator_handles_temporary_dupplicate_position(self):
         """we move position 1 to 4, and create a new position 1. Because creation
         happens before move, we have two positions 1 at some point.
@@ -1076,6 +1087,53 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
 
         migrator = RepositoryMigrator(analyser.analysed_rows)
         migrator.run()
+
+        self.assertEqual(
+            [{'active': True, 'prefix': u'1', 'title': u'new pos 1'},
+             {'active': True, 'prefix': u'2', 'title': u'Rechnungspr\xfcfungskommission'},
+             {'active': True, 'prefix': u'3', 'title': u'Spinn\xe4nnetzregistrar'},
+             {'active': True, 'prefix': u'4', 'title': u'F\xfchrung'}],
+            IReferenceNumberPrefix(self.repository_root).get_number_mapping())
+
+        new_repofolder = self.portal.unrestrictedTraverse("/plone/ordnungssystem/new-pos-1")
+        self.assertEqual(
+            [{'active': True, 'prefix': u'1', 'title': u'Vertr\xe4ge und Vereinbarungen'}],
+            IReferenceNumberPrefix(new_repofolder).get_number_mapping())
+
+        self.assertEqual(
+            [{'active': True, 'prefix': u'2', 'title': u'new pos 41'}],
+            IReferenceNumberPrefix(self.branch_repofolder).get_number_mapping())
+
+    def test_repository_migrator_handles_temporary_dupplicate_position_with_move(self):
+        """we move position 1 to 21, and create a new position 1. Because creation
+        happens before move, we have two positions 1 at some point.
+        Second trap here is that position 11 remains 11, i.e. it needs to be moved
+        to the newly created position 1.
+        """
+        self.login(self.manager)
+        migration_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/os_test_handles_temporary_dupplicate_position_with_move.xlsx')
+        analysis_file = resource_filename('opengever.bundle.tests', 'assets/os_migration/test_analysis.xlsx')
+        analyser = RepositoryExcelAnalyser(migration_file, analysis_file)
+        analyser.analyse()
+
+        migrator = RepositoryMigrator(analyser.analysed_rows)
+        migrator.run()
+
+        self.assertEqual(
+            [{'active': True, 'prefix': u'1', 'title': u'new pos 1'},
+             {'active': True, 'prefix': u'2', 'title': u'Rechnungspr\xfcfungskommission'},
+             {'active': True, 'prefix': u'3', 'title': u'Spinn\xe4nnetzregistrar'}],
+            IReferenceNumberPrefix(self.repository_root).get_number_mapping())
+
+        self.assertEqual(
+            [{'active': True, 'prefix': u'1', 'title': u'F\xfchrung'},
+             {'active': True, 'prefix': u'2', 'title': u'new pos 22'}],
+            IReferenceNumberPrefix(self.empty_repofolder).get_number_mapping())
+
+        branch_repofolder = self.portal.unrestrictedTraverse("/plone/ordnungssystem/rechnungsprufungskommission/fuhrung")
+        self.assertEqual(
+            [],
+            IReferenceNumberPrefix(branch_repofolder).get_number_mapping())
 
     def get_allowed_users(self, obj):
         return filter(lambda x: x.startswith("user:"),
