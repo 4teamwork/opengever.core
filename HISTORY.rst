@@ -10,6 +10,22 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.6 (2022-06-22)
+---------------------
+
+New features:
+
+
+- Add label for NullActor. [tinagerber]
+- Improve error handling when interacting with KuB. [tinagerber]
+
+
+Bug fixes:
+
+
+- Allow deleting dossier participations of unknown contacts. [tinagerber]
+
+
 2022.4.5 (2022-04-07)
 ---------------------
 
