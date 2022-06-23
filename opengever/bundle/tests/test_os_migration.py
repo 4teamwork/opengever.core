@@ -133,6 +133,7 @@ class OSMigrationTestMixin(object):
         'new_position_guid': None,
         'new_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
         'new_title': None,
+        'old_parent_guid': None,
         'old_repo_pos': RepositoryPosition(1, u"F\xfchrung", u"Alles zum Thema F\xfchrung."),
         'permissions': dict(empty_permissions.items() + [('manage_dossiers', [u'faivel.fruhling'])]),
         'permissions_disregarded': False,
@@ -158,6 +159,7 @@ class OSMigrationTestMixin(object):
         'new_position_guid': None,
         'new_repo_pos': RepositoryPosition(11,  u'Vertr\xe4ge und Vereinbarungen', None),
         'new_title': None,
+        'old_parent_guid': None,
         'old_repo_pos': RepositoryPosition(11,  u'Vertr\xe4ge und Vereinbarungen', None),
         'permissions': empty_permissions,
         'permissions_disregarded': False,
@@ -183,6 +185,7 @@ class OSMigrationTestMixin(object):
         'new_position_guid': None,
         'new_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
         'new_title': None,
+        'old_parent_guid': None,
         'old_repo_pos': RepositoryPosition(2, u"Rechnungspr\xfcfungskommission", None),
         'permissions': dict(empty_permissions.items() +
                             [('add', [u'jurgen.fischer']),
@@ -210,6 +213,7 @@ class OSMigrationTestMixin(object):
         'new_position_guid': None,
         'new_repo_pos': RepositoryPosition(3, u"Spinn\xe4nnetzregistrar", None),
         'new_title': None,
+        'old_parent_guid': None,
         'old_repo_pos': RepositoryPosition(3, u"Spinn\xe4nnetzregistrar", None),
         'permissions': empty_permissions,
         'permissions_disregarded': False,
@@ -231,6 +235,7 @@ class OSMigrationTestMixin(object):
         'new_position_guid': None,
         'new_repo_pos': RepositoryPosition(),
         'new_title': None,
+        'old_parent_guid': None,
         'old_repo_pos': RepositoryPosition(),
         'permissions': empty_permissions,
         'permissions_disregarded': False,
@@ -267,16 +272,17 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(6, len(analyser.analysed_rows))
         self.assertDictEqual(self.branch_repofolder_data, analyser.analysed_rows[0])
 
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.empty_repofolder_data)
         data['new_number'] = '0'
         data['new_repo_pos'] = RepositoryPosition(0, u'Allgemeines und \xdcbergreifendes', None)
         data['new_title'] = u'Allgemeines und \xdcbergreifendes'
+        data['old_parent_guid'] = reporoot_guid
         self.assertDictEqual(data, analyser.analysed_rows[1])
 
         self.assertDictEqual(self.inactive_repofolder_data, analyser.analysed_rows[2])
 
         new_branch_guid = analyser.analysed_rows[3]['new_position_guid']
-        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         self.assertIsNotNone(new_branch_guid)
         data = deepcopy(self.default_data)
         data['new_repo_pos'] = RepositoryPosition(4, 'Created branch', 'comment 1')
@@ -294,12 +300,14 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         data['new_position_guid'] = guid
         self.assertDictEqual(data, analyser.analysed_rows[4])
 
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.leaf_repofolder_data)
         data['new_number'] = '2'
         data['new_parent_guid'] = new_branch_guid
         data['new_repo_pos'] = RepositoryPosition(42, 'Moved leaf', 'comment for moved one')
         data['new_title'] = u'Moved leaf'
         data['need_move'] = True
+        data['old_parent_guid'] = branch_repofolder_guid
         self.assertDictEqual(data, analyser.analysed_rows[5])
 
     def test_repository_excel_analyser_os_test_migration(self):
@@ -316,7 +324,9 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         data['new_repo_pos'] = RepositoryPosition(1, u"F\xfchrung und Koordination", u"Alles zum Thema F\xfchrung.")
         self.assertDictEqual(data, analyser.analysed_rows[0])
 
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.empty_repofolder_data)
+        data['old_parent_guid'] = reporoot_guid
         data['new_number'] = u'0'
         data['new_repo_pos'] = RepositoryPosition(0, u'Branch with new number', '')
         data['new_title'] = u'Branch with new number'
@@ -329,6 +339,7 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         data['need_creation'] = True
         data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
         data['new_position_guid'] = guid
+
         self.assertDictEqual(data, analyser.analysed_rows[3])
 
         guid = analyser.analysed_rows[4]['new_position_guid']
@@ -340,7 +351,9 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         data['new_position_guid'] = guid
         self.assertDictEqual(data, analyser.analysed_rows[4])
 
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.leaf_repofolder_data)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_number'] = u'2'
         data['need_move'] = True
         data['new_repo_pos'] = RepositoryPosition('02', 'Moved leaf in branch with new number', 'comment for moved one')
@@ -363,9 +376,11 @@ class TestOSMigrationAnalysis(IntegrationTestCase, OSMigrationTestMixin):
         invalid_rows = [row for row in analyser.analysed_rows if not row['is_valid']]
         self.assertEqual(5, len(invalid_rows))
 
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.empty_repofolder_data)
         data['is_valid'] = False
         data['leaf_node_violated'] = True
+        data['old_parent_guid'] = reporoot_guid
         data['new_repo_pos'] = RepositoryPosition('111', u"Rechnungspr\xfcfungskommission", None)
         data['new_parent_guid'] = self.get_guid(self.leaf_repofolder)
         data['need_move'] = True
@@ -559,7 +574,9 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(2, len(changed_rows))
 
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
         data = deepcopy(self.branch_repofolder_data)
+        data['old_parent_guid'] = reporoot_guid
         data['new_repo_pos'] = RepositoryPosition(0, u"F\xfchrung", u"Alles zum Thema F\xfchrung.")
         data['new_number'] = '0'
         self.assertEqual(data, changed_rows[0])
@@ -641,6 +658,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         changed_rows = self.get_changed_rows(analyser.analysed_rows)
         self.assertEqual(1, len(changed_rows))
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(21, u'Vertr\xe4ge und Vereinbarungen', None)
         data['need_move'] = True
         data['new_number'] = '1'
@@ -791,6 +810,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(2, len(changed_rows))
 
         data = deepcopy(self.empty_repofolder_data)
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = reporoot_guid
         data['new_repo_pos'] = RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None)
         data['need_move'] = True
         data['new_number'] = '2'
@@ -871,6 +892,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(data, changed_rows[0])
 
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(41, u'Vertr\xe4ge und Vereinbarungen', None)
         data['need_move'] = True
         data['new_number'] = '1'
@@ -927,6 +950,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(1, len(changed_rows))
 
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None)
         data['need_move'] = True
         data['new_number'] = '4'
@@ -992,6 +1017,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(2, len(changed_rows))
 
         data = deepcopy(self.empty_repofolder_data)
+        reporoot_guid = IAnnotations(self.repository_root).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = reporoot_guid
         data['new_repo_pos'] = RepositoryPosition(12, u"Rechnungspr\xfcfungskommission", None)
         data['need_move'] = True
         data['new_number'] = '2'
@@ -999,6 +1026,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(data, changed_rows[0])
 
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(121, u'Vertr\xe4ge und Vereinbarungen', '')
         data['need_move'] = True
         data['new_number'] = '1'
@@ -1313,6 +1342,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(1, len(changed_rows))
 
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(2, u'Vertr\xe4ge und Vereinbarungen', None)
         data['need_merge'] = True
         data['new_parent_guid'] = self.get_guid(self.empty_repofolder)
@@ -1375,6 +1406,8 @@ class TestOSMigrationRun(IntegrationTestCase, OSMigrationTestMixin):
         self.assertEqual(data, changed_rows[0])
 
         data = deepcopy(self.leaf_repofolder_data)
+        branch_repofolder_guid = IAnnotations(self.branch_repofolder).get(BUNDLE_GUID_KEY)
+        data['old_parent_guid'] = branch_repofolder_guid
         data['new_repo_pos'] = RepositoryPosition(4, u'Vertr\xe4ge und Vereinbarungen', None)
         data['need_merge'] = True
         data['new_parent_guid'] = changed_rows[0]['new_position_guid']
