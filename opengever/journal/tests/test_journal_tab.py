@@ -127,7 +127,7 @@ class TestJournalTab(FunctionalTestCase):
 
         browser.open(dossier, view=u'tabbedview_view-journal')
         self.assertIn(
-            '&lt;img src="http://not.found/" onerror="script:alert(\'XSS\');" /&gt;',
+            '<img src="http://not.found/" />',
             browser.contents)
 
 

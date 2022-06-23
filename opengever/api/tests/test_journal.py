@@ -103,6 +103,18 @@ class TestJournalPost(IntegrationTestCase):
              u'type': u'ValueError'},
             browser.json)
 
+    @browsing
+    def test_add_journal_entry_via_api_is_xss_safe(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='@journal', method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({
+                         'comment': u'<p>Danger<script>alert("foo")</script> text</p>',
+                         'category': u'information'}))
+
+        entry = self.journal_entries(self.dossier)[-1]
+        self.assertEqual('<p>Danger text</p>', entry['comments'])
+
 
 class TestJournalGet(IntegrationTestCase):
 
