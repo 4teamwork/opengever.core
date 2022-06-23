@@ -3,6 +3,7 @@ from ftw.builder.builder import Builder
 from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.freezer import freeze
+from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.testing import IntegrationTestCase
 
 
@@ -113,6 +114,15 @@ class TestDossierSerializer(IntegrationTestCase):
 
         browser.open(self.subdossier, method="GET", headers=self.api_headers)
         self.assertEqual([], browser.json['back_references_relatedDossier'])
+
+    @browsing
+    def test_dossier_serializer_contains_filing_number(self, browser):
+        self.activate_feature('filing_number')
+        self.login(self.regular_user, browser=browser)
+        IFilingNumber(self.dossier).filing_no = 'OG-Amt-2013-5'
+
+        browser.open(self.dossier, method="GET", headers=self.api_headers)
+        self.assertEqual('OG-Amt-2013-5', browser.json.get("filing_no"))
 
 
 class TestMainDossierExpansion(IntegrationTestCase):
