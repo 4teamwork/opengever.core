@@ -144,6 +144,8 @@
       <element>opengever.dossier.behaviors.dossier.IDossierMarker</element>
       <element>opengever.dossier.templatefolder.interfaces.ITemplateFolder</element>
       <element>opengever.task.task.ITask</element>
+      <element>opengever.workspace.interfaces.IWorkspace</element>
+      <element>opengever.workspace.interfaces.IWorkspaceFolder</element>
     </value>
   </records>
 

@@ -62,6 +62,9 @@ class WorkspaceContextActions(BaseContextActions):
     def is_share_content_available(self):
         return True
 
+    def is_zipexport_available(self):
+        return True
+
 
 @adapter(IWorkspaceFolder, IOpengeverBaseLayer)
 class WorkspaceFolderContextActions(BaseContextActions):
@@ -86,3 +89,6 @@ class WorkspaceFolderContextActions(BaseContextActions):
 
     def is_untrash_context_available(self):
         return ITrasher(self.context).verify_may_untrash(raise_on_violations=False)
+
+    def is_zipexport_available(self):
+        return True
