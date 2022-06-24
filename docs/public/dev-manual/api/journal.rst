@@ -109,3 +109,36 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
         Suchresultate werden **paginiert** wenn die Anzahl Resultate die
         voreingestellte Seitengrösse (default: 25) überschreitet. Siehe
         :doc:`batching` zu Details zum Umgang mit paginierten Resultaten.
+
+
+Optionale Parameter:
+--------------------
+
+- ``b_start``: Das erste zurückzugebende Element
+- ``b_size``: Die maximale Anzahl der zurückzugebenden Elemente
+- ``search``: Filterung nach einem beliebigen Suchbegriff im Titel oder Kommentar
+- ``filters``: Einschränkung nach einem bestimmten Wert eines Feldes
+
+
+**Beispiel: Filtern nach Journal-Kategorie:**
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/fuehrung/dossier-23/@journal?filters.categories:record:list=phone-call HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel: Filtern nach manuellen Journal-Einträgen:**
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/fuehrung/dossier-23/@journal?filters.manual_entries_only:record:boolean=True HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel: Suchen nach Einträgen mit einem Suchbegriff:**
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/fuehrung/dossier-23/@journal?search=Important HTTP/1.1
+    Accept: application/json
