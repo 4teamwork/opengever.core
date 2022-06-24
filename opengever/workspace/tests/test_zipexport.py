@@ -17,11 +17,7 @@ class TestWorkspaceZipExport(IntegrationTestCase):
         self.assertEqual(
             [u'/WS F\xc3lder/Ordnerdokument.txt',
              u'/Teamraumdokument.txt',
-             u'/Die Buergschaft.eml',
-             u'/Allgemeine Informationen',
-             u'/Projekteinf\xfchrung/Go live',
-             u'/Projekteinf\xfchrung/Cleanup installation',
-             u'/Fix user login'],
+             u'/Die Buergschaft.eml'],
             paths)
 
     def test_workspacefolder_zip_export(self):

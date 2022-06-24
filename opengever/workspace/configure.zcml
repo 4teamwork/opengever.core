@@ -126,4 +126,22 @@
   <adapter factory=".delete.WorkspaceFolderDeleter" />
   <adapter factory=".delete.WorkspaceDeleter" />
 
+  <adapter
+      factory="ftw.zipexport.representations.general.NullZipRepresentation"
+      for="opengever.workspace.interfaces.IWorkspaceMeeting
+           zope.interface.Interface"
+      />
+
+  <adapter
+      factory="ftw.zipexport.representations.general.NullZipRepresentation"
+      for="opengever.workspace.interfaces.IToDo
+           zope.interface.Interface"
+      />
+
+  <adapter
+      factory="ftw.zipexport.representations.general.NullZipRepresentation"
+      for="opengever.workspace.interfaces.IToDoList
+           zope.interface.Interface"
+      />
+
 </configure>
