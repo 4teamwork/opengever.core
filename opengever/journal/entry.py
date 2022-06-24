@@ -1,10 +1,12 @@
 from ftw.journal.events.events import JournalEntryEvent
 from opengever.base.oguid import Oguid
-from opengever.base.utils import escape_html
 from opengever.journal import _
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.app.textfield import RichText
+from plone.restapi.interfaces import IFieldDeserializer
+from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
 from zope.globalrequest import getRequest
@@ -12,6 +14,8 @@ from zope.schema.interfaces import IVocabularyFactory
 
 
 MANUAL_JOURNAL_ENTRY = 'manually-journal-entry'
+
+comment_field = RichText(default_mime_type='text/html', output_mime_type='text/x-html-safe')
 
 
 class ManualJournalEntry(object):
@@ -29,10 +33,6 @@ class ManualJournalEntry(object):
         self.documents = documents
 
     def save(self):
-        if self.comment:
-            comment = escape_html(self.comment).encode('utf-8')
-        else:
-            comment = ''
         entry = {'obj': self.context,
                  'action': PersistentDict({
                      'type': MANUAL_JOURNAL_ENTRY,
@@ -42,9 +42,17 @@ class ManualJournalEntry(object):
                      'contacts': self.serialize_contacts(),
                      'users': self.serialize_users()}),
                  'actor': api.user.get_current().getId(),
-                 'comment': comment}
+                 'comment': self.serialize_comment()}
 
         notify(JournalEntryEvent(**entry))
+
+    def serialize_comment(self):
+        if not self.comment:
+            return ''
+
+        deserializer = getMultiAdapter(
+            (comment_field, self.context, self.request), IFieldDeserializer)
+        return deserializer(self.comment).output
 
     def serialize_documents(self):
         """Returns a persistent list of dicts with the following data for for
