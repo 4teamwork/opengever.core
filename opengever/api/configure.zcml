@@ -13,6 +13,7 @@
   <include package="plone.restapi" file="permissions.zcml" />
   <include package="Products.CMFEditions" file="permissions.zcml" />
   <include package="opengever.contact" file="permissions.zcml" />
+  <include package="opengever.disposition" file="permissions.zcml" />
   <include package="opengever.document" file="permissions.zcml" />
   <include package="opengever.repository" file="permissions.zcml" />
   <include package="opengever.trash" file="permissions.zcml" />
@@ -1651,6 +1652,14 @@
       for="opengever.disposition.disposition.IDispositionSchema"
       factory=".disposition.AppraisalPatch"
       permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
+      method="PATCH"
+      name="@transfer-number"
+      for="opengever.disposition.disposition.IDispositionSchema"
+      factory=".disposition.TransferNumberPatch"
+      permission="opengever.disposition.EditTransferNumber"
       />
 
   <plone:service

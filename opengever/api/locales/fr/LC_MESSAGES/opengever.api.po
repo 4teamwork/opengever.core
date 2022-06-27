@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-16 14:08+0000\n"
+"POT-Creation-Date: 2022-06-28 06:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,6 +186,11 @@ msgstr "Seules les réponses de type \"Commentaire\" peuvent être éditées."
 #: ./opengever/api/linked_workspaces.py
 msgid "participant_required"
 msgstr "Le paramètre 'participants' est requis"
+
+#. Default: "Property 'transfer_number' is required."
+#: ./opengever/api/disposition.py
+msgid "transfer_number_required"
+msgstr "Le paramètre 'transfer_number' est requis"
 
 #. Default: "User with userid ${userid} is not a participant in this meeting."
 #: ./opengever/api/attendees_presence_states.py

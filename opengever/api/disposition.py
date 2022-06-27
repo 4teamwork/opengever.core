@@ -1,5 +1,6 @@
 from opengever.api import _
 from opengever.api.deserializer import GeverDeserializeFromJson
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.api.relationfield import relationfield_value_to_object
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import GeverSerializeFolderToJson
@@ -7,6 +8,7 @@ from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.utils import unrestrictedUuidToObject
 from opengever.disposition.disposition import IDispositionSchema
 from opengever.disposition.interfaces import IAppraisal
+from opengever.disposition.interfaces import IDisposition
 from opengever.disposition.response import IDispositionResponse
 from opengever.disposition.validators import OfferedDossiersValidator
 from opengever.repository.interfaces import IRepositoryFolder
@@ -17,6 +19,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
+from plone.restapi.services.content.update import ContentPatch
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -132,6 +135,19 @@ class AppraisalPatch(Service):
             return serializer()
 
         return self.reply_no_content()
+
+
+class TransferNumberPatch(ContentPatch):
+
+    def reply(self):
+        data = json_body(self.request)
+        if 'transfer_number' not in data:
+            raise NotReportedBadRequest(_(
+                u'transfer_number_required',
+                default=u"Property 'transfer_number' is required."))
+        transfer_number = data['transfer_number']
+        IDisposition(self.context).transfer_number = transfer_number
+        return super(TransferNumberPatch, self).reply()
 
 
 @implementer(ISerializeToJson)

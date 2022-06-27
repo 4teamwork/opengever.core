@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
+from opengever.disposition.interfaces import IDisposition
 from opengever.testing import IntegrationTestCase
 from plone import api
 import json
@@ -351,3 +352,114 @@ class TestAppraisalUpdate(IntegrationTestCase):
              'createtreatydossiers000000000001 is not part of the disposition',
              'type': 'BadRequest'},
             browser.json)
+
+
+class TestDispositionPatch(IntegrationTestCase):
+
+    @browsing
+    def test_only_archivist_can_patch_transfer_number(self, browser):
+        self.login(self.records_manager, browser)
+        self.assertIsNone(IDisposition(self.disposition).transfer_number)
+        self.assertEqual('Angebot 31.8.2016', self.disposition.title)
+
+        self.login(self.records_manager, browser)
+        data = {'transfer_number': '213',
+                'title': 'Angebot neu'}
+
+        browser.open(self.disposition.absolute_url(),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertIsNone(IDisposition(self.disposition).transfer_number)
+        self.assertEqual('Angebot neu', self.disposition.title)
+
+        self.login(self.archivist, browser)
+        data = {'transfer_number': '213',
+                'title': 'Angebot neu 2'}
+
+        browser.open(self.disposition.absolute_url(),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('213', IDisposition(self.disposition).transfer_number)
+        self.assertEqual('Angebot neu 2', self.disposition.title)
+
+
+class TestTransferNumberPatch(IntegrationTestCase):
+
+    @browsing
+    def test_transfer_number_parameter_is_required(self, browser):
+        self.login(self.archivist, browser)
+
+        data = {}
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.assertEqual(
+            browser.json,
+            {u'additional_metadata': {},
+             u'message': u'transfer_number_required',
+             u'translated_message': u"Property 'transfer_number' is required",
+             u'type': u'BadRequest'})
+
+    @browsing
+    def test_archivist_can_update_transfer_number_until_disposition_is_disposed(self, browser):
+        self.login(self.archivist, browser)
+
+        self.assertEqual('disposition-state-in-progress',
+                         api.content.get_state(self.disposition))
+        self.assertIsNone(IDisposition(self.disposition).transfer_number)
+
+        data = {'transfer_number': '213'}
+        browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('213', IDisposition(self.disposition).transfer_number)
+
+        self.set_workflow_state('disposition-state-appraised', self.disposition)
+        data = {'transfer_number': '214'}
+        browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('214', IDisposition(self.disposition).transfer_number)
+
+        self.set_workflow_state('disposition-state-disposed', self.disposition)
+        data = {'transfer_number': '215'}
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.set_workflow_state('disposition-state-archived', self.disposition)
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+        self.set_workflow_state('disposition-state-closed', self.disposition)
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
+
+    @browsing
+    def test_records_manager_cannot_update_transfer_number(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.assertEqual('disposition-state-in-progress',
+                         api.content.get_state(self.disposition))
+        self.assertIsNone(IDisposition(self.disposition).transfer_number)
+
+        data = {'transfer_number': '213'}
+        with browser.expect_http_error(code=401, reason='Unauthorized'):
+            browser.open(u'{}/@transfer-number'.format(self.disposition.absolute_url()),
+                         method='PATCH', headers=self.api_headers,
+                         data=json.dumps(data))
