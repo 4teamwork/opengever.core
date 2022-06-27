@@ -139,6 +139,13 @@ def solr_data_for(obj, field=None):
     response = solr.search(filters=("UID:{}".format(obj.UID())))
 
     doc = response.docs[0]
+    if field == 'SearchableText':
+        return (
+            doc.get('SearchableText_de')
+            or doc.get('SearchableText_en')
+            or doc.get('SearchableText_fr')
+            or doc.get('SearchableText_general')
+        )
     return doc.get(field) if field else doc
 
 
