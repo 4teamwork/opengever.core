@@ -1,0 +1,10 @@
+<registry>
+
+  <records interface="ftw.zipexport.interfaces.IZipExportSettings">
+    <value key="enabled_dotted_names" purge="False">
+      <element>opengever.workspace.interfaces.IWorkspace</element>
+      <element>opengever.workspace.interfaces.IWorkspaceFolder</element>
+    </value>
+  </records>
+
+</registry>

@@ -53,12 +53,12 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
     def test_workspace_context_actions(self):
         self.login(self.workspace_member)
-        expected_actions = [u'edit', u'share_content']
+        expected_actions = [u'edit', u'share_content', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
 
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
-        expected_actions = [u'add_invitation', u'edit', u'local_roles', u'share_content']
+        expected_actions = [u'add_invitation', u'edit', u'local_roles', u'share_content', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
 
     def test_delete_action_only_available_for_deactivated_workspaces(self):
@@ -82,16 +82,16 @@ class TestWorkspaceFolderContextActions(IntegrationTestCase):
 
     def test_workspace_folder_context_actions(self):
         self.login(self.workspace_member)
-        expected_actions = [u'edit', u'share_content', u'trash_context']
+        expected_actions = [u'edit', u'share_content', u'trash_context', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
     def test_workspace_folder_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
-        expected_actions = [u'edit', u'local_roles', u'share_content', u'trash_context']
+        expected_actions = [u'edit', u'local_roles', u'share_content', u'trash_context', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
     def test_context_action_for_trashed_workspace_folder(self):
         self.login(self.workspace_member)
         ITrasher(self.workspace_folder).trash()
-        expected_actions = [u'delete_workspace_context', u'share_content', u'untrash_context']
+        expected_actions = [u'delete_workspace_context', u'share_content', u'untrash_context', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
