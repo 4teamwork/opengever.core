@@ -306,6 +306,12 @@
                         "repositoryfolder-state-active"
                     ]
                 },
+                "_creator": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "guid": {
                     "type": "string"
                 },

@@ -79,6 +79,12 @@
                         "opengever_workspace--STATUS--active"
                     ]
                 },
+                "_creator": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "guid": {
                     "type": "string"
                 },

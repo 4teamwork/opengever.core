@@ -10,6 +10,7 @@ from opengever.base.oguid import Oguid
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
+from opengever.journal.interfaces import IManualJournalActor
 from opengever.readonly import is_in_readonly_mode
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.browser.sharing import ROLE_MAPPING
@@ -51,10 +52,15 @@ def propper_string(value):
 def journal_entry_factory(context, action, title,
                           visible=True, comment='', actor=None,
                           documents=None):
+
+    request = getRequest()
+    if IManualJournalActor.providedBy(request):
+        actor = request.get('_manual_journal_actor')
+
     if actor is None:
         actor = api.user.get_current().getId()
 
-    comment = comment == '' and get_change_note(getRequest(), '') or comment
+    comment = comment == '' and get_change_note(request, '') or comment
     title = propper_string(title)
     action = propper_string(action)
     comment = propper_string(comment)
