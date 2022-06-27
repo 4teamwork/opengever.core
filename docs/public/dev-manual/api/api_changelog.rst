@@ -11,6 +11,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Provides filtering and searching.
+
 
 2022.12.0 (2022-06-21)
 ----------------------

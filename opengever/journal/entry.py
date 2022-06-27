@@ -36,6 +36,7 @@ class ManualJournalEntry(object):
         entry = {'obj': self.context,
                  'action': PersistentDict({
                      'type': MANUAL_JOURNAL_ENTRY,
+                     'category': self.category,
                      'title': self.get_title(),
                      'visible': True,
                      'documents': self.serialize_documents(),

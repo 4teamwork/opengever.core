@@ -3,6 +3,7 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
+from opengever.journal.entry import MANUAL_JOURNAL_ENTRY
 from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.form import IManualJournalEntry
 from plone.restapi.batching import HypermediaBatch
@@ -11,6 +12,7 @@ from plone.restapi.interfaces import IFieldDeserializer
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
+from Products.CMFPlone.utils import safe_unicode
 from z3c.form.field import Fields
 from zExceptions import BadRequest
 from zope.annotation.interfaces import IAnnotations
@@ -105,7 +107,8 @@ class JournalGet(Service):
     """
     def reply(self):
         result = {}
-        batch = HypermediaBatch(self.request, self._data())
+        batch = HypermediaBatch(self.request,
+                                self._reverse_items(self._filter_items(self._data())))
 
         result['items'] = self._create_items(batch)
         result['items_total'] = batch.items_total
@@ -127,7 +130,7 @@ class JournalGet(Service):
         for entry in batch:
             action = entry.get('action')
             item = {}
-            item['title'] = translate(action.get('title'), context=self.request)
+            item['title'] = self._item_title(entry)
             item['time'] = json_compatible(entry.get('time'))
             item['actor_id'] = entry.get('actor')
             item['actor_fullname'] = display_name(entry.get('actor'))
@@ -137,8 +140,41 @@ class JournalGet(Service):
 
         return items
 
+    def _item_title(self, item):
+        return translate(item.get('action').get('title'), context=self.request)
+
     def _data(self):
         annotations = IAnnotations(self.context)
         items = deepcopy(annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, []))
+        return items
+
+    def _filter_items(self, items):
+        filters = self.request.get('filters', {})
+        search = safe_unicode(self.request.get('search', '').lower())
+
+        manual_entries_only = filters.get('manual_entries_only', False)
+        categories = filters.get('categories', [])
+
+        filtered_items = []
+        for item in items:
+            action = item.get('action', {})
+            if manual_entries_only:
+                if not action.get('type') == MANUAL_JOURNAL_ENTRY:
+                    continue
+
+            if categories:
+                if action.get('category') not in categories:
+                    continue
+
+            if search:
+                title = safe_unicode(self._item_title(item).lower())
+                comments = safe_unicode(item['comments'].lower())
+                if search not in title and search not in comments:
+                    continue
+
+            filtered_items.append(item)
+        return filtered_items
+
+    def _reverse_items(self, items):
         items.reverse()
         return items

@@ -225,3 +225,83 @@ class TestJournalGet(IntegrationTestCase):
             u'time': u'2017-10-16T00:00:00+00:00',
             u'title': u'Manual entry: Information'
         }, response.get('items')[0])
+
+    @browsing
+    def test_can_filter_by_manual_entries_only(self, browser):
+        self.login(self.regular_user, browser)
+
+        ManualJournalEntry(self.dossier, 'information', 'Manual entry 1', [], [], []).save()
+        ManualJournalEntry(self.dossier, 'information', 'Manual entry 2', [], [], []).save()
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertEqual(19, response.json.get('items_total'))
+
+        response = browser.open(
+            self.dossier, view='@journal?filters.manual_entries_only:record:boolean=True',
+            method='GET', headers=http_headers())
+
+        self.assertEqual(
+            ['Manual entry 2', 'Manual entry 1'],
+            map(lambda item: item.get('comments'), response.json.get('items')))
+
+    @browsing
+    def test_can_filter_by_categories(self, browser):
+        self.login(self.regular_user, browser)
+
+        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
+        ManualJournalEntry(self.dossier, 'phone-call', 'my phone call', [], [], []).save()
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertEqual(19, response.json.get('items_total'))
+
+        response = browser.open(
+            self.dossier, view='@journal?filters.categories:record:list=phone-call',
+            method='GET', headers=http_headers())
+
+        self.assertEqual(
+            ['my phone call'],
+            map(lambda item: item.get('comments'), response.json.get('items')))
+
+    @browsing
+    def test_can_search_by_comment(self, browser):
+        self.login(self.regular_user, browser)
+
+        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
+        ManualJournalEntry(self.dossier, 'phone-call', u'my phone c\xe4ll', [], [], []).save()
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertEqual(19, response.json.get('items_total'))
+
+        response = browser.open(
+            self.dossier, view='@journal?search=c\xc3\xa4ll',
+            method='GET', headers=http_headers())
+
+        self.assertEqual(
+            [u'my phone c\xe4ll'],
+            map(lambda item: item.get('comments'), response.json.get('items')))
+
+    @browsing
+    def test_can_search_by_title(self, browser):
+        self.login(self.regular_user, browser)
+
+        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
+        ManualJournalEntry(self.dossier, 'phone-call', u'my phone c\xe4ll', [], [], []).save()
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertEqual(19, response.json.get('items_total'))
+
+        response = browser.open(
+            self.dossier, view='@journal?search=Manual',
+            method='GET', headers=http_headers())
+
+        self.assertEqual(
+            [u'Manual entry: Phone call', u'Manual entry: Information'],
+            map(lambda item: item.get('title'), response.json.get('items')))
