@@ -33,7 +33,7 @@ class Reactivator(object):
         self._recursive_reactivate(self.context)
 
     def _recursive_reactivate(self, dossier):
-        for subdossier in dossier.get_subdossiers():
+        for subdossier in dossier.get_subdossiers(depth=1):
             self._recursive_reactivate(subdossier.getObject())
 
         if self.wft.getInfoFor(dossier,
