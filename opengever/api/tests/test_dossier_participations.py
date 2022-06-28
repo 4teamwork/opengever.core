@@ -3,11 +3,13 @@ from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.interfaces import IDossierParticipants
 from opengever.dossier.participations import IParticipationData
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
+from plone import api
 import json
 import requests_mock
 
@@ -50,7 +52,8 @@ class TestParticipationsGet(IntegrationTestCase):
                             u'@id': u'http://nohost/plone/@actors/robert.ziegler',
                             u'identifier': u'robert.ziegler'},
                         u'roles': [u'regard']}],
-            u'items_total': 2}
+            u'items_total': 2,
+            u'primary_participation_roles': []}
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.dossier, method='GET', headers=self.api_headers)
@@ -60,6 +63,18 @@ class TestParticipationsGet(IntegrationTestCase):
         browser.open(self.dossier.absolute_url() + '?expand=participations',
                      method='GET', headers=self.api_headers)
         self.assertEqual(expected_json, browser.json['@components']['participations'])
+
+    @browsing
+    def test_get_participations_returns_primary_participation_roles(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(
+            name='primary_participation_roles', interface=IDossierParticipants,
+            value=['regard', 'final-drawing'])
+        browser.open(self.dossier, view='@participations', method='GET', headers=self.api_headers)
+
+        self.assertEqual([{u'title': u'For your information', u'token': u'regard'},
+                          {u'title': u'Final signature', u'token': u'final-drawing'}],
+                         browser.json['primary_participation_roles'])
 
     @browsing
     def test_response_is_batched(self, browser):
@@ -130,7 +145,8 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                  u'participant_title': u'4Teamwork',
                  u'roles': [u'regard']},
             ],
-            u'items_total': 3}
+            u'items_total': 3,
+            u'primary_participation_roles': []}
 
         browser.open(self.dossier.absolute_url() + '/@participations',
                      method='GET', headers=self.api_headers)
@@ -203,7 +219,8 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
                             u'@id': u'http://nohost/plone/@actors/person:1',
                             u'identifier': u'person:1'},
                         u'roles': [u'final-drawing', u'participation']}],
-            u'items_total': 2}
+            u'items_total': 2,
+            u'primary_participation_roles': []}
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.dossier, method='GET', headers=self.api_headers)
@@ -824,8 +841,9 @@ class TestParticipationsExpansion(IntegrationTestCase):
                             u'@id': u'http://nohost/plone/@actors/' + data.participant_id,
                             u'identifier': data.participant_id},
                         u'roles': data.roles}],
-            u'items_total': 1
-            }
+            u'items_total': 1,
+            u'primary_participation_roles': [],
+        }
         self.assertEqual(expected, browser.json['@components']['participations'])
 
     @browsing

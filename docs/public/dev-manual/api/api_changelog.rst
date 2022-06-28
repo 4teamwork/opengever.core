@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@journal``: Provides filtering and searching.
+- ``@participations``: Add field ``primary_participation_roles``. (see :ref:`dossier-participations`)
 
 
 2022.12.0 (2022-06-21)

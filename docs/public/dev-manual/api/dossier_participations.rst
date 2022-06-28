@@ -1,3 +1,5 @@
+.. _dossier-participations:
+
 Beteiligungen
 =============
 
@@ -69,7 +71,13 @@ Ein Beteiligter kann in verschiedenen Rollen an einem Dossier beteiligt sein. Mi
             ]
           }
         ],
-        "items_total": 2
+        "items_total": 2,
+        "primary_participation_roles": [
+          {
+            "title": "Schlusszeichnung",
+            "token": "final-drawing"
+          }
+        ]
       }
 
 
