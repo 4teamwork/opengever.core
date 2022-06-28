@@ -73,6 +73,17 @@ class IDossierParticipants(Interface):
         ),
     )
 
+    primary_participation_roles = schema.List(
+        title=u'Primary participation roles',
+        description=u'These roles are shown separately in the new UI',
+        value_type=schema.Choice(
+            vocabulary=u'opengever.dossier.participation_roles',
+        ),
+        required=False,
+        missing_value=list(),
+        default=list(),
+    )
+
 
 class ITemplateFolderProperties(Interface):
     """Document properties configuration.
