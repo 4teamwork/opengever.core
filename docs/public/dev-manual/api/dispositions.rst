@@ -82,3 +82,29 @@ Der Bewertungsentscheid lässt sich mit einem PATCH request auf den ``@appraisal
 
     HTTP/1.1 204 No Content
     Content-Type: application/json
+
+
+Ablieferungsnummer bearbeiten
+-----------------------------
+
+Die Ablieferungsnummer lässt sich mit einem PATCH request auf den ``@transfer-number`` Endpoint ändern. ``transfer-number`` wird im Body erwartet":
+
+**Request**:
+
+ .. sourcecode:: http
+
+    PATCH http://example.org/fd/ordnungssystem/disposition-234/@transfer-number HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+
+    {
+      "transfer-number": "Angebot 31.8.2016",
+    }
+
+
+ **Response**:
+
+ .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
+    Content-Type: application/json
