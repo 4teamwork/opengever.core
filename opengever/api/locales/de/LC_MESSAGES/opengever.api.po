@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-28 06:29+0000\n"
+"POT-Creation-Date: 2022-06-28 14:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,6 +77,11 @@ msgstr "Bereits in den Papierkorb verschoben"
 msgid "msg_cancel_checkout_disallowed"
 msgstr "Wiederrufen ist nicht erlaubt."
 
+#. Default: "The participant cannot be deleted because he has access to a subfolder on which you do not have admin rights."
+#: ./opengever/api/participations.py
+msgid "msg_cannot_manage_member_in_subfolder"
+msgstr "Der Teilnehmer kann nicht gelöscht werden, da er Zugriff auf einen Unterordner hat, auf dem Sie keine Admin-Rechte haben."
+
 #. Default: "Checkin is not allowed."
 #: ./opengever/api/checkin.py
 msgid "msg_checkin_disallowed"
@@ -131,6 +136,11 @@ msgstr "Das Dokument ist nicht durch denn aktuellen Benutzer ausgecheckt."
 #: ./opengever/api/trash.py
 msgid "msg_obj_not_trashable"
 msgstr "Das Objekt kann nicht in den Papierkorb verschoben werden."
+
+#. Default: "The participant cannot be deleted because he is the only administrator in a subfolder. At least one participant must remain an administrator."
+#: ./opengever/api/participations.py
+msgid "msg_one_in_subfolder_must_remain_admin"
+msgstr "Der Teilnehmer kann nicht gelöscht werden, weil er der einzige Administrator in einem Unterordner ist. Mindestens ein Teilnehmer muss Administrator bleiben."
 
 #. Default: "Property 'files' is required"
 #: ./opengever/api/upload_structure.py

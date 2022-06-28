@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-28 06:29+0000\n"
+"POT-Creation-Date: 2022-06-28 14:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,6 +80,11 @@ msgstr ""
 msgid "msg_cancel_checkout_disallowed"
 msgstr ""
 
+#. Default: "The participant cannot be deleted because he has access to a subfolder on which you do not have admin rights."
+#: ./opengever/api/participations.py
+msgid "msg_cannot_manage_member_in_subfolder"
+msgstr ""
+
 #. Default: "Checkin is not allowed."
 #: ./opengever/api/checkin.py
 msgid "msg_checkin_disallowed"
@@ -133,6 +138,11 @@ msgstr ""
 #. Default: "Object is not trashable"
 #: ./opengever/api/trash.py
 msgid "msg_obj_not_trashable"
+msgstr ""
+
+#. Default: "The participant cannot be deleted because he is the only administrator in a subfolder. At least one participant must remain an administrator."
+#: ./opengever/api/participations.py
+msgid "msg_one_in_subfolder_must_remain_admin"
 msgstr ""
 
 #. Default: "Property 'files' is required"

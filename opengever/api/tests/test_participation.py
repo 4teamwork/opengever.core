@@ -514,6 +514,30 @@ class TestParticipationDelete(IntegrationTestCase):
                          browser.json[u'translated_message'])
 
     @browsing
+    def test_cannot_delete_if_user_is_participant_of_a_folder_on_which_one_does_not_have_admin_rights(self, browser):
+        with self.login(self.workspace_admin, browser):
+            block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
+            add_participation(self.workspace_folder, browser, self.workspace_member.id,
+                              'WorkspaceGuest')
+            add_participation(self.workspace_folder, browser, self.workspace_owner.id,
+                              'WorkspaceMember')
+
+        self.login(self.workspace_owner, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_member.id),
+                method='DELETE',
+                headers=http_headers()
+            )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'The participant cannot be deleted because he has access to a subfolder'
+                         u' on which you do not have admin rights.',
+                         browser.json[u'translated_message'])
+
+    @browsing
     def test_cannot_delete_if_user_is_participant_of_a_folder_on_which_one_does_not_have_view_permission(self, browser):
         with self.login(self.workspace_admin, browser):
             block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
@@ -530,7 +554,30 @@ class TestParticipationDelete(IntegrationTestCase):
                 headers=http_headers()
             )
 
-        self.assertEqual(u'Unauthorized', browser.json[u'type'])
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'The participant cannot be deleted because he has access to a subfolder'
+                         u' on which you do not have admin rights.',
+                         browser.json[u'translated_message'])
+
+    @browsing
+    def test_cannot_delete_if_user_is_only_workspace_admin_of_a_folder(self, browser):
+        with self.login(self.workspace_admin, browser):
+            block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
+
+        self.login(self.administrator, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_admin.id),
+                method='DELETE',
+                headers=http_headers()
+            )
+
+        self.assertEqual(u'BadRequest', browser.json[u'type'])
+        self.assertEqual(u'The participant cannot be deleted because he is the only administrator '
+                         u'in a subfolder. At least one participant must remain an administrator.',
+                         browser.json[u'translated_message'])
 
     @browsing
     def test_cannot_delete_the_last_folder_admin_role_assignment(self, browser):
