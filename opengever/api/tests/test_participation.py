@@ -514,6 +514,25 @@ class TestParticipationDelete(IntegrationTestCase):
                          browser.json[u'translated_message'])
 
     @browsing
+    def test_cannot_delete_if_user_is_participant_of_a_folder_on_which_one_does_not_have_view_permission(self, browser):
+        with self.login(self.workspace_admin, browser):
+            block_role_inheritance(self.workspace_folder, browser, copy_roles=False)
+            add_participation(self.workspace_folder, browser, self.workspace_member.id,
+                              'WorkspaceGuest')
+
+        self.login(self.workspace_owner, browser=browser)
+
+        with browser.expect_http_error(400):
+            browser.open(
+                self.workspace,
+                view='@participations/{}'.format(self.workspace_member.id),
+                method='DELETE',
+                headers=http_headers()
+            )
+
+        self.assertEqual(u'Unauthorized', browser.json[u'type'])
+
+    @browsing
     def test_cannot_delete_the_last_folder_admin_role_assignment(self, browser):
         self.login(self.workspace_admin, browser=browser)
         block_role_inheritance(self.workspace_folder, browser, copy_roles=False)

@@ -2,6 +2,7 @@ from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import Actor
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.interfaces import IWorkspaceFolder
@@ -158,8 +159,9 @@ class ParticipationsDelete(ParticipationTraverseService):
             manager = ManageParticipants(obj, self.request)
             manager._delete(Actor.lookup(token).actor_type, token)
 
-        for folder in obj.listFolderContents(
-                contentFilter={'portal_type': 'opengever.workspace.folder'}):
+        with elevated_privileges():
+            folders = obj.listFolderContents(contentFilter={'portal_type': 'opengever.workspace.folder'})
+        for folder in folders:
             self.recursive_delete_participation(folder, token)
 
 
