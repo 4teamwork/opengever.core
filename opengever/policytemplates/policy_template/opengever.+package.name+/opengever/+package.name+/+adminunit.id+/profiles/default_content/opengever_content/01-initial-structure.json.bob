@@ -37,23 +37,5 @@
                 "Reader"
             ]
         }
-    },
-    {
-        "_path": "kontakte",
-        "_type": "opengever.contact.contactfolder",
-        "title_de": "Kontakte",
-        "title_fr": "Contacts",
-        "title_en": "Contacts",
-        "_transitions": "publish",
-        "_ac_local_roles": {
-            "{{{orgunit.users_group}}}": [
-                "Reader"
-            ],
-            "{{{orgunit.inbox_group}}}": [
-                "Contributor",
-                "Editor",
-                "Reader"
-            ]
-        }
     }
 ]
