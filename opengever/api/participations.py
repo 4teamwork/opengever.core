@@ -1,7 +1,9 @@
 from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import Actor
 from opengever.workspace.activities import WorkspaceWatcherManager
 from opengever.workspace.interfaces import IWorkspaceFolder
@@ -13,6 +15,7 @@ from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zExceptions import BadRequest
 from zExceptions import Forbidden
+from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -136,8 +139,7 @@ class ParticipationsDelete(ParticipationTraverseService):
 
     def reply(self):
         token = self.read_params()
-
-        self.recursive_delete_participation(self.context, token)
+        self.recursive_delete_participation(self.context, token, 0)
         self.request.response.setStatus(204)
         return None
 
@@ -148,7 +150,7 @@ class ParticipationsDelete(ParticipationTraverseService):
 
         return self.params[0]
 
-    def recursive_delete_participation(self, obj, token):
+    def recursive_delete_participation(self, obj, token, depth):
         """It is possible that a subfolder has blocked the role inheritance
         and has assigned it's own roles for a specific user. We have to be sure
         that this user will be deleted in the whole tree and not only in the
@@ -156,11 +158,26 @@ class ParticipationsDelete(ParticipationTraverseService):
         """
         if obj.get_context_with_local_roles() == obj and self.find_participant(token, obj):
             manager = ManageParticipants(obj, self.request)
-            manager._delete(Actor.lookup(token).actor_type, token)
+            try:
+                manager._delete(Actor.lookup(token).actor_type, token)
+            except Unauthorized:
+                raise BadRequest(
+                    _(u'msg_cannot_manage_member_in_subfolder',
+                      default=u'The participant cannot be deleted because he has access to a'
+                      u' subfolder on which you do not have admin rights.'))
+            except NotReportedBadRequest as exc:
+                if(depth > 0):
+                    raise NotReportedBadRequest(
+                        _(u'msg_one_in_subfolder_must_remain_admin',
+                          default=u'The participant cannot be deleted because he is the only '
+                          u'administrator in a subfolder. At least one participant must remain'
+                          u' an administrator.'))
+                raise exc
 
-        for folder in obj.listFolderContents(
-                contentFilter={'portal_type': 'opengever.workspace.folder'}):
-            self.recursive_delete_participation(folder, token)
+        with elevated_privileges():
+            folders = obj.listFolderContents(contentFilter={'portal_type': 'opengever.workspace.folder'})
+        for folder in folders:
+            self.recursive_delete_participation(folder, token, depth + 1)
 
 
 class ParticipationsPatch(ParticipationTraverseService):

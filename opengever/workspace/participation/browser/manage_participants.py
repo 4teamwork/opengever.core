@@ -114,7 +114,9 @@ class ManageParticipants(BrowserView):
         # A type_ of `null` (NullActor) happens when an inactive user gets
         # deleted which is no present in the OGDS.
         # Usually a leftover of a migration
-        elif type_ in ['user', 'group', 'null'] and can_manage_member(self.context, Actor.lookup(token)):
+        elif type_ in ['user', 'group', 'null']:
+            if not can_manage_member(self.context, Actor.lookup(token)):
+                raise Unauthorized()
             RoleAssignmentManager(self.context).clear_by_cause_and_principal(
                 ASSIGNMENT_VIA_SHARING, token)
             self._require_admin_assignment()

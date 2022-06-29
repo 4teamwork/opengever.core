@@ -13,6 +13,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@journal``: Provides filtering and searching.
 - ``@participations``: Add field ``primary_participation_roles``. (see :ref:`dossier-participations`)
+- ``@participations``: Improve error messages for DELETE endpoint.
 
 
 2022.12.0 (2022-06-21)
