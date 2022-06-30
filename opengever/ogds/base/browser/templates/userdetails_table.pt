@@ -107,7 +107,7 @@
       </td>
     </tr>
 
-    <tr tal:condition="python:len(teams) > 0">
+    <tr tal:condition="python:len(teams) > 0 and view.contactfolder_url()">
       <th i18n:translate="label_teams">Teams</th>
       <td>
         <ul class="teams">

@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
+from plone import api
 
 
 class TestUserDetails(IntegrationTestCase):
@@ -31,6 +32,18 @@ class TestUserDetails(IntegrationTestCase):
             'Teams': u'Projekt \xdcberbaung Dorfmatte',
             'URL': 'http://www.example.com',
         }, metadata)
+
+    @browsing
+    def test_hide_teams_in_user_details_if_contact_folder_does_not_exist(self, browser):
+        with self.login(self.manager):
+            api.content.delete(self.contactfolder)
+
+        self.login(self.regular_user, browser)
+        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+
+        metadata = dict(browser.css('.vertical').first.lists())
+        self.assertIn('Name', metadata)
+        self.assertNotIn('Teams', metadata)
 
     @browsing
     def test_parentheses_do_not_appear_without_abbreviation(self, browser):
@@ -125,3 +138,15 @@ class TestUserDetailsPlain(IntegrationTestCase):
         }, metadata)
 
         self.assertEquals([], browser.css('h1'))
+
+    @browsing
+    def test_hide_teams_in_user_details_plain_if_contact_folder_does_not_exist(self, browser):
+        with self.login(self.manager):
+            api.content.delete(self.contactfolder)
+
+        self.login(self.regular_user, browser)
+        browser.open(self.portal, view='@@user-details-plain/kathi.barfuss')
+
+        metadata = dict(browser.css('.vertical').first.lists())
+        self.assertIn('Name', metadata)
+        self.assertNotIn('Teams', metadata)

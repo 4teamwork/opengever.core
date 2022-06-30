@@ -46,7 +46,11 @@ class UserDetails(BrowserView):
         return self
 
     def contactfolder_url(team_id):
-        return get_contactfolder_url()
+        try:
+            contact_url = get_contactfolder_url()
+            return contact_url
+        except Exception:
+            return ''
 
     def groupmembers_url(self, groupid):
         return groupmembers_url(groupid)
