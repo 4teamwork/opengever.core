@@ -251,7 +251,7 @@ class TestListingStats(SolrIntegrationTestCase):
     def test_listing_stats_pivot_queries_supports_special_characters(self, browser):
         self.login(self.regular_user, browser)
         browser.open(
-            u'{}/@listing-stats?queries=Title:Vertr\xe4ge'.format(
+            u'{}/@listing-stats?queries=Title_de:Vertr\xe4ge'.format(
                 self.dossier.absolute_url()),
             headers={'Accept': 'application/json'},
         )
@@ -260,6 +260,6 @@ class TestListingStats(SolrIntegrationTestCase):
             {u'count': 12,
              u'field': u'listing_name',
              u'value': u'documents',
-             u'queries': {u'Title:Vertr\xe4ge': 3}
+             u'queries': {u'Title_de:Vertr\xe4ge': 7}
              },
             self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))

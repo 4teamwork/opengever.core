@@ -309,10 +309,8 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
                                   document_author=u'Hugo Boss',
                                   ))
         self.commit_solr()
-        solr = getUtility(ISolrSearch)
 
-        response = solr.search(filters=("UID:{}".format(document.UID())))
-        indexed_value = response.docs[0].get('SearchableText')
+        indexed_value = solr_data_for(document, 'SearchableText')
         self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 44 44 foo bar',
                       indexed_value)
 

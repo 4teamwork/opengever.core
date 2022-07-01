@@ -62,13 +62,13 @@ class TestDocumentsTab(SolrIntegrationTestCase):
             self.branch_repofolder,
             view='tabbed_view/listing?view_name=documents-proxy&pagesize=10000&searchable_text=vertrag'
         )
-        self.assertEqual(8, len(browser.css('table.listing tbody tr')))
+        self.assertEqual(11, len(browser.css('table.listing tbody tr')))
 
         # load page 2 with pagesize of 3  with text "vertrag"
         browser.open(
             self.branch_repofolder,
             view='tabbed_view/select_all?view_name=documents-proxy&pagesize=3&pagenumber=2&selected_count=3&searchable_text=vertrag'
         )
-        # 3 before + 3 already loaded + 2 after = 8 total
+        # 3 before + 3 already loaded + 5 after = 11 total
         self.assertEqual(3, len(browser.css('#above_visibles input')))
-        self.assertEqual(2, len(browser.css('#beneath_visibles input')))
+        self.assertEqual(5, len(browser.css('#beneath_visibles input')))

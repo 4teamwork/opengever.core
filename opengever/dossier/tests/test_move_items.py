@@ -1423,7 +1423,7 @@ class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
         browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.branch_repofolder.title_or_id()))))
         self.assertEqual('/plone/ordnungssystem/fuhrung|1. F\xc3\xbchrung', browser.contents)
 
-        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.leaf_repofolder.title_or_id().replace("-", " ")))))
+        browser.open(u'?'.join((autocomplete_url, u'q="{}"'.format(self.leaf_repofolder.title_or_id().replace("-", " ")))))
         self.assertEqual(
             '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen|1.1. Vertr\xc3\xa4ge und Vereinbarungen',
             browser.contents,
@@ -1452,7 +1452,7 @@ class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
             u'@@autocomplete-search',
         ))
 
-        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.dossier.title_or_id()))))
+        browser.open(u'?'.join((autocomplete_url, u'q="{}"'.format(self.dossier.title_or_id()))))
         self.assertEqual(
             '/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1'
             '|Vertr\xc3\xa4ge mit der kantonalen Finanzverwaltung',
@@ -1469,10 +1469,10 @@ class TestMoveItemsWithTestbrowserSolr(SolrIntegrationTestCase):
             u'@@autocomplete-search',
         ))
 
-        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.inactive_dossier.title_or_id()))))
+        browser.open(u'?'.join((autocomplete_url, u'q="{}"'.format(self.inactive_dossier.title_or_id()))))
         self.assertEqual('', browser.contents)
 
-        browser.open(u'?'.join((autocomplete_url, u'q={}'.format(self.expired_dossier.title_or_id()))))
+        browser.open(u'?'.join((autocomplete_url, u'q="{}"'.format(self.expired_dossier.title_or_id()))))
         self.assertEqual('', browser.contents)
 
 

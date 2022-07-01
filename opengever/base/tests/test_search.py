@@ -266,10 +266,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.request.processInputs()
         self.search.solr_results()
         self.solr.search.assert_called_with(
-            query=(u'{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}'
-                   u'Title:foo^100 OR Title:foo*^20 OR SearchableText:foo^5 '
-                   u'OR SearchableText:foo* OR metadata:foo^10 '
-                   u'OR metadata:foo*^2 OR sequence_number_string:foo^2000'),
+            query=(u'foo'),
             filters=[self.default_portal_types_filter(), u'trashed:false'],
             start=0,
             rows=10,
@@ -291,7 +288,7 @@ class TestSolrSearch(IntegrationTestCase):
         self.request.processInputs()
         self.search.solr_results()
         self.solr.search.assert_called_with(
-            query=u'*:*',
+            query=u'*',
             filters=[self.default_portal_types_filter(),
                      u'responsible:hans.muster',
                      u'trashed:false'],

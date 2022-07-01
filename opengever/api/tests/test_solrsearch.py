@@ -86,7 +86,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_raises_internal_error_for_invalid_queries(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(500):
-            url = u'{}/@solrsearch?q=OR'.format(self.portal.absolute_url())
+            url = u'{}/@solrsearch?fq=bla:foo'.format(self.portal.absolute_url())
             browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(u'InternalError', browser.json['type'])
@@ -108,7 +108,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_raw_query(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = u'{}/@solrsearch?q.raw=Title:Kommentar'.format(self.portal.absolute_url())
+        url = u'{}/@solrsearch?q.raw=title:Kommentar'.format(self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(1, browser.json["items_total"])
@@ -718,7 +718,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
     def test_include_breadcrumbs(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = u'{}/@solrsearch?q=Programm&breadcrumbs=1'.format(
+        url = u'{}/@solrsearch?q=Programm&breadcrumbs=1&fq=portal_type:opengever.document.document'.format(
             self.portal.absolute_url())
         browser.open(url, headers=self.api_headers)
         document = browser.json['items'][0]
@@ -1056,7 +1056,7 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(500):
             url = u'{}/@solrsearch'.format(self.portal.absolute_url())
-            browser.open(url, method='POST', data=json.dumps({'q': 'OR'}), headers=self.api_headers)
+            browser.open(url, method='POST', data=json.dumps({'fq': 'foo:bar'}), headers=self.api_headers)
 
         self.assertEqual(u'InternalError', browser.json['type'])
 
@@ -1081,7 +1081,7 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
 
         url = u'{}/@solrsearch'.format(self.portal.absolute_url())
         browser.open(url, method='POST',
-                     data=json.dumps({'q.raw': 'Title:Kommentar'}),
+                     data=json.dumps({'q.raw': 'title:Kommentar'}),
                      headers=self.api_headers)
 
         self.assertEqual(1, browser.json["items_total"])

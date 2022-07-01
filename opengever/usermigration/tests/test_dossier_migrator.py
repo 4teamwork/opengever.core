@@ -66,7 +66,7 @@ class TestDossierMigratorForResponsibleSolr(SolrIntegrationTestCase):
     def test_searchable_text_index_gets_updated(self):
         self.login(self.manager)
 
-        searchable_text = solr_data_for(self.dossier).get('SearchableText')
+        searchable_text = solr_data_for(self.dossier, 'SearchableText')
         self.assertEqual(self.dossier_responsible.id,
                          IDossier(self.dossier).responsible)
         self.assertIn(self.dossier_responsible.id, searchable_text)
@@ -80,7 +80,7 @@ class TestDossierMigratorForResponsibleSolr(SolrIntegrationTestCase):
         migrator.migrate()
         self.commit_solr()
 
-        searchable_text = solr_data_for(self.dossier).get('SearchableText')
+        searchable_text = solr_data_for(self.dossier, 'SearchableText')
         self.assertEqual(self.regular_user.id,
                          IDossier(self.dossier).responsible)
         self.assertNotIn(self.dossier_responsible.id, searchable_text)

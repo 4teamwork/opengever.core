@@ -457,7 +457,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         payload = {
             'listing_name': 'dossiers',
-            'search': self.dossier.title
+            'search': '"{}"'.format(self.dossier.title.encode('utf8'))
         }
 
         # Report
@@ -466,7 +466,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
         rows = list(workbook.active.rows)
 
         # Listing
-        view = '@listing?name=dossiers&search={}'.format(
+        view = '@listing?name=dossiers&search="{}"'.format(
             self.dossier.title.encode('utf-8'))
         browser.open(self.portal, view=view, headers=self.api_headers)
 

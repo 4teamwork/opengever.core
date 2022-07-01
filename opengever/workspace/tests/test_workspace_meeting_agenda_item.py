@@ -193,7 +193,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         self.workspace_meeting.reindexObject()
         self.commit_solr()
 
-        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        searchable_text = solr_data_for(self.workspace_meeting, 'SearchableText')
 
         self.assertEqual(
             u'Genehmigung des Lageberichts',
@@ -225,7 +225,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         self.workspace_meeting.reindexObject()
         self.commit_solr()
 
-        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        searchable_text = solr_data_for(self.workspace_meeting, 'SearchableText')
         self.assertNotIn("Danger text", searchable_text)
         self.assertNotIn("Danger decision", searchable_text)
 
@@ -238,7 +238,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
                          'decision': u'Danger<script>alert("foo")</script> decision'}))
 
         self.commit_solr()
-        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        searchable_text = solr_data_for(self.workspace_meeting, 'SearchableText')
         self.assertIn("Danger text", searchable_text)
         self.assertIn("Danger decision", searchable_text)
 
@@ -250,7 +250,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
         self.workspace_meeting.reindexObject()
         self.commit_solr()
 
-        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        searchable_text = solr_data_for(self.workspace_meeting, 'SearchableText')
         self.assertNotIn(u'\xc4 new title', searchable_text)
         self.assertNotIn(u'My <b>bold</b> text', searchable_text)
         self.assertNotIn(u'My <b>bold</b> decision', searchable_text)
@@ -267,7 +267,7 @@ class TestWorkspaceMeetingAgendaItemSolr(SolrIntegrationTestCase):
                      data=json.dumps(data))
 
         self.commit_solr()
-        searchable_text = solr_data_for(self.workspace_meeting).get('SearchableText')
+        searchable_text = solr_data_for(self.workspace_meeting, 'SearchableText')
         self.assertIn(u'\xc4 new title', searchable_text)
         self.assertIn(u'My bold text', searchable_text)
         self.assertNotIn(u'None', searchable_text)

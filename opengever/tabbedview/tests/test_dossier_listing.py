@@ -341,14 +341,14 @@ class TestDossierListing(SolrIntegrationTestCase):
         # check amount of total items with text "sitzung"
         browser.open(
             self.branch_repofolder,
-            view='tabbed_view/listing?view_name=dossiers&pagesize=10000&searchable_text=sitzung'
+            view='tabbed_view/listing?view_name=dossiers&pagesize=10000&searchable_text=sitzungsdossier'
         )
         self.assertEqual(4, len(browser.css('table.listing tbody tr')))
 
         # load page 2 with pagesize of 3 with text "sitzung"
         browser.open(
             self.branch_repofolder,
-            view='tabbed_view/select_all?view_name=dossiers&pagesize=2&pagenumber=2&selected_count=2&searchable_text=sitzung'
+            view='tabbed_view/select_all?view_name=dossiers&pagesize=2&pagenumber=2&selected_count=2&searchable_text=sitzungsdossier'
         )
         # 2 before + 2 already loaded + 0 after = 4 total
         self.assertEqual(2, len(browser.css('#above_visibles input')))

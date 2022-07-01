@@ -10,8 +10,8 @@ class TestLivesearchGet(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         # dossier
-        url = u'{}/@livesearch?q={}'.format(self.portal.absolute_url(),
-                                            self.dossier.title)
+        url = u'{}/@livesearch?q="{}"'.format(self.portal.absolute_url(),
+                                              self.dossier.title)
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -25,8 +25,8 @@ class TestLivesearchGet(SolrIntegrationTestCase):
             browser.json[0])
 
         # document
-        url = u'{}/@livesearch?q={}'.format(self.portal.absolute_url(),
-                                            self.proposaldocument.title)
+        url = u'{}/@livesearch?q="{}"'.format(self.portal.absolute_url(),
+                                              self.proposaldocument.title)
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(
@@ -53,7 +53,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     def test_livesearch_by_path(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             self.document.title,
             self.document.absolute_url()[len(self.portal.absolute_url()):])
@@ -67,7 +67,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_review_state(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             self.dossier.title,
             '/'.join(self.dossier.getPhysicalPath()).replace('/plone', ''),
@@ -94,7 +94,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_branch_dossier_is_not_subdossier(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             self.dossier.title,
             '/'.join(self.dossier.getPhysicalPath()).replace('/plone', ''),
@@ -118,7 +118,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_undeterminable_leafnode(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             safe_unicode(self.subdocument.Title()),
             u'/'.join(self.subdocument.getPhysicalPath()).replace(u'/plone', u''),
@@ -130,7 +130,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_branch_repositoryfolder_is_not_leafnode(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             safe_unicode(self.branch_repofolder.Title()),
             '/'.join(self.branch_repofolder.getPhysicalPath()).replace('/plone', ''),
@@ -142,7 +142,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_leaf_repositoryfolder_is_leafnode(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q={}&path={}'.format(
+        url = u'{}/@livesearch?q="{}"&path={}'.format(
             self.portal.absolute_url(),
             safe_unicode(self.leaf_repofolder.Title()),
             u'/'.join(self.leaf_repofolder.getPhysicalPath()).replace(u'/plone', u''),
