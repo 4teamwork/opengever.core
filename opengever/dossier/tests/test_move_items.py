@@ -315,7 +315,30 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         u'Title',
         u'trashed',
         u'UID',
-        ]
+    ]
+
+    # Updating language specific fields is a bit unpredictable as the detected
+    # language may vary. We therefore ignore these fields.
+    ignored_solrdata = [
+        u'_language_',
+        u'Description_de',
+        u'Description_en',
+        u'Description_fr',
+        u'Description_general',
+        u'SearchableText_de',
+        u'SearchableText_en',
+        u'SearchableText_fr',
+        u'SearchableText_general',
+        u'Title_de',
+        u'Title_en',
+        u'Title_fr',
+        u'Title_general',
+    ]
+
+    def remove_ignored_solrdata(self, data):
+        for ignored in self.ignored_solrdata:
+            if ignored in data:
+                del data[ignored]
 
     @browsing
     def test_move_document_metadata_update(self, browser):
@@ -391,6 +414,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         self.login(self.regular_user, browser=browser)
 
         initial_solrdata = solr_data_for(self.subdocument)
+        self.remove_ignored_solrdata(initial_solrdata)
 
         with freeze(self.MOVE_TIME):
             with self.observe_children(self.empty_dossier) as children:
@@ -402,6 +426,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         self.assertEqual(1, len(children['added']))
         moved = children['added'].pop()
         moved_solrdata = solr_data_for(moved)
+        self.remove_ignored_solrdata(moved_solrdata)
 
         # We expect some of the metadata to get modified during pasting
         paste_time_index = to_iso8601(self.MOVE_TIME).replace(".000Z", "Z")
@@ -426,7 +451,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'file_extension',
             u'filename',
             u'filesize',
-            u'SearchableText',
         ]
 
         unchanged_solrdata += self.common_unchanged_solrdata
@@ -463,6 +487,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             moved.reindexObject()
             self.commit_solr()
             reindexed_moved_solrdata = solr_data_for(moved)
+            self.remove_ignored_solrdata(reindexed_moved_solrdata)
 
         # Some index data is not up to date, but does not have to be
         # Other data should be up to date but is not.
@@ -615,6 +640,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         self.login(self.regular_user, browser=browser)
 
         initial_solrdata = solr_data_for(self.subsubdossier)
+        self.remove_ignored_solrdata(initial_solrdata)
 
         with freeze(self.MOVE_TIME):
             with self.observe_children(self.empty_repofolder) as children:
@@ -626,6 +652,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         self.assertEqual(1, len(children['added']))
         moved = children['added'].pop()
         moved_solrdata = solr_data_for(moved)
+        self.remove_ignored_solrdata(moved_solrdata)
 
         # We expect some of the metadata to get modified during pasting
         paste_time_index = to_iso8601(self.MOVE_TIME).replace(".000Z", "Z")
@@ -647,7 +674,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             'path_depth': 4,
             'path_parent': moved.absolute_url_path(),
             'reference': 'Client1 2 / 1',
-            'SearchableText': u'Subsubdossier Client1 2 / 1 4  Subsubkeyword Subsubkeyw\xf6rd',
             'sortable_reference': 'client00000001 00000002 / 00000001',
             'touched': paste_time_index,
         }
@@ -692,6 +718,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             moved.reindexObject()
             self.commit_solr()
             reindexed_moved_solrdata = solr_data_for(moved)
+        self.remove_ignored_solrdata(reindexed_moved_solrdata)
 
         # Some index data is not up to date, but does not have to be
         # Other data should be up to date but is not.
