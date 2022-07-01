@@ -2,7 +2,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
-from ftw.solr.query import make_query
 from opengever.base import interfaces
 from opengever.base import is_solr_feature_enabled
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
@@ -57,7 +56,7 @@ class SolrObjPathSource(ObjPathSource):
             return
 
         results = self.solr.search(
-            query=make_query(query),
+            query=query,
             filters=self.make_solr_filters(self.selectable_filter.criteria),
             rows=limit,
             fl=['path'],

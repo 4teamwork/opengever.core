@@ -2,7 +2,6 @@ from ftw.solr.query import ensure_text
 from ftw.solr.query import escape
 from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
-from ftw.solr.query import make_query
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
@@ -24,6 +23,10 @@ BLACKLISTED_ATTRIBUTES = set([
     'getObject',
     'getUserData',
     'SearchableText',
+    'SearchableText_de',
+    'SearchableText_en',
+    'SearchableText_fr',
+    'SearchableText_general',
     'allowedRolesAndUsers',
 ])
 
@@ -61,13 +64,13 @@ class SolrSearchGet(SolrQueryBaseService):
 
     def extract_query(self, params):
         if 'q' in params:
-            query = make_query(params['q'])
+            query = params['q']
             del params['q']
         elif 'q.raw' in params:
             query = params['q.raw']
             del params['q.raw']
         else:
-            query = '*:*'
+            query = '*'
         return query
 
     def extract_filters(self, params):
@@ -183,7 +186,7 @@ class SolrSearchGet(SolrQueryBaseService):
             sort = params['sort']
             del params['sort']
         else:
-            if query == '*:*':
+            if query == '*':
                 sort = None
             else:
                 sort = 'score desc'

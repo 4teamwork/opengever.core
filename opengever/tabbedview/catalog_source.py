@@ -102,16 +102,9 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
 
     def solr_results(self, query):
         if 'SearchableText' in query:
-            term = query['SearchableText'].rstrip('*').decode('utf8')
-            pattern = (
-                u'(Title:{term}* OR SearchableText:{term}* OR metadata:{term}* OR '
-                u'Title:{term} OR SearchableText:{term} OR metadata:{term})'
-            )
-
-            term_queries = [pattern.format(term=escape(t)) for t in term.split()]
-            solr_query = u' AND '.join(term_queries)
+            solr_query = query['SearchableText'].rstrip('*').decode('utf8')
         else:
-            solr_query = u'*:*'
+            solr_query = u'*'
 
         solr = getUtility(ISolrSearch)
         sort = self._extract_sorting(solr, query)

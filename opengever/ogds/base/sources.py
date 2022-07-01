@@ -452,10 +452,9 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
     def _extend_terms_with_contacts(self, query_string):
         solr = getUtility(ISolrSearch)
-        query = u'SearchableText:{}* AND object_provides:{}'.format(
-            escape(safe_unicode(query_string)),
-            IContact.__identifier__)
-        resp = solr.search(query=query)
+        query = u'text:{}*'.format(escape(safe_unicode(query_string)))
+        filters = [u'object_provides:{}'.format(IContact.__identifier__)]
+        resp = solr.search(query=query, filters=filters)
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
 
@@ -759,10 +758,9 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
 
     def _extend_terms_with_contacts(self, query_string):
         solr = getUtility(ISolrSearch)
-        query = u'SearchableText:{}* AND object_provides:{}'.format(
-            escape(safe_unicode(query_string)),
-            IContact.__identifier__)
-        resp = solr.search(query=query)
+        query = u'text:{}*'.format(query_string)
+        filters = u'object_provides:{}'.format(IContact.__identifier__)
+        resp = solr.search(query=query, filters=filters)
         for result in resp.docs:
             if 'email' in result:
                 self.terms.append(self.getTerm(solr_doc=result))

@@ -75,7 +75,7 @@ class SolrQueryBaseService(Service):
         return rows
 
     def extract_query(self, params):
-        return "*:*"
+        return "*"
 
     def extract_filters(self, params):
         return []
