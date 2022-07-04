@@ -152,6 +152,10 @@ class ListingGet(SolrQueryBaseService):
         query = params.get('search', '').strip()
         if not query:
             return '*'
+
+        if not query.endswith('"'):
+            query += '*'
+
         return query
 
     def extract_filters(self, params):

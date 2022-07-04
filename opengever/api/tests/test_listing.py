@@ -150,7 +150,7 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
         browser.open(self.repository_root, view=view,
                      headers=self.api_headers)
         query = self.solr.search.call_args[1]["query"]
-        self.assertEqual('feedb\xc3\xa4ck', query)
+        self.assertEqual('feedb\xc3\xa4ck*', query)
 
     @browsing
     def test_sort_on_existing_field(self, browser):
