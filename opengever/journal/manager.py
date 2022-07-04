@@ -86,6 +86,23 @@ class JournalManager(object):
     def _is_manual_entry(self, entry):
         return entry.get('action', {}).get('type') == MANUAL_JOURNAL_ENTRY
 
+    def update(self, entry_id, **kwargs):
+        entry = self.lookup(entry_id)
+        entry_action = entry.get('action')
+        if not self._is_manual_entry(entry):
+            raise AutoEntryManipulationException
+
+        if 'comment' in kwargs:
+            entry['comments'] = self._serialize_comment(kwargs.get('comment'))
+
+        if 'documents' in kwargs:
+            entry_action['documents'] = self._serialize_documents(kwargs.get('documents'))
+
+        if 'category' in kwargs:
+            category = kwargs.get('category')
+            entry_action['category'] = category
+            entry_action['title'] = self._get_manual_entry_title(category)
+
     def _notify_journal_event(self, event_obj):
         notify(JournalEntryEvent(**event_obj))
 
