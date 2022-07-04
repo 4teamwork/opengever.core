@@ -1,5 +1,7 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.kub.entity import KuBEntity
+from opengever.kub.interfaces import IKuBSettings
+from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from zExceptions import BadRequest
@@ -20,7 +22,10 @@ class SerializeKuBEntityToJson(object):
         self.request = request
 
     def __call__(self, full_representation=False):
-        return self.context.serialize()
+        serialization = self.context.serialize()
+        serialization['additional_ui_attributes'] = api.portal.get_registry_record(
+            'additional_ui_attributes', interface=IKuBSettings)
+        return serialization
 
 
 class KuBGet(Service):
