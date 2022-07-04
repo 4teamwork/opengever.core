@@ -20,6 +20,11 @@ MANUAL_JOURNAL_ENTRY = 'manually-journal-entry'
 comment_field = RichText(default_mime_type='text/html', output_mime_type='text/x-html-safe')
 
 
+class AutoEntryManipulationException(Exception):
+    """
+    """
+
+
 class JournalManager(object):
     def __init__(self, context):
         self.context = context
@@ -70,6 +75,16 @@ class JournalManager(object):
                 return journal_entry
 
         raise KeyError("Entry '{}' does not exist.".format(entry_id))
+
+    def remove(self, entry_id):
+        entry = self.lookup(entry_id)
+        if not self._is_manual_entry(entry):
+            raise AutoEntryManipulationException()
+
+        self.list().remove(entry)
+
+    def _is_manual_entry(self, entry):
+        return entry.get('action', {}).get('type') == MANUAL_JOURNAL_ENTRY
 
     def _notify_journal_event(self, event_obj):
         notify(JournalEntryEvent(**event_obj))

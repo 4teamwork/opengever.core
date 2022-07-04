@@ -1,6 +1,7 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.journal.manager import AutoEntryManipulationException
 from opengever.journal.manager import JournalManager
 from opengever.testing import IntegrationTestCase
 import pytz
@@ -92,3 +93,36 @@ class TestJournalManager(IntegrationTestCase):
 
         with self.assertRaises(KeyError):
             manager.lookup('invalid')
+
+    @browsing
+    def test_can_remove_entries(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'my comment')
+        entry_id = manager.list()[0].get('id')
+
+        self.assertEqual(1, manager.count())
+        manager.remove(entry_id)
+        self.assertEqual(0, manager.count())
+
+    @browsing
+    def test_remove_invalid_entry_will_raise(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        with self.assertRaises(KeyError):
+            manager.remove('invalid')
+
+    @browsing
+    def test_remove_auto_entry_will_raise(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+
+        with self.assertRaises(AutoEntryManipulationException):
+            manager.remove(manager.list()[0].get('id'))
