@@ -775,8 +775,11 @@
      </str>
       <!-- Field aliases -->
       <str name="f.title.qf">Title_de Title_en Title_fr Title_general</str>
+      <str name="f.Title.qf">Title_de Title_en Title_fr Title_general</str>
       <str name="f.description.qf">Description_de Description_en Description_fr Description_general</str>
+      <str name="f.Description.qf">Description_de Description_en Description_fr Description_general</str>
       <str name="f.text.qf">SearchableText_de SearchableText_en SearchableText_fr SearchableText_general</str>
+      <str name="f.SearchableText.qf">SearchableText_de SearchableText_en SearchableText_fr SearchableText_general</str>
       <!-- Do not allow querying allowedRolesAndUsers or embedded queries -->
       <str name="uf">* -allowedRolesAndUsers -_query_</str>
       <bool name="lowercaseOperators">true</bool>
