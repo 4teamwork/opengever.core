@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from OFS.interfaces import IObjectWillBeAddedEvent
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.behaviors import classification
@@ -18,7 +17,6 @@ from plone import api
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
@@ -292,9 +290,7 @@ def document_added(context, event):
 
 
 def reset_journal_history_after_clone(document, event):
-    annotations = IAnnotations(document)
-    if JOURNAL_ENTRIES_ANNOTATIONS_KEY in annotations:
-        del annotations[JOURNAL_ENTRIES_ANNOTATIONS_KEY]
+    JournalManager(document).clear()
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'

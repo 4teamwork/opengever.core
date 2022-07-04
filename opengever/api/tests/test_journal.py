@@ -1,13 +1,11 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.journal.manager import JournalManager
 from opengever.testing import IntegrationTestCase
-from zope.annotation import IAnnotations
 import json
 import pytz
 
@@ -20,7 +18,7 @@ def http_headers():
 class TestJournalPost(IntegrationTestCase):
 
     def journal_entries(self, obj):
-        return IAnnotations(obj).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        return JournalManager(obj).list()
 
     @browsing
     def test_add_journal_entry(self, browser):
@@ -119,7 +117,7 @@ class TestJournalPost(IntegrationTestCase):
 class TestJournalGet(IntegrationTestCase):
 
     def clear_journal_entries(self, obj):
-        del IAnnotations(obj)[JOURNAL_ENTRIES_ANNOTATIONS_KEY]
+        JournalManager(obj).clear()
 
     @browsing
     def test_returns_empty_list_if_no_jounral_entries_are_available(self, browser):

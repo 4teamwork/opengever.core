@@ -1,4 +1,3 @@
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
 from ftw.table import helper
@@ -6,13 +5,13 @@ from ftw.table.interfaces import ITableSource
 from ftw.table.interfaces import ITableSourceConfig
 from opengever.contact.utils import get_contactfolder_url
 from opengever.journal import _
+from opengever.journal.manager import JournalManager
 from opengever.tabbedview import BaseListingTab
 from opengever.tabbedview import GeverTableSource
 from opengever.tabbedview.helper import linked_ogds_author
 from opengever.tabbedview.helper import readable_ogds_user
 from opengever.tabbedview.helper import tooltip_helper
 from plone import api
-from zope.annotation.interfaces import IAnnotations
 from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.globalrequest import getRequest
@@ -133,8 +132,7 @@ class JournalTableSource(GeverTableSource):
     def validate_base_query(self, query):
         context = self.config.context
         if IAnnotationsJournalizable.providedBy(context):
-            annotations = IAnnotations(context)
-            data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+            data = JournalManager(context).list()
         elif IWorkflowHistoryJournalizable.providedBy(context):
             raise NotImplementedError
 

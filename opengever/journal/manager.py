@@ -1,3 +1,4 @@
+from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.events.events import JournalEntryEvent
 from opengever.base.oguid import Oguid
 from opengever.journal import _
@@ -6,6 +7,7 @@ from persistent.list import PersistentList
 from plone import api
 from plone.app.textfield import RichText
 from plone.restapi.interfaces import IFieldDeserializer
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.event import notify
@@ -50,6 +52,17 @@ class JournalManager(object):
                      'comment': comment}
 
         self._notify_journal_event(event_obj)
+
+    def clear(self):
+        annotations = IAnnotations(self.context)
+        if JOURNAL_ENTRIES_ANNOTATIONS_KEY in annotations:
+            del IAnnotations(self.context)[JOURNAL_ENTRIES_ANNOTATIONS_KEY]
+
+    def count(self):
+        return len(self.list())
+
+    def list(self):
+        return IAnnotations(self.context).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
 
     def _notify_journal_event(self, event_obj):
         notify(JournalEntryEvent(**event_obj))

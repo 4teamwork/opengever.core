@@ -1,11 +1,10 @@
 
 from Acquisition import aq_inner
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.journal.interfaces import IWorkflowHistoryJournalizable
+from opengever.journal.manager import JournalManager
 from Products.Five.browser import BrowserView
 from zope.annotation.interfaces import IAnnotatable
-from zope.annotation.interfaces import IAnnotations
 from zope.interface import alsoProvides
 
 
@@ -19,7 +18,6 @@ class JournalHistory(BrowserView):
 
     def data(self):
         if IAnnotationsJournalizable.providedBy(self.context):
-            annotations = IAnnotations(self.context)
-            return annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+            return JournalManager(self.context).list()
         elif IWorkflowHistoryJournalizable.providedBy(self.context):
             raise NotImplementedError

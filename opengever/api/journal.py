@@ -1,5 +1,4 @@
 from copy import deepcopy
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
@@ -15,7 +14,6 @@ from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.field import Fields
 from zExceptions import BadRequest
-from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.schema.interfaces import ConstraintNotSatisfied
@@ -141,9 +139,7 @@ class JournalGet(JournalService):
         return translate(item.get('action').get('title'), context=self.request)
 
     def _data(self):
-        annotations = IAnnotations(self.context)
-        items = deepcopy(annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, []))
-        return items
+        return deepcopy(JournalManager(self.context).list())
 
     def _filter_items(self, items):
         filters = self.request.get('filters', {})
