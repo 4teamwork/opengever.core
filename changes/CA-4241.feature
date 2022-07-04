@@ -1,0 +1,1 @@
+- Use language specific analyzers for indexing and switch to eDisMax query parser. [buchi]
