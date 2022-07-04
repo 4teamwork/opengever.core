@@ -92,11 +92,13 @@ class TestCMFEditionsModifiers(IntegrationTestCase):
 
         self.assertEqual(previous_journal, journal[:3])
 
+        journal_id = journal[-1].get('id')
         expected_entry = {'action': {
             'visible': True,
             'documents': [],
             'type': 'Reverted document file',
             'title': u'label_document_file_reverted'},
+            'id': journal_id,
             'comments': '',
             'actor': 'kathi.barfuss',
             'time': DateTime('2015/01/28 12:00:00 GMT+1')}
