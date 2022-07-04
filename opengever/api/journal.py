@@ -2,6 +2,7 @@ from copy import deepcopy
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.journal.form import IManualJournalEntry
+from opengever.journal.manager import AutoEntryManipulationException
 from opengever.journal.manager import JournalManager
 from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
 from plone.restapi.batching import HypermediaBatch
@@ -12,8 +13,13 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.field import Fields
+from zExceptions import BadRequest
+from zExceptions import Forbidden
+from zExceptions import NotFound
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
+from zope.interface import implements
+from zope.publisher.interfaces import IPublishTraverse
 
 
 DEFAULT_COMMENT_CATEGORY = 'information'
@@ -22,6 +28,24 @@ DEFAULT_COMMENT_CATEGORY = 'information'
 class JournalService(Service):
 
     fields = Fields(IManualJournalEntry)
+
+    def __init__(self, context, request):
+        super(JournalService, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@journal as parameters
+        self.params.append(name)
+        return self
+
+    def read_params(self):
+        if len(self.params) == 0:
+            raise BadRequest("Must supply a journal ID as URL path parameter.")
+
+        if len(self.params) > 1:
+            raise BadRequest("Only journal ID is a supported URL path parameter.")
+
+        return self.params[0]
 
     def _deserialize_data(self, data):
         deserialized_data = {}
@@ -135,3 +159,24 @@ class JournalGet(JournalService):
     def _reverse_items(self, items):
         items.reverse()
         return items
+
+
+class JournalDelete(JournalService):
+    """API Endpoint to delete an existing manual journal entry.
+
+    DELETE /dossier-1/@journal/123 HTTP/1.1
+    """
+
+    implements(IPublishTraverse)
+
+    def reply(self):
+        entry_id = self.read_params()
+        try:
+            JournalManager(self.context).remove(entry_id)
+        except KeyError:
+            raise NotFound()
+        except AutoEntryManipulationException:
+            raise Forbidden("Only manual journal entries can be removed")
+
+        self.request.response.setStatus(204)
+        return None

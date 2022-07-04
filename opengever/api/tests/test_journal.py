@@ -282,3 +282,79 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual(
             [u'Manual entry: Phone call', u'Manual entry: Information'],
             map(lambda item: item.get('title'), response.json.get('items')))
+
+
+class TestJournalDelete(IntegrationTestCase):
+
+    @browsing
+    def test_removes_entry_with_the_provided_id(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+        manager.add_manual_entry('information', 'second')
+
+        first_entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        self.assertEqual(2, manager.count())
+        browser.open(first_entry.get('@id'), method='DELETE', headers=http_headers())
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(1, manager.count())
+        entry_titles = [item.get('comments') for item in manager.list()]
+        self.assertEqual(['second'], entry_titles)
+
+    @browsing
+    def test_raises_when_id_does_not_exist(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(404):
+            url = '{}/@journal/{}'.format(self.dossier.absolute_url(), 'invalid')
+            browser.open(url, method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+    @browsing
+    def test_raises_without_edit_permission(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        manager = JournalManager(self.inactive_dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+        self.assertEqual(1, manager.count())
+
+        entry = browser.open(
+            self.inactive_dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(401):
+            browser.open(entry.get('@id'), method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(1, manager.count())
+
+    @browsing
+    def test_raises_when_deleting_a_non_manual_journal_entry(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(403):
+            browser.open(entry.get('@id'), method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'message': u'Only manual journal entries can be removed',
+             u'type': u'Forbidden'}, browser.json)

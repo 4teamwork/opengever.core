@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Provides removing of manual journal entries with DELETE method (only available for new manual journal entries).
 - ``@journal``: Returns the ``@id`` and ``id`` of a journal-entry.
 - ``@journal``: Properly deserializes category values provided by the vocabulary. We can now send category with ``{ 'token': 'information' }``.
 

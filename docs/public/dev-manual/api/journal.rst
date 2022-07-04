@@ -146,3 +146,26 @@ Optionale Parameter:
 
     GET /ordnungssystem/fuehrung/dossier-23/@journal?search=Important HTTP/1.1
     Accept: application/json
+
+
+Manuelle Journaleinträge entfernen:
+-----------------------------------
+Ein bestehender manueller Journaleintrag kann mittels DELETE Request auf die entsprechender URL gelöscht werden.
+
+Die URL setzt sich dabei folgendermassen zusammen:
+``context-url/@journal/{journal-id}``
+
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    DELETE /ordnungssystem/fuehrung/dossier-23/@journal/20 HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
