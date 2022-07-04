@@ -64,6 +64,13 @@ class JournalManager(object):
     def list(self):
         return IAnnotations(self.context).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
 
+    def lookup(self, entry_id):
+        for journal_entry in self.list():
+            if journal_entry.get('id') == entry_id:
+                return journal_entry
+
+        raise KeyError("Entry '{}' does not exist.".format(entry_id))
+
     def _notify_journal_event(self, event_obj):
         notify(JournalEntryEvent(**event_obj))
 

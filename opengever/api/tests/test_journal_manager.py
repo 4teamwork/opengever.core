@@ -70,3 +70,25 @@ class TestJournalManager(IntegrationTestCase):
 
         self.assertEqual(1, manager.count())
         self.assertEqual(u'Dossier modified', manager.list().pop().get('action').get('title'))
+
+    @browsing
+    def test_can_lookup_entries(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+        entry_id = manager.list()[0].get('id')
+        entry = manager.lookup(entry_id)
+        self.assertEqual(u'is an agent', entry.get('comments'))
+
+    @browsing
+    def test_lookup_invalid_entry_will_raise(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        with self.assertRaises(KeyError):
+            manager.lookup('invalid')
