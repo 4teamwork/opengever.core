@@ -61,7 +61,7 @@ class DocumentIndexHandler(CustomPropertiesIndexHandler, DexterityItemIndexHandl
         # SearchableText when no attributes are specified for indexing.
         # If this is the case, we need to add the custom properties.
         if attributes:
-            all_fields = set(self.manager.schema.fields.keys())
+            all_fields = self.all_indexable_fields()
             if set(attributes) | set([u'SearchableText']) == all_fields:
                 data.update(self.get_custom_properties())
         return data
