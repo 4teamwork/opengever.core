@@ -1,7 +1,6 @@
 # Adapted from skins/livesearch_reply.py
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
-from ftw.solr.query import make_query
 from opengever.base.solr import OGSolrContentListing
 from Products.CMFCore.utils import getToolByName
 from Products.CMFPlone import PloneMessageFactory as pmf
@@ -54,7 +53,7 @@ class LiveSearchReplyView(BrowserView):
             return []
 
         solr = getUtility(ISolrSearch)
-        query = make_query(self.search_term)
+        query = self.search_term
         filters = [u'trashed:false']
         if self.path:
             filters.append(u'path_parent:%s' % escape(self.path))

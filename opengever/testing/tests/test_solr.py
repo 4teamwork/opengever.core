@@ -19,7 +19,7 @@ class TestSolrIsolation(SolrIntegrationTestCase):
         self.commit_solr()
 
         browser.open(self.repository_root,
-                     view='@solrsearch?q=uniqueterm',
+                     view='@solrsearch?q=uniqueterm*',
                      headers={'Accept': 'application/json'})
 
         result = browser.json

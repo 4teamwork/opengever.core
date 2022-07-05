@@ -1,4 +1,3 @@
-from ftw.solr.query import escape
 from ftw.solr.query import make_path_filter
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
@@ -7,7 +6,6 @@ from opengever.base.solr.fields import REQUIRED_RESPONSE_FIELDS
 from opengever.dossier.indexers import ParticipationIndexHelper
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
-from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zope.component import getUtility
 from ZPublisher.HTTPRequest import record
@@ -151,15 +149,13 @@ class ListingGet(SolrQueryBaseService):
         super(ListingGet, self).__init__(context, request)
 
     def extract_query(self, params):
-        term = params.get('search', '').strip()
-        query = '*:*'
-        if term:
-            pattern = (
-                u'(Title:{term}* OR SearchableText:{term}*'
-                u' OR metadata:{term}*)')
-            term_queries = [
-                pattern.format(term=escape(safe_unicode(t))) for t in term.split()]
-            query = u' AND '.join(term_queries)
+        query = params.get('search', '').strip()
+        if not query:
+            return '*'
+
+        if not query.endswith('"'):
+            query += '*'
+
         return query
 
     def extract_filters(self, params):

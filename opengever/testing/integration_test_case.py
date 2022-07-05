@@ -756,13 +756,7 @@ class IntegrationTestCase(TestCase):
         return admin_unit, org_unit
 
     def assert_solr_called(self, solr, text, **kwargs):
-        query = (
-            u'{{!boost b=recip(ms(NOW,modified),3.858e-10,10,1)}}'
-            u'Title:{0}^100 OR Title:{0}*^20 OR SearchableText:{0}^5 '
-            u'OR SearchableText:{0}* OR metadata:{0}^10 OR '
-            u'metadata:{0}*^2 OR sequence_number_string:{0}^2000'.format(text)
-        )
-        solr.search.assert_called_with(query=query, **kwargs)
+        solr.search.assert_called_with(query=text, **kwargs)
 
     def register_successor(self, predecessor, successor):
         ISuccessorTaskController(successor).set_predecessor(

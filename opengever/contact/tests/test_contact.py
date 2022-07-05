@@ -54,4 +54,4 @@ class TestContact(SolrIntegrationTestCase):
     def test_searchable_text(self):
         self.login(self.regular_user)
         self.assertEqual(u'D\xfcrr Hanspeter',
-                          solr_data_for(self.hanspeter_duerr, 'SearchableText'))
+                         solr_data_for(self.hanspeter_duerr, 'SearchableText'))

@@ -2,7 +2,6 @@ from copy import deepcopy
 from DateTime import DateTime
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
-from ftw.solr.query import make_query
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr import OGSolrContentListing
 from opengever.base.utils import escape_html
@@ -66,9 +65,9 @@ class OpengeverSearch(Search):
 
         searchable_text = self.request.form.get('SearchableText', '')
         if searchable_text:
-            query = make_query(searchable_text)
+            query = searchable_text
         else:
-            query = u'*:*'
+            query = u'*'
 
         filters = self.solr_filters()
         if 'trashed' not in self.request.form:

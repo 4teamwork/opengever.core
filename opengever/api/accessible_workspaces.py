@@ -39,13 +39,14 @@ class AccessibleWorkspacesGet(SolrQueryBaseService):
             allowed_roles_and_users.extend([u'user:{}'.format(group) for group in user.getGroups()])
             allowed_roles_and_users.extend(user.getRoles())
 
-        query = u'object_provides:opengever.workspace.interfaces.IWorkspace'
-
         field = self.fields.get('allowedRolesAndUsers')
-        solr_filter = field.listing_to_solr_filter(allowed_roles_and_users)
+        solr_filters = [
+            field.listing_to_solr_filter(allowed_roles_and_users),
+            u'object_provides:opengever.workspace.interfaces.IWorkspace'
+        ]
 
         solr = getUtility(ISolrSearch)
-        response = solr.unrestricted_search(query=query, filters=solr_filter,
+        response = solr.unrestricted_search(query='*', filters=solr_filters,
                                             sort='sortable_title asc')
 
         self.response_fields = {'@id', '@type', 'review_state', 'title'}

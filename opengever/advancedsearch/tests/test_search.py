@@ -64,14 +64,14 @@ class TestSearchWithContent(SolrIntegrationTestCase):
 
         browser.open(self.portal, view='advanced_search')
         browser.fill({
-            'Text': "kantonalen Finanzverwaltung",
+            'Text': '"kantonalen Finanzverwaltung"',
             'Type': ['opengever.dossier.behaviors.dossier.IDossierMarker']})
         browser.css('#form-buttons-button_search').first.click()
 
         self.assertEquals(['1'], browser.css('#search-results-number').text)
         self.assertEquals(
             'object_provides=opengever.dossier.behaviors.dossier.IDossierMarker'
-            '&SearchableText=kantonalen+Finanzverwaltung',
+            '&SearchableText=%22kantonalen+Finanzverwaltung%22',
             urlparse.urlparse(browser.url).query)
         self.assertEquals(
             [u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'],
@@ -83,7 +83,7 @@ class TestSearchWithContent(SolrIntegrationTestCase):
 
         browser.open(self.portal, view='advanced_search')
         browser.fill({
-            'Text': u'Vertr\xe4gsentwurf',
+            'Text': u'"Vertr\xe4gsentwurf"',
             'Type': ['opengever.document.behaviors.IBaseDocument'],
         })
         browser.css('#form-buttons-button_search').first.click()
@@ -115,7 +115,7 @@ class TestSearchWithContent(SolrIntegrationTestCase):
         browser.open(self.portal, view='advanced_search')
 
         browser.fill({
-            'Text': "kantonalen Finanzverwaltung",
+            'Text': '"kantonalen Finanzverwaltung"',
             'form.widgets.object_provides': IDossierMarker.__identifier__,
             'form.widgets.start_1': "10.10.2015"})
         browser.css('#form-buttons-button_search').first.click()
@@ -125,7 +125,7 @@ class TestSearchWithContent(SolrIntegrationTestCase):
 
         browser.open(self.portal, view='advanced_search')
         browser.fill({
-            'Text': "kantonalen Finanzverwaltung",
+            'Text': '"kantonalen Finanzverwaltung"',
             'form.widgets.object_provides': IDossierMarker.__identifier__,
             'form.widgets.start_1': "10.01.2017"})
         browser.css('#form-buttons-button_search').first.click()

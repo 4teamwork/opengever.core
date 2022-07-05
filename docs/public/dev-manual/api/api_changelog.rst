@@ -8,6 +8,8 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@solrsearch``: The Solr query parser has been switched from Lucene to eDisMax. The ``q`` and ``q.raw`` parameters now behave identically and both expect a query in eDisMax syntax.
+
 
 Other Changes
 ^^^^^^^^^^^^^

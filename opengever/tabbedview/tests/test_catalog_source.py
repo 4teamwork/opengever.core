@@ -21,21 +21,10 @@ class TestSolrSearch(IntegrationTestCase):
             BaseCatalogListingTab(self.portal, self.request), self.request)
 
     def test_solr_query_contains_searchable_text(self):
-        self.source.solr_results({'SearchableText': 'foo*'})
+        self.source.solr_results({'SearchableText': 'foo bar'})
         self.assertEqual(
             self.solr.search.call_args[1]['query'],
-            u'(Title:foo* OR SearchableText:foo* OR metadata:foo* OR '
-            u'Title:foo OR SearchableText:foo OR metadata:foo)'
-        )
-
-    def test_solr_query_contains_pattern_for_each_term(self):
-        self.source.solr_results({'SearchableText': 'foo bar*'})
-        self.assertEqual(
-            self.solr.search.call_args[1]['query'],
-            u'(Title:foo* OR SearchableText:foo* OR metadata:foo* OR '
-            u'Title:foo OR SearchableText:foo OR metadata:foo) AND '
-            u'(Title:bar* OR SearchableText:bar* OR metadata:bar* OR '
-            u'Title:bar OR SearchableText:bar OR metadata:bar)'
+            u'foo bar'
         )
 
     def test_solr_filters_contain_trashed(self):

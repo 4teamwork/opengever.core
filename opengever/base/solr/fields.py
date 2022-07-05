@@ -285,6 +285,36 @@ class ListingField(SimpleListingField):
         return self.transform(value)
 
 
+class MultiLanguageListingField(ListingField):
+    def __init__(self, field_name, indexes, accessor=None, sort_index=None,
+                 transform=None, additional_required_fields=[], title=None):
+        self.field_name = field_name
+        self.index = None
+        self.indexes = indexes
+        self.accessor = accessor
+        self.sort_index = sort_index
+        self.transform = transform
+        self.additional_required_fields = additional_required_fields
+        self.title = title or field_name
+
+    def listing_to_solr_filter(self, value):
+        if self.indexes is None:
+            return
+        if isinstance(value, list):
+            value = map(filter_escape, value)
+            value = map(safe_unicode, value)
+            value = u' OR '.join(value)
+        else:
+            value = filter_escape(safe_unicode(value))
+
+        # Convert python empty string to solr empty string
+        if value == u'':
+            value = u'""'
+
+        return u' OR '.join(
+            [u'{}: ({})'.format(index, value) for index in self.indexes])
+
+
 class DateListingField(SimpleListingField):
 
     @staticmethod
@@ -443,9 +473,11 @@ FIELDS_WITH_MAPPING = [
         'delivery_date',
         title=document_mf(u'label_document_delivery_date'),
     ),
-    ListingField(
+    MultiLanguageListingField(
         'description',
-        index='Description',
+        indexes=['Description_de', 'Description_en', 'Description_fr', 'Description_general'],
+        accessor='Description',
+        additional_required_fields=['Description'],
         title=dossier_mf(u'label_description', default=u'Description'),
     ),
     ListingField(
@@ -634,12 +666,12 @@ FIELDS_WITH_MAPPING = [
         sort_index=DEFAULT_SORT_INDEX,
         additional_required_fields=['bumblebee_checksum', 'path'],
     ),
-    ListingField(
+    MultiLanguageListingField(
         'title',
-        index='Title',
+        indexes=['Title_de', 'Title_en', 'Title_fr', 'Title_general'],
         accessor=translated_title,
         sort_index='sortable_title',
-        additional_required_fields=['portal_type'],
+        additional_required_fields=['portal_type', 'Title'],
         title=dossier_mf(u'label_title', default=u'Title'),
     ),
     DateListingField(
@@ -657,6 +689,10 @@ copied_fields = deepcopy(FIELDS_WITH_MAPPING)
 for field in copied_fields:
     field.field_name = '-' + field.field_name
     field.index = '-' + field.index if field.index else None
+    field.indexes = (
+        ['-' + index for index in field.indexes]
+        if getattr(field, 'indexes', False) else None
+    )
 FIELDS_WITH_MAPPING.extend(copied_fields)
 
 
