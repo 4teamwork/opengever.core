@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Returns the ``@id`` and ``id`` of a journal-entry.
 - ``@journal``: Properly deserializes category values provided by the vocabulary. We can now send category with ``{ 'token': 'information' }``.
 
 2022.13.0 (2022-07-07)

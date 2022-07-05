@@ -169,12 +169,14 @@ class TestJournalGet(IntegrationTestCase):
 
         user = OgdsUserToContactAdapter.query.get(self.regular_user.id)
 
+        manager = JournalManager(self.dossier)
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            JournalManager(self.dossier).add_manual_entry(
+            manager.add_manual_entry(
                 'information', 'is an agent',
                 [person],
                 [user],
                 [self.document])
+            manager.list()[-1]['id'] = '123-456-789'  # mock id
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal?b_size=2',
@@ -183,6 +185,8 @@ class TestJournalGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual({
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/@journal/123-456-789',
+            u'id': '123-456-789',
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
             u'actor_id': u'kathi.barfuss',
             u'comment': u'is an agent',
