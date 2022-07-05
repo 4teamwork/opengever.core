@@ -333,6 +333,41 @@ class TestActorsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_actors_response_for_group_with_group_prefix(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        actor_id = 'group:projekt_a'
+        url = "{}/{}".format(self.actors_url, actor_id)
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+
+        self.assertDictEqual(
+            {
+                u'@id': url,
+                u'@type': u'virtual.ogds.actor',
+                u'active': True,
+                u'actor_type': u'group',
+                u'identifier': actor_id,
+                u'is_absent': False,
+                u'portrait_url': None,
+                u'label': u'Projekt A',
+                u'representatives': [
+                    {
+                        'identifier': u'kathi.barfuss',
+                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                    },
+                    {
+                        'identifier': u'robert.ziegler',
+                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                    },
+                ],
+                u'represents': {
+                    u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
+                },
+            },
+            browser.json)
+
+    @browsing
     def test_full_representation_for_group(self, browser):
         self.login(self.regular_user, browser=browser)
 

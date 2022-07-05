@@ -813,10 +813,11 @@ class ActorLookup(object):
             return self.create_null_actor()
 
     def load_group(self):
-        if not visible_users_and_groups_filter.can_access_principal(self.identifier):
+        groupid = self.identifier.split(':')[-1]
+        if not visible_users_and_groups_filter.can_access_principal(groupid):
             return None
 
-        return ogds_service().fetch_group(self.identifier)
+        return ogds_service().fetch_group(groupid)
 
     def create_group_actor(self, group=None):
         if not group:

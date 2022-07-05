@@ -10,14 +10,13 @@ Breaking Changes
 ^^^^^^^^^^^^^^^^
 - ``@solrsearch``: The Solr query parser has been switched from Lucene to eDisMax. The ``q`` and ``q.raw`` parameters now behave identically and both expect a query in eDisMax syntax.
 
-
 Other Changes
 ^^^^^^^^^^^^^
 - ``@journal``: Provides filtering and searching.
 - ``@participations``: Add field ``primary_participation_roles``. (see :ref:`dossier-participations`)
 - ``@participations``: Improve error messages for DELETE endpoint.
 - Include additional_ui_attributes in KuB entity serialization.
-
+- ``@actors``: Also handle groupids with group prefix.
 
 2022.12.0 (2022-06-21)
 ----------------------
