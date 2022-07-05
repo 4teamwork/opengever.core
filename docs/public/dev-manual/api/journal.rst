@@ -169,3 +169,27 @@ Die URL setzt sich dabei folgendermassen zusammen:
   .. sourcecode:: http
 
     HTTP/1.1 204 No Content
+
+
+Manuelle Journaleinträge bearbeiten:
+------------------------------------
+Ein bestehender manueller Journaleintrag kann mittels PATCH Request auf die entsprechender URL bearbeitet werden.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    PATCH /ordnungssystem/fuehrung/dossier-23/@journal/20 HTTP/1.1
+    Accept: application/json
+
+    {
+        "category": "phone-call",
+        "comment": "My updated comment"
+    }
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content

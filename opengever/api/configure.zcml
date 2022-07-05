@@ -755,6 +755,14 @@
       />
 
   <plone:service
+      method="PATCH"
+      name="@journal"
+      for="ftw.journal.interfaces.IJournalizable"
+      factory=".journal.JournalPatch"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <plone:service
       method="POST"
       name="@workflow"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"

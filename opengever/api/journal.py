@@ -20,6 +20,7 @@ from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import implements
 from zope.publisher.interfaces import IPublishTraverse
+from zope.schema.interfaces import ConstraintNotSatisfied
 
 
 DEFAULT_COMMENT_CATEGORY = 'information'
@@ -177,6 +178,40 @@ class JournalDelete(JournalService):
             raise NotFound()
         except AutoEntryManipulationException:
             raise Forbidden("Only manual journal entries can be removed")
+
+        self.request.response.setStatus(204)
+        return None
+
+
+class JournalPatch(JournalService):
+    """API Endpoint to update an existing journal entry.
+
+    PATCH /@journal/123 HTTP/1.1
+    {
+        "comment": "My new comment",
+        "category": "information",
+        "related_documents": []
+    }
+    """
+    implements(IPublishTraverse)
+
+    def reply(self):
+        entry_id = self.read_params()
+
+        try:
+            data = self._deserialize_data(json_body(self.request))
+        except (ValueError, ConstraintNotSatisfied) as exc:
+            raise BadRequest('%s: %s' % (exc.__class__.__name__, str(exc)))
+
+        if 'related_documents' in data:
+            data['documents'] = data.pop('related_documents')
+
+        try:
+            JournalManager(self.context).update(entry_id, **data)
+        except KeyError:
+            raise NotFound()
+        except AutoEntryManipulationException:
+            raise Forbidden("Only manual journal entries can be updated")
 
         self.request.response.setStatus(204)
         return None
