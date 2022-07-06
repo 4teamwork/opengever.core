@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.kub.interfaces.IKuBSettings">
+    <value key="additional_ui_attributes"/>
+  </records>
+</registry>

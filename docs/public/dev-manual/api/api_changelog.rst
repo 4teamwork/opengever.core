@@ -16,6 +16,7 @@ Other Changes
 - ``@journal``: Provides filtering and searching.
 - ``@participations``: Add field ``primary_participation_roles``. (see :ref:`dossier-participations`)
 - ``@participations``: Improve error messages for DELETE endpoint.
+- Include additional_ui_attributes in KuB entity serialization.
 
 
 2022.12.0 (2022-06-21)
