@@ -80,7 +80,7 @@ msgstr "Annuler le checkout n'est pas autorisé."
 #. Default: "The participant cannot be deleted because he has access to a subfolder on which you do not have admin rights."
 #: ./opengever/api/participations.py
 msgid "msg_cannot_manage_member_in_subfolder"
-msgstr ""
+msgstr "Vous ne pouvez pas supprimer ce participant car il a accès à un sous-dossier que vous n'êtes pas autorisé à administrer."
 
 #. Default: "Checkin is not allowed."
 #: ./opengever/api/checkin.py
@@ -140,7 +140,7 @@ msgstr "L'objet ne peut pas être déplacé dans la corbeille."
 #. Default: "The participant cannot be deleted because he is the only administrator in a subfolder. At least one participant must remain an administrator."
 #: ./opengever/api/participations.py
 msgid "msg_one_in_subfolder_must_remain_admin"
-msgstr ""
+msgstr "Vous ne pouvez pas supprimer ce participant car il est le seul administateur d'un sous-dossier et que chaque dossier doit toujours avoir au moins un administrateur."
 
 #. Default: "Property 'files' is required"
 #: ./opengever/api/upload_structure.py
