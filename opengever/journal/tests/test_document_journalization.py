@@ -3,7 +3,7 @@ from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
-from opengever.journal.entry import ManualJournalEntry
+from opengever.journal.manager import ManualJournalEntry
 from opengever.journal.handlers import DOCUMENT_ADDED_ACTION
 from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.journal.handlers import PUBLIC_TRIAL_MODIFIED_ACTION

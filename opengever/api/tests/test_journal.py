@@ -5,7 +5,7 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
-from opengever.journal.entry import ManualJournalEntry
+from opengever.journal.manager import ManualJournalEntry
 from opengever.testing import IntegrationTestCase
 from zope.annotation import IAnnotations
 import json

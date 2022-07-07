@@ -3,7 +3,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.sources import ContactsSourceBinder
 from opengever.journal import _
-from opengever.journal.entry import ManualJournalEntry
+from opengever.journal.manager import ManualJournalEntry
 from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.supermodel import model

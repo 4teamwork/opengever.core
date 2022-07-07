@@ -3,9 +3,9 @@ from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
-from opengever.journal.entry import MANUAL_JOURNAL_ENTRY
-from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.form import IManualJournalEntry
+from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
+from opengever.journal.manager import ManualJournalEntry
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
