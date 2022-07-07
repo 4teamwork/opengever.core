@@ -11,6 +11,10 @@ class TestKubClient(KuBIntegrationTestCase):
         self.assertIn('Authorization', self.client.session.headers)
         self.assertEqual(u'Token secret', self.client.session.headers['Authorization'])
 
+    def test_sets_accept_language_header(self, mocker):
+        self.assertIn('Accept-Language', self.client.session.headers)
+        self.assertEqual(u'en', self.client.session.headers['Accept-Language'])
+
     def test_kub_api_url(self, mocker):
         self.assertEqual(u'http://localhost:8000/api/v1/',
                          self.client.kub_api_url)

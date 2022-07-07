@@ -29,9 +29,11 @@ class KuBClient(object):
     @property
     def session(self):
         session = requests.Session()
+        language_tool = api.portal.get_tool('portal_languages')
+        language = language_tool.getPreferredLanguage()
         session.headers.update(
-            {'Authorization': 'Token {}'.format(self.kub_service_token)})
-
+            {'Accept-Language': language,
+             'Authorization': 'Token {}'.format(self.kub_service_token)})
         return session
 
     def query(self, query_str):
