@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.13.0 (2022-07-07)
+----------------------
+
+New features:
+
+
+- Set creator during bundle import and use creator as journal entry actor. [phgross]
+- Enabled zipexport for workspaces and workspacefolders. [phgross]
+- - Use language specific analyzers for indexing and switch to eDisMax query parser. [buchi]
+- Allow saving journal entry comments as HTML structure. [tinagerber]
+- The @journal endpoint can now be filtered and searched. [elioschmutz]
+- Add primary_participation_roles to registry. [tinagerber]
+- Add new @transfer-number endpoint to update a disposition's transfer number. [njohner]
+- Add additional_ui_attributes to registry. [tinagerber]
+
+
+Bug fixes:
+
+
+- Also check folders to which one has no access when removing workspace participations. [tinagerber]
+- Hide teams in user details view if contact folder does not exist. [tinagerber]
+- Also handle groupids with group prefix in @actors endpoint. [tinagerber]
+
+
+Other changes:
+
+
+- Improve error messages when removing workpace participation fails. [tinagerber]
+- Remove contact folder from policy template. [tinagerber]
+- - Bump Solr version to 8.11.2. [buchi]
+- Drastically improve performance of reactivation for highly nested dossiers. [njohner]
+
+
 2022.12.0 (2022-06-21)
 ----------------------
 
