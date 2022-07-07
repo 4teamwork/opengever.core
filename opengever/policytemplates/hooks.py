@@ -60,7 +60,7 @@ IGNORED_DIRECTORIES = {
 
 IGNORED_FILES = {
     'teamraum': ['hooks.py.bob'],
-    'gever': []
+    'gever': ['portal_languages.xml']
 }
 
 VARIABLE_VALUES = {
