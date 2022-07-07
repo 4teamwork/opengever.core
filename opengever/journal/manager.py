@@ -18,44 +18,51 @@ MANUAL_JOURNAL_ENTRY = 'manually-journal-entry'
 comment_field = RichText(default_mime_type='text/html', output_mime_type='text/x-html-safe')
 
 
-class ManualJournalEntry(object):
-    """Object to create and add a journal entry to a context.
-    Its used by the ManualJournalEntry form.
-    """
-
-    def __init__(self, context, category, comment, contacts, users, documents):
+class JournalManager(object):
+    def __init__(self, context):
         self.context = context
-        self.request = getRequest()
-        self.category = category
-        self.comment = comment
-        self.contacts = contacts
-        self.users = users
-        self.documents = documents
 
-    def save(self):
-        entry = {'obj': self.context,
-                 'action': PersistentDict({
-                     'type': MANUAL_JOURNAL_ENTRY,
-                     'category': self.category,
-                     'title': self.get_title(),
-                     'visible': True,
-                     'documents': self.serialize_documents(),
-                     'contacts': self.serialize_contacts(),
-                     'users': self.serialize_users()}),
-                 'actor': api.user.get_current().getId(),
-                 'comment': self.serialize_comment()}
+    def add_manual_entry(self, category, comment, contacts=[], users=[], documents=[]):
+        entry_obj = {'obj': self.context,
+                     'action': PersistentDict({
+                         'type': MANUAL_JOURNAL_ENTRY,
+                         'category': category,
+                         'title': self._get_manual_entry_title(category),
+                         'visible': True,
+                         'documents': self._serialize_documents(documents),
+                         'contacts': self._serialize_contacts(contacts),
+                         'users': self._serialize_users(users)}),
+                     'actor': api.user.get_current().getId(),
+                     'comment': self._serialize_comment(comment)}
 
-        notify(JournalEntryEvent(**entry))
+        self._notify_journal_event(entry_obj)
 
-    def serialize_comment(self):
-        if not self.comment:
+    def add_auto_entry(self, action, title, visible=True,
+                       comment='', actor=None, documents=[]):
+        event_obj = {'obj': self.context,
+                     'action': PersistentDict({
+                         'type': action,
+                         'title': title,
+                         'visible': visible,
+                         'documents': self._serialize_documents(documents),
+                     }),
+                     'actor': actor,
+                     'comment': comment}
+
+        self._notify_journal_event(event_obj)
+
+    def _notify_journal_event(self, event_obj):
+        notify(JournalEntryEvent(**event_obj))
+
+    def _serialize_comment(self, comment):
+        if not comment:
             return ''
 
         deserializer = getMultiAdapter(
-            (comment_field, self.context, self.request), IFieldDeserializer)
-        return deserializer(self.comment).output
+            (comment_field, self.context, getRequest()), IFieldDeserializer)
+        return deserializer(comment).output
 
-    def serialize_documents(self):
+    def _serialize_documents(self, documents):
         """Returns a persistent list of dicts with the following data for for
         all documents:
 
@@ -63,43 +70,43 @@ class ManualJournalEntry(object):
         title: document title
         """
         value = PersistentList()
-        for doc in self.documents:
+        for doc in documents:
             value.append(PersistentDict(
                 {'id': Oguid.for_object(doc).id, 'title': doc.title}))
 
         return value
 
-    def serialize_contacts(self):
+    def _serialize_contacts(self, contacts):
         """Returns a persistent list of dicts for all contacts.
         """
         value = PersistentList()
-        for item in self.contacts:
+        for item in contacts:
             value.append(
                 PersistentDict({'id': item.get_contact_id(),
                                 'title': item.get_title()}))
 
         return value
 
-    def serialize_users(self):
+    def _serialize_users(self, users):
         """Returns a persistent list of dicts for all users.
         """
         value = PersistentList()
-        for item in self.users:
+        for item in users:
             value.append(
                 PersistentDict({'id': item.id, 'title': item.get_title()}))
 
         return value
 
-    def get_title(self):
+    def _get_manual_entry_title(self, category):
         msg = _(u'label_manual_journal_entry',
                 default=u'Manual entry: ${category}',
-                mapping={'category': self.get_category_title()})
+                mapping={'category': self._get_category_title(category)})
 
         return msg
 
-    def get_category_title(self):
+    def _get_category_title(self, category):
         voca_factory = getUtility(
             IVocabularyFactory,
             name='opengever.journal.manual_entry_categories')
 
-        return voca_factory(self.context).getTerm(self.category).title
+        return voca_factory(self.context).getTerm(category).title

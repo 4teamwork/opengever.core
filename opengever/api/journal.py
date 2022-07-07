@@ -4,8 +4,8 @@ from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
 from opengever.journal.form import IManualJournalEntry
+from opengever.journal.manager import JournalManager
 from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
-from opengever.journal.manager import ManualJournalEntry
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
@@ -52,13 +52,8 @@ class JournalPost(Service):
         contacts = []
         users = []
 
-        entry = ManualJournalEntry(self.context,
-                                   category,
-                                   comment,
-                                   contacts,
-                                   users,
-                                   documents)
-        entry.save()
+        JournalManager(self.context).add_manual_entry(
+            category, comment, contacts, users, documents)
 
         self.request.response.setStatus(204)
         return super(JournalPost, self).reply()

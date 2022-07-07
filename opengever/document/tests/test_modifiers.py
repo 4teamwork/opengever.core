@@ -94,6 +94,7 @@ class TestCMFEditionsModifiers(IntegrationTestCase):
 
         expected_entry = {'action': {
             'visible': True,
+            'documents': [],
             'type': 'Reverted document file',
             'title': u'label_document_file_reverted'},
             'comments': '',

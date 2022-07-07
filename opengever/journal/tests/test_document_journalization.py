@@ -3,10 +3,10 @@ from ftw.builder import create
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
-from opengever.journal.manager import ManualJournalEntry
 from opengever.journal.handlers import DOCUMENT_ADDED_ACTION
 from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.journal.handlers import PUBLIC_TRIAL_MODIFIED_ACTION
+from opengever.journal.manager import JournalManager
 from opengever.testing import FunctionalTestCase
 from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
@@ -127,11 +127,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
                           .within(dossier)
                           .titled("File to copy"))
 
-        entry = ManualJournalEntry(document,
-                                   'meeting',
-                                   'comment',
-                                   [], [], [])
-        entry.save()
+        JournalManager(document).add_manual_entry('meeting', 'comment')
 
         cb = dossier.manage_copyObjects(document.getId())
         dossier.manage_pasteObjects(cb)

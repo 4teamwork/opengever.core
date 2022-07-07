@@ -1,22 +1,19 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from ftw.journal.events.events import JournalEntryEvent
 from OFS.interfaces import IObjectWillBeAddedEvent
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
-from opengever.base.oguid import Oguid
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
 from opengever.journal.interfaces import IManualJournalActor
+from opengever.journal.manager import JournalManager
 from opengever.readonly import is_in_readonly_mode
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.sharing.browser.sharing import ROLE_MAPPING
 from opengever.tabbedview.helper import readable_ogds_author
-from persistent.dict import PersistentDict
-from persistent.list import PersistentList
 from plone import api
 from plone.app.versioningbehavior.utils import get_change_note
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
@@ -24,7 +21,6 @@ from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.container.interfaces import IContainerModifiedEvent
-from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.i18nmessageid import MessageFactory
@@ -51,7 +47,7 @@ def propper_string(value):
 
 def journal_entry_factory(context, action, title,
                           visible=True, comment='', actor=None,
-                          documents=None):
+                          documents=[]):
 
     request = getRequest()
     if IManualJournalActor.providedBy(request):
@@ -65,23 +61,7 @@ def journal_entry_factory(context, action, title,
     action = propper_string(action)
     comment = propper_string(comment)
 
-    action_entry = PersistentDict({'type': action,
-                                   'title': title,
-                                   'visible': visible})
-    if documents:
-        action_documents = PersistentList()
-        for doc in documents:
-            action_documents.append(PersistentDict(
-                {'id': Oguid.for_object(doc).id, 'title': doc.title}))
-        action_entry['documents'] = action_documents
-
-    entry = {
-        'obj': context,
-        'action': action_entry,
-        'actor': actor,
-        'comment': comment}
-
-    notify(JournalEntryEvent(**entry))
+    JournalManager(context).add_auto_entry(action, title, visible, comment, actor, documents)
 
 
 def role_mapping_to_str(context, mapping):
