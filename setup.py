@@ -40,11 +40,9 @@ tests_require = [
     'zope.testing',
 ]
 
-solr_conf_files = [
-    os.path.join(parent, name)
-    for (parent, subdirs, files) in os.walk('solr-conf')
-    for name in files + subdirs
-]
+data_files = []
+for (parent, subdirs, files) in os.walk('solr-conf'):
+    data_files.append((parent, [os.path.join(parent, f) for f in files]))
 
 setup(name='opengever.core',
       version=version,
@@ -77,9 +75,7 @@ setup(name='opengever.core',
           'plonetheme',
       ],
       include_package_data=True,
-      data_files=[
-          ('solr-conf', solr_conf_files),
-      ],
+      data_files=data_files,
       zip_safe=False,
       install_requires=[
           'alembic >= 0.7.0',
