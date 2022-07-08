@@ -8,9 +8,11 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@journal``: Rename `comments` attribute for GET @journal entries to `comment` which is the expected naming in the POST request
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Properly deserializes category values provided by the vocabulary. We can now send category with ``{ 'token': 'information' }``.
 
 2022.13.0 (2022-07-07)
 ----------------------

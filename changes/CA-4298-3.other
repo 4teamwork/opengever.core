@@ -1,0 +1,1 @@
+Rename `comments` attribute for GET @journal entries to `comment` which is the expected naming in the POST request. [elioschmutz]
