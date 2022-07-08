@@ -1,6 +1,8 @@
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.kub.interfaces import IKuBSettings
 from plone import api
+from plone.memoize import ram
+from time import time
 import requests
 
 
@@ -51,3 +53,57 @@ class KuBClient(object):
 
     def get_resolve_url(self, _id):
         return u'{}resolve/{}'.format(self.kub_api_url, _id)
+
+    @ram.cache(lambda *args: time() // (60 * 60))
+    def get_kub_id_label_mapping(self):
+        items = {}
+        self._fetch_kub_items(items, url_name='people', kub_type='person')
+        self._fetch_kub_items(items, url_name='organizations', kub_type='organization')
+        self._fetch_kub_items(items, url_name='memberships', kub_type='membership')
+        return items
+
+    def _fetch_kub_items(self, mapping, url=None, url_name=None, kub_type=None):
+        if not url:
+            # KuB only supports a pageSize of 100 - for whatever reason
+            url = u'{}/{}?page1&pageSize=100'.format(self.kub_api_url, url_name)
+
+        resp = self.session.get(url)
+        data = resp.json()
+        for item in data.get('results', []):
+            mapping['{}:{}'.format(kub_type, item['id'])] = item['fullName']
+
+        if data.get('next'):
+            self._fetch_kub_items(mapping, url=data.get('next'),
+                                  url_name=url_name, kub_type=kub_type)
+
+        return mapping
+
+    def _fetch_organizations(self, mapping, url=None):
+        if not url:
+            # KuB only supports a pageSize of 100 - for whatever reason
+            url = u'{}/organizations?page1&pageSize=100'.format(self.kub_api_url)
+
+        resp = self.session.get(url)
+        data = resp.json()
+        for item in data.get('results', []):
+            mapping['organization:{}'.format(item['id'])] = item['name']
+
+        if data.get('next'):
+            self._fetch_persons(mapping, url=data.get('next'))
+
+        return mapping
+
+    def _fetch_memberships(self, mapping, url=None):
+        if not url:
+            # KuB only supports a pageSize of 100 - for whatever reason
+            url = u'{}/memberships?page1&pageSize=100'.format(self.kub_api_url)
+
+        resp = self.session.get(url)
+        data = resp.json()
+        for item in data.get('results', []):
+            mapping['membership:{}'.format(item['id'])] = item['text']
+
+        if data.get('next'):
+            self._fetch_persons(mapping, url=data.get('next'))
+
+        return mapping
