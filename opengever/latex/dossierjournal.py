@@ -1,17 +1,16 @@
 from contextlib import contextmanager
 from copy import deepcopy
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.interfaces import IAnnotationsJournalizable
 from ftw.pdfgenerator.browser.views import ExportPDFView
 from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import IPDFAssembler
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.pdfgenerator.view import MakoLaTeXView
+from opengever.journal.manager import JournalManager
 from opengever.latex import _
 from opengever.latex.interfaces import ILandscapeLayer
 from opengever.latex.listing import ILaTexListing
 from operator import itemgetter
-from zope.annotation.interfaces import IAnnotations
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
@@ -87,8 +86,7 @@ class DossierJorunalLaTeXView(MakoLaTeXView):
         all_entries = []
         for dossier in all_dossiers:
             if IAnnotationsJournalizable.providedBy(dossier):
-                annotations = IAnnotations(dossier)
-                entries = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
+                entries = JournalManager(dossier).list()
 
                 for entry in entries:
                     entry = deepcopy(entry)

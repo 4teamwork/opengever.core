@@ -1,13 +1,11 @@
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
-from opengever.journal.entry import ManualJournalEntry
+from opengever.journal.manager import JournalManager
 from opengever.testing import IntegrationTestCase
-from zope.annotation import IAnnotations
 import json
 import pytz
 
@@ -20,7 +18,7 @@ def http_headers():
 class TestJournalPost(IntegrationTestCase):
 
     def journal_entries(self, obj):
-        return IAnnotations(obj).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        return JournalManager(obj).list()
 
     @browsing
     def test_add_journal_entry(self, browser):
@@ -119,7 +117,7 @@ class TestJournalPost(IntegrationTestCase):
 class TestJournalGet(IntegrationTestCase):
 
     def clear_journal_entries(self, obj):
-        del IAnnotations(obj)[JOURNAL_ENTRIES_ANNOTATIONS_KEY]
+        JournalManager(obj).clear()
 
     @browsing
     def test_returns_empty_list_if_no_jounral_entries_are_available(self, browser):
@@ -139,8 +137,8 @@ class TestJournalGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.clear_journal_entries(self.dossier)
 
-        ManualJournalEntry(self.dossier, 'information', 'first', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'information', 'second', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'first')
+        JournalManager(self.dossier).add_manual_entry('information', 'second')
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal',
@@ -156,8 +154,8 @@ class TestJournalGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.clear_journal_entries(self.dossier)
 
-        ManualJournalEntry(self.dossier, 'information', 'first', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'information', 'second', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'first')
+        JournalManager(self.dossier).add_manual_entry('information', 'second')
 
         browser.open(
             self.dossier.absolute_url() + '/@journal',
@@ -174,9 +172,9 @@ class TestJournalGet(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.clear_journal_entries(self.dossier)
 
-        ManualJournalEntry(self.dossier, 'information', 'first', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'information', 'second', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'information', 'third', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'first')
+        JournalManager(self.dossier).add_manual_entry('information', 'second')
+        JournalManager(self.dossier).add_manual_entry('information', 'third')
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal?b_size=2',
@@ -198,10 +196,11 @@ class TestJournalGet(IntegrationTestCase):
         user = OgdsUserToContactAdapter.query.get(self.regular_user.id)
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            ManualJournalEntry(self.dossier, 'information', 'is an agent',
-                               [person],
-                               [user],
-                               [self.document]).save()
+            JournalManager(self.dossier).add_manual_entry(
+                'information', 'is an agent',
+                [person],
+                [user],
+                [self.document])
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal?b_size=2',
@@ -230,8 +229,8 @@ class TestJournalGet(IntegrationTestCase):
     def test_can_filter_by_manual_entries_only(self, browser):
         self.login(self.regular_user, browser)
 
-        ManualJournalEntry(self.dossier, 'information', 'Manual entry 1', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'information', 'Manual entry 2', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry 1')
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry 2')
 
         response = browser.open(
             self.dossier, view='@journal', method='GET', headers=http_headers())
@@ -250,8 +249,8 @@ class TestJournalGet(IntegrationTestCase):
     def test_can_filter_by_categories(self, browser):
         self.login(self.regular_user, browser)
 
-        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'phone-call', 'my phone call', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'my information')
+        JournalManager(self.dossier).add_manual_entry('phone-call', 'my phone call')
 
         response = browser.open(
             self.dossier, view='@journal', method='GET', headers=http_headers())
@@ -270,8 +269,8 @@ class TestJournalGet(IntegrationTestCase):
     def test_can_search_by_comment(self, browser):
         self.login(self.regular_user, browser)
 
-        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'phone-call', u'my phone c\xe4ll', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'my information')
+        JournalManager(self.dossier).add_manual_entry('phone-call', u'my phone c\xe4ll')
 
         response = browser.open(
             self.dossier, view='@journal', method='GET', headers=http_headers())
@@ -290,8 +289,8 @@ class TestJournalGet(IntegrationTestCase):
     def test_can_search_by_title(self, browser):
         self.login(self.regular_user, browser)
 
-        ManualJournalEntry(self.dossier, 'information', 'my information', [], [], []).save()
-        ManualJournalEntry(self.dossier, 'phone-call', u'my phone c\xe4ll', [], [], []).save()
+        JournalManager(self.dossier).add_manual_entry('information', 'my information')
+        JournalManager(self.dossier).add_manual_entry('phone-call', u'my phone c\xe4ll')
 
         response = browser.open(
             self.dossier, view='@journal', method='GET', headers=http_headers())

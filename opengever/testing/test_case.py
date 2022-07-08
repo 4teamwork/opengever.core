@@ -2,7 +2,6 @@ from AccessControl import getSecurityManager
 from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.keywordwidget.tests import widget  # keep!
 from opengever.activity.model import Notification
 from opengever.base.interfaces import IOpengeverBaseLayer
@@ -13,6 +12,7 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_TESTING
 from opengever.core.testing import OPENGEVER_SOLR_FUNCTIONAL_TESTING
 from opengever.dossier.interfaces import ITemplateFolderProperties
+from opengever.journal.manager import JournalManager
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.models.admin_unit import AdminUnit
@@ -31,7 +31,6 @@ from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
-from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.i18n import translate
@@ -254,9 +253,7 @@ class FunctionalTestCase(TestCase):
         return get_journal_entry(obj, entry)
 
     def get_journal_entries(self, obj):
-        annotations = IAnnotations(obj)
-        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        return data
+        return JournalManager(obj).list()
 
     def assert_journal_entry(self, obj, action_type, title, entry=-1):
         entry = get_journal_entry(obj, entry)

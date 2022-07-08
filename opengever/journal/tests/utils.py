@@ -1,18 +1,11 @@
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
-from zope.annotation.interfaces import IAnnotations
+from opengever.journal.manager import JournalManager
 
 
 def get_journal_length(obj):
     """ Get the lenght of the journal
     """
-    return len(IAnnotations(
-        obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
-            JOURNAL_ENTRIES_ANNOTATIONS_KEY))
+    return JournalManager(obj).count()
 
 
 def get_journal_entry(obj, entry=-1):
-    journal = IAnnotations(
-        obj, JOURNAL_ENTRIES_ANNOTATIONS_KEY).get(
-        JOURNAL_ENTRIES_ANNOTATIONS_KEY)[entry]
-
-    return journal
+    return JournalManager(obj).list()[entry]

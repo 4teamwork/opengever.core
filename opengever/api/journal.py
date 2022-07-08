@@ -1,11 +1,10 @@
 from copy import deepcopy
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.base.vocabulary import voc_term_title
-from opengever.journal.entry import MANUAL_JOURNAL_ENTRY
-from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.form import IManualJournalEntry
+from opengever.journal.manager import JournalManager
+from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
@@ -15,7 +14,6 @@ from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.field import Fields
 from zExceptions import BadRequest
-from zope.annotation.interfaces import IAnnotations
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.schema.interfaces import ConstraintNotSatisfied
@@ -25,43 +23,23 @@ from zope.schema.interfaces import RequiredMissing
 DEFAULT_COMMENT_CATEGORY = 'information'
 
 
-class JournalPost(Service):
-    """Adds a journal-entry"""
+class JournalService(Service):
 
     fields = Fields(IManualJournalEntry)
 
-    def reply(self):
-        data = json_body(self.request)
-        category = data.get('category', DEFAULT_COMMENT_CATEGORY)
-        comment = data.get('comment')
+    def _validate_category(self, category):
+        """Validates if the given category exists in the journal category
+        vocabulary.
 
-        if not comment:
-            raise BadRequest("The request body requires the 'comment' attribute")
+        :param category: string of category-term
 
-        if not self._validate_category(category):
+        :return true if valid, false if invalid
+        """
+        try:
+            voc_term_title(self.fields['category'].field, category)
+            return True
+        except LookupError:
             raise BadRequest("The provided 'category' does not exists.")
-
-        documents, invalid_urls = self._lookup_documents(
-            data.get('related_documents', []))
-
-        if invalid_urls:
-            raise BadRequest(
-                "Could not lookup the following documents: {}".format(
-                    ', '.join(invalid_urls)))
-
-        contacts = []
-        users = []
-
-        entry = ManualJournalEntry(self.context,
-                                   category,
-                                   comment,
-                                   contacts,
-                                   users,
-                                   documents)
-        entry.save()
-
-        self.request.response.setStatus(204)
-        return super(JournalPost, self).reply()
 
     def _lookup_documents(self, related_documents):
         """Lookups documents based on the url.
@@ -83,24 +61,41 @@ class JournalPost(Service):
             except (RequiredMissing, ConstraintNotSatisfied):
                 invalid_urls.append(document_url)
 
-        return documents, invalid_urls
+        if invalid_urls:
+            raise BadRequest(
+                "Could not lookup the following documents: {}".format(
+                    ', '.join(invalid_urls)))
 
-    def _validate_category(self, category):
-        """Validates if the given category exists in the journal category
-        vocabulary.
-
-        :param category: string of category-term
-
-        :return true if valid, false if invalid
-        """
-        try:
-            voc_term_title(self.fields['category'].field, category)
-            return True
-        except LookupError:
-            return False
+        return documents
 
 
-class JournalGet(Service):
+class JournalPost(JournalService):
+    """Adds a journal-entry"""
+
+    def reply(self):
+        data = json_body(self.request)
+        category = data.get('category', DEFAULT_COMMENT_CATEGORY)
+        comment = data.get('comment')
+
+        if not comment:
+            raise BadRequest("The request body requires the 'comment' attribute")
+
+        self._validate_category(category)
+
+        documents = self._lookup_documents(
+            data.get('related_documents', []))
+
+        contacts = []
+        users = []
+
+        JournalManager(self.context).add_manual_entry(
+            category, comment, contacts, users, documents)
+
+        self.request.response.setStatus(204)
+        return super(JournalPost, self).reply()
+
+
+class JournalGet(JournalService):
     """Returns a list of batched journal entries:
 
     GET /repository/dossier-1/@journal HTTP/1.1
@@ -144,9 +139,7 @@ class JournalGet(Service):
         return translate(item.get('action').get('title'), context=self.request)
 
     def _data(self):
-        annotations = IAnnotations(self.context)
-        items = deepcopy(annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, []))
-        return items
+        return deepcopy(JournalManager(self.context).list())
 
     def _filter_items(self, items):
         filters = self.request.get('filters', {})

@@ -1,14 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.testbrowser import browsing
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
-from opengever.journal.entry import ManualJournalEntry
 from opengever.journal.handlers import DOCUMENT_ADDED_ACTION
 from opengever.journal.handlers import DOCUMENT_MODIIFED_ACTION
 from opengever.journal.handlers import PUBLIC_TRIAL_MODIFIED_ACTION
+from opengever.journal.manager import JournalManager
 from opengever.testing import FunctionalTestCase
-from zope.annotation.interfaces import IAnnotations
 from zope.i18n import translate
 
 
@@ -24,9 +22,7 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
                                .with_dummy_content())
 
     def get_journal_entries(self):
-        annotations = IAnnotations(self.document)
-        data = annotations.get(JOURNAL_ENTRIES_ANNOTATIONS_KEY, [])
-        return data
+        return JournalManager(self.document).list()
 
     def assert_journal_entry(self, action, title, entry):
         translated_title = translate(entry.get('action').get('title'),
@@ -127,19 +123,14 @@ class TestDocumentEventJournalizations(FunctionalTestCase):
                           .within(dossier)
                           .titled("File to copy"))
 
-        entry = ManualJournalEntry(document,
-                                   'meeting',
-                                   'comment',
-                                   [], [], [])
-        entry.save()
+        JournalManager(document).add_manual_entry('meeting', 'comment')
 
         cb = dossier.manage_copyObjects(document.getId())
         dossier.manage_pasteObjects(cb)
         clone = dossier.objectValues()[-1]
 
-        journal = IAnnotations(document).get(JOURNAL_ENTRIES_ANNOTATIONS_KEY)
-        journal_clone = IAnnotations(clone).get(
-            JOURNAL_ENTRIES_ANNOTATIONS_KEY)
+        journal = JournalManager(document).list()
+        journal_clone = JournalManager(clone).list()
 
         self.assertNotEquals(len(journal), len(journal_clone))
         self.assertEquals(
