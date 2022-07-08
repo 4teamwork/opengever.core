@@ -21,7 +21,7 @@ Pflicht:
 
 Optional:
 
-``category``: ``String``
+``category``: ``String`` or ``dict with token``
    Journal-Kategory. Mögliche Werte können über den endpoint `@vocabularies/opengever.journal.manual_entry_categories` abgeholt werden.
 
 ``related_documents``: ``String[]``
@@ -37,7 +37,7 @@ Optional:
 
        {
          "comment": "Dossier mit externem Tool archiviert",
-         "category": "phone-call",
+         "category": { "token": "phone-call" },
          "related_documents": [
            "http://localhost:8080/fd/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1/document-1",
            "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-14/document-33"

@@ -23,8 +23,10 @@ class TestJournalPost(IntegrationTestCase):
     @browsing
     def test_add_journal_entry(self, browser):
         self.login(self.regular_user, browser)
-        payload = {'comment': 'example comment', 'category': 'information',
-                   'related_documents': [self.document.absolute_url()]}
+        payload = {
+            'comment': 'example comment',
+            'category': {'token': 'information'},
+            'related_documents': [self.document.absolute_url()]}
 
         browser.open(
             self.dossier.absolute_url() + '/@journal',
@@ -42,40 +44,17 @@ class TestJournalPost(IntegrationTestCase):
         self.assertEqual(self.document.title, documents[0].get('title'))
 
     @browsing
-    def test_post_raises_when_comment_is_missing(self, browser):
-        self.login(self.regular_user, browser)
-        payload = {'category': 'information'}
-
-        with browser.expect_http_error(400):
-            browser.open(
-                self.dossier.absolute_url() + '/@journal',
-                data=json.dumps(payload),
-                method='POST',
-                headers=http_headers(),
-            )
-
-        self.assertEqual(
-            {"message": "The request body requires the 'comment' attribute",
-             "type": "BadRequest"},
-            browser.json)
-
-    @browsing
     def test_post_raises_when_category_does_not_exist(self, browser):
         self.login(self.regular_user, browser)
         payload = {'comment': 'Foo', 'category': 'not-existing'}
 
-        with browser.expect_http_error(400):
+        with browser.expect_http_error(500):
             browser.open(
                 self.dossier.absolute_url() + '/@journal',
                 data=json.dumps(payload),
                 method='POST',
                 headers=http_headers(),
             )
-
-        self.assertEqual(
-            {"message": "The provided 'category' does not exists.",
-             "type": "BadRequest"},
-            browser.json)
 
     @browsing
     def test_post_raises_when_document_lookup_failed(self, browser):
@@ -95,11 +74,6 @@ class TestJournalPost(IntegrationTestCase):
                 method='POST',
                 headers=http_headers(),
             )
-
-        self.assertEqual(
-            {u'message': u'Could not resolve object for UID=https://not-existing',
-             u'type': u'ValueError'},
-            browser.json)
 
     @browsing
     def test_add_journal_entry_via_api_is_xss_safe(self, browser):

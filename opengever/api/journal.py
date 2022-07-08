@@ -1,7 +1,6 @@
 from copy import deepcopy
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
-from opengever.base.vocabulary import voc_term_title
 from opengever.journal.form import IManualJournalEntry
 from opengever.journal.manager import JournalManager
 from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
@@ -13,11 +12,8 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form.field import Fields
-from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
 from zope.i18n import translate
-from zope.schema.interfaces import ConstraintNotSatisfied
-from zope.schema.interfaces import RequiredMissing
 
 
 DEFAULT_COMMENT_CATEGORY = 'information'
@@ -27,63 +23,28 @@ class JournalService(Service):
 
     fields = Fields(IManualJournalEntry)
 
-    def _validate_category(self, category):
-        """Validates if the given category exists in the journal category
-        vocabulary.
+    def _deserialize_data(self, data):
+        deserialized_data = {}
+        for name, value in data.items():
+            field = IManualJournalEntry.get(name)
+            if field is None:
+                continue
 
-        :param category: string of category-term
+            deserializer = queryMultiAdapter(
+                (field, self.context, self.request), IFieldDeserializer)
+            deserialized_data[name] = deserializer(value)
 
-        :return true if valid, false if invalid
-        """
-        try:
-            voc_term_title(self.fields['category'].field, category)
-            return True
-        except LookupError:
-            raise BadRequest("The provided 'category' does not exists.")
-
-    def _lookup_documents(self, related_documents):
-        """Lookups documents based on the url.
-
-        :param related_documents: list of urls to related documents
-
-        :return list of document-objects, list of invalid-urls
-        """
-        deserializer = queryMultiAdapter(
-            (self.fields['related_documents'].field, self.context, self.request),
-            IFieldDeserializer)
-
-        documents = []
-        invalid_urls = []
-
-        for document_url in related_documents:
-            try:
-                documents.append(deserializer(document_url)[0])
-            except (RequiredMissing, ConstraintNotSatisfied):
-                invalid_urls.append(document_url)
-
-        if invalid_urls:
-            raise BadRequest(
-                "Could not lookup the following documents: {}".format(
-                    ', '.join(invalid_urls)))
-
-        return documents
+        return deserialized_data
 
 
 class JournalPost(JournalService):
     """Adds a journal-entry"""
 
     def reply(self):
-        data = json_body(self.request)
-        category = data.get('category', DEFAULT_COMMENT_CATEGORY)
+        data = self._deserialize_data(json_body(self.request))
         comment = data.get('comment')
-
-        if not comment:
-            raise BadRequest("The request body requires the 'comment' attribute")
-
-        self._validate_category(category)
-
-        documents = self._lookup_documents(
-            data.get('related_documents', []))
+        category = data.get('category', DEFAULT_COMMENT_CATEGORY)
+        documents = data.get('related_documents', [])
 
         contacts = []
         users = []
