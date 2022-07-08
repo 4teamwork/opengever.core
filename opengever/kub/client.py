@@ -64,8 +64,8 @@ class KuBClient(object):
 
     def _fetch_kub_items(self, mapping, url=None, url_name=None, kub_type=None):
         if not url:
-            # KuB only supports a pageSize of 100 - for whatever reason
-            url = u'{}/{}?page1&pageSize=100'.format(self.kub_api_url, url_name)
+            # KuB only supports a pageSize of 10000 - for whatever reason
+            url = u'{}/{}?page1&pageSize=10000'.format(self.kub_api_url, url_name)
 
         resp = self.session.get(url)
         data = resp.json()
@@ -75,35 +75,5 @@ class KuBClient(object):
         if data.get('next'):
             self._fetch_kub_items(mapping, url=data.get('next'),
                                   url_name=url_name, kub_type=kub_type)
-
-        return mapping
-
-    def _fetch_organizations(self, mapping, url=None):
-        if not url:
-            # KuB only supports a pageSize of 100 - for whatever reason
-            url = u'{}/organizations?page1&pageSize=100'.format(self.kub_api_url)
-
-        resp = self.session.get(url)
-        data = resp.json()
-        for item in data.get('results', []):
-            mapping['organization:{}'.format(item['id'])] = item['name']
-
-        if data.get('next'):
-            self._fetch_persons(mapping, url=data.get('next'))
-
-        return mapping
-
-    def _fetch_memberships(self, mapping, url=None):
-        if not url:
-            # KuB only supports a pageSize of 100 - for whatever reason
-            url = u'{}/memberships?page1&pageSize=100'.format(self.kub_api_url)
-
-        resp = self.session.get(url)
-        data = resp.json()
-        for item in data.get('results', []):
-            mapping['membership:{}'.format(item['id'])] = item['text']
-
-        if data.get('next'):
-            self._fetch_persons(mapping, url=data.get('next'))
 
         return mapping
