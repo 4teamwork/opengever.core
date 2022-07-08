@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- ``@journal``: Rename `comments` attribute for GET @journal entries to `comment` which is the expected naming in the POST request
 
 Other Changes
 ^^^^^^^^^^^^^

@@ -90,7 +90,7 @@ class JournalGet(JournalService):
             item['time'] = json_compatible(entry.get('time'))
             item['actor_id'] = entry.get('actor')
             item['actor_fullname'] = display_name(entry.get('actor'))
-            item['comments'] = entry.get('comments')
+            item['comment'] = entry.get('comments')
             item['related_documents'] = self.get_related_documents(action.get('documents', []))
             items.append(item)
 

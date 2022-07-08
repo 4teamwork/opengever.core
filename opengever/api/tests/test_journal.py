@@ -120,7 +120,7 @@ class TestJournalGet(IntegrationTestCase):
             headers=http_headers(),
         ).json
 
-        entry_titles = [item.get('comments') for item in response.get('items')]
+        entry_titles = [item.get('comment') for item in response.get('items')]
         self.assertEqual(['second', 'first'], entry_titles)
 
     @browsing
@@ -185,7 +185,7 @@ class TestJournalGet(IntegrationTestCase):
         self.assertDictEqual({
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
             u'actor_id': u'kathi.barfuss',
-            u'comments': u'is an agent',
+            u'comment': u'is an agent',
             u'related_documents': [{
                 u'@id': self.document.absolute_url(),
                 u'@type': u'opengever.document.document',
@@ -217,7 +217,7 @@ class TestJournalGet(IntegrationTestCase):
 
         self.assertEqual(
             ['Manual entry 2', 'Manual entry 1'],
-            map(lambda item: item.get('comments'), response.json.get('items')))
+            map(lambda item: item.get('comment'), response.json.get('items')))
 
     @browsing
     def test_can_filter_by_categories(self, browser):
@@ -237,7 +237,7 @@ class TestJournalGet(IntegrationTestCase):
 
         self.assertEqual(
             ['my phone call'],
-            map(lambda item: item.get('comments'), response.json.get('items')))
+            map(lambda item: item.get('comment'), response.json.get('items')))
 
     @browsing
     def test_can_search_by_comment(self, browser):
@@ -257,7 +257,7 @@ class TestJournalGet(IntegrationTestCase):
 
         self.assertEqual(
             [u'my phone c\xe4ll'],
-            map(lambda item: item.get('comments'), response.json.get('items')))
+            map(lambda item: item.get('comment'), response.json.get('items')))
 
     @browsing
     def test_can_search_by_title(self, browser):
