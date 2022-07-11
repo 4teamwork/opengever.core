@@ -114,6 +114,7 @@ class JournalGet(JournalService):
             item['@id'] = '{}/@journal/{}'.format(
                 self.context.absolute_url(), entry.get('id'))
             item['id'] = entry.get('id')
+            item['is_editable'] = bool(action.get('type') == MANUAL_JOURNAL_ENTRY and entry.get('id'))
             item['title'] = self._item_title(entry)
             item['time'] = json_compatible(entry.get('time'))
             item['actor_id'] = entry.get('actor')

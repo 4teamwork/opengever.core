@@ -76,6 +76,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
         {
           "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/@journal/123"
           "id": "123"
+          "is_editable": true,
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",
@@ -97,6 +98,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
         {
           "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/@journal/456"
           "id": "456"
+          "is_editable": true,
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",

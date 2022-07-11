@@ -187,6 +187,7 @@ class TestJournalGet(IntegrationTestCase):
         self.assertDictEqual({
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/@journal/123-456-789',
             u'id': '123-456-789',
+            u'is_editable': True,
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
             u'actor_id': u'kathi.barfuss',
             u'comment': u'is an agent',
@@ -282,6 +283,40 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual(
             [u'Manual entry: Phone call', u'Manual entry: Information'],
             map(lambda item: item.get('title'), response.json.get('items')))
+
+    @browsing
+    def test_manual_entries_are_flagged_as_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry')
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertTrue(response.json.get('items')[0].get('is_editable'))
+
+    @browsing
+    def test_old_manual_entries_without_id_are_flagged_as_non_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry without id (old entry)')
+
+        manager = JournalManager(self.dossier)
+        manager.list()[-1]['id'] = None  # remove id
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertFalse(response.json.get('items')[0].get('is_editable'))
+
+    @browsing
+    def test_auto_journal_entries_are_flagged_as_non_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertFalse(response.json.get('items')[0].get('is_editable'))
 
 
 class TestJournalDelete(IntegrationTestCase):
