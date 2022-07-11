@@ -12,6 +12,10 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Returns a new attribute ``is_editable`` for journal-entries.
+- ``@journal``: Provides PATCH for manual journal entries (only available for new manual journal entries).
+- ``@journal``: Provides removing of manual journal entries with DELETE method (only available for new manual journal entries).
+- ``@journal``: Returns the ``@id`` and ``id`` of a journal-entry.
 - ``@journal``: Properly deserializes category values provided by the vocabulary. We can now send category with ``{ 'token': 'information' }``.
 
 2022.13.0 (2022-07-07)

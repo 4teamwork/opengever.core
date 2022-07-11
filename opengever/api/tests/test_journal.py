@@ -169,12 +169,14 @@ class TestJournalGet(IntegrationTestCase):
 
         user = OgdsUserToContactAdapter.query.get(self.regular_user.id)
 
+        manager = JournalManager(self.dossier)
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
-            JournalManager(self.dossier).add_manual_entry(
+            manager.add_manual_entry(
                 'information', 'is an agent',
                 [person],
                 [user],
                 [self.document])
+            manager.list()[-1]['id'] = '123-456-789'  # mock id
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal?b_size=2',
@@ -183,6 +185,9 @@ class TestJournalGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual({
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/@journal/123-456-789',
+            u'id': '123-456-789',
+            u'is_editable': True,
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
             u'actor_id': u'kathi.barfuss',
             u'comment': u'is an agent',
@@ -278,3 +283,291 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual(
             [u'Manual entry: Phone call', u'Manual entry: Information'],
             map(lambda item: item.get('title'), response.json.get('items')))
+
+    @browsing
+    def test_manual_entries_are_flagged_as_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry')
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertTrue(response.json.get('items')[0].get('is_editable'))
+
+    @browsing
+    def test_old_manual_entries_without_id_are_flagged_as_non_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        JournalManager(self.dossier).add_manual_entry('information', 'Manual entry without id (old entry)')
+
+        manager = JournalManager(self.dossier)
+        manager.list()[-1]['id'] = None  # remove id
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertFalse(response.json.get('items')[0].get('is_editable'))
+
+    @browsing
+    def test_auto_journal_entries_are_flagged_as_non_editable(self, browser):
+        self.login(self.regular_user, browser)
+
+        response = browser.open(
+            self.dossier, view='@journal', method='GET', headers=http_headers())
+
+        self.assertFalse(response.json.get('items')[0].get('is_editable'))
+
+
+class TestJournalDelete(IntegrationTestCase):
+
+    @browsing
+    def test_removes_entry_with_the_provided_id(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+        manager.add_manual_entry('information', 'second')
+
+        first_entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        self.assertEqual(2, manager.count())
+        browser.open(first_entry.get('@id'), method='DELETE', headers=http_headers())
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(1, manager.count())
+        entry_titles = [item.get('comments') for item in manager.list()]
+        self.assertEqual(['second'], entry_titles)
+
+    @browsing
+    def test_raises_when_id_does_not_exist(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(404):
+            url = '{}/@journal/{}'.format(self.dossier.absolute_url(), 'invalid')
+            browser.open(url, method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+    @browsing
+    def test_raises_without_edit_permission(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        manager = JournalManager(self.inactive_dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+        self.assertEqual(1, manager.count())
+
+        entry = browser.open(
+            self.inactive_dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(401):
+            browser.open(entry.get('@id'), method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(1, manager.count())
+
+    @browsing
+    def test_raises_when_deleting_a_non_manual_journal_entry(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(403):
+            browser.open(entry.get('@id'), method='DELETE',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'message': u'Only manual journal entries can be removed',
+             u'type': u'Forbidden'}, browser.json)
+
+
+class TestJournalPatch(IntegrationTestCase):
+
+    @browsing
+    def test_can_patch_an_existing_journal_entry(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+
+        self.assertEqual(1, manager.count())
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        browser.open(entry.get('@id'),
+                     method='PATCH',
+                     data=json.dumps({
+                         "comment": "my new comment",
+                         "category": "phone-call",
+                         'related_documents': [self.document.absolute_url()]
+                     }),
+                     headers=http_headers())
+        self.assertEqual(1, manager.count())
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        self.assertEqual(u'my new comment', entry.get('comment'))
+        self.assertEqual(u'Manual entry: Phone call', entry.get('title'))
+        self.assertEqual(
+            self.document.absolute_url(),
+            entry.get('related_documents')[0].get('@id'))
+
+    @browsing
+    def test_raises_when_id_does_not_exist(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with browser.expect_http_error(404):
+            url = '{}/@journal/{}'.format(self.dossier.absolute_url(), 'invalid')
+            browser.open(url, method='PATCH',
+                         headers={'Accept': 'application/json'})
+
+    @browsing
+    def test_raises_when_updating_a_non_manual_journal_entry(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(403):
+            browser.open(entry.get('@id'), method='PATCH',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            {u'message': u'Only manual journal entries can be updated',
+             u'type': u'Forbidden'}, browser.json)
+
+    @browsing
+    def test_raises_without_edit_permission(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        manager = JournalManager(self.inactive_dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+        self.assertEqual(1, manager.count())
+
+        entry = browser.open(
+            self.inactive_dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(401):
+            browser.open(entry.get('@id'),
+                         method='PATCH',
+                         data=json.dumps({}),
+                         headers=http_headers())
+
+        self.assertEqual(1, manager.count())
+
+    @browsing
+    def test_raises_when_category_does_not_exist(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(400):
+            browser.open(entry.get('@id'),
+                         method='PATCH',
+                         data=json.dumps({
+                             "category": "invalid",
+                         }),
+                         headers=http_headers())
+
+        self.assertEqual(
+            {u'message': u'ConstraintNotSatisfied: invalid',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_raises_when_document_lookup_failed(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with browser.expect_http_error(400):
+            browser.open(entry.get('@id'),
+                         method='PATCH',
+                         data=json.dumps({
+                             'related_documents': ['https://not-existing']
+                         }),
+                         headers=http_headers())
+
+        self.assertEqual(
+            {u'message': u'ValueError: Could not resolve object for UID=https://not-existing',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_patch_journal_entry_via_api_is_xss_safe(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        browser.open(entry.get('@id'),
+                     method='PATCH',
+                     data=json.dumps({
+                         'comment': u'<p>Danger<script>alert("foo")</script> text</p>',
+                     }),
+                     headers=http_headers())
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        self.assertEqual('<p>Danger text</p>', entry['comment'])

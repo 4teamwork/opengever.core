@@ -23,6 +23,16 @@ def strip_timestamps(journal):
     return stripped_journal
 
 
+def strip_journal_id(journal):
+    stripped_journal = []
+    for entry in journal:
+        without_id = deepcopy(entry)
+        if 'id' in without_id:
+            without_id.pop('id')
+        stripped_journal.append(without_id)
+    return stripped_journal
+
+
 class TestDossierJournalPDFView(MockTestCase):
 
     layer = LATEX_ZCML_LAYER
@@ -320,7 +330,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
         ]
 
         self.assertEqual(
-            expected_journal, strip_timestamps(dossier_journal.get_journal_data()))
+            expected_journal, strip_journal_id(strip_timestamps(dossier_journal.get_journal_data())))
 
     def test_handle_special_white_space_characters(self):
         self.login(self.regular_user)

@@ -74,6 +74,9 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
     {
       "items": [
         {
+          "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/@journal/123"
+          "id": "123"
+          "is_editable": true,
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",
@@ -93,6 +96,9 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
           "title": "Manueller Eintrag: Telefongespräch"
         },
         {
+          "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/@journal/456"
+          "id": "456"
+          "is_editable": true,
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",
@@ -142,3 +148,50 @@ Optionale Parameter:
 
     GET /ordnungssystem/fuehrung/dossier-23/@journal?search=Important HTTP/1.1
     Accept: application/json
+
+
+Manuelle Journaleinträge entfernen:
+-----------------------------------
+Ein bestehender manueller Journaleintrag kann mittels DELETE Request auf die entsprechender URL gelöscht werden.
+
+Die URL setzt sich dabei folgendermassen zusammen:
+``context-url/@journal/{journal-id}``
+
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    DELETE /ordnungssystem/fuehrung/dossier-23/@journal/20 HTTP/1.1
+    Accept: application/json
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
+
+
+Manuelle Journaleinträge bearbeiten:
+------------------------------------
+Ein bestehender manueller Journaleintrag kann mittels PATCH Request auf die entsprechender URL bearbeitet werden.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    PATCH /ordnungssystem/fuehrung/dossier-23/@journal/20 HTTP/1.1
+    Accept: application/json
+
+    {
+        "category": "phone-call",
+        "comment": "My updated comment"
+    }
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+    HTTP/1.1 204 No Content
