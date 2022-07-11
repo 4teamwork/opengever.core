@@ -566,6 +566,40 @@ class TestOpenClosed(BaseTransitionGuardTests):
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, True, checker))
 
+    def test_available_for_issuer_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(is_issuer=True)
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_available_for_responsible_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(is_responsible=True)
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_issuer_agency_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(issuing_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, checker))
+
+    def test_responsible_agency_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(responsible_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, checker))
+
 
 class TestReassign(IntegrationTestCase):
     transition = 'task-transition-reassign'
