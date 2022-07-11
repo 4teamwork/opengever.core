@@ -33,6 +33,7 @@ WORKFLOW_NAMES = list(itertools.chain(*REVIEW_STATE_MAPPING.keys()))
 class InboxWorkflowSecurityUpdater(WorkflowSecurityUpdater):
 
     def __init__(self, inbox):
+        super(InboxWorkflowSecurityUpdater, self).__init__()
         self.inbox = inbox
 
     def lookup_objects(self, types):

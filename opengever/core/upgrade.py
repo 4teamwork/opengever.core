@@ -662,6 +662,7 @@ class DefaultValuePersister(UIDMaintenanceJobContextManagerMixin):
 class NightlyWorkflowSecurityUpdater(IntIdMaintenanceJobContextManagerMixin, WorkflowSecurityUpdater):
 
     def __init__(self, reindex_security):
+        WorkflowSecurityUpdater.__init__(self)
         self.reindex_security = reindex_security
         super(NightlyWorkflowSecurityUpdater, self).__init__()
 
