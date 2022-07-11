@@ -560,6 +560,11 @@ msgstr "Dokument als PDF öffnen"
 msgid "label_open_document_preview"
 msgstr "Dokumentvorschau öffnen"
 
+#. Default: "Comment: ${comment}"
+#: ./opengever/document/activities.py
+msgid "label_prefixed_journal_comment"
+msgstr "Kommentar: ${comment}"
+
 #. Default: "Preserved as paper"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_preserved_as_paper"
