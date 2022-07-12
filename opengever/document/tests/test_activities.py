@@ -81,19 +81,31 @@ class TestDocumentChangedActivities(IntegrationTestCase):
             (self.document, self.request),
             ICheckinCheckoutManager)
         manager.checkout()
-        manager.checkin()
+        manager.checkin('The best version ever.')
 
         self.assertEqual(1, Activity.query.count())
-        manager.revert_to_version(0)
+
+        manager.checkout()
+        manager.checkin()
+
         self.assertEqual(2, Activity.query.count())
 
+        manager.revert_to_version(0)
+        self.assertEqual(3, Activity.query.count())
+
         activities = Activity.query.all()
-        self.assertEqual([u'document-version-created', u'document-version-created'],
+        self.assertEqual(3 * [u'document-version-created'],
                          [activity.kind for activity in activities])
 
-        self.assertEqual([u'New document version created by B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                          u'New document version created by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
-                         [activity.summary for activity in activities])
+        self.assertEqual(
+            3 * [u'New document version created by B\xe4rfuss K\xe4thi (kathi.barfuss)'],
+            [activity.summary for activity in activities])
+
+        self.assertEqual(
+            ['Comment: The best version ever.',
+             None,
+             u'Comment: Version 0 restored.'],
+            [activity.description for activity in activities])
 
     @browsing
     def test_no_document_version_created_activity_when_cancelling_checkout(self, browser):
