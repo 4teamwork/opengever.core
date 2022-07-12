@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@journal``: Returns a new attribute ``category`` for journal-entries.
 - ``@journal``: Returns a new attribute ``is_editable`` for journal-entries.
 - ``@journal``: Provides PATCH for manual journal entries (only available for new manual journal entries).
 - ``@journal``: Provides removing of manual journal entries with DELETE method (only available for new manual journal entries).

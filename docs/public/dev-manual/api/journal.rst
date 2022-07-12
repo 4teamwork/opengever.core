@@ -80,6 +80,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",
+          "category": { "token": "information", "title": "Information" }
           "related_documents": [
             {
               "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/document-1",
@@ -102,6 +103,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
           "actor_fullname": "zopemaster",
           "actor_id": "zopemaster",
           "comment": "Ich bin ein neuer Journaleintrag",
+          "category": { "token": "information", "title": "Information" }
           "related_documents": [],
           "time": "2019-04-15T13:59:21+00:00",
           "title": "Manueller Eintrag: Telefongespräch"

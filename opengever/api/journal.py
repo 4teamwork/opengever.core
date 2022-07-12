@@ -121,6 +121,7 @@ class JournalGet(JournalService):
             item['actor_fullname'] = display_name(entry.get('actor'))
             item['comment'] = entry.get('comments')
             item['related_documents'] = self.get_related_documents(action.get('documents', []))
+            item['category'] = self._serialize_category(action.get('category'))
             items.append(item)
 
         return items
@@ -161,6 +162,29 @@ class JournalGet(JournalService):
     def _reverse_items(self, items):
         items.reverse()
         return items
+
+    def _serialize_category(self, category):
+        """JournalItems are not dexterity contents. The default field serializer
+        expects the value to be on a dexterity content.
+
+        We need to serialize the value by hand.
+
+        This implementation is based on the original dexterity ChoiceFieldSerializer.
+        """
+        field = IManualJournalEntry.get('category').bind(self.context)
+        if category is None:
+            return category
+
+        try:
+            term = field.vocabulary.getTerm(category)
+            category = {"token": term.token, "title": term.title}
+        except LookupError:
+            """The category is not part (or no longer part) of the vocabulary,
+            we'll just return the category id in this case which is the default behavior
+            of the dx serializer
+            """
+            pass
+        return json_compatible(category)
 
 
 class JournalDelete(JournalService):
