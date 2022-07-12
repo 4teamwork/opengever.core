@@ -235,8 +235,8 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
 
     def test_default_allowed(self):
         checker = FakeChecker(is_responsible=True,
-                                    all_subtasks_finished=True,
-                                    has_successors=False)
+                              all_subtasks_finished=True,
+                              has_successors=False)
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -255,17 +255,17 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
 
     def test_subtasks_has_to_be_finished(self):
         checker = FakeChecker(is_responsible=True,
-                                    all_subtasks_finished=False,
-                                    has_successors=False)
+                              all_subtasks_finished=False,
+                              has_successors=False)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
 
     def test_agency_fallback_for_responsible_orgunit_agency(self):
         checker = FakeChecker(is_responsible=False,
-                                    all_subtasks_finished=True,
-                                    has_successors=False,
-                                    responsible_agency=True)
+                              all_subtasks_finished=True,
+                              has_successors=False,
+                              responsible_agency=True)
 
         self.assertFalse(
             self.controller._is_transition_possible(
@@ -277,10 +277,10 @@ class TestInProgressResolvedGuard(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_administrator(self):
         checker = FakeChecker(is_responsible=False,
-                                    all_subtasks_finished=True,
-                                    has_successors=False,
-                                    responsible_agency=False,
-                                    is_administrator=True)
+                              all_subtasks_finished=True,
+                              has_successors=False,
+                              responsible_agency=False,
+                              is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -337,8 +337,8 @@ class TestInProgressClosed(BaseTransitionGuardTests):
 
     def test_default_allowed(self):
         checker = FakeChecker(is_responsible=True,
-                                    all_subtasks_finished=True,
-                                    has_successors=False)
+                              all_subtasks_finished=True,
+                              has_successors=False)
 
         self.assertTrue(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -357,25 +357,25 @@ class TestInProgressClosed(BaseTransitionGuardTests):
 
     def test_subtas_has_to_be_finished(self):
         checker = FakeChecker(is_responsible=True,
-                                    all_subtasks_finished=False,
-                                    has_successors=False)
+                              all_subtasks_finished=False,
+                              has_successors=False)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
 
     def test_subtasks_has_to_be_finished(self):
         checker = FakeChecker(is_responsible=True,
-                                    all_subtasks_finished=False,
-                                    has_successors=False)
+                              all_subtasks_finished=False,
+                              has_successors=False)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
 
     def test_agency_fallback_for_responsible_agency(self):
         checker = FakeChecker(is_responsible=False,
-                                    all_subtasks_finished=True,
-                                    has_successors=False,
-                                    responsible_agency=True)
+                              all_subtasks_finished=True,
+                              has_successors=False,
+                              responsible_agency=True)
 
         self.assertFalse(
             self.controller._is_transition_possible(
@@ -387,10 +387,10 @@ class TestInProgressClosed(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_administrator(self):
         checker = FakeChecker(is_responsible=False,
-                                    all_subtasks_finished=True,
-                                    has_successors=False,
-                                    responsible_agency=False,
-                                    is_administrator=True)
+                              all_subtasks_finished=True,
+                              has_successors=False,
+                              responsible_agency=False,
+                              is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -419,7 +419,7 @@ class TestOpenInProgress(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_responsible(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=True)
+                              responsible_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -429,8 +429,8 @@ class TestOpenInProgress(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_administrators(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=False,
-                                    is_administrator=True)
+                              responsible_agency=False,
+                              is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -449,7 +449,7 @@ class TestOpenRejected(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_responsible(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=True)
+                              responsible_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -459,8 +459,8 @@ class TestOpenRejected(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_administrators(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=False,
-                                    is_administrator=True)
+                              responsible_agency=False,
+                              is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -491,7 +491,7 @@ class TestOpenResolved(BaseTransitionGuardTests):
 
     def test_responsible_agency(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=True)
+                              responsible_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -501,8 +501,8 @@ class TestOpenResolved(BaseTransitionGuardTests):
 
     def test_agency_fallback_for_administrators(self):
         checker = FakeChecker(is_responsible=False,
-                                    responsible_agency=False,
-                                    is_administrator=True)
+                              responsible_agency=False,
+                              is_administrator=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))
@@ -559,6 +559,40 @@ class TestOpenClosed(BaseTransitionGuardTests):
     def test_agency_fallback_for_administrators_on_bidirectional_tasks(self):
         checker = FakeChecker(
             is_issuer=False, issuing_agency=False, is_administrator=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, checker))
+
+    def test_available_for_issuer_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(is_issuer=True)
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_available_for_responsible_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(is_responsible=True)
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+    def test_issuer_agency_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(issuing_agency=True)
+
+        self.assertFalse(self.controller._is_transition_possible(
+            self.transition, False, checker))
+
+        self.assertTrue(self.controller._is_transition_possible(
+            self.transition, True, checker))
+
+    def test_responsible_agency_for_unidirectional_by_value_tasks(self):
+        self.task_type_category = 'unidirectional_by_value'
+        checker = FakeChecker(responsible_agency=True)
 
         self.assertFalse(self.controller._is_transition_possible(
             self.transition, False, checker))

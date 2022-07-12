@@ -415,6 +415,22 @@ class TaskTransitionController(BrowserView):
 
         return c.current_user.is_responsible
 
+    @guard('task-transition-open-tested-and-closed')
+    @task_type_category('unidirectional_by_value')
+    def uniref_by_val_open_to_closed_guard(self, c, include_agency):
+        """Checks if:
+        - It's a unidirectional_by_value task
+        - Current user is the responsible, issuer or a member of the inbox group.
+        """
+        if include_agency:
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_responsible
+                    or c.current_user.in_responsible_orgunits_inbox_group
+                    or c.current_user.is_administrator)
+
+        return c.current_user.is_responsible or c.current_user.is_issuer
+
     @action('task-transition-open-tested-and-closed')
     @task_type_category('unidirectional_by_reference')
     def uniref_open_to_closed_action(self, transition, c):
