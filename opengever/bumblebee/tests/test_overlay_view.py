@@ -270,7 +270,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
             [
                 'Download copy',
                 'Attach to email',
-                'Revert document',
+                'Restore this version',
                 ],
             browser.css('.file-action-buttons a').text,
             )
@@ -435,7 +435,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
             [
                 'Download copy',
                 'Attach to email',
-                'Revert document',
+                'Restore this version',
                 ],
             browser.css('.file-action-buttons a').text,
             )

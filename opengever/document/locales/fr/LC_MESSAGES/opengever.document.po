@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-17 15:40+0000\n"
+"POT-Creation-Date: 2022-07-12 06:43+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -99,11 +99,6 @@ msgstr "Ne plus afficher ce message."
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
 msgstr "Exporter la sélection"
-
-#: ./opengever/document/checkout/manager.py
-#: ./opengever/document/checkout/revert.py
-msgid "Reverted file to version ${version_id}."
-msgstr "Retour à la version ${version_id} du document."
 
 #: ./opengever/document/forms.py
 msgid "Save"
@@ -597,6 +592,11 @@ msgstr "Numéro de référence"
 msgid "label_related_documents"
 msgstr "Documents liés"
 
+#. Default: "Restore"
+#: ./opengever/document/browser/versions_tab.py
+msgid "label_restore"
+msgstr "Restaurer"
+
 #. Default: "Docugate retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_docugate"
@@ -607,15 +607,11 @@ msgstr "Réessayer avec Docugate"
 msgid "label_retry_oneoffixx"
 msgstr "Réessayer avec Oneoffixx"
 
-#. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py
-msgid "label_revert"
-msgstr "Restaurer"
-
-#. Default: "Revert document"
+#. Default: "Restore this version"
 #: ./opengever/document/browser/templates/macros.pt
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_revert_document"
-msgstr "Restaurer le document"
+msgstr "Restaurer cette version"
 
 #. Default: "Save PDF"
 #: ./opengever/document/browser/versions_tab.py
@@ -761,6 +757,12 @@ msgstr "Le PDF a été généré avec succès"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "msg_pdf_generation_timeout"
 msgstr "La génération du PDF a duré trop longtemps"
+
+#. Default: "Version ${version_id} restored."
+#: ./opengever/document/checkout/manager.py
+#: ./opengever/document/checkout/revert.py
+msgid "msg_version_restored"
+msgstr "Version ${version_id} restaurée."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt

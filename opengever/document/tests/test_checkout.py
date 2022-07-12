@@ -294,7 +294,7 @@ class TestReverting(FunctionalTestCase):
 
         self.assertEquals(4, len(repo_tool.getHistory(self.document)))
         self.assertEqual(self.document.file.data, version2.object.file.data)
-        self.assertEquals(u'Reverted file to version 2.',
+        self.assertEquals(u'Version 2 restored.',
                           repo_tool.retrieve(self.document, 3).comment)
 
     def test_creates_a_new_blob_instance(self):
@@ -377,8 +377,8 @@ class TestReverting(FunctionalTestCase):
         revert_link = second_row.css('td a')[-1]
         revert_link.click()
 
-        self.assertEquals(['Reverted file to version 1.'], info_messages())
-        self.assertEquals('VERSION 1 DATA', self.document.file.data)
+        self.assertEqual(['Version 1 restored.'], info_messages())
+        self.assertEqual('VERSION 1 DATA', self.document.file.data)
 
     @browsing
     def test_revert_link_discreet_when_reverting_disallowed(self, browser):
@@ -386,7 +386,7 @@ class TestReverting(FunctionalTestCase):
         transaction.commit()
 
         browser.login().open(self.document, view='tabbedview_view-versions')
-        self.assertEqual('Revert', browser.css('span.discreet').first.text)
+        self.assertEqual('Restore this version', browser.css('span.discreet').first.text)
 
     @browsing
     def test_browser_revert_view_raises_unauthorized_when_revert_disallowed(self, browser):

@@ -90,13 +90,13 @@ class TestVersionsTab(BaseVersionsTab):
         browser.login().open(self.document, view='tabbedview_view-versions')
         listing = browser.css('.listing').first
         column_headers = listing.lists()[0]
-        self.assertEquals(
-            ['Version',
+        self.assertEqual(
+            [u'Version',
              u'Ge\xe4ndert von',
-             'Datum',
-             'Kommentar',
-             'Kopie herunterladen',
-             u'Zur\xfccksetzen'],
+             u'Datum',
+             u'Kommentar',
+             u'Kopie herunterladen',
+             u'Wiederherstellen'],
             column_headers)
 
     @browsing
@@ -136,10 +136,10 @@ class TestVersionsTab(BaseVersionsTab):
         url = urlparse(revert_link.attrib['href'])
         query = parse_qs(url.query)
 
-        self.assertEquals(u'Zur\xfccksetzen', revert_link.text)
-        self.assertEquals(['3'], query['version_id'])
+        self.assertEqual(u'Diese Version wiederherstellen', revert_link.text)
+        self.assertEqual(['3'], query['version_id'])
         self.assertIn('_authenticator', query)
-        self.assertEquals(
+        self.assertEqual(
             '/plone/dossier-1/document-1/revert-file-to-version', url.path)
 
     @browsing
@@ -169,15 +169,15 @@ class TestVersionsTabWithBubmelbeeActivated(BaseVersionsTab):
         browser.login().open(self.document, view='tabbedview_view-versions')
         listing = browser.css('.listing').first
         column_headers = listing.lists()[0]
-        self.assertEquals(
+        self.assertEqual(
             ['Version',
              u'Ge\xe4ndert von',
-             'Datum',
-             'Kommentar',
-             'Kopie herunterladen',
-             u'Zur\xfccksetzen',
-             'Vorschau',
-             'PDF speichern unter'],
+             u'Datum',
+             u'Kommentar',
+             u'Kopie herunterladen',
+             u'Wiederherstellen',
+             u'Vorschau',
+             u'PDF speichern unter'],
             column_headers)
 
     @browsing
@@ -209,11 +209,11 @@ class TestVersionsTabForDocumentWithoutInitialVersion(FunctionalTestCase):
         browser.login().open(self.document, view='tabbedview_view-versions')
 
         listing = browser.css('.listing').first
-        self.assertEquals(
+        self.assertEqual(
             [{'Comment': 'Initial version',
               'Download copy': 'Download copy',
               'Preview': 'Preview',
-              'Revert': '',
+              'Restore': '',
               'Save PDF as': 'Save PDF as',
               'Version': '0',
               'Date': 'Nov 06, 2016 12:00 AM',
