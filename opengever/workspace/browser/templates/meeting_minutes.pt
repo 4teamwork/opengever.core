@@ -136,6 +136,14 @@ a {
       <h3><span i18n:translate="label_decision">Decision</span>:</h3>
       <p tal:replace="structure agenda_item/decision"></p>
     </div>
+    <div tal:condition="nocall: agenda_item/related_items">
+      <h3><span i18n:translate="label_related_items">Related items</span>:</h3>
+      <ul class="related_items">
+        <tal:repeat tal:repeat="item agenda_item/related_items">
+          <li><a href="" tal:content="item/title" tal:attributes="href item/url"></a></li>
+        </tal:repeat>
+      </ul>
+    </div>
   </tal:repeat>
 
 </body>
