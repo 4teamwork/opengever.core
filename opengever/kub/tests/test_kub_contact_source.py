@@ -50,27 +50,28 @@ class TestKubContactSource(KuBIntegrationTestCase):
                               [term.title for term in terms])
 
     def test_get_term_by_token_handles_persons(self, mocker):
-        self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_labels(mocker)
         term = self.source.getTermByToken(self.person_jean)
         self.assertEqual(self.person_jean, term.token)
         self.assertEqual(self.person_jean, term.value)
         self.assertEqual('Dupont Jean', term.title)
 
     def test_get_by_id_handles_organizations(self, mocker):
-        self.mock_get_by_id(mocker, self.org_ftw)
+        self.mock_labels(mocker)
         term = self.source.getTermByToken(self.org_ftw)
         self.assertEqual(self.org_ftw, term.token)
         self.assertEqual(self.org_ftw, term.value)
         self.assertEqual('4Teamwork', term.title)
 
     def test_get_by_id_handles_memberships(self, mocker):
-        self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        self.mock_labels(mocker)
         term = self.source.getTermByToken(self.memb_jean_ftw)
         self.assertEqual(self.memb_jean_ftw, term.token)
         self.assertEqual(self.memb_jean_ftw, term.value)
         self.assertEqual('Dupont Jean - 4Teamwork (CEO)', term.title)
 
     def test_get_by_id_handles_ogds_users(self, mocker):
+        self.mock_labels(mocker)
         term = self.source.getTermByToken(self.regular_user.getId())
         ogds_user = ogds_service().fetch_user(self.regular_user.getId())
         self.assertEqual(self.regular_user.getId(), term.token)
@@ -78,6 +79,7 @@ class TestKubContactSource(KuBIntegrationTestCase):
         self.assertEqual(u'B\xe4rfuss K\xe4thi (kathi.barfuss)', term.title)
 
     def test_get_by_id_raises_lookup_error_for_invalid_token(self, mocker):
+        self.mock_labels(mocker)
         contact_id = "invalid-id"
         self.mock_get_by_id(mocker, contact_id)
         with self.assertRaises(LookupError):

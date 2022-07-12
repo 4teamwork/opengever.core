@@ -35,8 +35,8 @@ class KuBContactsSource(object):
             raise LookupError()
 
         if ActorLookup(token).is_kub_contact():
-            item = self.client.get_by_id(token)
-            return self._kub_term(item)
+            mapping = self.client.get_kub_id_label_mapping()
+            return SimpleTerm(value=token, title=mapping.get(token, token))
 
         # it's an ogds user
         try:
