@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-17 15:40+0000\n"
+"POT-Creation-Date: 2022-07-12 06:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,11 +98,6 @@ msgstr ""
 
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
-msgstr ""
-
-#: ./opengever/document/checkout/manager.py
-#: ./opengever/document/checkout/revert.py
-msgid "Reverted file to version ${version_id}."
 msgstr ""
 
 #: ./opengever/document/forms.py
@@ -594,6 +589,11 @@ msgstr ""
 msgid "label_related_documents"
 msgstr ""
 
+#. Default: "Restore"
+#: ./opengever/document/browser/versions_tab.py
+msgid "label_restore"
+msgstr ""
+
 #. Default: "Docugate retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_docugate"
@@ -604,13 +604,9 @@ msgstr ""
 msgid "label_retry_oneoffixx"
 msgstr ""
 
-#. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py
-msgid "label_revert"
-msgstr ""
-
-#. Default: "Revert document"
+#. Default: "Restore this version"
 #: ./opengever/document/browser/templates/macros.pt
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_revert_document"
 msgstr ""
 
@@ -757,6 +753,12 @@ msgstr ""
 #. Default: "PDF generation timed out"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "msg_pdf_generation_timeout"
+msgstr ""
+
+#. Default: "Version ${version_id} restored."
+#: ./opengever/document/checkout/manager.py
+#: ./opengever/document/checkout/revert.py
+msgid "msg_version_restored"
 msgstr ""
 
 #. Default: "No file"

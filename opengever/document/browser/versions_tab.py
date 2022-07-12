@@ -154,11 +154,11 @@ class VersionDataProxy(object):
             url = url.format(self.url, self.version_id)
             url = addTokenToUrl(url)
             link = translate_link(
-                url, _(u'label_revert', default=u'Revert'),
+                url, _(u'label_revert_document', default=u'Restore this version'),
                 css_class='standalone function-revert')
             return link
         else:
-            label = translate_text(_(u'label_revert', default=u'Revert'))
+            label = translate_text(_(u'label_revert_document', default=u'Restore this version'))
             return u'<span class="discreet">{}</span>'.format(label)
 
     @property
@@ -427,7 +427,7 @@ class VersionsTab(BaseListingTab):
          },
 
         {'column': 'revert_link',
-         'column_title': _(u'label_revert', default=u'Revert'),
+         'column_title': _(u'label_restore', default=u'Restore'),
          },
 
         # Dropped if bumblebee is not enabled

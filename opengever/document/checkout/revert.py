@@ -17,8 +17,8 @@ class RevertFileToVersion(BrowserView):
         manager.revert_to_version(version_id)
 
         # create a status message
-        msg = _(u'Reverted file to version ${version_id}.',
-                mapping=dict(version_id=version_id))
+        msg = _(u'msg_version_restored', default=u'Version ${version_id} restored.',
+                mapping={'version_id': version_id})
         IStatusMessage(self.request).addStatusMessage(msg)
 
         # redirect back to file view

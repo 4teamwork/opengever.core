@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-05-17 15:40+0000\n"
+"POT-Creation-Date: 2022-07-12 06:43+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -97,11 +97,6 @@ msgstr "Diese Meldung nicht mehr anzeigen."
 #: ./opengever/document/upgrades/20161111090446_add_document_export_actions/actions.xml
 msgid "Export selection"
 msgstr "Auswahl exportieren"
-
-#: ./opengever/document/checkout/manager.py
-#: ./opengever/document/checkout/revert.py
-msgid "Reverted file to version ${version_id}."
-msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt."
 
 #: ./opengever/document/forms.py
 msgid "Save"
@@ -600,6 +595,11 @@ msgstr "Aktenzeichen"
 msgid "label_related_documents"
 msgstr "Verwandte Dokumente"
 
+#. Default: "Restore"
+#: ./opengever/document/browser/versions_tab.py
+msgid "label_restore"
+msgstr "Wiederherstellen"
+
 #. Default: "Docugate retry"
 #: ./opengever/document/browser/templates/macros.pt
 msgid "label_retry_docugate"
@@ -610,15 +610,11 @@ msgstr "Mit Docugate wiederholen"
 msgid "label_retry_oneoffixx"
 msgstr "Mit Oneoffixx wiederholen"
 
-#. Default: "Revert"
-#: ./opengever/document/browser/versions_tab.py
-msgid "label_revert"
-msgstr "Zurücksetzen"
-
-#. Default: "Revert document"
+#. Default: "Restore this version"
 #: ./opengever/document/browser/templates/macros.pt
+#: ./opengever/document/browser/versions_tab.py
 msgid "label_revert_document"
-msgstr "Dokument zurücksetzen"
+msgstr "Diese Version wiederherstellen"
 
 #. Default: "Save PDF"
 #: ./opengever/document/browser/versions_tab.py
@@ -764,6 +760,12 @@ msgstr "Das PDF wurde erfolgreich generiert"
 #: ./opengever/document/browser/save_pdf_document_under.py
 msgid "msg_pdf_generation_timeout"
 msgstr "Das Erstellen des PDF hat zu lange gedauert"
+
+#. Default: "Version ${version_id} restored."
+#: ./opengever/document/checkout/manager.py
+#: ./opengever/document/checkout/revert.py
+msgid "msg_version_restored"
+msgstr "Version ${version_id} wiederhergestellt."
 
 #. Default: "No file"
 #: ./opengever/document/browser/templates/archiv_file.pt
