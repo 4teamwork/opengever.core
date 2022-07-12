@@ -191,6 +191,7 @@ class TestJournalGet(IntegrationTestCase):
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
             u'actor_id': u'kathi.barfuss',
             u'comment': u'is an agent',
+            u'category': {'token': 'information', 'title': 'Information' },
             u'related_documents': [{
                 u'@id': self.document.absolute_url(),
                 u'@type': u'opengever.document.document',
