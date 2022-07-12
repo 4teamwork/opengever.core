@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
@@ -109,6 +110,15 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
         self.assertIsNotNone(ogds_service().fetch_group('og_mandant1_users'))
 
+    def test_skips_groups_with_non_ascii_characters(self):
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup').named('og_mandänt_users'))]
+
+        updater = IOGDSUpdater(self.portal)
+
+        updater.import_groups()
+        self.assertIsNone(ogds_service().fetch_group(u'og_mandänt_users'))
+
     def test_mismapped_group_columns(self):
         all_column_names = {column.name for column in Group.__table__.columns}
 
@@ -208,7 +218,7 @@ class TestOGDSUpdater(FunctionalTestCase):
             [ogds.fetch_user('sk1m2'), ogds.fetch_user('sk2m2')],
             og_mandant2_users.users)
 
-    def test_imports_handle_unicode_values_properly(self):
+    def test_user_import_handles_unicode_values_properly(self):
         klaus = create(Builder('ldapuser')
                        .named('klaus.r\xc3\xbcegg')
                        .having(firstname='Klaus',
@@ -218,26 +228,15 @@ class TestOGDSUpdater(FunctionalTestCase):
                                ou=['M\xc3\xbcnster'],  # noqa
                                street=['F\xc3\xa4hrstrasse 13']))
 
-        group = create(Builder('ldapgroup')
-                       .named('f\xc3\xbchrung')
-                       .with_members([klaus]))
-
         FAKE_LDAP_USERFOLDER.users = [klaus]
-        FAKE_LDAP_USERFOLDER.groups = [group]
-
         updater = IOGDSUpdater(self.portal)
-
         updater.import_users()
-        updater.import_groups()
 
         ogds_user = ogds_service().fetch_user(u'klaus.r\xfcegg')
-        self.assertEquals(u'klaus.r\xfcegg', ogds_user.userid)
-        self.assertEquals(u'Klaus', ogds_user.firstname)
-        self.assertEquals(u'R\xfcegg', ogds_user.lastname)
-        self.assertEquals(u'klaus.r\xfcegg@example.com', ogds_user.email)
-
-        ogds_group = ogds_service().fetch_group(u'f\xfchrung')
-        self.assertEquals(u'f\xfchrung', ogds_group.groupid)
+        self.assertEqual(u'klaus.r\xfcegg', ogds_user.userid)
+        self.assertEqual(u'Klaus', ogds_user.firstname)
+        self.assertEqual(u'R\xfcegg', ogds_user.lastname)
+        self.assertEqual(u'klaus.r\xfcegg@example.com', ogds_user.email)
 
     def test_does_not_overwrite_local_groups(self):
         groupid = u'local.group'
