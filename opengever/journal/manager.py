@@ -29,7 +29,8 @@ class JournalManager(object):
     def __init__(self, context):
         self.context = context
 
-    def add_manual_entry(self, category, comment, contacts=[], users=[], documents=[]):
+    def add_manual_entry(self, category, comment, contacts=None, users=None, documents=None):
+
         entry_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': MANUAL_JOURNAL_ENTRY,
@@ -45,7 +46,7 @@ class JournalManager(object):
         self._notify_journal_event(entry_obj)
 
     def add_auto_entry(self, action, title, visible=True,
-                       comment='', actor=None, documents=[]):
+                       comment='', actor=None, documents=None):
         event_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': action,
@@ -122,9 +123,10 @@ class JournalManager(object):
         title: document title
         """
         value = PersistentList()
-        for doc in documents:
-            value.append(PersistentDict(
-                {'id': Oguid.for_object(doc).id, 'title': doc.title}))
+        if documents is not None:
+            for doc in documents:
+                value.append(PersistentDict(
+                    {'id': Oguid.for_object(doc).id, 'title': doc.title}))
 
         return value
 
@@ -132,10 +134,11 @@ class JournalManager(object):
         """Returns a persistent list of dicts for all contacts.
         """
         value = PersistentList()
-        for item in contacts:
-            value.append(
-                PersistentDict({'id': item.get_contact_id(),
-                                'title': item.get_title()}))
+        if contacts is not None:
+            for item in contacts:
+                value.append(
+                    PersistentDict({'id': item.get_contact_id(),
+                                    'title': item.get_title()}))
 
         return value
 
@@ -143,9 +146,10 @@ class JournalManager(object):
         """Returns a persistent list of dicts for all users.
         """
         value = PersistentList()
-        for item in users:
-            value.append(
-                PersistentDict({'id': item.id, 'title': item.get_title()}))
+        if users is not None:
+            for item in users:
+                value.append(
+                    PersistentDict({'id': item.id, 'title': item.get_title()}))
 
         return value
 
