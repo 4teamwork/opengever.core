@@ -31,6 +31,8 @@ class IObjectCheckoutCanceledEvent(IObjectEvent):
 class IObjectRevertedToVersion(IObjectEvent):
     """The object was reverted back to a specific version."""
 
+    comment = schema.Text(title=u'journal comment')
+
 
 class IFileCopyDownloadedEvent(IObjectEvent):
     """Event interface for event.FileDownloadedEvent."""

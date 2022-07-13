@@ -358,10 +358,12 @@ class CheckinCheckoutManager(object):
             comment = translate(msg, context=self.request)
             # This will also update the approval_state index in Solr
             self.versioner.create_version(comment)
+        else:
+            comment = ''
 
         # event
         notify(ObjectRevertedToVersion(self.context, version_id,
-                                       create_version))
+                                       create_version, comment))
 
     def is_locked(self):
         """Returns True if a user has a WebDAV lock on the adapted
