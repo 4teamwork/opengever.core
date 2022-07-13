@@ -52,6 +52,10 @@ class DocumenVersionCreatedActivity(BaseActivity):
     """
     kind = 'document-version-created'
 
+    def __init__(self, context, request, comment):
+        super(DocumenVersionCreatedActivity, self).__init__(context, request)
+        self.comment = comment
+
     @property
     def summary(self):
         return self.translate_to_all_languages(
@@ -65,16 +69,11 @@ class DocumenVersionCreatedActivity(BaseActivity):
 
     @property
     def description(self):
-        versioner = Versioner(self.context)
-        version_id = versioner.get_current_version_id()
-        if version_id is None:
-            return {}
-        comment = versioner.retrieve_version(version_id).comment
-        if comment:
+        if self.comment:
             return self.translate_to_all_languages(
                 _(u'label_prefixed_journal_comment',
                   default=u'Comment: ${comment}',
-                  mapping={'comment': comment}))
+                  mapping={'comment': self.comment}))
         else:
             return {}
 
