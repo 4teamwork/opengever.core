@@ -138,7 +138,8 @@ def document_reverted_to_version(context, event):
 
 
 def document_version_created(context, event):
-    DocumenVersionCreatedActivity(context, getRequest()).record()
+    DocumenVersionCreatedActivity(
+        context, getRequest(), getattr(event, "comment", None)).record()
 
 
 def author_or_title_changed(context, event):

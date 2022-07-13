@@ -201,11 +201,11 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
 
         # Object Reverted-To-Version-Event with fail
         length = get_journal_length(document)
-        notify(ObjectRevertedToVersion(document, '', ''))
+        notify(ObjectRevertedToVersion(document, '', '', ''))
         self.assertTrue(length == get_journal_length(document))
 
         # Object Reverted-To-Version-Event
-        notify(ObjectRevertedToVersion(document, 'v1', 'v1'))
+        notify(ObjectRevertedToVersion(document, 'v1', 'v1', ''))
         self.check_document_revertedtoversion(document)
 
         # Object Sent Document Event

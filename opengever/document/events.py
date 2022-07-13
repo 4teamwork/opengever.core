@@ -49,10 +49,11 @@ class ObjectCheckoutCanceledEvent(ObjectEvent):
 class ObjectRevertedToVersion(ObjectEvent):
     """The document was reverted back to a specific version."""
 
-    def __init__(self, obj, version_id, create_version):
+    def __init__(self, obj, version_id, create_version, comment):
         self.object = obj
         self.version_id = version_id
         self.create_version = create_version
+        self.comment = comment
 
 
 @implementer(interfaces.IFileCopyDownloadedEvent)
