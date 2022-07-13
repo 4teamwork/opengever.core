@@ -52,7 +52,7 @@ class DatetimeFieldDeserializer(DatetimeFieldDeserializer):
 @adapter(IUTCDatetime, IDexterityContent, IBrowserRequest)
 class UTCDatetimeFieldDeserializer(DefaultFieldDeserializer):
     def __call__(self, value):
-        # Inspired fromDatetimeFieldDeserializer, but we always save the value
+        # Inspired from DatetimeFieldDeserializer, but we always save the value
         # as timezone aware in UTC and reject years before 1900.
 
         # This happens when a 'null' is posted for a non-required field.
