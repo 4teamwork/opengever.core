@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
@@ -55,10 +56,13 @@ class TestJournalManager(IntegrationTestCase):
         manager.clear()
 
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            zope_time = DateTime()
             manager.add_manual_entry('information', 'is an agent')
 
         self.assertEqual(1, manager.count())
-        self.assertEqual(u'is an agent', manager.list().pop().get('comments'))
+        entry = manager.list().pop()
+        self.assertEqual(u'is an agent', entry.get('comments'))
+        self.assertEqual(zope_time, entry.get('time'))
 
     @browsing
     def test_can_add_auto_entries(self, browser):
@@ -135,13 +139,16 @@ class TestJournalManager(IntegrationTestCase):
         manager = JournalManager(self.dossier)
         manager.clear()
 
-        manager.add_manual_entry('information', 'is an agent')
-        entry = manager.list()[0]
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            zope_time = DateTime()
+            manager.add_manual_entry('information', 'is an agent')
 
+        entry = manager.list()[0]
         self.assertEqual(u'is an agent', entry.get('comments'))
         self.assertEqual(u'information', entry.get('action').get('category'))
         self.assertEqual(u'Manual entry: Information', translate(entry.get('action').get('title')))
         self.assertEqual([], entry.get('action').get('documents'))
+        self.assertEqual(zope_time, entry.get('time'))
 
         manager.update(entry.get('id'), comment='my new comment', category='phone-call', documents=[self.document])
         entry = manager.list()[0]
@@ -150,6 +157,7 @@ class TestJournalManager(IntegrationTestCase):
         self.assertEqual(u'phone-call', entry.get('action').get('category'))
         self.assertEqual(u'Manual entry: Phone call', translate(entry.get('action').get('title')))
         self.assertEqual([{'id': u'plone:1014073300', 'title': u'Vertr\xe4gsentwurf'}], entry.get('action').get('documents'))
+        self.assertEqual(zope_time, entry.get('time'))
 
     @browsing
     def test_modify_invalid_entry_will_raise(self, browser):
@@ -169,3 +177,69 @@ class TestJournalManager(IntegrationTestCase):
 
         with self.assertRaises(AutoEntryManipulationException):
             manager.update(manager.list()[0].get('id'), comment='my new comment')
+
+    @browsing
+    def test_add_validates_time(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        with self.assertRaises(ValueError) as cm:
+            manager.add_manual_entry('information', 'is an agent',
+                                     time="2022-07-13 12:57:30")
+
+        self.assertEqual(
+            "time should be a zope DateTime not <type 'str'>",
+            str(cm.exception))
+
+        self.assertEqual(0, manager.count())
+
+        with self.assertRaises(ValueError) as cm:
+            manager.add_manual_entry('information', 'is an agent',
+                                     time=datetime.now())
+
+        self.assertEqual(0, manager.count())
+        self.assertEqual(
+            "time should be a zope DateTime not <type 'datetime.datetime'>",
+            str(cm.exception))
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            zope_time = DateTime()
+            manager.add_manual_entry('information', 'is an agent',
+                                     time=DateTime())
+
+        self.assertEqual(1, manager.count())
+        entry = manager.list()[0]
+        self.assertEqual(u'is an agent', entry.get('comments'))
+        self.assertEqual(zope_time, entry.get('time'))
+
+    @browsing
+    def test_modify_validates_time(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            zope_time = DateTime()
+            manager.add_manual_entry('information', 'is an agent')
+
+        entry = manager.list()[0]
+        self.assertEqual(u'is an agent', entry.get('comments'))
+        self.assertEqual(zope_time, entry.get('time'))
+
+        with self.assertRaises(ValueError) as cm:
+            manager.update(entry.get('id'), time=datetime.now())
+
+        self.assertEqual(
+            "time should be a zope DateTime not <type 'datetime.datetime'>",
+            str(cm.exception))
+
+        with freeze(datetime(2018, 12, 14, 0, 0, tzinfo=pytz.utc)):
+            new_zope_time = DateTime()
+            manager.update(entry.get('id'), time=DateTime())
+
+        entry = manager.list()[0]
+        self.assertEqual(u'is an agent', entry.get('comments'))
+        self.assertEqual(new_zope_time, entry.get('time'))
