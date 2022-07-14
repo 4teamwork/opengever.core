@@ -84,7 +84,7 @@ class TestCMFEditionsModifiers(IntegrationTestCase):
         manager = getMultiAdapter(
             (self.document, self.request), ICheckinCheckoutManager)
 
-        with freeze(datetime(2015, 01, 28, 12, 00)):
+        with freeze(datetime(2015, 1, 28, 12, 00)):
             manager.revert_to_version(1)
 
         journal = list(IAnnotations(self.document)[self.JOURNAL_KEY])
@@ -97,7 +97,7 @@ class TestCMFEditionsModifiers(IntegrationTestCase):
             'visible': True,
             'documents': [],
             'type': 'Reverted document file',
-            'title': u'label_document_file_reverted'},
+            'title': u'msg_version_restored'},
             'id': journal_id,
             'comments': '',
             'actor': 'kathi.barfuss',

@@ -393,9 +393,8 @@ def document_file_reverted(context, event):
         if not create:
             return
 
-    title = _(u'label_document_file_reverted',
-              default=u'Reverte document file to version ${version_id}',
-              mapping=dict(version_id=event.version_id))
+    title = _(u'msg_version_restored', default=u'Version ${version_id} restored',
+              mapping={'version_id': event.version_id})
     journal_entry_factory(context, DOCUMENT_FILE_REVERTED, title)
 
 

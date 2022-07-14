@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-07-14 07:29+0000\n"
 "PO-Revision-Date: 2014-11-19 12:25+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -80,11 +80,6 @@ msgstr "Dokument ausgecheckt"
 #: ./opengever/journal/handlers.py
 msgid "label_document_checkout_cancel"
 msgstr "Änderungen an der Datei widerrufen"
-
-#. Default: "Reverte document file to version ${version_id}"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_reverted"
-msgstr "Datei des Dokuments auf Version ${version_id} zurückgesetzt"
 
 #. Default: "Document in dossier attached to email via OfficeConnector"
 #: ./opengever/journal/handlers.py
@@ -202,7 +197,7 @@ msgid "label_local_roles_modified_at"
 msgstr "Lokale Rollen von ${repository} modifziert."
 
 #. Default: "Manual entry: ${category}"
-#: ./opengever/journal/entry.py
+#: ./opengever/journal/manager.py
 msgid "label_manual_journal_entry"
 msgstr "Manueller Eintrag: ${category}"
 
@@ -280,6 +275,11 @@ msgstr "Titel"
 #: ./opengever/journal/handlers.py
 msgid "label_to_trash"
 msgstr "Dokument ${title} in den Papierkorb verschoben"
+
+#. Default: "Version ${version_id} restored"
+#: ./opengever/journal/handlers.py
+msgid "msg_version_restored"
+msgstr "Version ${version_id} wiederhergestellt"
 
 #. Default: "Journal"
 #: ./opengever/journal/templates/journalhistory.pt

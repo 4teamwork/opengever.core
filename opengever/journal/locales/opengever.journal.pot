@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-08 11:40+0000\n"
+"POT-Creation-Date: 2022-07-14 07:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -82,11 +82,6 @@ msgstr ""
 #. Default: "Canceled document checkout"
 #: ./opengever/journal/handlers.py
 msgid "label_document_checkout_cancel"
-msgstr ""
-
-#. Default: "Reverte document file to version ${version_id}"
-#: ./opengever/journal/handlers.py
-msgid "label_document_file_reverted"
 msgstr ""
 
 #. Default: "Document in dossier attached to email via OfficeConnector"
@@ -205,7 +200,7 @@ msgid "label_local_roles_modified_at"
 msgstr ""
 
 #. Default: "Manual entry: ${category}"
-#: ./opengever/journal/entry.py
+#: ./opengever/journal/manager.py
 msgid "label_manual_journal_entry"
 msgstr ""
 
@@ -282,6 +277,11 @@ msgstr ""
 #. Default: "Object moved to trash: ${title}"
 #: ./opengever/journal/handlers.py
 msgid "label_to_trash"
+msgstr ""
+
+#. Default: "Version ${version_id} restored"
+#: ./opengever/journal/handlers.py
+msgid "msg_version_restored"
 msgstr ""
 
 #. Default: "Journal"

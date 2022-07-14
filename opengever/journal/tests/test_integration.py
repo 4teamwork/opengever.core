@@ -500,7 +500,7 @@ class TestOpengeverJournalGeneral(unittest.TestCase):
         self.check_annotation(
             obj,
             action_type='Reverted document file',
-            action_title='Reverted file to version v%s' % (
+            action_title='Version v%s restored' % (
                 "1"))
 
     def check_document_sent(self, obj, doc):
