@@ -167,6 +167,10 @@ class JournalGet(JournalService):
         return filtered_items
 
     def _sort_items(self, items):
+        # We first reverse the list of items to have correct sorting
+        # order for items with the same time stamp. This is mainly relevant
+        # for testing purposes.
+        items.reverse()
         items.sort(key=lambda item: item['time'], reverse=True)
         return items
 

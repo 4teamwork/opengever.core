@@ -131,6 +131,27 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual(['third', 'first', 'second'], entry_titles)
 
     @browsing
+    def test_entries_with_identical_timestamp_are_sorted_by_newset_first(self, browser):
+        self.login(self.regular_user, browser)
+        self.clear_journal_entries(self.dossier)
+
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'first', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'second', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'third', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+
+        response = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        entry_titles = [item.get('comment') for item in response.get('items')]
+        self.assertEqual(['third', 'second', 'first'], entry_titles)
+
+    @browsing
     def test_show_total_items(self, browser):
         self.login(self.regular_user, browser)
         self.clear_journal_entries(self.dossier)
