@@ -1,4 +1,5 @@
 from copy import deepcopy
+from DateTime import DateTime
 from opengever.base.helpers import display_name
 from opengever.base.oguid import Oguid
 from opengever.journal.form import IManualJournalEntry
@@ -50,6 +51,11 @@ class JournalService(Service):
 
     def _deserialize_data(self, data):
         deserialized_data = {}
+        if "time" in data:
+            # We need to deserialize the time field by hand as it has to get
+            # stored as zope DateTime and there is no zope DateTime field.
+            time = data.pop("time")
+            deserialized_data["time"] = DateTime(time)
         for name, value in data.items():
             field = IManualJournalEntry.get(name)
             if field is None:
@@ -70,12 +76,13 @@ class JournalPost(JournalService):
         comment = data.get('comment')
         category = data.get('category', DEFAULT_COMMENT_CATEGORY)
         documents = data.get('related_documents', [])
+        time = data.get('time')
 
         contacts = []
         users = []
 
         JournalManager(self.context).add_manual_entry(
-            category, comment, contacts, users, documents)
+            category, comment, contacts, users, documents, time)
 
         self.request.response.setStatus(204)
         return super(JournalPost, self).reply()
@@ -89,7 +96,7 @@ class JournalGet(JournalService):
     def reply(self):
         result = {}
         batch = HypermediaBatch(self.request,
-                                self._reverse_items(self._filter_items(self._data())))
+                                self._sort_items(self._filter_items(self._data())))
 
         result['items'] = self._create_items(batch)
         result['items_total'] = batch.items_total
@@ -159,8 +166,12 @@ class JournalGet(JournalService):
             filtered_items.append(item)
         return filtered_items
 
-    def _reverse_items(self, items):
+    def _sort_items(self, items):
+        # We first reverse the list of items to have correct sorting
+        # order for items with the same time stamp. This is mainly relevant
+        # for testing purposes.
         items.reverse()
+        items.sort(key=lambda item: item['time'], reverse=True)
         return items
 
     def _serialize_category(self, category):

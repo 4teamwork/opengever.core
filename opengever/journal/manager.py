@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from ftw.journal.config import JOURNAL_ENTRIES_ANNOTATIONS_KEY
 from ftw.journal.events.events import JournalEntryEvent
 from opengever.base.oguid import Oguid
@@ -29,7 +30,14 @@ class JournalManager(object):
     def __init__(self, context):
         self.context = context
 
-    def add_manual_entry(self, category, comment, contacts=[], users=[], documents=[]):
+    def validate(self, data):
+        # validate time:
+        value = data.get("time")
+        if value and not isinstance(value, DateTime):
+            raise ValueError("time should be a zope DateTime not {}".format(type(value)))
+
+    def add_manual_entry(self, category, comment, contacts=None, users=None,
+                         documents=None, time=None):
         entry_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': MANUAL_JOURNAL_ENTRY,
@@ -40,12 +48,14 @@ class JournalManager(object):
                          'contacts': self._serialize_contacts(contacts),
                          'users': self._serialize_users(users)}),
                      'actor': api.user.get_current().getId(),
-                     'comment': self._serialize_comment(comment)}
+                     'comment': self._serialize_comment(comment),
+                     'time': time}
 
+        self.validate(entry_obj)
         self._notify_journal_event(entry_obj)
 
     def add_auto_entry(self, action, title, visible=True,
-                       comment='', actor=None, documents=[]):
+                       comment='', actor=None, documents=None):
         event_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': action,
@@ -56,6 +66,7 @@ class JournalManager(object):
                      'actor': actor,
                      'comment': comment}
 
+        self.validate(event_obj)
         self._notify_journal_event(event_obj)
 
     def clear(self):
@@ -103,6 +114,11 @@ class JournalManager(object):
             entry_action['category'] = category
             entry_action['title'] = self._get_manual_entry_title(category)
 
+        if 'time' in kwargs:
+            entry['time'] = kwargs.get('time')
+
+        self.validate(entry)
+
     def _notify_journal_event(self, event_obj):
         notify(JournalEntryEvent(**event_obj))
 
@@ -122,9 +138,10 @@ class JournalManager(object):
         title: document title
         """
         value = PersistentList()
-        for doc in documents:
-            value.append(PersistentDict(
-                {'id': Oguid.for_object(doc).id, 'title': doc.title}))
+        if documents is not None:
+            for doc in documents:
+                value.append(PersistentDict(
+                    {'id': Oguid.for_object(doc).id, 'title': doc.title}))
 
         return value
 
@@ -132,10 +149,11 @@ class JournalManager(object):
         """Returns a persistent list of dicts for all contacts.
         """
         value = PersistentList()
-        for item in contacts:
-            value.append(
-                PersistentDict({'id': item.get_contact_id(),
-                                'title': item.get_title()}))
+        if contacts is not None:
+            for item in contacts:
+                value.append(
+                    PersistentDict({'id': item.get_contact_id(),
+                                    'title': item.get_title()}))
 
         return value
 
@@ -143,9 +161,10 @@ class JournalManager(object):
         """Returns a persistent list of dicts for all users.
         """
         value = PersistentList()
-        for item in users:
-            value.append(
-                PersistentDict({'id': item.id, 'title': item.get_title()}))
+        if users is not None:
+            for item in users:
+                value.append(
+                    PersistentDict({'id': item.id, 'title': item.get_title()}))
 
         return value
 

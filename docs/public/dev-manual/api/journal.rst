@@ -27,6 +27,8 @@ Optional:
 ``related_documents``: ``String[]``
    URLs zu Gever-Dokumenten
 
+``time``: ``DateTime String``
+   Zum Beispiel "2022-07-13T17:28:44+00:00"
 
 **Beispiel-Request**:
 
@@ -41,7 +43,8 @@ Optional:
          "related_documents": [
            "http://localhost:8080/fd/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1/document-1",
            "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-14/document-33"
-         ]
+         ],
+         "time": "2022-07-13T17:28:44+00:00"
        }
 
 

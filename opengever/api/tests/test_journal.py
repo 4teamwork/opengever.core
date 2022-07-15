@@ -1,3 +1,4 @@
+from DateTime import DateTime
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -26,7 +27,8 @@ class TestJournalPost(IntegrationTestCase):
         payload = {
             'comment': 'example comment',
             'category': {'token': 'information'},
-            'related_documents': [self.document.absolute_url()]}
+            'related_documents': [self.document.absolute_url()],
+            'time': '2016-12-09T09:40:00'}
 
         browser.open(
             self.dossier.absolute_url() + '/@journal',
@@ -38,6 +40,7 @@ class TestJournalPost(IntegrationTestCase):
         entry = self.journal_entries(self.dossier)[-1]
         self.assertEqual('example comment', entry['comments'])
         self.assertEqual(self.regular_user.id, entry['actor'])
+        self.assertEqual(DateTime('2016-12-09T09:40:00'), entry['time'])
 
         documents = entry.get('action').get('documents')
         self.assertEqual(1, len(documents))
@@ -107,12 +110,16 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual([], response.get('items'))
 
     @browsing
-    def test_returns_journal_entries_in_newest_first_order(self, browser):
+    def test_returns_journal_entries_sorted_by_time_with_newest_first(self, browser):
         self.login(self.regular_user, browser)
         self.clear_journal_entries(self.dossier)
 
-        JournalManager(self.dossier).add_manual_entry('information', 'first')
-        JournalManager(self.dossier).add_manual_entry('information', 'second')
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            JournalManager(self.dossier).add_manual_entry('information', 'first')
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'second', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'third', time=DateTime(u'2017-10-16T11:34:00+00:00'))
 
         response = browser.open(
             self.dossier.absolute_url() + '/@journal',
@@ -121,7 +128,28 @@ class TestJournalGet(IntegrationTestCase):
         ).json
 
         entry_titles = [item.get('comment') for item in response.get('items')]
-        self.assertEqual(['second', 'first'], entry_titles)
+        self.assertEqual(['third', 'first', 'second'], entry_titles)
+
+    @browsing
+    def test_entries_with_identical_timestamp_are_sorted_by_newset_first(self, browser):
+        self.login(self.regular_user, browser)
+        self.clear_journal_entries(self.dossier)
+
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'first', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'second', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+        JournalManager(self.dossier).add_manual_entry(
+            'information', 'third', time=DateTime(u'2016-12-01T12:34:00+00:00'))
+
+        response = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        entry_titles = [item.get('comment') for item in response.get('items')]
+        self.assertEqual(['third', 'second', 'first'], entry_titles)
 
     @browsing
     def test_show_total_items(self, browser):
@@ -419,7 +447,8 @@ class TestJournalPatch(IntegrationTestCase):
                      data=json.dumps({
                          "comment": "my new comment",
                          "category": "phone-call",
-                         'related_documents': [self.document.absolute_url()]
+                         'related_documents': [self.document.absolute_url()],
+                         'time': u'2017-10-16T00:00:00+00:00',
                      }),
                      headers=http_headers())
         self.assertEqual(1, manager.count())
@@ -432,6 +461,7 @@ class TestJournalPatch(IntegrationTestCase):
 
         self.assertEqual(u'my new comment', entry.get('comment'))
         self.assertEqual(u'Manual entry: Phone call', entry.get('title'))
+        self.assertEqual(u'2017-10-16T00:00:00+00:00', entry['time'])
         self.assertEqual(
             self.document.absolute_url(),
             entry.get('related_documents')[0].get('@id'))
