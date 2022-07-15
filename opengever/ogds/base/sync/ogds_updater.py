@@ -447,6 +447,12 @@ class OGDSUpdater(object):
                     groupid = info['fullname']
 
                 groupid = groupid.decode('utf-8')
+                try:
+                    groupid.encode('ascii')
+                except UnicodeEncodeError:
+                    logger.warn(
+                        u"Skipping group '{}' - contains non-ascii characters".format(groupid))
+                    continue
                 info['groupid'] = groupid
 
                 # Skip groups with groupid longer than SQL 'groupid' column
