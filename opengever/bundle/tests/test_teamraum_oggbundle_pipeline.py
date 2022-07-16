@@ -198,7 +198,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             DateTime("2019-12-05T14:09:59.240726"))
         self.assertEqual(
             document1.changed,
-            datetime(2019, 12, 5, 14, 9, 59, 240726, tzinfo=tzlocal.get_localzone()))
+            tzlocal.get_localzone().localize(datetime(2019, 12, 5, 14, 9, 59, 240726)))
 
         self.assertEqual(
             tuple(),
@@ -240,7 +240,7 @@ class TestTeamraumOggBundlePipeline(IntegrationTestCase):
             DateTime("2019-12-05"))
         self.assertEqual(
             mail.changed,
-            datetime(2019, 12, 5, tzinfo=tzlocal.get_localzone()))
+            tzlocal.get_localzone().localize(datetime(2019, 12, 5)))
 
         self.assertEqual(
             None,
