@@ -32,6 +32,7 @@ from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
+from plone.restapi.batching import HypermediaBatch
 from plone.restapi.interfaces import IFieldSerializer
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
@@ -323,8 +324,10 @@ class GeverSerializeGroupToJson(SerializeGroupToJson):
     content_type = 'virtual.plone.group'
 
     def __call__(self):
-        data = super(GeverSerializeGroupToJson, self).__call__()
+        data = self.base_group_info()
         data['@type'] = self.content_type
+
+        data["users"] = self.member_data()
 
         # The user-items are just userids by default which is not the expected
         # response for summarized users. We have to extend the items manually
@@ -340,6 +343,36 @@ class GeverSerializeGroupToJson(SerializeGroupToJson):
 
         data.get('users')['items'] = user_items
         return data
+
+    def base_group_info(self):
+        group = self.context
+        portal = api.portal.get()
+
+        return {
+            "@id": "{}/@groups/{}".format(portal.absolute_url(), group.id),
+            "id": group.id,
+            "groupname": group.getGroupName(),
+            "email": group.getProperty("email"),
+            "title": group.getProperty("title"),
+            "description": group.getProperty("description"),
+            "roles": group.getRoles(),
+        }
+
+    def member_data(self):
+        # Get group member ids in a more performant way than in plone.restapi
+        # which calls `group.getGroupMemberIds()` which is incredibly slow
+        # for a larger amount of group members.
+        gtool = api.portal.get_tool(name='portal_groups')
+        members = gtool.getGroupMembers(self.context.getId())
+        batch = HypermediaBatch(self.request, members)
+        users_data = {
+            "@id": batch.canonical_url,
+            "items_total": batch.items_total,
+            "items": sorted(batch),
+        }
+        if batch.links:
+            users_data["batching"] = batch.links
+        return users_data
 
 
 @implementer(ISerializeToJson)

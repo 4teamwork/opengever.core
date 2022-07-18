@@ -3,11 +3,15 @@ from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.security import elevated_privileges
 from opengever.base.utils import check_group_plugin_configuration
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import groups_users
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy import or_
 from zExceptions import BadRequest
 from zExceptions import NotFound
 from zope.component import queryMultiAdapter
@@ -15,6 +19,7 @@ from zope.component.hooks import getSite
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.publisher.interfaces import IPublishTraverse
+from zope.sqlalchemy import mark_changed
 import plone.protect.interfaces
 
 
@@ -68,7 +73,10 @@ class GeverGroupsPost(Service):
                 "The group name you entered is too long: "
                 "maximal length is {}".format(GROUP_ID_LENGTH))
 
-        if Group.query.filter(Group.groupid == groupname).count() != 0:
+        if (
+            Group.query.filter(Group.groupid == groupname).filter(or_(
+                Group.active.is_(True), Group.is_local.is_(False))).count() != 0
+        ):
             raise BadRequest('Group {} already exists in OGDS.'.format(groupname))
 
         raise_for_unassignable_roles(roles)
@@ -116,10 +124,15 @@ class GeverGroupsPost(Service):
         # Add group to ogds
         session = create_session()
 
-        ogds_group = Group(groupname, is_local=True, title=title)
+        ogds_group = session.query(Group).get(groupname)
+        if ogds_group is None:
+            ogds_group = Group(groupname, is_local=True, title=title)
+        ogds_group.active = True
+
         for userid in users:
             user = get_sql_user(userid)
             ogds_group.users.append(user)
+
         session.add(ogds_group)
 
         self.request.response.setStatus(201)
@@ -170,8 +183,13 @@ class GeverGroupsPatch(Service):
     def update_ogds_group(self, title, users):
         if title:
             self.ogds_group.title = title
-        if users is not None:
-            self.ogds_group.users = map(get_sql_user, users)
+
+        session = create_session()
+        gid = self.ogds_group.groupid
+        session.execute(groups_users.delete().where(groups_users.c.groupid == gid))
+        if users:
+            session.execute(groups_users.insert().values([(gid, uid) for uid in users]))
+        mark_changed(session)
 
     def reply(self):
         data = json_body(self.request)
@@ -210,18 +228,32 @@ class GeverGroupsPatch(Service):
         self.group.setGroupProperties(properties)
 
         # Add/remove members
-        memberids = self.group.getGroupMemberIds()
+        gtool = api.portal.get_tool(name='portal_groups')
+        memberids = set(gtool.getGroupMembers(self.group.getId()))
         for userid, allow in users.items():
+            userid = userid.encode('utf8')
             if allow:
                 if userid not in memberids:
                     with elevated_privileges():
                         self.group.addMember(userid)
+                    memberids.add(userid)
             else:
                 if userid in memberids:
                     with elevated_privileges():
                         self.group.removeMember(userid)
+                    memberids.remove(userid)
 
-        self.update_ogds_group(data.get("title", None), self.group.getGroupMemberIds()
+        ogds_userids = set([
+            uid for uid,
+            in ogds_service()._query_user().with_entities(User.userid).all()
+        ])
+
+        not_in_ogds = memberids - ogds_userids
+        if not_in_ogds:
+            raise BadRequest("Users {} not found in OGDS.".format(list(not_in_ogds)))
+
+        new_ogds_userids = memberids & ogds_userids
+        self.update_ogds_group(data.get("title", None), new_ogds_userids
                                if users.items() else None)
 
         return self.reply_no_content()
