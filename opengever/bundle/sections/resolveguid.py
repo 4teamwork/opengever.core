@@ -73,9 +73,9 @@ class ResolveGUIDSection(object):
         self.bundle.item_by_guid = OrderedDict()
 
         # Table of formatted refnums that exist in Plone
-        self.bundle.existing_refnums = ()
+        self.bundle.existing_refnums = set()
         # Table of bundle GUIDs that exist in Plone
-        self.bundle.existing_guids = ()
+        self.bundle.existing_guids = set()
 
         # Current reference number formatter
         self.formatter = None
@@ -105,7 +105,7 @@ class ResolveGUIDSection(object):
 
     def get_existing_refnums(self):
         index = self.catalog._catalog.indexes['reference']
-        return tuple(index.uniqueValues())
+        return set(index.uniqueValues())
 
     def register_items_by_guid(self):
         """Register all items by their guid."""
@@ -158,8 +158,7 @@ class ResolveGUIDSection(object):
 
     def get_all_existing_guids(self):
         index = self.catalog._catalog.indexes['bundle_guid']
-        guids = tuple(index.uniqueValues())
-        return guids
+        return set(index.uniqueValues())
 
     def track_actual_item_stats(self, item):
         portal_type = item['_type']
