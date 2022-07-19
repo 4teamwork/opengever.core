@@ -21,7 +21,6 @@ _Everything has to be done/checked. Checked but not present means the author dee
 
 _Only applicable should be left and checked._
 
-- [ ] Dependency version bump, also bump version for docker image in `requirements-core.txt`
 - Upgrade-Steps:
   - [ ] SQL Operations do not use imported model (see [docs](https://4teamwork.atlassian.net/wiki/spaces/4TEAM/pages/994344994/Upgrade-Steps))
   - [ ] Make it deferrable if possible
