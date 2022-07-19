@@ -30,7 +30,7 @@
   <state
       state_id="document-state-draft"
       title="document-state-draft">
-    <description>one single state</description>
+    <description>document-state-draft</description>
     <exit-transition transition_id="document-transition-remove" />
     <permission-map
         name="Access contents information"
@@ -43,9 +43,6 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceGuest</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Access previous versions"
@@ -58,9 +55,6 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceGuest</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Apply version control"
@@ -69,8 +63,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Checkout to location"
@@ -79,8 +71,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Manage versioning policies"
@@ -89,8 +79,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Purge version"
@@ -99,8 +87,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="CMFEditions: Revert to previous versions"
@@ -109,8 +95,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Change portal events"
@@ -119,8 +103,6 @@
       <permission-role>Manager</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Content rules: Manage rules"
@@ -129,9 +111,6 @@
     <permission-map
         name="Copy or Move"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceGuest</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Delete objects"
@@ -145,8 +124,6 @@
     <permission-map
         name="Modify portal content"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="Request review"
@@ -167,9 +144,6 @@
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeMember</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceGuest</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV Lock items"
@@ -180,8 +154,6 @@
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV Unlock items"
@@ -192,8 +164,6 @@
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="WebDAV access"
@@ -204,26 +174,18 @@
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>CommitteeAdministrator</permission-role>
       <permission-role>CommitteeResponsible</permission-role>
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Cancel"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Checkin"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map
         name="opengever.document: Checkout"
         acquired="True">
-      <permission-role>WorkspaceAdmin</permission-role>
-      <permission-role>WorkspaceMember</permission-role>
     </permission-map>
   </state>
   <state
