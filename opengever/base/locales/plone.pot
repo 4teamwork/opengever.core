@@ -54,10 +54,19 @@ msgstr ""
 msgid "document-state-draft"
 msgstr ""
 
+msgid "document-state-final"
+msgstr ""
+
 msgid "document-state-removed"
 msgstr ""
 
+msgid "document-transition-finalize"
+msgstr ""
+
 msgid "document-transition-remove"
+msgstr ""
+
+msgid "document-transition-reopen"
 msgstr ""
 
 msgid "document-transition-restore"

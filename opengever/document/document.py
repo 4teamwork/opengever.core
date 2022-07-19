@@ -7,6 +7,7 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
+from opengever.base.utils import is_administrator
 from opengever.docugate import is_docugate_feature_enabled
 from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document import _
@@ -54,6 +55,8 @@ from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
+
+DOCUMENT_STATE_FINAL = 'document-state-final'
 
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg', '.p7m']
@@ -211,10 +214,13 @@ class Document(Item, BaseDocumentMixin):
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
     shadow_state = 'document-state-shadow'
+    final_state = 'document-state-final'
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
     initialize_transition = 'document-transition-initialize'
+    finalize_transition = 'document-transition-finalize'
+    reopen_transition = 'document-transition-reopen'
 
     workspace_workflow_id = 'opengever_workspace_document'
 
@@ -354,6 +360,12 @@ class Document(Item, BaseDocumentMixin):
         if self.is_shadow_document():
             api.content.transition(
                 self, transition='document-transition-initialize')
+
+    def is_finalize_allowed(self):
+        return not self.is_checked_out()
+
+    def is_reopen_allowed(self):
+        return is_administrator()
 
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),

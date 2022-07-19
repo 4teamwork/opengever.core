@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-07-12 06:43+0000\n"
+"POT-Creation-Date: 2022-07-21 07:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -502,6 +502,11 @@ msgid "label_file"
 msgstr ""
 
 msgid "label_filesize"
+msgstr ""
+
+#. Default: "Finalizer"
+#: ./opengever/document/document.py
+msgid "label_finalizer"
 msgstr ""
 
 #. Default: "Foreign Reference"

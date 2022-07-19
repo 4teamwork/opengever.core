@@ -171,6 +171,9 @@ msgstr "Offre refusée"
 msgid "document-state-draft"
 msgstr "Non défini"
 
+msgid "document-state-final"
+msgstr "Final"
+
 msgid "document-state-pending"
 msgstr "En suspend"
 
@@ -180,8 +183,14 @@ msgstr "Effacé"
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
+msgid "document-transition-finalize"
+msgstr "Finaliser"
+
 msgid "document-transition-remove"
 msgstr "Effacer"
+
+msgid "document-transition-reopen"
+msgstr "Réviser"
 
 msgid "document-transition-restore"
 msgstr "Récupérer"

@@ -171,6 +171,9 @@ msgstr "Ablehnen"
 msgid "document-state-draft"
 msgstr "nicht definiert"
 
+msgid "document-state-final"
+msgstr "Final"
+
 msgid "document-state-pending"
 msgstr "Hängig"
 
@@ -180,8 +183,14 @@ msgstr "Gelöscht"
 msgid "document-state-working_copy"
 msgstr "Arbeitskopie"
 
+msgid "document-transition-finalize"
+msgstr "Finalisieren"
+
 msgid "document-transition-remove"
 msgstr "Löschen"
+
+msgid "document-transition-reopen"
+msgstr "Überarbeiten"
 
 msgid "document-transition-restore"
 msgstr "Wiederherstellen"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-07-12 06:43+0000\n"
+"POT-Creation-Date: 2022-07-21 07:14+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -509,6 +509,11 @@ msgstr "Datei"
 #. Default: "File size"
 msgid "label_filesize"
 msgstr "Dateigrösse"
+
+#. Default: "Finalizer"
+#: ./opengever/document/document.py
+msgid "label_finalizer"
+msgstr "Finalisierer"
 
 #. Default: "Foreign Reference"
 #: ./opengever/document/behaviors/metadata.py

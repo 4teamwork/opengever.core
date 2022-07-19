@@ -225,6 +225,9 @@ msgstr "Refuse"
 msgid "document-state-draft"
 msgstr "undefined"
 
+msgid "document-state-final"
+msgstr "Final"
+
 #. German translation: Hängig
 msgid "document-state-pending"
 msgstr "Pending"
@@ -237,9 +240,15 @@ msgstr "Removed"
 msgid "document-state-working_copy"
 msgstr "Working copy"
 
+msgid "document-transition-finalize"
+msgstr "Finalize"
+
 #. German translation: Löschen
 msgid "document-transition-remove"
 msgstr "Remove"
+
+msgid "document-transition-reopen"
+msgstr "Revise"
 
 #. German translation: Wiederherstellen
 msgid "document-transition-restore"

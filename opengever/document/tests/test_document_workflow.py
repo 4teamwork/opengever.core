@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.document.document import Document
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -60,3 +61,58 @@ class TestDocumentWorkflow(IntegrationTestCase):
 
         self.login(self.manager)
         api.content.delete(obj=self.document)
+
+    def test_document_can_be_finalized_with_edit_permission(self):
+        self.login(self.regular_user)
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+        self.assertEquals(Document.final_state,
+                          api.content.get_state(obj=self.document))
+
+    def test_document_cannot_be_finalized_if_checked_out(self):
+        self.login(self.administrator)
+
+        self.checkout_document(self.document)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.document, transition=Document.finalize_transition)
+
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
+    def test_limited_admin_can_reopen_finalized_document(self):
+        with self.login(self.manager):
+            api.content.transition(obj=self.document,
+                                   transition=Document.finalize_transition)
+
+        with self.login(self.regular_user), self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.document, transition=Document.reopen_transition)
+
+        self.login(self.limited_admin)
+        api.content.transition(obj=self.document,
+                               transition=Document.reopen_transition)
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
+    def test_finalized_document_cannot_be_checked_out(self):
+        self.login(self.administrator)
+        self.assertTrue(self.document.is_checkout_permitted())
+
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+
+        self.assertFalse(self.document.is_checkout_permitted())
+
+    @browsing
+    def test_finalized_document_cannot_be_edited(self, browser):
+        self.login(self.administrator, browser)
+        browser.open(self.document, view='edit')
+
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(self.document, view='edit')
