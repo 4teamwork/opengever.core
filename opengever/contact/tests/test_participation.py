@@ -622,6 +622,7 @@ class TestRemoveKubParticipation(KuBIntegrationTestCase):
     @browsing
     def test_deleting_kub_participation_is_not_supported(self, mocker, browser):
         self.login(self.regular_user, browser)
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.person_jean)
         handler = IParticipationAware(self.empty_dossier)
         handler.add_participation(self.person_jean, roles=['participation'])

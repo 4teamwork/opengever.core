@@ -88,6 +88,7 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
         handler = IParticipationAware(self.dossier)
 
         self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_labels(mocker)
         handler.add_participation(
             self.person_jean, ['regard', 'participation', 'final-drawing'])
 
@@ -149,6 +150,7 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         handler = IParticipationAware(self.dossier)
 
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.person_jean)
         handler.add_participation(
             self.person_jean, ['regard', 'participation', 'final-drawing'])
@@ -403,15 +405,18 @@ class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, TestPa
         self.valid_participant_id2 = self.org_ftw
 
     def test_post_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_participant_id)
         self.mock_get_by_id(mocker, self.valid_participant_id2)
         super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation()
 
     def test_post_participations_without_roles_raises_bad_request(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_participant_id)
         super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_without_roles_raises_bad_request()
 
     def test_post_participations_with_invalid_role_raises_bad_request(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_participant_id)
         super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_with_invalid_role_raises_bad_request()
 
@@ -423,6 +428,7 @@ class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, TestPa
         super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participations_with_invalid_participant_id_raises_bad_request()
 
     def test_post_participation_with_existing_participant_raises_bad_request(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_participant_id)
         super(TestParticipationsPostWithKubFeatureEnabled, self).test_post_participation_with_existing_participant_raises_bad_request()
 
@@ -579,33 +585,41 @@ class TestParticipationsPatchWithKuBFeatureEnabled(KuBIntegrationTestCase, TestP
         self.participant_id = self.person_jean
 
     def test_patch_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.participant_id)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation()
 
     def test_patch_participation_without_participant_id_raises_bad_request(self, mocker):
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_without_participant_id_raises_bad_request()
 
     def test_patch_participation_when_particpant_has_no_participation_raises_bad_request(self,
                                                                                          mocker):
         self.mock_get_by_id(mocker, self.participant_id)
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_when_particpant_has_no_participation_raises_bad_request()
 
     def test_patch_participations_with_invalid_participant_id_raises_bad_request(self, mocker):
         self.mock_get_by_id(mocker, "invalid-id")
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_with_invalid_participant_id_raises_bad_request()
 
     def test_patch_participations_without_roles_raises_bad_request(self, mocker):
         self.mock_get_by_id(mocker, self.participant_id)
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_without_roles_raises_bad_request()
 
     def test_patch_participations_with_invalid_role_raises_bad_request(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.participant_id)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participations_with_invalid_role_raises_bad_request()
 
     def test_patch_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_for_resolved_dossier_raises_unauthorized()
 
     def test_patch_participation_for_inactive_dossier_raises_unauthorized(self, mocker):
+        self.mock_labels(mocker)
         super(TestParticipationsPatchWithKuBFeatureEnabled, self).test_patch_participation_for_inactive_dossier_raises_unauthorized()
 
 
@@ -708,15 +722,18 @@ class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, Test
 
     def test_delete_participation(self, mocker):
         self.mock_get_by_id(mocker, self.participant_id)
+        self.mock_labels(mocker)
         super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation()
 
     def test_delete_participation_when_participant_has_no_participation_raises_bad_request(
             self, mocker):
         self.mock_get_by_id(mocker, self.participant_id)
+        self.mock_labels(mocker)
         super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_delete_participation_when_participant_has_no_participation_raises_bad_request()
 
     def test_can_delete_participations_with_invalid_participant_id(self, mocker):
         self.mock_get_by_id(mocker, "invalid-id")
+        self.mock_labels(mocker)
         super(TestParticipationsDeleteWithKuBFeatureEnabled, self).test_can_delete_participations_with_invalid_participant_id()
 
     def test_delete_participation_for_resolved_dossier_raises_unauthorized(self, mocker):
@@ -763,8 +780,11 @@ class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCa
     @browsing
     def test_get_possible_participants(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = self.dossier.absolute_url() + '/@possible-participants?query=mei'
 
+        # features not working
+        self.activate_feature('contact')
+
+        url = self.dossier.absolute_url() + '/@possible-participants?query=mei'
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': url,

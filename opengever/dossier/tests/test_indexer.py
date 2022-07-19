@@ -438,6 +438,7 @@ class TestDossierParticipationsIndexerWithKuB(SolrIntegrationTestCase, KuBIntegr
     def test_kub_participations_are_indexed_in_solr(self, mocker):
         self.login(self.regular_user)
 
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.person_jean)
         handler = IParticipationAware(self.dossier)
         handler.add_participation(

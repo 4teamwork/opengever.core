@@ -1775,6 +1775,7 @@ class TestKuBDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase,
     def test_dossier_participations_fields(self, mocker, browser):
         self.login(self.regular_user, browser=browser)
 
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.person_jean)
         self.mock_get_by_id(mocker, self.org_ftw)
         handler = IParticipationAware(self.dossier)
@@ -1820,6 +1821,7 @@ class TestKuBDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase,
     def test_dossier_participant_and_roles_filters(self, mocker, browser):
         self.login(self.regular_user, browser=browser)
 
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.person_jean)
         self.mock_get_by_id(mocker, self.org_ftw)
         handler = IParticipationAware(self.dossier)
