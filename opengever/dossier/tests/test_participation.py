@@ -198,50 +198,61 @@ class TestKuBParticipationHanlder(KuBIntegrationTestCase, TestPloneParticipation
     valid_id = 'person:9af7d7cc-b948-423f-979f-587158c6bc65'
 
     def test_handler_delegates_to_correct_handler_class(self, mocker):
-        self.mock_get_by_id(mocker, self.valid_id)
+        self.mock_labels(mocker)
         super(TestKuBParticipationHanlder, self).test_handler_delegates_to_correct_handler_class()
 
     def test_adding_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_adding_participation()
 
     def test_updating_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_updating_participation()
 
     def test_deleting_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_deleting_participation()
 
     def test_only_one_participation_per_participant_is_allowed(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_only_one_participation_per_participant_is_allowed()
 
     def test_cannot_add_participation_for_invalid_participant(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, "invalid-id")
         super(TestKuBParticipationHanlder, self).test_cannot_add_participation_for_invalid_participant()
 
     def test_cannot_delete_missing_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_delete_missing_participation()
 
     def test_cannot_update_missing_participation(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_update_missing_participation()
 
     def test_cannot_add_participation_with_invalid_role(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_add_participation_with_invalid_role()
 
     def test_cannot_add_participation_without_role(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_add_participation_without_role()
 
     def test_cannot_update_participation_with_invalid_role(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_update_participation_with_invalid_role()
 
     def test_cannot_update_participation_without_role(self, mocker):
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, self.valid_id)
         super(TestKuBParticipationHanlder, self).test_cannot_update_participation_without_role()
 

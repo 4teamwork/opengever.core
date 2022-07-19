@@ -1,6 +1,8 @@
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.kub.interfaces import IKuBSettings
 from plone import api
+from plone.memoize import ram
+from time import time
 import requests
 
 
@@ -53,3 +55,18 @@ class KuBClient(object):
 
     def get_resolve_url(self, _id):
         return u'{}resolve/{}'.format(self.kub_api_url, _id)
+
+    # Cache kub labels for an hour
+    @ram.cache(lambda *args: time() // (60 * 60))
+    def get_kub_id_label_mapping(self):
+        return self._prepare_kub_label_mapping()
+
+    def _prepare_kub_label_mapping(self):
+        resp = self.session.get(u'{}labels'.format(self.kub_api_url))
+        try:
+            resp.raise_for_status()
+        except requests.HTTPError as exc:
+            log_msg_to_sentry(exc.message)
+            raise LookupError
+        return {
+            item['typedId']: item['label'] for item in resp.json()['results']}

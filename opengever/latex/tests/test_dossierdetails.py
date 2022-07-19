@@ -201,6 +201,7 @@ class TestDossierDetailsWithKuB(KuBIntegrationTestCase, TestDossierDetailsBase):
 
         self.login(self.regular_user)
 
+        self.mock_labels(mocker)
         self.mock_get_by_id(mocker, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
         handler = IParticipationAware(self.dossier)
         handler.add_participation(

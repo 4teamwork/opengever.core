@@ -29,6 +29,11 @@ class KuBIntegrationTestCase(IntegrationTestCase):
         mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
+    def mock_labels(self, mocker):
+        url = u'{}labels'.format(self.client.kub_api_url)
+        mocker.get(url, json=KUB_RESPONSES[url])
+        return url
+
 
 # These responses are taken from performing these exact requests against
 # the database defined in "fixtures/gever-testing.json" in the KUB repository.
@@ -786,5 +791,40 @@ KUB_RESPONSES = {
         "url": "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65",
         "typedId": "person:9af7d7cc-b948-423f-979f-587158c6bc65",
         "type": "person"
+    },
+
+    "http://localhost:8000/api/v1/labels": {
+        "results": [
+            {
+                "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+                "typedId": "person:0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+                "label": "Dupont Julie"
+            },
+            {
+                "id": "1193d423-ce13-4dd9-aa8d-1f224f6a2b96",
+                "typedId": "person:1193d423-ce13-4dd9-aa8d-1f224f6a2b96",
+                "label": "Peter Hans"
+            },
+            {
+                "id": "5db3e407-7fc3-4093-a6cf-96030044285a",
+                "typedId": "person:5db3e407-7fc3-4093-a6cf-96030044285a",
+                "label": "Schaudi Julia"
+            },
+            {
+                "id": "9af7d7cc-b948-423f-979f-587158c6bc65",
+                "typedId": "person:9af7d7cc-b948-423f-979f-587158c6bc65",
+                "label": "Dupont Jean"
+            },
+            {
+                "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a",
+                "label": "4Teamwork"
+            },
+            {
+                "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "label": "Dupont Jean - 4Teamwork (CEO)"
+            }
+        ]
     }
 }
