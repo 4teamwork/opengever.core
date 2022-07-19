@@ -1,5 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.solr.interfaces import ISolrSettings
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
@@ -23,11 +24,13 @@ from opengever.testing.event_recorder import register_event_recorder
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
+from plone.registry.interfaces import IRegistry
 from requests_toolbelt.utils import formdata
 from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
 from zope.component import getUtility
+from zope.component import queryUtility
 import json
 
 
@@ -39,7 +42,8 @@ class TestProposalStateGlobals(IntegrationTestCase):
 
         wftool = api.portal.get_tool('portal_workflow')
         workflow = wftool.getWorkflowById('opengever_proposal_workflow')
-        self.assertItemsEqual(all_states, tuple(workflow.states),
+        self.assertItemsEqual(
+            all_states, tuple(workflow.states),
             "Workflow state global definitions and actually available "
             "workflow states are unequal. You probably have added a new state"
             "and now the module globals must be updated.")
@@ -129,11 +133,11 @@ class TestProposalSolr(SolrIntegrationTestCase):
             self.dossier.absolute_url(),
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
             data=formdata.urlencode((original_template, authenticator, document_14_path, document_35_path, method, )),
-            )
+        )
         self.assertEqual(
             [u'Vertr\xe4gsentwurf', 'Feedback zum Vertragsentwurf'],
             browser.css('#form-widgets-relatedItems span.label').text,
-            )
+        )
 
     @browsing
     def test_creating_proposal_from_proposal_template(self, browser):
@@ -147,10 +151,14 @@ class TestProposalSolr(SolrIntegrationTestCase):
              'Proposal template': u'Geb\xfchren',
              'Edit after creation': True,
              'Attachments': [self.document]},
-             ).save()
+        ).save()
 
         statusmessages.assert_no_error_messages()
-        self.commit_solr()
+
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enable_updates_in_post_commit_hook = False
+        self.commit_solr(after_commit=True)
 
         self.assertIn('external_edit', browser.css('.redirector').first.text,
                       'External editor should have been triggered.')
@@ -235,12 +243,12 @@ class TestProposal(IntegrationTestCase):
             '++add++opengever.meeting.proposal',
             '++widget++form.widgets.relatedItems',
             '@@contenttree-fetch',
-            ))
+        ))
         browser.open(
             contenttree_url,
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
             data=formdata.urlencode({'href': '/'.join(self.dossier.getPhysicalPath()), 'rel': 0}),
-            )
+        )
         containers = browser.css('li.navTreeFolderish').text
         selectables = browser.css('li.selectable').text
         self.assertIn(self.proposal.title, containers)
@@ -282,7 +290,7 @@ class TestProposal(IntegrationTestCase):
             browser.context.getChildNodes()._data[0].file.data,
             self.document.file.data,
             u'Did not succesfully copy the file over from self.document.',
-            )
+        )
         self.assert_workflow_state('proposal-state-active', browser.context)
 
     @browsing
@@ -297,7 +305,7 @@ class TestProposal(IntegrationTestCase):
         expected_errors = [
             'Error There were some errors.',
             'Either a proposal template or a proposal document is required.',
-            ]
+        ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
@@ -314,7 +322,7 @@ class TestProposal(IntegrationTestCase):
         expected_errors = [
             'Error There were some errors.',
             'Either a proposal template or a proposal document is required.',
-            ]
+        ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
         browser.open(self.dossier)
@@ -328,7 +336,7 @@ class TestProposal(IntegrationTestCase):
         expected_errors = [
             'Error There were some errors.',
             'Either a proposal template or a proposal document is required.',
-            ]
+        ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
@@ -345,7 +353,7 @@ class TestProposal(IntegrationTestCase):
         expected_errors = [
             'Error There were some errors.',
             'Only .docx files are allowed as proposal documents.',
-            ]
+        ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
@@ -363,7 +371,7 @@ class TestProposal(IntegrationTestCase):
         expected_errors = [
             'Error There were some errors.',
             'Only .docx files are allowed as proposal documents.',
-            ]
+        ]
         self.assertEqual(expected_errors, browser.css('.error').text)
 
     @browsing
@@ -552,7 +560,7 @@ class TestProposal(IntegrationTestCase):
             'X-File-Name': filename,
             'Content-Type': 'application/octet-stream',
             'X-Requested-With': 'XMLHttpRequest',
-            }
+        }
         fileish = StringIO('foobar')
         proposal_document = self.draft_proposal.get_proposal_document()
         self.checkout_document(proposal_document)
@@ -562,7 +570,7 @@ class TestProposal(IntegrationTestCase):
             data={'file': fileish},
             headers=headers,
             view='@@quick_upload_file?qqfile={}'.format(filename),
-            )
+        )
         fileish.close()
         self.assertEqual(browser.json, expected_error)
 
@@ -801,8 +809,8 @@ class TestProposal(IntegrationTestCase):
             [],
             ISubmittedProposal(self.submitted_proposal).excerpts)
 
-        agenda_item = self.schedule_proposal(self.meeting,
-                              self.submitted_proposal)
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal)
         agenda_item.decide()
 
         with self.observe_children(self.meeting_dossier) as children:
