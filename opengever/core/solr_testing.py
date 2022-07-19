@@ -81,10 +81,10 @@ class SolrServer(object):
         processQueue()
         return manager.connection
 
-    def commit(self):
+    def commit(self, after_commit=False):
         """Commit any pending updates in Solr.
         """
-        self.connection.commit()
+        self.connection.commit(after_commit=after_commit)
 
     def stop(self):
         """Make sure the solr server is stopped.

@@ -26,7 +26,7 @@ class ReindexCustompropertiesForDossier(UpgradeStep):
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add([])
 
-        manager.connection.commit(soft_commit=False, extract_after_commit=False)
+        manager.connection.commit(soft_commit=False, after_commit=False)
 
     def has_dossier_propertysheet_registered(self):
         storage = PropertySheetSchemaStorage()

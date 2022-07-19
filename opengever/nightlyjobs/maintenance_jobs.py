@@ -256,5 +256,5 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
         if self.job_counter[key] % queue['commit_batch_size'] == 0 or force:
             if queue['commit_to_solr']:
                 manager = getUtility(ISolrConnectionManager)
-                manager.connection.commit(extract_after_commit=False)
+                manager.connection.commit(after_commit=False)
             transaction.commit()
