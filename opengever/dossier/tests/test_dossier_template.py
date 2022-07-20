@@ -94,17 +94,6 @@ class TestDossierTemplate(IntegrationTestCase):
         self.assertEquals(['Template'], browser.css('h1').text)
 
     @browsing
-    def test_edit_dossiertemplate_works_properly(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        browser.open(self.dossiertemplate)
-        browser.find('Edit').click()
-        browser.fill({'Title': 'Edited Template'}).submit()
-
-        self.assertEquals(['Changes saved'], info_messages())
-        self.assertEquals(['Edited Template'], browser.css('h1').text)
-
-    @browsing
     def test_addable_types(self, browser):
         self.login(self.administrator, browser=browser)
         browser.open(self.dossiertemplate)
@@ -271,6 +260,17 @@ class TestDossierTemplate(IntegrationTestCase):
 
 
 class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_edit_dossiertemplate_works_properly(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        browser.open(self.dossiertemplate)
+        browser.find('Edit').click()
+        browser.fill({'Title': 'Edited Template'}).submit()
+
+        self.assertEquals(['Changes saved'], info_messages())
+        self.assertEquals(['Edited Template'], browser.css('h1').text)
 
     @browsing
     def test_dossiertemplates_tab_lists_only_dossiertemplates_without_subdossiers(self, browser):

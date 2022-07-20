@@ -16,6 +16,7 @@ from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.browser.participants import translate_participation_role
+from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
@@ -177,12 +178,11 @@ def containing_subdossier(obj):
         if ISiteRoot.providedBy(parent):
             # Shouldn't happen, just to be safe
             break
-        if IDossierMarker.providedBy(parent):
+        if IDossierMarker.providedBy(parent) or IDossierTemplateMarker.providedBy(parent):
             parent_dossier_found = True
             parent_dossier = parent
 
-    if IDossierMarker.providedBy(aq_parent(parent_dossier)):
-        # parent dossier is a subdossier
+    if parent_dossier and parent_dossier.is_subdossier():
         return parent_dossier.Title()
     return ''
 
