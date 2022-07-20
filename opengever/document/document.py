@@ -23,6 +23,7 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
+from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
@@ -106,6 +107,13 @@ class IDocumentSchema(model.Schema):
     file = field.NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
+        required=False,
+    )
+
+    form.omitted('finalizer')
+    finalizer = schema.Choice(
+        title=_(u"label_finalizer", default="Finalizer"),
+        source=AllUsersSourceBinder(),
         required=False,
     )
 
@@ -365,7 +373,9 @@ class Document(Item, BaseDocumentMixin):
         return not self.is_checked_out()
 
     def is_reopen_allowed(self):
-        return is_administrator()
+        user = api.user.get_current()
+        return (is_administrator(user)
+                or user.getId() == IDocumentSchema(self).finalizer)
 
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),

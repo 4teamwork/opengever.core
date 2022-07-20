@@ -96,6 +96,20 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.assertEquals(Document.active_state,
                           api.content.get_state(obj=self.document))
 
+    def test_finalizer_can_reopen_document(self):
+        self.login(self.regular_user)
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+
+        self.assertEquals(Document.final_state,
+                          api.content.get_state(obj=self.document))
+
+        api.content.transition(
+            obj=self.document, transition=Document.reopen_transition)
+
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
     def test_finalized_document_cannot_be_checked_out(self):
         self.login(self.administrator)
         self.assertTrue(self.document.is_checkout_permitted())
