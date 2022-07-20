@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import freeze
