@@ -842,7 +842,10 @@ class OpengeverContentFixture(object):
         subtemplates = self.register('subtemplates', create(
             Builder('templatefolder')
             .titled(u'Vorlagen neu')
-            .having(id='vorlagen-neu')
+            .having(id='vorlagen-neu',
+                    title_de=u'Vorlagen neu',
+                    title_en=u'Templates new',
+                    title_fr=u'Mod\xe8les nouveau')
             .within(self.templates)
         ))
 

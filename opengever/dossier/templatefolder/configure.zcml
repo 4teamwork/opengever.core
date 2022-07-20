@@ -114,6 +114,12 @@
       handler=".subscribers.configure_templatefolder_portlets"
       />
 
+  <subscriber
+      for="opengever.dossier.templatefolder.interfaces.ITemplateFolder
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".subscribers.reindex_contained_documents"
+      />
+
   <utility
       factory=".vocabulary.DocumentTemplatesVocabulary"
       name="opengever.dossier.DocumentTemplatesVocabulary"

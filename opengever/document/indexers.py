@@ -14,6 +14,7 @@ from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
+from opengever.document.interfaces import ITemplateDocumentMarker
 from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.indexer import indexer
@@ -264,3 +265,13 @@ def approval_state(obj):
     approvals = IApprovalList(obj)
     approval_state = approvals.get_approval_state()
     return approval_state
+
+
+@indexer(ITemplateDocumentMarker)
+def containing_dossier_title(obj):
+    templatefolder = obj.get_parent_dossier()
+    if not templatefolder:
+        return None
+    languages = api.portal.get_tool('portal_languages').getSupportedLanguages()
+    titles = [templatefolder.Title(language.split('-')[0]) for language in languages]
+    return ' / '.join(titles)
