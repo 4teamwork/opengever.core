@@ -10,6 +10,46 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.14.0 (2022-07-20)
+----------------------
+
+New features:
+
+
+- Include links to related items in the teamraum meetings pdf. [phgross]
+- Add DELETE method for @journal endpoint (only available for new manual journal entries) . [elioschmutz]
+- Add PATCH method for @journal endpoint (only available for new manual journal entries) . [elioschmutz]
+- Add `category` attribute for serialized @journal entry items (only available for new manual journal entries) . [elioschmutz]
+- Allow setting and modifying time in manual journal entries. [njohner]
+
+
+Bug fixes:
+
+
+- Improve perfomance in KuB contact source. [phgross]
+- Bump docxcompose to fix issues with headers and footers for documents with sections. [njohner]
+- No longer sync groups with names containing non-ascii characters into the OGDS. [tinagerber]
+
+
+Other changes:
+
+
+- Optimize performance of groups API. [buchi]
+- Allow to recreate deleted local groups. [buchi]
+- Allow responsible to directly close tasks for direct execution. [njohner]
+- Bump ftw.upgrade to handle dead brains in security updates. [njohner]
+- Enable all languages by default for Teamraum policies. [njohner]
+- Add checkin comment in DocumenVersionCreatedActivity description. [njohner]
+- Optimize resolve GUID section in bundle import. [buchi]
+- Rename action to restore a document version. [tinagerber]
+- Bump ftw.solr to 2.12.0 to minimize the ZODB locking time. [njohner]
+- Refactor journal entry handling implementation . [elioschmutz]
+- Properly deserialize vocabulary values in @journal endpoint. [elioschmutz]
+- Rename `comments` attribute for GET @journal entries to `comment` which is the expected naming in the POST request. [elioschmutz]
+- Set Accept-Language header when requesting KuB. [tinagerber]
+- Bump alembic, psycopg2, SQLAlchemy-Utils and pytz to more recent versions. [buchi]
+
+
 2022.13.0 (2022-07-07)
 ----------------------
 
