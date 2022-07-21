@@ -24,7 +24,7 @@ from zope.component import queryUtility
 from zope.intid.interfaces import IIntIds
 
 
-class TestTaskIntegration(SolrIntegrationTestCase):
+class TestTaskSolrIntegration(SolrIntegrationTestCase):
 
     features = ('solr', 'activity')
 
@@ -498,6 +498,43 @@ class TestTaskIntegration(SolrIntegrationTestCase):
         self.assertEqual(self.dossier_responsible.getId(), activities[0].actor_id)
         self.assertEqual(u'task-added', activities[1].kind)
         self.assertEqual(self.dossier_responsible.getId(), activities[1].actor_id)
+
+
+class TestTaskIntegration(IntegrationTestCase):
+
+    def test_is_open(self):
+        self.login(self.regular_user)
+        # open
+        self.assertTrue(self.seq_subtask_1.is_open())
+        # in progress
+        self.assertFalse(self.task.is_open())
+        # resolved
+        self.assertFalse(self.subtask.is_open())
+
+    def test_is_pending(self):
+        self.login(self.regular_user)
+        # open
+        self.assertTrue(self.seq_subtask_1.is_pending())
+        # in progress
+        self.assertTrue(self.task.is_pending())
+        # resolved
+        self.assertTrue(self.subtask.is_pending())
+
+        wft = self.portal.portal_workflow
+        wft.doActionFor(self.seq_subtask_1, 'task-transition-open-tested-and-closed')
+        self.assertFalse(self.seq_subtask_1.is_pending())
+
+    def test_is_in_final_state(self):
+        self.login(self.regular_user)
+        # in progress
+        self.assertFalse(self.task.is_in_final_state)
+        # resolved
+        self.assertFalse(self.subtask.is_in_final_state)
+
+        # closed
+        wft = self.portal.portal_workflow
+        wft.doActionFor(self.seq_subtask_1, 'task-transition-open-tested-and-closed')
+        self.assertTrue(self.seq_subtask_1.is_in_final_state)
 
 
 class TestDossierSequenceNumber(IntegrationTestCase):

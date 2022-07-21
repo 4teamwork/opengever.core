@@ -443,6 +443,9 @@ class Task(Container, TaskReminderSupport):
     def is_open(self):
         return api.content.get_state(self) in TaskModel.OPEN_STATES
 
+    def is_pending(self):
+        return api.content.get_state(self) in TaskModel.PENDING_STATES
+
     def get_issuer_label(self):
         return self.get_sql_object().get_issuer_label()
 
