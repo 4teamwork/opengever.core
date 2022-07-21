@@ -194,6 +194,11 @@ class TestSubDossierListing(BaseLatexListingTest):
             ['No.', 'Title', 'Responsible', 'State', 'Start', 'End'],
             [col.text_content().strip() for col in cols])
 
+        cols = table.xpath(CSSSelector('colgroup col').path)
+        self.assertEquals(
+            ['5%', '40%', '35%', '10%', '5%', '5%'],
+            [col.get('width') for col in cols])
+
     def test_drop_reference_from_default_dossier_listings(self):
         self.listing.items = [obj2brain(self.dossier)]
 
