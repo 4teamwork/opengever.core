@@ -28,10 +28,6 @@ class TestTaskSolrIntegration(SolrIntegrationTestCase):
 
     features = ('solr', 'activity')
 
-    def setUp1(self):
-        super(TestTaskIntegration, self).setUp()
-        self.portal.portal_types['opengever.task.task'].global_allow = True
-
     def test_adding(self):
         self.login(self.regular_user)
         t1 = create(
