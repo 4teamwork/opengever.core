@@ -275,7 +275,7 @@ class Overview(DefaultView, GeverTabMixin, VisibleActionButtonRendererMixin):
             'url': obj.absolute_url(),
         } for obj in sorted(
             self.context.related_items(
-                bidirectional=True,
+                include_backrefs=True,
                 documents_only=True,
             ),
             key=lambda obj: obj.Title()

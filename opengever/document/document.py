@@ -25,6 +25,7 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.task.task import ITask
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
@@ -311,15 +312,17 @@ class Document(Item, BaseDocumentMixin):
         self._v_filename = getattr(value, "filename", None)
         self.sync_title_and_filename()
 
-    def related_items(self, bidirectional=False, documents_only=False):
+    def related_items(self, include_forwardrefs=True, include_backrefs=False,
+                      documents_only=False, tasks_only=False):
         _related_items = []
 
-        relations = IRelatedDocuments(self).relatedItems
+        if include_forwardrefs and not tasks_only:
+            relations = IRelatedDocuments(self).relatedItems
 
-        if relations:
-            _related_items += [rel.to_object for rel in relations if not rel.isBroken()]
+            if relations:
+                _related_items += [rel.to_object for rel in relations if not rel.isBroken()]
 
-        if bidirectional:
+        if include_backrefs:
             catalog = getUtility(ICatalog)
             doc_id = getUtility(IIntIds).getId(aq_inner(self))
             relations = catalog.findRelations(
@@ -330,6 +333,10 @@ class Document(Item, BaseDocumentMixin):
                     lambda rel: IBaseDocument.providedBy(rel.from_object),
                     relations)
 
+            if tasks_only:
+                relations = filter(
+                    lambda rel: ITask.providedBy(rel.from_object),
+                    relations)
             _related_items += [rel.from_object for rel in relations]
 
         return _related_items
