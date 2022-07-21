@@ -83,32 +83,52 @@ class TestDocumentWorkflow(IntegrationTestCase):
 
     def test_limited_admin_can_reopen_finalized_document(self):
         with self.login(self.manager):
-            api.content.transition(obj=self.document,
+            api.content.transition(obj=self.subdocument,
                                    transition=Document.finalize_transition)
 
         with self.login(self.regular_user), self.assertRaises(InvalidParameterError):
             api.content.transition(
-                obj=self.document, transition=Document.reopen_transition)
+                obj=self.subdocument, transition=Document.reopen_transition)
 
         self.login(self.limited_admin)
-        api.content.transition(obj=self.document,
+        api.content.transition(obj=self.subdocument,
                                transition=Document.reopen_transition)
         self.assertEquals(Document.active_state,
-                          api.content.get_state(obj=self.document))
+                          api.content.get_state(obj=self.subdocument))
+
+    def test_cannot_reopen_finalized_document_referenced_by_pending_task(self):
+        self.login(self.manager)
+        api.content.transition(obj=self.protected_document_with_task,
+                               transition=Document.finalize_transition)
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.protected_document_with_task,
+                transition=Document.reopen_transition)
+
+        self.set_workflow_state('task-state-tested-and-closed',
+                                self.task_in_protected_dossier)
+
+        api.content.transition(
+            obj=self.protected_document_with_task,
+            transition=Document.reopen_transition)
+        self.assertEquals(
+            Document.active_state,
+            api.content.get_state(obj=self.protected_document_with_task))
 
     def test_finalizer_can_reopen_document(self):
         self.login(self.regular_user)
-        api.content.transition(obj=self.document,
+        api.content.transition(obj=self.subdocument,
                                transition=Document.finalize_transition)
 
         self.assertEquals(Document.final_state,
-                          api.content.get_state(obj=self.document))
+                          api.content.get_state(obj=self.subdocument))
 
         api.content.transition(
-            obj=self.document, transition=Document.reopen_transition)
+            obj=self.subdocument, transition=Document.reopen_transition)
 
         self.assertEquals(Document.active_state,
-                          api.content.get_state(obj=self.document))
+                          api.content.get_state(obj=self.subdocument))
 
     def test_finalized_document_cannot_be_checked_out(self):
         self.login(self.administrator)
