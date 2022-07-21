@@ -53,7 +53,10 @@ msgstr "Document state changed to document-state-checked_out"
 
 #. German translation: Dokumentstatus verändert: Entwurf
 msgid "Document state changed to document-state-draft"
-msgstr "Document state changed to document-state-draft"
+msgstr "Document state changed: draft"
+
+msgid "Document state changed to document-state-final"
+msgstr "Document state changed: final"
 
 #. German translation: Dokumentstatus verändert: Hängig
 msgid "Document state changed to document-state-pending"

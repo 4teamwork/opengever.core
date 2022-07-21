@@ -42,7 +42,10 @@ msgid "Document state changed to document-state-checked_out"
 msgstr "Etat du document modifié: checkout"
 
 msgid "Document state changed to document-state-draft"
-msgstr "Etat du document modifié: ouvert"
+msgstr "Etat du document modifié: brouillon"
+
+msgid "Document state changed to document-state-final"
+msgstr "Etat du document modifié: final"
 
 msgid "Document state changed to document-state-pending"
 msgstr "Etat du document modifié: en suspend"

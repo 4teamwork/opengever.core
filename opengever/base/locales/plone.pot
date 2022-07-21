@@ -93,6 +93,9 @@ msgstr ""
 msgid "Document state changed to document-state-reject"
 msgstr ""
 
+msgid "Document state changed to document-state-final"
+msgstr ""
+
 msgid "Edit metadata"
 msgstr ""
 

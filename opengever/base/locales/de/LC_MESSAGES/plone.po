@@ -44,6 +44,9 @@ msgstr "Dokumentstatus verändert: Ausgecheckt"
 msgid "Document state changed to document-state-draft"
 msgstr "Dokumentstatus verändert: Entwurf"
 
+msgid "Document state changed to document-state-final"
+msgstr "Dokumentstatus verändert: Final"
+
 msgid "Document state changed to document-state-pending"
 msgstr "Dokumentstatus verändert: Hängig"
 
