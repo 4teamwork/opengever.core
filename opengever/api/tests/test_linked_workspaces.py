@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -44,6 +45,29 @@ def fix_publisher_test_bug(browser, obj):
     #
     # This issue only appears in a testing environment.
     browser.open(obj, method='GET', headers={'Accept': 'application/json'})
+
+
+@contextmanager
+def auto_commit_after_removing_dossier_reference(client):
+    """This contextmanager injects a session hook for the current client
+    session to commit the transaction after removing the dossier reference.
+    This is necessary because otherwise a ConflictError will be thrown
+    if the dossier and the workspace are modified at the same time.
+
+    This issue only appears in a testing environment.
+    """
+    def commit_after_removing_dossier_reference(r, *args, **kwargs):
+        if '@remove-dossier-reference' in r.url:
+            transaction.commit()
+
+    client_session_hooks = client.session.session.hooks
+    original_hooks = list(client_session_hooks['response'])
+    client_session_hooks['response'].append(commit_after_removing_dossier_reference)
+
+    try:
+        yield
+    finally:
+        client_session_hooks['response'] = original_hooks
 
 
 class TestLinkedWorkspacesPost(FunctionalWorkspaceClientTestCase):
@@ -375,6 +399,104 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
         assertStatusCode(test_with=500, raised_error=502)
         assertStatusCode(test_with=502, raised_error=502)
         assertStatusCode(test_with=504, raised_error=504)
+
+
+class TestUnlinkWorkspacePost(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_unlink_workspace(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.open(self.dossier, view='@linked-workspaces',
+                         method='GET', headers={'Accept': 'application/json'})
+
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in browser.json['items']])
+
+            with auto_commit_after_removing_dossier_reference(manager.client):
+                browser.open(
+                    self.dossier, view='@unlink-workspace',
+                    data=json.dumps({'workspace_uid': self.workspace.UID()}),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'})
+
+            browser.open(self.dossier, view='@linked-workspaces', method='GET',
+                         headers={'Accept': 'application/json'})
+
+            self.assertEqual([], browser.json['items'])
+
+    @browsing
+    def test_unlink_workspace_and_deactivate_workspace(self, browser):
+        self.grant('WorkspaceAdmin', on=self.workspace)
+        browser.login()
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.open(self.dossier, view='@linked-workspaces', method='GET',
+                         headers={'Accept': 'application/json'})
+
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in browser.json['items']])
+            self.assertEqual('opengever_workspace--STATUS--active',
+                             api.content.get_state(self.workspace))
+
+            with auto_commit_after_removing_dossier_reference(manager.client):
+                browser.open(self.dossier, view='@unlink-workspace', method='POST',
+                             data=json.dumps({'workspace_uid': self.workspace.UID(),
+                                             'deactivate_workspace': True}),
+                             headers={'Accept': 'application/json',
+                                      'Content-Type': 'application/json'})
+
+            browser.open(self.dossier, view='@linked-workspaces',
+                         method='GET', headers={'Accept': 'application/json'})
+
+            self.assertEqual([], browser.json['items'])
+            self.assertEqual('opengever_workspace--STATUS--inactive',
+                             api.content.get_state(self.workspace))
+
+    @browsing
+    def test_unlink_workspace_also_when_deactivation_fails(self, browser):
+        browser.login()
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.open(self.dossier, view='@linked-workspaces', method='GET',
+                         headers={'Accept': 'application/json'})
+
+            self.assertEqual(
+                [self.workspace.absolute_url()],
+                [workspace.get('@id') for workspace in browser.json['items']])
+
+            with auto_commit_after_removing_dossier_reference(manager.client):
+                with browser.expect_http_error(400):
+                    browser.open(
+                        self.dossier, view='@unlink-workspace',
+                        data=json.dumps({'workspace_uid': self.workspace.UID(),
+                                         'deactivate_workspace': True}),
+                        method='POST',
+                        headers={'Accept': 'application/json',
+                                 'Content-Type': 'application/json'})
+
+            self.assertEqual({
+                u'type': u'BadRequest', u'additional_metadata': {},
+                u'translated_message': u'The workspace was unlinked, but it could not be deactivated.',
+                u'message': u'deactivate_workspace_failed'},
+                browser.json)
+
+            browser.open(self.dossier, view='@linked-workspaces', method='GET',
+                         headers={'Accept': 'application/json'})
+            self.assertEqual([], browser.json['items'])
 
 
 class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):

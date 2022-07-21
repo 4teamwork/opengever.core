@@ -101,11 +101,12 @@ Ein Dosser kann über den Endpoint ``@link-to-workspace`` mit einem bestehenden 
 
       HTTP/1.1 204 No Content
 
+.. _unlink-workspace:
 
 Teamraum Verknüpfung entfernen
 ------------------------------
 
-Eine bestehende Verknüpfung eines Teamraums kann mit dem ``@unlink-workspace`` Endpoint entfernt werden. Dabei werden auch bestehende Locks auf verlinkten Dokumenten aufgehoben. Der Teamraum bleibt aber bestehen.
+Eine bestehende Verknüpfung eines Teamraums kann mit dem ``@unlink-workspace`` Endpoint entfernt werden. Dabei werden auch bestehende Locks auf verlinkten Dokumenten aufgehoben. Der Teamraum bleibt aber bestehen. Mit dem Parameter ``deactivate_workspace`` kann der Teamraum zusätzlich deaktiviert werden.
 
 **Beispiel-Request**:
 
@@ -116,7 +117,8 @@ Eine bestehende Verknüpfung eines Teamraums kann mit dem ``@unlink-workspace`` 
     Content-Type: application/json
 
     {
-      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a",
+      "deactivate_workspace": true
     }
 
 **Beispiel-Response**:

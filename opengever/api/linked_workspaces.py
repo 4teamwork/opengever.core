@@ -128,8 +128,8 @@ class UnlinkWorkspacePost(LinkedWorkspacesService):
         if not workspace_uid:
             raise BadRequest(_(u"workspace_uid_required",
                                default=u"Property 'workspace_uid' is required"))
-
-        ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid)
+        deactivate_workspace = data.get('deactivate_workspace', False)
+        ILinkedWorkspaces(self.context).unlink_workspace(workspace_uid, deactivate_workspace)
         return self.reply_no_content()
 
 

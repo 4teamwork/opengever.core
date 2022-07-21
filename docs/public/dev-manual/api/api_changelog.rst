@@ -11,7 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@unlink-workspace``: Add field ``deactivate_workspace``. (see :ref:`unlink-workspace`)
 
 2022.14.0 (2022-07-20)
 ----------------------
