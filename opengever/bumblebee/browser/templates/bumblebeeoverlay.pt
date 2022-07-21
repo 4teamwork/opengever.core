@@ -46,7 +46,7 @@
   <footer>
     <div metal:use-macro="context/@@macros/file_action_buttons" />
     <div class="info-viewlets">
-      <div tal:replace="structure view/overlay/render_checked_out_viewlet" />
+      <div tal:replace="structure view/overlay/render_document_status_viewlet" />
       <div tal:replace="structure view/overlay/render_lock_info_viewlet" />
       <div tal:define="message view/overlay/trash_warning" tal:condition="message">
         <dl class="portalMessage warning">

@@ -460,6 +460,9 @@ class Document(Item, BaseDocumentMixin):
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
 
+    def is_final_document(self):
+        return api.content.get_state(self) == self.final_state
+
     def is_oneoffixx_creatable(self):
         return (is_oneoffixx_feature_enabled()
                 and self.is_shadow_document()
