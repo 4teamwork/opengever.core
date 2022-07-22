@@ -206,10 +206,14 @@ class DossiersLaTeXListing(LaTexListing):
 @adapter(Interface, Interface, Interface)
 class SubDossiersLaTeXListing(DossiersLaTeXListing):
 
-    def update_column_dict(self, columns):
-        del columns['reference']
-        del columns['repository_title']
-        self.reset_column_widths(columns)
+    def get_columns(self):
+        columns = [
+            col for col in super(SubDossiersLaTeXListing, self).get_columns()
+            if col.id not in ['reference', 'repository_title']]
+
+        # widen title and responsible columns
+        columns[1].width = '40%'
+        columns[2].width = '35%'
         return columns
 
 
