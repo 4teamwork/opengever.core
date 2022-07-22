@@ -6,6 +6,8 @@ from zope.i18nmessageid import MessageFactory
 
 _ = MessageFactory('opengever.workspace')
 
+DEACTIVATE_WORKSPACE_TRANSITION = 'opengever_workspace--TRANSITION--deactivate--active_inactive'
+
 WHITELISTED_TEAMRAUM_GLOBAL_SOURCES = set()
 
 WHITELISTED_TEAMRAUM_PORTAL_TYPES = {

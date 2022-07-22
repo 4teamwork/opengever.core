@@ -1,3 +1,4 @@
+from opengever.workspace import DEACTIVATE_WORKSPACE_TRANSITION
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.exceptions import WorkspaceClientFeatureNotEnabled
 from opengever.workspaceclient.exceptions import WorkspaceURLMissing
@@ -102,6 +103,18 @@ class WorkspaceClient(object):
             workspace.get('@id'),
             json={'external_reference': new_dossier_oguid,
                   'gever_url': self.get_gever_url(new_dossier_oguid)})
+
+    def deactivate_workspace(self, workspace_url):
+        """Deactivates workspace"""
+        return self.request.post('{}/@workflow/{}'.format(workspace_url,
+                                                          DEACTIVATE_WORKSPACE_TRANSITION))
+
+    def is_workspace_deactivation_transition_available(self, workspace_url):
+        workflow_url = '{}/@workflow'.format(workspace_url)
+        response = self.request.get(workflow_url).json()
+        transition_url = '{}/{}'.format(workflow_url, DEACTIVATE_WORKSPACE_TRANSITION)
+        transition_ids = [transition['@id'] for transition in response.get('transitions', [])]
+        return transition_url in transition_ids
 
     def unlink_workspace(self, workspace_uid):
         """Removes external_reference on the workspace"""

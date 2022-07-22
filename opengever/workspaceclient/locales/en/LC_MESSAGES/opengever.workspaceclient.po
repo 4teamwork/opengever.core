@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-07 13:05+0000\n"
+"POT-Creation-Date: 2022-07-21 07:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,11 @@ msgstr ""
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "Not moved to trash: Document was retrieved, but workspace document could not be moved to trash."
 msgstr "Not moved to trash: the document was retrieved, but the workspace document could not be moved to the trash."
+
+#. Default: "The workspace was unlinked, but it could not be deactivated."
+#: ./opengever/workspaceclient/linked_workspaces.py
+msgid "deactivate_workspace_failed"
+msgstr "The workspace was unlinked, but it could not be deactivated."
 
 #. German translation: Dokument aus Teamraum zurückgeführt.
 #. Default: "Document retrieved from teamraum"

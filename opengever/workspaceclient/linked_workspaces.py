@@ -1,11 +1,14 @@
 from AccessControl.unauthorized import Unauthorized
 from opengever.api.add import GeverFolderPost
+from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
 from opengever.base.oguid import Oguid
+from opengever.base.sentry import maybe_report_exception
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_main_dossier
 from opengever.journal.handlers import journal_entry_factory
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
+from opengever.workspace import DEACTIVATE_WORKSPACE_TRANSITION
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -31,6 +34,7 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
+import sys
 import transaction
 
 
@@ -54,7 +58,7 @@ def list_cache_key(linked_workspaces_instance, **kwargs):
     timeout_key = str(time() // CACHE_TIMEOUT if CACHE_TIMEOUT > 0 else str(time()))
 
     cache_key = '-'.join(('linked_workspaces_storage', userid, uid,
-                         linked_workspace_uids, str(CACHE_TIMEOUT), timeout_key))
+                          linked_workspace_uids, str(CACHE_TIMEOUT), timeout_key))
 
     keywordarguments = '-'.join('{}={}'.format(key, value) for key, value in kwargs.items())
     if keywordarguments:
@@ -174,7 +178,7 @@ class LinkedWorkspaces(object):
             context=self.context, action='Linked to workspace',
             title=title)
 
-    def unlink_workspace(self, workspace_uid):
+    def unlink_workspace(self, workspace_uid, deactivate_workspace=False):
         if workspace_uid not in self.storage.list():
             raise BadRequest(
                 'Workspace with UID {} is not connected'.format(workspace_uid))
@@ -206,6 +210,27 @@ class LinkedWorkspaces(object):
         journal_entry_factory(
             context=self.context, action='Unlinked workspace',
             title=title)
+
+        if deactivate_workspace:
+            workspace_url = workspace.get('@id').strip('/')
+            raise_bad_request = False
+            try:
+                if self.client.is_workspace_deactivation_transition_available(workspace_url):
+                    self.client.deactivate_workspace(workspace_url)
+                else:
+                    raise_bad_request = True
+            except HTTPError:
+                e_type, e_value, tb = sys.exc_info()
+                maybe_report_exception(self.context, self.context.REQUEST, e_type, e_value, tb)
+                raise_bad_request = True
+
+            if raise_bad_request:
+                # We need to commit the transaction because the workspace is already unlinked
+                # and in case of a rollback only the dossier would remain linked.
+                transaction.commit()
+                raise NotReportedBadRequest(
+                    _(u"deactivate_workspace_failed",
+                      default=u"The workspace was unlinked, but it could not be deactivated."))
 
     def _get_linked_workspace_url(self, workspace_uid):
         if workspace_uid not in self.storage:
