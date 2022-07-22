@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
@@ -103,7 +105,7 @@ class TestDossierTemplatePost(IntegrationTestCase):
         self.assertEqual(1, len(children['added']))
 
 
-class TestDossierTemplatePatch(IntegrationTestCase):
+class TestDossierTemplatePatch(SolrIntegrationTestCase):
 
     features = ('dossiertemplate', )
 
@@ -133,6 +135,36 @@ class TestDossierTemplatePatch(IntegrationTestCase):
 
         self.assertEqual(204, browser.status_code)
         self.assertEqual('New title', self.dossiertemplate.Title())
+
+    @browsing
+    def test_patch_dossier_template_title_reindexes_containing_dossier(self, browser):
+        self.login(self.administrator, browser)
+        self.assertEqual('Bauvorhaben klein',
+                         solr_data_for(self.dossiertemplatedocument)['containing_dossier'])
+
+        data = {'title': 'New title'}
+        browser.open(self.dossiertemplate.absolute_url(), data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.commit_solr()
+        self.assertEqual('New title',
+                         solr_data_for(self.dossiertemplatedocument)['containing_dossier'])
+
+    @browsing
+    def test_patch_dossier_template_title_reindexes_containing_subdossier(self, browser):
+        self.login(self.administrator, browser)
+        self.assertEqual('Anfragen',
+                         solr_data_for(self.subdossiertemplatedocument)['containing_subdossier'])
+
+        data = {'title': 'New title'}
+        browser.open(self.subdossiertemplate.absolute_url(), data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.commit_solr()
+        self.assertEqual('New title',
+                         solr_data_for(self.subdossiertemplatedocument)['containing_subdossier'])
 
     @browsing
     def test_limited_admin_can_patch_dossier_template(self, browser):

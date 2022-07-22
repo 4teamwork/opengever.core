@@ -356,6 +356,11 @@
       name="approval_state"
       />
 
+  <adapter
+      factory=".indexers.containing_dossier_title"
+      name="containing_dossier"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

@@ -23,6 +23,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.testing import add_languages
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import get_contacts_token
 from plone import api
@@ -34,6 +35,7 @@ from plone.portlets.interfaces import IPortletManager
 from unittest import skip
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+import json
 import os
 
 
@@ -810,6 +812,27 @@ class TestTemplateFolder(FunctionalTestCase):
         assignable = getMultiAdapter(
             (browser.context, manager), ILocalPortletAssignmentManager)
         self.assertFalse(assignable.getBlacklistStatus(CONTEXT_CATEGORY))
+
+
+class TestTemplateFolderWithSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_patch_template_folder_title_reindexes_containing_dossier(self, browser):
+        self.login(self.administrator, browser)
+        self.subtemplate.reindexObject()
+        self.commit_solr()
+
+        self.assertEqual(u'Templates new / Vorlagen neu',
+                         solr_data_for(self.subtemplate)['containing_dossier'])
+
+        data = {'title_de': 'Neuer Titel', 'title_en': 'New title'}
+        browser.open(self.subtemplates.absolute_url(), data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(204, browser.status_code)
+        self.commit_solr()
+        self.assertEqual(u'New title / Neuer Titel',
+                         solr_data_for(self.subtemplate)['containing_dossier'])
 
 
 class TestTemplateFolderMeetingEnabled(IntegrationTestCase):

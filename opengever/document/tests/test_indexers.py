@@ -315,6 +315,25 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 44 44 foo bar',
                       indexed_value)
 
+    def test_containing_subdossier_is_indexed_for_document_in_subdossiertemplate(self):
+        self.login(self.regular_user)
+        document = create(Builder("document").within(self.subdossiertemplate))
+        self.commit_solr()
+        self.assertEqual(u'Anfragen', solr_data_for(document)['containing_subdossier'])
+
+    def test_containing_dossier_is_indexed_for_document_templates(self):
+        self.login(self.regular_user)
+        language_tool = api.portal.get_tool('portal_languages')
+        language_tool.supported_langs = ['fr', 'de-ch']
+        self.normal_template.reindexObject()
+        self.subtemplate.reindexObject()
+        self.commit_solr()
+
+        self.assertEqual(u'Mod\xe8le / Vorlagen',
+                         solr_data_for(self.normal_template)['containing_dossier'])
+        self.assertEqual(u'Mod\xe8les nouveau / Vorlagen neu',
+                         solr_data_for(self.subtemplate)['containing_dossier'])
+
     def test_removing_document_type_gets_indexed_correctly(self):
         self.login(self.regular_user)
         self.assertEqual('contract', solr_data_for(self.document, 'document_type'))
