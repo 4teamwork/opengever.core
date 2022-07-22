@@ -38,23 +38,11 @@ msgstr "Folgeaufgabe erstellen"
 msgid "Delegate task"
 msgstr "Delegieren"
 
-msgid "Document state changed to document-state-checked_out"
-msgstr "Dokumentstatus verändert: Ausgecheckt"
-
 msgid "Document state changed to document-state-draft"
 msgstr "Dokumentstatus verändert: Entwurf"
 
 msgid "Document state changed to document-state-final"
 msgstr "Dokumentstatus verändert: Final"
-
-msgid "Document state changed to document-state-pending"
-msgstr "Dokumentstatus verändert: Hängig"
-
-msgid "Document state changed to document-state-reject"
-msgstr "Dokument status verändert: Zurückweisen"
-
-msgid "Document state changed to document-state-working_copy"
-msgstr "Dokumentstatus verändert: Arbeitskopie"
 
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Status des Dossiers geändert zu In Bearbeitung"

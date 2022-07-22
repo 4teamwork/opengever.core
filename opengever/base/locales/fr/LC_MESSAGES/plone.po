@@ -38,23 +38,11 @@ msgstr "Créer tâche suivante"
 msgid "Delegate task"
 msgstr "Déléguer"
 
-msgid "Document state changed to document-state-checked_out"
-msgstr "Etat du document modifié: checkout"
-
 msgid "Document state changed to document-state-draft"
 msgstr "Etat du document modifié: brouillon"
 
 msgid "Document state changed to document-state-final"
 msgstr "Etat du document modifié: final"
-
-msgid "Document state changed to document-state-pending"
-msgstr "Etat du document modifié: en suspend"
-
-msgid "Document state changed to document-state-reject"
-msgstr "Etat du document modifié: rejeté"
-
-msgid "Document state changed to document-state-working_copy"
-msgstr "Etat du document modifié: copie de travail"
 
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Etat du dossier modifié: En cours de traitement"

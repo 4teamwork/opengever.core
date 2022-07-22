@@ -46,29 +46,12 @@ msgstr "Create successor task"
 msgid "Delegate task"
 msgstr "Delegate task"
 
-#. German translation: Dokumentstatus verändert: Ausgecheckt
-#. MARKER: I suspect many (or all) of the messages below aren't actually used
-msgid "Document state changed to document-state-checked_out"
-msgstr "Document state changed to document-state-checked_out"
-
 #. German translation: Dokumentstatus verändert: Entwurf
 msgid "Document state changed to document-state-draft"
 msgstr "Document state changed: draft"
 
 msgid "Document state changed to document-state-final"
 msgstr "Document state changed: final"
-
-#. German translation: Dokumentstatus verändert: Hängig
-msgid "Document state changed to document-state-pending"
-msgstr "Document state changed to document-state-pending"
-
-#. German translation: Dokument status verändert: Zurückweisen
-msgid "Document state changed to document-state-reject"
-msgstr "Document state changed to document-state-reject"
-
-#. German translation: Dokumentstatus verändert: Arbeitskopie
-msgid "Document state changed to document-state-working_copy"
-msgstr "Document state changed to document-state-working_copy"
 
 #. German translation: Status des Dossiers geändert zu In Bearbeitung
 msgid "Dossier state changed to dossier-state-active"
