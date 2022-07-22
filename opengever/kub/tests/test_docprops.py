@@ -1,5 +1,6 @@
 from opengever.kub.docprops import KuBEntityDocPropertyProvider
 from opengever.kub.entity import KuBEntity
+from opengever.kub.testing import KUB_RESPONSES
 from opengever.kub.testing import KuBIntegrationTestCase
 import requests_mock
 
@@ -26,6 +27,19 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.phone.number': None,
              'ogg.url.url': None},
             properties)
+
+    def test_zip_code_docproperty_is_swiss_or_foreign_zip_code(self, mocker):
+        url = self.mock_get_by_id(mocker, self.person_jean)
+        entity = KuBEntity(self.person_jean)
+        properties = KuBEntityDocPropertyProvider(entity).get_properties()
+        self.assertEqual(u'9999', properties['ogg.address.zip_code'])
+
+        KUB_RESPONSES[url]['primaryAddress']['swissZipCode'] = ""
+        KUB_RESPONSES[url]['primaryAddress']['foreignZipCode'] = "12345"
+        self.mock_get_by_id(mocker, self.person_jean)
+        entity = KuBEntity(self.person_jean)
+        properties = KuBEntityDocPropertyProvider(entity).get_properties()
+        self.assertEqual(u'12345', properties['ogg.address.zip_code'])
 
     def test_docproperties_for_kub_organization(self, mocker):
         self.mock_get_by_id(mocker, self.org_ftw)

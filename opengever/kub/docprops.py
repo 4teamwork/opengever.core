@@ -134,7 +134,7 @@ class KuBAddressDocPropertyProvider(BaseDocPropertyProvider):
         address = self.context.get("primaryAddress") or {}
         return {
             'street': address.get("street"),
-            'zip_code': address.get("swissZipCode"),
+            'zip_code': address.get("swissZipCode") or address.get('foreignZipCode'),
             'city': address.get("town"),
             'country': address.get("countryName"),
         }
