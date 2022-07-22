@@ -23,7 +23,6 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
-from opengever.ogds.base.sources import AllUsersSourceBinder
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.task.task import ITask
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
@@ -45,6 +44,7 @@ from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
 from zc.relation.interfaces import ICatalog
 from zope import schema
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
@@ -57,6 +57,8 @@ from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
+
+DOCUMENT_FINALIZER_KEY = 'opengever.document.finalizer'
 
 DOCUMENT_STATE_FINAL = 'document-state-final'
 
@@ -108,13 +110,6 @@ class IDocumentSchema(model.Schema):
     file = field.NamedBlobFile(
         title=_(u'label_file', default='File'),
         description=_(u'help_file', default=''),
-        required=False,
-    )
-
-    form.omitted('finalizer')
-    finalizer = schema.Choice(
-        title=_(u"label_finalizer", default="Finalizer"),
-        source=AllUsersSourceBinder(),
         required=False,
     )
 
@@ -387,8 +382,16 @@ class Document(Item, BaseDocumentMixin):
         # reopen is not allowed if a pending task is referencing the document
         user = api.user.get_current()
         return ((is_administrator(user)
-                 or user.getId() == IDocumentSchema(self).finalizer)
+                 or user.getId() == self.finalizer)
                 and not self.is_referenced_by_pending_task())
+
+    @property
+    def finalizer(self):
+        return IAnnotations(self).get(DOCUMENT_FINALIZER_KEY)
+
+    @finalizer.setter
+    def finalizer(self, value):
+        IAnnotations(self)[DOCUMENT_FINALIZER_KEY] = value
 
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),

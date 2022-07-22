@@ -14,4 +14,4 @@ class DocumentFinalizeTransitionExtender(TransitionExtender):
     def after_transition_hook(self, transition, disable_sync, transition_params):
         """Set finalizer
         """
-        IDocumentSchema(self.context).finalizer = api.user.get_current().getId()
+        self.context.finalizer = api.user.get_current().getId()
