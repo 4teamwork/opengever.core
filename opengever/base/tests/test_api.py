@@ -28,6 +28,7 @@ class TestDocumentStatus(IntegrationTestCase):
             u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
+            u'review_state': 'mail-state-active',
             u'title': u'Die B\xfcrgschaft',
         }
         self.assertEqual(expected, browser.json)
@@ -48,6 +49,7 @@ class TestDocumentStatus(IntegrationTestCase):
             u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
+            u'review_state': 'document-state-draft',
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
@@ -72,6 +74,7 @@ class TestDocumentStatus(IntegrationTestCase):
             u'lock_timeout': None,
             u'locked': False,
             u'locked_by': None,
+            u'review_state': 'document-state-draft',
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
@@ -97,6 +100,7 @@ class TestDocumentStatus(IntegrationTestCase):
             u'lock_timeout': 600,
             u'locked': True,
             u'locked_by': self.regular_user.getId(),
+            u'review_state': 'document-state-draft',
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
@@ -122,6 +126,7 @@ class TestDocumentStatus(IntegrationTestCase):
             u'lock_timeout': 1800,
             u'locked': True,
             u'locked_by': self.regular_user.getId(),
+            u'review_state': 'document-state-draft',
             u'title': u'Vertr\xe4gsentwurf',
         }
         self.assertEqual(expected, browser.json)
