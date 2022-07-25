@@ -9,6 +9,7 @@ Mit Dokumenten arbeiten
    metadatenpflegen
    anschauen
    bearbeiten
+   finalisieren
    versionen
    finden
    diverseaktionen
