@@ -13,7 +13,7 @@ class EnableAllLanguagesForTeamraum(UpgradeStep):
     }
 
     def __call__(self):
-        if is_workspace_feature_enabled():
+        if not is_workspace_feature_enabled():
             return
 
         lang_tool = api.portal.get_tool('portal_languages')
