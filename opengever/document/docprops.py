@@ -33,7 +33,7 @@ class DocPropertyCollector(object):
 
         return api.user.get(userid=creator_userid)
 
-    def get_properties(self, recipient_data=tuple()):
+    def get_properties(self, recipient_data=tuple(), sender_data=tuple()):
         dossier = self.document.get_parent_dossier()
         member = api.user.get_current()
         proposal = self.document.get_proposal()
@@ -55,6 +55,10 @@ class DocPropertyCollector(object):
         for recipient in recipient_data:
             provider = recipient.get_doc_property_provider()
             properties.update(provider.get_properties(prefix='recipient'))
+
+        for sender in sender_data:
+            provider = sender.get_doc_property_provider()
+            properties.update(provider.get_properties(prefix='sender'))
 
         return properties
 
@@ -84,8 +88,9 @@ class DocPropertyWriter(object):
     providers that are added to the document with a "recipient" prefix.
     """
 
-    def __init__(self, document, recipient_data=tuple()):
+    def __init__(self, document, recipient_data=tuple(), sender_data=tuple()):
         self.recipient_data = recipient_data
+        self.sender_data = sender_data
         self.document = document
         self.request = self.document.REQUEST
         self.date_format = api.portal.get_registry_record(
@@ -100,7 +105,7 @@ class DocPropertyWriter(object):
 
     def get_properties(self):
         return DocPropertyCollector(self.document).get_properties(
-            self.recipient_data)
+            self.recipient_data, self.sender_data)
 
     def is_export_enabled(self):
         registry = getUtility(IRegistry)

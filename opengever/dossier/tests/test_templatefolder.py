@@ -51,7 +51,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Normal'},
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Ohne'},
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '29.02.2020', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Sub'},
-            ]
+        ]
 
         self.assertEqual(expected_listing, browser.css('table.listing').first.dicts())
 
@@ -69,7 +69,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Normal'},
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '31.08.2016', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Ohne'},
             {'': '', 'Creator': 'nicole.kohler', 'Modified': '29.02.2020', 'Title': u'T\xc3\xb6mpl\xc3\xb6te Sub'},
-            ]
+        ]
 
         self.assertEqual(expected_listing, browser.css('table.listing').first.dicts())
 
@@ -87,7 +87,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             u'Filter',
             u'Title',
             u'Edit after creation',
-            ]
+        ]
 
         self.assertEqual(expected_labels, browser.css('#form label').text)
 
@@ -110,7 +110,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
             'Edit after creation': False,
-            }).save()
+        }).save()
 
         self.assertEqual(self.dossier, browser.context)
         self.assertEqual(self.dossier.absolute_url() + '#documents', browser.url)
@@ -122,7 +122,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         browser.fill({
             'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
-            }).save()
+        }).save()
 
         document = self.dossier.listFolderContents()[-1]
         self.assertEqual('Test Document', document.title)
@@ -134,7 +134,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         browser.fill({
             'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
-            }).save()
+        }).save()
 
         document = self.dossier.listFolderContents()[-1]
         self.assertEqual(date.today(), document.document_date)
@@ -147,7 +147,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
         browser.fill({
             'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test Document',
-            }).save()
+        }).save()
 
         document = self.dossier.listFolderContents()[-1]
 
@@ -163,7 +163,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             browser.fill({
                 'form.widgets.template': self.asset_template.UID(),
                 'Title': 'Test Docx',
-                }).save()
+            }).save()
 
         document = self.dossier.listFolderContents()[-1]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -182,12 +182,12 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
             u'T\xc3\xb6mpl\xc3\xb6te Normal',
             u'T\xc3\xb6mpl\xc3\xb6te Ohne',
             u'T\xc3\xb6mpl\xc3\xb6te Sub',
-            ]
+        ]
 
         found_documents = [
             row.get('Title')
             for row in browser.css('table.listing').first.dicts()
-            ]
+        ]
 
         self.assertEqual(expected_documents, found_documents)
         self.assertNotIn(u'T\xc3\xb6mpl\xc3\xb6te Leer', found_documents)
@@ -196,7 +196,7 @@ class TestDocumentWithTemplateFormPlain(IntegrationTestCase):
 class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
     features = (
         'doc-properties',
-        )
+    )
 
     maxDiff = None
 
@@ -216,7 +216,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             browser.fill({
                 'form.widgets.template': self.docprops_template.UID(),
                 'Title': 'Test Docx',
-                }).save()
+            }).save()
 
         document = self.dossier.listFolderContents()[-1]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -297,7 +297,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             browser.fill({
                 'form.widgets.template': self.asset_template.UID(),
                 'Title': 'Test Docx',
-                }).save()
+            }).save()
 
         document = self.dossier.listFolderContents()[-1]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -360,7 +360,7 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
             'ogg.document.creator.user.lastname': u'B\xe4rfuss',
             'ogg.document.creator.user.department': 'Staatskanzlei',
             'ogg.document.creator.user.directorate': 'Staatsarchiv',
-            }
+        }
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -414,7 +414,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             .titled('Word Docx template')
             .within(self.templatefolder)
             .with_asset_file('without_custom_properties.docx'),
-            )
+        )
 
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
         self.peter = create(Builder('person').having(firstname=u'Peter', lastname=u'M\xfcller'))
@@ -437,8 +437,8 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 zip_code=u'1234',
                 city=u'Hinterkappelen',
                 country=u'Schweiz',
-                ),
-            )
+            ),
+        )
 
         create(
             Builder('address')
@@ -447,26 +447,26 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             .having(
                 street=u'Hauptstrasse 1',
                 city=u'Vorkappelen',
-                ),
-            )
+            ),
+        )
 
         mailaddress = create(
             Builder('mailaddress')
             .for_contact(self.peter)
             .having(address=u'foo@example.com'),
-            )
+        )
 
         phonenumber = create(
             Builder('phonenumber')
             .for_contact(self.peter)
             .having(phone_number=u'1234 123 123'),
-            )
+        )
 
         url = create(
             Builder('url')
             .for_contact(self.peter)
             .having(url=u'http://www.example.com'),
-            )
+        )
 
         with freeze(self.document_date):
             # submit first wizard step
@@ -474,17 +474,17 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             browser.fill({
                 'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
-                })
+            })
             form = browser.find_form_by_field('Recipient')
             form.find_widget('Recipient').fill(get_contacts_token(self.peter))
             form.save()
             # submit second wizard step
             browser.fill({
-                'form.widgets.address': str(address1.address_id),
-                'form.widgets.mail_address': str(mailaddress.mailaddress_id),
-                'form.widgets.phonenumber': str(phonenumber.phone_number_id),
-                'form.widgets.url': str(url.url_id),
-                }).save()
+                'form.widgets.recipient_address': str(address1.address_id),
+                'form.widgets.recipient_mail_address': str(mailaddress.mailaddress_id),
+                'form.widgets.recipient_phonenumber': str(phonenumber.phone_number_id),
+                'form.widgets.recipient_url': str(url.url_id),
+            }).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -500,7 +500,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             'ogg.recipient.email.address': u'foo@example.com',
             'ogg.recipient.phone.number': u'1234 123 123',
             'ogg.recipient.url.url': u'http://www.example.com',
-            }
+        }
         expected_person_properties.update(self.expected_doc_properties)
 
         with TemporaryDocFile(document.file) as tmpfile:
@@ -513,7 +513,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         organization = create(
             Builder('organization')
             .having(name=u'Meier AG'),
-            )
+        )
 
         org_role = create(
             Builder('org_role')
@@ -521,8 +521,8 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 person=self.peter,
                 organization=organization,
                 function=u'cheffe',
-                ),
-            )
+            ),
+        )
 
         create(
             Builder('address')
@@ -533,26 +533,26 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
                 zip_code=u'1234',
                 city=u'Hinterkappelen',
                 country=u'Schweiz',
-                ),
-            )
+            ),
+        )
 
         mailaddress = create(
             Builder('mailaddress')
             .for_contact(organization)
             .having(address=u'foo@example.com'),
-            )
+        )
 
         phonenumber = create(
             Builder('phonenumber')
             .for_contact(self.peter)
             .having(phone_number=u'1234 123 123'),
-            )
+        )
 
         url = create(
             Builder('url')
             .for_contact(organization)
             .having(url=u'http://www.example.com'),
-            )
+        )
 
         address_id = org_role.addresses[0].address_id
 
@@ -562,17 +562,17 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             browser.fill({
                 'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
-                })
+            })
             form = browser.find_form_by_field('Recipient')
             form.find_widget('Recipient').fill(get_contacts_token(org_role))
             form.save()
             # submit second wizard step
             browser.fill({
-                'form.widgets.address': address_id,
-                'form.widgets.mail_address': str(mailaddress.mailaddress_id),
-                'form.widgets.phonenumber': str(phonenumber.phone_number_id),
-                'form.widgets.url': str(url.url_id),
-                }).save()
+                'form.widgets.recipient_address': address_id,
+                'form.widgets.recipient_mail_address': str(mailaddress.mailaddress_id),
+                'form.widgets.recipient_phonenumber': str(phonenumber.phone_number_id),
+                'form.widgets.recipient_url': str(url.url_id),
+            }).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -589,7 +589,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             'ogg.recipient.email.address': u'foo@example.com',
             'ogg.recipient.phone.number': u'1234 123 123',
             'ogg.recipient.url.url': u'http://www.example.com',
-            }
+        }
         expected_org_role_properties.update(self.expected_doc_properties)
 
         with TemporaryDocFile(document.file) as tmpfile:
@@ -604,7 +604,7 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             .id('ogds-peter')
             .having(**OGDS_USER_ATTRIBUTES)
             .as_contact_adapter(),
-            )
+        )
 
         with freeze(self.document_date):
             # submit first wizard step
@@ -612,17 +612,17 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             browser.fill({
                 'form.widgets.template': self.template_word.UID(),
                 'Title': 'Test Docx',
-                })
+            })
             form = browser.find_form_by_field('Recipient')
             form.find_widget('Recipient').fill(get_contacts_token(ogds_user))
             form.save()
             # submit second wizard step
             browser.fill({
-                'form.widgets.address': '{}_1'.format(ogds_user.id),
-                'form.widgets.mail_address': '{}_2'.format(ogds_user.id),
-                'form.widgets.phonenumber': '{}_3'.format(ogds_user.id),
-                'form.widgets.url': '{}_1'.format(ogds_user.id),
-                }).save()
+                'form.widgets.recipient_address': '{}_1'.format(ogds_user.id),
+                'form.widgets.recipient_mail_address': '{}_2'.format(ogds_user.id),
+                'form.widgets.recipient_phonenumber': '{}_3'.format(ogds_user.id),
+                'form.widgets.recipient_url': '{}_1'.format(ogds_user.id),
+            }).save()
 
         document = self.dossier.listFolderContents()[0]
         self.assertEqual(u'Test Docx.docx', document.file.filename)
@@ -648,6 +648,313 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             self.assertItemsEqual(expected_org_role_properties.items(), properties)
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
+    @browsing
+    def test_contact_sender_properties_are_added(self, browser):
+        address1 = create(
+            Builder('address')
+            .for_contact(self.peter)
+            .labeled(u'Home')
+            .having(
+                street=u'Musterstrasse 283',
+                zip_code=u'1234',
+                city=u'Hinterkappelen',
+                country=u'Schweiz',
+            ),
+        )
+
+        create(
+            Builder('address')
+            .for_contact(self.peter)
+            .labeled(u'Home')
+            .having(
+                street=u'Hauptstrasse 1',
+                city=u'Vorkappelen',
+            ),
+        )
+
+        mailaddress = create(
+            Builder('mailaddress')
+            .for_contact(self.peter)
+            .having(address=u'foo@example.com'),
+        )
+
+        phonenumber = create(
+            Builder('phonenumber')
+            .for_contact(self.peter)
+            .having(phone_number=u'1234 123 123'),
+        )
+
+        url = create(
+            Builder('url')
+            .for_contact(self.peter)
+            .having(url=u'http://www.example.com'),
+        )
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({
+                'form.widgets.template': self.template_word.UID(),
+                'Title': 'Test Docx',
+            })
+            form = browser.find_form_by_field('Sender')
+            form.find_widget('Sender').fill(get_contacts_token(self.peter))
+            form.save()
+            # submit second wizard step
+            browser.fill({
+                'form.widgets.sender_address': str(address1.address_id),
+                'form.widgets.sender_mail_address': str(mailaddress.mailaddress_id),
+                'form.widgets.sender_phonenumber': str(phonenumber.phone_number_id),
+                'form.widgets.sender_url': str(url.url_id),
+            }).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
+
+        expected_person_properties = {
+            'ogg.sender.contact.title': u'M\xfcller Peter',
+            'ogg.sender.person.firstname': 'Peter',
+            'ogg.sender.person.lastname': u'M\xfcller',
+            'ogg.sender.address.street': u'Musterstrasse 283',
+            'ogg.sender.address.zip_code': '1234',
+            'ogg.sender.address.city': 'Hinterkappelen',
+            'ogg.sender.address.country': 'Schweiz',
+            'ogg.sender.email.address': u'foo@example.com',
+            'ogg.sender.phone.number': u'1234 123 123',
+            'ogg.sender.url.url': u'http://www.example.com',
+        }
+        expected_person_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_person_properties.items(), properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_org_role_sender_properties_are_added(self, browser):
+        organization = create(
+            Builder('organization')
+            .having(name=u'Meier AG'),
+        )
+
+        org_role = create(
+            Builder('org_role')
+            .having(
+                person=self.peter,
+                organization=organization,
+                function=u'cheffe',
+            ),
+        )
+
+        create(
+            Builder('address')
+            .for_contact(organization)
+            .labeled(u'Home')
+            .having(
+                street=u'Musterstrasse 283',
+                zip_code=u'1234',
+                city=u'Hinterkappelen',
+                country=u'Schweiz',
+            ),
+        )
+
+        mailaddress = create(
+            Builder('mailaddress')
+            .for_contact(organization)
+            .having(address=u'foo@example.com'),
+        )
+
+        phonenumber = create(
+            Builder('phonenumber')
+            .for_contact(self.peter)
+            .having(phone_number=u'1234 123 123'),
+        )
+
+        url = create(
+            Builder('url')
+            .for_contact(organization)
+            .having(url=u'http://www.example.com'),
+        )
+
+        address_id = org_role.addresses[0].address_id
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({
+                'form.widgets.template': self.template_word.UID(),
+                'Title': 'Test Docx',
+            })
+            form = browser.find_form_by_field('Sender')
+            form.find_widget('Sender').fill(get_contacts_token(org_role))
+            form.save()
+            # submit second wizard step
+            browser.fill({
+                'form.widgets.sender_address': address_id,
+                'form.widgets.sender_mail_address': str(mailaddress.mailaddress_id),
+                'form.widgets.sender_phonenumber': str(phonenumber.phone_number_id),
+                'form.widgets.sender_url': str(url.url_id),
+            }).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
+        expected_org_role_properties = {
+            'ogg.sender.contact.title': u'M\xfcller Peter',
+            'ogg.sender.person.firstname': 'Peter',
+            'ogg.sender.person.lastname': u'M\xfcller',
+            'ogg.sender.orgrole.function': u'cheffe',
+            'ogg.sender.organization.name': u'Meier AG',
+            'ogg.sender.address.street': u'Musterstrasse 283',
+            'ogg.sender.address.zip_code': '1234',
+            'ogg.sender.address.city': 'Hinterkappelen',
+            'ogg.sender.address.country': 'Schweiz',
+            'ogg.sender.email.address': u'foo@example.com',
+            'ogg.sender.phone.number': u'1234 123 123',
+            'ogg.sender.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_org_role_properties.items(), properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_ogds_user_sender_properties_are_added(self, browser):
+        ogds_user = create(
+            Builder('ogds_user')
+            .id('ogds-peter')
+            .having(**OGDS_USER_ATTRIBUTES)
+            .as_contact_adapter(),
+        )
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({
+                'form.widgets.template': self.template_word.UID(),
+                'Title': 'Test Docx',
+            })
+            form = browser.find_form_by_field('Sender')
+            form.find_widget('Sender').fill(get_contacts_token(ogds_user))
+            form.save()
+            # submit second wizard step
+            browser.fill({
+                'form.widgets.sender_address': '{}_1'.format(ogds_user.id),
+                'form.widgets.sender_mail_address': '{}_2'.format(ogds_user.id),
+                'form.widgets.sender_phonenumber': '{}_3'.format(ogds_user.id),
+                'form.widgets.sender_url': '{}_1'.format(ogds_user.id),
+            }).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.sender.contact.title': u'M\xfcller Peter',
+            'ogg.sender.contact.description': u'nix',
+            'ogg.sender.person.salutation': 'Prof. Dr.',
+            'ogg.sender.person.firstname': 'Peter',
+            'ogg.sender.person.lastname': u'M\xfcller',
+            'ogg.sender.address.street': u'Kappelenweg 13, Postfach 1234',
+            'ogg.sender.address.zip_code': '1234',
+            'ogg.sender.address.city': u'Vorkappelen',
+            'ogg.sender.address.country': u'Schweiz',
+            'ogg.sender.email.address': u'bar@example.com',
+            'ogg.sender.phone.number': u'012 34 56 76',
+            'ogg.sender.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_org_role_properties.items(), properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
+    @browsing
+    def test_recipient_and_sender_properties_are_added(self, browser):
+        ogds_user = create(
+            Builder('ogds_user')
+            .id('ogds-peter')
+            .having(**OGDS_USER_ATTRIBUTES)
+            .as_contact_adapter(),
+        )
+
+        address1 = create(
+            Builder('address')
+            .for_contact(self.peter)
+            .labeled(u'Home')
+            .having(
+                street=u'Musterstrasse 283',
+                zip_code=u'1234',
+                city=u'Hinterkappelen',
+                country=u'Schweiz',
+            ),
+        )
+
+        mailaddress = create(
+            Builder('mailaddress')
+            .for_contact(self.peter)
+            .having(address=u'foo@example.com'),
+        )
+
+        with freeze(self.document_date):
+            # submit first wizard step
+            browser.login().open(self.dossier, view='document_with_template')
+            browser.fill({
+                'form.widgets.template': self.template_word.UID(),
+                'Title': 'Test Docx',
+            })
+            form = browser.find_form_by_field('Recipient')
+            form.find_widget('Recipient').fill(get_contacts_token(self.peter))
+            form = browser.find_form_by_field('Sender')
+            form.find_widget('Sender').fill(get_contacts_token(ogds_user))
+            form.save()
+            # submit second wizard step
+            browser.fill({
+                'form.widgets.recipient_address': str(address1.address_id),
+                'form.widgets.recipient_mail_address': str(mailaddress.mailaddress_id),
+            }).save()
+
+            # submit third wizard step
+            browser.fill({
+                'form.widgets.sender_address': '{}_1'.format(ogds_user.id),
+                'form.widgets.sender_mail_address': '{}_2'.format(ogds_user.id),
+                'form.widgets.sender_phonenumber': '{}_3'.format(ogds_user.id),
+                'form.widgets.sender_url': '{}_1'.format(ogds_user.id),
+            }).save()
+
+        document = self.dossier.listFolderContents()[0]
+        self.assertEqual(u'Test Docx.docx', document.file.filename)
+
+        expected_org_role_properties = {
+            'ogg.recipient.contact.title': u'M\xfcller Peter',
+            'ogg.recipient.person.firstname': 'Peter',
+            'ogg.recipient.person.lastname': u'M\xfcller',
+            'ogg.recipient.address.street': u'Musterstrasse 283',
+            'ogg.recipient.address.zip_code': '1234',
+            'ogg.recipient.address.city': 'Hinterkappelen',
+            'ogg.recipient.address.country': 'Schweiz',
+            'ogg.recipient.email.address': u'foo@example.com',
+            'ogg.sender.contact.title': u'M\xfcller Peter',
+            'ogg.sender.contact.description': u'nix',
+            'ogg.sender.person.salutation': 'Prof. Dr.',
+            'ogg.sender.person.firstname': 'Peter',
+            'ogg.sender.person.lastname': u'M\xfcller',
+            'ogg.sender.address.street': u'Kappelenweg 13, Postfach 1234',
+            'ogg.sender.address.zip_code': '1234',
+            'ogg.sender.address.city': u'Vorkappelen',
+            'ogg.sender.address.country': u'Schweiz',
+            'ogg.sender.email.address': u'bar@example.com',
+            'ogg.sender.phone.number': u'012 34 56 76',
+            'ogg.sender.url.url': u'http://www.example.com',
+        }
+        expected_org_role_properties.update(self.expected_doc_properties)
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+            self.assertItemsEqual(expected_org_role_properties.items(), properties)
+        self.assert_doc_properties_updated_journal_entry_generated(document)
+
 
 class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
 
@@ -663,7 +970,7 @@ class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
             browser.fill({
                 'form.widgets.template': self.normal_template.UID(),
                 'Title': 'Test Docx',
-                }).save()
+            }).save()
 
         self.assertEqual(1, len(children['added']))
         doc = children['added'].pop()
@@ -673,7 +980,7 @@ class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
 class TestDocumentWithTemplateFormWithOfficeConnector(IntegrationTestCase):
     features = (
         'officeconnector-checkout',
-        )
+    )
 
     @browsing
     def test_opens_doc_with_officeconnector_when_feature_flaged(self, browser):
@@ -682,13 +989,13 @@ class TestDocumentWithTemplateFormWithOfficeConnector(IntegrationTestCase):
         browser.fill({
             'form.widgets.template': self.normal_template.UID(),
             'Title': 'Test OfficeConnector',
-            }).save()
+        }).save()
 
         self.assertIn(
             "'oc:",
             browser.css('script.redirector').first.text,
             'OfficeConnector redirection script not found',
-            )
+        )
 
 
 class TestTemplateFolder(FunctionalTestCase):
@@ -715,14 +1022,14 @@ class TestTemplateFolder(FunctionalTestCase):
         self.assertNotIn(
             'Template Folder',
             factoriesmenu.addable_types()
-            )
+        )
 
         self.grant('Manager')
         browser.reload()
         self.assertIn(
             'Template Folder',
             factoriesmenu.addable_types()
-            )
+        )
 
     @browsing
     def test_manager_addable_types(self, browser):
@@ -839,7 +1146,7 @@ class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
 
     features = (
         'meeting',
-        )
+    )
 
     @browsing
     def test_addable_types_with_meeting_feature(self, browser):
@@ -853,7 +1160,7 @@ class TestTemplateFolderMeetingEnabled(IntegrationTestCase):
             'Sablon Template',
             'Task Template Folder',
             'Template Folder',
-            ]
+        ]
 
         addable_types = factoriesmenu.addable_types()
 
@@ -904,7 +1211,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Reference number',
             'File extension',
             'Keywords',
-            ]
+        ]
 
         self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
@@ -926,7 +1233,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Reference number',
             'File extension',
             'Keywords',
-            ]
+        ]
 
         self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
@@ -948,7 +1255,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Reference number',
             'File extension',
             'Keywords',
-            ]
+        ]
 
         self.assertEqual(expected_table_header, browser.css('table.listing').first.lists()[0])
 
@@ -962,7 +1269,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Copy items',
             'Export selection',
             'Move items',
-            ]
+        ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
 
@@ -977,7 +1284,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export selection',
             'Delete',
             'Move items',
-            ]
+        ]
 
         self.assertItemsEqual(expected_action_menu_content, browser.css('.actionMenuContent li').text)
 
@@ -999,12 +1306,12 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             self.asset_template.absolute_url(),
             self.normal_template.absolute_url(),
             self.empty_template.absolute_url(),
-            ]
+        ]
 
         document_urls = [
             element.get('Title').css('a').first.get('href')
             for element in templates
-            ]
+        ]
 
         self.assertEqual(expected_document_urls, document_urls)
         self.assertNotIn(self.subtemplate.absolute_url(), document_urls)
@@ -1018,7 +1325,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export as Zip',
             'Copy items',
             'Export selection',
-            ]
+        ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
@@ -1032,7 +1339,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Check in without comment',
             'Export selection',
             'Delete',
-            ]
+        ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
@@ -1050,7 +1357,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Export as Zip',
             'Copy items',
             'Export selection',
-            ]
+        ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
@@ -1064,7 +1371,7 @@ class TestTemplateFolderListings(SolrIntegrationTestCase):
             'Check in without comment',
             'Export selection',
             'Delete',
-            ]
+        ]
 
         self.assertItemsEqual(expected_actions, browser.css('.actionMenuContent li').text)
 
@@ -1165,7 +1472,7 @@ class TestTemplateDocumentTabsWithOneoffixx(IntegrationTestCase):
 class TestDossierTemplateFeature(IntegrationTestCase):
     features = (
         'dossiertemplate',
-        )
+    )
 
     @browsing
     def test_visible_tabs(self, browser):

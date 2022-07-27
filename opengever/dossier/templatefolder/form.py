@@ -159,15 +159,23 @@ class CreateDocumentMixin(object):
 
         recipient_data = filter(None, [
             data.get('recipient'),
-            data.get('address'),
-            data.get('mail_address'),
-            data.get('phonenumber'),
-            data.get('url'),
+            data.get('recipient_address'),
+            data.get('recipient_mail_address'),
+            data.get('recipient_phonenumber'),
+            data.get('recipient_url'),
+        ])
+
+        sender_data = filter(None, [
+            data.get('sender'),
+            data.get('sender_address'),
+            data.get('sender_mail_address'),
+            data.get('sender_phonenumber'),
+            data.get('sender_url'),
         ])
 
         command = CreateDocumentFromTemplateCommand(
             self.context, data['template'], data['title'],
-            recipient_data=recipient_data)
+            recipient_data=recipient_data, sender_data=sender_data)
         return command.execute()
 
 
