@@ -71,12 +71,14 @@ class DocumentFromTemplatePost(Service):
             raise BadRequest('Missing parameter title')
 
         recipient_id = data.get('recipient')
-        if recipient_id and not is_kub_feature_enabled():
-            raise BadRequest('recipient is only supported when KuB feature is active')
+        sender_id = data.get('sender')
+        if (recipient_id or sender_id) and not is_kub_feature_enabled():
+            raise BadRequest('recipient and sender are only supported when KuB feature is active')
         recipient = self.get_contact_data(recipient_id)
+        sender = self.get_contact_data(sender_id)
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template, title, recipient)
+            self.context, template, title, recipient, sender)
         document = command.execute()
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)

@@ -193,7 +193,25 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
                          data=json.dumps(data),
                          headers=self.api_headers)
         self.assertEqual(
-            'recipient is only supported when KuB feature is active',
+            'recipient and sender are only supported when KuB feature is active',
+            str(exc.exception))
+
+    @browsing
+    def test_raises_bad_request_if_sender_is_passed_and_kub_disabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'sender': KuBIntegrationTestCase.person_jean}
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as exc:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            'recipient and sender are only supported when KuB feature is active',
             str(exc.exception))
 
 
@@ -202,7 +220,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
 
     features = (
         'doc-properties',
-        )
+    )
 
     document_date = datetime(2015, 9, 28, 0, 0)
 
@@ -325,10 +343,48 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.person.salutation', 'Prof. Dr.'),
             ('ogg.recipient.phone.number', '012 34 56 78'),
             ('ogg.recipient.url.url', 'http://www.example.com'),
-            ]
+        ]
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
+        self.assertItemsEqual(expected_doc_properties, properties)
+
+    @browsing
+    def test_creates_document_from_template_with_kub_sender(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'sender': self.person_jean}
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.sender.contact.description', None),
+            ('ogg.sender.email.address', 'Jean.dupon@example.com'),
+            ('ogg.sender.person.academic_title', None),
+            ('ogg.sender.address.zip_code', '9999'),
+            ('ogg.sender.address.city', 'Bern'),
+            ('ogg.sender.contact.title', 'Dupont Jean'),
+            ('ogg.sender.address.street', 'Teststrasse'),
+            ('ogg.sender.address.country', 'Schweiz'),
+            ('ogg.sender.person.firstname', 'Jean'),
+            ('ogg.sender.person.lastname', 'Dupont'),
+            ('ogg.sender.person.salutation', 'Herr'),
+            ('ogg.sender.phone.number', '666 666 66 66')]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+
         self.assertItemsEqual(expected_doc_properties, properties)
 
 
