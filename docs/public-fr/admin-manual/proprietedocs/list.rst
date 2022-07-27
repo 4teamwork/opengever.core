@@ -92,6 +92,38 @@ ProriétéDocs pour les coordonnées du destinataire (Adresse/Tel./E-Mail/URL):
 - ``ogg.recipient.email.address``
 - ``ogg.recipient.url.url``
 
+ProriétéDocs pour tous les types de expéditeur:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.contact.title`` - Name der Organisation / zusammengesetzter Name der Person
+- ``ogg.sender.contact.description``
+
+ProriétéDocs d'expéditeurs de type personne:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.person.salutation``
+- ``ogg.sender.person.firstname``
+- ``ogg.sender.person.lastname``
+- ``ogg.sender.person.academic_title``
+
+ProriétéDocs d'expéditeurs de type organisation:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.organization.name``
+
+ProriétéDocs relation organisationnelle de l'expéditeur:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.orgrole.function``
+- ``ogg.sender.orgrole.department``
+- ``ogg.sender.orgrole.description``
+
+ProriétéDocs pour les coordonnées de l'expéditeur (Adresse/Tel./E-Mail/URL):
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.address.street``
+- ``ogg.sender.address.zip_code``
+- ``ogg.sender.address.city``
+- ``ogg.sender.address.country``
+- ``ogg.sender.phone.number``
+- ``ogg.sender.email.address``
+- ``ogg.sender.url.url``
+
 Ces ProriétéDocs sont obsolètes et ne doivent plus être utilisées:
 
 - ``Dossier.ReferenceNumber`` – référence du dossier qui contient le document

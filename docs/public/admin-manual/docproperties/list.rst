@@ -99,6 +99,38 @@ Doc-Properties Empfänger Adresse/Tel./E-Mail/URL:
 - ``ogg.recipient.email.address``
 - ``ogg.recipient.url.url``
 
+Doc-Properties alle Absender:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.contact.title`` - Name der Organisation / zusammengesetzter Name der Person
+- ``ogg.sender.contact.description``
+
+Doc-Properties Absender Person:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.person.salutation``
+- ``ogg.sender.person.firstname``
+- ``ogg.sender.person.lastname``
+- ``ogg.sender.person.academic_title``
+
+Doc-Properties Absender Organisation:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.organization.name``
+
+Doc-Properties Absender Organisationsbeziehung:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.orgrole.function``
+- ``ogg.sender.orgrole.department``
+- ``ogg.sender.orgrole.description``
+
+Doc-Properties Absender Adresse/Tel./E-Mail/URL:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- ``ogg.sender.address.street``
+- ``ogg.sender.address.zip_code``
+- ``ogg.sender.address.city``
+- ``ogg.sender.address.country``
+- ``ogg.sender.phone.number``
+- ``ogg.sender.email.address``
+- ``ogg.sender.url.url``
+
 Die folgenden Doc-Properties sind deprecated, und sollten deshalb nicht mehr verwendet werden:
 
 - ``Dossier.ReferenceNumber`` – Aktenzeichen des Dossiers, welches das Dokument
