@@ -121,6 +121,8 @@ class TestDocumentWorkflow(IntegrationTestCase):
         api.content.transition(obj=self.subdocument,
                                transition=Document.finalize_transition)
 
+        # finalizer gets stored on the document
+        self.assertEqual(self.subdocument.finalizer, self.regular_user.getId())
         self.assertEquals(Document.final_state,
                           api.content.get_state(obj=self.subdocument))
 
