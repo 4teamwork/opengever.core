@@ -125,6 +125,17 @@ class TestDocumentEventJournalizations(IntegrationTestCase):
         self.assert_journal_entry(
             DOCUMENT_MODIIFED_ACTION, u'Changed metadata', entries[-1])
 
+    def test_finalizing_the_document_is_journalized(self):
+        self.login(self.regular_user)
+
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+
+        entries = self.get_journal_entries()
+
+        self.assert_journal_entry(
+            DOCUMENT_STATE_CHANGED, u'Document state changed: final', entries[-1])
+
     def test_reset_journal_after_creating_a_copy(self):
         self.login(self.regular_user)
         JournalManager(self.document).add_manual_entry('meeting', 'comment')
