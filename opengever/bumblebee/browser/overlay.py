@@ -11,7 +11,7 @@ from opengever.bumblebee.interfaces import IBumblebeeOverlay
 from opengever.bumblebee.interfaces import IVersionedContextMarker
 from opengever.document import _ as document_mf
 from opengever.document.browser.actionbuttons import VisibleActionButtonRendererMixin
-from opengever.document.checkout.viewlets import CheckedOutViewlet
+from opengever.document.checkout.viewlets import DocumentStatusMessageViewlet
 from opengever.document.document import IDocumentSchema
 from opengever.document.versioner import Versioner
 from opengever.locking.info import GeverLockInfoViewlet
@@ -112,8 +112,8 @@ class BumblebeeBaseDocumentOverlay(object):
     def get_filename(self):
         return self.get_file().filename if self.has_file() else None
 
-    def render_checked_out_viewlet(self):
-        viewlet = CheckedOutViewlet(self.context, self.request, None, None)
+    def render_document_status_viewlet(self):
+        viewlet = DocumentStatusMessageViewlet(self.context, self.request, None, None)
         viewlet.update()
         return viewlet.render()
 
@@ -153,7 +153,7 @@ class BumblebeeDocumentVersionOverlay(BumblebeeBaseDocumentOverlay):
     def is_open_as_pdf_action_visible(self):
         return False
 
-    def render_checked_out_viewlet(self):
+    def render_document_status_viewlet(self):
         return ''
 
     def render_lock_info_viewlet(self):

@@ -1,9 +1,12 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.bumblebee.browser.overlay import BumblebeeBaseDocumentOverlay
 from opengever.bumblebee.interfaces import IBumblebeeOverlay
+from opengever.document.document import Document
 from opengever.testing import IntegrationTestCase
+from plone import api
 from plone.locking.interfaces import IRefreshableLockable
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -15,7 +18,7 @@ class TestAdapterRegisteredProperly(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_get_overlay_adapter_for_documents(self):
         self.login(self.regular_user)
@@ -31,7 +34,7 @@ class TestGetPreviewPdfUrl(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_preview_pdf_url_as_string(self):
         self.login(self.regular_user)
@@ -39,7 +42,7 @@ class TestGetPreviewPdfUrl(IntegrationTestCase):
         self.assertEqual(
             'http://nohost/plone/++resource++opengever.bumblebee.resources/fallback_not_digitally_available.svg',
             adapter.preview_pdf_url(),
-            )
+        )
 
 
 class TestGetFileSize(IntegrationTestCase):
@@ -47,7 +50,7 @@ class TestGetFileSize(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_file_size_in_kb_if_file_is_available(self):
         self.login(self.regular_user)
@@ -65,7 +68,7 @@ class TestGetCreator(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_link_to_creator(self):
         self.login(self.regular_user)
@@ -80,7 +83,7 @@ class TestGetDocumentDate(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_localized_document_date(self):
         self.login(self.regular_user)
@@ -105,7 +108,7 @@ class TestGetContainingDossier(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_the_containing_dossier(self):
         self.login(self.regular_user)
@@ -118,7 +121,7 @@ class TestGetSequenceNumber(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_sequence_number(self):
         self.login(self.regular_user)
@@ -131,7 +134,7 @@ class TestGetReferenceNumber(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_reference_number(self):
         self.login(self.regular_user)
@@ -144,7 +147,7 @@ class TestHasFile(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_true_if_document_has_a_file(self):
         self.login(self.regular_user)
@@ -162,7 +165,7 @@ class TestGetFile(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     def test_returns_none_if_document_has_no_file(self):
         self.login(self.regular_user)
@@ -180,7 +183,7 @@ class TestRenderLockInfoViewlet(IntegrationTestCase):
 
     features = (
         'bumblebee',
-        )
+    )
 
     @browsing
     def test_returns_empty_html_if_not_locked(self, browser):
@@ -198,23 +201,40 @@ class TestRenderLockInfoViewlet(IntegrationTestCase):
         self.assertEqual(1, len(browser.css('.portalMessage')))
 
 
-class TestRenderCheckedOutViewlet(IntegrationTestCase):
+class TestRenderDocumentStatusViewlet(IntegrationTestCase):
     """Test we correctly render the document checkout info viewlet."""
 
     features = (
         'bumblebee',
-        )
+    )
 
     @browsing
-    def test_returns_empty_html_if_not_checked_out(self, browser):
+    def test_returns_empty_html_if_not_checked_out_or_finalized(self, browser):
         self.login(self.regular_user)
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        self.assertEqual(u'\n', adapter.render_checked_out_viewlet())
+        self.assertEqual(u'\n', adapter.render_document_status_viewlet())
 
     @browsing
     def test_returns_lock_info_viewlet_if_checked_out(self, browser):
         self.login(self.regular_user)
         self.checkout_document(self.document)
         adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
-        browser.open_html(adapter.render_checked_out_viewlet())
-        self.assertEqual(1, len(browser.css('.portalMessage')))
+        browser.open_html(adapter.render_document_status_viewlet())
+        infos = info_messages()
+        self.assertEqual(1, len(infos))
+        self.assertEqual(
+            infos[0],
+            u'This document is currently checked out by B\xe4rfuss K\xe4thi (kathi.barfuss).')
+
+    @browsing
+    def test_returns_info_viewlet_if_finalized(self, browser):
+        self.login(self.regular_user)
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
+        adapter = getMultiAdapter((self.document, self.request), IBumblebeeOverlay)
+        browser.open_html(adapter.render_document_status_viewlet())
+        infos = info_messages()
+        self.assertEqual(1, len(infos))
+        self.assertEqual(
+            infos[0],
+            'This document cannot be modified because it has been finalized.')

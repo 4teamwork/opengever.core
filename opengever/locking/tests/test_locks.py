@@ -155,8 +155,9 @@ class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItems
         self.login(self.regular_user, browser)
 
         browser.open(self.document)
-        self.assertEqual(['Check out', 'Copy item', 'Move item', 'Properties'],
-                         editbar.menu_options('Actions'))
+        self.assertEqual(
+            ['Check out', 'Copy item', 'Move item', 'Properties', 'Finalize'],
+            editbar.menu_options('Actions'))
 
         ILockable(self.document).lock(self.lock_type)
         browser.open(self.document)

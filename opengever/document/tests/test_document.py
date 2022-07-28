@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
-from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import assert_message
 from ftw.testbrowser.pages.statusmessages import assert_no_error_messages
 from ftw.testing import freeze
@@ -145,10 +144,18 @@ class TestDocument(IntegrationTestCase):
         self.assertItemsEqual(
             [self.proposal, self.subdocument, self.subsubdocument, self.task,
              self.subtask, self.info_task, self.private_task, self.inbox_task],
-            self.document.related_items(bidirectional=True))
+            self.document.related_items(include_backrefs=True))
         self.assertItemsEqual(
             [self.subdocument, self.subsubdocument],
-            self.document.related_items(bidirectional=True, documents_only=True))
+            self.document.related_items(include_backrefs=True, documents_only=True))
+        self.assertItemsEqual(
+            [self.task, self.subtask, self.info_task,
+             self.private_task, self.inbox_task],
+            self.document.related_items(include_backrefs=True, tasks_only=True))
+        self.assertItemsEqual(
+            [self.subsubdocument],
+            self.subdocument.related_items(include_backrefs=True,
+                                           include_forwardrefs=False))
 
     def test_is_removed(self):
         self.login(self.regular_user)

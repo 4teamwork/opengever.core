@@ -1,3 +1,4 @@
+from plone import api
 from plone.rest import Service
 from plone.restapi.services.locking.locking import lock_info
 from zope.app.intid.interfaces import IIntIds
@@ -24,6 +25,8 @@ class DocumentStatus(Service):
         payload['lock_timeout'] = info.get('timeout')
 
         payload['file_mtime'] = self.context.get_file_mtime()
+
+        payload['review_state'] = api.content.get_state(self.context)
 
         return json.dumps(payload)
 

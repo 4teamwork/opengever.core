@@ -270,6 +270,9 @@ class BaseDocumentMixin(object):
     def is_shadow_document(self):
         return False
 
+    def is_final_document(self):
+        return False
+
     def is_checkin_allowed(self):
         return False
 

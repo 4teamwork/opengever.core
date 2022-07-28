@@ -78,11 +78,11 @@ class TestRelatedDocuments(IntegrationTestCase):
             [relation.to_object for relation in relations])
         self.assertItemsEqual(
             [self.document, self.subsubdocument],
-            self.subdocument.related_items(bidirectional=True))
+            self.subdocument.related_items(include_backrefs=True))
 
         api.content.delete(self.subsubdocument)
         relations = list(catalog.findRelations({'from_id': subsubdoc_id}))
         self.assertEqual(0, len(relations))
         self.assertItemsEqual(
             [self.document],
-            self.subdocument.related_items(bidirectional=True))
+            self.subdocument.related_items(include_backrefs=True))

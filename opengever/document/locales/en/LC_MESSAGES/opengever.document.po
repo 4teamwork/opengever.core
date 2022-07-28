@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-07-12 06:43+0000\n"
+"POT-Creation-Date: 2022-07-21 14:50+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -453,7 +453,7 @@ msgstr "Change archival file"
 #. German translation: Ausgecheckt
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview.py
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "label_checked_out"
 msgstr "Checked out"
 
@@ -615,6 +615,16 @@ msgstr "File"
 #. Default: "File size"
 msgid "label_filesize"
 msgstr "File size"
+
+#. Default: "Final"
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
+msgid "label_final"
+msgstr "Final"
+
+#. Default: "Finalizer"
+#: ./opengever/document/document.py
+msgid "label_finalizer"
+msgstr "Finalizer"
 
 #. German translation: Fremdzeichen
 #. Default: "Foreign Reference"
@@ -804,15 +814,20 @@ msgstr "yes"
 
 #. German translation: Dieses Dokument wurde von ${creator} ausgecheckt.
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "message_checkout_info"
 msgstr "This document is currently checked out by ${creator}."
 
 #. German translation: Dieses Dokument wird von ${creator} gerade in Office Online bearbeitet.
 #. Default: "This item is being edited in Office Online by ${creator}."
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "message_collaborative_checkout_info"
 msgstr "This document is being edited in Office Online by ${creator}."
+
+#. Default: "This document cannot be modified because it is final."
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
+msgid "message_final_info"
+msgstr "This document cannot be modified because it has been finalized."
 
 #. German translation: Das Dokument `${title}` konnte nicht ausgecheckt werden, da Mails den Check-in-/Check-out-Prozess nicht unterstützen.
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."

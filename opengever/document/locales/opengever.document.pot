@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-07-12 06:43+0000\n"
+"POT-Creation-Date: 2022-07-21 14:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -371,7 +371,7 @@ msgstr ""
 
 #. Default: "Checked out"
 #: ./opengever/document/browser/overview.py
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "label_checked_out"
 msgstr ""
 
@@ -502,6 +502,16 @@ msgid "label_file"
 msgstr ""
 
 msgid "label_filesize"
+msgstr ""
+
+#. Default: "Final"
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
+msgid "label_final"
+msgstr ""
+
+#. Default: "Finalizer"
+#: ./opengever/document/document.py
+msgid "label_finalizer"
 msgstr ""
 
 #. Default: "Foreign Reference"
@@ -661,13 +671,18 @@ msgid "label_yes"
 msgstr ""
 
 #. Default: "This item is being checked out by ${creator}."
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "message_checkout_info"
 msgstr ""
 
 #. Default: "This item is being edited in Office Online by ${creator}."
-#: ./opengever/document/checkout/templates/checkedoutviewlet.pt
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "message_collaborative_checkout_info"
+msgstr ""
+
+#. Default: "This document cannot be modified because it is final."
+#: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
+msgid "message_final_info"
 msgstr ""
 
 #. Default: "Could not cancel checkout on document ${title}, mails does not support the checkin checkout process."

@@ -7,6 +7,7 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
+from opengever.base.utils import is_administrator
 from opengever.docugate import is_docugate_feature_enabled
 from opengever.docugate.interfaces import IDocumentFromDocugate
 from opengever.document import _
@@ -23,6 +24,7 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.task.task import ITask
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
@@ -42,6 +44,7 @@ from z3c.form.interfaces import IAddForm
 from z3c.form.interfaces import IEditForm
 from zc.relation.interfaces import ICatalog
 from zope import schema
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
@@ -54,6 +57,10 @@ from zope.intid.interfaces import IIntIds
 import logging
 import os.path
 
+
+DOCUMENT_FINALIZER_KEY = 'opengever.document.finalizer'
+
+DOCUMENT_STATE_FINAL = 'document-state-final'
 
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg', '.p7m']
@@ -211,10 +218,13 @@ class Document(Item, BaseDocumentMixin):
     removed_state = 'document-state-removed'
     active_state = 'document-state-draft'
     shadow_state = 'document-state-shadow'
+    final_state = 'document-state-final'
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
     initialize_transition = 'document-transition-initialize'
+    finalize_transition = 'document-transition-finalize'
+    reopen_transition = 'document-transition-reopen'
 
     workspace_workflow_id = 'opengever_workspace_document'
 
@@ -297,15 +307,17 @@ class Document(Item, BaseDocumentMixin):
         self._v_filename = getattr(value, "filename", None)
         self.sync_title_and_filename()
 
-    def related_items(self, bidirectional=False, documents_only=False):
+    def related_items(self, include_forwardrefs=True, include_backrefs=False,
+                      documents_only=False, tasks_only=False):
         _related_items = []
 
-        relations = IRelatedDocuments(self).relatedItems
+        if include_forwardrefs and not tasks_only:
+            relations = IRelatedDocuments(self).relatedItems
 
-        if relations:
-            _related_items += [rel.to_object for rel in relations if not rel.isBroken()]
+            if relations:
+                _related_items += [rel.to_object for rel in relations if not rel.isBroken()]
 
-        if bidirectional:
+        if include_backrefs:
             catalog = getUtility(ICatalog)
             doc_id = getUtility(IIntIds).getId(aq_inner(self))
             relations = catalog.findRelations(
@@ -316,6 +328,10 @@ class Document(Item, BaseDocumentMixin):
                     lambda rel: IBaseDocument.providedBy(rel.from_object),
                     relations)
 
+            if tasks_only:
+                relations = filter(
+                    lambda rel: ITask.providedBy(rel.from_object),
+                    relations)
             _related_items += [rel.from_object for rel in relations]
 
         return _related_items
@@ -354,6 +370,28 @@ class Document(Item, BaseDocumentMixin):
         if self.is_shadow_document():
             api.content.transition(
                 self, transition='document-transition-initialize')
+
+    def is_finalize_allowed(self):
+        return not self.is_checked_out()
+
+    def is_referenced_by_pending_task(self):
+        tasks = self.related_items(include_forwardrefs=False, include_backrefs=True, tasks_only=True)
+        return any((task.is_pending() for task in tasks))
+
+    def is_reopen_allowed(self):
+        # reopen is not allowed if a pending task is referencing the document
+        user = api.user.get_current()
+        return ((is_administrator(user)
+                 or user.getId() == self.finalizer)
+                and not self.is_referenced_by_pending_task())
+
+    @property
+    def finalizer(self):
+        return IAnnotations(self).get(DOCUMENT_FINALIZER_KEY)
+
+    @finalizer.setter
+    def finalizer(self, value):
+        IAnnotations(self)[DOCUMENT_FINALIZER_KEY] = value
 
     def checked_out_by(self):
         manager = getMultiAdapter((self, self.REQUEST),
@@ -424,6 +462,9 @@ class Document(Item, BaseDocumentMixin):
 
     def is_shadow_document(self):
         return api.content.get_state(self) == self.shadow_state
+
+    def is_final_document(self):
+        return api.content.get_state(self) == self.final_state
 
     def is_oneoffixx_creatable(self):
         return (is_oneoffixx_feature_enabled()

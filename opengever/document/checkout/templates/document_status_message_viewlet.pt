@@ -1,0 +1,27 @@
+<dl tal:condition="view/available"
+    class="portalMessage info checked_out_viewlet"
+    i18n:domain="opengever.document">
+
+    <tal:block tal:condition="view/checked_out">
+        <dt i18n:translate="label_checked_out">Checked out</dt>
+        <dd>
+            <tal:block tal:condition="not:view/is_collaborative_checkout" i18n:translate="message_checkout_info">
+                This item is being checked out by
+                <a i18n:name="creator"
+                   tal:replace="structure view/checkout_by_link" />.
+            </tal:block>
+
+            <tal:block tal:condition="view/is_collaborative_checkout" i18n:translate="message_collaborative_checkout_info">
+                This item is being edited in Office Online by
+                <a i18n:name="creator"
+                   tal:replace="structure view/checkout_by_link" />.
+            </tal:block>
+        </dd>
+    </tal:block>
+    <tal:block tal:condition="view/is_final">
+        <dt i18n:translate="label_final">Final</dt>
+        <dd i18n:translate="message_final_info">
+            This document cannot be modified because it is final.
+        </dd>
+    </tal:block>
+</dl>

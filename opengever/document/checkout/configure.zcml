@@ -81,10 +81,10 @@
   <adapter factory=".manager.CheckinCheckoutManager" />
 
   <browser:viewlet
-      name="checkedoutviewlet"
+      name="documentstatusviewlet"
       for="opengever.document.document.IDocumentSchema"
       manager="plone.app.layout.viewlets.interfaces.IAboveContent"
-      class=".viewlets.CheckedOutViewlet"
+      class=".viewlets.DocumentStatusMessageViewlet"
       permission="zope2.View"
       />
 

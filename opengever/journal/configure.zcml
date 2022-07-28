@@ -172,6 +172,12 @@
       />
 
   <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.document_state_changed"
+      />
+
+  <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            opengever.mail.interfaces.IDocumentSent"
       handler=".handlers.document_sent"

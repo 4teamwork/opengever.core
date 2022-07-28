@@ -435,4 +435,10 @@
   <adapter factory=".actions.BaseDocumentContextActions" />
   <adapter factory=".actions.DocumentSchemaContextActions" />
 
+  <!-- transitions -->
+  <adapter
+      factory=".transition.DocumentFinalizeTransitionExtender"
+      name="document-transition-finalize"
+      />
+
 </configure>

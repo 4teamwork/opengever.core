@@ -4,6 +4,7 @@ from OFS.interfaces import IObjectWillBeAddedEvent
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
+from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
 from opengever.journal import _
@@ -291,6 +292,19 @@ def document_added(context, event):
 
 def reset_journal_history_after_clone(document, event):
     JournalManager(document).clear()
+
+
+DOCUMENT_STATE_CHANGED = 'Document state changed'
+
+
+def document_state_changed(context, event):
+    skip_transactions = [Document.initialize_transition]
+    if event.action in skip_transactions:
+        return
+    newstate = event.workflow.transitions.get(event.action).new_state_id
+    title = pmf(u'Document state changed to %s' % newstate)
+    journal_entry_factory(context, DOCUMENT_STATE_CHANGED, title)
+    return
 
 
 DOCUMENT_MODIIFED_ACTION = 'Document modified'

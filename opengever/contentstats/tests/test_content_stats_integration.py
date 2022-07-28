@@ -73,6 +73,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'disposition-state-disposed',
             'disposition-state-in-progress',
             'document-state-draft',
+            'document-state-final',
             'document-state-removed',
             'document-state-shadow',
             'dossier-state-active',

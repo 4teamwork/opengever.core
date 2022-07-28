@@ -38,20 +38,11 @@ msgstr "Créer tâche suivante"
 msgid "Delegate task"
 msgstr "Déléguer"
 
-msgid "Document state changed to document-state-checked_out"
-msgstr "Etat du document modifié: checkout"
-
 msgid "Document state changed to document-state-draft"
-msgstr "Etat du document modifié: ouvert"
+msgstr "Etat du document modifié: brouillon"
 
-msgid "Document state changed to document-state-pending"
-msgstr "Etat du document modifié: en suspend"
-
-msgid "Document state changed to document-state-reject"
-msgstr "Etat du document modifié: rejeté"
-
-msgid "Document state changed to document-state-working_copy"
-msgstr "Etat du document modifié: copie de travail"
+msgid "Document state changed to document-state-final"
+msgstr "Etat du document modifié: final"
 
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Etat du dossier modifié: En cours de traitement"
@@ -171,6 +162,9 @@ msgstr "Offre refusée"
 msgid "document-state-draft"
 msgstr "Non défini"
 
+msgid "document-state-final"
+msgstr "Final"
+
 msgid "document-state-pending"
 msgstr "En suspend"
 
@@ -180,8 +174,14 @@ msgstr "Effacé"
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
+msgid "document-transition-finalize"
+msgstr "Finaliser"
+
 msgid "document-transition-remove"
 msgstr "Effacer"
+
+msgid "document-transition-reopen"
+msgstr "Réviser"
 
 msgid "document-transition-restore"
 msgstr "Récupérer"

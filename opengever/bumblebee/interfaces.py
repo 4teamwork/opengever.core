@@ -95,8 +95,8 @@ class IBumblebeeOverlay(Interface):
         Returns None if there is no file.
         """
 
-    def render_checked_out_viewlet():
-        """Renders the checked out viewlet.
+    def render_document_status_viewlet():
+        """Renders the document status viewlet.
 
         Returns html.
         """

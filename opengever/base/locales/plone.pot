@@ -54,10 +54,19 @@ msgstr ""
 msgid "document-state-draft"
 msgstr ""
 
+msgid "document-state-final"
+msgstr ""
+
 msgid "document-state-removed"
 msgstr ""
 
+msgid "document-transition-finalize"
+msgstr ""
+
 msgid "document-transition-remove"
+msgstr ""
+
+msgid "document-transition-reopen"
 msgstr ""
 
 msgid "document-transition-restore"
@@ -69,19 +78,10 @@ msgstr ""
 msgid "label_reset"
 msgstr ""
 
-msgid "Document state changed to document-state-working_copy"
-msgstr ""
-
-msgid "Document state changed to document-state-pending"
-msgstr ""
-
 msgid "Document state changed to document-state-draft"
 msgstr ""
 
-msgid "Document state changed to document-state-checked_out"
-msgstr ""
-
-msgid "Document state changed to document-state-reject"
+msgid "Document state changed to document-state-final"
 msgstr ""
 
 msgid "Edit metadata"

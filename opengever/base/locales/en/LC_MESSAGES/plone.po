@@ -46,26 +46,12 @@ msgstr "Create successor task"
 msgid "Delegate task"
 msgstr "Delegate task"
 
-#. German translation: Dokumentstatus verändert: Ausgecheckt
-#. MARKER: I suspect many (or all) of the messages below aren't actually used
-msgid "Document state changed to document-state-checked_out"
-msgstr "Document state changed to document-state-checked_out"
-
 #. German translation: Dokumentstatus verändert: Entwurf
 msgid "Document state changed to document-state-draft"
-msgstr "Document state changed to document-state-draft"
+msgstr "Document state changed: draft"
 
-#. German translation: Dokumentstatus verändert: Hängig
-msgid "Document state changed to document-state-pending"
-msgstr "Document state changed to document-state-pending"
-
-#. German translation: Dokument status verändert: Zurückweisen
-msgid "Document state changed to document-state-reject"
-msgstr "Document state changed to document-state-reject"
-
-#. German translation: Dokumentstatus verändert: Arbeitskopie
-msgid "Document state changed to document-state-working_copy"
-msgstr "Document state changed to document-state-working_copy"
+msgid "Document state changed to document-state-final"
+msgstr "Document state changed: final"
 
 #. German translation: Status des Dossiers geändert zu In Bearbeitung
 msgid "Dossier state changed to dossier-state-active"
@@ -225,6 +211,9 @@ msgstr "Refuse"
 msgid "document-state-draft"
 msgstr "undefined"
 
+msgid "document-state-final"
+msgstr "Final"
+
 #. German translation: Hängig
 msgid "document-state-pending"
 msgstr "Pending"
@@ -237,9 +226,15 @@ msgstr "Removed"
 msgid "document-state-working_copy"
 msgstr "Working copy"
 
+msgid "document-transition-finalize"
+msgstr "Finalize"
+
 #. German translation: Löschen
 msgid "document-transition-remove"
 msgstr "Remove"
+
+msgid "document-transition-reopen"
+msgstr "Revise"
 
 #. German translation: Wiederherstellen
 msgid "document-transition-restore"

@@ -38,20 +38,11 @@ msgstr "Folgeaufgabe erstellen"
 msgid "Delegate task"
 msgstr "Delegieren"
 
-msgid "Document state changed to document-state-checked_out"
-msgstr "Dokumentstatus verändert: Ausgecheckt"
-
 msgid "Document state changed to document-state-draft"
 msgstr "Dokumentstatus verändert: Entwurf"
 
-msgid "Document state changed to document-state-pending"
-msgstr "Dokumentstatus verändert: Hängig"
-
-msgid "Document state changed to document-state-reject"
-msgstr "Dokument status verändert: Zurückweisen"
-
-msgid "Document state changed to document-state-working_copy"
-msgstr "Dokumentstatus verändert: Arbeitskopie"
+msgid "Document state changed to document-state-final"
+msgstr "Dokumentstatus verändert: Final"
 
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Status des Dossiers geändert zu In Bearbeitung"
@@ -171,6 +162,9 @@ msgstr "Ablehnen"
 msgid "document-state-draft"
 msgstr "nicht definiert"
 
+msgid "document-state-final"
+msgstr "Final"
+
 msgid "document-state-pending"
 msgstr "Hängig"
 
@@ -180,8 +174,14 @@ msgstr "Gelöscht"
 msgid "document-state-working_copy"
 msgstr "Arbeitskopie"
 
+msgid "document-transition-finalize"
+msgstr "Finalisieren"
+
 msgid "document-transition-remove"
 msgstr "Löschen"
+
+msgid "document-transition-reopen"
+msgstr "Überarbeiten"
 
 msgid "document-transition-restore"
 msgstr "Wiederherstellen"
