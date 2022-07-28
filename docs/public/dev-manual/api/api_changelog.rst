@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@unlink-workspace``: Add field ``deactivate_workspace``. (see :ref:`unlink-workspace`)
+- ``@document-from-template`` now also supports a ``sender`` parameter when KuB is active.
 
 2022.14.0 (2022-07-20)
 ----------------------
