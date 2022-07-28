@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-18 06:23+0000\n"
+"POT-Creation-Date: 2022-07-28 09:06+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -154,6 +154,10 @@ msgstr "Choisir un modèle"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "Select recipient address"
 msgstr "Choisir l'adresse du destinataire"
+
+#: ./opengever/dossier/templatefolder/form.py
+msgid "Select sender address"
+msgstr "Choisir l'adresse de l'expéditeur"
 
 #: ./opengever/dossier/dossiertemplate/menu.py
 #: ./opengever/dossier/menu.py
@@ -826,6 +830,11 @@ msgstr "Rôles"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_sablon_templates"
 msgstr "Modèles Sablon"
+
+#. Default: "Sender"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_sender"
+msgstr "Expéditeur"
 
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py

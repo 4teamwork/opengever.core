@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-18 06:23+0000\n"
+"POT-Creation-Date: 2022-07-28 09:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -154,6 +154,10 @@ msgstr ""
 
 #: ./opengever/dossier/templatefolder/form.py
 msgid "Select recipient address"
+msgstr ""
+
+#: ./opengever/dossier/templatefolder/form.py
+msgid "Select sender address"
 msgstr ""
 
 #: ./opengever/dossier/dossiertemplate/menu.py
@@ -824,6 +828,11 @@ msgstr ""
 #. Default: "Sablon Templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_sablon_templates"
+msgstr ""
+
+#. Default: "Sender"
+#: ./opengever/dossier/templatefolder/form.py
+msgid "label_sender"
 msgstr ""
 
 #. Default: "Sequence Number"
