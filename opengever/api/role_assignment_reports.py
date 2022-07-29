@@ -2,11 +2,13 @@ from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.ogds.base.actor import Actor
 from opengever.sharing.browser.sharing import ROLE_MAPPING
 from plone.app.uuid.utils import uuidToObject
+from plone.app.workflow.interfaces import ISharingPageRole
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import queryUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -83,9 +85,11 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
     def get_referenced_roles(self):
         roles = []
         for role in ROLE_MAPPING.keys():
+            util = queryUtility(ISharingPageRole, name=role)
+            title = util.title
             roles.append(
                 {'id': role,
-                 'title': translate(role, context=self.request, domain='plone')})
+                 'title': translate(title, context=self.request)})
 
         return roles
 
