@@ -12,8 +12,15 @@
 
   <browser:page
       for="*"
-      name="select-address"
-      class=".form.SelectAddressView"
+      name="select-recipient-address"
+      class=".form.SelectRecipientAddressView"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="*"
+      name="select-sender-address"
+      class=".form.SelectSenderAddressView"
       permission="zope2.View"
       />
 

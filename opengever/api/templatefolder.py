@@ -71,33 +71,38 @@ class DocumentFromTemplatePost(Service):
             raise BadRequest('Missing parameter title')
 
         recipient_id = data.get('recipient')
-        if recipient_id and not is_kub_feature_enabled():
-            raise BadRequest('recipient is only supported when KuB feature is active')
-        if recipient_id:
-            if ActorLookup(recipient_id).is_kub_contact():
-                recipient = (KuBEntity(recipient_id), )
-            else:
-                contact = OgdsUserToContactAdapter(
-                    ogds_service().find_user(recipient_id))
-                recipient = [contact]
-                if contact.addresses:
-                    recipient.append(contact.addresses[0])
-                if contact.phonenumbers:
-                    recipient.append(contact.phonenumbers[0])
-                if contact.mail_addresses:
-                    recipient.append(contact.mail_addresses[0])
-                if contact.urls:
-                    recipient.append(contact.urls[0])
-                recipient = tuple(recipient)
-        else:
-            recipient = tuple()
+        sender_id = data.get('sender')
+        if (recipient_id or sender_id) and not is_kub_feature_enabled():
+            raise BadRequest('recipient and sender are only supported when KuB feature is active')
+        recipient = self.get_contact_data(recipient_id)
+        sender = self.get_contact_data(sender_id)
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template, title, recipient)
+            self.context, template, title, recipient, sender)
         document = command.execute()
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)
         return serializer()
+
+    def get_contact_data(self, contact_id):
+        if contact_id:
+            if ActorLookup(contact_id).is_kub_contact():
+                return (KuBEntity(contact_id), )
+            else:
+                contact = OgdsUserToContactAdapter(
+                    ogds_service().find_user(contact_id))
+                data = [contact]
+                if contact.addresses:
+                    data.append(contact.addresses[0])
+                if contact.phonenumbers:
+                    data.append(contact.phonenumbers[0])
+                if contact.mail_addresses:
+                    data.append(contact.mail_addresses[0])
+                if contact.urls:
+                    data.append(contact.urls[0])
+                return tuple(data)
+        else:
+            return tuple()
 
 
 class DossierFromTemplatePost(FolderPost, CreateDossierContentFromTemplateMixin):

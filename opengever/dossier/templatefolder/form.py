@@ -97,6 +97,13 @@ class ICreateDocumentFromTemplate(model.Schema):
         required=False,
     )
 
+    form.widget('sender', KeywordFieldWidget, async=True)
+    sender = schema.Choice(
+        title=_(u'label_sender', default=u'Sender'),
+        source=ContactsSourceBinder(),
+        required=False,
+    )
+
     form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
     edit_after_creation = schema.Bool(
         title=_(u'label_edit_after_creation', default='Edit after creation'),
@@ -122,7 +129,8 @@ class CreateDocumentMixin(object):
         if not is_contact_feature_enabled():
             return []
         return [('select-document', _(u'Select document')),
-                ('select-address', _(u'Select recipient address'))]
+                ('select-recipient-address', _(u'Select recipient address')),
+                ('select-sender-address', _(u'Select sender address'))]
 
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)
@@ -151,15 +159,23 @@ class CreateDocumentMixin(object):
 
         recipient_data = filter(None, [
             data.get('recipient'),
-            data.get('address'),
-            data.get('mail_address'),
-            data.get('phonenumber'),
-            data.get('url'),
+            data.get('recipient_address'),
+            data.get('recipient_mail_address'),
+            data.get('recipient_phonenumber'),
+            data.get('recipient_url'),
+        ])
+
+        sender_data = filter(None, [
+            data.get('sender'),
+            data.get('sender_address'),
+            data.get('sender_mail_address'),
+            data.get('sender_phonenumber'),
+            data.get('sender_url'),
         ])
 
         command = CreateDocumentFromTemplateCommand(
             self.context, data['template'], data['title'],
-            recipient_data=recipient_data)
+            recipient_data=recipient_data, sender_data=sender_data)
         return command.execute()
 
 
@@ -172,6 +188,7 @@ class SelectTemplateDocumentWizardStep(
         super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
         if not is_contact_feature_enabled():
             self.fields = self.fields.omit('recipient')
+            self.fields = self.fields.omit('sender')
         if is_client_ip_in_office_connector_disallowed_ip_ranges():
             self.fields = self.fields.omit('edit_after_creation')
         if is_kub_feature_enabled():
@@ -198,7 +215,13 @@ class SelectTemplateDocumentWizardStep(
             dm = getUtility(IWizardDataStorage)
             dm.update(get_dm_key(self.context), data)
             return self.request.RESPONSE.redirect(
-                "{}/select-address".format(self.context.absolute_url()))
+                "{}/select-recipient-address".format(self.context.absolute_url()))
+
+        if data.get('sender'):
+            dm = getUtility(IWizardDataStorage)
+            dm.update(get_dm_key(self.context), data)
+            return self.request.RESPONSE.redirect(
+                "{}/select-sender-address".format(self.context.absolute_url()))
 
         return self.finish_document_creation(data)
 
@@ -212,7 +235,7 @@ class SelectTemplateDocumentView(FormWrapper):
     form = SelectTemplateDocumentWizardStep
 
 
-def get_recipient(context):
+def get_contact(context, key='recipient'):
     """Return the previously selected recipient.
 
     If it is an unpickled/detached mapper merge it into the current session,
@@ -222,66 +245,83 @@ def get_recipient(context):
     dm = getUtility(IWizardDataStorage)
     data = dm.get_data(get_dm_key(context))
 
-    recipient = data['recipient']
+    contact = data[key]
+
     try:
         # merge unpickled recipient into session when it is a mapper
-        if inspect(recipient).detached:
-            recipient = create_session().merge(recipient)
+        if inspect(contact).detached:
+            contact = create_session().merge(contact)
     except NoInspectionAvailable:
         pass
-    return recipient
+    return contact
 
 
-@provider(IContextSourceBinder)
-def make_address_vocabulary(context):
-    recipient = get_recipient(context)
+def make_address_vocabulary_binder(key='recipient'):
 
-    return SimpleVocabulary([
-        SimpleVocabulary.createTerm(
-            address, str(address.address_id))
-        for address in recipient.addresses])
+    @provider(IContextSourceBinder)
+    def make_address_vocabulary(context):
+        contact = get_contact(context, key=key)
+
+        return SimpleVocabulary([
+            SimpleVocabulary.createTerm(
+                address, str(address.address_id))
+            for address in contact.addresses])
+
+    return make_address_vocabulary
 
 
 def address_lines(item, value):
     return u"<br />".join(item.get_lines())
 
 
-@provider(IContextSourceBinder)
-def make_mail_address_vocabulary(context):
-    recipient = get_recipient(context)
+def make_mail_address_vocabulary_binder(key='recipient'):
 
-    return SimpleVocabulary([
-        SimpleVocabulary.createTerm(
-            mail_address, str(mail_address.mailaddress_id))
-        for mail_address in recipient.mail_addresses])
+    @provider(IContextSourceBinder)
+    def make_mail_address_vocabulary(context):
+        contact = get_contact(context, key=key)
 
+        return SimpleVocabulary([
+            SimpleVocabulary.createTerm(
+                mail_address, str(mail_address.mailaddress_id))
+            for mail_address in contact.mail_addresses])
 
-@provider(IContextSourceBinder)
-def make_phonenumber_vocabulary(context):
-    recipient = get_recipient(context)
-
-    return SimpleVocabulary([
-        SimpleVocabulary.createTerm(
-            phone_number, str(phone_number.phone_number_id))
-        for phone_number in recipient.phonenumbers])
+    return make_mail_address_vocabulary
 
 
-@provider(IContextSourceBinder)
-def make_url_vocabulary(context):
-    recipient = get_recipient(context)
+def make_phonenumber_vocabulary_binder(key='recipient'):
 
-    return SimpleVocabulary([
-        SimpleVocabulary.createTerm(
-            url, str(url.url_id))
-        for url in recipient.urls])
+    @provider(IContextSourceBinder)
+    def make_phonenumber_vocabulary(context):
+        contact = get_contact(context, key=key)
+
+        return SimpleVocabulary([
+            SimpleVocabulary.createTerm(
+                phone_number, str(phone_number.phone_number_id))
+            for phone_number in contact.phonenumbers])
+
+    return make_phonenumber_vocabulary
+
+
+def make_url_vocabulary_binder(key='recipient'):
+
+    @provider(IContextSourceBinder)
+    def make_url_vocabulary(context):
+        contact = get_contact(context, key=key)
+
+        return SimpleVocabulary([
+            SimpleVocabulary.createTerm(
+                url, str(url.url_id))
+            for url in contact.urls])
+
+    return make_url_vocabulary
 
 
 class ISelectRecipientAddress(model.Schema):
 
-    address = TableChoice(
+    recipient_address = TableChoice(
         title=_(u"label_address", default=u"Address"),
         required=False,
-        source=make_address_vocabulary,
+        source=make_address_vocabulary_binder(key='recipient'),
         columns=(
             {'column': 'label',
              'column_title': _(u'label_label', default=u'Label')},
@@ -290,10 +330,10 @@ class ISelectRecipientAddress(model.Schema):
              'transform': address_lines},
         ))
 
-    mail_address = TableChoice(
+    recipient_mail_address = TableChoice(
         title=_(u"label_mail_address", default=u"Mail-Address"),
         required=False,
-        source=make_mail_address_vocabulary,
+        source=make_mail_address_vocabulary_binder(key='recipient'),
         columns=(
             {'column': 'label',
              'column_title': _(u'label_label', default=u'Label')},
@@ -301,10 +341,10 @@ class ISelectRecipientAddress(model.Schema):
              'column_title': _(u'label_mail_address', default=u'Mail-Address')},
         ))
 
-    phonenumber = TableChoice(
+    recipient_phonenumber = TableChoice(
         title=_(u"label_phonenumber", default=u"Phonenumber"),
         required=False,
-        source=make_phonenumber_vocabulary,
+        source=make_phonenumber_vocabulary_binder(key='recipient'),
         columns=(
             {'column': 'label',
              'column_title': _(u'label_label', default=u'Label')},
@@ -312,10 +352,10 @@ class ISelectRecipientAddress(model.Schema):
              'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
         ))
 
-    url = TableChoice(
+    recipient_url = TableChoice(
         title=_(u"label_url", default=u"URL"),
         required=False,
-        source=make_url_vocabulary,
+        source=make_url_vocabulary_binder(key='recipient'),
         columns=(
             {'column': 'label',
              'column_title': _(u'label_label', default=u'Label')},
@@ -324,11 +364,88 @@ class ISelectRecipientAddress(model.Schema):
         ))
 
 
-class SelectAddressWizardStep(
+class ISelectSenderAddress(model.Schema):
+
+    sender_address = TableChoice(
+        title=_(u"label_address", default=u"Address"),
+        required=False,
+        source=make_address_vocabulary_binder(key='sender'),
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'address',
+             'column_title': _(u'label_address', default=u'Address'),
+             'transform': address_lines},
+        ))
+
+    sender_mail_address = TableChoice(
+        title=_(u"label_mail_address", default=u"Mail-Address"),
+        required=False,
+        source=make_mail_address_vocabulary_binder(key='sender'),
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'address',
+             'column_title': _(u'label_mail_address', default=u'Mail-Address')},
+        ))
+
+    sender_phonenumber = TableChoice(
+        title=_(u"label_phonenumber", default=u"Phonenumber"),
+        required=False,
+        source=make_phonenumber_vocabulary_binder(key='sender'),
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'phone_number',
+             'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
+        ))
+
+    sender_url = TableChoice(
+        title=_(u"label_url", default=u"URL"),
+        required=False,
+        source=make_url_vocabulary_binder(key='sender'),
+        columns=(
+            {'column': 'label',
+             'column_title': _(u'label_label', default=u'Label')},
+            {'column': 'url',
+             'column_title': _(u'label_url', default=u'URL')},
+        ))
+
+
+class SelectRecipientAddressWizardStep(
         CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
 
-    step_name = 'select-address'
+    step_name = 'select-recipient-address'
     schema = ISelectRecipientAddress
+
+    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
+    def handleApply(self, action):
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+            return
+
+        dm = getUtility(IWizardDataStorage)
+        data.update(dm.get_data(get_dm_key(self.context)))
+
+        if data.get('sender'):
+            dm = getUtility(IWizardDataStorage)
+            dm.update(get_dm_key(self.context), data)
+            return self.request.RESPONSE.redirect(
+                "{}/select-sender-address".format(self.context.absolute_url()))
+
+        return self.finish_document_creation(data)
+
+    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
+    def cancel(self, action):
+        return self.request.RESPONSE.redirect(self.context.absolute_url())
+
+
+class SelectSenderAddressWizardStep(
+        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
+
+    step_name = 'select-sender-address'
+    schema = ISelectSenderAddress
 
     @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
     def handleApply(self, action):
@@ -347,6 +464,11 @@ class SelectAddressWizardStep(
         return self.request.RESPONSE.redirect(self.context.absolute_url())
 
 
-class SelectAddressView(FormWrapper):
+class SelectRecipientAddressView(FormWrapper):
 
-    form = SelectAddressWizardStep
+    form = SelectRecipientAddressWizardStep
+
+
+class SelectSenderAddressView(FormWrapper):
+
+    form = SelectSenderAddressWizardStep
