@@ -21,7 +21,7 @@ msgstr "Pas déplacé vers la corbeille: le document a été rapatrié, mais le 
 #. Default: "The workspace was unlinked, but it could not be deactivated."
 #: ./opengever/workspaceclient/linked_workspaces.py
 msgid "deactivate_workspace_failed"
-msgstr ""
+msgstr "La liaison à l'espace de travail a été supprimée, mais il n'a pas pu être désactivé."
 
 #. Default: "Document retrieved from teamraum"
 #: ./opengever/workspaceclient/linked_workspaces.py
