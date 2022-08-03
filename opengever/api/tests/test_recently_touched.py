@@ -9,14 +9,14 @@ from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.tests.test_resolve import ResolveTestHelper
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from zope.annotation import IAnnotations
 from zope.component import queryMultiAdapter
 from zope.event import notify
 
 
-class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
+class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
 
     def _clear_recently_touched_log(self, user_id):
         del IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id][:]
@@ -63,6 +63,8 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                 (self.document, self.request), ICheckinCheckoutManager)
             manager.checkout()
 
+        self.commit_solr()
+
         url = '%s/@recently-touched/%s' % (
             self.portal.absolute_url(), self.regular_user.getId())
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
@@ -93,6 +95,8 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
             manager = queryMultiAdapter(
                 (self.document, self.request), ICheckinCheckoutManager)
             manager.checkout()
+
+        self.commit_solr()
 
         url = '%s/@recently-touched/%s?metadata_fields:list=checked_out&metadata_fields:list=filename' % (
             self.portal.absolute_url(), self.regular_user.getId())
@@ -134,6 +138,8 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                 (self.document, self.request), ICheckinCheckoutManager)
             manager.checkout()
 
+        self.commit_solr()
+
         url = '%s/@recently-touched/%s' % (
             self.portal.absolute_url(), self.regular_user.getId())
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
@@ -167,6 +173,8 @@ class TestRecentlyModifiedGet(IntegrationTestCase, ResolveTestHelper):
                 (self.document, self.request), ICheckinCheckoutManager)
             manager.checkout()
             notify(ObjectTouchedEvent(self.document))
+
+        self.commit_solr()
 
         url = '%s/@recently-touched/%s' % (
             self.portal.absolute_url(), self.regular_user.getId())
