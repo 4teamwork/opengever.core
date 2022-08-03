@@ -10,6 +10,32 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.0 (2022-08-03)
+----------------------
+
+New features:
+
+
+- Add parameter to deactivate the workspace in the @unlink-workspace endpoint. [tinagerber]
+- Index containing_dossier for document templates. [tinagerber]
+- Add sender docproperties when creating document from template. [njohner]
+- Add new review state for documents: document-state-final [njohner]
+
+
+Bug fixes:
+
+
+- Fix indexing of containing_dossier and containing_subdossier for documents in dossier templates. [tinagerber]
+- Fix column width in latex subdossier listings. [phgross]
+- Support foreign zip codes in document properties. [tinagerber]
+
+
+Other changes:
+
+
+- Use same labels in role assignment reports as in sharing view. [njohner]
+
+
 2022.14.0 (2022-07-20)
 ----------------------
 
