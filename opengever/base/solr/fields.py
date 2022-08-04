@@ -820,7 +820,14 @@ class SolrFieldMapper(object):
         dynamic_solr_fields = self.get_custom_property_solr_fields()
         matches = [f for f in dynamic_solr_fields if f['name'] == field_name]
         if matches:
-            assert len(matches) == 1
+            if len(matches) > 1:
+                # Check if all field definitions are equal
+                if len(set([tuple(match.items()) for match in matches])) > 1:
+                    raise Exception(
+                        u'PropertySheet incorrectly configured. Multiple fields '
+                        u'defined with name `{}`, but with a different '
+                        u'configuration.'.format(field_name))
+
             return matches[0]
 
     def get_custom_property_solr_fields(self, all_slots=False):
