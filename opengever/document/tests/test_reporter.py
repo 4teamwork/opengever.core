@@ -241,6 +241,40 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 
     @browsing
+    def test_supports_multiple_custom_field_with_same_name(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.create_propertysheet_for(self.document)
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.offer": {
+                "tagline": "Woosh!",
+            }
+        }
+
+        # add a second additional_title
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.report")
+            .with_field("textline", u"tagline", u"Tag Line", u"", False))
+
+        self.document.reindexObject()
+        self.commit_solr()
+
+        params = self.make_path_param(self.document)
+        params.update({'columns': ['title', 'tagline_custom_field_string']})
+        browser.open(view='document_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [u'Title', u'Tag Line']
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [u'Vertr\xe4gsentwurf', u'Woosh!']
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+    @browsing
     def test_sets_number_format_for_date_fields(self, browser):
         self.login(self.regular_user, browser=browser)
 
