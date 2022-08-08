@@ -15,7 +15,7 @@ class TestMeetingMinutes(IntegrationTestCase):
         browser.open(self.workspace_meeting, view="meeting_minutes_pdf")
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.headers['Content-Type'], 'application/pdf')
-        self.assertEqual(browser.contents[:8], '%PDF-1.5')
+        self.assertEqual(browser.contents[:8], '%PDF-1.7')
 
     @browsing
     def test_related_items_included_in_meeting_minutes_html(self, browser):
