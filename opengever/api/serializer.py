@@ -595,6 +595,11 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     def add_additional_metadata(self, data):
         data['title'] = self.context.fullname()
+
+        # The `title` field (as it's called on the SQL model) would conflict
+        # with the already existing `title` that is used as a display label.
+        data['job_title'] = self.context.title
+
         if is_administrator():
             data['last_login'] = json_compatible(getattr(self.context, 'last_login'))
 

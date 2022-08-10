@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@ogds-user-listing``: Add ``job_title`` field.
+
 2022.15.0 (2022-08-03)
 ----------------------
 

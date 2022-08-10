@@ -433,6 +433,7 @@ Beispiel: Auflistung aller Benutzer:
           "email": "sandro.ackermann@example.com",
           "email2": null,
           "firstname": "Sandro",
+          "job_title": "Gesch\u00e4ftsf\u00fchrer",
           "lastname": "Ackermann",
           "last_login": "2020-05-31",
           "phone_office": null,
