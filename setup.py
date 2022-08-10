@@ -212,6 +212,5 @@ setup(name='opengever.core',
       create-policy = opengever.policytemplates.cli:main
       pyxbgen = opengever.disposition.ech0160.pyxbgen:main
       toggle-readonly = opengever.readonly.cli:main
-      testserver = opengever.core.testserver_zope2server:server
       """,
       )
