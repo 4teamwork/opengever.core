@@ -98,6 +98,7 @@ class TestOGDSUserGet(IntegrationTestCase):
                           u'groupurl': u'http://nohost/plone/@groups/z_project',
                           u'is_local': False,
                           u'title': None}],
+             u'job_title': u'Gesch\xe4ftsf\xfchrerin',
              u'lastname': u'B\xe4rfuss',
              u'phone_fax': u'012 34 56 77',
              u'phone_mobile': u'012 34 56 76',

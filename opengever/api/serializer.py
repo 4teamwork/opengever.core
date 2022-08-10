@@ -405,6 +405,13 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
         data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)
         if not is_administrator():
             del data['last_login']
+
+        # Rename the attribute name for the title SQL column on the User model
+        # to 'job_title' in order to stay consistent with *summary* serializers
+        # for OGDS objects, where 'title' is a special computed field used as
+        # a display label.
+        data['job_title'] = data.pop('title')
+
         return data
 
     def assigned_groups(self):

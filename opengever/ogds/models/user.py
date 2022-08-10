@@ -45,6 +45,7 @@ class User(Base):
     phone_mobile = Column(String(30))
 
     salutation = Column(String(30))
+    title = Column(String(255))
     description = Column(UnicodeCoercingText())
     address1 = Column(String(100))
     address2 = Column(String(100))
@@ -63,7 +64,8 @@ class User(Base):
         'userid', 'active', 'firstname', 'lastname', 'directorate',
         'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',
         'url', 'phone_office', 'phone_fax', 'phone_mobile', 'salutation',
-        'description', 'address1', 'address2', 'zip_code', 'city', 'country',
+        'title', 'description', 'address1', 'address2', 'zip_code', 'city',
+        'country',
     }
 
     # A classmethod property needs to be defined on the metaclass

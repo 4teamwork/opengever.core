@@ -157,6 +157,16 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
+                "title": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "title",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
                 "description": {
                     "type": [
                         "null",
@@ -286,6 +296,7 @@
                 "phone_fax",
                 "phone_mobile",
                 "salutation",
+                "title",
                 "description",
                 "address1",
                 "address2",
