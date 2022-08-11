@@ -225,6 +225,7 @@ class TestOGDSUpdater(FunctionalTestCase):
                                lastname='R\xc3\xbcegg',
                                l=['M\xc3\xbcnsingen'],  # noqa
                                o=['M\xc3\xbcller & Co'],  # noqa
+                               title=['Gesch\xc3\xa4ftsf\xc3\xbchrer'],  # noqa
                                ou=['M\xc3\xbcnster'],  # noqa
                                street=['F\xc3\xa4hrstrasse 13']))
 
@@ -237,6 +238,7 @@ class TestOGDSUpdater(FunctionalTestCase):
         self.assertEqual(u'Klaus', ogds_user.firstname)
         self.assertEqual(u'R\xfcegg', ogds_user.lastname)
         self.assertEqual(u'klaus.r\xfcegg@example.com', ogds_user.email)
+        self.assertEqual(u'Gesch\xe4ftsf\xfchrer', ogds_user.title)
 
     def test_does_not_overwrite_local_groups(self):
         groupid = u'local.group'

@@ -289,6 +289,7 @@ class OpengeverContentFixture(object):
             phone_mobile='012 34 56 76',
             phone_office='012 34 56 78',
             salutation='Prof. Dr.',
+            title=u'Gesch\xe4ftsf\xfchrerin',
             url='http://www.example.com',
             zip_code='1234',
             user_settings={'_seen_tours': '["*"]'},

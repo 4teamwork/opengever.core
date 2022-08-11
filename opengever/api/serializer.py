@@ -405,6 +405,13 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
         data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)
         if not is_administrator():
             del data['last_login']
+
+        # Rename the attribute name for the title SQL column on the User model
+        # to 'job_title' in order to stay consistent with *summary* serializers
+        # for OGDS objects, where 'title' is a special computed field used as
+        # a display label.
+        data['job_title'] = data.pop('title')
+
         return data
 
     def assigned_groups(self):
@@ -588,6 +595,11 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     def add_additional_metadata(self, data):
         data['title'] = self.context.fullname()
+
+        # The `title` field (as it's called on the SQL model) would conflict
+        # with the already existing `title` that is used as a display label.
+        data['job_title'] = self.context.title
+
         if is_administrator():
             data['last_login'] = json_compatible(getattr(self.context, 'last_login'))
 
