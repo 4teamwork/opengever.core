@@ -1,19 +1,25 @@
 from opengever.document.behaviors import IBaseDocument
-from opengever.document.behaviors.customproperties import IDocumentCustomProperties
-from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.schema import getFields
+
+
+def get_customproperties_behavior(obj):
+    from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+    from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+    from opengever.dossier.behaviors.dossier import IDossierMarker
+    if IDossierMarker.providedBy(obj):
+        return IDossierCustomProperties
+    elif IBaseDocument.providedBy(obj):
+        return IDocumentCustomProperties
+
+    return
 
 
 def get_custom_properties(obj):
     data = {}
 
-    if IDossierMarker.providedBy(obj):
-        customprops_behavior = IDossierCustomProperties
-    elif IBaseDocument.providedBy(obj):
-        customprops_behavior = IDocumentCustomProperties
-    else:
+    customprops_behavior = get_customproperties_behavior(obj)
+    if customprops_behavior is None:
         return data
 
     adapted = customprops_behavior(obj, None)

@@ -1,21 +1,7 @@
 from copy import copy
-from opengever.document.behaviors import IBaseDocument
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.utils import get_customproperties_behavior
 from zope.component import queryAdapter
-
-
-def get_customproperties_behavior(obj):
-    # Avoid import problems when importing a bundle
-    from opengever.document.behaviors.customproperties import IDocumentCustomProperties
-    from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
-    from opengever.dossier.behaviors.dossier import IDossierMarker
-
-    if IDossierMarker.providedBy(obj):
-        return IDossierCustomProperties
-    elif IBaseDocument.providedBy(obj):
-        return IDocumentCustomProperties
-
-    return
 
 
 def initialize_customproperties_defaults(obj, reindex=True):
