@@ -291,6 +291,59 @@ class TestDocumentCustomPropertiesPost(IntegrationTestCase):
         )
 
     @browsing
+    def test_only_stores_defaults_for_active_and_default_slots(self, browser):
+        self.login(self.manager, browser)
+        create(
+            Builder("property_sheet_schema")
+            .named("schema3")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("text", u"foo1", u"title 1", u"", False)
+            .with_field("text", u"foo2", u"title 2", u"", False, default=u"bla")
+        )
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schem4")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("text", u"bar1", u"title 1", u"", False)
+            .with_field("text", u"bar2", u"title 2", u"", False, default=u"bli")
+        )
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema5")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.offer")
+            .with_field("text", u"baz1", u"title 1", u"", False)
+            .with_field("text", u"baz2", u"title 2", u"", False, default=u"blu")
+        )
+
+        self.login(self.regular_user, browser)
+        data = {
+            "@type": "opengever.document.document",
+            "file": {
+                "data": "foo bar",
+                "filename": "test.txt",
+            },
+            "document_type": "question",
+        }
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(self.dossier, data=json.dumps(data), method="POST",
+                         headers=self.api_headers)
+
+        property_data = {
+            u'IDocumentMetadata.document_type.question': {u'foo2': u'bla'},
+            u'IDocument.default': {u'bar2': u'bli'}
+        }
+        self.assertEqual(property_data, browser.json['custom_properties'])
+        self.assertEqual(1, len(children['added']))
+        new_document = children['added'].pop()
+        self.assertEqual(
+            property_data,
+            IDocumentCustomProperties(new_document).custom_properties,
+        )
+
+    @browsing
     def test_validates_custom_properties_when_document_type_selected(self, browser):
         self.login(self.manager, browser)
         create(

@@ -2,6 +2,7 @@ from base64 import b64encode
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import path_to_asset
@@ -316,3 +317,91 @@ class TestCustomPropertiesDeserializer(IntegrationTestCase):
         self.assertEqual(
             u'kathi.barfuss',
             get_custom_properties(dossier)['member'])
+
+    @browsing
+    def test_custom_properties_default_values_are_initialized_for_active_and_default_slots(self, browser):
+        self.login(self.manager)
+        create(
+            Builder("property_sheet_schema")
+            .named("schema3")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.question")
+            .with_field("text", u"foo1", u"title 1", u"", False)
+            .with_field("text", u"foo2", u"title 2", u"", False, default=u"bla")
+        )
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schem4")
+            .assigned_to_slots(u"IDocument.default")
+            .with_field("text", u"bar1", u"title 1", u"", False)
+            .with_field("text", u"bar2", u"title 2", u"", False, default=u"bli")
+        )
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema5")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.offer")
+            .with_field("text", u"baz1", u"title 1", u"", False)
+            .with_field("text", u"baz2", u"title 2", u"", False, default=u"blu")
+        )
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            data = {"@type": "opengever.document.document",
+                    "document_type": "question",
+                    "file": {
+                        "data": "foo bar",
+                        "filename": "test.txt"},
+                    }
+            browser.open(
+                self.empty_dossier.absolute_url(),
+                method='POST',
+                headers=self.api_headers,
+                data=json.dumps(data)
+            )
+
+        self.assertEqual(1, len(children["added"]))
+        document = children["added"].pop()
+
+        self.assertEqual(
+            {'bar1': None, 'bar2': u'bli', 'foo1': None, 'foo2': u'bla'},
+            get_custom_properties(document))
+        self.assertEqual(
+            {'IDocumentMetadata.document_type.question': {'foo2': u'bla'},
+             'IDocument.default': {'bar2': u'bli'}},
+            IDocumentCustomProperties(document).custom_properties)
+
+    @browsing
+    def test_custom_properties_default_values_are_not_initialized_for_inactive_slots(self, browser):
+        self.login(self.manager)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema3")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.offer")
+            .with_field("text", u"baz1", u"title 1", u"", False)
+            .with_field("text", u"baz2", u"title 2", u"", False, default=u"blu")
+        )
+
+        self.login(self.regular_user, browser=browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            data = {"@type": "opengever.document.document",
+                    "document_type": "question",
+                    "file": {
+                        "data": "foo bar",
+                        "filename": "test.txt"},
+                    }
+            browser.open(
+                self.empty_dossier.absolute_url(),
+                method='POST',
+                headers=self.api_headers,
+                data=json.dumps(data)
+            )
+
+        self.assertEqual(1, len(children["added"]))
+        document = children["added"].pop()
+
+        self.assertEqual({}, get_custom_properties(document))
+        self.assertEqual(None, IDocumentCustomProperties(document).custom_properties)

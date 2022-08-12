@@ -36,9 +36,14 @@ class GeverDeserializeFromJson(DeserializeFromJson):
         if create:
             container = aq_parent(aq_inner(self.context))
             set_default_values(self.context, container, data)
-            initialize_customproperties_defaults(self.context)
 
         schema_data, errors = self.get_schema_data(data, validate_all)
+
+        # set custom properties defaults, we do this after deserializing the
+        # other fields as the active slot is needed and defaults are only
+        # set if field was not set otherwise
+        if create:
+            initialize_customproperties_defaults(self.context)
 
         # Validate schemata
         for schema, field_data in schema_data.items():

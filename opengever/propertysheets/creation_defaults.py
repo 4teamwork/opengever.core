@@ -2,23 +2,35 @@ from copy import copy
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.utils import get_customproperties_behavior
 from zope.component import queryAdapter
+from zope.schema import getFields
 
 
 def initialize_customproperties_defaults(obj, reindex=True):
     behavior_iface = get_customproperties_behavior(obj)
     behavior = queryAdapter(obj, behavior_iface)
     if behavior:
+        # Only attempt to set defaults if no actual custom properties exist yet
+        if behavior.custom_properties:
+            return
+
         custom_prop_defaults = get_customproperties_defaults(
             behavior_iface['custom_properties'])
 
-        if not custom_prop_defaults:
+        field = getFields(behavior_iface).get('custom_properties')
+        active_slot = field.get_active_assignment_slot(obj)
+        default_slot = field.default_slot
+
+        defaults_to_store = {}
+        if custom_prop_defaults.get(active_slot):
+            defaults_to_store[active_slot] = custom_prop_defaults.get(active_slot)
+        if custom_prop_defaults.get(default_slot):
+            defaults_to_store[default_slot] = custom_prop_defaults.get(default_slot)
+        if not defaults_to_store:
             return
 
-        # Only attempt to set defaults if no actual custom properties exist yet
-        if not behavior.custom_properties:
-            behavior.custom_properties = custom_prop_defaults
-            if reindex:
-                obj.reindexObject()
+        behavior.custom_properties = defaults_to_store
+        if reindex:
+            obj.reindexObject()
 
 
 def get_customproperties_defaults(propsheet_field):
