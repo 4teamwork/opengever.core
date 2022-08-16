@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.1 (2022-08-16)
+----------------------
+
+Other changes:
+
+
+- Only save custom properties defaults of active and default slots. [njohner]
+
+
 2022.15.0 (2022-08-03)
 ----------------------
 
