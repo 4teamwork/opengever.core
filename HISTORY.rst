@@ -10,6 +10,12 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.11.2 (2022-08-16)
+----------------------
+
+No significant changes.
+
+
 2022.11.1 (2022-08-16)
 ----------------------
 
