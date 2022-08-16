@@ -113,14 +113,17 @@ class RecentlyTouchedGet(Service):
         touched_only_uids = [m['uid'] for m in recently_touched_log
                              if m['uid'] not in checked_out_uids]
 
-        touched_solr_docs = self.solr.search(
-            filters=make_filters(
-                UID=touched_only_uids,
-                object_provides=[
-                    i.__identifier__ for i in
-                    RECENTLY_TOUCHED_INTERFACES_TO_TRACK],
-            ),
-        )
+        if touched_only_uids:
+            touched_solr_docs = self.solr.search(
+                filters=make_filters(
+                    UID=touched_only_uids,
+                    object_provides=[
+                        i.__identifier__ for i in
+                        RECENTLY_TOUCHED_INTERFACES_TO_TRACK],
+                ),
+            )
+        else:
+            return []
 
         touched_solr_docs_by_uid = {
             d['UID']: OGSolrDocument(d)
