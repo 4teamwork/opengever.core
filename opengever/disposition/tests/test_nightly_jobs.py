@@ -1,10 +1,15 @@
+from datetime import datetime
+from ftw.testing import freeze
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.delivery import STATUS_SCHEDULED
 from opengever.disposition.delivery import STATUS_SUCCESS
+from opengever.disposition.nightly_jobs import NightlyDossierJournalPDF
 from opengever.disposition.nightly_jobs import NightlySIPDelivery
 from opengever.disposition.tests.test_delivery import TestFilesystemTransportBase
+from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import CapturingLogHandler
 from os.path import join as pjoin
+from plone import api
 import logging
 import os
 
@@ -82,3 +87,59 @@ class TestNightlyDelivery(TestFilesystemTransportBase):
         self.assertEqual(expected, logrecords,
                          "Expected log messages from DeliveryScheduler and "
                          "Transport to also show up in nightly logs")
+
+
+class TestNightlyDossierJournalPDF(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestNightlyDossierJournalPDF, self).setUp()
+        logger = logging.getLogger('opengever.nightlyjobs')
+        logger.addHandler(logging.NullHandler())
+
+        self.nightly_job_provider = NightlyDossierJournalPDF(
+            self.portal, self.request, logger)
+
+    def interrupt_if_necessary(self):
+        """Stub out the runner's `interrupt_if_necessary` function.
+        """
+
+    def execute_nightly_jobs(self, expected=None):
+        jobs = list(self.nightly_job_provider)
+        if expected:
+            self.assertEqual(expected, len(jobs))
+            self.assertEqual(expected, len(self.nightly_job_provider))
+
+        for job in jobs:
+            self.nightly_job_provider.run_job(job, self.interrupt_if_necessary)
+
+    def test_creates_dossier_journal_pdf(self):
+        self.login(self.regular_user)
+
+        nightly_job_provider = NightlyDossierJournalPDF(
+            self.portal, self.request, None)
+
+        nightly_job_provider.queue_journal_pdf_job(self.empty_dossier)
+        with self.observe_children(self.empty_dossier) as children, freeze(datetime(2016, 4, 25)):
+            self.execute_nightly_jobs(1)
+
+        self.assertEqual(0, len(self.nightly_job_provider))
+        self.assertEqual(1, len(children['added']))
+        journal_pdf = children['added'].pop()
+        self.assertEqual(
+            u'Journal of dossier An empty dossier, Apr 25, 2016 12:00 AM',
+            journal_pdf.title)
+
+    def test_handles_deleted_dossier(self):
+        self.login(self.regular_user)
+
+        nightly_job_provider = NightlyDossierJournalPDF(
+            self.portal, self.request, None)
+
+        nightly_job_provider.queue_journal_pdf_job(self.empty_dossier)
+
+        with self.login(self.manager):
+            api.content.delete(self.empty_dossier)
+
+        self.execute_nightly_jobs(1)
+
+        self.assertEqual(0, len(self.nightly_job_provider))
