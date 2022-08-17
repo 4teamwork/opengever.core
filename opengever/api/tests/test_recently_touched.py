@@ -22,6 +22,20 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
         del IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY][user_id][:]
 
     @browsing
+    def test_handles_empty_recently_touched_log(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self._clear_recently_touched_log(self.regular_user.getId())
+
+        url = '%s/@recently-touched/%s' % (
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual({'checked_out': [], 'recently_touched': []},
+                         browser.json)
+
+    @browsing
     def test_lists_recently_modified_objs_for_given_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
