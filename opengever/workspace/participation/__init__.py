@@ -66,12 +66,9 @@ def get_full_user_info(userid=None, member=None):
 
 
 def can_manage_member(context, actor=None, roles=None):
-    if actor and actor.identifier == api.user.get_current().getId():
-        return False
-    else:
-        return api.user.has_permission(
-            'Sharing page: Delegate WorkspaceAdmin role',
-            obj=context)
+    return api.user.has_permission(
+        'Sharing page: Delegate WorkspaceAdmin role',
+        obj=context)
 
 
 def invitation_to_item(invitation, context):
