@@ -146,8 +146,8 @@ class ManageParticipants(BrowserView):
         if role not in MANAGED_ROLES:
             raise Unauthorized('Inavlid role provided.')
 
-        if token == api.user.get_current().id:
-            raise Unauthorized('Not allowed to modify the current user.')
+        if not can_manage_member(self.context, Actor.lookup(token)):
+            raise Unauthorized()
 
         if type_ in ['user', 'group']:
             assignment_manager = RoleAssignmentManager(self.context)

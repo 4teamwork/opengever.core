@@ -98,7 +98,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
              {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
               u'@type': u'virtual.participations.user',
-              u'is_editable': False,
+              u'is_editable': True,
               u'participant_actor': {
                   u'@id': u'http://nohost/plone/@actors/gunther.frohlich',
                   u'identifier': u'gunther.frohlich'},
@@ -181,8 +181,8 @@ class TestParticipationGet(IntegrationTestCase):
             ], [item.get('@id') for item in response.get('items')])
 
     @browsing
-    def test_admin_cannot_edit_himself(self, browser):
-        self.login(self.workspace_owner, browser)
+    def test_admin_can_edit_himself(self, browser):
+        self.login(self.workspace_admin, browser)
 
         response = browser.open(
             self.workspace,
@@ -193,9 +193,9 @@ class TestParticipationGet(IntegrationTestCase):
 
         items = response.get('items')
 
-        self.assertFalse(
-            get_entry_by_id(items, self.workspace_owner.id)['is_editable'],
-            'The admin should not be able to manage himself')
+        self.assertTrue(
+            get_entry_by_id(items, self.workspace_admin.id)['is_editable'],
+            'The admin should be able to manage himself')
 
     @browsing
     def test_manages_invalid_participant(self, browser):
@@ -227,26 +227,6 @@ class TestParticipationGet(IntegrationTestCase):
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}}],
             response.get('items'))
 
-    @browsing
-    def test_current_logged_in_admin_cannot_edit_himself(self, browser):
-        self.login(self.workspace_admin, browser)
-
-        response = browser.open(
-            self.workspace,
-            view='@participations',
-            method='GET',
-            headers=http_headers(),
-        ).json
-
-        items = response.get('items')
-
-        self.assertFalse(
-            get_entry_by_id(items, self.workspace_admin.id)['is_editable'],
-            'The admin should not be able to manage himself')
-
-        self.assertTrue(
-            get_entry_by_id(items, 'hans.peter')['is_editable'],
-            'The admin should be able to manage hans.peter')
 
     @browsing
     def test_an_admin_can_edit_other_members(self, browser):
@@ -479,16 +459,35 @@ class TestParticipationDelete(IntegrationTestCase):
             'Expect to still have local roles for the user on the workspace')
 
     @browsing
-    def test_current_user_cannot_remove_its_local_roles(self, browser):
-        self.login(self.workspace_admin, browser=browser)
+    def test_workspace_member_cannot_remove_its_local_roles(self, browser):
+        self.login(self.workspace_member, browser=browser)
 
-        with browser.expect_http_error(400):
+        with browser.expect_http_error(401):
             browser.open(
                 self.workspace,
-                view='@participations/{}'.format(self.workspace_admin.id),
+                view='@participations/{}'.format(self.workspace_member.id),
                 method='DELETE',
                 headers=http_headers(),
-            ).json
+            )
+
+    @browsing
+    def test_workspace_admin_can_remove_its_local_roles(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        browser.open(
+            self.workspace,
+            view='@participations/{}'.format(self.workspace_admin.id),
+            method='DELETE',
+            headers=http_headers(),
+        )
+
+        with browser.expect_http_error(401):
+            browser.open(
+                self.workspace,
+                view='@participations',
+                method='GET',
+                headers=http_headers(),
+            )
 
     @browsing
     def test_cannot_delete_the_last_workspace_admin_role_assignment(self, browser):
@@ -909,7 +908,7 @@ class TestParticipationPatch(IntegrationTestCase):
                 )
 
     @browsing
-    def test_do_not_allow_modifying_the_current_user(self, browser):
+    def test_allow_modifying_the_current_user(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
         browser.open(
@@ -920,18 +919,48 @@ class TestParticipationPatch(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), self.workspace_admin.id)
+        data = json.dumps(json_compatible({'role': {'token': 'WorkspaceMember'}}))
+
+        browser.open(
+            entry['@id'],
+            method='PATCH',
+            data=data,
+            headers=http_headers(),
+        )
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_admin.id)
+        self.assertEqual(
+            {u'token': u'WorkspaceMember', u'title': u'Member'},
+            entry.get('role'))
+
+    @browsing
+    def test_prevent_privilege_escalation(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+
+        entry = get_entry_by_id(browser.json.get('items'), self.workspace_member.id)
+        data = json.dumps(json_compatible({'role': {'token': 'WorkspaceAdmin'}}))
 
         with browser.expect_http_error(401):
-            data = json.dumps(json_compatible({
-                'role': {'token': 'WorkspaceMember'}
-            }))
-
             browser.open(
                 entry['@id'],
                 method='PATCH',
                 data=data,
                 headers=http_headers(),
-                )
+            )
 
 
 class TestParticipationPostWorkspace(IntegrationTestCase):
