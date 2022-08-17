@@ -10,6 +10,30 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.16.0 (2022-08-17)
+----------------------
+
+New features:
+
+
+- Add `title` field to OGDS user model. [lgraf]
+- Add `job_title` field to `@ogds-user-listing` endpoint. [lgraf]
+
+
+Bug fixes:
+
+
+- Fix excel export if multiple customfields with same name are configured. [phgross]
+
+
+Other changes:
+
+
+- Switch `@recently-touched` endpoint to Solr. [lgraf]
+- Only save custom properties defaults of active and default slots. [njohner]
+- Policytemplate: Always configure ALL shared service URLs. [lgraf]
+
+
 2022.15.0 (2022-08-03)
 ----------------------
 
