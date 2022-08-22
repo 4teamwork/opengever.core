@@ -19,6 +19,7 @@ from opengever.document.widgets.document_link import DocumentLinkWidget
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import SUBMITTED_PROPOSAL_STATES
 from opengever.meeting.activity.activities import ProposalCommentedActivity
 from opengever.meeting.activity.activities import ProposalRejectedActivity
@@ -255,7 +256,10 @@ class ProposalBase(object):
         if document is None:
             raise ValueError('Proposal document seems to have vanished.')
 
-        if aq_parent(aq_inner(document)) != self:
+        # if meeting feature is disabled, we might have moved the meeting
+        # documents into the meeting dossier as preparation for removal of
+        # the meeting feature from Gever.
+        if aq_parent(aq_inner(document)) != self and is_meeting_feature_enabled():
             raise ValueError('Proposal document is in wrong location.')
 
         return document
