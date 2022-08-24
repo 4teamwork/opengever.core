@@ -54,21 +54,32 @@ class GeverMailInbound(MailInbound):
         acl_users = api.portal.get_tool('acl_users')
         pas_search = getMultiAdapter((self.context, self.request),
                                      name='pas_search')
-        users = pas_search.searchUsers(email=sender_email, exact_match=True)
-        if len(users) > 0:
-            user = acl_users.getUserById(users[0].get('userid'))
-            if not hasattr(user, 'aq_base'):
-                user = user.__of__(acl_users)
-            return user
+        matches = pas_search.searchUsers(email=sender_email, exact_match=False)
 
-        elif sender_email.lower() in sender_aliases:
+        if len(matches) > 0:
+            # Matches from pas_search are fuzzy (and exact_match=True may only
+            # be used when querying for 'id' or 'login'). We therefore filter
+            # for exact (but case-insensitive) matches ourselves.
+            for user_record in matches:
+                user = self._get_user_by_id(acl_users, user_record['userid'])
+                user_email = user.getProperty('email')
+                if user_email.lower() == sender_email.lower():
+                    return user
+
+        if sender_email.lower() in sender_aliases:
             target_userid = sender_aliases[sender_email.lower()]
             log.info('Sender address %r is an alias for userid %r' % (
                 sender_email, target_userid))
-            user = acl_users.getUserById(target_userid)
+            user = self._get_user_by_id(acl_users, target_userid)
             if user:
                 return user
 
         log.warn('Sender address: %r' % sender_email)
         log.warn('No users found in %r for that address.' % acl_users)
         raise UnknownSender(self.msg())
+
+    def _get_user_by_id(self, acl_users, userid):
+        user = acl_users.getUserById(userid)
+        if user and not hasattr(user, 'aq_base'):
+            user = user.__of__(acl_users)
+        return user
