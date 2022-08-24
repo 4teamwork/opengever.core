@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.4.7 (2022-08-24)
+---------------------
+
+Bug fixes:
+
+
+- Improve perfomance in KuB contact source. [phgross]
+- Support foreign zip codes in document properties. [tinagerber]
+
+
 2022.4.6 (2022-06-22)
 ---------------------
 
