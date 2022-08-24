@@ -405,3 +405,45 @@ class TestCustomPropertiesDeserializer(IntegrationTestCase):
 
         self.assertEqual({}, get_custom_properties(document))
         self.assertEqual(None, IDocumentCustomProperties(document).custom_properties)
+
+    @browsing
+    def test_update_custom_property_value_when_the_previous_value_contained_an_umlaut(self, browser):
+        self.login(self.manager)
+        choices = ['one', u'zw\xf6i']
+        create(
+            Builder('property_sheet_schema')
+            .named('schema')
+            .assigned_to_slots(u'IDossier.dossier_type.businesscase')
+            .with_field('choice', u'choose', u'Choose', u'', False, values=choices, default=u'zw\xf6i')
+        )
+
+        self.login(self.regular_user, browser=browser)
+
+        dossier = create(Builder('dossier')
+                         .within(self.leaf_repofolder)
+                         .having(
+                             dossier_type='businesscase',
+                             custom_properties={
+                                 'IDossier.dossier_type.businesscase':
+                                     {'choose': u"zw\xf6i"}}))
+
+        data = browser.open(dossier, headers=self.api_headers).json
+        custom_field = data.get('custom_properties').get(
+            'IDossier.dossier_type.businesscase').get('choose')
+
+        self.assertEqual(u'zw\xf6i', custom_field.get('title'))
+
+        browser.open(dossier, method='PATCH',
+                     data=json.dumps({
+                         'custom_properties': {
+                             'IDossier.dossier_type.businesscase': {
+                                 'choose': 'one'
+                             }
+                         }
+                     }), headers=self.api_headers)
+
+        data = browser.open(dossier, headers=self.api_headers).json
+        custom_field = data.get('custom_properties').get(
+            'IDossier.dossier_type.businesscase').get('choose')
+
+        self.assertEqual(u'one', custom_field.get('title'))
