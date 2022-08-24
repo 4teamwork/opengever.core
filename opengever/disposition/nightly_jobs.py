@@ -94,10 +94,10 @@ class NightlyDossierJournalPDF(NightlyJobProviderBase):
     def run_job(self, job, interrupt_if_necessary):
         """Run the job for the dossier identified by the IntId `job`.
         """
-        dossier = self.intids.getObject(job)
-
-        self.logger.info("Creating journal PDF for %r" % dossier)
-        dossier.create_or_update_journal_pdf()
+        dossier = self.intids.queryObject(job)
+        if dossier is not None:
+            self.logger.info("Creating journal PDF for %r" % dossier)
+            dossier.create_or_update_journal_pdf()
 
         queue = self.get_queue()
         queue.remove(job)
