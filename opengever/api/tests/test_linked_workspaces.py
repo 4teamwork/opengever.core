@@ -11,6 +11,8 @@ from opengever.document.versioner import Versioner
 from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.mail.tests import MAIL_DATA
 from opengever.testing.assets import load
+from opengever.workspace.participation import WORKSPCAE_GUEST
+from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
@@ -1649,3 +1651,160 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
              u'workspaces.user2': [u'WorkspaceMember'],
              'test_user_1_': ['WorkspaceAdmin']},
             self.workspace.__ac_local_roles__)
+
+
+class TestAddInvitationOnWorkspacePost(FunctionalWorkspaceClientTestCase):
+
+    def setUp(self):
+        super(TestAddInvitationOnWorkspacePost, self).setUp()
+
+        self.participation_manager = ManageParticipants(self.workspace, self.request)
+
+        # Grant WorkspaceAdmin to TEST_USER
+        self.grant('WorkspaceAdmin', on=self.workspace)
+
+        # Link the workspace to the dossier
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+    @browsing
+    def test_add_invitation_raises_for_missing_workspace_uid(self, browser):
+
+        payload = {
+            'recipient_email': 'max.muster@example.com',
+            'role': {'token': WORKSPCAE_GUEST.id},
+        }
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+
+        with self.workspace_client_env(), browser.expect_http_error(code=400):
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-invitations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'workspace_uid_required',
+             u'translated_message': u"Property 'workspace_uid' is required",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_add_invitation_raises_for_missing_recipient_email(self, browser):
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'role': {'token': WORKSPCAE_GUEST.id},
+        }
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+
+        with self.workspace_client_env(), browser.expect_http_error(code=400):
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-invitations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'recipient_email_required',
+             u'translated_message': u"Property 'recipient_email' is required",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_add_invitation_raises_for_missing_role(self, browser):
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'recipient_email': 'max.muster@example.com',
+        }
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+
+        with self.workspace_client_env(), browser.expect_http_error(code=400):
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-invitations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'role_required',
+             u'translated_message': u"Property 'role' is required",
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_add_invitation_raises_if_user_is_not_workspace_admin(self, browser):
+        self.grant('WorkspaceMember', on=self.workspace)
+
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'recipient_email': 'max.muster@example.com',
+            'role': {'token': WORKSPCAE_GUEST.id},
+        }
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.exception_bubbling = True
+            with self.assertRaises(HTTPServerError):
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-invitations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+        self.assertEqual(
+            {u'message': u'Error while communicating with the teamraum deployment',
+             u'service_error': {
+                 u'message': u'You are not authorized to access this resource.',
+                 u'status_code': 401,
+                 u'type': u'Unauthorized'},
+             u'type': u'Bad Gateway'},
+            browser.json)
+
+    @browsing
+    def test_add_invitation_adds_an_inivitation(self, browser):
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'recipient_email': 'max.muster@example.com',
+            'role': {'token': WORKSPCAE_GUEST.id},
+        }
+
+        self.assertEqual([], self.participation_manager.get_pending_invitations())
+
+        with self.workspace_client_env():
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@linked-workspace-invitations',
+                data=json.dumps(payload),
+                method='POST',
+                headers={'Accept': 'application/json',
+                         'Content-Type': 'application/json'},
+            )
+
+        self.assertEqual(1, len(self.participation_manager.get_pending_invitations()))

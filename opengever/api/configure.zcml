@@ -1199,6 +1199,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@linked-workspace-invitations"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.AddInvitationOnWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
       method="GET"
       name="@allowed-roles-and-principals"
       for="Products.CMFCore.interfaces.IContentish"

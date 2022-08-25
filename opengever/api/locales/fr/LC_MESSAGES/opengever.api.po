@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-28 14:05+0000\n"
+"POT-Creation-Date: 2022-08-25 13:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,6 +196,16 @@ msgstr "Seules les réponses de type \"Commentaire\" peuvent être éditées."
 #: ./opengever/api/linked_workspaces.py
 msgid "participant_required"
 msgstr "Le paramètre 'participants' est requis"
+
+#. Default: "Property 'recipient_email' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "recipient_email_required"
+msgstr "Le paramètre 'recipient_email' est requis"
+
+#. Default: "Property 'role' is required"
+#: ./opengever/api/linked_workspaces.py
+msgid "role_required"
+msgstr "Le paramètre 'role' est requis"
 
 #. Default: "Property 'transfer_number' is required."
 #: ./opengever/api/disposition.py
