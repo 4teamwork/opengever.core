@@ -306,11 +306,16 @@ class ResolveJobsTestHelper(object):
         self.assert_after_resolve_jobs_pending(False, dossiers)
 
 
-class NightlyResolveJobsTestHelper(ResolveJobsTestHelper):
+class NightlyResolveJobsTestHelper(object):
     """Helper to assert on the 'after_resolve_jobs_pending' flag's state
     in situations where after resolve jobs should NOT have been executed
     (i.e. when nightly jobs feature is enabled).
     """
+
+    def assert_after_resolve_jobs_pending(self, expected, dossiers):
+        for dossier in dossiers:
+            self.assertEqual(expected, AfterResolveJobs(dossier).after_resolve_jobs_pending)
+            self.assertEqual(expected, index_data_for(dossier)['after_resolve_jobs_pending'])
 
     def assert_after_resolve_jobs_pending_in_expected_state(self, dossiers):
         self.assert_after_resolve_jobs_pending(True, dossiers)
@@ -541,7 +546,7 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             [self.empty_dossier, subdossier])
 
 
-class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
+class TestResolveJobsNightly(IntegrationTestCase, ResolveTestHelper, NightlyResolveJobsTestHelper):
     """Variant of the above test class to test dossier resolution with the
     nightly jobs feature enabled.
 
@@ -871,6 +876,32 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
         self.assert_after_resolve_jobs_pending(
             False, [self.empty_dossier, subdossier])
 
+    @browsing
+    def test_purging_trashed_documents_is_disabled_by_default(self, browser):
+        self.login(self.secretariat_user, browser)
+        doc1 = create(Builder('document').within(self.empty_dossier).trashed())
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        self.assertIn(doc1, children['after'])
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
+
+    @browsing
+    def test_task_pdf_is_disabled_by_default(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.empty_dossier) as children:
+            self.resolve(self.empty_dossier, browser)
+
+        self.assertEquals(0, len(children['added']))
+
+        self.assert_after_resolve_jobs_pending_in_expected_state(
+            [self.empty_dossier])
+
+
 class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobsNightly):
     """Variant of the above test class to test dossier resolution via RESTAPI.
     """
@@ -968,13 +999,51 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
             self.assertEquals(0, len(get_queue().queue))
 
 
-class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
+class TestAutomaticPDFAConversionNightly(IntegrationTestCase, ResolveTestHelper):
 
     features = ('nightly-jobs', )
 
     def setUp(self):
         super(TestAutomaticPDFAConversionNightly, self).setUp()
+        reset_queue()
         nightly_after_resolve_job.sent_conversion_requests = 0
+
+    def create_additional_doc(self, dossier):
+        doc = create(Builder('document')
+                     .within(dossier)
+                     .attach_file_containing(
+                         bumblebee_asset('example.docx').bytes(),
+                         u'example.docx'))
+
+        # Remove the storing job
+        get_queue().reset()
+        return doc
+
+    def assert_queue_contains_jobs_for(self, docs):
+        """Assert that the queue contains conversion jobs for exactly these
+        documents.
+        """
+        # Order both job queue and document list by URL to avoid flakyness
+        queue_contents = list(get_queue().queue)
+        queue_contents.sort(key=itemgetter('url'))
+
+        docs = list(docs)
+        docs.sort(key=methodcaller('absolute_url'))
+
+        self.assertEquals(len(docs), len(queue_contents))
+
+        for doc, job in zip(docs, queue_contents):
+            checksum = IBumblebeeDocument(doc).calculate_checksum()
+            uuid = IUUID(doc)
+            url = doc.absolute_url()
+            path = doc.absolute_url_path()
+            expected_job_data = {
+                'callback_url': '%s/archival_file_conversion_callback' % url,
+                'file_url': 'http://nohost/plone/bumblebee_download?checksum=%s&uuid=%s' % (checksum, uuid),
+                'target_format': 'pdf/a',
+                'url': '%s/bumblebee_trigger_conversion' % path,
+            }
+            self.assertDictContainsSubset(expected_job_data, job)
 
     def interrupt_if_necessary(self):
         """Stub out the runner's `interrupt_if_necessary` function.
