@@ -23,6 +23,7 @@ from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
+from opengever.testing.patch import TempMonkeyPatch
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from operator import itemgetter
@@ -787,18 +788,18 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
 
         doc = self.create_additional_doc(self.resolvable_dossier)
 
-        nightly_after_resolve_job.MAX_CONVERSION_REQUESTS_PER_NIGHT = 1
-        # Resolving doesn't trigger the AfterResolveJobs yet...
-        self.resolve(self.resolvable_dossier, browser)
-        self.assertEquals(0, len(get_queue().queue))
+        with TempMonkeyPatch(nightly_after_resolve_job, 'MAX_CONVERSION_REQUESTS_PER_NIGHT', 1):
+            # Resolving doesn't trigger the AfterResolveJobs yet...
+            self.resolve(self.resolvable_dossier, browser)
+            self.assertEquals(0, len(get_queue().queue))
 
-        with RequestsSessionMock.installed():
-            # ...executing the nightly jobs will.
-            executed_jobs = self.execute_nightly_jobs(expected=2)
-            # Only first job got executed
-            self.assert_queue_contains_jobs_for([doc])
-            self.assertEqual([{'path': self.resolvable_dossier.absolute_url_path()}],
-                             executed_jobs)
+            with RequestsSessionMock.installed():
+                # ...executing the nightly jobs will.
+                executed_jobs = self.execute_nightly_jobs(expected=2)
+                # Only first job got executed
+                self.assert_queue_contains_jobs_for([doc])
+                self.assertEqual([{'path': self.resolvable_dossier.absolute_url_path()}],
+                                 executed_jobs)
 
 
 class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversion):
