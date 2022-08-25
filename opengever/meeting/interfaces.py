@@ -41,3 +41,10 @@ class IMembershipWrapper(ISQLObjectWrapper):
 
 class IMeetingDossier(model.Schema):
     """Marker interface for MeetingDossier"""
+
+
+class IDuringMeetingMigration(Interface):
+    """Request layer to indicate that meetings are being migrated
+    to prepare deletion of the meeting feature. It is used to skip certain
+    checks that would prevent the migration.
+    """

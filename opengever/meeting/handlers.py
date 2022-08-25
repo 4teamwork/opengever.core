@@ -11,6 +11,7 @@ from opengever.base.security import elevated_privileges
 from opengever.meeting.activity.watchers import add_watcher_on_proposal_created
 from opengever.meeting.command import UpdateExcerptInDossierCommand
 from opengever.meeting.exceptions import ProposalMovedOutsideOfMainDossierError
+from opengever.meeting.interfaces import IDuringMeetingMigration
 from opengever.meeting.model import GeneratedExcerpt
 from opengever.meeting.model import Proposal
 from opengever.meeting.model import SubmittedDocument
@@ -124,6 +125,11 @@ def proposal_will_be_moved(obj, event):
         # In this case, the obj is the proposal, but the event object is the
         # dossier. In this case we don't want to validate the new parent of
         # the proposal because it will be the same.
+        return
+
+    if IDuringMeetingMigration.providedBy(getRequest()):
+        # Meeting dossiers are replaced by normal dossiers, so if a proposal
+        # is inside a meeting dossier it will effectively get moved.
         return
 
     old_main_dossier = event.oldParent.get_main_dossier()
