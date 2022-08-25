@@ -282,7 +282,7 @@ class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossie
         self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
 
 
-class NightlyResolveJobsTestHelper(object):
+class ResolveJobsTestHelper(object):
     """Helper to assert on the 'after_resolve_jobs_pending' flag's state
     in situations where after resolve jobs should NOT have been executed
     (i.e. when nightly jobs feature is enabled).
@@ -297,7 +297,7 @@ class NightlyResolveJobsTestHelper(object):
         self.assert_after_resolve_jobs_pending(True, dossiers)
 
 
-class TestResolveJobsNightly(IntegrationTestCase, ResolveTestHelper, NightlyResolveJobsTestHelper):
+class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHelper):
 
     def interrupt_if_necessary(self):
         """Stub out the runner's `interrupt_if_necessary` function.
@@ -636,15 +636,15 @@ class TestResolveJobsNightly(IntegrationTestCase, ResolveTestHelper, NightlyReso
             [self.empty_dossier])
 
 
-class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobsNightly):
+class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobs):
     """Variant of the above test class to test dossier resolution via RESTAPI.
     """
 
 
-class TestAutomaticPDFAConversionNightly(IntegrationTestCase, ResolveTestHelper):
+class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
 
     def setUp(self):
-        super(TestAutomaticPDFAConversionNightly, self).setUp()
+        super(TestAutomaticPDFAConversion, self).setUp()
         reset_queue()
         nightly_after_resolve_job.sent_conversion_requests = 0
 
@@ -801,7 +801,7 @@ class TestAutomaticPDFAConversionNightly(IntegrationTestCase, ResolveTestHelper)
                              executed_jobs)
 
 
-class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversionNightly):
+class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversion):
 
     pass
 
