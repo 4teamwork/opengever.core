@@ -21,11 +21,6 @@ import traceback
 import transaction
 
 
-def nightly_jobs_feature_enabled():
-    return api.portal.get_registry_record(
-        'is_feature_enabled', interface=INightlyJobsSettings)
-
-
 def get_nightly_run_timestamp():
     """Get the timestamp of the last nightly run as a datetime.
 

@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 
 
-class EnableNightlyJobs(UpgradeStep):
-    """Enable nightly jobs.
+class RemoveNightlyJobsFeatureFlag(UpgradeStep):
+    """Remove nightly jobs feature flag.
     """
 
     def __call__(self):

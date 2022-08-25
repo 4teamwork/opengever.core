@@ -5,7 +5,6 @@ from opengever.core.debughelpers import all_plone_sites
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from opengever.nightlyjobs.browser.nightly_jobs_stats import get_nightly_job_stats
-from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.nightlyjobs.runner import NightlyJobRunner
 from plone import api
 from zope.globalrequest import getRequest
@@ -111,11 +110,6 @@ def register_sentry_except_hook():
 def invoke_nightly_job_runner(plone_site, force, logger):
     logger.info('Running nightly jobs...')
     logger.info('=' * 80)
-
-    if not nightly_jobs_feature_enabled() and not force:
-        logger.info('Nightly jobs feature is not enabled in registry - '
-                    'not running any jobs for %r' % plone_site)
-        return
 
     setup_language(plone_site)
 

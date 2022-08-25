@@ -17,7 +17,6 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierResolver
 from opengever.dossier.resolve_lock import ResolveLock
 from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
-from opengever.nightlyjobs.runner import nightly_jobs_feature_enabled
 from opengever.task.task import ITask
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -367,7 +366,7 @@ class AfterResolveJobs(object):
         the following night this method will be invoked by a nightly job
         (with nightly_run=True) to finally perform these jobs.
         """
-        if nightly_jobs_feature_enabled() and not nightly_run:
+        if not nightly_run:
             # Defer execution of after resolve jobs to a nightly job
             self.after_resolve_jobs_pending = True
             return
