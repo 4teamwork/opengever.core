@@ -541,11 +541,6 @@ class TestResolveJobs(IntegrationTestCase, ResolveTestHelper, ResolveJobsTestHel
             [self.empty_dossier, subdossier])
 
 
-class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobs):
-    """Variant of the above test class to test dossier resolution via RESTAPI.
-    """
-
-
 class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
     """Variant of the above test class to test dossier resolution with the
     nightly jobs feature enabled.
@@ -876,6 +871,10 @@ class TestResolveJobsNightly(NightlyResolveJobsTestHelper, TestResolveJobs):
         self.assert_after_resolve_jobs_pending(
             False, [self.empty_dossier, subdossier])
 
+class TestResolveJobsRESTAPI(ResolveTestHelperRESTAPI, TestResolveJobsNightly):
+    """Variant of the above test class to test dossier resolution via RESTAPI.
+    """
+
 
 class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
 
@@ -967,11 +966,6 @@ class TestAutomaticPDFAConversion(IntegrationTestCase, ResolveTestHelper):
         with RequestsSessionMock.installed():
             self.resolve(self.resolvable_dossier, browser)
             self.assertEquals(0, len(get_queue().queue))
-
-
-class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversion):
-
-    pass
 
 
 class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
@@ -1096,6 +1090,11 @@ class TestAutomaticPDFAConversionNightly(TestAutomaticPDFAConversion):
             self.assert_queue_contains_jobs_for([doc])
             self.assertEqual([{'path': self.resolvable_dossier.absolute_url_path()}],
                              executed_jobs)
+
+
+class TestAutomaticPDFAConversionRESTAPI(ResolveTestHelperRESTAPI, TestAutomaticPDFAConversionNightly):
+
+    pass
 
 
 class TestResolvingDossiersWithFilingNumberSupport(IntegrationTestCase, ResolveTestHelper):
