@@ -10,6 +10,21 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.2 (2022-08-25)
+----------------------
+
+Bug fixes:
+
+
+- Fix user lookup by email for inbound mail. [lgraf]
+
+
+Other changes:
+
+
+- Only save custom properties defaults of active and default slots. [njohner]
+
+
 2022.15.1 (2022-08-16)
 ----------------------
 
