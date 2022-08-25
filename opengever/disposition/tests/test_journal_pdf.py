@@ -38,126 +38,6 @@ class JournalPDFTestHelper(object):
 
 class TestJournalPDFJobs(IntegrationTestCase, JournalPDFTestHelper):
 
-    features = ('!nightly-jobs', )
-
-    @browsing
-    def test_adds_journal_pdf_to_main_dossier_only(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.records_manager, browser)
-
-        subdossier = create(
-            Builder('dossier')
-            .within(self.expired_dossier)
-            .titled(u'Sub')
-            .in_state('dossier-state-resolved')
-        )
-
-        with self.observe_children(self.expired_dossier) as main_children:
-            with self.observe_children(subdossier) as sub_children:
-                with freeze(datetime(2016, 4, 25)):
-                    self.offer(self.expired_dossier, browser)
-
-        self.assert_create_journal_pdf_jobs_pending(
-            False, [self.expired_dossier, subdossier])
-
-        self.assertEqual(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertEqual(
-            u'Journal of dossier Abgeschlossene Vertr\xe4ge, Apr 25, 2016 12:00 AM',
-            main_journal_pdf.title)
-        self.assertEqual(
-            u'Journal of dossier Abgeschlossene Vertraege, Apr 25, 2016 12 00 AM.pdf',
-            main_journal_pdf.file.filename)
-        self.assertEqual(
-            u'application/pdf',
-            main_journal_pdf.file.contentType)
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
-        self.assertFalse(main_journal_pdf.preserved_as_paper)
-
-        self.assertEqual(
-            0, len(sub_children['added']),
-            'Journal PDF should only be created for main dossier')
-
-    @browsing
-    def test_sets_journal_pdf_document_date_to_dossier_end_date(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.records_manager, browser)
-
-        with self.observe_children(self.expired_dossier) as main_children:
-            with freeze(datetime(2016, 4, 25)):
-                self.offer(self.expired_dossier, browser)
-
-        self.assert_create_journal_pdf_jobs_pending(
-            False, [self.expired_dossier])
-
-        self.assertEqual(1, len(main_children['added']))
-        main_journal_pdf, = main_children['added']
-        self.assertTrue(IDossierJournalPDFMarker.providedBy(main_journal_pdf))
-
-        self.assertEqual(
-            IDossier(self.expired_dossier).end,
-            main_journal_pdf.document_date,
-            "Journal PDF date should be dossier end date")
-
-    @browsing
-    def test_journal_pdf_gets_updated_when_dossier_is_offered_again(self, browser):
-        self.activate_feature('journal-pdf')
-        self.login(self.records_manager, browser)
-
-        # Offer
-        with self.observe_children(self.expired_dossier) as children:
-            self.offer(self.expired_dossier, browser)
-
-        self.assertEqual(1, len(children['added']))
-        journal_pdf, = children['added']
-        self.assertEqual(0, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        # Retract
-        self.retract(self.expired_dossier, browser)
-
-        # Offer again
-        with self.observe_children(self.expired_dossier) as children:
-            self.offer(self.expired_dossier, browser)
-
-        self.assertEqual(0, len(children['added']))
-
-        self.assertEqual(1, journal_pdf.get_current_version_id(missing_as_zero=True))
-
-        self.assert_create_journal_pdf_jobs_pending(
-            False, [self.expired_dossier])
-
-    @browsing
-    def test_journal_pdf_is_disabled_by_default(self, browser):
-        self.login(self.records_manager, browser)
-
-        with self.observe_children(self.expired_dossier) as children:
-            self.offer(self.expired_dossier, browser)
-
-        self.assertEqual(0, len(children['added']))
-
-        self.assert_create_journal_pdf_jobs_pending(
-            False, [self.expired_dossier])
-
-
-class TestJournalPDFJobsNightly(TestJournalPDFJobs):
-    """Variant of the above test class to test dossier offering with the
-    nightly jobs feature enabled.
-
-    These tests should test that the respective jobs are NOT executed when
-    the nightly jobs feature is enabled, but produce the same result when
-    the nightly job is triggered afterwards.
-
-    They usually follow this pattern:
-    - Offer one or more dossiers
-    - Assert that none of the work of the journal PDF job has been done yet
-    - Assert that the journal PDF jobs are still pending
-    - Run the nightly job(s)
-    - Assert that the job's work has been done
-    - Assert that the jobs are not pending any more
-    """
-
-    features = ('nightly-jobs', )
-
     def interrupt_if_necessary(self):
         """Stub out the runner's `interrupt_if_necessary` function.
         """
@@ -305,6 +185,18 @@ class TestJournalPDFJobsNightly(TestJournalPDFJobs):
         # No new PDF has been created, instead the existing one got updated
         self.assertEqual(0, len(children['added']))
         self.assertEqual(1, journal_pdf.get_current_version_id(missing_as_zero=True))
+
+        self.assert_create_journal_pdf_jobs_pending(
+            False, [self.expired_dossier])
+
+    @browsing
+    def test_journal_pdf_is_disabled_by_default(self, browser):
+        self.login(self.records_manager, browser)
+
+        with self.observe_children(self.expired_dossier) as children:
+            self.offer(self.expired_dossier, browser)
+
+        self.assertEqual(0, len(children['added']))
 
         self.assert_create_journal_pdf_jobs_pending(
             False, [self.expired_dossier])
