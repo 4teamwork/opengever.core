@@ -1,3 +1,4 @@
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import Meeting
 from opengever.meeting.period import Period
 
@@ -31,6 +32,8 @@ class ReopenMeeting(object):
 
     def get_errors(self):
         errors = []
+        if not is_meeting_feature_enabled():
+            errors.append("Can't reopen meeting when feature is disabled.")
         if self.meeting.workflow_state not in ('held', 'closed'):
             errors.append(u"Can't reopen meeting in state '{}'.".format(
                 self.meeting.workflow_state)

@@ -16,6 +16,21 @@ class TestReopenMeeting(IntegrationTestCase):
     features = ('meeting',)
     REOPEN_MEETING_ACTION = 'Reopen meeting'
 
+    def test_cannot_reopen_meeting_if_feature_is_deactivated(self):
+        self.login(self.committee_responsible)
+
+        self.schedule_ad_hoc(self.meeting, 'Foo')
+        self.schedule_paragraph(self.meeting, u'Para')
+        agenda_item = self.schedule_proposal(
+            self.meeting, self.submitted_proposal
+        )
+        agenda_item.decide()
+
+        self.deactivate_feature('meeting')
+        self.assertEqual(
+            ["Can't reopen meeting when feature is disabled."],
+            ReopenMeeting(self.meeting.model).get_errors())
+
     def test_reopen_held_meeting(self):
         self.login(self.committee_responsible)
 
