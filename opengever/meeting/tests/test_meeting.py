@@ -1,10 +1,12 @@
 from ftw.testbrowser import browsing
+from ftw.testbrowser.exceptions import NoElementFound
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
 from pyquery import PyQuery
+from zExceptions import BadRequest
 
 
 ZIP_EXPORT_ACTION_LABEL = 'Export as ZIP file'
@@ -385,3 +387,19 @@ class TestMeeting(IntegrationTestCase):
         self.period.title = u"\xe4 period"
         self.assertEqual(
             u'\xe4 period / 1', self.decided_meeting.model.get_meeting_number())
+
+
+class TestMeetingWithDisabledMeetingFeature(IntegrationTestCase):
+
+    @browsing
+    def test_cannot_reopen_closed_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+        self.assertEquals(u'closed', self.decided_meeting.model.workflow_state)
+
+        browser.open(self.decided_meeting)
+        with self.assertRaises(NoElementFound):
+            editbar.menu_option('Actions', 'Reopen')
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest):
+            browser.open(self.decided_meeting, view="meetingtransitioncontroller?transition=closed-held")
