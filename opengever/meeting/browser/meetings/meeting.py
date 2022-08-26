@@ -11,6 +11,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.base.schema import UTCDatetime
 from opengever.meeting import _
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.meetings.agendaitem_list import GenerateAgendaItemList
 from opengever.meeting.browser.meetings.agendaitem_list import UpdateAgendaItemList
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
@@ -33,6 +34,7 @@ from z3c.form.button import buttonAndHandler
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
+from zExceptions import Forbidden
 from zope import schema
 from zope.component import getUtility
 from zope.globalrequest import getRequest
@@ -171,6 +173,12 @@ class AddMeetingWizardStep(BaseWizardStepForm, Form):
 class AddMeetingWizardStepView(FormWrapper):
 
     form = AddMeetingWizardStep
+
+    def __call__(self):
+        if not is_meeting_feature_enabled():
+            raise Forbidden('Meeting feature is disabled')
+
+        return super(AddMeetingWizardStepView, self).__call__()
 
 
 class AddMeetingDossierView(WizzardWrappedAddForm):

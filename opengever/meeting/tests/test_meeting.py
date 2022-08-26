@@ -7,6 +7,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import localized_datetime
 from pyquery import PyQuery
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 
 
 ZIP_EXPORT_ACTION_LABEL = 'Export as ZIP file'
@@ -390,6 +391,14 @@ class TestMeeting(IntegrationTestCase):
 
 
 class TestMeetingWithDisabledMeetingFeature(IntegrationTestCase):
+
+    @browsing
+    def test_cannot_add_meeting(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(self.committee, view='add-meeting')
 
     @browsing
     def test_cannot_reopen_closed_meeting(self, browser):
