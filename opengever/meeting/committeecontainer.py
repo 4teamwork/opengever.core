@@ -1,4 +1,5 @@
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import Member
 from opengever.meeting.wrapper import MemberWrapper
 from plone.dexterity.content import Container
@@ -37,3 +38,7 @@ class CommitteeContainer(Container, TranslatedTitleMixin):
         if default is _marker:
             raise KeyError(id_)
         return default
+
+    @property
+    def exclude_from_nav(self):
+        return not is_meeting_feature_enabled()
