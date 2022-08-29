@@ -1,6 +1,8 @@
+from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api
+from sqlalchemy.sql import select
 from zope.globalrequest import getRequest
 
 
@@ -74,14 +76,14 @@ class VisibleUsersAndGroupsFilter:
         ]
 
     def extract_group_members(self, groupids):
-        group_members = []
-        for groupid in groupids:
-            group = ogds_service().fetch_group(groupid)
-            if not group:
-                continue
-
-            group_members += [user.userid for user in group.users]
-        return group_members
+        return [
+            userid
+            for userid, in ogds_service()
+            .session.execute(
+                select([groups_users.c.userid], groups_users.c.groupid.in_(groupids))
+            )
+            .fetchall()
+        ]
 
 
 visible_users_and_groups_filter = VisibleUsersAndGroupsFilter()
