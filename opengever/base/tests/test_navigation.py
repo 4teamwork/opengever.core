@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.meeting.utils import disable_meeting_feature
 from opengever.testing import IntegrationTestCase
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -133,9 +134,12 @@ class TestNavigation(IntegrationTestCase):
 
 class TestCatalogNavigationTabs(IntegrationTestCase):
 
+    features = ('meeting', )
+
     @browsing
     def test_catalog_tabs(self, browser):
         self.login(self.manager, browser=browser)
+
         view = self.portal.unrestrictedTraverse('@@portal_tabs_view')
         self.assertEqual(
             [
@@ -162,6 +166,48 @@ class TestCatalogNavigationTabs(IntegrationTestCase):
                     'id': 'opengever-meeting-committeecontainer',
                     'name': 'Sitzungen',
                     'url': 'http://nohost/plone/opengever-meeting-committeecontainer',
+                },
+                {
+                    'description': '',
+                    'id': 'eingangskorb',
+                    'name': 'Eingangsk\xc3\xb6rbli',
+                    'url': 'http://nohost/plone/eingangskorb',
+                },
+                {
+                    'description': '',
+                    'id': 'workspaces',
+                    'name': 'Teamr\xc3\xa4ume',
+                    'url': 'http://nohost/plone/workspaces',
+                }
+            ],
+            view.topLevelTabs(actions=[])
+        )
+
+    @browsing
+    def test_committee_container_is_hidden_from_catalog_tabs_when_feature_disabled(self, browser):
+        self.login(self.manager, browser=browser)
+        disable_meeting_feature()
+
+        view = self.portal.unrestrictedTraverse('@@portal_tabs_view')
+        self.assertEqual(
+            [
+                {
+                    'description': '',
+                    'id': 'kontakte',
+                    'name': 'Contacts',
+                    'url': 'http://nohost/plone/kontakte',
+                },
+                {
+                    'description': '',
+                    'id': 'ordnungssystem',
+                    'name': 'Ordnungssystem',
+                    'url': 'http://nohost/plone/ordnungssystem',
+                },
+                {
+                    'description': '',
+                    'id': 'vorlagen',
+                    'name': 'Vorlagen',
+                    'url': 'http://nohost/plone/vorlagen',
                 },
                 {
                     'description': '',

@@ -44,3 +44,12 @@ def is_docx(document):
     document_mimetype = document_file.contentType
     docx_mimetype = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     return document_mimetype == docx_mimetype
+
+
+def disable_meeting_feature():
+    api.portal.set_registry_record(
+        'is_feature_enabled', False, interface=IMeetingSettings)
+    catalog = api.portal.get_tool('portal_catalog')
+    for brain in catalog.unrestrictedSearchResults(
+            portal_type='opengever.meeting.committeecontainer'):
+        brain.getObject().reindexObject(idxs=['exclude_from_nav'])

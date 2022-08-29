@@ -11,6 +11,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.types import UnicodeCoercingText
 from opengever.base.utils import escape_html
 from opengever.meeting import _
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.browser.meetings.transitions import MeetingTransitionController
 from opengever.meeting.exceptions import MissingAdHocTemplate
 from opengever.meeting.exceptions import MissingMeetingDossierPermissions
@@ -110,7 +111,8 @@ class Meeting(Base, SQLFormSupport):
              'held', 'closed',
              title=_('close_meeting', default='Close meeting')),
          Transition('closed', 'held',
-                    title=_('reopen', default='Reopen')),
+                    title=_('reopen', default='Reopen'),
+                    condition=is_meeting_feature_enabled),
          CancelTransition('pending', 'cancelled',
                           title=_('cancel', default='Cancel')),
          ],

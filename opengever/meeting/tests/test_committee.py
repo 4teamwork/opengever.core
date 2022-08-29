@@ -11,7 +11,28 @@ from opengever.base.oguid import Oguid
 from opengever.meeting.model import Committee
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zExceptions import Unauthorized
 import pytz
+
+
+class TestCommitteeWithDisabledMeetingFeature(IntegrationTestCase):
+
+    @browsing
+    def test_committee_cannot_be_created_in_browser(self, browser):
+        self.login(self.administrator, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(self.committee_container,
+                         view='++add++opengever.meeting.committee')
+
+    @browsing
+    def test_committee_cannot_be_edited_in_browser(self, browser):
+        self.login(self.committee_responsible, browser)
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(self.committee, view='edit')
 
 
 class TestCommittee(IntegrationTestCase):
