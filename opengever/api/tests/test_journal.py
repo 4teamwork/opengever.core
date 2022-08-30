@@ -230,7 +230,7 @@ class TestJournalGet(IntegrationTestCase):
                 u'review_state': u'document-state-draft',
                 u'title': self.document.title}],
             u'time': u'2017-10-16T00:00:00+00:00',
-            u'title': u'Manual entry: Information'
+            u'title': u'Information'
         }, response.get('items')[0])
 
     @browsing
@@ -306,11 +306,11 @@ class TestJournalGet(IntegrationTestCase):
         self.assertEqual(19, response.json.get('items_total'))
 
         response = browser.open(
-            self.dossier, view='@journal?search=Manual',
+            self.dossier, view='@journal?search=call',
             method='GET', headers=http_headers())
 
         self.assertEqual(
-            [u'Manual entry: Phone call', u'Manual entry: Information'],
+            [u'Phone call'],
             map(lambda item: item.get('title'), response.json.get('items')))
 
     @browsing
@@ -460,7 +460,7 @@ class TestJournalPatch(IntegrationTestCase):
         ).json.get('items')[-1]
 
         self.assertEqual(u'my new comment', entry.get('comment'))
-        self.assertEqual(u'Manual entry: Phone call', entry.get('title'))
+        self.assertEqual(u'Phone call', entry.get('title'))
         self.assertEqual(u'2017-10-16T00:00:00+00:00', entry['time'])
         self.assertEqual(
             self.document.absolute_url(),

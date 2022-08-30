@@ -35,7 +35,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.open(self.dossier, view=u'tabbedview_view-journal')
         self.assertEquals(
             {'Changed by': 'Test User (test_user_1_)',
-             'Title': 'Manual entry: Phone call',
+             'Title': 'Phone call',
              'Comments': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier',
              'References': u'',
              'Time': '09.12.2016 09:40'},
@@ -141,7 +141,7 @@ class TestManualJournalEntry(FunctionalTestCase):
         browser.open(self.dossier, view=u'tabbedview_view-journal')
         row = browser.css('.listing').first.rows[1]
 
-        self.assertEquals('Manual entry: Phone call', row.dict().get('Title'))
+        self.assertEquals('Phone call', row.dict().get('Title'))
         self.assertEquals('', row.dict().get('Comments'))
 
     @browsing

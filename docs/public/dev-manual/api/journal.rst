@@ -97,7 +97,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
             }
           ],
           "time": "2019-04-15T14:00:48+00:00",
-          "title": "Manueller Eintrag: Telefongespräch"
+          "title": "Telefongespräch"
         },
         {
           "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/@journal/456"
@@ -109,7 +109,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
           "category": { "token": "information", "title": "Information" }
           "related_documents": [],
           "time": "2019-04-15T13:59:21+00:00",
-          "title": "Manueller Eintrag: Telefongespräch"
+          "title": "Telefongespräch"
         }
       ],
       "items_total": 2

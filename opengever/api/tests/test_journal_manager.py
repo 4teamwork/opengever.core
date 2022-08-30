@@ -146,7 +146,7 @@ class TestJournalManager(IntegrationTestCase):
         entry = manager.list()[0]
         self.assertEqual(u'is an agent', entry.get('comments'))
         self.assertEqual(u'information', entry.get('action').get('category'))
-        self.assertEqual(u'Manual entry: Information', translate(entry.get('action').get('title')))
+        self.assertEqual(u'Information', translate(entry.get('action').get('title')))
         self.assertEqual([], entry.get('action').get('documents'))
         self.assertEqual(zope_time, entry.get('time'))
 
@@ -155,7 +155,7 @@ class TestJournalManager(IntegrationTestCase):
 
         self.assertEqual(u'my new comment', entry.get('comments'))
         self.assertEqual(u'phone-call', entry.get('action').get('category'))
-        self.assertEqual(u'Manual entry: Phone call', translate(entry.get('action').get('title')))
+        self.assertEqual(u'Phone call', translate(entry.get('action').get('title')))
         self.assertEqual([{'id': u'plone:1014073300', 'title': u'Vertr\xe4gsentwurf'}], entry.get('action').get('documents'))
         self.assertEqual(zope_time, entry.get('time'))
 
