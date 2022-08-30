@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-08-23 08:54+0000\n"
+"POT-Creation-Date: 2022-08-30 06:01+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -74,23 +74,11 @@ msgstr "A repository folder with the same reference number already exists on the
 msgid "fieldset_common"
 msgstr "Common"
 
-#. German translation: Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.
-#. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py
-msgid "help_addable_dossier_types"
-msgstr "Select all additional dossier types which should be addable in this repository folder."
-
 #. German translation: Eine kurze Beschreibung des Inhalts.
 #. Default: "A short summary of the content."
 #: ./opengever/repository/repositoryfolder.py
 msgid "help_description"
 msgstr "A short summary of the content."
-
-#. German translation: Erlaubte Spezialdossiers
-#. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py
-msgid "label_addable_dossier_types"
-msgstr "Addable dossier types"
 
 #. German translation: Unterbruch Vererbung
 #. Default: "Blocked inheritance"

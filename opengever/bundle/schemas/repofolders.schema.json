@@ -66,15 +66,6 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
-                "addable_dossier_types": {
-                    "type": [
-                        "null",
-                        "array"
-                    ],
-                    "title": "Erlaubte Spezialdossiers",
-                    "description": "W\u00e4hlen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.",
-                    "_zope_schema_type": "List"
-                },
                 "allow_add_businesscase_dossier": {
                     "type": [
                         "null",
@@ -390,7 +381,6 @@
                 "location",
                 "referenced_activity",
                 "former_reference",
-                "addable_dossier_types",
                 "allow_add_businesscase_dossier",
                 "changed",
                 "classification",

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-08-23 08:54+0000\n"
+"POT-Creation-Date: 2022-08-30 06:01+0000\n"
 "PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -64,20 +64,10 @@ msgstr "A ce niveau du classement ce numéro de référence existe déjà."
 msgid "fieldset_common"
 msgstr "Général"
 
-#. Default: "Select all additional dossier types which should be addable in this repository folder."
-#: ./opengever/repository/repositoryfolder.py
-msgid "help_addable_dossier_types"
-msgstr "Sélectionnez les types de dossiers à ajouter pour cette position du classeur."
-
 #. Default: "A short summary of the content."
 #: ./opengever/repository/repositoryfolder.py
 msgid "help_description"
 msgstr "Brève description du contenu."
-
-#. Default: "Addable dossier types"
-#: ./opengever/repository/repositoryfolder.py
-msgid "label_addable_dossier_types"
-msgstr "Types de dossiers à ajouter"
 
 #. Default: "Blocked inheritance"
 #: ./opengever/repository/browser/excel_export.py

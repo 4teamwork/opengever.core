@@ -60,14 +60,6 @@
       provides=".dossiertemplate.behaviors.IRestrictAddableDossierTemplates"
       />
 
-  <!-- Restricted dossier behavior -->
-  <plone:behavior
-      title="Restricted dossier"
-      description="A restricted dossier is not addable by default in the
-                   repository folder."
-      provides="opengever.dossier.behaviors.restricteddossier.IRestrictedDossier"
-      />
-
   <!-- filingnumber support -->
   <plone:behavior
       title="Filing number behavior"

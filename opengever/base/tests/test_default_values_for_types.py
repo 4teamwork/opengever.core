@@ -77,7 +77,6 @@ REPOFOLDER_DEFAULTS = {
 REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_MISSING_VALUES = {
     'addable_dossier_templates': [],
-    'addable_dossier_types': [],
     'allow_add_businesscase_dossier': True,
     'archival_value_annotation': None,
     'date_of_cassation': None,
@@ -341,7 +340,6 @@ PRIVATEFOLDER_DEFAULTS = {
 }
 PRIVATEFOLDER_FORM_DEFAULTS = {}
 PRIVATEFOLDER_MISSING_VALUES = {
-    'addable_dossier_types': None,
     'description': '',
     'former_reference': None,
     'location': None,
@@ -687,9 +685,6 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_type_defaults()
 
-        # XXX: Don't know why this happens
-        expected['addable_dossier_types'] = None
-
         self.assert_default_values_equal(expected, persisted_values)
 
     def test_invoke_factory(self):
@@ -706,9 +701,6 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_type_defaults()
-
-        # XXX: Don't know why this happens
-        expected['addable_dossier_types'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -754,7 +746,6 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(folder)
         expected = self.get_type_defaults()
-        expected['addable_dossier_types'] = None
         expected['title_fr'] = u'French Title'
         # when setting description via rest api it seems to become a bytestring
         expected['description'] = ''

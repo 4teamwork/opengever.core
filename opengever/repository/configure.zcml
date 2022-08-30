@@ -42,11 +42,6 @@
 
   <adapter factory=".menu.RepositoryFolderPostFactoryMenu" />
 
-  <utility
-      factory=".vocabularies.RestrictedAddableDossiersVocabularyFactory"
-      name="opengever.repository.RestrictedAddableDossiersVocabulary"
-      />
-
   <subscriber
       for="opengever.repository.interfaces.IRepositoryFolder
            zope.lifecycleevent.interfaces.IObjectModifiedEvent"

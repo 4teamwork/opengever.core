@@ -41,7 +41,6 @@ class TextXLSImport(TestCase):
              u'read_dossiers_access',
              u'close_dossiers_access',
              u'manage_dossiers_access',
-             u'addable_dossier_types',
              u'retention_period',
              u'edit_dossiers_access',
              u'archival_value_annotation',
@@ -68,11 +67,6 @@ class TextXLSImport(TestCase):
     def test_valid_from_and_until_are_none_when_not_set(self):
         self.assertEquals(None, self.source[3]['valid_from'])
         self.assertEquals(None, self.source[3]['valid_until'])
-
-    def test_addable_dossier_types_gets_splitted_by_comma(self):
-        self.assertEquals(['opengever.dossier.special1',
-                           'opengever.dossier.special2'],
-                          self.source[0]['addable_dossier_types'])
 
     def test_archival_value_mapping(self):
         self.assertEquals('unchecked', self.source[0]['archival_value'])
