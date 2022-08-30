@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.17.0 (2022-08-30)
+----------------------
+
+Bug fixes:
+
+
+- Handle deleted dossiers in NightlyDossierJournalPDF. [njohner]
+- Fix updating a custom property value when the previous value contained an umlaut. [elioschmutz]
+- Fix user lookup by email for inbound mail. [lgraf]
+
+
+Other changes:
+
+
+- Remove nightly jobs feature flag. [tinagerber]
+- Add support for meetings migration and deactivation. [njohner]
+- Allow admins and workspace admins to modify and delete their own workspace participations. [tinagerber]
+- Improve performance of visible users and groups filter. [buchi]
+
+
 2022.16.0 (2022-08-17)
 ----------------------
 
