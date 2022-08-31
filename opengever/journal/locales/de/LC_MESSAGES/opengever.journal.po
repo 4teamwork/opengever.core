@@ -199,7 +199,7 @@ msgstr "Lokale Rollen von ${repository} modifziert."
 #. Default: "Manual entry: ${category}"
 #: ./opengever/journal/manager.py
 msgid "label_manual_journal_entry"
-msgstr "Manueller Eintrag: ${category}"
+msgstr "${category}"
 
 #. Default: "Object cut: ${title}"
 #: ./opengever/journal/handlers.py

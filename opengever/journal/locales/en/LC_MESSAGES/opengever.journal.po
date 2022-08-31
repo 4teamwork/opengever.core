@@ -237,7 +237,7 @@ msgstr "Local roles modified at ${repository}."
 #. Default: "Manual entry: ${category}"
 #: ./opengever/journal/manager.py
 msgid "label_manual_journal_entry"
-msgstr "Manual entry: ${category}"
+msgstr "${category}"
 
 #. German translation: Objekt ausgeschnitten: ${title}
 #. Default: "Object cut: ${title}"
