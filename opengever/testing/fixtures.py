@@ -274,6 +274,7 @@ class OpengeverContentFixture(object):
             'regular_user',
             u'K\xe4thi',
             u'B\xe4rfuss',
+            ['WorkspaceClientUser'],
             address1='Kappelenweg 13',
             address2='Postfach 1234',
             city='Vorkappelen',
