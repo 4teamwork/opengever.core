@@ -23,10 +23,11 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('current_user', OrderedDict([
                 ('username', 'kathi.barfuss'),
                 ('description', None),
-                ('roles', ['Member']),
+                ('roles', ['Member', 'WorkspaceClientUser']),
                 ('home_page', None),
                 ('roles_and_principals', ['principal:kathi.barfuss',
                                           'Member',
+                                          'WorkspaceClientUser',
                                           'Authenticated',
                                           'principal:AuthenticatedUsers',
                                           'principal:fa_users',
