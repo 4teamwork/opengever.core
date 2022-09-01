@@ -64,16 +64,6 @@
        
 
 
-   .. py:attribute:: addable_dossier_types
-
-       :Feldname: :field-title:`Erlaubte Spezialdossiers`
-       :Datentyp: ``List``
-       
-       
-       :Beschreibung: Wählen Sie die Spezialdossiers aus, die in dieser Ordnungsposition erlaubt sind.
-       
-
-
    .. py:attribute:: allow_add_businesscase_dossier
 
        :Feldname: :field-title:`Hinzufügen von Geschäftsdossiers erlauben`

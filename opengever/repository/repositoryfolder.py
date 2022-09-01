@@ -5,10 +5,8 @@ from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
-from plone.autoform import directives as form
 from plone.dexterity import content
 from plone.supermodel import model
-from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from zope import schema
 from zope.component import adapter
 from zope.interface import implementer
@@ -32,7 +30,6 @@ class IRepositoryFolderSchema(model.Schema):
             u'location',
             u'referenced_activity',
             u'former_reference',
-            u'addable_dossier_types',
             u'allow_add_businesscase_dossier',
         ],
     )
@@ -73,17 +70,6 @@ class IRepositoryFolderSchema(model.Schema):
         title=_(u'label_former_reference', default=u'Former reference'),
         required=False,
     )
-
-    form.widget(addable_dossier_types=CheckBoxFieldWidget)
-    addable_dossier_types = schema.List(
-        title=_(u'label_addable_dossier_types',
-                default=u'Addable dossier types'),
-        description=_(u'help_addable_dossier_types',
-                      default=u'Select all additional dossier types which '
-                      'should be addable in this repository folder.'),
-        value_type=schema.Choice(
-            vocabulary=u'opengever.repository.RestrictedAddableDossiersVocabulary'),
-        required=False)
 
     allow_add_businesscase_dossier = schema.Bool(
         title=_(u'allow_add_businesscase_dossier',

@@ -53,7 +53,6 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.ogds.base.OrgUnitsVocabularyFactory',
     'opengever.ogds.base.OtherAssignedClientsVocabulary',
     'opengever.propertysheets.PropertySheetAssignmentsVocabulary',
-    'opengever.repository.RestrictedAddableDossiersVocabulary',
     'opengever.task.attachable_documents_vocabulary',
     'opengever.task.bidirectional_by_reference',
     'opengever.task.bidirectional_by_value',

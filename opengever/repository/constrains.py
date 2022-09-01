@@ -96,28 +96,4 @@ class RepositoryFolderConstrainTypes(object):
             types = filter(
                 lambda a: a == fti or a.id == 'opengever.disposition.disposition',
                 types)
-
-        # Finally: remove not enabled resticted content types
-        marker_behavior = 'opengever.dossier.behaviors.restricteddossier.' + \
-            'IRestrictedDossier'
-
-        allowed = self.context.addable_dossier_types \
-            and self.context.addable_dossier_types or []
-
-        def _filterer(fti):
-            if fti.id in allowed:
-                # FTI is enabled in repository folder
-                return True
-
-            elif getattr(fti, 'behaviors', None) \
-                    and marker_behavior in fti.behaviors:
-                # FTI has marker interface and is not enabled
-                return False
-
-            else:
-                # Normal type - we don't care
-                return True
-
-        types = filter(_filterer, types)
-
         return types

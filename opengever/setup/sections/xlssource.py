@@ -134,10 +134,6 @@ class XlsSource(object):
             if key in ('valid_from', 'valid_until') and cell in ('', u''):
                 cell = None
 
-            if key == 'addable_dossier_types':
-                cell = cell.replace(' ', '').split(',')
-                cell = [t for t in cell if not t == '']
-
             if key in MAPPED_FIELDS.keys():
                 mapping = MAPPED_FIELDS[key]
 
