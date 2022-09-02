@@ -189,6 +189,32 @@ Mit dem ``@linked-workspace-participations`` Endpoint können Teilnehmer auf ein
     }
 
 
+Teilnehmer in einen verknüpften Teamraum einladen
+-------------------------------------------------
+
+Mit dem ``@linked-workspace-invitations`` Endpoint können Teilnehmer auf einem verknüpften Teamraum eingeladen werden.
+
+**Beispiel-Request**:
+
+  .. sourcecode:: http
+
+    POST /ordnungssystem/dossier-23/@linked-workspace-invitations HTTP/1.1
+    Accept: application/json
+    Content-Type: application/json
+
+    {
+      "workspace_uid": "c11627f492b6447fb61617bb06b9a21a"
+      "recipient_email": "max.muster@example.com",
+      "role": {"token": "WorkspaceGuest"},
+    }
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+
+
 Ein GEVER-Dokument in einen verknüpften Teamraum kopieren
 ---------------------------------------------------------
 

@@ -34,6 +34,7 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
+import json
 import sys
 import transaction
 
@@ -551,3 +552,11 @@ class LinkedWorkspaces(object):
         return self.client.post(
             '{}/@participations'.format(workspace_url),
             json={'participants': participations})
+
+    def add_invitation(self, workspace_uid, invitation_data):
+        """ Adds an invitation on the workspace
+        """
+        workspace_url = self._get_linked_workspace_url(workspace_uid)
+        return self.client.post(
+            '{}/@invitations'.format(workspace_url),
+            json=invitation_data)

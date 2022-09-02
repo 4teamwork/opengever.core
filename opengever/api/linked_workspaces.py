@@ -309,3 +309,32 @@ class AddParticipationsOnWorkspacePost(LinkedWorkspacesService):
             "@id": "{}/@linked-workspace-participations".format(self.context.absolute_url()),
             "items": items
         }
+
+
+class AddInvitationOnWorkspacePost(LinkedWorkspacesService):
+    """API Endpoint to add invitations on a linked workspace.
+    """
+
+    @teamraum_request_error_handler
+    def reply(self):
+        alsoProvides(self.request, IDisableCSRFProtection)
+        data = json_body(self.request)
+        workspace_uid = data.get('workspace_uid')
+        if not workspace_uid:
+            raise BadRequest(_(u"workspace_uid_required",
+                               default=u"Property 'workspace_uid' is required"))
+
+        recipient_email = data.get('recipient_email')
+        if not recipient_email:
+            raise BadRequest(_(u"recipient_email_required",
+                               default=u"Property 'recipient_email' is required"))
+
+        role = data.get('role')
+        if not role:
+            raise BadRequest(_(u"role_required",
+                               default=u"Property 'role' is required"))
+
+        ILinkedWorkspaces(self.context).add_invitation(workspace_uid, data)
+
+        self.request.response.setStatus(204)
+        return super(AddInvitationOnWorkspacePost, self).reply()

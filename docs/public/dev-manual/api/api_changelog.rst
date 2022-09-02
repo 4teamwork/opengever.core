@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@linked-workspace-invitations``: New endpoint to invite users from GEVER into a workspace.
 
 2022.17.0 (2022-08-30)
 ----------------------
