@@ -53,7 +53,7 @@ five.intid==1.0.3
 five.localsitemanager==2.0.6
 five.pt==2.2.5
 ftw.builder==2.0.0
-ftw.bumblebee==3.10.0
+ftw.bumblebee==3.10.1
 ftw.casauth==1.4.2
 ftw.catalogdoctor==1.2.0
 ftw.contentmenu==2.4.0

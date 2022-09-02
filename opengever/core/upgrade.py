@@ -3,6 +3,7 @@ from alembic.operations import Operations
 from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
 from decorator import decorator
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.upgrade import UpgradeStep
@@ -740,3 +741,33 @@ class NightlyDossierCommentIndexer(NightlyIndexer):
             manager = getUtility(ISolrConnectionManager)
             handler = getMultiAdapter((obj, manager), ISolrIndexHandler)
             handler.add(idxs)
+
+
+class FixGhostChecksums(UIDMaintenanceJobContextManagerMixin):
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.fix_ghost_checksum.__name__))
+
+        return MaintenanceJobType(function_dotted_name)
+
+    @classmethod
+    def fix_ghost_checksum(cls, key):
+        obj = cls.key_to_obj(key)
+        if not obj:
+            return
+
+        doc = IBumblebeeDocument(obj)
+        if doc.is_convertable():
+            # Checksums of already convertable documents are not affected
+            return
+
+        if not doc.get_checksum():
+            # Non convertable documents should have no checksum.
+            return
+
+        # We need to update the checksum for non convertable documents
+        # still having a checksum.
+        doc.update_checksum()
+        obj.reindexObject(idxs=["getId", "bumblebee_checksum"])
