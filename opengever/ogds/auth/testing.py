@@ -95,3 +95,6 @@ class OGDSAuthTestCase(IntegrationTestCase):
         if getattr(self, 'plugin', None):
             del self.plugin
             del self.uf['ogds_auth']
+
+    def ids(self, sequence):
+        return tuple((item['id'] for item in sequence))

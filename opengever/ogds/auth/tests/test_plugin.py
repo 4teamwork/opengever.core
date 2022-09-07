@@ -5,21 +5,22 @@ from opengever.ogds.models.service import ogds_service
 from plone import api
 
 
-def ids(sequence):
-    return tuple((item['id'] for item in sequence))
-
-
-class TestOGDSAuthPlugin(OGDSAuthTestCase):
-    """Test case that tests the OGDS auth plugin's interface directly.
+class TestOGDSAuthPluginBase(OGDSAuthTestCase):
+    """Base for test cases to test the OGDS auth plugin's interface directly.
     """
 
     def setUp(self):
-        super(TestOGDSAuthPlugin, self).setUp()
+        super(TestOGDSAuthPluginBase, self).setUp()
         self.install_ogds_plugin()
 
     def tearDown(self):
-        super(TestOGDSAuthPlugin, self).tearDown()
+        super(TestOGDSAuthPluginBase, self).tearDown()
         self.uninstall_ogds_plugin()
+
+
+class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
+    """Tests for the IUserEnumeration plugin interface.
+    """
 
     def test_enum_users_by_id(self):
         results = self.plugin.enumerateUsers('kathi.barfuss')
@@ -34,12 +35,12 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
     def test_enum_users_by_login(self):
         results = self.plugin.enumerateUsers(login='kathi.barfuss')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, ids(results))
+        self.assertEqual(expected, self.ids(results))
 
     def test_enum_users_id_takes_precedence_over_login(self):
         results = self.plugin.enumerateUsers(id='kathi.barfuss', login='foo')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, ids(results))
+        self.assertEqual(expected, self.ids(results))
 
     def test_enum_users_with_no_match_returns_empty_tuple(self):
         results = self.plugin.enumerateUsers(id='doesnt-exist')
@@ -72,7 +73,7 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
             'james.bond',
             'committee.secretary',
         )
-        self.assertEqual(expected, ids(results))
+        self.assertEqual(expected, self.ids(results))
 
     def test_enum_users_filters_inactive_users(self):
         # Guard assertion: User exists and is inactive
@@ -90,6 +91,11 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
         for key, value in results[0].items():
             self.assertIsInstance(key, str)
             self.assertIsInstance(value, str)
+
+
+class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
+    """Tests for the IGroups plugin interface.
+    """
 
     def test_groups_for_principal(self):
         member = api.user.get('kathi.barfuss')
@@ -169,4 +175,4 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
         pas = api.portal.get_tool('acl_users')
         users = pas.searchUsers()
         self.assertGreater(len(users), 5)
-        self.assertIn('kathi.barfuss', ids(users))
+        self.assertIn('kathi.barfuss', self.ids(users))
