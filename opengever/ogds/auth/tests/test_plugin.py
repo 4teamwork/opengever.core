@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.ogds.auth.testing import OGDSAuthTestCase
 from opengever.ogds.models.service import ogds_service
 from plone import api
@@ -51,6 +53,15 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
         self.assertEqual(expected, results)
         self.assertIsInstance(results, tuple)
 
+    def test_enum_users_filters_inactive_users(self):
+        # Guard assertion: User exists and is inactive
+        user = ogds_service().fetch_user('inactive.user')
+        self.assertFalse(user.active)
+
+        results = self.plugin.enumerateUsers('inactive.user')
+        expected = ()
+        self.assertEqual(expected, results)
+
     def test_enum_users_returns_bytestring_values(self):
         results = self.plugin.enumerateUsers('kathi.barfuss')
         self.assertTrue(len(results) > 0)
@@ -82,6 +93,21 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
 
         for groupid in results:
             self.assertIsInstance(groupid, str)
+
+    def test_groups_for_principal_filters_inactive_groups(self):
+        user = ogds_service().fetch_user('robert.ziegler')
+        create(
+            Builder('ogds_group')
+            .having(groupid='inactive.group',
+                    title=u'Inactive Group',
+                    active=False,
+                    users=[user]))
+        ogds_service().session.flush()
+
+        member = api.user.get('robert.ziegler')
+        results = self.plugin.getGroupsForPrincipal(member)
+        expected = ('fa_users', 'projekt_a')
+        self.assertEqual(expected, results)
 
 
 class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):

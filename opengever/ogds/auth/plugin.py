@@ -1,6 +1,7 @@
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from logging import getLogger
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
@@ -81,6 +82,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
             query = (
                 select([User.userid])
                 .where(User.userid == id)
+                .where(User.active == True)
             )
             matches = [
                 userid.encode('utf-8')
@@ -102,9 +104,12 @@ class OGDSAuthenticationPlugin(BasePlugin):
     def getGroupsForPrincipal(self, principal, request=None):
         self.log('Getting groups for principal={!r}'.format(principal))
 
+        groups = Group.__table__
         query = (
-            select([groups_users.c.groupid])
+            select([groups.c.groupid])
+            .select_from(groups.join(groups_users))
             .where(groups_users.c.userid == principal.getId())
+            .where(groups.c.active == True)
         )
         results = tuple([
             groupid.encode('utf-8')
