@@ -83,6 +83,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
         query = (
             select([User.userid])
             .where(User.active == True)
+            .order_by(User.userid)
         )
         if id:
             query = query.where(User.userid == id)
@@ -113,6 +114,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
         query = (
             select([Group.groupid])
             .where(Group.active == True)
+            .order_by(Group.groupid)
         )
         if id:
             query = query.where(Group.groupid == id)

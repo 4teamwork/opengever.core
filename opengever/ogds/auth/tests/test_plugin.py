@@ -51,27 +51,27 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     def test_enum_users_without_search_critera_returns_all_users(self):
         results = self.plugin.enumerateUsers()
         expected = (
-            'nicole.kohler',
-            'maja.harzig',
-            'david.meier',
-            'robert.ziegler',
-            'kathi.barfuss',
-            'herbert.jager',
-            'jurgen.konig',
-            'franzi.muller',
-            'faivel.fruhling',
-            'ramon.flucht',
-            'gunther.frohlich',
-            'fridolin.hugentobler',
             'beatrice.schrodinger',
+            'committee.secretary',
+            'david.meier',
+            'faivel.fruhling',
+            'franzi.muller',
+            'fridolin.hugentobler',
+            'gunther.frohlich',
             'hans.peter',
+            'herbert.jager',
+            'james.bond',
             'jurgen.fischer',
+            'jurgen.konig',
+            'kathi.barfuss',
+            'lucklicher.laser',
+            'maja.harzig',
+            'nicole.kohler',
+            'propertysheets.manager',
+            'ramon.flucht',
+            'robert.ziegler',
             'service.user',
             'webaction.manager',
-            'propertysheets.manager',
-            'lucklicher.laser',
-            'james.bond',
-            'committee.secretary',
         )
         self.assertEqual(expected, self.ids(results))
 
@@ -129,7 +129,7 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
             'rk_inbox_users',
             'rk_users'
         )
-        self.assertEqual(expected, self.ids(sorted(results)))
+        self.assertEqual(expected, self.ids(results))
 
     def test_enum_groups_supports_max_results(self):
         results = self.plugin.enumerateGroups(max_results=3)
