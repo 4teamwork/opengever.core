@@ -47,11 +47,32 @@ class TestOGDSAuthPlugin(OGDSAuthTestCase):
         self.assertEqual(expected, results)
         self.assertIsInstance(results, tuple)
 
-    def test_enum_users_without_id_or_login_returns_empty_tuple(self):
+    def test_enum_users_without_search_critera_returns_all_users(self):
         results = self.plugin.enumerateUsers()
-        expected = ()
-        self.assertEqual(expected, results)
-        self.assertIsInstance(results, tuple)
+        expected = (
+            'nicole.kohler',
+            'maja.harzig',
+            'david.meier',
+            'robert.ziegler',
+            'kathi.barfuss',
+            'herbert.jager',
+            'jurgen.konig',
+            'franzi.muller',
+            'faivel.fruhling',
+            'ramon.flucht',
+            'gunther.frohlich',
+            'fridolin.hugentobler',
+            'beatrice.schrodinger',
+            'hans.peter',
+            'jurgen.fischer',
+            'service.user',
+            'webaction.manager',
+            'propertysheets.manager',
+            'lucklicher.laser',
+            'james.bond',
+            'committee.secretary',
+        )
+        self.assertEqual(expected, ids(results))
 
     def test_enum_users_filters_inactive_users(self):
         # Guard assertion: User exists and is inactive
@@ -142,3 +163,10 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
             self.install_ogds_plugin()
             member = api.user.get('kathi.barfuss')
             self.assertEqual(['projekt_a', 'fa_users'], member.getGroups())
+
+    def test_pas_search_users_without_criteria_lists_all_users(self):
+        self.install_ogds_plugin()
+        pas = api.portal.get_tool('acl_users')
+        users = pas.searchUsers()
+        self.assertGreater(len(users), 5)
+        self.assertIn('kathi.barfuss', ids(users))

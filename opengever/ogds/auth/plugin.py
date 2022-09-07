@@ -78,22 +78,23 @@ class OGDSAuthenticationPlugin(BasePlugin):
         if login and (not id):
             id = login
 
+        query = (
+            select([User.userid])
+            .where(User.active == True)
+        )
         if id:
-            query = (
-                select([User.userid])
-                .where(User.userid == id)
-                .where(User.active == True)
-            )
-            matches = [
-                userid.encode('utf-8')
-                for userid, in self.query_ogds(query)
-            ]
-            plugin_id = self.getId()
-            results = tuple(({
-                'id': userid,
-                'login': userid,
-                'pluginid': plugin_id,
-            } for userid in matches))
+            query = query.where(User.userid == id)
+
+        matches = [
+            userid.encode('utf-8')
+            for userid, in self.query_ogds(query)
+        ]
+        plugin_id = self.getId()
+        results = tuple(({
+            'id': userid,
+            'login': userid,
+            'pluginid': plugin_id,
+        } for userid in matches))
 
         self.log('Found users: {!r}'.format([user['id'] for user in results]))
         return results
