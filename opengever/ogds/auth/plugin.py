@@ -85,8 +85,15 @@ class OGDSAuthenticationPlugin(BasePlugin):
             .where(User.active == True)
             .order_by(User.userid)
         )
-        if id:
+
+        if exact_match:
+            if not id:
+                raise ValueError('Exact match specified but no ID or login given')
             query = query.where(User.userid == id)
+        elif id:
+            pattern = '%{}%'.format(id)
+            query = query.where(User.userid.ilike(pattern))
+
         if isinstance(max_results, int):
             query = query.limit(max_results)
 
@@ -116,8 +123,15 @@ class OGDSAuthenticationPlugin(BasePlugin):
             .where(Group.active == True)
             .order_by(Group.groupid)
         )
-        if id:
+
+        if exact_match:
+            if not id:
+                raise ValueError('Exact match specified but no ID given')
             query = query.where(Group.groupid == id)
+        elif id:
+            pattern = '%{}%'.format(id)
+            query = query.where(Group.groupid.ilike(pattern))
+
         if isinstance(max_results, int):
             query = query.limit(max_results)
 
