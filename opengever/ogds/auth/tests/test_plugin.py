@@ -93,6 +93,61 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             self.assertIsInstance(value, str)
 
 
+class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
+    """Tests for the IGroupEnumeration plugin interface.
+    """
+
+    def test_enum_groups_by_id(self):
+        results = self.plugin.enumerateGroups('fa_users')
+        expected = ({
+            'id': 'fa_users',
+            'pluginid': 'ogds_auth',
+        },)
+        self.assertEqual(expected, results)
+        self.assertIsInstance(results, tuple)
+
+    def test_enum_groups_with_no_match_returns_empty_tuple(self):
+        results = self.plugin.enumerateGroups(id='group-doesnt-exist')
+        expected = ()
+        self.assertEqual(expected, results)
+        self.assertIsInstance(results, tuple)
+
+    def test_enum_groups_without_search_critera_returns_all_groups(self):
+        results = self.plugin.enumerateGroups()
+        expected = (
+            'committee_rpk_group',
+            'committee_ver_group',
+            'fa_inbox_users',
+            'fa_users',
+            'projekt_a',
+            'projekt_b',
+            'projekt_laeaer',
+            'rk_inbox_users',
+            'rk_users'
+        )
+        self.assertEqual(expected, self.ids(sorted(results)))
+
+    def test_enum_groups_filters_inactive_groups(self):
+        create(
+            Builder('ogds_group')
+            .having(groupid='inactive.group',
+                    title=u'Inactive Group',
+                    active=False))
+        ogds_service().session.flush()
+
+        results = self.plugin.enumerateGroups('inactive.group')
+        expected = ()
+        self.assertEqual(expected, results)
+
+    def test_enum_groups_returns_bytestring_values(self):
+        results = self.plugin.enumerateGroups('fa_users')
+        self.assertTrue(len(results) > 0)
+
+        for key, value in results[0].items():
+            self.assertIsInstance(key, str)
+            self.assertIsInstance(value, str)
+
+
 class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
     """Tests for the IGroups plugin interface.
     """
@@ -176,3 +231,10 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
         users = pas.searchUsers()
         self.assertGreater(len(users), 5)
         self.assertIn('kathi.barfuss', self.ids(users))
+
+    def test_pas_search_groups_without_criteria_lists_all_groups(self):
+        self.install_ogds_plugin()
+        pas = api.portal.get_tool('acl_users')
+        groups = pas.searchGroups()
+        self.assertGreater(len(groups), 5)
+        self.assertIn('fa_users', self.ids(groups))

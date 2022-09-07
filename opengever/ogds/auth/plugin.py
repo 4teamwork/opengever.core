@@ -7,6 +7,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from Products.CMFCore.permissions import ManagePortal
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # noqa
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
@@ -39,6 +40,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
     """
     implements(
         IUserEnumerationPlugin,
+        IGroupEnumerationPlugin,
         IGroupsPlugin,
     )
     meta_type = 'OGDS Authentication Plugin'
@@ -97,6 +99,34 @@ class OGDSAuthenticationPlugin(BasePlugin):
         } for userid in matches))
 
         self.log('Found users: {!r}'.format([user['id'] for user in results]))
+        return results
+
+    security.declarePrivate('enumerateGroups')
+
+    # IGroupEnumerationPlugin implementation
+    def enumerateGroups(self, id=None, exact_match=False, sort_by=None,
+                        max_results=None, **kw):
+        self.log('Enumerating groups for id={!r}'.format(id))
+
+        query = (
+            select([Group.groupid])
+            .where(Group.active == True)
+        )
+        if id:
+            query = query.where(Group.groupid == id)
+
+        matches = [
+            groupid.encode('utf-8')
+            for groupid, in self.query_ogds(query)
+        ]
+
+        plugin_id = self.getId()
+        results = tuple(({
+            'id': groupid,
+            'pluginid': plugin_id,
+        } for groupid in matches))
+
+        self.log('Found groups: {!r}'.format([group['id'] for group in results]))
         return results
 
     security.declarePrivate('getGroupsForPrincipal')

@@ -66,6 +66,7 @@ class DisabledUserPlugins(DisabledPluginTypes):
 class DisabledGroupPlugins(DisabledPluginTypes):
 
     types_to_disable = [
+        'IGroupEnumerationPlugin',
         'IGroupsPlugin',
     ]
 
@@ -87,6 +88,7 @@ class OGDSAuthTestCase(IntegrationTestCase):
         plugin = self.uf['ogds_auth']
         plugin.manage_activateInterfaces([
             'IUserEnumerationPlugin',
+            'IGroupEnumerationPlugin',
             'IGroupsPlugin',
         ])
         self.plugin = plugin
