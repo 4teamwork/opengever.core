@@ -75,6 +75,10 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_supports_max_results(self):
+        results = self.plugin.enumerateUsers(max_results=3)
+        self.assertEqual(3, len(results))
+
     def test_enum_users_filters_inactive_users(self):
         # Guard assertion: User exists and is inactive
         user = ogds_service().fetch_user('inactive.user')
@@ -126,6 +130,10 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
             'rk_users'
         )
         self.assertEqual(expected, self.ids(sorted(results)))
+
+    def test_enum_groups_supports_max_results(self):
+        results = self.plugin.enumerateGroups(max_results=3)
+        self.assertEqual(3, len(results))
 
     def test_enum_groups_filters_inactive_groups(self):
         create(

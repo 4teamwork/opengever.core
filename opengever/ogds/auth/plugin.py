@@ -86,6 +86,8 @@ class OGDSAuthenticationPlugin(BasePlugin):
         )
         if id:
             query = query.where(User.userid == id)
+        if isinstance(max_results, int):
+            query = query.limit(max_results)
 
         matches = [
             userid.encode('utf-8')
@@ -114,6 +116,8 @@ class OGDSAuthenticationPlugin(BasePlugin):
         )
         if id:
             query = query.where(Group.groupid == id)
+        if isinstance(max_results, int):
+            query = query.limit(max_results)
 
         matches = [
             groupid.encode('utf-8')
