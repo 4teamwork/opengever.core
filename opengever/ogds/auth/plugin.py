@@ -1,6 +1,7 @@
 from AccessControl.requestmethod import postonly
 from AccessControl.SecurityInfo import ClassSecurityInfo
 from logging import getLogger
+from OFS.Cache import Cacheable
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
@@ -35,7 +36,7 @@ def addOGDSAuthenticationPlugin(self, id_, title=None, REQUEST=None):
                 self.absolute_url()))
 
 
-class OGDSAuthenticationPlugin(BasePlugin):
+class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
     """Plone PAS plugin for authentication against OGDS.
     """
     implements(
@@ -51,6 +52,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
         ({'label': 'Configuration',
           'action': 'manage_config'},)
         + BasePlugin.manage_options
+        + Cacheable.manage_options
     )
     security.declareProtected(ManagePortal, 'manage_config')
     manage_config = PageTemplateFile('www/config', globals(),
@@ -61,7 +63,8 @@ class OGDSAuthenticationPlugin(BasePlugin):
         self.title = title
         self.debug_mode = False
 
-    def query_ogds(self, query):
+    @staticmethod
+    def query_ogds(query):
         return ogds_service().session.execute(query)
 
     def log(self, msg):
@@ -74,6 +77,22 @@ class OGDSAuthenticationPlugin(BasePlugin):
     def enumerateUsers(self, id=None, login=None, exact_match=False,
                        sort_by=None, max_results=None, **kw):
         self.log('Enumerating users for id={!r}, login={!r}'.format(id, login))
+
+        view_name = self.getId() + '_enumerateUsers'
+        criteria = {
+            'id': id,
+            'login': login,
+            'exact_match': exact_match,
+            'sort_by': sort_by,
+            'max_results': max_results,
+        }
+        criteria.update(kw)
+        cached_info = self.ZCacheable_get(
+            view_name=view_name, keywords=criteria, default=None)
+
+        if cached_info is not None:
+            self.log('Returning cached results from enumerateUsers()')
+            return cached_info
 
         results = ()
 
@@ -108,6 +127,15 @@ class OGDSAuthenticationPlugin(BasePlugin):
             'pluginid': plugin_id,
         } for userid in matches))
 
+        # This caching is not as effective yet as it could be:
+        # Because we just store results (all users) for id=None, login=None
+        # queries with the cache key for "no id/login criteria" , a subsequent
+        # query for any single user will still result in a cache miss.
+        #
+        # We could improve this by iterating over results in this case, and
+        # also cache each individual user record with its individual cache key.
+
+        self.ZCacheable_set(results, view_name=view_name, keywords=criteria)
         self.log('Found users: {!r}'.format([user['id'] for user in results]))
         return results
 
@@ -117,6 +145,21 @@ class OGDSAuthenticationPlugin(BasePlugin):
     def enumerateGroups(self, id=None, exact_match=False, sort_by=None,
                         max_results=None, **kw):
         self.log('Enumerating groups for id={!r}'.format(id))
+
+        view_name = self.getId() + '_enumerateGroups'
+        criteria = {
+            'id': id,
+            'exact_match': exact_match,
+            'sort_by': sort_by,
+            'max_results': max_results,
+        }
+        criteria.update(kw)
+        cached_info = self.ZCacheable_get(
+            view_name=view_name, keywords=criteria, default=None)
+
+        if cached_info is not None:
+            self.log('Returning cached results from enumerateGroups()')
+            return cached_info
 
         query = (
             select([Group.groupid])
@@ -146,6 +189,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
             'pluginid': plugin_id,
         } for groupid in matches))
 
+        self.ZCacheable_set(results, view_name=view_name, keywords=criteria)
         self.log('Found groups: {!r}'.format([group['id'] for group in results]))
         return results
 
@@ -155,11 +199,21 @@ class OGDSAuthenticationPlugin(BasePlugin):
     def getGroupsForPrincipal(self, principal, request=None):
         self.log('Getting groups for principal={!r}'.format(principal))
 
+        view_name = self.getId() + '_getGroupsForPrincipal'
+        principal_id = principal.getId()
+        criteria = {'id': principal_id}
+        cached_info = self.ZCacheable_get(
+            view_name=view_name, keywords=criteria, default=None)
+
+        if cached_info is not None:
+            self.log('Returning cached results from getGroupsForPrincipal()')
+            return cached_info
+
         groups = Group.__table__
         query = (
             select([groups.c.groupid])
             .select_from(groups.join(groups_users))
-            .where(groups_users.c.userid == principal.getId())
+            .where(groups_users.c.userid == principal_id)
             .where(groups.c.active == True)
         )
         results = tuple([
@@ -167,6 +221,7 @@ class OGDSAuthenticationPlugin(BasePlugin):
             for groupid, in self.query_ogds(query)
         ])
 
+        self.ZCacheable_set(results, view_name=view_name, keywords=criteria)
         self.log('Found groups: {!r}'.format(results))
         return results
 

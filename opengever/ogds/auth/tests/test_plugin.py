@@ -1,5 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from mock import patch
+from opengever.ogds.auth.plugin import OGDSAuthenticationPlugin
 from opengever.ogds.auth.testing import OGDSAuthTestCase
 from opengever.ogds.models.service import ogds_service
 from plone import api
@@ -110,6 +112,25 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             self.assertIsInstance(key, str)
             self.assertIsInstance(value, str)
 
+    @patch('opengever.ogds.auth.plugin.OGDSAuthenticationPlugin.query_ogds',
+           wraps=OGDSAuthenticationPlugin.query_ogds)
+    def test_enum_users_is_cached(self, mock_query_ogds):
+        self.plugin.ZCacheable_setManagerId('RAMCache')
+
+        results = self.plugin.enumerateUsers('kathi.barfuss')
+        cached_results = self.plugin.enumerateUsers('kathi.barfuss')
+        self.assertEqual(results, cached_results)
+        self.assertEqual(1, mock_query_ogds.call_count)
+
+        cache_miss = self.plugin.enumerateUsers('robert.ziegler')
+        self.assertNotEqual(cache_miss, cached_results)
+        self.assertEqual(2, mock_query_ogds.call_count)
+
+        negative_cache_miss = self.plugin.enumerateUsers('doesnt-exist')
+        negative_cache_hit = self.plugin.enumerateUsers('doesnt-exist')
+        self.assertEqual(3, mock_query_ogds.call_count)
+        self.assertEqual(negative_cache_hit, negative_cache_miss)
+
 
 class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
     """Tests for the IGroupEnumeration plugin interface.
@@ -187,6 +208,25 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
             self.assertIsInstance(key, str)
             self.assertIsInstance(value, str)
 
+    @patch('opengever.ogds.auth.plugin.OGDSAuthenticationPlugin.query_ogds',
+           wraps=OGDSAuthenticationPlugin.query_ogds)
+    def test_enum_groups_is_cached(self, mock_query_ogds):
+        self.plugin.ZCacheable_setManagerId('RAMCache')
+
+        results = self.plugin.enumerateGroups('fa_users')
+        cached_results = self.plugin.enumerateGroups('fa_users')
+        self.assertEqual(results, cached_results)
+        self.assertEqual(1, mock_query_ogds.call_count)
+
+        cache_miss = self.plugin.enumerateGroups('projekt_a')
+        self.assertNotEqual(cache_miss, cached_results)
+        self.assertEqual(2, mock_query_ogds.call_count)
+
+        negative_cache_miss = self.plugin.enumerateGroups('doesnt-exist')
+        negative_cache_hit = self.plugin.enumerateGroups('doesnt-exist')
+        self.assertEqual(3, mock_query_ogds.call_count)
+        self.assertEqual(negative_cache_hit, negative_cache_miss)
+
 
 class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
     """Tests for the IGroups plugin interface.
@@ -230,6 +270,50 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
         results = self.plugin.getGroupsForPrincipal(member)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
+
+    @patch('opengever.ogds.auth.plugin.OGDSAuthenticationPlugin.query_ogds',
+           wraps=OGDSAuthenticationPlugin.query_ogds)
+    def test_groups_for_principal_is_cached(self, mock_query_ogds):
+        kathi = api.user.get('kathi.barfuss')
+        robert = api.user.get('robert.ziegler')
+        franzi = api.user.get('franzi.muller')
+
+        user = ogds_service().fetch_user('robert.ziegler')
+        create(
+            Builder('ogds_group')
+            .having(groupid='additional.group',
+                    users=[user]))
+
+        ogds_service().fetch_user('franzi.muller').groups = []
+        ogds_service().session.flush()
+
+        self.plugin.ZCacheable_setManagerId('RAMCache')
+
+        # An initial call to getGroupsForPrincipal(user) leads to recursive
+        # calls to getGroupsForPrincipal(group), via the 'recursive_groups'
+        # groupmaker plugin - I have a strong feeling we'll want to turn this
+        # off, since we already store flattened user -> group memberships in
+        # OGDS, and don't store group -> group memberships anyway.
+        #
+        # For now however, we'll just have to be a bit more deliberate about
+        # tracking call counts in this test.
+
+        calls_before = mock_query_ogds.call_count
+        results = self.plugin.getGroupsForPrincipal(kathi)
+        cached_results = self.plugin.getGroupsForPrincipal(kathi)
+        self.assertEqual(results, cached_results)
+        self.assertEqual(1, mock_query_ogds.call_count - calls_before)
+
+        calls_before = mock_query_ogds.call_count
+        cache_miss = self.plugin.getGroupsForPrincipal(robert)
+        self.assertNotEqual(cache_miss, cached_results)
+        self.assertEqual(1, mock_query_ogds.call_count - calls_before)
+
+        calls_before = mock_query_ogds.call_count
+        negative_cache_miss = self.plugin.getGroupsForPrincipal(franzi)
+        negative_cache_hit = self.plugin.getGroupsForPrincipal(franzi)
+        self.assertEqual(1, mock_query_ogds.call_count - calls_before)
+        self.assertEqual(negative_cache_hit, negative_cache_miss)
 
 
 class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
