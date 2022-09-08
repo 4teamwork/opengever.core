@@ -126,7 +126,8 @@ class GeverGroupsPost(Service):
 
         ogds_group = session.query(Group).get(groupname)
         if ogds_group is None:
-            ogds_group = Group(groupname, is_local=True, title=title)
+            ogds_group = Group(groupname, is_local=True, title=title, groupname=groupname,
+                               external_id=groupname)
         ogds_group.active = True
 
         for userid in users:

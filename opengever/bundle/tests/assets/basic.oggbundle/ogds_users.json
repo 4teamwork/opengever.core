@@ -2,6 +2,8 @@
   {
     "guid": "peter.muster",
     "userid": "peter.muster",
+    "username": "peter.muster",
+    "external_id": "peter.muster",
     "firstname": "Peter",
     "lastname": "Muster",
     "active": false,
@@ -12,6 +14,8 @@
   {
     "guid": "james.green",
     "userid": "james.green",
+    "username": "james.green",
+    "external_id": "james.green",
     "firstname": "James",
     "lastname": "Green",
     "active": false,

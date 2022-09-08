@@ -11,6 +11,20 @@
             "description": "",
             "_zope_schema_type": "Text"
         },
+        "groupname": {
+            "type": "string",
+            "title": "groupname",
+            "maxLength": 255,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
+        "external_id": {
+            "type": "string",
+            "title": "external_id",
+            "maxLength": 255,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
         "active": {
             "type": "boolean",
             "title": "active",
@@ -34,10 +48,14 @@
         }
     },
     "required": [
-        "groupid"
+        "groupid",
+        "groupname",
+        "external_id"
     ],
     "field_order": [
         "groupid",
+        "groupname",
+        "external_id",
         "active",
         "title",
         "is_local"

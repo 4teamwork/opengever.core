@@ -416,6 +416,8 @@ class OGDSUpdater(object):
                     user_attrs[col.name] = value
 
                 user_attrs['active'] = True
+                user_attrs['external_id'] = userid
+                user_attrs['username'] = userid
                 users[userid] = user_attrs
 
         return users
@@ -470,6 +472,8 @@ class OGDSUpdater(object):
                     group_attrs['title'] = self._convert_value(
                         info.get(title_attribute))
                 group_attrs['active'] = True
+                group_attrs['external_id'] = groupid
+                group_attrs['groupname'] = groupid
                 groups[groupid] = group_attrs
 
                 contained_users = set()
@@ -532,6 +536,8 @@ class OGDSUpdater(object):
                 title = safe_unicode(title)
             groups[groupid] = {
                 'groupid': groupid.decode('utf8'),
+                'groupname': groupid.decode('utf8'),
+                'external_id': groupid.decode('utf8'),
                 'title': title,
                 'active': True,
                 'is_local': True,

@@ -28,6 +28,9 @@ class User(Base):
     __tablename__ = 'users'
 
     userid = Column(String(USER_ID_LENGTH), primary_key=True)
+    username = Column(String(USER_ID_LENGTH), nullable=False)
+    external_id = Column(String(USER_ID_LENGTH), unique=True, nullable=False)
+
     active = Column(Boolean, default=True)
     firstname = Column(String(FIRSTNAME_LENGTH))
     lastname = Column(String(LASTNAME_LENGTH))
@@ -61,7 +64,7 @@ class User(Base):
     absent_to = Column(Date)
 
     column_names_to_sync = {
-        'userid', 'active', 'firstname', 'lastname', 'directorate',
+        'userid', 'username', 'external_id', 'active', 'firstname', 'lastname', 'directorate',
         'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',
         'url', 'phone_office', 'phone_fax', 'phone_mobile', 'salutation',
         'title', 'description', 'address1', 'address2', 'zip_code', 'city',

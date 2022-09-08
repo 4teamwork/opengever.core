@@ -275,6 +275,12 @@ class OGDSUserBuilder(SqlObjectBuilder):
             self.groups.append(org_unit.users_group)
         return self
 
+    def before_create(self):
+        if 'username' not in self.arguments:
+            self.arguments['username'] = self.arguments[self.id_argument_name]
+        if 'external_id' not in self.arguments:
+            self.arguments['external_id'] = self.arguments[self.id_argument_name]
+
     def create_object(self):
         obj = super(OGDSUserBuilder, self).create_object()
         if self.groups:
@@ -313,6 +319,12 @@ class OGDSGroupBuilder(SqlObjectBuilder):
         super(OGDSGroupBuilder, self).__init__(session)
         self.arguments['groupid'] = 'testgroup'
         self.arguments['title'] = 'Test Group'
+
+    def before_create(self):
+        if 'groupname' not in self.arguments:
+            self.arguments['groupname'] = self.arguments[self.id_argument_name]
+        if 'external_id' not in self.arguments:
+            self.arguments['external_id'] = self.arguments[self.id_argument_name]
 
 
 builder_registry.register('ogds_group', OGDSGroupBuilder)

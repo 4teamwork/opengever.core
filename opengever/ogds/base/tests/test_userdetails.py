@@ -99,7 +99,8 @@ class TestUserDetails(IntegrationTestCase):
         self.login(self.regular_user, browser)
         user = self.get_ogds_user(self.regular_user)
 
-        group_with_spaces = Group(groupid='with spaces')
+        group_with_spaces = Group(groupid='with spaces', groupname='with spaces',
+                                  external_id='with spaces')
         user.groups.append(group_with_spaces)
 
         browser.open(self.portal, view='@@user-details/kathi.barfuss')
