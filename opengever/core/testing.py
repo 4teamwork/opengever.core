@@ -177,6 +177,7 @@ class OpengeverFixture(PloneSandboxLayer):
         self.installOpengeverProfiles(portal)
         self.setupLanguageTool(portal)
         self.allowAllTypes(portal)
+        self.disable_recursive_groups_plugin(portal)
         deactivate_activity_center()
         deactivate_bumblebee_feature()
 
@@ -215,6 +216,12 @@ class OpengeverFixture(PloneSandboxLayer):
         to do that.
         """
         portal.portal_types['Plone Site'].filter_content_types = False
+
+    def disable_recursive_groups_plugin(self, portal):
+        """Disable the recursive_groups plugin, just as we do in production.
+        """
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.recursive_groups.manage_activateInterfaces([])
 
 
 def functional_session_factory():
