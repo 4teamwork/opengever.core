@@ -55,22 +55,8 @@ class InvitationMailer(Mailer):
             name='custom_invitation_mail_content',
             interface=IWorkspaceSettings)
         if custom_mail_content:
-            content = safe_unicode(custom_mail_content).format(
+            custom_mail_content = safe_unicode(custom_mail_content).format(
                 **content_variables)
-        else:
-            content = translate(
-                _(
-                    u'invitation_mail_summary',
-                    default=u'Hello,\n'
-                    u'\n'
-                    u'You were invited by ${user} to the workspace "${title}" at ${platform}.\n'
-                    u'\n'
-                    u'Please click the following link if you want to accept the invitation:\n'
-                    u'${accept_url}',
-                    mapping=content_variables
-                ),
-                context=self.request
-            )
 
         comment_title = translate(
             _(
@@ -83,10 +69,14 @@ class InvitationMailer(Mailer):
 
         data = {
             'title': title,
-            'content': content.splitlines(),
             'comment_title': comment_title,
             'comment': invitation['comment'].splitlines(),
             'public_url': get_current_admin_unit().public_url,
+            'admin_unit_title': get_current_admin_unit().title,
+            'user': content_variables.get('user'),
+            'workspace_title': content_variables.get('title'),
+            'accept_url': content_variables.get('accept_url'),
+            'custom_mail_content': custom_mail_content and custom_mail_content.splitlines(),
         }
         msg, mail_to, mail_from = self.prepare_mail(
             subject=subject, to_email=invitation['recipient_email'],
