@@ -499,16 +499,7 @@ class KuBContactActor(Actor):
 
     def get_label(self, with_principal=True):
         mapping = KuBClient().get_kub_id_label_mapping()
-        name = mapping.get(self.identifier, self.identifier)
-
-        if with_principal:
-            # XXX Primary_email is currently not returned by the KuB search
-            # endpoint. This should change once we have an endpoint to actually
-            # resolve the contact ids.
-            email = self.contact.get("primary_email", "")
-            if email:
-                return u'{} ({})'.format(name, email)
-        return name
+        return mapping.get(self.identifier, self.identifier)
 
     def get_profile_url(self):
         # XXX This should be an URL pointing to KUB, e.g.

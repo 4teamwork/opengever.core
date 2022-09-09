@@ -102,15 +102,10 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         handler = IParticipationAware(self.dossier)
 
-        self.mock_get_by_id(mocker, self.person_jean)
         self.mock_labels(mocker)
         handler.add_participation(
             self.person_jean, ['regard', 'participation', 'final-drawing'])
-
-        self.mock_get_by_id(mocker, self.org_ftw)
         handler.add_participation(self.org_ftw, ['regard'])
-
-        self.mock_get_by_id(mocker, self.memb_jean_ftw)
         handler.add_participation(self.memb_jean_ftw, ['participation'])
 
         participations_url = "{}/@participations".format(self.dossier.absolute_url())
@@ -167,11 +162,9 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
         handler = IParticipationAware(self.dossier)
 
         self.mock_labels(mocker)
-        self.mock_get_by_id(mocker, self.person_jean)
         handler.add_participation(
             self.person_jean, ['regard', 'participation', 'final-drawing'])
 
-        self.mock_get_by_id(mocker, self.org_ftw)
         handler.add_participation(self.org_ftw, ['regard'])
 
         browser.open(self.dossier.absolute_url() + '/@participations?b_size=1',
