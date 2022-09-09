@@ -119,6 +119,13 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                                  {u'title': u'Participation',
                                   u'token': u'participation'}],
             u'items': [
+                {u'@id': "{}/{}".format(participations_url, self.org_ftw),
+                 u'participant_actor': {
+                    u'@id': u'http://nohost/plone/@actors/' + self.org_ftw,
+                    u'identifier': self.org_ftw},
+                 u'participant_id': self.org_ftw,
+                 u'participant_title': u'4Teamwork',
+                 u'roles': [u'regard']},
                 {u'@id': "{}/{}".format(participations_url, self.person_jean),
                  u'participant_actor': {
                     u'@id': u'http://nohost/plone/@actors/' + self.person_jean,
@@ -133,19 +140,13 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                  u'participant_id': self.memb_jean_ftw,
                  u'participant_title': u'Dupont Jean - 4Teamwork (CEO)',
                  u'roles': [u'participation']},
-                {u'@id': "{}/{}".format(participations_url, self.org_ftw),
-                 u'participant_actor': {
-                    u'@id': u'http://nohost/plone/@actors/' + self.org_ftw,
-                    u'identifier': self.org_ftw},
-                 u'participant_id': self.org_ftw,
-                 u'participant_title': u'4Teamwork',
-                 u'roles': [u'regard']},
             ],
             u'items_total': 3,
             u'primary_participation_roles': []}
 
         browser.open(self.dossier.absolute_url() + '/@participations',
                      method='GET', headers=self.api_headers)
+
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.dossier, method='GET', headers=self.api_headers)
@@ -175,6 +176,23 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(3, len(browser.json['available_roles']))
         self.assertIn('batching', browser.json)
 
+    @browsing
+    def test_participants_are_sorted_by_title(self, mocker, browser):
+        self.login(self.regular_user, browser=browser)
+        handler = IParticipationAware(self.dossier)
+
+        self.mock_labels(mocker)
+        handler.add_participation(self.person_jean, ['regard'])
+        handler.add_participation(self.person_julie, ['participation'])
+        handler.add_participation(self.regular_user.getId(), ['participation'])
+        handler.add_participation(self.dossier_responsible.getId(), ['regard'])
+
+        browser.open(self.dossier, view='@participations',
+                     method='GET', headers=self.api_headers)
+        self.assertEqual([u'B\xe4rfuss K\xe4thi (kathi.barfuss)', u'Dupont Jean', u'Dupont Julie',
+                          u'Ziegler Robert (robert.ziegler)'], [item['participant_title']
+                         for item in browser.json['items']])
+
 
 class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
 
@@ -199,21 +217,21 @@ class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
                                   u'token': u'participation'},
                                  ],
             u'items': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
-                                u'vereinbarungen/dossier-1/@participations/organization:2',
-                        u'participant_id': u'organization:2',
-                        u'participant_title': u'Meier AG',
-                        u'participant_actor': {
-                            u'@id': u'http://nohost/plone/@actors/organization:2',
-                            u'identifier': u'organization:2'},
-                        u'roles': [u'final-drawing']},
-                       {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
                                 u'vereinbarungen/dossier-1/@participations/person:1',
                         u'participant_id': u'person:1',
                         u'participant_title': u'B\xfchler Josef',
                         u'participant_actor': {
                             u'@id': u'http://nohost/plone/@actors/person:1',
                             u'identifier': u'person:1'},
-                        u'roles': [u'final-drawing', u'participation']}],
+                        u'roles': [u'final-drawing', u'participation']},
+                       {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
+                                u'vereinbarungen/dossier-1/@participations/organization:2',
+                        u'participant_id': u'organization:2',
+                        u'participant_title': u'Meier AG',
+                        u'participant_actor': {
+                            u'@id': u'http://nohost/plone/@actors/organization:2',
+                            u'identifier': u'organization:2'},
+                        u'roles': [u'final-drawing']}],
             u'items_total': 2,
             u'primary_participation_roles': []}
         self.assertEqual(expected_json, browser.json)
