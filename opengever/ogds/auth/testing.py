@@ -1,6 +1,7 @@
 from copy import copy
 from opengever.ogds.auth.plugin import OGDSAuthenticationPlugin
 from opengever.testing import IntegrationTestCase
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 
 
 class DisabledPluginTypes(object):
@@ -71,16 +72,32 @@ class DisabledGroupPlugins(DisabledPluginTypes):
     ]
 
 
+class DisabledPropertyPlugins(DisabledPluginTypes):
+
+    types_to_disable = [
+        'IPropertiesPlugin',
+    ]
+
+
 class OGDSAuthTestCase(IntegrationTestCase):
 
     def setUp(self):
         super(OGDSAuthTestCase, self).setUp()
         self.disabled_user_plugins = DisabledUserPlugins(self.uf)
         self.disabled_group_plugins = DisabledGroupPlugins(self.uf)
+        self.disabled_property_plugins = DisabledPropertyPlugins(self.uf)
 
     @property
     def uf(self):
         return self.portal.acl_users
+
+    def move_plugin_to_top(self, plugin_iface, plugin_id):
+        plugins = self.uf.plugins
+        ids = plugins._getPlugins(plugin_iface)
+        new_ids = list(ids)
+        new_ids.remove(plugin_id)
+        new_ids.insert(0, plugin_id)
+        plugins._plugins[plugin_iface] = tuple(new_ids)
 
     def install_ogds_plugin(self):
         plugin = OGDSAuthenticationPlugin('ogds_auth')
@@ -90,7 +107,9 @@ class OGDSAuthTestCase(IntegrationTestCase):
             'IUserEnumerationPlugin',
             'IGroupEnumerationPlugin',
             'IGroupsPlugin',
+            'IPropertiesPlugin',
         ])
+        self.move_plugin_to_top(IPropertiesPlugin, 'ogds_auth')
         self.plugin = plugin
 
     def uninstall_ogds_plugin(self):

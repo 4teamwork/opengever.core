@@ -10,6 +10,7 @@ from Products.CMFCore.permissions import ManagePortal
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # noqa
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from sqlalchemy.sql import select
@@ -43,6 +44,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         IUserEnumerationPlugin,
         IGroupEnumerationPlugin,
         IGroupsPlugin,
+        IPropertiesPlugin,
     )
     meta_type = 'OGDS Authentication Plugin'
     security = ClassSecurityInfo()
@@ -232,6 +234,57 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         self.ZCacheable_set(results, view_name=view_name, keywords=criteria)
         self.log('Found groups: {!r}'.format(results))
         return results
+
+    security.declarePrivate('getPropertiesForUser')
+
+    # IPropertiesPlugin implementation
+    def getPropertiesForUser(self, user, request=None):
+        self.log('Getting properties for user={!r}'.format(user))
+
+        view_name = self.getId() + '_getPropertiesForUser'
+        userid = user.getId()
+        criteria = {'id': userid}
+        cached_info = self.ZCacheable_get(
+            view_name=view_name, keywords=criteria, default=None)
+
+        if cached_info is not None:
+            self.log('Returning cached results from getPropertiesForUser()')
+            return cached_info
+
+        SUPPORTED_PROPS = {
+            'userid': User.userid,
+            'email': User.email,
+            'firstname': User.firstname,
+            'lastname': User.lastname,
+        }
+
+        properties = {}
+        prop_keys, prop_columns = SUPPORTED_PROPS.keys(), SUPPORTED_PROPS.values()
+        query = (
+            select(prop_columns)
+            .where(User.userid == userid)
+            .where(User.active == True)
+        )
+        match = self.query_ogds(query).fetchone()
+
+        if match:
+            properties = dict(zip(
+                prop_keys,
+                [value.encode('utf-8') if value else '' for value in match]
+            ))
+
+            # For now, implement 'fullname' as a "computed property" based
+            # on first and last name. In reality, this is actually stored in
+            # LDAP/AD, and may contain a different value than just a
+            # concatenation of the two. It should therefore be added as an SQL
+            # column in OGDS, and synced from LDAP/AD.
+            properties['fullname'] = ' '.join([
+                properties['firstname'], properties['lastname']])
+
+            self.log("Returning properties %r" % properties)
+
+        self.ZCacheable_set(properties, view_name=view_name, keywords=criteria)
+        return properties
 
     security.declareProtected(ManagePortal, 'manage_updateConfig')
 
