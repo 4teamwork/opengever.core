@@ -10,6 +10,29 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.18.0 (2022-09-13)
+----------------------
+
+New features:
+
+
+- Allow to invite users to a workspace through the workspace-client from GEVER. [elioschmutz]
+
+
+Bug fixes:
+
+
+- Do no longer show previous of older document versions if the new version is not convertable. [elioschmutz]
+
+
+Other changes:
+
+
+- Remove IRestrictedDossier behavior and addable_dossier_types field. [tinagerber]
+- Adjust journal entry title of manual entries. [tinagerber]
+- Setup test environment for workspace client e2e tests [elioschmutz]
+
+
 2022.17.0 (2022-08-30)
 ----------------------
 
