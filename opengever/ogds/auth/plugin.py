@@ -71,6 +71,12 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if self.debug_mode:
             logger.info(msg)
 
+    def to_ascii(self, value):
+        try:
+            return value.encode('ascii')
+        except UnicodeEncodeError:
+            return None
+
     security.declarePrivate('enumerateUsers')
 
     # IUserEnumerationPlugin implementation
@@ -216,10 +222,12 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             .where(groups_users.c.userid == principal_id)
             .where(groups.c.active == True)
         )
-        results = tuple([
-            groupid.encode('utf-8')
+
+        # Omit groups with non-ASCII names
+        results = tuple(filter(None, [
+            self.to_ascii(groupid)
             for groupid, in self.query_ogds(query)
-        ])
+        ]))
 
         self.ZCacheable_set(results, view_name=view_name, keywords=criteria)
         self.log('Found groups: {!r}'.format(results))

@@ -271,6 +271,21 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
 
+    def test_groups_for_principal_filters_non_ascii_groups(self):
+        user = ogds_service().fetch_user('robert.ziegler')
+        create(
+            Builder('ogds_group')
+            .having(groupid=u'gruppe_mit_uml\xe4uten',
+                    title=u'gruppe_mit_uml\xe4uten',
+                    active=True,
+                    users=[user]))
+        ogds_service().session.flush()
+
+        member = api.user.get('robert.ziegler')
+        results = self.plugin.getGroupsForPrincipal(member)
+        expected = ('fa_users', 'projekt_a')
+        self.assertEqual(expected, results)
+
     def test_groups_for_principal_is_cached(self):
         kathi = api.user.get('kathi.barfuss')
         robert = api.user.get('robert.ziegler')
