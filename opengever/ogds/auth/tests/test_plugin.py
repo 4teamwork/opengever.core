@@ -54,6 +54,15 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         expected = ('kathi.barfuss', )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_with_exact_match_is_case_insensitive(self):
+        results = self.plugin.enumerateUsers('KATHI.BARFUSS', exact_match=True)
+        expected = ({
+            'id': 'kathi.barfuss',
+            'login': 'kathi.barfuss',
+            'pluginid': 'ogds_auth',
+        },)
+        self.assertEqual(expected, results)
+
     def test_enum_users_with_exact_match_false_does_ci_substring_search(self):
         results = self.plugin.enumerateUsers('atHI.BArfu', exact_match=False)
         expected = ('kathi.barfuss', )
@@ -152,6 +161,11 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
         results = self.plugin.enumerateGroups('projekt_a', exact_match=True)
+        expected = ('projekt_a', )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_groups_with_exact_match_is_case_insensitive(self):
+        results = self.plugin.enumerateGroups('PROJEKT_A', exact_match=True)
         expected = ('projekt_a', )
         self.assertEqual(expected, self.ids(results))
 

@@ -13,6 +13,7 @@ from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # noqa
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
+from sqlalchemy import func
 from sqlalchemy.sql import select
 from zope.interface import implements
 
@@ -116,7 +117,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if exact_match:
             if not id:
                 raise ValueError('Exact match specified but no ID or login given')
-            query = query.where(User.userid == id)
+            query = query.where(func.lower(User.userid) == id.lower())
         elif id:
             pattern = '%{}%'.format(id)
             query = query.where(User.userid.ilike(pattern))
@@ -178,7 +179,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if exact_match:
             if not id:
                 raise ValueError('Exact match specified but no ID given')
-            query = query.where(Group.groupid == id)
+            query = query.where(func.lower(Group.groupid) == id.lower())
         elif id:
             pattern = '%{}%'.format(id)
             query = query.where(Group.groupid.ilike(pattern))
