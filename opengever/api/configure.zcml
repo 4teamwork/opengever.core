@@ -27,6 +27,7 @@
   <adapter factory=".serializer.GeverSerializeToJson" />
   <adapter factory=".serializer.GeverSerializeToJsonSummary" />
   <adapter factory=".serializer.GeverSerializeFolderToJson" />
+  <adapter factory=".serializer.GeverSerializePrivateFolderToJson" />
   <adapter factory=".serializer.SerializeTeamModelToJson" />
   <adapter factory=".serializer.SerializeUserModelToJson" />
   <adapter factory=".serializer.SerializeGroupModelToJson" />
