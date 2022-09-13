@@ -23,6 +23,8 @@ def create_ogds_user(userid, session=None,
 
     defaults = {'firstname': 'Hugo',
                 'lastname': 'Boss',
+                'external_id': userid,
+                'username': userid,
                 'email': 'hugo@boss.ch'}
 
     options = defaults.copy()
@@ -66,7 +68,7 @@ def ogds_add_user_to_group(user, groupid, session=None):
     try:
         group = session.query(Group).filter_by(groupid=groupid).one()
     except NoResultFound:
-        group = Group(groupid)
+        group = Group(groupid, groupname=groupid, external_id=groupid)
 
     group.users.append(user)
     session.add(group)

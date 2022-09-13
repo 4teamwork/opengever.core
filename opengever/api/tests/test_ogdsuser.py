@@ -69,6 +69,7 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'directorate_abbr': u'Arch',
              u'email': u'foo@example.com',
              u'email2': u'bar@example.com',
+             u'external_id': u'kathi.barfuss',
              u'firstname': u'K\xe4thi',
              u'groups': [{u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                           u'@type': u'virtual.ogds.group',
@@ -130,6 +131,7 @@ class TestOGDSUserGet(IntegrationTestCase):
                          u'title': u'Zentrale Dienste'}],
              u'url': u'http://www.example.com',
              u'userid': u'kathi.barfuss',
+             u'username': u'kathi.barfuss',
              u'zip_code': u'1234'},
             browser.json)
 

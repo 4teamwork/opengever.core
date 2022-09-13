@@ -39,6 +39,8 @@ class Group(Base):
     __tablename__ = 'groups'
 
     groupid = Column(String(GROUP_ID_LENGTH), primary_key=True)
+    groupname = Column(String(GROUP_ID_LENGTH), nullable=False)
+    external_id = Column(String(GROUP_ID_LENGTH), unique=True, nullable=False)
     active = Column(Boolean, default=True)
     title = Column(String(GROUP_TITLE_LENGTH))
 
@@ -51,7 +53,7 @@ class Group(Base):
                      backref=backref('groups', order_by='Group.groupid'))
     teams = relationship(Team, back_populates="group")
 
-    column_names_to_sync = {'groupid', 'active', 'title'}
+    column_names_to_sync = {'groupid', 'groupname', 'external_id', 'active', 'title'}
 
     # A classmethod property needs to be defined on the metaclass
     class __metaclass__(type(Base)):

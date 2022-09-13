@@ -19,7 +19,7 @@ class TestGroupModel(OGDSTestCase):
         groups = self.session.query(Group).all()
         self.assertEqual(len(groups), 5)
 
-        g1 = Group('group-one')
+        g1 = Group('group-one', groupname='group-one', external_id='group-one')
         self.session.add(g1)
 
         groups = self.session.query(Group).all()

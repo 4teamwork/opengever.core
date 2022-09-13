@@ -199,6 +199,8 @@ class MyWorkspaceInvitations(BrowserView):
         email = member.getProperty('email')
         ogds_user = User(
             userid=userid,
+            username=userid,
+            external_id=userid,
             firstname=firstname,
             lastname=lastname,
             email=email)

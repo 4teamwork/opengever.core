@@ -17,6 +17,20 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
+                "username": {
+                    "type": "string",
+                    "title": "username",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
+                "external_id": {
+                    "type": "string",
+                    "title": "external_id",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
                 "active": {
                     "type": [
                         "null",
@@ -278,10 +292,14 @@
             },
             "required": [
                 "userid",
+                "username",
+                "external_id",
                 "guid"
             ],
             "field_order": [
                 "userid",
+                "username",
+                "external_id",
                 "active",
                 "firstname",
                 "lastname",
