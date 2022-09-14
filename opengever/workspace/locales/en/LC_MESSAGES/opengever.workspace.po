@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-06-17 09:57+0000\n"
+"POT-Creation-Date: 2022-09-09 12:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,6 +150,16 @@ msgstr "URL to launch a video conference for this workspace"
 msgid "invitation"
 msgstr "Invitation"
 
+#. Default: "Please click the following link if you want to accept the invitation: ${accept_url}"
+#: ./opengever/workspace/participation/templates/invitation_mail.pt
+msgid "invitation_accept"
+msgstr ""
+
+#. Default: "accept invitation"
+#: ./opengever/workspace/participation/templates/invitation_mail.pt
+msgid "invitation_accept_link"
+msgstr ""
+
 #. German translation: Sie wurden von ${user} in den Teamraum \"${title}\" eingeladen.
 #. Default: "You were invited by ${user} to the workspace \"${title}\"."
 #: ./opengever/workspace/participation/invitation_mailer.py
@@ -168,17 +178,15 @@ msgstr "Message from ${user}:"
 msgid "invitation_mail_subject"
 msgstr "Invitation to workspace \"${title}\""
 
-#. German translation: "Guten Tag,\n\n${user} hat Sie eingeladen, an \"${title}\" auf der Plattform ${platform} teilzunehmen.\n\nWenn Sie die Einladung annehmen möchten, klicken Sie auf folgenden Link:\n${accept_url}""
-#. Default: "Hello,\n\nYou were invited by ${user} to the workspace \"${title}\" at ${platform}.\n\nPlease click the following link if you want to accept the invitation:\n${accept_url}"
-#: ./opengever/workspace/participation/invitation_mailer.py
-msgid "invitation_mail_summary"
+#. Default: "Hello"
+#: ./opengever/workspace/participation/templates/invitation_mail.pt
+msgid "invitation_salutation"
 msgstr ""
-"Hello,\n"
-"\n"
-"You were invited by ${user} to the workspace \"${title}\" at ${platform}.\n"
-"\n"
-"Please click the following link to accept the invitation:\n"
-"${accept_url}"
+
+#. Default: "You were invited by ${user} to the workspace \"${workspace_title}\" at ${platform}."
+#: ./opengever/workspace/participation/templates/invitation_mail.pt
+msgid "invitation_text"
+msgstr ""
 
 #. Default: "Attendees"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
@@ -269,6 +277,7 @@ msgid "label_owner"
 msgstr "Owner"
 
 #. Default: "Related items"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
 #: ./opengever/workspace/todo.py
 #: ./opengever/workspace/workspace_meeting_agenda_item.py
 msgid "label_related_items"
