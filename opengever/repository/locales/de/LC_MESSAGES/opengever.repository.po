@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-08-30 06:01+0000\n"
+"POT-Creation-Date: 2022-12-06 11:08+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -120,35 +120,65 @@ msgstr "nein"
 msgid "label_former_reference"
 msgstr "Früheres Zeichen"
 
+#. Default: "Create dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_contributor_role"
+msgstr "Dossiers hinzufügen lokale Rollen"
+
+#. Default: "Edit dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_editor_role"
+msgstr "Dossiers bearbeiten lokale Rollen"
+
+#. Default: "Manage dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_manager_role"
+msgstr "Dossiers verwalten lokale Rollen"
+
 #. Default: "Create dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_contributor_role"
-msgstr "Dossiers hinzufügen"
+msgid "label_groupnames_with_local_or_inherited_contributor_role"
+msgstr "Dossiers hinzufügen lokale oder vererbte Rollen"
 
 #. Default: "Edit dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_editor_role"
-msgstr "Dossiers bearbeiten"
+msgid "label_groupnames_with_local_or_inherited_editor_role"
+msgstr "Dossiers bearbeiten lokale oder vererbte Rollen"
 
 #. Default: "Manage dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_manager_role"
-msgstr "Dossiers verwalten"
+msgid "label_groupnames_with_local_or_inherited_manager_role"
+msgstr "Dossiers verwalten lokale oder vererbte Rollen"
 
 #. Default: "Reactivate dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_publisher_role"
-msgstr "Dossiers reaktivieren"
+msgid "label_groupnames_with_local_or_inherited_publisher_role"
+msgstr "Dossiers reaktivieren lokale oder vererbte Rollen"
 
 #. Default: "Read dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_reader_role"
-msgstr "Dossiers lesen"
+msgid "label_groupnames_with_local_or_inherited_reader_role"
+msgstr "Dossiers lesen lokale oder vererbte Rollen"
 
 #. Default: "Close dossiers"
 #: ./opengever/repository/browser/excel_export.py
-msgid "label_groupnames_with_reviewer_role"
-msgstr "Dossiers abschliessen"
+msgid "label_groupnames_with_local_or_inherited_reviewer_role"
+msgstr "Dossiers abschliessen lokale oder vererbte Rollen"
+
+#. Default: "Reactivate dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_publisher_role"
+msgstr "Dossiers reaktivieren lokale Rollen"
+
+#. Default: "Read dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_reader_role"
+msgstr "Dossiers lesen lokale Rollen"
+
+#. Default: "Close dossiers local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_reviewer_role"
+msgstr "Dossiers abschliessen lokale Rollen"
 
 #. Default: "Info"
 #: ./opengever/repository/browser/tabbed.py

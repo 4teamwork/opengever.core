@@ -5,6 +5,7 @@ from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.sharing.security import disabled_permission_check
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -83,31 +84,54 @@ def generate_report(request, context):
         u'label_blocked_inheritance',
         default=u'Blocked inheritance',
     ))
-    label_groupnames_with_reader_role = repository_translater(_(
-        u'label_groupnames_with_reader_role',
+    label_groupnames_with_local_reader_role = repository_translater(_(
+        u'label_groupnames_with_local_reader_role',
+        default=u'Read dossiers local',
+    ))
+    label_groupnames_with_local_contributor_role = repository_translater(_(
+        u'label_groupnames_with_local_contributor_role',
+        default=u'Create dossiers local',
+    ))
+    label_groupnames_with_local_editor_role = repository_translater(_(
+        u'label_groupnames_with_local_editor_role',
+        default=u'Edit dossiers local',
+    ))
+    label_groupnames_with_local_reviewer_role = repository_translater(_(
+        u'label_groupnames_with_local_reviewer_role',
+        default=u'Close dossiers local',
+    ))
+    label_groupnames_with_local_publisher_role = repository_translater(_(
+        u'label_groupnames_with_local_publisher_role',
+        default=u'Reactivate dossiers local',
+    ))
+    label_groupnames_with_local_manager_role = repository_translater(_(
+        u'label_groupnames_with_local_manager_role',
+        default=u'Manage dossiers local',
+    ))
+    label_groupnames_with_local_or_inherited_reader_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_reader_role',
         default=u'Read dossiers',
     ))
-    label_groupnames_with_contributor_role = repository_translater(_(
-        u'label_groupnames_with_contributor_role',
+    label_groupnames_with_local_or_inherited_contributor_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_contributor_role',
         default=u'Create dossiers',
     ))
-    label_groupnames_with_editor_role = repository_translater(_(
-        u'label_groupnames_with_editor_role',
+    label_groupnames_with_local_or_inherited_editor_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_editor_role',
         default=u'Edit dossiers',
     ))
-    label_groupnames_with_reviewer_role = repository_translater(_(
-        u'label_groupnames_with_reviewer_role',
+    label_groupnames_with_local_or_inherited_reviewer_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_reviewer_role',
         default=u'Close dossiers',
     ))
-    label_groupnames_with_publisher_role = repository_translater(_(
-        u'label_groupnames_with_publisher_role',
+    label_groupnames_with_local_or_inherited_publisher_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_publisher_role',
         default=u'Reactivate dossiers',
     ))
-    label_groupnames_with_manager_role = repository_translater(_(
-        u'label_groupnames_with_manager_role',
+    label_groupnames_with_local_or_inherited_manager_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_manager_role',
         default=u'Manage dossiers',
     ))
-
     column_map = (
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
         {'id': 'title_de', 'title': label_repositoryfolder_title_de},
@@ -125,12 +149,19 @@ def generate_report(request, context):
         {'id': 'valid_from', 'title': label_valid_from},
         {'id': 'valid_until', 'title': label_valid_until},
         {'id': '__ac_local_roles_block__', 'title': label_blocked_inheritance, 'transform': bool_label, 'default': False},
-        {'id': 'get_groupnames_with_reader_role', 'title': label_groupnames_with_reader_role, 'callable': True},
-        {'id': 'get_groupnames_with_contributor_role', 'title': label_groupnames_with_contributor_role, 'callable': True},
-        {'id': 'get_groupnames_with_editor_role', 'title': label_groupnames_with_editor_role, 'callable': True},
-        {'id': 'get_groupnames_with_reviewer_role', 'title': label_groupnames_with_reviewer_role, 'callable': True},
-        {'id': 'get_groupnames_with_publisher_role', 'title': label_groupnames_with_publisher_role, 'callable': True},
-        {'id': 'get_groupnames_with_manager_role', 'title': label_groupnames_with_manager_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_reader_role', 'title': label_groupnames_with_local_reader_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_contributor_role', 'title': label_groupnames_with_local_contributor_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_editor_role', 'title': label_groupnames_with_local_editor_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_reviewer_role', 'title': label_groupnames_with_local_reviewer_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_publisher_role', 'title': label_groupnames_with_local_publisher_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_manager_role', 'title': label_groupnames_with_local_manager_role, 'callable': True},
+        {'id': 'get_groupnames_with_local_or_inherited_reader_role', 'title': label_groupnames_with_local_or_inherited_reader_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_contributor_role', 'title': label_groupnames_with_local_or_inherited_contributor_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_editor_role', 'title': label_groupnames_with_local_or_inherited_editor_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_reviewer_role', 'title': label_groupnames_with_local_or_inherited_reviewer_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_publisher_role', 'title': label_groupnames_with_local_or_inherited_publisher_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_manager_role', 'title': label_groupnames_with_local_or_inherited_manager_role, 'callable': True},  # noqa
+
     )
 
     # We sort these by reference number to preserve user experienced ordering
@@ -142,11 +173,13 @@ def generate_report(request, context):
     )
     repository_folders = [context] + [brain.getObject() for brain in repository_brains]
 
-    # XXX - the excel importer expects 4 non-meaningful rows
-    return XLSReporter(
-        request,
-        column_map,
-        repository_folders,
-        sheet_title=repository_translater(u'RepositoryRoot'),
-        blank_header_rows=4,
-    )()
+    # We need to disable the permission checks to get the sharing roles
+    with disabled_permission_check():
+        # XXX - the excel importer expects 4 non-meaningful rows
+        return XLSReporter(
+            request,
+            column_map,
+            repository_folders,
+            sheet_title=repository_translater(u'RepositoryRoot'),
+            blank_header_rows=4,
+        )()
