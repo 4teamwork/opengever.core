@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -97,6 +99,20 @@ class TestRepositoryFolderSerializer(IntegrationTestCase):
         self.assertEqual(
             u'plone:%s' % int_id,
             browser.json.get(u'oguid'))
+
+
+class TestPrivateFolderSerializer(IntegrationTestCase):
+    features = ('private', )
+
+    @browsing
+    def test_private_folder_serialization_contains_title(self, browser):
+        membership_tool = api.portal.get_tool('portal_membership')
+        self.login(self.regular_user, browser)
+        membership_tool.createMemberarea()
+        private_folder = get_private_folder()
+        browser.open(private_folder, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(u'Bärfuss Käthi', browser.json.get(u'title'))
 
 
 class TestDossierSerializer(IntegrationTestCase):

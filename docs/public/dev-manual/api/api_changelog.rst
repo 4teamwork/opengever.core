@@ -12,6 +12,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``@participation``: Sort dossier participations by ``participant_title``.
+- Include title in private folder serialization.
 
 2022.18.0 (2022-09-13)
 ----------------------

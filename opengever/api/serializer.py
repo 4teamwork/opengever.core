@@ -28,6 +28,7 @@ from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
+from opengever.private.folder import IPrivateFolder
 from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
@@ -180,6 +181,15 @@ class GeverSerializeFolderToJson(SerializeFolderToJson):
         extend_with_sequence_number(result, self.context, self.request)
 
         drop_inactive_language_fields(result)
+        return result
+
+
+@adapter(IPrivateFolder, IOpengeverBaseLayer)
+class GeverSerializePrivateFolderToJson(GeverSerializeFolderToJson):
+
+    def __call__(self, *args, **kwargs):
+        result = super(GeverSerializePrivateFolderToJson, self).__call__(*args, **kwargs)
+        result['title'] = self.context.title
         return result
 
 
