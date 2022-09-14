@@ -1,8 +1,8 @@
 from ftw.testbrowser import browsing
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 
 
-class TestOfficeconnectorForwardingAPIDisabled(OCIntegrationTestCase):
+class TestOfficeconnectorForwardingAPIDisabled(OCSolrIntegrationTestCase):
 
     features = (
         '!officeconnector-attach',

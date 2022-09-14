@@ -2,11 +2,11 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 import jwt
 
 
-class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
 
     features = ("!officeconnector-checkout", "officeconnector-attach")
 
@@ -157,7 +157,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCIntegrationTestCase):
             self.assertIsNone(oc_url)
 
 
-class TestOfficeconnectorMailAPIWithAttachInTeamraum(OCIntegrationTestCase):
+class TestOfficeconnectorMailAPIWithAttachInTeamraum(OCSolrIntegrationTestCase):
 
     features = ('!officeconnector-checkout', 'officeconnector-attach', 'workspace')
 

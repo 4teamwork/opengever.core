@@ -4,13 +4,13 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 import json
 import jwt
 
 
-class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
 
     features = (
         '!officeconnector-checkout',

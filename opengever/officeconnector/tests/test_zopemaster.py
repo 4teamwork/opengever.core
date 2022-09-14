@@ -4,12 +4,12 @@ from ftw.testing import freeze
 from hashlib import sha256
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_ZOPE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from opengever.testing.assets import path_to_asset
 import jwt
 
 
-class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCSolrIntegrationTestCase):
     features = (
         'officeconnector-attach',
     )
@@ -54,7 +54,7 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithAttach(OCIntegrationTestCase)
         self.assertEquals(file_contents, self.document.file.data)
 
 
-class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCIntegrationTestCase):
+class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCSolrIntegrationTestCase):
     features = (
         'officeconnector-checkout',
     )

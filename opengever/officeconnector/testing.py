@@ -21,7 +21,7 @@ JWT_SIGNING_SECRET_PLONE = '/'.join((JWT_SECRET, 'plone', 'acl_users', 'jwt_auth
 JWT_SIGNING_SECRET_ZOPE = '/'.join((JWT_SECRET, 'acl_users', 'jwt_auth'))
 
 
-class OCIntegrationTestCase(SolrIntegrationTestCase):
+class OCSolrIntegrationTestCase(SolrIntegrationTestCase):
     """Extend SolrIntegrationTestCase with Office Connector specific helpers."""
 
     @contextmanager
