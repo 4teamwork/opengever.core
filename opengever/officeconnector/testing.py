@@ -5,7 +5,7 @@ from opengever.journal.handlers import DOCUMENT_ATTACHED
 from opengever.journal.handlers import DOCUMENT_CHECKED_IN
 from opengever.journal.handlers import DOCUMENT_CHECKED_OUT
 from opengever.journal.tests.utils import get_journal_entry
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.fixtures import JWT_SECRET
 from os import fstat
 from os.path import basename
@@ -21,8 +21,8 @@ JWT_SIGNING_SECRET_PLONE = '/'.join((JWT_SECRET, 'plone', 'acl_users', 'jwt_auth
 JWT_SIGNING_SECRET_ZOPE = '/'.join((JWT_SECRET, 'acl_users', 'jwt_auth'))
 
 
-class OCIntegrationTestCase(IntegrationTestCase):
-    """Extend IntegrationTestCase with Office Connector specific helpers."""
+class OCIntegrationTestCase(SolrIntegrationTestCase):
+    """Extend SolrIntegrationTestCase with Office Connector specific helpers."""
 
     @contextmanager
     def as_officeconnector(self, browser):
