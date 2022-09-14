@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@participation``: Sort dossier participations by ``participant_title``.
 
 2022.18.0 (2022-09-13)
 ----------------------

@@ -38,6 +38,7 @@ from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
 from opengever.kub import is_kub_feature_enabled
+from opengever.kub.client import KuBClient
 from opengever.kub.entity import KuBEntity
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
@@ -48,6 +49,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.team import Team
 from plone import api
 from plone.dexterity.utils import safe_unicode
+from plone.memoize import instance
 from Products.CMFCore.interfaces._tools import IMemberData
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.authservice import IPropertiedUser
@@ -484,24 +486,20 @@ class KuBContactActor(Actor):
     css_class = 'actor-contact'
     actor_type = 'kubcontact'
 
-    def __init__(self, identifier, contact=None):
-        super(KuBContactActor, self).__init__(identifier)
-        self.contact = contact
-
     def corresponds_to(self, user):
         return False
 
-    def get_label(self, with_principal=True):
-        name = self.contact.get("text", "")
+    @instance.memoize
+    def get_contact(self, identifier):
+        return KuBEntity(identifier)
 
-        # XXX Primary_email is currently not returned by the KuB search
-        # endpoint. This should change once we have an endpoint to actually
-        # resolve the contact ids.
-        email = self.contact.get("primary_email", "")
-        if with_principal and email:
-            return u'{} ({})'.format(name, email)
-        else:
-            return name
+    @property
+    def contact(self):
+        return self.get_contact(self.identifier)
+
+    def get_label(self, with_principal=True):
+        mapping = KuBClient().get_kub_id_label_mapping()
+        return mapping.get(self.identifier, self.identifier)
 
     def get_profile_url(self):
         # XXX This should be an URL pointing to KUB, e.g.
@@ -759,14 +757,11 @@ class ActorLookup(object):
 
         return ContactActor(self.identifier, contact=contact)
 
-    def create_kub_contact_actor(self, contact=None):
-        if not contact:
-            try:
-                contact = KuBEntity(self.identifier)
-            except LookupError:
-                return self.create_null_actor()
-
-        return KuBContactActor(self.identifier, contact=contact)
+    def create_kub_contact_actor(self):
+        mapping = KuBClient().get_kub_id_label_mapping()
+        if not mapping.get(self.identifier):
+            return self.create_null_actor()
+        return KuBContactActor(self.identifier)
 
     def create_sql_contact_actor(self, contact=None):
         if not contact:

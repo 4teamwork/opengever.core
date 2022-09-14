@@ -200,6 +200,7 @@ class TestActorLookup(IntegrationTestCase):
 class TestKuBContactActor(KuBIntegrationTestCase):
 
     def test_person_actor_lookup(self, mocker):
+        self.mock_labels(mocker)
         url = self.mock_get_by_id(mocker, self.person_jean)
         self.login(self.regular_user)
         actor = Actor.lookup(self.person_jean)
@@ -211,6 +212,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
                          actor.represents().data)
 
     def test_organization_actor_lookup(self, mocker):
+        self.mock_labels(mocker)
         url = self.mock_get_by_id(mocker, self.org_ftw)
         self.login(self.regular_user)
         actor = Actor.lookup(self.org_ftw)
@@ -221,6 +223,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
         self.assertEqual(KUB_RESPONSES[url], actor.represents().data)
 
     def test_membership_actor_lookup(self, mocker):
+        self.mock_labels(mocker)
         url = self.mock_get_by_id(mocker, self.memb_jean_ftw)
         self.login(self.regular_user)
         actor = Actor.lookup(self.memb_jean_ftw)
@@ -240,7 +243,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
 
     @browsing
     def test_actors_response_for_kubcontact(self, mocker, browser):
-        self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_labels(mocker)
         self.login(self.regular_user, browser=browser)
         url = "{}/@actors/{}".format(self.portal.absolute_url(), self.person_jean)
         browser.open(url, headers=self.api_headers)
@@ -266,6 +269,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
     @browsing
     def test_full_representation_for_kubcontact(self, mocker, browser):
         self.mock_get_by_id(mocker, self.person_jean)
+        self.mock_labels(mocker)
         self.login(self.regular_user, browser=browser)
         url = "{}/@actors/{}?full_representation=true".format(
             self.portal.absolute_url(), self.person_jean)

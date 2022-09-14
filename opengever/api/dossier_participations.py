@@ -1,8 +1,6 @@
 from contextlib import contextmanager
 from opengever.api.actors import serialize_actor_id_to_json_summary
-from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.interfaces import IOpengeverBaseLayer
-from opengever.contact import is_contact_feature_enabled
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.interfaces import IDossierParticipants
@@ -62,16 +60,14 @@ class Participations(object):
             return result
 
         handler = IParticipationAware(self.context)
-        participations = handler.get_participations()
+        participation_data = [IParticipationData(participation)
+                              for participation in handler.get_participations()]
+        participation_data = sorted(participation_data, key=lambda data: data.participant_title)
 
-        if is_contact_feature_enabled():
-            batch = SQLHypermediaBatch(self.request, participations, 'id')
-        else:
-            batch = HypermediaBatch(self.request, participations)
+        batch = HypermediaBatch(self.request, participation_data)
 
         items = []
-        for participation in batch:
-            data = IParticipationData(participation)
+        for data in batch:
             items.append({
                 "@id": '{}/@participations/{}'.format(
                     self.context.absolute_url(), data.participant_id),

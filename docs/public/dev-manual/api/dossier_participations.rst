@@ -46,6 +46,18 @@ Ein Beteiligter kann in verschiedenen Rollen an einem Dossier beteiligt sein. Mi
         ],
         "items": [
           {
+            "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1/@participations/contact:james-bond",
+            "participant_id": "contact:james-bond",
+            "participant_title": "Bond James (james@example.com)",
+            "participant_actor": {
+              "@id": "https://example.org/@actors/contact:james-bond",
+              "identifier": "contact:james-bond"
+            },
+            "roles": [
+              "final-drawing"
+            ]
+          },
+          {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1/@participations/rolf.ziegler",
             "participant_id": "rolf.ziegler",
             "participant_title": "Ziegler Rolf (rolf.ziegler)",
@@ -56,18 +68,6 @@ Ein Beteiligter kann in verschiedenen Rollen an einem Dossier beteiligt sein. Mi
             "roles": [
               "regard",
               "participation"
-            ]
-          },
-          {
-            "@id": "https://example.org/ordnungssystem/fuehrung/dossier-1/@participations/contact:james-bond",
-            "participant_id": "contact:james-bond",
-            "participant_title": "Bond James (james@example.com)",
-            "participant_actor": {
-              "@id": "https://example.org/@actors/contact:james-bond",
-              "identifier": "contact:james-bond"
-            },
-            "roles": [
-              "final-drawing"
             ]
           }
         ],
