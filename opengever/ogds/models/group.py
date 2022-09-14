@@ -28,6 +28,21 @@ groups_users = Table(
 )
 
 
+def create_additional_groups_users_indexes(table, connection, *args, **kw):
+    engine = connection.engine
+    if engine.dialect.name != 'sqlite':
+        # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
+        # that SQLAlchemy produces for this functional index
+        ix = Index('ix_groups_users_userid_lower',
+                   func.lower(groups_users.c.userid))
+        ix.create(engine)
+
+
+event.listen(
+    groups_users, 'after_create',
+    create_additional_groups_users_indexes)
+
+
 class GroupQuery(BaseQuery):
 
     searchable_fields = ['groupid', 'title']

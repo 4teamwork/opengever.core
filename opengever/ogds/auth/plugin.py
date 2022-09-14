@@ -222,7 +222,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         query = (
             select([groups.c.groupid])
             .select_from(groups.join(groups_users))
-            .where(groups_users.c.userid == principal_id)
+            .where(func.lower(groups_users.c.userid) == principal_id.lower())
             .where(groups.c.active == True)
         )
 

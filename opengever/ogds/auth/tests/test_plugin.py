@@ -6,6 +6,7 @@ from opengever.ogds.auth.testing import OGDSAuthTestCase
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from Products.PlonePAS.plugins.ufactory import PloneUser
 
 
 class TestOGDSAuthPluginBase(OGDSAuthTestCase):
@@ -298,6 +299,12 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
 
         member = api.user.get('robert.ziegler')
         results = self.plugin.getGroupsForPrincipal(member)
+        expected = ('fa_users', 'projekt_a')
+        self.assertEqual(expected, results)
+
+    def test_groups_for_principal_is_case_insensitive(self):
+        user = PloneUser('KATHI.BARFUSS')
+        results = self.plugin.getGroupsForPrincipal(user)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
 
