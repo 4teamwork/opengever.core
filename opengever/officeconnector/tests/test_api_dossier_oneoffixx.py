@@ -3,7 +3,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from opengever.testing.assets import path_to_asset
 from pkg_resources import resource_string
 import jwt
@@ -11,7 +11,7 @@ import re
 import xml.etree.ElementTree as ET
 
 
-class TestOfficeconnectorDossierAPIWithOneOffixx(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithOneOffixx(OCSolrIntegrationTestCase):
     features = (
         'officeconnector-checkout',
         'oneoffixx'

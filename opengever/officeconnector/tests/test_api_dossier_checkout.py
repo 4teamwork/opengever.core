@@ -6,13 +6,13 @@ from hashlib import sha256
 from opengever.document.document import Document
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from opengever.testing.assets import path_to_asset
 from zope.annotation.interfaces import IAnnotations
 import jwt
 
 
-class TestOfficeconnectorDossierAPIWithCheckout(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithCheckout(OCSolrIntegrationTestCase):
 
     features = (
         '!officeconnector-attach',

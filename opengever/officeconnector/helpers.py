@@ -1,5 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import escape
 from opengever.base.ip_range import is_in_ip_range
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.behaviors import IBaseDocument
@@ -10,6 +12,7 @@ from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlug
 from ua_parser.user_agent_parser import ParseUserAgent
 from zExceptions import Forbidden
 from zExceptions import NotFound
+from zope.component import getUtility
 from zope.globalrequest import getRequest
 import json
 
@@ -53,8 +56,7 @@ def parse_bcc(request):
     return None
 
 
-def parse_documents(request, context, action):
-    documents = []
+def parse_document_uids(request, context, action):
     if (
             request['REQUEST_METHOD'] == 'GET'
             or request['REQUEST_METHOD'] == 'POST'
@@ -71,21 +73,19 @@ def parse_documents(request, context, action):
         # OfficeConnectorOneOffixxPayload, the document should be in the shadow state
         if not (context.has_file() or context.is_shadow_document()):
             raise NotFound
-
-        documents.append(context)
+        return [api.content.get_uuid(context)]
 
     elif request['REQUEST_METHOD'] == 'POST' and 'BODY' in request:
         payload = json.loads(request['BODY'])
-        paths = payload.get('documents', None)
-
-        for path in paths:
-            # Restricted traversal does not handle unicode paths
-            document = api.content.get(path=str(path))
-
-            if document.has_file():
-                documents.append(document)
-
-    return documents
+        site = api.portal.get()
+        plone_path = '/{}'.format(site.id)
+        paths = [escape(path) if path.startswith(plone_path)
+                 else '{}{}'.format(plone_path, escape(path))
+                 for path in payload.get('documents', [])]
+        filters = ['path:("{}")'.format('" OR "'.join(paths)), '-filename:""']
+        solr = getUtility(ISolrSearch)
+        resp = solr.search(filters=filters, fl=['UID'])
+        return [doc['UID'] for doc in resp.docs]
 
 
 def get_auth_plugin(context):
@@ -172,11 +172,11 @@ def create_oc_url(request, context, payload):
 
     bcc = parse_bcc(request)
 
-    documents = parse_documents(request, context, action)
+    document_uids = parse_document_uids(request, context, action)
 
     flags = parse_flags(request, action)
 
-    if not documents:
+    if not document_uids:
         raise NotFound
 
     # Create a JWT for OfficeConnector - contents:
@@ -188,11 +188,7 @@ def create_oc_url(request, context, payload):
         'oc_' + payload['action'],
     ))
 
-    # Create a multi-document payload
-    payload['documents'] = []
-
-    for document in documents:
-        payload['documents'].append(api.content.get_uuid(document))
+    payload['documents'] = document_uids
 
     if bcc:
         payload['bcc'] = bcc

@@ -2,11 +2,11 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 import jwt
 
 
-class TestOfficeconnectorForwardingAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorForwardingAPIWithAttach(OCSolrIntegrationTestCase):
     features = (
         'officeconnector-attach',
     )

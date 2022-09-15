@@ -1,13 +1,16 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
+from plone.uuid.interfaces import IUUID
 import json
 import jwt
 
 
-class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
+class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
 
     features = (
         '!officeconnector-checkout',
@@ -564,6 +567,34 @@ class TestOfficeconnectorDossierAPIWithAttach(OCIntegrationTestCase):
         raw_token = url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         self.assertEqual(u'-links', token['flags'])
+
+    @browsing
+    def test_attach_multiple_documents_works_for_external_user(self, browser):
+        external_user = create(Builder('user').with_userid('external.user').with_roles([]))
+        with self.login(self.administrator):
+            self.meeting_dossier.__ac_local_roles_block__ = True
+            self.set_roles(self.leaf_repofolder, 'external.user', ['Reader'])
+            docs =['/'.join(doc.getPhysicalPath()) for doc
+                   in [self.document, self.empty_document, self.mail_eml, self.meeting_document]]
+            segments = list(self.subdocument.getPhysicalPath())
+            segments.remove('plone')
+            docs.append('/'.join(segments))
+            data =  json.dumps({'documents': docs})
+
+        self.login(external_user, browser)
+        browser.open(
+            self.portal,
+            method='POST',
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+            data=data
+        )
+        url = browser.json['url']
+        raw_token = url.split(':')[-1]
+        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        with self.login(self.regular_user):
+            self.assertEqual([IUUID(self.document), IUUID(self.subdocument), IUUID(self.mail_eml)],
+                             token['documents'])
 
     @browsing
     def test_attach_multiple_documents_does_not_set_links_flag(self, browser):

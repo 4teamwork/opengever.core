@@ -3,12 +3,12 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
-from opengever.officeconnector.testing import OCIntegrationTestCase
+from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from plone.locking.interfaces import ILockable
 import jwt
 
 
-class TestDocumentForceUnlock(OCIntegrationTestCase):
+class TestDocumentForceUnlock(OCSolrIntegrationTestCase):
 
     features = ('officeconnector-checkout',)
 
