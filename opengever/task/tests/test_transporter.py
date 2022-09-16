@@ -1,9 +1,11 @@
 from datetime import datetime
 from ftw.testing import freeze
+from opengever.document.interfaces import IDocumentSettings
 from opengever.document.versioner import Versioner
 from opengever.task.interfaces import ITaskDocumentsTransporter
 from opengever.task.task import ITask
 from opengever.testing import IntegrationTestCase
+from plone import api
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
@@ -94,3 +96,23 @@ class TestTransporter(IntegrationTestCase):
                          str(self.document.created()))
         self.assertEqual('2017/10/16 02:00:00 GMT+2',
                          str(doc.created()))
+
+    def test_initialize_preserved_as_paper_with_current_default(self):
+        self.login(self.regular_user)
+        intids = getUtility(IIntIds)
+        ids = [intids.getId(self.document)]
+
+        self.assertTrue(self.document.preserved_as_paper)
+
+        # change default to false
+        api.portal.set_registry_record(
+            name='preserved_as_paper_default', interface=IDocumentSettings,
+            value=False)
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            doc_transporter = getUtility(ITaskDocumentsTransporter)
+            doc_transporter.copy_documents_from_remote_task(
+                self.task.get_sql_object(), self.seq_subtask_1, documents=ids)
+
+        doc = self.seq_subtask_1.getFolderContents()[0].getObject()
+        self.assertFalse(doc.preserved_as_paper)

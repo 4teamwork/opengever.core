@@ -209,6 +209,10 @@ class DexterityFieldDataCollector(object):
     This adapter is used by the transporter utility.
     """
 
+    # Each client has its own preserved_as_paper default, therefore it
+    # shouldn't be copied to the other client
+    skipped_fields = ['preserved_as_paper']
+
     def __init__(self, context):
         self.context = context
 
@@ -245,6 +249,9 @@ class DexterityFieldDataCollector(object):
             for name, field in schema.getFieldsInOrder(schemata):
                 if IPropertySheetField.providedBy(field):
                     # Custom properties don't get transported
+                    continue
+
+                if name in self.skipped_fields:
                     continue
 
                 value = subdata.get(name, _marker)
