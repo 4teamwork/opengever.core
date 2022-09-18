@@ -395,6 +395,16 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         }
         self.assertEqual(expected, results)
 
+    def test_get_properties_for_user_also_works_for_groups(self):
+        group = PloneUser('projekt_a')
+        group._isGroup = True
+        results = self.plugin.getPropertiesForUser(group)
+        expected = {
+            'groupid': 'projekt_a',
+            'title': 'Projekt A',
+        }
+        self.assertEqual(expected, results)
+
     def test_get_properties_for_user_with_no_match_returns_empty_dict(self):
         member_not_in_ogds = api.user.get(TEST_USER_ID)
         results = self.plugin.getPropertiesForUser(member_not_in_ogds)

@@ -294,8 +294,12 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         self.log('Getting properties for user={!r}'.format(user))
 
         view_name = self.getId() + '_getPropertiesForUser'
-        userid = user.getId()
-        criteria = {'id': userid}
+        principal_id = user.getId()
+        is_group = user.isGroup()
+        criteria = {
+            'id': principal_id,
+            'is_group': is_group,
+        }
         cached_info = self.ZCacheable_get(
             view_name=view_name, keywords=criteria, default=None)
 
@@ -303,15 +307,24 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log('Returning cached results from getPropertiesForUser()')
             return cached_info
 
-        userid = safe_unicode(userid)
+        principal_id = safe_unicode(principal_id)
+
+        supported_props = self.USER_PROPS
+        id_column = User.userid
+        active_column = User.active
+
+        if is_group:
+            supported_props = self.GROUP_PROPS
+            id_column = Group.groupid
+            active_column = Group.active
 
         properties = {}
         prop_keys, prop_columns = (
-            self.USER_PROPS.keys(), self.USER_PROPS.values())
+            supported_props.keys(), supported_props.values())
         query = (
             select(prop_columns)
-            .where(func.lower(User.userid) == userid.lower())
-            .where(User.active == True)
+            .where(func.lower(id_column) == principal_id.lower())
+            .where(active_column == True)
         )
         match = self.query_ogds(query).fetchone()
 
@@ -326,8 +339,9 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             # LDAP/AD, and may contain a different value than just a
             # concatenation of the two. It should therefore be added as an SQL
             # column in OGDS, and synced from LDAP/AD.
-            properties['fullname'] = ' '.join([
-                properties['firstname'], properties['lastname']])
+            if not is_group:
+                properties['fullname'] = ' '.join([
+                    properties['firstname'], properties['lastname']])
 
             self.log("Returning properties %r" % properties)
 
