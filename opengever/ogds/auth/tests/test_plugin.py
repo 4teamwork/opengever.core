@@ -403,6 +403,11 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         }
         self.assertEqual(expected, results)
 
+    def test_get_properties_for_user_is_case_insensitive(self):
+        user = PloneUser('KATHI.BARFUSS')
+        results = self.plugin.getPropertiesForUser(user)
+        self.assertEqual('kathi.barfuss', results['userid'])
+
     def test_get_properties_for_user_is_cached(self):
         kathi = api.user.get('kathi.barfuss')
         robert = api.user.get('robert.ziegler')

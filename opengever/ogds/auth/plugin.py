@@ -263,7 +263,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         prop_keys, prop_columns = SUPPORTED_PROPS.keys(), SUPPORTED_PROPS.values()
         query = (
             select(prop_columns)
-            .where(User.userid == userid)
+            .where(func.lower(User.userid) == userid.lower())
             .where(User.active == True)
         )
         match = self.query_ogds(query).fetchone()
