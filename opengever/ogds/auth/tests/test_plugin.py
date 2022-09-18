@@ -7,6 +7,7 @@ from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from Products.PlonePAS.plugins.ufactory import PloneUser
+from zope.component import getMultiAdapter
 
 
 class TestOGDSAuthPluginBase(OGDSAuthTestCase):
@@ -99,6 +100,25 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'robert.ziegler',
             'service.user',
             'webaction.manager',
+        )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_users_attribute_search_with_exact_match_true(self):
+        results = self.plugin.enumerateUsers(
+            firstname='J\xc3\xbcRGEN', exact_match=True)
+        expected = (
+            'jurgen.fischer',
+            'jurgen.konig',
+        )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_users_attribute_search_with_exact_match_false(self):
+        results = self.plugin.enumerateUsers(lastname='LER')
+        expected = (
+            'franzi.muller',
+            'fridolin.hugentobler',
+            'nicole.kohler',
+            'robert.ziegler',
         )
         self.assertEqual(expected, self.ids(results))
 
@@ -197,6 +217,22 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
             'projekt_laeaer',
             'rk_inbox_users',
             'rk_users'
+        )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_groups_attribute_search_with_exact_match_true(self):
+        results = self.plugin.enumerateGroups(
+            title='PROJEKT A', exact_match=True)
+        expected = ('projekt_a', )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_groups_attribute_search_with_exact_match_false(self):
+        results = self.plugin.enumerateGroups(title='USERS')
+        expected = (
+            'fa_inbox_users',
+            'fa_users',
+            'rk_inbox_users',
+            'rk_users',
         )
         self.assertEqual(expected, self.ids(results))
 
@@ -491,3 +527,27 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
             user = api.user.get('kathi.barfuss')
             self.assertEqual(
                 'totally.unique@example.org', user.getProperty('email'))
+
+    def test_pas_search_by_attribute(self):
+        """This covers functionality needed in og.mail.browser.inbound
+        """
+        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user.email = u'totally.unique@example.org'
+        ogds_service().session.flush()
+
+        with self.disabled_property_plugins, self.disabled_user_plugins:
+            self.install_ogds_plugin()
+            pas_search = getMultiAdapter(
+                (self.portal, self.request), name='pas_search')
+            matches = pas_search.searchUsers(
+                email='totally.unique@example.org', exact_match=False)
+
+            expected = [{
+                'id': 'kathi.barfuss',
+                'login': 'kathi.barfuss',
+                'pluginid': 'ogds_auth',
+                'principal_type': 'user',
+                'title': 'kathi.barfuss',
+                'userid': 'kathi.barfuss',
+            }]
+            self.assertEqual(expected, matches)

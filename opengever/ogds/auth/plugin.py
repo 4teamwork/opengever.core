@@ -7,6 +7,7 @@ from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from Products.CMFCore.permissions import ManagePortal
+from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
@@ -61,6 +62,18 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
     manage_config = PageTemplateFile('www/config', globals(),
                                      __name__='manage_config')
 
+    # Supported properties for search and enumeration
+    USER_PROPS = {
+        'userid': User.userid,
+        'email': User.email,
+        'firstname': User.firstname,
+        'lastname': User.lastname,
+    }
+    GROUP_PROPS = {
+        'groupid': Group.groupid,
+        'title': Group.title,
+    }
+
     def __init__(self, id_, title=None):
         self._setId(id_)
         self.title = title
@@ -108,6 +121,10 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if login and (not id):
             id = login
 
+        id = safe_unicode(id)
+        for key, value in kw.items():
+            kw[key] = safe_unicode(value)
+
         query = (
             select([User.userid])
             .where(User.active == True)
@@ -115,12 +132,26 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         )
 
         if exact_match:
-            if not id:
-                raise ValueError('Exact match specified but no ID or login given')
-            query = query.where(func.lower(User.userid) == id.lower())
-        elif id:
-            pattern = '%{}%'.format(id)
-            query = query.where(User.userid.ilike(pattern))
+            if not (id or kw):
+                raise ValueError('Exact match specified but no criteria given')
+            if id:
+                query = query.where(func.lower(User.userid) == id.lower())
+
+            for key, value in kw.items():
+                column = self.USER_PROPS.get(key)
+                if column:
+                    query = query.where(func.lower(column) == value.lower())
+
+        else:
+            if id:
+                pattern = u'%{}%'.format(id)
+                query = query.where(User.userid.ilike(pattern))
+
+            for key, value in kw.items():
+                column = self.USER_PROPS.get(key)
+                if column:
+                    pattern = u'%{}%'.format(value)
+                    query = query.where(column.ilike(pattern))
 
         if isinstance(max_results, int):
             query = query.limit(max_results)
@@ -170,6 +201,10 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log('Returning cached results from enumerateGroups()')
             return cached_info
 
+        id = safe_unicode(id)
+        for key, value in kw.items():
+            kw[key] = safe_unicode(value)
+
         query = (
             select([Group.groupid])
             .where(Group.active == True)
@@ -177,12 +212,26 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         )
 
         if exact_match:
-            if not id:
-                raise ValueError('Exact match specified but no ID given')
-            query = query.where(func.lower(Group.groupid) == id.lower())
-        elif id:
-            pattern = '%{}%'.format(id)
-            query = query.where(Group.groupid.ilike(pattern))
+            if not (id or kw):
+                raise ValueError('Exact match specified but no criteria given')
+            if id:
+                query = query.where(func.lower(Group.groupid) == id.lower())
+
+            for key, value in kw.items():
+                column = self.GROUP_PROPS.get(key)
+                if column:
+                    query = query.where(func.lower(column) == value.lower())
+
+        else:
+            if id:
+                pattern = u'%{}%'.format(id)
+                query = query.where(Group.groupid.ilike(pattern))
+
+            for key, value in kw.items():
+                column = self.GROUP_PROPS.get(key)
+                if column:
+                    pattern = u'%{}%'.format(value)
+                    query = query.where(column.ilike(pattern))
 
         if isinstance(max_results, int):
             query = query.limit(max_results)
@@ -218,6 +267,8 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log('Returning cached results from getGroupsForPrincipal()')
             return cached_info
 
+        principal_id = safe_unicode(principal_id)
+
         groups = Group.__table__
         query = (
             select([groups.c.groupid])
@@ -252,15 +303,11 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log('Returning cached results from getPropertiesForUser()')
             return cached_info
 
-        SUPPORTED_PROPS = {
-            'userid': User.userid,
-            'email': User.email,
-            'firstname': User.firstname,
-            'lastname': User.lastname,
-        }
+        userid = safe_unicode(userid)
 
         properties = {}
-        prop_keys, prop_columns = SUPPORTED_PROPS.keys(), SUPPORTED_PROPS.values()
+        prop_keys, prop_columns = (
+            self.USER_PROPS.keys(), self.USER_PROPS.values())
         query = (
             select(prop_columns)
             .where(func.lower(User.userid) == userid.lower())
