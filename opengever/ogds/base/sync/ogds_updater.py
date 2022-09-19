@@ -286,6 +286,12 @@ class OGDSUpdater(object):
                     logger.info('Added user %s into group %s.', userid, groupid)
                 modified_count += 1
 
+        for deleted in deleted_mappings:
+            group = ogds_groups[deleted['groupid']]
+            group.users = []
+            logger.info('Removed all users from group %s.', deleted['groupid'])
+            modified_count += 1
+
         logger.info('Groups added: %s', len(added_mappings))
         logger.info('Groups deactivated: %s', len(deleted_mappings))
         logger.info('Groups modified: %s', len(modified_mappings))

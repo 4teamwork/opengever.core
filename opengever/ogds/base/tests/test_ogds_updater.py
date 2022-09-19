@@ -20,6 +20,7 @@ from plone import api
 from plone.app.testing import TEST_USER_ID
 from zope.annotation import IAnnotations
 from zope.component import getUtility
+import transaction
 
 
 FAKE_LDAP_USERFOLDER = FakeLDAPUserFolder()
@@ -217,6 +218,33 @@ class TestOGDSUpdater(FunctionalTestCase):
         self.assertItemsEqual(
             [ogds.fetch_user('sk1m2'), ogds.fetch_user('sk2m2')],
             og_mandant2_users.users)
+
+    def test_removes_memberships_when_deactivating_groups(self):
+        user1 = create(Builder('ldapuser').named('user1'))
+        user2 = create(Builder('ldapuser').named('user2'))
+
+        FAKE_LDAP_USERFOLDER.users = [user1, user2]
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup')
+                   .named('group1')
+                   .with_members([user1, user2])),
+        ]
+
+        updater = IOGDSUpdater(self.portal)
+
+        updater.import_users()
+        updater.import_groups()
+
+        ogds = ogds_service()
+        group1 = ogds.fetch_group('group1')
+        self.assertTrue(group1.active)
+        self.assertEqual(['user1', 'user2'], [user.userid for user in group1.users])
+
+        FAKE_LDAP_USERFOLDER.groups = []
+        updater.import_groups()
+        transaction.commit()
+        self.assertFalse(group1.active)
+        self.assertEqual([], group1.users)
 
     def test_user_import_handles_unicode_values_properly(self):
         klaus = create(Builder('ldapuser')

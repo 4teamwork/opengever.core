@@ -1,0 +1,1 @@
+Remove group memberships in ogds sync when ldap group is deactivated. [tinagerber]
