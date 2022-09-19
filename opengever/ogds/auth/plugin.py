@@ -40,7 +40,18 @@ def addOGDSAuthenticationPlugin(self, id_, title=None, REQUEST=None):
 
 
 class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
-    """Plone PAS plugin for authentication against OGDS.
+    """Plone PAS plugin to enumerate users and groups from OGDS.
+
+    This plugin aims to replace parts of the functionality provided by the
+    LDAP/AD plugins from P.LDAPMultiPlugins, so that we can eventually
+    remove those from our stack.
+
+    It acts as a user/group source backed by OGDS, capable of enumerating
+    users, groups, group memberships and properties.
+
+    This plugin does not perform authentication itself, but instead requires
+    there to be some other IAuthenticationPlugin that is capable of
+    authenticating users for this deployment (e.g. cas_auth).
     """
     implements(
         IUserEnumerationPlugin,
