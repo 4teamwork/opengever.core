@@ -1,7 +1,6 @@
 from copy import copy
-from opengever.ogds.auth.plugin import OGDSAuthenticationPlugin
+from opengever.ogds.auth.plugin import install_ogds_auth_plugin
 from opengever.testing import IntegrationTestCase
-from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 
 
 class DisabledPluginTypes(object):
@@ -91,25 +90,13 @@ class OGDSAuthTestCase(IntegrationTestCase):
     def uf(self):
         return self.portal.acl_users
 
-    def move_plugin_to_top(self, plugin_iface, plugin_id):
-        plugins = self.uf.plugins
-        ids = plugins._getPlugins(plugin_iface)
-        new_ids = list(ids)
-        new_ids.remove(plugin_id)
-        new_ids.insert(0, plugin_id)
-        plugins._plugins[plugin_iface] = tuple(new_ids)
-
     def install_ogds_plugin(self):
-        plugin = OGDSAuthenticationPlugin('ogds_auth')
-        self.uf._setObject(plugin.getId(), plugin)
+        install_ogds_auth_plugin()
         plugin = self.uf['ogds_auth']
-        plugin.manage_activateInterfaces([
-            'IUserEnumerationPlugin',
-            'IGroupEnumerationPlugin',
-            'IGroupsPlugin',
-            'IPropertiesPlugin',
-        ])
-        self.move_plugin_to_top(IPropertiesPlugin, 'ogds_auth')
+
+        # Disable RAMCache by default, tests will enable it when needed
+        plugin.ZCacheable_setManagerId(None)
+
         self.plugin = plugin
 
     def uninstall_ogds_plugin(self):

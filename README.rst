@@ -1365,6 +1365,8 @@ This plugin serves as a replacement for the LDAP/AD PAS plugins to enumerate use
 
 The plugin does not perform authentication itself. It therefore requires another ``IAuthenticationPlugin`` to be present, activated and capable to authenticate users for the given deployment.
 
+For programmatic installation during setup, the ``install_ogds_auth_plugin`` helper function in ``opengever.ogds.auth.plugin`` may be used to perform the steps listed above.
+
 
 Content creation
 ~~~~~~~~~~~~~~~~

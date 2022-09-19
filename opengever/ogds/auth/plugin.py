@@ -6,6 +6,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
+from plone import api
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
@@ -29,14 +30,40 @@ manage_addOGDSAuthenticationPlugin = PageTemplateFile(
 def addOGDSAuthenticationPlugin(self, id_, title=None, REQUEST=None):
     """Add an OGDS authentication plugin
     """
-    plugin = OGDSAuthenticationPlugin(id_, title)
-    self._setObject(plugin.getId(), plugin)
+    configure_after_creation = bool(
+        REQUEST.form.get('configure_after_creation', False))
+
+    install_ogds_auth_plugin(id_, title, configure_after_creation)
 
     if REQUEST is not None:
         REQUEST['RESPONSE'].redirect(
             '{}/manage_workspace'
             '?manage_tabs_message=OGDS+authentication+plugin+added.'.format(
                 self.absolute_url()))
+
+
+def install_ogds_auth_plugin(id_='ogds_auth', title=None,
+                             configure_after_creation=True):
+    acl_users = api.portal.get_tool('acl_users')
+
+    if id_ not in acl_users.objectIds():
+        plugin = OGDSAuthenticationPlugin(id_, title)
+        acl_users._setObject(plugin.getId(), plugin)
+        plugin = acl_users[plugin.getId()]
+
+        if configure_after_creation:
+            plugin.ZCacheable_setManagerId('RAMCache')
+
+            plugin.manage_activateInterfaces([
+                'IUserEnumerationPlugin',
+                'IGroupEnumerationPlugin',
+                'IGroupsPlugin',
+                'IPropertiesPlugin',
+            ])
+
+            # Move properties plugin to top position
+            while not acl_users.plugins.listPluginIds(IPropertiesPlugin)[0] == plugin.getId():
+                acl_users.plugins.movePluginsUp(IPropertiesPlugin, [plugin.getId()])
 
 
 class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
