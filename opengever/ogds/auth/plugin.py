@@ -131,6 +131,12 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         except UnicodeEncodeError:
             return None
 
+    def known_properties(self, principal_type):
+        if principal_type == 'user':
+            return self.USER_PROPS.keys()
+        else:
+            return self.GROUP_PROPS.keys()
+
     security.declarePrivate('enumerateUsers')
 
     # IUserEnumerationPlugin implementation
@@ -153,6 +159,11 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if cached_info is not None:
             self.log('Returning cached results from enumerateUsers()')
             return cached_info
+
+        # Unknown search critera - must not return any results
+        if any((key not in self.known_properties('user') for key in kw)):
+            self.ZCacheable_set((), view_name=view_name, keywords=criteria)
+            return ()
 
         results = ()
 
@@ -238,6 +249,11 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         if cached_info is not None:
             self.log('Returning cached results from enumerateGroups()')
             return cached_info
+
+        # Unknown search critera - must not return any results
+        if any((key not in self.known_properties('group') for key in kw)):
+            self.ZCacheable_set((), view_name=view_name, keywords=criteria)
+            return ()
 
         id = safe_unicode(id)
         for key, value in kw.items():

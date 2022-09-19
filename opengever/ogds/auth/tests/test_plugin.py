@@ -103,6 +103,11 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_with_unknown_search_criteria_returns_empty_tuple(self):
+        results = self.plugin.enumerateUsers(unkown_attr='foo')
+        expected = ()
+        self.assertEqual(expected, results)
+
     def test_enum_users_attribute_search_with_exact_match_true(self):
         results = self.plugin.enumerateUsers(
             firstname='J\xc3\xbcRGEN', exact_match=True)
@@ -219,6 +224,11 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
             'rk_users'
         )
         self.assertEqual(expected, self.ids(results))
+
+    def test_enum_groups_with_unknown_search_criteria_returns_empty_tuple(self):
+        results = self.plugin.enumerateGroups(unkown_attr='foo')
+        expected = ()
+        self.assertEqual(expected, results)
 
     def test_enum_groups_attribute_search_with_exact_match_true(self):
         results = self.plugin.enumerateGroups(
