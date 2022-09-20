@@ -8,7 +8,6 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_main_dossier
 from opengever.journal.handlers import journal_entry_factory
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
-from opengever.workspace import DEACTIVATE_WORKSPACE_TRANSITION
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -34,7 +33,6 @@ from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
-import json
 import sys
 import transaction
 

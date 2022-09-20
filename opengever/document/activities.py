@@ -1,7 +1,6 @@
 from opengever.activity import ACTIVITY_TRANSLATIONS
 from opengever.activity.base import BaseActivity
 from opengever.document import _
-from opengever.document.versioner import Versioner
 from opengever.ogds.base.actor import Actor
 
 
