@@ -2,6 +2,8 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
@@ -9,6 +11,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseSupported
 from opengever.base.security import elevated_privileges
+from opengever.base.solr import OGSolrDocument
 from opengever.contact.models import Participation
 from opengever.contact.participation import ParticipationWrapper
 from opengever.document.behaviors import IBaseDocument
@@ -240,18 +243,22 @@ class DossierContainer(Container):
             'path': dict(query=dossier_path, depth=depth),
             'object_provides': IDossierMarker.__identifier__,
         }
-        if sort_on:
-            query['sort_on'] = sort_on
-        if sort_order:
-            query['sort_order'] = sort_order
+        sort_order = 'asc' if sort_order == 'ascending' else 'desc'
 
         if review_state:
             query['review_state'] = review_state
 
+        solr = getUtility(ISolrSearch)
         if unrestricted:
-            subdossiers = self.portal_catalog.unrestrictedSearchResults(query)
+            search_method = solr.unrestricted_search
         else:
-            subdossiers = self.portal_catalog(query)
+            search_method = solr.search
+
+        response = search_method(
+            filters=make_filters(**query),
+            sort=' '.join((sort_on, sort_order)),
+        )
+        subdossiers = [OGSolrDocument(d) for d in response.docs]
 
         # Remove the object itself from the list of subdossiers
         subdossiers = [

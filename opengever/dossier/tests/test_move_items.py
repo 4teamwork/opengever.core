@@ -46,7 +46,7 @@ class MoveItemsHelper(object):
         form.handle_submit(form, object)
 
 
-class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
+class TestMoveItems(SolrIntegrationTestCase, MoveItemsHelper):
 
     def test_cant_move_items_to_invalid_target(self):
         self.login(self.manager)
@@ -1554,7 +1554,7 @@ class TestMoveItem(IntegrationTestCase):
         assert_message(u'{} was moved.'.format(doc_title.decode('utf-8')))
 
 
-class TestDossierMovabilityChecker(IntegrationTestCase):
+class TestDossierMovabilityChecker(SolrIntegrationTestCase):
 
     def test_dossier_structure_depth(self):
         self.login(self.manager)

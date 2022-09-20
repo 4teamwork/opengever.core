@@ -14,6 +14,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
@@ -24,7 +25,7 @@ import pytz
 import transaction
 
 
-class TestDossierContainer(IntegrationTestCase):
+class TestDossierContainer(SolrIntegrationTestCase):
 
     def test_is_all_supplied_without_any_subdossiers(self):
         self.login(self.dossier_responsible)

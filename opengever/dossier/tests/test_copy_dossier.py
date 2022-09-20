@@ -21,6 +21,7 @@ class TestCopyDossiers(SolrIntegrationTestCase):
 
         dossier_copy = api.content.copy(
             source=self.empty_dossier, target=self.empty_repofolder)
+        self.commit_solr()
 
         # subdossier is copied
         self.assertEqual(1, len(dossier_copy.get_subdossiers()))

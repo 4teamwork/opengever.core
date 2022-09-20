@@ -5,12 +5,12 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from plone import api
 import json
 
 
-class TestMove(IntegrationTestCase):
+class TestMove(SolrIntegrationTestCase):
 
     def assert_can_move(self, browser, source, target):
         uid = source.UID()
