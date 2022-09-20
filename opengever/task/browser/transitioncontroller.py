@@ -304,10 +304,18 @@ class TaskTransitionController(BrowserView):
     @guard('task-transition-in-progress-cancelled')
     def progress_to_cancelled_guard(self, c, include_agency):
         """Checks if:
-        The task is generated from tasktemplate and its the main task.
+        - The task is generated from tasktemplate and its the main task
+        - The current user is the issuer
         """
-        return self.context.is_from_tasktemplate and not \
-            ITask.providedBy(aq_parent(self.context))
+        if self.context.is_from_tasktemplate:
+            return not ITask.providedBy(aq_parent(self.context))
+
+        if include_agency:
+            return (c.current_user.is_issuer
+                    or c.current_user.in_issuing_orgunits_inbox_group
+                    or c.current_user.is_administrator)
+
+        return c.current_user.is_issuer
 
     @action('task-transition-in-progress-cancelled')
     def progress_to_cancelled_action(self, transition, c):

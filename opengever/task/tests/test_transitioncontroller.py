@@ -197,19 +197,51 @@ class TestOpenCancelledGuard(IntegrationTestCase):
 class TestInProgressCancelledGuard(IntegrationTestCase):
     transition = 'task-transition-in-progress-cancelled'
 
-    def test_not_available_for_regular_task(self):
+    def test_only_available_when_user_is_issuer(self):
         self.login(self.regular_user)
         self.set_workflow_state('task-state-in-progress', self.task)
 
+        # not issuer
         self.assertNotIn(
             self.transition, self.get_workflow_transitions_for(self.task))
 
-    def test_not_available_for_adminstrators_on_regular_task(self):
-        self.login(self.administrator)
+        # issuer
+        self.login(self.dossier_responsible)
+        self.assertIn(
+            self.transition, self.get_workflow_transitions_for(self.task))
+
+    @browsing
+    def test_administrator_has_agency_permission(self, browser):
+        self.login(self.administrator, browser=browser)
         self.set_workflow_state('task-state-in-progress', self.task)
 
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
         self.assertNotIn(
-            self.transition, self.get_workflow_transitions_for(self.task))
+            translated(self.transition), browser.css('.regular_buttons a').text)
+
+    @browsing
+    def test_limited_admin_has_agency_permission(self, browser):
+        self.login(self.limited_admin, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            translated(self.transition), browser.css('.regular_buttons a').text)
+
+    @browsing
+    def test_issuing_inbox_group_has_agency_permission(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+
+        self.assertIn(translated(self.transition), browser.css('.agency_buttons a').text)
+        self.assertNotIn(
+            translated(self.transition), browser.css('.regular_buttons a').text)
 
     def test_only_available_for_tasktemplate_process_main_tasks(self):
         self.login(self.regular_user)
