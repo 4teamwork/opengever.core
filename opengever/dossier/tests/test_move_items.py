@@ -1574,14 +1574,16 @@ class TestDossierMovabilityChecker(IntegrationTestCase):
             interface=IDossierContainerTypes
             ))
 
-        # empty_dossier can only be moved to main dossier
+        # empty_dossier can only be moved to main dossier, or a dossier that
+        # already contains a subdossier on the same level
         with self.assertRaises(Forbidden):
             DossierMovabiliyChecker(self.empty_dossier).validate_movement(
                 self.subsubdossier)
 
-        with self.assertRaises(Forbidden):
-            DossierMovabiliyChecker(self.empty_dossier).validate_movement(
-                self.subdossier)
+        # Allowed even though this will exceed the max nesting depth, because
+        # self.subsubdossier already exists on the same level
+        DossierMovabiliyChecker(self.empty_dossier).validate_movement(
+            self.subdossier)
 
         DossierMovabiliyChecker(self.empty_dossier).validate_movement(
             self.dossier)
@@ -1594,6 +1596,13 @@ class TestDossierMovabilityChecker(IntegrationTestCase):
 
         DossierMovabiliyChecker(self.subsubdossier).validate_movement(
             self.empty_dossier)
+
+        # a dossier containing a subdossier can even be moved to a place
+        # where it would exceed the max nesting depth by 2, if another
+        # subdossier with a subsubdossier already exists on that level and
+        # already violates the max nesting depth by 2.
+        DossierMovabiliyChecker(self.resolvable_dossier).validate_movement(
+            self.dossier)
 
         # two subdossier levels allowed.
         api.portal.set_registry_record(
