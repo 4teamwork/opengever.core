@@ -138,6 +138,12 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         expected = ('kathi.barfuss', )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_can_search_by_name_and_login(self):
+        # Workaround to accomodate the sharing view's search for users
+        results = self.plugin.enumerateUsers(name='kathi.', login='kathi.')
+        expected = ('kathi.barfuss', )
+        self.assertEqual(expected, self.ids(results))
+
     def test_enum_users_supports_max_results(self):
         results = self.plugin.enumerateUsers(max_results=3)
         self.assertEqual(3, len(results))

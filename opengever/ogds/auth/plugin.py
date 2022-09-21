@@ -161,6 +161,14 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             self.log('Returning cached results from enumerateUsers()')
             return cached_info
 
+        if 'name' in kw and login:
+            # This is most likely the sharing view searching for a user by "id"
+            # It never queries by 'id', only by 'login' plus 'name' (which is
+            # not an OGDS column or property we support). By just dropping
+            # the 'name' criterion we essentially turn this into a lookup by
+            # login which then succeeds.
+            del kw['name']
+
         # Unknown search critera - must not return any results
         if any((key not in self.known_properties('user') for key in kw)):
             self.ZCacheable_set((), view_name=view_name, keywords=criteria)
