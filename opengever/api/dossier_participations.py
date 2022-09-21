@@ -229,6 +229,12 @@ class PossibleParticipantsGet(Service):
         handler = IParticipationAware(self.context)
         results = handler.participant_source.search(query)
 
+        # filter out current participants
+        current_participants = set(
+            IParticipationData(participation).participant_id
+            for participation in handler.get_participations())
+        results = [term for term in results if term.token not in current_participants]
+
         batch = HypermediaBatch(self.request, results)
 
         serialized_terms = []

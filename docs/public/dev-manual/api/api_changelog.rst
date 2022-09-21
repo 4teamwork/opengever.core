@@ -13,6 +13,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@participation``: Sort dossier participations by ``participant_title``.
 - Include title in private folder serialization.
+- Current participants are now filtered out in ``@possible-participations`` endpoint.
 
 2022.18.0 (2022-09-13)
 ----------------------
