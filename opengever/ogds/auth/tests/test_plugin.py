@@ -127,6 +127,17 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_can_search_by_fullname_with_exact_match_true(self):
+        results = self.plugin.enumerateUsers(
+            fullname='K\xc3\xa4thi B\xc3\xa4rFUSS', exact_match=True)
+        expected = ('kathi.barfuss', )
+        self.assertEqual(expected, self.ids(results))
+
+    def test_enum_users_can_search_by_fullname_with_exact_match_false(self):
+        results = self.plugin.enumerateUsers(fullname='THI B\xc3\xa4rFUSS')
+        expected = ('kathi.barfuss', )
+        self.assertEqual(expected, self.ids(results))
+
     def test_enum_users_supports_max_results(self):
         results = self.plugin.enumerateUsers(max_results=3)
         self.assertEqual(3, len(results))
@@ -455,7 +466,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'email': '',
             'firstname': '',
             'lastname': '',
-            'fullname': ' ',
+            'fullname': '',
         }
         self.assertEqual(expected, results)
 

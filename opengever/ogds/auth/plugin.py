@@ -106,6 +106,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         'email': User.email,
         'firstname': User.firstname,
         'lastname': User.lastname,
+        'fullname': (User.firstname + u' ' + User.lastname),
     }
     GROUP_PROPS = {
         'groupid': Group.groupid,
@@ -188,7 +189,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
             for key, value in kw.items():
                 column = self.USER_PROPS.get(key)
-                if column:
+                if column is not None:
                     query = query.where(func.lower(column) == value.lower())
 
         else:
@@ -198,7 +199,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
             for key, value in kw.items():
                 column = self.USER_PROPS.get(key)
-                if column:
+                if column is not None:
                     pattern = u'%{}%'.format(value)
                     query = query.where(column.ilike(pattern))
 
@@ -387,15 +388,6 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
                 prop_keys,
                 [value.encode('utf-8') if value else '' for value in match]
             ))
-
-            # For now, implement 'fullname' as a "computed property" based
-            # on first and last name. In reality, this is actually stored in
-            # LDAP/AD, and may contain a different value than just a
-            # concatenation of the two. It should therefore be added as an SQL
-            # column in OGDS, and synced from LDAP/AD.
-            if not is_group:
-                properties['fullname'] = ' '.join([
-                    properties['firstname'], properties['lastname']])
 
             self.log("Returning properties %r" % properties)
 
