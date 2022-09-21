@@ -17,6 +17,7 @@ from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlu
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from sqlalchemy import func
 from sqlalchemy.sql import select
+from sqlalchemy.sql.expression import true
 from zope.interface import implements
 
 
@@ -185,7 +186,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
         query = (
             select([User.userid])
-            .where(User.active == True)
+            .where(User.active == true())
             .order_by(User.userid)
         )
 
@@ -270,7 +271,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
         query = (
             select([Group.groupid])
-            .where(Group.active == True)
+            .where(Group.active == true())
             .order_by(Group.groupid)
         )
 
@@ -337,7 +338,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             select([groups.c.groupid])
             .select_from(groups.join(groups_users))
             .where(func.lower(groups_users.c.userid) == principal_id.lower())
-            .where(groups.c.active == True)
+            .where(groups.c.active == true())
         )
 
         # Omit groups with non-ASCII names
@@ -387,7 +388,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         query = (
             select(prop_columns)
             .where(func.lower(id_column) == principal_id.lower())
-            .where(active_column == True)
+            .where(active_column == true())
         )
         match = self.query_ogds(query).fetchone()
 
