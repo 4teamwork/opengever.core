@@ -177,24 +177,25 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
 
         results = ()
 
-        if login and (not id):
-            id = login
-
         id = safe_unicode(id)
+        login = safe_unicode(login)
         for key, value in kw.items():
             kw[key] = safe_unicode(value)
 
         query = (
-            select([User.userid])
+            select([User.userid, User.username])
             .where(User.active == true())
             .order_by(User.userid)
         )
 
         if exact_match:
-            if not (id or kw):
+            if not (id or login or kw):
                 raise ValueError('Exact match specified but no criteria given')
             if id:
                 query = query.where(func.lower(User.userid) == id.lower())
+
+            elif login:
+                query = query.where(func.lower(User.username) == login.lower())
 
             for key, value in kw.items():
                 column = self.USER_PROPS.get(key)
@@ -206,6 +207,10 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
                 pattern = u'%{}%'.format(id)
                 query = query.where(User.userid.ilike(pattern))
 
+            elif login:
+                pattern = u'%{}%'.format(login)
+                query = query.where(User.username.ilike(pattern))
+
             for key, value in kw.items():
                 column = self.USER_PROPS.get(key)
                 if column is not None:
@@ -216,15 +221,15 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             query = query.limit(max_results)
 
         matches = [
-            userid.encode('utf-8')
-            for userid, in self.query_ogds(query)
+            (userid.encode('utf-8'), username.encode('utf-8'))
+            for userid, username in self.query_ogds(query)
         ]
         plugin_id = self.getId()
         results = tuple(({
             'id': userid,
-            'login': userid,
+            'login': username,
             'pluginid': plugin_id,
-        } for userid in matches))
+        } for userid, username in matches))
 
         # This caching is not as effective yet as it could be:
         # Because we just store results (all users) for id=None, login=None

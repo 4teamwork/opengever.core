@@ -47,6 +47,22 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         expected = ('kathi.barfuss', )
         self.assertEqual(expected, self.ids(results))
 
+    def test_enum_users_by_login_maps_to_username(self):
+        create(
+            Builder('ogds_user')
+            .having(userid='12345',
+                    username='charles.babbage',
+                    external_id='11111111-2222-3333-4444-555555555555'))
+        ogds_service().session.flush()
+
+        results = self.plugin.enumerateUsers(login='charles.babbage')
+        expected = ({
+            'id': '12345',
+            'login': 'charles.babbage',
+            'pluginid': 'ogds_auth',
+        },)
+        self.assertEqual(expected, results)
+
     def test_enum_users_with_exact_match_true(self):
         results = self.plugin.enumerateUsers('kathi', exact_match=True)
         expected = ()
