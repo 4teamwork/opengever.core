@@ -7,7 +7,10 @@ from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from sqlalchemy import Boolean
 from sqlalchemy import Column
+from sqlalchemy import event
 from sqlalchemy import ForeignKey
+from sqlalchemy import func
+from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import Table
 from sqlalchemy.orm import backref
@@ -23,6 +26,21 @@ groups_users = Table(
     Column('userid', String(USER_ID_LENGTH),
            ForeignKey('users.userid'), primary_key=True),
 )
+
+
+def create_additional_groups_users_indexes(table, connection, *args, **kw):
+    engine = connection.engine
+    if engine.dialect.name != 'sqlite':
+        # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
+        # that SQLAlchemy produces for this functional index
+        ix = Index('ix_groups_users_userid_lower',
+                   func.lower(groups_users.c.userid))
+        ix.create(engine)
+
+
+event.listen(
+    groups_users, 'after_create',
+    create_additional_groups_users_indexes)
 
 
 class GroupQuery(BaseQuery):
@@ -87,3 +105,15 @@ class Group(Base):
 
     def label(self):
         return self.title or self.groupid
+
+
+def create_additional_group_indexes(table, connection, *args, **kw):
+    engine = connection.engine
+    if engine.dialect.name != 'sqlite':
+        # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
+        # that SQLAlchemy produces for this functional index
+        ix = Index('ix_groups_groupid_lower', func.lower(table.c.groupid))
+        ix.create(engine)
+
+
+event.listen(Group.__table__, 'after_create', create_additional_group_indexes)

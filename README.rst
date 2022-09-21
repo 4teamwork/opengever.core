@@ -220,7 +220,7 @@ respective user in our development LDAP tree.
 Solr
 ~~~~
 
-Solr is provided as a Docker image and started with other services using `docker-compose`. 
+Solr is provided as a Docker image and started with other services using `docker-compose`.
 
 
 Activating Solr update chain
@@ -1350,6 +1350,23 @@ Example for a ``configuration.json``:
         ]
       }
     }
+
+OGDS PAS Plugin
+^^^^^^^^^^^^^^^
+
+This plugin serves as a replacement for the LDAP/AD PAS plugins to enumerate users and groups from OGDS instead of LDAP. Because it's still experimental, it's not installed by default. In order to install it, and have it function as intended, the following needs to be done:
+
+- Make sure a plugin is present that can perform authentication (e.g. ``cas_auth``)
+- Add an instance of "OGDS Authentication Plugin" in ZMI
+- In the "Cache" tab of the plugin, associate it with "RAMCache"
+- In the "Activate" tab of the plugin, enable all its capabilities
+- Move the OGDS plugin to the top of the list for properties plugins (acl_users -> plugins -> Properties Plugins -> move ``ogds_auth`` to the top)
+- Disable all of the LDAP plugin's capabilities
+
+The plugin does not perform authentication itself. It therefore requires another ``IAuthenticationPlugin`` to be present, activated and capable to authenticate users for the given deployment.
+
+For programmatic installation during setup, the ``install_ogds_auth_plugin`` helper function in ``opengever.ogds.auth.plugin`` may be used to perform the steps listed above.
+
 
 Content creation
 ~~~~~~~~~~~~~~~~

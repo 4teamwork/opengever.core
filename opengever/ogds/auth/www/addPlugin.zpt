@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal">
+  <body>
+    <h1 tal:replace="structure here/manage_page_header">Header</h1>
+
+    <h2 tal:define="form_title string:OGDS Authentication Plugin"
+        tal:replace="structure here/manage_form_title">Form Title</h2>
+
+    <p class="form-help">
+      Plone PAS plugin to enumerate users and groups from OGDS.
+    </p>
+
+    <form action="addOGDSAuthenticationPlugin" method="post">
+      <table>
+        <tr>
+          <td class="form-label">Id</td>
+          <td><input type="text" name="id_" tal:attributes="value request/id|string:ogds_auth"/></td>
+        </tr>
+        <tr>
+          <td class="form-label">Title</td>
+          <td><input type="text" name="title" value="OGDS Authentication Plugin"/></td>
+        </tr>
+        <tr>
+          <td class="form-label">Configure after creation
+            <br/>
+            <span style="font-weight: normal">
+            (activate all plugin interfaces, associate it with RAMCache and move properties plugin to top)</span>
+          </td>
+          <td>
+            <input type="checkbox" name="configure_after_creation"
+                   checked="checked" />
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="form-element">
+              <input type="submit" value="Add"/>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

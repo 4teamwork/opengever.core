@@ -8,6 +8,9 @@ from opengever.base.types import UnicodeCoercingText
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import Date
+from sqlalchemy import event
+from sqlalchemy import func
+from sqlalchemy import Index
 from sqlalchemy import String
 
 
@@ -119,3 +122,15 @@ class User(Base):
             parts.append(self.userid)
 
         return u' '.join(parts)
+
+
+def create_additional_user_indexes(table, connection, *args, **kw):
+    engine = connection.engine
+    if engine.dialect.name != 'sqlite':
+        # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
+        # that SQLAlchemy produces for this functional index
+        ix = Index('ix_users_userid_lower', func.lower(table.c.userid))
+        ix.create(engine)
+
+
+event.listen(User.__table__, 'after_create', create_additional_user_indexes)
