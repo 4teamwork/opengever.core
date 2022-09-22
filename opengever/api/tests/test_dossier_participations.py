@@ -774,7 +774,7 @@ class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, Test
 class TestPossibleParticipantsGet(SolrIntegrationTestCase):
 
     @browsing
-    def test_get_possible_participants(self, browser):
+    def test_get_possible_participants_filters_out_current_participants(self, browser):
         self.login(self.regular_user, browser=browser)
         url = self.dossier.absolute_url() + '/@possible-participants?query=fra'
 
@@ -786,6 +786,18 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
                                     {u'title': u'Meier Franz (meier.f@example.com)',
                                      u'token': u'contact:meier-franz'}],
                          u'items_total': 2}
+
+        self.assertEqual(expected_json, browser.json)
+
+        handler = IParticipationAware(self.dossier)
+        handler.add_participation('contact:meier-franz', ['regard'])
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {u'@id': url,
+                         u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
+                                     u'token': u'franzi.muller'}],
+                         u'items_total': 1}
 
         self.assertEqual(expected_json, browser.json)
 
@@ -806,13 +818,25 @@ class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCa
     features = ('contact', )
 
     @browsing
-    def test_get_possible_participants(self, browser):
+    def test_get_possible_participants_filters_out_current_participants(self, browser):
         self.login(self.regular_user, browser=browser)
 
         # features not working
         self.activate_feature('contact')
 
         url = self.dossier.absolute_url() + '/@possible-participants?query=mei'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {u'@id': url,
+                         u'items': [{u'title': u'Meier David (david.meier)',
+                                     u'token': u'ogds_user:david.meier'}],
+                         u'items_total': 1}
+
+        self.assertEqual(expected_json, browser.json)
+
+        handler = IParticipationAware(self.dossier)
+        handler.remove_participation('organization:2')
+
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': url,
@@ -831,7 +855,7 @@ class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCa
 
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(24, browser.json.get('items_total'))
+        self.assertEqual(22, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
 
 
