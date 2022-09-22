@@ -4,6 +4,9 @@ from opengever.base.solr import OGSolrContentListing
 from opengever.base.solr.fields import DEFAULT_SORT_INDEX
 from opengever.base.solr.fields import SolrFieldMapper
 from opengever.base.utils import safe_int
+from opengever.dossier.indexers import ParticipationIndexHelper
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.client import KuBClient
 from plone.memoize.view import memoize
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
@@ -26,6 +29,11 @@ class SolrQueryBaseService(Service):
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
         self.facets = []
+
+        self.participation_idx_helper = ParticipationIndexHelper()
+        self.kub_label_mapping = {}
+        if is_kub_feature_enabled():
+            self.kub_label_mapping = KuBClient().get_kub_id_label_mapping()
 
     @property
     @memoize
@@ -96,7 +104,13 @@ class SolrQueryBaseService(Service):
             if not solr_facet:
                 continue
 
-            facet_counts[facet_name] = self.extract_facet(solr_facet, field)
+            if facet_name == 'participants' and is_kub_feature_enabled():
+                # Performance optimized extraction
+                extract = self.extract_participants_facet
+            else:
+                extract = self.extract_facet
+
+            facet_counts[facet_name] = extract(solr_facet, field)
 
         return facet_counts
 
@@ -108,6 +122,40 @@ class SolrQueryBaseService(Service):
             counts_for_facet[facet] = {
                 "count": count,
                 "label": field.index_value_to_label(facet)
+            }
+        return counts_for_facet
+
+    def extract_participants_facet(self, solr_facet, field):
+        """Performance optimized extraction of participants facet.
+
+        This is a shortcut optimized for building labels for very large
+        'participants' facets (~100k entries) that speeds this process up
+        by avoiding doing a lot of the same work again for each and every
+        entry (like creating an instance of PloneSqlOrKubContactSourceBinder
+        and looking up the term in this source).
+
+        Instead, this shortcut directly checks the KuB ID to label mapping
+        for a participant ID, and only delegates to the traditional
+        implementation if it can't find it.
+        """
+        helper = self.participation_idx_helper
+        counts_for_facet = {}
+        for facet, count in solr_facet.items():
+            # Avoid splitting the index value repeatedly
+            participant_id, role = helper.index_value_to_participant_id_and_role(facet)
+
+            if role == helper.any_role_marker:
+                # Facet is hidden
+                continue
+
+            label = self.kub_label_mapping.get(participant_id)
+            if not label:
+                # Not found in cached KuB mapping - delegate
+                label = field.index_value_to_label(facet)
+
+            counts_for_facet[facet] = {
+                "count": count,
+                "label": label,
             }
         return counts_for_facet
 
