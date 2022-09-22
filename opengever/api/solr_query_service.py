@@ -96,16 +96,20 @@ class SolrQueryBaseService(Service):
             if not solr_facet:
                 continue
 
-            facet_counts[facet_name] = {}
-            for facet, count in solr_facet.items():
-                if field.hide_facet(facet):
-                    continue
-                facet_counts[field.field_name][facet] = {
-                    "count": count,
-                    "label": field.index_value_to_label(facet)
-                }
+            facet_counts[facet_name] = self.extract_facet(solr_facet, field)
 
         return facet_counts
+
+    def extract_facet(self, solr_facet, field):
+        counts_for_facet = {}
+        for facet, count in solr_facet.items():
+            if field.hide_facet(facet):
+                continue
+            counts_for_facet[facet] = {
+                "count": count,
+                "label": field.index_value_to_label(facet)
+            }
+        return counts_for_facet
 
     def parse_requested_fields(self, params):
         """Extracts requested fields from request
