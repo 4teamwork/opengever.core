@@ -217,13 +217,13 @@ class TestMove(IntegrationTestCase):
         message = u'msg_would_exceed_max_dossier_level'
         translated = u'This would exceed the maximally allowed dossier depth.'
         self.assert_cannot_move(
-            browser, self.empty_dossier, self.subdossier, message, translated)
+            browser, self.empty_dossier, self.subsubdossier, message, translated)
 
         api.portal.set_registry_record(name='maximum_dossier_depth',
-                                       value=2,
+                                       value=3,
                                        interface=IDossierContainerTypes)
 
-        self.assert_can_move(browser, self.empty_dossier, self.subdossier)
+        self.assert_can_move(browser, self.empty_dossier, self.subsubdossier)
 
     @browsing
     def test_moving_dossier_with_subdossier_respects_maximum_dossier_depth(self, browser):

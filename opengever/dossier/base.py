@@ -201,7 +201,27 @@ class DossierContainer(Container):
             interface=IDossierContainerTypes,
             default=100,
         )
-        return self._get_dossier_depth() + additional_depth <= max_depth + 1
+        max_depth_respected = (
+            self._get_dossier_depth() + additional_depth <= max_depth + 1)
+
+        if max_depth_respected:
+            return True
+
+        # Max depth would technically be exceeded.
+        # However, if a dossier structure that exceeds the max depth already
+        # exists at the same level, we'll allow new structures with the same
+        # additional depth (or lower).
+        path = '/'.join(self.getPhysicalPath())
+        subdossiers = self.get_subdossiers(unrestricted=True)
+        if subdossiers:
+            max_existing_additional_depth = max((
+                sub.getPath()[len(path):].count('/') for sub in subdossiers
+            ))
+
+            if additional_depth <= max_existing_additional_depth:
+                return True
+
+        return False
 
     def has_subdossiers(self):
         return len(self.get_subdossiers()) > 0
@@ -644,9 +664,6 @@ class DefaultConstrainTypeDecider(object):
         ) + 1
 
         self.constrain_configuration = {
-            'opengever.dossier.businesscasedossier': {
-                'opengever.dossier.businesscasedossier': max_dossier_depth,
-            },
             'opengever.private.dossier': {
                 'opengever.private.dossier': max_dossier_depth
             },
@@ -663,6 +680,9 @@ class DefaultConstrainTypeDecider(object):
 
         if factory_type in [u'opengever.meeting.proposal']:
             return is_meeting_feature_enabled()
+
+        if factory_type == 'opengever.dossier.businesscasedossier':
+            return self.context.is_subdossier_addable()
 
         return True
 
