@@ -37,6 +37,7 @@ class User(Base):
     active = Column(Boolean, default=True)
     firstname = Column(String(FIRSTNAME_LENGTH))
     lastname = Column(String(LASTNAME_LENGTH))
+    display_name = Column(String(FIRSTNAME_LENGTH + 1 + LASTNAME_LENGTH))
 
     directorate = Column(String(255))
     directorate_abbr = Column(String(50))
@@ -129,10 +130,11 @@ class User(Base):
         return u"%s (%s)" % (self.fullname(), self.userid)
 
     def fullname(self):
-        """Return a visual representation of the UserPersona as String.
-        - The default is "<lastname> <firstname>"
-        - If either one is missing it is: "<lastname>" or "<firstname>"
-        - The fallback is "<userid>"
+        """Return a visual representation of the user's full name.
+
+        Note that this is different from the 'display_name' stored on this
+        model, which is imported from LDAP/AD, and is therefore a
+        customer-controlled representation.
         """
         parts = []
         if self.lastname:

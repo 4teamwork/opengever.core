@@ -61,6 +61,16 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
+                "display_name": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "display_name",
+                    "maxLength": 511,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
                 "directorate": {
                     "type": [
                         "null",
@@ -313,6 +323,7 @@
                 "active",
                 "firstname",
                 "lastname",
+                "display_name",
                 "directorate",
                 "directorate_abbr",
                 "department",
