@@ -10,6 +10,7 @@ from opengever.ogds.base.interfaces import ILDAPSearch
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.sync.import_stamp import set_remote_import_stamp
+from opengever.ogds.base.sync.sid2str import sid2str
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from plone import api
@@ -424,6 +425,11 @@ class OGDSUpdater(object):
                 user_attrs['active'] = True
                 user_attrs['external_id'] = userid
                 user_attrs['username'] = userid
+
+                object_sid = info.get('objectSid')
+                if object_sid:
+                    user_attrs['object_sid'] = sid2str(object_sid)
+
                 users[userid] = user_attrs
 
         return users

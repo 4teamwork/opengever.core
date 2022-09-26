@@ -66,6 +66,8 @@ class User(Base):
     absent_from = Column(Date)
     absent_to = Column(Date)
 
+    object_sid = Column(String(255))
+
     column_names_to_sync = {
         'userid', 'username', 'external_id', 'active', 'firstname', 'lastname', 'directorate',
         'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',
