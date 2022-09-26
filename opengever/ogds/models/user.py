@@ -69,11 +69,30 @@ class User(Base):
     object_sid = Column(String(255))
 
     column_names_to_sync = {
-        'userid', 'username', 'external_id', 'active', 'firstname', 'lastname', 'directorate',
-        'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',
-        'url', 'phone_office', 'phone_fax', 'phone_mobile', 'salutation',
-        'title', 'description', 'address1', 'address2', 'zip_code', 'city',
+        'active',
+        'address1',
+        'address2',
+        'city',
         'country',
+        'department',
+        'department_abbr',
+        'description',
+        'directorate',
+        'directorate_abbr',
+        'email',
+        'email2',
+        'external_id',
+        'firstname',
+        'lastname',
+        'phone_fax',
+        'phone_mobile',
+        'phone_office',
+        'salutation',
+        'title',
+        'url',
+        'userid',
+        'username',
+        'zip_code',
     }
 
     # A classmethod property needs to be defined on the metaclass
