@@ -21,6 +21,8 @@ from opengever.dossier.participations import IParticipationData
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.kub import is_kub_feature_enabled
+from opengever.kub.client import KuBClient
 from opengever.private.dossier import IPrivateDossier
 from plone import api
 from plone.dexterity.interfaces import IDexterityContent
@@ -338,6 +340,12 @@ class ParticipationIndexHelper(object):
         """
         if participant_id == self.any_participant_marker:
             return translate(_(u'any_participant'), context=getRequest())
+
+        if is_kub_feature_enabled():
+            client = KuBClient()
+            if participant_id in client.get_kub_id_label_mapping():
+                return client.get_kub_id_label_mapping()[participant_id]
+
         source = PloneSqlOrKubContactSourceBinder()(api.portal.get())
         try:
             term = source.getTermByToken(participant_id)

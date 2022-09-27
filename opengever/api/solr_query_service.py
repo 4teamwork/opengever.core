@@ -106,7 +106,7 @@ class SolrQueryBaseService(Service):
 
             if facet_name == 'participants' and is_kub_feature_enabled():
                 # Performance optimized extraction
-                extract = self.extract_participants_facet
+                extract = self.extract_facet
             else:
                 extract = self.extract_facet
 
