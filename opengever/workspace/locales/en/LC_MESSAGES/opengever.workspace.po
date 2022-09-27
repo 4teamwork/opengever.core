@@ -153,12 +153,12 @@ msgstr "Invitation"
 #. Default: "Please click the following link if you want to accept the invitation: ${accept_url}"
 #: ./opengever/workspace/participation/templates/invitation_mail.pt
 msgid "invitation_accept"
-msgstr ""
+msgstr "Please click the following link if you want to accept the invitation: ${accept_url}"
 
 #. Default: "accept invitation"
 #: ./opengever/workspace/participation/templates/invitation_mail.pt
 msgid "invitation_accept_link"
-msgstr ""
+msgstr "Accept invitation"
 
 #. German translation: Sie wurden von ${user} in den Teamraum \"${title}\" eingeladen.
 #. Default: "You were invited by ${user} to the workspace \"${title}\"."
@@ -181,12 +181,12 @@ msgstr "Invitation to workspace \"${title}\""
 #. Default: "Hello"
 #: ./opengever/workspace/participation/templates/invitation_mail.pt
 msgid "invitation_salutation"
-msgstr ""
+msgstr "Hi"
 
 #. Default: "You were invited by ${user} to the workspace \"${workspace_title}\" at ${platform}."
 #: ./opengever/workspace/participation/templates/invitation_mail.pt
 msgid "invitation_text"
-msgstr ""
+msgstr "You were invited by ${user} to join the workspace \"${workspace_title}\" at ${platform}"
 
 #. Default: "Attendees"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
