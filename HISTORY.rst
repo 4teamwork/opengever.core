@@ -10,6 +10,36 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.19.0 (2022-09-28)
+----------------------
+
+New features:
+
+
+- Implement OGDS authentication plugin. [lgraf]
+- Add username and external_id columns to user model. [tinagerber]
+- Add groupname and external_id columns to group model. [tinagerber]
+- Improve links of workspace invitation email template. [elioschmutz]
+
+
+Bug fixes:
+
+
+- Sort dossier participants by participant_title in @participations endpoint. [tinagerber]
+- Current participants are now filtered out in @possible-participations endpoint. [njohner]
+- Fix attaching documents for external users. [tinagerber]
+- Use client own preserved_as_paper default when transporting documents. [phgross]
+- Remove group memberships in ogds sync when ldap group is deactivated. [tinagerber]
+
+
+Other changes:
+
+
+- Make max dossier depth restriction less strict. [lgraf]
+- Optimize KuBContactActor. [tinagerber]
+- Include title in private folder serialization. [tinagerber]
+
+
 2022.18.0 (2022-09-13)
 ----------------------
 
