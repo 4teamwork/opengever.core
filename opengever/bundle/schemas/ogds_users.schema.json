@@ -111,6 +111,16 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
+                "organization": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "organization",
+                    "maxLength": 255,
+                    "description": "",
+                    "_zope_schema_type": "Text"
+                },
                 "email": {
                     "type": [
                         "null",
@@ -328,6 +338,7 @@
                 "directorate_abbr",
                 "department",
                 "department_abbr",
+                "organization",
                 "email",
                 "email2",
                 "url",

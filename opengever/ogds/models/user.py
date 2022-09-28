@@ -43,6 +43,7 @@ class User(Base):
     directorate_abbr = Column(String(50))
     department = Column(String(255))
     department_abbr = Column(String(50))
+    organization = Column(String(255))
 
     email = Column(String(EMAIL_LENGTH))
     email2 = Column(String(EMAIL_LENGTH))
@@ -85,6 +86,7 @@ class User(Base):
         'external_id',
         'firstname',
         'lastname',
+        'organization',
         'phone_fax',
         'phone_mobile',
         'phone_office',

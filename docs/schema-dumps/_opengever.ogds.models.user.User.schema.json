@@ -81,6 +81,13 @@
             "description": "",
             "_zope_schema_type": "Text"
         },
+        "organization": {
+            "type": "string",
+            "title": "organization",
+            "maxLength": 255,
+            "description": "",
+            "_zope_schema_type": "Text"
+        },
         "email": {
             "type": "string",
             "title": "email",
@@ -231,6 +238,7 @@
         "directorate_abbr",
         "department",
         "department_abbr",
+        "organization",
         "email",
         "email2",
         "url",
