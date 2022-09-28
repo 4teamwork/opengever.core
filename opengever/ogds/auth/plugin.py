@@ -108,6 +108,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         'firstname': User.firstname,
         'lastname': User.lastname,
         'fullname': (User.firstname + u' ' + User.lastname),
+        'objectSid': User.object_sid,
     }
     GROUP_PROPS = {
         'groupid': Group.groupid,

@@ -427,6 +427,10 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
     """
 
     def test_get_properties_for_user(self):
+        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user.object_sid = u'S-1-5-21-2109130332-968164008-972369679-13586'
+        ogds_service().session.flush()
+
         member = api.user.get('kathi.barfuss')
         results = self.plugin.getPropertiesForUser(member)
         expected = {
@@ -435,6 +439,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'firstname': 'K\xc3\xa4thi',
             'lastname': 'B\xc3\xa4rfuss',
             'fullname': 'K\xc3\xa4thi B\xc3\xa4rfuss',
+            'objectSid': 'S-1-5-21-2109130332-968164008-972369679-13586',
         }
         self.assertEqual(expected, results)
 
@@ -477,6 +482,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         ogds_user.firstname = None
         ogds_user.lastname = None
         ogds_user.email = None
+        ogds_user.object_sid = None
         ogds_service().session.flush()
         member = api.user.get('kathi.barfuss')
 
@@ -488,6 +494,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'email': '',
             'firstname': '',
             'lastname': '',
+            'objectSid': '',
             'fullname': '',
         }
         self.assertEqual(expected, results)
