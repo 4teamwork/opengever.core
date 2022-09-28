@@ -158,15 +158,33 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
 class TestDeadlineModifierController(IntegrationTestCase):
 
-    def test_modify_is_allowed_for_issuer_on_a_open_task(self):
+    def test_modify_is_not_allowed_for_issuer_on_closed_task(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-tested-and-closed', self.task)
+
+        self.assertFalse(IDeadlineModifier(self.task).is_modify_allowed())
+
+    def test_modify_is_allowed_for_issuer_on_open_task(self):
         self.login(self.dossier_responsible)
         self.set_workflow_state('task-state-open', self.task)
 
         self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
 
-    def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
+    def test_modify_is_allowed_for_issuer_on_in_progress_task(self):
         self.login(self.dossier_responsible)
         self.set_workflow_state('task-state-in-progress', self.task)
+
+        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
+
+    def test_modify_is_allowed_for_issuer_on_planned_task(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-planned', self.task)
+
+        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
+
+    def test_modify_is_allowed_for_issuer_on_resolved_task(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-resolved', self.task)
 
         self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
 

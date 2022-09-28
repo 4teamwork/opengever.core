@@ -411,7 +411,10 @@ class Task(Container, TaskReminderSupport):
     @property
     def is_editable(self):
         current_state = api.content.get_state(self)
-        return current_state in ['task-state-open', 'task-state-in-progress']
+        return current_state in ['task-state-open',
+                                 'task-state-in-progress',
+                                 'task-state-planned',
+                                 'task-state-resolved']
 
     @property
     def is_team_task(self):
