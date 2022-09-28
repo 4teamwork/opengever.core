@@ -144,12 +144,20 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         self.assertEqual(expected, self.ids(results))
 
     def test_enum_users_can_search_by_fullname_with_exact_match_true(self):
+        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
+        ogds_service().session.flush()
+
         results = self.plugin.enumerateUsers(
-            fullname='K\xc3\xa4thi B\xc3\xa4rFUSS', exact_match=True)
+            fullname='K\xc3\xa4thi B\xc3\xa4rFUSS (FD-AFI)', exact_match=True)
         expected = ('kathi.barfuss', )
         self.assertEqual(expected, self.ids(results))
 
     def test_enum_users_can_search_by_fullname_with_exact_match_false(self):
+        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
+        ogds_service().session.flush()
+
         results = self.plugin.enumerateUsers(fullname='THI B\xc3\xa4rFUSS')
         expected = ('kathi.barfuss', )
         self.assertEqual(expected, self.ids(results))
@@ -429,6 +437,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
     def test_get_properties_for_user(self):
         ogds_user = ogds_service().fetch_user('kathi.barfuss')
         ogds_user.object_sid = u'S-1-5-21-2109130332-968164008-972369679-13586'
+        ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
         ogds_service().session.flush()
 
         member = api.user.get('kathi.barfuss')
@@ -438,7 +447,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'email': 'foo@example.com',
             'firstname': 'K\xc3\xa4thi',
             'lastname': 'B\xc3\xa4rfuss',
-            'fullname': 'K\xc3\xa4thi B\xc3\xa4rfuss',
+            'fullname': 'K\xc3\xa4thi B\xc3\xa4rfuss (FD-AFI)',
             'objectSid': 'S-1-5-21-2109130332-968164008-972369679-13586',
         }
         self.assertEqual(expected, results)

@@ -430,6 +430,16 @@ class OGDSUpdater(object):
                 if object_sid:
                     user_attrs['object_sid'] = sid2str(object_sid)
 
+                # The LDAP/AD attributes 'displayName' or 'cn' are sometimes
+                # mapped to the 'fullname' property. If it exists, we store
+                # this in OGDS in the display_name column.
+                # This is therefore a customer-controlled display name, and
+                # different from the full name we build in the User.fullname()
+                # method by concatenating first and last name.
+                display_name = info.get('fullname')
+                if display_name:
+                    user_attrs['display_name'] = display_name.decode('utf-8')
+
                 users[userid] = user_attrs
 
         return users

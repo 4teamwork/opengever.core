@@ -37,6 +37,7 @@ class User(Base):
     active = Column(Boolean, default=True)
     firstname = Column(String(FIRSTNAME_LENGTH))
     lastname = Column(String(LASTNAME_LENGTH))
+    display_name = Column(String(FIRSTNAME_LENGTH + 1 + LASTNAME_LENGTH))
 
     directorate = Column(String(255))
     directorate_abbr = Column(String(50))
@@ -69,11 +70,30 @@ class User(Base):
     object_sid = Column(String(255))
 
     column_names_to_sync = {
-        'userid', 'username', 'external_id', 'active', 'firstname', 'lastname', 'directorate',
-        'directorate_abbr', 'department', 'department_abbr', 'email', 'email2',
-        'url', 'phone_office', 'phone_fax', 'phone_mobile', 'salutation',
-        'title', 'description', 'address1', 'address2', 'zip_code', 'city',
+        'active',
+        'address1',
+        'address2',
+        'city',
         'country',
+        'department',
+        'department_abbr',
+        'description',
+        'directorate',
+        'directorate_abbr',
+        'email',
+        'email2',
+        'external_id',
+        'firstname',
+        'lastname',
+        'phone_fax',
+        'phone_mobile',
+        'phone_office',
+        'salutation',
+        'title',
+        'url',
+        'userid',
+        'username',
+        'zip_code',
     }
 
     # A classmethod property needs to be defined on the metaclass
@@ -110,10 +130,11 @@ class User(Base):
         return u"%s (%s)" % (self.fullname(), self.userid)
 
     def fullname(self):
-        """Return a visual representation of the UserPersona as String.
-        - The default is "<lastname> <firstname>"
-        - If either one is missing it is: "<lastname>" or "<firstname>"
-        - The fallback is "<userid>"
+        """Return a visual representation of the user's full name.
+
+        Note that this is different from the 'display_name' stored on this
+        model, which is imported from LDAP/AD, and is therefore a
+        customer-controlled representation.
         """
         parts = []
         if self.lastname:
