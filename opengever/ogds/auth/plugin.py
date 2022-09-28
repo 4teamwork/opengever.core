@@ -183,8 +183,9 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         for key, value in kw.items():
             kw[key] = safe_unicode(value)
 
+        selected_cols = [User.userid, User.username]
         query = (
-            select([User.userid, User.username])
+            select(selected_cols)
             .where(User.active == true())
             .order_by(User.userid)
         )
@@ -222,8 +223,8 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             query = query.limit(max_results)
 
         matches = [
-            (userid.encode('utf-8'), username.encode('utf-8'))
-            for userid, username in self.query_ogds(query)
+            tuple([row[col.name].encode('utf-8') for col in selected_cols])
+            for row in self.query_ogds(query)
         ]
         plugin_id = self.getId()
         results = tuple(({
@@ -389,20 +390,17 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
             active_column = Group.active
 
         properties = {}
-        prop_keys, prop_columns = (
-            supported_props.keys(), supported_props.values())
         query = (
-            select(prop_columns)
+            select(supported_props.values())
             .where(func.lower(id_column) == principal_id.lower())
             .where(active_column == true())
         )
         match = self.query_ogds(query).fetchone()
 
         if match:
-            properties = dict(zip(
-                prop_keys,
-                [value.encode('utf-8') if value else '' for value in match]
-            ))
+            for prop_key, prop_column in supported_props.items():
+                value = match[prop_column.name]
+                properties[prop_key] = value.encode('utf-8') if value else ''
 
             self.log("Returning properties %r" % properties)
 

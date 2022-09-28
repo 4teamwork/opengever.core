@@ -1,0 +1,1 @@
+OGDS auth plugin: Fix how we access RowProxy results from SQLAlchemy. [lgraf]
