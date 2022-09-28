@@ -233,11 +233,7 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="False">
-      <permission-role>Editor</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>LimitedAdmin</permission-role>
+        acquired="True">
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
@@ -334,11 +330,7 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="False">
-      <permission-role>Editor</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>LimitedAdmin</permission-role>
+        acquired="True">
     </permission-map>
     <permission-map
         name="Review portal content"
@@ -528,11 +520,7 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="False">
-      <permission-role>Editor</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>LimitedAdmin</permission-role>
+        acquired="True">
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
@@ -715,11 +703,7 @@
     </permission-map>
     <permission-map
         name="Modify portal content"
-        acquired="False">
-      <permission-role>Editor</permission-role>
-      <permission-role>Manager</permission-role>
-      <permission-role>Administrator</permission-role>
-      <permission-role>LimitedAdmin</permission-role>
+        acquired="True">
     </permission-map>
     <permission-map
         name="Sharing page: Delegate roles"
