@@ -3,6 +3,7 @@ from datetime import datetime
 from opengever.dossier.base import as_date
 from opengever.dossier.base import max_date
 from unittest import TestCase
+import pytz
 
 
 class TestUnitDossierMaxDate(TestCase):
@@ -35,3 +36,24 @@ class TestUnitDossierAsDate(TestCase):
 
     def test_converts_datetime_to_date(self):
         self.assertEquals(date(1939, 9, 1), as_date(datetime(1939, 9, 1, 5, 45)))
+
+    def test_handles_timezone_corretly(self):
+        datetime_format = "%Y-%m-%d %H:%M"
+        date_format = "%Y-%m-%d"
+
+        utc_datetime = datetime(2017, 7, 16, 22, 15, tzinfo=pytz.utc)
+        local_datetime = utc_datetime.astimezone(pytz.timezone('Europe/Zurich'))
+        self.assertEqual('2017-07-16 22:15', utc_datetime.strftime(datetime_format))
+        self.assertEqual('2017-07-17 00:15', local_datetime.strftime(datetime_format))
+        self.assertEqual('2017-07-17', as_date(utc_datetime).strftime(date_format))
+        self.assertEqual('2017-07-17', as_date(local_datetime).strftime(date_format))
+
+        utc_datetime = datetime(2017, 11, 16, 23, 15, tzinfo=pytz.utc)
+        local_datetime = utc_datetime.astimezone(pytz.timezone('Europe/Zurich'))
+        self.assertEqual('2017-11-17 00:15', local_datetime.strftime(datetime_format))
+        self.assertEqual('2017-11-16 23:15', utc_datetime.strftime(datetime_format))
+        self.assertEqual('2017-11-17', as_date(utc_datetime).strftime(date_format))
+        self.assertEqual('2017-11-17', as_date(local_datetime).strftime(date_format))
+
+        utc_datetime = datetime(2017, 11, 16, 12, 15, tzinfo=pytz.utc)
+        self.assertEqual('2017-11-16', as_date(utc_datetime).strftime(date_format))
