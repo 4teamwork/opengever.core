@@ -15,7 +15,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': None,
              'ogg.address.country': None,
-             'ogg.address.street': None,
+             'ogg.address.street': u'',
              'ogg.address.zip_code': None,
              'ogg.contact.description': u'',
              'ogg.contact.title': u'Dupont Julie',
@@ -49,7 +49,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
-             'ogg.address.street': u'Dammweg',
+             'ogg.address.street': u'Dammweg 9',
              'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'Web application specialist',
              'ogg.contact.title': u'4Teamwork',
@@ -68,7 +68,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
-             'ogg.address.street': u'Dammweg',
+             'ogg.address.street': u'Dammweg 9',
              'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'',
              'ogg.contact.title': u'Dupont Jean - 4Teamwork (CEO)',
