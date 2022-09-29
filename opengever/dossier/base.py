@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import datetime
+from dateutil import tz
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
@@ -33,6 +34,7 @@ from plone import api
 from plone.dexterity.content import Container
 from plone.dexterity.interfaces import IDexterityFTI
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
+from pytz import utc
 from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getUtility
@@ -71,7 +73,11 @@ def max_date(*dates):
 
 def as_date(datetime_obj):
     if isinstance(datetime_obj, datetime):
-        return datetime_obj.date()
+        if datetime_obj.tzinfo == utc:
+            local_zone = tz.tzlocal()
+            return datetime_obj.astimezone(local_zone).date()
+        else:
+            return datetime_obj.date()
 
     # It is already a date-object
     return datetime_obj
