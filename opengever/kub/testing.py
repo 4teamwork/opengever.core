@@ -361,7 +361,20 @@ KUB_RESPONSES = {
             }
         ],
         "emailAddresses": [],
-        "phoneNumbers": [],
+        "phoneNumbers": [
+            {
+                "id": "4b92f284-4924-4608-8f6f-068c668ebdc8",
+                "label": "Arbeit",
+                "phoneNumber": "+41 31 511 04 00",
+                "phoneCategory": 5,
+                "otherPhoneCategory": None,
+                "phoneCategoryText": u'Gesch\xe4ftliche Nummer (Zentrale)',
+                "isDefault": True,
+                "thirdPartyId": None,
+                "modified": "2022-09-29T14:06:26.994768+02:00",
+                "created": "2022-09-29T14:04:50.142282+02:00"
+            }
+        ],
         "urls": [],
         "memberships": [
             {
@@ -387,7 +400,18 @@ KUB_RESPONSES = {
             }
         ],
         "primaryEmail": None,
-        "primaryPhoneNumber": None,
+        "primaryPhoneNumber": {
+            "id": "4b92f284-4924-4608-8f6f-068c668ebdc8",
+            "label": "Arbeit",
+            "phoneNumber": "+41 31 511 04 00",
+            "phoneCategory": 5,
+            "otherPhoneCategory": None,
+            "phoneCategoryText": u'Gesch\xe4ftliche Nummer (Zentrale)',
+            "isDefault": True,
+            "thirdPartyId": None,
+            "modified": "2022-09-29T14:06:26.994768+02:00",
+            "created": "2022-09-29T14:04:50.142282+02:00"
+        },
         "tags": [
             "Bude"
         ],
