@@ -59,6 +59,23 @@ class DossierTemplateListingActions(BaseListingActions):
 
 
 @adapter(IDossierMarker, IOpengeverBaseLayer)
+class SubDossierListingActions(DossierListingActions):
+
+    def is_copy_dossier_to_workspace_available(self):
+        if not self.context.is_open():
+            return False
+        if not is_workspace_client_feature_available():
+            return False
+        if not api.user.has_permission('Modify portal content', obj=self.context):
+            return False
+        if not api.user.has_permission('opengever.workspaceclient: Use Workspace Client'):
+            return False
+
+        linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
+        return linked_workspaces_manager.has_linked_workspaces()
+
+
+@adapter(IDossierMarker, IOpengeverBaseLayer)
 class DossierContextActions(BaseContextActions):
 
     def __init__(self, context, request):
