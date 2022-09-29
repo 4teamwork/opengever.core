@@ -49,3 +49,28 @@ class TestBaseDocPropertyProvider(unittest.TestCase):
             'ogg.my_scope.default_prefix.bar': 'Hello',
         }
         self.assertEqual(expected, actual)
+
+    def test_get_properties_supports_omitting_app_prefix(self):
+        actual = self.provider.get_properties(with_app_prefix=False)
+        expected = {
+            'foo': 42,
+            'bar': 'Hello',
+        }
+        self.assertEqual(expected, actual)
+
+        provider = SampleProvider(context=None)
+        provider.DEFAULT_PREFIX = ('default_prefix', )
+
+        actual = provider.get_properties(with_app_prefix=False)
+        expected = {
+            'default_prefix.foo': 42,
+            'default_prefix.bar': 'Hello',
+        }
+        self.assertEqual(expected, actual)
+
+        actual = provider.get_properties(prefix='my_scope', with_app_prefix=False)
+        expected = {
+            'my_scope.default_prefix.foo': 42,
+            'my_scope.default_prefix.bar': 'Hello',
+        }
+        self.assertEqual(expected, actual)
