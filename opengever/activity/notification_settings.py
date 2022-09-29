@@ -65,6 +65,7 @@ NOTIFICATION_CONFIGURATION = [
                        'task-transition-skipped-open',
                        'task-transition-planned-skipped',
                        'task-transition-delegate',
+                       'task-transition-in-progress-cancelled',
                        'task-transition-in-progress-resolved',
                        'task-transition-open-resolved',
                        'task-transition-in-progress-tested-and-closed',
