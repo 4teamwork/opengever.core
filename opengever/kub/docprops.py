@@ -138,6 +138,8 @@ class KuBAddressDocPropertyProvider(BaseDocPropertyProvider):
     def _collect_properties(self):
         address = self.context.get("primaryAddress") or {}
         return {
+            'extra_line_1': address.get("addressLine1"),
+            'extra_line_2': address.get("addressLine2"),
             'street': u' '.join(filter(None, [
                 address.get("street"),
                 address.get("houseNumber"),
