@@ -55,7 +55,8 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.contact.title': u'4Teamwork',
              'ogg.email.address': None,
              'ogg.organization.name': u'4Teamwork',
-             'ogg.phone.number': None,
+             'ogg.organization.phone.number': u'+41 31 511 04 00',
+             'ogg.phone.number': u'+41 31 511 04 00',
              'ogg.url.url': None},
             properties)
 
@@ -74,6 +75,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.contact.title': u'Dupont Jean - 4Teamwork (CEO)',
              'ogg.email.address': u'Jean.dupon@example.com',
              'ogg.organization.name': u'4Teamwork',
+             'ogg.organization.phone.number': u'+41 31 511 04 00',
              'ogg.orgrole.department': u'',
              'ogg.orgrole.description': u'',
              'ogg.orgrole.function': u'CEO',

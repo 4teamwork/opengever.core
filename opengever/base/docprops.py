@@ -23,10 +23,15 @@ class BaseDocPropertyProvider(object):
 
         return tuple(name_or_iterable)
 
-    def _prefix_properties_with_namespace(self, properties, prefix=None):
+    def _prefix_properties_with_namespace(
+            self, properties, prefix=None, with_app_prefix=True):
         """Prefix all keys in properties with the correct namespace."""
 
-        namespace = self._as_ns_part(self.NS_APP)
+        if with_app_prefix:
+            namespace = self._as_ns_part(self.NS_APP)
+        else:
+            namespace = ()
+
         if prefix:
             namespace += self._as_ns_part(prefix)
         namespace += self._as_ns_part(self.DEFAULT_PREFIX)
@@ -48,7 +53,7 @@ class BaseDocPropertyProvider(object):
         merged.update(d2)
         return merged
 
-    def get_properties(self, prefix=None):
+    def get_properties(self, prefix=None, with_app_prefix=True):
         properties = self._collect_properties()
         return self._prefix_properties_with_namespace(
-            properties, prefix=prefix)
+            properties, prefix=prefix, with_app_prefix=with_app_prefix)

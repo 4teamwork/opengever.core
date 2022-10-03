@@ -109,7 +109,12 @@ class KuBOrganizationDocPropertyProvider(BaseDocPropertyProvider):
     DEFAULT_PREFIX = ('organization',)
 
     def _collect_properties(self):
-        return {'name': self.context.get("name")}
+        properties = {
+            'name': self.context.get("name"),
+        }
+        phone_provider = KuBPhoneNumberDocPropertyProvider(self.context)
+        properties.update(phone_provider.get_properties(with_app_prefix=False))
+        return properties
 
 
 class KuBMembershipDocPropertyProvider(BaseDocPropertyProvider):
