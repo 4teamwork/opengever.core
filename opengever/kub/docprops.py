@@ -133,7 +133,10 @@ class KuBAddressDocPropertyProvider(BaseDocPropertyProvider):
     def _collect_properties(self):
         address = self.context.get("primaryAddress") or {}
         return {
-            'street': address.get("street"),
+            'street': u' '.join(filter(None, [
+                address.get("street"),
+                address.get("houseNumber"),
+            ])),
             'zip_code': address.get("swissZipCode") or address.get('foreignZipCode'),
             'city': address.get("town"),
             'country': address.get("countryName"),
