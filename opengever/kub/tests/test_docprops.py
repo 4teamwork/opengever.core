@@ -15,6 +15,8 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': None,
              'ogg.address.country': None,
+             'ogg.address.extra_line_1': None,
+             'ogg.address.extra_line_2': None,
              'ogg.address.street': u'',
              'ogg.address.zip_code': None,
              'ogg.contact.description': u'',
@@ -49,6 +51,8 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
+             'ogg.address.extra_line_1': u'c/o John Doe',
+             'ogg.address.extra_line_2': u'',
              'ogg.address.street': u'Dammweg 9',
              'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'Web application specialist',
@@ -69,6 +73,8 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.assertDictEqual(
             {'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
+             'ogg.address.extra_line_1': u'c/o John Doe',
+             'ogg.address.extra_line_2': u'',
              'ogg.address.street': u'Dammweg 9',
              'ogg.address.zip_code': u'3013',
              'ogg.contact.description': u'',
