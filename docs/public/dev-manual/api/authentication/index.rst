@@ -21,7 +21,4 @@ von OneGov GEVER unterstützt werden.
 .. toctree::
    :maxdepth: 1
 
-   basic_auth
    oauth2_token_auth
-   jwt
-   logout
