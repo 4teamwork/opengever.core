@@ -45,6 +45,19 @@ logger = logging.getLogger('opengever.ogds.base')
 logger.setLevel(logging.INFO)
 
 
+class CaseInsensitiveDict(dict):
+    """Dictionary that is case insensitive just for getting items.
+    """
+    def __getitem__(self, key):
+        if key in self:
+            return super(CaseInsensitiveDict, self).__getitem__(key)
+        for k, v in self.items():
+            if k.lower() == key.lower():
+                return v
+
+        raise KeyError(key)
+
+
 def sync_ogds(plone, users=True, groups=True, local_groups=False,
               update_remote_timestamps=True, disable_logfile=False):
     """Syncronize OGDS users and groups by importing users, groups and
@@ -264,9 +277,9 @@ class OGDSUpdater(object):
             logger.info('Modified group %s', modified['groupid'])
 
         # Update group members
-        ogds_users = {
+        ogds_users = CaseInsensitiveDict({
             user.userid: user for user in session.query(User)
-        }
+        })
         ogds_groups = {
             group.groupid: group
             for group in session.query(Group).filter(
