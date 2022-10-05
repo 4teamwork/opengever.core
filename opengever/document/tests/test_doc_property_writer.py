@@ -271,11 +271,8 @@ class TestDocPropertyWriter(IntegrationTestCase):
 
         with TemporaryDocFile(self.document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
-        # while the property is stored as empty string, it will be considered
-        # None while reading the element <vt:lpwstr/>
-        # this is ok as we are interested in the fact that the property is
-        # still present in the file
-        self.assertIn(('ogg.document.document_type', None), properties)
+
+        self.assertIn(('ogg.document.document_type', u''), properties)
 
     def test_document_with_content_controls_gets_updated(self):
         self.login(self.regular_user)

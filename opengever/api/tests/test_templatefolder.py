@@ -294,11 +294,11 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
-            ('ogg.recipient.contact.description', None),
+            ('ogg.recipient.contact.description', u''),
             ('ogg.recipient.email.address', 'Jean.dupon@example.com'),
-            ('ogg.recipient.person.academic_title', None),
-            ('ogg.recipient.address.extra_line_1', None),
-            ('ogg.recipient.address.extra_line_2', None),
+            ('ogg.recipient.person.academic_title', u''),
+            ('ogg.recipient.address.extra_line_1', u''),
+            ('ogg.recipient.address.extra_line_2', u''),
             ('ogg.recipient.address.zip_code', '9999'),
             ('ogg.recipient.address.city', 'Bern'),
             ('ogg.recipient.contact.title', 'Dupont Jean'),
@@ -371,11 +371,11 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
-            ('ogg.sender.contact.description', None),
+            ('ogg.sender.contact.description', u''),
             ('ogg.sender.email.address', 'Jean.dupon@example.com'),
-            ('ogg.sender.person.academic_title', None),
-            ('ogg.sender.address.extra_line_1', None),
-            ('ogg.sender.address.extra_line_2', None),
+            ('ogg.sender.person.academic_title', u''),
+            ('ogg.sender.address.extra_line_1', u''),
+            ('ogg.sender.address.extra_line_2', u''),
             ('ogg.sender.address.zip_code', '9999'),
             ('ogg.sender.address.city', 'Bern'),
             ('ogg.sender.contact.title', 'Dupont Jean'),
