@@ -1,0 +1,1 @@
+Bump docxcompose to fix bug where placeholder values for empty/absent docproperties weren't always updated. [lgraf]
