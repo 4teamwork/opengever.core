@@ -49,8 +49,13 @@ class TestTaskContextActions(IntegrationTestCase):
 
     def test_task_context_actions(self):
         self.login(self.regular_user)
-        expected_actions = [u'edit', u'move_item']
+        expected_actions = [u'move_item']
         self.assertEqual(expected_actions, self.get_actions(self.task))
+
+    def test_edit_action_available_for_task_issuer(self):
+        self.login(self.dossier_responsible)
+        self.set_workflow_state('task-state-open', self.task)
+        self.assertIn(u'edit', self.get_actions(self.task))
 
     def test_move_item_action_only_available_if_user_has_move_permission(self):
         self.login(self.regular_user)

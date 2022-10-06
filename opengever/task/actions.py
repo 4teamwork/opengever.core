@@ -28,3 +28,10 @@ class TaskContextActions(BaseContextActions):
 
     def is_move_item_available(self):
         return api.user.has_permission('Copy or Move', obj=self.context)
+
+    def is_edit_available(self):
+        is_locked_for_current_user = self.context.restrictedTraverse(
+            '@@plone_lock_info').is_locked_for_current_user()
+        has_modify_permission = api.user.has_permission(
+            'opengever.task: Edit task', obj=self.context)
+        return has_modify_permission and not is_locked_for_current_user
