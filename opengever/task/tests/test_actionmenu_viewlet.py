@@ -32,7 +32,8 @@ class TestActionmenuViewlet(FunctionalTestCase):
         browser.login().open(self.task, view='tabbedview_view-overview')
 
         self.assertEquals(
-            ['Accept',
+            ['Modify deadline',
+             'Accept',
              'Reject',
              'Resolve',
              'Reassign',
@@ -40,8 +41,7 @@ class TestActionmenuViewlet(FunctionalTestCase):
             browser.css('ul.regular_buttons a').text)
 
         self.assertEquals(
-            ['Modify deadline',
-             'Cancel',
+            ['Cancel',
              'Close'],
             browser.css('dl.agency_buttons ul a').text)
 
