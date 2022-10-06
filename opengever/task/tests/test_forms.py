@@ -86,6 +86,23 @@ class TestTaskAddForm(IntegrationTestCase):
 class TestTaskEditForm(IntegrationTestCase):
 
     @browsing
+    def test_editor_can_only_edit_open_task(self, browser):
+        allowed_states = ['task-state-open']
+        disallowed_states = [
+            'task-state-in-progress', 'task-state-rejected',
+            'task-state-tested-and-closed','task-state-planned',
+            'task-state-resolved', 'task-state-skipped', 'task-state-cancelled']
+        self.login(self.regular_user, browser=browser)
+        for state in allowed_states:
+            self.set_workflow_state(state, self.task)
+            browser.open(self.task, view='edit')
+
+        for state in disallowed_states:
+            self.set_workflow_state(state, self.task)
+            with browser.expect_unauthorized():
+                browser.open(self.task, view='edit')
+
+    @browsing
     def test_edit_responsible_adds_reassign_response(self, browser):
         self.login(self.administrator, browser=browser)
         self.set_workflow_state('task-state-open', self.task)
