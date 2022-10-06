@@ -49,7 +49,7 @@ class TestTaskContextActions(IntegrationTestCase):
 
     def test_task_context_actions(self):
         self.login(self.regular_user)
-        expected_actions = [u'move_item']
+        expected_actions = [u'move_item', u'edit description', u'edit relatedItems']
         self.assertEqual(expected_actions, self.get_actions(self.task))
 
     def test_edit_action_available_for_task_issuer(self):
@@ -67,3 +67,20 @@ class TestTaskContextActions(IntegrationTestCase):
         self.login(self.secretariat_user)
         self.assertTrue(api.user.has_permission('Copy or Move', obj=self.inbox_forwarding))
         self.assertNotIn(u'move_item', self.get_actions(self.inbox_forwarding))
+
+    def test_edit_description_and_related_items_action_available_on_pending_tasks(self):
+        self.login(self.regular_user)
+        allowed_states = ['task-state-in-progress', 'task-state-open',
+                          'task-state-planned', 'task-state-resolved']
+        disallowed_states = ['task-state-rejected', 'task-state-tested-and-closed',
+                             'task-state-skipped', 'task-state-cancelled']
+
+        for state in allowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertIn(u'edit description', self.get_actions(self.task))
+            self.assertIn(u'edit relatedItems', self.get_actions(self.task))
+
+        for state in disallowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertNotIn(u'edit description', self.get_actions(self.task))
+            self.assertNotIn(u'edit relatedItems', self.get_actions(self.task))
