@@ -246,7 +246,7 @@ class TestNotificationSettingsGet(IntegrationTestCase):
             u'added-as-watcher',
             u'external-activity',
             u'task-added-or-reassigned',
-            u'task-transition-modify-deadline',
+            u'task-modified',
             u'task-commented',
             u'task-status-modified',
             u'task-reminder',

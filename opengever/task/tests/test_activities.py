@@ -272,12 +272,38 @@ class TestTaskActivites(FunctionalTestCase):
         activity = Activity.query.order_by(desc(Activity.id)).first()
         self.assertEquals(u'task-commented', activity.kind)
         self.assertEquals(
-          u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
+            u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
         self.assertEquals(
             u'Commented by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
             activity.summary)
         self.assertEquals(u'Wird n\xe4chste Woche erledigt.', activity.description)
         self.assertEquals([], warning_messages())
+
+    @browsing
+    def test_task_modified_activity(self, browser):
+        dossier = create(Builder('dossier')
+                         .titled(u"Dossier XY"))
+        task = create(Builder('task')
+                      .within(dossier)
+                      .titled(u'Abkl\xe4rung Fall Meier')
+                      .having(responsible=TEST_USER_ID,
+                              task_type='information'))
+
+        browser.login().visit(task, view="edit")
+        browser.fill({'Text': u'New description.'})
+        browser.find('Save').click()
+
+        # Ensure task comment activity is fired only once.
+        # Second activity is for task creation
+        self.assertEqual(2, Activity.query.count())
+
+        activity = Activity.query.order_by(desc(Activity.id)).first()
+        self.assertEquals(u'task-modified', activity.kind)
+        self.assertEquals(
+            u'Dossier XY - Abkl\xe4rung Fall Meier', activity.title)
+        self.assertEquals(
+            u'Modified by <a href="http://nohost/plone/@@user-details/test_user_1_">Test User (test_user_1_)</a>',
+            activity.summary)
 
     @browsing
     def test_activity_actor_is_current_user(self, browser):

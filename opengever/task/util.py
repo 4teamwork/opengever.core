@@ -97,6 +97,14 @@ class TaskAutoResponseChangesTracker(AutoResponseChangesTracker):
 
     response_class = TaskResponse
 
+    def _generate_response_object(self):
+        response = super(TaskAutoResponseChangesTracker, self)._generate_response_object()
+        if response:
+            response.transition = 'task-modified'
+            TaskTransitionActivity(self.context, self.request, response).record()
+
+        return response
+
 
 def add_simple_response(task, text='', field_changes=None, added_objects=None,
                         successor_oguid=None, supress_events=False, supress_activity=False,

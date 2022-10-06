@@ -338,6 +338,11 @@ msgstr "Tâche créée / réassignée"
 msgid "task-commented"
 msgstr "Tâche commentée"
 
+#. Default: "Task modified"
+#: ./opengever/activity/notification_settings.py
+msgid "task-modified"
+msgstr "Tâche modifiée"
+
 #. Default: "Task reminder"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py

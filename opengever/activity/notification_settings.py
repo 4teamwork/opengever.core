@@ -40,9 +40,9 @@ NOTIFICATION_CONFIGURATION = [
         },
     },
     {
-        'id': 'task-transition-modify-deadline',
-        'title': _('task-transition-modify-deadline', default=u'Task deadline modified'),
-        'activities': ['task-transition-modify-deadline'],
+        'id': 'task-modified',
+        'title': _('task-modified', default=u'Task modified'),
+        'activities': ['task-transition-modify-deadline', 'task-modified'],
         'default_settings': {
             'badge_notification_roles': [TASK_RESPONSIBLE_ROLE, TASK_ISSUER_ROLE, WATCHER_ROLE],
         },

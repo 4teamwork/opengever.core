@@ -44,7 +44,7 @@ NOTIFICATION_SETTING_TABS = [
      'roles': [TASK_ISSUER_ROLE, TASK_RESPONSIBLE_ROLE, WATCHER_ROLE],
      'settings': [
          'task-added-or-reassigned',
-         'task-transition-modify-deadline',
+         'task-modified',
          'task-commented',
          'task-status-modified'
      ]},

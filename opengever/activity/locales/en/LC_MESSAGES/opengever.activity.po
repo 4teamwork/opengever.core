@@ -393,6 +393,11 @@ msgstr "Task added / reassigned"
 msgid "task-commented"
 msgstr "Task commented"
 
+#. Default: "Task modified"
+#: ./opengever/activity/notification_settings.py
+msgid "task-modified"
+msgstr "Task modified"
+
 #. German translation: Aufgaben-Erinnerung
 #. Default: "Task reminder"
 #: ./opengever/activity/__init__.py
@@ -402,7 +407,7 @@ msgstr "Task reminder"
 
 #. German translation: Aufgaben-Frist verändert
 #. Default: "Task deadline modified"
-#: ./opengever/activity/notification_settings.py
+#: ./opengever/activity/__init__.py
 msgid "task-transition-modify-deadline"
 msgstr "Task deadline modified"
 

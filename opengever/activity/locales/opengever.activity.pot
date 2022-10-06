@@ -336,6 +336,11 @@ msgstr ""
 msgid "task-commented"
 msgstr ""
 
+#. Default: "Task modified"
+#: ./opengever/activity/notification_settings.py
+msgid "task-modified"
+msgstr ""
+
 #. Default: "Task reminder"
 #: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
@@ -343,7 +348,7 @@ msgid "task-reminder"
 msgstr ""
 
 #. Default: "Task deadline modified"
-#: ./opengever/activity/notification_settings.py
+#: ./opengever/activity/__init__.py
 msgid "task-transition-modify-deadline"
 msgstr ""
 
