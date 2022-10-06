@@ -199,6 +199,7 @@ class AutoResponseChangesTracker(object):
     """Contextmanager to track changes made on an object and autogenerating
     a response-object with the changes.
     """
+    response_class = Response
 
     def __init__(self, context, request):
         self.context = context
@@ -235,7 +236,7 @@ class AutoResponseChangesTracker(object):
         if not self.changes:
             return None
 
-        response = Response(SCHEMA_FIELD_CHANGE_RESPONSE_TYPE)
+        response = self.response_class(SCHEMA_FIELD_CHANGE_RESPONSE_TYPE)
         for key, value in self.changes.items():
             response.add_change(key, *value)
 

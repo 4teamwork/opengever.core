@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-06-13 05:29+0000\n"
+"POT-Creation-Date: 2022-10-07 07:53+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -799,6 +799,11 @@ msgstr "New task opened by ${user}"
 msgid "label_task_commented"
 msgstr "Comment added"
 
+#. Default: "Task modified"
+#: ./opengever/task/response_description.py
+msgid "label_task_modified"
+msgstr "Task modified"
+
 #. German translation: Aufgabentitel
 #. Default: "Task title"
 #: ./opengever/task/activities.py
@@ -908,6 +913,11 @@ msgstr "Task successfully reassigned."
 #: ./opengever/task/response_description.py
 msgid "msg_task_commented"
 msgstr "Commented by ${user}"
+
+#. Default: "Modified by ${user}"
+#: ./opengever/task/response_description.py
+msgid "msg_task_modified"
+msgstr "Modified by ${user}"
 
 #. German translation: Status erfolgreich geändert.
 #. Default: "Review state successfully changed."

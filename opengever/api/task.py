@@ -17,6 +17,7 @@ from opengever.task.helper import task_type_value_helper
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.task import ITask
 from opengever.task.task_response import ITaskResponse
+from opengever.task.util import TaskAutoResponseChangesTracker
 from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from plone.restapi.deserializer import json_body
@@ -318,7 +319,10 @@ class TaskPatch(ContentPatch):
         current_is_private_value = self.context.is_private
         current_responsible = self.context.responsible
         current_responsible_client = self.context.responsible_client
-        data = super(TaskPatch, self).reply()
+
+        changes_tracker = TaskAutoResponseChangesTracker(self.context, self.request)
+        with changes_tracker.track_changes(['text', 'relatedItems']):
+            data = super(TaskPatch, self).reply()
 
         if self.context.is_private != current_is_private_value:
             raise BadRequest("It's not allowed to change the is_private option"

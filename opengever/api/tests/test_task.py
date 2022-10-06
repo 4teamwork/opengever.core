@@ -577,6 +577,27 @@ class TestTaskPatch(IntegrationTestCase):
             "It's not allowed to change the is_private option of an existing task.",
             str(cm.exception))
 
+    @browsing
+    def test_changing_text_creates_response(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, headers=self.api_headers)
+        responses = browser.json['responses']
+        self.assertEquals(2, len(responses))
+
+        browser.open(self.task, json.dumps({"text": "New description"}),
+                     method="PATCH", headers=self.api_headers)
+
+        browser.open(self.task, headers=self.api_headers)
+        responses = browser.json['responses']
+        self.assertEquals(3, len(responses))
+        self.assertEquals(
+            [{u'after': u'New description',
+              u'before': None,
+              u'field_id': u'text',
+              u'field_title': u''}],
+            responses[-1]['changes'])
+
 
 class TestTaskTransitions(IntegrationTestCase):
 
