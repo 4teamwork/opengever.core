@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-12-08 16:03+0000\n"
+"POT-Creation-Date: 2022-10-07 09:20+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -75,37 +75,31 @@ msgid "created"
 msgstr "Créé"
 
 #. Default: "Disposition added"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-added"
 msgstr "Offre ajoutée"
 
 #. Default: "Disposition appraised"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-appraise"
 msgstr "Evaluation finalisée"
 
 #. Default: "Disposition archived"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-archive"
 msgstr "Archivage confirmé"
 
 #. Default: "Disposition closed"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-close"
 msgstr "Offre clôturée"
 
 #. Default: "Disposition disposed"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-dispose"
 msgstr "Proposé pour archivage"
 
 #. Default: "Disposition refused"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "disposition-transition-refuse"
 msgstr "Offre refusée"
@@ -130,13 +124,7 @@ msgstr "Titre du document modifié"
 msgid "document-version-created"
 msgstr "Nouvelle version du document créée"
 
-#. Default: "Added as watcher to document"
-#: ./opengever/activity/__init__.py
-msgid "document-watcher-added"
-msgstr "Ajouté comme observateur à un document"
-
 #. Default: "Overdue dossier"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "dossier-overdue"
 msgstr "Dossier en souffrance"
@@ -150,46 +138,6 @@ msgstr "Responsable"
 #: ./opengever/activity/notification_settings.py
 msgid "external-activity"
 msgstr "Activités externes"
-
-#. Default: "Forwarding added"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-added"
-msgstr "une transmission à été ajoutée"
-
-#. Default: "Forwarding accepted"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-accept"
-msgstr "transmission acceptée"
-
-#. Default: "Forwarding assigned to dossier"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-assign-to-dossier"
-msgstr "transmission assignée à un dossier"
-
-#. Default: "Forwarding closed"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-close"
-msgstr "transmission terminée"
-
-#. Default: "Forwarding reassigned"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-reassign"
-msgstr "transmission réassignée"
-
-#. Default: "Forwarding reassigned and refused"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-reassign-refused"
-msgstr "transmission réassignée et refusée"
-
-#. Default: "Forwarding refused"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-transition-refuse"
-msgstr "transmission refusée"
-
-#. Default: "Added as watcher to forwarding"
-#: ./opengever/activity/__init__.py
-msgid "forwarding-watcher-added"
-msgstr "Ajouté comme observateur à une transmission"
 
 #. Default: "Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -380,18 +328,12 @@ msgstr "Activité GEVER"
 msgid "submitted-proposal-commented"
 msgstr "Requête soumise commentée"
 
-#. Default: "Task added"
-#: ./opengever/activity/__init__.py
-msgid "task-added"
-msgstr "tâche ajoutée"
-
 #. Default: "Task added / reassigned"
 #: ./opengever/activity/notification_settings.py
 msgid "task-added-or-reassigned"
 msgstr "Tâche créée / réassignée"
 
 #. Default: "Task commented"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "task-commented"
 msgstr "tâche commentée"
@@ -402,96 +344,10 @@ msgstr "tâche commentée"
 msgid "task-reminder"
 msgstr "Rappel tâche"
 
-#. Default: "Task reopened"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-cancelled-open"
-msgstr "tâche rouverte"
-
-#. Default: "Task delegated"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-delegate"
-msgstr "tâche déléguée"
-
-#. Default: "Task resolved"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-in-progress-resolved"
-msgstr "tâche accomplie"
-
-#. Default: "Task closed"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-in-progress-tested-and-closed"
-msgstr "tâche clôturée"
-
 #. Default: "Task deadline modified"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "task-transition-modify-deadline"
 msgstr "le délai attribué à la tâche a été modifié"
-
-#. Default: "Task cancelled"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-open-cancelled"
-msgstr "tâches annulées"
-
-#. Default: "Task accepted"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-open-in-progress"
-msgstr "tâche acceptée"
-
-#. Default: "Task rejected"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-open-rejected"
-msgstr "tâche refusée"
-
-#. Default: "Task resolved"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-open-resolved"
-msgstr "tâche accomplie"
-
-#. Default: "Task closed"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-open-tested-and-closed"
-msgstr "tâche clôturée"
-
-#. Default: "Task skipped"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-planned-skipped"
-msgstr "tâche omise"
-
-#. Default: "Task reassign"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-reassign"
-msgstr "tâche réassignée"
-
-#. Default: "Task reopened"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-rejected-open"
-msgstr "tâche rouverte"
-
-#. Default: "Task skipped"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-rejected-skipped"
-msgstr "tâche omise"
-
-#. Default: "Task revision wanted"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-resolved-in-progress"
-msgstr "révision de la tâche requise"
-
-#. Default: "Task closed"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-resolved-tested-and-closed"
-msgstr "tâche clôturée"
-
-#. Default: "Task reopened"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-skipped-open"
-msgstr "tâche rouverte"
-
-#. Default: "Added as watcher to task"
-#: ./opengever/activity/__init__.py
-msgid "task-watcher-added"
-msgstr "Ajouté comme observateur à une tâche"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
@@ -519,13 +375,11 @@ msgid "title_daily_digest"
 msgstr "Résumé quotidien pour ${username}"
 
 #. Default: "ToDo assigned"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
 msgstr "ToDo assigné"
 
 #. Default: "ToDo modified"
-#: ./opengever/activity/__init__.py
 #: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
 msgstr "ToDo Modifié"
@@ -534,16 +388,6 @@ msgstr "ToDo Modifié"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
 msgstr "Responsable d'un ToDo"
-
-#. Default: "Document added"
-#: ./opengever/activity/__init__.py
-msgid "transition-add-document"
-msgstr "Document ajouté"
-
-#. Default: "Subtask added"
-#: ./opengever/activity/__init__.py
-msgid "transition-add-subtask"
-msgstr "Sous-tâche ajoutée"
 
 #. Default: "Workspace member"
 #: ./opengever/activity/roles.py

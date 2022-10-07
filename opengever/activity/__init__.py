@@ -69,66 +69,8 @@ def send_digest_zopectl_handler(app, args):
 
 
 ACTIVITY_TRANSLATIONS = {
-    'task-added': _('task-added', default=u'Task added'),
-    'task-transition-cancelled-open': _(
-        'task-transition-cancelled-open', default=u'Task reopened'),
-    'task-transition-delegate': _(
-        'task-transition-delegate', default=u'Task delegated'),
-    'task-transition-in-progress-resolved': _(
-        'task-transition-in-progress-resolved', default=u'Task resolved'),
-    'task-transition-in-progress-tested-and-closed': _(
-        'task-transition-in-progress-tested-and-closed',
-        default=u'Task closed'),
-    'task-transition-modify-deadline': _(
-        'task-transition-modify-deadline', default=u'Task deadline modified'),
-    'task-transition-open-cancelled': _(
-        'task-transition-open-cancelled', default=u'Task cancelled'),
-    'task-transition-open-in-progress': _(
-        'task-transition-open-in-progress', default=u'Task accepted'),
-    'task-transition-open-rejected': _(
-        'task-transition-open-rejected', default=u'Task rejected'),
-    'task-transition-open-resolved': _(
-        'task-transition-open-resolved', default=u'Task resolved'),
-    'task-transition-open-tested-and-closed': _(
-        'task-transition-open-tested-and-closed', default=u'Task closed'),
-    'task-commented': _('task-commented', default=u'Task commented'),
-    'task-transition-reassign': _(
-        'task-transition-reassign', default=u'Task reassign'),
-    'task-transition-rejected-open': _(
-        'task-transition-rejected-open', default=u'Task reopened'),
-    'task-transition-resolved-in-progress': _(
-        'task-transition-resolved-in-progress', default=u'Task revision wanted'),  # noqa
-    'task-transition-resolved-tested-and-closed': _(
-        'task-transition-resolved-tested-and-closed', default=u'Task closed'),
-    'task-transition-skipped-open': _(
-        'task-transition-skipped-open', default=u'Task reopened'),
-    'task-transition-rejected-skipped': _(
-        'task-transition-rejected-skipped', default=u'Task skipped'),
-    'task-transition-planned-skipped': _(
-        'task-transition-planned-skipped', default=u'Task skipped'),
     'task-reminder': _(
         'task-reminder', default=u'Task reminder'),
-    'task-watcher-added': _(
-        'task-watcher-added', default=u'Added as watcher to task'),
-    'transition-add-subtask': _('transition-add-subtask', 'Subtask added'),
-    'transition-add-document': _('transition-add-document', 'Document added'),
-    'forwarding-added': _(
-        'forwarding-added', default=u'Forwarding added'),
-    'forwarding-transition-accept': _(
-        'forwarding-transition-accept', default=u'Forwarding accepted'),
-    'forwarding-transition-assign-to-dossier': _(
-        'forwarding-transition-assign-to-dossier',
-        default=u'Forwarding assigned to dossier'),
-    'forwarding-transition-close': _('forwarding-transition-close', default=u'Forwarding closed'),  # noqa
-    'forwarding-transition-reassign': _(
-        'forwarding-transition-reassign', default=u'Forwarding reassigned'),
-    'forwarding-transition-reassign-refused': _(
-        'forwarding-transition-reassign-refused',
-        default=u'Forwarding reassigned and refused'),
-    'forwarding-transition-refuse': _(
-        'forwarding-transition-refuse', default=u'Forwarding refused'),
-    'forwarding-watcher-added': _(
-        'forwarding-watcher-added', default=u'Added as watcher to forwarding'),
     'proposal-transition-reject': _(
         'proposal-transition-reject', default=u'Proposal rejected'),
     'proposal-transition-schedule': _(
@@ -148,33 +90,6 @@ ACTIVITY_TRANSLATIONS = {
     'submitted-proposal-commented': _(
         'submitted-proposal-commented',
         default=u'Submitted proposal commented'),
-    'disposition-added': _(
-        'disposition-added',
-        default=u'Disposition added'),
-    'disposition-transition-appraise': _(
-        'disposition-transition-appraise',
-        default=u'Disposition appraised'),
-    'disposition-transition-archive': _(
-        'disposition-transition-archive',
-        default=u'Disposition archived'),
-    'disposition-transition-dispose': _(
-        'disposition-transition-dispose',
-        default=u'Disposition disposed'),
-    'disposition-transition-refuse': _(
-        'disposition-transition-refuse',
-        default=u'Disposition refused'),
-    'disposition-transition-close': _(
-        'disposition-transition-close',
-        default=u'Disposition closed'),
-    'dossier-overdue': _(
-        'dossier-overdue',
-        default=u'Overdue dossier'),
-    'todo-assigned': _(
-        'todo-assigned',
-        default=u'ToDo assigned'),
-    'todo-modified': _(
-        'todo-modified',
-        default=u'ToDo modified'),
     'document-author-changed': _(
         'document-author-changed',
         default=u'Document author changed'),
@@ -184,7 +99,4 @@ ACTIVITY_TRANSLATIONS = {
     'document-version-created': _(
         'document-version-created',
         default=u'New document version created'),
-    'document-watcher-added': _(
-        'document-watcher-added',
-        default=u'Added as watcher to document'),
 }
