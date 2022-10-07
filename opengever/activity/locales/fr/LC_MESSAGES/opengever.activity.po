@@ -37,17 +37,17 @@ msgstr "Archiviste"
 #. Default: "Cancel"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_cancel"
-msgstr "annuler"
+msgstr "Annuler"
 
 #. Default: "Reset"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_reset"
-msgstr "rétablir les valeurs par défaut"
+msgstr "Rétablir les valeurs par défaut"
 
 #. Default: "Save"
 #: ./opengever/activity/browser/settings.py
 msgid "btn_save"
-msgstr "sauvegarder"
+msgstr "Sauvegarder"
 
 #. Default: "Actor"
 #: ./opengever/activity/browser/listing.py
@@ -57,7 +57,7 @@ msgstr "Acteur"
 #. Default: "Kind"
 #: ./opengever/activity/browser/listing.py
 msgid "column_kind"
-msgstr "type"
+msgstr "Type"
 
 #. Default: "Title"
 #: ./opengever/activity/browser/listing.py
@@ -147,12 +147,12 @@ msgstr "Notifications"
 #. Default: "Activity"
 #: ./opengever/activity/browser/settings.py
 msgid "label_activity"
-msgstr "activité"
+msgstr "Activité"
 
 #. Default: "Badge"
 #: ./opengever/activity/browser/settings.py
 msgid "label_badge"
-msgstr "message GEVER"
+msgstr "Message GEVER"
 
 #. Default: "Daily Digest"
 #: ./opengever/activity/browser/settings.py
@@ -182,13 +182,13 @@ msgstr "Général"
 #. Default: "Mail"
 #: ./opengever/activity/browser/settings.py
 msgid "label_mail"
-msgstr "e-mail"
+msgstr "E-mail"
 
 #. Default: "Notification settings"
 #: ./opengever/activity/browser/templates/notification_mail_macros.pt
 #: ./opengever/activity/browser/templates/settings.pt
 msgid "label_notification_settings"
-msgstr "paramètres de notification"
+msgstr "Paramètres de notification"
 
 #. Default: "All Notifications"
 #: ./opengever/activity/viewlets/notification.pt
@@ -306,7 +306,7 @@ msgstr "Records Manager"
 #. Default: "Watcher"
 #: ./opengever/activity/roles.py
 msgid "regular_watcher"
-msgstr "observateur"
+msgstr "Observateur"
 
 #. Default: "State changed"
 #: ./opengever/activity/notification_settings.py
@@ -336,7 +336,7 @@ msgstr "Tâche créée / réassignée"
 #. Default: "Task commented"
 #: ./opengever/activity/notification_settings.py
 msgid "task-commented"
-msgstr "tâche commentée"
+msgstr "Tâche commentée"
 
 #. Default: "Task reminder"
 #: ./opengever/activity/__init__.py
@@ -347,12 +347,12 @@ msgstr "Rappel tâche"
 #. Default: "Task deadline modified"
 #: ./opengever/activity/notification_settings.py
 msgid "task-transition-modify-deadline"
-msgstr "le délai attribué à la tâche a été modifié"
+msgstr "Le délai attribué à la tâche a été modifié"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
 msgid "task_issuer"
-msgstr "mandant"
+msgstr "Mandant"
 
 #. Default: "Task former responsible"
 #: ./opengever/activity/roles.py
@@ -362,12 +362,12 @@ msgstr "Mandataire précédent"
 #. Default: "Watcher"
 #: ./opengever/activity/roles.py
 msgid "task_reminder_watcher_role"
-msgstr "observateur"
+msgstr "Observateur"
 
 #. Default: "Task responsible"
 #: ./opengever/activity/roles.py
 msgid "task_responsible"
-msgstr "mandataire"
+msgstr "Mandataire"
 
 #. Default: "Daily Digest for ${username}"
 #: ./opengever/activity/digest.py
