@@ -39,6 +39,8 @@ class TaskContextActions(BaseContextActions):
             self.add_action(u'edit description')
 
     def maybe_add_edit_related_items_action(self):
+        if self.context.get_sql_object().is_part_of_remote_predecessor_successor_pair:
+            return False
         if not self.context.is_editable:
             return False
         if api.user.has_permission('Modify portal content', obj=self.context):

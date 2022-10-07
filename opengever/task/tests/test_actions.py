@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
 from opengever.testing import IntegrationTestCase
@@ -84,3 +86,29 @@ class TestTaskContextActions(IntegrationTestCase):
             self.set_workflow_state(state, self.task)
             self.assertNotIn(u'edit description', self.get_actions(self.task))
             self.assertNotIn(u'edit relatedItems', self.get_actions(self.task))
+
+    def test_edit_related_items_action_not_available_if_task_has_remote_predecessor(self):
+        self.login(self.regular_user)
+        self.assertIn(u'edit relatedItems', self.get_actions(self.task))
+
+        create(Builder('admin_unit').id(u'extra-au'))
+        predecessor = create(Builder('globalindex_task').having(
+            int_id='1234', admin_unit_id='extra-au'))
+        self.task.get_sql_object().predecessor = predecessor
+        self.assertNotIn(u'edit relatedItems', self.get_actions(self.task))
+
+        predecessor.admin_unit_id = 'plone'
+        self.assertIn(u'edit relatedItems', self.get_actions(self.task))
+
+    def test_edit_related_items_action_not_available_if_task_has_remote_sucessor(self):
+        self.login(self.regular_user)
+        self.assertIn(u'edit relatedItems', self.get_actions(self.task))
+
+        create(Builder('admin_unit').id(u'extra-au'))
+        successor = create(Builder('globalindex_task').having(
+            int_id='1234', admin_unit_id='extra-au'))
+        self.task.get_sql_object().successors = [successor]
+        self.assertNotIn(u'edit relatedItems', self.get_actions(self.task))
+
+        successor.admin_unit_id = 'plone'
+        self.assertIn(u'edit relatedItems', self.get_actions(self.task))

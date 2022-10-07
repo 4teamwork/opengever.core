@@ -206,6 +206,38 @@ class TestGlobalindexTask(TestCase):
         task_successor.predecessor = forwarding
         self.assertFalse(task_successor.has_remote_predecessor)
 
+    def test_has_remote_successor(self):
+        predecessor = create(Builder('globalindex_task')
+                             .having(int_id=1, admin_unit_id='fd'))
+        successor = create(Builder('globalindex_task')
+                           .having(int_id=2, admin_unit_id='rk'))
+        successor.predecessor = predecessor
+        self.assertTrue(predecessor.has_remote_successor)
+
+        forwarding = create(Builder('globalindex_task')
+                            .having(int_id=3, admin_unit_id='fd'))
+        task_successor = create(Builder('globalindex_task')
+                                .having(int_id=4, admin_unit_id='fd'))
+        task_successor.predecessor = forwarding
+        self.assertFalse(forwarding.has_remote_successor)
+
+    def test_is_part_of_remote_predecessor_successor_pair(self):
+        predecessor = create(Builder('globalindex_task')
+                             .having(int_id=1, admin_unit_id='fd'))
+        successor = create(Builder('globalindex_task')
+                           .having(int_id=2, admin_unit_id='rk'))
+        successor.predecessor = predecessor
+        self.assertTrue(predecessor.is_part_of_remote_predecessor_successor_pair)
+        self.assertTrue(successor.is_part_of_remote_predecessor_successor_pair)
+
+        forwarding = create(Builder('globalindex_task')
+                            .having(int_id=3, admin_unit_id='fd'))
+        task_successor = create(Builder('globalindex_task')
+                                .having(int_id=4, admin_unit_id='fd'))
+        task_successor.predecessor = forwarding
+        self.assertFalse(forwarding.is_part_of_remote_predecessor_successor_pair)
+        self.assertFalse(task_successor.is_part_of_remote_predecessor_successor_pair)
+
     def test_has_sequential_successor(self):
         task1 = create(Builder('globalindex_task').having(int_id=1))
         task2 = create(Builder('globalindex_task').having(int_id=2))
