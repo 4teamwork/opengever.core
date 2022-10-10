@@ -1105,6 +1105,14 @@
 
   <plone:service
       method="POST"
+      name="@prepare-copy-dossier-to-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.PrepareCopyDossierToWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
+      method="POST"
       name="@document-from-template"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".templatefolder.DocumentFromTemplatePost"
