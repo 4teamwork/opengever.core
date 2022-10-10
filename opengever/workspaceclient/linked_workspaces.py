@@ -14,6 +14,7 @@ from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
+from opengever.workspaceclient.exceptions import FolderNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
@@ -244,8 +245,22 @@ class LinkedWorkspaces(object):
             raise WorkspaceNotFound()
         return workspace_url
 
-    def copy_document_to_workspace(self, document, workspace_uid, lock=False):
+    def _get_folder_url(self, folder_uid):
+        folder_url = self.client.lookup_url_by_uid(folder_uid)
+
+        if not folder_url:
+            raise FolderNotFound()
+
+        return folder_url
+
+    def copy_document_to_workspace(self, document, workspace_uid, lock=False, folder_uid=None):
         """Will upload a copy of a document to a linked workspace.
+
+        If a `folder_uid` is provided, the document will be uploaded to that
+        folder in the workspace (that folder must be inside the linked
+        workspace identified by `workspace_uid`).
+
+        Otherwise, the document is uploaded into the root of the workspace.
         """
         if document.is_checked_out():
             raise CopyToWorkspaceForbidden(
@@ -254,14 +269,22 @@ class LinkedWorkspaces(object):
 
         workspace_url = self._get_linked_workspace_url(workspace_uid)
 
+        folder_url = None
+        if folder_uid:
+            folder_url = self._get_folder_url(folder_uid)
+
         file_ = document.get_file()
         document_repr = self._serialized_document_schema_fields(document)
         document_metadata = self._drop_non_metadata_fields(document_repr)
 
+        target_url = workspace_url
+        if folder_url:
+            target_url = folder_url
+
         if not file_:
             # File only preserved in paper. Not linked to GEVER document,
             # since there's no file that could be transferred back.
-            return self.client.post(workspace_url, json=document_repr)
+            return self.client.post(target_url, json=document_repr)
 
         document_metadata['gever_url'] = self.client.get_gever_url(Oguid.for_object(document).id)
 
@@ -281,7 +304,7 @@ class LinkedWorkspaces(object):
             title=title, documents=[document])
 
         response = self.client.upload_document_copy(
-            workspace_url, file_.open(),
+            target_url, file_.open(),
             file_.contentType, filename,
             document_metadata, gever_document_uid)
 

@@ -970,6 +970,14 @@
 
   <plone:service
       method="POST"
+      name="@upload-document-copy"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".workspace.UploadDocumentCopy"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
       name="@move"
       for="opengever.workspace.interfaces.IToDoList"
       factory=".todo.ToDoMove"

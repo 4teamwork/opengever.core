@@ -28,7 +28,8 @@ class SerializeWorkspaceToJson(GeverSerializeFolderToJson):
 
 
 class UploadDocumentCopy(GeverFolderPost):
-    """Endpoint to upload a complete copy of a GEVER document to a workspace.
+    """Endpoint to upload a complete copy of a GEVER document to a workspace
+    or workspace folder.
 
     Expects a multipart request that includes the document blob as well as
     the document metadata.

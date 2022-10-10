@@ -923,6 +923,53 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         self.assertEqual(LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK,
                          lockable.lock_info()[0]['type'].__name__)
 
+    @browsing
+    def test_also_allows_copying_documents_to_workspace_folder(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        folder = create(Builder('workspace folder')
+                        .within(self.workspace))
+
+        payload = {
+            'document_uid': document.UID(),
+            'workspace_uid': self.workspace.UID(),
+            'folder_uid': folder.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(folder) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            # XXX: This is incorrect, only one document should be added. This
+            # is a testing issue (doesn't happen in production) that was never
+            # really addressed. The fix_publisher_test_bug() is supposed to
+            # work around this, but it doesn't.
+            self.assertEqual(len(children['added']), 2)
+
+            id_ = browser.json['id'].encode('ascii')
+            workspace_document = folder.restrictedTraverse(id_)
+
+            self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_document.title, document.title)
+
+            self.assertEqual(
+                {'UID': IUUID(document)},
+                ILinkedDocuments(workspace_document).linked_gever_document)
+
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
 
