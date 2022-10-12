@@ -10,6 +10,36 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.20.0 (2022-10-12)
+----------------------
+
+New features:
+
+
+- Allow cancellation of tasks in progress. [tinagerber]
+- Include KuB organization phone number in membership docproperties. [lgraf]
+- Include extra address lines from KuB contacts in DocProperties. [lgraf]
+
+
+Bug fixes:
+
+
+- Include house number in `*.address.street` DocProperties for KuB entities. [lgraf]
+- OGDS auth plugin: Fix how we access RowProxy results from SQLAlchemy. [lgraf]
+- Consider time zone when determining the end date of a dossier. [tinagerber]
+- Bump docxcompose to fix bug where placeholder values for empty/absent docproperties weren't always updated. [lgraf]
+
+
+Other changes:
+
+
+- Add users.object_sid column to OGDS. [lgraf]
+- Expose `objectSid` property via OGDS auth plugin. [lgraf]
+- Add `display_name` column to OGDS user model. [lgraf]
+- OGDS auth plugin: Use OGDS `display_name` as the `fullname` member property. [lgraf]
+- Add `organization` column to OGDS user model. [lgraf]
+
+
 2022.19.0 (2022-09-28)
 ----------------------
 
