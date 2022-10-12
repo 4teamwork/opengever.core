@@ -22,3 +22,4 @@ von OneGov GEVER unterstützt werden.
    :maxdepth: 1
 
    oauth2_token_auth
+   cas_auth
