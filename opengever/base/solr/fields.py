@@ -515,6 +515,11 @@ FIELDS_WITH_MAPPING = [
         title=dossier_mf(u'label_end', default=u'Closing Date')
     ),
     ListingField(
+        'external_reference',
+        index='external_reference',
+        title=dossier_mf(u'label_external_reference'),
+    ),
+    ListingField(
         'filename',
         index='filename',
         accessor=filename,

@@ -28,7 +28,6 @@ OTHER_ALLOWED_FIELDS = set([
     'dossier_type',
     'email',
     'end',
-    'external_reference',
     'file_extension',
     'firstname',
     'getObjPositionInParent',
