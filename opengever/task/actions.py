@@ -30,6 +30,7 @@ class TaskContextActions(BaseContextActions):
         super(TaskContextActions, self).get_actions()
         self.maybe_add_edit_description_action()
         self.maybe_add_edit_related_items_action()
+        self.maybe_add_add_comment_action()
         return self.actions
 
     def maybe_add_edit_description_action(self):
@@ -45,6 +46,10 @@ class TaskContextActions(BaseContextActions):
             return False
         if api.user.has_permission('Modify portal content', obj=self.context):
             self.add_action(u'edit relatedItems')
+
+    def maybe_add_add_comment_action(self):
+        if api.user.has_permission('opengever.task: Add task comment', obj=self.context):
+            self.add_action(u'add comment')
 
     def is_move_item_available(self):
         return api.user.has_permission('Copy or Move', obj=self.context)
