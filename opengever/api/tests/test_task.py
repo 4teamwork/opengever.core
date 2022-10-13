@@ -585,8 +585,22 @@ class TestTaskPatch(IntegrationTestCase):
         responses = browser.json['responses']
         self.assertEquals(2, len(responses))
 
+        headers = {'Accept': 'application/json',
+                   'Content-Type': 'application/json',
+                   'Prefer': 'return=representation'}
+
         browser.open(self.task, json.dumps({"text": "New description"}),
-                     method="PATCH", headers=self.api_headers)
+                     method="PATCH", headers=headers)
+
+        # Check that the responses are up to date in the serialized object
+        # returned by the PATCH request.
+        self.assertEqual(3, len(browser.json['responses']))
+        self.assertEqual(
+            [{u'after': u'New description',
+              u'before': None,
+              u'field_id': u'text',
+              u'field_title': u''}],
+            browser.json['responses'][-1]['changes'])
 
         browser.open(self.task, headers=self.api_headers)
         responses = browser.json['responses']

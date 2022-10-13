@@ -5,6 +5,7 @@ from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.globalindex import translate_review_state
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
+from opengever.api.serializer import extend_with_responses
 from opengever.api.serializer import GeverSerializeFolderToJson
 from opengever.api.serializer import SerializeSQLModelToJsonBase
 from opengever.api.serializer import SerializeSQLModelToJsonSummaryBase
@@ -323,6 +324,12 @@ class TaskPatch(ContentPatch):
         changes_tracker = TaskAutoResponseChangesTracker(self.context, self.request)
         with changes_tracker.track_changes(['text', 'relatedItems']):
             data = super(TaskPatch, self).reply()
+
+        # if representation was requested, then the responses will not be up to
+        # date in data as the new response was generated after
+        # super(TaskPatch, self).reply() is called
+        if self.request.getHeader("Prefer") == "return=representation":
+            extend_with_responses(data, self.context, self.request)
 
         if self.context.is_private != current_is_private_value:
             raise BadRequest("It's not allowed to change the is_private option"
