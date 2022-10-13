@@ -77,6 +77,11 @@ class TestForwarding(IntegrationTestCase):
         self.assertEqual('Common', fieldsets.first.css('legend').first.text)
 
     @browsing
+    def test_editors_can_edit_forwarding(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        browser.open(self.inbox_forwarding, view='edit')
+
+    @browsing
     def test_users_are_available_as_responsible(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
