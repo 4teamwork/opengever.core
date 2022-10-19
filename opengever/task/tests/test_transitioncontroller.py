@@ -650,31 +650,33 @@ class TestReassign(IntegrationTestCase):
         self.login(self.reader_user)
         self.assertNotIn(self.transition, self.get_workflow_transitions_for(self.task))
 
-    def test_editor_cannot_reassign_resolved_task(self):
+    def test_editor_can_only_reassign_pending_tasks(self):
         self.login(self.regular_user)
         RoleAssignmentManager(self.task).add_or_update_assignment(
             SharingRoleAssignment(self.regular_user.getId(), ['Editor']),
         )
-        self.set_workflow_state('task-state-resolved', self.task)
-        self.assertNotIn(self.transition, self.get_workflow_transitions_for(self.task))
+        allowed_states = ['task-state-in-progress', 'task-state-open',
+                          'task-state-planned', 'task-state-resolved']
+        disallowed_states = ['task-state-rejected', 'task-state-tested-and-closed',
+                            'task-state-skipped', 'task-state-cancelled']
 
-    def test_administrator_can_reassign_tasks_in_not_final_states(self):
+        for state in allowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+        for state in disallowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertNotIn(self.transition, self.get_workflow_transitions_for(self.task))
+
+    def test_administrator_can_reassign_rejected_tasks(self):
         self.login(self.administrator)
-        not_final_states = ['task-state-in-progress', 'task-state-open', 'task-state-planned',
-                            'task-state-rejected', 'task-state-resolved']
+        self.set_workflow_state('task-state-rejected', self.task)
+        self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
 
-        for state in not_final_states:
-            self.set_workflow_state(state, self.task)
-            self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
-
-    def test_limited_admin_can_reassign_tasks_in_not_final_states(self):
+    def test_limited_admin_can_reassign_rejected_tasks(self):
         self.login(self.limited_admin)
-        not_final_states = ['task-state-in-progress', 'task-state-open', 'task-state-planned',
-                            'task-state-rejected', 'task-state-resolved']
-
-        for state in not_final_states:
-            self.set_workflow_state(state, self.task)
-            self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
+        self.set_workflow_state('task-state-rejected', self.task)
+        self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
 
 
 class TestDelegate(IntegrationTestCase):

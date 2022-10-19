@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-06-13 05:29+0000\n"
+"POT-Creation-Date: 2022-10-07 07:53+0000\n"
 "PO-Revision-Date: 2009-02-25 14:39+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -667,6 +667,11 @@ msgstr ""
 msgid "label_task_commented"
 msgstr ""
 
+#. Default: "Task modified"
+#: ./opengever/task/response_description.py
+msgid "label_task_modified"
+msgstr ""
+
 #. Default: "Task title"
 #: ./opengever/task/activities.py
 #: ./opengever/task/browser/overview.py
@@ -757,6 +762,11 @@ msgstr ""
 #. Default: "Commented by ${user}"
 #: ./opengever/task/response_description.py
 msgid "msg_task_commented"
+msgstr ""
+
+#. Default: "Modified by ${user}"
+#: ./opengever/task/response_description.py
+msgid "msg_task_modified"
 msgstr ""
 
 #. Default: "Review state successfully changed."

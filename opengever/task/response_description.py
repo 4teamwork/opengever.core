@@ -552,6 +552,22 @@ class TaskCommented(ResponseDescription):
 ResponseDescription.add_description(TaskCommented)
 
 
+class TaskModified(ResponseDescription):
+
+    transition = 'task-modified'
+    css_class = 'revise'
+
+    def msg(self):
+        return _('msg_task_modified', u'Modified by ${user}',
+                 mapping=self._msg_mapping)
+
+    def label(self):
+        return _('label_task_modified', u'Task modified')
+
+
+ResponseDescription.add_description(TaskModified)
+
+
 class TaskAdded(ResponseDescription):
 
     transition = 'task-added'

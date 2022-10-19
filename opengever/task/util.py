@@ -1,3 +1,4 @@
+from opengever.base.response import AutoResponseChangesTracker
 from opengever.base.response import IResponseContainer
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.ogds.base.actor import ActorLookup
@@ -90,6 +91,19 @@ def get_task_type_title(task_type, language):
         for vdex_term in vdex_terms:
             if vdex_term['key'] == task_type:
                 return vdex_term['value']
+
+
+class TaskAutoResponseChangesTracker(AutoResponseChangesTracker):
+
+    response_class = TaskResponse
+
+    def _generate_response_object(self):
+        response = super(TaskAutoResponseChangesTracker, self)._generate_response_object()
+        if response:
+            response.transition = 'task-modified'
+            TaskTransitionActivity(self.context, self.request, response).record()
+
+        return response
 
 
 def add_simple_response(task, text='', field_changes=None, added_objects=None,

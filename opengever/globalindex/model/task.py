@@ -370,6 +370,17 @@ class Task(Base):
         return False
 
     @property
+    def has_remote_successor(self):
+        for successor in self.successors:
+            if successor.admin_unit_id != self.admin_unit_id:
+                return True
+        return False
+
+    @property
+    def is_part_of_remote_predecessor_successor_pair(self):
+        return self.has_remote_successor or self.has_remote_predecessor
+
+    @property
     def has_sequential_successor(self):
         if self.tasktemplate_successor:
             return True

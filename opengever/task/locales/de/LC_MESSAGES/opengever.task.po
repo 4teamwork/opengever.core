@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-06-13 05:29+0000\n"
+"POT-Creation-Date: 2022-10-07 07:53+0000\n"
 "PO-Revision-Date: 2015-02-17 18:41+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -668,6 +668,11 @@ msgstr "Neue Aufgabe eröffnet durch ${user}"
 msgid "label_task_commented"
 msgstr "Aufgabe wurde kommentiert"
 
+#. Default: "Task modified"
+#: ./opengever/task/response_description.py
+msgid "label_task_modified"
+msgstr "Aufgabe verändert"
+
 #. Default: "Task title"
 #: ./opengever/task/activities.py
 #: ./opengever/task/browser/overview.py
@@ -760,6 +765,11 @@ msgstr "Aufgabe erfolgreich neu zugewiesen."
 #: ./opengever/task/response_description.py
 msgid "msg_task_commented"
 msgstr "Kommentiert von ${user}"
+
+#. Default: "Modified by ${user}"
+#: ./opengever/task/response_description.py
+msgid "msg_task_modified"
+msgstr "Verändert von ${user}"
 
 #. Default: "Review state successfully changed."
 #: ./opengever/task/response.py

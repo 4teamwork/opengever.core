@@ -73,6 +73,19 @@ class TestResponseDescriptions(FunctionalTestCase):
         browser.open(self.task, view='tabbedview_view-overview')
 
     @browsing
+    def test_modifying_text_creates_response(self, browser):
+        browser.login()
+
+        browser.open(self.task, view='edit')
+        browser.fill({u'Text': u'New description'})
+        browser.click_on('Save')
+
+        self.visit_overview(browser)
+        self.assertEqual(
+            u'Modified by M\xfcller Hans (test_user_1_)',
+            self.get_latest_answer(browser))
+
+    @browsing
     def test_reactivating_creates_response(self, browser):
         browser.login()
 

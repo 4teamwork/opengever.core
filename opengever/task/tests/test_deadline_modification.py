@@ -3,6 +3,8 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
+from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.task.interfaces import IDeadlineModifier
 from opengever.task.interfaces import ISuccessorTaskController
@@ -158,17 +160,35 @@ class TestDeadlineModificationForm(IntegrationTestCase):
 
 class TestDeadlineModifierController(IntegrationTestCase):
 
-    def test_modify_is_allowed_for_issuer_on_a_open_task(self):
+    def test_issuer_can_only_only_modify_deadline_of_pending_tasks(self):
         self.login(self.dossier_responsible)
-        self.set_workflow_state('task-state-open', self.task)
+        allowed_states = ['task-state-in-progress', 'task-state-open',
+                          'task-state-planned', 'task-state-resolved']
+        disallowed_states = ['task-state-rejected', 'task-state-tested-and-closed',
+                            'task-state-skipped', 'task-state-cancelled']
 
-        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
+        for state in allowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
 
-    def test_modify_is_allowed_for_issuer_on_a_in_progress_task(self):
-        self.login(self.dossier_responsible)
-        self.set_workflow_state('task-state-in-progress', self.task)
+        for state in disallowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertFalse(IDeadlineModifier(self.task).is_modify_allowed())
 
-        self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
+    def test_editor_can_only_only_modify_deadline_of_pending_tasks(self):
+        self.login(self.regular_user)
+        allowed_states = ['task-state-in-progress', 'task-state-open',
+                          'task-state-planned', 'task-state-resolved']
+        disallowed_states = ['task-state-rejected', 'task-state-tested-and-closed',
+                             'task-state-skipped', 'task-state-cancelled']
+
+        for state in allowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertTrue(IDeadlineModifier(self.task).is_modify_allowed())
+
+        for state in disallowed_states:
+            self.set_workflow_state(state, self.task)
+            self.assertFalse(IDeadlineModifier(self.task).is_modify_allowed())
 
     def test_modify_is_allowed_for_a_inbox_group_user_when_inbox_is_issuer(self):
         self.login(self.secretariat_user)
@@ -178,49 +198,19 @@ class TestDeadlineModifierController(IntegrationTestCase):
         self.task.sync()
 
         modifier = IDeadlineModifier(self.task)
-        self.assertTrue(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-    def test_modify_is_allowed_for_admin_on_a_open_task_as_agency(self):
-        self.login(self.administrator)
-
-        self.set_workflow_state('task-state-open', self.task)
-
-        modifier = IDeadlineModifier(self.task)
-        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-        self.login(self.limited_admin)
-        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-    def test_modify_is_allowed_for_admin_on_a_in_progress_task_as_agency(self):
-        self.login(self.administrator)
-
-        self.set_workflow_state('task-state-in-progress', self.task)
-
-        modifier = IDeadlineModifier(self.task)
-        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-        self.login(self.limited_admin)
-        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
-
-    def test_modify_is_allowed_for_issuing_org_unit_agency_member_as_agency(self):
-        self.login(self.secretariat_user)
-
-        self.set_workflow_state('task-state-in-progress', self.task)
-
-        modifier = IDeadlineModifier(self.task)
-        self.assertFalse(modifier.is_modify_allowed(include_agency=False))
-        self.assertTrue(modifier.is_modify_allowed(include_agency=True))
+        self.assertTrue(modifier.is_modify_allowed())
 
 
 class TestDeadlineModifier(IntegrationTestCase):
 
     def test_raise_unauthorized_when_mofication_is_not_allowed(self):
         self.login(self.regular_user)
+
+        self.dossier.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.task).clear_all()
+        RoleAssignmentManager(self.task).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(), ['Reader']),
+        )
 
         with self.assertRaises(Unauthorized):
             IDeadlineModifier(self.task).modify_deadline(

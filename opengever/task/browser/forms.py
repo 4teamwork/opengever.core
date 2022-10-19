@@ -5,6 +5,7 @@ from opengever.task.activities import TaskReassignActivity
 from opengever.task.task import IAddTaskSchema
 from opengever.task.task import ITask
 from opengever.task.util import add_simple_response
+from opengever.task.util import TaskAutoResponseChangesTracker
 from opengever.task.util import update_reponsible_field_data
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
@@ -191,7 +192,9 @@ class TaskEditForm(DefaultEditForm):
             changes = super(TaskEditForm, self).applyChanges(data)
             TaskReassignActivity(self.context, self.context.REQUEST, response).record()
         else:
-            changes = super(TaskEditForm, self).applyChanges(data)
+            changes_tracker = TaskAutoResponseChangesTracker(self.context, self.request)
+            with changes_tracker.track_changes(['text', 'relatedItems']):
+                changes = super(TaskEditForm, self).applyChanges(data)
 
         return changes
 

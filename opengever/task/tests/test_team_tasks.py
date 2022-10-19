@@ -44,7 +44,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
-            ['Reassign', 'label_add_comment'],
+            ['Modify deadline', 'Reassign', 'label_add_comment'],
             browser.css('.actionButtons li').text,
             'Expect none responsible actions, because the regular_user is not '
             'a team member and therefore not a responsible.')
@@ -52,7 +52,8 @@ class TestTeamTasks(IntegrationTestCase):
         self.login(self.meeting_user, browser)
         browser.open(self.task, view='tabbedview_view-overview')
         self.assertEquals(
-            ['Accept',
+            ['Modify deadline',
+             'Accept',
              'Reject',
              'Resolve',
              'Reassign',
