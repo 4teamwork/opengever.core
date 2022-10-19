@@ -169,7 +169,7 @@ class TestTUSUpload(IntegrationTestCase):
         self.assert_tus_replace_fails(self.document, browser)
 
     @skipIf(
-        datetime.now() < datetime(2022, 10, 11),
+        datetime.now() < datetime(2022, 11, 11),
         "Lock verification temporary disabled, because it's not yet supported "
         "by Office Connector",
     )
