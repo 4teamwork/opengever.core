@@ -122,7 +122,7 @@ class Task(Base):
         nullable=False,
     )
 
-    predecessor_id = Column(Integer, ForeignKey('tasks.id'))
+    predecessor_id = Column(Integer, ForeignKey('tasks.id'), index=True)
     successors = relationship(
         "Task",
         foreign_keys=[predecessor_id],
@@ -748,3 +748,12 @@ def create_principals_index(target, connection, **kw):
             func.nlssort(TaskPrincipal.principal, 'NLS_SORT=GERMAN_CI'))
 
         task_principals_ix.create(create_session().bind)
+
+
+@event.listens_for(Task.__table__, 'after_create')
+def create_review_state_index(target, connection, **kw):
+    if is_oracle():
+        ix_tasks_review_state = Index(
+            'ix_tasks_review_state',
+            func.nlssort(Task.review_state, 'NLS_SORT=GERMAN_CI'))
+        ix_tasks_review_state.create(create_session().bind)
