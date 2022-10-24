@@ -1,8 +1,13 @@
+from datetime import datetime
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.kub.interfaces import IKuBSettings
+from persistent.mapping import PersistentMapping
 from plone import api
 from plone.memoize import ram
+from time import mktime
 from time import time
+from wsgiref.handlers import format_date_time
+from zope.annotation import IAnnotations
 import requests
 
 
@@ -10,6 +15,16 @@ KUB_API_VERSION = 'v1'
 
 
 class KuBClient(object):
+
+    STORAGE_MODIFIED_KEY = 'opengever.kub.storage.modified'
+    STORAGE_LABEL_MAPPING_KEY = 'opengever.kub.storage.label_mapping'
+
+    def __init__(self):
+        self._storage = IAnnotations(api.portal.get())
+        if self.STORAGE_MODIFIED_KEY not in self._storage:
+            self._storage[self.STORAGE_MODIFIED_KEY] = None
+        if self.STORAGE_LABEL_MAPPING_KEY not in self._storage:
+            self._storage[self.STORAGE_LABEL_MAPPING_KEY] = None
 
     @property
     def request(self):
@@ -56,17 +71,25 @@ class KuBClient(object):
     def get_resolve_url(self, _id):
         return u'{}resolve/{}'.format(self.kub_api_url, _id)
 
-    # Cache kub labels for an hour
-    @ram.cache(lambda *args: time() // (60 * 60))
+    # Cache kub labels for 5 seconds
+    @ram.cache(lambda *args: time() // (5))
     def get_kub_id_label_mapping(self):
-        return self._prepare_kub_label_mapping()
+        self._update_kub_label_mapping()
+        return self._storage[self.STORAGE_LABEL_MAPPING_KEY]
 
-    def _prepare_kub_label_mapping(self):
-        resp = self.session.get(u'{}labels'.format(self.kub_api_url))
+    def _update_kub_label_mapping(self):
+        now = datetime.now()
+        modified = self._storage[self.STORAGE_MODIFIED_KEY]
+        headers = {'If-Modified-Since': modified} if modified else {}
+        resp = self.session.get(u'{}labels'.format(self.kub_api_url), headers=headers)
         try:
             resp.raise_for_status()
         except requests.HTTPError as exc:
             log_msg_to_sentry(exc.message)
             raise LookupError
-        return {
-            item['typedId']: item['label'] for item in resp.json()['results']}
+
+        if resp.status_code == 200:
+            self._storage[self.STORAGE_LABEL_MAPPING_KEY] = PersistentMapping(
+                {item['typedId']: item['label'] for item in resp.json()['results']})
+            stamp = mktime(now.timetuple())
+            self._storage[self.STORAGE_MODIFIED_KEY] = format_date_time(stamp)
