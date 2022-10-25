@@ -15,3 +15,4 @@ Les chapitres suivants décrivent les méthodes d'authentification supportées p
    :maxdepth: 1
 
    oauth2_token_auth
+   cas_auth
