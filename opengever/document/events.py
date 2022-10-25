@@ -30,9 +30,10 @@ class ObjectCheckedInEvent(ObjectEvent):
     was checked in.
     """
 
-    def __init__(self, obj, comment):
+    def __init__(self, obj, comment, suppress_journal_entry_creation=False):
         self.object = obj
         self.comment = comment
+        self.suppress_journal_entry_creation = suppress_journal_entry_creation
 
 
 @implementer(interfaces.IObjectCheckoutCanceledEvent)
