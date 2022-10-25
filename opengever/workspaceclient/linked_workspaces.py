@@ -1,6 +1,7 @@
 from AccessControl.unauthorized import Unauthorized
 from opengever.api.add import GeverFolderPost
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
+from opengever.base.handlers import ObjectTouchedEvent
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import maybe_report_exception
 from opengever.document.events import ObjectCheckedInEvent
@@ -410,6 +411,7 @@ class LinkedWorkspaces(object):
         )
 
         notify(ObjectCheckedInEvent(gever_doc, '', suppress_journal_entry_creation=True))
+        notify(ObjectTouchedEvent(gever_doc))
         ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
         return gever_doc
 

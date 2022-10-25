@@ -7,6 +7,7 @@ from mock import patch
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
+from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
@@ -25,6 +26,7 @@ from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
 from tzlocal import get_localzone
 from zExceptions import BadRequest
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 import pytz
@@ -612,6 +614,11 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 title=u'Document Testdokum\xe4nt copied back from workspace.',
             )
             self.assertEqual(freeze_time, IChanged(gever_doc).changed)
+            local_freeze_time = freeze_time.astimezone(get_localzone())
+            last_entry = IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY]['test_user_1_'][-1]
+            self.assertEqual(
+                {'last_touched': local_freeze_time, 'uid': IUUID(gever_doc)},
+                last_entry)
 
     def test_copy_document_from_a_workspace_and_trash_tr_document(self):
         document = create(Builder('document')
