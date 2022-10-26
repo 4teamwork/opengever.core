@@ -86,7 +86,7 @@ class TestMyInvitationsView(IntegrationTestCase):
 
             # check that we get redirected to login
             parsed_url = urlparse.urlparse(browser.url)
-            self.assertEqual('/portal/login', parsed_url.path)
+            self.assertEqual('/portal', parsed_url.path)
 
             # with redirect_url to accept the invitation and no_redirect in payload
             payload = serialize_and_sign_payload({'iid': self.invitation_id,
