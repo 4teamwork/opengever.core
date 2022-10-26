@@ -10,6 +10,31 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.21.0 (2022-10-26)
+----------------------
+
+New features:
+
+
+- Be more lenient about when and by whom tasks can be modified. [njohner]
+- Modifying a task's relatedItems or text now creates a response and activity. [njohner]
+- Allow editors to modify open and refused forwardings. [njohner]
+- Support external_reference in dossier excel report. [tinagerber]
+
+
+Bug fixes:
+
+
+- Improve performance of @globalindex endpoint. [tinagerber]
+
+
+Other changes:
+
+
+- Clean-up activity translations. [njohner]
+- No longer cache kub label mapping for an hour, use If-Modified-Since header instead. [tinagerber]
+
+
 2022.20.0 (2022-10-12)
 ----------------------
 

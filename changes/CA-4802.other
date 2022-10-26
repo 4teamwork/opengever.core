@@ -1,1 +1,0 @@
-No longer cache kub label mapping for an hour, use If-Modified-Since header instead. [tinagerber]
