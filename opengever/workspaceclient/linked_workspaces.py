@@ -1,8 +1,10 @@
 from AccessControl.unauthorized import Unauthorized
 from opengever.api.add import GeverFolderPost
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
+from opengever.base.handlers import ObjectTouchedEvent
 from opengever.base.oguid import Oguid
 from opengever.base.sentry import maybe_report_exception
+from opengever.document.events import ObjectCheckedInEvent
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_main_dossier
@@ -28,6 +30,7 @@ from time import time
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.component import getMultiAdapter
+from zope.event import notify
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 from zope.interface import alsoProvides
@@ -407,6 +410,8 @@ class LinkedWorkspaces(object):
                         u'document from teamraum.')
         )
 
+        notify(ObjectCheckedInEvent(gever_doc, '', suppress_journal_entry_creation=True))
+        notify(ObjectTouchedEvent(gever_doc))
         ILockable(gever_doc).unlock(COPIED_TO_WORKSPACE_LOCK)
         return gever_doc
 

@@ -378,6 +378,8 @@ DOCUMENT_CHECKED_IN = 'Document checked in'
 
 
 def document_checked_in(context, event):
+    if event.suppress_journal_entry_creation:
+        return
     user_comment = event.comment
     title = _(u'label_document_checkin',
               default=u'Document checked in', )

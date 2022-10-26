@@ -1,9 +1,13 @@
 from contextlib import contextmanager
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from mock import patch
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
+from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
@@ -20,9 +24,12 @@ from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
+from tzlocal import get_localzone
 from zExceptions import BadRequest
+from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
+import pytz
 import transaction
 
 
@@ -562,12 +569,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
         with self.workspace_client_env():
             manager = ILinkedWorkspaces(self.dossier)
             manager.storage.add(self.workspace.UID())
-
+            freeze_time = datetime(2018, 4, 30, 7, 30, tzinfo=pytz.UTC)
             with self.observe_children(self.dossier) as children:
                 with auto_commit_after_request(manager.client):
-                    dst_doc, retrieval_mode = manager.copy_document_from_workspace(
-                        self.workspace.UID(), workspace_doc.UID(),
-                        as_new_version=True)
+                    with freeze(freeze_time):
+                        dst_doc, retrieval_mode = manager.copy_document_from_workspace(
+                            self.workspace.UID(), workspace_doc.UID(),
+                            as_new_version=True)
 
             self.assertEqual(0, len(children['added']))
             self.assertEqual(gever_doc, dst_doc)
@@ -605,6 +613,12 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
                 action_type='Document retrieved from teamraum',
                 title=u'Document Testdokum\xe4nt copied back from workspace.',
             )
+            self.assertEqual(freeze_time, IChanged(gever_doc).changed)
+            local_freeze_time = freeze_time.astimezone(get_localzone())
+            last_entry = IAnnotations(self.portal)[RECENTLY_TOUCHED_KEY]['test_user_1_'][-1]
+            self.assertEqual(
+                {'last_touched': local_freeze_time, 'uid': IUUID(gever_doc)},
+                last_entry)
 
     def test_copy_document_from_a_workspace_and_trash_tr_document(self):
         document = create(Builder('document')
