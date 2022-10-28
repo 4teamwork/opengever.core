@@ -339,3 +339,34 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(
             [user.userid for user in group.users],
             [user['userid'] for user in browser.json['items']])
+
+    @browsing
+    def test_sorting_when_filtering_by_group_membership(self, browser):
+        self.login(self.regular_user, browser=browser)
+        group = ogds_service().fetch_group("projekt_a")
+        group.users.append(ogds_service().fetch_user(self.meeting_user.getId()))
+        self.assertEqual(3, len(group.users))
+
+        browser.open(
+            self.portal,
+            view='@ogds-user-listing?filters.groupid:record=projekt_a&sort_on=lastname',
+            headers=self.api_headers)
+        self.assertEqual(
+            sorted([user.lastname for user in group.users]),
+            [user['lastname'] for user in browser.json['items']])
+
+        browser.open(
+            self.portal,
+            view='@ogds-user-listing?filters.groupid:record=projekt_a&sort_on=lastname&sort_order=reverse',
+            headers=self.api_headers)
+        self.assertEqual(
+            sorted([user.lastname for user in group.users], reverse=True),
+            [user['lastname'] for user in browser.json['items']])
+
+        browser.open(
+            self.portal,
+            view='@ogds-user-listing?filters.groupid:record=projekt_a&sort_on=userid&sort_order=reverse',
+            headers=self.api_headers)
+        self.assertEqual(
+            sorted([user.userid for user in group.users], reverse=True),
+            [user['userid'] for user in browser.json['items']])
