@@ -11,7 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@config``: Add ``template_folder_url`` key to expose the path to the template_folder.
 
 2022.19.0 (2022-09-28)
 ----------------------

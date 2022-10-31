@@ -2,6 +2,7 @@ from ftw.bumblebee.config import bumblebee_config
 from opengever.base import utils
 from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
+from opengever.dossier.templatefolder import get_template_folder
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -47,6 +48,9 @@ class ConfigGet(Service):
 
         plone_inbox = get_current_inbox(self.context)
         config['inbox_folder_url'] = plone_inbox.absolute_url() if plone_inbox else ''
+
+        template_folder = get_template_folder()
+        config['template_folder_url'] = template_folder.absolute_url() if template_folder else ''
 
         ogds_inbox = get_current_org_unit().inbox()
         current_user = ogds_service().fetch_current_user()
