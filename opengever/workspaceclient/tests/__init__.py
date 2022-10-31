@@ -2,8 +2,8 @@ from contextlib import contextmanager
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.tokenauth.testing.builders import KeyPairBuilder  # noqa
-from opengever.core.testing import OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
-from opengever.testing import FunctionalTestCase
+from opengever.core.testing import OPENGEVER_FUNCTIONAL_SOLR_ZSERVER_TESTING
+from opengever.testing import SolrFunctionalTestCase
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import IWorkspaceClientSettings
 from opengever.workspaceclient.session import SESSION_STORAGE
@@ -17,9 +17,9 @@ import transaction
 DEFAULT_MARKER = object()
 
 
-class FunctionalWorkspaceClientTestCase(FunctionalTestCase):
+class FunctionalWorkspaceClientTestCase(SolrFunctionalTestCase):
 
-    layer = OPENGEVER_FUNCTIONAL_ZSERVER_TESTING
+    layer = OPENGEVER_FUNCTIONAL_SOLR_ZSERVER_TESTING
 
     def setUp(self):
         super(FunctionalWorkspaceClientTestCase, self).setUp()

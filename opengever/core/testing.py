@@ -734,3 +734,10 @@ OPENGEVER_SOLR_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE_WITH_SOLR,
            set_builder_session_factory(functional_session_factory)),
     name="opengever.core:solr-functional")
+
+
+OPENGEVER_FUNCTIONAL_SOLR_ZSERVER_TESTING = FunctionalTesting(
+    bases=(z2.ZSERVER_FIXTURE,
+           OPENGEVER_SOLR_FUNCTIONAL_TESTING,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:solr-zserver")
