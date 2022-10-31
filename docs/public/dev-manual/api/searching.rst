@@ -161,6 +161,12 @@ Gibt alle Inhalte zurück die unterhalb des angegebenen Parents liegen und das p
   GET /plone/@solrsearch?fq:list=url_parent:http://example.com/dossier-1&fq:list=@id_parent:http://example.com/dossier-2 HTTP/1.1
 
 
+Gibt alle Inhalte zurück die **nicht** unterhalb des angegebenen Parents liegen:
+
+.. sourcecode:: http
+
+  GET /plone/@solrsearch?fq:list=-url_parent:http://example.com/dossier-1&fq:list=-@id_parent:http://example.com/dossier-2 HTTP/1.1
+
 
 Fields
 ~~~~~~
