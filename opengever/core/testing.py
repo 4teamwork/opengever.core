@@ -697,7 +697,7 @@ WEASYPRINT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 
 class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
 
-    solr_port = os.environ.get('PORT5', '19905')
+    solr_port = os.environ.get('PORT2', '19905')
     solr_core = 'functionaltesting'
 
     def setUpPloneSite(self, portal):
