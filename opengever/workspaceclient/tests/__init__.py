@@ -34,7 +34,9 @@ class FunctionalWorkspaceClientTestCase(SolrFunctionalTestCase):
         # Minimal GEVER setup
         self.repository_root = create(Builder('repository_root'))
         self.leaf_repofolder = create(Builder('repository').within(self.repository_root))
-        self.dossier = create(Builder('dossier').within(self.leaf_repofolder))
+        self.dossier = create(Builder('dossier')
+                              .titled(u'My dossier')
+                              .within(self.leaf_repofolder))
         self.expired_dossier = create(Builder('dossier').within(
             self.leaf_repofolder).in_state('dossier-state-resolved'))
 
