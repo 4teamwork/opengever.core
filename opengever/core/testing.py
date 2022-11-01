@@ -718,6 +718,13 @@ class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
         self.maybe_stop_solr()
         super(OpengeverFixtureWithSolr, self).tearDownZope(app)
 
+    def testTearDown(self):
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            client.restore_backup('fixture')
+            client.await_restored()
+        super(OpengeverFixtureWithSolr, self).testTearDown()
+
 
 OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
     sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
