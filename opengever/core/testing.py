@@ -680,7 +680,7 @@ OPENGEVER_SOLR_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # Warning: do not try to base other layers on ContentFixtureWithSolrLayer.
     # See docstring of ContentFixtureLayer.
     bases=(ContentFixtureWithSolrLayer(), TRAVERSAL_BROWSER_FIXTURE),
-    name="opengever.core:integration:solr")
+    name="opengever.core:solr-integration")
 
 PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
     bases=(PDFLATEX_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
@@ -733,4 +733,4 @@ OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
 OPENGEVER_SOLR_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE_WITH_SOLR,
            set_builder_session_factory(functional_session_factory)),
-    name="opengever.core:functional:solr")
+    name="opengever.core:solr-functional")
