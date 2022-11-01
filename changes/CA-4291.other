@@ -1,1 +1,0 @@
-Bump ftw.solr to 2.12.0 to minimize the ZODB locking time. [njohner]

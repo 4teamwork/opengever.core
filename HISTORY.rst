@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.10.1 (2022-11-01)
+----------------------
+
+Other changes:
+
+
+- Bump ftw.solr to 2.12.0 to minimize the ZODB locking time. [njohner]
+- Drastically improve performance of reactivation for highly nested dossiers. [njohner]
+
+
 2022.10.0 (2022-05-11)
 ----------------------
 
