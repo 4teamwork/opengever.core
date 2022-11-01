@@ -14,6 +14,5 @@ Les chapitres suivants décrivent les méthodes d'authentification supportées p
 .. toctree::
    :maxdepth: 1
 
-   basic_auth
-   jwt
    oauth2_token_auth
+   cas_auth
