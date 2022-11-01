@@ -27,7 +27,7 @@ class AlwaysUseSolrForTableSource(UpgradeStep):
             if contact.email2:
                 handler = getMultiAdapter((contact, manager), ISolrIndexHandler)
                 handler.add(['email2'])
-        manager.connection.commit(soft_commit=False, extract_after_commit=False)
+        manager.connection.commit(soft_commit=False, after_commit=False)
 
     def index_retention_expiration_in_solr(self):
         manager = getUtility(ISolrConnectionManager)
@@ -39,4 +39,4 @@ class AlwaysUseSolrForTableSource(UpgradeStep):
             if dossier.retention_expiration:
                 handler = getMultiAdapter((dossier, manager), ISolrIndexHandler)
                 handler.add(['retention_expiration'])
-        manager.connection.commit(soft_commit=False, extract_after_commit=False)
+        manager.connection.commit(soft_commit=False, after_commit=False)

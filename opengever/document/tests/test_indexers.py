@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.interfaces import ISolrSettings
 from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from opengever.activity import notification_center
@@ -29,11 +30,13 @@ from plone import api
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.interfaces import ISiteRoot
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
+from zope.component import queryUtility
 from zope.component.hooks import setSite
 import datetime
 import pytz
@@ -442,7 +445,14 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
             self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
 
         copied_doc = api.content.copy(self.document, target=self.subdossier)
-        self.commit_solr()
+
+        # We need to execute the update commands but avoid extracting from the
+        # blob, which fails as the zope transaction is not committed.
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enable_updates_in_post_commit_hook = False
+        self.commit_solr(after_commit=True)
+
         indexed_value = solr_data_for(copied_doc, 'approval_state')
         self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
 
@@ -456,6 +466,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         approvals.add(
             versioner.get_current_version_id(missing_as_zero=True),
             self.subtask, self.regular_user.id, datetime.datetime(2021, 7, 2))
+
         self.commit_solr()
 
         versioner.create_version('Second version')
@@ -464,7 +475,14 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.assertEqual(APPROVED_IN_OLDER_VERSION, indexed_value)
 
         copied_doc = api.content.copy(self.document, target=self.subdossier)
-        self.commit_solr()
+
+        # We need to execute the update commands but avoid extracting from the
+        # blob, which fails as the zope transaction is not committed.
+        registry = queryUtility(IRegistry)
+        settings = registry.forInterface(ISolrSettings)
+        settings.enable_updates_in_post_commit_hook = False
+        self.commit_solr(after_commit=True)
+
         indexed_value = solr_data_for(copied_doc, 'approval_state')
         self.assertEqual(None, indexed_value)
 

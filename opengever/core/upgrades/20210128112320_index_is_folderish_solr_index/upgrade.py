@@ -24,4 +24,4 @@ class IndexIsFolderishSolrIndex(UpgradeStep):
         for content in ProgressLogger('Index is_folderish in Solr', contents):
             handler = getMultiAdapter((content, manager), ISolrIndexHandler)
             handler.add(['is_folderish'])
-        manager.connection.commit(soft_commit=False, extract_after_commit=False)
+        manager.connection.commit(soft_commit=False, after_commit=False)

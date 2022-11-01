@@ -243,8 +243,8 @@ class CapturingLogHandler(logging.NullHandler):
 
 class SolrTestMixin(object):
 
-    def commit_solr(self):
-        SolrServer.get_instance().commit()
+    def commit_solr(self, after_commit=False):
+        SolrServer.get_instance().commit(after_commit=after_commit)
 
     def get_solr_connection(self):
         return SolrServer.get_instance().connection
