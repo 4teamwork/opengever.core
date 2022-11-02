@@ -301,6 +301,16 @@ class TestConfig(IntegrationTestCase):
         )
 
     @browsing
+    def test_config_contains_url_to_template_folder(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            u'http://nohost/plone/vorlagen',
+            browser.json.get(u'template_folder_url')
+        )
+
+    @browsing
     def test_config_contains_current_inbox_url_if_available(self, browser):
         self.login(self.secretariat_user, browser)
 

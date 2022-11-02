@@ -125,6 +125,7 @@ GEVER-Mandanten abgefragt werden.
               "black_list_prefix": "^$",
               "white_list_prefix": "^.+"
           },
+          "template_folder_url": "http://localhost:8080/fd/vorlagen",
           "user_settings": {
               "notify_inbox_actions": true,
               "notify_own_actions": false,
