@@ -18,6 +18,8 @@ def translate_review_state(review_state):
 
 class GlobalIndexGet(OGDSListingBaseService):
 
+    model_class = Task
+
     searchable_columns = [Task.title, Task.text,
                           Task.sequence_number, Task.responsible]
     facet_columns = (

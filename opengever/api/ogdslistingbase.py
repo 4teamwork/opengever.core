@@ -10,6 +10,7 @@ from sqlalchemy import or_
 from sqlalchemy.sql.expression import asc
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import desc
+from sqlalchemy.sql.expression import table
 from zope.component import queryMultiAdapter
 from ZPublisher.HTTPRequest import record
 
@@ -96,8 +97,12 @@ class OGDSListingBaseService(Service):
 
         # Don't plug column names as literal strings into an order_by
         # clause, but use a ColumnClause instead to allow SQLAlchemy to
-        # properly quote the identifier name depending on the dialect
-        sort_on = column(sort_on)
+        # properly quote the identifier name depending on the dialect.
+        # Moreover just the column name can be ambiguous in certain cases
+        # when two tables are joined, so we make sure to specify the correct
+        # table as well
+        columns = table(self.model_class.__tablename__, column(sort_on)).c
+        sort_on = getattr(columns, sort_on)
 
         if sort_order in ['descending', 'reverse']:
             order_f = desc

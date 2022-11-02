@@ -34,12 +34,6 @@ class OGDSUserListingGet(OGDSListingBaseService):
     default_state_filter = tuple()
     pattern = re.compile(r"^(\d{4}-\d{2}-\d{2}) TO (\d{4}-\d{2}-\d{2})")
 
-    def extract_params(self):
-        sort_on, sort_order, search, filters = super(OGDSUserListingGet, self).extract_params()
-        if self.needs_join_with_groups_users(filters) and sort_on:
-            sort_on = "users.{}".format(sort_on)
-        return sort_on, sort_order, search, filters
-
     def needs_join_with_groups_users(self, filters):
         return bool(filters.get('groupid', False))
 
