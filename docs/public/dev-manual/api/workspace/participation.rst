@@ -257,6 +257,21 @@ In einem selbst verwalteten Teamraum-Ordner (Vererbung wurde unterbrochen) könn
       ]
     }
 
+Mit dem Flag ``notify_user`` kann der hinzugefügte Benutzer übers Benachrichtigungssystem (je nach Einstellung per Mail, GEVER-Benachhrichtigung oder Tageszusammenfassung) benachrichtigt werden, dass er dem Teamraum hinzugefügt wurde.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /workspaces/workspace-1/folder-1/@participations HTTP/1.1
+       Accept: application/json
+
+       {
+         "participant": "maria.meier",
+         "role": "WorkspaceAdmin",
+         "notify_user": true
+       }
+
 Beteiligungen bearbeiten:
 -------------------------
 Beteiligungen können über einen PATCH request auf die jeweilige Ressourece geändert werden.

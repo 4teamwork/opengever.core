@@ -39,9 +39,8 @@ class WorkspaceWatcherManager(object):
             self.center.add_watcher_to_resource(
                 todo, member["userid"], WORKSPACE_MEMBER_ROLE)
 
-    def new_participant_added(self, participant):
+    def new_participant_added(self, participant, notify_user=False):
         catalog = api.portal.get_tool("portal_catalog")
-
         todos = catalog.searchResults(
             portal_type="opengever.workspace.todo",
             path='/'.join(self.workspace.getPhysicalPath()))
@@ -49,6 +48,9 @@ class WorkspaceWatcherManager(object):
         for todo in todos:
             self.center.add_watcher_to_resource(
                 todo.getObject(), participant, WORKSPACE_MEMBER_ROLE)
+        if notify_user:
+            WorkspaceParticipationAddedActivity(self.workspace, getRequest(),
+                                                participant).record()
 
     def participant_removed(self, participant):
         """We remove all subscriptions for participant on objects that are in
