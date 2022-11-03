@@ -91,6 +91,11 @@ NOTIFICATION_SETTING_TABS = [
          'todo-assigned',
          'todo-modified'
      ]},
+    {'id': 'workspaces',
+     'roles': [ALWAYS],
+     'settings': [
+         'workspace-participation-added'
+     ]},
     {'id': 'document',
      'roles': [WATCHER_ROLE],
      'settings': [

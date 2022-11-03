@@ -244,6 +244,15 @@ NOTIFICATION_CONFIGURATION = [
         }
     },
     {
+        'id': 'workspace-participation-added',
+        'title': _('workspace-participation-added', default=u'Added as workspace participant'),
+        'activities': ['workspace-participation-added'],
+        'default_settings': {
+            'badge_notification_roles': [ALWAYS],
+            'mail_notification_roles': [ALWAYS],
+        }
+    },
+    {
         'id': 'document-modified',
         'title': _('document-modified', default=u'Document modified'),
         'activities': ['document-title-changed',

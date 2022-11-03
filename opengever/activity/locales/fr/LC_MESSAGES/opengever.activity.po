@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-03 13:00+0000\n"
+"POT-Creation-Date: 2022-11-03 15:04+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -388,6 +388,11 @@ msgstr "ToDo Modifié"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
 msgstr "Responsable d'un ToDo"
+
+#. Default: "Added as workspace participant"
+#: ./opengever/activity/notification_settings.py
+msgid "workspace-participation-added"
+msgstr ""
 
 #. Default: "Workspace member"
 #: ./opengever/activity/roles.py

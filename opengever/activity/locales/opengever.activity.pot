@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-03 13:00+0000\n"
+"POT-Creation-Date: 2022-11-03 15:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -385,6 +385,11 @@ msgstr ""
 #. Default: "ToDo responsible"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
+msgstr ""
+
+#. Default: "Added as workspace participant"
+#: ./opengever/activity/notification_settings.py
+msgid "workspace-participation-added"
 msgstr ""
 
 #. Default: "Workspace member"
