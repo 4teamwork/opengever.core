@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-09-09 12:33+0000\n"
+"POT-Creation-Date: 2022-11-03 15:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -319,6 +319,11 @@ msgstr "Video-Call Link"
 msgid "label_videoconferencing_url"
 msgstr "Videokonferenz URL"
 
+#. Default: "Added to the workspace"
+#: ./opengever/workspace/activities.py
+msgid "label_workspace_participation_added"
+msgstr "Zum Teamraum hinzugefügt worden"
+
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
@@ -353,6 +358,11 @@ msgstr "${user} hat einen Hinweis an Sie versendet:"
 #: ./opengever/workspace/activities.py
 msgid "summary_todo_assigned_activity"
 msgstr "An ${responsible} neu zugewiesen durch ${user}"
+
+#. Default: "Added to the workspace by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_workspace_participation_added"
+msgstr "Zum Teamraum hinzugefügt worden durch ${user}"
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
