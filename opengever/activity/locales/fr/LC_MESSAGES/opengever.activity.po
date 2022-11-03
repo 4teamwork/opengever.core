@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-10-07 09:20+0000\n"
+"POT-Creation-Date: 2022-11-03 13:00+0000\n"
 "PO-Revision-Date: 2017-12-03 16:14+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-activity/fr/>\n"
@@ -348,11 +348,6 @@ msgstr "Tâche modifiée"
 #: ./opengever/activity/notification_settings.py
 msgid "task-reminder"
 msgstr "Rappel tâche"
-
-#. Default: "Task deadline modified"
-#: ./opengever/activity/notification_settings.py
-msgid "task-transition-modify-deadline"
-msgstr "Le délai attribué à la tâche a été modifié"
 
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py

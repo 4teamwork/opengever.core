@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-10-07 09:20+0000\n"
+"POT-Creation-Date: 2022-11-03 13:00+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -404,12 +404,6 @@ msgstr "Task modified"
 #: ./opengever/activity/notification_settings.py
 msgid "task-reminder"
 msgstr "Task reminder"
-
-#. German translation: Aufgaben-Frist verändert
-#. Default: "Task deadline modified"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-modify-deadline"
-msgstr "Task deadline modified"
 
 #. German translation: Auftraggeber
 #. Default: "Task issuer"
