@@ -263,6 +263,8 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 payload['upload'] = '@tus-replace'
                 payload['checkin'] = '@checkin'
                 payload['unlock'] = '@unlock'
+                payload['cancelcheckout'] = '@cancelcheckout'
+                payload['has_pending_changes'] = document.has_pending_changes
 
             else:
                 # Fail per default
