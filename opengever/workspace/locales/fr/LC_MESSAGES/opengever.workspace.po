@@ -287,12 +287,12 @@ msgstr "ToDo"
 #. Default: "ToDo assigned"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_assigned_activity"
-msgstr "Todo assigné"
+msgstr "ToDo assigné"
 
 #. Default: "ToDo closed"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_closed_activity"
-msgstr "Todo complété"
+msgstr "ToDo complété"
 
 #. Default: "ToDo commented"
 #: ./opengever/workspace/activities.py
@@ -302,7 +302,7 @@ msgstr "ToDo commenté"
 #. Default: "ToDo reopened"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_reopened_activity"
-msgstr "Todo rouvert"
+msgstr "ToDo rouvert"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py

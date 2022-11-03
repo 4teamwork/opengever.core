@@ -375,17 +375,17 @@ msgstr "Tageszusammenfassung für ${username}"
 #. Default: "ToDo assigned"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
-msgstr "ToDo zugewiesen"
+msgstr "To-do zugewiesen"
 
 #. Default: "ToDo modified"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
-msgstr "ToDo modifiziert"
+msgstr "To-do modifiziert"
 
 #. Default: "ToDo responsible"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
-msgstr "ToDo Verantwortlicher"
+msgstr "To-do Verantwortlicher"
 
 #. Default: "Workspace member"
 #: ./opengever/activity/roles.py

@@ -354,12 +354,12 @@ msgstr "Vorlagenordner"
 #: ./opengever/core/profiles/default/types/opengever.workspace.todo.xml
 #: ./opengever/core/upgrades/20190710151706_install_workspace_todo_type/types/opengever.workspace.todo.xml
 msgid "ToDo"
-msgstr "ToDo"
+msgstr "To-do"
 
 #: ./opengever/core/profiles/default/types/opengever.workspace.todolist.xml
 #: ./opengever/core/upgrades/20190716140644_add_to_do_list_contenttype/types/opengever.workspace.todolist.xml
 msgid "ToDo list"
-msgstr "ToDo Liste"
+msgstr "To-do-Liste"
 
 #: ./opengever/core/profiles/default/actions.xml
 msgid "Toggle orgunit selector"

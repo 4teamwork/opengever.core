@@ -299,7 +299,7 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                     u'mail': {u'todo_responsible_role': False,
                               u'workspace_member_role': False},
                     u'personal': False,
-                    u'title': u'ToDo assigned'},
+                    u'title': u'To-do assigned'},
                     {u'@id': u'http://nohost/plone/@notification-settings/activities/todo-modified',
                      u'badge': {u'todo_responsible_role': True,
                                 u'workspace_member_role': False},
@@ -311,7 +311,7 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                      u'mail': {u'todo_responsible_role': False,
                                u'workspace_member_role': False},
                      u'personal': False,
-                     u'title': u'ToDo modified'},
+                     u'title': u'To-do modified'},
                     {u'@id': u'http://nohost/plone/@notification-settings/activities/document-modified',
                      u'badge': {u'regular_watcher': True},
                              u'digest': {u'regular_watcher': False},
@@ -336,7 +336,7 @@ class TestNotificationSettingsGet(IntegrationTestCase):
                     u'value': False}]},
             u'translations': [{
                 u'id': u'todo_responsible_role',
-                u'title': u'ToDo responsible'},
+                u'title': u'To-do responsible'},
                 {u'id': u'regular_watcher', u'title': u'Watcher'},
                 {u'id': u'workspace_member_role',
                  u'title': u'Workspace member'}]}, browser.json)

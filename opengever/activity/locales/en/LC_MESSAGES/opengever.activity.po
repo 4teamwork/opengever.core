@@ -439,19 +439,19 @@ msgstr "Daily Digest for ${username}"
 #. Default: "ToDo assigned"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
-msgstr "ToDo assigned"
+msgstr "To-do assigned"
 
 #. German translation: ToDo modifiziert
 #. Default: "ToDo modified"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
-msgstr "ToDo modified"
+msgstr "To-do modified"
 
 #. German translation: ToDo Verantwortlicher
 #. Default: "ToDo responsible"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
-msgstr "ToDo responsible"
+msgstr "To-do responsible"
 
 #. German translation: Teamraum Mitglied
 #. Default: "Workspace member"
