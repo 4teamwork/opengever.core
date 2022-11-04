@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.3 (2022-11-04)
+----------------------
+
+Bug fixes:
+
+
+- Fix updating a custom property value when the previous value contained an umlaut. [elioschmutz]
+
+
 2022.15.2 (2022-08-25)
 ----------------------
 
