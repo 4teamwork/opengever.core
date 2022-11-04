@@ -1,3 +1,4 @@
+from plone.dexterity.utils import safe_utf8
 from zope.schema import Choice
 from zope.schema import Set
 
@@ -11,7 +12,7 @@ def is_multiple_choice_field(field):
 
 
 def _add_value_to_vocabulary(vocab, value):
-    term = vocab.createTerm(value)
+    term = vocab.createTerm(safe_utf8(value))
     vocab._terms.append(term)
     vocab.by_value[term.value] = term
     vocab.by_token[term.value] = term
