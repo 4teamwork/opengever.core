@@ -123,6 +123,7 @@ class SolrSearchGet(SolrQueryBaseService):
 
     def add_url_path_parent_filters(self, filters):
         self.add_url_filters(filters, ['@id_parent:', 'url_parent:'], 'path_parent')
+        self.add_url_filters(filters, ['-@id_parent:', '-url_parent:'], '-path_parent')
 
     def add_url_filters(self, filters, query_prefix, filter_name,):
         """Beside the 'path' filter, we provide an 'url' (alias '@id')

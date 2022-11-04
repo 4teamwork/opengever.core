@@ -1030,6 +1030,40 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             ],
             [item['@id'] for item in browser.json['items']])
 
+    @browsing
+    def test_fq_with_excluded_url_parents(self, browser):
+        self.login(self.administrator, browser=browser)
+        ids_filter = 'fq=id:(dossiertemplate-1 OR document-12 OR document-24)'
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.portal.absolute_url(),
+            '&'.join([ids_filter]))
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/vorlagen/dossiertemplate-1',
+                u'http://nohost/plone/eingangskorb/eingangskorb_fa/document-12',
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
+            ],
+            [item['@id'] for item in browser.json['items']])
+
+        url = u'{}/@solrsearch?{}'.format(
+            self.portal.absolute_url(),
+            '&'.join([
+                ids_filter,
+                'fq:list=-@id_parent:{}'.format(self.templates.absolute_url()),
+                'fq:list=-url_parent:{}'.format(self.inbox.absolute_url())
+            ]))
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertItemsEqual(
+            [
+                u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
+            ],
+            [item['@id'] for item in browser.json['items']])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
