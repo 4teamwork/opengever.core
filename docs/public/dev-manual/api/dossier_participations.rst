@@ -33,15 +33,18 @@ Ein Beteiligter kann in verschiedenen Rollen an einem Dossier beteiligt sein. Mi
         "available_roles": [
           {
             "title": "Kenntnisnahme",
-            "token": "regard"
+            "token": "regard",
+            "active": true,
           },
           {
             "title": "Mitwirkung",
-            "token": "participation"
+            "token": "participation",
+            "active": true,
           },
           {
             "title": "Schlusszeichnung",
-            "token": "final-drawing"
+            "token": "final-drawing",
+            "active": true,
           }
         ],
         "items": [

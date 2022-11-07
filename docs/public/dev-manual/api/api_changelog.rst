@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@participations``: Returns an active-flag for each available role.
 - ``@solrsearch``: The results can now be filtered by ``-@id_parent`` or ``-url_parent``.
 - ``@config``: Add ``template_folder_url`` key to expose the path to the template_folder.
 

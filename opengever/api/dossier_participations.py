@@ -28,8 +28,13 @@ from zope.schema.vocabulary import getVocabularyRegistry
 
 
 def available_roles(context):
+    active_roles = api.portal.get_registry_record('roles', IDossierParticipants) or []
     vocabulary = getVocabularyRegistry().get(context, "opengever.dossier.participation_roles")
-    return [{"token": term.token, "title": term.title} for term in vocabulary]
+    return [{
+        "token": term.token,
+        "title": term.title,
+        "active": term.token in active_roles if active_roles else True
+    } for term in vocabulary]
 
 
 def primary_participation_roles(context):
