@@ -291,12 +291,14 @@ class PrepareCopyDossierToWorkspacePost(Service):
             uid = dossier.UID()
             msg = _(u'main_dossier_not_linked_to_workspace')
             return {
-                'msg': translate(msg, context=self.request),
-                'msgid': unicode(msg),
-                'obj_uid': uid,
-                'obj_title': dossier.title,
-                'obj_url': dossier.absolute_url(),
-                'obj_type': dossier.portal_type,
+                'translated_message': translate(msg, context=self.request),
+                'message': unicode(msg),
+                'additional_metadata': {
+                    'obj_uid': uid,
+                    'obj_title': dossier.title,
+                    'obj_url': dossier.absolute_url(),
+                    'obj_type': dossier.portal_type,
+                },
             }
 
     def validate_document(self, doc):
@@ -304,12 +306,14 @@ class PrepareCopyDossierToWorkspacePost(Service):
         if doc.is_checked_out():
             msg = _(u'document_is_checked_out')
             return {
-                'msg': translate(msg, context=self.request),
-                'msgid': unicode(msg),
-                'obj_uid': doc.UID(),
-                'obj_title': doc.title,
-                'obj_url': doc.absolute_url(),
-                'obj_type': doc.portal_type,
+                'translated_message': translate(msg, context=self.request),
+                'message': unicode(msg),
+                'additional_metadata': {
+                    'obj_uid': doc.UID(),
+                    'obj_title': doc.title,
+                    'obj_url': doc.absolute_url(),
+                    'obj_type': doc.portal_type,
+                },
             }
 
     def collect_documents(self, dossier_to_copy):

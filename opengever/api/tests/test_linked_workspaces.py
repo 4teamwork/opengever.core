@@ -1038,12 +1038,14 @@ class TestPrepareCopyDossierToWorkspaceValidation(FunctionalWorkspaceClientTestC
                 )
         expected = {
             'errors': [{
-                'msg': 'Main dossier not linked to workspace',
-                'msgid': 'main_dossier_not_linked_to_workspace',
-                'obj_title': 'My dossier',
-                'obj_type': 'opengever.dossier.businesscasedossier',
-                'obj_uid': self.dossier.UID(),
-                'obj_url': self.dossier.absolute_url(),
+                'translated_message': 'Main dossier not linked to workspace',
+                'message': 'main_dossier_not_linked_to_workspace',
+                'additional_metadata': {
+                    'obj_title': 'My dossier',
+                    'obj_type': 'opengever.dossier.businesscasedossier',
+                    'obj_uid': self.dossier.UID(),
+                    'obj_url': self.dossier.absolute_url(),
+                },
             }],
             'ok': False,
         }
@@ -1077,12 +1079,14 @@ class TestPrepareCopyDossierToWorkspaceValidation(FunctionalWorkspaceClientTestC
                 )
         expected = {
             'errors': [{
-                'msg': 'Document is checked out',
-                'msgid': 'document_is_checked_out',
-                'obj_title': u'Testdokum\xe4nt',
-                'obj_type': 'opengever.document.document',
-                'obj_uid': document.UID(),
-                'obj_url': document.absolute_url(),
+                'translated_message': 'Document is checked out',
+                'message': 'document_is_checked_out',
+                'additional_metadata': {
+                    'obj_title': u'Testdokum\xe4nt',
+                    'obj_type': 'opengever.document.document',
+                    'obj_uid': document.UID(),
+                    'obj_url': document.absolute_url(),
+                },
             }],
             'ok': False,
         }
