@@ -3,6 +3,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
 from opengever.disposition.ech0160.sippackage import SIPPackage
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from tempfile import TemporaryFile
@@ -29,16 +31,20 @@ class TestSIPPackageIntegration(IntegrationTestCase):
                 u'SIP_20161106_PLONE_10\xe434', package.get_folder_name())
 
     def test_ablieferungs_metadata(self):
+        rm_user = ogds_service().fetch_user(self.records_manager.getId())
+        rm_user.firstname = u'R\xe4mon'
+        get_current_admin_unit().title = u'Hauptmand\xe4nt'
+
         self.login(self.records_manager)
         package = SIPPackage(self.disposition)
 
         self.assertEquals(
             u'GEVER', package.ablieferung.ablieferungstyp)
         self.assertEquals(
-            'Hauptmandant, ramon.flucht',
+            u'Hauptmand\xe4nt, Flucht R\xe4mon',
             package.ablieferung.ablieferndeStelle)
         self.assertEquals(
-            u'Hauptmandant', package.ablieferung.provenienz.aktenbildnerName)
+            u'Hauptmand\xe4nt', package.ablieferung.provenienz.aktenbildnerName)
         self.assertEquals(
             u'Ordnungssystem', package.ablieferung.provenienz.registratur)
 
