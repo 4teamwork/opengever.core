@@ -33,8 +33,9 @@ import sys
 
 
 EXCLUDED_LAYERS = [
-    'opengever.core.testing.opengever.core:integration:solr',
-    'opengever.core.testing.opengever.core:functional:solr',
+    'opengever.core.testing.opengever.core:solr-integration',
+    'opengever.core.testing.opengever.core:solr-functional',
+    'opengever.core.testing.opengever.core:solr-zserver',
 ]
 
 

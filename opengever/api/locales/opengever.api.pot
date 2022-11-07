@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-08-25 13:12+0000\n"
+"POT-Creation-Date: 2022-10-10 14:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,6 +40,10 @@ msgstr ""
 msgid "disallowed_participant"
 msgstr ""
 
+#: ./opengever/api/linked_workspaces.py
+msgid "document_is_checked_out"
+msgstr ""
+
 #. Default: "The participant ${actorid} already exists"
 #: ./opengever/api/participations.py
 msgid "duplicate_participant"
@@ -58,6 +62,10 @@ msgstr ""
 #. Default: "Role ${role} is not available. Available roles are: ${allowed_roles}"
 #: ./opengever/api/participations.py
 msgid "invalid_role"
+msgstr ""
+
+#: ./opengever/api/linked_workspaces.py
+msgid "main_dossier_not_linked_to_workspace"
 msgstr ""
 
 #. Default: "Missing parameter 'participant'"

@@ -124,6 +124,11 @@ class FunctionalTestCase(TestCase):
     layer = OPENGEVER_FUNCTIONAL_TESTING
     use_default_fixture = True
 
+    api_headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+    }
+
     def setUp(self):
         super(FunctionalTestCase, self).setUp()
         self.portal = self.layer['portal']

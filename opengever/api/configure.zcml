@@ -970,6 +970,14 @@
 
   <plone:service
       method="POST"
+      name="@upload-document-copy"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".workspace.UploadDocumentCopy"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
       name="@move"
       for="opengever.workspace.interfaces.IToDoList"
       factory=".todo.ToDoMove"
@@ -1100,6 +1108,14 @@
       name="@copy-document-to-workspace"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       factory=".linked_workspaces.CopyDocumentToWorkspacePost"
+      permission="opengever.workspaceclient.UseWorkspaceClient"
+      />
+
+  <plone:service
+      method="POST"
+      name="@prepare-copy-dossier-to-workspace"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      factory=".linked_workspaces.PrepareCopyDossierToWorkspacePost"
       permission="opengever.workspaceclient.UseWorkspaceClient"
       />
 

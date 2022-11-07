@@ -680,7 +680,7 @@ OPENGEVER_SOLR_INTEGRATION_TESTING = GEVERIntegrationTesting(
     # Warning: do not try to base other layers on ContentFixtureWithSolrLayer.
     # See docstring of ContentFixtureLayer.
     bases=(ContentFixtureWithSolrLayer(), TRAVERSAL_BROWSER_FIXTURE),
-    name="opengever.core:integration:solr")
+    name="opengever.core:solr-integration")
 
 PDFLATEX_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
     bases=(PDFLATEX_SERVICE_FIXTURE, OPENGEVER_FIXTURE),
@@ -697,7 +697,7 @@ WEASYPRINT_SERVICE_INTEGRATION_TESTING = GEVERIntegrationTesting(
 
 class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
 
-    solr_port = os.environ.get('PORT5', '19905')
+    solr_port = os.environ.get('PORT2', '19905')
     solr_core = 'functionaltesting'
 
     def setUpPloneSite(self, portal):
@@ -718,6 +718,13 @@ class OpengeverFixtureWithSolr(SolrTestingBase, OpengeverFixture):
         self.maybe_stop_solr()
         super(OpengeverFixtureWithSolr, self).tearDownZope(app)
 
+    def testTearDown(self):
+        client = SolrReplicationAPIClient.get_instance()
+        if client._configured:
+            client.restore_backup('fixture')
+            client.await_restored()
+        super(OpengeverFixtureWithSolr, self).testTearDown()
+
 
 OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
     sql_layer=sqlite_testing.SQLITE_MEMORY_FIXTURE)
@@ -726,4 +733,11 @@ OPENGEVER_FIXTURE_SQLITE_WITH_SOLR = OpengeverFixtureWithSolr(
 OPENGEVER_SOLR_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(OPENGEVER_FIXTURE_SQLITE_WITH_SOLR,
            set_builder_session_factory(functional_session_factory)),
-    name="opengever.core:functional:solr")
+    name="opengever.core:solr-functional")
+
+
+OPENGEVER_FUNCTIONAL_SOLR_ZSERVER_TESTING = FunctionalTesting(
+    bases=(z2.ZSERVER_FIXTURE,
+           OPENGEVER_SOLR_FUNCTIONAL_TESTING,
+           set_builder_session_factory(functional_session_factory)),
+    name="opengever.core:solr-zserver")

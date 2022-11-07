@@ -146,7 +146,7 @@ class WorkspaceClient(object):
 
     def upload_document_copy(self, url_or_path, file_, content_type,
                              filename, document_metadata, gever_document_uid):
-        """Creates a copy of a GEVER document in a workspace.
+        """Creates a copy of a GEVER document in a workspace or folder.
 
         :param url_or_path: Location where to create the new document
         :param file_: Readable IO which holds the content of the file

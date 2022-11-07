@@ -923,6 +923,320 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         self.assertEqual(LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK,
                          lockable.lock_info()[0]['type'].__name__)
 
+    @browsing
+    def test_also_allows_copying_documents_to_workspace_folder(self, browser):
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .with_dummy_content())
+
+        folder = create(Builder('workspace folder')
+                        .within(self.workspace))
+
+        payload = {
+            'document_uid': document.UID(),
+            'workspace_uid': self.workspace.UID(),
+            'folder_uid': folder.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            fix_publisher_test_bug(browser, document)
+            with self.observe_children(folder) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+
+            # XXX: This is incorrect, only one document should be added. This
+            # is a testing issue (doesn't happen in production) that was never
+            # really addressed. The fix_publisher_test_bug() is supposed to
+            # work around this, but it doesn't.
+            self.assertEqual(len(children['added']), 2)
+
+            id_ = browser.json['id'].encode('ascii')
+            workspace_document = folder.restrictedTraverse(id_)
+
+            self.assertEqual(workspace_document.absolute_url(), browser.json.get('@id'))
+            self.assertEqual(workspace_document.title, document.title)
+
+            self.assertEqual(
+                {'UID': IUUID(document)},
+                ILinkedDocuments(workspace_document).linked_gever_document)
+
+
+class TestPrepareCopyDossierToWorkspaceValidation(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_passes_if_all_ok(self, browser):
+        payload = {
+            'validate_only': True,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            browser.open(
+                self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers,
+            )
+        self.assertEqual({u'ok': True}, browser.json)
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
+    def test_fails_if_workspace_uid_missing(self, browser):
+        payload = {
+            'validate_only': True,
+        }
+
+        with self.workspace_client_env():
+            browser.login()
+
+            with browser.expect_http_error(code=400):
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+        expected = {
+            'type': 'BadRequest',
+            'message': 'workspace_uid_required',
+            'translated_message': "Property 'workspace_uid' is required",
+            'additional_metadata': {},
+        }
+        self.assertEqual(expected, browser.json)
+
+    @browsing
+    def test_fails_if_workspace_not_linked(self, browser):
+        payload = {
+            'validate_only': True,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            browser.login()
+
+            with browser.expect_http_error(code=400):
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+        expected = {
+            'errors': [{
+                'translated_message': 'Main dossier not linked to workspace',
+                'message': 'main_dossier_not_linked_to_workspace',
+                'additional_metadata': {
+                    'obj_title': 'My dossier',
+                    'obj_type': 'opengever.dossier.businesscasedossier',
+                    'obj_uid': self.dossier.UID(),
+                    'obj_url': self.dossier.absolute_url(),
+                },
+            }],
+            'ok': False,
+        }
+        self.assertEqual(expected, browser.json)
+        self.assertEqual(400, browser.status_code)
+
+    @browsing
+    def test_fails_if_dossier_contains_checked_out_doc(self, browser):
+        payload = {
+            'validate_only': True,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        document = create(Builder('document')
+                          .within(self.dossier)
+                          .checked_out())
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+
+            with browser.expect_http_error(code=400):
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+        expected = {
+            'errors': [{
+                'translated_message': 'Document is checked out',
+                'message': 'document_is_checked_out',
+                'additional_metadata': {
+                    'obj_title': u'Testdokum\xe4nt',
+                    'obj_type': 'opengever.document.document',
+                    'obj_uid': document.UID(),
+                    'obj_url': document.absolute_url(),
+                },
+            }],
+            'ok': False,
+        }
+        self.assertEqual(expected, browser.json)
+        self.assertEqual(400, browser.status_code)
+
+
+class TestPrepareCopyDossierToWorkspaceStructureCreation(FunctionalWorkspaceClientTestCase):
+
+    @browsing
+    def test_creates_structure(self, browser):
+        payload = {
+            'validate_only': False,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        document = create(Builder('document')
+                          .within(self.dossier))
+
+        subdossier = create(Builder('dossier')
+                            .titled(u'Subdossier')
+                            .within(self.dossier))
+
+        subdocument = create(Builder('document')
+                             .titled(u'Subdocument')
+                             .within(subdossier))
+        self.commit_solr()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+
+            self.assertEqual(
+                1, len(children['added']),
+                'Workspace should have 1 direct new folder')
+
+            folder = list(children['added'])[0]
+
+            self.assertEqual(1, len(folder.objectValues()))
+            subfolder = folder.objectValues()[0]
+
+            self.assertEqual(u'My dossier', folder.title)
+            self.assertEqual(u'Subdossier', subfolder.title)
+
+        expected = {
+            'docs_to_upload': [
+                {
+                    'source_document_uid': document.UID(),
+                    'target_folder_uid': folder.UID(),
+                    'title': u'Testdokum\xe4nt',
+                },
+                {
+                    'source_document_uid': subdocument.UID(),
+                    'target_folder_uid': subfolder.UID(),
+                    'title': u'Subdocument',
+                },
+            ]
+        }
+        self.assertEqual(expected, browser.json)
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
+    def test_also_creates_folders_for_empty_dossiers(self, browser):
+        payload = {
+            'validate_only': False,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+
+            self.assertEqual(
+                1, len(children['added']),
+                'Workspace should have 1 direct new folder')
+
+        expected = {
+            'docs_to_upload': []
+        }
+        self.assertEqual(expected, browser.json)
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
+    def test_maps_documents_in_non_dossiers_to_closest_containing_dossier(self, browser):
+        payload = {
+            'validate_only': False,
+            'workspace_uid': self.workspace.UID(),
+        }
+
+        task = create(Builder('task')
+                      .titled(u'Task')
+                      .within(self.dossier))
+
+        document = create(Builder('document')
+                          .within(task))
+
+        self.commit_solr()
+
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            browser.login()
+            with self.observe_children(self.workspace) as children:
+                browser.open(
+                    self.dossier.absolute_url() + '/@prepare-copy-dossier-to-workspace',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers=self.api_headers,
+                )
+
+            self.assertEqual(
+                1, len(children['added']),
+                'Workspace should have 1 direct new folder')
+
+            folder = list(children['added'])[0]
+
+        expected = {
+            'docs_to_upload': [
+                {
+                    'source_document_uid': document.UID(),
+                    'target_folder_uid': folder.UID(),
+                    'title': u'Testdokum\xe4nt',
+                },
+            ]
+        }
+        self.assertEqual(expected, browser.json)
+        self.assertEqual(200, browser.status_code)
+
 
 class TestListDocumentsInLinkedWorkspaceGet(FunctionalWorkspaceClientTestCase):
 

@@ -92,6 +92,11 @@
            opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
+  <adapter
+      factory=".actions.SubDossierListingActions"
+      name="dossiers"
+      />
+
   <adapter factory=".actions.DossierContextActions" />
   <adapter factory=".actions.TemplateFolderContextActions" />
   <adapter factory=".actions.DossierTemplateContextActions" />

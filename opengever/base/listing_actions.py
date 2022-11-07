@@ -26,6 +26,7 @@ class BaseListingActions(object):
         self.maybe_add_pdf_taskslisting()
         self.maybe_add_create_disposition()
         self.maybe_add_copy_documents_to_workspace()
+        self.maybe_add_copy_dossier_to_workspace()
         self.maybe_add_trash_content()
         self.maybe_add_untrash_content()
         self.maybe_add_remove()
@@ -40,6 +41,9 @@ class BaseListingActions(object):
         return False
 
     def is_copy_documents_to_workspace_available(self):
+        return False
+
+    def is_copy_dossier_to_workspace_available(self):
         return False
 
     def is_copy_items_available(self):
@@ -106,6 +110,10 @@ class BaseListingActions(object):
     def maybe_add_copy_documents_to_workspace(self):
         if self.is_copy_documents_to_workspace_available():
             self.add_action(u'copy_documents_to_workspace')
+
+    def maybe_add_copy_dossier_to_workspace(self):
+        if self.is_copy_dossier_to_workspace_available():
+            self.add_action(u'copy_dossier_to_workspace')
 
     def maybe_add_copy_items(self):
         if self.is_copy_items_available():

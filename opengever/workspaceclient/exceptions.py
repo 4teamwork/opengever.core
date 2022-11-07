@@ -39,6 +39,13 @@ class WorkspaceNotFound(Exception):
             'No workspace found.')
 
 
+class FolderNotFound(Exception):
+
+    def __init__(self):
+        super(FolderNotFound, self).__init__(
+            'No folder found.')
+
+
 class CopyToWorkspaceForbidden(Exception):
     """Raised if copying a document to a workspace is not permitted for
     business logic reasons.

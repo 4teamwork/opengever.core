@@ -57,6 +57,28 @@ class TestDossierListingActions(IntegrationTestCase):
         self.assertEqual(expected_actions, self.get_actions(self.private_folder))
 
 
+class TestWorkspaceClientDossierListingActions(FunctionalWorkspaceClientTestCase):
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request),
+                                    interface=IListingActions,
+                                    name='dossiers')
+        return adapter.get_actions() if adapter else []
+
+    def test_copy_dossier_to_workspace_action_available_in_open_dossier_with_linked_workspaces(self):
+        with self.workspace_client_env():
+            self.assertNotIn(u'copy_dossier_to_workspace', self.get_actions(self.dossier))
+            manager = ILinkedWorkspaces(self.dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+            self.assertIn(u'copy_dossier_to_workspace', self.get_actions(self.dossier))
+
+            api.content.transition(obj=self.dossier,
+                                   transition='dossier-transition-deactivate')
+
+            self.assertNotIn(u'copy_dossier_to_workspace', self.get_actions(self.dossier))
+
+
 class TestDossierTemplateListingActions(IntegrationTestCase):
 
     def get_actions(self, context):
