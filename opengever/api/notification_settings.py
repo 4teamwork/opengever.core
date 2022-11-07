@@ -66,7 +66,8 @@ class NotificationSettingsGet(Service):
             'reminder': not is_workspace_feature_enabled(),
             'task': not is_workspace_feature_enabled(),
             'general': not is_workspace_feature_enabled(),
-            'workspace': is_workspace_feature_enabled() and is_todo_feature_enabled(),
+            'workspaces': is_workspace_feature_enabled(),
+            'todos': is_workspace_feature_enabled() and is_todo_feature_enabled(),
             'document': True,
         }
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-10-07 09:20+0000\n"
+"POT-Creation-Date: 2022-11-03 15:04+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -347,11 +347,6 @@ msgstr "Aufgabe verändert"
 msgid "task-reminder"
 msgstr "Aufgaben-Erinnerung"
 
-#. Default: "Task deadline modified"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-modify-deadline"
-msgstr "Aufgaben-Frist verändert"
-
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
 msgid "task_issuer"
@@ -380,17 +375,22 @@ msgstr "Tageszusammenfassung für ${username}"
 #. Default: "ToDo assigned"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
-msgstr "ToDo zugewiesen"
+msgstr "To-do zugewiesen"
 
 #. Default: "ToDo modified"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
-msgstr "ToDo modifiziert"
+msgstr "To-do modifiziert"
 
 #. Default: "ToDo responsible"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
-msgstr "ToDo Verantwortlicher"
+msgstr "To-do Verantwortlicher"
+
+#. Default: "Added as workspace participant"
+#: ./opengever/activity/notification_settings.py
+msgid "workspace-participation-added"
+msgstr "Als Teamraum-Teilnehmer hinzugefügt worden"
 
 #. Default: "Workspace member"
 #: ./opengever/activity/roles.py

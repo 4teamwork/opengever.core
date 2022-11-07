@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-09-09 12:33+0000\n"
+"POT-Creation-Date: 2022-11-03 15:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -287,12 +287,12 @@ msgstr "ToDo"
 #. Default: "ToDo assigned"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_assigned_activity"
-msgstr "Todo assigné"
+msgstr "ToDo assigné"
 
 #. Default: "ToDo closed"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_closed_activity"
-msgstr "Todo complété"
+msgstr "ToDo complété"
 
 #. Default: "ToDo commented"
 #: ./opengever/workspace/activities.py
@@ -302,7 +302,7 @@ msgstr "ToDo commenté"
 #. Default: "ToDo reopened"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_reopened_activity"
-msgstr "Todo rouvert"
+msgstr "ToDo rouvert"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
@@ -318,6 +318,11 @@ msgstr "Lien pour la vidéoconférence"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
 msgstr "URL de vidéoconférence"
+
+#. Default: "Added to the workspace"
+#: ./opengever/workspace/activities.py
+msgid "label_workspace_participation_added"
+msgstr ""
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
@@ -352,7 +357,12 @@ msgstr "${user} vous a envoyé une note:"
 #. Default: "Assigned to ${responsible} by ${user}"
 #: ./opengever/workspace/activities.py
 msgid "summary_todo_assigned_activity"
-msgstr "Todo assigné à ${responsible} par ${user}"
+msgstr "ToDo assigné à ${responsible} par ${user}"
+
+#. Default: "Added to the workspace by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_workspace_participation_added"
+msgstr ""
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt

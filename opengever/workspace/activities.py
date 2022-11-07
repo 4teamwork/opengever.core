@@ -39,9 +39,8 @@ class WorkspaceWatcherManager(object):
             self.center.add_watcher_to_resource(
                 todo, member["userid"], WORKSPACE_MEMBER_ROLE)
 
-    def new_participant_added(self, participant):
+    def new_participant_added(self, participant, notify_user=False):
         catalog = api.portal.get_tool("portal_catalog")
-
         todos = catalog.searchResults(
             portal_type="opengever.workspace.todo",
             path='/'.join(self.workspace.getPhysicalPath()))
@@ -49,6 +48,9 @@ class WorkspaceWatcherManager(object):
         for todo in todos:
             self.center.add_watcher_to_resource(
                 todo.getObject(), participant, WORKSPACE_MEMBER_ROLE)
+        if notify_user:
+            WorkspaceParticipationAddedActivity(self.workspace, getRequest(),
+                                                participant).record()
 
     def participant_removed(self, participant):
         """We remove all subscriptions for participant on objects that are in
@@ -157,3 +159,35 @@ class ToDoCommentedActivity(ToDoModifiedBaseActivity):
                 mapping={'user': user.get_label(with_principal=False)})
 
         return self.translate_to_all_languages(msg)
+
+
+class WorkspaceParticipationAddedActivity(BaseActivity):
+    """Activity representation for a user or group being added to a workspace.
+    """
+
+    kind = u'workspace-participation-added'
+
+    def __init__(self, context, request, participation_id):
+        super(WorkspaceParticipationAddedActivity, self).__init__(context, request)
+        self.participation_id = participation_id
+
+    @property
+    def summary(self):
+        return self.translate_to_all_languages(
+            _('summary_workspace_participation_added', u'Added to the workspace by ${user}',
+              mapping={'user': Actor.lookup(self.actor_id).get_link()}))
+
+    @property
+    def description(self):
+        return {}
+
+    @property
+    def label(self):
+        return self.translate_to_all_languages(
+            _('label_workspace_participation_added', u'Added to the workspace'))
+
+    def add_activity(self):
+        representatives = [user.userid for user in
+                           Actor.lookup(self.participation_id).representatives()]
+        return super(WorkspaceParticipationAddedActivity, self).add_activity(
+            notification_recipients=representatives)

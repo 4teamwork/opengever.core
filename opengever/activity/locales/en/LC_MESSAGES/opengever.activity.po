@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-10-07 09:20+0000\n"
+"POT-Creation-Date: 2022-11-03 15:04+0000\n"
 "PO-Revision-Date: 2015-02-24 08:40+0100\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -405,12 +405,6 @@ msgstr "Task modified"
 msgid "task-reminder"
 msgstr "Task reminder"
 
-#. German translation: Aufgaben-Frist verändert
-#. Default: "Task deadline modified"
-#: ./opengever/activity/__init__.py
-msgid "task-transition-modify-deadline"
-msgstr "Task deadline modified"
-
 #. German translation: Auftraggeber
 #. Default: "Task issuer"
 #: ./opengever/activity/roles.py
@@ -445,19 +439,24 @@ msgstr "Daily Digest for ${username}"
 #. Default: "ToDo assigned"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-assigned"
-msgstr "ToDo assigned"
+msgstr "To-do assigned"
 
 #. German translation: ToDo modifiziert
 #. Default: "ToDo modified"
 #: ./opengever/activity/notification_settings.py
 msgid "todo-modified"
-msgstr "ToDo modified"
+msgstr "To-do modified"
 
 #. German translation: ToDo Verantwortlicher
 #. Default: "ToDo responsible"
 #: ./opengever/activity/roles.py
 msgid "todo_responsible_role"
-msgstr "ToDo responsible"
+msgstr "To-do responsible"
+
+#. Default: "Added as workspace participant"
+#: ./opengever/activity/notification_settings.py
+msgid "workspace-participation-added"
+msgstr "Added as workspace participant"
 
 #. German translation: Teamraum Mitglied
 #. Default: "Workspace member"

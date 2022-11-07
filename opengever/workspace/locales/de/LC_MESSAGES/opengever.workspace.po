@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-09-09 12:33+0000\n"
+"POT-Creation-Date: 2022-11-03 15:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -282,27 +282,27 @@ msgstr "Titel"
 #. Default: "ToDo"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_todo"
-msgstr "ToDo"
+msgstr "To-do"
 
 #. Default: "ToDo assigned"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_assigned_activity"
-msgstr "ToDo zugewiesen"
+msgstr "To-do zugewiesen"
 
 #. Default: "ToDo closed"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_closed_activity"
-msgstr "ToDo erledigt"
+msgstr "To-do erledigt"
 
 #. Default: "ToDo commented"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_commented_activity"
-msgstr "ToDo kommentiert"
+msgstr "To-do kommentiert"
 
 #. Default: "ToDo reopened"
 #: ./opengever/workspace/activities.py
 msgid "label_todo_reopened_activity"
-msgstr "ToDo wieder eröffnet"
+msgstr "To-do wieder eröffnet"
 
 #. Default: "Trash"
 #: ./opengever/workspace/browser/tabbed.py
@@ -318,6 +318,11 @@ msgstr "Video-Call Link"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
 msgstr "Videokonferenz URL"
+
+#. Default: "Added to the workspace"
+#: ./opengever/workspace/activities.py
+msgid "label_workspace_participation_added"
+msgstr "Zum Teamraum hinzugefügt worden"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
@@ -353,6 +358,11 @@ msgstr "${user} hat einen Hinweis an Sie versendet:"
 #: ./opengever/workspace/activities.py
 msgid "summary_todo_assigned_activity"
 msgstr "An ${responsible} neu zugewiesen durch ${user}"
+
+#. Default: "Added to the workspace by ${user}"
+#: ./opengever/workspace/activities.py
+msgid "summary_workspace_participation_added"
+msgstr "Zum Teamraum hinzugefügt worden durch ${user}"
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt

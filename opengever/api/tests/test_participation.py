@@ -1,6 +1,8 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.activity.model import Activity
+from opengever.activity.model import Notification
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
@@ -965,6 +967,8 @@ class TestParticipationPatch(IntegrationTestCase):
 
 class TestParticipationPostWorkspace(IntegrationTestCase):
 
+    features = ('activity', )
+
     @browsing
     def test_let_a_user_participate(self, browser):
         self.login(self.workspace_admin, browser=browser)
@@ -1197,6 +1201,60 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
                                     u"'participant' or 'role'",
              u'type': u'BadRequest'},
             browser.json)
+
+    @browsing
+    def test_notifies_added_participants(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        data = {
+            "participant": {"token": self.meeting_user.id},
+            "role": {"token": 'WorkspaceGuest'},
+            "notify_user": True
+        }
+
+        browser.open(self.workspace, view='@participations', method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+        notifications = Notification.query.all()
+        self.assertEqual(1, len(notifications))
+        self.assertEqual(1, Activity.query.count())
+        notification = notifications[0]
+        activity = notification.activity
+        self.assertEqual(self.meeting_user.id, notification.userid)
+        self.assertEqual(u'workspace-participation-added', activity.kind)
+
+        data = {
+            "participant": {"token": "projekt_a"},
+            "role": {"token": 'WorkspaceGuest'},
+            "notify_user": True
+        }
+
+        browser.open(self.workspace, view='@participations', method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual([self.meeting_user.id, self.regular_user.id, self.dossier_responsible.id],
+                         sorted([notification.userid for notification in Notification.query.all()]))
+        self.assertEqual([u'workspace-participation-added', u'workspace-participation-added'],
+                         [activity.kind for activity in Activity.query.all()])
+
+    @browsing
+    def test_does_not_notify_participants_if_notify_user_not_set(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+        data = {
+            "participant": {"token": self.meeting_user.id},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(self.workspace, view='@participations', method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+        self.assertEqual(0, Notification.query.count())
+        self.assertEqual(0, Activity.query.count())
+
+        remove_participation(self.workspace, browser, self.meeting_user.id)
+        data['notify_user'] = True
+        browser.open(self.workspace, view='@participations', method='POST',
+                     data=json.dumps(data), headers=self.api_headers)
+
+        self.assertEqual(1, Notification.query.count())
+        self.assertEqual(1, Activity.query.count())
 
 
 class TestParticipationPostWorkspaceFolder(IntegrationTestCase):

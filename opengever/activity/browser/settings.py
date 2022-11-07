@@ -85,11 +85,16 @@ NOTIFICATION_SETTING_TABS = [
          'dossier-overdue',
      ]},
 
-    {'id': 'workspace',
+    {'id': 'todos',
      'roles': [TODO_RESPONSIBLE_ROLE, WORKSPACE_MEMBER_ROLE],
      'settings': [
          'todo-assigned',
          'todo-modified'
+     ]},
+    {'id': 'workspaces',
+     'roles': [ALWAYS],
+     'settings': [
+         'workspace-participation-added'
      ]},
     {'id': 'document',
      'roles': [WATCHER_ROLE],

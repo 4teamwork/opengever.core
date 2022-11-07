@@ -213,8 +213,7 @@ class ParticipationsPost(ParticipationTraverseService):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        participations = self.validate_data(json_body(self.request))
-
+        participations, notify_user = self.validate_data(json_body(self.request))
         results = []
         container = self.context.get_context_with_local_roles()
         for token, role in participations:
@@ -224,7 +223,7 @@ class ParticipationsPost(ParticipationTraverseService):
             RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
             activity_manager = WorkspaceWatcherManager(self.context)
-            activity_manager.new_participant_added(token)
+            activity_manager.new_participant_added(token, notify_user)
 
             results.append(self.prepare_response_item(self.find_participant(
                 token, container)))
@@ -250,8 +249,9 @@ class ParticipationsPost(ParticipationTraverseService):
                               participation in data.get("participants")]
         else:
             participations = [self.extract_participation(data)]
+        notify_user = data.get('notify_user', False)
 
-        return participations
+        return participations, notify_user
 
     def extract_participation(self, data):
         participant = data.get('participant')
