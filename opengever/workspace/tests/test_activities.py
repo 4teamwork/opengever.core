@@ -199,7 +199,7 @@ class TestToDoActivities(IntegrationTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('todo-assigned', activity.kind)
-        self.assertEquals(u'ToDo assigned', activity.label)
+        self.assertEquals(u'To-do assigned', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Test ToDos', activity.title)
         user = ActorLookup(self.workspace_owner.getId()).lookup()
@@ -220,7 +220,7 @@ class TestToDoActivities(IntegrationTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('todo-assigned', activity.kind)
-        self.assertEquals(u'ToDo assigned', activity.label)
+        self.assertEquals(u'To-do assigned', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Go live', activity.title)
         user = ActorLookup(self.workspace_owner.getId()).lookup()
@@ -241,7 +241,7 @@ class TestToDoActivities(IntegrationTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('todo-modified', activity.kind)
-        self.assertEquals(u'ToDo closed', activity.label)
+        self.assertEquals(u'To-do closed', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Go live', activity.title)
         user = ActorLookup(self.workspace_owner.getId()).lookup()
@@ -259,7 +259,7 @@ class TestToDoActivities(IntegrationTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('todo-modified', activity.kind)
-        self.assertEquals(u'ToDo reopened', activity.label)
+        self.assertEquals(u'To-do reopened', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Cleanup installation', activity.title)
         user = ActorLookup(self.workspace_owner.getId()).lookup()
@@ -277,7 +277,7 @@ class TestToDoActivities(IntegrationTestCase):
 
         activity = Activity.query.one()
         self.assertEquals('todo-modified', activity.kind)
-        self.assertEquals(u'ToDo commented', activity.label)
+        self.assertEquals(u'To-do commented', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals('Fix user login', activity.title)
         user = ActorLookup(self.workspace_member.getId()).lookup()

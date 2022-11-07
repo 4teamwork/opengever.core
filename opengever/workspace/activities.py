@@ -4,7 +4,7 @@ from opengever.activity.base import BaseActivity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
 from opengever.ogds.base.actor import Actor
-from opengever.task import _
+from opengever.workspace import _
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
 from plone import api
 from zope.globalrequest import getRequest
