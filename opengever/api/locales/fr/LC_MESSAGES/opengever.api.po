@@ -39,7 +39,7 @@ msgstr "Le participant ${actorid} n'est pas autorisé"
 
 #: ./opengever/api/linked_workspaces.py
 msgid "document_is_checked_out"
-msgstr ""
+msgstr "Document en checkout"
 
 #. Default: "The participant ${actorid} already exists"
 #: ./opengever/api/participations.py
@@ -63,7 +63,7 @@ msgstr "Le rôle ${role} n'est pas valable. Les rôles valides sont: ${allowed_r
 
 #: ./opengever/api/linked_workspaces.py
 msgid "main_dossier_not_linked_to_workspace"
-msgstr ""
+msgstr "Le dossier principal n'est pas lié à cet espace de travail"
 
 #. Default: "Missing parameter 'participant'"
 #: ./opengever/api/participations.py
