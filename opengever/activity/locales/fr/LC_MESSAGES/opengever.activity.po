@@ -392,7 +392,7 @@ msgstr "Responsable d'un ToDo"
 #. Default: "Added as workspace participant"
 #: ./opengever/activity/notification_settings.py
 msgid "workspace-participation-added"
-msgstr ""
+msgstr "Ajouté comme participant à l'espace de travail partagé"
 
 #. Default: "Workspace member"
 #: ./opengever/activity/roles.py

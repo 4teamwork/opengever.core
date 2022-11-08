@@ -322,7 +322,7 @@ msgstr "URL de vidéoconférence"
 #. Default: "Added to the workspace"
 #: ./opengever/workspace/activities.py
 msgid "label_workspace_participation_added"
-msgstr ""
+msgstr "Ajouté à l'espace de travail partagé"
 
 #. Default: "Workspaces"
 #: ./opengever/workspace/browser/tabbed.py
@@ -362,7 +362,7 @@ msgstr "ToDo assigné à ${responsible} par ${user}"
 #. Default: "Added to the workspace by ${user}"
 #: ./opengever/workspace/activities.py
 msgid "summary_workspace_participation_added"
-msgstr ""
+msgstr "Ajouté à l'espace de travail partagé par ${user}"
 
 #. Default: "Manage participation of ${workspace}"
 #: ./opengever/workspace/participation/browser/templates/participants-view.pt
