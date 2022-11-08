@@ -22,7 +22,7 @@
         <p>
           <tal:summary tal:repeat="line options/custom_mail_content">
             <tal:last tal:define="is_last repeat/line/end">
-              <p tal:replace="structure line" /><br tal:condition="not: is_last" />
+             <tal:line tal:replace="structure line" /><br tal:condition="not: is_last" />
             </tal:last>
           </tal:summary>
         </p>
