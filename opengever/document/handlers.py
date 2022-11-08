@@ -160,3 +160,17 @@ def author_or_title_changed(context, event):
         DocumentTitleChangedActivity(context, getRequest()).record()
     if author_changed:
         DocumentAuthorChangedActivity(context, getRequest()).record()
+
+
+def mark_pending_changes(context, event):
+    if context.REQUEST.method == 'PUT':
+        context.has_pending_changes = True
+    else:
+        for desc in event.descriptions:
+            if 'IDocumentSchema.file' in desc.attributes or 'file' in desc.attributes:
+                context.has_pending_changes = True
+                return
+
+
+def unmark_pending_changes(context, event):
+    context.has_pending_changes = False

@@ -10,8 +10,11 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.testing import FunctionalTestCase
+from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from plone.protect.utils import addTokenToUrl
+from six import BytesIO
 from zope.component import getMultiAdapter
 
 
@@ -302,3 +305,132 @@ class TestHandlers(FunctionalTestCase):
                                   target=self.target_dossier)
 
         self.assertEqual('Copy of Invalid DOCX', copied.title)
+
+
+class TestHandlersIntegration(IntegrationTestCase):
+
+    UPLOAD_DATA = b"abcdefgh"
+    UPLOAD_LENGTH = len(UPLOAD_DATA)
+    UPLOAD_METADATA = (
+        'filename dGVzdC50eHQ=,content-type dGV4dC9wbGFpbg==,'
+        '@type b3BlbmdldmVyLmRvY3VtZW50LmRvY3VtZW50'
+    )
+
+    @browsing
+    def test_document_has_pending_changes_after_tus_upload(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            self.document.absolute_url() + '/@checkout', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(self.document.has_pending_changes)
+
+        browser.open(
+            self.document.absolute_url() + '/@tus-replace',
+            method='POST',
+            headers=dict({
+                "Accept": "application/json",
+                "Tus-Resumable": "1.0.0",
+                "Upload-Length": str(self.UPLOAD_LENGTH),
+                "Upload-Metadata": self.UPLOAD_METADATA,
+            }),
+        )
+        self.assertEqual(browser.status_code, 201)
+        location = browser.headers.get('Location')
+
+        browser.open(
+            location,
+            method='PATCH',
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/offset+octet-stream",
+                "Upload-Offset": "0",
+                "Tus-Resumable": "1.0.0",
+            },
+            data=BytesIO(self.UPLOAD_DATA),
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertTrue(self.document.has_pending_changes)
+
+    @browsing
+    def test_document_has_pending_changes_after_put(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            self.document.absolute_url() + '/@checkout', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(self.document.has_pending_changes)
+
+        browser.open(
+            self.document.absolute_url(), method='PUT',
+            data=BytesIO(self.UPLOAD_DATA),
+        )
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(self.document.has_pending_changes)
+
+    @browsing
+    def test_document_has_pending_changes_after_form_upload(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(addTokenToUrl(
+            self.document.absolute_url() + '/@@checkout_documents'))
+        self.assertEqual(browser.status_code, 200)
+        self.assertFalse(self.document.has_pending_changes)
+
+        browser.open(addTokenToUrl(self.document.absolute_url() + '/@@edit'))
+        browser.fill({'File': ('DATA', 'file.txt', 'text/plain')}).save()
+        self.assertEqual(browser.status_code, 200)
+        self.assertTrue(self.document.has_pending_changes)
+
+    @browsing
+    def test_document_has_no_pending_changes_after_checkin(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            self.document.absolute_url() + '/@checkout', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+
+        self.document.has_pending_changes = True
+
+        browser.open(
+            self.document.absolute_url() + '/@checkin', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(self.document.has_pending_changes)
+
+    @browsing
+    def test_document_has_no_pending_changes_after_cancelcheckout(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(
+            self.document.absolute_url() + '/@checkout', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+
+        self.document.has_pending_changes = True
+
+        browser.open(
+            self.document.absolute_url() + '/@cancelcheckout', method='POST',
+            headers={"Accept": "application/json"},
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(self.document.has_pending_changes)
+
+    @browsing
+    def test_document_has_no_pending_changes_after_metadata_change(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            self.document.absolute_url(), method='PATCH',
+            headers={"Accept": "application/json", "Content-Type": "application/json"},
+            data='{"title": "New Title"}',
+        )
+        self.assertEqual(browser.status_code, 204)
+        self.assertFalse(self.document.has_pending_changes)

@@ -82,12 +82,14 @@ class TestOfficeconnectorAsZopemasterDossierAPIWithCheckout(OCSolrIntegrationTes
 
         expected_payloads = [{
             u'status': u'status',
+            u'cancelcheckout': u'@cancelcheckout',
             u'checkin': u'@checkin',
             u'checkout': u'@checkout',
             u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             u'document-url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
             u'download': u'download',
             u'filename': u'Vertraegsentwurf.docx',
+            u'has_pending_changes': False,
             u'lock': u'@lock',
             u'unlock': u'@unlock',
             u'upload': u'@tus-replace',

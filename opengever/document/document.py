@@ -59,8 +59,8 @@ import os.path
 
 
 DOCUMENT_FINALIZER_KEY = 'opengever.document.finalizer'
-
 DOCUMENT_STATE_FINAL = 'document-state-final'
+DOCUMENT_HAS_PENDING_CHANGES = '_document_has_pending_changes'
 
 LOG = logging.getLogger('opengever.document')
 MAIL_EXTENSIONS = ['.eml', '.msg', '.p7m']
@@ -520,6 +520,16 @@ class Document(Item, BaseDocumentMixin):
         if self.has_file():
             return self.file._p_mtime
         return None
+
+    @property
+    def has_pending_changes(self):
+        """True if the document has changes that haven't been checked-in yet.
+        """
+        return IAnnotations(self).get(DOCUMENT_HAS_PENDING_CHANGES, False)
+
+    @has_pending_changes.setter
+    def has_pending_changes(self, value):
+        IAnnotations(self)[DOCUMENT_HAS_PENDING_CHANGES] = value
 
     def get_download_view_name(self):
         return 'download'

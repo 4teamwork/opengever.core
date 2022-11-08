@@ -241,6 +241,12 @@
 
   <subscriber
       for="opengever.document.document.IDocumentSchema
+           zope.lifecycleevent.interfaces.IObjectModifiedEvent"
+      handler=".handlers.mark_pending_changes"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectRevertedToVersion"
       handler=".handlers.document_reverted_to_version"
       />
@@ -249,6 +255,18 @@
       for="opengever.document.document.IDocumentSchema
            opengever.document.interfaces.IObjectCheckedInEvent"
       handler=".handlers.document_version_created"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckedInEvent"
+      handler=".handlers.unmark_pending_changes"
+      />
+
+  <subscriber
+      for="opengever.document.document.IDocumentSchema
+           opengever.document.interfaces.IObjectCheckoutCanceledEvent"
+      handler=".handlers.unmark_pending_changes"
       />
 
   <adapter
