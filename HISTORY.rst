@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.22.0 (2022-11-09)
+----------------------
+
+New features:
+
+
+- Add ability to notify users when they're added to a workspace with the @participations endpoint. [tinagerber]
+
+
+Bug fixes:
+
+
+- Update changed field and ark document as recently touched when copying documents as new version from workspace. [tinagerber]
+- Fix sorting in OGDSUserListing when members of a group are listed. [njohner]
+- Return an 'active'-flag for available roles in in the ``@participations`` endpoint. [elioschmutz]
+
+
+Other changes:
+
+
+- Add template_folder_url to the @config endpoint. [elioschmutz]
+- @solrsearch provieds filters for -@id_parent and -url_parent to exclude path parents. [elioschmutz]
+- Add support for canceling checkout with Office Connector. [buchi]
+- Add `@prepare-copy-dossier-to-workspace` endpoint to prepare copying a subdossier to a workspace.
+- @copy-document-to-workspace: Also allow copying documents to workspace folders.
+- API Docs: Add CAS authentication documentation. [lgraf]
+- No longer escape custom_invitation_mail_content in teamraum invitation mail. [tinagerber]
+
+
 2022.21.0 (2022-10-26)
 ----------------------
 
