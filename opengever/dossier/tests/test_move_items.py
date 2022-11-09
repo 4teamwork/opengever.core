@@ -267,7 +267,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         'getId',
         'getObjPositionInParent',
         'id',
-        'is_default_page',
         'is_folderish',
         'is_subtask',
         'issuer',

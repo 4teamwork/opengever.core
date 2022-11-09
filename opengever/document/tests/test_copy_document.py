@@ -235,7 +235,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'filesize',
                                'firstname',
                                'getObjPositionInParent',
-                               'is_default_page',
                                'is_folderish',
                                'is_subtask',
                                'issuer',

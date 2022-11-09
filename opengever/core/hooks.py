@@ -123,6 +123,7 @@ def remove_unused_catalog_indexes(site):
         'expires',
         'getRawRelatedItems',
         'in_reply_to',
+        'is_default_page',
         'meta_type',
         'SearchableText',
         'total_comments',

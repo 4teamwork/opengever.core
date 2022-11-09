@@ -51,9 +51,6 @@ class Fetch(Fetch):
         if directory is not None:
             navtree_query['path'] = {'depth': 1, 'query': directory}
 
-        if 'is_default_page' not in navtree_query:
-            navtree_query['is_default_page'] = False
-
         content = closest_content(context)
 
         strategy = getMultiAdapter((content, widget), INavtreeStrategy)

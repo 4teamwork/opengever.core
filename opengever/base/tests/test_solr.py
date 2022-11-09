@@ -89,7 +89,6 @@ class TestSolr(IntegrationTestCase):
             'contactid',
             'date_of_completion',
             'getId',
-            'is_default_page',
             'predecessor',
             'sortable_author',
         ]
