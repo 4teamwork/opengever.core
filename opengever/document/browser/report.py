@@ -49,8 +49,6 @@ class DocumentReporter(SolrReporterView):
         {
             'id': 'document_author',
             'is_default': True,
-            'transform': readable_author,
-            'tabbedview_column': 'sortable_author',
         },
         {
             'id': 'document_date',

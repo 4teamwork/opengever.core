@@ -8,7 +8,6 @@ import opengever.contact.hooks
 import opengever.document.hooks
 import opengever.dossier.hooks
 import opengever.inbox.hooks
-import opengever.mail.hooks
 import opengever.ogds.base.hooks
 import opengever.private.hooks
 import opengever.quota.hooks
@@ -93,7 +92,6 @@ def trigger_subpackage_hooks(site):
     opengever.ogds.base.hooks.default_installed(site)
     opengever.base.hooks.installed(site)
     opengever.document.hooks.installed(site)
-    opengever.mail.hooks.installed(site)
     opengever.dossier.hooks.installed(site)
     opengever.task.hooks.installed(site)
     opengever.tabbedview.hooks.installed(site)

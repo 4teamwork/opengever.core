@@ -248,7 +248,6 @@ class TestCopyDocuments(IntegrationTestCase):
                                'responsible',
                                'retention_expiration',
                                'review_state',
-                               'sortable_author',
                                'start',
                                'task_type',
                                'trashed']

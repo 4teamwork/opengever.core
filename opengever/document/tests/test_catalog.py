@@ -20,8 +20,5 @@ class TestCatalog(FunctionalTestCase):
     def test_receipt_date_index_registered(self):
         self.assertIn('receipt_date', self.catalog.indexes())
 
-    def test_sortable_author_index_registered(self):
-        self.assertIn('sortable_author', self.catalog.indexes())
-
     def test_public_trial_index_registered(self):
         self.assertIn('public_trial', self.catalog.indexes())

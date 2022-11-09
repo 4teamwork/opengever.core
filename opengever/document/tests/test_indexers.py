@@ -62,17 +62,12 @@ class TestDocumentIndexers(FunctionalTestCase):
             document_date=datetime.date(2011, 1, 1))
 
         self.assertEquals(obj2brain(doc1).document_author, 'Hugo Boss')
-        self.assertEquals(
-            index_data_for(doc1).get('sortable_author'),
-            u'Hugo Boss')
 
         # without a author
         doc1.document_author = None
         doc1.reindexObject()
 
         self.assertEquals(obj2brain(doc1).document_author, None)
-        self.assertEquals(
-            index_data_for(doc1).get('sortable_author'), u'')
 
         # with a non-ascii characters including author
 
@@ -81,8 +76,6 @@ class TestDocumentIndexers(FunctionalTestCase):
 
         self.assertEquals(
             obj2brain(doc1).document_author, 'H\xc3\xbcgo B\xc3\xb6ss')
-        self.assertEquals(
-            index_data_for(doc1).get('sortable_author'), u'H\xfcgo B\xf6ss')
 
     def test_document_type_indexer(self):
         document = create(Builder("document"))

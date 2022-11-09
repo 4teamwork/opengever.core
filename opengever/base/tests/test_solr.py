@@ -90,7 +90,6 @@ class TestSolr(IntegrationTestCase):
             'date_of_completion',
             'getId',
             'predecessor',
-            'sortable_author',
         ]
 
         for index in catalog.indexes():

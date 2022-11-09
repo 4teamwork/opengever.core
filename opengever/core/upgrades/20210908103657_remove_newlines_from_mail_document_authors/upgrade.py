@@ -24,4 +24,4 @@ class RemoveNewlinesFromMailDocumentAuthors(UpgradeStep):
             return
 
         mail.document_author = stripped
-        mail.reindexObject(idxs=["sortable_author", "document_author"])
+        mail.reindexObject(idxs=["document_author"])

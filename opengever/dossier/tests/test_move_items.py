@@ -281,7 +281,6 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         'retention_expiration',
         'review_state',
         'sequence_number',
-        'sortable_author',
         'sortable_title',
         'start',
         'start',
