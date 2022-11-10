@@ -1,6 +1,6 @@
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.base.browser.reporting_view import SolrReporterView
-from opengever.base.reporter import readable_author
+from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
@@ -46,13 +46,13 @@ class ProposalReporter(SolrReporterView):
             'id': 'issuer',
             'is_default': True,
             'title': _(u'label_issuer', default='Issuer'),
-            'transform': readable_author,
+            'transform': readable_actor,
         },
         {
             'id': 'responsible',
             'is_default': True,
             'title': _(u'label_comittee', default='Comittee'),
-            'transform': readable_author,
+            'transform': readable_actor,
         },
         {
             'id': 'containing_dossier',

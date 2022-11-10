@@ -1,7 +1,7 @@
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.base.browser.reporting_view import SolrReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
-from opengever.base.reporter import readable_author
+from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
@@ -50,7 +50,7 @@ class DossierReporter(SolrReporterView):
             'id': 'responsible',
             'is_default': True,
             'alias': 'responsible_fullname',
-            'transform': readable_author,
+            'transform': readable_actor,
         },
         {
             'id': 'review_state',

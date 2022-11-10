@@ -1,7 +1,7 @@
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.base.browser.reporting_view import SolrReporterView
 from opengever.base.reporter import DATETIME_NUMBER_FORMAT
-from opengever.base.reporter import readable_author
+from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.base.solr.fields import translate_document_type
@@ -66,7 +66,7 @@ class DocumentReporter(SolrReporterView):
             'id': 'checked_out',
             'is_default': True,
             'title': _(u'label_document_checked_out_by'),
-            'transform': readable_author,
+            'transform': readable_actor,
             'alias': 'checked_out_fullname',
         },
         {

@@ -1,7 +1,7 @@
 from datetime import datetime
 from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
-from opengever.base.reporter import readable_author
+from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.globalindex import _
@@ -38,11 +38,11 @@ class TaskReporter(BaseReporterView):
             {'id': 'get_main_task_title', 'callable': True,
              'title': _('label_main_task', default=u'Main task')},
             {'id': 'issuer', 'title': _('label_issuer'),
-             'transform': readable_author},
+             'transform': readable_actor},
             {'id': 'issuing_org_unit_label',
              'title': _('label_issuing_org_unit')},
             {'id': 'responsible', 'title': _('label_responsible'),
-             'transform': readable_author},
+             'transform': readable_actor},
             {'id': 'task_type', 'title': _('label_task_type'),
              'transform': task_type_value_helper},
             {'id': 'admin_unit_id', 'title': _('label_admin_unit_id')},
