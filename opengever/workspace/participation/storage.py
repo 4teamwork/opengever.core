@@ -129,13 +129,22 @@ class InvitationStorage(object):
     def _find_user_id_for_email(self, email):
         pas_search = getMultiAdapter((api.portal.get(), getRequest()),
                                      name='pas_search')
-        users = pas_search.searchUsers(email=email, exact_match=True)
-        if len(users) > 1:
-            raise MultipleUsersFound("Found mulitple users for {}".format(email))
-        elif len(users) == 0:
-            return None
-
-        return users[0].get('userid')
+        users = pas_search.searchUsers(email=email, exact_match=False)
+        if len(users) > 0:
+            # Matches from pas_search are fuzzy (and exact_match=True may only
+            # be used when querying for 'id' or 'login'). We therefore filter
+            # for exact (but case-insensitive) matches ourselves.
+            userids = []
+            acl_users = api.portal.get_tool('acl_users')
+            for user_record in users:
+                user = acl_users.getUserById(user_record['userid'])
+                user_email = user.getProperty('email')
+                if user_email.lower() == email.lower():
+                    userids.append(user_record.get('userid'))
+            if len(userids) > 1:
+                raise MultipleUsersFound("Found mulitple users for {}".format(email))
+            if len(userids) == 1:
+                return userids[0]
 
     def _has_pending_invitation(self, target, recipient_email):
         target_uuid = IUUID(target)
