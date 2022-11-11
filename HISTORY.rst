@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.4 (2022-11-11)
+----------------------
+
+Bug fixes:
+
+
+- Fix workspace invitations portal redirects. [phgross]
+- Fix user lookup by email for workspace invitation mail. [tinagerber]
+
+
 2022.15.3 (2022-11-04)
 ----------------------
 
