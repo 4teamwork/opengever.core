@@ -174,7 +174,7 @@ class MyWorkspaceInvitations(BrowserView):
                 accept_url = "{}?invitation={}".format(
                     accept_url, serialize_and_sign_payload(accept_params))
                 params = {'next': accept_url}
-                redirect_url = "{}/login?{}".format(
+                redirect_url = "{}?{}".format(
                     get_gever_portal_url(), urlencode(params))
 
             return self.request.RESPONSE.redirect(redirect_url)
