@@ -397,6 +397,7 @@
     <permission-map
         name="View"
         acquired="False">
+      <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -573,6 +574,7 @@
     <permission-map
         name="View"
         acquired="False">
+      <permission-role>Contributor</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
