@@ -16,6 +16,7 @@
     <role name="Records Manager" />
     <role name="Role Manager" />
     <role name="ServiceKeyUser" />
+    <role name="TaskResponsible" />
     <role name="WebActionManager" />
     <role name="WorkspaceAdmin" />
     <role name="WorkspaceGuest" />
@@ -105,6 +106,7 @@
       <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Contributor" />
+      <role name="TaskResponsible" />
       <role name="Editor" />
       <role name="Reviewer" />
     </permission>
@@ -240,6 +242,7 @@
     <!-- POLICY -->
     <permission name="plone.restapi: Use REST API" acquire="True">
       <role name="Contributor" />
+      <role name="TaskResponsible" />
       <role name="Manager" />
       <role name="Member" />
       <role name="Authenticated" />
@@ -395,6 +398,7 @@
 
     <permission name="plone.restapi: Access Plone vocabularies" acquire="True">
       <role name="Contributor" />
+      <role name="TaskResponsible" />
       <role name="Manager" />
       <role name="Member" />
       <role name="Authenticated" />
