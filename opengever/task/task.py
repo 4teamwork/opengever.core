@@ -751,6 +751,15 @@ class Task(Container, TaskReminderSupport):
 
         return None
 
+    def may_be_started(self):
+        """Whether a sequential task may be started.
+        (Transitioned from 'planned' to 'open')
+        """
+        if not self.is_part_of_sequential_process:
+            return False
+
+        return self.all_predecessors_are_skipped()
+
     def all_predecessors_are_skipped(self):
         return self.get_sql_object().all_predecessors_are_skipped()
 
