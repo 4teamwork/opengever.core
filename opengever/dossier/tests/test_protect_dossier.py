@@ -301,7 +301,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
         browser.click_on('Save')
 
         self.assert_local_roles(
-            IProtectDossier(self.dossier).READING_ROLES + ['Contributor'],  # assignment via task
+            IProtectDossier(self.dossier).READING_ROLES + ['TaskResponsible'],  # assignment via task
             self.regular_user.getId(), browser.context)
 
     def test_protect_dossier_will_disable_role_inheritance(self):
@@ -330,7 +330,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
         dossier_protector.protect()
 
         self.assert_local_roles(
-            dossier_protector.READING_ROLES + ['Contributor'],  # assignment via task
+            dossier_protector.READING_ROLES + ['TaskResponsible'],  # assignment via task
             self.regular_user.getId(), self.dossier)
 
     def test_protect_dossier_does_not_change_task_permissions(self):
@@ -343,12 +343,12 @@ class TestProtectDossier(SolrIntegrationTestCase):
 
         # Assignement via task
         self.assert_local_roles(
-            dossier_protector.READING_ROLES + ['Contributor'],
+            dossier_protector.READING_ROLES + ['TaskResponsible'],
             self.regular_user.getId(), self.dossier)
 
         # Assignement via task agency
         self.assert_local_roles(
-            ['Contributor'], 'fa_inbox_users', self.dossier)
+            ['TaskResponsible'], 'fa_inbox_users', self.dossier)
 
     def test_protect_dossier_will_add_selected_reading_and_writing_users_to_localroles(self):
         self.login(self.dossier_manager)
@@ -359,7 +359,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
         dossier_protector.protect()
 
         self.assert_local_roles(
-            dossier_protector.READING_AND_WRITING_ROLES,
+            dossier_protector.READING_AND_WRITING_ROLES + ['TaskResponsible'],  # assignment via task
             self.regular_user.getId(), self.dossier)
 
     def test_full_dossier_protection_check(self):
@@ -373,7 +373,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
         dossier_protector.protect()
 
         self.assert_local_roles(
-            dossier_protector.READING_ROLES + ['Contributor'], #  assignment via task
+            dossier_protector.READING_ROLES + ['TaskResponsible'],  # assignment via task
             self.regular_user.getId(), self.dossier)
 
         self.assert_local_roles(
@@ -409,7 +409,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
 
         self.assertItemsEqual(
             ['Administrator', 'Contributor', 'Editor', 'LimitedAdmin', 'Manager', 'Reader',
-             'user:fa_users', 'user:{}'.format(self.regular_user.getId()),
+             'TaskResponsible', 'user:fa_users', 'user:{}'.format(self.regular_user.getId()),
              'user:fa_inbox_users', 'user:{}'.format(self.archivist)],
             self.get_allowed_roles_and_users_for(self.dossier))
 
@@ -421,7 +421,7 @@ class TestProtectDossier(SolrIntegrationTestCase):
 
         self.assertItemsEqual(
             ['Administrator', 'Contributor', 'Editor', 'LimitedAdmin', 'Manager', 'Reader',
-             'user:fa_inbox_users',  # task agency role assignments
+             'TaskResponsible', 'user:fa_inbox_users',  # task role assignments
              'user:{}'.format(self.dossier_manager.getId()),
              'user:{}'.format(self.regular_user.getId())],
             self.get_allowed_roles_and_users_for(self.dossier))

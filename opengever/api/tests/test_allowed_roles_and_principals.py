@@ -22,18 +22,18 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
         allowed_roles_and_principals = {
-                u'Administrator',
-                u'Contributor',
-                u'Editor',
-                u'LimitedAdmin',
-                u'Manager',
-                u'Reader',
-                u'principal:fa_inbox_users',
-                u'principal:fa_users',
-                u'principal:jurgen.fischer',
-                u'principal:kathi.barfuss',
+            u'Administrator',
+            u'Editor',
+            u'LimitedAdmin',
+            u'Manager',
+            u'Reader',
+            u'Contributor',
+            u'TaskResponsible',
+            u'principal:fa_inbox_users',
+            u'principal:fa_users',
+            u'principal:jurgen.fischer',
+            u'principal:kathi.barfuss',
         }
-
         self.assertEqual(url, browser.json['@id'])
         self.assertEqual(allowed_roles_and_principals,
                          set(browser.json['allowed_roles_and_principals']))

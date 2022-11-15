@@ -127,12 +127,12 @@ class LocalRolesSetter(object):
             agency_principal = self.inbox_group_id
 
         self._add_local_roles(distinct_parent, principal, agency_principal,
-                              ('Contributor', ), reindex=False)
+                              ('TaskResponsible', ), reindex=False)
 
         # We disabled reindexObjectSecurity and reindex the security manually
         # instead, to avoid reindexing all objects including all documents.
-        # Because there View permission isn't affected by the `Contributor` role
-        # on the dossier.
+        # Because there View permission isn't affected by the `TaskResponsible`
+        # role on the dossier.
         catalog = api.portal.get_tool('portal_catalog')
         subdossiers = [brain.getObject() for brain in catalog(
             object_provides=[IDossierMarker.__identifier__,

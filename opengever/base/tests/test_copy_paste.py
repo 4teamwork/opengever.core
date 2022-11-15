@@ -288,22 +288,16 @@ class TestCopyPaste(IntegrationTestCase):
     def test_paste_not_available_without_copy_or_move_on_target(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.dossier, view="copy_items", data=self.make_path_param(self.document))
-        # A task grants us 'Contributor' on the otherwise inaccessible dossier
+        # A task grants us 'TaskResponsible' on the otherwise inaccessible dossier
         browser.open(self.protected_dossier_with_task)
         expected_actions = [
-            u'Add new\u2026 \u25bc',
-            'Document',
-            'Document from template',
-            'Task',
-            'Task from template',
-            'Subdossier',
-            'Participant',
+            u'Add new\u2026',
             u'Actions \u25bc',
             'Cover page (PDF)',
             'Export as Zip',
             'Print details (PDF)',
-            'Properties',
-            ]
+            'Properties']
+
         self.assertEqual(expected_actions, browser.css('#contentActionMenus a').text)
 
 

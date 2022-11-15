@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.contentmenu.menu import FactoriesMenu
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK
@@ -96,20 +97,20 @@ class TestLocalRolesSetter(IntegrationTestCase):
             ('Editor', 'Reader', ),
             self.document.get_local_roles_for_userid(self.regular_user.id))
 
-    def test_responsible_has_contributor_role_on_distinct_parent_when_task_is_added(self):
+    def test_responsible_has_task_responsible_role_on_distinct_parent_when_task_is_added(self):
         self.login(self.regular_user)
         self.assertEqual(
-            ('Contributor', ),
+            ('TaskResponsible', ),
             self.dossier.get_local_roles_for_userid(self.regular_user.id))
 
-    def test_responsible_has_contributor_role_on_distinct_parent_when_task_is_updated(self):
+    def test_responsible_has_task_responsible_role_on_distinct_parent_when_task_is_updated(self):
         self.login(self.regular_user)
 
         self.inactive_task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.inactive_task))
 
         self.assertEqual(
-            ('Contributor', ),
+            ('TaskResponsible', ),
             self.inactive_dossier.get_local_roles_for_userid(self.secretariat_user.id))
 
     def test_inbox_group_of_the_responsible_client_has_the_same_localroles_as_the_responsible_in_a_multiclient_setup(self):
@@ -121,7 +122,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
             ('Editor', 'Reader', ),
             self.document.get_local_roles_for_userid('fa_inbox_users'))
         self.assertEqual(
-            ('Contributor', ),
+            ('TaskResponsible', ),
             self.dossier.get_local_roles_for_userid('fa_inbox_users'))
 
     def test_inbox_group_has_no_additional_localroles_on_private_tasks(self):
@@ -159,7 +160,7 @@ class TestLocalRolesSetter(IntegrationTestCase):
             self.inbox_task.get_local_roles_for_userid('fa_inbox_users'))
 
         self.assertEqual(
-            ('Contributor', ),
+            ('TaskResponsible', ),
             self.dossier.get_local_roles_for_userid('fa_inbox_users'))
 
         self.assertEqual(
@@ -172,13 +173,43 @@ class TestLocalRolesSetter(IntegrationTestCase):
 
         RoleAssignmentManager(self.dossier).add_or_update_assignment(
             SharingRoleAssignment(self.administrator.getId(),
-                                  ['Reader', 'Contributor', 'Editor']))
+                                  ['Reader', 'TaskResponsible', 'Editor']))
 
         self.task.responsible = self.secretariat_user.id
         notify(ObjectModifiedEvent(self.task))
 
         self.login(self.secretariat_user, browser=browser)
         browser.open(self.taskdocument, view='edit')
+
+    @browsing
+    def test_permissions_granted_to_task_responsible(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.empty_dossier.__ac_local_roles_block__ = True
+        document1 = create(Builder('document').within(self.empty_dossier))
+        document2 = create(Builder('document').within(self.empty_dossier))
+
+        task = create(Builder('task')
+                      .within(self.empty_dossier)
+                      .relate_to(document1)
+                      .having(responsible=self.regular_user.getId(),
+                              responsible_client='fa',
+                              issuer=self.dossier_responsible.getId(),
+                              task_type='correction',
+                              deadline=date(2016, 11, 1)))
+
+        self.login(self.regular_user, browser=browser)
+        menu = FactoriesMenu(self.portal)
+        # TaskResponsible role does not allow to add any objects in the dossier
+        items = [el['id'] for el in menu.getMenuItems(self.empty_dossier, self.portal.REQUEST)]
+        self.assertEqual([], items)
+
+        # Editor role allows to add documents in the task
+        items = [el['id'] for el in menu.getMenuItems(task, self.portal.REQUEST)]
+        self.assertEqual(['opengever.document.document'], items)
+
+        # Responsible gets view on document1 but not on document2
+        self.assertTrue(api.user.has_permission("View", obj=document1))
+        self.assertFalse(api.user.has_permission("View", obj=document2))
 
 
 class TestLocalRolesRevoking(IntegrationTestCase):
@@ -557,23 +588,23 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         self.assertEqual(
             [{'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': 'fa_inbox_users'},
              {'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': self.dossier_responsible.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': 'fa_inbox_users'},
              {'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.administrator.id}],
             storage._storage())
@@ -599,27 +630,27 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.meeting_task.revoke_permissions = False
 
         self.assertEqual(
-            (('fa_inbox_users', ('Contributor',)),
+            (('fa_inbox_users', ('TaskResponsible',)),
              ('franzi.muller', ('Owner',)),
-             ('robert.ziegler', ('Contributor',))),
+             ('robert.ziegler', ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 
         storage = RoleAssignmentManager(self.meeting_dossier).storage
         self.assertEqual(
             [{'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': 'fa_inbox_users'},
              {'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': self.dossier_responsible.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_subtask),
               'principal': 'fa_inbox_users'}],
             storage._storage())
@@ -635,18 +666,18 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         self.assertEqual(
             [{'cause': ASSIGNMENT_VIA_TASK,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': self.dossier_responsible.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'reference': Oguid.for_object(self.meeting_task),
               'principal': 'fa_inbox_users'}],
             storage._storage())
         self.assertEqual(
-            (('fa_inbox_users', ('Contributor',)),
+            (('fa_inbox_users', ('TaskResponsible',)),
              ('franzi.muller', ('Owner',)),
-             ('robert.ziegler', ('Contributor',))),
+             ('robert.ziegler', ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 
     @browsing

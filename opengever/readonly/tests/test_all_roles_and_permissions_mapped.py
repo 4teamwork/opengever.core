@@ -25,6 +25,7 @@ NON_WRITER_ROLES = [
     'Records Manager',
     'ServiceKeyUser',
     'Site Administrator',
+    'TaskResponsible',
     'WebActionManager',
     'WorkspaceAdmin',
     'WorkspaceClientUser',

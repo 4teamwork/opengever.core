@@ -101,7 +101,7 @@ class TestRevokePermissions(IntegrationTestCase):
         storage = RoleAssignmentManager(self.dossier).storage
         self.assertIn(
             {'cause': ASSIGNMENT_VIA_TASK,
-             'roles': ['Contributor'],
+             'roles': ['TaskResponsible'],
              'reference': Oguid.for_object(self.subtask),
              'principal': self.regular_user.id},
             storage._storage())
@@ -109,7 +109,7 @@ class TestRevokePermissions(IntegrationTestCase):
         RevokePermissions(self.subtask, self.request)()
         self.assertNotIn(
             {'cause': ASSIGNMENT_VIA_TASK,
-             'roles': ['Contributor'],
+             'roles': ['TaskResponsible'],
              'reference': Oguid.for_object(self.subtask),
              'principal': self.regular_user.id},
             storage._storage())
