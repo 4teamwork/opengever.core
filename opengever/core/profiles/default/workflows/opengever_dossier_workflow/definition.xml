@@ -66,6 +66,7 @@
         name="Access contents information"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -171,6 +172,7 @@
         name="View"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -208,6 +210,7 @@
         name="opengever.document: Cancel"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
@@ -217,6 +220,7 @@
         name="opengever.document: Checkin"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
@@ -233,6 +237,7 @@
         name="opengever.document: Checkout"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Administrator</permission-role>
@@ -262,6 +267,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -398,6 +404,7 @@
         name="View"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -575,6 +582,7 @@
         name="View"
         acquired="False">
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -661,6 +669,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -755,6 +764,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -840,6 +850,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
@@ -937,6 +948,7 @@
       <permission-role>Administrator</permission-role>
       <permission-role>LimitedAdmin</permission-role>
       <permission-role>Contributor</permission-role>
+      <permission-role>TaskResponsible</permission-role>
       <permission-role>Editor</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>Reader</permission-role>
