@@ -48,7 +48,6 @@
   <column value="task_type" />
   <column value="sequence_number" />
   <column value="is_subtask" />
-  <column value="predecessor" />
 
   <!-- TASKTEMPLATES -->
   <column value="preselected" />

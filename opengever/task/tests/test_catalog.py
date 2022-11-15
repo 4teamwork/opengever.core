@@ -28,6 +28,3 @@ class TestCatalog(FunctionalTestCase):
 
     def test_is_subtask_index_registered(self):
         self.assertIn('is_subtask', self.catalog.indexes())
-
-    def test_predecessor_index_registered(self):
-        self.assertIn('predecessor', self.catalog.indexes())

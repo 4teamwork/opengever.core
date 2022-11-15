@@ -4,10 +4,12 @@ from ftw.upgrade import UpgradeStep
 
 INDEXES_TO_REMOVE = [
     'is_default_page',
+    'predecessor',
     'sortable_author',
 ]
 
 METADATA_TO_REMOVE = [
+    'predecessor',
 ]
 
 
