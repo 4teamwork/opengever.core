@@ -13,6 +13,7 @@ from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.api.exc import InvalidParameterError
 from urlparse import urlparse
 from zope.interface import alsoProvides
 
@@ -172,6 +173,28 @@ class TestSequentialTaskProcess(IntegrationTestCase):
             'task-state-resolved', api.content.get_state(self.subtask))
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
+
+    def test_does_not_allow_to_manually_start_sequential_task_if_parent_not_in_progress(self):
+        self.login(self.regular_user)
+
+        subsubtask = create(Builder('task')
+                            .within(self.subtask)
+                            .having(responsible_client='fa',
+                                    responsible=self.regular_user.getId(),
+                                    issuer=self.dossier_responsible.getId(),
+                                    task_type='correction',
+                                    deadline=date(2016, 11, 1))
+                            .in_state('task-state-planned'))
+
+        self.set_workflow_state('task-state-planned', self.subtask)
+        alsoProvides(self.task, IContainParallelProcess)
+        alsoProvides(self.subtask, IContainSequentialProcess)
+        alsoProvides(subsubtask, IPartOfSequentialProcess)
+        self.subtask.set_tasktemplate_order([subsubtask])
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=subsubtask, transition='task-transition-planned-open')
 
     def test_handles_missing_permissions_on_next_task(self):
         self.login(self.regular_user)
