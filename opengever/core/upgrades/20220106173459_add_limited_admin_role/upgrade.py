@@ -6,7 +6,7 @@ class AddLimitedAdminRole(UpgradeStep):
     """Add LimitedAdmin role.
     """
 
-    deferrable = True
+    deferrable = False
 
     def __call__(self):
         self.install_upgrade_profile()
