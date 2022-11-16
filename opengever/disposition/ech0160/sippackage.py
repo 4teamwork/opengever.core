@@ -6,6 +6,7 @@ from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.service import ogds_service
 from opengever.repository.repositoryroot import IRepositoryRoot
 from pkg_resources import resource_filename
 from plone import api
@@ -87,15 +88,14 @@ class SIPPackage(object):
 
         return content_folder
 
-    # XXX
     def get_transferring_office(self):
         """Returns the current adminunits label, followed by the
-        current users fullname.
+        disposition creator's fullname.
         """
-        # TODO: should use the fullname of the dispositiion creator rather
-        # than current users fullname
-        return '{}, {}'.format(get_current_admin_unit().label(),
-                               api.user.get_current().title_or_id())
+        creator = self.disposition.Creator()
+        user = ogds_service().fetch_user(creator)
+        fullname = user.fullname() if user else creator
+        return u'{}, {}'.format(get_current_admin_unit().label(), fullname)
 
     def get_repository_title(self):
         # TODO: use disposition itself instead of the first dossier
