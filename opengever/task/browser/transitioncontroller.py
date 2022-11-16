@@ -170,9 +170,8 @@ class TaskTransitionController(BrowserView):
     def open_guard(self, transition, c):
         if IInternalWorkflowTransition.providedBy(getRequest()):
             return True
-        if not self.context.is_part_of_sequential_process:
-            return False
-        return self.context.all_predecessors_are_skipped()
+
+        return self.context.may_be_started()
 
     @guard('task-transition-cancelled-open')
     def cancelled_to_open_guard(self, c, include_agency):

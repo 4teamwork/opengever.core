@@ -30,6 +30,7 @@ from opengever.task import _
 from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task import is_private_task_feature_enabled
+from opengever.task import TASK_STATE_IN_PROGRESS
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import TASK_STATE_SKIPPED
 from opengever.task import util
@@ -750,6 +751,19 @@ class Task(Container, TaskReminderSupport):
             return next_task
 
         return None
+
+    def may_be_started(self):
+        """Whether a sequential task may be started.
+        (Transitioned from 'planned' to 'open')
+        """
+        if not self.is_part_of_sequential_process:
+            return False
+
+        parent_state = api.content.get_state(aq_parent(aq_inner(self)))
+        if parent_state != TASK_STATE_IN_PROGRESS:
+            return False
+
+        return self.all_predecessors_are_skipped()
 
     def all_predecessors_are_skipped(self):
         return self.get_sql_object().all_predecessors_are_skipped()

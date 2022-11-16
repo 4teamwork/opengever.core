@@ -31,6 +31,8 @@ TASK_STATE_PLANNED = 'task-state-planned'
 
 TASK_STATE_SKIPPED = 'task-state-skipped'
 
+TASK_STATE_IN_PROGRESS = 'task-state-in-progress'
+
 FINAL_TASK_STATES = [
     'task-state-tested-and-closed',
     'task-state-cancelled',
