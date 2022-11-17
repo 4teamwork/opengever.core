@@ -11,4 +11,11 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for="opengever.document.behaviors.IBaseDocument"
+      name="oc_checkout"
+      class=".oc_checkout_redirect.RedirectToOCCheckoutURL"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
