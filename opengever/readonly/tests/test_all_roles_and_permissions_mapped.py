@@ -245,6 +245,7 @@ NON_WRITE_PERMISSIONS = [
     'Sharing page: Delegate Reader role',
     'Sharing page: Delegate Reviewer role',
     'Sharing page: Delegate roles',
+    'Sharing page: Delegate TaskResponsible role',
     'Sharing page: Delegate WorkspaceAdmin role',
     'Sharing page: Delegate WorkspaceGuest role',
     'Sharing page: Delegate WorkspaceMember role',

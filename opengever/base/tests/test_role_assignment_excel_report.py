@@ -27,7 +27,7 @@ class TestExcelRoleAssignmentReport(IntegrationTestCase):
             browser.open(url)
 
     @browsing
-    def test_role_assignent_report(self, browser):
+    def test_role_assignment_report(self, browser):
         self.login(self.administrator, browser=browser)
 
         url = u'{}/download-role-assignment-report/report_0'.format(
@@ -52,9 +52,10 @@ class TestExcelRoleAssignmentReport(IntegrationTestCase):
 
         self.assertSequenceEqual(
             [[u'Title', u'Read', u'Add dossiers', u'Edit dossiers',
-              u'Resolve dossiers', u'Reactivate dossiers', u'Manage dossiers'],
-             [u'Ordnungssystem', None, u'x', None, None, None, None],
-             [u'Subsubdossier', u'x', None, u'x', u'x', None, None],
+              u'Resolve dossiers', u'Reactivate dossiers', u'Manage dossiers',
+              u'Task responsible'],
+             [u'Ordnungssystem', None, u'x', None, None, None, None, None],
+             [u'Subsubdossier', u'x', None, u'x', u'x', None, None, None],
              [u'2. Rechnungspr\xfcfungskommission',
-              None, u'x', None, None, u'x', None]],
+              None, u'x', None, None, u'x', None, None]],
             [[cell.value for cell in row] for row in rows])

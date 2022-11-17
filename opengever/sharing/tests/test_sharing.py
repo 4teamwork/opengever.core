@@ -40,7 +40,7 @@ class TestOpengeverSharing(IntegrationTestCase):
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
-    def test_available_roles_on_commiteecontainer(self, browser):
+    def test_available_roles_on_committeecontainer(self, browser):
         self.login(self.manager, browser=browser)
 
         browser.open(self.committee_container, view='@sharing',
@@ -64,11 +64,11 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            [u'Reader', u'Contributor', u'Editor',
+            [u'TaskResponsible', u'Reader', u'Contributor', u'Editor',
              u'Reviewer', u'Publisher', u'DossierManager'],
             [role['id'] for role in browser.json.get('available_roles')])
         self.assertEqual(
-            [u'Publisher', u'DossierManager', u'Editor',
+            [u'Publisher', u'TaskResponsible', u'DossierManager', u'Editor',
              u'Reader', u'Contributor', u'Reviewer'],
             browser.json['entries'][0]['roles'].keys())
 
@@ -115,6 +115,36 @@ class TestOpengeverSharing(IntegrationTestCase):
               'reference': None,
               'principal': self.secretariat_user.id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+    @browsing
+    def test_only_manager_can_grant_task_responsible(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        data = json.dumps({
+            "entries": [
+                {"id": self.regular_user.id,
+                 "roles": {"TaskResponsible": True,
+                           "Contributor": False,
+                           "Editor": False,
+                           "Reader": True,
+                           "Reviewer": False,
+                           "Publisher": False},
+                 "type": "user"},
+            ],
+            "inherit": True})
+
+        browser.open(self.empty_dossier, data, view='@sharing',
+                     method='POST', headers=self.api_headers)
+        self.assertEqual(((u'kathi.barfuss', (u'Reader',)),
+                          ('robert.ziegler', ('Owner',))),
+                         self.empty_dossier.get_local_roles())
+
+        self.login(self.manager, browser=browser)
+        browser.open(self.empty_dossier, data, view='@sharing',
+                     method='POST', headers=self.api_headers)
+        self.assertEqual(((u'kathi.barfuss', (u'TaskResponsible', u'Reader')),
+                          ('robert.ziegler', ('Owner',))),
+                         self.empty_dossier.get_local_roles())
 
     @browsing
     def test_stop_inheritance(self, browser):
@@ -209,7 +239,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                     u'email': u'robert.ziegler@gever.local',
                                     u'email2': None,
                                     u'firstname': u'Robert',
-                                     u'job_title': None,
+                                    u'job_title': None,
                                     u'lastname': u'Ziegler',
                                     u'phone_fax': None,
                                     u'phone_mobile': None,

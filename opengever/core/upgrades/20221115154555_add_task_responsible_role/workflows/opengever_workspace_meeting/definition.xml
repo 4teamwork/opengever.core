@@ -1,25 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<dc-workflow workflow_id="opengever_workspace_todo" title="Workspace todo workflow" description="" initial_state="opengever_workspace_todo--STATUS--active" state_variable="review_state" manager_bypass="True">
+<dc-workflow workflow_id="opengever_workspace_meeting" title="Workspace meeting workflow" description="" initial_state="opengever_workspace_meeting--STATUS--active" state_variable="review_state" manager_bypass="True">
   <permission>Access contents information</permission>
+  <permission>Add portal content</permission>
   <permission>CMFEditions: Access previous versions</permission>
-  <permission>CMFEditions: Apply version control</permission>
-  <permission>CMFEditions: Checkout to location</permission>
-  <permission>CMFEditions: Revert to previous versions</permission>
-  <permission>CMFEditions: Save new version</permission>
-  <permission>Edit comments</permission>
   <permission>Edit date of cassation</permission>
-  <permission>Edit date of submission</permission>
   <permission>List folder contents</permission>
   <permission>Modify constrain types</permission>
+  <permission>Modify portal content</permission>
   <permission>Modify view template</permission>
-  <permission>Poi: Edit response</permission>
-  <permission>Poi: Modify issue assignment</permission>
-  <permission>Poi: Modify issue severity</permission>
-  <permission>Poi: Modify issue state</permission>
-  <permission>Poi: Modify issue tags</permission>
-  <permission>Poi: Modify issue target release</permission>
-  <permission>Poi: Modify issue watchers</permission>
-  <permission>Poi: Upload attachment</permission>
   <permission>Portlets: Manage portlets</permission>
   <permission>Sharing page: Delegate Administrator role</permission>
   <permission>Sharing page: Delegate CommitteeAdministrator role</permission>
@@ -36,60 +24,34 @@
   <permission>Sharing page: Delegate WorkspacesCreator role</permission>
   <permission>Sharing page: Delegate WorkspacesUser role</permission>
   <permission>View</permission>
-  <permission>ftw.keywordwidget: Add new term</permission>
-  <permission>ftw.mail: Add Inbound Mail</permission>
-  <permission>iterate : Check in content</permission>
-  <permission>iterate : Check out content</permission>
-  <permission>opengever.contact: Add contact</permission>
   <permission>opengever.contact: Add contactfolder</permission>
-  <permission>opengever.contact: Add person</permission>
-  <permission>opengever.contact: Edit person</permission>
   <permission>opengever.disposition: Add disposition</permission>
   <permission>opengever.disposition: Download SIP Package</permission>
-  <permission>opengever.disposition: Edit transfer number</permission>
-  <permission>opengever.document: Add document</permission>
-  <permission>opengever.document: Cancel</permission>
-  <permission>opengever.document: Checkin</permission>
-  <permission>opengever.document: Checkout</permission>
-  <permission>opengever.document: Force Checkin</permission>
   <permission>opengever.document: Modify archival file</permission>
-  <permission>opengever.dossier: Add businesscasedossier</permission>
-  <permission>opengever.dossier: Add dossiertemplate</permission>
-  <permission>opengever.dossier: Add templatefolder</permission>
   <permission>opengever.dossier: Destroy dossier</permission>
   <permission>opengever.dossier: Protect dossier</permission>
-  <permission>opengever.inbox: Add Forwarding</permission>
   <permission>opengever.inbox: Add Inbox</permission>
-  <permission>opengever.inbox: Add Year Folder</permission>
-  <permission>opengever.inbox: Scan In</permission>
-  <permission>opengever.meeting: Add Committee</permission>
   <permission>opengever.meeting: Add CommitteeContainer</permission>
-  <permission>opengever.meeting: Add Member</permission>
-  <permission>opengever.meeting: Add Period</permission>
-  <permission>opengever.meeting: Add Proposal</permission>
-  <permission>opengever.meeting: Add Proposal Template</permission>
-  <permission>opengever.meeting: Add Sablon Template</permission>
-  <permission>opengever.private: Add private dossier</permission>
   <permission>opengever.private: Add private folder</permission>
   <permission>opengever.private: Add private root</permission>
   <permission>opengever.repository: Add repositoryfolder</permission>
   <permission>opengever.repository: Add repositoryroot</permission>
   <permission>opengever.repository: Unlock Reference Prefix</permission>
-  <permission>opengever.task: Add task</permission>
-  <permission>opengever.task: Add task comment</permission>
-  <permission>opengever.task: Edit task</permission>
-  <permission>opengever.trash: Trash content</permission>
-  <permission>opengever.trash: Untrash content</permission>
-  <permission>opengever.workspace: Add Workspace</permission>
+  <permission>opengever.workspace: Delete Workspace Meeting Agenda Items</permission>
   <permission>plone.portlet.collection: Add collection portlet</permission>
   <permission>plone.portlet.static: Add static portlet</permission>
-  <state state_id="opengever_workspace_todo--STATUS--active" title="Active">
-    <exit-transition transition_id="opengever_workspace_todo--TRANSITION--complete--active_completed"/>
+  <state state_id="opengever_workspace_meeting--STATUS--active" title="Active">
+    <exit-transition transition_id="opengever_workspace_meeting--TRANSITION--close--active_closed"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceGuest</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
+    <permission-map name="Add portal content" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
@@ -99,30 +61,21 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="CMFEditions: Apply version control" acquired="False"/>
-    <permission-map name="CMFEditions: Checkout to location" acquired="False"/>
-    <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
-    <permission-map name="CMFEditions: Save new version" acquired="False"/>
-    <permission-map name="Edit comments" acquired="False"/>
     <permission-map name="Edit date of cassation" acquired="False"/>
-    <permission-map name="Edit date of submission" acquired="False"/>
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
+    <permission-map name="Modify portal content" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
     <permission-map name="Modify view template" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Poi: Edit response" acquired="False"/>
-    <permission-map name="Poi: Modify issue assignment" acquired="False"/>
-    <permission-map name="Poi: Modify issue severity" acquired="False"/>
-    <permission-map name="Poi: Modify issue state" acquired="False"/>
-    <permission-map name="Poi: Modify issue tags" acquired="False"/>
-    <permission-map name="Poi: Modify issue target release" acquired="False"/>
-    <permission-map name="Poi: Modify issue watchers" acquired="False"/>
-    <permission-map name="Poi: Upload attachment" acquired="False"/>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -147,46 +100,20 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="ftw.keywordwidget: Add new term" acquired="False"/>
-    <permission-map name="ftw.mail: Add Inbound Mail" acquired="False"/>
-    <permission-map name="iterate : Check in content" acquired="False"/>
-    <permission-map name="iterate : Check out content" acquired="False"/>
-    <permission-map name="opengever.contact: Add contact" acquired="False"/>
     <permission-map name="opengever.contact: Add contactfolder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.contact: Add person" acquired="False"/>
-    <permission-map name="opengever.contact: Edit person" acquired="False"/>
     <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
     <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
-    <permission-map name="opengever.disposition: Edit transfer number" acquired="False"/>
-    <permission-map name="opengever.document: Add document" acquired="False"/>
-    <permission-map name="opengever.document: Cancel" acquired="False"/>
-    <permission-map name="opengever.document: Checkin" acquired="False"/>
-    <permission-map name="opengever.document: Checkout" acquired="False"/>
-    <permission-map name="opengever.document: Force Checkin" acquired="False"/>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
-    <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False"/>
-    <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False"/>
-    <permission-map name="opengever.dossier: Add templatefolder" acquired="False"/>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
     <permission-map name="opengever.dossier: Protect dossier" acquired="False"/>
-    <permission-map name="opengever.inbox: Add Forwarding" acquired="False"/>
     <permission-map name="opengever.inbox: Add Inbox" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.inbox: Add Year Folder" acquired="False"/>
-    <permission-map name="opengever.inbox: Scan In" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Committee" acquired="False"/>
     <permission-map name="opengever.meeting: Add CommitteeContainer" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.meeting: Add Member" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Period" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Proposal" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Proposal Template" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Sablon Template" acquired="False"/>
-    <permission-map name="opengever.private: Add private dossier" acquired="False"/>
     <permission-map name="opengever.private: Add private folder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -198,12 +125,11 @@
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
-    <permission-map name="opengever.task: Add task" acquired="False"/>
-    <permission-map name="opengever.task: Add task comment" acquired="False"/>
-    <permission-map name="opengever.task: Edit task" acquired="False"/>
-    <permission-map name="opengever.trash: Trash content" acquired="False"/>
-    <permission-map name="opengever.trash: Untrash content" acquired="False"/>
-    <permission-map name="opengever.workspace: Add Workspace" acquired="False"/>
+    <permission-map name="opengever.workspace: Delete Workspace Meeting Agenda Items" acquired="False">
+      <permission-role>Administrator</permission-role>
+      <permission-role>WorkspaceAdmin</permission-role>
+      <permission-role>WorkspaceMember</permission-role>
+    </permission-map>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -211,8 +137,8 @@
       <permission-role>Manager</permission-role>
     </permission-map>
   </state>
-  <state state_id="opengever_workspace_todo--STATUS--completed" title="Completed">
-    <exit-transition transition_id="opengever_workspace_todo--TRANSITION--open--completed_active"/>
+  <state state_id="opengever_workspace_meeting--STATUS--closed" title="Closed">
+    <exit-transition transition_id="opengever_workspace_meeting--TRANSITION--reopen--closed_active"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -220,6 +146,7 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
+    <permission-map name="Add portal content" acquired="False"/>
     <permission-map name="CMFEditions: Access previous versions" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -227,30 +154,17 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="CMFEditions: Apply version control" acquired="False"/>
-    <permission-map name="CMFEditions: Checkout to location" acquired="False"/>
-    <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
-    <permission-map name="CMFEditions: Save new version" acquired="False"/>
-    <permission-map name="Edit comments" acquired="False"/>
     <permission-map name="Edit date of cassation" acquired="False"/>
-    <permission-map name="Edit date of submission" acquired="False"/>
     <permission-map name="List folder contents" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="Modify constrain types" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
+    <permission-map name="Modify portal content" acquired="False"/>
     <permission-map name="Modify view template" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="Poi: Edit response" acquired="False"/>
-    <permission-map name="Poi: Modify issue assignment" acquired="False"/>
-    <permission-map name="Poi: Modify issue severity" acquired="False"/>
-    <permission-map name="Poi: Modify issue state" acquired="False"/>
-    <permission-map name="Poi: Modify issue tags" acquired="False"/>
-    <permission-map name="Poi: Modify issue target release" acquired="False"/>
-    <permission-map name="Poi: Modify issue watchers" acquired="False"/>
-    <permission-map name="Poi: Upload attachment" acquired="False"/>
     <permission-map name="Portlets: Manage portlets" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -275,46 +189,20 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="ftw.keywordwidget: Add new term" acquired="False"/>
-    <permission-map name="ftw.mail: Add Inbound Mail" acquired="False"/>
-    <permission-map name="iterate : Check in content" acquired="False"/>
-    <permission-map name="iterate : Check out content" acquired="False"/>
-    <permission-map name="opengever.contact: Add contact" acquired="False"/>
     <permission-map name="opengever.contact: Add contactfolder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.contact: Add person" acquired="False"/>
-    <permission-map name="opengever.contact: Edit person" acquired="False"/>
     <permission-map name="opengever.disposition: Add disposition" acquired="False"/>
     <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
-    <permission-map name="opengever.disposition: Edit transfer number" acquired="False"/>
-    <permission-map name="opengever.document: Add document" acquired="False"/>
-    <permission-map name="opengever.document: Cancel" acquired="False"/>
-    <permission-map name="opengever.document: Checkin" acquired="False"/>
-    <permission-map name="opengever.document: Checkout" acquired="False"/>
-    <permission-map name="opengever.document: Force Checkin" acquired="False"/>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
-    <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False"/>
-    <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False"/>
-    <permission-map name="opengever.dossier: Add templatefolder" acquired="False"/>
     <permission-map name="opengever.dossier: Destroy dossier" acquired="False"/>
     <permission-map name="opengever.dossier: Protect dossier" acquired="False"/>
-    <permission-map name="opengever.inbox: Add Forwarding" acquired="False"/>
     <permission-map name="opengever.inbox: Add Inbox" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.inbox: Add Year Folder" acquired="False"/>
-    <permission-map name="opengever.inbox: Scan In" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Committee" acquired="False"/>
     <permission-map name="opengever.meeting: Add CommitteeContainer" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
-    <permission-map name="opengever.meeting: Add Member" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Period" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Proposal" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Proposal Template" acquired="False"/>
-    <permission-map name="opengever.meeting: Add Sablon Template" acquired="False"/>
-    <permission-map name="opengever.private: Add private dossier" acquired="False"/>
     <permission-map name="opengever.private: Add private folder" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -326,12 +214,7 @@
       <permission-role>Manager</permission-role>
     </permission-map>
     <permission-map name="opengever.repository: Unlock Reference Prefix" acquired="False"/>
-    <permission-map name="opengever.task: Add task" acquired="False"/>
-    <permission-map name="opengever.task: Add task comment" acquired="False"/>
-    <permission-map name="opengever.task: Edit task" acquired="False"/>
-    <permission-map name="opengever.trash: Trash content" acquired="False"/>
-    <permission-map name="opengever.trash: Untrash content" acquired="False"/>
-    <permission-map name="opengever.workspace: Add Workspace" acquired="False"/>
+    <permission-map name="opengever.workspace: Delete Workspace Meeting Agenda Items" acquired="False"/>
     <permission-map name="plone.portlet.collection: Add collection portlet" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -339,20 +222,19 @@
       <permission-role>Manager</permission-role>
     </permission-map>
   </state>
-  <transition new_state="opengever_workspace_todo--STATUS--completed" title="complete" transition_id="opengever_workspace_todo--TRANSITION--complete--active_completed" after_script="" before_script="" trigger="USER">
-    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_todo--TRANSITION--complete--active_completed">complete</action>
+  <transition new_state="opengever_workspace_meeting--STATUS--closed" title="close" transition_id="opengever_workspace_meeting--TRANSITION--close--active_closed" after_script="" before_script="" trigger="USER">
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_meeting--TRANSITION--close--active_closed">close</action>
     <guard>
       <guard-role>Administrator</guard-role>
       <guard-role>WorkspaceAdmin</guard-role>
       <guard-role>WorkspaceMember</guard-role>
     </guard>
   </transition>
-  <transition new_state="opengever_workspace_todo--STATUS--active" title="open" transition_id="opengever_workspace_todo--TRANSITION--open--completed_active" after_script="" before_script="" trigger="USER">
-    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_todo--TRANSITION--open--completed_active">open</action>
+  <transition new_state="opengever_workspace_meeting--STATUS--active" title="reopen" transition_id="opengever_workspace_meeting--TRANSITION--reopen--closed_active" after_script="" before_script="" trigger="USER">
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_meeting--TRANSITION--reopen--closed_active">reopen</action>
     <guard>
       <guard-role>Administrator</guard-role>
       <guard-role>WorkspaceAdmin</guard-role>
-      <guard-role>WorkspaceMember</guard-role>
     </guard>
   </transition>
   <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">
