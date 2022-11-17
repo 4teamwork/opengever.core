@@ -17,8 +17,8 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_TASK, self.task)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_TASK, self.task)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
@@ -32,13 +32,13 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
 
         # update
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Reader'],
+                              ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
@@ -52,12 +52,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
 
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
+                              ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add_or_update(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
+                              ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -71,12 +71,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
 
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
+                              ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add_or_update(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
+                              ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -120,7 +120,7 @@ class TestRoleAssignmentManager(IntegrationTestCase):
              {'principal': u'fa_inbox_users',
               'roles': ['Reader', 'Editor'],
               'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-           'reference': Oguid.for_object(task).id}],
+             'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(document).storage._storage())
 
         self.assertEquals(
@@ -235,7 +235,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'reference': {
                     u'url': self.subtask.absolute_url(),
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                    },
+                },
                 u'principal': u'kathi.barfuss',
             },
             {
@@ -244,7 +244,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'reference': {
                     u'url': self.subtask.absolute_url(),
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                    },
+                },
                 u'principal': u'fa_inbox_users',
             },
             {
