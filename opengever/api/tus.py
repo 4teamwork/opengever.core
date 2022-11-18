@@ -84,11 +84,8 @@ class UploadPatch(GeverUploadPatch):
         if self.context.has_file() and not manager.is_checked_out_by_current_user():
             raise Forbidden("Document not checked out.")
 
-        # XXX: Currently not supported by the latest Office Connector 1.10.0
-        # Enable this after a grace period when OC > 1.10.0 has been rolled out
-        # to customers.
-        # if manager.is_locked_by_other():
-        #     raise Forbidden("Document is locked.")
+        if manager.is_locked_by_other():
+            raise Forbidden("Document is locked.")
 
         if self.is_proposal_document_upload() or self.is_proposal_template_upload():
             tus_upload = self.tus_upload()
