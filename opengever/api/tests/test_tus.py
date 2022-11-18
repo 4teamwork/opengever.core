@@ -168,11 +168,6 @@ class TestTUSUpload(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.assert_tus_replace_fails(self.document, browser)
 
-    @skipIf(
-        datetime.now() < datetime(2022, 11, 18),
-        "Lock verification temporary disabled, because it's not yet supported "
-        "by Office Connector",
-    )
     @browsing
     def test_cannot_replace_document_if_lock_token_not_provided(self, browser):
         self.login(self.regular_user, browser)
