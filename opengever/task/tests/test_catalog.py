@@ -11,9 +11,6 @@ class TestCatalog(FunctionalTestCase):
     def test_responsible_index_registered(self):
         self.assertIn('responsible', self.catalog.indexes())
 
-    def test_issuer_index_registered(self):
-        self.assertIn('issuer', self.catalog.indexes())
-
     def test_task_type_index_registered(self):
         self.assertIn('task_type', self.catalog.indexes())
 

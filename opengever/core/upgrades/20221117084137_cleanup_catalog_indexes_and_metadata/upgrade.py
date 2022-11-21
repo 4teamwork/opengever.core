@@ -6,6 +6,7 @@ INDEXES_TO_REMOVE = [
     'date_of_completion',
     'deadline',
     'is_default_page',
+    'issuer',
     'predecessor',
     'sortable_author',
 ]
@@ -13,6 +14,7 @@ INDEXES_TO_REMOVE = [
 METADATA_TO_REMOVE = [
     'date_of_completion',
     'deadline',
+    'issuer'
     'predecessor',
 ]
 

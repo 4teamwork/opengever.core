@@ -42,7 +42,6 @@
 
   <!-- TASK -->
   <column value="responsible" />
-  <column value="issuer" />
   <column value="task_type" />
   <column value="sequence_number" />
   <column value="is_subtask" />

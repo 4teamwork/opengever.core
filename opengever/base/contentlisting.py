@@ -182,10 +182,6 @@ class OpengeverCatalogContentListingObject(CatalogContentListingObject):
         userid = getattr(self._brain, "responsible", None)
         return None if userid is None else display_name(userid)
 
-    def issuer_fullname(self):
-        userid = getattr(self._brain, "issuer", None)
-        return None if userid is None else display_name(userid)
-
     def checked_out_fullname(self):
         userid = getattr(self._brain, "checked_out", None)
         return None if userid is None else display_name(userid)
