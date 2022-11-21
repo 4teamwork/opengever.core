@@ -41,7 +41,6 @@
   <column value="is_subdossier" />
 
   <!-- TASK -->
-  <column value="date_of_completion" />
   <column value="responsible" />
   <column value="issuer" />
   <column value="task_type" />

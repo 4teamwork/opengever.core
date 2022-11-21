@@ -1,5 +1,4 @@
 INDEXES = (
-    ('date_of_completion', 'DateIndex'),
     ('responsible', 'FieldIndex'),
     ('issuer', 'FieldIndex'),
     ('task_type', 'FieldIndex'),

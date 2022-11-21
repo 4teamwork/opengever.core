@@ -8,9 +8,6 @@ class TestCatalog(FunctionalTestCase):
         super(TestCatalog, self).setUp()
         self.catalog = api.portal.get_tool('portal_catalog')
 
-    def test_date_of_completion_index_registered(self):
-        self.assertIn('date_of_completion', self.catalog.indexes())
-
     def test_responsible_index_registered(self):
         self.assertIn('responsible', self.catalog.indexes())
 

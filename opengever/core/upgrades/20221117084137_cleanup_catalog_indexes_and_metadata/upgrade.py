@@ -3,6 +3,7 @@ from ftw.upgrade import UpgradeStep
 
 
 INDEXES_TO_REMOVE = [
+    'date_of_completion',
     'deadline',
     'is_default_page',
     'predecessor',
@@ -10,6 +11,7 @@ INDEXES_TO_REMOVE = [
 ]
 
 METADATA_TO_REMOVE = [
+    'date_of_completion',
     'deadline',
     'predecessor',
 ]
