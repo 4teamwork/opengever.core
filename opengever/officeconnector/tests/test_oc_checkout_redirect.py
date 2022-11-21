@@ -16,11 +16,11 @@ class TestOCCheckoutRedirect(IntegrationTestCase):
             browser.allow_redirects = False
             browser.open(self.document, view='@@oc_checkout')
 
-        self.assertEqual(302, browser.status_code)
+            self.assertEqual(302, browser.status_code)
 
-        oc_url = browser.headers['location']
-        raw_token = oc_url.split(':')[-1]
-        token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+            oc_url = browser.headers['location']
+            raw_token = oc_url.split(':')[-1]
+            token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
 
         expected_token = {
             u'action': u'checkout',
