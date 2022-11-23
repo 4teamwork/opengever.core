@@ -30,5 +30,5 @@ class UpdateTaskAssignmentRole(UpgradeStep):
     @staticmethod
     def update_assignment(assignment):
         if 'Contributor' in assignment['roles']:
-            assignment['roles'].remove('Contributor')
-            assignment['roles'].append('TaskResponsible')
+            roles = [role if role != 'Contributor' else 'TaskResponsible' for role in assignment['roles']]
+            assignment['roles'] = roles
