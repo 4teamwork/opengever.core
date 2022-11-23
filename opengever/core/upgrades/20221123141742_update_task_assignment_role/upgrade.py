@@ -14,9 +14,14 @@ class UpdateTaskAssignmentRole(UpgradeStep):
     deferrable = True
 
     def __call__(self):
-        query = {'object_provides': 'opengever.dossier.behaviors.dossier.IDossierMarker'}
-        for dossier in self.objects(query, "Update task assignments."):
-            storage = RoleAssignmentStorage(dossier)
+        query = {
+            'object_provides': [
+                'opengever.dossier.behaviors.dossier.IDossierMarker',
+                'opengever.inbox.inbox.IInbox'
+            ]
+        }
+        for obj in self.objects(query, "Update task assignments."):
+            storage = RoleAssignmentStorage(obj)
             for assignment in storage.get_by_cause(ASSIGNMENT_VIA_TASK):
                 self.update_assignment(assignment)
             for assignment in storage.get_by_cause(ASSIGNMENT_VIA_TASK_AGENCY):
