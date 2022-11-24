@@ -185,6 +185,7 @@ NON_WRITE_PERMISSIONS = [
     'opengever.workspace: Access all users and groups',
     'opengever.workspace: Manage Workspaces',
     'opengever.workspaceclient: Use Workspace Client',
+    'opengever.workspace: Access hidden members',
     'Plone Site Setup: Calendar',
     'Plone Site Setup: Editing',
     'Plone Site Setup: Filtering',

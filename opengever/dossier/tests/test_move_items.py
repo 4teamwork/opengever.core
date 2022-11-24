@@ -260,6 +260,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         'firstname',
         'getId',
         'getObjPositionInParent',
+        'hide_member_details',
         'id',
         'is_folderish',
         'is_subtask',

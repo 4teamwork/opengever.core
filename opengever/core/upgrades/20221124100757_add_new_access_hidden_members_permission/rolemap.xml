@@ -1,0 +1,14 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="opengever.workspace: Access hidden members" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="WorkspaceAdmin" />
+      <role name="WorkspaceMember" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

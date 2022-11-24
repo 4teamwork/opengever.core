@@ -48,6 +48,15 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "hide_members_for_guests": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
+                    "title": "Teamraum Mitglieder f\u00fcr G\u00e4ste ausblenden",
+                    "description": "",
+                    "_zope_schema_type": "Bool"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -127,6 +136,7 @@
                 "videoconferencing_url",
                 "external_reference",
                 "gever_url",
+                "hide_members_for_guests",
                 "changed",
                 "title",
                 "description"
