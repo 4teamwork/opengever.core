@@ -1,1 +1,0 @@
-Fix unicode error when disposing a disposition on admin unit with umlaut in title. [lgraf]

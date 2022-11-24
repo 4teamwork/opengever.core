@@ -10,6 +10,33 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.23.0 (2022-11-24)
+----------------------
+
+New features:
+
+
+- Add ``@@oc_checkout`` view that redirects to oc: checkout URL. [lgraf]
+
+
+Bug fixes:
+
+
+- Fix unicode error when disposing a disposition on admin unit with umlaut in title. [lgraf]
+- Use disposition creator's fullname in eCH0160 'ablieferndeStelle' field. [lgraf]
+- Fix workspace invitations portal redirects. [phgross]
+- Bump ftw.mail to fix mails with cropped attachment titles. [phgross]
+- Fix user lookup by email for workspace invitation mail. [tinagerber]
+- Sequential tasks: Only allow subtasks to be started when parent is in progress. [lgraf]
+
+
+Other changes:
+
+
+- Bump docxcompose to handle document language when updating datefields. [njohner]
+- Re-enable forbidding tus-replace when document is locked by another user. [njohner]
+
+
 2022.22.0 (2022-11-09)
 ----------------------
 
