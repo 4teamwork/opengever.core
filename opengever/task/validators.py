@@ -12,11 +12,14 @@ from zope.interface import Invalid
 
 
 def get_checked_out_documents(intids):
+    from opengever.mail.mail import IOGMailMarker
     checked_out = []
     intid_utility = getUtility(IIntIds)
     request = getRequest()
     for intid in intids:
         doc = intid_utility.getObject(intid)
+        if IOGMailMarker.providedBy(doc):
+            continue
         manager = getMultiAdapter((doc, request),
                                   ICheckinCheckoutManager)
         if manager.get_checked_out_by():

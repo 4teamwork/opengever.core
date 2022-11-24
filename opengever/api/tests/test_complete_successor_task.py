@@ -3,7 +3,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from mock import patch
 from mock import PropertyMock
-from opengever.api.complete_successor_task import CompleteSuccessorTaskPost
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.document.approvals import IApprovalList
@@ -16,7 +15,6 @@ from z3c.relationfield.relation import RelationValue
 from zExceptions import BadRequest
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.interface import alsoProvides
 from zope.intid import IIntIds
 import json
 
@@ -110,6 +108,49 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_delivers_documents_and_mails(self, browser):
+        self.login(self.regular_user, browser)
+
+        # Test setup - create predecessor and accepted successor task pair
+        predecessor, successor = self.prepare_accepted_task_pair()
+
+        # Add a document and mail in successor that should be delivered back
+        procuded_mail = create(Builder('mail')
+                               .within(self.dossier)
+                               .with_asset_message('mail_with_one_mail_attachment.eml'))
+        produced_doc = create(Builder('document')
+                              .within(successor)
+                              .titled(u'Statement in response to inquiry')
+                              .with_asset_file('text.txt'))
+
+        self.login(self.regular_user, browser)
+        # Need to trick the transition controller into thinking its a remote
+        # request so that it allows the resolve transition on the predecessor
+        with patch('opengever.task.browser.transitioncontroller.'
+                   'RequestChecker.is_remote',
+                   new_callable=PropertyMock) as mock_is_remote:
+            mock_is_remote.return_value = True
+
+            request_body = json.dumps({
+                'transition': 'task-transition-in-progress-resolved',
+                'text': 'I finished this task.',
+                'documents': [getUtility(IIntIds).getId(produced_doc),
+                              getUtility(IIntIds).getId(procuded_mail)]
+            })
+            with self.observe_children(predecessor) as children:
+                browser.open(
+                    successor.absolute_url() + '/@complete-successor-task',
+                    method='POST',
+                    data=request_body,
+                    headers=self.api_headers)
+
+        self.assertEqual(2, len(children["added"]))
+        self.assertItemsEqual(
+            ['RE: Statement in response to inquiry',
+             'RE: \xc3\x84usseres Testm\xc3\xa4il'],
+            [obj.Title() for obj in children["added"]])
+
+    @browsing
     def test_prevents_checked_out_documents(self, browser):
         self.login(self.regular_user, browser)
 
@@ -166,7 +207,6 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         doc = create(Builder('document')
                      .within(successor)
                      .titled(u'Statement in response to inquiry'))
-
 
         # Need to trick the transition controller into thinking its a remote
         # request so that it allows the resolve transition on the predecessor
