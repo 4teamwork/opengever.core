@@ -1,6 +1,11 @@
 import os
 
 
+INDEXES = (
+    ('hide_member_details', 'BooleanIndex'),
+)
+
+
 class WorkspaceConfig(object):
 
     @property

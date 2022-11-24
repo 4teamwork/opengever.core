@@ -65,3 +65,8 @@ class WorkspaceMeetingSearchableTextExtender(object):
 @indexer(IWorkspaceMeeting)
 def attendees(obj):
     return obj.attendees
+
+
+@indexer(IWorkspaceSchema)
+def hide_member_details(obj):
+    return bool(obj.hide_members_for_guests)

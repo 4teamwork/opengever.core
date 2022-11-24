@@ -229,6 +229,7 @@ class TestCopyDocuments(IntegrationTestCase):
                                'filesize',
                                'firstname',
                                'getObjPositionInParent',
+                               'hide_member_details',
                                'is_folderish',
                                'is_subtask',
                                'lastname',
