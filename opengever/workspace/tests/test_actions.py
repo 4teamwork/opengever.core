@@ -28,8 +28,15 @@ class TestTodoContextActions(IntegrationTestCase):
 
     def test_todo_context_actions(self):
         self.login(self.workspace_member)
-        expected_actions = [u'edit', u'share_content']
-        self.assertEqual(expected_actions, self.get_actions(self.todo))
+        self.assertEqual([u'edit', u'share_content'], self.get_actions(self.todo))
+
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content'], self.get_actions(self.todo))
+
+        with self.login(self.workspace_admin):
+            self.workspace.hide_members_for_guests = True
+
+        self.assertEqual([], self.get_actions(self.todo))
 
 
 class TestWorkspaceMeetingContextActions(IntegrationTestCase):
@@ -44,6 +51,18 @@ class TestWorkspaceMeetingContextActions(IntegrationTestCase):
                             u'share_content']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_meeting))
 
+        self.login(self.workspace_guest)
+        self.assertEqual(
+            [u'meeting_ical_download', u'meeting_minutes_pdf', u'share_content'],
+            self.get_actions(self.workspace_meeting))
+
+        with self.login(self.workspace_admin):
+            self.workspace.hide_members_for_guests = True
+
+        self.assertEqual(
+            [u'meeting_ical_download', u'meeting_minutes_pdf'],
+            self.get_actions(self.workspace_meeting))
+
 
 class TestWorkspaceContextActions(IntegrationTestCase):
 
@@ -55,6 +74,16 @@ class TestWorkspaceContextActions(IntegrationTestCase):
         self.login(self.workspace_member)
         expected_actions = [u'edit', u'share_content', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
+
+    def test_workspace_context_actions_for_guests(self):
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content', 'zipexport'],
+                         self.get_actions(self.workspace))
+
+        with self.login(self.workspace_admin):
+            self.workspace.hide_members_for_guests = True
+
+        self.assertEqual([u'zipexport'], self.get_actions(self.workspace))
 
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
@@ -84,6 +113,16 @@ class TestWorkspaceFolderContextActions(IntegrationTestCase):
         self.login(self.workspace_member)
         expected_actions = [u'edit', u'share_content', u'trash_context', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
+    def test_workspace_context_actions_for_guests(self):
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content', 'zipexport'],
+                         self.get_actions(self.workspace_folder))
+
+        with self.login(self.workspace_admin):
+            self.workspace.hide_members_for_guests = True
+
+        self.assertEqual([u'zipexport'], self.get_actions(self.workspace_folder))
 
     def test_workspace_folder_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)

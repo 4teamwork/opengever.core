@@ -7,6 +7,7 @@ from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeeting
+from opengever.workspace.utils import get_containing_workspace
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from zExceptions import Forbidden
@@ -30,7 +31,7 @@ class WorkspaceFolderListingActions(BaseListingActions):
 class TodoContextActions(BaseContextActions):
 
     def is_share_content_available(self):
-        return True
+        return get_containing_workspace(self.context).access_members_allowed()
 
     def is_edit_available(self):
         return api.user.has_permission('Modify portal content', obj=self.context)
@@ -46,7 +47,7 @@ class WorkspaceMeetingContextActions(BaseContextActions):
         return True
 
     def is_share_content_available(self):
-        return True
+        return get_containing_workspace(self.context).access_members_allowed()
 
 
 @adapter(IWorkspace, IOpengeverBaseLayer)
@@ -60,7 +61,7 @@ class WorkspaceContextActions(BaseContextActions):
         return self.context.is_deletion_allowed()
 
     def is_share_content_available(self):
-        return True
+        return get_containing_workspace(self.context).access_members_allowed()
 
     def is_zipexport_available(self):
         return True
@@ -82,7 +83,7 @@ class WorkspaceFolderContextActions(BaseContextActions):
         return super(WorkspaceFolderContextActions, self).is_edit_available()
 
     def is_share_content_available(self):
-        return True
+        return get_containing_workspace(self.context).access_members_allowed()
 
     def is_trash_context_available(self):
         return ITrasher(self.context).verify_may_trash(raise_on_violations=False)
