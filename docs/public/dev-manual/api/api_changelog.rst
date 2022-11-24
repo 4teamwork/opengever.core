@@ -12,6 +12,11 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+2022.23.0 (2022-11-24)
+----------------------
+
+Nothing changed in this version.
+
 
 2022.22.0 (2022-11-09)
 ----------------------
