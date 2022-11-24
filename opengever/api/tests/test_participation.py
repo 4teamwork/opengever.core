@@ -8,6 +8,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.storage import IInvitationStorage
 from plone.restapi.serializer.converters import json_compatible
+from zExceptions import Forbidden
 from zExceptions import Unauthorized
 from zope.component import getUtility
 import json
@@ -141,6 +142,18 @@ class TestParticipationGet(IntegrationTestCase):
                                u'title': u'Projekt A'},
               u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}}],
             response.get('items'))
+
+    @browsing
+    def test_raises_forbidden_for_guests_if_members_are_hidden(self, browser):
+        browser.exception_bubbling = True
+
+        self.login(self.workspace_admin)
+        self.workspace.hide_members_for_guests = True
+
+        self.login(self.workspace_guest, browser)
+        with self.assertRaises(Forbidden):
+            browser.open(self.workspace, view='@participations',
+                         method='GET', headers=self.api_headers)
 
     @browsing
     def test_list_all_current_participants_in_folder_lists_participants_of_the_workspace(self, browser):
