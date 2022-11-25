@@ -36,6 +36,9 @@ msgstr "Completed"
 msgid "DossierManager"
 msgstr "Manage dossiers"
 
+msgid "TaskResponsible"
+msgstr "Task responsible"
+
 #. German translation: Als Excel exportieren
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml

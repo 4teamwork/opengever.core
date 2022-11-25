@@ -11,6 +11,8 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import groupmembers_url
@@ -45,7 +47,7 @@ import json
 import re
 
 
-ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
+ROLES_ORDER = ['TaskResponsible', 'Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',
                'CommitteeResponsible', 'CommitteeMember', 'WorkspaceAdmin',
@@ -60,6 +62,7 @@ ROLE_MAPPING = OrderedDict([
     (u'Reviewer', _('sharing_dossier_reviewer')),
     (u'Publisher', _('sharing_dossier_publisher')),
     (u'DossierManager', _('sharing_dossier_manager')),
+    (u'TaskResponsible', _('sharing_task_responsible')),
 ])
 
 
@@ -173,6 +176,9 @@ class OpengeverSharingView(SharingView):
         else:
             available_roles = [u'Reader', u'Contributor', u'Editor',
                                u'Role Manager']
+
+        if IDossierMarker.providedBy(self.context) or IInbox.providedBy(self.context):
+            available_roles.append(u'TaskResponsible')
 
         result = []
         for role in [r.get('id') for r in super_roles]:

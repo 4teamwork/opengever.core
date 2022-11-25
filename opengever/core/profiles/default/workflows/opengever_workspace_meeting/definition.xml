@@ -20,6 +20,7 @@
   <permission>Sharing page: Delegate Publisher role</permission>
   <permission>Sharing page: Delegate Reader role</permission>
   <permission>Sharing page: Delegate Reviewer role</permission>
+  <permission>Sharing page: Delegate TaskResponsible role</permission>
   <permission>Sharing page: Delegate WorkspacesCreator role</permission>
   <permission>Sharing page: Delegate WorkspacesUser role</permission>
   <permission>View</permission>
@@ -81,6 +82,7 @@
     <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate TaskResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
     <permission-map name="View" acquired="False">
@@ -165,6 +167,7 @@
     <permission-map name="Sharing page: Delegate Publisher role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reader role" acquired="False"/>
     <permission-map name="Sharing page: Delegate Reviewer role" acquired="False"/>
+    <permission-map name="Sharing page: Delegate TaskResponsible role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesCreator role" acquired="False"/>
     <permission-map name="Sharing page: Delegate WorkspacesUser role" acquired="False"/>
     <permission-map name="View" acquired="False">

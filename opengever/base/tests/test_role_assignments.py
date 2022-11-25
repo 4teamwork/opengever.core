@@ -17,8 +17,8 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_TASK, self.task)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_TASK, self.task)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
@@ -32,13 +32,13 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         manager = RoleAssignmentManager(self.empty_dossier)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
 
         # update
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Reader'],
+                              ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             [{'principal': self.secretariat_user.id,
@@ -52,12 +52,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
 
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
+                              ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add_or_update(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
+                              ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -71,12 +71,12 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.empty_dossier)
 
         manager.add_or_update(self.secretariat_user.id,
-                    ['Editor', 'Contributor', 'Reader'],
-                    ASSIGNMENT_VIA_SHARING)
+                              ['Editor', 'Contributor', 'Reader'],
+                              ASSIGNMENT_VIA_SHARING)
         manager.add_or_update(self.secretariat_user.id,
-                    ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
+                              ['Reader'], ASSIGNMENT_VIA_TASK, self.task)
         manager.add_or_update(self.regular_user.id,
-                    ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
+                              ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
             (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
@@ -120,16 +120,16 @@ class TestRoleAssignmentManager(IntegrationTestCase):
              {'principal': u'fa_inbox_users',
               'roles': ['Reader', 'Editor'],
               'cause': ASSIGNMENT_VIA_TASK_AGENCY,
-           'reference': Oguid.for_object(task).id}],
+             'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(document).storage._storage())
 
         self.assertEquals(
             [{'principal': self.regular_user.id,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id},
              {'principal': u'fa_inbox_users',
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
@@ -177,11 +177,11 @@ class TestRoleAssignmentManager(IntegrationTestCase):
 
         self.assertItemsEqual(
             [{'principal': self.regular_user.id,
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(task).id},
              {'principal': u'fa_inbox_users',
-              'roles': ['Contributor'],
+              'roles': ['TaskResponsible'],
               'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'reference': Oguid.for_object(task).id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
@@ -192,7 +192,7 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         manager = RoleAssignmentManager(self.dossier)
 
         self.assertEquals(
-            set(['Contributor']),
+            set(['TaskResponsible']),
             manager.get_roles_by_principal_id(self.regular_user.id))
 
 
@@ -219,73 +219,73 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
         expected_assignments = [
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.task.absolute_url(), u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
                 u'principal': u'kathi.barfuss',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.task.absolute_url(), u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
                 u'principal': u'fa_inbox_users',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, 'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': self.subtask.absolute_url(),
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                    },
+                },
                 u'principal': u'kathi.barfuss',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, 'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': self.subtask.absolute_url(),
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
-                    },
+                },
                 u'principal': u'fa_inbox_users',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.sequential_task.absolute_url(), u'title': u'Personaleintritt'},
                 u'principal': u'kathi.barfuss',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.sequential_task.absolute_url(), u'title': u'Personaleintritt'},
                 u'principal': u'fa_inbox_users',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_1.absolute_url(), u'title': u'Mitarbeiter Dossier generieren'},
                 u'principal': u'kathi.barfuss',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_1.absolute_url(), u'title': u'Mitarbeiter Dossier generieren'},
                 u'principal': u'fa_inbox_users',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_2.absolute_url(), u'title': u'Arbeitsplatz vorbereiten'},
                 u'principal': u'kathi.barfuss',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_2.absolute_url(), u'title': u'Arbeitsplatz vorbereiten'},
                 u'principal': u'fa_inbox_users',
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': self.seq_subtask_3.absolute_url(),
                     u'title': u'Vorstellungsrunde bei anderen Mitarbeitern',
@@ -294,7 +294,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': self.seq_subtask_3.absolute_url(),
                     u'title': u'Vorstellungsrunde bei anderen Mitarbeitern',
@@ -303,7 +303,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-11',
                     u'title': u'Vertragsentw\xfcrfe 2018',
@@ -312,7 +312,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-11',
                     u'title': u'Vertragsentw\xfcrfe 2018',
@@ -321,7 +321,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung'
                             u'/vertrage-und-vereinbarungen/dossier-1/task-12',
@@ -331,7 +331,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
-                u'roles': [u'Contributor'],
+                u'roles': [u'TaskResponsible'],
                 u'reference': {
                     u'title': u're: Diskr\xe4te Dinge',
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-13'
