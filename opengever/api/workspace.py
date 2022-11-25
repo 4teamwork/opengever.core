@@ -22,6 +22,7 @@ class SerializeWorkspaceToJson(GeverSerializeFolderToJson):
         result = super(SerializeWorkspaceToJson, self).__call__(*args, **kwargs)
 
         result[u"can_manage_participants"] = can_manage_member(self.context)
+        result[u"can_access_members"] = self.context.access_members_allowed()
         result[u'email'] = IEmailAddress(self.request).get_email_for_object(self.context)
 
         return result

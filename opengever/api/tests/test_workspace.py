@@ -46,3 +46,15 @@ class TestWorkspaceSerializer(IntegrationTestCase):
         browser.open(self.workspace, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual(u'1018013300@example.org', browser.json[u'email'])
+
+    @browsing
+    def test_workspace_serialization_contains_can_access_members(self, browser):
+        self.login(self.workspace_guest, browser)
+        browser.open(self.workspace, headers=self.api_headers)
+        self.assertTrue(browser.json['can_access_members'])
+
+        with self.login(self.workspace_admin, browser):
+            self.workspace.hide_members_for_guests = True
+
+        browser.open(self.workspace, headers=self.api_headers)
+        self.assertFalse(browser.json['can_access_members'])
