@@ -11,6 +11,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Workspace and workspace folders serialization contains a new attribute ``can_access_members``.
+- ``@participations`` and ``@@workspace-content-members`` is no longer available for guests in workspaces with enabled ``hide_member_details`` option.
 
 2022.23.0 (2022-11-24)
 ----------------------
