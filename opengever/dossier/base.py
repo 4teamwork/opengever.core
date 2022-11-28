@@ -22,7 +22,6 @@ from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
-from opengever.dossier.utils import truncate_ellipsis
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.ogds.base.actor import Actor
@@ -521,27 +520,6 @@ class DossierContainer(Container):
 
     def get_reference_number(self):
         return IReferenceNumber(self).get_number()
-
-    def get_formatted_comments(self, threshold=400):
-        """Returns the dossier's comment truncated to characters defined
-        in `threshold` and transformed as web intelligent text.
-        """
-        comments = IDossier(self).comments
-
-        if comments and threshold:
-            comments = truncate_ellipsis(comments, threshold)
-
-            return (
-                api.portal.get_tool(name='portal_transforms')
-                .convertTo(
-                    'text/html',
-                    comments,
-                    mimetype='text/x-web-intelligent',
-                )
-                .getData()
-            )
-
-        return None
 
     def get_retention_expiration_date(self):
         """Returns the date when the expiration date expires:

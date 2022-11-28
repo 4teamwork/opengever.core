@@ -5,7 +5,6 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.inbox.inbox import IInbox
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
-from Products.CMFPlone.utils import safe_unicode
 import unicodedata
 
 
@@ -50,14 +49,6 @@ def get_main_dossier(obj):
         obj = aq_parent(aq_inner(obj))
 
     return dossier
-
-
-def truncate_ellipsis(text, threshold, ellipsis=ELLIPSIS):
-    if text:
-        text = safe_unicode(text)
-        return (text[:threshold] + ellipsis) if len(text) > threshold else text
-    else:
-        return ''
 
 
 def is_dossierish_portal_type(portal_type_name):

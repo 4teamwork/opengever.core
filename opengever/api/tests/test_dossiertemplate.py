@@ -83,7 +83,6 @@ class TestDossierTemplatePost(IntegrationTestCase):
         self.assertEqual('My title help', template.title_help)
         self.assertTrue(template.predefined_keywords)
         self.assertTrue(template.restrict_keywords)
-        self.assertItemsEqual('A comment', IDossierTemplate(template).comments)
         self.assertItemsEqual(
             ('first', 'second'), IDossierTemplate(template).keywords)
         self.assertItemsEqual(
