@@ -9,6 +9,8 @@ API Changelog
 Breaking Changes
 ^^^^^^^^^^^^^^^^
 
+- Dossier templates: The ``comments`` field has been removed.
+
 Other Changes
 ^^^^^^^^^^^^^
 

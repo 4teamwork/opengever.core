@@ -87,7 +87,6 @@ class IDossierTemplate(model.Schema):
         fields=[
             u'keywords',
             u'dossier_type',
-            u'comments',
             u'checklist',
         ],
     )
@@ -109,11 +108,6 @@ class IDossierTemplate(model.Schema):
         source=wrap_vocabulary(
             'opengever.dossier.dossier_types',
             hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types'),
-        required=False,
-    )
-
-    comments = schema.Text(
-        title=_(u'label_comments', default=u'Comments'),
         required=False,
     )
 
