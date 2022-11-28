@@ -330,11 +330,6 @@
       />
 
   <adapter
-      factory=".indexers.sortable_author"
-      name="sortable_author"
-      />
-
-  <adapter
       factory=".indexers.DocumentSubjectIndexer"
       name="Subject"
       />

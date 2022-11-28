@@ -12,7 +12,7 @@ def resolve_document_author(document, event):
         user = ogds_service().fetch_user(document.document_author)
         if user:
             document.document_author = user.fullname()
-            document.reindexObject(idxs=['sortable_author'])
+            document.reindexObject(idxs=['UID', 'document_author'])
 
 
 def set_digitally_available(doc, event):

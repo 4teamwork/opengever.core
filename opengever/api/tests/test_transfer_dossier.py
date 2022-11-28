@@ -2,11 +2,11 @@ from ftw.testbrowser import browsing
 from opengever.activity.model import Notification
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.resolve import LockingResolveManager
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
-class TestTransferDossierPost(IntegrationTestCase):
+class TestTransferDossierPost(SolrIntegrationTestCase):
 
     @browsing
     def test_dossier_transfer_does_not_trigger_notifications(self, browser):
@@ -129,6 +129,7 @@ class TestTransferDossierPost(IntegrationTestCase):
 
         IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
         self.subdossier.reindexObject()
+        self.commit_solr()
 
         browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
                      headers=self.api_headers, data=json.dumps(
@@ -144,6 +145,7 @@ class TestTransferDossierPost(IntegrationTestCase):
 
         IDossier(self.subdossier).responsible = self.regular_user.getId()
         self.subdossier.reindexObject()
+        self.commit_solr()
 
         browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
                      headers=self.api_headers, data=json.dumps(
@@ -159,6 +161,7 @@ class TestTransferDossierPost(IntegrationTestCase):
 
         IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
         self.subdossier.reindexObject()
+        self.commit_solr()
 
         browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
                      headers=self.api_headers, data=json.dumps(
@@ -192,8 +195,8 @@ class TestTransferDossierPost(IntegrationTestCase):
 
         IDossier(self.subdossier).responsible = self.dossier_responsible.getId()
         self.subdossier.reindexObject()
-
         LockingResolveManager(self.subdossier).resolve()
+        self.commit_solr()
 
         browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
                      headers=self.api_headers, data=json.dumps(

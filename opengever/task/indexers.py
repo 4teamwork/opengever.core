@@ -1,5 +1,4 @@
 from collective import dexteritytextindexer
-from datetime import datetime
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.task.task import ITask
@@ -7,14 +6,6 @@ from plone import api
 from plone.indexer import indexer
 from zope.component import adapter
 from zope.interface import implementer
-
-
-@indexer(ITask)
-def date_of_completion(obj):
-    # handle 'None' dates. we always need a date for indexing.
-    if obj.date_of_completion is None:
-        return datetime(1970, 1, 1)
-    return obj.date_of_completion
 
 
 @indexer(ITask)

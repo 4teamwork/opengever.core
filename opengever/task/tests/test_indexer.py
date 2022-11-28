@@ -1,4 +1,3 @@
-from datetime import datetime
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.testing import IntegrationTestCase
@@ -8,21 +7,6 @@ from opengever.testing import SolrIntegrationTestCase
 
 
 class TestTaskIndexers(IntegrationTestCase):
-
-    def test_date_of_completion(self):
-        self.login(self.regular_user)
-
-        self.assertEquals(
-            datetime(1970, 1, 1),
-            obj2brain(self.subtask).date_of_completion)
-
-        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
-        self.subtask.date_of_completion = datetime(2021, 11, 3, 12, 3)
-        self.subtask.reindexObject()
-
-        self.assertEquals(
-            datetime(2021, 11, 3, 12, 3),
-            obj2brain(self.subtask).date_of_completion)
 
     def test_is_subtask(self):
         self.login(self.regular_user)

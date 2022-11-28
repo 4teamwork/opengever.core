@@ -15,7 +15,6 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.document.interfaces import ITemplateDocumentMarker
-from opengever.ogds.base.actor import Actor
 from plone import api
 from plone.indexer import indexer
 from Products.CMFDiffTool.utils import safe_utf8
@@ -161,18 +160,6 @@ def checked_out(obj):
 
     else:
         return ''
-
-
-@indexer(IDocumentMetadata)
-def sortable_author(obj):
-    """Index to allow users to sort on document_author."""
-    author = obj.document_author
-    if author:
-        actor = Actor.user(author)
-        if actor.actor_type == 'null':
-            return author
-        return actor.get_label()
-    return ''
 
 
 @indexer(IDocumentMetadata)

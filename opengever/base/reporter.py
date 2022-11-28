@@ -27,15 +27,15 @@ def value(input_string):
     return input_string
 
 
-def readable_author(author):
-    """Helper method which returns the author description,
-    instead of the userid"""
-    if author is None:
+def readable_actor(actorid):
+    """Helper method which returns the actor label
+    instead of the actorid"""
+    if actorid is None:
         return ''
 
-    actor = Actor.lookup(six.ensure_text(author))
+    actor = Actor.lookup(six.ensure_text(actorid))
     if actor.actor_type == 'null':
-        return author or ''
+        return actorid or ''
     return actor.get_label()
 
 

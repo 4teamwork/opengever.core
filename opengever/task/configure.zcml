@@ -176,11 +176,6 @@
       />
 
   <adapter
-      factory=".indexers.date_of_completion"
-      name="date_of_completion"
-      />
-
-  <adapter
       factory=".indexers.is_completed"
       name="is_completed"
       />

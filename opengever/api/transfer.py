@@ -1,6 +1,9 @@
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.activity.model.watcher import Watcher
 from opengever.base.model import create_session
 from opengever.base.sentry import log_msg_to_sentry
+from opengever.base.solr import OGSolrDocument
 from opengever.base.txnutils import registered_objects
 from opengever.base.txnutils import txn_is_dirty
 from opengever.dossier.base import DOSSIER_STATES_OPEN
@@ -17,6 +20,7 @@ from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import getUtility
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -191,18 +195,20 @@ class TransferDossierPost(ExtractOldNewUserMixin, Service):
 
     def transfer_dossier(self, dossier, old_userid, new_userid, recursive=True):
         if recursive:
-            catalog = api.portal.get_tool('portal_catalog')
-            dossiers_to_transfer = [brain.getObject() for brain in catalog(
-                path='/'.join(self.context.getPhysicalPath()),
-                object_provides=IDossierMarker.__identifier__,
-                responsible=old_userid,
-                review_state=DOSSIER_STATES_OPEN)]
+            solr = getUtility(ISolrSearch)
+            query = {'path': {'query': '/'.join(self.context.getPhysicalPath()),
+                              'depth': -1},
+                     'object_provides': IDossierMarker.__identifier__,
+                     'responsible': old_userid,
+                     'review_state': DOSSIER_STATES_OPEN}
+            dossiers_to_transfer = [OGSolrDocument(doc).getObject() for doc in
+                                    solr.search(filters=make_filters(**query)).docs]
         else:
             dossiers_to_transfer = [self.context]
 
         for dossier in dossiers_to_transfer:
             IDossier(dossier).responsible = new_userid
-            dossier.reindexObject(idxs=['responsible'])
+            dossier.reindexObject(idxs=['UID', 'responsible'])
 
             # We have to trigger an object modified event to get a jorunal entry
             notify(ObjectModifiedEvent(dossier))
