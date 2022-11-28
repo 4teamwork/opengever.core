@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.sync.import_stamp import get_ogds_sync_stamp
 from opengever.ogds.base.sync.import_stamp import ogds_sync_within_24h
+from opengever.ogds.base.sync.ogds_updater import CaseInsensitiveDict
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
@@ -18,6 +19,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from unittest import TestCase
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 import transaction
@@ -421,3 +423,36 @@ class TestImportStamp(IntegrationTestCase):
 
         IAnnotations(self.portal).pop('sync_stamp')
         self.assertFalse(ogds_sync_within_24h())
+
+
+class TestCaseInsensitiveDict(TestCase):
+
+    def setUp(self):
+        self.dct = CaseInsensitiveDict({
+            'foo': 42,
+            'FooBar': 1,
+            'qux': 'lowercase',
+            'QUX': 'uppercase',
+        })
+
+    def test_original_case_is_preserved_for_keys(self):
+        self.assertItemsEqual(
+            ['foo', 'FooBar', 'qux', 'QUX'], self.dct.keys())
+
+    def test_contains_is_case_insensitive(self):
+        self.assertIn('FOO', self.dct)
+        self.assertIn('foo', self.dct)
+
+    def test_get_is_case_insensitive(self):
+        self.assertEqual(42, self.dct.get('FOO'))
+
+    def test_getitem_is_case_insensitive(self):
+        self.assertEqual(42, self.dct['FOO'])
+
+    def test_get_picks_exact_case_match_first(self):
+        self.assertEqual('lowercase', self.dct.get('qux'))
+        self.assertEqual('uppercase', self.dct.get('QUX'))
+
+    def test_getitem_picks_exact_case_match_first(self):
+        self.assertEqual('lowercase', self.dct['qux'])
+        self.assertEqual('uppercase', self.dct['QUX'])

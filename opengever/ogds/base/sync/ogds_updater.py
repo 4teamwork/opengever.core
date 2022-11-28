@@ -22,12 +22,55 @@ from sqlalchemy import String
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import or_
 from sqlalchemy.sql.expression import true
+from UserDict import UserDict
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 import logging
 import os
 import time
+
+
+class CaseInsensitiveDict(UserDict):
+    """Dictionary class that supports case insensitive lookups.
+
+    NOTE: This is only intended for use the OGDSUpdater below. It is not fit
+    for purpose as a generic case insensitive dict, so please resist the
+    temptation to move this into some utils.py and reuse it without checking.
+
+    This dictionary has the following properties:
+    - The following operations are case-insensitive:
+      - dct.get(key)
+      - dct[key]
+      - key in dct
+    - The two lookup methods will always prioritize an exact case match, if
+      the dict should contain two "duplicate" keys that only differ in case.
+    - Case of keys is preserved, so dct.keys() returns the original spelling.
+    """
+
+    def __getitem__(self, key):
+        if key in self.data:
+            return self.data[key]
+        for k, v in self.data.items():
+            if k.lower() == key.lower():
+                return v
+        raise KeyError(key)
+
+    def get(self, key, failobj=None):
+        if key in self.data:
+            return self[key]
+        for k, v in self.data.items():
+            if k.lower() == key.lower():
+                return v
+        return failobj
+
+    def __contains__(self, key):
+        if key in self.data:
+            return True
+        for k in self.data:
+            if k.lower() == key.lower():
+                return True
+        return False
 
 
 IGNORED_LOCAL_GROUPS = set([
@@ -267,6 +310,10 @@ class OGDSUpdater(object):
         ogds_users = {
             user.userid: user for user in session.query(User)
         }
+
+        ogds_user_ids_ci = CaseInsensitiveDict(
+            zip(ogds_users.keys(), ogds_users.keys()))
+
         ogds_groups = {
             group.groupid: group
             for group in session.query(Group).filter(
@@ -279,10 +326,14 @@ class OGDSUpdater(object):
             diff = ldap_group_members[groupid] ^ ogds_group_members.get(groupid, set())
             if diff:
                 group = ogds_groups[groupid]
+
+                # Case insensitive lookup of existing OGDS user via userid
+                # from LDAP (which may differ in capitalization).
                 group.users = [
-                    ogds_users[userid] for userid
+                    ogds_users[ogds_user_ids_ci[userid]] for userid
                     in ldap_group_members[groupid]
                 ]
+
                 for userid in ldap_group_members[groupid]:
                     logger.info('Added user %s into group %s.', userid, groupid)
                 modified_count += 1
