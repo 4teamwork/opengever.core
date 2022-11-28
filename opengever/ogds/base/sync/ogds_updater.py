@@ -625,6 +625,10 @@ class OGDSUpdater(object):
         ldap_keys = set(ldap_objects.keys())
         ogds_keys = set(ogds_objects.keys())
         lower_ogds_keys = set([userid.lower() for userid in ogds_keys])
+
+        ldap_objects_ci = CaseInsensitiveDict(ldap_objects)
+        ogds_objects_ci = CaseInsensitiveDict(ogds_objects)
+
         ogds_active_keys = set(
             [key for key, value in ogds_objects.items() if value.get('active')])
 
@@ -637,22 +641,33 @@ class OGDSUpdater(object):
         for skipped in added - added_ignore_capitalization:
             logger.info('Skip duplicate user {}'.format(skipped))
 
-        deleted = ogds_active_keys - ldap_keys
-        existing = ldap_keys & ogds_keys
+        deleted = [k for k in ogds_active_keys if k not in ldap_objects_ci]
+        existing = [k for k in ogds_keys if k in ldap_objects_ci]
         modified = {}
         for key in existing:
-            diff = set(ldap_objects[key].items()) ^ set(ogds_objects[key].items())
+            # Case-insensitive lookup of the matching LDAP record
+            ldap_record = ldap_objects_ci[key]
+            ogds_record = ogds_objects[key]
+
+            diff = set(ldap_record.items()) ^ set(ogds_record.items())
             if diff:
                 attributes = dict(diff).keys()
-                modified[key] = attributes
+                # Never modify an existing userid or external_id in OGDS.
+                # They may differ in case if userid was changed in LDAP/AD.
+                attributes = filter(
+                    lambda x: x not in ['userid', 'external_id'], attributes)
+                if attributes:
+                    modified[key] = attributes
 
         added_mappings = [ldap_objects[a] for a in added_ignore_capitalization]
         deleted_mappings = [{pk: d, 'active': False} for d in deleted]
         modified_mappings = []
         for key, modified_attrs in modified.items():
             changes = {pk: key}
+            # Case-insensitive lookup of the matching LDAP record
+            ldap_record = ldap_objects_ci[key]
             for modified_attr in modified_attrs:
-                changes[modified_attr] = ldap_objects[key][modified_attr]
+                changes[modified_attr] = ldap_record[modified_attr]
             modified_mappings.append(changes)
 
         return added_mappings, deleted_mappings, modified_mappings
