@@ -1,5 +1,6 @@
 from opengever.propertysheets.definition import PropertySheetSchemaDefinition
 from opengever.propertysheets.exportimport import dottedname
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from zope.component import adapter
@@ -26,6 +27,7 @@ class SerializePropertySheetSchemaDefinitionToJson(object):
             'fields': [],
             'assignments': definition.assignments,
         }
+        docprops = self.get_docprops_for_schema()
 
         for name, field in getFieldsInOrder(definition.schema_class):
             ps_field = {
@@ -34,6 +36,7 @@ class SerializePropertySheetSchemaDefinitionToJson(object):
                 'title': field.title,
                 'description': field.description,
                 'required': field.required,
+                'available_as_docproperty': name in docprops,
             }
 
             ps_field.update(self.get_values(field))
@@ -42,6 +45,11 @@ class SerializePropertySheetSchemaDefinitionToJson(object):
             serialized_definition['fields'].append(ps_field)
 
         return json_compatible(serialized_definition)
+
+    def get_docprops_for_schema(self):
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get(self.context.name)
+        return definition.docprops
 
     def get_field_type(self, field):
         """Return propertysheet field_type name given a zope.schema field.

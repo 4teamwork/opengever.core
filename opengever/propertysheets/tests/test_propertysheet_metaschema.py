@@ -43,6 +43,12 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             u"description": u"Fields",
             u"items": {
                 u"properties": {
+                    u'available_as_docproperty': {
+                        u'default': False,
+                        u'description': u'Whether the field should be available as docproperty or not',
+                        u'title': u'Available as docproperty',
+                        u'type': u'boolean'
+                    },
                     u"default": {
                         u"description": u"Default value for this field",
                         u"title": u"Default",
@@ -362,6 +368,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Pflichtfeld',
                 u'Default',
                 u'Wertebereich',
+                u'Als DocProperty verf\xfcgbar',
             ],
             [prop['title'] for prop in field_properties.values()]
         )
@@ -399,6 +406,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Angabe, ob Benutzer dieses Feld zwingend ausf\xfcllen m\xfcssen',
                 u'Default-Wert f\xfcr dieses Feld',
                 u'Liste der erlaubten Werte f\xfcr das Feld (ein Wert pro Zeile)',
+                u'Angabe, ob das Feld als Docproperty verf\xfcgbar sein soll',
             ],
             [prop['description'] for prop in field_properties.values()]
         )

@@ -70,7 +70,8 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
             .assigned_to_slots(u"IDocumentMetadata.document_type.question")
             .with_field("bool", u"yesorno", u"y/n", u"", False)
             .with_field(
-                "choice", u"chooseone", u"choose", u"", False, values=choices
+                "choice", u"chooseone", u"choose", u"", False, values=choices,
+                available_as_docproperty=True
             )
         )
 
@@ -85,6 +86,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
                 u"assignments": [u"IDocumentMetadata.document_type.question"],
                 u"fields": [
                     {
+                        u"available_as_docproperty": False,
                         u"description": u"",
                         u"field_type": u"bool",
                         u"name": u"yesorno",
@@ -92,6 +94,7 @@ class TestSchemaDefinitionGet(IntegrationTestCase):
                         u"title": u"y/n",
                     },
                     {
+                        u"available_as_docproperty": True,
                         u"description": u"",
                         u"field_type": u"choice",
                         u"name": u"chooseone",

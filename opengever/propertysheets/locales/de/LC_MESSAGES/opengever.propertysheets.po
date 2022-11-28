@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-18 10:39+0000\n"
+"POT-Creation-Date: 2022-11-24 15:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,6 +65,11 @@ msgstr "(Maximum: ${max_length} Zeichen. Tatsächliche Länge: ${actual_length} 
 msgid "help_assignments"
 msgstr "Für welche Arten von Inhalten dieses Property Sheet verfügbar sein soll"
 
+#. Default: "Whether the field should be available as docproperty or not"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_available_as_docproperty"
+msgstr "Angabe, ob das Feld als Docproperty verfügbar sein soll"
+
 #. Default: "Default value for this field"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_default"
@@ -114,6 +119,11 @@ msgstr "Liste der erlaubten Werte für das Feld (ein Wert pro Zeile)"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_assignments"
 msgstr "Slots"
+
+#. Default: "Available as docproperty"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_available_as_docproperty"
+msgstr "Als DocProperty verfügbar"
 
 #. Default: "Default"
 #: ./opengever/propertysheets/metaschema.py
