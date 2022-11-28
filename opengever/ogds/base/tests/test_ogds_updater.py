@@ -28,7 +28,6 @@ BLACKLISTED_USER_COLUMNS = {
     'absent',
     'absent_from',
     'absent_to',
-    'display_name',
     'last_login',
     'object_sid',
 }
