@@ -3,11 +3,13 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
 from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.sync.import_stamp import get_ogds_sync_stamp
 from opengever.ogds.base.sync.import_stamp import ogds_sync_within_24h
+from opengever.ogds.base.sync.ogds_updater import CaseInsensitiveDict
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPUserFolder
@@ -18,6 +20,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from unittest import TestCase
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 import transaction
@@ -28,7 +31,6 @@ BLACKLISTED_USER_COLUMNS = {
     'absent',
     'absent_from',
     'absent_to',
-    'display_name',
     'last_login',
     'object_sid',
 }
@@ -86,6 +88,53 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_users()
 
         self.assertEqual([TEST_USER_ID, 'peter'],
+                         [user.userid for user in ogds_service().all_users()])
+
+    def test_handles_group_membership_update_when_userid_case_changes(self):
+        old_group = create(Builder('ogds_group')
+                           .having(groupid='old_group'))
+
+        create(Builder('ogds_user')
+               .id('peter')
+               .in_group(old_group)
+               .having(firstname=u'Hans',
+                       lastname=u'Peter'))
+
+        # LDAP user with different case than existing OGDS user
+        peter = create(Builder('ldapuser').named('PETER'))
+        FAKE_LDAP_USERFOLDER.users = [peter]
+
+        FAKE_LDAP_USERFOLDER.groups = [
+            create(Builder('ldapgroup')
+                   .named('new_group')
+                   .with_members([peter]))
+        ]
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_groups()
+
+        ogds_user = ogds_service().fetch_user('peter')
+        self.assertEqual([u'new_group'], [g.groupid for g in ogds_user.groups])
+
+    def test_properties_update_when_userid_case_changes(self):
+        existing_user = create(Builder('ogds_user')
+                               .id('someuserid')
+                               .having(email='old@example.org'))
+
+        peter = create(Builder('ldapuser')
+                       .named('SOMEUSERID')
+                       .having(firstname='Peter',
+                               lastname='Muster',
+                               email='peter@new.example.org'))
+        FAKE_LDAP_USERFOLDER.users = [peter]
+
+        updater = IOGDSUpdater(self.portal)
+        updater.import_users()
+
+        create_session().expunge(existing_user)
+        updated_user = ogds_service().fetch_user('someuserid')
+        self.assertEqual('peter@new.example.org', updated_user.email)
+        self.assertEqual([TEST_USER_ID, 'someuserid'],
                          [user.userid for user in ogds_service().all_users()])
 
     def test_flags_users_not_present_in_ldap_as_inactive(self):
@@ -422,3 +471,36 @@ class TestImportStamp(IntegrationTestCase):
 
         IAnnotations(self.portal).pop('sync_stamp')
         self.assertFalse(ogds_sync_within_24h())
+
+
+class TestCaseInsensitiveDict(TestCase):
+
+    def setUp(self):
+        self.dct = CaseInsensitiveDict({
+            'foo': 42,
+            'FooBar': 1,
+            'qux': 'lowercase',
+            'QUX': 'uppercase',
+        })
+
+    def test_original_case_is_preserved_for_keys(self):
+        self.assertItemsEqual(
+            ['foo', 'FooBar', 'qux', 'QUX'], self.dct.keys())
+
+    def test_contains_is_case_insensitive(self):
+        self.assertIn('FOO', self.dct)
+        self.assertIn('foo', self.dct)
+
+    def test_get_is_case_insensitive(self):
+        self.assertEqual(42, self.dct.get('FOO'))
+
+    def test_getitem_is_case_insensitive(self):
+        self.assertEqual(42, self.dct['FOO'])
+
+    def test_get_picks_exact_case_match_first(self):
+        self.assertEqual('lowercase', self.dct.get('qux'))
+        self.assertEqual('uppercase', self.dct.get('QUX'))
+
+    def test_getitem_picks_exact_case_match_first(self):
+        self.assertEqual('lowercase', self.dct['qux'])
+        self.assertEqual('uppercase', self.dct['QUX'])

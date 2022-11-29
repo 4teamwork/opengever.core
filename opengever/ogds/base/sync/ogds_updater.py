@@ -22,12 +22,55 @@ from sqlalchemy import String
 from sqlalchemy.sql.expression import false
 from sqlalchemy.sql.expression import or_
 from sqlalchemy.sql.expression import true
+from UserDict import UserDict
 from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 import logging
 import os
 import time
+
+
+class CaseInsensitiveDict(UserDict):
+    """Dictionary class that supports case insensitive lookups.
+
+    NOTE: This is only intended for use the OGDSUpdater below. It is not fit
+    for purpose as a generic case insensitive dict, so please resist the
+    temptation to move this into some utils.py and reuse it without checking.
+
+    This dictionary has the following properties:
+    - The following operations are case-insensitive:
+      - dct.get(key)
+      - dct[key]
+      - key in dct
+    - The two lookup methods will always prioritize an exact case match, if
+      the dict should contain two "duplicate" keys that only differ in case.
+    - Case of keys is preserved, so dct.keys() returns the original spelling.
+    """
+
+    def __getitem__(self, key):
+        if key in self.data:
+            return self.data[key]
+        for k, v in self.data.items():
+            if k.lower() == key.lower():
+                return v
+        raise KeyError(key)
+
+    def get(self, key, failobj=None):
+        if key in self.data:
+            return self[key]
+        for k, v in self.data.items():
+            if k.lower() == key.lower():
+                return v
+        return failobj
+
+    def __contains__(self, key):
+        if key in self.data:
+            return True
+        for k in self.data:
+            if k.lower() == key.lower():
+                return True
+        return False
 
 
 IGNORED_LOCAL_GROUPS = set([
@@ -267,6 +310,10 @@ class OGDSUpdater(object):
         ogds_users = {
             user.userid: user for user in session.query(User)
         }
+
+        ogds_user_ids_ci = CaseInsensitiveDict(
+            zip(ogds_users.keys(), ogds_users.keys()))
+
         ogds_groups = {
             group.groupid: group
             for group in session.query(Group).filter(
@@ -279,10 +326,14 @@ class OGDSUpdater(object):
             diff = ldap_group_members[groupid] ^ ogds_group_members.get(groupid, set())
             if diff:
                 group = ogds_groups[groupid]
+
+                # Case insensitive lookup of existing OGDS user via userid
+                # from LDAP (which may differ in capitalization).
                 group.users = [
-                    ogds_users[userid] for userid
+                    ogds_users[ogds_user_ids_ci[userid]] for userid
                     in ldap_group_members[groupid]
                 ]
+
                 for userid in ldap_group_members[groupid]:
                     logger.info('Added user %s into group %s.', userid, groupid)
                 modified_count += 1
@@ -573,35 +624,55 @@ class OGDSUpdater(object):
         """
         ldap_keys = set(ldap_objects.keys())
         ogds_keys = set(ogds_objects.keys())
-        lower_ogds_keys = set([userid.lower() for userid in ogds_keys])
+
+        ldap_objects_ci = CaseInsensitiveDict(ldap_objects)
+        ogds_objects_ci = CaseInsensitiveDict(ogds_objects)
+
         ogds_active_keys = set(
             [key for key, value in ogds_objects.items() if value.get('active')])
 
         added = ldap_keys - ogds_keys
-        # Skip duplicate users with different capitalization
-        added_ignore_capitalization = set([
+
+        # Don't add users with different capitalization in LDAP than an
+        # existing OGDS user as new, duplicate users in OGDS that would only
+        # differ in case.
+        #
+        # We still consider them for updating properties and group memberships
+        # of the existing OGDS user though.
+        added_ci = set([
             userid for userid in added
-            if userid.lower() not in lower_ogds_keys])
+            if userid not in ogds_objects_ci])
 
-        for skipped in added - added_ignore_capitalization:
-            logger.info('Skip duplicate user {}'.format(skipped))
+        for skipped in added - added_ci:
+            logger.info('Not adding duplicate user with deviating case {}'.format(skipped))
 
-        deleted = ogds_active_keys - ldap_keys
-        existing = ldap_keys & ogds_keys
+        deleted = [k for k in ogds_active_keys if k not in ldap_objects_ci]
+        existing = [k for k in ogds_keys if k in ldap_objects_ci]
         modified = {}
         for key in existing:
-            diff = set(ldap_objects[key].items()) ^ set(ogds_objects[key].items())
+            # Case-insensitive lookup of the matching LDAP record
+            ldap_record = ldap_objects_ci[key]
+            ogds_record = ogds_objects[key]
+
+            diff = set(ldap_record.items()) ^ set(ogds_record.items())
             if diff:
                 attributes = dict(diff).keys()
-                modified[key] = attributes
+                # Never modify an existing userid or external_id in OGDS.
+                # They may differ in case if userid was changed in LDAP/AD.
+                attributes = filter(
+                    lambda x: x not in ['userid', 'external_id'], attributes)
+                if attributes:
+                    modified[key] = attributes
 
-        added_mappings = [ldap_objects[a] for a in added_ignore_capitalization]
+        added_mappings = [ldap_objects[a] for a in added_ci]
         deleted_mappings = [{pk: d, 'active': False} for d in deleted]
         modified_mappings = []
         for key, modified_attrs in modified.items():
             changes = {pk: key}
+            # Case-insensitive lookup of the matching LDAP record
+            ldap_record = ldap_objects_ci[key]
             for modified_attr in modified_attrs:
-                changes[modified_attr] = ldap_objects[key][modified_attr]
+                changes[modified_attr] = ldap_record[modified_attr]
             modified_mappings.append(changes)
 
         return added_mappings, deleted_mappings, modified_mappings
