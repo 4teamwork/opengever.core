@@ -246,6 +246,7 @@
                    opengever.workspace: Update Content Order,
                    opengever.workspaceclient: Unlink Workspace,
                    opengever.workspace: Access all users and groups,
+                   opengever.workspace: Access hidden members,
                    opengever.workspaceclient: Use Workspace Client,
                    plone.app.collection: Add Collection,
                    plone.restapi: Access Plone user information,

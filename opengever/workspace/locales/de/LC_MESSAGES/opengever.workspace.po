@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-03 15:09+0000\n"
+"POT-Creation-Date: 2022-11-24 14:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -215,6 +215,11 @@ msgstr "Ordner"
 #: ./opengever/workspace/workspace.py
 msgid "label_gever_url"
 msgstr "GEVER URL"
+
+#. Default: "Hide workspace members for workspace guests"
+#: ./opengever/workspace/workspace.py
+msgid "label_hide_members_for_guests"
+msgstr "Teamraum Mitglieder für Gäste ausblenden"
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py

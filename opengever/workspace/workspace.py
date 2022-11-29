@@ -65,6 +65,11 @@ class IWorkspaceSchema(model.Schema):
         default=u'',
         missing_value=u''
     )
+    hide_members_for_guests = schema.Bool(
+        title=_(u'label_hide_members_for_guests',
+                default=u'Hide workspace members for workspace guests'),
+        required=False,
+    )
 
 
 class Workspace(WorkspaceBase):
@@ -91,6 +96,13 @@ class Workspace(WorkspaceBase):
             return True
         except Forbidden:
             return False
+
+    def access_members_allowed(self):
+        if self.hide_members_for_guests:
+            return api.user.has_permission(
+                'opengever.workspace: Access hidden members', obj=self)
+
+        return True
 
 
 class WorkspaceContentPatch(ContentPatch):

@@ -278,6 +278,29 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
         self.maxDiff = None
         self.assertEquals(expected, got)
 
+    def test_access_members_allowed_for_guests_if_flag_disabled(self):
+        self.login(self.workspace_admin)
+        self.workspace.hide_members_for_guests = False
+
+        self.login(self.workspace_guest)
+        self.assertTrue(self.workspace.access_members_allowed())
+
+    def test_access_members_disallowed_for_guests_if_flag_enabled(self):
+        self.login(self.workspace_admin)
+        self.workspace.hide_members_for_guests = True
+
+        self.login(self.workspace_guest)
+        self.assertFalse(self.workspace.access_members_allowed())
+
+    def test_access_members_allowed_for_members_and_admins(self):
+        self.login(self.workspace_admin)
+        self.workspace.hide_members_for_guests = True
+
+        self.assertTrue(self.workspace.access_members_allowed())
+
+        self.login(self.workspace_member)
+        self.assertTrue(self.workspace.access_members_allowed())
+
 
 class TestWorkspaceWorkspaceAPI(IntegrationTestCase):
 

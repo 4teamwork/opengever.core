@@ -103,6 +103,11 @@
       />
 
   <adapter
+      factory=".indexers.hide_member_details"
+      name="hide_member_details"
+      />
+
+  <adapter
       factory=".indexers.attendees"
       name="attendees"
       />

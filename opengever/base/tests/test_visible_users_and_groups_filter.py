@@ -83,6 +83,40 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             [self.regular_user.getId(), self.workspace_admin.getId(), self.workspace_guest.getId()],
             VisibleUsersAndGroupsFilter().get_whitelisted_principals())
 
+    def test_all_workspace_members_of_a_workspace_with_activated_hidden_flag_are_skipped(self):
+        self.login(self.workspace_admin)
+
+        self.assertItemsEqual(
+            [self.workspace_admin.id, self.workspace_guest.id,
+             self.workspace_owner.id, self.workspace_member.id],
+            VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
+        self.workspace.hide_members_for_guests = True
+        self.workspace.reindexObject()
+
+        # drop cache
+        delattr(self.request,
+                VisibleUsersAndGroupsFilter.ALLOWED_USERS_AND_GROUPS_CACHEKEY)
+
+        self.assertItemsEqual(
+            [self.workspace_admin.id],
+            VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
+        # add not hidden workspace
+        workspace_project_a = create(Builder('workspace')
+                                     .titled(u'Project A')
+                                     .within(self.workspace_root))
+        self.set_roles(workspace_project_a,
+                       self.workspace_member.id, ['WorkspaceMember'])
+
+        # drop cache
+        delattr(self.request,
+                VisibleUsersAndGroupsFilter.ALLOWED_USERS_AND_GROUPS_CACHEKEY)
+
+        self.assertItemsEqual(
+            [self.workspace_admin.id, self.workspace_member.id],
+            VisibleUsersAndGroupsFilter().get_whitelisted_principals())
+
     def test_members_of_other_workspaces_should_not_be_whitelisted(self):
         self.login(self.regular_user)
 

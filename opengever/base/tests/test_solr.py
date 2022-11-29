@@ -90,6 +90,7 @@ class TestSolr(IntegrationTestCase):
             'date_of_completion',
             'getId',
             'predecessor',
+            'hide_member_details',
         ]
 
         for index in catalog.indexes():

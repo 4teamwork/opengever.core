@@ -116,6 +116,9 @@ class ParticipationsGet(ParticipationTraverseService):
     GET workspace/@participations HTTP/1.1
     """
     def reply(self):
+        if not self.context.access_members_allowed():
+            raise Forbidden
+
         token = self.read_params()
         if token:
             return self.prepare_response_item(self.find_participant(

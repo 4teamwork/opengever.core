@@ -62,7 +62,8 @@ class VisibleUsersAndGroupsFilter:
         catalog = api.portal.get_tool('portal_catalog')
         zcatalog = catalog._catalog
 
-        workspace_brains = catalog(portal_type="opengever.workspace.workspace")
+        workspace_brains = catalog(portal_type="opengever.workspace.workspace",
+                                   hide_member_details=False)
         allowedRolesAndUsers_index = zcatalog.getIndex('allowedRolesAndUsers')
         rids = [zcatalog.uids[brain.getPath()] for brain in workspace_brains]
 

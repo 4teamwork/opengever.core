@@ -28,4 +28,6 @@
 
   <permission id="opengever.workspace.AccessAllUsersAndGroups" title="opengever.workspace: Access all users and groups" />
 
+  <permission id="opengever.workspace.AccessHiddenMembers" title="opengever.workspace: Access hidden members" />
+
 </configure>

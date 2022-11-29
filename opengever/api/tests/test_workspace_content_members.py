@@ -3,6 +3,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
 from plone import api
+from zExceptions import Forbidden
 import json
 
 
@@ -26,6 +27,18 @@ class TestWorkspaceContentMembersGetGet(IntegrationTestCase):
                         u'token': u'beatrice.schrodinger'}],
             u'items_total': 4}
         self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_raises_forbidden_for_guests_if_members_are_hidden(self, browser):
+        browser.exception_bubbling = True
+
+        self.login(self.workspace_admin)
+        self.workspace.hide_members_for_guests = True
+
+        self.login(self.workspace_guest, browser=browser)
+        url = self.workspace.absolute_url() + '/@workspace-content-members'
+        with self.assertRaises(Forbidden):
+            browser.open(url, method='GET', headers=self.api_headers)
 
     @browsing
     def test_get_workspace_content_members_with_query(self, browser):
