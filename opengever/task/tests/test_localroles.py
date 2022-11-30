@@ -214,8 +214,14 @@ class TestLocalRolesSetter(IntegrationTestCase):
     @browsing
     def test_removing_related_documents_revokes_roles_on_removed_documents(self, browser):
         self.login(self.dossier_responsible, browser=browser)
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+        notify(ObjectModifiedEvent(self.task))
+
         self.assertEqual(
-            [self.document],
+            [self.document, self.proposaldocument],
             [item.to_object for item in ITask(self.task).relatedItems])
 
         storage = RoleAssignmentManager(self.document).storage
@@ -225,9 +231,23 @@ class TestLocalRolesSetter(IntegrationTestCase):
             [u'kathi.barfuss', u'fa_inbox_users'],
             [assignment['principal'] for assignment in assignments])
 
-        ITask(self.task).relatedItems.pop()
+        storage = RoleAssignmentManager(self.proposaldocument).storage
+        assignments = filter(lambda assignment: assignment[
+                             'reference'] == Oguid.for_object(self.task).id, storage._storage())
+        self.assertEqual(
+            [u'kathi.barfuss', u'fa_inbox_users'],
+            [assignment['principal'] for assignment in assignments])
+
+        ITask(self.task).relatedItems = []
         notify(ObjectModifiedEvent(self.task))
 
+        storage = RoleAssignmentManager(self.document).storage
+        assignments = filter(lambda assignment: assignment[
+                             'reference'] == Oguid.for_object(self.task).id, storage._storage())
+        self.assertEqual(
+            [], [assignment['principal'] for assignment in assignments])
+
+        storage = RoleAssignmentManager(self.proposaldocument).storage
         assignments = filter(lambda assignment: assignment[
                              'reference'] == Oguid.for_object(self.task).id, storage._storage())
         self.assertEqual(

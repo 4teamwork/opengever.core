@@ -158,7 +158,9 @@ class LocalRolesSetter(object):
         to_ids = [item.to_id for item in getattr(aq_base(self.task), 'relatedItems', [])]
         if RELATED_ITEMS_KEY not in annotations:
             annotations[RELATED_ITEMS_KEY] = PersistentList(to_ids)
-        deleted_intids = set(annotations[RELATED_ITEMS_KEY]) - set(to_ids)
+        to_ids_set = set(to_ids)
+        annotations_related_items_set = set(annotations[RELATED_ITEMS_KEY])
+        deleted_intids = annotations_related_items_set - to_ids_set
         if deleted_intids:
             intids = getUtility(IIntIds)
             for deleted_intid in deleted_intids:
@@ -168,6 +170,8 @@ class LocalRolesSetter(object):
                     # obj has been deleted
                     continue
                 self._revoke_roles(obj)
+
+        if annotations_related_items_set != to_ids_set:
             annotations[RELATED_ITEMS_KEY] = PersistentList(to_ids)
 
         roles = ['Reader']
