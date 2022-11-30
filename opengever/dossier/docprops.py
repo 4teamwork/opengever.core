@@ -30,6 +30,11 @@ class DocPropertyProvider(BaseDocPropertyProvider):
     def _collect_deprectated_properties(self):
         return dict()
 
+    def _as_datetime(self, date):
+        if not date:
+            return date
+        return datetime.combine(date, time(0, 0))
+
     def get_properties(self, prefix=None):
         properties = super(DocPropertyProvider, self).get_properties(
             prefix=prefix)
@@ -43,12 +48,6 @@ class DocPropertyProvider(BaseDocPropertyProvider):
 class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
 
     DEFAULT_PREFIX = ('document',)
-
-    def _as_datetime(self, date):
-        if not date:
-            return date
-
-        return datetime.combine(date, time(0, 0))
 
     def get_document_author(self):
         return IDocumentMetadata(self.context).document_author
