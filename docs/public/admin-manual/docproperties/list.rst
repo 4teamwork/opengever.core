@@ -52,6 +52,12 @@ Doc-Properties Dokument:
 - ``ogg.document.document.creator.user.*`` - Doc-Properties des Benutzers, der das Dokument erstellt hat. Es werden die gleichen Doc-Property-Information wie beim aktuellen Benutzer verwendet, siehe `Doc-Properties aktueller Benutzer:`_
 
 
+Doc-Properties Custom Properties
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Custom Properties von Dossiers und Dokumenten können auch als DocProperties verwendet werden. Welche genau zur Verfügung stehen, muss konfiguriert werden.
+
+- ``ogg.document.cp.*`` - * muss mit Name des Custom Property ersetzt werden
+- ``ogg.dossier.cp.*`` - * muss mit Name des Custom Property ersetzt werden
 
 Doc-Properties Sitzung Antrag/Traktandum:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

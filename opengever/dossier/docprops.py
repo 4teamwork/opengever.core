@@ -1,3 +1,4 @@
+from datetime import date
 from datetime import datetime
 from datetime import time
 from opengever.base.docprops import BaseDocPropertyProvider
@@ -9,6 +10,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.models.service import ogds_service
+from opengever.propertysheets.utils import get_custom_properties
 from Products.CMFCore.interfaces import IMemberData
 from zope.component import adapter
 from zope.component import getAdapter
@@ -43,6 +45,20 @@ class DocPropertyProvider(BaseDocPropertyProvider):
                 properties, self._collect_deprectated_properties())
         return properties
 
+    def get_custom_properties(self):
+        custom_properties = {}
+        for key, value in get_custom_properties(self.context, docprops_only=True).items():
+            key_with_prefix = u"cp.{}".format(key)
+            if isinstance(value, date):
+                custom_properties[key_with_prefix] = self._as_datetime(value)
+            elif isinstance(value, set):
+                custom_properties[key_with_prefix] = u', '.join(value)
+            elif isinstance(value, unicode):
+                custom_properties[key_with_prefix] = value.replace(u'\n', u' ')
+            else:
+                custom_properties[key_with_prefix] = value
+        return custom_properties
+
 
 @adapter(IDocumentSchema)
 class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
@@ -73,7 +89,7 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         return IDocumentMetadata(self.context).get_current_version_id(missing_as_zero=True)
 
     def _collect_properties(self):
-        return {
+        properties = {
             'title': self.get_title(),
             'reference_number': self.get_reference_number(),
             'sequence_number': self.get_sequence_number(),
@@ -84,6 +100,8 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
             'delivery_date': self.get_delivery_date(),
             'version_number': self.get_document_version(),
         }
+        properties.update(self.get_custom_properties())
+        return properties
 
     def _collect_deprectated_properties(self):
         return {
@@ -102,12 +120,14 @@ class DefaultDossierDocPropertyProvider(DocPropertyProvider):
         return IDossier(self.context).external_reference
 
     def _collect_properties(self):
-        return {
+        properties = {
             'title': self.get_title(),
             'reference_number': self.get_reference_number(),
             'sequence_number': self.get_sequence_number(),
             'external_reference': self.get_external_reference(),
         }
+        properties.update(self.get_custom_properties())
+        return properties
 
     def _collect_deprectated_properties(self):
         return {
