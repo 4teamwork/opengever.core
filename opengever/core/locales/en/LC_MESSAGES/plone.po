@@ -36,9 +36,6 @@ msgstr "Completed"
 msgid "DossierManager"
 msgstr "Manage dossiers"
 
-msgid "TaskResponsible"
-msgstr "Task responsible"
-
 #. German translation: Als Excel exportieren
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
@@ -61,6 +58,9 @@ msgstr "Inactive"
 #. German translation: Reaktivieren
 msgid "Publisher"
 msgstr "Reactivate"
+
+msgid "TaskResponsible"
+msgstr "Task responsible"
 
 #. Default: "close"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
