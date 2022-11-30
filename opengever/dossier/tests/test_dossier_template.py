@@ -168,7 +168,6 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
-            u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -186,7 +185,6 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
-            u'Comments',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -206,7 +204,6 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
-            u'Comments',
             u'Checklist',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -225,7 +222,6 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
-            u'Comments',
             u'Checklist',
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
@@ -802,14 +798,6 @@ class TestDossierTemplateOverview(SolrIntegrationTestCase):
 
         self.assertEqual([u'secret', u'special'],
                          browser.css('#keywordsBox li span').text)
-
-    @browsing
-    def test_comments_box_shows_comment(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        browser.open(self.dossiertemplate, view=OVERVIEW_TAB)
-        self.assertEqual(u'this is very special',
-                         browser.css('#commentsBox span').first.text)
 
     @browsing
     def test_filing_prefix_box_shows_filing_prefix_title(self, browser):

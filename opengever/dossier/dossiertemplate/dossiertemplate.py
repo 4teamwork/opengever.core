@@ -9,7 +9,6 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
-from opengever.dossier.utils import truncate_ellipsis
 from plone import api
 from plone.dexterity.browser import add
 from plone.dexterity.browser import edit
@@ -166,14 +165,3 @@ class DossierTemplate(Container):
     def get_filing_prefix_label(self):
         return voc_term_title(IDossierTemplate['filing_prefix'],
                               IDossierTemplate(self).filing_prefix)
-
-    def get_formatted_comments(self, threshold=400):
-        """Returns the dossier's comment truncated to characters defined
-        in `threshold` and transformed as web intelligent text.
-        """
-        comments = IDossierTemplate(self).comments
-        if comments:
-            if threshold:
-                comments = truncate_ellipsis(comments, threshold)
-            return api.portal.get_tool(name='portal_transforms').convertTo(
-                'text/html', comments, mimetype='text/x-web-intelligent').getData()

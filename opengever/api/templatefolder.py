@@ -1,9 +1,6 @@
 from opengever.api.add import FolderPost
 from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
-from opengever.base.response import COMMENT_RESPONSE_TYPE
-from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
@@ -133,7 +130,6 @@ class DossierFromTemplatePost(FolderPost, CreateDossierContentFromTemplateMixin)
 
         serialized_dossier = super(DossierFromTemplatePost, self).reply()
         self.validate_keywords(self.dossier_template, self.request_data.get('keywords'))
-        self.add_comment()
         self.create_dossier_content_from_template(self.obj, self.dossier_template)
         return serialized_dossier
 
@@ -146,12 +142,6 @@ class DossierFromTemplatePost(FolderPost, CreateDossierContentFromTemplateMixin)
             for keyword in keywords:
                 if keyword not in allowed_keywords:
                     raise BadRequest("Keyword '{}' is not allowed".format(keyword))
-
-    def add_comment(self):
-        if IDossierTemplate(self.dossier_template).comments:
-            response = Response(COMMENT_RESPONSE_TYPE)
-            response.text = IDossierTemplate(self.dossier_template).comments
-            IResponseContainer(self.obj).add(response)
 
 
 class ITriggerTaskTemplate(model.Schema):

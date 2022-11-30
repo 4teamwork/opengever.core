@@ -1,13 +1,9 @@
 from opengever.base.command import BaseObjectCreatorCommand
 from opengever.base.command import CreateDocumentCommand
-from opengever.base.response import COMMENT_RESPONSE_TYPE
-from opengever.base.response import IResponseContainer
-from opengever.base.response import Response
 from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.document.docprops import DocPropertyWriter
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
-from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from plone.dexterity.utils import iterSchemataForType
 from zope.globalrequest import getRequest
@@ -73,7 +69,6 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
         del kw["IOpenGeverBase"]
         self.additional_fields = kw
 
-        self.initial_comment = IDossierTemplate(template).comments
         # Grab blocking of role inheritance
         self.block_role_inheritance = getattr(
             template, '__ac_local_roles_block__', None)
@@ -113,10 +108,6 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
             # Passing an empty iterable in here creates an empty mapping
             manager.add_or_update_assignments(self.role_assignments)
 
-        if self.initial_comment:
-            response = Response(COMMENT_RESPONSE_TYPE)
-            response.text = self.initial_comment
-            IResponseContainer(obj).add(response)
         return obj
 
     def _get_additional_attributes(self, template):

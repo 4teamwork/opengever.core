@@ -381,7 +381,6 @@ DOSSIER_TEMPLATE_FORM_DEFAULTS = {
 DOSSIER_TEMPLATE_MISSING_VALUES = {
     'checklist': None,
     'dossier_type': None,
-    'comments': None,
     'filing_prefix': None,
 }
 

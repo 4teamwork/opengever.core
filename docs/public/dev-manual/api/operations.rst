@@ -55,7 +55,6 @@ children des Objekts).
         "archival_value": "not archival worthy",
         "archival_value_annotation": null,
         "classification": "unprotected",
-        "comments": null,
         "container_location": null,
         "container_type": null,
         "created": "2016-01-08T10:51:40+00:00",
