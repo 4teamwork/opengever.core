@@ -9,7 +9,8 @@ class PropertySheetSchemaBuilder(object):
         self.session = session
         self.arguments = {
             'name': 'schema',
-            'assignments': None
+            'assignments': None,
+            'docprops': []
         }
         self.field_defs = []
         self.storage = PropertySheetSchemaStorage()
@@ -36,7 +37,10 @@ class PropertySheetSchemaBuilder(object):
 
     def with_field(self, field_type, name, title, description, required,
                    values=None, default=None, default_factory=None,
-                   default_expression=None, default_from_member=None):
+                   default_expression=None, default_from_member=None,
+                   available_as_docproperty=False):
+        if available_as_docproperty:
+            self.arguments['docprops'].append(name)
         self.field_defs.append(
             (field_type, name, title, description, required, values,
              default, default_factory, default_expression, default_from_member)
@@ -46,7 +50,8 @@ class PropertySheetSchemaBuilder(object):
     def create(self, **kwargs):
         definition = PropertySheetSchemaDefinition.create(
             self.arguments['name'],
-            self.arguments['assignments']
+            self.arguments['assignments'],
+            self.arguments['docprops']
         )
         for field_def in self.field_defs:
             definition.add_field(*field_def)

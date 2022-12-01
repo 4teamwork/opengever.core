@@ -60,6 +60,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                     "title": u"Y/N",
                     "description": u"yes or no",
                     "required": True,
+                    "available_as_docproperty": False,
                 }
             ],
             "assignments": [u"IDocumentMetadata.document_type.question"],
@@ -76,6 +77,7 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
                 u"id": u"question",
                 u"fields": [
                     {
+                        u"available_as_docproperty": False,
                         u"description": u"yes or no",
                         u"field_type": u"bool",
                         u"name": u"foo",
@@ -517,6 +519,58 @@ class TestSchemaDefinitionPost(IntegrationTestCase):
         self.assertEqual(u'B\xe4rfuss K\xe4thi', fields['zeiletext'].defaultFactory())
         self.assertEqual('{"property": "fullname"}',
                          fields['zeiletext'].default_from_member)
+
+    @browsing
+    def test_property_sheet_schema_definition_post_supports_setting_docprops(self, browser):
+        self.login(self.manager, browser)
+
+        data = {
+            "fields": [
+                {
+                    "name": "yn",
+                    "available_as_docproperty": True,
+                    "field_type": u"bool",
+                    "title": u"ja oder nein"
+                },
+                {
+                    "name": "colors",
+                    "available_as_docproperty": False,
+                    "field_type": u"multiple_choice",
+                    "title": u"Select one or more",
+                    "values": [u"gr\xfcn", "blau", "weiss"]
+                },
+                {
+                    "name": "nummer",
+                    "available_as_docproperty": True,
+                    "field_type": u"int",
+                    "title": u"zahl"
+                },
+                {
+                    "name": "text",
+                    "field_type": u"text",
+                },
+            ],
+            "assignments": ["IDocumentMetadata.document_type.question"],
+        }
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="POST",
+            data=json.dumps(data),
+            headers=self.api_headers,
+        )
+
+        storage = PropertySheetSchemaStorage()
+        definition = storage.get("meinschema")
+        self.assertEqual(['yn', 'nummer'], definition.docprops)
+
+        browser.open(
+            view="@propertysheets/meinschema",
+            method="GET",
+            headers=self.api_headers,
+        )
+        self.assertEqual(
+            [(u'yn', True), (u'colors', False), (u'nummer', True), ('text', False)],
+            [(field['name'], field['available_as_docproperty']) for field in browser.json['fields']])
 
     @browsing
     def test_property_sheet_schema_definition_post_reject_invalid_choices(self, browser):

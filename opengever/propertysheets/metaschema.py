@@ -87,6 +87,13 @@ class IFieldDefinition(model.Schema):
         default=None,
         value_type=schema.TextLine(),
     )
+    available_as_docproperty = schema.Bool(
+        title=_(u'label_available_as_docproperty', default=u'Available as docproperty'),
+        description=_(u'help_available_as_docproperty',
+                      default=u'Whether the field should be available as docproperty or not'),
+        required=False,
+        default=False,
+    )
 
     @invariant
     def valid_default_value(obj):

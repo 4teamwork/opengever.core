@@ -128,20 +128,21 @@ class PropertySheetSchemaDefinition(object):
     )
 
     @classmethod
-    def create(cls, name, assignments=None):
+    def create(cls, name, assignments=None, docprops=[]):
 
         class SchemaClass(model.Schema):
             pass
         SchemaClass.__name__ = name
 
-        return cls(name, SchemaClass, assignments=assignments)
+        return cls(name, SchemaClass, assignments=assignments, docprops=docprops)
 
-    def __init__(self, name, schema_class, assignments=None):
+    def __init__(self, name, schema_class, assignments=None, docprops=[]):
         self.name = name
         self.schema_class = schema_class
         if assignments is None:
             assignments = tuple()
         self.assignments = assignments
+        self.docprops = docprops
 
         for field in self.get_fields():
             self._init_field(field[1])
@@ -205,7 +206,8 @@ class PropertySheetSchemaDefinition(object):
 
     def add_field(self, field_type, name, title, description, required,
                   values=None, default=None, default_factory=None,
-                  default_expression=None, default_from_member=None):
+                  default_expression=None, default_from_member=None,
+                  available_as_docproperty=False):
         if field_type not in self.FACTORIES:
             raise InvalidFieldType("Field type '{}' is invalid.".format(field_type))
 
@@ -411,6 +413,7 @@ class PropertySheetSchemaDefinition(object):
         definition_data = PersistentMapping()
         definition_data['schema'] = serialized_schema
         definition_data['assignments'] = PersistentList(self.assignments)
+        definition_data['docprops'] = PersistentList(self.docprops)
         storage[self.name] = definition_data
 
     @classmethod
@@ -418,7 +421,8 @@ class PropertySheetSchemaDefinition(object):
         definition_data = storage[name]
         serialized_schema = definition_data['schema']
         assignments = definition_data['assignments']
+        docprops = definition_data.get('docprops', [])
         model = loadString(serialized_schema, policy=u'propertysheets')
         schema_class = model.schemata[name]
 
-        return cls(name, schema_class, assignments=assignments)
+        return cls(name, schema_class, assignments=assignments, docprops=docprops)

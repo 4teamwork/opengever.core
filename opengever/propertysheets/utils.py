@@ -15,7 +15,7 @@ def get_customproperties_behavior(obj):
     return
 
 
-def get_custom_properties(obj):
+def get_custom_properties(obj, docprops_only=False):
     data = {}
 
     customprops_behavior = get_customproperties_behavior(obj)
@@ -41,6 +41,7 @@ def get_custom_properties(obj):
             continue
 
         for name, field in definition.get_fields():
-            data[name] = custom_properties[slot].get(name)
+            if (docprops_only and name in definition.docprops) or not docprops_only:
+                data[name] = custom_properties[slot].get(name)
 
     return data

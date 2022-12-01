@@ -45,6 +45,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
                     "name": "foo",
                     "field_type": "bool",
                     "title": u"Y/N",
+                    "available_as_docproperty": False,
                     "description": u"yes or no",
                     "required": True,
                 }
@@ -85,6 +86,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
             "fields": [
                 {
                     "name": "yn",
+                    "available_as_docproperty": False,
                     "field_type": u"bool",
                     "title": u"ja oder nein"
                 },
@@ -107,6 +109,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
                     "values": [u"Rot", u"Gr\xfcn", u"Blau"],
                     "description": "Select one or more",
                     "required": False,
+                    "available_as_docproperty": True,
                 },
             ],
         }
@@ -182,6 +185,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
                     "name": "yn",
                     "field_type": u"bool",
                     "title": u"ja oder nein",
+                    "available_as_docproperty": False,
                     "default_factory": dottedname(dummy_default_factory_true),
                 },
             ],
@@ -204,6 +208,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
                     "name": "yn",
                     "field_type": u"bool",
                     "title": u"My new title",
+                    "available_as_docproperty": False,
                     "default_factory": dottedname(dummy_default_factory_true),
                 },
             ],
@@ -220,6 +225,7 @@ class TestSchemaDefinitionPatch(IntegrationTestCase):
             u'id': u'question',
             u'assignments': [u'IDocument.default'],
             u'fields': [{
+                u'available_as_docproperty': False,
                 u'default_factory': dottedname(dummy_default_factory_true),
                 u'description': u'',
                 u'field_type': u'bool',

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-01-18 10:39+0000\n"
+"POT-Creation-Date: 2022-11-24 15:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,6 +68,11 @@ msgstr ""
 msgid "help_assignments"
 msgstr ""
 
+#. Default: "Whether the field should be available as docproperty or not"
+#: ./opengever/propertysheets/metaschema.py
+msgid "help_available_as_docproperty"
+msgstr ""
+
 #. Default: "Default value for this field"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_default"
@@ -116,6 +121,11 @@ msgstr ""
 #. Default: "Assignments"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_assignments"
+msgstr ""
+
+#. Default: "Available as docproperty"
+#: ./opengever/propertysheets/metaschema.py
+msgid "label_available_as_docproperty"
 msgstr ""
 
 #. Default: "Default"

@@ -263,13 +263,14 @@ class PropertySheetWriter(PropertySheetLocator):
         return errors
 
     def create_property_sheet(self, sheet_id, assignments, fields):
+        docprops = [field['name'] for field in fields if field.get('available_as_docproperty')]
         schema_definition = PSDefinition.create(
             sheet_id,
             assignments=assignments,
+            docprops=docprops,
         )
 
         for field_data in fields:
-
             name = field_data['name']
             field_type = field_data['field_type']
             title = field_data.get('title', name.decode('ascii'))
