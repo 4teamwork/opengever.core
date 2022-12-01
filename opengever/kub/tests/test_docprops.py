@@ -47,7 +47,6 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         self.mock_get_by_id(mocker, self.org_ftw)
         entity = KuBEntity(self.org_ftw)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
-
         self.assertDictEqual(
             {'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
@@ -59,8 +58,8 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.contact.title': u'4Teamwork',
              'ogg.email.address': None,
              'ogg.organization.name': u'4Teamwork',
-             'ogg.organization.phone.number': u'+41 31 511 04 00',
-             'ogg.phone.number': u'+41 31 511 04 00',
+             'ogg.organization.phone.number': u'111 111 11 11',
+             'ogg.phone.number': u'111 111 11 11',
              'ogg.url.url': None},
             properties)
 
@@ -81,7 +80,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.contact.title': u'Dupont Jean - 4Teamwork (CEO)',
              'ogg.email.address': u'Jean.dupon@example.com',
              'ogg.organization.name': u'4Teamwork',
-             'ogg.organization.phone.number': u'+41 31 511 04 00',
+             'ogg.organization.phone.number': u'111 111 11 11',
              'ogg.orgrole.department': u'',
              'ogg.orgrole.description': u'',
              'ogg.orgrole.function': u'CEO',
