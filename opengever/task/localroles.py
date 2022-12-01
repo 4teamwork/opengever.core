@@ -13,7 +13,14 @@ from opengever.globalindex.handlers.task import sync_task
 from opengever.meeting.proposal import IBaseProposal
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_org_unit
+from persistent.list import PersistentList
 from plone import api
+from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
+from zope.intid import IIntIds
+
+
+RELATED_ITEMS_KEY = 'opengever.task.related_items'
 
 
 class LocalRolesSetter(object):
@@ -144,6 +151,29 @@ class LocalRolesSetter(object):
 
     def set_roles_on_related_items(self):
         """Set local roles on related items (usually documents)."""
+
+        # Some related items might have been deleted, we need to revoke the roles
+        # on those first.
+        annotations = IAnnotations(self.task)
+        to_ids = [item.to_id for item in getattr(aq_base(self.task), 'relatedItems', [])]
+        if RELATED_ITEMS_KEY not in annotations:
+            annotations[RELATED_ITEMS_KEY] = PersistentList(to_ids)
+        to_ids_set = set(to_ids)
+        annotations_related_items_set = set(annotations[RELATED_ITEMS_KEY])
+        deleted_intids = annotations_related_items_set - to_ids_set
+        if deleted_intids:
+            intids = getUtility(IIntIds)
+            for deleted_intid in deleted_intids:
+                try:
+                    obj = intids.getObject(deleted_intid)
+                except KeyError:
+                    # obj has been deleted
+                    continue
+                self._revoke_roles(obj)
+
+        if annotations_related_items_set != to_ids_set:
+            annotations[RELATED_ITEMS_KEY] = PersistentList(to_ids)
+
         roles = ['Reader']
         if self.task.task_type_category in [
                 'bidirectional_by_reference', 'unidirectional_by_value']:
