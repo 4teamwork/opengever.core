@@ -31,6 +31,9 @@ msgstr ""
 msgid "DossierManager"
 msgstr ""
 
+msgid "TaskResponsible"
+msgstr ""
+
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "Download Excel"

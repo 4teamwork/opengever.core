@@ -34,9 +34,6 @@ msgstr "Erledigt"
 msgid "DossierManager"
 msgstr "Verwalten"
 
-msgid "TaskResponsible"
-msgstr "Auftragnehmer"
-
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "Download Excel"
@@ -55,6 +52,9 @@ msgstr "Inaktiv"
 
 msgid "Publisher"
 msgstr "Reaktivieren"
+
+msgid "TaskResponsible"
+msgstr "Auftragnehmer"
 
 #. Default: "close"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
