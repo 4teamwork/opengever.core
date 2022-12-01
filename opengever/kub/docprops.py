@@ -26,14 +26,6 @@ class KuBEntityDocPropertyProvider(object):
     def membership_person_or_organization(self):
         return self.membership or self.person or self.organization
 
-    @property
-    def person_or_organization(self):
-        return self.person or self.organization
-
-    @property
-    def organization_or_person(self):
-        return self.organization or self.person
-
     def get_properties(self, prefix=None):
         properties = {}
         properties.update(self.get_contact_properties(prefix))
@@ -67,7 +59,7 @@ class KuBEntityDocPropertyProvider(object):
         return KuBMembershipDocPropertyProvider(self.membership).get_properties(prefix)
 
     def get_address_properties(self, prefix):
-        provider = KuBAddressDocPropertyProvider(self.organization_or_person)
+        provider = KuBAddressDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_address_block(self, prefix):
@@ -79,15 +71,15 @@ class KuBEntityDocPropertyProvider(object):
         return {key: address_block.format()}
 
     def get_email_properties(self, prefix):
-        provider = KuBEmailDocPropertyProvider(self.person_or_organization)
+        provider = KuBEmailDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_phone_properties(self, prefix):
-        provider = KuBPhoneNumberDocPropertyProvider(self.person_or_organization)
+        provider = KuBPhoneNumberDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_url_properties(self, prefix):
-        provider = KuBURLDocPropertyProvider(self.organization_or_person)
+        provider = KuBURLDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
 
