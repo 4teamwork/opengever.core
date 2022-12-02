@@ -64,8 +64,8 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='GET', headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            [u'TaskResponsible', u'Reader', u'Contributor', u'Editor',
-             u'Reviewer', u'Publisher', u'DossierManager'],
+            [u'Reader', u'Contributor', u'Editor', u'Reviewer',
+             u'Publisher', u'DossierManager', u'TaskResponsible'],
             [role['id'] for role in browser.json.get('available_roles')])
         self.assertEqual(
             [u'Publisher', u'TaskResponsible', u'DossierManager', u'Editor',

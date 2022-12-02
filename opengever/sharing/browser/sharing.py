@@ -47,11 +47,11 @@ import json
 import re
 
 
-ROLES_ORDER = ['TaskResponsible', 'Reader', 'Contributor', 'Editor', 'Reviewer',
+ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',
-               'CommitteeResponsible', 'CommitteeMember', 'WorkspaceAdmin',
-               'WorkspacesCreator',
+               'CommitteeResponsible', 'CommitteeMember', 'TaskResponsible',
+               'WorkspaceAdmin', 'WorkspacesCreator',
                'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
 
 
