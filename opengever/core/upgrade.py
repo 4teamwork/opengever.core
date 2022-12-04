@@ -20,16 +20,19 @@ from opengever.base.utils import unrestrictedUuidToObject
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
+from operator import itemgetter
 from plone import api
 from plone.memoize import forever
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
+from sqlalchemy import and_
 from sqlalchemy import BigInteger
 from sqlalchemy import Column
 from sqlalchemy import MetaData
 from sqlalchemy import String
 from sqlalchemy.schema import CreateSequence
 from sqlalchemy.schema import Sequence
+from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import table
 from zope.annotation.interfaces import IAnnotations
@@ -399,6 +402,47 @@ class SchemaMigration(SQLUpgradeStep):
     @property
     def is_mysql(self):
         return self.dialect_name == 'mysql'
+
+    def get_index_names(self, table_name):
+        if self.is_postgres:
+            # SQLAlchemy < 2.0 doesn't support reflection of expression based
+            # indexes. If we were to just use MetaData.indexes we would
+            # therefore miss indexes like 'ix_groups_users_userid_lower'.
+            # So we query the names ourselves from pg_indexes.
+            query = (
+                select([column('indexname')])
+                .select_from(table('pg_indexes'))
+                .where(
+                    and_(
+                        column('schemaname') == 'public',
+                        column('tablename') == table_name))
+                .order_by('indexname')
+            )
+            results = self.connection.execute(query).fetchall()
+            return map(itemgetter(0), results)
+
+        else:
+            # Oracle
+            #
+            # XXX: Check whether this also works for expression based indexes
+            # once we start testing og.core >= 2022.19.0 on Zug DEV.
+            tbl = self.metadata.tables.get(table_name)
+            if tbl is not None:
+                return [idx.name for idx in tbl.indexes]
+
+        return []
+
+    def has_index(self, idx_name, table_name):
+        index_names = self.get_index_names(table_name)
+        return idx_name in index_names
+
+    def create_index_if_not_exists(self, idx_name, table_name, idx_columns):
+        if not self.has_index(idx_name, table_name):
+            logger.info('Creating index {}.{}'.format(table_name, idx_name))
+            self.op.create_index(idx_name, table_name, idx_columns)
+        else:
+            logger.info('Index {}.{} already exists, skipping creation.'.format(
+                table_name, idx_name))
 
     def _assert_configuration(self):
         assert self.profileid is not None, 'configure a profileid'
