@@ -71,22 +71,14 @@ class ISchemaMigration(Interface):
 
 
 def get_operations(connection):
-    """MySQL does not have transactional DDL, we might have to recover
-    from partially executed migrations, thus we use IdempotentOperations.
-
-    For all other DBMS (oracle and PostgreSQL) use alembic operations since
-    they have transactional DDL and IdempotentOperations does not work
-    there.
+    """Create a memoized Alembic 'Operations' instance.
     """
     cache_name = '_migration_operations'
     if hasattr(connection, cache_name):
         return getattr(connection, cache_name)
 
     migration_context = MigrationContext.configure(connection)
-    if connection.dialect.name == 'mysql':
-        operations = IdempotentOperations(migration_context)
-    else:
-        operations = Operations(migration_context)
+    operations = Operations(migration_context)
 
     setattr(connection, cache_name, operations)
     return operations
@@ -100,211 +92,6 @@ def metadata_operation(f, *args, **kwargs):
     result = f(*args, **kwargs)
     operations._refresh_metadata()
     return result
-
-
-class IdempotentOperations(Operations):
-    """Operations for MySQL - make alembic.operations tolerant to the same
-    migration instruction being called multiple times.
-
-    Works only for non-transactional DDL since it relies on a metadata
-    instance to reflect about the database which seems not to see non-committed
-    changes.
-
-    This might happen when a DB-migration has been executed halfway but then
-    fails. Since MYSQL does not support transaction aware schema changes we
-    have to handle these partially executed migrations by ourself.
-
-    XXX: once we drop MySQL support this class should be removed.
-
-    """
-    def __init__(self, migration_context, metadata):
-        super(IdempotentOperations, self).__init__(migration_context)
-        self.metadata = metadata
-
-    def _get_table(self, table_name):
-        return self.metadata.tables.get(table_name)
-
-    def _get_column(self, table_name, column_name):
-        table = self._get_table(table_name)
-        if table is None:
-            return None
-        return table.columns.get(column_name)
-
-    def _constraint_exists(self, name, table_name, type_):
-        if type_ == 'unique':
-            return self._has_index(name, table_name)
-        else:
-            return self._has_constraint(name, table_name)
-
-    def _has_index(self, indexname, tablename):
-        table = self.metadata.tables.get(tablename)
-        for index in table.indexes:
-            if index.name == indexname:
-                return True
-        return False
-
-    def _has_constraint(self, name, tablename):
-        table = self.metadata.tables.get(tablename)
-        for constraint in table.constraints:
-            if constraint.name == name:
-                return True
-        return False
-
-    def _refresh_metadata(self):
-        self.metadata.clear()
-        self.metadata.reflect()
-
-    @metadata_operation
-    def drop_column(self, table_name, column_name, **kw):
-        if self._get_column(table_name, column_name) is None:
-            logger.log(logging.INFO,
-                       "Skipping drop colum '{0}' of table '{1}', "
-                       "column does not exist"
-                       .format(column_name, table_name))
-            return
-
-        return super(IdempotentOperations, self).drop_column(
-            table_name, column_name, **kw)
-
-    @metadata_operation
-    def add_column(self, table_name, column, schema=None):
-        column_name = column.name
-        if self._get_column(table_name, column_name) is not None:
-            logger.log(logging.INFO,
-                       "Skipping add colum '{0}' to table '{1}', "
-                       "column does already exist"
-                       .format(column_name, table_name))
-            return
-
-        return super(IdempotentOperations, self).add_column(
-            table_name, column, schema)
-
-    @metadata_operation
-    def create_table(self, name, *columns, **kw):
-        if self._get_table(name) is not None:
-            logger.log(logging.INFO,
-                       "Skipping create table '{0}', table does already exist"
-                       .format(name))
-            return
-
-        return super(IdempotentOperations, self).create_table(
-            name, *columns, **kw)
-
-    @metadata_operation
-    def drop_constraint(self, name, table_name, type_=None, schema=None):
-        if not self._constraint_exists(name, table_name, type_):
-            logger.log(logging.INFO,
-                       "Skipping drop constraint '{0}' for table '{1}', "
-                       "constraint does not exists."
-                       .format(name, table_name))
-            return
-
-        super(IdempotentOperations, self).drop_constraint(
-            name, table_name, type_=type_, schema=schema)
-
-    @metadata_operation
-    def create_unique_constraint(self, name, source, local_cols,
-                                 schema=None, **kw):
-        if self._has_index(name, source):
-            logger.log(logging.INFO,
-                       "Skipping create unique constraint '{0}' for table '{1}', "
-                       "constraint already exists."
-                       .format(name, source))
-            return
-
-        return super(IdempotentOperations, self).create_unique_constraint(
-            name, source, local_cols, schema, **kw)
-
-    @metadata_operation
-    def batch_alter_table(self, *args, **kwargs):
-        return super(IdempotentOperations, self).batch_alter_table(
-            *args, **kwargs)
-
-    @metadata_operation
-    def rename_table(self, *args, **kwargs):
-        return super(IdempotentOperations, self).rename_table(
-            *args, **kwargs)
-
-    @metadata_operation
-    def alter_column(self, *args, **kwargs):
-        return super(IdempotentOperations, self).alter_column(
-            *args, **kwargs)
-
-    @metadata_operation
-    def create_primary_key(self, *args, **kwargs):
-        return super(IdempotentOperations, self).create_primary_key(
-            *args, **kwargs)
-
-    @metadata_operation
-    def create_foreign_key(self, *args, **kwargs):
-        return super(IdempotentOperations, self).create_foreign_key(
-            *args, **kwargs)
-
-    @metadata_operation
-    def create_check_constraint(self, *args, **kwargs):
-        return super(IdempotentOperations, self).create_check_constraint(
-            *args, **kwargs)
-
-    @metadata_operation
-    def drop_table(self, name, **kw):
-        if self._get_table(name) is None:
-            logger.log(logging.INFO,
-                       "Skipping drop table '{0}', table no longer exist"
-                       .format(name))
-            return
-
-        return super(IdempotentOperations, self).drop_table(name, **kw)
-
-    @metadata_operation
-    def create_index(self, name, table_name, columns, schema=None,
-                     unique=False, quote=None, **kw):
-        if self._has_index(name, table_name):
-            logger.log(logging.INFO,
-                       "Skipping create index '{0}' for table '{1}', "
-                       "index already exists."
-                       .format(name, table_name))
-            return
-
-        return super(IdempotentOperations, self).create_index(
-            name, table_name, columns,
-            schema=schema, unique=unique, quote=quote, **kw)
-
-    @metadata_operation
-    def drop_index(self, name, table_name=None, schema=None):
-        if not self._has_index(name, table_name):
-            logger.log(logging.INFO,
-                       "Skipping drop index '{0}' for table '{1}', "
-                       "index no longer exists."
-                       .format(name, table_name))
-            return
-
-        return super(IdempotentOperations, self).drop_index(
-            name, table_name=table_name, schema=schema)
-
-
-class DeactivatedFKConstraint(object):
-    """Temporarily removes an FK-constraint.
-
-    This is required when migrating a MySQL column that is part of a foreign
-    key relationship.
-
-    """
-    def __init__(self, operations, name, source, referent,
-                 source_cols, referent_cols):
-        self.op = operations
-        self.name = name
-        self.source = source
-        self.referent = referent
-        self.source_cols = source_cols
-        self.referent_cols = referent_cols
-
-    def __enter__(self):
-        self.op.drop_constraint(self.name, self.source, type_='foreignkey')
-
-    def __exit__(self, exc_type, exc_value, exc_tb):
-        self.op.create_foreign_key(self.name, self.source, self.referent,
-                                   self.source_cols, self.referent_cols)
-        return False
 
 
 class SQLUpgradeStep(UpgradeStep):
@@ -398,10 +185,6 @@ class SchemaMigration(SQLUpgradeStep):
     @property
     def is_postgres(self):
         return self.dialect_name == 'postgresql'
-
-    @property
-    def is_mysql(self):
-        return self.dialect_name == 'mysql'
 
     def get_index_names(self, table_name):
         if self.is_postgres:

@@ -1,6 +1,10 @@
-from opengever.core.upgrade import DeactivatedFKConstraint
 from opengever.core.upgrade import SchemaMigration
 from sqlalchemy import String
+
+
+# Dropped since we don't support MySQL anymore and this UpgradeStep is so
+# ancient that we might remove it anyway.
+DeactivatedFKConstraint = None
 
 
 class MigrateAdminUnitOrgUnitSchema(SchemaMigration):
