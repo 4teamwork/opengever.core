@@ -10,4 +10,4 @@ class AddIndexForPredecessorId(SchemaMigration):
         if is_oracle():
             # The index already exists for Zug.
             return
-        self.op.create_index('ix_tasks_predecessor_id', 'tasks', ['predecessor_id'])
+        self.create_index_if_not_exists('ix_tasks_predecessor_id', 'tasks', ['predecessor_id'])

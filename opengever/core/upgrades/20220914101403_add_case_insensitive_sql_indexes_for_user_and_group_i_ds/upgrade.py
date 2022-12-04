@@ -13,4 +13,4 @@ class AddCaseInsensitiveSQLIndexesForUserAndGroupIDs(SchemaMigration):
         )
 
         for idx_name, table_name, idx_columns in INDEXES:
-            self.op.create_index(idx_name, table_name, idx_columns)
+            self.create_index_if_not_exists(idx_name, table_name, idx_columns)

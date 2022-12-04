@@ -1,0 +1,1 @@
+Use create_index_if_not_exists() for recent upgrade steps that create indexes. [lgraf]
