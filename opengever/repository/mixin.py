@@ -38,6 +38,9 @@ class RepositoryMixin(object):
     def get_groupnames_with_local_manager_role(self):
         return self.get_groupnames_with_local_role('Manager')
 
+    def get_groupnames_with_local_taskresponsible_role(self):
+        return self.get_groupnames_with_local_role('TaskResponsible')
+
     def get_groupnames_with_local_or_inherited_reader_role(self):
         return self.get_groupnames_with_local_or_inherited_role('Reader')
 
@@ -55,3 +58,6 @@ class RepositoryMixin(object):
 
     def get_groupnames_with_local_or_inherited_manager_role(self):
         return self.get_groupnames_with_local_or_inherited_role('Manager')
+
+    def get_groupnames_with_local_or_inherited_taskresponsible_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('TaskResponsible')

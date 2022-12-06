@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-06 11:08+0000\n"
+"POT-Creation-Date: 2022-12-06 14:01+0000\n"
 "PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -164,6 +164,11 @@ msgstr "Lire dossiers rôles locaux ou hérités"
 msgid "label_groupnames_with_local_or_inherited_reviewer_role"
 msgstr "Clôturer dossiers rôles locaux ou hérités"
 
+#. Default: "Task responsible"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_or_inherited_taskresponsible_role"
+msgstr "Mandataire rôles locaux ou hérités"
+
 #. Default: "Reactivate dossiers local"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_local_publisher_role"
@@ -178,6 +183,11 @@ msgstr "Lire dossiers rôles locaux"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_local_reviewer_role"
 msgstr "Clôturer dossiers rôles locaux"
+
+#. Default: "Task responsible local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_taskresponsible_role"
+msgstr "Mandataire rôles locaux"
 
 #. Default: "Info"
 #: ./opengever/repository/browser/tabbed.py

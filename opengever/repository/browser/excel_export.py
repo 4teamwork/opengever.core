@@ -108,6 +108,10 @@ def generate_report(request, context):
         u'label_groupnames_with_local_manager_role',
         default=u'Manage dossiers local',
     ))
+    label_groupnames_with_local_taskresponsible_role = repository_translater(_(
+        u'label_groupnames_with_local_taskresponsible_role',
+        default=u'Task responsible local',
+    ))
     label_groupnames_with_local_or_inherited_reader_role = repository_translater(_(
         u'label_groupnames_with_local_or_inherited_reader_role',
         default=u'Read dossiers',
@@ -132,6 +136,10 @@ def generate_report(request, context):
         u'label_groupnames_with_local_or_inherited_manager_role',
         default=u'Manage dossiers',
     ))
+    label_groupnames_with_local_or_inherited_taskresponsible_role = repository_translater(_(
+        u'label_groupnames_with_local_or_inherited_taskresponsible_role',
+        default=u'Task responsible',
+    ))
     column_map = (
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
         {'id': 'title_de', 'title': label_repositoryfolder_title_de},
@@ -155,12 +163,14 @@ def generate_report(request, context):
         {'id': 'get_groupnames_with_local_reviewer_role', 'title': label_groupnames_with_local_reviewer_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_publisher_role', 'title': label_groupnames_with_local_publisher_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_manager_role', 'title': label_groupnames_with_local_manager_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_taskresponsible_role', 'title': label_groupnames_with_local_taskresponsible_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_reader_role', 'title': label_groupnames_with_local_or_inherited_reader_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_contributor_role', 'title': label_groupnames_with_local_or_inherited_contributor_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_editor_role', 'title': label_groupnames_with_local_or_inherited_editor_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_reviewer_role', 'title': label_groupnames_with_local_or_inherited_reviewer_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_publisher_role', 'title': label_groupnames_with_local_or_inherited_publisher_role, 'callable': True},  # noqa
         {'id': 'get_groupnames_with_local_or_inherited_manager_role', 'title': label_groupnames_with_local_or_inherited_manager_role, 'callable': True},  # noqa
+        {'id': 'get_groupnames_with_local_or_inherited_taskresponsible_role', 'title': label_groupnames_with_local_or_inherited_taskresponsible_role, 'callable': True},  # noqa
 
     )
 

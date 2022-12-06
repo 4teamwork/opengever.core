@@ -50,6 +50,8 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Repositoryfolder title (French)': u'Syst\xe8me de classement',
             u'Repositoryfolder title (German)': u'Ordnungssystem',
             u'Retention period (years)': u'',
+            u'Task responsible local or inherited roles': u'',
+            u'Task responsible local roles': u'',
             u'Valid from': u'',
             u'Valid until': u''
         }
@@ -83,6 +85,8 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Repositoryfolder title (French)': u'Direction',
             u'Repositoryfolder title (German)': u'F\xfchrung',
             u'Retention period (years)': 5,
+            u'Task responsible local or inherited roles': u'',
+            u'Task responsible local roles': u'',
             u'Valid from': u'',
             u'Valid until': u''
         }

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-06 11:08+0000\n"
+"POT-Creation-Date: 2022-12-06 14:01+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -189,6 +189,11 @@ msgstr "Read dossiers local or inherited roles"
 msgid "label_groupnames_with_local_or_inherited_reviewer_role"
 msgstr "Close dossiers local or inherited roles"
 
+#. Default: "Task responsible"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_or_inherited_taskresponsible_role"
+msgstr "Task responsible local or inherited roles"
+
 #. German translation: Dossiers reaktivieren
 #. Default: "Reactivate dossiers local"
 #: ./opengever/repository/browser/excel_export.py
@@ -206,6 +211,11 @@ msgstr "Read dossiers local roles"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_groupnames_with_local_reviewer_role"
 msgstr "Close dossiers local roles"
+
+#. Default: "Task responsible local"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_groupnames_with_local_taskresponsible_role"
+msgstr "Task responsible local roles"
 
 #. German translation: Info
 #. Default: "Info"
