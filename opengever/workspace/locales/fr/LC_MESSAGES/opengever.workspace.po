@@ -219,7 +219,7 @@ msgstr "GEVER URL"
 #. Default: "Hide workspace members for workspace guests"
 #: ./opengever/workspace/workspace.py
 msgid "label_hide_members_for_guests"
-msgstr ""
+msgstr "Masquer les membres de l'espace de travail pour les invités"
 
 #. Default: "Journal"
 #: ./opengever/workspace/browser/tabbed.py
