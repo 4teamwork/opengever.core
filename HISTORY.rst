@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.24.0 (2022-12-07)
+----------------------
+
+New features:
+
+
+- No longer grant permission to task responsible to add content to the dossier. [njohner]
+- Provide custom properties of documents and dossiers as docproperties. [tinagerber]
+- Introduce a new option hide_members_for_guests on workspaces. [phgross]
+
+
+Bug fixes:
+
+
+- Make OGDS sync case-insensitive in regard to user IDs. [lgraf]
+- Revoke roles when objects are removed from a task's related items.
+
+
+Other changes:
+
+
+- Remove various unneeded catalog indexes and metadata columns. [tinagerber]
+- Remove 'comments' field for dossier templates. [lgraf]
+- Also allow to deliver mails back to the predecessor task. [njohner]
+- SchemaMigration: Add create_index_if_not_exists() helper method. [lgraf]
+- Use create_index_if_not_exists() for recent upgrade steps that create indexes. [lgraf]
+
+
 2022.23.0 (2022-11-24)
 ----------------------
 
