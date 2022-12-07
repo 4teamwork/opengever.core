@@ -68,7 +68,7 @@ msgstr "Type de contenu pour lequel cette Property Sheet sera disponible"
 #. Default: "Whether the field should be available as docproperty or not"
 #: ./opengever/propertysheets/metaschema.py
 msgid "help_available_as_docproperty"
-msgstr ""
+msgstr "Rendre le champ accessible en tant que docproperty"
 
 #. Default: "Default value for this field"
 #: ./opengever/propertysheets/metaschema.py
@@ -123,7 +123,7 @@ msgstr "Assignations"
 #. Default: "Available as docproperty"
 #: ./opengever/propertysheets/metaschema.py
 msgid "label_available_as_docproperty"
-msgstr ""
+msgstr "Accessible en tant que docproperty"
 
 #. Default: "Default"
 #: ./opengever/propertysheets/metaschema.py

@@ -32,7 +32,7 @@
         },
         "hide_members_for_guests": {
             "type": "boolean",
-            "title": "Teamraum Mitglieder f\u00fcr G\u00e4ste ausblenden",
+            "title": "Teamraum-Teilnehmer f\u00fcr G\u00e4ste ausblenden",
             "description": "",
             "_zope_schema_type": "Bool"
         },
