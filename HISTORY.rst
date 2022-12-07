@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.24.1 (2022-12-07)
+----------------------
+
+Bug fixes:
+
+
+- Disable lock check in @tus-upload endpoint again. [tinagerber]
+
+
 2022.24.0 (2022-12-07)
 ----------------------
 
