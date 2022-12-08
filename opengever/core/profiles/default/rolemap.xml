@@ -74,9 +74,16 @@
       <role name="LimitedAdmin" />
       <role name="Manager" />
       <role name="Reader" />
+      <role name="Contributor" />
+      <role name="TaskResponsible" />
+      <role name="Editor" />
+      <role name="Reviewer" />
       <role name="WorkspaceAdmin" />
       <role name="WorkspaceMember" />
       <role name="WorkspaceGuest" />
+      <role name="CommitteeAdministrator" />
+      <role name="CommitteeMember" />
+      <role name="CommitteeResponsible" />
     </permission>
 
     <permission name="opengever.api: View AllowedRolesAndPrincipals" acquire="False">
