@@ -199,7 +199,7 @@ class BaseDocumentContextActions(BaseContextActions):
     def is_revive_bumblebee_preview_available(self):
         if not is_bumblebee_feature_enabled():
             return False
-        if not api.user.has_permission('opengever.bumblebee: Revive Preview'):
+        if not api.user.has_permission('opengever.bumblebee: Revive Preview', obj=self.context):
             return False
         return IBumblebeeable.providedBy(self.context)
 
