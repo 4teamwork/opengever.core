@@ -1,65 +1,33 @@
-from ftw.testing import MockTestCase
-from mocker import KWARGS
+from ftw.builder import Builder
+from ftw.builder import create
+from ftw.testbrowser import browsing
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
-from zope.publisher.interfaces import NotFound
+from opengever.testing import IntegrationTestCase
 
 
-class TestPrimaryRepositoryRoot(MockTestCase):
+class TestPrimaryRepositoryRoot(IntegrationTestCase):
 
-    def setUp(self):
-        super(TestPrimaryRepositoryRoot, self).setUp()
-        self.portal_url = self.stub()
-        self.mock_tool(self.portal_url, 'portal_url')
+    @browsing
+    def test_get_primary_repository_root(self, browser):
+        self.login(self.administrator, browser=browser)
 
-        self.site = self.mocker.mock()
-        self.expect(self.portal_url.getPortalObject()).result(self.site)
+        view = PrimaryRepositoryRoot(self.portal, self.request)
+        self.assertEqual(self.repository_root,
+                         view.get_primary_repository_root())
 
+        create(Builder('repository_root').titled(u'root1'))
+        root17 = create(Builder('repository_root').titled(u'root17'))
+        create(Builder('repository_root').titled(u'root2'))
 
-    def test_get_primary_repository_root_raises_404_if_no_root_found(self):
-        context = self.stub()
-        request = self.stub()
+        self.assertEqual(root17, view.get_primary_repository_root())
 
-        self.expect(self.site.getFolderContents(KWARGS)).result([])
+    @browsing
+    def test_render_redirects_to_repository_root(self, browser):
+        self.login(self.administrator, browser=browser)
 
-        self.replay()
-        view = PrimaryRepositoryRoot(context, request)
+        browser.open(view='primary_repository_root')
+        self.assertEqual(self.repository_root.absolute_url(), browser.url)
 
-        with self.assertRaises(NotFound):
-            view.get_primary_repository_root()
-
-    def test_get_primary_repository_root(self):
-        context = self.stub()
-        request = self.stub()
-
-        root = self.create_dummy(id='root')
-        root1 = self.create_dummy(id='root1')
-        root2 = self.create_dummy(id='root2')
-        root3 = self.create_dummy(id='root3')
-        root17 = self.create_dummy(id='root17')
-
-        query = {'portal_type': ['opengever.repository.repositoryroot']}
-        self.expect(self.site.getFolderContents(
-                full_objects=True, contentFilter=query)).result([
-                root3, root, root17, root2, root1])
-
-        self.replay()
-        view = PrimaryRepositoryRoot(context, request)
-        self.assertEqual(view.get_primary_repository_root(),
-                         root17)
-
-    def test_render_redirects_to_repository_root(self):
-        context = self.stub()
-        request = self.mocker.mock()
-
-        root1 = self.create_dummy(id='root1')
-        root2 = self.mocker.mock()
-        self.expect(root2.id).result('root2').count(1, None)
-        self.expect(root2.absolute_url()).result('http://nohost/site/root2')
-
-        self.expect(self.site.getFolderContents(KWARGS)).result(
-            [root1, root2])
-
-        self.expect(request.RESPONSE.redirect('http://nohost/site/root2'))
-
-        self.replay()
-        PrimaryRepositoryRoot(context, request)()
+        root2 = create(Builder('repository_root').titled(u'root2'))
+        browser.open(view='primary_repository_root')
+        self.assertEqual(root2.absolute_url(), browser.url)
