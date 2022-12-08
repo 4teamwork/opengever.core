@@ -1,4 +1,5 @@
 from ftw import bumblebee
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.api import _
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.serializer import extend_with_backreferences
@@ -41,8 +42,8 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         version = "current" if kwargs.get('version') is None else kwargs.get('version')
         obj = self.getVersion(version)
-
         bumblebee_service = bumblebee.get_service_v3()
+        result['bumblebee_checksum'] = IBumblebeeDocument(obj).get_checksum()
         result[u'thumbnail_url'] = bumblebee_service.get_representation_url(
             obj, 'thumbnail')
         result[u'preview_url'] = bumblebee_service.get_representation_url(

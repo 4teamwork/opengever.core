@@ -1,6 +1,4 @@
 from Acquisition import aq_inner
-from ftw.bumblebee.interfaces import IBumblebeeable
-from ftw.bumblebee.interfaces import IBumblebeeDocument
 from Missing import Value as MissingValue
 from opengever.api.batch import SQLHypermediaBatch
 from opengever.base.behaviors.sequence import ISequenceNumberBehavior
@@ -71,11 +69,6 @@ def extend_with_oguid(result, context):
         oguid = None
 
     result['oguid'] = oguid
-
-
-def extend_with_bumblebee_checksum(result, context):
-    if IBumblebeeable.providedBy(context):
-        result['bumblebee_checksum'] = IBumblebeeDocument(context).get_checksum()
 
 
 def extend_with_relative_path(result, context):
@@ -159,7 +152,6 @@ class GeverSerializeToJson(SerializeToJson):
         result = super(GeverSerializeToJson, self).__call__(*args, **kwargs)
 
         extend_with_oguid(result, self.context)
-        extend_with_bumblebee_checksum(result, self.context)
         extend_with_relative_path(result, self.context)
         extend_with_responses(result, self.context, self.request)
         extend_with_sequence_number(result, self.context, self.request)

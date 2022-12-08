@@ -288,6 +288,27 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
                          [each['version'] for each in browser.json['items']])
 
     @browsing
+    def test_returns_different_bumblebee_checksums_for_different_versions(self, browser):
+        self.login(self.regular_user, browser)
+        create_document_version(self.document, 0)
+        create_document_version(self.document, 1)
+
+        browser.open(self.document,
+                     view='@versions/0',
+                     method='GET',
+                     headers=self.api_headers)
+
+        checksum_1 = browser.json['bumblebee_checksum']
+
+        browser.open(self.document,
+                     view='@versions/1',
+                     method='GET',
+                     headers=self.api_headers)
+
+        checksum_2 = browser.json['bumblebee_checksum']
+        self.assertNotEqual(checksum_1, checksum_2)
+
+    @browsing
     def test_returns_initial_version_details_for_lazy_initial_version(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
