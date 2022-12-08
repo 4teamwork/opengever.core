@@ -5,15 +5,11 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import statusmessages
 from ftw.testing import freeze
-from ftw.testing import MockTestCase
 from opengever.base.behaviors.changed import IChanged
-from opengever.core.testing import COMPONENT_UNIT_TESTING
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier.archive import Archiver
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.filing import IFilingNumber
-from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.dossier.filing.form import EnddateValidator
 from opengever.dossier.filing.form import get_filing_actions
 from opengever.dossier.filing.form import METHOD_FILING
@@ -29,9 +25,10 @@ from opengever.dossier.filing.form import RESOLVE_WITH_NEW_NUMBER
 from opengever.dossier.filing.form import valid_filing_year
 from opengever.dossier.interfaces import IDossierArchiver
 from opengever.testing import IntegrationTestCase
-from zExceptions import BadRequest
+from zope.interface import Interface
 from zope.interface import Invalid
 from zope.interface.verify import verifyClass
+from zope.schema.interfaces import IDate
 import json
 import pytz
 
@@ -108,90 +105,54 @@ class TestArchiver(IntegrationTestCase):
                 valid_filing_year(year)
 
 
-class TestArchiving(MockTestCase):
+class TestArchiving(IntegrationTestCase):
 
-    layer = COMPONENT_UNIT_TESTING
-
-    def setUp(self):
-        super(TestArchiving, self).setUp()
-
-    def stub_dossier(self):
-        return self.providing_stub([IDossier,
-                                    IDossierMarker,
-                                    IFilingNumber,
-                                    IFilingNumberMarker])
+    features = ('filing_number', )
 
     def test_end_date_validator(self):
+        self.login(self.regular_user)
 
-        dossier = self.stub()
-        request = self.stub_request()
+        self.assertEqual(
+            date(2016, 8, 31),
+            self.dossier.earliest_possible_end_date())
 
-        self.expect(
-            dossier.earliest_possible_end_date()).result(date(2012, 02, 15))
-        self.replay()
-
-        from zope.schema.interfaces import IDate
-        from zope.interface import Interface
         validator = EnddateValidator(
-            dossier, request, Interface, IDate, Interface)
+            self.dossier, self.request, Interface, IDate, Interface)
 
         # invalid
         with self.assertRaises(Invalid):
-            validator.validate(date(2012, 02, 10))
+            validator.validate(date(2016, 8, 10))
 
         with self.assertRaises(MissingValue):
             self.assertRaises(validator.validate(None))
 
         # valid
-        validator.validate(date(2012, 02, 15))
-        validator.validate(date(2012, 04, 15))
+        validator.validate(date(2016, 8, 31))
+        validator.validate(date(2016, 10, 10))
 
     def test_get_filing_actions(self):
-        wft = self.stub()
-        self.mock_tool(wft, 'portal_workflow')
+        self.login(self.regular_user)
 
         # dossier not resolved yet without a filing no
-        dossier1 = self.stub_dossier()
-        self.expect(dossier1.filing_no).result(None)
-        self.expect(wft.getInfoFor(dossier1, 'review_state', None)).result(
-            'dossier-state-active')
+        IFilingNumber(self.resolvable_dossier).filing_no = None
 
-        # dossier not resolved yet with a not valid filing no
-        dossier2 = self.stub_dossier()
-        self.expect(dossier2.filing_no).result('FAKE_NUMBER')
-        self.expect(wft.getInfoFor(dossier2, 'review_state', None)).result(
-            'dossier-state-active')
-
-        # dossier not resolved yet with a valid filing no
-        dossier3 = self.stub_dossier()
-        self.expect(dossier3.filing_no).result('TEST A-Amt-2011-2')
-        self.expect(wft.getInfoFor(dossier3, 'review_state', None)).result(
-            'dossier-state-active')
-
-        # dossier allready rsolved no filing
-        dossier4 = self.stub_dossier()
-        self.expect(dossier4.filing_no).result(None)
-        self.expect(wft.getInfoFor(dossier4, 'review_state', None)).result(
-            'dossier-state-resolved')
-
-        self.replay()
-
-        # dossier not resolved yet without a filing no
-        actions = get_filing_actions(dossier1)
+        actions = get_filing_actions(self.resolvable_dossier)
         self.assertEquals(actions.by_token.keys(),
                           [ONLY_RESOLVE, RESOLVE_AND_NUMBER])
         self.assertEquals(actions.by_value.keys(),
                           [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING])
 
-        # dossier not resolved yet but with a filing no
-        actions = get_filing_actions(dossier2)
+        # dossier not resolved yet but with a invalid filing no
+        IFilingNumber(self.resolvable_dossier).filing_no = 'FAKE_NUMBER'
+        actions = get_filing_actions(self.resolvable_dossier)
         self.assertEquals(actions.by_token.keys(),
                           [ONLY_RESOLVE, RESOLVE_AND_NUMBER])
         self.assertEquals(actions.by_value.keys(),
                           [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING])
 
-        # dossier not resolved yet but with a filing no
-        actions = get_filing_actions(dossier3)
+        # dossier not resolved yet but with a valid filing no
+        IFilingNumber(self.resolvable_dossier).filing_no = u'Hauptmandant-Amt-2016-2'
+        actions = get_filing_actions(self.resolvable_dossier)
         self.assertEquals(
             actions.by_token.keys(),
             [RESOLVE_WITH_EXISTING_NUMBER, RESOLVE_WITH_NEW_NUMBER])
@@ -199,7 +160,11 @@ class TestArchiving(MockTestCase):
                           [METHOD_RESOLVING_AND_FILING, METHOD_RESOLVING_EXISTING_FILING])
 
         # dossier allready resolved but without filing
-        actions = get_filing_actions(dossier4)
+        self.set_workflow_state(
+            'dossier-state-resolved', self.resolvable_dossier)
+        IFilingNumber(self.resolvable_dossier).filing_no = None
+
+        actions = get_filing_actions(self.resolvable_dossier)
         self.assertEquals(actions.by_token.keys(), [ONLY_NUMBER])
         self.assertEquals(actions.by_value.keys(), [METHOD_FILING])
 
