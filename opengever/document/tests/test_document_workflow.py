@@ -96,10 +96,21 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.assertEquals(Document.active_state,
                           api.content.get_state(obj=self.subdocument))
 
-    def test_cannot_reopen_finalized_document_referenced_by_pending_task(self):
+    def test_cannot_reopen_finalized_document_referenced_by_pending_approval_task(self):
         self.login(self.manager)
         api.content.transition(obj=self.protected_document_with_task,
                                transition=Document.finalize_transition)
+
+        self.assertFalse(self.task_in_protected_dossier.is_approval_task())
+        self.assertIn(
+            'document-transition-reopen',
+            self.get_workflow_transitions_for(self.protected_document_with_task))
+
+        self.task_in_protected_dossier.task_type = 'approval'
+        self.assertTrue(self.task_in_protected_dossier.is_approval_task())
+        self.assertNotIn(
+            'document-transition-reopen',
+            self.get_workflow_transitions_for(self.protected_document_with_task))
 
         with self.assertRaises(InvalidParameterError):
             api.content.transition(
@@ -109,6 +120,9 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.set_workflow_state('task-state-tested-and-closed',
                                 self.task_in_protected_dossier)
 
+        self.assertIn(
+            'document-transition-reopen',
+            self.get_workflow_transitions_for(self.protected_document_with_task))
         api.content.transition(
             obj=self.protected_document_with_task,
             transition=Document.reopen_transition)

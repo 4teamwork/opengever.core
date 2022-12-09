@@ -79,6 +79,8 @@ TASKTEMPLATE_PREDECESSOR_KEY = 'tasktemplate_predecessor'
 TASK_PROCESS_ORDER_KEY = 'task_process_order'
 TASK_FORMER_RESPONSIBLES_KEY = 'task_former_responsibles'
 
+TASK_TYPE_APPROVAL = 'approval'
+
 
 def deadline_default():
     offset = api.portal.get_registry_record(
@@ -438,6 +440,9 @@ class Task(Container, TaskReminderSupport):
         """If the task is the main task of a sequential process.
         """
         return IContainSequentialProcess.providedBy(self)
+
+    def is_approval_task(self):
+        return self.task_type == TASK_TYPE_APPROVAL
 
     @property
     def is_in_final_state(self):
