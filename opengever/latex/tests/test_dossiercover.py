@@ -5,17 +5,12 @@ from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
-from ftw.testing import MockTestCase
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.latex.dossiercover import DossierCoverPDFView
 from opengever.latex.dossiercover import IDossierCoverLayer
 from opengever.latex.layouts.default import DefaultLayout
-from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import create_ogds_user
 from opengever.testing import FunctionalTestCase
 from zope.component import getMultiAdapter
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
 class TestDossierCoverRenderArguments(FunctionalTestCase):
@@ -93,30 +88,3 @@ class TestDossierCoverRenderArguments(FunctionalTestCase):
     def test_contains_end_date_in_readable_format(self):
         arguments = self.dossiercover.get_render_arguments()
         self.assertEquals('Dec 31, 2013', arguments.get('end'))
-
-
-class TestDossierCoverPDFView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_is_registered(self):
-        context = self.providing_stub([IDossierMarker])
-        request = self.providing_stub([IDefaultBrowserLayer])
-
-        self.replay()
-        view = getMultiAdapter((context, request), name='dossier_cover_pdf')
-
-        self.assertTrue(isinstance(view, DossierCoverPDFView))
-
-    def test_render_adds_browser_layer(self):
-        context = request = self.create_dummy()
-
-        view = self.mocker.patch(DossierCoverPDFView(context, request))
-
-        self.expect(view.allow_alternate_output()).result(False)
-        self.expect(view.export())
-
-        self.replay()
-
-        view()
-        self.assertTrue(IDossierCoverLayer.providedBy(request))

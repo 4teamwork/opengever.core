@@ -2,15 +2,11 @@ from copy import deepcopy
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
-from ftw.testing import MockTestCase
-from opengever.latex import dossierjournal
 from opengever.latex.dossierjournal import IDossierJournalLayer
 from opengever.latex.layouts.default import DefaultLayout
-from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
 def strip_timestamps(journal):
@@ -31,19 +27,6 @@ def strip_journal_id(journal):
             without_id.pop('id')
         stripped_journal.append(without_id)
     return stripped_journal
-
-
-class TestDossierJournalPDFView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_is_registered(self):
-        context = self.create_dummy()
-        request = self.providing_stub([IDefaultBrowserLayer])
-
-        self.replay()
-        view = getMultiAdapter((context, request), name='pdf-dossier-journal')
-        self.assertTrue(isinstance(view, dossierjournal.DossierJournalPDFView))
 
 
 class TestJournalListingLaTeXView(IntegrationTestCase):

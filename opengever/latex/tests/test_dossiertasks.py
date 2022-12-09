@@ -7,30 +7,13 @@ from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
-from ftw.testing import MockTestCase
-from opengever.latex import dossiertasks
 from opengever.latex.dossiertasks import provide_dossier_task_layer
 from opengever.latex.layouts.default import DefaultLayout
-from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-
-
-class TestDossierTasksPDFView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_is_registered(self):
-        context = self.create_dummy()
-        request = self.providing_stub([IDefaultBrowserLayer])
-
-        self.replay()
-        view = getMultiAdapter((context, request), name='pdf-dossier-tasks')
-        self.assertTrue(isinstance(view, dossiertasks.DossierTasksPDFView))
 
 
 class TestDossierTasksLaTeXView(FunctionalTestCase):
