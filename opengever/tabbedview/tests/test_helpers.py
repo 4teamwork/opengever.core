@@ -1,6 +1,5 @@
 from datetime import date
 from ftw.testbrowser import browsing
-from ftw.testing import MockTestCase
 from opengever.tabbedview.helper import linked_subjects
 from opengever.tabbedview.helper import readable_date
 from opengever.tabbedview.helper import task_id_checkbox_helper
