@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 21:02+0000\n"
+"POT-Creation-Date: 2022-12-22 21:03+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -29,11 +29,6 @@ msgstr "Add person"
 #: ./opengever/contact/contact.py
 msgid "Contact"
 msgstr "Contact"
-
-#. German translation: Löschen
-#: ./opengever/contact/browser/participation_forms.py
-msgid "Remove"
-msgstr "Remove"
 
 #. German translation: Adresse
 #. Default: "Address"
@@ -104,12 +99,6 @@ msgstr "Organizations"
 msgid "column_salutation"
 msgstr "Salutation"
 
-#. German translation: Beteiligung gelöscht
-#. Default: "Participation removed"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "info_participation_removed"
-msgstr "Participation removed"
-
 #. German translation: Internet
 #. Default: "Internet"
 #: ./opengever/contact/contact.py
@@ -130,12 +119,6 @@ msgstr "Academic title"
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr "Active"
-
-#. German translation: Beteiligung hinzufügen
-#. Default: "Add Participation"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_add_participation"
-msgstr "Add participation"
 
 #. German translation: Adresse (Strasse / Nr.)
 #. Default: "Address 1"
@@ -189,12 +172,6 @@ msgstr "Archived personal information"
 msgid "label_archived_phone_numbers"
 msgstr "Archived phone numbers"
 
-#. German translation: Abbrechen
-#. Default: "Cancel"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_cancel"
-msgstr "Cancel"
-
 #. German translation: Ort
 #. Default: "City"
 #: ./opengever/contact/contact.py
@@ -206,12 +183,6 @@ msgstr "City"
 #: ./opengever/contact/contact.py
 msgid "label_company"
 msgstr "Company"
-
-#. German translation: Kontakt
-#. Default: "Contact"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_contact"
-msgstr "Contact"
 
 #. German translation: Land
 #. Default: "Country"
@@ -231,13 +202,6 @@ msgstr "Department"
 #: ./opengever/contact/contact.py
 msgid "label_description"
 msgstr "Description"
-
-#. German translation: Beteiligung von ${title} bearbeiten
-#. Default: "Edit ${title}"
-#. MARKER: double check
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_edit_participation"
-msgstr "Edit ${title}"
 
 #. German translation: E-Mail 1
 #. Default: "email"
@@ -401,18 +365,6 @@ msgstr "Phone (work)"
 msgid "label_picture"
 msgstr "Picture"
 
-#. German translation: ${title} löschen
-#. Default: "Remove ${title}"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_remove_participation"
-msgstr "Remove ${title}"
-
-#. German translation: Rollen
-#. Default: "Roles"
-#: ./opengever/contact/browser/participation_forms.py
-msgid "label_roles"
-msgstr "Roles"
-
 #. German translation: Anrede
 #. Default: "Salutation"
 #. MARKER: questionable
@@ -475,12 +427,6 @@ msgstr "ZIP code"
 #: ./opengever/contact/contact.py
 msgid "lable_function"
 msgstr "Function"
-
-#. German translation: Für diesen Kontakt existiert bereits eine Beteiligung.
-#. Default: "There already exists a participation for this contact."
-#: ./opengever/contact/browser/participation_forms.py
-msgid "msg_participation_already_exists"
-msgstr "A participation already exists for this contact."
 
 #. German translation: Persönliche Angaben
 #. Default: "Personal Stuff"
