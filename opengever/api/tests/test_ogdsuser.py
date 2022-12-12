@@ -107,7 +107,7 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'phone_office': u'012 34 56 78',
              u'object_sid': None,
              u'organization': None,
-             u'salutation': u'Prof. Dr.',
+             u'salutation': u'Frau',
              u'teams': [{u'@id': u'http://nohost/plone/@teams/4',
                          u'@type': u'virtual.ogds.team',
                          u'active': True,

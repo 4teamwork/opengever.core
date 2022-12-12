@@ -334,7 +334,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
-            ('ogg.recipient.address.block', u'Prof. Dr.\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
+            ('ogg.recipient.address.block', u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
             ('ogg.recipient.address.city', 'Vorkappelen'),
             ('ogg.recipient.address.country', 'Schweiz'),
             ('ogg.recipient.address.street', 'Kappelenweg 13, Postfach 1234'),
@@ -344,7 +344,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.email.address', 'foo@example.com'),
             ('ogg.recipient.person.firstname', u'K\xe4thi'),
             ('ogg.recipient.person.lastname', u'B\xe4rfuss'),
-            ('ogg.recipient.person.salutation', 'Prof. Dr.'),
+            ('ogg.recipient.person.salutation', 'Frau'),
             ('ogg.recipient.phone.number', '012 34 56 78'),
             ('ogg.recipient.url.url', 'http://www.example.com'),
         ]
