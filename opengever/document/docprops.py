@@ -3,6 +3,7 @@ from docx import Document
 from docxcompose.properties import CustomProperties
 from docxcompose.sdt import StructuredDocumentTags
 from opengever import journal
+from opengever.base.addressblock.interfaces import IAddressBlockData
 from opengever.base.date_time import ulocalized_time
 from opengever.base.interfaces import IDocPropertyProvider
 from opengever.dossier.interfaces import ITemplateFolderProperties
@@ -56,9 +57,17 @@ class DocPropertyCollector(object):
             provider = recipient.get_doc_property_provider()
             properties.update(provider.get_properties(prefix='recipient'))
 
+            address_block = queryAdapter(recipient, IAddressBlockData)
+            if address_block:
+                properties.update({'ogg.recipient.address.block': address_block.format()})
+
         for sender in sender_data:
             provider = sender.get_doc_property_provider()
             properties.update(provider.get_properties(prefix='sender'))
+
+            address_block = queryAdapter(sender, IAddressBlockData)
+            if address_block:
+                properties.update({'ogg.sender.address.block': address_block.format()})
 
         return properties
 

@@ -297,6 +297,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.contact.description', u''),
             ('ogg.recipient.email.address', 'Jean.dupon@example.com'),
             ('ogg.recipient.person.academic_title', u''),
+            ('ogg.recipient.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.recipient.address.extra_line_1', u''),
             ('ogg.recipient.address.extra_line_2', u''),
             ('ogg.recipient.address.zip_code', '9999'),
@@ -333,6 +334,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.recipient.address.block', u'Prof. Dr.\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
             ('ogg.recipient.address.city', 'Vorkappelen'),
             ('ogg.recipient.address.country', 'Schweiz'),
             ('ogg.recipient.address.street', 'Kappelenweg 13, Postfach 1234'),
@@ -374,6 +376,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.contact.description', u''),
             ('ogg.sender.email.address', 'Jean.dupon@example.com'),
             ('ogg.sender.person.academic_title', u''),
+            ('ogg.sender.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.sender.address.extra_line_1', u''),
             ('ogg.sender.address.extra_line_2', u''),
             ('ogg.sender.address.zip_code', '9999'),

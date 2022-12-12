@@ -9,24 +9,25 @@ import requests_mock
 class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
 
     def test_docproperties_for_kub_person(self, mocker):
-        self.mock_get_by_id(mocker, self.person_julie)
-        entity = KuBEntity(self.person_julie)
+        self.mock_get_by_id(mocker, self.person_jean)
+        entity = KuBEntity(self.person_jean)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
         self.assertDictEqual(
-            {'ogg.address.city': None,
-             'ogg.address.country': None,
-             'ogg.address.extra_line_1': None,
-             'ogg.address.extra_line_2': None,
-             'ogg.address.street': u'',
-             'ogg.address.zip_code': None,
+            {'ogg.address.block': u'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern',
+             'ogg.address.city': u'Bern',
+             'ogg.address.country': u'Schweiz',
+             'ogg.address.extra_line_1': u'',
+             'ogg.address.extra_line_2': u'',
+             'ogg.address.street': u'Teststrasse 43',
+             'ogg.address.zip_code': u'9999',
              'ogg.contact.description': u'',
-             'ogg.contact.title': u'Dupont Julie',
-             'ogg.email.address': None,
+             'ogg.contact.title': u'Dupont Jean',
+             'ogg.email.address': u'Jean.dupon@example.com',
              'ogg.person.academic_title': u'',
-             'ogg.person.firstname': u'Julie',
+             'ogg.person.firstname': u'Jean',
              'ogg.person.lastname': u'Dupont',
-             'ogg.person.salutation': u'Frau',
-             'ogg.phone.number': None,
+             'ogg.person.salutation': u'Herr',
+             'ogg.phone.number': u'666 666 66 66',
              'ogg.url.url': None},
             properties)
 

@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.base.addressblock">
+
+  <adapter factory=".extraction.ogds_address_data_factory" />
+
+  <adapter factory=".extraction.kub_address_data_factory" />
+
+</configure>
