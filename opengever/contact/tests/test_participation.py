@@ -90,38 +90,6 @@ class TestDossierParticipation(FunctionalTestCase):
         self.assertEqual(0, len(intersecting_elements))
 
 
-class TestParticipationWrapper(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestParticipationWrapper, self).setUp()
-        self.dossier = create(Builder('dossier')
-                              .titled(u'Dossier'))
-        self.hans = create(Builder('person')
-                           .having(firstname=u'Hans', lastname=u'M\xfcller'))
-        self.participation = create(Builder('contact_participation')
-                                    .for_dossier(self.dossier)
-                                    .for_contact(self.hans))
-
-    @browsing
-    def test_dossier_participation_endpoint(self, browser):
-        browser.login().open('{}/participation-1/edit'.format(
-            self.dossier.absolute_url()))
-
-        self.assertEqual(
-            [u'Edit Participation of M\xfcller Hans'],
-            browser.css('h1').text)
-        self.assertEqual(
-            [u'Dossier', u'Participation of M\xfcller Hans'],
-            browser.css('#portal-breadcrumbs li').text)
-
-    @browsing
-    def test_cross_injection_raises_unauthorized(self, browser):
-        dossier2 = create(Builder('dossier'))
-        with browser.expect_unauthorized():
-            browser.login().open('{}/participation-1/edit'.format(
-                dossier2.absolute_url()))
-
-
 class TestParticipationsEndPoint(FunctionalTestCase):
 
     def setUp(self):
