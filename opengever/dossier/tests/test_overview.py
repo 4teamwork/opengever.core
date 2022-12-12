@@ -5,8 +5,6 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from lxml.etree import tostring
 from opengever.base.behaviors.base import IOpenGeverBase
-from opengever.contact.interfaces import IContactSettings
-from opengever.core.testing import toggle_feature
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.testing import solr_data_for
@@ -150,17 +148,6 @@ class TestOverview(SolrIntegrationTestCase):
         self.assertListEqual(
             self.participants,
             browser.css('#participantsBox li:not(.moreLink) a').text)
-
-    @browsing
-    def test_contact_participations_are_listed_when_contact_feature_is_enabled(self, browser):
-        toggle_feature(IContactSettings, enabled=True)
-
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.tested_dossier,
-                     view='tabbedview_view-overview')
-        self.assertEqual(
-            [u'B\xfchler Josef', 'Meier AG'],
-            browser.css('#participationsBox li:not(.moreLink) a').text)
 
     @browsing
     def test_task_link_is_safe_html_transformed(self, browser):

@@ -4,7 +4,6 @@ from ftw.solr.query import make_filters
 from opengever.base.browser.boxes_view import BoxesViewMixin
 from opengever.base.browser.helper import get_css_class
 from opengever.base.solr import OGSolrContentListing
-from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.base import DOSSIER_STATES_OPEN
 from opengever.dossier.behaviors.dossier import IDossier
@@ -39,19 +38,11 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
                  self.make_keyword_box()]]
 
     def make_participation_box(self):
-        if is_contact_feature_enabled():
-            return dict(id='participations',
-                        content=self.sql_participations(),
-                        href='participations',
-                        label=_("Participations"),
-                        available=self.context.has_participation_support())
-
-        else:
-            return dict(id='participants',
-                        content=self.plone_participations(),
-                        href='participants',
-                        label=_("Participants"),
-                        available=self.context.has_participation_support())
+        return dict(id='participants',
+                    content=self.plone_participations(),
+                    href='participants',
+                    label=_("Participants"),
+                    available=self.context.has_participation_support())
 
     def make_task_box(self):
         return dict(id='newest_tasks', content=self.tasks(),
@@ -120,19 +111,6 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
         phandler = IParticipationAware(self.context)
         return phandler.get_participations()
 
-    def sql_participations(self):
-        participations = []
-        for participation in self._get_participations():
-            participant = participation.participant
-            participations.append({
-                'getURL': participant.get_url(),
-                'Title': participant.get_title(),
-                'css_class': participant.get_css_class(),
-            })
-
-        return sorted(participations,
-                      key=lambda participation: participation.get('Title'))
-
     def plone_participations(self):
         results = list(self._get_participations())
 
@@ -150,6 +128,11 @@ class DossierOverview(BoxesViewMixin, BrowserView, GeverTabMixin):
 
         users = []
         for dossier in results:
+            ptype = getattr(dossier, 'participation_type', None)
+            if ptype == u'contact_participation':
+                # Gracefully skip legacy SQL contact participations
+                continue
+
             actor = Actor.lookup(dossier.contact)
             users.append({
                 'Title': actor.get_label(),
