@@ -109,27 +109,6 @@
       />
 
   <browser:page
-      name="add-sql-participation"
-      for="opengever.dossier.behaviors.dossier.IDossierMarker"
-      class=".participation_forms.ParticipationAddForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      name="edit"
-      for="opengever.contact.participation.IParticipationWrapper"
-      class=".participation_forms.ParticipationEditForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      name="remove"
-      for="opengever.contact.participation.IParticipationWrapper"
-      class=".participation_forms.ParticipationRemoveForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
       name="edit"
       for="opengever.contact.interfaces.IPerson"
       class=".person.EditPerson"
