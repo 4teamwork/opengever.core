@@ -86,9 +86,9 @@ class DocumentFromTemplatePost(Service):
             if ActorLookup(contact_id).is_kub_contact():
                 return (KuBEntity(contact_id), )
             else:
-                contact = OgdsUserToContactAdapter(
-                    ogds_service().find_user(contact_id))
-                data = [contact]
+                ogds_user = ogds_service().find_user(contact_id)
+                contact = OgdsUserToContactAdapter(ogds_user)
+                data = [ogds_user, contact]
                 if contact.addresses:
                     data.append(contact.addresses[0])
                 if contact.phonenumbers:

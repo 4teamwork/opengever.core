@@ -1,30 +1,26 @@
 from opengever.base.addressblock import AddressBlockData
 from opengever.base.addressblock.interfaces import IAddressBlockData
-from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.kub.entity import KuBEntity
+from opengever.ogds.models.user import User
 from zope.component import adapter
 from zope.interface import implementer
 
 
 @implementer(IAddressBlockData)
-@adapter(OgdsUserToContactAdapter)
+@adapter(User)
 def ogds_address_data_factory(context):
     return OGDSAddressDataExtractor(context)()
 
 
 class OGDSAddressDataExtractor(object):
     """Extracts address data from an OGDS user as an IAddressBlockData.
-
-    For technical reasons, this currently adapts an OgdsUserToContactAdapter
-    instead of an OGDS User directly, because that's what ends up in the
-    recipient_data / sender_data tuples.
     """
 
     def __init__(self, context):
         self.context = context
 
     def __call__(self):
-        ogds_user = self.context.ogds_user
+        ogds_user = self.context
 
         return AddressBlockData(
             academic_title=None,

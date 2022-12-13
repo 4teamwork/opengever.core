@@ -1,7 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.addressblock.interfaces import IAddressBlockData
-from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.kub.entity import KuBEntity
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import IntegrationTestCase
@@ -23,8 +22,7 @@ class TestOGDSUserAddressExtraction(IntegrationTestCase):
                           country=u'Schweiz',
         ))
 
-        adapted_user = OgdsUserToContactAdapter(user)
-        block = IAddressBlockData(adapted_user)
+        block = IAddressBlockData(user)
 
         expected = {
             'salutation': u'Herr',
