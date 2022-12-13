@@ -1,4 +1,4 @@
-from opengever.workspace.interfaces import IDeleter
+from opengever.base.interfaces import IDeleter
 from opengever.workspace.utils import is_within_workspace_root
 from plone import api
 from plone.restapi.services.content.delete import ContentDelete

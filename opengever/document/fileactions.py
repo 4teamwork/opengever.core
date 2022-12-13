@@ -1,5 +1,6 @@
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.api.lock import can_unlock_obj
+from opengever.base.interfaces import IDeleter
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
@@ -11,7 +12,6 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.trash.trash import ITrashed
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
-from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.locking.interfaces import ILockable

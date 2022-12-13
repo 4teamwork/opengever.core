@@ -1,6 +1,6 @@
+from opengever.base.interfaces import IDeleter
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrasher
-from opengever.workspace.interfaces import IDeleter
 from zExceptions import Forbidden
 
 
