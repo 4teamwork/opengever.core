@@ -36,3 +36,10 @@ class BaseContentDeleter(object):
     def check_delete_permission(self):
         if not api.user.has_permission(self.permission, obj=self.context):
             raise Forbidden()
+
+    def is_delete_allowed(self):
+        try:
+            self.verify_may_delete()
+            return True
+        except Forbidden:
+            return False

@@ -48,3 +48,14 @@ class TestContentDeleter(IntegrationTestCase):
         self.login(self.manager)
         adapter = getAdapter(self.repository_root, IDeleter)
         self.assertIsInstance(adapter, BaseContentDeleter)
+
+    def test_is_delete_allowed_returns_boolean(self):
+        self.login(self.regular_user)
+        deleter = BaseContentDeleter(self.dossier)
+
+        self.assertFalse(api.user.has_permission(deleter.permission, obj=self.dossier))
+        self.assertFalse(deleter.is_delete_allowed())
+
+        deleter.permission = 'View'
+        self.assertTrue(api.user.has_permission(deleter.permission, obj=self.dossier))
+        self.assertTrue(deleter.is_delete_allowed())
