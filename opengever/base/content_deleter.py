@@ -3,10 +3,13 @@ from opengever.base.interfaces import IDeleter
 from plone import api
 from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zExceptions import Forbidden
+from zope.component import adapter
 from zope.interface import implementer
+from zope.interface import Interface
 
 
 @implementer(IDeleter)
+@adapter(Interface)
 class BaseContentDeleter(object):
     """Deleter adapter used for deleting objects over the REST-API
     """

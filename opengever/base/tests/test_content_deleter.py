@@ -1,7 +1,9 @@
 from opengever.base.content_deleter import BaseContentDeleter
+from opengever.base.interfaces import IDeleter
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zExceptions import Forbidden
+from zope.component import getAdapter
 
 
 class TestContentDeleter(IntegrationTestCase):
@@ -41,3 +43,8 @@ class TestContentDeleter(IntegrationTestCase):
             deleter.delete()
 
         self.assertEqual(1, len(children['removed']))
+
+    def test_is_adapter(self):
+        self.login(self.manager)
+        adapter = getAdapter(self.repository_root, IDeleter)
+        self.assertIsInstance(adapter, BaseContentDeleter)
