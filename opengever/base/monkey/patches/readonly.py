@@ -239,6 +239,7 @@ WRITE_PERMISSIONS = [
     'opengever.document: Checkout',
     'opengever.document: Force Checkin',
     'opengever.document: Modify archival file',
+    'opengever.dossier: Delete dossier',
     'opengever.dossier: Destroy dossier',
     'opengever.dossier: Protect dossier',
     'opengever.repository: Unlock Reference Prefix',

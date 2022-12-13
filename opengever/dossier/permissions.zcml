@@ -12,4 +12,6 @@
 
   <permission id="opengever.dossier.ProtectDossier" title="opengever.dossier: Protect dossier" />
 
+  <permission id="opengever.dossier.DeleteDossier" title="opengever.dossier: Delete dossier" />
+
 </configure>
