@@ -309,7 +309,7 @@ class ResolveTransitionExtender(DefaultTransitionExtender):
         approved_documents = map(unrestrictedUuidToObject, approved_documents)
 
         if approved_documents:
-            if self.context.task_type != 'approval':
+            if not self.context.is_approval_task():
                 raise BadRequest(
                     "Param 'approved_documents' is only supported for tasks "
                     "of task_type 'approval'.")

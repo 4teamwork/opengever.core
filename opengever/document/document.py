@@ -374,16 +374,16 @@ class Document(Item, BaseDocumentMixin):
     def is_finalize_allowed(self):
         return not self.is_checked_out()
 
-    def is_referenced_by_pending_task(self):
+    def is_referenced_by_pending_approval_task(self):
         tasks = self.related_items(include_forwardrefs=False, include_backrefs=True, tasks_only=True)
-        return any((task.is_pending() for task in tasks))
+        return any((task.is_pending() and task.is_approval_task() for task in tasks))
 
     def is_reopen_allowed(self):
         # reopen is not allowed if a pending task is referencing the document
         user = api.user.get_current()
         return ((is_administrator(user)
                  or user.getId() == self.finalizer)
-                and not self.is_referenced_by_pending_task())
+                and not self.is_referenced_by_pending_approval_task())
 
     @property
     def finalizer(self):
