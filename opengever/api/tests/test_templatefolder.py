@@ -394,6 +394,44 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
 
         self.assertItemsEqual(expected_doc_properties, properties)
 
+    @browsing
+    def test_creates_document_from_template_with_ogds_sender(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'sender': self.regular_user.getId()}
+
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.sender.address.block', u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
+            ('ogg.sender.address.city', 'Vorkappelen'),
+            ('ogg.sender.address.country', 'Schweiz'),
+            ('ogg.sender.address.street', 'Kappelenweg 13, Postfach 1234'),
+            ('ogg.sender.address.zip_code', '1234'),
+            ('ogg.sender.contact.description', 'nix'),
+            ('ogg.sender.contact.title', u'B\xe4rfuss K\xe4thi'),
+            ('ogg.sender.email.address', 'foo@example.com'),
+            ('ogg.sender.person.firstname', u'K\xe4thi'),
+            ('ogg.sender.person.lastname', u'B\xe4rfuss'),
+            ('ogg.sender.person.salutation', 'Frau'),
+            ('ogg.sender.phone.number', '012 34 56 78'),
+            ('ogg.sender.url.url', 'http://www.example.com'),
+        ]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+        self.assertItemsEqual(expected_doc_properties, properties)
+
 
 class TestDossierFromTemplatePost(IntegrationTestCase):
 
