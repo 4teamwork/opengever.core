@@ -95,7 +95,7 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_groups()
 
         ogds_user = ogds_service().fetch_user('peter')
-        self.assertEqual([u'new_group'], [g.groupid for g in ogds_user.groups])
+        self.assertItemsEqual([u'old_group', u'new_group'], [g.groupid for g in ogds_user.groups])
 
     def test_properties_update_when_userid_case_changes(self):
         existing_user = create(Builder('ogds_user')
