@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.15.5 (2022-12-14)
+----------------------
+
+Bug fixes:
+
+
+- Make OGDS sync case-insensitive in regard to user IDs. [lgraf]
+- Fix permission check for revive_bumblebee_preview action. [tinagerber]
+
+
 2022.15.4 (2022-11-11)
 ----------------------
 
