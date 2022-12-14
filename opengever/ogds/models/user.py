@@ -70,7 +70,6 @@ class User(Base):
         'description',
         'directorate',
         'directorate_abbr',
-        'display_name',
         'email',
         'email2',
         'firstname',
