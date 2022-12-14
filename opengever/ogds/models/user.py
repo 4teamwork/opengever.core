@@ -78,7 +78,6 @@ class User(Base):
         'phone_mobile',
         'phone_office',
         'salutation',
-        'title',
         'url',
         'userid',
         'zip_code',
