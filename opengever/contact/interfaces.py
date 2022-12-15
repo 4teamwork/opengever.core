@@ -27,3 +27,9 @@ class IContactSettings(Interface):
         description=u'Temporary feature flag for the improvements on the'
         'contact module (Persons and Organizations)',
         default=False)
+
+
+class IDuringContactMigration(Interface):
+    """Request layer to indicate that contacts are being migrated to KuB.
+    It is used to skip creation of journal entries during the migration.
+    """
