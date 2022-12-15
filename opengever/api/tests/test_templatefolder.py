@@ -297,6 +297,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.contact.description', u''),
             ('ogg.recipient.email.address', 'Jean.dupon@example.com'),
             ('ogg.recipient.person.academic_title', u''),
+            ('ogg.recipient.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.recipient.address.extra_line_1', u''),
             ('ogg.recipient.address.extra_line_2', u''),
             ('ogg.recipient.address.zip_code', '9999'),
@@ -333,6 +334,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.recipient.address.block', u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
             ('ogg.recipient.address.city', 'Vorkappelen'),
             ('ogg.recipient.address.country', 'Schweiz'),
             ('ogg.recipient.address.street', 'Kappelenweg 13, Postfach 1234'),
@@ -342,7 +344,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.email.address', 'foo@example.com'),
             ('ogg.recipient.person.firstname', u'K\xe4thi'),
             ('ogg.recipient.person.lastname', u'B\xe4rfuss'),
-            ('ogg.recipient.person.salutation', 'Prof. Dr.'),
+            ('ogg.recipient.person.salutation', 'Frau'),
             ('ogg.recipient.phone.number', '012 34 56 78'),
             ('ogg.recipient.url.url', 'http://www.example.com'),
         ]
@@ -374,6 +376,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.contact.description', u''),
             ('ogg.sender.email.address', 'Jean.dupon@example.com'),
             ('ogg.sender.person.academic_title', u''),
+            ('ogg.sender.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.sender.address.extra_line_1', u''),
             ('ogg.sender.address.extra_line_2', u''),
             ('ogg.sender.address.zip_code', '9999'),
@@ -389,6 +392,44 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
 
+        self.assertItemsEqual(expected_doc_properties, properties)
+
+    @browsing
+    def test_creates_document_from_template_with_ogds_sender(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'sender': self.regular_user.getId()}
+
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.sender.address.block', u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
+            ('ogg.sender.address.city', 'Vorkappelen'),
+            ('ogg.sender.address.country', 'Schweiz'),
+            ('ogg.sender.address.street', 'Kappelenweg 13, Postfach 1234'),
+            ('ogg.sender.address.zip_code', '1234'),
+            ('ogg.sender.contact.description', 'nix'),
+            ('ogg.sender.contact.title', u'B\xe4rfuss K\xe4thi'),
+            ('ogg.sender.email.address', 'foo@example.com'),
+            ('ogg.sender.person.firstname', u'K\xe4thi'),
+            ('ogg.sender.person.lastname', u'B\xe4rfuss'),
+            ('ogg.sender.person.salutation', 'Frau'),
+            ('ogg.sender.phone.number', '012 34 56 78'),
+            ('ogg.sender.url.url', 'http://www.example.com'),
+        ]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
         self.assertItemsEqual(expected_doc_properties, properties)
 
 

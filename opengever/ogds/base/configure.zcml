@@ -49,6 +49,8 @@
       name="opengever.ogds.base.OtherAssignedClientsVocabulary"
       />
 
+  <adapter factory=".docprops.OGDSUserDocPropertyProvider" />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.ogds.base"

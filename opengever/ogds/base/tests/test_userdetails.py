@@ -28,7 +28,7 @@ class TestUserDetails(IntegrationTestCase):
             'Mobile phone': '012 34 56 76',
             'Name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
             'Phone (work)': '012 34 56 78',
-            'Salutation': 'Prof. Dr.',
+            'Salutation': 'Frau',
             'Teams': u'Projekt \xdcberbaung Dorfmatte',
             'URL': 'http://www.example.com',
         }, metadata)
@@ -133,7 +133,7 @@ class TestUserDetailsPlain(IntegrationTestCase):
             'Mobile phone': '012 34 56 76',
             'Name': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
             'Phone (work)': '012 34 56 78',
-            'Salutation': 'Prof. Dr.',
+            'Salutation': 'Frau',
             'Teams': u'Projekt \xdcberbaung Dorfmatte',
             'URL': 'http://www.example.com',
         }, metadata)

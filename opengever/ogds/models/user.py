@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IDocPropertyProvider
 from opengever.base.model import Base
 from opengever.base.model import EMAIL_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
@@ -148,6 +149,9 @@ class User(Base):
             parts.append(self.userid)
 
         return u' '.join(parts)
+
+    def get_doc_property_provider(self):
+        return IDocPropertyProvider(self)
 
 
 def create_additional_user_indexes(table, connection, *args, **kw):

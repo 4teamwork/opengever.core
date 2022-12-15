@@ -289,7 +289,7 @@ class OpengeverContentFixture(object):
             phone_fax='012 34 56 77',
             phone_mobile='012 34 56 76',
             phone_office='012 34 56 78',
-            salutation='Prof. Dr.',
+            salutation='Frau',
             title=u'Gesch\xe4ftsf\xfchrerin',
             url='http://www.example.com',
             zip_code='1234',

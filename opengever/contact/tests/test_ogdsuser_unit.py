@@ -37,7 +37,7 @@ class TestOgdsUserToContactAdapter(unittest.TestCase):
         self.assertEqual(u'nix', self.adapter.description)
 
     def test_salutation(self):
-        self.assertEqual(u'Prof. Dr.', self.adapter.salutation)
+        self.assertEqual(u'Herr', self.adapter.salutation)
 
     def test_firstname(self):
         self.assertEqual(u'Peter', self.adapter.firstname)
