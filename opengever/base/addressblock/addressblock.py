@@ -107,6 +107,9 @@ class AddressBlockData(object):
             if not any(name in self.country.lower() for name in names):
                 lines.append(self.country)
 
+        # Filter any None values or empty strings
+        lines = [line for line in lines if line]
+
         return u'\n'.join(lines)
 
     def join_tokens(self, *tokens):
