@@ -227,3 +227,14 @@ class TestAddressFormatting(TestCase):
         United States of America
         """)
         self.assertEqual(expected, block.format())
+
+    def test_filters_none_values_and_empty_strings(self):
+        block = AddressBlockData(
+            first_name=u'Bill',
+            last_name=u'Gates',
+        )
+
+        expected = addr(u"""
+        Bill Gates
+        """)
+        self.assertEqual(expected, block.format())
