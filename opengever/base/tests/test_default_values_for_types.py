@@ -997,7 +997,7 @@ class TestDocumentDefaults(TestDefaultsBase):
                     u'Title': DOCUMENT_REQUIREDS['title'],
                     u'File': (
                         TestDocumentDefaults.SAMPLE_FILE,
-                        'b\xc3\xa4rengraben.txt', 'text/plain')}).save()
+                        'baerengraben.txt', 'text/plain')}).save()
 
         doc, = children.get('added')
 
