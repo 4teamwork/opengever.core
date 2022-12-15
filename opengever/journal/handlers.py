@@ -4,6 +4,7 @@ from OFS.interfaces import IObjectWillBeAddedEvent
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.behaviors import classification
 from opengever.base.browser.paste import ICopyPasteRequestLayer
+from opengever.contact.interfaces import IDuringContactMigration
 from opengever.document.document import Document
 from opengever.document.document import IDocumentSchema
 from opengever.dossier.browser.participants import role_list_helper
@@ -618,6 +619,8 @@ PARTICIPANT_ADDED = 'Participant added'
 
 
 def participation_created(context, event):
+    if IDuringContactMigration.providedBy(getRequest()):
+        return
     author = readable_ogds_author(event.participant,
                                   event.participant.contact)
     roles = role_list_helper(event.participant,
