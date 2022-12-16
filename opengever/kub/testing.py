@@ -184,7 +184,53 @@ KUB_RESPONSES = {
                 "department": "",
                 "thirdPartyId": None,
                 "start": "1990-02-24",
-                "end": None
+                "end": None,
+                "primaryEmail": {
+                    "id": "3bc940de-ee8a-43b0-b373-3f1640122021",
+                    "label": "Private",
+                    "email": "Jean.dupon@example.com",
+                    "isDefault": True,
+                    "thirdPartyId": None,
+                    "modified": "2021-11-18T00:00:00+01:00",
+                    "created": "2021-11-18T00:00:00+01:00"
+                },
+                "primaryAddress": {
+                    "id": "ad0de780-3f62-400c-921a-0feb9e79c062",
+                    "label": "Standort Bern",
+                    "isDefault": True,
+                    "organisationName": "",
+                    "organisationNameAddOn1": "",
+                    "organisationNameAddOn2": "",
+                    "addressLine1": "c/o John Doe",
+                    "addressLine2": "",
+                    "street": "Dammweg",
+                    "houseNumber": "9",
+                    "dwellingNumber": "",
+                    "postOfficeBox": "",
+                    "swissZipCode": "3013",
+                    "swissZipCodeAddOn": "",
+                    "swissZipCodeId": "",
+                    "foreignZipCode": "",
+                    "locality": "",
+                    "town": "Bern",
+                    "countryIdISO2": "CH",
+                    "countryName": "Schweiz",
+                    "thirdPartyId": None,
+                    "modified": "2021-11-18T00:00:00+01:00",
+                    "created": "2021-11-18T00:00:00+01:00"
+                },
+                "primaryPhoneNumber": {
+                    "id": "e1046ad8-c4d7-4cac-93ac-d7c8298795e5",
+                    "label": "Mobile",
+                    "phoneNumber": "666 666 66 66",
+                    "phoneCategory": 2,
+                    "otherPhoneCategory": None,
+                    "phoneCategoryText": "Private Mobilnummer",
+                    "isDefault": True,
+                    "thirdPartyId": None,
+                    "modified": "2021-11-18T00:00:00+01:00",
+                    "created": "2021-11-18T00:00:00+01:00"
+                }
             }
         ],
         "organizations": [
@@ -401,7 +447,54 @@ KUB_RESPONSES = {
         "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448",
         "type": "membership",
         "url": "http://localhost:8000/api/v1/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
-        "text": "Dupont Jean - 4Teamwork (CEO)"
+        "text": "Dupont Jean - 4Teamwork (CEO)",
+        "primaryEmail": {
+            "id": "3bc940de-ee8a-43b0-b373-3f1640122021",
+            "label": "Private",
+            "email": "Jean.dupon@example.com",
+            "isDefault": True,
+            "thirdPartyId": None,
+            "modified": "2021-11-18T00:00:00+01:00",
+            "created": "2021-11-18T00:00:00+01:00"
+        },
+        "primaryAddress": {
+            "id": "ad0de780-3f62-400c-921a-0feb9e79c062",
+            "label": "Standort Bern",
+            "isDefault": True,
+            "organisationName": "",
+            "organisationNameAddOn1": "",
+            "organisationNameAddOn2": "",
+            "addressLine1": "c/o John Doe",
+            "addressLine2": "",
+            "street": "Dammweg",
+            "houseNumber": "9",
+            "dwellingNumber": "",
+            "postOfficeBox": "",
+            "swissZipCode": "3013",
+            "swissZipCodeAddOn": "",
+            "swissZipCodeId": "",
+            "foreignZipCode": "",
+            "locality": "",
+            "town": "Bern",
+            "countryIdISO2": "CH",
+            "countryName": "Schweiz",
+            "thirdPartyId": None,
+            "modified": "2021-11-18T00:00:00+01:00",
+            "created": "2021-11-18T00:00:00+01:00"
+        },
+        "primaryPhoneNumber": {
+            "id": "e1046ad8-c4d7-4cac-93ac-d7c8298795e5",
+            "label": "Mobile",
+            "phoneNumber": "666 666 66 66",
+            "phoneCategory": 2,
+            "otherPhoneCategory": None,
+            "phoneCategoryText": "Private Mobilnummer",
+            "isDefault": True,
+            "thirdPartyId": None,
+            "modified": "2021-11-18T00:00:00+01:00",
+            "created": "2021-11-18T00:00:00+01:00"
+        },
+        "primaryUrl": None
     },
 
     "http://localhost:8000/api/v1/resolve/organization:30bab83d-300a-4886-97d4-ff592e88a56a": {
@@ -568,7 +661,7 @@ KUB_RESPONSES = {
         "customValues": {}
     },
 
-    "http://localhost:8000/api/v1/resolve/invalid-id": "Invalid uuid",
+    "http://localhost:8000/api/v1/resolve/invalid-id": ["Invalid uuid"],
 
     "http://localhost:8000/api/v1/resolve/person:0e623708-2d0d-436a-82c6-c1a9c27b65dc": {
         "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
