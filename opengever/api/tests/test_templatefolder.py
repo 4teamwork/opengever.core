@@ -403,8 +403,6 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
                 'sender': self.memb_jean_ftw}
 
         self.mock_get_by_id(mocker, self.memb_jean_ftw)
-        self.mock_get_by_id(mocker, self.org_ftw)
-        self.mock_get_by_id(mocker, self.person_jean)
         with freeze(self.document_date), self.observe_children(self.dossier) as children:
             browser.open('{}/@document-from-template'.format(
                          self.dossier.absolute_url()),

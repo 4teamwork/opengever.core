@@ -4,9 +4,11 @@ from opengever.kub.docprops import KuBEntityDocPropertyProvider
 
 class KuBEntity(object):
 
-    def __init__(self, type_id):
+    def __init__(self, type_id, data=None):
         self.identifier = type_id
-        self.data = KuBClient().get_by_id(self.identifier)
+        if data is None:
+            data = KuBClient().get_by_id(self.identifier)
+        self.data = data
 
     def __getitem__(self, key):
         return self.data[key]
