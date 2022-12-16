@@ -9,7 +9,7 @@ from opengever.repository.deleter import RepositoryDeleter
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from plone import api
-from zExceptions import Unauthorized
+from zExceptions import Forbidden
 
 
 class TestAddActionsDisabledInReadOnly(IntegrationTestCase):
@@ -170,7 +170,7 @@ class TestDeleteActionsDisabledInReadOnly(IntegrationTestCase):
         self.assertIn(repo_id, parent.objectIds())
 
         with ZODBStorageInReadonlyMode():
-            with self.assertRaises(Unauthorized):
+            with self.assertRaises(Forbidden):
                 RepositoryDeleter(self.empty_repofolder).delete()
 
         self.assertIn(repo_id, parent.objectIds())
