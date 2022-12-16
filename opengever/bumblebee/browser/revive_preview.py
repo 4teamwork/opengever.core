@@ -2,7 +2,9 @@ from ftw.bumblebee.interfaces import IBumblebeeable
 from ftw.bumblebee.interfaces import IBumblebeeDocument
 from opengever.bumblebee import _
 from opengever.bumblebee import is_bumblebee_feature_enabled
+from opengever.document.versioner import Versioner
 from plone import api
+from plone.restapi.deserializer import json_body
 from Products.Five import BrowserView
 
 
@@ -28,18 +30,24 @@ class RevivePreview(BrowserView):
         """
         if self.available():
 
+            data = json_body(self.request)
+            version = data.get('version')
+            if version and version != 'current':
+                document = Versioner(self.context).retrieve(version)
+            else:
+                document = self.context
             # Indicates that this context should not be converted if the
             # checksum didn't change. Even the force attribute respects this
             # marker-attribute.
             #
             # Because we really want to update the document, we just remove
             # this property.
-            if hasattr(self.context, '_v_bumblebee_last_converted'):
-                delattr(self.context, '_v_bumblebee_last_converted')
+            if hasattr(document, '_v_bumblebee_last_converted'):
+                delattr(document, '_v_bumblebee_last_converted')
 
             # Forces a document-update. Means, regenerating the checksum
             # and queue storing in bumblebee.
-            IBumblebeeDocument(self.context)._handle_update(force=True)
+            IBumblebeeDocument(document)._handle_update(force=True)
 
             api.portal.show_message(message=_(u'preview_revived',
                                               default=u'Preview revived and will be available soon'),
