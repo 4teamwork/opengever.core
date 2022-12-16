@@ -28,6 +28,7 @@ def check_modified_in_sync(succeeded, obj, instruction):
         log.warn(u'Error when querying for: {} {}'.format(
             repr(obj), query)
         )
+        return
 
     brain = brains[0]
     if brain.modified == obj.modified():
