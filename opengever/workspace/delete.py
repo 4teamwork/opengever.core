@@ -2,6 +2,7 @@ from opengever.base.content_deleter import BaseContentDeleter
 from opengever.base.interfaces import IDeleter
 from opengever.document.document import IBaseDocument
 from opengever.trash.trash import ITrasher
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspace
@@ -17,7 +18,7 @@ class BaseWorkspaceContentDeleter(BaseContentDeleter):
     """Deleter adapter used for deleting workspace objects over the REST-API
     """
     def verify_may_delete(self, main=True):
-        if main:
+        if main and is_workspace_feature_enabled():
             self.check_within_workspace()
         super(BaseWorkspaceContentDeleter, self).verify_may_delete()
 
@@ -46,11 +47,25 @@ class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContentDeleter):
 
 @adapter(IBaseDocument)
 class WorkspaceDocumentDeleter(BaseWorkspaceContentDeleter):
+    """We can't separate workspace documents from gever documents becuase
+       we don't have a request layer indicating the deployment type.
 
-    permission = 'opengever.workspace: Delete Documents'
+       Thus, we can just register one adapter for both. Because the
+       workspace document has a more specific implementation, we register
+       the adapter for teamraum documents and will adjust it for GEVER-envs.
+    """
+    def __init__(self, context):
+        super(WorkspaceDocumentDeleter, self).__init__(context)
+        if is_workspace_feature_enabled():
+            self.permission = 'opengever.workspace: Delete Documents'
+        else:
+            self.permission = "Delete objects"
 
     def verify_may_delete(self, main=True):
-        super(WorkspaceDocumentDeleter, self).verify_may_delete()
+        super(WorkspaceDocumentDeleter, self).verify_may_delete(main=main)
+        if not is_workspace_feature_enabled():
+            return
+
         if not ITrasher(self.context).is_trashed():
             raise Forbidden
 

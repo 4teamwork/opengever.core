@@ -7,6 +7,8 @@ from zope.component import queryMultiAdapter
 
 class TestWorkspaceFolderListingActions(IntegrationTestCase):
 
+    features = ('workspace', )
+
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request),
                                     interface=IListingActions,
@@ -21,6 +23,8 @@ class TestWorkspaceFolderListingActions(IntegrationTestCase):
 
 
 class TestTodoContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
@@ -40,6 +44,8 @@ class TestTodoContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceMeetingContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
@@ -65,6 +71,8 @@ class TestWorkspaceMeetingContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
@@ -104,6 +112,8 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceFolderContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)

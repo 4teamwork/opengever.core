@@ -140,6 +140,8 @@ class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
 
 class TestFileActionsGetForWorkspaceDocument(FileActionsTestBase):
 
+    features = ('workspace', 'bumblebee')
+
     @browsing
     def test_available_file_actions_for_workspace_document(self, browser):
         self.login(self.workspace_member, browser)

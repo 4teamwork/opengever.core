@@ -116,6 +116,8 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
 
 class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
 
+    features = ('workspace', )
+
     @browsing
     def test_deleting_todos_requires_delete_todos_permission(self, browser):
         self.login(self.workspace_guest, browser)
