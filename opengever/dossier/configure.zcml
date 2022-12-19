@@ -404,4 +404,9 @@
   <adapter factory=".move_items.DossierMovabiliyChecker" />
   <adapter factory=".move_items.DossierTemplateMovabilityChecker" />
 
+  <adapter factory=".content_deleter.DossierDeleter" />
+  <adapter
+      factory="opengever.base.content_deleter.BaseContentDeleter"
+      for="opengever.private.dossier.IPrivateDossier"
+      />
 </configure>
