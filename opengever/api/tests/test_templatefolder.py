@@ -395,6 +395,52 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertItemsEqual(expected_doc_properties, properties)
 
     @browsing
+    def test_creates_document_from_template_with_kub_membership_sender(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'sender': self.memb_jean_ftw}
+
+        self.mock_get_by_id(mocker, self.memb_jean_ftw)
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.sender.address.block', '4Teamwork\nHerr Jean Dupont\nDammweg 9\n3013 Bern'),
+            ('ogg.sender.address.city', 'Bern'),
+            ('ogg.sender.address.country', 'Schweiz'),
+            ('ogg.sender.address.extra_line_1', 'c/o John Doe'),
+            ('ogg.sender.address.extra_line_2', u''),
+            ('ogg.sender.address.street', 'Dammweg 9'),
+            ('ogg.sender.address.zip_code', '3013'),
+            ('ogg.sender.contact.description', u''),
+            ('ogg.sender.contact.title', 'Dupont Jean - 4Teamwork (CEO)'),
+            ('ogg.sender.email.address', 'Jean.dupon@example.com'),
+            ('ogg.sender.organization.name', '4Teamwork'),
+            ('ogg.sender.organization.phone.number', '111 111 11 11'),
+            ('ogg.sender.orgrole.department', u''),
+            ('ogg.sender.orgrole.description', u''),
+            ('ogg.sender.orgrole.function', 'CEO'),
+            ('ogg.sender.person.academic_title', u''),
+            ('ogg.sender.person.firstname', 'Jean'),
+            ('ogg.sender.person.lastname', 'Dupont'),
+            ('ogg.sender.person.salutation', 'Herr'),
+            ('ogg.sender.phone.number', '666 666 66 66')]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+
+        self.assertItemsEqual(expected_doc_properties, properties)
+
+    @browsing
     def test_creates_document_from_template_with_ogds_sender(self, mocker, browser):
         self.login(self.secretariat_user, browser)
 

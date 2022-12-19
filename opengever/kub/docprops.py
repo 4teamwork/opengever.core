@@ -17,21 +17,15 @@ class KuBEntityDocPropertyProvider(object):
         elif entity.is_organization():
             self.organization = entity
         elif entity.is_membership():
-            self.person = KuBEntity("person:" + entity["person"]["id"])
-            self.organization = KuBEntity("organization:" + entity["organization"]["id"])
+            self.person = KuBEntity("person:" + entity["person"]["id"],
+                                    data=entity["person"])
+            self.organization = KuBEntity("organization:" + entity["organization"]["id"],
+                                          data=entity["organization"])
             self.membership = entity
 
     @property
     def membership_person_or_organization(self):
         return self.membership or self.person or self.organization
-
-    @property
-    def person_or_organization(self):
-        return self.person or self.organization
-
-    @property
-    def organization_or_person(self):
-        return self.organization or self.person
 
     def get_properties(self, prefix=None):
         properties = {}
@@ -66,22 +60,22 @@ class KuBEntityDocPropertyProvider(object):
         return KuBMembershipDocPropertyProvider(self.membership).get_properties(prefix)
 
     def get_address_properties(self, prefix):
-        provider = KuBAddressDocPropertyProvider(self.organization_or_person)
+        provider = KuBAddressDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_address_block(self, prefix):
         return get_addressblock_docprops(self.entity, prefix)
 
     def get_email_properties(self, prefix):
-        provider = KuBEmailDocPropertyProvider(self.person_or_organization)
+        provider = KuBEmailDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_phone_properties(self, prefix):
-        provider = KuBPhoneNumberDocPropertyProvider(self.person_or_organization)
+        provider = KuBPhoneNumberDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
     def get_url_properties(self, prefix):
-        provider = KuBURLDocPropertyProvider(self.organization_or_person)
+        provider = KuBURLDocPropertyProvider(self.membership_person_or_organization)
         return provider.get_properties(prefix)
 
 

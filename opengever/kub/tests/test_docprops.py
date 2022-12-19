@@ -67,8 +67,6 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
 
     def test_docproperties_for_kub_membership(self, mocker):
         self.mock_get_by_id(mocker, self.memb_jean_ftw)
-        self.mock_get_by_id(mocker, self.org_ftw)
-        self.mock_get_by_id(mocker, self.person_jean)
         entity = KuBEntity(self.memb_jean_ftw)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
         self.assertDictEqual(

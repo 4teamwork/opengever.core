@@ -99,8 +99,6 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
     def test_kub_membership_address_extraction(self, mocker):
         self.mock_get_by_id(mocker, self.memb_jean_ftw)
-        self.mock_get_by_id(mocker, self.org_ftw)
-        self.mock_get_by_id(mocker, self.person_jean)
         entity = KuBEntity(self.memb_jean_ftw)
 
         block = IAddressBlockData(entity)
