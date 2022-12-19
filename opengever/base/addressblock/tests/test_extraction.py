@@ -151,3 +151,28 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
         block = IAddressBlockData(entity)
 
         self.assertEqual('7777', block.postal_code)
+
+    def test_kub_entity_extraction_handles_missing_primary_address(self, mocker):
+        self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
+
+        self.assertIsNone(entity.get('primaryAddress'))
+
+        block = IAddressBlockData(entity)
+
+        expected = {
+            'salutation': u'Frau',
+            'academic_title': u'',
+            'first_name': u'Julie',
+            'last_name': u'Dupont',
+
+            'org_name': None,
+
+            'street_and_no': u'',
+            'po_box': None,
+
+            'postal_code': None,
+            'city': None,
+            'country': None,
+        }
+        self.assertEqual(expected, block.__dict__)
