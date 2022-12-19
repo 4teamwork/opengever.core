@@ -1,6 +1,5 @@
-from opengever.base.addressblock.interfaces import IAddressBlockData
+from opengever.base.addressblock.docprops import get_addressblock_docprops
 from opengever.base.docprops import BaseDocPropertyProvider
-from zope.component import queryAdapter
 
 
 class KuBEntityDocPropertyProvider(object):
@@ -71,12 +70,7 @@ class KuBEntityDocPropertyProvider(object):
         return provider.get_properties(prefix)
 
     def get_address_block(self, prefix):
-        address_block = queryAdapter(self.entity, IAddressBlockData)
-        if not address_block:
-            return {}
-
-        key = '.'.join(filter(None, ['ogg', prefix, 'address.block']))
-        return {key: address_block.format()}
+        return get_addressblock_docprops(self.entity, prefix)
 
     def get_email_properties(self, prefix):
         provider = KuBEmailDocPropertyProvider(self.person_or_organization)

@@ -28,3 +28,8 @@ class KuBEntity(object):
 
     def get_doc_property_provider(self):
         return KuBEntityDocPropertyProvider(self)
+
+    def __repr__(self):
+        return '<{} {}>'.format(
+            self.__class__.__name__,
+            repr(str(self.identifier)))
