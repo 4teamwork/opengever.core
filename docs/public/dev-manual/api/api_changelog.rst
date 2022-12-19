@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Use correct ``bumblebee_checksum`` for document versions in document serialization.
 
 2022.24.0 (2022-12-06)
 ----------------------
