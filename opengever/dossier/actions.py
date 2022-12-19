@@ -4,7 +4,6 @@ from opengever.base.listing_actions import BaseListingActions
 from opengever.docugate import is_docugate_feature_enabled
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
-from opengever.dossier.templatefolder import ITemplateFolder
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.workspaceclient import is_linking_enabled
 from opengever.workspaceclient import is_workspace_client_feature_available
@@ -42,17 +41,11 @@ class PrivateDossierListingActions(BaseListingActions):
     def is_export_dossiers_available(self):
         return True
 
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
-
     def is_pdf_dossierlisting_available(self):
         return True
 
 
 class DossierTemplateListingActions(BaseListingActions):
-
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
 
     def is_move_items_available(self):
         return True
@@ -168,18 +161,8 @@ class DossierContextActions(BaseContextActions):
         return True
 
 
-@adapter(ITemplateFolder, IOpengeverBaseLayer)
-class TemplateFolderContextActions(BaseContextActions):
-
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
-
-
 @adapter(IDossierTemplateMarker, IOpengeverBaseLayer)
 class DossierTemplateContextActions(BaseContextActions):
-
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
 
     def is_move_item_available(self):
         return api.user.has_permission('Copy or Move', obj=self.context)

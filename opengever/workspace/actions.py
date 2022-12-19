@@ -70,6 +70,9 @@ class WorkspaceContextActions(BaseContextActions):
 @adapter(IWorkspaceFolder, IOpengeverBaseLayer)
 class WorkspaceFolderContextActions(BaseContextActions):
 
+    def is_delete_available(self):
+        return False
+
     def is_delete_workspace_context_available(self):
         try:
             IDeleter(self.context).verify_may_delete()

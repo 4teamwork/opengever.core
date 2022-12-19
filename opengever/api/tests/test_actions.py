@@ -97,6 +97,11 @@ class TestFileActionsGetForNonDocumentishTypes(FileActionsTestBase):
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.task))
 
+
+class TestFileActionsGetForNonDocumentishTypesForWorkspace(FileActionsTestBase):
+
+    features = ('workspace', )
+
     @browsing
     def test_available_file_actions_for_workspace_root(self, browser):
         self.login(self.workspace_member, browser)

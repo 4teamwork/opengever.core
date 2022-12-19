@@ -10,9 +10,6 @@ from zope.component import adapter
 @adapter(IPrivateDossier, IOpengeverBaseLayer)
 class PrivateDossierContextActions(BaseContextActions):
 
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
-
     def is_document_from_docugate_available(self):
         return api.user.has_permission('Add portal content', obj=self.context) \
             and is_docugate_feature_enabled()

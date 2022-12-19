@@ -32,7 +32,7 @@ class TestTodoContextActions(IntegrationTestCase):
 
     def test_todo_context_actions(self):
         self.login(self.workspace_member)
-        self.assertEqual([u'edit', u'share_content'], self.get_actions(self.todo))
+        self.assertEqual([u'delete', u'edit', u'share_content'], self.get_actions(self.todo))
 
         self.login(self.workspace_guest)
         self.assertEqual([u'share_content'], self.get_actions(self.todo))

@@ -12,6 +12,7 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.trash.trash import ITrashed
 from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.locking.interfaces import ILockable
@@ -132,12 +133,9 @@ class BaseDocumentFileActions(object):
         return False
 
     def is_delete_workspace_context_action_available(self):
-        deleter = IDeleter(self.context)
-        try:
-            deleter.verify_may_delete()
-            return True
-        except Forbidden:
-            return False
+        if is_workspace_feature_enabled():
+            return IDeleter(self.context).is_delete_allowed()
+        return False
 
 
 @implementer(IFileActions)

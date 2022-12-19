@@ -22,9 +22,6 @@ class TrashListingActions(BaseListingActions):
 @adapter(IPrivateDossier, IOpengeverBaseLayer)
 class PrivateDossierTrashListingActions(TrashListingActions):
 
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
-
     def is_remove_available(self):
         return False
 
@@ -37,4 +34,7 @@ class WorkspaceTrashListingActions(TrashListingActions):
                                             obj=self.context))
 
     def is_remove_available(self):
+        return False
+
+    def is_delete_available(self):
         return False
