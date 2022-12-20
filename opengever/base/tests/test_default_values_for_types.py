@@ -7,6 +7,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testing import freeze
+from ftw.testing.freezer import FrozenDatetime
 from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
@@ -38,6 +39,7 @@ import textwrap
 # offset leads to a date shift, we define a timezone naive FROZEN_TODAY.
 FROZEN_NOW = utcnow_tz_aware()
 with freeze(FROZEN_NOW):
+    FROZEN_DATETIME_NOW = FrozenDatetime.fromdatetime(FROZEN_NOW)
     FROZEN_TODAY = date.today()
 
 DEFAULT_TITLE = u'My title'
@@ -64,7 +66,7 @@ REPOFOLDER_REQUIREDS = {
 }
 REPOFOLDER_DEFAULTS = {
     'archival_value': u'unchecked',
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'classification': u'unprotected',
     'custody_period': 30,
     'description': u'',
@@ -97,7 +99,7 @@ DOSSIER_REQUIREDS = {
 }
 DOSSIER_DEFAULTS = {
     'archival_value': u'unchecked',
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'checklist': None,
     'classification': u'unprotected',
     'custody_period': 30,
@@ -141,7 +143,7 @@ DOCUMENT_REQUIREDS = {
     'title': DEFAULT_TITLE,
 }
 DOCUMENT_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'classification': u'unprotected',
     'custom_properties': None,
     'description': u'',
@@ -173,7 +175,7 @@ DOCUMENT_MISSING_VALUES = {
 
 MAIL_REQUIREDS = {}
 MAIL_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'classification': u'unprotected',
     'custom_properties': None,
     'description': u'',
@@ -205,7 +207,7 @@ MAIL_MISSING_VALUES = {
 
 
 TASK_REQUIREDS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'issuer': 'kathi.barfuss',
     'responsible': u'kathi.barfuss',
     'responsible_client': DEFAULT_CLIENT,
@@ -236,7 +238,7 @@ TASK_MISSING_VALUES = {
 
 
 FORWARDING_REQUIREDS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'issuer': 'inbox:{}'.format(DEFAULT_CLIENT),
     'responsible': 'inbox:{}'.format(DEFAULT_CLIENT),
     'responsible_client': DEFAULT_CLIENT,
@@ -270,7 +272,7 @@ CONTACT_REQUIREDS = {
     'lastname': u'Doe',
 }
 CONTACT_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'description': u'',
 }
 CONTACT_FORM_DEFAULTS = {}
@@ -302,7 +304,7 @@ PROPOSAL_REQUIREDS = {
     'committee_oguid': u'plone:1010073300',
 }
 PROPOSAL_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'description': u'',
     'title': u'Containing Dossier Title',
     'language': u'en',
@@ -322,7 +324,7 @@ SUBMITTED_PROPOSAL_REQUIREDS = {
     'issuer': u'herbert.jager',
 }
 SUBMITTED_PROPOSAL_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'description': u'',
     'title': u'',
     'language': u'en',
@@ -357,7 +359,7 @@ PERIOD_DEFAULTS = {
     'end': date(FROZEN_TODAY.year, 12, 31),
     'meeting_sequence_number': 0,
     'decision_sequence_number': 0,
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
 }
 PERIOD_FORM_DEFAULTS = {
 }
@@ -368,7 +370,7 @@ DOSSIER_TEMPLATE_REQUIREDS = {
     'title': DEFAULT_TITLE,
 }
 DOSSIER_TEMPLATE_DEFAULTS = {
-    'changed': FROZEN_NOW,
+    'changed': FROZEN_DATETIME_NOW,
     'checklist': None,
     'description': u'',
     'keywords': (),
