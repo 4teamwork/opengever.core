@@ -7,11 +7,6 @@
   <adapter factory=".organization_listing.OrganizationTableSource" />
   <adapter factory=".person_listing.PersonTableSource" />
 
-  <browser:resourceDirectory
-      name="opengever.contact"
-      directory="resources"
-      />
-
   <browser:page
       for="opengever.contact.contact.IContact"
       name="contact_view"
