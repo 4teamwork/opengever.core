@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-24 14:55+0000\n"
+"POT-Creation-Date: 2022-12-22 20:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -159,7 +159,6 @@ msgid "label_academic_title"
 msgstr ""
 
 #. Default: "Active"
-#: ./opengever/contact/browser/byline.py
 #: ./opengever/contact/browser/tabs.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
@@ -282,11 +281,6 @@ msgstr ""
 #: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
-msgstr ""
-
-#. Default: "Former contact ID"
-#: ./opengever/contact/browser/byline.py
-msgid "label_former_contact_id"
 msgstr ""
 
 #. Default: "Group"
@@ -417,11 +411,6 @@ msgstr ""
 #: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
-msgstr ""
-
-#. Default: "Sequence Number"
-#: ./opengever/contact/browser/byline.py
-msgid "label_sequence_number"
 msgstr ""
 
 #. Default: "Show all ${total} participations"

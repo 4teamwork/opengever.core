@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2021-11-24 14:55+0000\n"
+"POT-Creation-Date: 2022-12-22 20:59+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -187,7 +187,6 @@ msgstr "Academic title"
 
 #. German translation: Aktiv
 #. Default: "Active"
-#: ./opengever/contact/browser/byline.py
 #: ./opengever/contact/browser/tabs.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
@@ -334,12 +333,6 @@ msgstr "Fax"
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
 msgstr "First name"
-
-#. German translation: Frühere Kontakt ID
-#. Default: "Former contact ID"
-#: ./opengever/contact/browser/byline.py
-msgid "label_former_contact_id"
-msgstr "Former contact ID"
 
 #. German translation: Gruppe
 #. Default: "Group"
@@ -496,12 +489,6 @@ msgstr "Roles"
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Salutation"
-
-#. German translation: Laufnummer
-#. Default: "Sequence Number"
-#: ./opengever/contact/browser/byline.py
-msgid "label_sequence_number"
-msgstr "Sequence number"
 
 #. German translation: Alle ${total} Beteiligungen anzeigen
 #. Default: "Show all ${total} participations"
