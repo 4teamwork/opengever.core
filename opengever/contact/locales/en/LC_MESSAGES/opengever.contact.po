@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 20:59+0000\n"
+"POT-Creation-Date: 2022-12-22 21:02+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -29,31 +29,6 @@ msgstr "Add person"
 #: ./opengever/contact/contact.py
 msgid "Contact"
 msgstr "Contact"
-
-#. German translation: Löschen
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Delete"
-msgstr "Delete"
-
-#. German translation: E-Mail-Adresse löschen
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Delete mailaddress"
-msgstr "Delete email address"
-
-#. German translation: E-Mail-Adresse
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Emailadddress"
-msgstr "Email address"
-
-#. German translation: E-Mail-Adressen
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Emailaddresses"
-msgstr "Email address"
-
-#. German translation: Label
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Label"
-msgstr "Label"
 
 #. German translation: Löschen
 #: ./opengever/contact/browser/participation_forms.py
@@ -128,42 +103,6 @@ msgstr "Organizations"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_salutation"
 msgstr "Salutation"
-
-#. German translation: E-Mail-Adresse wurde aktualisiert.
-#. Default: "Email address updated."
-#: ./opengever/contact/browser/mail.py
-msgid "email_address_updated"
-msgstr "Email address updated."
-
-#. German translation: Bitte geben Sie eine gültige E-Mail-Adresse ein.
-#. Default: "Please specify a valid email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_invalid_email"
-msgstr "Please specify a valid email address"
-
-#. German translation: Bitte geben Sie eine E-Mail-Adresse ein.
-#. Default: "Please specify an email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_email"
-msgstr "Please specify an email address"
-
-#. German translation: Bitte geben Sie ein Label für Ihre E-Mail-Adresse ein.
-#. Default: "Please specify a label for your email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_label"
-msgstr "Please specify a label for your email address"
-
-#. German translation: Bitte geben Sie ein Label sowie eine E-Mail-Adresse ein.
-#. Default: "Please specify a label and an email address."
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_label_and_email"
-msgstr "Please specify a label and an email address."
-
-#. German translation: Die E-Mail-Adresse wurde erstellt.
-#. Default: "The email address was created successfully"
-#: ./opengever/contact/browser/mail.py
-msgid "info_mailaddress_created"
-msgstr "The email address was created successfully"
 
 #. German translation: Beteiligung gelöscht
 #. Default: "Participation removed"
@@ -253,7 +192,6 @@ msgstr "Archived phone numbers"
 #. German translation: Abbrechen
 #. Default: "Cancel"
 #: ./opengever/contact/browser/participation_forms.py
-#: ./opengever/contact/browser/templates/person_edit.pt
 msgid "label_cancel"
 msgstr "Cancel"
 
@@ -280,12 +218,6 @@ msgstr "Contact"
 #: ./opengever/contact/contact.py
 msgid "label_country"
 msgstr "Country"
-
-#. German translation: Wollen Sie die E-Mail-Adresse wirklich löschen?
-#. Default: "Are you sure you want to delete this mail address?"
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "label_delete_mail_address_confirm_text"
-msgstr "Are you sure you want to delete this email address?"
 
 #. German translation: Abteilung
 #. Default: "Department"
@@ -543,12 +475,6 @@ msgstr "ZIP code"
 #: ./opengever/contact/contact.py
 msgid "lable_function"
 msgstr "Function"
-
-#. German translation: Die E-Mail-Adresse wurde gelöscht.
-#. Default: "Mailaddress successfully deleted"
-#: ./opengever/contact/browser/mail.py
-msgid "mail_address_deleted"
-msgstr "Email address deleted successfully"
 
 #. German translation: Für diesen Kontakt existiert bereits eine Beteiligung.
 #. Default: "There already exists a participation for this contact."

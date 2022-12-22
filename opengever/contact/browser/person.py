@@ -1,6 +1,5 @@
 from opengever.base.browser.modelforms import ModelAddForm
 from opengever.base.browser.modelforms import ModelEditForm
-from opengever.base.handlebars import prepare_handlebars_template
 from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
 from opengever.base.model import LASTNAME_LENGTH
@@ -111,12 +110,6 @@ class EditPerson(ModelEditForm):
     def __init__(self, context, request):
         super(EditPerson, self).__init__(context, request, context.model)
 
-    def get_fetch_url(self):
-        return self.context.model.get_url('mails/list')
-
-    def get_create_mail_url(self):
-        return self.context.model.get_url('mails/add')
-
     def nextURL(self):
         return self.context.model.get_url()
 
@@ -126,6 +119,3 @@ class EditPerson(ModelEditForm):
 
         return viewlet.prepare_edit_tab(
             self.model.get_edit_url(self.context.parent), is_selected=True)
-
-    def render_handlebars_email_template(self):
-        return prepare_handlebars_template(TEMPLATES_DIR.joinpath('email.html'))

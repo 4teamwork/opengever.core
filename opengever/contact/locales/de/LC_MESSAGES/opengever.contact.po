@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 20:59+0000\n"
+"POT-Creation-Date: 2022-12-22 21:02+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -26,26 +26,6 @@ msgstr "Person hinzufügen"
 #: ./opengever/contact/contact.py
 msgid "Contact"
 msgstr "Kontakt"
-
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Delete"
-msgstr "Löschen"
-
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Delete mailaddress"
-msgstr "E-Mail-Adresse löschen"
-
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Emailadddress"
-msgstr "E-Mail-Adresse"
-
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Emailaddresses"
-msgstr "E-Mail-Adressen"
-
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "Label"
-msgstr "Label"
 
 #: ./opengever/contact/browser/participation_forms.py
 msgid "Remove"
@@ -107,36 +87,6 @@ msgstr "Organisationen"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_salutation"
 msgstr "Anrede"
-
-#. Default: "Email address updated."
-#: ./opengever/contact/browser/mail.py
-msgid "email_address_updated"
-msgstr "E-Mail-Adresse wurde aktualisiert."
-
-#. Default: "Please specify a valid email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_invalid_email"
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
-
-#. Default: "Please specify an email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_email"
-msgstr "Bitte geben Sie eine E-Mail-Adresse ein."
-
-#. Default: "Please specify a label for your email address"
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_label"
-msgstr "Bitte geben Sie ein Label für Ihre E-Mail-Adresse ein."
-
-#. Default: "Please specify a label and an email address."
-#: ./opengever/contact/browser/mail.py
-msgid "error_no_label_and_email"
-msgstr "Bitte geben Sie ein Label sowie eine E-Mail-Adresse ein."
-
-#. Default: "The email address was created successfully"
-#: ./opengever/contact/browser/mail.py
-msgid "info_mailaddress_created"
-msgstr "Die E-Mail-Adresse wurde erstellt."
 
 #. Default: "Participation removed"
 #: ./opengever/contact/browser/participation_forms.py
@@ -212,7 +162,6 @@ msgstr "Archivierte Telefonnummern"
 
 #. Default: "Cancel"
 #: ./opengever/contact/browser/participation_forms.py
-#: ./opengever/contact/browser/templates/person_edit.pt
 msgid "label_cancel"
 msgstr "Abbrechen"
 
@@ -235,11 +184,6 @@ msgstr "Kontakt"
 #: ./opengever/contact/contact.py
 msgid "label_country"
 msgstr "Land"
-
-#. Default: "Are you sure you want to delete this mail address?"
-#: ./opengever/contact/browser/templates/person_edit.pt
-msgid "label_delete_mail_address_confirm_text"
-msgstr "Wollen Sie die E-Mail-Adresse wirklich löschen?"
 
 #. Default: "Department"
 #: ./opengever/contact/contact.py
@@ -454,11 +398,6 @@ msgstr "PLZ"
 #: ./opengever/contact/contact.py
 msgid "lable_function"
 msgstr "Funktion"
-
-#. Default: "Mailaddress successfully deleted"
-#: ./opengever/contact/browser/mail.py
-msgid "mail_address_deleted"
-msgstr "Die E-Mail-Adresse wurde gelöscht."
 
 #. Default: "There already exists a participation for this contact."
 #: ./opengever/contact/browser/participation_forms.py

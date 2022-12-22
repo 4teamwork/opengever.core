@@ -137,14 +137,6 @@
       permission="cmf.AddPortalContent"
       />
 
-  <browser:page
-      name="mails"
-      for="opengever.contact.interfaces.IPerson"
-      class=".mail.MailAddressesView"
-      permission="opengever.contact.EditPerson"
-      allowed_interface="opengever.contact.browser.mail.IMailAddressesActions"
-      />
-
   <adapter
       factory=".contactfolder_forms.AddView"
       provides="zope.publisher.interfaces.browser.IBrowserPage"
