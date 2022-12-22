@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-07-28 09:06+0000\n"
+"POT-Creation-Date: 2022-12-22 17:22+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -537,12 +537,6 @@ msgstr "Responsable: ${author}"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_checklist"
 msgstr "Checklist"
-
-#. Default: "Comments"
-#: ./opengever/dossier/browser/overview.py
-#: ./opengever/dossier/dossiertemplate/behaviors.py
-msgid "label_comments"
-msgstr "Commentaire"
 
 #. Default: "Contact"
 #: ./opengever/dossier/behaviors/participation.py

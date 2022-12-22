@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-07-21 14:50+0000\n"
+"POT-Creation-Date: 2022-12-22 17:22+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -620,11 +620,6 @@ msgstr "File size"
 #: ./opengever/document/checkout/templates/document_status_message_viewlet.pt
 msgid "label_final"
 msgstr "Final"
-
-#. Default: "Finalizer"
-#: ./opengever/document/document.py
-msgid "label_finalizer"
-msgstr "Finalizer"
 
 #. German translation: Fremdzeichen
 #. Default: "Foreign Reference"

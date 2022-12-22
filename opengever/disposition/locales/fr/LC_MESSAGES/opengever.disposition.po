@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-22 15:56+0000\n"
+"POT-Creation-Date: 2022-12-22 20:31+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -198,6 +198,7 @@ msgstr "Métadonnées"
 
 #. Default: "No"
 #: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/ech0160/model/additional_data.py
 msgid "label_no"
 msgstr "Non"
 
@@ -257,11 +258,13 @@ msgstr "Numéro de livraison"
 
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/ech0160/model/additional_data.py
 msgid "label_yes"
 msgstr "Oui"
 
 #. Default: "The appraisal is incomplete, appraisal could not be finalized."
 #: ./opengever/disposition/browser/views.py
+#: ./opengever/disposition/transition.py
 msgid "msg_appraisal_incomplete"
 msgstr "L'évaluation n'est pas complète, l'évaluation n'a pas pu être finalisée"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-11-22 15:56+0000\n"
+"POT-Creation-Date: 2022-12-22 20:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,6 +196,7 @@ msgstr "Metadaten"
 
 #. Default: "No"
 #: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/ech0160/model/additional_data.py
 msgid "label_no"
 msgstr "Nein"
 
@@ -255,11 +256,13 @@ msgstr "Ablieferungsnummer"
 
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py
+#: ./opengever/disposition/ech0160/model/additional_data.py
 msgid "label_yes"
 msgstr "Ja"
 
 #. Default: "The appraisal is incomplete, appraisal could not be finalized."
 #: ./opengever/disposition/browser/views.py
+#: ./opengever/disposition/transition.py
 msgid "msg_appraisal_incomplete"
 msgstr "Die Bewertung ist nicht komplett, die Bewertung konnte nicht finalisiert werden."
 
