@@ -152,25 +152,6 @@ $rotate: 20deg;
   }
 }
 
-@mixin watermark-state-icon($char, $color:$gray-dark, $right: 100px, $bottom: -65px){
-  #tabbedview-header:before {
-    display: block;
-    position: absolute;
-    right: $right;
-    bottom: $bottom;
-    padding: 10px;
-    z-index: 1;
-    content: $char;
-    font-family: fontawesome;
-    font-size: 21px;
-    color: white;
-    background-color: $color;
-    border-radius: 50%;
-    border: 4px solid white;
-    transform: rotate($rotate);
-  }
-}
-
 body.template-tabbed_view.portaltype-opengever-repository-repositoryfolder,
 body.template-view.portaltype-opengever-repository-repositoryfolder {
   @include heading-icon($repository_folder);
