@@ -136,22 +136,6 @@
       />
 
   <browser:page
-      name="plone_layout"
-      for="opengever.contact.interfaces.IPerson"
-      permission="zope.Public"
-      class=".layout.PersonLayoutPolicy"
-      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-      />
-
-  <browser:page
-      name="plone_layout"
-      for="opengever.contact.interfaces.IOrganization"
-      permission="zope.Public"
-      class=".layout.OrganizationLayoutPolicy"
-      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-      />
-
-  <browser:page
       name="add-participation"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       class=".participation_add_view.ParticipationAddView"
