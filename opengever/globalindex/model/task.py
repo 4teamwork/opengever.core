@@ -262,6 +262,12 @@ class Task(Base):
 
         self.sync_reminders(plone_task)
 
+    @classmethod
+    def physical_path_to_char_if_oracle(cls):
+        if is_oracle():
+            return func.to_char(cls.physical_path)
+        return cls.physical_path
+
     def sync_reminders(self, plone_task):
         reminders = plone_task.get_reminders()
 
@@ -602,12 +608,6 @@ class TaskQuery(BaseQuery):
             )
         )
 
-    def _extend_with_physical_path(self, query, field, path):
-        if is_oracle():
-            return query.filter(func.to_char(field) == path)
-
-        return query.filter(field == path)
-
     def users_tasks(self, userid):
         """Returns query which List all tasks where the given user,
         his userid, is responsible. It queries all admin units.
@@ -658,15 +658,14 @@ class TaskQuery(BaseQuery):
         path (which is relative to the site root!) or None.
         """
         query = self.filter_by(admin_unit_id=admin_unit_id)
-        return self._extend_with_physical_path(
-            query, Task.physical_path, path).first()
+        return query.filter(Task.physical_path_to_char_if_oracle() == path).first()
 
     def by_paths(self, paths, admin_unit_id=None):
         """Returns all tasks whos physical_path is listed in `paths`.
         """
         admin_unit_id = admin_unit_id or get_current_admin_unit().id()
         query = self.restrict().filter_by(admin_unit_id=admin_unit_id)
-        return query.filter(Task.physical_path.in_(paths)).all()
+        return query.filter(Task.physical_path_to_char_if_oracle().in_(paths)).all()
 
     def by_ids(self, task_ids):
         """Returns all tasks whos task_ids are listed in `task_ids`.
@@ -684,8 +683,8 @@ class TaskQuery(BaseQuery):
     def by_brain(self, brain):
         relative_content_path = '/'.join(brain.getPath().split('/')[2:])
         query = self.by_admin_unit(get_current_admin_unit())
-        return self._extend_with_physical_path(
-            query, Task.physical_path, relative_content_path).one()
+        return query.filter(
+            Task.physical_path_to_char_if_oracle() == relative_content_path).one()
 
     def subtasks_by_tasks(self, tasks):
         """Queries all subtask of the given tasks sql object."""

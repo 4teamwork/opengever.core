@@ -156,7 +156,7 @@ class TestTaskReporter(IntegrationTestCase):
 
         # self.task
         self.assertSequenceEqual(
-            [self.task.title,  u'In progress',
+            [self.task.title, u'In progress',
              datetime(2016, 11, 1, 0, 0), None,
              self.dossier.title, None, u'Ziegler Robert (robert.ziegler)',
              u'Finanz\xe4mt', u'B\xe4rfuss K\xe4thi (kathi.barfuss)',

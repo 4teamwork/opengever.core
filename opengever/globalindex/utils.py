@@ -38,7 +38,7 @@ def get_selected_items(context, request):
         all_subtasks = []
         for task in tasks:
             subtasks = Task.query.subtasks_by_task(task).order_by(
-                desc(Task.physical_path)).all()
+                desc(Task.physical_path_to_char_if_oracle())).all()
             all_subtasks.extend(subtasks)
             key_index = keys.index(getattr(task, attr)) + 1
             for subtask in subtasks:
