@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IDeleter
 from opengever.base.interfaces import IListingActions
 from zope.interface import implementer
 
@@ -62,7 +63,7 @@ class BaseListingActions(object):
         return False
 
     def is_delete_available(self):
-        return False
+        return IDeleter(self.context).is_delete_allowed()
 
     def is_delete_workspace_content_available(self):
         return False

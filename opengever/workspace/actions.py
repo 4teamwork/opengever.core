@@ -1,8 +1,8 @@
 from opengever.base.context_actions import BaseContextActions
+from opengever.base.interfaces import IDeleter
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
 from opengever.trash.trash import ITrasher
-from opengever.workspace.interfaces import IDeleter
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
@@ -69,6 +69,9 @@ class WorkspaceContextActions(BaseContextActions):
 
 @adapter(IWorkspaceFolder, IOpengeverBaseLayer)
 class WorkspaceFolderContextActions(BaseContextActions):
+
+    def is_delete_available(self):
+        return False
 
     def is_delete_workspace_context_available(self):
         try:

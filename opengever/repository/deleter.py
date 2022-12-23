@@ -1,30 +1,28 @@
+from opengever.base.content_deleter import BaseContentDeleter
 from opengever.repository.interfaces import IDuringRepositoryDeletion
-from plone import api
-from zExceptions import Unauthorized
+from opengever.repository.interfaces import IRepositoryFolder
+from zExceptions import Forbidden
+from zope.component import adapter
 from zope.globalrequest import getRequest
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 
 
-class RepositoryDeleter(object):
-
-    def __init__(self, repository):
-        self.repository = repository
+@adapter(IRepositoryFolder)
+class RepositoryDeleter(BaseContentDeleter):
 
     def delete(self):
-        if not self.is_deletion_allowed():
-            raise Unauthorized
+        self.verify_may_delete()
 
         # add request layer to allow deletion of the repository
         request = getRequest()
         alsoProvides(request, IDuringRepositoryDeletion)
 
-        api.content.delete(obj=self.repository)
+        self._delete()
 
         noLongerProvides(request, IDuringRepositoryDeletion)
 
-    def is_deletion_allowed(self):
-        return self.is_repository_empty()
-
-    def is_repository_empty(self):
-        return self.repository.objectCount() == 0
+    def verify_may_delete(self, **kwargs):
+        super(RepositoryDeleter, self).verify_may_delete()
+        if not self.context.objectCount() == 0:
+            raise Forbidden("Repository is not empty.")

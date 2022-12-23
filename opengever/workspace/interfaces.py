@@ -81,11 +81,6 @@ class IWorkspaceMeetingAgendaItem(Interface):
     """ Marker interface for WorkspaceMeetingAgendaItem"""
 
 
-class IDeleter(Interface):
-    """Interface for the Deleter adapter.
-    """
-
-
 class IWorkspaceMeetingAttendeesPresenceStateStorage(Interface):
     """Attendees presence state storage adapter.
     """

@@ -7,6 +7,8 @@ from zope.component import queryMultiAdapter
 
 class TestWorkspaceFolderListingActions(IntegrationTestCase):
 
+    features = ('workspace', )
+
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request),
                                     interface=IListingActions,
@@ -22,13 +24,15 @@ class TestWorkspaceFolderListingActions(IntegrationTestCase):
 
 class TestTodoContextActions(IntegrationTestCase):
 
+    features = ('workspace', )
+
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
         return adapter.get_actions() if adapter else []
 
     def test_todo_context_actions(self):
         self.login(self.workspace_member)
-        self.assertEqual([u'edit', u'share_content'], self.get_actions(self.todo))
+        self.assertEqual([u'delete', u'edit', u'share_content'], self.get_actions(self.todo))
 
         self.login(self.workspace_guest)
         self.assertEqual([u'share_content'], self.get_actions(self.todo))
@@ -40,6 +44,8 @@ class TestTodoContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceMeetingContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
@@ -65,6 +71,8 @@ class TestWorkspaceMeetingContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
@@ -104,6 +112,8 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
 
 class TestWorkspaceFolderContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def get_actions(self, context):
         adapter = queryMultiAdapter((context, self.request), interface=IContextActions)

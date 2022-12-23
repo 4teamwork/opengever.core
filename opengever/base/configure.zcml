@@ -481,4 +481,6 @@
 
   <adapter factory=".response.ResponseContainer" />
 
+  <adapter factory=".content_deleter.BaseContentDeleter" />
+
 </configure>

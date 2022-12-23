@@ -587,3 +587,24 @@ class IContextActions(Interface):
 
     def get_actions():
         """Return context actions"""
+
+
+class IDeleter(Interface):
+    """Interface for the Deleter adapter.
+    """
+
+    def delete():
+        """ Deletes the adapted context if possible.
+
+        This method should do permission checks and validate all necessary preconditions.
+        """
+
+    def verify_may_delete():
+        """Performs all security checks and validates all preconditions.
+
+        This function should raise a Forbidden-error if any validation fails.
+        """
+
+    def is_delete_allowed():
+        """Returns a boolean, indicating if the context could be deleted.
+        """

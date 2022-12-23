@@ -14,14 +14,14 @@ from zExceptions import Unauthorized
 class TestRepositoryRootDeletion(IntegrationTestCase):
 
     def test_deletion_is_not_allowed_when_repository_is_not_empty(self):
-        self.login(self.administrator)
+        self.login(self.manager)
         self.assertTrue(self.repository_root.objectIds(),
                         'Precondition: Assumed repofolder to have children.')
         self.assertFalse(RepositoryDeleter(self.repository_root)
-                         .is_deletion_allowed())
+                         .is_delete_allowed())
 
     def test_deletion_is_allowed_when_root_is_empty(self):
-        self.login(self.administrator)
+        self.login(self.manager)
         empty_root = create(
             Builder('repository_root')
             .with_tree_portlet()
@@ -30,7 +30,7 @@ class TestRepositoryRootDeletion(IntegrationTestCase):
         self.assertFalse(empty_root.objectIds(),
                          'Precondition: Assumed reporoot to have no children.')
         self.assertTrue(RepositoryDeleter(empty_root)
-                        .is_deletion_allowed())
+                        .is_delete_allowed())
 
     @browsing
     def test_deletion_is_not_allowed_through_delete_confirmation_view(self, browser):
@@ -47,7 +47,7 @@ class TestRepositoryRootDeletion(IntegrationTestCase):
 
     @browsing
     def test_delete_repository_view_is_not_available(self, browser):
-        self.login(self.administrator, browser)
+        self.login(self.manager, browser)
         with browser.expect_http_error(code=404, reason='Not Found'):
             browser.open(self.repository_root, view='delete_repository')
 
@@ -76,14 +76,14 @@ class TestRepositoryDeleter(IntegrationTestCase):
         self.assertTrue(self.branch_repofolder.objectIds(),
                         'Precondition: Assumed repofolder to have children.')
         self.assertFalse(RepositoryDeleter(self.branch_repofolder)
-                         .is_deletion_allowed())
+                         .is_delete_allowed())
 
     def test_deletion_is_allowed_when_repository_is_empty(self):
         self.login(self.administrator)
         self.assertFalse(self.empty_repofolder.objectIds(),
                          'Precondition: Assumed repofolder to have no children.')
         self.assertTrue(RepositoryDeleter(self.empty_repofolder)
-                        .is_deletion_allowed())
+                        .is_delete_allowed())
 
     def test_repository_deletion(self):
         self.login(self.administrator)

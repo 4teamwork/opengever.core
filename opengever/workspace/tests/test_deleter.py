@@ -1,10 +1,12 @@
+from opengever.base.interfaces import IDeleter
 from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrasher
-from opengever.workspace.interfaces import IDeleter
 from zExceptions import Forbidden
 
 
-class TestDeleter(IntegrationTestCase):
+class TestWorkspaceDeleter(IntegrationTestCase):
+
+    features = ('workspace', )
 
     def test_may_not_delete_document_outside_workspace_root(self):
         self.login(self.manager)

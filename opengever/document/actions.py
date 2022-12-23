@@ -15,6 +15,7 @@ from opengever.meeting import is_meeting_feature_enabled
 from opengever.private.dossier import IPrivateDossier
 from opengever.private.folder import IPrivateFolder
 from opengever.trash.trash import ITrasher
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.utils import is_within_workspace
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -30,9 +31,6 @@ class BaseDocumentListingActions(BaseListingActions):
 
     def is_copy_items_available(self):
         return True
-
-    def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
 
     def is_edit_items_available(self):
         return True
@@ -50,6 +48,13 @@ class BaseDocumentListingActions(BaseListingActions):
 
     def is_zip_selected_available(self):
         return True
+
+    def is_delete_available(self):
+        if is_workspace_feature_enabled():
+            # A workspace env provides its own delete action (is_delete_workspace_context_available)
+            # for documents.
+            return False
+        return super(BaseDocumentListingActions, self).is_delete_available()
 
 
 class RepositoryDocumentListingActions(BaseDocumentListingActions):
@@ -157,7 +162,11 @@ class BaseDocumentContextActions(BaseContextActions):
         return api.user.has_permission('opengever.inbox: Add Forwarding', obj=self.context)
 
     def is_delete_available(self):
-        return api.user.has_permission('Delete objects', obj=self.context)
+        if is_workspace_feature_enabled():
+            # A workspace env provides its own delete action (is_delete_workspace_context_available)
+            # for documents.
+            return False
+        return super(BaseDocumentContextActions, self).is_delete_available()
 
     def is_delete_workspace_context_available(self):
         return self.file_actions.is_delete_workspace_context_action_available()

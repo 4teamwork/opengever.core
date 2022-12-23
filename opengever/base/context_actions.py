@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IContextActions
+from opengever.base.interfaces import IDeleter
 from plone import api
 from zope.interface import implementer
 
@@ -110,7 +111,7 @@ class BaseContextActions(object):
         return False
 
     def is_delete_available(self):
-        return False
+        return IDeleter(self.context).is_delete_allowed()
 
     def is_delete_workspace_available(self):
         return False

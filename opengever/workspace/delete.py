@@ -1,53 +1,29 @@
-from Acquisition import aq_parent
+from opengever.base.content_deleter import BaseContentDeleter
+from opengever.base.interfaces import IDeleter
 from opengever.document.document import IBaseDocument
 from opengever.trash.trash import ITrasher
-from opengever.workspace.interfaces import IDeleter
+from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.interfaces import IToDo
 from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeetingAgendaItem
 from opengever.workspace.utils import is_within_workspace_root
-from plone import api
-from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import queryAdapter
-from zope.interface import implementer
 
 
-@implementer(IDeleter)
-class BaseWorkspaceContentDeleter(object):
-    """Deleter adapter used for deleting objects over the REST-API
+class BaseWorkspaceContentDeleter(BaseContentDeleter):
+    """Deleter adapter used for deleting workspace objects over the REST-API
     """
-
-    permission = "Delete objects"
-
-    def __init__(self, context):
-        self.context = context
-
-    def delete(self):
-        self.verify_may_delete()
-        self._delete()
-
-    def _delete(self):
-        parent = aq_parent(self.context)
-        try:
-            parent._delObject(self.context.getId())
-        except LinkIntegrityNotificationException:
-            pass
-
     def verify_may_delete(self, main=True):
-        if main:
+        if main and is_workspace_feature_enabled():
             self.check_within_workspace()
-        self.check_delete_permission()
+        super(BaseWorkspaceContentDeleter, self).verify_may_delete()
 
     def check_within_workspace(self):
         if not is_within_workspace_root(self.context):
-            raise Forbidden()
-
-    def check_delete_permission(self):
-        if not api.user.has_permission(self.permission, obj=self.context):
             raise Forbidden()
 
 
@@ -71,11 +47,25 @@ class WorkspaceMeetingAgendaItemDeleter(BaseWorkspaceContentDeleter):
 
 @adapter(IBaseDocument)
 class WorkspaceDocumentDeleter(BaseWorkspaceContentDeleter):
+    """We can't separate workspace documents from gever documents becuase
+       we don't have a request layer indicating the deployment type.
 
-    permission = 'opengever.workspace: Delete Documents'
+       Thus, we can just register one adapter for both. Because the
+       workspace document has a more specific implementation, we register
+       the adapter for teamraum documents and will adjust it for GEVER-envs.
+    """
+    def __init__(self, context):
+        super(WorkspaceDocumentDeleter, self).__init__(context)
+        if is_workspace_feature_enabled():
+            self.permission = 'opengever.workspace: Delete Documents'
+        else:
+            self.permission = "Delete objects"
 
     def verify_may_delete(self, main=True):
-        super(WorkspaceDocumentDeleter, self).verify_may_delete()
+        super(WorkspaceDocumentDeleter, self).verify_may_delete(main=main)
+        if not is_workspace_feature_enabled():
+            return
+
         if not ITrasher(self.context).is_trashed():
             raise Forbidden
 

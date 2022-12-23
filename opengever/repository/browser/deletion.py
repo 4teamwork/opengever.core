@@ -1,11 +1,12 @@
 from AccessControl import Unauthorized
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.interfaces import IDeleter
 from opengever.repository import _
-from opengever.repository.deleter import RepositoryDeleter
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.component import getAdapter
 
 
 class RepositoryDeletionView(BrowserView):
@@ -15,9 +16,9 @@ class RepositoryDeletionView(BrowserView):
     def __call__(self):
         self.parent = aq_parent(aq_inner(self.context))
 
-        deleter = RepositoryDeleter(self.context)
+        deleter = getAdapter(self.context, IDeleter)
 
-        if not deleter.is_deletion_allowed():
+        if not deleter.is_delete_allowed():
             raise Unauthorized
 
         if self.request.get('form.buttons.cancel'):
@@ -50,7 +51,7 @@ class RepositoryDeletionAllowed(BrowserView):
 
     def __call__(self):
         if IRepositoryFolderSchema.providedBy(self.context):
-            deleter = RepositoryDeleter(self.context)
-            return deleter.is_deletion_allowed()
+            deleter = getAdapter(self.context, IDeleter)
+            return deleter.is_delete_allowed()
 
         return False

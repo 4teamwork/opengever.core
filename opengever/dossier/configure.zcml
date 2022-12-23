@@ -98,7 +98,11 @@
       />
 
   <adapter factory=".actions.DossierContextActions" />
-  <adapter factory=".actions.TemplateFolderContextActions" />
+  <adapter
+      factory="opengever.base.context_actions.BaseContextActions"
+      for="opengever.dossier.templatefolder.ITemplateFolder
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
   <adapter factory=".actions.DossierTemplateContextActions" />
 
   <!-- JSON endpoint for dossier attributes -->
@@ -404,4 +408,9 @@
   <adapter factory=".move_items.DossierMovabiliyChecker" />
   <adapter factory=".move_items.DossierTemplateMovabilityChecker" />
 
+  <adapter factory=".content_deleter.DossierDeleter" />
+  <adapter
+      factory="opengever.base.content_deleter.BaseContentDeleter"
+      for="opengever.private.dossier.IPrivateDossier"
+      />
 </configure>

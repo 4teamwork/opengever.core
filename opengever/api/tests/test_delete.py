@@ -27,14 +27,52 @@ class APITestDeleteMixin(object):
 class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
 
     @browsing
-    def test_deleting_businesscasedossier_requires_delete_objects_permission(self, browser):
+    def test_deleting_businesscasedossier_requires_delete_dossiers_permission(self, browser):
         self.login(self.administrator, browser)
         obj = self.empty_dossier
 
+        obj.manage_permission('opengever.dossier: Delete dossier', roles=[])
+
         self.assert_cannot_delete(obj, browser, code=403)
 
-        obj.manage_permission("Delete objects", roles=["Administrator"])
+        obj.manage_permission('opengever.dossier: Delete dossier', roles=["Administrator"])
+
         self.assert_can_delete(obj, browser)
+
+    @browsing
+    def test_deleting_businesscasedossier_requires_an_empty_dossier(self, browser):
+        self.login(self.administrator, browser)
+        subdossier = create(Builder('dossier').titled(u'Dossier A').within(self.empty_dossier))
+
+        self.assert_cannot_delete(self.empty_dossier, browser, code=403)
+
+        self.assert_can_delete(subdossier, browser)
+        self.assert_can_delete(self.empty_dossier, browser)
+
+    @browsing
+    def test_deleting_businesscasedossier_requires_no_trashed_objs(self, browser):
+        self.login(self.administrator, browser)
+        doc = create(Builder('document')
+                     .within(self.empty_dossier)
+                     .titled(u'Statement in response to inquiry'))
+        ITrasher(doc).trash()
+
+        self.assert_cannot_delete(self.empty_dossier, browser, code=403)
+
+        with self.login(self.manager, browser):
+            self.assert_can_delete(doc, browser)
+        self.assert_can_delete(self.empty_dossier, browser)
+
+    @browsing
+    def test_deleting_businesscasedossier_respects_subobjects_without_view_permission(self, browser):
+        self.login(self.administrator, browser)
+        subdossier = create(Builder('dossier').titled(u'Dossier B').within(self.empty_dossier))
+        subdossier.manage_permission('View', roles=["Administrator"])
+
+        with self.login(self.regular_user, browser):
+            with browser.expect_http_error(code=401):
+                browser.open(subdossier, method='GET', headers=self.api_headers)
+            self.assert_cannot_delete(self.empty_dossier, browser, code=403)
 
     @browsing
     def test_deleting_document_requires_delete_objects_permission(self, browser):
@@ -115,6 +153,8 @@ class DeleteGeverObjects(IntegrationTestCase, APITestDeleteMixin):
 
 
 class TestDeleteTeamraumObjects(IntegrationTestCase, APITestDeleteMixin):
+
+    features = ('workspace', )
 
     @browsing
     def test_deleting_todos_requires_delete_todos_permission(self, browser):
