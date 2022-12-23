@@ -1,7 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import MockTestCase
-from mocker import ANY
+from mock import call
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
@@ -20,63 +20,52 @@ class TestAttachmentContentDisposition(MockTestCase):
     def setUp(self):
         super(TestAttachmentContentDisposition, self).setUp()
         self.header = []
-
-        self.request = self.mocker.proxy({}, count=False)
-        self.expect(
-            self.request.response.setHeader(ANY, ANY)).call(
-                lambda x, y: self.header.append(y)).count(0, None)
+        self.request = self.mock().proxy({}, count=False)
 
     def test_set_empty_filename(self):
-
-        self.request['HTTP_USER_AGENT'] = ''
-
-        self.replay()
+        # HTTP_USER_AGENT
+        self.request.get.return_value = ''
 
         set_attachment_content_disposition(self.request, '')
 
-        self.assertEqual(len(self.header), 0)
+        self.request.response.setHeader.assert_not_called()
 
     def test_set_ms_filename(self):
         """ In Ms we must remove the quotes.
         """
-
-        self.expect(self.request.get('HTTP_USER_AGENT', ANY)).result('MSIE')
-
-        self.replay()
+        # HTTP_USER_AGENT
+        self.request.get.return_value = 'MSIE'
 
         set_attachment_content_disposition(self.request, 'MS Name')
 
-        self.assertEquals(
-            self.header[0],
+        self.request.response.setHeader.assert_called_with(
+            'Content-disposition',
             'attachment; filename=%s' % quote('MS Name'))
 
     def test_filename(self):
         """ Normaly we have the filename in quotes
         """
-
-        self.expect(self.request.get('HTTP_USER_AGENT', ANY)).result('DEF')
-
-        self.replay()
+        # HTTP_USER_AGENT
+        self.request.get.return_value = 'DEF'
 
         set_attachment_content_disposition(self.request, 'Default Name')
 
-        self.assertEquals(
-            self.header[0],
+        self.request.response.setHeader.assert_called_with(
+            'Content-disposition',
             'attachment; filename="%s"' % 'Default Name')
 
     def test_with_file(self):
-        self.expect(self.request.get('HTTP_USER_AGENT', ANY)).result('DEF')
+        # HTTP_USER_AGENT
+        self.request.get.return_value = 'DEF'
 
         monk_file = NamedFile('bla bla', filename=u'test.txt')
-
-        self.replay()
-
         set_attachment_content_disposition(
             self.request, 'Default Name', file=monk_file)
 
-        self.assertEquals(
-            self.header,
-            ['text/plain', 7, 'attachment; filename="Default Name"'])
+        self.request.response.setHeader.assert_has_calls(
+            [call('Content-Type', 'text/plain'),
+             call('Content-Length', 7),
+             call('Content-disposition', 'attachment; filename="%s"' % 'Default Name')])
 
 
 class TestFindParentDossier(IntegrationTestCase):

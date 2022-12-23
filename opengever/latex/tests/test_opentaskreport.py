@@ -2,71 +2,16 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.pdfgenerator.builder import Builder as PDFBuilder
-from ftw.pdfgenerator.interfaces import ILaTeXLayout
 from ftw.pdfgenerator.interfaces import ILaTeXView
 from ftw.pdfgenerator.utils import provide_request_layer
 from ftw.testbrowser import browsing
-from ftw.testing import MockTestCase
-from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.latex import opentaskreport
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.latex.opentaskreport import IOpenTaskReportLayer
 from opengever.latex.opentaskreport import OpenTaskReportLaTeXView
-from opengever.latex.testing import LATEX_ZCML_LAYER
 from opengever.testing import FunctionalTestCase
 from plone.app.testing import login
 from zExceptions import Unauthorized
-from zope.component import adaptedBy
 from zope.component import getMultiAdapter
-from zope.interface.verify import verifyClass
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-import unittest
-
-
-class TestOpenTaskReportPDFView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_is_registered(self):
-        context = self.providing_stub([IDossierMarker])
-        request = self.providing_stub([IDefaultBrowserLayer])
-
-        self.replay()
-        view = getMultiAdapter((context, request),
-                               name='pdf-open-task-report')
-
-        self.assertTrue(isinstance(
-                        view, opentaskreport.OpenTaskReportPDFView))
-
-
-class TestOpenTaskReportLaTeXView(MockTestCase):
-
-    layer = LATEX_ZCML_LAYER
-
-    def test_component_is_registered(self):
-        context = self.create_dummy()
-        request = self.providing_stub([opentaskreport.IOpenTaskReportLayer])
-        layout = self.providing_stub([ILaTeXLayout])
-
-        self.replay()
-
-        view = getMultiAdapter((context, request, layout), ILaTeXView)
-
-        self.assertEqual(type(view), opentaskreport.OpenTaskReportLaTeXView)
-
-    def test_implements_interface(self):
-        self.replay()
-        self.assertTrue(ILaTeXView.implementedBy(
-                        opentaskreport.OpenTaskReportLaTeXView))
-
-        verifyClass(ILaTeXView, opentaskreport.OpenTaskReportLaTeXView)
-
-    def test_adapts_layer(self):
-        self.replay()
-        context_iface, request_iface, layout_iface = adaptedBy(
-            opentaskreport.OpenTaskReportLaTeXView)
-
-        self.assertEqual(request_iface, opentaskreport.IOpenTaskReportLayer)
 
 
 class TestOpenTaskReport(FunctionalTestCase):

@@ -79,6 +79,18 @@ class TestSendDocument(FunctionalTestCase):
             ['Select at least one internal or external email address.'],
             browser.css('div.error').text)
 
+        mail = self.send_documents(
+            dossier, documents,
+            extern_receiver='hugo.dskljfch\nJames.Example.com',
+            intern_receiver=None)
+
+        self.assertEquals(mail, None)
+        self.assertEquals(
+            ['External recipient Email addresses of the recipients. Enter one '
+             'address per line. Invalid value hugo.dskljfch James.Example.com',
+             'Invalid value'],
+            browser.css('div.error').text)
+
     @browsing
     def test_send_documents(self, browser):
         dossier = create(Builder("dossier"))
