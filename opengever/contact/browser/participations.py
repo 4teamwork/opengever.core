@@ -2,11 +2,9 @@ from ftw.tabbedview.interfaces import ITabbedView
 from opengever.base.json_response import JSONResponse
 from opengever.contact import _
 from opengever.contact.models import Participation
-from opengever.tabbedview import GeverTabMixin
 from plone import api
 from Products.Five.browser import BrowserView
 from sqlalchemy import desc
-from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
 from zope.i18n import translate
 
 
@@ -65,21 +63,3 @@ class PersonParticipationsView(ParticipationsView):
 
     def get_particpations_query(self):
         return Participation.query.by_person(self.context.model)
-
-
-class ParticipationTab(BrowserView, GeverTabMixin):
-
-    show_searchform = False
-
-    template = ViewPageTemplateFile('templates/participations.pt')
-
-    def __call__(self):
-        return self.template()
-
-    def get_participations(self):
-        """Returns all participations for the current context.
-        """
-        participations = Participation.query.by_dossier(self.context).all()
-        return sorted(
-            participations,
-            key=lambda participation: participation.participant.get_title())

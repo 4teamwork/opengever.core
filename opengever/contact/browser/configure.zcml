@@ -89,13 +89,6 @@
       />
 
   <browser:page
-      name="tabbedview_view-participations"
-      for="*"
-      class=".participations.ParticipationTab"
-      permission="zope2.View"
-      />
-
-  <browser:page
       name="edit"
       for="opengever.contact.interfaces.IPerson"
       class=".person.EditPerson"

@@ -1,4 +1,3 @@
-from opengever.contact import is_contact_feature_enabled
 from opengever.dossier import _
 from opengever.dossier.dossiertemplate import is_dossier_template_feature_enabled
 from opengever.meeting import is_meeting_feature_enabled
@@ -69,18 +68,10 @@ class DossierTabbedView(GeverTabbedView):
             }
         return None
 
-    @property
-    def participations_tab(self):
-        if is_contact_feature_enabled():
-            return {
-                'id': 'participations',
-                'title': _(u'label_participations', default=u'Participations'),
-            }
-
-        return {
-            'id': 'participants',
-            'title': _(u'label_participants', default=u'Participants'),
-        }
+    participations_tab = {
+        'id': 'participants',
+        'title': _(u'label_participants', default=u'Participants'),
+    }
 
     @property
     def blocked_local_roles_tab(self):

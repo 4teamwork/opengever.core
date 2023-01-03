@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 21:03+0000\n"
+"POT-Creation-Date: 2023-01-03 18:07+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -35,18 +35,6 @@ msgstr "Contact"
 #: ./opengever/contact/contact.py
 msgid "address"
 msgstr "Address"
-
-#. German translation: Bearbeiten
-#. Default: "Edit"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_edit"
-msgstr "Edit"
-
-#. German translation: Löschen
-#. Default: "Remove"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_remove"
-msgstr "Remove"
 
 #. German translation: Titel
 #. Default: "Academic title"
@@ -282,12 +270,6 @@ msgstr "Mobile"
 msgid "label_name"
 msgstr "Name"
 
-#. German translation: Keine Beteiligungen
-#. Default: "No participations"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "label_no_participations"
-msgstr "No participations"
-
 #. German translation: Büro
 #. Default: "Office"
 #: ./opengever/contact/ogdsuser.py
@@ -302,7 +284,6 @@ msgstr "Organizational unit"
 
 #. German translation: Organisationen
 #. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organizations"
@@ -322,7 +303,6 @@ msgstr "Personal information:"
 #. German translation: Personen
 #. Default: "Persons"
 #. MARKER: This might actually be correct here (instead of 'People'). Double check.
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Persons"
