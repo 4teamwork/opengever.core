@@ -12,13 +12,9 @@ from opengever.contact.models import ArchivedOrganization
 from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
-from opengever.contact.models import ContactParticipation
 from opengever.contact.models import MailAddress
-from opengever.contact.models import OgdsUserParticipation
 from opengever.contact.models import Organization
 from opengever.contact.models import OrgRole
-from opengever.contact.models import OrgRoleParticipation
-from opengever.contact.models import ParticipationRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
@@ -725,70 +721,6 @@ class OrgRoleBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('org_role', OrgRoleBuilder)
-
-
-class BaseParticipationBuilder(SqlObjectBuilder):
-
-    id_argument_name = 'participation_id'
-    roles = []
-
-    def for_dossier(self, obj):
-        self.arguments['dossier_oguid'] = Oguid.for_object(obj)
-        return self
-
-    def with_roles(self, roles):
-        self.roles = roles
-        return self
-
-    def after_create(self, obj):
-        if self.roles:
-            obj.add_roles(self.roles)
-        return obj
-
-
-class ContactParticipationBuilder(BaseParticipationBuilder):
-
-    mapped_class = ContactParticipation
-
-    def for_contact(self, contact):
-        self.arguments['contact'] = contact
-        return self
-
-
-builder_registry.register('contact_participation', ContactParticipationBuilder)
-
-
-class OrgRoleParticipationBuilder(BaseParticipationBuilder):
-
-    mapped_class = OrgRoleParticipation
-
-    def for_org_role(self, org_role):
-        self.arguments['org_role'] = org_role
-        return self
-
-
-builder_registry.register('org_role_participation', OrgRoleParticipationBuilder)
-
-
-class OgdsUserParticipationBuilder(BaseParticipationBuilder):
-
-    mapped_class = OgdsUserParticipation
-
-    def for_ogds_user(self, adapted_ogds_user):
-        self.arguments['ogds_user'] = adapted_ogds_user
-        return self
-
-
-builder_registry.register('ogds_user_participation', OgdsUserParticipationBuilder)
-
-
-class ParticipationRoleBuilder(SqlObjectBuilder):
-
-    mapped_class = ParticipationRole
-    id_argument_name = 'participation_role_id'
-
-
-builder_registry.register('participation_role', ParticipationRoleBuilder)
 
 
 class FavoriteBuilder(SqlObjectBuilder):

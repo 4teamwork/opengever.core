@@ -1,4 +1,5 @@
 import opengever.testing.builders.activity  # noqa
+import opengever.testing.builders.dummy  # noqa
 import opengever.testing.builders.dx  # noqa
 import opengever.testing.builders.fixture  # noqa
 import opengever.testing.builders.ldap  # noqa
