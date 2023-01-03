@@ -10,7 +10,6 @@ from opengever.dossier.participations import IParticipationData
 from opengever.dossier.participations import KuBParticipationHandler
 from opengever.dossier.participations import MissingParticipation
 from opengever.dossier.participations import PloneParticipationHandler
-from opengever.dossier.participations import SQLParticipationHandler
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.testing import IntegrationTestCase
 import requests_mock
@@ -175,14 +174,6 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
         self.assertItemsEqual(
             IParticipationData(participation).roles,
             ['participation', 'final-drawing'])
-
-
-class TestSQLParticipationHanlder(TestPloneParticipationHanlder):
-
-    features = ('contact', )
-
-    handler_class = SQLParticipationHandler
-    valid_id = 'ogds_user:kathi.barfuss'
 
 
 class TestKuBParticipationHanlderWithOgdsUser(KuBIntegrationTestCase, TestPloneParticipationHanlder):

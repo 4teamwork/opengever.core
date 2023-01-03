@@ -1,6 +1,3 @@
-from opengever.contact import is_contact_feature_enabled
-from opengever.contact.models import Participation as SQLParticipation
-from opengever.contact.sources import ContactsSource
 from opengever.dossier import events
 from opengever.dossier.behaviors.participation import IParticipation
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -48,8 +45,6 @@ class ParticipationHandler(object):
         self.context = context
         if is_kub_feature_enabled():
             self.handler = KuBParticipationHandler(context)
-        elif is_contact_feature_enabled():
-            self.handler = SQLParticipationHandler(context)
         else:
             self.handler = PloneParticipationHandler(context)
 
@@ -166,68 +161,6 @@ class KuBParticipationHandler(PloneParticipationHandler):
         self.participant_source = KuBContactsSourceBinder()(self.context)
 
 
-class SQLParticipationHandler(ParticipationHandlerBase):
-    """ IParticipationAware behavior / adpter factory
-    """
-
-    def __init__(self, context):
-        self.context = context
-        self.participant_source = ContactsSource(self.context)
-
-    def get_participations(self):
-        query = SQLParticipation.query.by_dossier(self.context)
-        return query
-
-    def get_participation(self, participant_id):
-        participant = self.get_participant(participant_id)
-        query = participant.participation_class.query.by_participant(
-            participant).by_dossier(self.context)
-        participation = query.one_or_none()
-        if not participation:
-            raise MissingParticipation(
-                u"{} has no participations on this context".format(participant_id))
-        return query.one_or_none()
-
-    def has_participation(self, participant_id):
-        try:
-            self.get_participation(participant_id)
-            return True
-        except (MissingParticipation, InvalidParticipantId):
-            return False
-
-    def get_participant(self, participant_id):
-        try:
-            term = self.participant_source.getTermByToken(participant_id)
-        except LookupError:
-            raise InvalidParticipantId(
-                u"{} is not a valid id".format(participant_id))
-        return term.value
-
-    def add_participation(self, participant_id, roles, validate=True):
-        if validate:
-            self.validate_roles(roles)
-        if self.has_participation(participant_id):
-            raise DupplicateParticipation(
-                u"There is already a participation for {}".format(participant_id))
-
-        participant = self.get_participant(participant_id)
-        participation = participant.participation_class.create(
-            participant=participant, dossier=self.context, roles=roles)
-        self.context.reindexObject(idxs=["participations", "UID"])
-        return participation
-
-    def update_participation(self, participant_id, roles):
-        self.validate_roles(roles)
-        participation = self.get_participation(participant_id)
-        participation.update_roles(roles)
-        self.context.reindexObject(idxs=["participations", "UID"])
-
-    def remove_participation(self, participant_id):
-        participation = self.get_participation(participant_id)
-        participation.delete()
-        self.context.reindexObject(idxs=["participations", "UID"])
-
-
 class IParticipationData(Interface):
     """Adapter interface to harmonize data accessors for
     plone and SQL participations.
@@ -266,24 +199,3 @@ class PloneOrKuBParticipationData(object):
     def participant_title(self):
         actor = ActorLookup(self._participation.contact).lookup()
         return actor.get_label()
-
-
-@implementer(IParticipationData)
-@adapter(SQLParticipation)
-class SQLParticipationData(object):
-
-    def __init__(self, participation):
-        self._participation = participation
-
-    @property
-    def roles(self):
-        return [role.role for role in self._participation.roles]
-
-    @property
-    def participant_id(self):
-        source = ContactsSource(self._participation.resolve_dossier())
-        return source.getTerm(self._participation.participant).token
-
-    @property
-    def participant_title(self):
-        return self._participation.participant.get_title()

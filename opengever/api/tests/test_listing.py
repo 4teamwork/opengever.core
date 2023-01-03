@@ -1510,50 +1510,6 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             browser.json['items'])
 
 
-class TestSQLDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
-
-    features = ('bumblebee', 'solr', 'contact')
-    maxDiff = None
-
-    @browsing
-    def test_dossier_participations_fields(self, browser):
-        self.activate_feature('contact')
-        self.login(self.regular_user, browser=browser)
-        self.dossier.reindexObject()
-        self.commit_solr()
-
-        query_string = '&'.join((
-            'name=dossiers',
-            'columns=title',
-            'columns=participations',
-            'columns=participants',
-            'columns=participation_roles',
-            'filters.UID:record:list={}'.format(IUUID(self.dossier))
-        ))
-        view = '@listing?{}'.format(query_string)
-        browser.open(self.repository_root, view=view, headers=self.api_headers)
-
-        self.assertEqual(1, browser.json['items_total'])
-        item = browser.json['items'][0]
-        self.assertEqual(self.dossier.absolute_url(), item['@id'])
-        self.assertEqual(IUUID(self.dossier), item['UID'])
-        self.assertItemsEqual(
-            [u'B\xfchler Josef', u'Meier AG', u'Any participant'],
-            item['participants'])
-        self.assertItemsEqual(
-            [u'Any role', u'Participation', u'Final signature'],
-            item['participation_roles'])
-        self.assertItemsEqual(
-            [u'B\xfchler Josef|Any role',
-             u'B\xfchler Josef|Final signature',
-             u'Any participant|Participation',
-             u'Meier AG|Any role',
-             u'B\xfchler Josef|Participation',
-             u'Meier AG|Final signature',
-             u'Any participant|Final signature'],
-            item['participations'])
-
-
 class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 
     features = ('bumblebee', 'solr')
