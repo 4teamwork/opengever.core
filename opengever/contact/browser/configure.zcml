@@ -73,22 +73,6 @@
       />
 
   <browser:page
-      name="participations"
-      for="opengever.contact.interfaces.IOrganization"
-      class=".participations.OrganizationParticipationsView"
-      permission="zope2.View"
-      allowed_attributes="list"
-      />
-
-  <browser:page
-      name="participations"
-      for="opengever.contact.interfaces.IPerson"
-      class=".participations.PersonParticipationsView"
-      permission="zope2.View"
-      allowed_attributes="list"
-      />
-
-  <browser:page
       name="edit"
       for="opengever.contact.interfaces.IPerson"
       class=".person.EditPerson"

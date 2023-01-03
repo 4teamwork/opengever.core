@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.tabbedview.interfaces import ITabbedView
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
@@ -86,107 +85,6 @@ class TestDossierParticipation(FunctionalTestCase):
         intersecting_elements = set(original_participations).intersection(
                                                     set(copied_participations))
         self.assertEqual(0, len(intersecting_elements))
-
-
-class TestParticipationsEndPoint(FunctionalTestCase):
-
-    def setUp(self):
-        super(TestParticipationsEndPoint, self).setUp()
-
-        # adjust slice size
-        api.portal.set_registry_record(
-            'batch_size', 2, interface=ITabbedView)
-
-        self.contactfolder = create(Builder('contactfolder'))
-        self.meierag = create(Builder('organization').having(name=u'Meier AG'))
-        self.dossier1 = create(Builder('dossier').titled(u'Dossier A'))
-        self.dossier2 = create(Builder('dossier').titled(u'Dossier B'))
-        self.dossier3 = create(Builder('dossier').titled(u'Dossier C'))
-        create(Builder('contact_participation')
-               .for_dossier(self.dossier1)
-               .for_contact(self.meierag)
-               .with_roles(['regard', 'final-drawing']))
-        create(Builder('contact_participation')
-               .for_dossier(self.dossier2)
-               .for_contact(self.meierag)
-               .with_roles(['participation']))
-        create(Builder('contact_participation')
-               .for_dossier(self.dossier3)
-               .for_contact(self.meierag)
-               .with_roles(['participation']))
-
-    @browsing
-    def test_returns_a_list_of_serialized_participations_the_latest_first(self, browser):
-        browser.login().open(self.meierag.get_url('participations/list'))
-
-        self.assertEqual(
-            [{u'roles': [{u'label': u'Participation'}],
-              u'title': u'Dossier C',
-              u'url': u'http://nohost/plone/dossier-3'},
-             {u'roles': [{u'label': u'Participation'}],
-              u'title': u'Dossier B',
-              u'url': u'http://nohost/plone/dossier-2'}],
-            browser.json.get('participations'))
-
-    @browsing
-    def test_include_org_role_participations_for_the_current_context(self, browser):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter', lastname=u'M\xfcller'))
-        role1 = create(Builder('org_role')
-                       .having(person=peter, organization=self.meierag))
-        create(Builder('org_role_participation')
-               .for_dossier(self.dossier2)
-               .with_roles(['regard'])
-               .for_org_role(role1))
-
-        teamwork = create(Builder('organization').named('4teamwork AG'))
-        role2 = create(Builder('org_role')
-                       .having(person=peter, organization=teamwork))
-        create(Builder('org_role_participation')
-               .for_dossier(self.dossier1)
-               .with_roles(['regard'])
-               .for_org_role(role2))
-
-        # organization
-        browser.login().open(self.meierag.get_url('participations/list'),
-                             {'show_all': 'true'})
-        self.assertEqual(
-            [u'Dossier B', u'Dossier C', u'Dossier B', u'Dossier A'],
-            [item.get('title') for item in browser.json.get('participations')])
-
-        # person
-        browser.login().open(peter.get_url('participations/list'),
-                             {'show_all': 'true'})
-        self.assertEqual(
-            [u'Dossier A', u'Dossier B'],
-            [item.get('title') for item in browser.json.get('participations')])
-
-    @browsing
-    def test_is_sliced_and_has_more_flag_is_set_when_slice_size_is_exceeded(self, browser):
-        browser.login().open(self.meierag.get_url('participations/list'))
-
-        self.assertEqual(browser.json.get('has_more'), True)
-        self.assertEqual(
-            [u'Dossier C', u'Dossier B'],
-            [participation.get('title') for participation
-             in browser.json.get('participations')])
-
-    @browsing
-    def test_show_all_link(self, browser):
-        browser.login().open(self.meierag.get_url('participations/list'))
-
-        self.assertEqual(u'Show all 3 participations',
-                         browser.json.get('show_all_label'))
-
-    @browsing
-    def test_returns_all_participations_when_request_flag_is_set(self, browser):
-        browser.login().open(self.meierag.get_url('participations/list'),
-                             {'show_all': 'true'})
-
-        self.assertEqual(
-            [u'Dossier C', u'Dossier B', u'Dossier A'],
-            [participation.get('title') for participation
-             in browser.json.get('participations')])
 
 
 class TestAddParticipationAction(IntegrationTestCase):

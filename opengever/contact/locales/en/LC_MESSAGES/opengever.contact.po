@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-03 18:07+0000\n"
+"POT-Creation-Date: 2023-01-03 20:01+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -238,12 +238,6 @@ msgstr "Inactive"
 msgid "label_lastname"
 msgstr "Last name"
 
-#. German translation: Letzte Beteiligungen
-#. Default: "Latest participations"
-#: ./opengever/contact/browser/templates/latest_participations.pt
-msgid "label_latest_participations"
-msgstr "Most recent participations"
-
 #. German translation: Lokal
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py
@@ -284,6 +278,7 @@ msgstr "Organizational unit"
 
 #. German translation: Organisationen
 #. Default: "Organizations"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organizations"
@@ -303,6 +298,7 @@ msgstr "Personal information:"
 #. German translation: Personen
 #. Default: "Persons"
 #. MARKER: This might actually be correct here (instead of 'People'). Double check.
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Persons"
@@ -353,12 +349,6 @@ msgstr "Picture"
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Salutation"
-
-#. German translation: Alle ${total} Beteiligungen anzeigen
-#. Default: "Show all ${total} participations"
-#: ./opengever/contact/browser/participations.py
-msgid "label_show_all"
-msgstr "Show all ${total} participations"
 
 #. German translation: Alle
 #: ./opengever/contact/browser/tabs.py

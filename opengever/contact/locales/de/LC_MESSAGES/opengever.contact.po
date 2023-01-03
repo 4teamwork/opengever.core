@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-03 18:07+0000\n"
+"POT-Creation-Date: 2023-01-03 20:01+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -202,11 +202,6 @@ msgstr "Inaktiv"
 msgid "label_lastname"
 msgstr "Nachname"
 
-#. Default: "Latest participations"
-#: ./opengever/contact/browser/templates/latest_participations.pt
-msgid "label_latest_participations"
-msgstr "Letzte Beteiligungen"
-
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py
 msgid "label_local"
@@ -240,6 +235,7 @@ msgid "label_org_unit"
 msgstr "Organisationseinheit"
 
 #. Default: "Organizations"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organisationen"
@@ -255,6 +251,7 @@ msgid "label_personal_information"
 msgstr "Persönliche Informationen:"
 
 #. Default: "Persons"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Personen"
@@ -297,11 +294,6 @@ msgstr "Bild"
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Anrede"
-
-#. Default: "Show all ${total} participations"
-#: ./opengever/contact/browser/participations.py
-msgid "label_show_all"
-msgstr "Alle ${total} Beteiligungen anzeigen"
 
 #: ./opengever/contact/browser/tabs.py
 msgid "label_tabbedview_filter_all"
