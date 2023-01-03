@@ -29,8 +29,6 @@ class PersonView(BrowserView):
     implements(IBrowserView, IPublishTraverse)
 
     template = ViewPageTemplateFile('templates/person.pt')
-    latest_participations = ViewPageTemplateFile(
-        'templates/latest_participations.pt')
 
     def __init__(self, context, request):
         super(PersonView, self).__init__(context, request)
@@ -39,9 +37,6 @@ class PersonView(BrowserView):
 
     def __call__(self):
         return self.template()
-
-    def participations_fetch_url(self):
-        return self.context.model.get_url('participations/list')
 
     def prepare_model_tabs(self, viewlet):
         if not self.model.is_editable():
@@ -56,9 +51,6 @@ class PersonView(BrowserView):
     def get_org_roles(self):
         query = OrgRole.query.filter_by(person=self.context.model)
         return query.join(Organization).order_by(Organization.name).all()
-
-    def latest_participations_template(self):
-        return self.latest_participations()
 
 
 class IPersonModel(model.Schema):

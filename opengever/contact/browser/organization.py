@@ -15,8 +15,6 @@ class OrganizationView(BrowserView):
     implements(IBrowserView, IPublishTraverse)
 
     template = ViewPageTemplateFile('templates/organization.pt')
-    latest_participations = ViewPageTemplateFile(
-        'templates/latest_participations.pt')
 
     def __init__(self, context, request):
         super(OrganizationView, self).__init__(context, request)
@@ -38,9 +36,3 @@ class OrganizationView(BrowserView):
 
     def get_inactive_org_roles(self):
         return self.get_org_roles(active=False)
-
-    def participations_fetch_url(self):
-        return self.context.model.get_url('participations/list')
-
-    def latest_participations_template(self):
-        return self.latest_participations()

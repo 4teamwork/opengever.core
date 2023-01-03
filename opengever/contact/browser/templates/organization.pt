@@ -115,8 +115,6 @@
         </li>
       </ul>
 
-      <div tal:replace="structure view/latest_participations_template" />
-
       <div class="collapsible" id="contactHistory"
            tal:condition="organization/has_archived_information">
         <div class="collapsible-header">

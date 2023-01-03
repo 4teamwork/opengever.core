@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 18:07+0000\n"
+"POT-Creation-Date: 2023-01-03 20:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,11 +205,6 @@ msgstr ""
 msgid "label_lastname"
 msgstr ""
 
-#. Default: "Latest participations"
-#: ./opengever/contact/browser/templates/latest_participations.pt
-msgid "label_latest_participations"
-msgstr ""
-
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py
 msgid "label_local"
@@ -243,6 +238,7 @@ msgid "label_org_unit"
 msgstr ""
 
 #. Default: "Organizations"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr ""
@@ -258,6 +254,7 @@ msgid "label_personal_information"
 msgstr ""
 
 #. Default: "Persons"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr ""
@@ -299,11 +296,6 @@ msgstr ""
 #: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
-msgstr ""
-
-#. Default: "Show all ${total} participations"
-#: ./opengever/contact/browser/participations.py
-msgid "label_show_all"
 msgstr ""
 
 #: ./opengever/contact/browser/tabs.py

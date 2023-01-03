@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 18:07+0000\n"
+"POT-Creation-Date: 2023-01-03 20:01+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -204,11 +204,6 @@ msgstr "Inactif"
 msgid "label_lastname"
 msgstr "Nom"
 
-#. Default: "Latest participations"
-#: ./opengever/contact/browser/templates/latest_participations.pt
-msgid "label_latest_participations"
-msgstr "Dernières participations"
-
 #. Default: "Local"
 #: ./opengever/contact/browser/tabbed.py
 msgid "label_local"
@@ -242,6 +237,7 @@ msgid "label_org_unit"
 msgstr "Unité d'organisation"
 
 #. Default: "Organizations"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organisations"
@@ -257,6 +253,7 @@ msgid "label_personal_information"
 msgstr "Informations personnelles:"
 
 #. Default: "Persons"
+#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Personnes"
@@ -299,11 +296,6 @@ msgstr "Image"
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Formule de salutation"
-
-#. Default: "Show all ${total} participations"
-#: ./opengever/contact/browser/participations.py
-msgid "label_show_all"
-msgstr "Indiquer toutes les participations ${total}"
 
 #: ./opengever/contact/browser/tabs.py
 msgid "label_tabbedview_filter_all"
