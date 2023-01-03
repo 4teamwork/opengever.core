@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 21:03+0000\n"
+"POT-Creation-Date: 2023-01-03 18:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,16 +33,6 @@ msgstr ""
 #. Default: "Address"
 #: ./opengever/contact/contact.py
 msgid "address"
-msgstr ""
-
-#. Default: "Edit"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_edit"
-msgstr ""
-
-#. Default: "Remove"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_remove"
 msgstr ""
 
 #. Default: "Academic title"
@@ -242,11 +232,6 @@ msgstr ""
 msgid "label_name"
 msgstr ""
 
-#. Default: "No participations"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "label_no_participations"
-msgstr ""
-
 #. Default: "Office"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_office"
@@ -258,7 +243,6 @@ msgid "label_org_unit"
 msgstr ""
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr ""
@@ -274,7 +258,6 @@ msgid "label_personal_information"
 msgstr ""
 
 #. Default: "Persons"
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr ""

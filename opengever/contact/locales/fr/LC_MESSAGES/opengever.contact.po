@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 21:03+0000\n"
+"POT-Creation-Date: 2023-01-03 18:07+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -33,16 +33,6 @@ msgstr "Contact"
 #: ./opengever/contact/contact.py
 msgid "address"
 msgstr "Adresse"
-
-#. Default: "Edit"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_edit"
-msgstr "Editer"
-
-#. Default: "Remove"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "button_remove"
-msgstr "Effacer"
 
 #. Default: "Academic title"
 #: ./opengever/contact/browser/person_listing.py
@@ -241,11 +231,6 @@ msgstr "Téléphone portable"
 msgid "label_name"
 msgstr "Nom"
 
-#. Default: "No participations"
-#: ./opengever/contact/browser/templates/participations.pt
-msgid "label_no_participations"
-msgstr "Pas de participations"
-
 #. Default: "Office"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_office"
@@ -257,7 +242,6 @@ msgid "label_org_unit"
 msgstr "Unité d'organisation"
 
 #. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organisations"
@@ -273,7 +257,6 @@ msgid "label_personal_information"
 msgstr "Informations personnelles:"
 
 #. Default: "Persons"
-#: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Personnes"
