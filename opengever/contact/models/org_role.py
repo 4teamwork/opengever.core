@@ -89,9 +89,6 @@ class OrgRole(Base):
     department = Column(String(CONTENT_TITLE_LENGTH))
     description = Column(UnicodeCoercingText)
 
-    participations = relationship("OrgRoleParticipation",
-                                  back_populates="org_role")
-
     @property
     def id(self):
         return self.org_role_id

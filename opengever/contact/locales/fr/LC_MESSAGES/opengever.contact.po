@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 20:01+0000\n"
+"POT-Creation-Date: 2023-01-03 22:51+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -241,11 +241,6 @@ msgstr "Unité d'organisation"
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organisations"
-
-#. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py
-msgid "label_participation_of"
-msgstr "Participation de ${contact_title}"
 
 #. Default: "Personal information:"
 #: ./opengever/contact/browser/templates/person.pt

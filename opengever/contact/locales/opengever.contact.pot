@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 20:01+0000\n"
+"POT-Creation-Date: 2023-01-03 22:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,11 +241,6 @@ msgstr ""
 #: ./opengever/contact/browser/tabbed.py
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
-msgstr ""
-
-#. Default: "Participation of ${contact_title}"
-#: ./opengever/contact/models/participation.py
-msgid "label_participation_of"
 msgstr ""
 
 #. Default: "Personal information:"

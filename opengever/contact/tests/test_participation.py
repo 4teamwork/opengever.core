@@ -14,46 +14,6 @@ from requests_toolbelt.utils import formdata
 import requests_mock
 
 
-class TestDossierParticipation(FunctionalTestCase):
-
-    def test_contact_relation_to_dossier(self):
-        dossier = create(Builder('dossier'))
-        contact = create(Builder('person').having(
-            firstname=u'peter', lastname=u'hans'))
-        participation = create(Builder('contact_participation').having(
-            contact=contact,
-            dossier_oguid=Oguid.for_object(dossier)))
-
-        self.assertEqual(dossier, participation.resolve_dossier())
-
-    def test_org_role_relation_to_dossier(self):
-        dossier = create(Builder('dossier'))
-        peter = create(Builder('person').having(
-            firstname=u'peter', lastname=u'hans'))
-        organization = create(Builder('organization').named('ACME'))
-        org_role = create(Builder('org_role').having(
-            person=peter, organization=organization, function=u'cheffe'))
-
-        participation = create(Builder('org_role_participation').having(
-            org_role=org_role,
-            dossier_oguid=Oguid.for_object(dossier)))
-
-        self.assertEqual(dossier, participation.resolve_dossier())
-
-    def test_ogds_user_relation_to_dossier(self):
-        dossier = create(Builder('dossier'))
-        ogds_user = create(Builder('ogds_user')
-                           .id('peter')
-                           .having(firstname=u'Hans', lastname=u'Peter')
-                           .as_contact_adapter())
-
-        participation = create(Builder('ogds_user_participation')
-                               .for_dossier(dossier)
-                               .for_ogds_user(ogds_user))
-
-        self.assertEqual(dossier, participation.resolve_dossier())
-
-
 class TestAddParticipationAction(IntegrationTestCase):
 
     @browsing
