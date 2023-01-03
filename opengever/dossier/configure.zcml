@@ -403,7 +403,6 @@
       />
 
   <adapter factory=".participations.PloneOrKuBParticipationData" />
-  <adapter factory=".participations.SQLParticipationData" />
 
   <adapter factory=".move_items.DossierMovabiliyChecker" />
   <adapter factory=".move_items.DossierTemplateMovabilityChecker" />

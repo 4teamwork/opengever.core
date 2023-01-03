@@ -18,7 +18,6 @@ from opengever.sharing.events import LocalRolesAcquisitionActivated
 from opengever.sharing.events import LocalRolesAcquisitionBlocked
 from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
-from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
@@ -452,25 +451,6 @@ class TestDossierParticipationsIndexer(SolrIntegrationTestCase):
             u'any-participant|participation',
             u'any-participant|final-drawing',
             u'kathi.barfuss|any-role']
-        self.assertItemsEqual(expected, indexed_value)
-
-    def test_sql_participations_are_indexed_in_solr(self):
-        self.activate_feature('contact')
-        self.login(self.regular_user)
-
-        # participations do not get indexed properly during setup of the fixture
-        self.dossier.reindexObject(idxs=['UID', 'participations'])
-        self.commit_solr()
-
-        indexed_value = solr_data_for(self.dossier, 'participations')
-        expected = [
-            u'any-participant|final-drawing',
-            u'any-participant|participation',
-            u'organization:2|any-role',
-            u'organization:2|final-drawing',
-            u'person:1|any-role',
-            u'person:1|final-drawing',
-            u'person:1|participation']
         self.assertItemsEqual(expected, indexed_value)
 
 
