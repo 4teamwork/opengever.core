@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 22:51+0000\n"
+"POT-Creation-Date: 2023-01-04 10:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,11 +67,6 @@ msgstr ""
 msgid "column_name"
 msgstr ""
 
-#. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_organizations"
-msgstr ""
-
 #. Default: "Salutation"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_salutation"
@@ -91,7 +86,6 @@ msgstr ""
 
 #. Default: "Active"
 #: ./opengever/contact/browser/tabs.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr ""
 
@@ -193,11 +187,6 @@ msgstr ""
 msgid "label_group"
 msgstr ""
 
-#. Default: "Inactive"
-#: ./opengever/contact/browser/templates/organization.pt
-msgid "label_inactive"
-msgstr ""
-
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/browser/person.py
@@ -239,7 +228,6 @@ msgstr ""
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr ""
 
@@ -250,7 +238,6 @@ msgstr ""
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr ""
 

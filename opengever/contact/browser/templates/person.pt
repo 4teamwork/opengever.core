@@ -95,19 +95,6 @@
 
       </table>
 
-      <h3 i18n:translate="label_organizations">Organizations</h3>
-      <ul class="organizations orgrole_listing">
-        <li tal:repeat="org_role view/get_org_roles">
-          <span class="name">
-            <a href="#"
-               tal:attributes="href org_role/organization/get_url"
-               tal:content="org_role/organization/name" />
-          </span>
-          <span class="function" tal:content="org_role/function" />
-          <span class="department" tal:content="org_role/department" />
-        </li>
-      </ul>
-
       <div class="collapsible" id="contactHistory"
            tal:condition="person/has_archived_information">
         <div class="collapsible-header">

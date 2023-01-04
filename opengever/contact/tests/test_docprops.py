@@ -56,35 +56,6 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         self.assertItemsEqual(expected_organization_properties,
                               provider.get_properties(prefix='recipient'))
 
-    def test_org_role_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller',
-                               salutation='Herr',
-                               academic_title='Prof. Dr.',
-                               description='blablabla'))
-        organization = create(Builder('organization').having(name=u'Foo'))
-        org_role = create(Builder('org_role')
-                          .having(organization=organization,
-                                  person=peter,
-                                  function=u'M\xe4dchen f\xfcr alles',
-                                  description=u'blub',
-                                  department=u'Informatik'))
-        provider = org_role.get_doc_property_provider()
-        expected_orgrole_properties = {
-            'ogg.recipient.orgrole.function': u'M\xe4dchen f\xfcr alles',
-            'ogg.recipient.orgrole.description': 'blub',
-            'ogg.recipient.orgrole.department': 'Informatik',
-            'ogg.recipient.contact.title': u'M\xfcller Peter',
-            'ogg.recipient.contact.description': 'blablabla',
-            'ogg.recipient.person.salutation': 'Herr',
-            'ogg.recipient.person.academic_title': 'Prof. Dr.',
-            'ogg.recipient.person.firstname': 'Peter',
-            'ogg.recipient.person.lastname': u'M\xfcller',
-        }
-        self.assertItemsEqual(expected_orgrole_properties,
-                              provider.get_properties(prefix='recipient'))
-
     def test_ogds_user_adapter_doc_property_provider(self):
         provider = OgdsUserToContactAdapter(self.user).get_doc_property_provider()
 
@@ -116,40 +87,6 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
             'ogg.recipient.address.street': u'Musterstrasse 283',
             'ogg.recipient.address.zip_code': '1234',
             'ogg.recipient.address.city': 'Hinterkappelen',
-            'ogg.recipient.address.country': 'Schweiz',
-        }
-        self.assertItemsEqual(expected_address_properties,
-                              provider.get_properties(prefix='recipient'))
-
-    def test_org_role_address_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller',
-                               salutation='Herr',
-                               academic_title='Prof. Dr.',
-                               description='blablabla'))
-        organization = create(Builder('organization').having(name=u'Foo'))
-        create(Builder('address')
-               .for_contact(organization)
-               .labeled(u'Main')
-               .having(street=u'Musterstrasse 1234',
-                       zip_code=u'7335',
-                       city=u'Obermumpf',
-                       country=u'Schweiz'))
-        org_role = create(Builder('org_role')
-                          .having(organization=organization,
-                                  person=peter,
-                                  function=u'M\xe4dchen f\xfcr alles',
-                                  description=u'blub',
-                                  department=u'Informatik'))
-
-        org_role_address = org_role.addresses[0]
-        provider = org_role_address.get_doc_property_provider()
-        expected_address_properties = {
-            'ogg.recipient.organization.name': u'Foo',
-            'ogg.recipient.address.street': u'Musterstrasse 1234',
-            'ogg.recipient.address.zip_code': '7335',
-            'ogg.recipient.address.city': 'Obermumpf',
             'ogg.recipient.address.country': 'Schweiz',
         }
         self.assertItemsEqual(expected_address_properties,

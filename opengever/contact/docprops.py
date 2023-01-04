@@ -46,26 +46,6 @@ class OrganizationDocPropertProvider(BaseDocPropertyProvider):
         )
 
 
-class OrgRoleDocPropertyProvider(BaseDocPropertyProvider):
-    """Provides doc-properties for an org-role and its associated person."""
-
-    DEFAULT_PREFIX = ('orgrole',)
-
-    def _collect_properties(self):
-        return {
-            'function': self.context.function,
-            'description': self.context.description,
-            'department': self.context.department,
-        }
-
-    def get_properties(self, prefix=None):
-
-        return self._merge(
-            super(OrgRoleDocPropertyProvider, self).get_properties(prefix=prefix),
-            self.context.person.get_doc_property_provider().get_properties(prefix=prefix)
-        )
-
-
 class AddressDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for an address."""
 
@@ -111,20 +91,3 @@ class URLDocPropertyProvider(BaseDocPropertyProvider):
         return {
             'url': self.context.url,
         }
-
-
-class OrgRoleAddressDocPropertyProvider(BaseDocPropertyProvider):
-    """Provides doc-properties for org role addresses.
-
-    Injects organization name into address.
-    """
-    DEFAULT_PREFIX = ('organization',)
-
-    def _collect_properties(self):
-        return {'name': self.context.organization.name}
-
-    def get_properties(self, prefix=None):
-        return self._merge(
-            super(OrgRoleAddressDocPropertyProvider, self).get_properties(prefix=prefix),
-            AddressDocPropertyProvider(self.context.organization_address).get_properties(prefix=prefix)
-        )

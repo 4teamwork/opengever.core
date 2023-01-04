@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-03 22:51+0000\n"
+"POT-Creation-Date: 2023-01-04 10:43+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -66,11 +66,6 @@ msgstr "Nom"
 msgid "column_name"
 msgstr "Nom"
 
-#. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_organizations"
-msgstr "Organisations"
-
 #. Default: "Salutation"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_salutation"
@@ -90,7 +85,6 @@ msgstr "Titre"
 
 #. Default: "Active"
 #: ./opengever/contact/browser/tabs.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr "Actif"
 
@@ -192,11 +186,6 @@ msgstr "Prénom"
 msgid "label_group"
 msgstr "Groupe"
 
-#. Default: "Inactive"
-#: ./opengever/contact/browser/templates/organization.pt
-msgid "label_inactive"
-msgstr "Inactif"
-
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/browser/person.py
@@ -238,7 +227,6 @@ msgstr "Unité d'organisation"
 
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organisations"
 
@@ -249,7 +237,6 @@ msgstr "Informations personnelles:"
 
 #. Default: "Persons"
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Personnes"
 

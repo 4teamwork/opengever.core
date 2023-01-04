@@ -2,9 +2,7 @@ from opengever.base.query import BaseQuery
 from opengever.base.query import extend_query_with_textfilter
 from opengever.contact.models import Contact
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
-from sqlalchemy.orm import contains_eager
 
 
 class ContactQuery(BaseQuery):
@@ -18,14 +16,12 @@ class ContactQuery(BaseQuery):
         """
         if text_filters is None:
             text_filters = []
-        # we need to join manually instead of using `options.joinedload` to be
-        # able to filter by OrgRole.function below.
-        query = self.outerjoin(Person.organizations)
-        query = query.options(contains_eager(Person.organizations))
+
+        query = Contact.query
         return extend_query_with_textfilter(
             query,
             [Person.firstname, Person.lastname, Organization.name,
-             OrgRole.function, Contact.former_contact_id],
+             Contact.former_contact_id],
             text_filters,
         )
 

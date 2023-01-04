@@ -303,25 +303,6 @@ class TestSQLContactActor(IntegrationTestCase):
         self.assertEqual(None, actor.get_profile_url())
         self.assertEqual(None, actor.represents())
 
-    def test_orgrole_actor_lookup(self):
-        self.login(self.regular_user)
-
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter', lastname=u'B\xfchler'))
-        buhler_ag = create(Builder('organization').named(u'Buhler AG'))
-        create(Builder('org_role')
-               .having(person=peter,
-                       organization=buhler_ag,
-                       function=u'CEO'))
-
-        actor = Actor.lookup('org_role:1')
-
-        self.assertIsInstance(actor, SQLContactActor)
-        self.assertEqual(u'B\xfchler Peter - Buhler AG (CEO)',
-                         actor.get_label())
-        self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(None, actor.represents())
-
     def test_sql_contact_actor_lookup_for_not_existing_contact(self):
         self.login(self.regular_user)
         actor = Actor.lookup('person:not')

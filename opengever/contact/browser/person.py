@@ -4,8 +4,6 @@ from opengever.base.model import CONTENT_TITLE_LENGTH
 from opengever.base.model import FIRSTNAME_LENGTH
 from opengever.base.model import LASTNAME_LENGTH
 from opengever.contact import _
-from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models.person import Person
 from opengever.ogds.base.actor import Actor
 from path import Path
@@ -47,10 +45,6 @@ class PersonView(BrowserView):
 
     def get_actor_link(self, archive):
         return Actor.lookup(archive.actor_id).get_link()
-
-    def get_org_roles(self):
-        query = OrgRole.query.filter_by(person=self.context.model)
-        return query.join(Organization).order_by(Organization.name).all()
 
 
 class IPersonModel(model.Schema):

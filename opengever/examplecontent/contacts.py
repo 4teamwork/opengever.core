@@ -7,7 +7,6 @@ from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.ogds.models.user import User
@@ -107,13 +106,6 @@ class ContactExampleContentCreator(object):
             self.add_archived_phonenumbers(items, person, PHONENUMBER_LABELS)
             self.add_mail(item, person, ADDRESS_LABELS)
             self.add_archived_mails(items, person, ADDRESS_LABELS)
-
-            for entry in self.random_range:
-                org_role = OrgRole(person=person,
-                                   function=random.choice(ORG_ROLE_FUNCTIONS),
-                                   organization=random.choice(organizations),
-                                   department=random.choice(DEPARTMENTS))
-                self.db_session.add(org_role)
 
     def add_archived_persons(self, person, items):
         for archive_entry in self.random_range:

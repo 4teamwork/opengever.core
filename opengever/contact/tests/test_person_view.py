@@ -225,37 +225,3 @@ class TestPersonView(FunctionalTestCase):
         self.assertEquals(['https://www.peters-blog.example.com',
                            'https://peters-homepage.example.com'],
                           [link.get('href') for link in links])
-
-    @browsing
-    def test_list_all_of_the_users_organizations_alphabetically(self, browser):
-        org1 = create(Builder('organization').named(u'Jaeger & Heike GmbH'))
-        create(Builder('organization').named(u'Schuhmacher Peter AG'))
-        org3 = create(Builder('organization').named(u'Albert B & N SA'))
-
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter', lastname=u'M\xfcller')
-                       .in_orgs([(org1, 'CEO'),
-                                 (org3, u'Stellvertretende F\xfchrung')]))
-
-        browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        self.assertEquals(
-            ['Albert B & N SA', 'Jaeger & Heike GmbH'],
-            browser.css('.organizations .name').text)
-
-        browser.login().open(self.contactfolder, view=peter.wrapper_id)
-        self.assertEquals(
-            [u'Stellvertretende F\xfchrung', u'CEO'],
-            browser.css('.organizations .function').text)
-
-    @browsing
-    def test_related_organizations_are_linked_to_organization_view(self, browser):
-        org1 = create(Builder('organization').named(u'4teamwork AG'))
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter', lastname=u'M\xfcller')
-                       .in_orgs([(org1, 'CEO')]))
-
-        browser.login().open(peter.get_url())
-
-        self.assertEquals(
-            org1.get_url(),
-            browser.css('.organizations .name > a').first.get('href'))

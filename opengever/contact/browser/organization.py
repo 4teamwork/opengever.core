@@ -1,5 +1,3 @@
-from opengever.contact.models import OrgRole
-from opengever.contact.models import Person
 from opengever.ogds.base.actor import Actor
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -25,14 +23,3 @@ class OrganizationView(BrowserView):
 
     def get_actor_link(self, archive):
         return Actor.lookup(archive.actor_id).get_link()
-
-    def get_org_roles(self, active):
-        query = OrgRole.query.filter_by(organization=self.context.model)
-        query = query.join(Person).filter(Person.is_active == active)
-        return query.order_by(Person.lastname, Person.firstname).all()
-
-    def get_active_org_roles(self):
-        return self.get_org_roles(active=True)
-
-    def get_inactive_org_roles(self):
-        return self.get_org_roles(active=False)
