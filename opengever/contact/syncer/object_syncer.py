@@ -2,7 +2,6 @@ from AccessControl.SecurityInfo import ClassSecurityInformation
 from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
-from opengever.contact.models import MailAddress
 from opengever.contact.models import URL
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy.sql import select
@@ -165,34 +164,6 @@ class ContactAdditionsSyncer(SQLObjectSyncer):
         data['contact_id'] = self.get_contact_mapping()[
             source_row.former_contact_id]
         return data
-
-
-class MailSyncer(ContactAdditionsSyncer):
-
-    model = MailAddress
-    attributes = {'label': 'label', 'address': 'address'}
-    gever_id_column = 'mailaddress_id'
-    _contact_mapping = None
-
-    def get_existing_id_lookup(self):
-        mail_table = table(
-            "mail_addresses", column('id'),
-            column('label'),
-            column('contact_id'))
-
-        contact_table = table(
-            "contacts",
-            column('id'), column('former_contact_id'))
-
-        stmt = select([
-            mail_table.c.id, mail_table.c.label,
-            mail_table.c.contact_id, contact_table.c.former_contact_id])
-        stmt = stmt.select_from(
-            join(mail_table, contact_table,
-                 mail_table.c.contact_id == contact_table.c.id))
-
-        return {self.get_identifier(gever_row): gever_row.id
-                for gever_row in self.db_session.execute(stmt)}
 
 
 def save_url(url):
