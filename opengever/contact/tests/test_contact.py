@@ -1,5 +1,4 @@
 from ftw.testbrowser import browsing
-from ftw.testbrowser import InsufficientPrivileges
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
@@ -7,28 +6,9 @@ from opengever.testing import SolrIntegrationTestCase
 
 class TestContact(SolrIntegrationTestCase):
 
-    features = ('contact', )
-
     @browsing
-    def test_cannot_add_a_contact_with_contact_feature_enabled(self, browser):
+    def test_can_add_a_contact(self, browser):
         self.login(self.regular_user, browser)
-
-        browser.open(self.contactfolder)
-
-        with self.assertRaises(ValueError) as err:
-            factoriesmenu.addable_types()
-
-        self.assertEqual(
-            'Factories menu is not visible.',
-            str(err.exception))
-
-        with self.assertRaises(InsufficientPrivileges):
-            browser.visit(self.contactfolder, view="++add++opengever.contact.contact")
-
-    @browsing
-    def test_can_add_a_contact_with_contact_feature_disabled(self, browser):
-        self.login(self.regular_user, browser)
-        self.deactivate_feature('contact')
 
         browser.open(self.contactfolder)
         factoriesmenu.add('Contact')
