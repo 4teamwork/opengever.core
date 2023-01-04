@@ -5,8 +5,6 @@ from ftw.builder import builder_registry
 from ftw.builder import create
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
-from opengever.contact.models import Address
-from opengever.contact.models import ArchivedAddress
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
@@ -539,46 +537,6 @@ class LockBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('lock', LockBuilder)
-
-
-class ContactAttributesBuilder(SqlObjectBuilder):
-    """Base class for contacts attributes builders like the
-    AddressBuilder, PhoneNumberBuilder or the MailAddressBuilder.
-    """
-
-    def for_contact(self, contact):
-        self.arguments['contact'] = contact
-        return self
-
-    def labeled(self, label):
-        self.arguments['label'] = label
-        return self
-
-
-class ArchivedContactAttributesBuilder(ContactAttributesBuilder):
-    """Base class for archived contacts attributes."""
-
-    def __init__(self, session):
-        super(ArchivedContactAttributesBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
-
-
-class AddressBuilder(ContactAttributesBuilder):
-
-    mapped_class = Address
-    id_argument_name = 'address_id'
-
-
-builder_registry.register('address', AddressBuilder)
-
-
-class ArchivedAddressBuilder(ArchivedContactAttributesBuilder):
-
-    mapped_class = ArchivedAddress
-    id_argument_name = 'archived_address_id'
-
-
-builder_registry.register('archived_address', ArchivedAddressBuilder)
 
 
 class FavoriteBuilder(SqlObjectBuilder):

@@ -24,10 +24,7 @@ class Contact(Base, SQLFormSupport):
 
     former_contact_id = Column('former_contact_id', Integer, unique=True)
 
-    addresses = relationship("Address", back_populates="contact")
-
     archived_contacts = relationship("ArchivedContact", back_populates="contact")
-    archived_addresses = relationship("ArchivedAddress", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on': contact_type,
                        'with_polymorphic': '*'}
@@ -44,8 +41,7 @@ class Contact(Base, SQLFormSupport):
         return False
 
     def has_archived_information(self):
-        return any([self.archived_contacts,
-                    self.archived_addresses])
+        return any([self.archived_contacts])
 
     def get_contact_id(self):
         return self.contact_id

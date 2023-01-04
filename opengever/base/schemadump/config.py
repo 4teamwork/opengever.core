@@ -122,7 +122,6 @@ MANAGEABLE_ROLES_BY_TYPE = {
 
 
 GEVER_SQL_TYPES = [
-    '_opengever.contact.models.Address',
     '_opengever.ogds.models.user.User',
     '_opengever.ogds.models.group.Group',
 ]

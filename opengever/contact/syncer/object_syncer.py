@@ -1,11 +1,9 @@
 from AccessControl.SecurityInfo import ClassSecurityInformation
 from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
-from opengever.contact.models import Address
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import column
-from sqlalchemy.sql.expression import join
 from sqlalchemy.sql.expression import table
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
@@ -162,34 +160,3 @@ class ContactAdditionsSyncer(SQLObjectSyncer):
         data['contact_id'] = self.get_contact_mapping()[
             source_row.former_contact_id]
         return data
-
-
-class AddressSyncer(ContactAdditionsSyncer):
-
-    model = Address
-    attributes = {'label': 'label',
-                  'street': 'street',
-                  'zip_code': 'zip_code',
-                  'city': 'city',
-                  'country': 'country'}
-    gever_id_column = 'address_id'
-
-    def get_existing_id_lookup(self):
-        address_table = table(
-            "addresses", column('id'), column('label'), column('contact_id'))
-
-        contact_table = table(
-            "contacts",
-            column('id'), column('former_contact_id'))
-
-        stmt = select([
-            address_table.c.id,
-            address_table.c.label,
-            address_table.c.contact_id,
-            contact_table.c.former_contact_id])
-        stmt = stmt.select_from(
-            join(address_table, contact_table,
-                 address_table.c.contact_id == contact_table.c.id))
-
-        return {self.get_identifier(gever_row): gever_row.id
-                for gever_row in self.db_session.execute(stmt)}
