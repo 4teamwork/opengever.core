@@ -180,11 +180,6 @@ class TestConfigurationAdapter(IntegrationTestCase):
         contact_type = IGeverSettings(self.portal)._get_contact_type()
         self.assertEqual("plone", contact_type)
 
-        self.activate_feature("contact")
-        contact_type = IGeverSettings(self.portal)._get_contact_type()
-        self.assertEqual("sql", contact_type)
-
-        self.deactivate_feature("contact")
         api.portal.set_registry_record(
             'base_url', u'http://localhost:8000', IKuBSettings)
         contact_type = IGeverSettings(self.portal)._get_contact_type()

@@ -10,9 +10,7 @@ from ftw.testbrowser.pages import plone
 from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testing import freeze
-from opengever.contact.interfaces import IContactSettings
 from opengever.document.docprops import TemporaryDocFile
-from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
@@ -24,8 +22,6 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
-from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletAssignmentMapping
@@ -366,62 +362,6 @@ class TestDocumentWithTemplateFormWithDocProperties(IntegrationTestCase):
                 expected_doc_properties.items(),
                 properties)
         self.assert_doc_properties_updated_journal_entry_generated(document, self.regular_user)
-
-
-class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
-    document_date = datetime(2015, 9, 28, 0, 0)
-
-    expected_doc_properties = {
-        'Document.ReferenceNumber': 'Client1 / 1 / 2',
-        'Document.SequenceNumber': '2',
-        'Dossier.ReferenceNumber': 'Client1 / 1',
-        'Dossier.Title': 'My Dossier',
-        'User.FullName': 'Test User',
-        'User.ID': TEST_USER_ID,
-        'ogg.document.document_date': document_date,
-        'ogg.document.reference_number': 'Client1 / 1 / 2',
-        'ogg.document.sequence_number': '2',
-        'ogg.document.title': 'Test Docx',
-        'ogg.document.version_number': 0,
-        'ogg.dossier.reference_number': 'Client1 / 1',
-        'ogg.dossier.sequence_number': '1',
-        'ogg.dossier.title': 'My Dossier',
-        'ogg.user.email': 'test@example.org',
-        'ogg.user.firstname': 'User',
-        'ogg.user.lastname': 'Test',
-        'ogg.user.title': 'Test User',
-        'ogg.user.userid': TEST_USER_ID,
-        'ogg.document.creator.user.email': 'test@example.org',
-        'ogg.document.creator.user.userid': 'test_user_1_',
-        'ogg.document.creator.user.title': 'Test User',
-        'ogg.document.creator.user.firstname': 'User',
-        'ogg.document.creator.user.lastname': 'Test',
-    }
-
-    def setUp(self):
-        super(TestDocumentWithTemplateFormWithContacts, self).setUp()
-        api.portal.set_registry_record('create_doc_properties', True, interface=ITemplateFolderProperties)
-        api.portal.set_registry_record('is_feature_enabled', True, interface=IContactSettings)
-
-        self.setup_fullname(fullname='Peter')
-        self.modification_date = datetime(2012, 12, 28)
-        self.templatefolder = create(Builder('templatefolder'))
-
-        self.template_word = create(
-            Builder('document')
-            .titled('Word Docx template')
-            .within(self.templatefolder)
-            .with_asset_file('without_custom_properties.docx'),
-        )
-
-        self.dossier = create(Builder('dossier').titled(u'My Dossier'))
-
-    def assert_doc_properties_updated_journal_entry_generated(self, document):
-        entry = get_journal_entry(document)
-
-        self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
-        self.assertEqual(TEST_USER_ID, entry['actor'])
-        self.assertEqual('', entry['comments'])
 
 
 class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
