@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-04 10:43+0000\n"
+"POT-Creation-Date: 2023-01-04 11:01+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -44,7 +44,6 @@ msgstr "Academic title"
 
 #. German translation: Aktiv
 #. Default: "Active"
-#: ./opengever/contact/browser/organization_listing.py
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_active"
 msgstr "Active"
@@ -57,7 +56,6 @@ msgstr "First name"
 
 #. German translation: Frühere Kontakt ID
 #. Default: "Former contact id"
-#: ./opengever/contact/browser/organization_listing.py
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_former_contact_id"
 msgstr "Former contact ID"
@@ -67,12 +65,6 @@ msgstr "Former contact ID"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_lastname"
 msgstr "Last name"
-
-#. German translation: Name
-#. Default: "Name"
-#: ./opengever/contact/browser/organization_listing.py
-msgid "column_name"
-msgstr "Name"
 
 #. German translation: Anrede
 #. Default: "Salutation"
@@ -115,30 +107,21 @@ msgstr "Address 2"
 
 #. German translation: Adressen
 #. Default: "Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_addresses"
 msgstr "Addresses"
 
 #. German translation: Archivierte Adressen
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_addresses"
 msgstr "Archived addresses"
 
 #. German translation: Archivierte E-Mail-Adressen
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_mail"
 msgstr "Archived email addresses"
-
-#. German translation: Archivierte Informationen
-#. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt
-msgid "label_archived_organizations"
-msgstr "Archived information"
 
 #. German translation: Archivierte persönliche Informationen
 #. Default: "Archived Personal Information"
@@ -148,7 +131,6 @@ msgstr "Archived personal information"
 
 #. German translation: Archivierte Telefonnummern
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_phone_numbers"
 msgstr "Archived phone numbers"
@@ -233,7 +215,6 @@ msgstr "Local"
 
 #. German translation: E-Mail-Adressen
 #. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_mail"
 msgstr "Email Addresses"
@@ -246,7 +227,6 @@ msgstr "Mobile"
 
 #. German translation: Name
 #. Default: "Name"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_name"
 msgstr "Name"
@@ -262,12 +242,6 @@ msgstr "Office"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
 msgstr "Organizational unit"
-
-#. German translation: Organisationen
-#. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py
-msgid "label_organizations"
-msgstr "Organizations"
 
 #. German translation: Persönliche Informationen:
 #. Default: "Personal information:"
@@ -302,7 +276,6 @@ msgstr "Mobile"
 
 #. German translation: Telefonnummern
 #. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_phone_numbers"
 msgstr "Phone numbers"
@@ -354,7 +327,6 @@ msgstr "URL"
 
 #. German translation: URLs
 #. Default: "URLs"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_urls"
 msgstr "URLs"

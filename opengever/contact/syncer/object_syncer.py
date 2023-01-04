@@ -3,7 +3,6 @@ from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
@@ -139,36 +138,6 @@ class SQLObjectSyncer(object):
         the value is the gever-id.
         """
         raise NotImplementedError
-
-
-class OrganizationSyncer(SQLObjectSyncer):
-
-    model = Organization
-    default_values = {'contact_type': 'organization'}
-    attributes = {'name': 'name',
-                  'description': 'description',
-                  'former_contact_id': 'former_contact_id',
-                  'is_active': lambda row: bool(getattr(row, 'is_active'))}
-
-    source_id_column = 'former_contact_id'
-    gever_id_column = 'contact_id'
-
-    def get_existing_id_lookup(self):
-        contact_table = table(
-            "contacts",
-            column('id'),
-            column('former_contact_id'))
-        stmt = select([contact_table.c.former_contact_id, contact_table.c.id])
-        return {key: value for (key, value) in self.db_session.execute(stmt)}
-
-    def finalize_update_data(self, data, source_row, existing):
-        data = super(OrganizationSyncer, self).finalize_update_data(
-            data, source_row, existing)
-
-        # Because Organization is a inherited Model we also need to pass in the
-        # id as the organization primary key.
-        data['organization_id'] = existing[self.get_identifier(source_row)]
-        return data
 
 
 class PersonSyncer(SQLObjectSyncer):

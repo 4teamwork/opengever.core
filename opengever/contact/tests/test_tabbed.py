@@ -17,13 +17,13 @@ class TestContactFolderTabbedView(IntegrationTestCase):
             browser.css('.formTab').text)
 
     @browsing
-    def test_shows_person_organization_and_user_tab_when_contact_feature_is_enabled(self, browser):
+    def test_shows_person_and_user_tab_when_contact_feature_is_enabled(self, browser):
         self.activate_feature("contact")
         self.login(self.regular_user, browser)
         browser.open(self.contactfolder, view='tabbed_view')
 
         self.assertEquals(
-            ['Persons', 'Organizations', 'Users', 'Teams'],
+            ['Persons', 'Users', 'Teams'],
             browser.css('.formTab').text)
 
     @browsing

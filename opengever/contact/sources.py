@@ -1,6 +1,5 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Contact
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.kub import is_kub_feature_enabled
@@ -22,7 +21,6 @@ class ContactsSource(object):
     """
 
     by_type = {'person': Person,
-               'organization': Organization,
                'ogds_user': OgdsUserToContactAdapter}
     by_class = {v: k for k, v in by_type.iteritems()}
 

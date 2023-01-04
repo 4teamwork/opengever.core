@@ -23,19 +23,3 @@ class TestArchivedMailAddress(unittest.TestCase):
                       .having(address=u'm.peter@example.com'))
 
         self.assertEquals([home, work], fritz.archived_mail_addresses)
-
-    def test_organization_can_have_multiple_archived_mail_addresses(self):
-        acme = create(Builder('organization')
-                      .having(name=u'ACME'))
-
-        sales = create(Builder('archived_mail_addresses')
-                       .for_contact(acme)
-                       .labeled(u'Sales')
-                       .having(address=u'sales@example.com'))
-
-        hr = create(Builder('archived_mail_addresses')
-                    .for_contact(acme)
-                    .labeled(u'HR')
-                    .having(address=u'hr@example.com'))
-
-        self.assertEquals([sales, hr], acme.archived_mail_addresses)

@@ -673,7 +673,7 @@ class OpengeverContentFixture(object):
             .having(firstname=u'Josef', lastname=u'B\xfchler'),
         )
 
-        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        create(Builder('dummy_clock_tick'))
 
         create_session().flush()
 

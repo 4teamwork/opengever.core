@@ -24,11 +24,6 @@ class ContactFolderTabbedView(TabbedView):
                  'title': _(u'label_persons', default=u'Persons'),
                  'icon': None,
                  'url': '#',
-                 'class': None},
-                {'id': 'organizations',
-                 'title': _(u'label_organizations', default=u'Organizations'),
-                 'icon': None,
-                 'url': '#',
                  'class': None}]
 
         else:

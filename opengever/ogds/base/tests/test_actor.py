@@ -294,15 +294,6 @@ class TestSQLContactActor(IntegrationTestCase):
         self.assertEqual(None, actor.get_profile_url())
         self.assertEqual(None, actor.represents())
 
-    def test_organization_actor_lookup(self):
-        self.login(self.regular_user)
-        actor = Actor.lookup('organization:2')
-
-        self.assertIsInstance(actor, SQLContactActor)
-        self.assertEqual(u'Meier AG', actor.get_label())
-        self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(None, actor.represents())
-
     def test_sql_contact_actor_lookup_for_not_existing_contact(self):
         self.login(self.regular_user)
         actor = Actor.lookup('person:not')
