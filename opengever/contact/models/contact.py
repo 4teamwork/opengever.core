@@ -30,13 +30,11 @@ class Contact(Base, SQLFormSupport):
         back_populates="contact",
         order_by='MailAddress.mailaddress_id')
 
-    phonenumbers = relationship("PhoneNumber", back_populates="contact")
     urls = relationship("URL", back_populates="contact")
 
     archived_contacts = relationship("ArchivedContact", back_populates="contact")
     archived_addresses = relationship("ArchivedAddress", back_populates="contact")
     archived_mail_addresses = relationship("ArchivedMailAddress", back_populates="contact")
-    archived_phonenumbers = relationship("ArchivedPhoneNumber", back_populates="contact")
     archived_urls = relationship("ArchivedURL", back_populates="contact")
 
     __mapper_args__ = {'polymorphic_on': contact_type,
@@ -57,7 +55,6 @@ class Contact(Base, SQLFormSupport):
         return any([self.archived_contacts,
                     self.archived_addresses,
                     self.archived_mail_addresses,
-                    self.archived_phonenumbers,
                     self.archived_urls])
 
     def get_contact_id(self):
