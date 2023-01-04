@@ -2,13 +2,11 @@ from AccessControl.SecurityInfo import ClassSecurityInformation
 from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
-from opengever.contact.models import URL
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import join
 from sqlalchemy.sql.expression import table
-from urlparse import urlparse
 from zope.sqlalchemy.datamanager import mark_changed
 import logging
 
@@ -164,39 +162,6 @@ class ContactAdditionsSyncer(SQLObjectSyncer):
         data['contact_id'] = self.get_contact_mapping()[
             source_row.former_contact_id]
         return data
-
-
-def save_url(url):
-    if not urlparse(url).scheme:
-        return u'http://{}'.format(safe_unicode(url))
-
-    return url
-
-
-class UrlSyncer(ContactAdditionsSyncer):
-
-    model = URL
-    attributes = {'label': 'label',
-                  'url': lambda row: save_url(getattr(row, 'url'))}
-    gever_id_column = 'url_id'
-
-    def get_existing_id_lookup(self):
-        url_table = table(
-            "urls", column('id'), column('label'), column('contact_id'))
-
-        contact_table = table(
-            "contacts",
-            column('id'), column('former_contact_id'))
-
-        stmt = select([
-            url_table.c.id, url_table.c.label, url_table.c.contact_id,
-            contact_table.c.former_contact_id])
-        stmt = stmt.select_from(
-            join(url_table, contact_table,
-                 url_table.c.contact_id == contact_table.c.id))
-
-        return {self.get_identifier(gever_row): gever_row.id
-                for gever_row in self.db_session.execute(stmt)}
 
 
 class AddressSyncer(ContactAdditionsSyncer):
