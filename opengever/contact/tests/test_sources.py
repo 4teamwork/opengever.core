@@ -22,14 +22,6 @@ class TestContactsSource(FunctionalTestCase):
                               .having(firstname=u'Peter',
                                       lastname=u'Meier')
                               .having(is_active=False))
-        self.meier_ag = create(Builder('organization')
-                               .named(u'Meier AG')
-                               .having(former_contact_id=2222))
-        self.teamwork_ag = create(Builder('organization')
-                                  .named(u'4teamwork AG'))
-        self.school = create(Builder('organization')
-                             .named(u'School')
-                             .having(is_active=False))
         self.ogds_user = OgdsUserToContactAdapter(
             ogds_service().all_users()[0])
 

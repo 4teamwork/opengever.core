@@ -32,7 +32,6 @@ from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
 from opengever.base.interfaces import IActorSettings
 from opengever.base.utils import escape_html
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
@@ -767,8 +766,6 @@ class ActorLookup(object):
             type_, id_ = self.identifier.split(':')
             if self.identifier.startswith('person'):
                 contact = Person.get(id_)
-            elif self.identifier.startswith('organization'):
-                contact = Organization.get(id_)
 
             if not contact:
                 return self.create_null_actor()

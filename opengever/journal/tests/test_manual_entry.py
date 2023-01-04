@@ -71,8 +71,6 @@ class TestManualJournalEntry(FunctionalTestCase):
         peter = create(Builder('person')
                        .having(firstname=u'H\xfcgo', lastname='Boss'))
 
-        meierag = create(Builder('organization').named(u'Meier AG'))
-
         browser.login().open(self.dossier, view='add-journal-entry')
         browser.fill({
             'Category': u'phone-call',
@@ -80,7 +78,7 @@ class TestManualJournalEntry(FunctionalTestCase):
 
         form = browser.find_form_by_field('Contacts')
         form.find_widget('Contacts').fill(
-            [get_contacts_token(peter), get_contacts_token(meierag)])
+            [get_contacts_token(peter)])
 
         browser.css('#form-buttons-add').first.click()
 
@@ -88,14 +86,13 @@ class TestManualJournalEntry(FunctionalTestCase):
         row = browser.css('.listing').first.rows[1]
         links = row.css('.contacts a')
 
-        self.assertEquals(u'Contacts Boss H\xfcgo Meier AG',
+        self.assertEquals(u'Contacts Boss H\xfcgo',
                           row.dict().get('References'))
 
         self.assertEquals(
-            ['http://nohost/plone/opengever-contact-contactfolder/contact-1',
-             'http://nohost/plone/opengever-contact-contactfolder/contact-2'],
+            ['http://nohost/plone/opengever-contact-contactfolder/contact-1'],
             [link.get('href') for link in links])
-        self.assertEquals([u'Boss H\xfcgo', 'Meier AG'], links.text)
+        self.assertEquals([u'Boss H\xfcgo'], links.text)
 
     @browsing
     def test_adding_a_entry_with_a_user_as_contact(self, browser):

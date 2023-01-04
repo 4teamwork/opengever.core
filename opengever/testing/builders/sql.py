@@ -8,12 +8,10 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedMailAddress
-from opengever.contact.models import ArchivedOrganization
 from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
@@ -555,11 +553,6 @@ class PersonBuilder(SqlObjectBuilder):
 
     mapped_class = Person
     id_argument_name = 'person_id'
-    organizations = []
-
-    def in_orgs(self, organizations):
-        self.organizations = organizations
-        return self
 
     def after_create(self, obj):
         obj = super(PersonBuilder, self).after_create(obj)
@@ -674,32 +667,6 @@ class ArchivedURLBuilder(ArchivedContactAttributesBuilder):
 
 
 builder_registry.register('archived_url', ArchivedURLBuilder)
-
-
-class OrganizationBuilder(SqlObjectBuilder):
-
-    mapped_class = Organization
-    id_argument_name = 'organization_id'
-
-    def named(self, name):
-        self.arguments['name'] = name
-        return self
-
-
-builder_registry.register('organization', OrganizationBuilder)
-
-
-class ArchivedOrganizationBuilder(SqlObjectBuilder):
-
-    mapped_class = ArchivedOrganization
-    id_argument_name = 'archived_organization_id'
-
-    def __init__(self, session):
-        super(ArchivedOrganizationBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
-
-
-builder_registry.register('archived_organization', ArchivedOrganizationBuilder)
 
 
 class FavoriteBuilder(SqlObjectBuilder):

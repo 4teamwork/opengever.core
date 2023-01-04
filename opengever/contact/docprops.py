@@ -32,20 +32,6 @@ class PersonDocPropertyProvider(BaseDocPropertyProvider):
         )
 
 
-class OrganizationDocPropertProvider(BaseDocPropertyProvider):
-
-    DEFAULT_PREFIX = ('organization',)
-
-    def _collect_properties(self):
-        return {'name': self.context.name}
-
-    def get_properties(self, prefix=None):
-        return self._merge(
-            super(OrganizationDocPropertProvider, self).get_properties(prefix=prefix),
-            ContactDocPropertyProvider(self.context).get_properties(prefix=prefix)
-        )
-
-
 class AddressDocPropertyProvider(BaseDocPropertyProvider):
     """Provides doc-properties for an address."""
 

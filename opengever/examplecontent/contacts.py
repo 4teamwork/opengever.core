@@ -2,11 +2,9 @@ from opengever.base.model import create_session
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedMailAddress
-from opengever.contact.models import ArchivedOrganization
 from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import MailAddress
-from opengever.contact.models import Organization
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.ogds.models.user import User
@@ -51,46 +49,10 @@ class ContactExampleContentCreator(object):
             'opengever.examplecontent', 'data/persons.json')
         return json.load(open(path, 'r'))
 
-    def load_organizations(self):
-        path = resource_filename(
-            'opengever.examplecontent', 'data/organizations.json')
-        return json.load(open(path, 'r'))
-
     def create(self):
-        organizations = self.create_organizations()
-        self.create_contacts(organizations)
+        self.create_contacts()
 
-    def create_organizations(self):
-        organizations = []
-        items = self.load_organizations()
-        for item in items:
-            organization = Organization(name=item['name'])
-            self.db_session.add(organization)
-            self.add_archived_organizations(organization, items)
-            organizations.append(organization)
-
-            address_labels = ['Hauptsitz', None]
-            mail_labels = ['Info', 'Support', None]
-
-            self.add_address(item, organization, address_labels)
-            self.add_archived_addresses(items, organization, address_labels)
-            self.add_mail(item, organization, mail_labels)
-            self.add_archived_mails(items, organization, mail_labels)
-
-        return organizations
-
-    def add_archived_organizations(self, organization, items):
-        for archive_entry in self.random_range:
-            # used to randomly choose a different name
-            item = random.choice(items)
-
-            archived_organization = ArchivedOrganization(
-                contact=organization,
-                actor_id=self.random_actor,
-                name=item['name'])
-            self.db_session.add(archived_organization)
-
-    def create_contacts(self, organizations=[]):
+    def create_contacts(self):
         items = self.load_persons()
         for item in items:
 

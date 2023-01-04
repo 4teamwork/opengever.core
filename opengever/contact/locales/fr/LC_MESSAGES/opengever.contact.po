@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-04 10:43+0000\n"
+"POT-Creation-Date: 2023-01-04 11:01+0000\n"
 "PO-Revision-Date: 2017-11-29 11:04+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-contact/fr/>\n"
@@ -40,7 +40,6 @@ msgid "column_academic_title"
 msgstr "Titre"
 
 #. Default: "Active"
-#: ./opengever/contact/browser/organization_listing.py
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_active"
 msgstr "Actif"
@@ -51,7 +50,6 @@ msgid "column_firstname"
 msgstr "Prénom"
 
 #. Default: "Former contact id"
-#: ./opengever/contact/browser/organization_listing.py
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_former_contact_id"
 msgstr "Contacts antérieurs ID"
@@ -59,11 +57,6 @@ msgstr "Contacts antérieurs ID"
 #. Default: "Lastname"
 #: ./opengever/contact/browser/person_listing.py
 msgid "column_lastname"
-msgstr "Nom"
-
-#. Default: "Name"
-#: ./opengever/contact/browser/organization_listing.py
-msgid "column_name"
 msgstr "Nom"
 
 #. Default: "Salutation"
@@ -99,27 +92,19 @@ msgid "label_address2"
 msgstr "Complément d'adresse"
 
 #. Default: "Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_addresses"
 msgstr "Adresses"
 
 #. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_addresses"
 msgstr "Adresses archivées"
 
 #. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_mail"
 msgstr "Adresses électroniques archivées"
-
-#. Default: "Archived Information"
-#: ./opengever/contact/browser/templates/organization.pt
-msgid "label_archived_organizations"
-msgstr "Informations archivées"
 
 #. Default: "Archived Personal Information"
 #: ./opengever/contact/browser/templates/person.pt
@@ -127,7 +112,6 @@ msgid "label_archived_persons"
 msgstr "Informations personnelles archivées"
 
 #. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_archived_phone_numbers"
 msgstr "Numéros de téléphones archivés"
@@ -199,7 +183,6 @@ msgid "label_local"
 msgstr "Local"
 
 #. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_mail"
 msgstr "Adresses électroniques"
@@ -210,7 +193,6 @@ msgid "label_mobile"
 msgstr "Téléphone portable"
 
 #. Default: "Name"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_name"
 msgstr "Nom"
@@ -224,11 +206,6 @@ msgstr "Bureau"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
 msgstr "Unité d'organisation"
-
-#. Default: "Organizations"
-#: ./opengever/contact/browser/tabbed.py
-msgid "label_organizations"
-msgstr "Organisations"
 
 #. Default: "Personal information:"
 #: ./opengever/contact/browser/templates/person.pt
@@ -256,7 +233,6 @@ msgid "label_phone_mobile"
 msgstr "Téléphone mobile"
 
 #. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_phone_numbers"
 msgstr "Numéros de téléphone"
@@ -299,7 +275,6 @@ msgid "label_url"
 msgstr "Adresse URL"
 
 #. Default: "URLs"
-#: ./opengever/contact/browser/templates/organization.pt
 #: ./opengever/contact/browser/templates/person.pt
 msgid "label_urls"
 msgstr "URLs"

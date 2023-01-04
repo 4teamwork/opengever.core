@@ -23,19 +23,3 @@ class TestArchivedURL(unittest.TestCase):
                        .having(url=u'http://example.org'))
 
         self.assertEquals([home, gever], fritz.archived_urls)
-
-    def test_organization_can_have_multiple_archived_urls(self):
-        acme = create(Builder('organization')
-                      .having(name=u'ACME'))
-
-        info = create(Builder('archived_url')
-                      .for_contact(acme)
-                      .labeled(u'ftw')
-                      .having(url=u'http://example.com'))
-
-        gever = create(Builder('archived_url')
-                       .for_contact(acme)
-                       .labeled(u'gever')
-                       .having(url=u'http://example.org'))
-
-        self.assertEquals([info, gever], acme.archived_urls)

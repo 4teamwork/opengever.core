@@ -4,7 +4,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.contact">
 
-  <adapter factory=".organization_listing.OrganizationTableSource" />
   <adapter factory=".person_listing.PersonTableSource" />
 
   <browser:page
@@ -45,22 +44,8 @@
 
   <browser:page
       for="opengever.contact.interfaces.IContactFolder"
-      name="tabbedview_view-organizations"
-      class=".organization_listing.Organizations"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="opengever.contact.interfaces.IContactFolder"
       name="tabbedview_view-persons"
       class=".person_listing.Persons"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      name="view"
-      for="opengever.contact.interfaces.IOrganization"
-      class=".organization.OrganizationView"
       permission="zope2.View"
       />
 

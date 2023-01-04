@@ -23,19 +23,3 @@ class TestArchviedPhoneNumber(unittest.TestCase):
                       .having(phone_number=u'0315110000'))
 
         self.assertEquals([home, work], fritz.archived_phonenumbers)
-
-    def test_organization_can_have_multiple_archived_phonenumbers(self):
-        acme = create(Builder('organization')
-                      .having(name=u'ACME'))
-
-        location1 = create(Builder('archived_phonenumber')
-                           .for_contact(acme)
-                           .labeled(u'Home')
-                           .having(phone_number=u'+41791234566'))
-
-        location2 = create(Builder('archived_phonenumber')
-                           .for_contact(acme)
-                           .labeled(u'Work')
-                           .having(phone_number=u'0315110000'))
-
-        self.assertEquals([location1, location2], acme.archived_phonenumbers)
