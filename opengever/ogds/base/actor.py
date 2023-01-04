@@ -33,7 +33,6 @@ from opengever.base.interfaces import IActorSettings
 from opengever.base.utils import escape_html
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.utils import get_contactfolder_url
 from opengever.inbox.utils import get_inbox_for_org_unit
@@ -731,7 +730,7 @@ class ActorLookup(object):
                 and is_kub_feature_enabled())
 
     def is_sql_contact(self):
-        sql_contact_prefixes = ['organization:', 'person:', 'org_role:']
+        sql_contact_prefixes = ['organization:', 'person:']
         for prefix in sql_contact_prefixes:
             if self.identifier.startswith(prefix):
                 return True
@@ -770,8 +769,6 @@ class ActorLookup(object):
                 contact = Person.get(id_)
             elif self.identifier.startswith('organization'):
                 contact = Organization.get(id_)
-            else:
-                contact = OrgRole.get(id_)
 
             if not contact:
                 return self.create_null_actor()

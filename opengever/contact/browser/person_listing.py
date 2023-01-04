@@ -10,7 +10,6 @@ from opengever.tabbedview.filters import Filter
 from opengever.tabbedview.filters import FilterList
 from opengever.tabbedview.helper import boolean_helper
 from opengever.tabbedview.helper import linked_sql_object
-from sqlalchemy.orm import joinedload
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import implements
@@ -48,26 +47,13 @@ class PersonListingTab(BaseListingTab):
              'column_title': _(u'column_active', default=u'Active'),
              'transform': boolean_helper},
 
-            {'column': 'organizations',
-             'column_title': _(u'column_organizations',
-                               default=u'Organizations'),
-             'transform': self.organizations_links},
-
             {'column': 'former_contact_id',
              'column_title': _(u'column_former_contact_id',
                                default=u'Former contact id')},
         )
 
-    def organizations_links(self, item, value):
-        links = []
-        for org_role in item.organizations:
-            links.append(linked_sql_object(org_role.organization,
-                                           org_role.organization.get_title()))
-
-        return ', '.join(links)
-
     def get_base_query(self):
-        return Person.query.options(joinedload('organizations'))
+        return Person.query
 
 
 @implementer(ITableSource)

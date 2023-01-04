@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-03 22:51+0000\n"
+"POT-Creation-Date: 2023-01-04 10:43+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -74,12 +74,6 @@ msgstr "Last name"
 msgid "column_name"
 msgstr "Name"
 
-#. German translation: Organisationen
-#. Default: "Organizations"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_organizations"
-msgstr "Organizations"
-
 #. German translation: Anrede
 #. Default: "Salutation"
 #. MARKER: questionable
@@ -104,7 +98,6 @@ msgstr "Academic title"
 #. German translation: Aktiv
 #. Default: "Active"
 #: ./opengever/contact/browser/tabs.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_active"
 msgstr "Active"
 
@@ -224,12 +217,6 @@ msgstr "First name"
 msgid "label_group"
 msgstr "Group"
 
-#. German translation: Inaktiv
-#. Default: "Inactive"
-#: ./opengever/contact/browser/templates/organization.pt
-msgid "label_inactive"
-msgstr "Inactive"
-
 #. German translation: Nachname
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
@@ -279,7 +266,6 @@ msgstr "Organizational unit"
 #. German translation: Organisationen
 #. Default: "Organizations"
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/person.pt
 msgid "label_organizations"
 msgstr "Organizations"
 
@@ -293,7 +279,6 @@ msgstr "Personal information:"
 #. Default: "Persons"
 #. MARKER: This might actually be correct here (instead of 'People'). Double check.
 #: ./opengever/contact/browser/tabbed.py
-#: ./opengever/contact/browser/templates/organization.pt
 msgid "label_persons"
 msgstr "Persons"
 

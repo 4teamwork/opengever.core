@@ -4,12 +4,10 @@ from opengever.base.model import create_session
 from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from Products.CMFPlone.utils import safe_unicode
-from sqlalchemy.orm import aliased
 from sqlalchemy.sql import select
 from sqlalchemy.sql.expression import column
 from sqlalchemy.sql.expression import join
@@ -357,57 +355,3 @@ class AddressSyncer(ContactAdditionsSyncer):
 
         return {self.get_identifier(gever_row): gever_row.id
                 for gever_row in self.db_session.execute(stmt)}
-
-
-class OrgRoleSyncer(ContactAdditionsSyncer):
-
-    model = OrgRole
-    attributes = {'function': 'function'}
-    gever_id_column = 'org_role_id'
-
-    def get_identifier(self, source_row):
-        return u'{}:{}'.format(
-            source_row.organization_id, source_row.person_id)
-
-    def get_existing_id_lookup(self):
-        org_role_table = table("org_roles",
-                               column('id'),
-                               column('organization_id'),
-                               column('person_id'),
-                               column('function'))
-
-        contact_table = table(
-            "contacts",
-            column('id'),
-            column('former_contact_id'))
-
-        org_contact = aliased(contact_table, alias='org_contact')
-        person_contact = aliased(contact_table, alias='person_contact')
-
-        query = self.db_session.query(org_role_table, org_contact, person_contact)
-        query = query.join(org_contact,
-                           org_role_table.c.organization_id == org_contact.c.id)
-        query = query.join(person_contact,
-                           org_role_table.c.person_id == person_contact.c.id)
-
-        mapping = {}
-
-        for gever_row in query:
-            key = u'{}:{}'.format(gever_row[5], gever_row[7])
-            mapping[key] = gever_row[0]
-
-        return mapping
-
-    def finalize_insert_data(self, data, source_row):
-        data['organization_id'] = self.get_contact_mapping()[
-            source_row.organization_id]
-        data['person_id'] = self.get_contact_mapping()[source_row.person_id]
-        return data
-
-    def finalize_update_data(self, data, source_row, existing):
-        data = super(OrgRoleSyncer, self).finalize_update_data(
-            data, source_row, existing)
-        mapping = self.get_contact_mapping()
-        data['organization_id'] = mapping[source_row.organization_id]
-        data['person_id'] = mapping[source_row.person_id]
-        return data

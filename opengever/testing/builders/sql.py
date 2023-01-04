@@ -14,7 +14,6 @@ from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
@@ -564,17 +563,6 @@ class PersonBuilder(SqlObjectBuilder):
 
     def after_create(self, obj):
         obj = super(PersonBuilder, self).after_create(obj)
-        for organization in self.organizations:
-            if isinstance(organization, tuple):
-                organization, function = organization
-            else:
-                function = None
-
-            create(Builder('org_role')
-                   .having(person=obj,
-                           organization=organization,
-                           function=function))
-
         return obj
 
 
@@ -712,15 +700,6 @@ class ArchivedOrganizationBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('archived_organization', ArchivedOrganizationBuilder)
-
-
-class OrgRoleBuilder(SqlObjectBuilder):
-
-    mapped_class = OrgRole
-    id_argument_name = 'org_role_id'
-
-
-builder_registry.register('org_role', OrgRoleBuilder)
 
 
 class FavoriteBuilder(SqlObjectBuilder):

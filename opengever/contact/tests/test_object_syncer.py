@@ -2,12 +2,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.model import create_session
 from opengever.contact.models import Organization
-from opengever.contact.models import OrgRole
 from opengever.contact.models import Person
 from opengever.contact.syncer.object_syncer import AddressSyncer
 from opengever.contact.syncer.object_syncer import MailSyncer
 from opengever.contact.syncer.object_syncer import OrganizationSyncer
-from opengever.contact.syncer.object_syncer import OrgRoleSyncer
 from opengever.contact.syncer.object_syncer import PersonSyncer
 from opengever.contact.syncer.object_syncer import PhoneNumberSyncer
 from opengever.contact.syncer.object_syncer import UrlSyncer
@@ -433,64 +431,3 @@ class TestAddressSyncer(SyncerBaseTest):
         self.assertEquals(
             [u'Teststrasse 1', u'Rue de Lausanne'],
             [address.street for address in organization.addresses])
-
-
-class TestOrganizationRoleSyncer(SyncerBaseTest):
-
-    SAMPLE_DATA = [{u'person_id': 1111,
-                    u'organization_id': 2222,
-                    u'function': u'Leitung'},
-                   {u'person_id': 3333,
-                    u'organization_id': 2222,
-                    u'function': u'Vorsteher'}]
-
-    def create_source_db(self):
-        self.source_table = Table("orgroles",
-                                  self.source_metadata,
-                                  Column("person_id", Integer),
-                                  Column("organization_id", Integer),
-                                  Column("function", String))
-        self.source_table.create()
-
-    def test_add_organization_roles_properly_while_syncing(self):
-        create(Builder('organization')
-               .having(name=u'Meier AG', former_contact_id=2222))
-
-        create(Builder('person')
-               .having(lastname=u'Meier', firstname=u'Peter',
-                       former_contact_id=1111))
-        create(Builder('person')
-               .having(lastname=u'Bond', firstname=u'James',
-                       former_contact_id=3333))
-
-        OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
-        transaction.commit()
-
-        org_roles = Organization.query.first().persons
-        self.assertEquals([u'Leitung', u'Vorsteher'],
-                          [role.function for role in org_roles])
-        self.assertEquals(['Peter', 'James'],
-                          [role.person.firstname for role in org_roles])
-
-    def test_update_existing_organization_roles(self):
-        org1 = create(Builder('organization')
-                      .having(name=u'Meier AG',
-                              former_contact_id=2222))
-        create(Builder('organization')
-               .having(name=u'Search AG', former_contact_id=4444))
-
-        peter = create(Builder('person')
-                       .having(lastname=u'Meier', firstname=u'Peter',
-                               former_contact_id=1111))
-        create(Builder('person')
-               .having(lastname=u'Bond', firstname=u'James',
-                       former_contact_id=3333))
-
-        create(Builder('org_role')
-               .having(person=peter, organization=org1,
-                       function='Stellv. Leitung'))
-
-        OrgRoleSyncer(self.source_db, 'SELECT * from orgroles')()
-        self.assertEquals(2, OrgRole.query.count())
-        self.assertEquals([u'Leitung', u'Vorsteher'],
-                          [aa.function for aa in OrgRole.query])

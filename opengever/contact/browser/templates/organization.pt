@@ -85,36 +85,6 @@
 
       </table>
 
-      <h3 i18n:translate="label_persons">Persons</h3>
-      <h4 i18n:translate="label_active">Active</h4>
-      <ul class="active_persons persons orgrole_listing">
-        <li tal:repeat="org_role view/get_active_org_roles">
-          <span class="name">
-            <a href="#"
-               tal:attributes="href org_role/person/get_url"
-               tal:content="org_role/person/fullname" />
-          </span>
-          <span class="function" tal:content="org_role/function" />
-          <span class="department" tal:content="org_role/department" />
-        </li>
-      </ul>
-
-      <h4 i18n:translate="label_inactive">Inactive</h4>
-      <ul class="inactive_persons persons orgrole_listing"
-          tal:define="org_roles view/get_inactive_org_roles"
-          tal:condition="org_roles">
-
-        <li tal:repeat="org_role org_roles">
-          <span class="name">
-            <a href="#"
-               tal:attributes="href org_role/person/get_url"
-               tal:content="org_role/person/fullname" />
-          </span>
-          <span class="function" tal:content="org_role/function" />
-          <span class="department" tal:content="org_role/department" />
-        </li>
-      </ul>
-
       <div class="collapsible" id="contactHistory"
            tal:condition="organization/has_archived_information">
         <div class="collapsible-header">
