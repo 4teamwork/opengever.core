@@ -1,9 +1,7 @@
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedContact
-from opengever.contact.models import ArchivedURL
 from opengever.contact.models import Contact
-from opengever.contact.models import URL
 from sqlalchemy import inspect
 from unittest import TestCase
 
@@ -37,6 +35,3 @@ class TestArchiveTables(TestCase):
         self.assert_correct_archive_entity(
             Contact, ArchivedContact,
             ignore=['contact_type', 'archived_contact_type', 'former_contact_id'])
-
-    def test_url_archive_contains_all_columns(self):
-        self.assert_correct_archive_entity(URL, ArchivedURL)
