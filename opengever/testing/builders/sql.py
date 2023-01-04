@@ -7,9 +7,7 @@ from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
-from opengever.contact.models import ArchivedMailAddress
 from opengever.contact.models import ArchivedURL
-from opengever.contact.models import MailAddress
 from opengever.contact.models import URL
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.globalindex.model.reminder_settings import ReminderSetting
@@ -583,24 +581,6 @@ class ArchivedAddressBuilder(ArchivedContactAttributesBuilder):
 
 
 builder_registry.register('archived_address', ArchivedAddressBuilder)
-
-
-class MailAddressBuilder(ContactAttributesBuilder):
-
-    mapped_class = MailAddress
-    id_argument_name = 'mailaddress_id'
-
-
-builder_registry.register('mailaddress', MailAddressBuilder)
-
-
-class ArchivedMailAddressBuilder(ArchivedContactAttributesBuilder):
-
-    mapped_class = ArchivedMailAddress
-    id_argument_name = 'archived_mail_address_id'
-
-
-builder_registry.register('archived_mail_addresses', ArchivedMailAddressBuilder)
 
 
 class URLBuilder(ContactAttributesBuilder):
