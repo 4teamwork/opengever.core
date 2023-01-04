@@ -6,7 +6,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 class ParticipationAddView(BrowserView):
     """A simple redirector view which redirects to the corresponding add form,
-    depending on the is_contact_feature_enabled flag.
+    depending on whether KuB is enabled or not.
 
     The view is called by dossiers `Add participation` factoriesmenu action.
     """

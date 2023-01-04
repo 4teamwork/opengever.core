@@ -143,8 +143,6 @@ class TestDossierDetails(TestDossierDetailsBase):
 class TestDossierDetailsWithKuB(KuBIntegrationTestCase, TestDossierDetailsBase):
 
     def test_handles_kub_participations(self, mocker):
-        self.activate_feature('contact')
-
         self.login(self.regular_user)
 
         self.mock_labels(mocker)
