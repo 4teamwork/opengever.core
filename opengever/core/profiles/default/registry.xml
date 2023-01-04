@@ -56,7 +56,6 @@
   </record>
 
   <!-- CONTACT -->
-  <records interface="opengever.contact.interfaces.IContactSettings" />
   <records interface="opengever.kub.interfaces.IKuBSettings" />
 
   <!-- DATEPICKER -->
