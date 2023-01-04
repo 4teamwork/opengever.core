@@ -1,5 +1,3 @@
-from opengever.contact.models import Address
-from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedContact
 from opengever.contact.models import Contact
 from sqlalchemy import inspect
@@ -27,9 +25,6 @@ class TestArchiveTables(TestCase):
         self.assertEqual(
             set(entity_columns + self.additional_archive_columns),
             set(archive_entity_columns))
-
-    def test_address_archive_contains_all_columns(self):
-        self.assert_correct_archive_entity(Address, ArchivedAddress)
 
     def test_contact_archive_contains_all_columns(self):
         self.assert_correct_archive_entity(
