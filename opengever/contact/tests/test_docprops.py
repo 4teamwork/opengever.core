@@ -24,25 +24,6 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
         self.set_docproperty_export_enabled(False)
         super(TestContactDocPropertyProvider, self).tearDown()
 
-    def test_person_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller',
-                               salutation='Herr',
-                               academic_title='Prof. Dr.',
-                               description='blablabla'))
-        provider = peter.get_doc_property_provider()
-        expected_person_properties = {
-            'ogg.recipient.contact.title': u'M\xfcller Peter',
-            'ogg.recipient.contact.description': 'blablabla',
-            'ogg.recipient.person.salutation': 'Herr',
-            'ogg.recipient.person.academic_title': 'Prof. Dr.',
-            'ogg.recipient.person.firstname': 'Peter',
-            'ogg.recipient.person.lastname': u'M\xfcller',
-        }
-        self.assertItemsEqual(expected_person_properties,
-                              provider.get_properties(prefix='recipient'))
-
     def test_ogds_user_adapter_doc_property_provider(self):
         provider = OgdsUserToContactAdapter(self.user).get_doc_property_provider()
 
@@ -55,74 +36,4 @@ class TestContactDocPropertyProvider(FunctionalTestCase):
             'ogg.recipient.person.lastname': u'M\xfcller',
         }
         self.assertItemsEqual(expected_ogds_user_properties,
-                              provider.get_properties(prefix='recipient'))
-
-    def test_contact_address_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller'))
-        address = create(Builder('address')
-                         .for_contact(peter)
-                         .labeled(u'Home')
-                         .having(street=u'Musterstrasse 283',
-                                 zip_code=u'1234',
-                                 city=u'Hinterkappelen',
-                                 country=u'Schweiz'))
-
-        provider = address.get_doc_property_provider()
-        expected_address_properties = {
-            'ogg.recipient.address.street': u'Musterstrasse 283',
-            'ogg.recipient.address.zip_code': '1234',
-            'ogg.recipient.address.city': 'Hinterkappelen',
-            'ogg.recipient.address.country': 'Schweiz',
-        }
-        self.assertItemsEqual(expected_address_properties,
-                              provider.get_properties(prefix='recipient'))
-
-    def test_contact_mail_address_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller'))
-        mail_address = create(Builder('mailaddress')
-                              .for_contact(peter)
-                              .labeled(u'Private')
-                              .having(address=u'peter@example.com'))
-
-        provider = mail_address.get_doc_property_provider()
-        expected_address_properties = {
-            'ogg.recipient.email.address': u'peter@example.com',
-        }
-        self.assertItemsEqual(expected_address_properties,
-                              provider.get_properties(prefix='recipient'))
-
-    def test_contact_phonenumber_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller'))
-        phonenumber = create(Builder('phonenumber')
-                             .for_contact(peter)
-                             .labeled(u'Psst')
-                             .having(phone_number=u'0190 666 666'))
-
-        provider = phonenumber.get_doc_property_provider()
-        expected_phone_properties = {
-            'ogg.recipient.phone.number': u'0190 666 666',
-        }
-        self.assertItemsEqual(expected_phone_properties,
-                              provider.get_properties(prefix='recipient'))
-
-    def test_contact_url_doc_property_provider(self):
-        peter = create(Builder('person')
-                       .having(firstname=u'Peter',
-                               lastname=u'M\xfcller'))
-        url = create(Builder('url')
-                     .for_contact(peter)
-                     .labeled(u'There')
-                     .having(url=u'http://www.example.com'))
-
-        provider = url.get_doc_property_provider()
-        expected_url_properties = {
-            'ogg.recipient.url.url': u'http://www.example.com',
-        }
-        self.assertItemsEqual(expected_url_properties,
                               provider.get_properties(prefix='recipient'))

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-04 11:01+0000\n"
+"POT-Creation-Date: 2023-01-04 12:03+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -18,11 +18,6 @@ msgstr ""
 msgid "Active"
 msgstr "Aktiv"
 
-#. Default: "Add Person"
-#: ./opengever/contact/browser/person.py
-msgid "Add Person"
-msgstr "Person hinzufügen"
-
 #: ./opengever/contact/contact.py
 msgid "Contact"
 msgstr "Kontakt"
@@ -32,44 +27,12 @@ msgstr "Kontakt"
 msgid "address"
 msgstr "Adresse"
 
-#. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_academic_title"
-msgstr "Titel"
-
-#. Default: "Active"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_active"
-msgstr "Aktiv"
-
-#. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_firstname"
-msgstr "Vorname"
-
-#. Default: "Former contact id"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_former_contact_id"
-msgstr "Frühere Kontakt ID"
-
-#. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_lastname"
-msgstr "Nachname"
-
-#. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_salutation"
-msgstr "Anrede"
-
 #. Default: "Internet"
 #: ./opengever/contact/contact.py
 msgid "internet"
 msgstr "Internet"
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_academic_title"
 msgstr "Titel"
@@ -88,31 +51,6 @@ msgstr "Adresse (Strasse / Nr.)"
 #: ./opengever/contact/contact.py
 msgid "label_address2"
 msgstr "Adresszusatz"
-
-#. Default: "Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_addresses"
-msgstr "Adressen"
-
-#. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_addresses"
-msgstr "Archivierte Adressen"
-
-#. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_mail"
-msgstr "Archivierte E-Mail-Adressen"
-
-#. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_persons"
-msgstr "Archivierte persönliche Informationen"
-
-#. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_phone_numbers"
-msgstr "Archivierte Telefonnummern"
 
 #. Default: "City"
 #: ./opengever/contact/contact.py
@@ -135,7 +73,6 @@ msgid "label_department"
 msgstr "Abteilung"
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_description"
 msgstr "Beschreibung"
@@ -158,7 +95,6 @@ msgstr "Fax"
 
 #. Default: "Firstname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
 msgstr "Vorname"
@@ -170,7 +106,6 @@ msgstr "Gruppe"
 
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_lastname"
 msgstr "Nachname"
@@ -180,20 +115,10 @@ msgstr "Nachname"
 msgid "label_local"
 msgstr "Lokal"
 
-#. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_mail"
-msgstr "E-Mail-Adressen"
-
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_mobile"
 msgstr "Mobiltelefon"
-
-#. Default: "Name"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_name"
-msgstr "Name"
 
 #. Default: "Office"
 #: ./opengever/contact/ogdsuser.py
@@ -204,16 +129,6 @@ msgstr "Büro"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
 msgstr "Organisationseinheit"
-
-#. Default: "Personal information:"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_personal_information"
-msgstr "Persönliche Informationen:"
-
-#. Default: "Persons"
-#: ./opengever/contact/browser/tabbed.py
-msgid "label_persons"
-msgstr "Personen"
 
 #. Default: "Fax"
 #: ./opengever/contact/contact.py
@@ -230,11 +145,6 @@ msgstr "Telefon Privat"
 msgid "label_phone_mobile"
 msgstr "Telefon Mobile"
 
-#. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_phone_numbers"
-msgstr "Telefonnummern"
-
 #. Default: "Phone office"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/contact.py
@@ -247,8 +157,6 @@ msgid "label_picture"
 msgstr "Bild"
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Anrede"
@@ -271,11 +179,6 @@ msgstr "Titel"
 #: ./opengever/contact/contact.py
 msgid "label_url"
 msgstr "URL"
-
-#. Default: "URLs"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_urls"
-msgstr "URLs"
 
 #. Default: "Users"
 #: ./opengever/contact/browser/tabbed.py

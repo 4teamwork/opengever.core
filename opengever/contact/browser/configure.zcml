@@ -4,8 +4,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.contact">
 
-  <adapter factory=".person_listing.PersonTableSource" />
-
   <browser:page
       for="opengever.contact.contact.IContact"
       name="contact_view"
@@ -28,25 +26,11 @@
       />
 
   <browser:page
-      name="view"
-      for="opengever.contact.interfaces.IPerson"
-      class=".person.PersonView"
-      permission="zope2.View"
-      />
-
-  <browser:page
       for="opengever.contact.interfaces.IContactFolder"
       name="tabbed_view"
       class=".tabbed.ContactFolderTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
-      />
-
-  <browser:page
-      for="opengever.contact.interfaces.IContactFolder"
-      name="tabbedview_view-persons"
-      class=".person_listing.Persons"
-      permission="zope2.View"
       />
 
   <browser:viewlet
@@ -55,20 +39,6 @@
       manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
       class=".byline.TeamByline"
       permission="zope2.View"
-      />
-
-  <browser:page
-      name="edit"
-      for="opengever.contact.interfaces.IPerson"
-      class=".person.EditPerson"
-      permission="opengever.contact.EditPerson"
-      />
-
-  <browser:page
-      name="add-person"
-      for="opengever.contact.interfaces.IContactFolder"
-      class=".person.AddPerson"
-      permission="opengever.contact.AddPerson"
       />
 
   <browser:page

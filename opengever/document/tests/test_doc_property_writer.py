@@ -208,54 +208,6 @@ class TestDocPropertyWriter(IntegrationTestCase):
             properties = CustomProperties(Document(tmpfile.path)).items()
             self.assertItemsEqual(expected_properties.items(), properties)
 
-    def test_writes_additional_recipient_property_providers(self):
-        self.login(self.regular_user)
-        self.with_asset_file('without_custom_properties.docx')
-
-        peter = create(
-            Builder('person')
-            .having(
-                firstname=u'Peter',
-                lastname=u'M\xfcller',
-                )
-            )
-
-        address = create(
-            Builder('address')
-            .for_contact(peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Musterstrasse 283',
-                zip_code=u'1234',
-                city=u'Hinterkappelen',
-                country=u'Schweiz',
-                )
-            )
-
-        writer = DocPropertyWriter(
-            self.document,
-            recipient_data=(peter, address),
-            )
-
-        writer.update_doc_properties(only_existing=False)
-
-        additional_recipient_properties = {
-            'ogg.recipient.contact.title': u'M\xfcller Peter',
-            'ogg.recipient.person.firstname': 'Peter',
-            'ogg.recipient.person.lastname': u'M\xfcller',
-            'ogg.recipient.address.street': u'Musterstrasse 283',
-            'ogg.recipient.address.zip_code': '1234',
-            'ogg.recipient.address.city': 'Hinterkappelen',
-            'ogg.recipient.address.country': 'Schweiz',
-            }
-
-        with TemporaryDocFile(self.document.file) as tmpfile:
-            properties = CustomProperties(Document(tmpfile.path)).items()
-            self.assertDictContainsSubset(
-                additional_recipient_properties,
-                dict(properties),
-                )
-
     def test_text_properties_are_nullified_when_none(self):
         self.login(self.regular_user)
         self.with_asset_file('with_gever_properties.docx')

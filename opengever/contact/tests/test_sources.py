@@ -1,5 +1,3 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.contact.sources import ContactsSource
 from opengever.ogds.models.service import ogds_service
@@ -11,17 +9,6 @@ class TestContactsSource(FunctionalTestCase):
     def setUp(self):
         super(TestContactsSource, self).setUp()
 
-        self.peter_a = create(Builder('person')
-                              .having(firstname=u'Peter',
-                                      lastname=u'M\xfcller',
-                                      former_contact_id=1111))
-        self.peter_b = create(Builder('person')
-                              .having(firstname=u'Peter',
-                                      lastname=u'Fl\xfcckiger'))
-        self.peter_c = create(Builder('person')
-                              .having(firstname=u'Peter',
-                                      lastname=u'Meier')
-                              .having(is_active=False))
         self.ogds_user = OgdsUserToContactAdapter(
             ogds_service().all_users()[0])
 

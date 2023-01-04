@@ -15,7 +15,6 @@ from opengever.ogds.base.actor import KuBContactActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
-from opengever.ogds.base.actor import SQLContactActor
 from opengever.ogds.base.actor import TeamActor
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -279,25 +278,6 @@ class TestKuBContactActor(KuBIntegrationTestCase):
             u'@id': u'http://nohost/plone/@kub/person:9af7d7cc-b948-423f-979f-587158c6bc65',
             u'dateOfBirth': u'1992-05-15',
             u'fullName': u'Dupont Jean'}, browser.json['represents'])
-
-
-class TestSQLContactActor(IntegrationTestCase):
-
-    features = ('contact', )
-
-    def test_person_actor_lookup(self):
-        self.login(self.regular_user)
-        actor = Actor.lookup('person:1')
-
-        self.assertIsInstance(actor, SQLContactActor)
-        self.assertEqual(u'B\xfchler Josef', actor.get_label())
-        self.assertEqual(None, actor.get_profile_url())
-        self.assertEqual(None, actor.represents())
-
-    def test_sql_contact_actor_lookup_for_not_existing_contact(self):
-        self.login(self.regular_user)
-        actor = Actor.lookup('person:not')
-        self.assertIsInstance(actor, NullActor)
 
 
 class TestActorCorresponding(IntegrationTestCase):

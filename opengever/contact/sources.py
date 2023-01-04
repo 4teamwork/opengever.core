@@ -1,6 +1,5 @@
 from opengever.contact import is_contact_feature_enabled
 from opengever.contact.models import Contact
-from opengever.contact.models import Person
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.kub import is_kub_feature_enabled
 from opengever.kub.sources import KuBContactsSourceBinder
@@ -20,8 +19,7 @@ class ContactsSource(object):
     """A source of all active contacts (all persons and organizations).
     """
 
-    by_type = {'person': Person,
-               'ogds_user': OgdsUserToContactAdapter}
+    by_type = {'ogds_user': OgdsUserToContactAdapter}
     by_class = {v: k for k, v in by_type.iteritems()}
 
     def __init__(self, context):

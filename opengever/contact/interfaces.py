@@ -12,10 +12,6 @@ class IContact(ISQLObjectWrapper):
     """Base Markerinterface for contactish object wrappers."""
 
 
-class IPerson(IContact):
-    """Marker interface for person object wrappers."""
-
-
 class IContactSettings(Interface):
 
     is_feature_enabled = schema.Bool(

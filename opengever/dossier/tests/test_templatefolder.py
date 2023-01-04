@@ -417,7 +417,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         )
 
         self.dossier = create(Builder('dossier').titled(u'My Dossier'))
-        self.peter = create(Builder('person').having(firstname=u'Peter', lastname=u'M\xfcller'))
 
     def assert_doc_properties_updated_journal_entry_generated(self, document):
         entry = get_journal_entry(document)
@@ -425,88 +424,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
         self.assertEqual(TEST_USER_ID, entry['actor'])
         self.assertEqual('', entry['comments'])
-
-    @browsing
-    def test_contact_recipient_properties_are_added(self, browser):
-        address1 = create(
-            Builder('address')
-            .for_contact(self.peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Musterstrasse 283',
-                zip_code=u'1234',
-                city=u'Hinterkappelen',
-                country=u'Schweiz',
-            ),
-        )
-
-        create(
-            Builder('address')
-            .for_contact(self.peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Hauptstrasse 1',
-                city=u'Vorkappelen',
-            ),
-        )
-
-        mailaddress = create(
-            Builder('mailaddress')
-            .for_contact(self.peter)
-            .having(address=u'foo@example.com'),
-        )
-
-        phonenumber = create(
-            Builder('phonenumber')
-            .for_contact(self.peter)
-            .having(phone_number=u'1234 123 123'),
-        )
-
-        url = create(
-            Builder('url')
-            .for_contact(self.peter)
-            .having(url=u'http://www.example.com'),
-        )
-
-        with freeze(self.document_date):
-            # submit first wizard step
-            browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({
-                'form.widgets.template': self.template_word.UID(),
-                'Title': 'Test Docx',
-            })
-            form = browser.find_form_by_field('Recipient')
-            form.find_widget('Recipient').fill(get_contacts_token(self.peter))
-            form.save()
-            # submit second wizard step
-            browser.fill({
-                'form.widgets.recipient_address': str(address1.address_id),
-                'form.widgets.recipient_mail_address': str(mailaddress.mailaddress_id),
-                'form.widgets.recipient_phonenumber': str(phonenumber.phone_number_id),
-                'form.widgets.recipient_url': str(url.url_id),
-            }).save()
-
-        document = self.dossier.listFolderContents()[0]
-        self.assertEqual(u'Test Docx.docx', document.file.filename)
-
-        expected_person_properties = {
-            'ogg.recipient.contact.title': u'M\xfcller Peter',
-            'ogg.recipient.person.firstname': 'Peter',
-            'ogg.recipient.person.lastname': u'M\xfcller',
-            'ogg.recipient.address.street': u'Musterstrasse 283',
-            'ogg.recipient.address.zip_code': '1234',
-            'ogg.recipient.address.city': 'Hinterkappelen',
-            'ogg.recipient.address.country': 'Schweiz',
-            'ogg.recipient.email.address': u'foo@example.com',
-            'ogg.recipient.phone.number': u'1234 123 123',
-            'ogg.recipient.url.url': u'http://www.example.com',
-        }
-        expected_person_properties.update(self.expected_doc_properties)
-
-        with TemporaryDocFile(document.file) as tmpfile:
-            properties = CustomProperties(Document(tmpfile.path)).items()
-            self.assertItemsEqual(expected_person_properties.items(), properties)
-        self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
     def test_ogds_user_recipient_properties_are_added(self, browser):
@@ -541,88 +458,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         self.assert_doc_properties_updated_journal_entry_generated(document)
 
     @browsing
-    def test_contact_sender_properties_are_added(self, browser):
-        address1 = create(
-            Builder('address')
-            .for_contact(self.peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Musterstrasse 283',
-                zip_code=u'1234',
-                city=u'Hinterkappelen',
-                country=u'Schweiz',
-            ),
-        )
-
-        create(
-            Builder('address')
-            .for_contact(self.peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Hauptstrasse 1',
-                city=u'Vorkappelen',
-            ),
-        )
-
-        mailaddress = create(
-            Builder('mailaddress')
-            .for_contact(self.peter)
-            .having(address=u'foo@example.com'),
-        )
-
-        phonenumber = create(
-            Builder('phonenumber')
-            .for_contact(self.peter)
-            .having(phone_number=u'1234 123 123'),
-        )
-
-        url = create(
-            Builder('url')
-            .for_contact(self.peter)
-            .having(url=u'http://www.example.com'),
-        )
-
-        with freeze(self.document_date):
-            # submit first wizard step
-            browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({
-                'form.widgets.template': self.template_word.UID(),
-                'Title': 'Test Docx',
-            })
-            form = browser.find_form_by_field('Sender')
-            form.find_widget('Sender').fill(get_contacts_token(self.peter))
-            form.save()
-            # submit second wizard step
-            browser.fill({
-                'form.widgets.sender_address': str(address1.address_id),
-                'form.widgets.sender_mail_address': str(mailaddress.mailaddress_id),
-                'form.widgets.sender_phonenumber': str(phonenumber.phone_number_id),
-                'form.widgets.sender_url': str(url.url_id),
-            }).save()
-
-        document = self.dossier.listFolderContents()[0]
-        self.assertEqual(u'Test Docx.docx', document.file.filename)
-
-        expected_person_properties = {
-            'ogg.sender.contact.title': u'M\xfcller Peter',
-            'ogg.sender.person.firstname': 'Peter',
-            'ogg.sender.person.lastname': u'M\xfcller',
-            'ogg.sender.address.street': u'Musterstrasse 283',
-            'ogg.sender.address.zip_code': '1234',
-            'ogg.sender.address.city': 'Hinterkappelen',
-            'ogg.sender.address.country': 'Schweiz',
-            'ogg.sender.email.address': u'foo@example.com',
-            'ogg.sender.phone.number': u'1234 123 123',
-            'ogg.sender.url.url': u'http://www.example.com',
-        }
-        expected_person_properties.update(self.expected_doc_properties)
-
-        with TemporaryDocFile(document.file) as tmpfile:
-            properties = CustomProperties(Document(tmpfile.path)).items()
-            self.assertItemsEqual(expected_person_properties.items(), properties)
-        self.assert_doc_properties_updated_journal_entry_generated(document)
-
-    @browsing
     def test_ogds_user_sender_properties_are_added(self, browser):
         ogds_user = create(
             Builder('ogds_user')
@@ -642,64 +477,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
             form.find_widget('Sender').fill(get_contacts_token(ogds_user))
             form.save()
             # submit second wizard step
-            browser.fill({
-                'form.widgets.sender_address': '{}_1'.format(ogds_user.id),
-                'form.widgets.sender_mail_address': '{}_2'.format(ogds_user.id),
-                'form.widgets.sender_phonenumber': '{}_3'.format(ogds_user.id),
-                'form.widgets.sender_url': '{}_1'.format(ogds_user.id),
-            }).save()
-
-        document = self.dossier.listFolderContents()[0]
-        self.assertEqual(u'Test Docx.docx', document.file.filename)
-
-        self.assert_doc_properties_updated_journal_entry_generated(document)
-
-    @browsing
-    def test_recipient_and_sender_properties_are_added(self, browser):
-        ogds_user = create(
-            Builder('ogds_user')
-            .id('ogds-peter')
-            .having(**OGDS_USER_ATTRIBUTES)
-            .as_contact_adapter(),
-        )
-
-        address1 = create(
-            Builder('address')
-            .for_contact(self.peter)
-            .labeled(u'Home')
-            .having(
-                street=u'Musterstrasse 283',
-                zip_code=u'1234',
-                city=u'Hinterkappelen',
-                country=u'Schweiz',
-            ),
-        )
-
-        mailaddress = create(
-            Builder('mailaddress')
-            .for_contact(self.peter)
-            .having(address=u'foo@example.com'),
-        )
-
-        with freeze(self.document_date):
-            # submit first wizard step
-            browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({
-                'form.widgets.template': self.template_word.UID(),
-                'Title': 'Test Docx',
-            })
-            form = browser.find_form_by_field('Recipient')
-            form.find_widget('Recipient').fill(get_contacts_token(self.peter))
-            form = browser.find_form_by_field('Sender')
-            form.find_widget('Sender').fill(get_contacts_token(ogds_user))
-            form.save()
-            # submit second wizard step
-            browser.fill({
-                'form.widgets.recipient_address': str(address1.address_id),
-                'form.widgets.recipient_mail_address': str(mailaddress.mailaddress_id),
-            }).save()
-
-            # submit third wizard step
             browser.fill({
                 'form.widgets.sender_address': '{}_1'.format(ogds_user.id),
                 'form.widgets.sender_mail_address': '{}_2'.format(ogds_user.id),
