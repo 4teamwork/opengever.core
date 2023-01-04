@@ -1,5 +1,4 @@
 from opengever.contact import is_contact_feature_enabled
-from opengever.contact.models import Contact
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.kub import is_kub_feature_enabled
 from opengever.kub.sources import KuBContactsSourceBinder
@@ -68,12 +67,6 @@ class ContactsSource(object):
         self.terms = []
 
         text_filters = query_string.split()
-        query = Contact.query.filter(Contact.is_active == True)  # noqa
-        query = query.polymorphic_by_searchable_text(
-            text_filters=text_filters)
-
-        for contact in query.order_by(Contact.contact_id):
-            self.terms.append(self.getTerm(contact))
 
         for ogds_user in ogds_service().filter_users(text_filters):
             self.terms.append(
