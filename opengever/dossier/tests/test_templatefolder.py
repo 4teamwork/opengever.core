@@ -15,7 +15,6 @@ from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
-from opengever.dossier.tests import OGDS_USER_ATTRIBUTES
 from opengever.journal.handlers import DOC_PROPERTIES_UPDATED
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.kub.testing import KuBIntegrationTestCase
@@ -25,7 +24,6 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
-from opengever.testing.helpers import get_contacts_token
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.portlets.constants import CONTEXT_CATEGORY
@@ -424,70 +422,6 @@ class TestDocumentWithTemplateFormWithContacts(FunctionalTestCase):
         self.assertEqual(DOC_PROPERTIES_UPDATED, entry['action']['type'])
         self.assertEqual(TEST_USER_ID, entry['actor'])
         self.assertEqual('', entry['comments'])
-
-    @browsing
-    def test_ogds_user_recipient_properties_are_added(self, browser):
-        ogds_user = create(
-            Builder('ogds_user')
-            .id('ogds-peter')
-            .having(**OGDS_USER_ATTRIBUTES)
-            .as_contact_adapter(),
-        )
-
-        with freeze(self.document_date):
-            # submit first wizard step
-            browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({
-                'form.widgets.template': self.template_word.UID(),
-                'Title': 'Test Docx',
-            })
-            form = browser.find_form_by_field('Recipient')
-            form.find_widget('Recipient').fill(get_contacts_token(ogds_user))
-            form.save()
-            # submit second wizard step
-            browser.fill({
-                'form.widgets.recipient_address': '{}_1'.format(ogds_user.id),
-                'form.widgets.recipient_mail_address': '{}_2'.format(ogds_user.id),
-                'form.widgets.recipient_phonenumber': '{}_3'.format(ogds_user.id),
-                'form.widgets.recipient_url': '{}_1'.format(ogds_user.id),
-            }).save()
-
-        document = self.dossier.listFolderContents()[0]
-        self.assertEqual(u'Test Docx.docx', document.file.filename)
-
-        self.assert_doc_properties_updated_journal_entry_generated(document)
-
-    @browsing
-    def test_ogds_user_sender_properties_are_added(self, browser):
-        ogds_user = create(
-            Builder('ogds_user')
-            .id('ogds-peter')
-            .having(**OGDS_USER_ATTRIBUTES)
-            .as_contact_adapter(),
-        )
-
-        with freeze(self.document_date):
-            # submit first wizard step
-            browser.login().open(self.dossier, view='document_with_template')
-            browser.fill({
-                'form.widgets.template': self.template_word.UID(),
-                'Title': 'Test Docx',
-            })
-            form = browser.find_form_by_field('Sender')
-            form.find_widget('Sender').fill(get_contacts_token(ogds_user))
-            form.save()
-            # submit second wizard step
-            browser.fill({
-                'form.widgets.sender_address': '{}_1'.format(ogds_user.id),
-                'form.widgets.sender_mail_address': '{}_2'.format(ogds_user.id),
-                'form.widgets.sender_phonenumber': '{}_3'.format(ogds_user.id),
-                'form.widgets.sender_url': '{}_1'.format(ogds_user.id),
-            }).save()
-
-        document = self.dossier.listFolderContents()[0]
-        self.assertEqual(u'Test Docx.docx', document.file.filename)
-
-        self.assert_doc_properties_updated_journal_entry_generated(document)
 
 
 class TestDocumentWithTemplateFormWithKuBContacts(KuBIntegrationTestCase):
