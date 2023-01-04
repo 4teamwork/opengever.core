@@ -8,11 +8,9 @@ from opengever.base.oguid import Oguid
 from opengever.contact.models import Address
 from opengever.contact.models import ArchivedAddress
 from opengever.contact.models import ArchivedMailAddress
-from opengever.contact.models import ArchivedPerson
 from opengever.contact.models import ArchivedPhoneNumber
 from opengever.contact.models import ArchivedURL
 from opengever.contact.models import MailAddress
-from opengever.contact.models import Person
 from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
@@ -547,32 +545,6 @@ class LockBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('lock', LockBuilder)
-
-
-class PersonBuilder(SqlObjectBuilder):
-
-    mapped_class = Person
-    id_argument_name = 'person_id'
-
-    def after_create(self, obj):
-        obj = super(PersonBuilder, self).after_create(obj)
-        return obj
-
-
-builder_registry.register('person', PersonBuilder)
-
-
-class ArchivedPersonBuilder(SqlObjectBuilder):
-
-    mapped_class = ArchivedPerson
-    id_argument_name = 'archived_person_id'
-
-    def __init__(self, session):
-        super(ArchivedPersonBuilder, self).__init__(session)
-        self.arguments['actor_id'] = TEST_USER_ID
-
-
-builder_registry.register('archived_person', ArchivedPersonBuilder)
 
 
 class ContactAttributesBuilder(SqlObjectBuilder):

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-04 11:01+0000\n"
+"POT-Creation-Date: 2023-01-04 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,11 +21,6 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#. Default: "Add Person"
-#: ./opengever/contact/browser/person.py
-msgid "Add Person"
-msgstr ""
-
 #: ./opengever/contact/contact.py
 msgid "Contact"
 msgstr ""
@@ -35,44 +30,12 @@ msgstr ""
 msgid "address"
 msgstr ""
 
-#. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_academic_title"
-msgstr ""
-
-#. Default: "Active"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_active"
-msgstr ""
-
-#. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_firstname"
-msgstr ""
-
-#. Default: "Former contact id"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_former_contact_id"
-msgstr ""
-
-#. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_lastname"
-msgstr ""
-
-#. Default: "Salutation"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_salutation"
-msgstr ""
-
 #. Default: "Internet"
 #: ./opengever/contact/contact.py
 msgid "internet"
 msgstr ""
 
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_academic_title"
 msgstr ""
@@ -90,31 +53,6 @@ msgstr ""
 #. Default: "Address 2"
 #: ./opengever/contact/contact.py
 msgid "label_address2"
-msgstr ""
-
-#. Default: "Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_addresses"
-msgstr ""
-
-#. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_addresses"
-msgstr ""
-
-#. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_mail"
-msgstr ""
-
-#. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_persons"
-msgstr ""
-
-#. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_phone_numbers"
 msgstr ""
 
 #. Default: "City"
@@ -138,7 +76,6 @@ msgid "label_department"
 msgstr ""
 
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_description"
 msgstr ""
@@ -161,7 +98,6 @@ msgstr ""
 
 #. Default: "Firstname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
 msgstr ""
@@ -173,7 +109,6 @@ msgstr ""
 
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_lastname"
 msgstr ""
@@ -183,19 +118,9 @@ msgstr ""
 msgid "label_local"
 msgstr ""
 
-#. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_mail"
-msgstr ""
-
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_mobile"
-msgstr ""
-
-#. Default: "Name"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_name"
 msgstr ""
 
 #. Default: "Office"
@@ -206,16 +131,6 @@ msgstr ""
 #. Default: "Org Unit"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
-msgstr ""
-
-#. Default: "Personal information:"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_personal_information"
-msgstr ""
-
-#. Default: "Persons"
-#: ./opengever/contact/browser/tabbed.py
-msgid "label_persons"
 msgstr ""
 
 #. Default: "Fax"
@@ -233,11 +148,6 @@ msgstr ""
 msgid "label_phone_mobile"
 msgstr ""
 
-#. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_phone_numbers"
-msgstr ""
-
 #. Default: "Phone office"
 #: ./opengever/contact/browser/contacts_tab.py
 #: ./opengever/contact/contact.py
@@ -250,8 +160,6 @@ msgid "label_picture"
 msgstr ""
 
 #. Default: "Salutation"
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr ""
@@ -273,11 +181,6 @@ msgstr ""
 #. Default: "Url"
 #: ./opengever/contact/contact.py
 msgid "label_url"
-msgstr ""
-
-#. Default: "URLs"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_urls"
 msgstr ""
 
 #. Default: "Users"

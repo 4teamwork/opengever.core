@@ -668,11 +668,7 @@ class OpengeverContentFixture(object):
             )
         ))
 
-        self.josef_buehler = create(
-            Builder('person')
-            .having(firstname=u'Josef', lastname=u'B\xfchler'),
-        )
-
+        create(Builder('dummy_clock_tick'))
         create(Builder('dummy_clock_tick'))
 
         create_session().flush()

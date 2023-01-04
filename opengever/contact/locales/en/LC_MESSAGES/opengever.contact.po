@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-04 11:01+0000\n"
+"POT-Creation-Date: 2023-01-04 12:03+0000\n"
 "PO-Revision-Date: 2011-01-05 15:15+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -19,12 +19,6 @@ msgstr ""
 msgid "Active"
 msgstr "Active"
 
-#. German translation: Person hinzufügen
-#. Default: "Add Person"
-#: ./opengever/contact/browser/person.py
-msgid "Add Person"
-msgstr "Add person"
-
 #. German translation: Kontakt
 #: ./opengever/contact/contact.py
 msgid "Contact"
@@ -36,43 +30,6 @@ msgstr "Contact"
 msgid "address"
 msgstr "Address"
 
-#. German translation: Titel
-#. Default: "Academic title"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_academic_title"
-msgstr "Academic title"
-
-#. German translation: Aktiv
-#. Default: "Active"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_active"
-msgstr "Active"
-
-#. German translation: Vorname
-#. Default: "Firstname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_firstname"
-msgstr "First name"
-
-#. German translation: Frühere Kontakt ID
-#. Default: "Former contact id"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_former_contact_id"
-msgstr "Former contact ID"
-
-#. German translation: Nachname
-#. Default: "Lastname"
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_lastname"
-msgstr "Last name"
-
-#. German translation: Anrede
-#. Default: "Salutation"
-#. MARKER: questionable
-#: ./opengever/contact/browser/person_listing.py
-msgid "column_salutation"
-msgstr "Salutation"
-
 #. German translation: Internet
 #. Default: "Internet"
 #: ./opengever/contact/contact.py
@@ -81,8 +38,6 @@ msgstr "Internet"
 
 #. German translation: Titel
 #. Default: "Academic title"
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_academic_title"
 msgstr "Academic title"
@@ -104,36 +59,6 @@ msgstr "Address 1"
 #: ./opengever/contact/contact.py
 msgid "label_address2"
 msgstr "Address 2"
-
-#. German translation: Adressen
-#. Default: "Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_addresses"
-msgstr "Addresses"
-
-#. German translation: Archivierte Adressen
-#. Default: "Archived Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_addresses"
-msgstr "Archived addresses"
-
-#. German translation: Archivierte E-Mail-Adressen
-#. Default: "Archived Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_mail"
-msgstr "Archived email addresses"
-
-#. German translation: Archivierte persönliche Informationen
-#. Default: "Archived Personal Information"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_persons"
-msgstr "Archived personal information"
-
-#. German translation: Archivierte Telefonnummern
-#. Default: "Archived Phone Numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_archived_phone_numbers"
-msgstr "Archived phone numbers"
 
 #. German translation: Ort
 #. Default: "City"
@@ -161,7 +86,6 @@ msgstr "Department"
 
 #. German translation: Beschreibung
 #. Default: "Description"
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_description"
 msgstr "Description"
@@ -188,7 +112,6 @@ msgstr "Fax"
 #. German translation: Vorname
 #. Default: "Firstname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_firstname"
 msgstr "First name"
@@ -202,7 +125,6 @@ msgstr "Group"
 #. German translation: Nachname
 #. Default: "Lastname"
 #: ./opengever/contact/browser/contacts_tab.py
-#: ./opengever/contact/browser/person.py
 #: ./opengever/contact/contact.py
 msgid "label_lastname"
 msgstr "Last name"
@@ -213,23 +135,11 @@ msgstr "Last name"
 msgid "label_local"
 msgstr "Local"
 
-#. German translation: E-Mail-Adressen
-#. Default: "Mail Addresses"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_mail"
-msgstr "Email Addresses"
-
 #. German translation: Mobiltelefon
 #. Default: "Mobile"
 #: ./opengever/contact/ogdsuser.py
 msgid "label_mobile"
 msgstr "Mobile"
-
-#. German translation: Name
-#. Default: "Name"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_name"
-msgstr "Name"
 
 #. German translation: Büro
 #. Default: "Office"
@@ -242,19 +152,6 @@ msgstr "Office"
 #: ./opengever/contact/browser/tabs.py
 msgid "label_org_unit"
 msgstr "Organizational unit"
-
-#. German translation: Persönliche Informationen:
-#. Default: "Personal information:"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_personal_information"
-msgstr "Personal information:"
-
-#. German translation: Personen
-#. Default: "Persons"
-#. MARKER: This might actually be correct here (instead of 'People'). Double check.
-#: ./opengever/contact/browser/tabbed.py
-msgid "label_persons"
-msgstr "Persons"
 
 #. German translation: Fax Arbeit
 #. Default: "Fax"
@@ -274,12 +171,6 @@ msgstr "Phone (home)"
 msgid "label_phone_mobile"
 msgstr "Mobile"
 
-#. German translation: Telefonnummern
-#. Default: "Phone numbers"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_phone_numbers"
-msgstr "Phone numbers"
-
 #. German translation: Telefon Arbeit
 #. Default: "Phone office"
 #: ./opengever/contact/browser/contacts_tab.py
@@ -296,8 +187,6 @@ msgstr "Picture"
 #. German translation: Anrede
 #. Default: "Salutation"
 #. MARKER: questionable
-#: ./opengever/contact/browser/person.py
-#: ./opengever/contact/browser/templates/person.pt
 #: ./opengever/contact/contact.py
 msgid "label_salutation"
 msgstr "Salutation"
@@ -324,12 +213,6 @@ msgstr "Title"
 #: ./opengever/contact/contact.py
 msgid "label_url"
 msgstr "URL"
-
-#. German translation: URLs
-#. Default: "URLs"
-#: ./opengever/contact/browser/templates/person.pt
-msgid "label_urls"
-msgstr "URLs"
 
 #. German translation: Benutzer
 #. Default: "Users"
