@@ -3,7 +3,6 @@ from ftw.upgrade import ProgressLogger
 from opengever.base.model import create_session
 from opengever.contact.models import Address
 from opengever.contact.models import MailAddress
-from opengever.contact.models import PhoneNumber
 from opengever.contact.models import URL
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy.sql import select
@@ -224,38 +223,6 @@ class UrlSyncer(ContactAdditionsSyncer):
         stmt = stmt.select_from(
             join(url_table, contact_table,
                  url_table.c.contact_id == contact_table.c.id))
-
-        return {self.get_identifier(gever_row): gever_row.id
-                for gever_row in self.db_session.execute(stmt)}
-
-
-class PhoneNumberSyncer(ContactAdditionsSyncer):
-
-    model = PhoneNumber
-    attributes = {'label': 'label',
-                  'phone_number': 'phone_number'}
-    gever_id_column = 'phone_number_id'
-
-    def get_existing_id_lookup(self):
-        phone_table = table(
-            "phonenumbers",
-            column('id'),
-            column('label'),
-            column('contact_id'))
-
-        contact_table = table(
-            "contacts",
-            column('id'), column('former_contact_id'))
-
-        stmt = select([
-            phone_table.c.id,
-            phone_table.c.label,
-            phone_table.c.contact_id,
-            contact_table.c.former_contact_id])
-
-        stmt = stmt.select_from(
-            join(phone_table, contact_table,
-                 phone_table.c.contact_id == contact_table.c.id))
 
         return {self.get_identifier(gever_row): gever_row.id
                 for gever_row in self.db_session.execute(stmt)}
