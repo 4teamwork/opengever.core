@@ -140,6 +140,7 @@ class OgdsUserToContactAdapter(BaseAdapter):
     query = QueryAdapter()
 
     def __init__(self, ogds_user):
+        raise Exception('Boom!')
         self.ogds_user = ogds_user
 
     @property
