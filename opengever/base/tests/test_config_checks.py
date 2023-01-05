@@ -1,7 +1,10 @@
 from opengever.base.config_checks.checks import BaseCheck
 from opengever.base.config_checks.manager import ConfigCheckManager
 from opengever.base.interfaces import IConfigCheck
+from opengever.bundle.ldap import LDAP_PLUGIN_META_TYPES
 from opengever.testing import IntegrationTestCase
+from plone import api
+from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
 from zope.component import adapter
 from zope.component import getSiteManager
 from zope.interface import implementer
@@ -37,3 +40,15 @@ class TestConfigCheckManager(IntegrationTestCase):
             {'id': 'DummyCheckMissconfigured1', 'title': 'Dummy check 1', 'description': 'Description 1'},
             {'id': 'DummyCheckMissconfigured2', 'title': 'Dummy check 2', 'description': ''}
         ], ConfigCheckManager().check_all())
+
+    def test_check_for_ldap_plugin_order(self):
+        self.login(self.manager)
+
+        self.assertEqual(0, len(ConfigCheckManager().check_all()))
+
+        # Set the meta-type of the last auth plugin to an ldap plugin meta type
+        # to simulate a bad plugin order
+        plugins = api.portal.get_tool('acl_users').plugins.listPlugins(IAuthenticationPlugin)
+        plugins[-1][1].meta_type = LDAP_PLUGIN_META_TYPES[0]
+
+        self.assertEqual(1, len(ConfigCheckManager().check_all()))
