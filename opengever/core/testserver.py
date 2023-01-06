@@ -6,6 +6,7 @@ from ftw.testing import staticuid
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
+from opengever.base.tests.test_config_checks import DummyCheckMissconfigured1
 from opengever.core import sqlite_testing
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
@@ -21,6 +22,7 @@ from plone.testing import z2
 from requests.exceptions import ConnectionError
 from uuid import uuid4
 from zope.component import getGlobalSiteManager
+from zope.component import getSiteManager
 from zope.configuration import xmlconfig
 from zope.globalrequest import setRequest
 from zope.schema.interfaces import IVocabularyFactory
@@ -144,6 +146,9 @@ class TestserverLayer(OpengeverFixture):
         activate_bumblebee_feature()
 
         self.replaceDossierTypesVocabulary()
+
+        # Register a broken configuration-check
+        getSiteManager().registerAdapter(DummyCheckMissconfigured1, name="check-missconfigured-1")
 
         setRequest(portal.REQUEST)
         print 'Installing fixture. Have patience.'
