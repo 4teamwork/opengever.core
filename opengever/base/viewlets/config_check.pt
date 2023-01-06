@@ -1,0 +1,11 @@
+<dl class="portalMessage error"
+    tal:define="errors view/errors"
+    tal:condition="errors">
+    <tal:block tal:repeat="error errors">
+        <dt tal:content="error/id"/>
+        <dd>
+            <h3 tal:content="error/title" ></h3>
+            <p tal:content="error/description" ></p>
+        </dd>
+    </tal:block>
+</dl>

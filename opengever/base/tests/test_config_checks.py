@@ -1,3 +1,5 @@
+from ftw.testbrowser import browsing
+from ftw.testbrowser.pages import statusmessages
 from opengever.base.config_checks.checks import BaseCheck
 from opengever.base.config_checks.manager import ConfigCheckManager
 from opengever.base.interfaces import IConfigCheck
@@ -52,3 +54,33 @@ class TestConfigCheckManager(IntegrationTestCase):
         plugins[-1][1].meta_type = LDAP_PLUGIN_META_TYPES[0]
 
         self.assertEqual(1, len(ConfigCheckManager().check_all()))
+
+
+class TestConfigCheckViewlet(IntegrationTestCase):
+
+    @browsing
+    def test_show_errors_in_a_plone_viewlet_for_managers(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.portal)
+        statusmessages.assert_no_messages()
+
+        getSiteManager().registerAdapter(DummyCheckMissconfigured1, name="check-missconfigured-1")
+
+        browser.reload()
+
+        statusmessages.assert_message('Dummy check 1 Description 1')
+
+    @browsing
+    def test_show_error_viewlet_only_for_managers(self, browser):
+        self.login(self.manager, browser=browser)
+
+        getSiteManager().registerAdapter(DummyCheckMissconfigured1, name="check-missconfigured-1")
+        browser.open(self.portal)
+
+        self.assertEqual(1, len(statusmessages.messages().get('error')))
+
+        self.login(self.administrator, browser=browser)
+        browser.reload()
+
+        statusmessages.assert_no_messages()
