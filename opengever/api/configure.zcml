@@ -1775,4 +1775,12 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      method="GET"
+      name="@config-checks"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".config_checks.ConfigChecks"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
