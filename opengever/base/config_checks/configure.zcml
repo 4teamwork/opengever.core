@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:vdex="http://namespaces.zope.org/vdex"
+    i18n_domain="opengever.base">
+
+  <adapter
+      factory=".checks.LDAPPluginOrderCheck"
+      name="ldap-plugin-order"
+      />
+</configure>

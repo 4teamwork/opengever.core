@@ -75,4 +75,5 @@ Inhalt:
    dispositions.rst
    out_of_office.rst
    substitutes.rst
+   config_checks.rst
    examples/index.rst

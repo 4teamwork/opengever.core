@@ -608,3 +608,20 @@ class IDeleter(Interface):
     def is_delete_allowed():
         """Returns a boolean, indicating if the context could be deleted.
         """
+
+
+class IConfigCheckManager(Interface):
+    def check_all():
+        """It returns a list of all configuration errors if something is not
+        properly configured.
+
+        The list will be empty if there are no errors
+        """
+
+
+class IConfigCheck(Interface):
+    def check():
+        """Runs the specific check.
+
+        It returns a dict with error metadata for missconfigurated configs
+        """

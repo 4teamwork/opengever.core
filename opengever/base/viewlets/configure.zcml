@@ -114,4 +114,11 @@
       permission="zope2.View"
       />
 
+  <browser:viewlet
+      name="opengever.base.config_check"
+      manager="plone.app.layout.viewlets.interfaces.IAboveContent"
+      class=".config_check.ConfigCheckViewlet"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

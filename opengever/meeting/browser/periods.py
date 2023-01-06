@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from opengever.base.utils import is_manager
 from opengever.tabbedview import GeverTabMixin
 from plone import api
 from plone.dexterity.browser.add import DefaultAddForm
@@ -60,4 +61,4 @@ class PeriodsTab(BrowserView, GeverTabMixin):
             'Modify portal content', obj=self.context)
 
     def is_manager(self):
-        return api.user.has_permission('cmf.ManagePortal')
+        return is_manager()

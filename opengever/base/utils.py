@@ -257,6 +257,10 @@ def is_administrator(user=None):
                 or user.has_role('Manager'))
 
 
+def is_manager(user=None):
+    return api.user.has_permission('cmf.ManagePortal', user=user)
+
+
 def check_group_plugin_configuration(portal):
     acl_users = getToolByName(portal, 'acl_users')
     plugins = acl_users.plugins

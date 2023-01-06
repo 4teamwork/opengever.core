@@ -6,6 +6,7 @@ from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
 from opengever.base.utils import is_administrator
+from opengever.base.utils import is_manager
 from opengever.base.utils import safe_int
 from opengever.dossier.utils import find_parent_dossier
 from opengever.testing import IntegrationTestCase
@@ -192,3 +193,26 @@ class TestIsAdministrator(IntegrationTestCase):
         self.assertTrue(is_administrator(user=self.limited_admin))
         self.login(self.limited_admin)
         self.assertTrue(is_administrator())
+
+
+class TestIsManager(IntegrationTestCase):
+
+    def test_is_manager_with_regular_user(self):
+        self.assertFalse(is_manager(user=self.regular_user))
+        self.login(self.regular_user)
+        self.assertFalse(is_manager())
+
+    def test_is_manager_with_administrator(self):
+        self.assertFalse(is_manager(user=self.administrator))
+        self.login(self.administrator)
+        self.assertFalse(is_manager())
+
+    def test_is_manager_with_limited_admin(self):
+        self.assertFalse(is_manager(user=self.limited_admin))
+        self.login(self.limited_admin)
+        self.assertFalse(is_manager())
+
+    def test_is_manager_with_manager(self):
+        self.assertTrue(is_manager(user=self.manager))
+        self.login(self.manager)
+        self.assertTrue(is_manager())

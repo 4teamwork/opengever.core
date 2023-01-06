@@ -2,6 +2,7 @@ from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from functools import wraps
 from opengever.base.json_response import JSONResponse
+from opengever.base.utils import is_manager
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting import _
 from opengever.meeting.exceptions import CannotExecuteTransition
@@ -282,7 +283,7 @@ class AgendaItemsView(BrowserView):
             if item.is_revise_possible():
                 data['revise_link'] = meeting.get_url(
                     view='agenda_items/{}/revise'.format(item.agenda_item_id))
-            if self.is_manager():
+            if is_manager():
                 data['debug_excerpt_docxcompose_link'] = meeting.get_url(
                     view='agenda_items/{}/debug_excerpt_docxcompose'.format(item.agenda_item_id))
             if item.is_paragraph:
@@ -566,11 +567,8 @@ class AgendaItemsView(BrowserView):
                 return doc
         return None
 
-    def is_manager(self):
-        return api.user.has_permission('cmf.ManagePortal')
-
     def debug_excerpt_docxcompose(self):
-        if not self.is_manager():
+        if not is_manager():
             raise Forbidden
 
         if self.agenda_item.is_paragraph:
