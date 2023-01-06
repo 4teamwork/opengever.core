@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add the attribute ``is_manager`` tot the ``@config`` endpoint.
 - Use correct ``bumblebee_checksum`` for document versions in document serialization.
 
 2022.24.0 (2022-12-06)

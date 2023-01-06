@@ -42,6 +42,7 @@ class ConfigGet(Service):
         """
         config['is_emm_environment'] = is_client_ip_in_office_connector_disallowed_ip_ranges()
         config['is_admin'] = utils.is_administrator()
+        config['is_manager'] = utils.is_manager()
         config['bumblebee_app_id'] = bumblebee_config.app_id
         config['private_folder_url'] = get_private_folder_url()
         config['gever_colorization'] = get_color()
