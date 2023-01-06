@@ -1,8 +1,8 @@
 from Acquisition import aq_acquire
 from logging import getLogger
+from opengever.base.utils import is_manager
 from opengever.debug import write_on_read_tracing
 from opengever.debug.write_on_read_tracing import format_instruction
-from plone import api
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import NotFound
@@ -45,7 +45,7 @@ class ErrorHandlingView(BrowserView):
 
     def is_manager(self):
         if self.plone:
-            return api.user.has_permission('cmf.ManagePortal')
+            return is_manager()
 
     def is_notfound_error(self):
         return isinstance(self.context, NotFound)
