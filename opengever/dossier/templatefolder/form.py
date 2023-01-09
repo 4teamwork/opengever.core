@@ -1,7 +1,4 @@
 from ftw.table import helper
-from opengever.base.browser.wizard import BaseWizardStepForm
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.contact import _ as contact_mf
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -18,9 +15,9 @@ from plone.z3cform.layout import FormWrapper
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
-from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -92,21 +89,10 @@ class ICreateDocumentFromTemplate(model.Schema):
     )
 
 
-def get_dm_key(context):
-    """Return the key used to store template-data in the wizard-storage."""
-
-    container_oguid = Oguid.for_object(context)
-    return 'add_document_from_template:{}'.format(container_oguid)
-
-
 class CreateDocumentMixin(object):
 
     label = _(u'create_document_with_template',
               default=u'Create document from template')
-
-    @property
-    def steps(self):
-        return []
 
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)
@@ -137,13 +123,13 @@ class CreateDocumentMixin(object):
         return command.execute()
 
 
-class SelectTemplateDocumentWizardStep(
-        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
+class SelectTemplateDocumentForm(CreateDocumentMixin, AutoExtensibleForm, Form):
 
-    step_name = 'select-document'
+    fields = Fields(ICreateDocumentFromTemplate)
+    ignoreContext = True
 
     def updateFieldsFromSchemata(self):
-        super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
+        super(SelectTemplateDocumentForm, self).updateFieldsFromSchemata()
         if is_client_ip_in_office_connector_disallowed_ip_ranges():
             self.fields = self.fields.omit('edit_after_creation')
         if is_kub_feature_enabled():
@@ -166,18 +152,6 @@ class SelectTemplateDocumentWizardStep(
             self.status = self.formErrorsMessage
             return
 
-        if data.get('recipient'):
-            dm = getUtility(IWizardDataStorage)
-            dm.update(get_dm_key(self.context), data)
-            return self.request.RESPONSE.redirect(
-                "{}/select-recipient-address".format(self.context.absolute_url()))
-
-        if data.get('sender'):
-            dm = getUtility(IWizardDataStorage)
-            dm.update(get_dm_key(self.context), data)
-            return self.request.RESPONSE.redirect(
-                "{}/select-sender-address".format(self.context.absolute_url()))
-
         return self.finish_document_creation(data)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
@@ -187,4 +161,4 @@ class SelectTemplateDocumentWizardStep(
 
 class SelectTemplateDocumentView(FormWrapper):
 
-    form = SelectTemplateDocumentWizardStep
+    form = SelectTemplateDocumentForm
