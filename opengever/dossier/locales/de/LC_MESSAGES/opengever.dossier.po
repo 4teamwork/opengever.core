@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 17:22+0000\n"
+"POT-Creation-Date: 2023-01-09 15:05+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -140,25 +140,9 @@ msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 msgid "Participants"
 msgstr "Beteiligungen"
 
-#: ./opengever/dossier/browser/overview.py
-msgid "Participations"
-msgstr "Beteiligungen"
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select document"
-msgstr "Dokument auswählen"
-
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "Select dossiertemplate"
 msgstr "Vorlage auswählen"
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select recipient address"
-msgstr "Empfänger-Adresse auswählen"
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select sender address"
-msgstr "Absender-Adresse auswählen"
 
 #: ./opengever/dossier/dossiertemplate/menu.py
 #: ./opengever/dossier/menu.py
@@ -519,11 +503,6 @@ msgstr "${item} wurde verschoben."
 msgid "label_addable_dossier_templates"
 msgstr "Erlaubte Dossiervorlagen"
 
-#. Default: "Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_address"
-msgstr "Adresse"
-
 #. Default: "Protected Objects"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_blocked_local_roles"
@@ -668,20 +647,10 @@ msgstr "Journal"
 msgid "label_keywords"
 msgstr "Schlagwörter"
 
-#. Default: "Label"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_label"
-msgstr "Label"
-
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py
 msgid "label_linked_dossiers"
 msgstr "Verlinkte Dossiers"
-
-#. Default: "Mail-Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_mail_address"
-msgstr "Mail Addresse"
 
 #. Default: "Meeting Templates"
 #: ./opengever/dossier/browser/tabbed.py
@@ -749,16 +718,6 @@ msgstr "Beteiligungen"
 msgid "label_participation"
 msgstr "Beteiligung"
 
-#. Default: "Participations"
-#: ./opengever/dossier/browser/tabbed.py
-msgid "label_participations"
-msgstr "Beteiligungen"
-
-#. Default: "Phonenumber"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_phonenumber"
-msgstr "Telefonnummer"
-
 #. Default: "Predefined Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_predefined_keywords"
@@ -783,11 +742,6 @@ msgstr "Lesend"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_reading_and_writing"
 msgstr "Lesend & schreibend"
-
-#. Default: "Recipient"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_recipient"
-msgstr "Empfänger"
 
 #. Default: "Reference Number"
 #: ./opengever/dossier/behaviors/dossier.py
@@ -826,11 +780,6 @@ msgstr "Rollen"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_sablon_templates"
 msgstr "Sablon Vorlagen"
-
-#. Default: "Sender"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_sender"
-msgstr "Absender"
 
 #. Default: "Sequence Number"
 #: ./opengever/dossier/viewlets/byline.py
@@ -895,11 +844,6 @@ msgstr "Änderungsdatum des Dossiers oder seines Inhalts"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_trash"
 msgstr "Papierkorb"
-
-#. Default: "URL"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_url"
-msgstr "URL"
 
 #. Default: "State"
 #: ./opengever/dossier/project_templates/byline.pt

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 17:22+0000\n"
+"POT-Creation-Date: 2023-01-09 15:05+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -168,29 +168,10 @@ msgstr "Some required fields are missing."
 msgid "Participants"
 msgstr "Participants"
 
-#. German translation: Beteiligungen
-#: ./opengever/dossier/browser/overview.py
-msgid "Participations"
-msgstr "Participations"
-
-#. German translation: Dokument auswählen
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select document"
-msgstr "Select document"
-
 #. German translation: Vorlage auswählen
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "Select dossiertemplate"
 msgstr "Select dossier template"
-
-#. German translation: Empfänger-Adresse auswählen
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select recipient address"
-msgstr "Select recipient address"
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select sender address"
-msgstr "Select sender address"
 
 #. German translation: Subdossier
 #: ./opengever/dossier/dossiertemplate/menu.py
@@ -639,12 +620,6 @@ msgstr "${item} was moved."
 msgid "label_addable_dossier_templates"
 msgstr "Addable dossier templates"
 
-#. German translation: Adresse
-#. Default: "Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_address"
-msgstr "Address"
-
 #. German translation: Geschützte Objekte
 #. Default: "Protected Objects"
 #: ./opengever/dossier/browser/tabbed.py
@@ -814,23 +789,11 @@ msgstr "Journal"
 msgid "label_keywords"
 msgstr "Keywords"
 
-#. German translation: Label
-#. Default: "Label"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_label"
-msgstr "Label"
-
 #. German translation: Verlinkte Dossiers
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py
 msgid "label_linked_dossiers"
 msgstr "Linked dossiers"
-
-#. German translation: Mail Addresse
-#. Default: "Mail-Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_mail_address"
-msgstr "Email address"
 
 #. German translation: Sitzungsvorlagen
 #. Default: "Meeting Templates"
@@ -909,18 +872,6 @@ msgstr "Participants"
 msgid "label_participation"
 msgstr "Participation"
 
-#. German translation: Beteiligungen
-#. Default: "Participations"
-#: ./opengever/dossier/browser/tabbed.py
-msgid "label_participations"
-msgstr "Participations"
-
-#. German translation: Telefonnummer
-#. Default: "Phonenumber"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_phonenumber"
-msgstr "Phone number"
-
 #. German translation: Schlagwörter vorausfüllen
 #. Default: "Predefined Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -950,12 +901,6 @@ msgstr "Read only access"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_reading_and_writing"
 msgstr "Read/Write access"
-
-#. German translation: Empfänger
-#. Default: "Recipient"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_recipient"
-msgstr "Recipient"
 
 #. German translation: Aktenzeichen
 #. Default: "Reference Number"
@@ -1001,11 +946,6 @@ msgstr "Roles"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_sablon_templates"
 msgstr "Sablon templates"
-
-#. Default: "Sender"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_sender"
-msgstr "Sender"
 
 #. German translation: Laufnummer
 #. Default: "Sequence Number"
@@ -1083,12 +1023,6 @@ msgstr "Modification date of dossier or its content"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_trash"
 msgstr "Trash"
-
-#. German translation: URL
-#. Default: "URL"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_url"
-msgstr "URL"
 
 #. German translation: Status
 #. Default: "State"

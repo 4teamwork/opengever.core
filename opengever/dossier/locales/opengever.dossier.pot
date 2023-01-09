@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 17:22+0000\n"
+"POT-Creation-Date: 2023-01-09 15:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,24 +140,8 @@ msgstr ""
 msgid "Participants"
 msgstr ""
 
-#: ./opengever/dossier/browser/overview.py
-msgid "Participations"
-msgstr ""
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select document"
-msgstr ""
-
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "Select dossiertemplate"
-msgstr ""
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select recipient address"
-msgstr ""
-
-#: ./opengever/dossier/templatefolder/form.py
-msgid "Select sender address"
 msgstr ""
 
 #: ./opengever/dossier/dossiertemplate/menu.py
@@ -516,11 +500,6 @@ msgstr ""
 msgid "label_addable_dossier_templates"
 msgstr ""
 
-#. Default: "Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_address"
-msgstr ""
-
 #. Default: "Protected Objects"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_blocked_local_roles"
@@ -665,19 +644,9 @@ msgstr ""
 msgid "label_keywords"
 msgstr ""
 
-#. Default: "Label"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_label"
-msgstr ""
-
 #. Default: "Linked Dossiers"
 #: ./opengever/dossier/browser/overview.py
 msgid "label_linked_dossiers"
-msgstr ""
-
-#. Default: "Mail-Address"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_mail_address"
 msgstr ""
 
 #. Default: "Meeting Templates"
@@ -746,16 +715,6 @@ msgstr ""
 msgid "label_participation"
 msgstr ""
 
-#. Default: "Participations"
-#: ./opengever/dossier/browser/tabbed.py
-msgid "label_participations"
-msgstr ""
-
-#. Default: "Phonenumber"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_phonenumber"
-msgstr ""
-
 #. Default: "Predefined Keywords"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_predefined_keywords"
@@ -779,11 +738,6 @@ msgstr ""
 #. Default: "Reading and writing"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_reading_and_writing"
-msgstr ""
-
-#. Default: "Recipient"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_recipient"
 msgstr ""
 
 #. Default: "Reference Number"
@@ -822,11 +776,6 @@ msgstr ""
 #. Default: "Sablon Templates"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_sablon_templates"
-msgstr ""
-
-#. Default: "Sender"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_sender"
 msgstr ""
 
 #. Default: "Sequence Number"
@@ -891,11 +840,6 @@ msgstr ""
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py
 msgid "label_trash"
-msgstr ""
-
-#. Default: "URL"
-#: ./opengever/dossier/templatefolder/form.py
-msgid "label_url"
 msgstr ""
 
 #. Default: "State"
