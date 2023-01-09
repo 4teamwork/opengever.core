@@ -1,7 +1,7 @@
 from opengever.base.interfaces import IConfigCheck
 from opengever.bundle.ldap import LDAP_PLUGIN_META_TYPES
 from plone import api
-from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
@@ -25,21 +25,21 @@ class BaseCheck(object):
 
 @implementer(IConfigCheck)
 @adapter(Interface)
-class LDAPPluginOrderCheck(BaseCheck):
+class LDAPPropertiesPluginOrderCheck(BaseCheck):
 
     def check(self):
         is_first_entry = True
         for plugin_id, plugin in self.get_plugins():
             if plugin.meta_type in LDAP_PLUGIN_META_TYPES and not is_first_entry:
                 return self.config_error(
-                    title='LDAP authentication plugin with the ID: "{}" is not at the '
+                    title='LDAP properties plugin with the ID: "{}" is not at the '
                           'first position'.format(plugin_id),
                     description='Move the active ldap plugin from '
-                                '/acl_users/plugins/manage_plugins > "Authentication Plugins" '
+                                '/acl_users/plugins/manage_plugins > "Properties Plugins" '
                                 'to the first position. This is required to properly lookup '
                                 'user metadata from the ldap.')
 
             is_first_entry = False
 
     def get_plugins(self):
-        return api.portal.get_tool('acl_users').plugins.listPlugins(IAuthenticationPlugin)
+        return api.portal.get_tool('acl_users').plugins.listPlugins(IPropertiesPlugin)
