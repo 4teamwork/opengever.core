@@ -1,10 +1,7 @@
 from DateTime import DateTime
 from datetime import datetime
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.journal.manager import JournalManager
 from opengever.testing import IntegrationTestCase
 import json
@@ -192,15 +189,11 @@ class TestJournalGet(IntegrationTestCase):
     def test_validate_item_fields(self, browser):
         self.login(self.regular_user, browser)
 
-        user = OgdsUserToContactAdapter.query.get(self.regular_user.id)
-
         manager = JournalManager(self.dossier)
         with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
             manager.add_manual_entry(
                 'information', 'is an agent',
-                [],
-                [user],
-                [self.document])
+                documents=[self.document])
             manager.list()[-1]['id'] = '123-456-789'  # mock id
 
         response = browser.open(

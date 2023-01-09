@@ -78,11 +78,8 @@ class JournalPost(JournalService):
         documents = data.get('related_documents', [])
         time = data.get('time')
 
-        contacts = []
-        users = []
-
         JournalManager(self.context).add_manual_entry(
-            category, comment, contacts, users, documents, time)
+            category, comment, documents, time)
 
         self.request.response.setStatus(204)
         return super(JournalPost, self).reply()

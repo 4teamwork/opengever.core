@@ -73,14 +73,10 @@ class ManualJournalEntryAddForm(AddForm):
         self.actions['add'].addClass("context")
 
     def createAndAdd(self, data):
-        contacts = []
-        users = []
         JournalManager(self.context).add_manual_entry(
             data.get('category'),
             data.get('comment'),
-            contacts,
-            users,
-            data.get('related_documents'))
+            documents=data.get('related_documents'))
 
         return True
 
