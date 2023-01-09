@@ -1,19 +1,4 @@
-from opengever.base.model import create_session
 from opengever.base.portlets import block_context_portlet_inheritance
-from opengever.contact.models import Participation
-
-
-def copy_participations(copied_dossier, event):
-    """Make sure that participations are copied as well when copying a dossier.
-    """
-
-    participations = Participation.query.by_dossier(event.original).all()
-    if not participations:
-        return
-
-    session = create_session()
-    for participation in participations:
-        session.add(participation.copy_to_dossier(copied_dossier))
 
 
 def configure_contactfolder_portlets(contactfolder, event):

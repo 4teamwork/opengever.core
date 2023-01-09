@@ -119,20 +119,6 @@
     </permission>
 
     <!-- CONTACT -->
-    <permission name="opengever.contact: Add person" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-      <role name="LimitedAdmin" />
-    </permission>
-
-    <permission name="opengever.contact: Edit person" acquire="True">
-      <role name="Manager" />
-      <role name="Contributor" />
-      <role name="Administrator" />
-      <role name="LimitedAdmin" />
-    </permission>
-
     <permission name="opengever.contact: Add team" acquire="True">
       <role name="Manager" />
       <role name="Administrator" />

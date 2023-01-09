@@ -1,5 +1,4 @@
 from ftw.upgrade import UpgradeStep
-from opengever.contact import is_contact_feature_enabled
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from persistent.list import PersistentList
@@ -14,8 +13,6 @@ class MigrateParticipations(UpgradeStep):
     annotation_key = 'participations'
 
     def __call__(self):
-        if is_contact_feature_enabled():
-            return
         query = {'object_provides': IParticipationAwareMarker.__identifier__}
         for dossier in self.objects(query, 'Merge participations.'):
             handler = IParticipationAware(dossier)

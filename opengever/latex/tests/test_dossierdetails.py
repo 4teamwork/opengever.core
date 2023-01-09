@@ -138,31 +138,11 @@ class TestDossierDetails(TestDossierDetailsBase):
             dossierdetails.get_participants().split("\n")
         )
 
-    def test_handles_sql_participations(self):
-        self.activate_feature('contact')
-
-        self.login(self.regular_user)
-
-        dossierdetails = self.get_dossierdetails_view(self.dossier)
-        dossierdetails.get_participants()
-        self.assertEqual(
-            ['{ ',
-             '\\vspace{-\\baselineskip}\\begin{itemize} ',
-             '\\item Ziegler Robert (robert.ziegler), Responsible ',
-             '\\item Meier AG, Final signature ',
-             '\\item B\xc3\xbchler Josef, Final signature, Participation ',
-             '\\vspace{-\\baselineskip}\\end{itemize} ',
-             '}'],
-            dossierdetails.get_participants().split("\n")
-        )
-
 
 @requests_mock.Mocker()
 class TestDossierDetailsWithKuB(KuBIntegrationTestCase, TestDossierDetailsBase):
 
     def test_handles_kub_participations(self, mocker):
-        self.activate_feature('contact')
-
         self.login(self.regular_user)
 
         self.mock_labels(mocker)

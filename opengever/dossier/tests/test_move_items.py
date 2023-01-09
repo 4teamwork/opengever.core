@@ -1407,7 +1407,7 @@ class TestReferenceNumberUpdateOnMove(IntegrationTestCase):
         brains = catalog(path='/'.join(dossier.getPhysicalPath()),
                          portal_type='opengever.dossier.businesscasedossier')
 
-        self.assertEquals(
+        self.assertItemsEqual(
             ['Client1 2 / 1',
              'Client1 2 / 1.1',
              'Client1 2 / 1.2',

@@ -38,7 +38,6 @@
       action_group="add"
       permissions="
                    opengever.contact: Add contact,
-                   opengever.contact: Add person,
                    opengever.document: Add document,
                    opengever.dossier: Add businesscasedossier,
                    opengever.dossier: Add dossiertemplate,
@@ -64,7 +63,6 @@
       action_group="add gever content"
       permissions="
                    opengever.contact: Add contact,
-                   opengever.contact: Add person,
                    opengever.dossier: Add businesscasedossier,
                    opengever.dossier: Add dossiertemplate,
                    opengever.dossier: Add projectdossier,
@@ -97,7 +95,6 @@
                    Poi: Modify issue target release,
                    Poi: Modify issue watchers,
                    Poi: Upload attachment,
-                   opengever.contact: Edit person,
                    opengever.disposition: Edit transfer number,
                    opengever.document: Cancel,
                    opengever.document: Checkin,
@@ -495,7 +492,6 @@
                      ftw.keywordwidget: Add new term,
                      ftw.mail: Add Inbound Mail,
                      opengever.contact: Add contact,
-                     opengever.contact: Add person,
                      opengever.document: Add document,
                      opengever.dossier: Add businesscasedossier,
                      opengever.dossier: Add dossiertemplate,
@@ -530,7 +526,6 @@
                      ftw.keywordwidget: Add new term,
                      iterate : Check in content,
                      iterate : Check out content,
-                     opengever.contact: Edit person,
                      opengever.disposition: Edit transfer number,
                      opengever.document: Cancel,
                      opengever.document: Checkin,

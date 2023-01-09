@@ -36,17 +36,14 @@ class JournalManager(object):
         if value and not isinstance(value, DateTime):
             raise ValueError("time should be a zope DateTime not {}".format(type(value)))
 
-    def add_manual_entry(self, category, comment, contacts=None, users=None,
-                         documents=None, time=None):
+    def add_manual_entry(self, category, comment, documents=None, time=None):
         entry_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': MANUAL_JOURNAL_ENTRY,
                          'category': category,
                          'title': self._get_manual_entry_title(category),
                          'visible': True,
-                         'documents': self._serialize_documents(documents),
-                         'contacts': self._serialize_contacts(contacts),
-                         'users': self._serialize_users(users)}),
+                         'documents': self._serialize_documents(documents)}),
                      'actor': api.user.get_current().getId(),
                      'comment': self._serialize_comment(comment),
                      'time': time}
@@ -142,29 +139,6 @@ class JournalManager(object):
             for doc in documents:
                 value.append(PersistentDict(
                     {'id': Oguid.for_object(doc).id, 'title': doc.title}))
-
-        return value
-
-    def _serialize_contacts(self, contacts):
-        """Returns a persistent list of dicts for all contacts.
-        """
-        value = PersistentList()
-        if contacts is not None:
-            for item in contacts:
-                value.append(
-                    PersistentDict({'id': item.get_contact_id(),
-                                    'title': item.get_title()}))
-
-        return value
-
-    def _serialize_users(self, users):
-        """Returns a persistent list of dicts for all users.
-        """
-        value = PersistentList()
-        if users is not None:
-            for item in users:
-                value.append(
-                    PersistentDict({'id': item.id, 'title': item.get_title()}))
 
         return value
 

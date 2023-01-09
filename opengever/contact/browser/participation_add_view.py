@@ -1,5 +1,4 @@
 from opengever.contact import _ as contact_mf
-from opengever.contact import is_contact_feature_enabled
 from opengever.kub import is_kub_feature_enabled
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -7,7 +6,7 @@ from Products.statusmessages.interfaces import IStatusMessage
 
 class ParticipationAddView(BrowserView):
     """A simple redirector view which redirects to the corresponding add form,
-    depending on the is_contact_feature_enabled flag.
+    depending on whether KuB is enabled or not.
 
     The view is called by dossiers `Add participation` factoriesmenu action.
     """
@@ -19,10 +18,6 @@ class ParticipationAddView(BrowserView):
                 default=u'Kub contacts are only supported in the new frontend')
             IStatusMessage(self.request).addStatusMessage(msg, type=u'error')
             return self.request.RESPONSE.redirect(self.context.absolute_url())
-        if is_contact_feature_enabled():
-            return self.request.RESPONSE.redirect(
-                self.get_url('add-sql-participation'))
-
         return self.request.response.redirect(
             self.get_url('add-plone-participation'))
 

@@ -4,14 +4,6 @@
     xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="opengever.contact">
 
-  <adapter factory=".organization_listing.OrganizationTableSource" />
-  <adapter factory=".person_listing.PersonTableSource" />
-
-  <browser:resourceDirectory
-      name="opengever.contact"
-      directory="resources"
-      />
-
   <browser:page
       for="opengever.contact.contact.IContact"
       name="contact_view"
@@ -34,47 +26,11 @@
       />
 
   <browser:page
-      name="view"
-      for="opengever.contact.interfaces.IPerson"
-      class=".person.PersonView"
-      permission="zope2.View"
-      />
-
-  <browser:page
       for="opengever.contact.interfaces.IContactFolder"
       name="tabbed_view"
       class=".tabbed.ContactFolderTabbedView"
       permission="zope2.View"
       allowed_interface="ftw.tabbedview.interfaces.ITabbedViewEndpoints"
-      />
-
-  <browser:page
-      for="opengever.contact.interfaces.IContactFolder"
-      name="tabbedview_view-organizations"
-      class=".organization_listing.Organizations"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="opengever.contact.interfaces.IContactFolder"
-      name="tabbedview_view-persons"
-      class=".person_listing.Persons"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      name="view"
-      for="opengever.contact.interfaces.IOrganization"
-      class=".organization.OrganizationView"
-      permission="zope2.View"
-      />
-
-  <browser:viewlet
-      name="plone.belowcontenttitle.documentbyline"
-      for="opengever.contact.interfaces.IContact"
-      manager="plone.app.layout.viewlets.interfaces.IBelowContentTitle"
-      class=".byline.ContactByline"
-      permission="zope2.View"
       />
 
   <browser:viewlet
@@ -86,92 +42,10 @@
       />
 
   <browser:page
-      name="participations"
-      for="opengever.contact.interfaces.IOrganization"
-      class=".participations.OrganizationParticipationsView"
-      permission="zope2.View"
-      allowed_attributes="list"
-      />
-
-  <browser:page
-      name="participations"
-      for="opengever.contact.interfaces.IPerson"
-      class=".participations.PersonParticipationsView"
-      permission="zope2.View"
-      allowed_attributes="list"
-      />
-
-  <browser:page
-      name="tabbedview_view-participations"
-      for="*"
-      class=".participations.ParticipationTab"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      name="add-sql-participation"
-      for="opengever.dossier.behaviors.dossier.IDossierMarker"
-      class=".participation_forms.ParticipationAddForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      name="edit"
-      for="opengever.contact.participation.IParticipationWrapper"
-      class=".participation_forms.ParticipationEditForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      name="remove"
-      for="opengever.contact.participation.IParticipationWrapper"
-      class=".participation_forms.ParticipationRemoveForm"
-      permission="cmf.ModifyPortalContent"
-      />
-
-  <browser:page
-      name="edit"
-      for="opengever.contact.interfaces.IPerson"
-      class=".person.EditPerson"
-      permission="opengever.contact.EditPerson"
-      />
-
-  <browser:page
-      name="add-person"
-      for="opengever.contact.interfaces.IContactFolder"
-      class=".person.AddPerson"
-      permission="opengever.contact.AddPerson"
-      />
-
-  <browser:page
-      name="plone_layout"
-      for="opengever.contact.interfaces.IPerson"
-      permission="zope.Public"
-      class=".layout.PersonLayoutPolicy"
-      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-      />
-
-  <browser:page
-      name="plone_layout"
-      for="opengever.contact.interfaces.IOrganization"
-      permission="zope.Public"
-      class=".layout.OrganizationLayoutPolicy"
-      allowed_interface="plone.app.layout.globals.interfaces.ILayoutPolicy"
-      />
-
-  <browser:page
       name="add-participation"
       for="opengever.dossier.behaviors.dossier.IDossierMarker"
       class=".participation_add_view.ParticipationAddView"
       permission="cmf.AddPortalContent"
-      />
-
-  <browser:page
-      name="mails"
-      for="opengever.contact.interfaces.IPerson"
-      class=".mail.MailAddressesView"
-      permission="opengever.contact.EditPerson"
-      allowed_interface="opengever.contact.browser.mail.IMailAddressesActions"
       />
 
   <adapter

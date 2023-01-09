@@ -5,7 +5,6 @@ from ftw.solr.interfaces import ISolrSearch
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.base.solr import OGSolrDocument
-from opengever.contact.sources import ContactsSource
 from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
 from opengever.testing.assets import path_to_asset
@@ -179,14 +178,6 @@ def create_document_version(doc, version_id, data=None, comment=None):
 
 def css_to_xpath(css):
     return LxmlTranslator().css_to_xpath(css)
-
-
-def get_contacts_source():
-    return ContactsSource(api.portal.get())
-
-
-def get_contacts_token(obj):
-    return get_contacts_source().getTerm(obj).token
 
 
 def obj2paths(objs):

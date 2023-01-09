@@ -35,12 +35,6 @@
       handler=".handlers.configure_contactfolder_portlets"
       />
 
-  <subscriber
-      for="opengever.dossier.behaviors.dossier.IDossierMarker
-           zope.lifecycleevent.interfaces.IObjectCopiedEvent"
-      handler=".handlers.copy_participations"
-      />
-
   <adapter
       factory=".contact.contactid"
       name="contactid"

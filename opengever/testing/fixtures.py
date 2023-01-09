@@ -668,12 +668,8 @@ class OpengeverContentFixture(object):
             )
         ))
 
-        self.josef_buehler = create(
-            Builder('person')
-            .having(firstname=u'Josef', lastname=u'B\xfchler'),
-        )
-
-        self.meier_ag = create(Builder('organization').named(u'Meier AG'))
+        create(Builder('dummy_clock_tick'))
+        create(Builder('dummy_clock_tick'))
 
         create_session().flush()
 
@@ -1157,19 +1153,8 @@ class OpengeverContentFixture(object):
             )
         ))
 
-        create(
-            Builder('contact_participation')
-            .for_contact(self.meier_ag)
-            .for_dossier(self.dossier)
-            .with_roles(['final-drawing'])
-        )
-
-        create(
-            Builder('contact_participation')
-            .for_contact(self.josef_buehler)
-            .for_dossier(self.dossier)
-            .with_roles(['final-drawing', 'participation'])
-        )
+        create(Builder('dummy_clock_tick'))
+        create(Builder('dummy_clock_tick'))
 
         self.document = self.register('document', create(
             Builder('document')
@@ -1819,19 +1804,8 @@ class OpengeverContentFixture(object):
             )
         ))
 
-        create(
-            Builder('contact_participation')
-            .for_contact(self.meier_ag)
-            .for_dossier(self.meeting_dossier)
-            .with_roles(['final-drawing'])
-        )
-
-        create(
-            Builder('contact_participation')
-            .for_contact(self.josef_buehler)
-            .for_dossier(self.meeting_dossier)
-            .with_roles(['final-drawing', 'participation'])
-        )
+        create(Builder('dummy_clock_tick'))
+        create(Builder('dummy_clock_tick'))
 
         self.meeting_document = self.register('meeting_document', create(
             Builder('document')

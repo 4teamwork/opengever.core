@@ -1,17 +1,12 @@
-from ftw.keywordwidget.widget import KeywordWidget
 from opengever.base.source import DossierPathSourceBinder
-from opengever.contact import is_contact_feature_enabled
-from opengever.contact.sources import ContactsSourceBinder
 from opengever.journal import _
 from opengever.journal.manager import JournalManager
-from plone.autoform.widgets import ParameterizedWidget
 from plone.dexterity.i18n import MessageFactory as pd_mf
 from plone.supermodel import model
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.form import AddForm
 from z3c.form.i18n import MessageFactory as z3c_mf
-from z3c.form.interfaces import HIDDEN_MODE
 from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
@@ -28,13 +23,6 @@ class IManualJournalEntry(model.Schema):
 
     comment = schema.Text(
         title=_(u'label_comment', default=u'Comment'),
-        required=False,
-    )
-
-    contacts = schema.List(
-        title=_(u'label_contacts', default=u'Contacts'),
-        value_type=schema.Choice(
-            source=ContactsSourceBinder()),
         required=False,
     )
 
@@ -64,16 +52,6 @@ class ManualJournalEntryAddForm(AddForm):
     label = _(u'label_add_journal_entry', default=u'Add journal entry')
     fields = Fields(IManualJournalEntry)
 
-    fields['contacts'].widgetFactory = ParameterizedWidget(
-        KeywordWidget,
-        async=True
-    )
-
-    def updateWidgets(self, prefix=None):
-        super(ManualJournalEntryAddForm, self).updateWidgets(prefix=prefix)
-        if not is_contact_feature_enabled():
-            self.widgets['contacts'].mode = HIDDEN_MODE
-
     @button.buttonAndHandler(z3c_mf('Add'), name='add')
     def handleAdd(self, action):
         data, errors = self.extractData()
@@ -95,29 +73,12 @@ class ManualJournalEntryAddForm(AddForm):
         self.actions['add'].addClass("context")
 
     def createAndAdd(self, data):
-        contacts, users = self.split_contacts_and_users(data.get('contacts'))
         JournalManager(self.context).add_manual_entry(
             data.get('category'),
             data.get('comment'),
-            contacts,
-            users,
-            data.get('related_documents'))
+            documents=data.get('related_documents'))
 
         return True
-
-    def split_contacts_and_users(self, items):
-        """Spliting up the contact list, in to a list of contact objects
-        and a list of adapted users.
-        """
-        contacts = []
-        users = []
-        for item in items:
-            if item.is_adapted_user:
-                users.append(item)
-            else:
-                contacts.append(item)
-
-        return contacts, users
 
     def nextURL(self):
         return '{}#journal'.format(self.context.absolute_url())

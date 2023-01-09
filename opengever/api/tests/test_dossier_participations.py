@@ -1,7 +1,4 @@
-from ftw.builder.builder import Builder
-from ftw.builder.builder import create
 from ftw.testbrowser import browsing
-from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.interfaces import IDossierParticipants
 from opengever.dossier.participations import IParticipationData
@@ -229,72 +226,6 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                          for item in browser.json['items']])
 
 
-class TestParticipationsGetWithContactFeatureEnabled(IntegrationTestCase):
-
-    features = ('contact', )
-
-    @browsing
-    def test_get_participations(self, browser):
-        self.maxDiff = None
-
-        self.login(self.regular_user, browser=browser)
-
-        browser.open(self.dossier.absolute_url() + '/@participations',
-                     method='GET', headers=self.api_headers)
-        expected_json = {
-            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                    u'vertrage-und-vereinbarungen/dossier-1/@participations',
-            u'available_roles': [{u'title': u'Final signature',
-                                  u'token': u'final-drawing',
-                                  u'active': True},
-                                 {u'title': u'For your information',
-                                  u'token': u'regard',
-                                  u'active': True},
-                                 {u'title': u'Participation',
-                                  u'token': u'participation',
-                                  u'active': True},
-                                 ],
-            u'items': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
-                                u'vereinbarungen/dossier-1/@participations/person:1',
-                        u'participant_id': u'person:1',
-                        u'participant_title': u'B\xfchler Josef',
-                        u'participant_actor': {
-                            u'@id': u'http://nohost/plone/@actors/person:1',
-                            u'identifier': u'person:1'},
-                        u'roles': [u'final-drawing', u'participation']},
-                       {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
-                                u'vereinbarungen/dossier-1/@participations/organization:2',
-                        u'participant_id': u'organization:2',
-                        u'participant_title': u'Meier AG',
-                        u'participant_actor': {
-                            u'@id': u'http://nohost/plone/@actors/organization:2',
-                            u'identifier': u'organization:2'},
-                        u'roles': [u'final-drawing']}],
-            u'items_total': 2,
-            u'primary_participation_roles': []}
-        self.assertEqual(expected_json, browser.json)
-
-        browser.open(self.dossier, method='GET', headers=self.api_headers)
-        self.assertEqual({u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                                  u'vertrage-und-vereinbarungen/dossier-1/@participations'},
-                         browser.json['@components']['participations'])
-
-        browser.open(self.dossier.absolute_url() + '?expand=participations',
-                     method='GET', headers=self.api_headers)
-        self.assertEqual(expected_json, browser.json['@components']['participations'])
-
-    @browsing
-    def test_response_is_batched(self, browser):
-        self.login(self.regular_user, browser=browser)
-        browser.open(self.dossier.absolute_url() + '/@participations?b_size=1',
-                     method='GET', headers=self.api_headers)
-
-        self.assertEqual(1, len(browser.json['items']))
-        self.assertEqual(2, browser.json['items_total'])
-        self.assertEqual(3, len(browser.json['available_roles']))
-        self.assertIn('batching', browser.json)
-
-
 class TestParticipationsPost(IntegrationTestCase):
 
     def setUp(self):
@@ -441,25 +372,6 @@ class TestParticipationsPost(IntegrationTestCase):
                                           'roles': ['regard']}))
         self.assertEqual({"message": "You are not authorized to access this resource.",
                           "type": "Unauthorized"}, browser.json)
-
-
-class TestParticipationsPostWithContactFeatureEnabled(TestParticipationsPost):
-
-    features = ('contact', )
-
-    def setUp(self):
-        super(TestParticipationsPostWithContactFeatureEnabled, self).setUp()
-        self.person = create(Builder('person').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-        self.organization = create(Builder('organization').named('4teamwork AG'))
-        self.org_role = create(Builder('org_role').having(
-            person=self.person,
-            organization=self.organization,
-            function=u'Gute Fee'))
-        create_session().flush()
-
-        self.valid_participant_id = 'person:{}'.format(self.person.id)
-        self.valid_participant_id2 = 'organization:{}'.format(self.organization.id)
 
 
 @requests_mock.Mocker()
@@ -630,19 +542,6 @@ class TestParticipationsPatch(IntegrationTestCase):
                           "type": "Unauthorized"}, browser.json)
 
 
-class TestParticipationsPatchWithContactFeatureEnabled(TestParticipationsPatch):
-
-    features = ('contact', )
-
-    def setUp(self):
-        super(TestParticipationsPatchWithContactFeatureEnabled, self).setUp()
-        self.person = create(Builder('person').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-        create_session().flush()
-        self.participant_id = 'person:{}'.format(self.person.id)
-        self.participant_title = self.person.get_title()
-
-
 @requests_mock.Mocker()
 class TestParticipationsPatchWithKuBFeatureEnabled(KuBIntegrationTestCase, TestParticipationsPatch):
 
@@ -761,24 +660,6 @@ class TestParticipationsDelete(IntegrationTestCase):
                           "type": "Unauthorized"}, browser.json)
 
 
-class TestParticipationsDeleteWithContactFeatureEnabled(TestParticipationsDelete):
-
-    features = ('contact', )
-
-    def setUp(self):
-        super(TestParticipationsDeleteWithContactFeatureEnabled, self).setUp()
-        self.person = create(Builder('person').having(
-            firstname=u'Hans', lastname=u'M\xfcller'))
-        create_session().flush()
-        self.participant_id = 'person:{}'.format(self.person.id)
-        self.participant_title = self.person.get_title()
-
-    @browsing
-    def test_can_delete_participations_with_invalid_participant_id(self, browser):
-        # This cannot happen for sql contacts
-        pass
-
-
 @requests_mock.Mocker()
 class TestParticipationsDeleteWithKuBFeatureEnabled(KuBIntegrationTestCase, TestParticipationsDelete):
 
@@ -848,52 +729,6 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
 
         self.assertEqual(5, len(browser.json.get('items')))
         self.assertEqual(24, browser.json.get('items_total'))
-        self.assertIn('batching', browser.json)
-
-
-class TestPossibleParticipantsGetWithContactFeatureEnabled(SolrIntegrationTestCase):
-
-    features = ('contact', )
-
-    @browsing
-    def test_get_possible_participants_filters_out_current_participants(self, browser):
-        self.login(self.regular_user, browser=browser)
-
-        # features not working
-        self.activate_feature('contact')
-
-        url = self.dossier.absolute_url() + '/@possible-participants?query=mei'
-        browser.open(url, method='GET', headers=self.api_headers)
-
-        expected_json = {u'@id': url,
-                         u'items': [{u'title': u'Meier David (david.meier)',
-                                     u'token': u'ogds_user:david.meier'}],
-                         u'items_total': 1}
-
-        self.assertEqual(expected_json, browser.json)
-
-        handler = IParticipationAware(self.dossier)
-        handler.remove_participation('organization:2')
-
-        browser.open(url, method='GET', headers=self.api_headers)
-
-        expected_json = {u'@id': url,
-                         u'items': [{u'title': u'Meier AG',
-                                     u'token': u'organization:2'},
-                                    {u'title': u'Meier David (david.meier)',
-                                     u'token': u'ogds_user:david.meier'}],
-                         u'items_total': 2}
-
-        self.assertEqual(expected_json, browser.json)
-
-    @browsing
-    def test_response_is_batched(self, browser):
-        self.login(self.regular_user, browser=browser)
-        url = self.dossier.absolute_url() + '/@possible-participants?b_size=5'
-
-        browser.open(url, method='GET', headers=self.api_headers)
-        self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(22, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
 
 

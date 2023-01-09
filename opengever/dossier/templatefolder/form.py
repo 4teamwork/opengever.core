@@ -1,13 +1,6 @@
-from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.table import helper
-from opengever.base.browser.wizard import BaseWizardStepForm
-from opengever.base.browser.wizard.interfaces import IWizardDataStorage
-from opengever.base.model import create_session
-from opengever.base.oguid import Oguid
 from opengever.base.schema import TableChoice
 from opengever.contact import _ as contact_mf
-from opengever.contact import is_contact_feature_enabled
-from opengever.contact.sources import ContactsSourceBinder
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.dossier import _
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
@@ -20,13 +13,11 @@ from plone.autoform.form import AutoExtensibleForm
 from plone.supermodel import model
 from plone.z3cform.layout import FormWrapper
 from Products.statusmessages.interfaces import IStatusMessage
-from sqlalchemy import inspect
-from sqlalchemy.exc import NoInspectionAvailable
 from z3c.form import button
 from z3c.form.browser.checkbox import SingleCheckBoxFieldWidget
+from z3c.form.field import Fields
 from z3c.form.form import Form
 from zope import schema
-from zope.component import getUtility
 from zope.interface import provider
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.vocabulary import SimpleVocabulary
@@ -90,20 +81,6 @@ class ICreateDocumentFromTemplate(model.Schema):
         title=_(u"label_title", default=u"Title"),
         required=True)
 
-    form.widget('recipient', KeywordFieldWidget, async=True)
-    recipient = schema.Choice(
-        title=_(u'label_recipient', default=u'Recipient'),
-        source=ContactsSourceBinder(),
-        required=False,
-    )
-
-    form.widget('sender', KeywordFieldWidget, async=True)
-    sender = schema.Choice(
-        title=_(u'label_sender', default=u'Sender'),
-        source=ContactsSourceBinder(),
-        required=False,
-    )
-
     form.widget(edit_after_creation=SingleCheckBoxFieldWidget)
     edit_after_creation = schema.Bool(
         title=_(u'label_edit_after_creation', default='Edit after creation'),
@@ -112,25 +89,10 @@ class ICreateDocumentFromTemplate(model.Schema):
     )
 
 
-def get_dm_key(context):
-    """Return the key used to store template-data in the wizard-storage."""
-
-    container_oguid = Oguid.for_object(context)
-    return 'add_document_from_template:{}'.format(container_oguid)
-
-
 class CreateDocumentMixin(object):
 
     label = _(u'create_document_with_template',
               default=u'Create document from template')
-
-    @property
-    def steps(self):
-        if not is_contact_feature_enabled():
-            return []
-        return [('select-document', _(u'Select document')),
-                ('select-recipient-address', _(u'Select recipient address')),
-                ('select-sender-address', _(u'Select sender address'))]
 
     def finish_document_creation(self, data):
         new_doc = self.create_document(data)
@@ -156,39 +118,18 @@ class CreateDocumentMixin(object):
 
     def create_document(self, data):
         """Create a new document based on a template."""
-
-        recipient_data = filter(None, [
-            data.get('recipient'),
-            data.get('recipient_address'),
-            data.get('recipient_mail_address'),
-            data.get('recipient_phonenumber'),
-            data.get('recipient_url'),
-        ])
-
-        sender_data = filter(None, [
-            data.get('sender'),
-            data.get('sender_address'),
-            data.get('sender_mail_address'),
-            data.get('sender_phonenumber'),
-            data.get('sender_url'),
-        ])
-
         command = CreateDocumentFromTemplateCommand(
-            self.context, data['template'], data['title'],
-            recipient_data=recipient_data, sender_data=sender_data)
+            self.context, data['template'], data['title'])
         return command.execute()
 
 
-class SelectTemplateDocumentWizardStep(
-        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
+class SelectTemplateDocumentForm(CreateDocumentMixin, AutoExtensibleForm, Form):
 
-    step_name = 'select-document'
+    fields = Fields(ICreateDocumentFromTemplate)
+    ignoreContext = True
 
     def updateFieldsFromSchemata(self):
-        super(SelectTemplateDocumentWizardStep, self).updateFieldsFromSchemata()
-        if not is_contact_feature_enabled():
-            self.fields = self.fields.omit('recipient')
-            self.fields = self.fields.omit('sender')
+        super(SelectTemplateDocumentForm, self).updateFieldsFromSchemata()
         if is_client_ip_in_office_connector_disallowed_ip_ranges():
             self.fields = self.fields.omit('edit_after_creation')
         if is_kub_feature_enabled():
@@ -211,18 +152,6 @@ class SelectTemplateDocumentWizardStep(
             self.status = self.formErrorsMessage
             return
 
-        if data.get('recipient'):
-            dm = getUtility(IWizardDataStorage)
-            dm.update(get_dm_key(self.context), data)
-            return self.request.RESPONSE.redirect(
-                "{}/select-recipient-address".format(self.context.absolute_url()))
-
-        if data.get('sender'):
-            dm = getUtility(IWizardDataStorage)
-            dm.update(get_dm_key(self.context), data)
-            return self.request.RESPONSE.redirect(
-                "{}/select-sender-address".format(self.context.absolute_url()))
-
         return self.finish_document_creation(data)
 
     @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
@@ -232,243 +161,4 @@ class SelectTemplateDocumentWizardStep(
 
 class SelectTemplateDocumentView(FormWrapper):
 
-    form = SelectTemplateDocumentWizardStep
-
-
-def get_contact(context, key='recipient'):
-    """Return the previously selected recipient.
-
-    If it is an unpickled/detached mapper merge it into the current session,
-    this triggers a reload of the mapped instance.
-    """
-
-    dm = getUtility(IWizardDataStorage)
-    data = dm.get_data(get_dm_key(context))
-
-    contact = data[key]
-
-    try:
-        # merge unpickled recipient into session when it is a mapper
-        if inspect(contact).detached:
-            contact = create_session().merge(contact)
-    except NoInspectionAvailable:
-        pass
-    return contact
-
-
-def make_address_vocabulary_binder(key='recipient'):
-
-    @provider(IContextSourceBinder)
-    def make_address_vocabulary(context):
-        contact = get_contact(context, key=key)
-
-        return SimpleVocabulary([
-            SimpleVocabulary.createTerm(
-                address, str(address.address_id))
-            for address in contact.addresses])
-
-    return make_address_vocabulary
-
-
-def address_lines(item, value):
-    return u"<br />".join(item.get_lines())
-
-
-def make_mail_address_vocabulary_binder(key='recipient'):
-
-    @provider(IContextSourceBinder)
-    def make_mail_address_vocabulary(context):
-        contact = get_contact(context, key=key)
-
-        return SimpleVocabulary([
-            SimpleVocabulary.createTerm(
-                mail_address, str(mail_address.mailaddress_id))
-            for mail_address in contact.mail_addresses])
-
-    return make_mail_address_vocabulary
-
-
-def make_phonenumber_vocabulary_binder(key='recipient'):
-
-    @provider(IContextSourceBinder)
-    def make_phonenumber_vocabulary(context):
-        contact = get_contact(context, key=key)
-
-        return SimpleVocabulary([
-            SimpleVocabulary.createTerm(
-                phone_number, str(phone_number.phone_number_id))
-            for phone_number in contact.phonenumbers])
-
-    return make_phonenumber_vocabulary
-
-
-def make_url_vocabulary_binder(key='recipient'):
-
-    @provider(IContextSourceBinder)
-    def make_url_vocabulary(context):
-        contact = get_contact(context, key=key)
-
-        return SimpleVocabulary([
-            SimpleVocabulary.createTerm(
-                url, str(url.url_id))
-            for url in contact.urls])
-
-    return make_url_vocabulary
-
-
-class ISelectRecipientAddress(model.Schema):
-
-    recipient_address = TableChoice(
-        title=_(u"label_address", default=u"Address"),
-        required=False,
-        source=make_address_vocabulary_binder(key='recipient'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'address',
-             'column_title': _(u'label_address', default=u'Address'),
-             'transform': address_lines},
-        ))
-
-    recipient_mail_address = TableChoice(
-        title=_(u"label_mail_address", default=u"Mail-Address"),
-        required=False,
-        source=make_mail_address_vocabulary_binder(key='recipient'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'address',
-             'column_title': _(u'label_mail_address', default=u'Mail-Address')},
-        ))
-
-    recipient_phonenumber = TableChoice(
-        title=_(u"label_phonenumber", default=u"Phonenumber"),
-        required=False,
-        source=make_phonenumber_vocabulary_binder(key='recipient'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'phone_number',
-             'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
-        ))
-
-    recipient_url = TableChoice(
-        title=_(u"label_url", default=u"URL"),
-        required=False,
-        source=make_url_vocabulary_binder(key='recipient'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'url',
-             'column_title': _(u'label_url', default=u'URL')},
-        ))
-
-
-class ISelectSenderAddress(model.Schema):
-
-    sender_address = TableChoice(
-        title=_(u"label_address", default=u"Address"),
-        required=False,
-        source=make_address_vocabulary_binder(key='sender'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'address',
-             'column_title': _(u'label_address', default=u'Address'),
-             'transform': address_lines},
-        ))
-
-    sender_mail_address = TableChoice(
-        title=_(u"label_mail_address", default=u"Mail-Address"),
-        required=False,
-        source=make_mail_address_vocabulary_binder(key='sender'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'address',
-             'column_title': _(u'label_mail_address', default=u'Mail-Address')},
-        ))
-
-    sender_phonenumber = TableChoice(
-        title=_(u"label_phonenumber", default=u"Phonenumber"),
-        required=False,
-        source=make_phonenumber_vocabulary_binder(key='sender'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'phone_number',
-             'column_title': _(u'label_phonenumber', default=u'Phonenumber')},
-        ))
-
-    sender_url = TableChoice(
-        title=_(u"label_url", default=u"URL"),
-        required=False,
-        source=make_url_vocabulary_binder(key='sender'),
-        columns=(
-            {'column': 'label',
-             'column_title': _(u'label_label', default=u'Label')},
-            {'column': 'url',
-             'column_title': _(u'label_url', default=u'URL')},
-        ))
-
-
-class SelectRecipientAddressWizardStep(
-        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
-
-    step_name = 'select-recipient-address'
-    schema = ISelectRecipientAddress
-
-    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
-    def handleApply(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-
-        dm = getUtility(IWizardDataStorage)
-        data.update(dm.get_data(get_dm_key(self.context)))
-
-        if data.get('sender'):
-            dm = getUtility(IWizardDataStorage)
-            dm.update(get_dm_key(self.context), data)
-            return self.request.RESPONSE.redirect(
-                "{}/select-sender-address".format(self.context.absolute_url()))
-
-        return self.finish_document_creation(data)
-
-    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
-    def cancel(self, action):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-
-class SelectSenderAddressWizardStep(
-        CreateDocumentMixin, AutoExtensibleForm, BaseWizardStepForm, Form):
-
-    step_name = 'select-sender-address'
-    schema = ISelectSenderAddress
-
-    @button.buttonAndHandler(_('button_save', default=u'Save'), name='save')
-    def handleApply(self, action):
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
-            return
-
-        dm = getUtility(IWizardDataStorage)
-        data.update(dm.get_data(get_dm_key(self.context)))
-
-        return self.finish_document_creation(data)
-
-    @button.buttonAndHandler(_(u'button_cancel', default=u'Cancel'), name='cancel')
-    def cancel(self, action):
-        return self.request.RESPONSE.redirect(self.context.absolute_url())
-
-
-class SelectRecipientAddressView(FormWrapper):
-
-    form = SelectRecipientAddressWizardStep
-
-
-class SelectSenderAddressView(FormWrapper):
-
-    form = SelectSenderAddressWizardStep
+    form = SelectTemplateDocumentForm

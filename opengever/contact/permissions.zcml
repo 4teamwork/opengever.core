@@ -6,10 +6,6 @@
 
   <permission id="opengever.contact.AddContactFolder" title="opengever.contact: Add contactfolder" />
 
-  <permission id="opengever.contact.AddPerson" title="opengever.contact: Add person" />
-
-  <permission id="opengever.contact.EditPerson" title="opengever.contact: Edit person" />
-
   <permission id="opengever.contact.AddTeam" title="opengever.contact: Add team" />
 
   <permission id="opengever.contact.EditTeam" title="opengever.contact: Edit team" />

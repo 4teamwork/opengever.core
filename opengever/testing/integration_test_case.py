@@ -68,7 +68,6 @@ FEATURE_FLAGS = {
     'bumblebee-open-pdf-new-tab': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.open_pdf_in_a_new_window',
     'bumblebee-auto-refresh': 'opengever.bumblebee.interfaces.IGeverBumblebeeSettings.is_auto_refresh_enabled',
     'changed_for_end_date': 'opengever.dossier.interfaces.IDossierResolveProperties.use_changed_for_end_date',
-    'contact': 'opengever.contact.interfaces.IContactSettings.is_feature_enabled',
     'disposition-disregard-retention-period': 'opengever.disposition.interfaces.IDispositionSettings.disregard_retention_period',  # noqa
     'doc-properties': 'opengever.dossier.interfaces.ITemplateFolderProperties.create_doc_properties',
     'docugate': 'opengever.docugate.interfaces.IDocugateSettings.is_feature_enabled',

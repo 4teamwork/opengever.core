@@ -13,7 +13,6 @@ from opengever.base.interfaces import IHubSpotSettings
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.interfaces import ISearchSettings
 from opengever.bumblebee.interfaces import IGeverBumblebeeSettings
-from opengever.contact.interfaces import IContactSettings
 from opengever.disposition.interfaces import IDispositionSettings
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.interfaces import IFTPSTransportSettings
@@ -188,8 +187,6 @@ class GeverSettingsAdpaterV1(object):
         return IFilingNumberActivatedLayer.providedBy(getRequest())
 
     def _get_contact_type(self):
-        if api.portal.get_registry_record('is_feature_enabled', interface=IContactSettings):
-            return "sql"
-        elif is_kub_feature_enabled():
+        if is_kub_feature_enabled():
             return "kub"
         return "plone"

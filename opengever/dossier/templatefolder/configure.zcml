@@ -12,20 +12,6 @@
 
   <browser:page
       for="*"
-      name="select-recipient-address"
-      class=".form.SelectRecipientAddressView"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
-      name="select-sender-address"
-      class=".form.SelectSenderAddressView"
-      permission="zope2.View"
-      />
-
-  <browser:page
-      for="*"
       name="tabbedview_view-dossiertemplates"
       class=".tabs.TemplateFolderDossierTemplates"
       permission="zope2.View"
