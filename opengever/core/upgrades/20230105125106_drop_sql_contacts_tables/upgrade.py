@@ -1,5 +1,4 @@
 from opengever.core.upgrade import SchemaMigration
-from plone import api
 from sqlalchemy.sql import select
 import logging
 
@@ -39,11 +38,6 @@ class DropSQLContactsTables(SchemaMigration):
     """
 
     def migrate(self):
-        portal = api.portal.get()
-        if portal.id != 'stabs':
-            # This upgrade only applies to StABS
-            return
-
         self.assert_tables_empty()
 
         # Drop tables in proper order:
