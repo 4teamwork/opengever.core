@@ -4,7 +4,7 @@
     i18n_domain="opengever.base">
 
   <adapter
-      factory=".checks.LDAPPluginOrderCheck"
-      name="ldap-plugin-order"
+      factory=".checks.LDAPPropertiesPluginOrderCheck"
+      name="ldap-properties-plugin-order"
       />
 </configure>
