@@ -1,4 +1,6 @@
+from Acquisition._Acquisition import aq_inner
 from Acquisition._Acquisition import aq_parent
+from datetime import date
 from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
@@ -10,6 +12,8 @@ from opengever.base.oguid import Oguid
 from opengever.base.security import reindex_object_security_without_children
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
+from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.globalindex.handlers.task import sync_task
@@ -247,3 +251,23 @@ def maybe_update_changed_date(context, event):
 def update_changed_date(context, event):
     IChanged(context).changed = utcnow_tz_aware()
     context.reindexObject(idxs=["changed"])
+
+
+def update_touched_date(obj, event):
+    today = date.today()
+    while obj and not IPloneSiteRoot.providedBy(obj):
+        if IDossierMarker.providedBy(obj) and IDossier(obj).touched != today:
+            IDossier(obj).touched = today
+            # Prevent reindexing all indexes by indexing `UID` too.
+            obj.reindexObject(idxs=['UID', 'touched'])
+        obj = aq_parent(aq_inner(obj))
+
+
+def update_touched_date_for_move_event(obj, event):
+    """ObjectMovedEvent get dispatched to all children of the moved object
+    by OFS.subscribers.dispatchObjectMovedEvent. Because, we do not want
+    to set touched for all children of the moved object, we skip the update for
+    the dispatched events.
+    """
+    if obj == event.object:
+        update_touched_date(obj, event)

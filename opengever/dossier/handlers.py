@@ -1,6 +1,5 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
-from datetime import date
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
 from opengever.base.interfaces import IReferenceNumber
@@ -10,13 +9,11 @@ from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
-from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.component import getAdapter
 from zope.component import queryUtility
 from zope.container.interfaces import IContainerModifiedEvent
@@ -165,27 +162,6 @@ def purge_reference_number_mappings(copied_dossier, event):
     """
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
-
-
-def update_dossier_touched_date(obj, event):
-    today = date.today()
-    while obj and not IPloneSiteRoot.providedBy(obj):
-        if IDossierMarker.providedBy(obj) and IDossier(obj).touched != today:
-            IDossier(obj).touched = today
-            # Prevent reindexing all indexes by indexing `UID` too.
-            obj.reindexObject(idxs=['UID', 'touched'])
-        obj = aq_parent(aq_inner(obj))
-
-
-def update_dossier_touched_date_for_move_event(obj, event):
-    """ObjectMovedEvent get dispatched to all children of the moved object
-    by OFS.subscribers.dispatchObjectMovedEvent. Because, we do not want
-    to set touched for all children of the moved object, we skip the update for
-    the dispatched events.
-    """
-    if obj == event.object:
-        update_dossier_touched_date(obj, event)
-
 
 def move_connected_teamraum_to_main_dossier(obj, event):
     """If a dossier with linked workspaces gets moved into a dossier,

@@ -3,6 +3,7 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base import _ as base_mf
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
