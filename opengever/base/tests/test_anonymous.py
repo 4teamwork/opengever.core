@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from OFS.Image import Image
 from opengever.testing import IntegrationTestCase
 from unittest import skip
 
@@ -30,3 +31,21 @@ class TestAnonymousAccess(IntegrationTestCase):
 
         self.assertEquals(self.portal.absolute_url() + '/@@search',
                           browser.url)
+
+    @browsing
+    def test_anonymous_cannot_access_member_portraits(self, browser):
+        userid = self.regular_user.getId()
+        img = Image(id=userid, file='', title='')
+        self.portal.portal_memberdata._setPortrait(img, userid)
+        with browser.expect_unauthorized():
+            browser.open(self.portal, view='portal_memberdata/portraits/%s' % userid)
+
+    @browsing
+    def test_authenticated_can_access_member_portraits(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        userid = self.regular_user.getId()
+        img = Image(id=userid, file='', title='')
+        self.portal.portal_memberdata._setPortrait(img, userid)
+        browser.open(self.portal, view='portal_memberdata/portraits/%s' % userid)
+        self.assertEqual(200, browser.status_code)

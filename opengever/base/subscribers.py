@@ -103,9 +103,15 @@ def disallow_anonymous_views_on_site_root(event):
 
        The same applies for tabbed_view attributes of a tabbed_view that is
        displayed for the portal root.
+
+       In addition, disallow access to member portraits for Anonymous users.
     """
     if getSecurityManager().getUser() != nobody:
         return
+
+    # Block anonymous access to member portraits
+    if event.request.steps[1:3] == ['portal_memberdata', 'portraits']:
+        raise Unauthorized
 
     # Find the first physical / persistent object in the PARENTS
     # by filtering all non-persist parents (views, widgets, ...).
