@@ -497,6 +497,11 @@
       name="getObjPositionInParent"
       />
 
+  <adapter
+      factory=".indexes.touched_indexer"
+      name="touched"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />

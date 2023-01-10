@@ -3,6 +3,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.changed import IChangedMarker
+from opengever.base.behaviors.touched import ITouched
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
 from opengever.base.interfaces import IReferenceNumber
@@ -160,3 +161,8 @@ def getObjPositionInParent(obj):
             return
         return ploneGetObjPositionInParent(obj)()
     return None
+
+
+@indexer(ITouched)
+def touched_indexer(obj):
+    return ITouched(obj).touched

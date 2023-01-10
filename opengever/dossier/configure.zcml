@@ -234,11 +234,6 @@
       />
 
   <adapter
-      factory=".indexers.dossier_touched_indexer"
-      name="touched"
-      />
-
-  <adapter
       factory=".indexers.participations"
       name="participations"
       />
