@@ -35,6 +35,7 @@
     <element value="opengever.sharing.behaviors.IDossier" />
     <element value="plone.app.lockingbehavior.behaviors.ILocking" />
     <element value="opengever.mail.behaviors.ISendableDocsContainer" />
+    <element value="opengever.base.behaviors.touched.ITouched" />
   </property>
 
   <!-- View information -->

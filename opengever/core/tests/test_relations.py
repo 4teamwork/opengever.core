@@ -63,6 +63,7 @@ EXPECTED_INTERFACES = [
     'opengever.base.behaviors.classification.IClassificationMarker',
     'opengever.base.behaviors.lifecycle.ILifeCycleMarker',
     'opengever.base.behaviors.sequence.ISequenceNumberBehavior',
+    'opengever.base.behaviors.touched.ITouched',
     'opengever.base.behaviors.translated_title.ITranslatedTitleSupport',
     'opengever.base.response.IResponseSupported',
     'opengever.disposition.disposition.IDispositionSchema',

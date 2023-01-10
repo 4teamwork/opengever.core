@@ -163,6 +163,7 @@ def purge_reference_number_mappings(copied_dossier, event):
     prefix_adapter = IReferenceNumberPrefix(copied_dossier)
     prefix_adapter.purge_mappings()
 
+
 def move_connected_teamraum_to_main_dossier(obj, event):
     """If a dossier with linked workspaces gets moved into a dossier,
     the workspace link needs to be updated and moved to the new main dossier.

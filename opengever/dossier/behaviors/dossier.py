@@ -3,7 +3,6 @@ from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.field import ChoicePlus
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
-from opengever.base import _ as base_mf
 from opengever.base.source import RepositoryPathSourceBinder
 from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier import _
@@ -108,16 +107,6 @@ class IDossier(model.Schema):
     end = schema.Date(
         title=_(u'label_end', default=u'Closing Date'),
         required=False,
-    )
-
-    # Omitted because it must not be updated manually, only by event handlers.
-    form.omitted('touched')
-    touched = schema.Date(
-        title=_(u'label_touched',
-                default=u'Date of modification of the dossier or its content'),
-        required=False,
-        readonly=True,
-        default=None,
     )
 
     form.widget('responsible', KeywordFieldWidget, async=True)

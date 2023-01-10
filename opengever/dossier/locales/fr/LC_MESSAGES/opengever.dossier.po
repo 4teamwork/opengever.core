@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-09 15:05+0000\n"
+"POT-Creation-Date: 2023-01-10 12:25+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -832,11 +832,6 @@ msgstr "Titre"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_title_help"
 msgstr "Aide pour le choix du titre"
-
-#. Default: "Date of modification of the dossier or its content"
-#: ./opengever/dossier/behaviors/dossier.py
-msgid "label_touched"
-msgstr "Date de modification du dossier ou de son contenu"
 
 #. Default: "Trash"
 #: ./opengever/dossier/browser/tabbed.py

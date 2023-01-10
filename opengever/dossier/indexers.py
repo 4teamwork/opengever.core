@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
+from opengever.base.behaviors.touched import ITouched
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.response import IResponseContainer
@@ -255,7 +256,7 @@ class SearchableTextExtender(object):
 
 @indexer(IDossierMarker)
 def dossier_touched_indexer(obj):
-    return IDossier(obj).touched
+    return ITouched(obj).touched
 
 
 class ParticipationIndexHelper(object):

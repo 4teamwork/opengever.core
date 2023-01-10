@@ -4,6 +4,7 @@ from datetime import date
 from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
+from opengever.base.behaviors.touched import ITouched
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.favorite import FavoriteManager
 from opengever.base.model import create_session
@@ -12,8 +13,6 @@ from opengever.base.oguid import Oguid
 from opengever.base.security import reindex_object_security_without_children
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
-from opengever.dossier.behaviors.dossier import IDossier
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.globalindex.handlers.task import sync_task
@@ -256,8 +255,8 @@ def update_changed_date(context, event):
 def update_touched_date(obj, event):
     today = date.today()
     while obj and not IPloneSiteRoot.providedBy(obj):
-        if IDossierMarker.providedBy(obj) and IDossier(obj).touched != today:
-            IDossier(obj).touched = today
+        if ITouched.providedBy(obj) and ITouched(obj).touched != today:
+            ITouched(obj).touched = today
             # Prevent reindexing all indexes by indexing `UID` too.
             obj.reindexObject(idxs=['UID', 'touched'])
         obj = aq_parent(aq_inner(obj))

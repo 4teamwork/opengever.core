@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-09 15:05+0000\n"
+"POT-Creation-Date: 2023-01-10 12:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -830,11 +830,6 @@ msgstr ""
 #. Default: "Title help"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_title_help"
-msgstr ""
-
-#. Default: "Date of modification of the dossier or its content"
-#: ./opengever/dossier/behaviors/dossier.py
-msgid "label_touched"
 msgstr ""
 
 #. Default: "Trash"

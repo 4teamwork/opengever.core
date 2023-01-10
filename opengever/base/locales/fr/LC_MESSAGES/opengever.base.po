@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-09 15:05+0000\n"
+"POT-Creation-Date: 2023-01-10 12:25+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -421,6 +421,11 @@ msgstr "Titre (anglais)"
 #: ./opengever/base/behaviors/translated_title.py
 msgid "label_title_fr"
 msgstr "Titre (français)"
+
+#. Default: "Date of modification of the object or its content"
+#: ./opengever/base/behaviors/touched.py
+msgid "label_touched"
+msgstr "Date de modification de l'objet ou de son contenu"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py
