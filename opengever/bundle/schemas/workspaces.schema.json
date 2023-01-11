@@ -82,6 +82,16 @@
                     "description": "",
                     "_zope_schema_type": "Text"
                 },
+                "touched": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "\u00c4nderungsdatum des Objektes oder seines Inhalts",
+                    "format": "date",
+                    "description": "",
+                    "_zope_schema_type": "Date"
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [
@@ -139,7 +149,8 @@
                 "hide_members_for_guests",
                 "changed",
                 "title",
-                "description"
+                "description",
+                "touched"
             ]
         },
         "permission": {
