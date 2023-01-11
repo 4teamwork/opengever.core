@@ -10,6 +10,41 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.1.0 (2023-01-11)
+---------------------
+
+New features:
+
+
+- Allow to revive bumblebee preview for document versions. [tinagerber]
+- Also list inherited roles in repository excel export. [njohner]
+- Editors can delete empty dossiers in the active or inactive states [elioschmutz]
+- Implement config check for the ldap authentication plugin order [elioschmutz]
+- Add a new endpoint: @config-checks to validate the current deployment. [elioschmutz]
+- Only prevent reopening a document if the referencing task is for approval. [njohner]
+- Bump docxcompose to get support for updating multiline Content Controls. [lgraf]
+- Add support for providing formatted address blocks as DocProperties. [lgraf]
+
+
+Bug fixes:
+
+
+- Add upgrade step that fixes order of IPropertiesPlugin PAS plugins. [lgraf]
+- Fix permission check for revive_bumblebee_preview action. [tinagerber]
+- Disallow anonymous access to member portraits. [lgraf]
+- Fix task listing export to excel and PDF for Oracle. [njohner]
+
+
+Other changes:
+
+
+- Bump ftw.testing and ftw.keywordwidget to most recent version. [phgross]
+- Bump ftw.testbrowser to most recent version. [lgraf]
+- Avoid creating journal entries during contact migration. [njohner]
+- Remove legacy SQL contacts implementation. [lgraf]
+- Membership docproperties now take the address, phone number, URL and Email directly from the membership. [njohner]
+
+
 2022.24.1 (2022-12-07)
 ----------------------
 
