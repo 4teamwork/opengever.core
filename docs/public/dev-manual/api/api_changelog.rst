@@ -3,11 +3,17 @@
 API Changelog
 =============
 
-2022.25.0 (unreleased)
+2023.1.0 (unreleased)
 ----------------------
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+2023.1.0 (2023-01-11)
+----------------------
 
 Other Changes
 ^^^^^^^^^^^^^
