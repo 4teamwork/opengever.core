@@ -1,4 +1,5 @@
 from ftw.upgrade import UpgradeStep
+from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.touched import ITouched
 from opengever.dossier.behaviors.dossier import IDossier
 
@@ -10,6 +11,7 @@ class AddITouchedBehavior(UpgradeStep):
     def __call__(self):
         self.install_upgrade_profile()
         self.migrate_touched_to_new_behavior()
+        self.index_changed_on_todos_and_todo_lists()
         self.index_touched_on_worskspaces()
 
     def migrate_touched_to_new_behavior(self):
@@ -39,3 +41,10 @@ class AddITouchedBehavior(UpgradeStep):
             )[0].changed
 
             obj.reindexObject(idxs=['UID', 'touched'])
+
+    def index_changed_on_todos_and_todo_lists(self):
+        query = {'object_provides': ['opengever.workspace.interfaces.IToDo',
+                                     'opengever.workspace.interfaces.IToDoList']}
+        for obj in self.objects(query, "Index changed on todos and todolists."):
+            IChanged(obj).changed = obj.modified()
+            obj.reindexObject(idxs=['UID', 'changed'])
