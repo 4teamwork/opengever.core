@@ -253,11 +253,6 @@ class SearchableTextExtender(object):
         return ' '.join(searchable)
 
 
-@indexer(IDossierMarker)
-def dossier_touched_indexer(obj):
-    return IDossier(obj).touched
-
-
 class ParticipationIndexHelper(object):
     """This helper class is used to convert data back and forth between
     participations, participants and roles on one side and index values

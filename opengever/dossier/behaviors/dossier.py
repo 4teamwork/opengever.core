@@ -109,16 +109,6 @@ class IDossier(model.Schema):
         required=False,
     )
 
-    # Omitted because it must not be updated manually, only by event handlers.
-    form.omitted('touched')
-    touched = schema.Date(
-        title=_(u'label_touched',
-                default=u'Date of modification of the dossier or its content'),
-        required=False,
-        readonly=True,
-        default=None,
-    )
-
     form.widget('responsible', KeywordFieldWidget, async=True)
     responsible = schema.Choice(
         title=_(u"label_responsible", default="Responsible"),

@@ -1,7 +1,10 @@
+from Acquisition._Acquisition import aq_inner
 from Acquisition._Acquisition import aq_parent
+from datetime import date
 from DateTime import DateTime
 from ftw.upgrade.helpers import update_security_for
 from opengever.base.behaviors.changed import IChanged
+from opengever.base.behaviors.touched import ITouched
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.favorite import FavoriteManager
 from opengever.base.model import create_session
@@ -247,3 +250,23 @@ def maybe_update_changed_date(context, event):
 def update_changed_date(context, event):
     IChanged(context).changed = utcnow_tz_aware()
     context.reindexObject(idxs=["changed"])
+
+
+def update_touched_date(obj, event):
+    today = date.today()
+    while obj and not IPloneSiteRoot.providedBy(obj):
+        if ITouched.providedBy(obj) and ITouched(obj).touched != today:
+            ITouched(obj).touched = today
+            # Prevent reindexing all indexes by indexing `UID` too.
+            obj.reindexObject(idxs=['UID', 'touched'])
+        obj = aq_parent(aq_inner(obj))
+
+
+def update_touched_date_for_move_event(obj, event):
+    """ObjectMovedEvent get dispatched to all children of the moved object
+    by OFS.subscribers.dispatchObjectMovedEvent. Because, we do not want
+    to set touched for all children of the moved object, we skip the update for
+    the dispatched events.
+    """
+    if obj == event.object:
+        update_touched_date(obj, event)

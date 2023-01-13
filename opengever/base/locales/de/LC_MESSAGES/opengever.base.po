@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-05-06 13:47+0000\n"
+"POT-Creation-Date: 2023-01-10 12:25+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -422,6 +422,11 @@ msgstr "Titel (englisch)"
 #: ./opengever/base/behaviors/translated_title.py
 msgid "label_title_fr"
 msgstr "Titel (französisch)"
+
+#. Default: "Date of modification of the object or its content"
+#: ./opengever/base/behaviors/touched.py
+msgid "label_touched"
+msgstr "Änderungsdatum des Objektes oder seines Inhalts"
 
 #. Default: "limited-public"
 #: opengever/repository/classification.py

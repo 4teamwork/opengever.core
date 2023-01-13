@@ -44,13 +44,6 @@
             "description": "",
             "_zope_schema_type": "Date"
         },
-        "touched": {
-            "type": "string",
-            "title": "\u00c4nderungsdatum des Dossiers oder seines Inhalts",
-            "format": "date",
-            "description": "",
-            "_zope_schema_type": "Date"
-        },
         "responsible": {
             "type": "string",
             "title": "Federf\u00fchrend",
@@ -249,6 +242,13 @@
             "title": "Benutzerdefinierte Felder",
             "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
             "_zope_schema_type": "PropertySheetField"
+        },
+        "touched": {
+            "type": "string",
+            "title": "\u00c4nderungsdatum des Objektes oder seines Inhalts",
+            "format": "date",
+            "description": "",
+            "_zope_schema_type": "Date"
         }
     },
     "required": [
@@ -262,7 +262,6 @@
         "keywords",
         "start",
         "end",
-        "touched",
         "responsible",
         "external_reference",
         "filing_prefix",
@@ -285,6 +284,7 @@
         "custody_period",
         "date_of_cassation",
         "date_of_submission",
-        "custom_properties"
+        "custom_properties",
+        "touched"
     ]
 }
