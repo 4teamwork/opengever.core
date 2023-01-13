@@ -62,3 +62,15 @@ class TestWorkspaceTouched(SolrIntegrationTestCase):
             api.content.move(source=self.workspace_folder_document, target=new_workspace)
             self.assertEqual("2020-06-12", str(ITouched(self.workspace).touched))
             self.assertEqual("2020-06-12", str(ITouched(new_workspace).touched))
+
+    @browsing
+    def test_changing_state_of_todo_touches_the_workspace(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        self.assertEqual("2016-08-31", str(ITouched(self.workspace).touched))
+
+        with freeze(datetime(2020, 6, 12)):
+            browser.open(
+                self.todo, method='POST', headers=self.api_headers,
+                view="@workflow/opengever_workspace_todo--TRANSITION--complete--active_completed")
+            self.assertEqual("2020-06-12", str(ITouched(self.workspace).touched))
