@@ -427,6 +427,12 @@
       />
 
   <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_touched_date"
+      />
+
+  <subscriber
       for="opengever.task.task.ITask
            Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.update_touched_date"
