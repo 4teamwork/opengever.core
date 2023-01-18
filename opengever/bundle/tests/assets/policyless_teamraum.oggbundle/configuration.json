@@ -22,18 +22,5 @@
   },
   "registry": {
     "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
-  },
-  "ldap": {
-    "users_base": "ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch",
-    "groups_base": "ou=Groups,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch",
-    "servers": [
-        {
-            "host": "ldap.4teamwork.ch",
-            "protocol": "ldaps",
-            "port": 636,
-            "conn_timeout": 5,
-            "op_timeout": -1
-        }
-    ]
   }
 }

@@ -16,24 +16,11 @@
       additional_profiles="opengever.setup:casauth_ianus_portal"
       />
 
-  <opengever:registerLDAP
-      title="Policyless LDAP"
-      ldap_profile="opengever.setup.policyless:policyless-ldap"
-      />
-
   <genericsetup:registerProfile
       name="default"
       title="opengever.setup.policyless: default"
       directory="profiles/default"
       description="Policyless default profile"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
-
-  <genericsetup:registerProfile
-      name="policyless-ldap"
-      title="opengever.setup.policyless: Policyless LDAP"
-      directory="profiles/policyless-ldap"
-      description="Policyless LDAP configuration"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
