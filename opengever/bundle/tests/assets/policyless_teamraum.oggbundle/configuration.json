@@ -15,8 +15,8 @@
         "unit_id": "musterstadt",
         "title": "Musterstadt",
         "admin_unit_id": "musterstadt",
-        "users_group_id": "og_demo-ftw_users",
-        "inbox_group_id": "og_demo-ftw_users"
+        "users_group_name": "og_demo-ftw_users",
+        "inbox_group_name": "og_demo-ftw_users"
       }
     ]
   },
