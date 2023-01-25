@@ -1502,6 +1502,22 @@
       />
 
   <plone:service
+      method="POST"
+      name="@save-minutes-as-pdf"
+      for="opengever.workspace.interfaces.IWorkspace"
+      factory=".save_minutes_as_pdf.SaveMinutesAsPDFPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
+      method="POST"
+      name="@save-minutes-as-pdf"
+      for="opengever.workspace.interfaces.IWorkspaceFolder"
+      factory=".save_minutes_as_pdf.SaveMinutesAsPDFPost"
+      permission="cmf.AddPortalContent"
+      />
+
+  <plone:service
       method="GET"
       name="@groups"
       for="Products.CMFCore.interfaces.ISiteRoot"
