@@ -1305,8 +1305,6 @@ Select "Policyless Deployment" and "Policyless LDAP" on the setup screen to crea
 
 Then, using the ``@@import-bundle`` view, import a Bundle containing the appropriate content as well as a ``configuration.json``.
 
-LDAP credentials can be specified via the classic ``~/.opengever/ldap/<hostname>.json``, or through environment variables ``PLONE_LDAP_BIND_UID`` and ``PLONE_LDAP_BIND_PWD`` (these always take precedence, if set). These credentials will be read and configured once during the import of the bundle configuration.
-
 Example for a ``configuration.json``:
 
 .. code:: json
@@ -1328,26 +1326,13 @@ Example for a ``configuration.json``:
             "unit_id": "musterstadt",
             "title": "Musterstadt",
             "admin_unit_id": "musterstadt",
-            "users_group_id": "users_group",
-            "inbox_group_id": "inbox_group"
+            "users_group_name": "users_group",
+            "inbox_group_name": "inbox_group"
           }
         ]
       },
       "registry": {
         "opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled": true
-      },
-      "ldap": {
-        "users_base": "ou=Users,dc=example,dc=org",
-        "groups_base": "ou=Groups,dc=example,dc=org",
-        "servers": [
-            {
-                "host": "ldap.example.org",
-                "protocol": "ldaps",
-                "port": 636,
-                "conn_timeout": 5,
-                "op_timeout": -1
-            }
-        ]
       }
     }
 

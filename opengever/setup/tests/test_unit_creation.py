@@ -37,25 +37,25 @@ class TestAdminUnitCreator(BaseTestUnitCreator):
         data = self.data_with_all_required_attrs
         del data['unit_id']
         with self.assertRaises(GeverSetupException):
-            self.create_admin_unit_for(data)
+            self.create_admin_unit_for([data])
 
     def test_ip_address_required(self):
         data = self.data_with_all_required_attrs
         del data['ip_address']
         with self.assertRaises(GeverSetupException):
-            self.create_admin_unit_for(data)
+            self.create_admin_unit_for([data])
 
     def test_site_url_required(self):
         data = self.data_with_all_required_attrs
         del data['site_url']
         with self.assertRaises(GeverSetupException):
-            self.create_admin_unit_for(data)
+            self.create_admin_unit_for([data])
 
     def test_public_url_required(self):
         data = self.data_with_all_required_attrs
         del data['public_url']
         with self.assertRaises(GeverSetupException):
-            self.create_admin_unit_for(data)
+            self.create_admin_unit_for([data])
 
     def test_attributes_are_set(self):
         attributes = {
@@ -93,39 +93,39 @@ class TestOrgUnitCreator(BaseTestUnitCreator):
         data = self.data_with_all_required_attrs
         del data['unit_id']
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_fails_when_admin_unit_id_is_not_specified(self):
         data = self.data_with_all_required_attrs
         del data['admin_unit_id']
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_fails_when_uses_group_id_is_not_specified(self):
         data = self.data_with_all_required_attrs
         del data['users_group_id']
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_fails_when_inbox_group_id_is_not_specified(self):
         data = self.data_with_all_required_attrs
         del data['inbox_group_id']
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_fails_when_admin_unit_does_not_exist(self):
         create(Builder('ogds_group').id('users'))
 
         data = self.data_with_all_required_attrs
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_fails_when_group_does_not_exist(self):
         create(Builder('admin_unit').id('bar'))
 
         data = self.data_with_all_required_attrs
         with self.assertRaises(GeverSetupException):
-            self.create_org_unit_for(data)
+            self.create_org_unit_for([data])
 
     def test_assignes_users_group_to_member_role(self):
         create(Builder('admin_unit').id('bar'))

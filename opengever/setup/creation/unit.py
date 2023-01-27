@@ -27,9 +27,13 @@ class UnitCreator(object):
         for item in self.get_json_data(jsonfile):
             if self.is_development:
                 self.apply_development_config(item)
+            self.preprocess(item)
             self.check_constraints(item)
             self.apply_key_mapping(item)
             self.create_unit(item)
+
+    def preprocess(self, item):
+        pass
 
     def apply_development_config(self, item):
         pass

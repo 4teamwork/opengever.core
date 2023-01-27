@@ -15,15 +15,15 @@
         "unit_id": "finanzdepartement",
         "title": "Finanzdepartement",
         "admin_unit_id": "musterstadt",
-        "users_group_id": "og_demo-ftw_users",
-        "inbox_group_id": "og_demo-ftw_users"
+        "users_group_name": "og_demo-ftw_users",
+        "inbox_group_name": "og_demo-ftw_users"
       },
       {
         "unit_id": "baudepartement",
         "title": "Baudepartement",
         "admin_unit_id": "musterstadt",
-        "users_group_id": "og_demo-ftw_users",
-        "inbox_group_id": "og_demo-ftw_users"
+        "users_group_name": "og_demo-ftw_users",
+        "inbox_group_name": "og_demo-ftw_users"
       }
     ]
   },
@@ -31,18 +31,5 @@
     "opengever.dossier.interfaces.IDossierContainerTypes.maximum_dossier_depth": 2,
     "opengever.base.interfaces.IBaseCustodyPeriods.custody_periods": ["0", "30", "100"],
     "opengever.bumblebee.interfaces.IGeverBumblebeeSettings.open_pdf_in_a_new_window": false
-  },
-  "ldap": {
-    "users_base": "ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch",
-    "groups_base": "ou=Groups,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch",
-    "servers": [
-        {
-            "host": "ldap.4teamwork.ch",
-            "protocol": "ldaps",
-            "port": 636,
-            "conn_timeout": 5,
-            "op_timeout": -1
-        }
-    ]
   }
 }

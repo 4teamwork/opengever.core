@@ -8,6 +8,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.inbox.container import IInboxContainer
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.committeecontainer import ICommitteeContainer
+from opengever.ogds.auth.plugin import install_ogds_auth_plugin
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -66,6 +67,7 @@ class GeverDeployment(object):
         self.site = self.setup_plone_site()
 
         self.setup_ldap()
+        self.setup_ogds_auth_plugin()
         self.sync_ogds()
         self.configure_admin_unit()
         self.install_policy_profile()
@@ -162,6 +164,10 @@ class GeverDeployment(object):
                 plugins.deactivatePlugin(IAuthenticationPlugin, 'ldap')
             except KeyError:
                 pass
+
+    def setup_ogds_auth_plugin(self):
+        if self.is_policyless:
+            install_ogds_auth_plugin()
 
     def sync_ogds(self):
         if not self.has_ogds_sync or self.is_policyless:
