@@ -598,3 +598,21 @@ class FixGhostChecksums(UIDMaintenanceJobContextManagerMixin):
         # still having a checksum.
         doc.update_checksum()
         obj.reindexObject(idxs=["getId", "bumblebee_checksum"])
+
+
+class NightlyMailAttachmentInfoUpdater(UIDMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.update_attachment_infos.__name__))
+
+        return MaintenanceJobType(function_dotted_name)
+
+    @classmethod
+    def update_attachment_infos(cls, key):
+        mail = cls.key_to_obj(key)
+        if not mail:
+            return
+        mail._update_attachment_infos()
