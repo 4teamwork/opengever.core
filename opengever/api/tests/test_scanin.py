@@ -226,3 +226,12 @@ class TestScanIn(IntegrationTestCase):
 
         expected_message = 'The scan-in destination does not exist.'
         self.assertIn(expected_message, browser.json.get('error').get('message'))
+
+    @browsing
+    def test_scanin_provides_www_authenticate_header_if_401(self, browser):
+        with browser.expect_http_error(code=401):
+            browser.open(self.portal.absolute_url() + '/@scan-in',
+                         method='POST',
+                         headers={'Accept': 'application/json'})
+
+        self.assertEqual('Basic', browser.headers.get('www-authenticate'))

@@ -47,6 +47,10 @@ ALLOWED_ENDPOINTS = set([
     'wopi',
 ])
 
+BASIC_AUTH_ENDPOINTS = [
+    'POST_application_json_@scan-in'
+]
+
 
 def disable_plone_protect(obj, event):
     """Disables plone.protect for requests beginning an edit.
@@ -126,6 +130,9 @@ def disallow_anonymous_views_on_site_root(event):
     views = filter(IBrowserView.providedBy, event.request['PARENTS'])
     if len(views) > 0 and views[0].__name__ in ALLOWED_ENDPOINTS:
         return
+
+    if endpoint_name in BASIC_AUTH_ENDPOINTS:
+        event.request.response['WWW-Authenticate'] = 'Basic'
 
     raise Unauthorized
 
