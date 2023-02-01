@@ -114,7 +114,7 @@ def disallow_anonymous_views_on_site_root(event):
         return
 
     # Block anonymous access to member portraits
-    if event.request.steps[1:3] == ['portal_memberdata', 'portraits']:
+    if '/portal_memberdata/portraits/' in event.request.getURL():
         raise Unauthorized
 
     # Find the first physical / persistent object in the PARENTS
