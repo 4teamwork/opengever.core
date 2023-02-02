@@ -4,6 +4,7 @@ from BTrees.IIBTree import IITreeSet
 from BTrees.OOBTree import OOTreeSet
 from decorator import decorator
 from ftw.bumblebee.interfaces import IBumblebeeDocument
+from ftw.mail.utils import get_attachments
 from ftw.solr.interfaces import ISolrConnectionManager
 from ftw.solr.interfaces import ISolrIndexHandler
 from ftw.upgrade import UpgradeStep
@@ -771,3 +772,37 @@ class FixGhostChecksums(UIDMaintenanceJobContextManagerMixin):
         # still having a checksum.
         doc.update_checksum()
         obj.reindexObject(idxs=["getId", "bumblebee_checksum"])
+
+
+class NightlyMailAttachmentInfoUpdater(UIDMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.update_attachment_infos.__name__))
+
+        return MaintenanceJobType(function_dotted_name)
+
+    @classmethod
+    def update_attachment_infos(cls, key):
+        mail = cls.key_to_obj(key)
+
+        if not mail:
+            return
+
+        pos = itemgetter('position')
+
+        existing_attachments = sorted(mail.attachment_infos, key=pos)
+        updated_attachments = sorted(get_attachments(mail.msg), key=pos)
+
+        if not list(map(pos, existing_attachments)) == list(map(pos, updated_attachments)):
+            logger.warn(
+                'NightlyMailAttachmentInfoUpdater: Failed to update '
+                'attachments for mail %r' % mail)
+            return
+
+        for existing, updated in zip(existing_attachments, updated_attachments):
+            assert existing['position'] == updated['position']
+            assert existing['size'] == updated['size']
+            mail._modify_attachment_info(**updated)
