@@ -1,3 +1,4 @@
+from datetime import datetime
 from opengever.kub.docprops import KuBEntityDocPropertyProvider
 from opengever.kub.entity import KuBEntity
 from opengever.kub.testing import KUB_RESPONSES
@@ -24,10 +25,36 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.contact.title': u'Dupont Jean',
              'ogg.email.address': u'Jean.dupon@example.com',
              'ogg.person.academic_title': u'',
+             'ogg.person.date_of_birth': datetime(1992, 5, 15, 0, 0),
              'ogg.person.firstname': u'Jean',
              'ogg.person.lastname': u'Dupont',
              'ogg.person.salutation': u'Herr',
+             'ogg.person.sex': None,
              'ogg.phone.number': u'666 666 66 66',
+             'ogg.url.url': None},
+            properties)
+
+        self.mock_get_by_id(mocker, self.person_julie)
+        entity = KuBEntity(self.person_julie)
+        properties = KuBEntityDocPropertyProvider(entity).get_properties()
+        self.assertDictEqual(
+            {'ogg.address.block': u'Frau\nJulie Dupont',
+             'ogg.address.city': None,
+             'ogg.address.country': None,
+             'ogg.address.extra_line_1': None,
+             'ogg.address.extra_line_2': None,
+             'ogg.address.street': u'',
+             'ogg.address.zip_code': None,
+             'ogg.contact.description': u'',
+             'ogg.contact.title': u'Dupont Julie',
+             'ogg.email.address': None,
+             'ogg.person.academic_title': u'',
+             'ogg.person.date_of_birth': None,
+             'ogg.person.firstname': u'Julie',
+             'ogg.person.lastname': u'Dupont',
+             'ogg.person.salutation': u'Frau',
+             'ogg.person.sex': 2,
+             'ogg.phone.number': None,
              'ogg.url.url': None},
             properties)
 
@@ -86,9 +113,11 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.orgrole.description': u'',
              'ogg.orgrole.function': u'CEO',
              'ogg.person.academic_title': u'',
+             'ogg.person.date_of_birth': datetime(1992, 5, 15, 0, 0),
              'ogg.person.firstname': u'Jean',
              'ogg.person.lastname': u'Dupont',
              'ogg.person.salutation': u'Herr',
+             'ogg.person.sex': None,
              'ogg.phone.number': u'666 666 66 66',
              'ogg.url.url': None},
             properties)
