@@ -78,6 +78,7 @@ class DocumentReporter(SolrReporterView):
         {
             'id': 'containing_dossier',
             'is_default': True,
+            'title': _(u'document_report_containing_dossier', default=u'Dossier')
         },
         {
             'id': 'document_type',

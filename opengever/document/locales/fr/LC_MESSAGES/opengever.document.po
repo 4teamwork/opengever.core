@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-02-06 15:21+0000\n"
+"POT-Creation-Date: 2023-02-06 15:29+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -180,6 +180,11 @@ msgstr "Copie de"
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "description_download_confirmation"
 msgstr "Vous étes en train de télécharger une copie du document ${filename}."
+
+#. Default: "Dossier"
+#: ./opengever/document/browser/report.py
+msgid "document_report_containing_dossier"
+msgstr "Dossier"
 
 #. Default: "Document number"
 #: ./opengever/document/browser/report.py

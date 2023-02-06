@@ -116,7 +116,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
             u'Document number',
             u'Last modified',
             u'Author',
-            u'Dossier title',
+            u'Dossier',
             u'Sequence number',
             u'Document date',
             u'Document type',
