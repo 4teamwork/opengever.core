@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Support ``participations` in ``@document-from-template`` endpoint when KuB feature is enabled (see :ref:`templatefolder`).
+
 2023.1.0 (2023-01-11)
 ----------------------
 

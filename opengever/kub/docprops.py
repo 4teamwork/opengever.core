@@ -1,3 +1,4 @@
+from datetime import datetime
 from opengever.base.addressblock.docprops import get_addressblock_docprops
 from opengever.base.docprops import BaseDocPropertyProvider
 
@@ -96,11 +97,16 @@ class KuBPersonDocPropertyProvider(BaseDocPropertyProvider):
     DEFAULT_PREFIX = ('person',)
 
     def _collect_properties(self):
+        date_of_birth = self.context.get('dateOfBirth')
+        if date_of_birth:
+            date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d')
         return {
             'salutation': self.context.get("salutation"),
             'academic_title': self.context.get("title"),
             'firstname': self.context.get("firstName"),
             'lastname': self.context.get("officialName"),
+            'date_of_birth': date_of_birth,
+            'sex': self.context.get('sex'),
         }
 
 
