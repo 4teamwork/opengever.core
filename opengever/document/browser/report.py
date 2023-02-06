@@ -98,6 +98,11 @@ class DocumentReporter(SolrReporterView):
             'number_format': DATETIME_NUMBER_FORMAT,
             'title': _(u'document_report_created', default=u'Created'),
         },
+        {
+            'id': 'creator',
+            'is_default': False,
+            'title': _(u'document_report_creator', default=u'Created by'),
+        },
     ]
 
     def __call__(self):

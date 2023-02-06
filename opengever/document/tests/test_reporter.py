@@ -123,7 +123,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
             u'label_document_receipt_date',
             u'label_document_delivery_date',
             u'Created',
-            u'creator',
+            u'Created by',
             u'Checked out by',
             u'Disclosure status',
             u'Keywords',
