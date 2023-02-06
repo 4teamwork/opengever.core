@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2022.21.3 (2023-02-06)
+----------------------
+
+Bug fixes:
+
+
+- Bump ftw.mail version to fix issue with cropped attachment filenames. [lgraf]
+
+
 2022.21.2 (2023-01-13)
 ----------------------
 
