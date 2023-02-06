@@ -91,7 +91,13 @@ class DocumentReporter(SolrReporterView):
             'id': 'changed',
             'is_default': False,
             'number_format': DATETIME_NUMBER_FORMAT,
-        }
+        },
+        {
+            'id': 'created',
+            'is_default': False,
+            'number_format': DATETIME_NUMBER_FORMAT,
+            'title': _(u'document_report_created', default=u'Created'),
+        },
     ]
 
     def __call__(self):

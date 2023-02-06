@@ -300,7 +300,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
         self.assertEqual(
-            ['DD.MM.YYYY HH:MM', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
+            ['DD.MM.YYYY HH:MM', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY HH:MM'],
             [cell.number_format for cell in rows[1]],
         )
 
