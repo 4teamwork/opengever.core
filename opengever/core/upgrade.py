@@ -21,6 +21,7 @@ from opengever.base.utils import unrestrictedUuidToObject
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
+from operator import itemgetter
 from plone import api
 from plone.memoize import forever
 from plone.uuid.interfaces import IUUID
