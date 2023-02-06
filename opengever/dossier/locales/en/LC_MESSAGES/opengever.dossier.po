@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-10 12:25+0000\n"
+"POT-Creation-Date: 2023-02-06 14:57+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -434,6 +434,11 @@ msgstr "Documents"
 #: ./opengever/dossier/browser/protect_dossier.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr "Local roles do not match with current dossier protection settings. If you save this form, local roles will be overridden with the roles specified in protection settings."
+
+#. Default: "Responsible"
+#: ./opengever/dossier/browser/report.py
+msgid "dossier_report_responsible"
+msgstr "Responsible"
 
 #. German translation: Es wurden keine Objekte verschoben. Folgende Objekte dürfen nicht in den Zielordner eingefügt werden: ${failed_objects}
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"

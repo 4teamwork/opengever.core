@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-01-10 12:25+0000\n"
+"POT-Creation-Date: 2023-02-06 14:57+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -349,6 +349,11 @@ msgstr "Dokumente"
 #: ./opengever/dossier/browser/protect_dossier.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr "Die lokalen Berechtigungen stimmen nicht mit den Dossier-Schutz Einstellungen überein. Wenn Sie dieses Formular speichern, werden die aktuellen lokalen Berechtigungen mit den Dossier-Schutz Einstellungen überschrieben."
+
+#. Default: "Responsible"
+#: ./opengever/dossier/browser/report.py
+msgid "dossier_report_responsible"
+msgstr "Federführung"
 
 #. Default: "It isn't allowed to add such items there: ${failed_objects}"
 #: ./opengever/dossier/move_items.py

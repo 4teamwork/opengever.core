@@ -51,6 +51,7 @@ class DossierReporter(SolrReporterView):
             'is_default': True,
             'alias': 'responsible_fullname',
             'transform': readable_actor,
+            'title': _(u'dossier_report_responsible', default=u'Responsible')
         },
         {
             'id': 'review_state',
