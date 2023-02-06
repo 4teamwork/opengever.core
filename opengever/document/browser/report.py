@@ -42,6 +42,7 @@ class DocumentReporter(SolrReporterView):
         {
             'id': 'sequence_number',
             'is_default': True,
+            'title': _(u'document_report_sequence_number', default=u'Document-ID')
         },
         {
             'id': 'title',

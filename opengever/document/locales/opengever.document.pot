@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-02-06 15:29+0000\n"
+"POT-Creation-Date: 2023-02-06 15:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -189,6 +189,11 @@ msgstr ""
 #. Default: "Document number"
 #: ./opengever/document/browser/report.py
 msgid "document_report_reference"
+msgstr ""
+
+#. Default: "Document-ID"
+#: ./opengever/document/browser/report.py
+msgid "document_report_sequence_number"
 msgstr ""
 
 #. Default: "User is not allowed to add a document there."

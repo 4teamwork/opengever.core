@@ -117,7 +117,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
             u'Last modified',
             u'Author',
             u'Dossier',
-            u'Sequence number',
+            u'Document-ID',
             u'Document date',
             u'Document type',
             u'label_document_receipt_date',
@@ -377,7 +377,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         workbook = self.load_workbook(browser.contents)
 
         self.assertEquals(
-            [u'Sequence number',
+            [u'Document-ID',
              u'Title',
              u'Author',
              u'Document date',

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-02-06 15:29+0000\n"
+"POT-Creation-Date: 2023-02-06 15:42+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -222,6 +222,11 @@ msgstr "Dossier"
 #: ./opengever/document/browser/report.py
 msgid "document_report_reference"
 msgstr "Document number"
+
+#. Default: "Document-ID"
+#: ./opengever/document/browser/report.py
+msgid "document_report_sequence_number"
+msgstr "Document-ID"
 
 #. German translation: Sie dürfen kein Dokument in diesem Zielort erstellen.
 #. Default: "User is not allowed to add a document there."
