@@ -15,6 +15,7 @@ from opengever.dossier.indexers import ParticipationIndexHelper
 from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.field import PropertySheetField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.tabbedview import _ as tabbedview_mf
 from opengever.task.helper import task_type_helper
 from opengever.task.helper import task_type_value_helper
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
@@ -518,6 +519,11 @@ FIELDS_WITH_MAPPING = [
         'external_reference',
         index='external_reference',
         title=dossier_mf(u'label_external_reference'),
+    ),
+    ListingField(
+        'file_extension',
+        index='file_extension',
+        title=tabbedview_mf(u'label_document_file_extension', default=u'File extension'),
     ),
     ListingField(
         'filename',
