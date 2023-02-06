@@ -37,6 +37,7 @@ class DocumentReporter(SolrReporterView):
             'id': 'reference',
             'is_default': True,
             'tabbedview_column': 'reference',
+            'title': _(u'document_report_reference', default=u'Document number')
         },
         {
             'id': 'sequence_number',

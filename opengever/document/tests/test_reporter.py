@@ -113,7 +113,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
 
         expected_titles = [
             u'Title',
-            u'Reference number',
+            u'Document number',
             u'Last modified',
             u'Author',
             u'Dossier title',
@@ -384,7 +384,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
              u'label_document_receipt_date',
              u'label_document_delivery_date',
              u'Checked out by',
-             u'Reference number'],
+             u'Document number'],
             [cell.value for cell in list(workbook.active.rows)[0]])
 
     @browsing
