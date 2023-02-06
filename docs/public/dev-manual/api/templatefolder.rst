@@ -35,4 +35,23 @@ siehe :ref:`Inhaltstypen <content-types>`.
 Mit Kontakt- und Behördenverzeichnis
 ------------------------------------
 
-Wenn OneGov GEVER mit der Kontakt- und Behördenverzeichnis Applikation verlinkt ist, können zusätzlich noch ein ``recipient`` und ein ``sender`` mitgegeben werden, dessen Daten als docproperties verwendet werden. Valide ``recipient`` und ``sender`` können von ``@globalsources/contacts`` auf Stufe PloneSiteRoot abgefragt werden.
+Wenn OneGov GEVER mit der Kontakt- und Behördenverzeichnis Applikation verlinkt ist, können zusätzlich noch ein ``recipient``, ein ``sender`` und ``participations`` mitgegeben werden, dessen Daten als docproperties verwendet werden. Valide ``recipient`` und ``sender`` können von ``@globalsources/contacts`` auf Stufe PloneSiteRoot abgefragt werden.
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /ordnungssystem/fuehrung/dossier-23/@document-from-template HTTP/1.1
+       Accept: application/json
+
+       {
+         "template": {"token": "1234567890"},
+         "title": "Document title"
+         "recipient": "hans.peter",
+         "sender": "karin.sutter",
+         "participations": [
+           {"participant_id": "john.doe", "role": "final-drawing" }
+         ]
+       }
+

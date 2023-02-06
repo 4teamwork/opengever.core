@@ -193,7 +193,7 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
                          data=json.dumps(data),
                          headers=self.api_headers)
         self.assertEqual(
-            'recipient and sender are only supported when KuB feature is active',
+            'recipient, sender and participations are only supported when KuB feature is active',
             str(exc.exception))
 
     @browsing
@@ -211,7 +211,27 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
                          data=json.dumps(data),
                          headers=self.api_headers)
         self.assertEqual(
-            'recipient and sender are only supported when KuB feature is active',
+            'recipient, sender and participations are only supported when KuB feature is active',
+            str(exc.exception))
+
+    @browsing
+    def test_raises_bad_request_if_participations_is_passed_and_kub_disabled(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'participations': [
+                    {'participant_id': KuBIntegrationTestCase.person_jean,
+                     'role': 'final-drawing'}]}
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as exc:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+        self.assertEqual(
+            'recipient, sender and participations are only supported when KuB feature is active',
             str(exc.exception))
 
 
@@ -476,6 +496,64 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.phone.number', '012 34 56 78'),
             ('ogg.sender.url.url', 'http://www.example.com'),
         ]
+
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path)).items()
+        self.assertItemsEqual(expected_doc_properties, properties)
+
+    @browsing
+    def test_creates_document_from_template_with_participations(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        data = {'template': self.docprops_template.UID(),
+                'title': u'New d\xf6cument',
+                'participations': [
+                    {'participant_id': self.person_jean, 'role': 'final-drawing'},
+                    {'participant_id': self.regular_user.getId(), 'role': 'participation'}]}
+
+        self.mock_get_by_id(mocker, self.person_jean)
+        with freeze(self.document_date), self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+        self.assertEqual(u'New d\xf6cument', document.title)
+
+        expected_doc_properties = self.expected_doc_properties + [
+            ('ogg.final-drawing.address.block',
+             'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
+            ('ogg.final-drawing.address.city', 'Bern'),
+            ('ogg.final-drawing.address.country', 'Schweiz'),
+            ('ogg.final-drawing.address.extra_line_1', u''),
+            ('ogg.final-drawing.address.extra_line_2', u''),
+            ('ogg.final-drawing.address.street', 'Teststrasse 43'),
+            ('ogg.final-drawing.address.zip_code', '9999'),
+            ('ogg.final-drawing.contact.description', u''),
+            ('ogg.final-drawing.contact.title', 'Dupont Jean'),
+            ('ogg.final-drawing.email.address', 'Jean.dupon@example.com'),
+            ('ogg.final-drawing.person.academic_title', u''),
+            ('ogg.final-drawing.person.date_of_birth', datetime(1992, 5, 15, 0, 0)),
+            ('ogg.final-drawing.person.firstname', 'Jean'),
+            ('ogg.final-drawing.person.lastname', 'Dupont'),
+            ('ogg.final-drawing.person.salutation', 'Herr'),
+            ('ogg.final-drawing.phone.number', '666 666 66 66'),
+            ('ogg.participation.address.block',
+             u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
+            ('ogg.participation.address.city', 'Vorkappelen'),
+            ('ogg.participation.address.country', 'Schweiz'),
+            ('ogg.participation.address.street', 'Kappelenweg 13, Postfach 1234'),
+            ('ogg.participation.address.zip_code', '1234'),
+            ('ogg.participation.contact.description', 'nix'),
+            ('ogg.participation.contact.title', u'B\xe4rfuss K\xe4thi'),
+            ('ogg.participation.email.address', 'foo@example.com'),
+            ('ogg.participation.person.firstname', u'K\xe4thi'),
+            ('ogg.participation.person.lastname', u'B\xe4rfuss'),
+            ('ogg.participation.person.salutation', 'Frau'),
+            ('ogg.participation.phone.number', '012 34 56 78'),
+            ('ogg.participation.url.url', 'http://www.example.com')]
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()

@@ -14,13 +14,14 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
     """
 
     def __init__(self, context, template_doc, title, recipient_data=tuple(),
-                 sender_data=tuple()):
+                 sender_data=tuple(), participation_data=[]):
         data = getattr(template_doc.get_file(), "data", None)
         super(CreateDocumentFromTemplateCommand, self).__init__(
             context, template_doc.get_filename(), data,
             title=title)
         self.recipient_data = recipient_data
         self.sender_data = sender_data
+        self.participation_data = participation_data
 
         # Grab blocking of role inheritance
         self.block_role_inheritance = getattr(
@@ -44,7 +45,8 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
 
         getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
         DocPropertyWriter(obj, recipient_data=self.recipient_data,
-                          sender_data=self.sender_data).initialize()
+                          sender_data=self.sender_data,
+                          participation_data=self.participation_data).initialize()
 
         # Set blocking of role inheritance based on the template object
         if self.block_role_inheritance is not None:

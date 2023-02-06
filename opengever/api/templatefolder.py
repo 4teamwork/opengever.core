@@ -69,13 +69,20 @@ class DocumentFromTemplatePost(Service):
 
         recipient_id = data.get('recipient')
         sender_id = data.get('sender')
-        if (recipient_id or sender_id) and not is_kub_feature_enabled():
-            raise BadRequest('recipient and sender are only supported when KuB feature is active')
+        participations = data.get('participations', [])
+        if (recipient_id or sender_id or participations) and not is_kub_feature_enabled():
+            raise BadRequest('recipient, sender and participations '
+                             'are only supported when KuB feature is active')
         recipient = self.get_contact_data(recipient_id)
         sender = self.get_contact_data(sender_id)
+        participation_data = []
+        for participation in participations:
+            participants = self.get_contact_data(participation['participant_id'])
+            participation_data.append({'participants': participants,
+                                       'role': participation['role']})
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template, title, recipient, sender)
+            self.context, template, title, recipient, sender, participation_data)
         document = command.execute()
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)
