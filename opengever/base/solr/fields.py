@@ -452,6 +452,11 @@ FIELDS_WITH_MAPPING = [
         index='containing_dossier',
         title=document_mf(u'label_dossier_title'),
     ),
+    ListingField(
+        'containing_subdossier',
+        index='containing_subdossier',
+        title=tabbedview_mf(u'label_subdossier'),
+    ),
     DateListingField(
         'created',
         title=document_mf('label_created', default='Created'),

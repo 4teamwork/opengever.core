@@ -15,7 +15,6 @@ from ZPublisher.HTTPRequest import record
 OTHER_ALLOWED_FIELDS = set([
     'approval_state',
     'blocked_local_roles',
-    'containing_subdossier',
     'email',
     'firstname',
     'getObjPositionInParent',
