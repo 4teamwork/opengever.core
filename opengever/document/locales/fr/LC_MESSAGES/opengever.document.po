@@ -472,10 +472,10 @@ msgid "label_document_date"
 msgstr "Date du document"
 
 msgid "label_document_delivery_date"
-msgstr "Date d'entrée"
+msgstr "Date de sortie"
 
 msgid "label_document_receipt_date"
-msgstr "Date de sortie"
+msgstr "Date d'entrée"
 
 msgid "label_document_reference_number"
 msgstr "Numéro de référence"

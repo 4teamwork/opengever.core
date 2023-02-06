@@ -475,10 +475,10 @@ msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 msgid "label_document_delivery_date"
-msgstr "Eingangsdatum"
+msgstr "Ausgangsdatum"
 
 msgid "label_document_receipt_date"
-msgstr "Ausgangsdatum"
+msgstr "Eingangsdatum"
 
 msgid "label_document_reference_number"
 msgstr "Aktenzeichen"
