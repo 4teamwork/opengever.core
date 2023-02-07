@@ -49,6 +49,9 @@ class WorkspaceMeetingContextActions(BaseContextActions):
     def is_share_content_available(self):
         return get_containing_workspace(self.context).access_members_allowed()
 
+    def is_add_save_minutes_as_pdf_available(self):
+        return True
+
 
 @adapter(IWorkspace, IOpengeverBaseLayer)
 class WorkspaceContextActions(BaseContextActions):

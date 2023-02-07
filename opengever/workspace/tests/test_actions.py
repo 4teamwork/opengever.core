@@ -54,19 +54,21 @@ class TestWorkspaceMeetingContextActions(IntegrationTestCase):
     def test_workspace_meeting_context_actions(self):
         self.login(self.workspace_member)
         expected_actions = [u'edit', u'meeting_ical_download', u'meeting_minutes_pdf',
-                            u'share_content']
+                            u'share_content', u'save_minutes_as_pdf']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_meeting))
 
         self.login(self.workspace_guest)
         self.assertEqual(
-            [u'meeting_ical_download', u'meeting_minutes_pdf', u'share_content'],
+            [u'meeting_ical_download', u'meeting_minutes_pdf', u'share_content',
+             u'save_minutes_as_pdf'],
             self.get_actions(self.workspace_meeting))
 
         with self.login(self.workspace_admin):
             self.workspace.hide_members_for_guests = True
 
         self.assertEqual(
-            [u'meeting_ical_download', u'meeting_minutes_pdf'],
+            [u'meeting_ical_download', u'meeting_minutes_pdf',
+             u'save_minutes_as_pdf'],
             self.get_actions(self.workspace_meeting))
 
 

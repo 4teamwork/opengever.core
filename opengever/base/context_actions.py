@@ -66,6 +66,7 @@ class BaseContextActions(object):
         self.maybe_add_unlock()
         self.maybe_add_untrash_context()
         self.maybe_add_zipexport()
+        self.maybe_add_save_minutes_as_pdf()
         return self.actions
 
     def add_action(self, action):
@@ -231,6 +232,9 @@ class BaseContextActions(object):
         return False
 
     def is_zipexport_available(self):
+        return False
+
+    def is_add_save_minutes_as_pdf_available(self):
         return False
 
     def maybe_add_add_invitation(self):
@@ -444,3 +448,7 @@ class BaseContextActions(object):
     def maybe_add_zipexport(self):
         if self.is_zipexport_available():
             self.add_action(u'zipexport')
+
+    def maybe_add_save_minutes_as_pdf(self):
+        if self.is_add_save_minutes_as_pdf_available():
+            self.add_action(u'save_minutes_as_pdf')
