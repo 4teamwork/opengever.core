@@ -7,6 +7,7 @@ from opengever.document.activities import DocumentTitleChangedActivity
 from opengever.document.activities import DocumenVersionCreatedActivity
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.docprops import DocPropertyWriter
+from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ITemplateDocumentMarker
 from opengever.dossier.templatefolder.utils import is_directly_within_template_folder
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
@@ -51,13 +52,18 @@ def before_documend_checked_in(context, event):
     _update_docproperties(context, raise_on_error=False)
 
 
-def document_moved_or_added(context, event):
+def document_or_mail_moved_or_added(context, event):
     if IObjectRemovedEvent.providedBy(event):
         return
 
     if IObjectMovedEvent.providedBy(event):
         context.reindexObject(idxs=["reference", "sortable_reference", "metadata"])
 
+    if IDocumentSchema.providedBy(context):
+        document_moved_or_added(context, event)
+
+
+def document_moved_or_added(context, event):
     if context.REQUEST.get(DISABLE_DOCPROPERTY_UPDATE_FLAG):
         return
 

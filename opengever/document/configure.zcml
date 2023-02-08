@@ -174,9 +174,9 @@
       />
 
   <subscriber
-      for="opengever.document.document.IDocumentSchema
+      for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.IObjectMovedEvent"
-      handler=".handlers.document_moved_or_added"
+      handler=".handlers.document_or_mail_moved_or_added"
       />
 
   <subscriber
