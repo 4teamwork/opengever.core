@@ -19,6 +19,8 @@ from opengever.dossier.resolve_lock import ResolveLock
 from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
 from opengever.task.task import ITask
 from plone import api
+from Products.CMFCore.Expression import createExprContext
+from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from zope.annotation import IAnnotations
@@ -524,7 +526,23 @@ class ResolveConditions(object):
         if not self.context.has_valid_startdate():
             errors.append(NO_START_DATE)
 
+        if not self.check_custom_resolve_rule():
+            errors.append(api.portal.get_registry_record(
+                'resolver_custom_rule_error_text_de', IDossierResolveProperties))
+
         return errors
+
+    def check_custom_resolve_rule(self):
+        resolver_custom_rule = api.portal.get_registry_record(
+            'resolver_custom_rule', IDossierResolveProperties)
+
+        if not resolver_custom_rule:
+            return True
+
+        portal = api.portal.get()
+        ec = createExprContext(folder=self.context, portal=portal, object=self.context)
+        expr = Expression(resolver_custom_rule)
+        return expr(ec)
 
     def check_end_dates(self):
         """Recursively check if the dossier has a valid end date."""
