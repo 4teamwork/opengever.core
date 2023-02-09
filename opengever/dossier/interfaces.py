@@ -236,6 +236,21 @@ class IDossierResolveProperties(Interface):
         default='strict'
     )
 
+    resolver_custom_rule = schema.TextLine(
+        title=u"Custom dossier resolution rule.",
+        description=u'Tales expression defining a rule checked when closing a'
+                    u' dossier, when returning True, the dossier can be closed'
+                    u', when returning False, closing the dossier will fail.',
+        default=u''
+    )
+
+    resolver_custom_rule_error_text_de = schema.TextLine(
+        title=u"Error text for the resolver_custom_rule",
+        description=u'Error text displayed when the resolver_custom_rule '
+                    u'returns False.',
+        default=u''
+    )
+
     use_changed_for_end_date = schema.Bool(
         title=u"Use the 'changed' date for earliest possible end date",
         description=u'When True, changed will be used in the calculation of '
