@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.2.0 (2023-02-09)
+---------------------
+
+New features:
+
+
+- Add new @save-minutes-as-pdf API endpoint. [njohner]
+- Include KuB person sex and date of birth in person docproperties. [tinagerber]
+- Add participations docproperties when creating document from template. [tinagerber]
+- Add touched date index for workspaces. [elioschmutz]
+
+
+Bug fixes:
+
+
+- Fix check to prevent anonymous users from viewing member portraits. [lgraf]
+- Bump ftw.mail version to fix issue with cropped attachment filenames. [lgraf]
+
+
+Other changes:
+
+
+- Bump versions for ftw.bumblebee, ftw.casauth and ftw.usermigration. [lgraf]
+- Policyless deployment works without the ldap plugin. [elioschmutz]
+- Bump ftw.structlog to get support for logging to Fluentd. [lgraf]
+- Provides a "WWW-Authenticate" response header for unauthorized requests to the @scan-in endpoint. [elioschmutz]
+
+
 2023.1.0 (2023-01-11)
 ---------------------
 
