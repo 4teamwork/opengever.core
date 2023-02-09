@@ -22,6 +22,7 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.ogds.base.actor import Actor
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
 from opengever.workspaceclient import is_workspace_client_feature_enabled
@@ -599,6 +600,10 @@ class DossierContainer(Container):
                 interfaces=[IDossierJournalPDFMarker],
                 **kwargs).execute()
             document.reindexObject(idxs=['object_provides'])
+
+    @property
+    def custom_properties(self):
+        return get_custom_properties(self)
 
 
 @implementer(IConstrainTypeDecider)

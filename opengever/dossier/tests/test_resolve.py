@@ -16,6 +16,7 @@ from opengever.base.behaviors.changed import IChanged
 from opengever.base.tests.byline_base_test import TestBylineBase
 from opengever.document.interfaces import IDossierTasksPDFMarker
 from opengever.dossier import nightly_after_resolve_job
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
@@ -1030,6 +1031,32 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
+        self.assert_resolved(self.resolvable_dossier)
+
+    @browsing
+    def test_can_use_custom_properties_in_custom_dossier_resolution_rule(self, browser):
+        api.portal.set_registry_record(
+            'resolver_custom_rule_error_text_de',
+            u'custom rule broken',
+            IDossierResolveProperties)
+
+        api.portal.set_registry_record(
+            'resolver_custom_rule',
+            u'python:object.custom_properties.get("additional_title")',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+        self.assert_not_resolved(self.resolvable_dossier)
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ['custom rule broken'])
+
+        IDossierCustomProperties(self.resolvable_dossier).custom_properties = {
+            "IDossier.default": {"additional_title": "I have an additional title"},
+        }
+
+        self.resolve(self.resolvable_dossier, browser)
         self.assert_resolved(self.resolvable_dossier)
 
 
