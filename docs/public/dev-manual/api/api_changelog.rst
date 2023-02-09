@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2023.1.0 (unreleased)
+2023.3.0 (unreleased)
 ----------------------
 
 Breaking Changes
@@ -12,7 +12,13 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
-- Support ``participations` in ``@document-from-template`` endpoint when KuB feature is enabled (see :ref:`templatefolder`).
+2023.2.0 (2023-02-09)
+----------------------
+
+Other Changes
+^^^^^^^^^^^^^
+
+- Support ``participations`` in ``@document-from-template`` endpoint when KuB feature is enabled (see :ref:`templatefolder`).
 
 2023.1.0 (2023-01-11)
 ----------------------
