@@ -22,6 +22,8 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import index_data_for
 from opengever.testing.patch import TempMonkeyPatch
@@ -1058,6 +1060,36 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
         self.assert_resolved(self.resolvable_dossier)
+
+    @browsing
+    def test_can_set_custom_properties_in_custom_dossier_resolution_rule(self, browser):
+        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDossier.default")
+            .with_field("date", u"date", u"Choose a date", u"", True)
+        )
+
+        api.portal.set_registry_record(
+            'resolver_custom_rule_error_text_de',
+            u'custom rule broken',
+            IDossierResolveProperties)
+
+        api.portal.set_registry_record(
+            'resolver_custom_rule',
+            u'python:object.set_custom_property("date", object.earliest_possible_end_date()) or True',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.assertEqual({}, get_custom_properties(self.resolvable_dossier))
+        self.resolve(self.resolvable_dossier, browser)
+        self.assert_resolved(self.resolvable_dossier)
+        self.assertEqual({'date': date(2016, 8, 31)},
+                         get_custom_properties(self.resolvable_dossier))
 
 
 class TestResolveConditionsRESTAPI(ResolveTestHelperRESTAPI, TestResolveConditions):
