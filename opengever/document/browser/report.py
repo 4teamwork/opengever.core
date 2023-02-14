@@ -37,10 +37,12 @@ class DocumentReporter(SolrReporterView):
             'id': 'reference',
             'is_default': True,
             'tabbedview_column': 'reference',
+            'title': _(u'document_report_reference', default=u'Document number')
         },
         {
             'id': 'sequence_number',
             'is_default': True,
+            'title': _(u'document_report_sequence_number', default=u'Document-ID')
         },
         {
             'id': 'title',
@@ -77,6 +79,7 @@ class DocumentReporter(SolrReporterView):
         {
             'id': 'containing_dossier',
             'is_default': True,
+            'title': _(u'document_report_containing_dossier', default=u'Dossier')
         },
         {
             'id': 'document_type',
@@ -88,7 +91,18 @@ class DocumentReporter(SolrReporterView):
             'id': 'changed',
             'is_default': False,
             'number_format': DATETIME_NUMBER_FORMAT,
-        }
+        },
+        {
+            'id': 'created',
+            'is_default': False,
+            'number_format': DATETIME_NUMBER_FORMAT,
+            'title': _(u'document_report_created', default=u'Created'),
+        },
+        {
+            'id': 'creator',
+            'is_default': False,
+            'title': _(u'document_report_creator', default=u'Created by'),
+        },
     ]
 
     def __call__(self):

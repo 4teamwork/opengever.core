@@ -113,19 +113,21 @@ class TestDocumentReporter(SolrIntegrationTestCase):
 
         expected_titles = [
             u'Title',
-            u'Reference number',
+            u'Document number',
             u'Last modified',
             u'Author',
-            u'Dossier title',
-            u'Sequence number',
+            u'Dossier',
+            u'Subdossier',
+            u'Document-ID',
             u'Document date',
             u'Document type',
-            u'label_document_receipt_date',
-            u'label_document_delivery_date',
+            u'Received date',
+            u'Sent date',
             u'Created',
-            u'creator',
+            u'Created by',
             u'Checked out by',
             u'Disclosure status',
+            u'File extension',
             u'Keywords',
             u'File size',
             u'Description',
@@ -138,6 +140,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
             datetime(2016, 8, 31, 14, 7, 33),
             u'test_user_1_',
             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung',
+            None,
             14,
             datetime(2010, 1, 3, 0, 0),
             u'Contract',
@@ -147,6 +150,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
             u'robert.ziegler',
             None,
             u'not assessed',
+            u'.docx',
             u'Wichtig',
             27413,
             u'Wichtige Vertr\xe4ge',
@@ -300,7 +304,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
         self.assertEqual(
-            ['DD.MM.YYYY HH:MM', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY'],
+            ['DD.MM.YYYY HH:MM', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY', 'DD.MM.YYYY HH:MM'],
             [cell.number_format for cell in rows[1]],
         )
 
@@ -377,14 +381,14 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         workbook = self.load_workbook(browser.contents)
 
         self.assertEquals(
-            [u'Sequence number',
+            [u'Document-ID',
              u'Title',
              u'Author',
              u'Document date',
-             u'label_document_receipt_date',
-             u'label_document_delivery_date',
+             u'Received date',
+             u'Sent date',
              u'Checked out by',
-             u'Reference number'],
+             u'Document number'],
             [cell.value for cell in list(workbook.active.rows)[0]])
 
     @browsing

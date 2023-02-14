@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 17:22+0000\n"
+"POT-Creation-Date: 2023-02-06 17:59+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -178,6 +178,31 @@ msgstr "Kopie von"
 #: ./opengever/document/browser/templates/downloadconfirmation.pt
 msgid "description_download_confirmation"
 msgstr "Sie sind dabei, eine Kopie des Dokuments ${filename} herunterzuladen."
+
+#. Default: "Dossier"
+#: ./opengever/document/browser/report.py
+msgid "document_report_containing_dossier"
+msgstr "Dossier"
+
+#. Default: "Created"
+#: ./opengever/document/browser/report.py
+msgid "document_report_created"
+msgstr "Erstellt am"
+
+#. Default: "Created by"
+#: ./opengever/document/browser/report.py
+msgid "document_report_creator"
+msgstr "Erstellt von"
+
+#. Default: "Document number"
+#: ./opengever/document/browser/report.py
+msgid "document_report_reference"
+msgstr "Dokumentennummer"
+
+#. Default: "Document-ID"
+#: ./opengever/document/browser/report.py
+msgid "document_report_sequence_number"
+msgstr "Dokument-ID"
 
 #. Default: "User is not allowed to add a document there."
 #: ./opengever/document/forms.py
@@ -450,10 +475,10 @@ msgid "label_document_date"
 msgstr "Dokumentdatum"
 
 msgid "label_document_delivery_date"
-msgstr "Eingangsdatum"
+msgstr "Ausgangsdatum"
 
 msgid "label_document_receipt_date"
-msgstr "Ausgangsdatum"
+msgstr "Eingangsdatum"
 
 msgid "label_document_reference_number"
 msgstr "Aktenzeichen"

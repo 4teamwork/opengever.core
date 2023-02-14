@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-22 17:22+0000\n"
+"POT-Creation-Date: 2023-02-06 17:59+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -213,6 +213,31 @@ msgstr "Copy of"
 msgid "description_download_confirmation"
 msgstr "You're downloading a copy of the document ${filename}"
 
+#. Default: "Dossier"
+#: ./opengever/document/browser/report.py
+msgid "document_report_containing_dossier"
+msgstr "Dossier"
+
+#. Default: "Created"
+#: ./opengever/document/browser/report.py
+msgid "document_report_created"
+msgstr "Created"
+
+#. Default: "Created by"
+#: ./opengever/document/browser/report.py
+msgid "document_report_creator"
+msgstr "Created by"
+
+#. Default: "Document number"
+#: ./opengever/document/browser/report.py
+msgid "document_report_reference"
+msgstr "Document number"
+
+#. Default: "Document-ID"
+#: ./opengever/document/browser/report.py
+msgid "document_report_sequence_number"
+msgstr "Document-ID"
+
 #. German translation: Sie dürfen kein Dokument in diesem Zielort erstellen.
 #. Default: "User is not allowed to add a document there."
 #: ./opengever/document/forms.py
@@ -314,7 +339,6 @@ msgid "help_checkin_journal_comment"
 msgstr "Description of changes"
 
 #. German translation: Datum, an dem das Dokument über den Korrespondenzweg versandt worden ist
-#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_delivery_date"
 msgstr "Date on which the document was sent by mail."
@@ -362,7 +386,6 @@ msgid "help_preview"
 msgstr "Online preview of the original document"
 
 #. German translation: Datum, an dem das Dokument über den Korrespondenzweg angekommen ist
-#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "help_receipt_date"
 msgstr "Date on which the document was received by mail."
@@ -501,7 +524,6 @@ msgstr "Date"
 
 #. German translation: Ausgangsdatum
 #. Default: "Date of delivery"
-#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_delivery_date"
 msgstr "Sent date"
@@ -541,15 +563,13 @@ msgstr "Collaborators: ${collaborators}"
 msgid "label_document_date"
 msgstr "Document date"
 
-#. German translation: Eingangsdatum
-#. MARKER: receipt-delivery-date-mixup double check!
-msgid "label_document_delivery_date"
-msgstr "label_document_delivery_date"
-
 #. German translation: Ausgangsdatum
-#. MARKER: receipt-delivery-date-mixup double check!
+msgid "label_document_delivery_date"
+msgstr "Sent date"
+
+#. German translation: Eingangsdatum
 msgid "label_document_receipt_date"
-msgstr "label_document_receipt_date"
+msgstr "Received date"
 
 #. German translation: Aktenzeichen
 msgid "label_document_reference_number"
@@ -711,7 +731,6 @@ msgstr "Disclosure status"
 
 #. German translation: Eingangsdatum
 #. Default: "Date of receipt"
-#. MARKER: receipt-delivery-date-mixup double check!
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_receipt_date"
 msgstr "Received date"
