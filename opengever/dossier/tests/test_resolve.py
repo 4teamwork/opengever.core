@@ -266,6 +266,27 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.assert_success(self.resolvable_dossier, browser,
                             ['Dossier has been resolved succesfully.'])
 
+    @browsing
+    def test_resolving_with_resolver_custom_after_transition_hook(self, browser):
+        self.login(self.manager)
+
+        api.portal.set_registry_record(
+            'resolver_custom_after_transition_hook',
+            u'python:object.create_or_update_journal_pdf()',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.resolvable_dossier) as children, freeze(datetime(2016, 2, 25)):
+            self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_resolved(self.resolvable_dossier)
+        self.assertEqual(1, len(children["added"]))
+        journal_pdf = children["added"].pop()
+        self.assertEqual(
+            u'Journal of dossier A resolvable main dossier, Feb 25, 2016 12 00 AM.pdf',
+            journal_pdf.get_filename())
+
 
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
     """Variant of the above test class to test dossier resolution via RESTAPI.
