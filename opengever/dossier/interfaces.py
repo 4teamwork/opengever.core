@@ -236,6 +236,22 @@ class IDossierResolveProperties(Interface):
         default='strict'
     )
 
+    resolver_custom_precondition = schema.TextLine(
+        title=u"Custom dossier resolution precondition.",
+        description=u'Tales expression defining a precondition checked when '
+                    u'resolving a dossier. When returning True, the dossier can '
+                    u'be closed, when returning False, resolving the dossier '
+                    u'will fail.',
+        default=u''
+    )
+
+    resolver_custom_precondition_error_text_de = schema.TextLine(
+        title=u"Error text for the resolver_custom_precondition",
+        description=u'Error text displayed when the resolver_custom_precondition '
+                    u'returns False.',
+        default=u''
+    )
+
     use_changed_for_end_date = schema.Bool(
         title=u"Use the 'changed' date for earliest possible end date",
         description=u'When True, changed will be used in the calculation of '
