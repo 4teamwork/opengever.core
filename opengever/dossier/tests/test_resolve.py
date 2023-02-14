@@ -994,6 +994,44 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.assert_success(self.resolvable_dossier, browser,
                             ['Dossier has been resolved succesfully.'])
 
+    @browsing
+    def test_resolving_is_cancelled_when_custom_precondition_is_not_satisfied(self, browser):
+        api.portal.set_registry_record(
+            'resolver_custom_precondition_error_text_de',
+            u'custom precondition not satisfied',
+            IDossierResolveProperties)
+
+        api.portal.set_registry_record(
+            'resolver_custom_precondition',
+            u'python:object.is_subdossier()',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_not_resolved(self.resolvable_dossier)
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ['custom precondition not satisfied'])
+
+    @browsing
+    def test_resolving_when_custom_precondition_is_satisfied(self, browser):
+        api.portal.set_registry_record(
+            'resolver_custom_precondition_error_text_de',
+            u'custom precondition not satisfied',
+            IDossierResolveProperties)
+
+        api.portal.set_registry_record(
+            'resolver_custom_precondition',
+            u'python:not object.is_subdossier()',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_resolved(self.resolvable_dossier)
+
 
 class TestResolveConditionsRESTAPI(ResolveTestHelperRESTAPI, TestResolveConditions):
 
