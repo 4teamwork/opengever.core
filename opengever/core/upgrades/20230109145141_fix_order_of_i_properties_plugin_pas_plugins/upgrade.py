@@ -11,4 +11,5 @@ class FixOrderOfIPropertiesPluginPASPlugins(UpgradeStep):
         acl_users = api.portal.get_tool('acl_users')
         plugins = acl_users.plugins
 
-        plugins.movePluginsTop(IPropertiesPlugin, ('ldap',))
+        if 'ldap' in plugins.listPluginIds(IPropertiesPlugin):
+            plugins.movePluginsTop(IPropertiesPlugin, ('ldap',))
