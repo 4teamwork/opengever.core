@@ -1,4 +1,5 @@
 from opengever.document.behaviors import IBaseDocument
+from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.schema import getFields
 
@@ -45,3 +46,31 @@ def get_custom_properties(obj, docprops_only=False):
                 data[name] = custom_properties[slot].get(name)
 
     return data
+
+
+def set_custom_property(obj, fieldname, value, reindex=False):
+    customprops_behavior = get_customproperties_behavior(obj)
+    adapted = customprops_behavior(obj, None)
+    custom_props = adapted.custom_properties or {}
+
+    field = getFields(customprops_behavior).get('custom_properties')
+    active_slot = field.get_active_assignment_slot(obj)
+    for slot in [active_slot, field.default_slot]:
+        if slot is None:
+            continue
+
+        definition = PropertySheetSchemaStorage().query(slot)
+        if not definition:
+            continue
+
+        if fieldname in definition.get_fieldnames():
+            if slot not in custom_props:
+                custom_props[slot] = {}
+            custom_props[slot][fieldname] = value
+
+            field.set(field.interface(obj), custom_props)
+            if reindex:
+                solr_field = SolrDynamicField(
+                    fieldname, definition.schema_class[fieldname])
+                obj.reindexObject(idxs=["UID", solr_field.solr_field_name])
+            return

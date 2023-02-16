@@ -22,7 +22,10 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
 from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve_lock import ResolveLock
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.utils import get_custom_properties
 from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import index_data_for
 from opengever.testing.patch import TempMonkeyPatch
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -266,6 +269,27 @@ class TestResolvingDossiers(IntegrationTestCase, ResolveTestHelper):
         self.assert_success(self.resolvable_dossier, browser,
                             ['Dossier has been resolved succesfully.'])
 
+    @browsing
+    def test_resolving_with_resolver_custom_after_transition_hook(self, browser):
+        self.login(self.manager)
+
+        api.portal.set_registry_record(
+            'resolver_custom_after_transition_hook',
+            u'python:object.create_or_update_journal_pdf()',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        with self.observe_children(self.resolvable_dossier) as children, freeze(datetime(2016, 2, 25)):
+            self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_resolved(self.resolvable_dossier)
+        self.assertEqual(1, len(children["added"]))
+        journal_pdf = children["added"].pop()
+        self.assertEqual(
+            u'Journal of dossier A resolvable main dossier, Feb 25, 2016 12 00 AM.pdf',
+            journal_pdf.get_filename())
+
 
 class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiers):
     """Variant of the above test class to test dossier resolution via RESTAPI.
@@ -282,6 +306,47 @@ class TestResolvingDossiersRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossie
                 u'type': u'Bad Request'}},
             browser.json)
         self.assert_workflow_state('dossier-state-active', self.resolvable_dossier)
+
+
+class TestResolvingDossiersSolr(SolrIntegrationTestCase, ResolveTestHelper):
+
+    @browsing
+    def test_can_set_custom_properties_in_custom_after_transition_hook(self, browser):
+        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDossier.default")
+            .with_field("date", u"date", u"Choose a date", u"", True)
+        )
+
+        api.portal.set_registry_record(
+            'resolver_custom_after_transition_hook',
+            u'python:object.set_custom_property("date", object.earliest_possible_end_date()'
+            u', reindex=True)',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.assertEqual({}, get_custom_properties(self.resolvable_dossier))
+        self.resolve(self.resolvable_dossier, browser)
+        self.assert_resolved(self.resolvable_dossier)
+        self.assertEqual({'date': date(2016, 8, 31)},
+                         get_custom_properties(self.resolvable_dossier))
+        self.assertEqual({'date': date(2016, 8, 31)},
+                         get_custom_properties(self.resolvable_subdossier))
+
+        self.commit_solr()
+        self.assert_solr_field_value(u'2016-08-31T00:00:00Z',
+                                     u'date_custom_field_date',
+                                     self.resolvable_dossier)
+
+
+class TestResolvingDossiersSolrRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiersSolr):
+    """Variant of the above test class to test dossier resolution with via RESTAPI.
+    """
 
 
 class ResolveJobsTestHelper(object):

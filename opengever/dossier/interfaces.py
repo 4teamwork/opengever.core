@@ -252,6 +252,13 @@ class IDossierResolveProperties(Interface):
         default=u''
     )
 
+    resolver_custom_after_transition_hook = schema.TextLine(
+        title=u"Custom dossier resolution after transition hook.",
+        description=u'Tales expression defining an after transition hook'
+                    u'executing when resolving a dossier.',
+        default=u''
+    )
+
     use_changed_for_end_date = schema.Bool(
         title=u"Use the 'changed' date for earliest possible end date",
         description=u'When True, changed will be used in the calculation of '

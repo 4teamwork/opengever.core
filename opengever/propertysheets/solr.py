@@ -2,6 +2,7 @@ from ftw.solr.handlers import DefaultIndexHandler
 from ftw.solr.handlers import DexterityItemIndexHandler
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.schema import getFields
 
@@ -13,12 +14,18 @@ class CustomPropertiesIndexHandler(DefaultIndexHandler):
 
     def get_data(self, attributes):
         data = super(CustomPropertiesIndexHandler, self).get_data(attributes)
-        if not attributes:
-            data.update(self.get_custom_properties())
+        data.update(self.get_custom_properties(attributes))
         return data
 
-    def get_custom_properties(self):
+    def get_custom_properties(self, attributes):
         data = {}
+
+        index_all = not bool(attributes)
+        custom_field_attributes = []
+        if attributes:
+            custom_field_attributes = [name for name in attributes if SolrDynamicField.is_dynamic_field(name)]
+        if not index_all and not custom_field_attributes:
+            return data
 
         adapted = self.behavior(self.context, None)
         if not adapted:
@@ -40,6 +47,8 @@ class CustomPropertiesIndexHandler(DefaultIndexHandler):
 
             for solr_field in definition.get_solr_dynamic_fields():
                 name = solr_field.name
+                if not index_all and solr_field.solr_field_name not in custom_field_attributes:
+                    continue
                 if name in custom_properties[slot]:
                     value = solr_field.convert_value(custom_properties[slot][name])
                     data[solr_field.solr_field_name] = value
@@ -63,5 +72,5 @@ class DocumentIndexHandler(CustomPropertiesIndexHandler, DexterityItemIndexHandl
         if attributes:
             all_fields = self.all_indexable_fields()
             if set(attributes) | set([u'SearchableText']) == all_fields:
-                data.update(self.get_custom_properties())
+                data.update(self.get_custom_properties([]))
         return data

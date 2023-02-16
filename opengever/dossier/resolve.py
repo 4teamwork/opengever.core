@@ -102,6 +102,19 @@ class ResolveDossierTransitionExtender(TransitionExtender):
 
     def after_transition_hook(self, transition, disable_sync, transition_params):
         AfterResolveJobs(self.context).execute()
+        self.execute_custom_after_transition_hook(transition, transition_params)
+
+    def execute_custom_after_transition_hook(self, transition, transition_params):
+        custom_after_transition_hook = api.portal.get_registry_record(
+            'resolver_custom_after_transition_hook', IDossierResolveProperties)
+
+        if not custom_after_transition_hook:
+            return
+
+        portal = api.portal.get()
+        ec = createExprContext(folder=self.context, portal=portal, object=self.context)
+        expr = Expression(custom_after_transition_hook)
+        expr(ec)
 
 
 class LockingResolveManager(object):
