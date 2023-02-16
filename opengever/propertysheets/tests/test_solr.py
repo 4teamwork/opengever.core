@@ -4,6 +4,7 @@ from ftw.builder import create
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.testing import index_data_for
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 
@@ -90,3 +91,57 @@ class TestCustomPropertiesIndexHandler(SolrIntegrationTestCase):
             solr_doc.get(u'f1_custom_field_string'), u'indexme-businesscase')
         self.assertEqual(
             solr_doc.get(u'additional_title_custom_field_string'), u'indexme-default')
+
+    def test_index_specific_custom_property_for_dossier(self):
+        self.login(self.manager)
+
+        solr_doc = solr_data_for(self.dossier)
+        self.assertEqual(
+            solr_doc.get(u'additional_title_custom_field_string'), None)
+        self.assertEqual(
+            solr_doc.get(u'location_custom_field_string'), None)
+        self.assertEqual(solr_doc.get(u'Title'),
+                         u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
+
+        self.dossier.title = u"new title"
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.default": {"additional_title": "new additional title",
+                                 "location": "new location"},
+        }
+
+        self.dossier.reindexObject(
+            idxs=['UID', 'additional_title_custom_field_string'])
+        self.commit_solr()
+
+        solr_doc = solr_data_for(self.dossier)
+        # Only additional_title_custom_field_string has been reindexed,
+        # other custom and normal solr fields have not.
+        self.assertEqual(
+            solr_doc.get(u'additional_title_custom_field_string'),
+            'new additional title')
+        self.assertEqual(solr_doc.get(u'location_custom_field_string'), None)
+        self.assertEqual(
+            solr_doc.get(u'Title'),
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung')
+        # Also make sure that the object was not reindexed in the catalog.
+        self.assertEqual(index_data_for(self.dossier).get("sortable_title"),
+                         'vertrage mit der kantonalen finanzverwaltung')
+
+    def test_index_specific_custom_property_for_document(self):
+        self.login(self.regular_user)
+
+        self.document.document_type = u'regulations'
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.regulations": {
+                "yesorno": True,
+                "choose": u"gr\xfcn",
+            }
+        }
+        self.document.reindexObject(idxs=["choose_custom_field_string"])
+        self.commit_solr()
+
+        solr_doc = solr_data_for(self.document)
+        self.assertNotEqual(
+            solr_doc.get(u'yesorno_custom_field_boolean'), True)
+        self.assertEqual(
+            solr_doc.get(u'choose_custom_field_string'), u"gr\xfcn")
