@@ -606,8 +606,8 @@ class DossierContainer(Container):
     def custom_properties(self):
         return get_custom_properties(self)
 
-    def set_custom_property(self, fieldname, value):
-        set_custom_property(self, fieldname, value)
+    def set_custom_property(self, fieldname, value, reindex=False):
+        set_custom_property(self, fieldname, value, reindex)
 
 
 @implementer(IConstrainTypeDecider)
