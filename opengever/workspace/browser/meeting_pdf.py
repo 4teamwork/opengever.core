@@ -62,7 +62,7 @@ class MeetingMinutesPDFView(BrowserView):
             obj = item.getObject()
             text = obj.text.output if obj.text else ''
             decision = obj.decision.output if obj.decision else ''
-            related_items = [item.to_object for item in obj.relatedItems]
+            related_items = [item.to_object for item in obj.relatedItems if item.to_object]
             data['agenda_items'].append({
                 'number': '{}. '.format(i + 1),
                 'title': obj.Title(),
