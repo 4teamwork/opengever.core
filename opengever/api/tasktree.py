@@ -1,6 +1,7 @@
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_filters
+from ftw.solr.query import make_path_filter
 from opengever.base.browser.navigation import make_tree_by_url
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.solr import OGSolrContentListing
@@ -23,6 +24,9 @@ class TaskTree(object):
     def __init__(self, context, request):
         self.context = context
         self.request = request
+        self.solr = getUtility(ISolrSearch)
+        self.fieldlist = [
+            'Title', 'portal_type', 'path', 'review_state', 'object_provides']
 
     def __call__(self, expand=False):
         result = {
@@ -86,22 +90,31 @@ class TaskTree(object):
         tree['is_task_addable_before'] = is_task_addable_before
         tree['is_task_addable'] = is_task_addable
 
-    def task_tree(self):
-        main_task = self.get_main_task()
-        solr = getUtility(ISolrSearch)
-        is_sequential = IContainSequentialProcess.providedBy(main_task)
+    def recursive_query(self, item, docs):
+        docs.append(item)
         filters = make_filters(
             path={
-                'query': '/'.join(main_task.getPhysicalPath()),
-                'depth': -1,
+                'query': item.get("path"),
+                'depth': 1,
             },
             object_provides=ITask.__identifier__,
         )
-        fieldlist = ['Title', 'portal_type', 'path', 'review_state', 'object_provides']
+        is_sequential = IContainSequentialProcess.__identifier__ in item.get("object_provides")
         sort = 'getObjPositionInParent asc' if is_sequential else 'created asc'
-        resp = solr.search(
-            filters=filters, start=0, rows=1000, sort=sort,
-            fl=fieldlist)
+        resp = self.solr.search(
+            filters=filters, start=0, rows=1000, sort=sort, fl=self.fieldlist)
+        for item in resp.docs:
+            self.recursive_query(item, docs)
+
+    def task_tree(self):
+        main_task = self.get_main_task()
+        path = '/'.join(main_task.getPhysicalPath())
+        resp = self.solr.search(filters=make_path_filter(path, 0))
+
+        docs = []
+        if resp.docs:
+            self.recursive_query(resp.docs[0], docs)
+            resp.docs = docs
 
         nodes = []
         solr_items_per_url = {}

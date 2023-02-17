@@ -151,6 +151,110 @@ class TestTaskTree(SolrIntegrationTestCase):
             [item['@id'] for item in browser.json['children'][0]['children']])
 
     @browsing
+    def test_subtasks_are_sorted_correctly_in_nested_parallel_and_sequential_tasks(self, browser):
+        self.login(self.regular_user, browser=browser)
+        data = {
+            "related_documents": [],
+            "start_immediately": True,
+            "process": {
+                "title": "New employee",
+                "text": "A new employee arrives.",
+                "sequence_type": "sequential",
+                "items": [
+                    {
+                        "title": "Workout",
+                        "sequence_type": "sequential",
+                        "items": [
+                            {
+                                "title": "Present Gever",
+                                "responsible": "fa:{}".format(self.regular_user.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-10",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                            {
+                                "title": "Present Teamraum",
+                                "responsible": "fa:{}".format(self.workspace_admin.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-12",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                        ]
+
+                    },
+                    {
+                        "title": "Training",
+                        "sequence_type": "parallel",
+                        "items": [
+                            {
+                                "title": "Present Gever",
+                                "responsible": "fa:{}".format(self.regular_user.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-10",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                            {
+                                "title": "Present Teamraum",
+                                "responsible": "fa:{}".format(self.workspace_admin.id),
+                                "issuer": self.dossier_responsible.id,
+                                "deadline": "2022-03-12",
+                                "task_type": "direct-execution",
+                                "is_private": False,
+                            },
+                        ]
+
+                    },
+                    {
+                        "title": "Assign userid",
+                        "responsible": "fa:{}".format(self.regular_user.id),
+                        "issuer": self.secretariat_user.id,
+                        "deadline": "2022-03-01",
+                        "task_type": "direct-execution",
+                        "is_private": False,
+                    },
+                ]
+            }
+        }
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@process'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        main_task = children['added'].pop()
+        subtask1, subtask2, subtask3 = main_task.contentValues()
+        sequential1, sequential2 = subtask1.contentValues()
+        parallel1, parallel2 = subtask2.contentValues()
+
+        main_task.set_tasktemplate_order([subtask3, subtask1, subtask2])
+        subtask1.set_tasktemplate_order([sequential2, sequential1])
+        subtask2.set_tasktemplate_order([parallel2, parallel1])
+        self.commit_solr()
+        browser.open(main_task, view="@tasktree", method="GET", headers=self.api_headers)
+
+        # Ordered according to position in parent
+        self.assertEqual(
+            [subtask3.absolute_url(),
+             subtask1.absolute_url(),
+             subtask2.absolute_url()],
+            [item['@id'] for item in browser.json['children'][0]['children']])
+
+        # Ordered according to position in parent
+        self.assertEqual(
+            [sequential2.absolute_url(),
+             sequential1.absolute_url()],
+            [item['@id'] for item in browser.json['children'][0]['children'][1]['children']])
+
+        # Ordered according to creation date
+        self.assertEqual(
+            [parallel1.absolute_url(),
+             parallel2.absolute_url()],
+            [item['@id'] for item in browser.json['children'][0]['children'][2]['children']])
+
+    @browsing
     def test_get_task_with_tasktree_expansion(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(
