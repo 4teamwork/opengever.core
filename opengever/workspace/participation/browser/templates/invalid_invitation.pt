@@ -1,0 +1,59 @@
+<tal:doctype tal:replace="structure string:&lt;!DOCTYPE html&gt;" />
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      i18n:domain="opengever.workspace"
+      tal:define="portal_url view/portal_url">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet"
+          tal:attributes="href string:${portal_url}/++theme++plonetheme.teamraum/css/gever/gever.css" />
+    <link rel="stylesheet"
+          tal:attributes="href string:${portal_url}/++theme++plonetheme.teamraum/css/main.css" />
+    <style>
+      body {
+      height: auto;
+      }
+
+      #content {
+      margin: auto auto;
+      width: 75%;
+      position: relative;
+      top: 200px;
+      }
+
+      #header {
+      margin-bottom: 2em;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="content" class="gever-error-page">
+
+      <h1 class="documentFirstHeading"
+          i18n:translate="heading_invalid_invitation">
+        This invitation is no longer valid
+      </h1>
+
+      <p i18n:translate="description_invalid_invitation">
+        This invitation has been cancelled or is invalid.
+      </p>
+
+      <div class="error-body">
+        <a tal:attributes="href portal_url | python: '/'"
+           i18n:translate="text_back_to_portal"
+           i18n:domain="opengever.base">
+          Back to the portal
+        </a>
+      </div>
+
+    </div>
+  </body>
+</html>

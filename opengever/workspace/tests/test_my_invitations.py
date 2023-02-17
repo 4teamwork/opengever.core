@@ -209,14 +209,21 @@ class TestMyInvitationsView(IntegrationTestCase):
         self.assertEqual(browser.url, self.workspace.absolute_url())
 
     @browsing
-    def test_cannot_accept_invalid_invitation(self, browser):
+    def test_cannot_accept_invalid_invitation_shows_error_page_instead(self, browser):
         self.login(self.regular_user, browser=browser)
         with freeze(FROZEN_NOW):
             payload = serialize_and_sign_payload({'iid': 'someinvalidiid'})
         accept_url = "{}/@@my-invitations/accept?invitation={}".format(
             self.workspace_url, payload)
-        with browser.expect_http_error(400):
-            browser.open(accept_url)
+
+        browser.open(accept_url)
+
+        self.assertEqual(
+            [u'This invitation is no longer valid'],
+            browser.css('h1').text)
+        self.assertEqual(
+            ['This invitation has been cancelled or is invalid.'],
+            browser.css('#content p').text)
 
     @browsing
     def test_accept_declined_invitation_tries_to_redirect_to_workspace(self, browser):

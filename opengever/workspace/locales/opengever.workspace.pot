@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-24 14:02+0000\n"
+"POT-Creation-Date: 2023-02-21 18:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,6 +101,11 @@ msgstr ""
 msgid "absent"
 msgstr ""
 
+#. Default: "This invitation has been cancelled or is invalid."
+#: ./opengever/workspace/participation/browser/templates/invalid_invitation.pt
+msgid "description_invalid_invitation"
+msgstr ""
+
 #. Default: "excused"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "excused"
@@ -114,6 +119,11 @@ msgstr ""
 #. Default: "Agenda Items"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
 msgid "heading_agenda_items"
+msgstr ""
+
+#. Default: "This invitation is no longer valid"
+#: ./opengever/workspace/participation/browser/templates/invalid_invitation.pt
+msgid "heading_invalid_invitation"
 msgstr ""
 
 #. Default: "Meeting Minutes: ${title}"

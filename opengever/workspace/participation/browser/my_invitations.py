@@ -21,6 +21,7 @@ from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from Products.Five.browser import BrowserView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from Products.LDAPMultiPlugins.interfaces import ILDAPMultiPlugin
 from urllib import urlencode
 from zExceptions import BadRequest
@@ -125,7 +126,13 @@ class MyWorkspaceInvitations(BrowserView):
         """
         alsoProvides(self.request, IDisableCSRFProtection)
 
-        invitation, payload = self.get_invitation_and_validate_payload()
+        try:
+            invitation, payload = self.get_invitation_and_validate_payload()
+        except BadRequest:
+            self.portal_url = api.portal.get().absolute_url()
+            template = ViewPageTemplateFile('templates/invalid_invitation.pt')
+            return template(self)
+
         with elevated_privileges():
             target_workspace = uuidToObject(invitation['target_uuid'])
 
