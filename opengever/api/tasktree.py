@@ -26,7 +26,8 @@ class TaskTree(object):
         self.request = request
         self.solr = getUtility(ISolrSearch)
         self.fieldlist = [
-            'Title', 'portal_type', 'path', 'review_state', 'object_provides']
+            'Title', 'portal_type', 'path', 'review_state', 'object_provides',
+            'has_sametype_children']
 
     def __call__(self, expand=False):
         result = {
@@ -92,6 +93,8 @@ class TaskTree(object):
 
     def recursive_query(self, item, docs):
         docs.append(item)
+        if not item.get("has_sametype_children"):
+            return
         filters = make_filters(
             path={
                 'query': item.get("path"),
