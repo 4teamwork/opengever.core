@@ -1,5 +1,8 @@
 from Acquisition import aq_parent
+from opengever.activity.model import Resource
 from opengever.base.interfaces import IDeleter
+from opengever.base.model import create_session
+from opengever.base.oguid import Oguid
 from plone import api
 from plone.app.linkintegrity.exceptions import LinkIntegrityNotificationException
 from zExceptions import Forbidden
@@ -21,7 +24,17 @@ class BaseContentDeleter(object):
 
     def delete(self):
         self.verify_may_delete()
+        self.cleanup_resources()
         self._delete()
+
+    def cleanup_resources(self):
+        oguid = Oguid.for_object(self.context)
+        resource = Resource.query.get_by_oguid(oguid)
+        if resource:
+            session = create_session()
+            for subscription in resource.subscriptions:
+                session.delete(subscription)
+            session.delete(resource)
 
     def _delete(self):
         parent = aq_parent(self.context)
