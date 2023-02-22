@@ -1,13 +1,9 @@
-from ftw.builder import Builder
-from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.statusmessages import error_messages
-from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.kub.interfaces import IKuBSettings
 from opengever.kub.testing import KuBIntegrationTestCase
-from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone import api
 from requests_toolbelt.utils import formdata
@@ -57,7 +53,7 @@ class TestRemoveKubParticipation(KuBIntegrationTestCase):
             self.empty_dossier.absolute_url(),
             headers={'Content-Type': 'application/x-www-form-urlencoded'},
             data=formdata.urlencode((original_template, oids, method, )),
-            )
+        )
 
         self.assertEqual(
             ['The Contact and Authorities directory is only supported in the new UI.'],
