@@ -101,7 +101,7 @@ msgstr "absent"
 #. Default: "This invitation has been cancelled or is invalid."
 #: ./opengever/workspace/participation/browser/templates/invalid_invitation.pt
 msgid "description_invalid_invitation"
-msgstr ""
+msgstr "Cette invitation a été annulée ou n'est plus valable."
 
 #. Default: "excused"
 #: ./opengever/workspace/workspace_meeting.py
@@ -121,7 +121,7 @@ msgstr "Points à l'ordre du jour"
 #. Default: "This invitation is no longer valid"
 #: ./opengever/workspace/participation/browser/templates/invalid_invitation.pt
 msgid "heading_invalid_invitation"
-msgstr ""
+msgstr "Cette invitation n'est plus valable"
 
 #. Default: "Meeting Minutes: ${title}"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
