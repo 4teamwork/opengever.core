@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.3.0 (2023-02-22)
+---------------------
+
+New features:
+
+
+- Allow to define a custom dossier resolution precondition. [njohner]
+- Allow to define a custom dossier resolution after transition hook. [njohner]
+
+
+Bug fixes:
+
+
+- Fix ordering of subtasks in @tasktree endpoint for nested task processes. [njohner]
+- Handle missing resources when deleting a workspace member. [njohner]
+- Clean-up resources and subscriptions when an object is deleted. [njohner]
+- Reindex the reference number of mails during move operations. [njohner]
+- Show specific error page when invitations are no longer valid. [phgross]
+- Handle broken references when generating the meeting minutes PDF. [njohner]
+- Fix LDAP properties plugin upgrade step to work in deployments without LDAP. [lgraf]
+
+
+Other changes:
+
+
+- Harmonize naming of Excel export columns. [lgraf]
+- Remove deprecated journal and task pdf marker interfaces. [njohner]
+
+
 2023.2.0 (2023-02-09)
 ---------------------
 
