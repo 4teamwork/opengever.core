@@ -107,14 +107,19 @@
       </td>
     </tr>
 
-    <tr tal:condition="python:len(teams) > 0 and view.contactfolder_url()">
+    <tr tal:condition="python:len(teams) > 0">
       <th i18n:translate="label_teams">Teams</th>
       <td>
         <ul class="teams">
           <li tal:repeat="team teams">
-            <a class="team"
-               tal:attributes="href string:${view/contactfolder_url}/team-${team/team_id}/view"
-               tal:content="team/title"></a>
+            <tal:block tal:condition="view/contactfolder_url">
+                <a class="team"
+                   tal:attributes="href string:${view/contactfolder_url}/team-${team/team_id}/view"
+                   tal:content="team/title"></a>
+            </tal:block>
+            <tal:block tal:condition="python:not view.contactfolder_url()">
+                <span tal:content="team/title" />
+            </tal:block>
           </li>
         </ul>
       </td>
