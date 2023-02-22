@@ -1,10 +1,12 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.activity import base_notification_center
 from opengever.activity import notification_center
 from opengever.activity.model import Activity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
+from opengever.base.oguid import Oguid
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
@@ -16,7 +18,7 @@ import json
 
 class TestToDoWatchers(IntegrationTestCase):
 
-    features = ('activity', )
+    features = ('activity', 'workspace')
 
     def setUp(self):
         super(TestToDoWatchers, self).setUp()
@@ -162,19 +164,50 @@ class TestToDoWatchers(IntegrationTestCase):
             watched_resources)
 
     @browsing
-    def test_deleted_workspace_member_is_removed_as_watcher_from_all_todos(self, browser):
+    def test_deleted_workspace_member_is_removed_as_watcher_from_all_contained_objects(self, browser):
         self.login(self.workspace_admin, browser=browser)
         self.center.add_watcher_to_resource(self.todo,
+                                            self.workspace_member.getId(),
+                                            WORKSPACE_MEMBER_ROLE)
+
+        self.center.add_watcher_to_resource(self.workspace_document,
+                                            self.workspace_member.getId(),
+                                            WORKSPACE_MEMBER_ROLE)
+
+        watcher = self.center.fetch_watcher(self.workspace_member.getId())
+        subscriptions = watcher.subscriptions
+        self.assertEqual(3, len(subscriptions))
+        expected = [(TODO_RESPONSIBLE_ROLE, self.assigned_todo),
+                    (WORKSPACE_MEMBER_ROLE, self.todo),
+                    (WORKSPACE_MEMBER_ROLE, self.workspace_document)]
+        actual = [(subscription.role, subscription.resource.oguid.resolve_object())
+                  for subscription in subscriptions]
+        self.assertItemsEqual(expected, actual)
+
+        browser.open(self.workspace.absolute_url() + '/manage-participants/delete',
+                     data={'token': self.workspace_member.getId(),
+                           'type': 'user',
+                           '_authenticator': createToken()})
+
+        self.center.session.refresh(watcher)
+        self.assertEqual([], watcher.subscriptions)
+
+    @browsing
+    def test_deleting_workspace_member_handles_missing_resources(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        base_center = base_notification_center()
+        # create subscription for a resource with an invalid IntId.
+        base_center.add_watcher_to_resource(Oguid('plone', 123),
                                             self.workspace_member.getId(),
                                             WORKSPACE_MEMBER_ROLE)
 
         watcher = self.center.fetch_watcher(self.workspace_member.getId())
         subscriptions = watcher.subscriptions
         self.assertEqual(2, len(subscriptions))
-        expected = [(TODO_RESPONSIBLE_ROLE, self.assigned_todo),
-                    (WORKSPACE_MEMBER_ROLE, self.todo)]
-        actual = [(subscription.role, subscription.resource.oguid.resolve_object())
-                  for subscription in subscriptions]
+
+        expected = [Oguid.for_object(self.assigned_todo).id, 'plone:123']
+        actual = [subscription.resource.oguid.id for subscription in subscriptions]
         self.assertItemsEqual(expected, actual)
 
         browser.open(self.workspace.absolute_url() + '/manage-participants/delete',

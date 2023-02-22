@@ -1,8 +1,10 @@
 from Acquisition import aq_chain
+from opengever.activity import base_notification_center
 from opengever.activity import notification_center
 from opengever.activity.base import BaseActivity
 from opengever.activity.roles import TODO_RESPONSIBLE_ROLE
 from opengever.activity.roles import WORKSPACE_MEMBER_ROLE
+from opengever.base.exceptions import InvalidOguidIntIdPart
 from opengever.ogds.base.actor import Actor
 from opengever.workspace import _
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
@@ -60,7 +62,14 @@ class WorkspaceWatcherManager(object):
         if watcher is None:
             return
         for subscription in watcher.subscriptions:
-            obj = subscription.resource.oguid.resolve_object()
+            oguid = subscription.resource.oguid
+            try:
+                obj = oguid.resolve_object()
+            except InvalidOguidIntIdPart:
+                base_notification_center().remove_watcher_from_resource(
+                    oguid, participant, subscription.role)
+                continue
+
             if self.workspace in aq_chain(obj):
                 self.center.remove_watcher_from_resource(obj, participant, subscription.role)
 
