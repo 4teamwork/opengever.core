@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.contact.tests import create_contacts
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.interfaces import IDossierParticipants
 from opengever.dossier.participations import IParticipationData
@@ -226,13 +227,7 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                          for item in browser.json['items']])
 
 
-class TestParticipationsPost(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestParticipationsPost, self).setUp()
-        self.valid_participant_id = self.regular_user.getId()
-        with self.login(self.regular_user):
-            self.valid_participant_id2 = 'contact:{}'.format(self.franz_meier.getId())
+class ParticipationsPostTestMixin():
 
     @browsing
     def test_post_participation(self, browser):
@@ -374,8 +369,18 @@ class TestParticipationsPost(IntegrationTestCase):
                           "type": "Unauthorized"}, browser.json)
 
 
+class TestParticipationsPost(IntegrationTestCase, ParticipationsPostTestMixin):
+
+    def setUp(self):
+        super(TestParticipationsPost, self).setUp()
+        create_contacts(self)
+        self.valid_participant_id = self.regular_user.getId()
+        with self.login(self.regular_user):
+            self.valid_participant_id2 = 'contact:{}'.format(self.franz_meier.getId())
+
+
 @requests_mock.Mocker()
-class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, TestParticipationsPost):
+class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, ParticipationsPostTestMixin):
 
     def setUp(self):
         super(TestParticipationsPostWithKubFeatureEnabled, self).setUp()

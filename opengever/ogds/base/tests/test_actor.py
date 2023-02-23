@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.contact.tests import create_contacts
 from opengever.kub.testing import KUB_RESPONSES
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.actor import Actor
@@ -16,6 +17,7 @@ from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
 from opengever.ogds.base.actor import TeamActor
+from opengever.ogds.models.user import User
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from plone.app.testing import TEST_USER_ID
@@ -47,6 +49,7 @@ class TestActorLookup(IntegrationTestCase):
             actor.get_link(with_icon=True))
 
     def test_contact_actor_lookup(self):
+        create_contacts(self)
         self.login(self.regular_user)
         actor = Actor.lookup('contact:{}'.format(self.franz_meier.id))
 
@@ -90,17 +93,17 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIsInstance(actor, TeamActor)
         self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                          actor.get_label())
-        self.assertEqual('http://nohost/plone/kontakte/team-1/view',
+        self.assertEqual('None/team-1/view',
                          actor.get_profile_url())
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/kontakte/team-1/view" '
+            u'<a href="None/team-1/view" '
             u'class="actor-label actor-team">Projekt \xdcberbaung Dorfmatte '
             u'(Finanz\xe4mt)</a>',
             actor.get_link(with_icon=True))
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/kontakte/team-1/view">'
+            u'<a href="None/team-1/view">'
             u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
             actor.get_link())
 
@@ -108,7 +111,7 @@ class TestActorLookup(IntegrationTestCase):
         self.login(self.foreign_contributor)
         actor = Actor.lookup('team:1')
         self.assertEqual(
-            u'<a href="http://nohost/plone/kontakte/team-1/view">'
+            u'<a href="None/team-1/view">'
             u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
             actor.get_link())
 
@@ -156,13 +159,14 @@ class TestActorLookup(IntegrationTestCase):
     def test_get_link_returns_safe_html(self):
         self.login(self.regular_user)
 
-        self.franz_meier.firstname = u"Foo <b onmouseover=alert('Foo!')>click me!</b>"
-        self.franz_meier.reindexObject()
-        actor = Actor.lookup('contact:meier-franz')
+        user = User.get("kathi.barfuss")
+        user.firstname = "Foo <b onmouseover=alert('Foo!')>click me!</b>"
+
+        actor = Actor.lookup('kathi.barfuss')
 
         self.assertEquals(
-            u'<a href="http://nohost/plone/kontakte/meier-franz">'
-            u'Meier Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (meier.f@example.com)'
+            u'<a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+            u'B\xe4rfuss Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (kathi.barfuss)'
             u'</a>',
             actor.get_link())
 

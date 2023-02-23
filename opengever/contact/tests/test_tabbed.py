@@ -1,11 +1,16 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.contact.tests import create_contacts
 from opengever.kub.interfaces import IKuBSettings
 from opengever.testing import IntegrationTestCase
 from plone import api
 
 
 class TestContactFolderTabbedView(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestContactFolderTabbedView, self).setUp()
+        create_contacts(self)
 
     @browsing
     def test_shows_local_and_user_tab(self, browser):

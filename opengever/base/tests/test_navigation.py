@@ -145,12 +145,6 @@ class TestCatalogNavigationTabs(IntegrationTestCase):
             [
                 {
                     'description': '',
-                    'id': 'kontakte',
-                    'name': 'Contacts',
-                    'url': 'http://nohost/plone/kontakte',
-                },
-                {
-                    'description': '',
                     'id': 'ordnungssystem',
                     'name': 'Ordnungssystem',
                     'url': 'http://nohost/plone/ordnungssystem',
@@ -191,12 +185,6 @@ class TestCatalogNavigationTabs(IntegrationTestCase):
         view = self.portal.unrestrictedTraverse('@@portal_tabs_view')
         self.assertEqual(
             [
-                {
-                    'description': '',
-                    'id': 'kontakte',
-                    'name': 'Contacts',
-                    'url': 'http://nohost/plone/kontakte',
-                },
                 {
                     'description': '',
                     'id': 'ordnungssystem',

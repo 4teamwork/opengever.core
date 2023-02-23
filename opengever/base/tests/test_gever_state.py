@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.contact.tests import create_contacts
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -76,6 +77,7 @@ class TestGeverStateView(IntegrationTestCase):
 
     @browsing
     def test_properties_action_not_available_on_contactfolder(self, browser):
+        create_contacts(self)
         self.login(self.manager, browser=browser)
 
         browser.open(self.contactfolder)
@@ -85,6 +87,7 @@ class TestGeverStateView(IntegrationTestCase):
 
     @browsing
     def test_properties_action_not_available_for_teams(self, browser):
+        create_contacts(self)
         self.login(self.administrator, browser=browser)
 
         browser.open(self.contactfolder, view='team-1/view')

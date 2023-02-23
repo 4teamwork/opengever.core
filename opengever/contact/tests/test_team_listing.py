@@ -1,10 +1,15 @@
 from ftw.testbrowser import browsing
 from opengever.base.model import create_session
+from opengever.contact.tests import create_contacts
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 
 
 class TestTeamListing(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestTeamListing, self).setUp()
+        create_contacts(self)
 
     @browsing
     def test_team_listing(self, browser):

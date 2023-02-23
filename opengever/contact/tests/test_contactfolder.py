@@ -12,6 +12,7 @@ class TestContactFolder(IntegrationTestCase):
 
     def setUp(self):
         super(TestContactFolder, self).setUp()
+        create_contacts(self)
         add_languages(['de-ch', 'fr-ch'])
 
     def test_provides_marker_interface(self):
