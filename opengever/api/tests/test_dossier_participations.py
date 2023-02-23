@@ -701,22 +701,19 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
 
         expected_json = {u'@id': url,
                          u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
-                                     u'token': u'franzi.muller'},
-                                    {u'title': u'Meier Franz (meier.f@example.com)',
-                                     u'token': u'contact:meier-franz'}],
-                         u'items_total': 2}
+                                     u'token': u'franzi.muller'}],
+                         u'items_total': 1}
 
         self.assertEqual(expected_json, browser.json)
 
         handler = IParticipationAware(self.dossier)
-        handler.add_participation('contact:meier-franz', ['regard'])
+        handler.add_participation('franzi.muller', ['regard'])
 
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': url,
-                         u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
-                                     u'token': u'franzi.muller'}],
-                         u'items_total': 1}
+                         u'items': [],
+                         u'items_total': 0}
 
         self.assertEqual(expected_json, browser.json)
 
@@ -728,7 +725,7 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(24, browser.json.get('items_total'))
+        self.assertEqual(22, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
 
 

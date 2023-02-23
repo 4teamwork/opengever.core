@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.indexes import changed_indexer
+from opengever.contact.tests import create_contacts
 from opengever.disposition.interfaces import IAppraisal
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.dossier.behaviors.dossier import IDossier
@@ -329,6 +330,8 @@ class TestChangedUpdateForContact(TestChangedUpdateBase):
 
     @browsing
     def test_changed_is_updated_when_metadata_is_changed(self, browser):
+        create_contacts(self)
+        self.commit_solr()
         self.login(self.administrator, browser)
         with freeze(FREEZING_TIME):
             browser.open(self.franz_meier, view='edit')

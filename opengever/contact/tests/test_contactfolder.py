@@ -1,6 +1,7 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from opengever.contact.interfaces import IContactFolder
+from opengever.contact.tests import create_contacts
 from opengever.testing import add_languages
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
@@ -43,6 +44,11 @@ class TestContactFolder(IntegrationTestCase):
 
 
 class TestLocalContactListing(SolrIntegrationTestCase):
+
+    def setUp(self):
+        super(TestLocalContactListing, self).setUp()
+        create_contacts(self)
+        self.commit_solr()
 
     @browsing
     def test_list_active_contacts(self, browser):

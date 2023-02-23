@@ -1,10 +1,16 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.contact.tests import create_contacts
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 
 
 class TestContact(SolrIntegrationTestCase):
+
+    def setUp(self):
+        super(TestContact, self).setUp()
+        create_contacts(self)
+        self.commit_solr()
 
     @browsing
     def test_can_add_a_contact(self, browser):
