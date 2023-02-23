@@ -93,26 +93,22 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIsInstance(actor, TeamActor)
         self.assertEqual(u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                          actor.get_label())
-        self.assertEqual('None/team-1/view',
+        self.assertEqual(None,
                          actor.get_profile_url())
-
         self.assertEqual(
-            u'<a href="None/team-1/view" '
-            u'class="actor-label actor-team">Projekt \xdcberbaung Dorfmatte '
-            u'(Finanz\xe4mt)</a>',
+            u'<span class="actor-label actor-team">'
+            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</span>',
             actor.get_link(with_icon=True))
 
         self.assertEqual(
-            u'<a href="None/team-1/view">'
-            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
+            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
             actor.get_link())
 
     def test_team_profile_url_for_foreign_user(self):
         self.login(self.foreign_contributor)
         actor = Actor.lookup('team:1')
         self.assertEqual(
-            u'<a href="None/team-1/view">'
-            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)</a>',
+            u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
             actor.get_link())
 
     def test_user_actor_ogds_user(self):
