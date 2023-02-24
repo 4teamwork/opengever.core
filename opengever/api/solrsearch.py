@@ -16,6 +16,7 @@ from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
+import re
 
 
 BLACKLISTED_ATTRIBUTES = set([
@@ -71,6 +72,10 @@ class SolrSearchGet(SolrQueryBaseService):
             del params['q.raw']
         else:
             query = '*'
+        return self.preprocess_query(query)
+
+    @staticmethod
+    def preprocess_query(query):
         return query
 
     def extract_filters(self, params):
@@ -307,6 +312,24 @@ class SolrSearchGet(SolrQueryBaseService):
                 obj, self.request).get_serialized_breadcrumbs()
 
         return data
+
+
+class SolrLiveSearchGet(SolrSearchGet):
+    """REST API endpoint for querying Solr
+    """
+
+    @staticmethod
+    def preprocess_query(query):
+        preprocessed_query = []
+        words = filter(None, re.split(r'; |, |\. |@|\s', query))
+        for word in words:
+            prefix = ""
+            if word.startswith("-"):
+                prefix = "-"
+                word = word.lstrip("-")
+            preprocessed_query.extend(["{}{}*".format(prefix, token.rstrip("*"))
+                                       for token in word.split("-")])
+        return " ".join(preprocessed_query)
 
 
 class TeamraumSolrSearchGet(Service):

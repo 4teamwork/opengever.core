@@ -1308,3 +1308,193 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23'
             ],
             [item['@id'] for item in browser.json['items']])
+
+
+class TestSolrLiveSearchGet(SolrIntegrationTestCase):
+
+    features = ('solr', )
+
+    def solr_search(self, browser, query):
+        url = u'{}/@solrsearch?{}'.format(self.portal.absolute_url(), query)
+        browser.open(url, method='GET', headers=self.api_headers)
+        return browser.json
+
+    def solr_livesearch(self, browser, query):
+        url = u'{}/@solrlivesearch?{}'.format(self.portal.absolute_url(), query)
+        browser.open(url, method='GET', headers=self.api_headers)
+        return browser.json
+
+    @browsing
+    def test_livesearch_adds_wildcard(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = "q=Title:an"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'An empty dossier'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(5, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'An empty dossier',
+             u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau',
+             u'Anfragen'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = "q=Title:antrag"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_adds_wildcard_to_each_term(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = "q=Title:an kr"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_adds_wildcard_ignores_capitalization(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = "q=Title:aNtrAg KreiS"
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_preserves_negative_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = "q=Title:an -kr"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'An empty dossier'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'An empty dossier',
+             u'Anfragen'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_splits_hyphenated_terms(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title="Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title="Taktische-Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = "q=Title:taktische-ba"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = "q=Title:taktische-banane"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = "q=Title:taktische-banane*"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+
+    @browsing
+    def test_stemming_does_not_work_in_live_search_but_it_does_not_matter(self, browser):
+        """As stemming happened during indexing, and as we keep also the whole
+        token, it does not matter that stemming does not happen during query.
+        """
+        self.login(self.regular_user, browser=browser)
+
+        query = "q=Title:runde"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = "q=Title:vorstellungsrunde"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = "q=Title:arbeit"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(4, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Arbeitsplatz einrichten.'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(4, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Arbeitsplatz einrichten.'],
+            [item["title"] for item in livesearch["items"]])
+
