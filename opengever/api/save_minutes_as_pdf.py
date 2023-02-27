@@ -39,7 +39,7 @@ class SaveMinutesAsPDFPost(Service):
             u'label_workspace_meeting_minutes',
             default=u'Minutes for ${meeting_title}',
             mapping={'meeting_title': meeting.title}
-        ))
+        ), context=self.request)
 
         filename = "minutes.pdf"
         command = CreateDocumentCommand(self.context, filename, minutes_data,
