@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.3.1 (2023-02-28)
+---------------------
+
+Bug fixes:
+
+
+- Fix @tasktree for users lacking view permission on main task. [njohner]
+
+
 2023.3.0 (2023-02-22)
 ---------------------
 
