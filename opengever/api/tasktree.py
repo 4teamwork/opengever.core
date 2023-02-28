@@ -114,6 +114,8 @@ class TaskTree(object):
         path = '/'.join(main_task.getPhysicalPath())
         resp = self.solr.search(filters=make_path_filter(path, 0))
 
+        if not resp.docs:
+            return []
         docs = []
         if resp.docs:
             self.recursive_query(resp.docs[0], docs)
