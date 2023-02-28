@@ -1,4 +1,6 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.testing import SolrIntegrationTestCase
@@ -280,4 +282,44 @@ class TestTaskTree(SolrIntegrationTestCase):
                     u'title': u'Vertragsentwurf \xdcberpr\xfcfen'
                 }
             ]
+        )
+
+    @browsing
+    def test_get_tasktree_with_no_permissions_on_main_task_returns_empty_dict(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        subtask = create(
+            Builder('task')
+            .within(self.task_in_protected_dossier)
+            .titled(u'Unteraufgabe')
+            .having(
+                responsible_client='fa',
+                responsible=self.dossier_manager.getId(),
+                issuer=self.dossier_responsible.getId(),
+                task_type='correction'
+            )
+            .in_state('task-state-in-progress')
+        )
+
+        browser.open(
+            subtask, view="@tasktree", method="GET", headers=self.api_headers)
+
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17/task-14/task-15/@tasktree',
+             u'children': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17/task-14',
+                            u'@type': u'opengever.task.task',
+                            u'children': [],
+                            u'is_task_addable': False,
+                            u'is_task_addable_before': False,
+                            u'review_state': u'task-state-in-progress',
+                            u'title': u'Ein notwendiges \xdcbel'}]},
+            browser.json
+        )
+
+        self.login(self.dossier_manager, browser=browser)
+        browser.open(
+            subtask, view="@tasktree", method="GET", headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17/task-14/task-15/@tasktree',
+             u'children': []},
+            browser.json
         )
