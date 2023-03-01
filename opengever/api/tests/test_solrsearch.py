@@ -1064,6 +1064,48 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             ],
             [item['@id'] for item in browser.json['items']])
 
+    @browsing
+    def test_search_default_operator_is_and_for_fewer_than_4_terms(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane"
+        self.document.reindexObject(idxs=["Title", "modified"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title", "modified"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title", "modified"])
+        self.empty_document.title = "Banane und Apfel Strudel"
+        self.empty_document.reindexObject(idxs=["Title", "modified"])
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?q=banane'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(4, browser.json["items_total"])
+        self.assertItemsEqual(
+            [item.absolute_url() for item in (self.subdocument, self.document,
+                                              self.subsubdocument, self.empty_document)],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(2, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.subdocument.absolute_url(), self.subsubdocument.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch apfel'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(1, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.subsubdocument.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch apfel strudel'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(2, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.subsubdocument.absolute_url(), self.empty_document.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not

@@ -783,6 +783,7 @@
       <!-- Do not allow querying allowedRolesAndUsers or embedded queries -->
       <str name="uf">* -allowedRolesAndUsers -_query_</str>
       <bool name="lowercaseOperators">true</bool>
+      <str name="mm">3&lt;75%</str>
     </lst>
     <!-- If the default list of SearchComponents is not desired, that
          list can either be overridden completely, or components can be
