@@ -784,6 +784,7 @@
       <str name="uf">* -allowedRolesAndUsers -_query_</str>
       <bool name="lowercaseOperators">true</bool>
       <str name="mm">3&lt;75%</str>
+      <str name="bq">{!func}recip(ms(NOW,changed),3.858e-10,10,1)</str>
     </lst>
     <!-- If the default list of SearchComponents is not desired, that
          list can either be overridden completely, or components can be

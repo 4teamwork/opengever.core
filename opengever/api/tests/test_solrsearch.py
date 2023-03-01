@@ -1,7 +1,11 @@
+from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.api.solrsearch import SolrSearchGet
+from opengever.base.handlers import update_changed_date
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
@@ -1106,6 +1110,47 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         self.assertItemsEqual(
             [self.subsubdocument.absolute_url(), self.empty_document.absolute_url()],
             [item["@id"] for item in browser.json[u'items']])
+
+    @browsing
+    def test_search_sorts_recently_modified_docs_first(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with freeze(datetime.today() - timedelta(300)):
+            self.document.title = "Banane"
+            update_changed_date(self.document, None)
+            self.document.reindexObject(idxs=["Title"])
+
+        with freeze(datetime.today()-timedelta(1)):
+            self.subdocument.title = "Banane"
+            update_changed_date(self.subdocument, None)
+            self.subdocument.reindexObject(idxs=["Title"])
+
+        with freeze(datetime.today() - timedelta(50)):
+            self.subsubdocument.title = "Banane"
+            update_changed_date(self.subsubdocument, None)
+            self.subsubdocument.reindexObject(idxs=["Title"])
+
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?q=Title:banane'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(3, browser.json["items_total"])
+        self.assertEqual(
+            [item.absolute_url() for item in
+             (self.subdocument, self.subsubdocument, self.document)],
+            [item["@id"] for item in browser.json[u'items']])
+
+        with freeze(datetime.today()):
+            update_changed_date(self.document, None)
+
+        self.commit_solr()
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            [item.absolute_url() for item in
+             (self.document, self.subdocument, self.subsubdocument)],
+            [item["@id"] for item in browser.json[u'items']])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
