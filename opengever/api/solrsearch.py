@@ -331,6 +331,11 @@ class SolrLiveSearchGet(SolrSearchGet):
                                        for token in word.split("-")])
         return " ".join(preprocessed_query)
 
+    def reply(self):
+        if self.request_payload.get("only_preprocess_query"):
+            return {"preprocessed_query": self.extract_query(self.request_payload)}
+        return super(SolrLiveSearchGet, self).reply()
+
 
 class TeamraumSolrSearchGet(Service):
 

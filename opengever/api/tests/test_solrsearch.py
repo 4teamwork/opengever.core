@@ -1498,3 +1498,11 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
              u'Arbeitsplatz einrichten.'],
             [item["title"] for item in livesearch["items"]])
 
+    @browsing
+    def test_only_preprocess_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query="only_preprocess_query=true&q=some word-with-hyhpen"
+        self.solr_livesearch(browser, query)
+        self.assertEqual(
+            {u'preprocessed_query': u'some* word* with* hyhpen*'},
+            browser.json)
