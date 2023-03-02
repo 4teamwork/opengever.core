@@ -1436,6 +1436,8 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Taktische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
+        # Note that adding a wildcard to normal search does not lead to the
+        # expected behavior for the customer
         query = "q=Title:taktische-banane*"
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
