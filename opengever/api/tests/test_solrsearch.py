@@ -1499,6 +1499,54 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch["items"]])
 
     @browsing
+    def test_querying_sequence_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query = "q=14&fl=sequence_number"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        # the one with sequence number 20 has reference Client1 1.1 / 14
+        self.assertEqual(4, livesearch["items_total"])
+        self.assertItemsEqual(
+            [14, 14, 14, 20],
+            [item["sequence_number"] for item in livesearch["items"]])
+        self.assertEqual(4, search["items_total"])
+        self.assertItemsEqual(
+            [14, 14, 14, 20],
+            [item["sequence_number"] for item in search["items"]])
+
+    @browsing
+    def test_querying_reference_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query = "q=Client1 1.1 / 14&fl=@id,reference_number"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        # For some reason the /* that appears in the preprocessed query
+        # leads to finding all kind of stuff
+        self.assertEqual(36, livesearch["items_total"])
+        self.assertItemsEqual(
+            u'Client1 1.1 / 14', livesearch["items"][0]["reference_number"])
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in search["items"]])
+
+        # without the / it works as expected. We could clean that up in
+        # the preprocessing of the query
+        query = "q=Client1 1.1 14&fl=@id,reference_number"
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in search["items"]])
+
+    @browsing
     def test_only_preprocess_query(self, browser):
         self.login(self.regular_user, browser=browser)
         query="only_preprocess_query=true&q=some word-with-hyhpen"
