@@ -1,3 +1,4 @@
+from datetime import timedelta
 from opengever.base.exceptions import IncorrectConfigurationError
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
@@ -325,3 +326,13 @@ def unrestrictedUuidToCatalogBrain(uuid):
         return None
 
     return result[0]
+
+
+def get_date_with_delta_excluding_weekends(start_date, days_delta):
+    calculated_delta = 0
+    end_date = start_date
+    while calculated_delta < days_delta:
+        end_date = end_date + timedelta(days=1)
+        if end_date.weekday() not in [5, 6]:
+            calculated_delta += 1
+    return end_date
