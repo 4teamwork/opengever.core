@@ -334,8 +334,11 @@ class OGDSUpdater(object):
                     in ldap_group_members[groupid]
                 ]
 
-                for userid in ldap_group_members[groupid]:
-                    logger.info('Added user %s into group %s.', userid, groupid)
+                for userid in diff:
+                    if userid in ogds_group_members.get(groupid, set()):
+                        logger.info('Removed user %s from group %s.', userid, groupid)
+                    else:
+                        logger.info('Added user %s into group %s.', userid, groupid)
                 modified_count += 1
 
         for deleted in deleted_mappings:
