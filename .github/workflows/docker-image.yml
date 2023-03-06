@@ -57,8 +57,8 @@ jobs:
           push: true
           tags: ${{ steps.meta_ogcore.outputs.tags }}
           labels: ${{ steps.meta_ogcore.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=ogcore
+          cache-to: type=gha,mode=max,scope=ogcore
 
       - name: Extract metadata from Git reference for ogtestserver
         id: meta_ogtestserver
@@ -78,5 +78,5 @@ jobs:
           push: true
           tags: ${{ steps.meta_ogtestserver.outputs.tags }}
           labels: ${{ steps.meta_ogtestserver.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=ogtestserver
+          cache-to: type=gha,mode=max,scope=ogtestserver
