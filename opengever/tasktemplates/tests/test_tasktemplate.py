@@ -20,7 +20,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task type': 'comment',
-             'Deadline in Days': u'10'})
+             'Deadline in workdays': u'10'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(self.dossier_responsible)
@@ -95,7 +95,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task type': 'comment',
-             'Deadline in Days': u'10'})
+             'Deadline in workdays': u'10'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill('team:1')
@@ -120,7 +120,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task type': 'comment',
-             'Deadline in Days': u'10'})
+             'Deadline in workdays': u'10'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
@@ -203,7 +203,7 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         browser.fill(
             {'Title': 'Arbeitsplatz einrichten.',
              'Task type': 'comment',
-             'Deadline in Days': u'10'})
+             'Deadline in workdays': u'10'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Issuer').fill(INTERACTIVE_ACTOR_RESPONSIBLE_ID)
@@ -223,17 +223,18 @@ class TestTaskTemplates(SolrIntegrationTestCase):
         # Get the cells in the column "deadline".
         cells = [row.css('td').first
                  for row in browser.css('.task-listing tr')
-                 if len(row.css('th')) and row.css('th').first.text == 'Deadline in Days']
+                 if len(row.css('th')) and row.css('th').first.text == 'Deadline in workdays']
 
         self.assertEquals(
             ["10"],
             [cell.text for cell in cells]
         )
 
-    def test_get_absolute_deadline_returns_the_resolved_deadline(self):
+    def test_get_absolute_deadline_returns_the_resolved_deadline_excluding_weekends(self):
         self.login(self.administrator)
 
         self.tasktemplate.deadline = 5
 
-        with freeze(datetime(2021, 12, 10)):
-            self.assertEqual(date(2021, 12, 15), self.tasktemplate.get_absolute_deadline())
+        # Freeze on monday
+        with freeze(datetime(2023, 3, 6, 0, 0)):
+            self.assertEqual(date(2023, 3, 13), self.tasktemplate.get_absolute_deadline())

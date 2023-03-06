@@ -1,6 +1,6 @@
 from datetime import date
-from datetime import timedelta
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.task import util
 from opengever.task.util import update_reponsible_field_data
@@ -79,7 +79,7 @@ class ITaskTemplate(model.Schema):
     )
 
     deadline = schema.Int(
-        title=_(u"label_deadline", default=u"Deadline in Days"),
+        title=_(u"label_deadline", default=u"Deadline in workdays"),
         description=_('help_deadline', default=u""),
         required=True,
     )
@@ -104,7 +104,7 @@ class TaskTemplate(Item):
     implements(ITaskTemplate)
 
     def get_absolute_deadline(self):
-        return date.today() + timedelta(days=self.deadline)
+        return get_date_with_delta_excluding_weekends(date.today(), self.deadline)
 
 
 default_responsible_client = widget.ComputedWidgetAttribute(

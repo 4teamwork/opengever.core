@@ -10,6 +10,7 @@ from ftw.testing import freeze
 from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.core.testing import toggle_feature
 from opengever.document.docprops import TemporaryDocFile
 from opengever.dossier.behaviors.dossier import IDossier
@@ -1080,7 +1081,8 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
 
             main_task = children['added'].pop()
             self.assertEqual(
-                date.today() + timedelta(days=10 + 5), main_task.deadline)
+                get_date_with_delta_excluding_weekends(date.today() + timedelta(days=10), 5),
+                main_task.deadline)
 
     @browsing
     def test_create_parallel_tasks(self, browser):

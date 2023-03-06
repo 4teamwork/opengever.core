@@ -99,7 +99,7 @@ msgstr ""
 msgid "help_title"
 msgstr ""
 
-#. Default: "Deadline in Days"
+#. Default: "Deadline in workdays"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_deadline"

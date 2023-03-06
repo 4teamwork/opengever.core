@@ -68,10 +68,10 @@ msgstr "Nested TaskTemplateFolders are only supported in the new UI."
 msgid "fieldset_common"
 msgstr "Common"
 
-#. German translation: Frist in Tagen ab Startdatum der Aufgabe.
+#. German translation: Frist in Arbeitstagen ab Startdatum der Aufgabe.
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_deadline"
-msgstr "Deadline in days after the task's start date."
+msgstr "Deadline in workdays after the task's start date."
 
 #. German translation: Wählen Sie einen Auftraggeber aus. Sie können auch die interaktiven Benutzer \"Federführender\" oder \"Sachbearbeiter\" auswählen.
 #: ./opengever/tasktemplates/content/tasktemplate.py
@@ -114,12 +114,12 @@ msgstr "Enter detailed instructions or a comment describing the work"
 msgid "help_title"
 msgstr "The task's title"
 
-#. German translation: Frist in Tagen
-#. Default: "Deadline in Days"
+#. German translation: Frist in Arbeitstagen
+#. Default: "Deadline in workdays"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_deadline"
-msgstr "Deadline in Days"
+msgstr "Deadline in workdays"
 
 #. German translation: Auftraggeber
 #. Default: "Issuer"
