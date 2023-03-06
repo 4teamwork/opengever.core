@@ -1626,13 +1626,13 @@ class TestTaskTemplateStructure(IntegrationTestCase):
 
         self.tasktemplate.deadline = 5
 
-        with freeze(datetime(2021, 12, 10)):
+        with freeze(datetime(2021, 12, 10)):  # Friday
             browser.open(
                 '{}/@task-template-structure'.format(
                     self.tasktemplatefolder.absolute_url()),
                 headers=self.api_headers)
 
-        self.assertEqual(u'2021-12-15', browser.json.get('items')[0].get('deadline'))
+        self.assertEqual(u'2021-12-17', browser.json.get('items')[0].get('deadline'))
 
     @browsing
     def test_include_static_is_private_attribute_for_tasktemplates(self, browser):

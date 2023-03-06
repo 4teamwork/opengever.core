@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
@@ -186,14 +187,14 @@ class ProcessDataPreprocessor(object):
                 longest_deadline = max(longest_deadline, deadline)
 
             if data.get("deadline") is None:
-                data["deadline"] = longest_deadline + self.default_deadline_timedelta
+                data["deadline"] = get_date_with_delta_excluding_weekends(
+                    longest_deadline, self.default_deadline_timedelta)
         return data["deadline"]
 
     @property
     def default_deadline_timedelta(self):
-        deadline_timedelta = api.portal.get_registry_record(
+        return api.portal.get_registry_record(
             'deadline_timedelta', interface=ITaskSettings)
-        return timedelta(deadline_timedelta)
 
     def replace_interactive_actors(self, data):
         if ActorLookup(data.get('issuer')).is_interactive_actor():
