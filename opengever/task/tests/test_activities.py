@@ -448,7 +448,7 @@ class TestTaskActivites(FunctionalTestCase):
         rows = browser.css('table').first.rows
         self.assertEquals(
             [['Task title', u'Unteraufgabe Abkl\xe4rung Fall Meier'],
-             ['Deadline', 'Mar 07, 2015'],
+             ['Deadline', 'Mar 09, 2015'],
              ['Task type', 'To comment'],
              ['Dossier title', 'Dossier XY'],
              ['Main task', u'Abkl\xe4rung Fall Meier'],

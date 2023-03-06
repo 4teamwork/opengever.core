@@ -57,7 +57,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                                    issuer=self.user.userid,
                                    title="task 2"))
 
-        expected_deadline = datetime(2016, 4, 17, 0, 0)
+        expected_deadline = datetime(2016, 4, 19, 0, 0)
 
         with freeze(datetime(2016, 10, 12, 13, 20)):
             api.content.transition(task1, to_state='task-state-resolved')

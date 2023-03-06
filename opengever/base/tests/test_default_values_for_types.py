@@ -1,6 +1,5 @@
 from copy import deepcopy
 from datetime import date
-from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.bumblebee.interfaces import IBumblebeeDocument
@@ -12,6 +11,7 @@ from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.base.oguid import Oguid
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.contact.tests import create_contacts
 from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.private.tests import create_members_folder
@@ -216,7 +216,7 @@ TASK_REQUIREDS = {
     'title': DEFAULT_TITLE,
 }
 TASK_DEFAULTS = {
-    'deadline': FROZEN_TODAY + timedelta(days=5),
+    'deadline': get_date_with_delta_excluding_weekends(FROZEN_TODAY, 5),
     'relatedItems': [],
     'informed_principals': [],
     'is_private': False,
