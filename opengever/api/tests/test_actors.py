@@ -9,6 +9,7 @@ from opengever.base.interfaces import AVATAR_SOURCE_PLONE_ONLY
 from opengever.base.interfaces import AVATAR_SOURCE_PORTAL_ONLY
 from opengever.base.interfaces import IActorSettings
 from opengever.base.model import create_session
+from opengever.contact.tests import create_contacts
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -137,6 +138,7 @@ class TestActorsGet(IntegrationTestCase):
 
     @browsing
     def test_actors_response_for_contact(self, browser):
+        create_contacts(self)
         self.login(self.regular_user, browser=browser)
 
         actor_id = 'contact:{}'.format(self.franz_meier.id)
@@ -164,6 +166,7 @@ class TestActorsGet(IntegrationTestCase):
 
     @browsing
     def test_full_representation_for_contact(self, browser):
+        create_contacts(self)
         self.login(self.regular_user, browser=browser)
 
         actor_id = 'contact:{}'.format(self.franz_meier.id)

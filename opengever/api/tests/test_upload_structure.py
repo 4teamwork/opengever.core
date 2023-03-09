@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.upload_structure import IUploadStructureAnalyser
+from opengever.contact.tests import create_contacts
 from opengever.testing import SolrIntegrationTestCase
 import json
 
@@ -361,6 +362,8 @@ class TestUploadStructure(SolrIntegrationTestCase):
 
     @browsing
     def test_upload_structure_in_contact_folder(self, browser):
+        create_contacts(self)
+        self.commit_solr()
         self.login(self.manager, browser)
 
         # dossier cannot be added in contact folder

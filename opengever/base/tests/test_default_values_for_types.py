@@ -12,6 +12,7 @@ from hashlib import sha256
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.default_values import get_persisted_values_for_obj
 from opengever.base.oguid import Oguid
+from opengever.contact.tests import create_contacts
 from opengever.inbox import FORWARDING_TASK_TYPE_ID
 from opengever.private.tests import create_members_folder
 from opengever.testing import IntegrationTestCase
@@ -1410,6 +1411,10 @@ class TestContactDefaults(TestDefaultsBase):
     type_defaults = CONTACT_DEFAULTS
     form_defaults = CONTACT_FORM_DEFAULTS
     missing_values = CONTACT_MISSING_VALUES
+
+    def setUp(self):
+        super(TestContactDefaults, self).setUp()
+        create_contacts(self)
 
     def get_obj_of_own_type(self):
         return self.franz_meier

@@ -332,8 +332,10 @@ class TeamActor(Actor):
         self.team = team
 
     def get_profile_url(self):
-        return '{}/team-{}/view'.format(
-            get_contactfolder_url(unrestricted=True), self.team.team_id)
+        contact_folder_url = get_contactfolder_url(unrestricted=True)
+        if contact_folder_url is None:
+            return None
+        return '{}/team-{}/view'.format(contact_folder_url, self.team.team_id)
 
     def corresponds_to(self, user):
         return user in self.team.group.users

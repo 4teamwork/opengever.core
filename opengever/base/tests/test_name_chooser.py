@@ -1,3 +1,4 @@
+from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.content.interfaces import INameFromTitle
@@ -96,6 +97,7 @@ class TestNameFromTitleBehavior(IntegrationTestCase):
             'There is a new type with the name chooser behavior.')
 
     def test_name_from_title_behavior_is_implemented_for_all_expected_types(self):
+        create_contacts(self)
         self.login(self.manager)
         for portal_type in EXPECTED_TYPES_WITH_NAME_FROM_TITLE:
             obj = getattr(self, type_to_obj[portal_type])
