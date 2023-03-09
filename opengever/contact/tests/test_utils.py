@@ -12,6 +12,5 @@ class TestContactFolderUrl(FunctionalTestCase):
         self.assertEquals(contactfolder.absolute_url(),
                           get_contactfolder_url())
 
-    def test_raises_exception_when_no_contactfolder_exists(self):
-        with self.assertRaises(Exception):
-            get_contactfolder_url()
+    def test_none_when_no_contactfolder_exists(self):
+        self.assertIsNone(get_contactfolder_url())

@@ -1,10 +1,15 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.contact.tests import create_contacts
 from opengever.ogds.models.team import Team
 from opengever.testing import IntegrationTestCase
 
 
 class TestTeamAddForm(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestTeamAddForm, self).setUp()
+        create_contacts(self)
 
     @browsing
     def test_add_new_team_form_is_only_available_for_administrators_and_managers(self, browser):
@@ -38,6 +43,10 @@ class TestTeamAddForm(IntegrationTestCase):
 
 
 class TestTeamEditForm(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestTeamEditForm, self).setUp()
+        create_contacts(self)
 
     @browsing
     def test_editing_a_team(self, browser):
@@ -76,6 +85,10 @@ class TestTeamEditForm(IntegrationTestCase):
 
 
 class TestTeamEditAction(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestTeamEditAction, self).setUp()
+        create_contacts(self)
 
     @browsing
     def test_edit_link_is_visible_for_administrators(self, browser):

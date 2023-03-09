@@ -19,7 +19,6 @@ def get_contactfolder_url(unrestricted=False):
         result = catalog(object_provides=IContactFolder.__identifier__)
 
     if not result:
-        raise Exception('Contactfolder is missing, GEVER deployment was not '
-                        'correctly set up.')
+        return
 
     return result[0].getURL()

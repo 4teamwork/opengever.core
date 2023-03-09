@@ -8,10 +8,8 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
-from opengever.base.sentry import log_msg_to_sentry
 from opengever.base.utils import is_administrator
 from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
-from opengever.contact.utils import get_contactfolder_url
 from opengever.document import is_documentish_portal_type
 from opengever.document.approvals import Approval
 from opengever.document.behaviors import IBaseDocument
@@ -527,22 +525,6 @@ class SerializeSQLModelToJsonSummaryBase(object):
     @property
     def base_url(self):
         return self.request.URL.rsplit("/@")[0]
-
-
-class SerializeContactModelToJsonSummaryBase(SerializeSQLModelToJsonSummaryBase):
-
-    @property
-    def get_url(self):
-        try:
-            base_url = get_contactfolder_url()
-        except Exception as e:
-            log_msg_to_sentry(e.message, request=self.request)
-            return None
-        return '{}/{}/{}'.format(
-            base_url,
-            self.endpoint_name,
-            getattr(self.context, self.id_attribute_name)
-        )
 
 
 @implementer(ISerializeToJsonSummary)

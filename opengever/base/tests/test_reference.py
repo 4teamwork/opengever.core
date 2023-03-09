@@ -1,6 +1,7 @@
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
+from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 from plone import api
 from zope.component import queryAdapter
@@ -82,12 +83,14 @@ class TestLocalReferenceNumber(IntegrationTestCase):
             u'eingangskorb_fa', IReferenceNumber(self.inbox).get_local_number())
 
     def test_contactfolder_returns_empty_string(self):
+        create_contacts(self)
         self.login(self.secretariat_user)
 
         self.assertEquals(
             u'', IReferenceNumber(self.contactfolder).get_local_number())
 
     def test_contact_returns_empty_string(self):
+        create_contacts(self)
         self.login(self.regular_user)
 
         self.assertEquals(
@@ -286,12 +289,14 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
                           IReferenceNumber(self.inbox).get_number())
 
     def test_reference_number_for_contactfolder(self):
+        create_contacts(self)
         self.login(self.secretariat_user)
 
         self.assertEquals(u'Client1',
                           IReferenceNumber(self.contactfolder).get_number())
 
     def test_reference_number_for_contact(self):
+        create_contacts(self)
         self.login(self.regular_user)
 
         self.assertEquals(u'Client1',

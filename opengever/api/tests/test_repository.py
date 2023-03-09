@@ -79,12 +79,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 u'description': u'',
                 u'title': u'Plone site',
             },
-            u"previous_item": {
-                u"@id": u"http://nohost/plone/kontakte",
-                u"@type": u"opengever.contact.contactfolder",
-                u"description": u"",
-                u"title": u"Contacts"
-            },
+            u"previous_item": {},
             u'reference_number_addendum': None,
             u'relative_path': u'ordnungssystem',
             u'review_state': u'repositoryroot-state-active',

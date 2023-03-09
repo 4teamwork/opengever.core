@@ -13,6 +13,7 @@ from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TY
 from opengever.base.behaviors.translated_title import TranslatedTitle
 from opengever.base.brain import supports_translated_title
 from opengever.base.solr import OGSolrDocument
+from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
 from opengever.testing import set_preferred_language
@@ -196,6 +197,7 @@ class TestTranslatedTitleFieldsInEditForms(IntegrationTestCase, TranslatedTitleT
     @browsing
     def test_contact_folder_edit_form_only_shows_translated_title_fields_for_active_languages(
             self, browser):
+        create_contacts(self)
         self.login(self.manager, browser=browser)
         self.assert_edit_form_shows_translated_title_fields_only_for_active_languages(
             browser, self.contactfolder)

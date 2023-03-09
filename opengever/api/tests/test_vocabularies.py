@@ -1,8 +1,8 @@
 from collective.elephantvocabulary.interfaces import IElephantVocabulary
 from ftw.testbrowser import browsing
 from opengever.api.schema.sources import get_field_by_name
-from opengever.base.behaviors.classification import IClassification
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
@@ -415,8 +415,9 @@ class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
     def test_get_task_issuer_escaping_for_solr(self, browser):
         self.login(self.secretariat_user, browser)
 
-        self.franz_meier.firstname = 'Super:franz'
-        self.franz_meier.reindexObject()
+        user = User.get("kathi.barfuss")
+        user.firstname = 'Super:franz'
+
         self.commit_solr()
 
         url = self.query_source_url(self.task, 'issuer', query=u'Super:fr')

@@ -114,7 +114,6 @@ class OpengeverContentFixture(object):
 
         with self.freeze_at_hour(6):
             self.create_teams()
-            self.create_contacts()
 
         self.create_property_sheets()
 
@@ -626,52 +625,6 @@ class OpengeverContentFixture(object):
             )
             .in_state('repositoryfolder-state-inactive')
         ))
-
-    @staticuid()
-    def create_contacts(self):
-        self.contactfolder = self.register('contactfolder', create(
-            Builder('contactfolder')
-            .having(
-                id='kontakte',
-                title_de=u'Kontakte',
-                title_en=u'Contacts',
-                title_fr=u'Contacts',
-            )
-        ))
-
-        self.set_roles(
-            self.contactfolder, self.org_unit_fa.users_group_id,
-            ['Reader'])
-
-        self.set_roles(
-            self.contactfolder, self.org_unit_fa.users_group_id,
-            ['Reader', 'Contributor', 'Editor'])
-
-        self.contactfolder.reindexObjectSecurity()
-
-        self.hanspeter_duerr = self.register('hanspeter_duerr', create(
-            Builder('contact')
-            .within(self.contactfolder)
-            .having(
-                firstname=u'Hanspeter',
-                lastname='D\xc3\xbcrr'.decode('utf-8'),
-            )
-        ))
-
-        self.franz_meier = self.register('franz_meier', create(
-            Builder('contact')
-            .within(self.contactfolder)
-            .having(
-                firstname=u'Franz',
-                lastname=u'Meier',
-                email=u'meier.f@example.com',
-            )
-        ))
-
-        create(Builder('dummy_clock_tick'))
-        create(Builder('dummy_clock_tick'))
-
-        create_session().flush()
 
     @staticuid()
     def create_templates(self):

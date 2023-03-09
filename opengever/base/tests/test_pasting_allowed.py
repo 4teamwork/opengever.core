@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 
 
@@ -6,6 +7,7 @@ class TestPastingAllowed(IntegrationTestCase):
 
     @browsing
     def test_paste_action_not_displayed_for_contactfolder(self, browser):
+        create_contacts(self)
         self.login(self.regular_user, browser)
         paths = ['/'.join(self.hanspeter_duerr.getPhysicalPath())]
         browser.open(self.contactfolder, data={'paths:list': paths}, view='copy_items')

@@ -651,9 +651,6 @@ Objects
     - self.committee_president
     - self.empty_committee
     - self.inactive_committee_participant
-  - self.contactfolder
-    - self.franz_meier
-    - self.hanspeter_duerr
   - self.inbox_container
     - self.inbox
       - self.inbox_document

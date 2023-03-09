@@ -1,4 +1,5 @@
 from ftw.testbrowser import browsing
+from opengever.contact.tests import create_contacts
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.interfaces import IDossierParticipants
 from opengever.dossier.participations import IParticipationData
@@ -226,13 +227,7 @@ class TestParticipationsGetWithKubFeatureEnabled(KuBIntegrationTestCase):
                          for item in browser.json['items']])
 
 
-class TestParticipationsPost(IntegrationTestCase):
-
-    def setUp(self):
-        super(TestParticipationsPost, self).setUp()
-        self.valid_participant_id = self.regular_user.getId()
-        with self.login(self.regular_user):
-            self.valid_participant_id2 = 'contact:{}'.format(self.franz_meier.getId())
+class ParticipationsPostTestMixin():
 
     @browsing
     def test_post_participation(self, browser):
@@ -374,8 +369,18 @@ class TestParticipationsPost(IntegrationTestCase):
                           "type": "Unauthorized"}, browser.json)
 
 
+class TestParticipationsPost(IntegrationTestCase, ParticipationsPostTestMixin):
+
+    def setUp(self):
+        super(TestParticipationsPost, self).setUp()
+        create_contacts(self)
+        self.valid_participant_id = self.regular_user.getId()
+        with self.login(self.regular_user):
+            self.valid_participant_id2 = 'contact:{}'.format(self.franz_meier.getId())
+
+
 @requests_mock.Mocker()
-class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, TestParticipationsPost):
+class TestParticipationsPostWithKubFeatureEnabled(KuBIntegrationTestCase, ParticipationsPostTestMixin):
 
     def setUp(self):
         super(TestParticipationsPostWithKubFeatureEnabled, self).setUp()
@@ -701,22 +706,19 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
 
         expected_json = {u'@id': url,
                          u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
-                                     u'token': u'franzi.muller'},
-                                    {u'title': u'Meier Franz (meier.f@example.com)',
-                                     u'token': u'contact:meier-franz'}],
-                         u'items_total': 2}
+                                     u'token': u'franzi.muller'}],
+                         u'items_total': 1}
 
         self.assertEqual(expected_json, browser.json)
 
         handler = IParticipationAware(self.dossier)
-        handler.add_participation('contact:meier-franz', ['regard'])
+        handler.add_participation('franzi.muller', ['regard'])
 
         browser.open(url, method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': url,
-                         u'items': [{u'title': u'M\xfcller Fr\xe4nzi (franzi.muller)',
-                                     u'token': u'franzi.muller'}],
-                         u'items_total': 1}
+                         u'items': [],
+                         u'items_total': 0}
 
         self.assertEqual(expected_json, browser.json)
 
@@ -728,7 +730,7 @@ class TestPossibleParticipantsGet(SolrIntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(24, browser.json.get('items_total'))
+        self.assertEqual(22, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
 
 
