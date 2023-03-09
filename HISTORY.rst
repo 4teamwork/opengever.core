@@ -10,6 +10,17 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.4.0 (2023-03-09)
+---------------------
+
+Bug fixes:
+
+
+- Fix translating the title for pdfs created by the @save-minutes-as-pdf API endpoint. [elioschmutz]
+- Fix @tasktree for users lacking view permission on main task. [njohner]
+- Fix OGDS sync logging of modified group memberships. [njohner]
+
+
 2023.3.0 (2023-02-22)
 ---------------------
 
