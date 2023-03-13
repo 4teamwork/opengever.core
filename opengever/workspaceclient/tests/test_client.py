@@ -13,14 +13,16 @@ import transaction
 class TestWorkspaceClient(FunctionalWorkspaceClientTestCase):
 
     def test_raises_an_error_if_using_the_client_with_disabled_feature(self):
+        client = WorkspaceClient()
         self.enable_feature(False)
         with self.assertRaises(WorkspaceClientFeatureNotEnabled):
-            WorkspaceClient()
+            client.get('/')
 
     def test_raises_an_error_if_the_workspace_url_is_not_configured(self):
+        client = WorkspaceClient()
         with self.env(TEAMRAUM_URL=''):
             with self.assertRaises(WorkspaceURLMissing):
-                WorkspaceClient()
+                client.get('/')
 
     def test_raises_an_error_if_user_lacks_neccesary_permissions(self):
         with self.workspace_client_env() as client:
