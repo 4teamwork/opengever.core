@@ -61,7 +61,7 @@ msgstr "Allgemein"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_deadline"
-msgstr "Frist in Tagen ab Startdatum der Aufgabe."
+msgstr "Frist in Arbeitstagen ab Startdatum der Aufgabe."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_issuer"
@@ -96,11 +96,11 @@ msgstr "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein."
 msgid "help_title"
 msgstr "Der Name der Aufgabe."
 
-#. Default: "Deadline in Days"
+#. Default: "Deadline in workdays"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_deadline"
-msgstr "Frist in Tagen"
+msgstr "Frist in Arbeitstagen"
 
 #. Default: "Issuer"
 #: ./opengever/tasktemplates/browser/tasktemplates.py

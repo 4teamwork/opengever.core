@@ -1,10 +1,14 @@
+from datetime import date
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing import freeze
 from ftw.testing import MockTestCase
 from mock import call
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.utils import escape_html
 from opengever.base.utils import file_checksum
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.base.utils import is_administrator
 from opengever.base.utils import is_manager
 from opengever.base.utils import safe_int
@@ -216,3 +220,27 @@ class TestIsManager(IntegrationTestCase):
         self.assertTrue(is_manager(user=self.manager))
         self.login(self.manager)
         self.assertTrue(is_manager())
+
+
+class TestGetDateWithDeltaExcludingWeekends(TestCase):
+
+    def test_get_date_with_delta_excluding_weekends_adds_the_day_offset(self):
+        # Freeze on monday
+        with freeze(datetime(2023, 3, 6, 0, 0)):
+            delta = 4
+            self.assertEqual(
+                date(2023, 3, 10),  # Friday
+                get_date_with_delta_excluding_weekends(datetime.today(), delta).date())
+
+    def test_get_date_with_delta_excluding_weekends_adds_the_day_offset_and_ignores_weekends(self):
+        # Freeze on monday
+        with freeze(datetime(2023, 3, 6, 0, 0)):
+            delta = 5
+            self.assertEqual(
+                date(2023, 3, 13),  # Next monday
+                get_date_with_delta_excluding_weekends(datetime.today(), delta).date())
+
+            delta = 20
+            self.assertEqual(
+                date(2023, 4, 3),  # Monday in one month
+                get_date_with_delta_excluding_weekends(datetime.today(), delta).date())

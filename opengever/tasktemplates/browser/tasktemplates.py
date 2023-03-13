@@ -100,7 +100,7 @@ class TaskTemplates(BaseCatalogListingTab):
 
         {'column': 'period',
          'sortable': False,
-         'column_title': _(u"label_deadline", default=u"Deadline in Days")},
+         'column_title': _(u"label_deadline", default=u"Deadline in workdays")},
 
         {'column': 'preselected',
          'column_title': _(u"label_preselected", default=u"Preselect"),

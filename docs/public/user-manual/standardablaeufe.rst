@@ -30,7 +30,7 @@ c) Auftraggeber
 
 d) Auftragnehmer
 
-e) Frist in Tagen ab Auslösung der Aufgabe
+e) Frist in Arbeitstagen ab Auslösung der Aufgabe
 
 f) Vorselektion: Angabe, ob die Aufgabe automatisch ausgewählt werden
    soll, wenn man den Standardablauf in einem Dossier auslöst.

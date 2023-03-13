@@ -17,80 +17,82 @@ import json
 
 class TestProcessDataPreprocessor(IntegrationTestCase):
 
-    def test_deadline_is_the_longest_deadline_of_children_plus_five(self):
+    def test_deadline_is_the_longest_deadline_of_children_plus_five_workdays(self):
         self.login(self.regular_user)
         data = {
             "process": {
                 "items": [
-                    {"deadline": date(2022, 03, 01)},
-                    {"deadline": date(2022, 03, 05)},
-                    {"deadline": date(2022, 03, 02)},
+                    {"deadline": date(2022, 3, 1)},
+                    {"deadline": date(2022, 3, 4)},  # Friday
+                    {"deadline": date(2022, 3, 2)},
                 ]
             }
         }
         processor = ProcessDataPreprocessor(self.dossier, data)
-        with freeze(datetime(2022, 02, 01)):
+        with freeze(datetime(2022, 2, 1)):
             processor.recursive_set_deadlines()
 
-        self.assertEqual(date(2022, 03, 10), data["process"]["deadline"])
+        self.assertEqual(date(2022, 3, 11), data["process"]["deadline"])
 
-    def test_deadline_at_least_today_plus_five(self):
+    def test_deadline_at_least_today_plus_five_workdays(self):
         self.login(self.regular_user)
         data = {
             "process": {
                 "items": [
-                    {"deadline": date(2022, 03, 05)},
-                    {"deadline": date(2022, 03, 01)},
-                    {"deadline": date(2022, 03, 02)},
+                    {"deadline": date(2022, 3, 5)},
+                    {"deadline": date(2022, 3, 1)},
+                    {"deadline": date(2022, 3, 2)},
                 ]
             }
         }
         processor = ProcessDataPreprocessor(self.dossier, data)
-        with freeze(datetime(2022, 04, 01)):
+
+        # Friday
+        with freeze(datetime(2022, 4, 1)):
             processor.recursive_set_deadlines()
 
-        self.assertEqual(date(2022, 04, 06), data["process"]["deadline"])
+        self.assertEqual(date(2022, 4, 8), data["process"]["deadline"])
 
     def test_recursive_deadline_propagation(self):
         self.login(self.regular_user)
         data = {
             "process": {
                 "items": [
-                    {"deadline": date(2022, 03, 01)},
+                    {"deadline": date(2022, 3, 1)},  # Tuesday
                     {"items": [
-                        {"deadline": date(2022, 03, 10)},
+                        {"deadline": date(2022, 3, 10)},  # Thursday
                         {"items": [
-                            {"deadline": date(2022, 04, 2)},
+                            {"deadline": date(2022, 4, 4)},  # Monday
                         ]},
                     ]},
                     {"items": [
-                        {"deadline": date(2022, 03, 10)},
-                        {"deadline": date(2022, 03, 05)},
+                        {"deadline": date(2022, 3, 10)},  # Thursday
+                        {"deadline": date(2022, 3, 4)},  # Friday
                     ]},
                 ]
             }
         }
         processor = ProcessDataPreprocessor(self.dossier, data)
-        with freeze(datetime(2022, 02, 01)):
+        with freeze(datetime(2022, 2, 1)):  # Tuesday
             processor.recursive_set_deadlines()
 
         expected_data = {
             "process": {
-                "deadline": date(2022, 4, 17),
+                "deadline": date(2022, 4, 25),  # Monday
                 "items": [
-                    {"deadline": date(2022, 03, 01)},
-                    {"deadline": date(2022, 4, 12),
+                    {"deadline": date(2022, 3, 1)},
+                    {"deadline": date(2022, 4, 18),  # Monday
                      "items": [
-                        {"deadline": date(2022, 03, 10)},
-                        {"deadline": date(2022, 4, 7),
+                        {"deadline": date(2022, 3, 10)},  # Thursday
+                        {"deadline": date(2022, 4, 11),  # Monday
                          "items": [
-                            {"deadline": date(2022, 04, 2)},
+                            {"deadline": date(2022, 4, 4)},  # Monday
                         ]},
                     ]},
-                    {"deadline": date(2022, 03, 15),
+                    {"deadline": date(2022, 3, 17),  # Thursday
                      "items": [
-                        {"deadline": date(2022, 03, 10)},
-                        {"deadline": date(2022, 03, 05)},
+                        {"deadline": date(2022, 3, 10)},  # Thursday
+                        {"deadline": date(2022, 3, 4)},  # Friday
                     ]},
                 ]
             }
@@ -124,7 +126,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -141,7 +143,7 @@ class TestProcessPost(IntegrationTestCase):
         self.assertEqual('direct-execution', main_task.task_type)
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(main_task))
-        self.assertEqual(date(2022, 3, 6), main_task.deadline)
+        self.assertEqual(date(2022, 3, 8), main_task.deadline)
 
         subtasks = main_task.listFolderContents()
         self.assertEqual(1, len(subtasks))
@@ -200,7 +202,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -235,9 +237,9 @@ class TestProcessPost(IntegrationTestCase):
         # Check deadline propagation
         self.assertEqual(date(2022, 3, 10), subsubtask1.deadline)
         self.assertEqual(date(2022, 3, 12), subsubtask2.deadline)
-        self.assertEqual(date(2022, 3, 17), subtask_container.deadline)
+        self.assertEqual(date(2022, 3, 18), subtask_container.deadline)
         self.assertEqual(date(2022, 3, 1), subtask.deadline)
-        self.assertEqual(date(2022, 3, 22), main_task.deadline)
+        self.assertEqual(date(2022, 3, 25), main_task.deadline)
 
         # check parallel and sequential interfaces
         self.assertTrue(IContainSequentialProcess.providedBy(main_task))
@@ -274,7 +276,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -332,7 +334,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -413,7 +415,7 @@ class TestProcessPost(IntegrationTestCase):
                 ]
             }
         }
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -532,7 +534,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -548,7 +550,7 @@ class TestProcessPost(IntegrationTestCase):
                           api.content.get_state(subtask_2))
 
         data["start_immediately"] = False
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -594,7 +596,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),
@@ -646,7 +648,7 @@ class TestProcessPost(IntegrationTestCase):
             }
         }
 
-        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 02, 01)):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
             browser.open('{}/@process'.format(
                          self.dossier.absolute_url()),
                          data=json.dumps(data),

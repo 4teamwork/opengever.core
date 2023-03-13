@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
@@ -177,14 +178,16 @@ class TestTriggeringTaskTemplate(IntegrationTestCase):
                           api.content.get_state(main_task))
 
     @browsing
-    def test_main_task_deadline_is_the_highest_template_deadline_plus_five(self, browser):
+    def test_main_task_deadline_is_the_highest_template_deadline_plus_five_working_days(self, browser):
         self.login(self.regular_user, browser=browser)
+
         self.trigger_tasktemplatefolder(
             browser, templates=['Arbeitsplatz einrichten.'])
 
         main_task = self.dossier.listFolderContents()[-1]
         self.assertEquals(
-            date.today() + timedelta(days=10 + 5), main_task.deadline)
+            get_date_with_delta_excluding_weekends(date.today() + timedelta(days=10), 5),
+            main_task.deadline)
 
     @browsing
     def test_all_tasks_are_marked_with_marker_interface(self, browser):

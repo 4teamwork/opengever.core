@@ -872,7 +872,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         items = browser.json['items']
         deadlines = list(set(map(lambda x: x['deadline'], items)))
         self.assertEqual(1, len(deadlines))
-        self.assertEqual('2016-09-05T00:00:00Z', deadlines[0])
+        self.assertEqual('2016-09-07T00:00:00Z', deadlines[0])
 
     @browsing
     def test_filter_supports_unicode(self, browser):

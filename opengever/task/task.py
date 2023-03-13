@@ -4,7 +4,6 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import datetime
-from datetime import timedelta
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -15,6 +14,7 @@ from opengever.base.response import IResponseSupported
 from opengever.base.security import as_internal_workflow_transition
 from opengever.base.security import elevated_privileges
 from opengever.base.source import DossierPathSourceBinder
+from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.dossier.utils import get_containing_dossier
 from opengever.dossier.utils import get_main_dossier
 from opengever.globalindex.model.task import Task as TaskModel
@@ -88,7 +88,7 @@ def deadline_default():
         interface=ITaskSettings,
     )
 
-    return (datetime.today() + timedelta(days=offset)).date()
+    return get_date_with_delta_excluding_weekends(datetime.today(), offset).date()
 
 
 class ITask(model.Schema):

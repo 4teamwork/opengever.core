@@ -63,7 +63,7 @@ msgstr "Général"
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_deadline"
-msgstr "Délai en jours à partir de la date de début de la tâche."
+msgstr "Délai en jours ouvrables à partir de la date de début de la tâche."
 
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "help_issuer"
@@ -98,11 +98,11 @@ msgstr "Saisie d'une instruction de travail détaillée ou d'un commentaire."
 msgid "help_title"
 msgstr "Nom de la tâche."
 
-#. Default: "Deadline in Days"
+#. Default: "Deadline in workdays"
 #: ./opengever/tasktemplates/browser/tasktemplates.py
 #: ./opengever/tasktemplates/content/tasktemplate.py
 msgid "label_deadline"
-msgstr "Délai en jours"
+msgstr "Délai en jours ouvrables"
 
 #. Default: "Issuer"
 #: ./opengever/tasktemplates/browser/tasktemplates.py

@@ -1,4 +1,5 @@
 from datetime import date
+from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
@@ -6,6 +7,7 @@ from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
 from ftw.testbrowser.pages.dexterity import erroneous_fields
 from ftw.testbrowser.pages.statusmessages import error_messages
+from ftw.testing import freeze
 from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
 from opengever.ogds.base.utils import get_current_org_unit
@@ -597,29 +599,37 @@ class TestDossierSequenceNumber(IntegrationTestCase):
 class TestDeadlineDefaultValue(IntegrationTestCase):
 
     @browsing
-    def test_deadline_is_today_plus_five_days_by_default(self, browser):
+    def test_deadline_is_today_plus_five_working_days_by_default(self, browser):
         self.login(self.dossier_responsible, browser=browser)
+        today = datetime(2023, 3, 6)  # Monday
 
-        browser.open(self.empty_dossier, view='++add++opengever.task.task')
+        with freeze(today):
+            browser.open(self.empty_dossier, view='++add++opengever.task.task')
+
         browser.fill({'Title': 'Test task',
                       'Task type': 'comment'})
 
         form = browser.find_form_by_field('Responsible')
         form.find_widget('Responsible').fill(
             get_current_org_unit().id() + ':' + self.dossier_responsible.getId())
+
         browser.css('#form-buttons-save').first.click()
 
-        expected = date.today() + timedelta(days=5)
-        self.assertEqual(expected, self.empty_dossier.objectValues()[0].deadline)
+        # Monday in one week (Monday + 5 days excluding weekends)
+        expected = today + timedelta(days=7)
+        self.assertEqual(expected.date(), self.empty_dossier.objectValues()[0].deadline)
 
     @browsing
     def test_deadline_use_registry_entry_to_calculate_timedelta(self, browser):
         self.login(self.dossier_responsible, browser=browser)
+        today = datetime(2023, 3, 6)  # Monday
 
         registry = getUtility(IRegistry)
-        registry.forInterface(ITaskSettings).deadline_timedelta = 12
+        registry.forInterface(ITaskSettings).deadline_timedelta = 3
 
-        browser.open(self.empty_dossier, view='++add++opengever.task.task')
+        with freeze(today):
+            browser.open(self.empty_dossier, view='++add++opengever.task.task')
+
         browser.fill({'Title': 'Test task',
                       'Task type': 'comment'})
 
@@ -629,8 +639,8 @@ class TestDeadlineDefaultValue(IntegrationTestCase):
 
         browser.css('#form-buttons-save').first.click()
 
-        expected = date.today() + timedelta(days=12)
-        self.assertEqual(expected, self.empty_dossier.objectValues()[0].deadline)
+        expected = today + timedelta(days=3)
+        self.assertEqual(expected.date(), self.empty_dossier.objectValues()[0].deadline)
 
 
 class TestTaskTypeTranslations(IntegrationTestCase):
