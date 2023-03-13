@@ -178,5 +178,5 @@ class FolderButtonsAvailabilityView(BrowserView):
         if not self._can_use_workspace_client():
             return False
 
-        linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
+        linked_workspaces_manager = ILinkedWorkspaces(self.context)
         return linked_workspaces_manager.has_linked_workspaces()

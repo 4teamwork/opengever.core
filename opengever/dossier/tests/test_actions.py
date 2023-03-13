@@ -153,7 +153,7 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
         with self.workspace_client_env():
             self.link_workspace(self.dossier)
             subdossier = create(Builder('dossier').within(self.dossier))
-            expected_actions = [u'copy_documents_to_workspace', u'document_with_template', u'edit',
+            expected_actions = [u'copy_documents_to_workspace', u'delete', u'document_with_template', u'edit',
                                 u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
                                 u'zipexport']
 
