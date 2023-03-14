@@ -2,7 +2,13 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK
+from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK
+from opengever.globalindex.model.task import Task
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 class TestGlobalIndexGet(IntegrationTestCase):
@@ -351,3 +357,63 @@ class TestGlobalIndexGet(IntegrationTestCase):
                 },
             },
         )
+
+    @browsing
+    def test_use_successor_task_duplicate_strategy(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('admin_unit').id('unit-3').having(title='Remote'))
+        create(Builder('admin_unit').id('unit-2').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = u'unit-3'
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'unit-2'
+
+        view = '@globalindex?duplicate_strategy={}'.format(
+            AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertIn(
+            successor.id,
+            [item['task_id'] for item in browser.json['items']])
+
+        self.assertNotIn(
+            predecessor.id,
+            [item['task_id'] for item in browser.json['items']])
+
+        self.assertEqual(14, browser.json['items_total'])
+
+    @browsing
+    def test_use_predecessor_task_duplicate_strategy(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('admin_unit').id('unit-3').having(title='Remote'))
+        create(Builder('admin_unit').id('unit-2').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = u'unit-3'
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'unit-2'
+
+        view = '@globalindex?duplicate_strategy={}'.format(
+            AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK)
+        browser.open(self.portal, view=view, headers=self.api_headers)
+
+        self.assertIn(
+            predecessor.id,
+            [item['task_id'] for item in browser.json['items']])
+
+        self.assertNotIn(
+            successor.id,
+            [item['task_id'] for item in browser.json['items']])
+
+        self.assertEqual(14, browser.json['items_total'])

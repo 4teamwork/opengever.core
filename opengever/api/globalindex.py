@@ -1,6 +1,7 @@
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.base.helpers import display_name
+from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_LOCAL
 from opengever.globalindex.model.task import Task
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
@@ -79,4 +80,6 @@ class GlobalIndexGet(OGDSListingBaseService):
         return query
 
     def get_base_query(self):
-        return Task.query.restrict().avoid_duplicates()
+        strategy = self.request.form.get('duplicate_strategy',
+                                         AVOID_DUPLICATES_STRATEGY_LOCAL)
+        return Task.query.restrict().avoid_duplicates(strategy=strategy)
