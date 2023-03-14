@@ -327,11 +327,20 @@ class SolrLiveSearchGet(SolrSearchGet):
         return ["{}{}*".format(prefix, token.rstrip("*"))
                 for token in term.split("-")]
 
+    @staticmethod
+    def _preprocess_phrase(phrase):
+        return '"{}"'.format(phrase)
+
     def preprocess_query(self, query):
         preprocessed_query = []
-        terms = filter(None, re.split(r'; |, |\. |@|\s', query))
-        for term in terms:
-            preprocessed_query.extend(self._preprocess_term(term))
+        parts = query.split('"')
+        for i, part in enumerate(parts):
+            if i%2 == 0:
+                terms = filter(None, re.split(r'; |, |\. |@|\s', part))
+                for term in terms:
+                    preprocessed_query.extend(self._preprocess_term(term))
+            else:
+                preprocessed_query.append(self._preprocess_phrase(part))
         return " ".join(preprocessed_query)
 
     def reply(self):
