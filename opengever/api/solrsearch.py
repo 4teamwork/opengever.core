@@ -319,16 +319,19 @@ class SolrLiveSearchGet(SolrSearchGet):
     """
 
     @staticmethod
-    def preprocess_query(query):
+    def _preprocess_term(term):
+        prefix = ""
+        if term.startswith("-"):
+            prefix = "-"
+            term = term.lstrip("-")
+        return ["{}{}*".format(prefix, token.rstrip("*"))
+                for token in term.split("-")]
+
+    def preprocess_query(self, query):
         preprocessed_query = []
-        words = filter(None, re.split(r'; |, |\. |@|\s', query))
-        for word in words:
-            prefix = ""
-            if word.startswith("-"):
-                prefix = "-"
-                word = word.lstrip("-")
-            preprocessed_query.extend(["{}{}*".format(prefix, token.rstrip("*"))
-                                       for token in word.split("-")])
+        terms = filter(None, re.split(r'; |, |\. |@|\s', query))
+        for term in terms:
+            preprocessed_query.extend(self._preprocess_term(term))
         return " ".join(preprocessed_query)
 
     def reply(self):
