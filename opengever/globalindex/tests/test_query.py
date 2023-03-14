@@ -3,9 +3,11 @@ from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
 from opengever.globalindex.model.task import Task
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from plone.registry.interfaces import IRegistry
 from sqlalchemy.orm.exc import NoResultFound
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
@@ -244,3 +246,49 @@ class TestTaskQueries(IntegrationTestCase):
         self.assertEqual(
             [],
             Task.query.subtasks_by_task(self.expired_task.get_sql_object()).all())
+
+    def test_avoid_duplicates_returns_all_single_unit_tasks(self):
+        self.login(self.regular_user)
+
+        self.assertEqual(
+            set([]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates().all()))
+
+    def test_avoid_duplicates_excludes_task_on_remote_system_if_a_task_has_predecessor(self):
+        self.login(self.regular_user)
+        create(Builder('admin_unit').id('remote').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'remote'
+
+        self.assertEqual(
+            set([predecessor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates().all()))
+
+        proxy.current_unit_id = u'remote'
+
+        self.assertEqual(
+            set([successor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates().all()))
+
+    def test_avoid_duplicates_excludes_task_pair_if_on_a_third_admin_unit(self):
+        self.login(self.regular_user)
+        create(Builder('admin_unit').id('unit-3').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = u'unit-3'
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'unit-2'
+
+        self.assertEqual(
+            set([successor, predecessor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates().all()))
