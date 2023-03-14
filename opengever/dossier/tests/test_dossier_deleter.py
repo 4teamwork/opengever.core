@@ -63,3 +63,22 @@ class TestDossierDeleterWithTeamraum(FunctionalWorkspaceClientTestCase):
 
             with self.assertRaises(Forbidden):
                 deleter.delete()
+
+    @browsing
+    def test_can_delete_subdossier_if_parent_is_linked_to_a_workspace(self, browser):
+        browser.login()
+
+        with self.workspace_client_env():
+            dossier = create(Builder('dossier').titled(u'Dossier A').within(self.leaf_repofolder))
+            manager = ILinkedWorkspaces(dossier)
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+            empty_subdossier = create(Builder('dossier').titled(u'Dossier A').within(dossier))
+
+            deleter = getAdapter(empty_subdossier, IDeleter)
+
+            with self.observe_children(empty_subdossier.__parent__) as children:
+                deleter.delete()
+
+            self.assertEqual(1, len(children['removed']))
