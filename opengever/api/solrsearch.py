@@ -335,7 +335,7 @@ class SolrLiveSearchGet(SolrSearchGet):
         preprocessed_query = []
         parts = query.split('"')
         for i, part in enumerate(parts):
-            if i%2 == 0:
+            if i % 2 == 0 or i == len(parts) - 1:
                 if part.endswith("-"):
                     following_phrase_prefix = "-"
                     part = part.rstrip("-")

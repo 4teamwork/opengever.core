@@ -1424,6 +1424,23 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["@id"] for item in browser.json[u'items']])
 
     @browsing
+    def test_livesearch_does_not_preserve_unfinished_phrases(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        url = u'{}/@solrlivesearch?q="Taktische Bana'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(2, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.document.absolute_url(), self.subdocument.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
+
+    @browsing
     def test_livesearch_preserves_phrase_exclusion(self, browser):
         self.login(self.regular_user, browser=browser)
 
