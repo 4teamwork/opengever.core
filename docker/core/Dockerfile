@@ -56,6 +56,8 @@ RUN mkdir -p /app/var/log \
  && ln -sf /dev/stdout /app/var/log/instance-json.log \
  && ln -sf /dev/stdout /app/var/log/solr-maintenance.log
 
+RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
+
 # Patch ftw.bumblebee to use time.time() for timestamp generation
 # datetime.now().strftime('%s') does not return the same on Alpine Linux (musl)
 # https://www.openwall.com/lists/musl/2018/01/18/3
