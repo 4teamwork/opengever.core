@@ -423,14 +423,13 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertFalse(ILockable(mail).locked())
 
     def test_has_linked_workspaces(self):
-        with self.workspace_client_env():
-            manager = ILinkedWorkspaces(self.dossier)
+        manager = ILinkedWorkspaces(self.dossier)
 
-            self.assertFalse(manager.has_linked_workspaces())
+        self.assertFalse(manager.has_linked_workspaces())
 
-            manager.storage.add(self.workspace.UID())
+        manager.storage.add(self.workspace.UID())
 
-            self.assertTrue(manager.has_linked_workspaces())
+        self.assertTrue(manager.has_linked_workspaces())
 
     def test_list_documents_in_linked_workspace_raises_if_workspace_is_not_linked(self):
         with self.workspace_client_env():

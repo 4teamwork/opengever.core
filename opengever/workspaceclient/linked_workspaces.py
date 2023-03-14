@@ -499,7 +499,7 @@ class LinkedWorkspaces(object):
     def has_linked_workspaces(self):
         """Returns true if the current context has linked workspaces
         """
-        return self.list().get('items_total', 0) > 0
+        return self.number_of_linked_workspaces() > 0
 
     def move_workspace_links_to_main_dossier(self):
         """Called by event handler when a dossier gets moved in to a subdossier.

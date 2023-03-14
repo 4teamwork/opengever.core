@@ -132,6 +132,7 @@ class FolderButtonsAvailabilityView(BrowserView):
     def is_unlink_workspace_available(self):
         return (self._is_main_dossier()
                 and self._can_unlink_workspace()
+                and self._can_use_workspace_client()
                 and self._has_linked_workspaces())
 
     def is_move_items_available(self):
@@ -175,8 +176,5 @@ class FolderButtonsAvailabilityView(BrowserView):
         return not self._is_template_area()
 
     def _has_linked_workspaces(self):
-        if not self._can_use_workspace_client():
-            return False
-
         linked_workspaces_manager = ILinkedWorkspaces(self.context)
         return linked_workspaces_manager.has_linked_workspaces()

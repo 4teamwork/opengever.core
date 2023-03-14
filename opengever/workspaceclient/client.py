@@ -14,18 +14,17 @@ class WorkspaceClient(object):
     REST API. It is instantiated for the current logged in user.
     """
 
-    def __init__(self):
+    @property
+    def session(self):
+        """We always need to invoke a new workspace-session. Otherwise it is
+        possible to dispatch a request with another users session.
+        """
         if not is_workspace_client_feature_available():
             raise WorkspaceClientFeatureNotEnabled()
 
         if not self.workspace_url:
             raise WorkspaceURLMissing()
 
-    @property
-    def session(self):
-        """We always need to invoke a new workspace-session. Otherwise it is
-        possible to dispatch a request with another users session.
-        """
         if not api.user.has_permission('opengever.workspaceclient: Use Workspace Client'):
             raise Unauthorized("User does not have permission to use the WorkspaceClient")
         return WorkspaceSession(self.workspace_url,
