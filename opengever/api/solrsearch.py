@@ -328,19 +328,29 @@ class SolrLiveSearchGet(SolrSearchGet):
                 for token in term.split("-")]
 
     @staticmethod
-    def _preprocess_phrase(phrase):
-        return '"{}"'.format(phrase)
+    def _preprocess_phrase(phrase, phrase_prefix):
+        return '{}"{}"'.format(phrase_prefix, phrase)
 
     def preprocess_query(self, query):
         preprocessed_query = []
         parts = query.split('"')
         for i, part in enumerate(parts):
             if i%2 == 0:
+                if part.endswith("-"):
+                    following_phrase_prefix = "-"
+                    part = part.rstrip("-")
+                elif part.endswith("+"):
+                    following_phrase_prefix = "+"
+                    part = part.rstrip("+")
+                else:
+                    following_phrase_prefix = ""
+
                 terms = filter(None, re.split(r'; |, |\. |@|\s', part))
                 for term in terms:
                     preprocessed_query.extend(self._preprocess_term(term))
             else:
-                preprocessed_query.append(self._preprocess_phrase(part))
+                preprocessed_query.append(
+                    self._preprocess_phrase(part, following_phrase_prefix))
         return " ".join(preprocessed_query)
 
     def reply(self):
