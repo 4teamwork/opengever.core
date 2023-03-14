@@ -2,6 +2,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.oguid import Oguid
 from opengever.base.security import elevated_privileges
+from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK
+from opengever.globalindex.model.task import AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK
 from opengever.globalindex.model.task import Task
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -292,3 +294,73 @@ class TestTaskQueries(IntegrationTestCase):
         self.assertEqual(
             set([successor, predecessor]),
             set(Task.query.all()) - set(Task.query.avoid_duplicates().all()))
+
+    def test_avoid_duplicates_excludes_predecessor_task_with_successor_strategy(self):
+        self.login(self.regular_user)
+        create(Builder('admin_unit').id('unit-3').having(title='Remote'))
+        create(Builder('admin_unit').id('unit-2').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'unit-2'
+
+        self.assertEqual(
+            set([predecessor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK).all()))
+
+        proxy.current_unit_id = u'unit-2'
+
+        self.assertEqual(
+            set([predecessor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK).all()))
+
+        proxy.current_unit_id = u'unit-3'
+
+        self.assertEqual(
+            set([predecessor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK).all()))
+
+    def test_avoid_duplicates_excludes_successor_task_with_predecessor_strategy(self):
+        self.login(self.regular_user)
+        create(Builder('admin_unit').id('unit-3').having(title='Remote'))
+        create(Builder('admin_unit').id('unit-2').having(title='Remote'))
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+
+        successor = Task.query.all()[0]
+        predecessor = Task.query.all()[1]
+
+        successor.predecessor = predecessor
+        predecessor.admin_unit_id = 'unit-2'
+
+        self.assertEqual(
+            set([successor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK).all()))
+
+        proxy.current_unit_id = u'unit-2'
+
+        self.assertEqual(
+            set([successor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK).all()))
+
+        proxy.current_unit_id = u'unit-3'
+
+        self.assertEqual(
+            set([successor]),
+            set(Task.query.all()) - set(Task.query.avoid_duplicates(
+                strategy=AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK).all()))
+
+    def test_avoid_duplicates_raises_not_implemented_for_unknown_strategies(self):
+        self.login(self.regular_user)
+
+        with self.assertRaises(NotImplementedError):
+            Task.query.avoid_duplicates(strategy="unknown")
