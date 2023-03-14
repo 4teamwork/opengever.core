@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.3.2 (2023-03-14)
+---------------------
+
+Bug fixes:
+
+
+- Fix various issues arising when the ContactFolder is missing. [njohner]
+- Empty subdossiers can be deleted even if the main dossier is linked with a workspace. [elioschmutz]
+
+
 2023.3.1 (2023-02-28)
 ---------------------
 
