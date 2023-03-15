@@ -314,12 +314,17 @@ class SolrSearchGet(SolrQueryBaseService):
         return data
 
 
+OPERATORS = ["and", "or", "&&", "||", "not", "!"]
+
+
 class SolrLiveSearchGet(SolrSearchGet):
     """REST API endpoint for querying Solr
     """
 
     @staticmethod
     def _preprocess_term(term):
+        if term.lower() in OPERATORS:
+            return [term]
         prefix = ""
         if term.startswith("-"):
             prefix = "-"

@@ -1070,7 +1070,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             [item['@id'] for item in browser.json['items']])
 
     @browsing
-    def test_search_default_operator_is_and_for_fewer_than_4_terms(self, browser):
+    def test_search_default_operator_is_and(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.document.title = "Banane"
@@ -1107,10 +1107,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         url = u'{}/@solrsearch?q=banane taktisch apfel strudel'.format(self.portal.absolute_url())
         browser.open(url, method='GET', headers=self.api_headers)
-        self.assertEqual(2, browser.json["items_total"])
-        self.assertItemsEqual(
-            [self.subsubdocument.absolute_url(), self.empty_document.absolute_url()],
-            [item["@id"] for item in browser.json[u'items']])
+        self.assertEqual(0, browser.json["items_total"])
 
     @browsing
     def test_search_sorts_recently_modified_docs_first(self, browser):
@@ -1379,7 +1376,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch["items"]])
 
     @browsing
-    def test_livesearch_adds_wildcard_ignores_capitalization(self, browser):
+    def test_livesearch_ignores_capitalization(self, browser):
         self.login(self.regular_user, browser=browser)
 
         query = {"q": "Title:aNtrAg KreiS"}
@@ -1408,6 +1405,59 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
              u'An empty dossier',
              u'Anfragen'],
             [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_handles_operators(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Apfel"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.empty_document.title = "Banane und Apfel"
+        self.empty_document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        # default operator is and
+        query = {"q": "Taktische Banane Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische AND Banane AND Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische && Banane && Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische OR Banane"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(3, livesearch["items_total"])
+
+        # For some reason that does not work and is treated as AND
+        query = {"q": "Taktische || Banane"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+
+        # With a combination of operators things become fishy,
+        # probably because mm default depends on the operators and
+        # edismax might try to do its own magic to counter that.
+        query = {"q": "Apfel AND Banane OR Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Banane und Apfel', u'Apfel'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": "Banane OR Apfel AND Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel'],
+            [item["title"] for item in livesearch[u'items']])
 
     @browsing
     def test_livesearch_preserves_phrases(self, browser):
