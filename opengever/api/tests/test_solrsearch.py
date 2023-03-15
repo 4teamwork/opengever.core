@@ -1652,6 +1652,49 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["reference_number"] for item in search["items"]])
 
     @browsing
+    def test_querying_filenames(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title="20221121_some_file-name"
+        self.document.reindexObject(idxs=["Title", "filename"])
+        self.commit_solr()
+
+        # partial filename is only found with livesearch
+        query = {"q": "20221121"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "20221121_some"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        # full filename without extension is found by both
+        query = {"q": "20221121_some_file-name"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        # full filename with extension is not found by any, as we do not
+        # not search the filename field, only the title field.
+        query = {"q": "20221121_some_file-name.docx"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+        # when specifically searching the filename field, splitting at
+        # hyphens can come in the way in the livesearch
+        query = {"q": "filename:20221121_some_file-name.docx"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+    @browsing
     def test_only_preprocess_query(self, browser):
         self.login(self.regular_user, browser=browser)
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
