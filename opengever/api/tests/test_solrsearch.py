@@ -12,6 +12,7 @@ from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
+from urllib import urlencode
 from zope.component import getMultiAdapter
 import json
 
@@ -1315,12 +1316,14 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     features = ('solr', )
 
     def solr_search(self, browser, query):
-        url = u'{}/@solrsearch?{}'.format(self.portal.absolute_url(), query)
+        url = u'{}/@solrsearch?{}'.format(self.portal.absolute_url(),
+                                          urlencode(query))
         browser.open(url, method='GET', headers=self.api_headers)
         return browser.json
 
     def solr_livesearch(self, browser, query):
-        url = u'{}/@solrlivesearch?{}'.format(self.portal.absolute_url(), query)
+        url = u'{}/@solrlivesearch?{}'.format(self.portal.absolute_url(),
+                                              urlencode(query))
         browser.open(url, method='GET', headers=self.api_headers)
         return browser.json
 
@@ -1328,7 +1331,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_adds_wildcard(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = "q=Title:an"
+        query = {"q": "Title:an"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(1, search["items_total"])
@@ -1345,7 +1348,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
              u'Anfragen'],
             [item["title"] for item in livesearch["items"]])
 
-        query = "q=Title:antrag"
+        query = {"q": "Title:antrag"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(2, search["items_total"])
@@ -1364,7 +1367,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_adds_wildcard_to_each_term(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = "q=Title:an kr"
+        query = {"q": "Title:an kr"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
@@ -1379,7 +1382,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_adds_wildcard_ignores_capitalization(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = "q=Title:aNtrAg KreiS"
+        query = {"q": "Title:aNtrAg KreiS"}
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
@@ -1391,7 +1394,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_preserves_negative_queries(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = "q=Title:an -kr"
+        query = {"q": "Title:an -kr"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(1, search["items_total"])
@@ -1416,12 +1419,12 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        url = u'{}/@solrlivesearch?q="Taktische Banane"'.format(self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-        self.assertEqual(1, browser.json["items_total"])
+        query = {"q": '"Taktische Banane"'}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
         self.assertItemsEqual(
             [self.subdocument.absolute_url()],
-            [item["@id"] for item in browser.json[u'items']])
+            [item["@id"] for item in livesearch[u'items']])
 
     @browsing
     def test_livesearch_does_not_preserve_unfinished_phrases(self, browser):
@@ -1433,12 +1436,12 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        url = u'{}/@solrlivesearch?q="Taktische Bana'.format(self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-        self.assertEqual(2, browser.json["items_total"])
+        query = {"q": "Taktische Bana"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
             [self.document.absolute_url(), self.subdocument.absolute_url()],
-            [item["@id"] for item in browser.json[u'items']])
+            [item["@id"] for item in livesearch[u'items']])
 
     @browsing
     def test_livesearch_preserves_phrase_exclusion(self, browser):
@@ -1450,12 +1453,12 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        url = u'{}/@solrlivesearch?q=banane -"Taktische Banane"'.format(self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-        self.assertEqual(1, browser.json["items_total"])
+        query = {"q": 'banane -"Taktische Banane"'}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
         self.assertItemsEqual(
             [self.document.absolute_url()],
-            [item["@id"] for item in browser.json[u'items']])
+            [item["@id"] for item in livesearch[u'items']])
 
     @browsing
     def test_livesearch_splits_hyphenated_terms(self, browser):
@@ -1466,7 +1469,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        query = "q=Title:taktische-ba"
+        query = {"q": "Title:taktische-ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
@@ -1475,7 +1478,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Taktische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
-        query = "q=Title:taktische-banane"
+        query = {"q": "Title:taktische-banane"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(1, search["items_total"])
@@ -1489,7 +1492,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         # Note that adding a wildcard to normal search does not lead to the
         # expected behavior for the customer
-        query = "q=Title:taktische-banane*"
+        query = {"q": "Title:taktische-banane*"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
@@ -1498,7 +1501,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Taktische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
-
     @browsing
     def test_stemming_does_not_work_in_live_search_but_it_does_not_matter(self, browser):
         """As stemming happened during indexing, and as we keep also the whole
@@ -1506,7 +1508,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         """
         self.login(self.regular_user, browser=browser)
 
-        query = "q=Title:runde"
+        query = {"q": "Title:runde"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
@@ -1519,7 +1521,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Vorstellungsrunde bei anderen Mitarbeitern'],
             [item["title"] for item in livesearch["items"]])
 
-        query = "q=Title:vorstellungsrunde"
+        query = {"q": "Title:vorstellungsrunde"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
@@ -1532,7 +1534,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Vorstellungsrunde bei anderen Mitarbeitern'],
             [item["title"] for item in livesearch["items"]])
 
-        query = "q=Title:arbeit"
+        query = {"q": "Title:arbeit"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
@@ -1554,7 +1556,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_querying_sequence_number(self, browser):
         self.login(self.regular_user, browser=browser)
-        query = "q=14&fl=sequence_number"
+        query = {"q": "14", "fl": "sequence_number"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         # the one with sequence number 20 has reference Client1 1.1 / 14
@@ -1570,7 +1572,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_querying_reference_number(self, browser):
         self.login(self.regular_user, browser=browser)
-        query = "q=Client1 1.1 / 14&fl=@id,reference_number"
+        query = {"q": "Client1 1.1 / 14", "fl": "@id,reference_number"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
@@ -1586,7 +1588,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         # without the / it works as expected. We could clean that up in
         # the preprocessing of the query
-        query = "q=Client1 1.1 14&fl=@id,reference_number"
+        query = {"q": "Client1 1.1 14", "fl": "@id,reference_number"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
@@ -1602,7 +1604,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_only_preprocess_query(self, browser):
         self.login(self.regular_user, browser=browser)
-        query="only_preprocess_query=true&q=some word-with-hyhpen"
+        query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
             {u'preprocessed_query': u'some* word* with* hyhpen*'},
