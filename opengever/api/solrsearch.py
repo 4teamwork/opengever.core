@@ -326,6 +326,7 @@ class SolrLiveSearchGet(SolrSearchGet):
         if term.lower() in OPERATORS:
             return [term]
         prefix = ""
+        term = term.rstrip(";,.")
         if term.startswith("-"):
             prefix = "-"
             term = term.lstrip("-")

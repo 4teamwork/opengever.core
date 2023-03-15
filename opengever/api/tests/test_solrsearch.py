@@ -1552,6 +1552,41 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch["items"]])
 
     @browsing
+    def test_livesearch_handles_trailing_special_characters(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title="dotted.title.without.spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dotted.title."}
+        self.assertEqual(0, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title="dotted. title. with. spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dotted. title."}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title="dashed-title-without-spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dashed-title-"}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title="dashed- title- with- spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dashed- title-"}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+    @browsing
     def test_stemming_does_not_work_in_live_search_but_it_does_not_matter(self, browser):
         """As stemming happened during indexing, and as we keep also the whole
         token, it does not matter that stemming does not happen during query.
