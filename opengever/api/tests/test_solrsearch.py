@@ -1702,3 +1702,16 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.assertEqual(
             {u'preprocessed_query': u'some* word* with* hyhpen*'},
             browser.json)
+
+
+class TestSolrLiveSearchPost(TestSolrLiveSearchGet):
+
+    def solr_search(self, browser, query):
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
+        return browser.json
+
+    def solr_livesearch(self, browser, query):
+        url = u'{}/@solrlivesearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
+        return browser.json
