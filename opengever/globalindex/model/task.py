@@ -591,16 +591,13 @@ class TaskQuery(BaseQuery):
                 TaskPrincipal.principal.in_(principals))
         return self.filter(Task.task_id.in_(principal_query))
 
-    def avoid_duplicates(self, admin_unit_id=None):
+    def avoid_duplicates(self):
         """Avoid duplicates and only list one task if a task has a successor.
 
-        If a task has a successor task, list only the task that is on a
-        specified admin unit. Hence, for tasks with a successor, the query
+        If a task has a successor task, list only the task that is on the
+        current admin unit. Hence, for tasks with a successor, the query
         will by default only return tasks that are on the local admin unit.
         """
-        if admin_unit_id is None:
-            admin_unit_id = get_current_admin_unit().id()
-
         return self.filter(
             or_(
                 and_(Task.predecessor == None, Task.successors == None),  # noqa
