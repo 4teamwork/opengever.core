@@ -5,6 +5,7 @@ from ftw.solr.query import make_path_filter
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
+from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr.fields import relative_to_physical_path
@@ -16,7 +17,6 @@ from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
 from zExceptions import InternalError
-import re
 
 
 BLACKLISTED_ATTRIBUTES = set([
@@ -72,7 +72,7 @@ class SolrSearchGet(SolrQueryBaseService):
             del params['q.raw']
         else:
             query = '*'
-        return self.preprocess_query(query)
+        return query
 
     @staticmethod
     def preprocess_query(query):
@@ -314,54 +314,14 @@ class SolrSearchGet(SolrQueryBaseService):
         return data
 
 
-OPERATORS = ["and", "or", "&&", "||", "not", "!"]
-
-
-class SolrLiveSearchGet(SolrSearchGet):
+class SolrLiveSearchGet(LiveSearchQueryPreprocessingMixin, SolrSearchGet):
     """REST API endpoint for querying Solr
     """
 
-    @staticmethod
-    def _preprocess_term(term):
-        if term.lower() in OPERATORS:
-            return [term]
-        prefix = ""
-        term = term.rstrip(";,.")
-        if term.startswith("-"):
-            prefix = "-"
-            term = term.lstrip("-")
-        return ["{}{}*".format(prefix, token.rstrip("*"))
-                for token in term.split("-")]
-
-    @staticmethod
-    def _preprocess_phrase(phrase, phrase_prefix):
-        return '{}"{}"'.format(phrase_prefix, phrase)
-
-    def preprocess_query(self, query):
-        preprocessed_query = []
-        parts = query.split('"')
-        for i, part in enumerate(parts):
-            if i % 2 == 0 or i == len(parts) - 1:
-                if part.endswith("-"):
-                    following_phrase_prefix = "-"
-                    part = part.rstrip("-")
-                elif part.endswith("+"):
-                    following_phrase_prefix = "+"
-                    part = part.rstrip("+")
-                else:
-                    following_phrase_prefix = ""
-
-                terms = filter(None, re.split(r'; |, |\. |@|\s', part))
-                for term in terms:
-                    preprocessed_query.extend(self._preprocess_term(term))
-            else:
-                preprocessed_query.append(
-                    self._preprocess_phrase(part, following_phrase_prefix))
-        return " ".join(preprocessed_query)
-
     def reply(self):
         if self.request_payload.get("only_preprocess_query"):
-            return {"preprocessed_query": self.extract_query(self.request_payload)}
+            return {"preprocessed_query": self.preprocess_query(
+                self.extract_query(self.request_payload))}
         return super(SolrLiveSearchGet, self).reply()
 
 

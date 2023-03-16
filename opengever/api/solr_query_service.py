@@ -12,6 +12,7 @@ from plone.restapi.services import Service
 from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
+import re
 
 
 class SolrQueryBaseService(Service):
@@ -43,7 +44,7 @@ class SolrQueryBaseService(Service):
         """ Extract the requested parameters and prepare the solr query
         """
         params = params.copy()
-        query = self.extract_query(params)
+        query = self.preprocess_query(self.extract_query(params))
         filters = self.extract_filters(params)
         start = self.extract_start(params)
         rows = self.extract_rows(params)
@@ -76,6 +77,10 @@ class SolrQueryBaseService(Service):
 
     def extract_query(self, params):
         return "*"
+
+    @staticmethod
+    def preprocess_query(query):
+        return query
 
     def extract_filters(self, params):
         return []
@@ -164,3 +169,47 @@ class SolrQueryBaseService(Service):
         response['items_total'] = batch.items_total
         if batch.links:
             response['batching'] = batch.links
+
+
+OPERATORS = ["and", "or", "&&", "||", "not", "!"]
+
+
+class LiveSearchQueryPreprocessingMixin(object):
+
+    @staticmethod
+    def _preprocess_term(term):
+        if term.lower() in OPERATORS:
+            return [term]
+        prefix = ""
+        term = term.rstrip(";,.")
+        if term.startswith("-"):
+            prefix = "-"
+            term = term.lstrip("-")
+        return ["{}{}*".format(prefix, token.rstrip("*"))
+                for token in term.split("-")]
+
+    @staticmethod
+    def _preprocess_phrase(phrase, phrase_prefix):
+        return '{}"{}"'.format(phrase_prefix, phrase)
+
+    def preprocess_query(self, query):
+        preprocessed_query = []
+        parts = query.split('"')
+        for i, part in enumerate(parts):
+            if i % 2 == 0 or i == len(parts) - 1:
+                if part.endswith("-"):
+                    following_phrase_prefix = "-"
+                    part = part.rstrip("-")
+                elif part.endswith("+"):
+                    following_phrase_prefix = "+"
+                    part = part.rstrip("+")
+                else:
+                    following_phrase_prefix = ""
+
+                terms = filter(None, re.split(r'; |, |\. |@|\s', part))
+                for term in terms:
+                    preprocessed_query.extend(self._preprocess_term(term))
+            else:
+                preprocessed_query.append(
+                    self._preprocess_phrase(part, following_phrase_prefix))
+        return " ".join(preprocessed_query)
