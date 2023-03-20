@@ -566,6 +566,11 @@ class Task(Base):
             return main_task.title
 
 
+AVOID_DUPLICATES_STRATEGY_LOCAL = 'local'
+AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK = 'successor_task'
+AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK = 'predecessor_task'
+
+
 class TaskQuery(BaseQuery):
 
     roles_allowed_to_see_tasks = ('Manager', 'Administrator', 'LimitedAdmin', 'Reader')
@@ -591,22 +596,48 @@ class TaskQuery(BaseQuery):
                 TaskPrincipal.principal.in_(principals))
         return self.filter(Task.task_id.in_(principal_query))
 
-    def avoid_duplicates(self, admin_unit_id=None):
+    def avoid_duplicates(self, strategy=AVOID_DUPLICATES_STRATEGY_LOCAL):
         """Avoid duplicates and only list one task if a task has a successor.
 
-        If a task has a successor task, list only the task that is on a
-        specified admin unit. Hence, for tasks with a successor, the query
-        will by default only return tasks that are on the local admin unit.
-        """
-        if admin_unit_id is None:
-            admin_unit_id = get_current_admin_unit().id()
+        Available strategies are:
 
-        return self.filter(
-            or_(
-                and_(Task.predecessor == None, Task.successors == None),  # noqa
-                Task.admin_unit_id == get_current_admin_unit().id()
+        local (default):
+        If a task has a successor task, list only the task that is on the
+        current admin unit. Hence, for tasks with a successor, the query
+        will by default only return tasks that are on the local admin unit.
+
+        successor_task:
+        If a task has a successor task, always return the successor task
+
+        predecessor_task:
+        If a task has a predecessor, always return the predecessor task
+        """
+        if strategy == AVOID_DUPLICATES_STRATEGY_LOCAL:
+            return self.filter(
+                or_(
+                    and_(Task.predecessor == None, Task.successors == None),  # noqa
+                    Task.admin_unit_id == get_current_admin_unit().id()
+                )
             )
-        )
+
+        if strategy == AVOID_DUPLICATES_STRATEGY_SUCCESSOR_TASK:
+            return self.filter(
+                or_(
+                    and_(Task.predecessor == None, Task.successors == None),  # noqa
+                    Task.predecessor != None  # noqa
+                )
+            )
+
+        elif strategy == AVOID_DUPLICATES_STRATEGY_PREDECESSOR_TASK:
+            return self.filter(
+                or_(
+                    and_(Task.predecessor == None, Task.successors == None),  # noqa
+                    Task.successors != None  # noqa
+                )
+            )
+
+        else:
+            raise NotImplementedError()
 
     def users_tasks(self, userid):
         """Returns query which List all tasks where the given user,

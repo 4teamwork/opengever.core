@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add duplicate-strategies to the ``@globalindex`` endpoint.
+
 2023.4.0 (2023-03-09)
 ---------------------
 
