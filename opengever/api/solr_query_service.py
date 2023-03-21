@@ -172,6 +172,7 @@ class SolrQueryBaseService(Service):
 
 
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
+IGNORED_TOKENS = ["/"]
 
 
 class LiveSearchQueryPreprocessingMixin(object):
@@ -180,6 +181,8 @@ class LiveSearchQueryPreprocessingMixin(object):
     def _preprocess_term(term):
         if term.lower() in OPERATORS:
             return [term]
+        if term in IGNORED_TOKENS:
+            return []
         prefix = ""
         term = term.rstrip(";,.")
         if term.startswith("-"):

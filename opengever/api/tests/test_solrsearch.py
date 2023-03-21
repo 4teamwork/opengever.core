@@ -1661,22 +1661,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
 
-        # For some reason the /* that appears in the preprocessed query
-        # leads to finding all kind of stuff
-        self.assertEqual(36, livesearch["items_total"])
-        self.assertItemsEqual(
-            u'Client1 1.1 / 14', livesearch["items"][0]["reference_number"])
-        self.assertEqual(2, search["items_total"])
-        self.assertItemsEqual(
-            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
-            [item["reference_number"] for item in search["items"]])
-
-        # without the / it works as expected. We could clean that up in
-        # the preprocessing of the query
-        query = {"q": "Client1 1.1 14", "fl": "@id,reference_number"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
             [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
