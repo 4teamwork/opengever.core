@@ -6,9 +6,11 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.api.solrsearch import SolrSearchGet
 from opengever.base.handlers import update_changed_date
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
+from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
@@ -1668,6 +1670,47 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.assertEqual(2, search["items_total"])
         self.assertItemsEqual(
             [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in search["items"]])
+
+    @browsing
+    def test_querying_reference_number_grouped_by_three(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(
+            name='formatter', value='grouped_by_three',
+            interface=IReferenceNumberSettings)
+        self.leaf_repofolder.reindexObject()
+        self.branch_repofolder.reindexObject()
+        self.repository_root.reindexObject()
+        self.dossier.reindexObject()
+        self.subdossier.reindexObject()
+        self.subsubdossier.reindexObject()
+        self.document.reindexObject()
+        self.subdocument.reindexObject()
+        self.subsubdocument.reindexObject()
+        self.commit_solr()
+
+        query = {"q": "Client1 11-1.1.1-23", "fl": "@id,reference_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in search["items"]])
+
+        query = {"q": "Client1 11-1.1.1", "fl": "@id,reference_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [livesearch["items"]],
             [item["reference_number"] for item in search["items"]])
 
     @browsing
