@@ -77,10 +77,7 @@ class KuBAddressDataExtractor(object):
             last_name = provider.person.get('officialName')
 
         # Localization data (Street or PO Box, Postal Code, City)
-        if is_organization or is_membership:
-            addressed_entity = provider.organization
-        else:
-            addressed_entity = provider.person
+        addressed_entity = provider.membership_person_or_organization
 
         addressed_location = addressed_entity.get('primaryAddress')
         if not addressed_location:

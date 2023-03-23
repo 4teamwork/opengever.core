@@ -107,6 +107,11 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
         self.mock_get_by_id(mocker, self.memb_jean_ftw)
         entity = KuBEntity(self.memb_jean_ftw)
 
+        # as the organisation primaryAddress is the same as that of the
+        # the membership, we modify the data, so that we can make sure the
+        # primaryAddress comes from the membership
+        entity.data["primaryAddress"]["addressLine2"] = "membership extra 2"
+
         block = IAddressBlockData(entity)
 
         expected = {
@@ -120,7 +125,7 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
             'street_and_no': u'Dammweg 9',
             'po_box': u'',
             'extra_line_1': u'c/o John Doe',
-            'extra_line_2': u'',
+            'extra_line_2': u'membership extra 2',
 
             'postal_code': u'3013',
             'city': u'Bern',
