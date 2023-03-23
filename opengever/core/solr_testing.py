@@ -51,7 +51,7 @@ class SolrServer(object):
             'SOLR_CORES=testing functionaltesting testserver',
             '--name',
             self.container_name,
-            '4teamwork/ogsolr:edismax',
+            '4teamwork/ogsolr:latest',
             'solr-foreground',
         ]
 
