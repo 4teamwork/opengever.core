@@ -466,7 +466,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             u'labels_custom_field_strings',
             u'age_custom_field_int',
             u'short_note_custom_field_string',
-            ], facet_counts.keys())
+        ], facet_counts.keys())
 
         expected = {
             u'color_custom_field_string': {
@@ -908,7 +908,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         filters = [
             'path_parent:/inbox',
             'path_parent:/private',
-            ]
+        ]
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual(
@@ -1118,7 +1118,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             update_changed_date(self.document, None)
             self.document.reindexObject(idxs=["Title"])
 
-        with freeze(datetime.today()-timedelta(1)):
+        with freeze(datetime.today() - timedelta(1)):
             self.subdocument.title = "Banane"
             update_changed_date(self.subdocument, None)
             self.subdocument.reindexObject(idxs=["Title"])
@@ -1513,9 +1513,9 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_livesearch_splits_hyphenated_terms(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.document.title="Taktische"
+        self.document.title = "Taktische"
         self.document.reindexObject(idxs=["Title"])
-        self.subdocument.title="Taktische-Banane"
+        self.subdocument.title = "Taktische-Banane"
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
@@ -1554,7 +1554,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_livesearch_handles_trailing_special_characters(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.document.title="dotted.title.without.spaces"
+        self.document.title = "dotted.title.without.spaces"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
@@ -1562,7 +1562,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.assertEqual(0, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
-        self.document.title="dotted. title. with. spaces"
+        self.document.title = "dotted. title. with. spaces"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
@@ -1570,7 +1570,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
-        self.document.title="dashed-title-without-spaces"
+        self.document.title = "dashed-title-without-spaces"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
@@ -1578,7 +1578,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
-        self.document.title="dashed- title- with- spaces"
+        self.document.title = "dashed- title- with- spaces"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
@@ -1689,7 +1689,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     @browsing
     def test_querying_filenames(self, browser):
         self.login(self.regular_user, browser=browser)
-        self.document.title="20221121_some_file-name"
+        self.document.title = "20221121_some_file-name"
         self.document.reindexObject(idxs=["Title", "filename"])
         self.commit_solr()
 
