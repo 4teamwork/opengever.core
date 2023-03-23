@@ -10,6 +10,30 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.5.0 (2023-03-23)
+---------------------
+
+New features:
+
+
+- Default task deadline calculation will ignore weekends. [elioschmutz]
+- Add duplicate-strategies to the @globalindex endpoint. [elioschmutz]
+
+
+Bug fixes:
+
+
+- Fix various issues arising when the ContactFolder is missing. [njohner]
+- Empty subdossiers can be deleted even if the main dossier is linked with a workspace. [elioschmutz]
+
+
+Other changes:
+
+
+- ogcore docker image: Send ftw.upgrade's stats log to /dev/null [lgraf]
+- Refine the workspace-client to improve debugging. [elioschmutz]
+
+
 2023.4.0 (2023-03-09)
 ---------------------
 
