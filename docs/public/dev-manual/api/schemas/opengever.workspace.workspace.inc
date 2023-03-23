@@ -44,6 +44,16 @@
        
 
 
+   .. py:attribute:: hide_members_for_guests
+
+       :Feldname: :field-title:`Teamraum-Teilnehmer für Gäste ausblenden`
+       :Datentyp: ``Bool``
+       
+       
+       
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`
@@ -68,6 +78,16 @@
 
        :Feldname: :field-title:`Beschreibung`
        :Datentyp: ``Text``
+       
+       
+       
+       
+
+
+   .. py:attribute:: touched
+
+       :Feldname: :field-title:`Änderungsdatum des Objektes oder seines Inhalts`
+       :Datentyp: ``Date``
        
        
        

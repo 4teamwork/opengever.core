@@ -91,6 +91,7 @@ welche Aufgabe bei Aufgaben-Pärchen zurückgegeben werden soll.
 
 Folgende Strategien stehen zur Verfügung:
 - ``duplicate_strategy``:
+
   - ``local`` (Standard): Gibt immer die Aufgabe vom aktuellen Mandanten zurück. Wenn sich das Pärchen auf anderen Mandanten befindet, wird keine der beiden Aufgaben zurückgegeben.
   - ``predecessor_task``: Gibt immer die Haupt-Aufgabe zurück, unabhängig davon, auf welchem Manden man sich aktuell befindet.
   - ``successor_task``: Gibt immer die Nachfolge-Aufgabe zurück, unabhängig davon, auf welchem Manden man sich aktuell befindet.

@@ -64,16 +64,6 @@
        
 
 
-   .. py:attribute:: touched
-
-       :Feldname: :field-title:`Änderungsdatum des Dossiers oder seines Inhalts`
-       :Datentyp: ``Date``
-       
-       
-       
-       
-
-
    .. py:attribute:: responsible
 
        :Feldname: :field-title:`Federführend`
@@ -301,4 +291,14 @@
        
        
        :Beschreibung: Enthält die Daten für die benutzerdefinierten Felder.
+       
+
+
+   .. py:attribute:: touched
+
+       :Feldname: :field-title:`Änderungsdatum des Objektes oder seines Inhalts`
+       :Datentyp: ``Date``
+       
+       
+       
        
