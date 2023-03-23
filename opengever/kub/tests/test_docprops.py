@@ -76,7 +76,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         entity = KuBEntity(self.org_ftw)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
         self.assertDictEqual(
-            {'ogg.address.block': u'4Teamwork\nDammweg 9\n3013 Bern',
+            {'ogg.address.block': u'4Teamwork\nc/o John Doe\nDammweg 9\n3013 Bern',
              'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
              'ogg.address.extra_line_1': u'c/o John Doe',
@@ -97,7 +97,7 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
         entity = KuBEntity(self.memb_jean_ftw)
         properties = KuBEntityDocPropertyProvider(entity).get_properties()
         self.assertDictEqual(
-            {'ogg.address.block': u'4Teamwork\nHerr Jean Dupont\nDammweg 9\n3013 Bern',
+            {'ogg.address.block': u'4Teamwork\nHerr Jean Dupont\nc/o John Doe\nDammweg 9\n3013 Bern',
              'ogg.address.city': u'Bern',
              'ogg.address.country': u'Schweiz',
              'ogg.address.extra_line_1': u'c/o John Doe',

@@ -29,6 +29,30 @@ class TestAddressFormatting(TestCase):
         """)
         self.assertEqual(expected, block.format())
 
+    def test_private_address_with_extra_lines(self):
+        block = AddressBlockData(
+            salutation=u'Herr',
+            academic_title=u'Dr.',
+            first_name=u'Fridolin',
+            last_name=u'M\xfcller',
+
+            street_and_no=u'Murtenstrasse 42',
+            postal_code=u'3008',
+            city=u'Bern',
+            extra_line_1=u'c/o John Doe',
+            extra_line_2=u'who knows what comes here'
+        )
+
+        expected = addr(u"""
+        Herr
+        Dr. Fridolin M\xfcller
+        c/o John Doe
+        who knows what comes here
+        Murtenstrasse 42
+        3008 Bern
+        """)
+        self.assertEqual(expected, block.format())
+
     def test_org_address(self):
         block = AddressBlockData(
             org_name=u'Fabasoft 4teamwork AG',
@@ -62,6 +86,30 @@ class TestAddressFormatting(TestCase):
         expected = addr(u"""
         Fabasoft 4teamwork AG
         Herr Dr. Fridolin M\xfcller
+        Dammweg 9
+        3012 Bern
+        """)
+        self.assertEqual(expected, block.format())
+
+    def test_org_address_addressed_to_person_with_extra_lines(self):
+        block = AddressBlockData(
+            salutation=u'Herr',
+            academic_title=u'Dr.',
+            first_name=u'Fridolin',
+            last_name=u'M\xfcller',
+
+            extra_line_1=u'en extra address line',
+            org_name=u'Fabasoft 4teamwork AG',
+
+            street_and_no=u'Dammweg 9',
+            postal_code=u'3012',
+            city=u'Bern',
+        )
+
+        expected = addr(u"""
+        Fabasoft 4teamwork AG
+        Herr Dr. Fridolin M\xfcller
+        en extra address line
         Dammweg 9
         3012 Bern
         """)

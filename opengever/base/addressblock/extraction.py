@@ -90,6 +90,8 @@ class KuBAddressDataExtractor(object):
         house_no = addressed_location.get('houseNumber')
         street_tokens = filter(None, [street, house_no])
         street_and_no = u' '.join(street_tokens)
+        extra_line_1 = addressed_location.get("addressLine1")
+        extra_line_2 = addressed_location.get("addressLine2")
         # XXX: KuB also shows 'dwellingNumber' and 'locality' in API, but
         # there's no way to edit those fields it seems.
 
@@ -111,6 +113,8 @@ class KuBAddressDataExtractor(object):
             first_name=first_name,
             last_name=last_name,
 
+            extra_line_1=extra_line_1,
+            extra_line_2=extra_line_2,
             street_and_no=street_and_no,
             po_box=po_box,
 

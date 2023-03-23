@@ -34,6 +34,8 @@ class TestOGDSUserAddressExtraction(IntegrationTestCase):
 
             'street_and_no': u'Murtenstrasse 42',
             'po_box': None,
+            'extra_line_1': None,
+            'extra_line_2': None,
 
             'postal_code': u'3008',
             'city': u'Bern',
@@ -67,6 +69,8 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
             'street_and_no': u'Teststrasse 43',
             'po_box': u'',
+            'extra_line_1': u'',
+            'extra_line_2': u'',
 
             'postal_code': u'9999',
             'city': u'Bern',
@@ -90,6 +94,8 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
             'street_and_no': u'Dammweg 9',
             'po_box': u'',
+            'extra_line_1': u'c/o John Doe',
+            'extra_line_2': u'',
 
             'postal_code': u'3013',
             'city': u'Bern',
@@ -113,6 +119,8 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
             'street_and_no': u'Dammweg 9',
             'po_box': u'',
+            'extra_line_1': u'c/o John Doe',
+            'extra_line_2': u'',
 
             'postal_code': u'3013',
             'city': u'Bern',
@@ -168,6 +176,8 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
             'street_and_no': u'',
             'po_box': None,
+            'extra_line_1': None,
+            'extra_line_2': None,
 
             'postal_code': None,
             'city': None,
