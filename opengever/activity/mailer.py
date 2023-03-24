@@ -35,7 +35,6 @@ mail_queue = NotificationMailQueue()
 
 def process_mail_queue():
     mailhost = api.portal.get_tool('MailHost')
-
     with NotificationErrorHandler():
         while not mail_queue.empty():
             mail, mail_to, mail_from = mail_queue.get()
@@ -89,7 +88,7 @@ class Mailer(object):
         mail_queue.put(msg, [each.strip() for each in mail_to.split(',')], mail_from)
 
     def prepare_mail(self, subject=u'', to_userid=None, to_email=None,
-                     cc_email=None, from_userid=None, data=None):
+                     cc_email=None, bcc_email=None, from_userid=None, data=None):
         if data is None:
             data = {}
 
@@ -127,12 +126,21 @@ class Mailer(object):
 
         if to_userid:
             to_email = ogds_service().fetch_user(to_userid).email
-        msg['To'] = to_email
-        recipients_email = to_email
+
+        recipients = []
+        if to_email:
+            msg['To'] = to_email
+            recipients.append(to_email)
 
         if cc_email:
             msg['Cc'] = cc_email
-            recipients_email = ', '.join((recipients_email, cc_email))
+            recipients.append(cc_email)
+
+        if bcc_email:
+            msg['Bcc'] = bcc_email
+            recipients.append(bcc_email)
+
+        recipients_email = ', '.join(recipients)
 
         msg['Subject'] = Header(subject, 'utf-8')
 

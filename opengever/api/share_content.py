@@ -46,15 +46,17 @@ class ShareContentPost(Service):
 
         if self.notify_all:
             source = WorkspaceContentMemberUsersSource(self.context)
-            emails_to = self.get_email_adresses(source.search(''), self.notify_all)
-            emails_cc = []
+            emails_to = ""
+            emails_cc = ""
+            emails_bcc = self.get_email_adresses(source.search(''), self.notify_all)
         else:
             emails_to = self.get_email_adresses(self.actors_to)
             emails_cc = self.get_email_adresses(self.actors_cc)
+            emails_bcc = ""
 
         sender_id = api.user.get_current().getId()
         mailer = ContentSharingMailer()
-        mailer.share_content(self.context, sender_id, emails_to, emails_cc, self.comment)
+        mailer.share_content(self.context, sender_id, emails_to, emails_cc, emails_bcc, self.comment)
 
         self.request.response.setStatus(204)
         return super(ShareContentPost, self).reply()
