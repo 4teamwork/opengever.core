@@ -77,10 +77,7 @@ class KuBAddressDataExtractor(object):
             last_name = provider.person.get('officialName')
 
         # Localization data (Street or PO Box, Postal Code, City)
-        if is_organization or is_membership:
-            addressed_entity = provider.organization
-        else:
-            addressed_entity = provider.person
+        addressed_entity = provider.membership_person_or_organization
 
         addressed_location = addressed_entity.get('primaryAddress')
         if not addressed_location:
@@ -90,6 +87,8 @@ class KuBAddressDataExtractor(object):
         house_no = addressed_location.get('houseNumber')
         street_tokens = filter(None, [street, house_no])
         street_and_no = u' '.join(street_tokens)
+        extra_line_1 = addressed_location.get("addressLine1")
+        extra_line_2 = addressed_location.get("addressLine2")
         # XXX: KuB also shows 'dwellingNumber' and 'locality' in API, but
         # there's no way to edit those fields it seems.
 
@@ -111,6 +110,8 @@ class KuBAddressDataExtractor(object):
             first_name=first_name,
             last_name=last_name,
 
+            extra_line_1=extra_line_1,
+            extra_line_2=extra_line_2,
             street_and_no=street_and_no,
             po_box=po_box,
 

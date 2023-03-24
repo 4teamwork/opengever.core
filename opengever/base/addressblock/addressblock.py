@@ -38,6 +38,10 @@ class AddressBlockData(object):
         self.street_and_no = kwargs.get('street_and_no')
         self.po_box = kwargs.get('po_box')
 
+        # Extra address lines
+        self.extra_line_1 = kwargs.get('extra_line_1')
+        self.extra_line_2 = kwargs.get('extra_line_2')
+
         # Postal code and city
         self.postal_code = kwargs.get('postal_code')
         self.city = kwargs.get('city')
@@ -85,6 +89,9 @@ class AddressBlockData(object):
                     self.first_name,
                     self.last_name,
                 ))
+
+        lines.append(self.extra_line_1)
+        lines.append(self.extra_line_2)
 
         if self.is_po_box_address():
             # Technically, an address could contain both Street+Number and a

@@ -437,7 +437,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         self.assertEqual(u'New d\xf6cument', document.title)
 
         expected_doc_properties = self.expected_doc_properties + [
-            ('ogg.sender.address.block', '4Teamwork\nHerr Jean Dupont\nDammweg 9\n3013 Bern'),
+            ('ogg.sender.address.block', '4Teamwork\nHerr Jean Dupont\nc/o John Doe\nDammweg 9\n3013 Bern'),
             ('ogg.sender.address.city', 'Bern'),
             ('ogg.sender.address.country', 'Schweiz'),
             ('ogg.sender.address.extra_line_1', 'c/o John Doe'),
