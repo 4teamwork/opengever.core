@@ -50,6 +50,7 @@ class Task(Base):
     """docstring for Task"""
 
     MAX_TITLE_LENGTH = 256
+    MAX_DOSSIER_TITLE_LENGTH = 512
     MAX_BREADCRUMB_LENGTH = 512
 
     OVERDUE_INDEPENDENT_STATES = [
@@ -101,8 +102,8 @@ class Task(Base):
     reference_number = Column(String(100))
     sequence_number = Column(Integer, index=True, nullable=False)
     dossier_sequence_number = Column(Integer, index=True)
-    containing_dossier = Column(String(512))
-    containing_subdossier = Column(String(512))
+    containing_dossier = Column(String(MAX_DOSSIER_TITLE_LENGTH))
+    containing_subdossier = Column(String(MAX_DOSSIER_TITLE_LENGTH))
 
     created = Column(DateTime, default=functions.now())
     modified = Column(DateTime)
@@ -229,9 +230,8 @@ class Task(Base):
         self.sequence_number = plone_task.get_sequence_number()
         self.reference_number = plone_task.get_reference_number()
 
-        self.containing_dossier = safe_unicode(
-            plone_task.get_containing_dossier_title(),
-        )
+        self.containing_dossier = self.safe_truncated_string(
+            plone_task.get_containing_dossier_title(), self.MAX_DOSSIER_TITLE_LENGTH)
 
         self.dossier_sequence_number = plone_task.get_dossier_sequence_number()
         self.assigned_org_unit = plone_task.responsible_client
@@ -241,9 +241,8 @@ class Task(Base):
             *plone_task.get_predecessor_ids()
         )
 
-        self.containing_subdossier = safe_unicode(
-            plone_task.get_containing_subdossier(),
-        )
+        self.containing_subdossier = self.safe_truncated_string(
+            plone_task.get_containing_subdossier(), self.MAX_DOSSIER_TITLE_LENGTH)
 
         try:
             predecessor = plone_task.get_tasktemplate_predecessor()
@@ -261,6 +260,13 @@ class Task(Base):
             self.tasktemplate_predecessor = predecessor.get_sql_object()
 
         self.sync_reminders(plone_task)
+
+    @staticmethod
+    def safe_truncated_string(string, max_length):
+        string = safe_unicode(string)
+        if string:
+            return string[:max_length]
+        return string
 
     @classmethod
     def physical_path_to_char_if_oracle(cls):
