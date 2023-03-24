@@ -143,12 +143,17 @@ def sync_ogds(plone, users=True, groups=True, local_groups=False,
 def setup_ogds_sync_logfile(logger):
     """Sets up logging to a rotating var/log/ogds-update.log.
     """
+    handler_name = "ogds_update"
+    for handler in logger.handlers:
+        if isinstance(handler, TimedRotatingFileHandler) and handler.get_name() == handler_name:
+            return
     log_dir = PathFinder().var_log
     file_handler = TimedRotatingFileHandler(
         os.path.join(log_dir, 'ogds-update.log'),
         when='midnight', backupCount=7)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
+    file_handler.set_name(handler_name)
     logger.addHandler(file_handler)
 
 
