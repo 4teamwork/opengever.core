@@ -88,7 +88,7 @@ def deadline_default():
         interface=ITaskSettings,
     )
 
-    return get_date_with_delta_excluding_weekends(datetime.today(), offset).date()
+    return get_date_with_delta_excluding_weekends(datetime.today(), offset)
 
 
 class ITask(model.Schema):
