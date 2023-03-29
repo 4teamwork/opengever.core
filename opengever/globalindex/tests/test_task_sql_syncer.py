@@ -164,3 +164,11 @@ class TestTaskSQLSyncer(IntegrationTestCase):
 
         self.assertEqual(added_task.get_sql_object(),
                          successor.tasktemplate_predecessor)
+
+    def test_sql_task_sync_handles_long_dossier_title(self):
+        self.login(self.regular_user)
+        self.dossier.title = u'\xe4\xf6' * 300
+
+        notify(ObjectModifiedEvent(self.task))
+        sql_task = self.task.get_sql_object()
+        self.assertEqual(512, len(sql_task.containing_dossier))
