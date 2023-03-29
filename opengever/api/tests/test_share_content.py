@@ -203,9 +203,9 @@ class TestShareContentPost(IntegrationTestCase):
 
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
-        expected_mail_to = '{}, {},\n {}, {}'.format(*expected_to)
-        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['To'])
         self.assertIsNone(mail['Cc'])
+        self.assertIsNone(mail['Bcc'])
 
     @browsing
     def test_share_workspace_folder_notify_all_respects_local_roles_block(self, browser):
@@ -231,9 +231,9 @@ class TestShareContentPost(IntegrationTestCase):
 
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
-        expected_mail_to = '{}'.format(*expected_to)
-        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['To'])
         self.assertIsNone(mail['Cc'])
+        self.assertIsNone(mail['Bcc'])
 
     @browsing
     def test_share_workspace_ignores_actors_to_and_actors_cc_if_notify_all_is_set(self, browser):
@@ -264,7 +264,7 @@ class TestShareContentPost(IntegrationTestCase):
 
         self.assertEqual(1, len(mailing.get_messages()))
         mail = email.message_from_string(Mailing(self.portal).pop())
-        expected_mail_to = '{}, {},\n {}, {}'.format(*expected_to)
-        self.assertEqual(expected_mail_to, mail['To'])
+        self.assertIsNone(mail['To'])
         self.assertIsNone(mail['Cc'])
+        self.assertIsNone(mail['Bcc'])
         self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())

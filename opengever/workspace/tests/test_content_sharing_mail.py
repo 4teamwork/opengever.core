@@ -16,12 +16,16 @@ class TestContentSharingMail(IntegrationTestCase):
 
         mailer = ContentSharingMailer()
         sender_id = self.workspace_member.getId()
-        emails_to = self.workspace_guest.getProperty('email')
+        emails_to = self.workspace_owner.getProperty('email')
         emails_cc = self.workspace_admin.getProperty('email')
+        emails_bcc = self.workspace_guest.getProperty('email')
         comment = u'Check out this interesting w\xf6rkspace!'
-        mailer.share_content(self.workspace, sender_id, emails_to, emails_cc, comment)
+        mailer.share_content(self.workspace, sender_id, emails_to, emails_cc, emails_bcc, comment)
         process_mail_queue()
-        mail = email.message_from_string(Mailing(self.portal).pop())
+        message = Mailing(self.portal).get_mailhost().messages.pop()
+        mail = email.message_from_string(message.messageText)
+
+        self.assertItemsEqual([emails_to, emails_cc, emails_bcc], message.mto)
         self.assertEqual(emails_to, mail['To'])
         self.assertEqual(emails_cc, mail['Cc'])
         self.assertEqual('=?utf-8?q?Schr=C3=B6dinger_B=C3=A9atrice?= <test@localhost>',
