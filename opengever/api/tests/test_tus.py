@@ -1,5 +1,4 @@
 from base64 import b64encode
-from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -11,7 +10,6 @@ from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.MimeTypeItem import MimeTypeItem
 from six import BytesIO
-from unittest import skipIf
 
 
 UPLOAD_DATA = b"abcdefgh"
@@ -168,11 +166,6 @@ class TestTUSUpload(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.assert_tus_replace_fails(self.document, browser)
 
-    @skipIf(
-        datetime.now() < datetime(2023, 4, 1),
-        "Lock verification temporary disabled, because it's not yet works correctly. "
-        "Will be fixed with https://4teamwork.atlassian.net/browse/CA-5107",
-    )
     @browsing
     def test_cannot_replace_document_if_lock_token_not_provided(self, browser):
         self.login(self.regular_user, browser)
