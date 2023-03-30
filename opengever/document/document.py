@@ -372,7 +372,8 @@ class Document(Item, BaseDocumentMixin):
                 self, transition='document-transition-initialize')
 
     def is_finalize_allowed(self):
-        return not self.is_checked_out()
+        return not self.is_checked_out() and \
+            not self.is_referenced_by_pending_approval_task()
 
     def is_referenced_by_pending_approval_task(self):
         tasks = self.related_items(include_forwardrefs=False, include_backrefs=True, tasks_only=True)

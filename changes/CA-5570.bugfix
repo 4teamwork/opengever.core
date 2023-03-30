@@ -1,0 +1,1 @@
+Prevent document finalization if document is referenced by a pending approval task. [phgross]
