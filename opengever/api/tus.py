@@ -84,9 +84,8 @@ class UploadPatch(GeverUploadPatch):
         if self.context.has_file() and not manager.is_checked_out_by_current_user():
             raise Forbidden("Document not checked out.")
 
-        # Check will be fixed with https://4teamwork.atlassian.net/browse/CA-5107
-        # if manager.is_locked_by_other():
-        #     raise Forbidden("Document is locked.")
+        if manager.is_locked_by_other():
+            raise Forbidden("Document is locked.")
 
         if self.is_proposal_document_upload() or self.is_proposal_template_upload():
             tus_upload = self.tus_upload()
