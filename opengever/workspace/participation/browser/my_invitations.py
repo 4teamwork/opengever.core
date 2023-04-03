@@ -141,7 +141,7 @@ class MyWorkspaceInvitations(BrowserView):
                 return self.request.RESPONSE.redirect(target_workspace.absolute_url())
             elif not payload.get("no_redirect"):
                 params = {'next': target_workspace.absolute_url()}
-                redirect_url = "{}/login?{}".format(
+                redirect_url = "{}?{}".format(
                     get_gever_portal_url(), urlencode(params))
                 return self.request.RESPONSE.redirect(redirect_url)
 

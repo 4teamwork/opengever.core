@@ -131,7 +131,7 @@ class TestMyInvitationsView(IntegrationTestCase):
             callback_payload)
 
     @browsing
-    def test_accept_accepted_invitation_when_not_signed_in_redirects_to_login_form(self, browser):
+    def test_accept_accepted_invitation_when_not_signed_in_redirects_to_portal_with_next_parameter(self, browser):
         self.maxDiff = None
         with freeze(FROZEN_NOW):
             self.login(self.regular_user, browser=browser)
@@ -142,9 +142,9 @@ class TestMyInvitationsView(IntegrationTestCase):
             with browser.expect_http_error():
                 browser.open(self.accept_url)
 
-            # check that we get redirected to login
+            # check that we get redirected to portal
             parsed_url = urlparse.urlparse(browser.url)
-            self.assertEqual('/portal/login', parsed_url.path)
+            self.assertEqual('/portal', parsed_url.path)
 
             params = urlparse.parse_qs(parsed_url.query)
             self.assertDictEqual({'next': [self.workspace_url]}, params)
