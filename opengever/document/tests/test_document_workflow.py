@@ -81,6 +81,18 @@ class TestDocumentWorkflow(IntegrationTestCase):
         self.assertEquals(Document.active_state,
                           api.content.get_state(obj=self.document))
 
+    def test_document_cannot_be_finalized_if_is_referenced_by_pending_approval_task(self):
+        self.login(self.administrator)
+        self.task_in_protected_dossier.task_type = 'approval'
+
+        with self.assertRaises(InvalidParameterError):
+            api.content.transition(
+                obj=self.protected_document_with_task,
+                transition=Document.finalize_transition)
+
+        self.assertEquals(Document.active_state,
+                          api.content.get_state(obj=self.document))
+
     def test_limited_admin_can_reopen_finalized_document(self):
         with self.login(self.manager):
             api.content.transition(obj=self.subdocument,
