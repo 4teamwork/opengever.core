@@ -183,9 +183,9 @@ class LiveSearchQueryPreprocessingMixin(object):
     @staticmethod
     def _preprocess_term(term):
         if term.lower() in OPERATORS:
-            return [term]
+            return term
         if term in IGNORED_TOKENS:
-            return []
+            return None
         prefix = ""
         term = term.rstrip(";,.")
         if term.startswith("-"):
@@ -194,8 +194,9 @@ class LiveSearchQueryPreprocessingMixin(object):
         elif term.startswith("+"):
             prefix = "+"
             term = term.lstrip("+")
-        return ["{}{}*".format(prefix, token.rstrip("*"))
-                for token in term_split_pattern.split(term)]
+        tokens = ["{}{}*".format(prefix, token.rstrip("*"))
+                  for token in term_split_pattern.split(term)]
+        return "({})".format(" ".join(tokens))
 
     @staticmethod
     def _preprocess_phrase(phrase, phrase_prefix):
@@ -215,10 +216,10 @@ class LiveSearchQueryPreprocessingMixin(object):
                 else:
                     following_phrase_prefix = ""
 
-                terms = filter(None, re.split(r'; |, |\. |@|\s', part))
+                terms = filter(None, part_split_pattern.split(part))
                 for term in terms:
-                    preprocessed_query.extend(self._preprocess_term(term))
+                    preprocessed_query.append(self._preprocess_term(term))
             else:
                 preprocessed_query.append(
                     self._preprocess_phrase(part, following_phrase_prefix))
-        return " ".join(preprocessed_query)
+        return " ".join(filter(None, preprocessed_query))

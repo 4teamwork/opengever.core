@@ -1462,6 +1462,25 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch[u'items']])
 
     @browsing
+    def test_livesearch_handles_or_whilst_splitting_terms(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "md-103"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "md-104"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "md-105"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "md-103 or md-104"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'md-103', u'md-104'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
     def test_livesearch_preserves_phrases(self, browser):
         self.login(self.regular_user, browser=browser)
 
@@ -1791,7 +1810,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
-            {u'preprocessed_query': u'some* word* with* hyhpen*'},
+            {u'preprocessed_query': u'(some*) (word* with* hyhpen*)'},
             browser.json)
 
 
