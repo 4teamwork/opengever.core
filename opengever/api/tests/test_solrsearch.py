@@ -1532,13 +1532,30 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["@id"] for item in livesearch[u'items']])
 
     @browsing
-    def test_livesearch_splits_hyphenated_terms(self, browser):
+    def test_livesearch_splits_hyphenated_terms_and_adds_wildcard_to_last_token(self, browser):
         self.login(self.regular_user, browser=browser)
         self.document.title = "Taktische"
         self.document.reindexObject(idxs=["Title"])
         self.subdocument.title = "Taktische-Banane"
         self.subdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
+
+        # first token "takt" does not get postfixed with wildcard
+        query = {"q": "Title:takt-ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+        # first token "takt" explicit wildcard is preserved
+        query = {"q": "Title:takt*-ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
 
         query = {"q": "Title:taktische-ba"}
         search = self.solr_search(browser, query)
@@ -1810,7 +1827,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
-            {u'preprocessed_query': u'(some*) (word* with* hyhpen*)'},
+            {u'preprocessed_query': u'(some*) (word with hyhpen*)'},
             browser.json)
 
 
