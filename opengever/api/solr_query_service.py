@@ -173,9 +173,9 @@ class SolrQueryBaseService(Service):
 
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
 IGNORED_TOKENS = ["/"]
-TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#"]
+TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@"]
 term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS))
-part_split_pattern = re.compile(r'; |, |\. |@|\s')
+part_split_pattern = re.compile(r'; |, |\. |\s')
 
 
 class LiveSearchQueryPreprocessingMixin(object):
@@ -194,8 +194,9 @@ class LiveSearchQueryPreprocessingMixin(object):
         elif term.startswith("+"):
             prefix = "+"
             term = term.lstrip("+")
-        tokens = ["{}{}*".format(prefix, token.rstrip("*"))
+        tokens = ["{}{}".format(prefix, token)
                   for token in term_split_pattern.split(term)]
+        tokens[-1] = "{}*".format(tokens[-1].rstrip("*"))
         return "({})".format(" ".join(tokens))
 
     @staticmethod
