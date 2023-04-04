@@ -1481,6 +1481,35 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch[u'items']])
 
     @browsing
+    def test_livesearch_handles_brackets(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Apfel"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.empty_document.title = "Banane und Apfel"
+        self.empty_document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "(Apfel AND Banane) OR Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Taktische Banane', u'Banane und Apfel'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": "(Apfel OR Banane) AND Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Taktische Banane'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
     def test_livesearch_preserves_phrases(self, browser):
         self.login(self.regular_user, browser=browser)
 

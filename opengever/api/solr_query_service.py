@@ -196,7 +196,13 @@ class LiveSearchQueryPreprocessingMixin(object):
             term = term.lstrip("+")
         tokens = ["{}{}".format(prefix, token)
                   for token in term_split_pattern.split(term)]
-        tokens[-1] = "{}*".format(tokens[-1].rstrip("*"))
+
+        # Handle bracket and add wildcard to last token
+        last_token = tokens[-1]
+        n_brackets = len(last_token) - len(last_token.rstrip(")"))
+        last_token = last_token.rstrip(")") + "*" + n_brackets * ")"
+        tokens[-1] = last_token
+
         return "({})".format(" ".join(tokens))
 
     @staticmethod
