@@ -1754,11 +1754,11 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Client1 11-1.1.1-23'],
+            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
             [item["reference_number"] for item in livesearch["items"]])
         self.assertEqual(2, search["items_total"])
         self.assertItemsEqual(
-            [livesearch["items"]],
+            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
             [item["reference_number"] for item in search["items"]])
 
     @browsing
