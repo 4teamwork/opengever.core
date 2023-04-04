@@ -173,6 +173,9 @@ class SolrQueryBaseService(Service):
 
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
 IGNORED_TOKENS = ["/"]
+TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#"]
+term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS))
+part_split_pattern = re.compile(r'; |, |\. |@|\s')
 
 
 class LiveSearchQueryPreprocessingMixin(object):
@@ -188,8 +191,11 @@ class LiveSearchQueryPreprocessingMixin(object):
         if term.startswith("-"):
             prefix = "-"
             term = term.lstrip("-")
+        elif term.startswith("+"):
+            prefix = "+"
+            term = term.lstrip("+")
         return ["{}{}*".format(prefix, token.rstrip("*"))
-                for token in term.split("-")]
+                for token in term_split_pattern.split(term)]
 
     @staticmethod
     def _preprocess_phrase(phrase, phrase_prefix):

@@ -1554,6 +1554,35 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch["items"]])
 
     @browsing
+    def test_livesearch_splits_terms_at_other_special_characters(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title = "Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische/Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische?Banane"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "Title:taktische/ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische/Banane', "Taktische?Banane"],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:taktische?ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische/Banane', "Taktische?Banane"],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
     def test_livesearch_handles_trailing_special_characters(self, browser):
         self.login(self.regular_user, browser=browser)
         self.document.title = "dotted.title.without.spaces"
