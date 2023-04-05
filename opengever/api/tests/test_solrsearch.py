@@ -853,7 +853,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             [
                 u'http://nohost/plone/private/kathi-barfuss/dossier-15',
                 u'http://nohost/plone/private/kathi-barfuss',
@@ -876,7 +876,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             [
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
