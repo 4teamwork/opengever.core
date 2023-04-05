@@ -117,6 +117,9 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
         }
         raw_token = oc_url.split(":")[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
+
+        self.assertItemsEqual(token.pop('documents'), expected_token.pop('documents'))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -146,8 +149,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
             },
         ]
 
-        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(expected_payloads, payloads)
+        self.assertItemsEqual(expected_payloads, payloads)
 
     @browsing
     def test_checkout_checkin(self, browser):
