@@ -343,6 +343,41 @@ class TestResolvingDossiersSolr(SolrIntegrationTestCase, ResolveTestHelper):
                                      u'date_custom_field_date',
                                      self.resolvable_dossier)
 
+    @browsing
+    def test_automatically_cast_datetime_to_date_if_neccessary(self, browser):
+        self.login(self.manager)
+        PropertySheetSchemaStorage().clear()
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDossier.default")
+            .with_field("date", u"date", u"Choose a date", u"", True)
+        )
+
+        api.portal.set_registry_record(
+            'resolver_custom_after_transition_hook',
+            u'python:object.set_custom_property("date", DateTime().utcdatetime()'
+            u', reindex=True)',
+            IDossierResolveProperties)
+
+        self.login(self.secretariat_user, browser)
+
+        self.assertEqual({}, get_custom_properties(self.resolvable_dossier))
+        with freeze(datetime(2017, 10, 16, 14, 30, tzinfo=pytz.utc)):
+            self.resolve(self.resolvable_dossier, browser)
+
+        self.assert_resolved(self.resolvable_dossier)
+        self.assertEqual({'date': date(2017, 10, 16)},
+                         get_custom_properties(self.resolvable_dossier))
+        self.assertEqual({'date': date(2017, 10, 16)},
+                         get_custom_properties(self.resolvable_subdossier))
+
+        self.commit_solr()
+        self.assert_solr_field_value(u'2017-10-16T00:00:00Z',
+                                     u'date_custom_field_date',
+                                     self.resolvable_dossier)
+
 
 class TestResolvingDossiersSolrRESTAPI(ResolveTestHelperRESTAPI, TestResolvingDossiersSolr):
     """Variant of the above test class to test dossier resolution with via RESTAPI.
