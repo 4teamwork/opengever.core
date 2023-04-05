@@ -1,13 +1,20 @@
+from datetime import datetime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.api.solrsearch import SolrSearchGet
+from opengever.base.handlers import update_changed_date
+from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import IntegrationTestCase
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
+from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
+from urllib import urlencode
 from zope.component import getMultiAdapter
 import json
 
@@ -461,7 +468,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             u'labels_custom_field_strings',
             u'age_custom_field_int',
             u'short_note_custom_field_string',
-            ], facet_counts.keys())
+        ], facet_counts.keys())
 
         expected = {
             u'color_custom_field_string': {
@@ -846,7 +853,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             [
                 u'http://nohost/plone/private/kathi-barfuss/dossier-15',
                 u'http://nohost/plone/private/kathi-barfuss',
@@ -869,7 +876,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         browser.open(url, method='GET', headers=self.api_headers)
 
-        self.assertEqual(
+        self.assertItemsEqual(
             [
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/document-24',
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
@@ -903,7 +910,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         filters = [
             'path_parent:/inbox',
             'path_parent:/private',
-            ]
+        ]
         solrsearch.add_path_parent_filters(filters)
 
         self.assertEqual(
@@ -1064,6 +1071,86 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
             ],
             [item['@id'] for item in browser.json['items']])
 
+    @browsing
+    def test_search_default_operator_is_and(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane"
+        self.document.reindexObject(idxs=["Title", "modified"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title", "modified"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title", "modified"])
+        self.empty_document.title = "Banane und Apfel Strudel"
+        self.empty_document.reindexObject(idxs=["Title", "modified"])
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?q=banane'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(4, browser.json["items_total"])
+        self.assertItemsEqual(
+            [item.absolute_url() for item in (self.subdocument, self.document,
+                                              self.subsubdocument, self.empty_document)],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(2, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.subdocument.absolute_url(), self.subsubdocument.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch apfel'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(1, browser.json["items_total"])
+        self.assertItemsEqual(
+            [self.subsubdocument.absolute_url()],
+            [item["@id"] for item in browser.json[u'items']])
+
+        url = u'{}/@solrsearch?q=banane taktisch apfel strudel'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(0, browser.json["items_total"])
+
+    @browsing
+    def test_search_sorts_recently_modified_docs_first(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with freeze(datetime.today() - timedelta(300)):
+            self.document.title = "Banane"
+            update_changed_date(self.document, None)
+            self.document.reindexObject(idxs=["Title"])
+
+        with freeze(datetime.today() - timedelta(1)):
+            self.subdocument.title = "Banane"
+            update_changed_date(self.subdocument, None)
+            self.subdocument.reindexObject(idxs=["Title"])
+
+        with freeze(datetime.today() - timedelta(50)):
+            self.subsubdocument.title = "Banane"
+            update_changed_date(self.subsubdocument, None)
+            self.subsubdocument.reindexObject(idxs=["Title"])
+
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?q=Title:banane'.format(self.portal.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(3, browser.json["items_total"])
+        self.assertEqual(
+            [item.absolute_url() for item in
+             (self.subdocument, self.subsubdocument, self.document)],
+            [item["@id"] for item in browser.json[u'items']])
+
+        with freeze(datetime.today()):
+            update_changed_date(self.document, None)
+
+        self.commit_solr()
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            [item.absolute_url() for item in
+             (self.document, self.subdocument, self.subsubdocument)],
+            [item["@id"] for item in browser.json[u'items']])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
@@ -1221,3 +1308,566 @@ class TestSolrSearchPost(SolrIntegrationTestCase):
                 u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4/document-23'
             ],
             [item['@id'] for item in browser.json['items']])
+
+
+class TestSolrLiveSearchGet(SolrIntegrationTestCase):
+
+    features = ('solr', )
+
+    def solr_search(self, browser, query):
+        url = u'{}/@solrsearch?{}'.format(self.portal.absolute_url(),
+                                          urlencode(query))
+        browser.open(url, method='GET', headers=self.api_headers)
+        return browser.json
+
+    def solr_livesearch(self, browser, query):
+        url = u'{}/@solrlivesearch?{}'.format(self.portal.absolute_url(),
+                                              urlencode(query))
+        browser.open(url, method='GET', headers=self.api_headers)
+        return browser.json
+
+    @browsing
+    def test_livesearch_adds_wildcard(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = {"q": "Title:an"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'An empty dossier'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(5, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'An empty dossier',
+             u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau',
+             u'Anfragen'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:antrag"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_adds_wildcard_to_each_term(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = {"q": "Title:an kr"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_ignores_capitalization(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = {"q": "Title:aNtrAg KreiS"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_preserves_negative_queries(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        query = {"q": "Title:an -kr"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'An empty dossier'],
+            [item["title"] for item in search["items"]])
+
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'An empty dossier',
+             u'Anfragen'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_handles_operators(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Apfel"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.empty_document.title = "Banane und Apfel"
+        self.empty_document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        # default operator is and
+        query = {"q": "Taktische Banane Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische AND Banane AND Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische && Banane && Apfel"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "Taktische OR Banane"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(3, livesearch["items_total"])
+
+        # For some reason that does not work and is treated as AND
+        query = {"q": "Taktische || Banane"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+
+        # With a combination of operators things become fishy,
+        # probably because mm default depends on the operators and
+        # edismax might try to do its own magic to counter that.
+        query = {"q": "Apfel AND Banane OR Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Banane und Apfel', u'Apfel'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": "Banane OR Apfel AND Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_handles_or_whilst_splitting_terms(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "md-103"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "md-104"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "md-105"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "md-103 or md-104"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'md-103', u'md-104'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_handles_brackets(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Apfel"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische Banane und Apfel"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.empty_document.title = "Banane und Apfel"
+        self.empty_document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "(Apfel AND Banane) OR Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(3, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Taktische Banane', u'Banane und Apfel'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": "(Apfel OR Banane) AND Taktische"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische Banane und Apfel', u'Taktische Banane'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_preserves_phrases(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": '"Taktische Banane"'}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [self.subdocument.absolute_url()],
+            [item["@id"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_does_not_preserve_unfinished_phrases(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "Taktische Bana"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [self.document.absolute_url(), self.subdocument.absolute_url()],
+            [item["@id"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_preserves_phrase_exclusion(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "Banane Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": 'banane -"Taktische Banane"'}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [self.document.absolute_url()],
+            [item["@id"] for item in livesearch[u'items']])
+
+    @browsing
+    def test_livesearch_splits_hyphenated_terms_and_adds_wildcard_to_last_token(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title = "Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische-Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        # first token "takt" does not get postfixed with wildcard
+        query = {"q": "Title:takt-ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+        # first token "takt" explicit wildcard is preserved
+        query = {"q": "Title:takt*-ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:taktische-ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:taktische-banane"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+        # Note that adding a wildcard to normal search does not lead to the
+        # expected behavior for the customer
+        query = {"q": "Title:taktische-banane*"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische-Banane'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_splits_terms_at_other_special_characters(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title = "Taktische"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "Taktische/Banane"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische?Banane"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "Title:taktische/ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische/Banane', "Taktische?Banane"],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:taktische?ba"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Taktische/Banane', "Taktische?Banane"],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_livesearch_handles_trailing_special_characters(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title = "dotted.title.without.spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dotted.title."}
+        self.assertEqual(0, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title = "dotted. title. with. spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dotted. title."}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title = "dashed-title-without-spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dashed-title-"}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+        self.document.title = "dashed- title- with- spaces"
+        self.document.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "dashed- title-"}
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
+
+    @browsing
+    def test_stemming_does_not_work_in_live_search_but_it_does_not_matter(self, browser):
+        """As stemming happened during indexing, and as we keep also the whole
+        token, it does not matter that stemming does not happen during query.
+        """
+        self.login(self.regular_user, browser=browser)
+
+        query = {"q": "Title:runde"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:vorstellungsrunde"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern'],
+            [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:arbeit"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(4, search["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Arbeitsplatz einrichten.'],
+            [item["title"] for item in search["items"]])
+        self.assertEqual(4, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Vorstellungsrunde bei anderen Mitarbeitern',
+             u'Mitarbeiter Dossier generieren',
+             u'Arbeitsplatz vorbereiten',
+             u'Arbeitsplatz einrichten.'],
+            [item["title"] for item in livesearch["items"]])
+
+    @browsing
+    def test_querying_sequence_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query = {"q": "14", "fl": "sequence_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        # the one with sequence number 20 has reference Client1 1.1 / 14
+        self.assertEqual(4, livesearch["items_total"])
+        self.assertItemsEqual(
+            [14, 14, 14, 20],
+            [item["sequence_number"] for item in livesearch["items"]])
+        self.assertEqual(4, search["items_total"])
+        self.assertItemsEqual(
+            [14, 14, 14, 20],
+            [item["sequence_number"] for item in search["items"]])
+
+    @browsing
+    def test_querying_reference_number(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query = {"q": "Client1 1.1 / 14", "fl": "@id,reference_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 1.1 / 14', u'Client1 1.1 / 1 / 14'],
+            [item["reference_number"] for item in search["items"]])
+
+    @browsing
+    def test_querying_reference_number_grouped_by_three(self, browser):
+        self.login(self.regular_user, browser=browser)
+        api.portal.set_registry_record(
+            name='formatter', value='grouped_by_three',
+            interface=IReferenceNumberSettings)
+        self.leaf_repofolder.reindexObject()
+        self.branch_repofolder.reindexObject()
+        self.repository_root.reindexObject()
+        self.dossier.reindexObject()
+        self.subdossier.reindexObject()
+        self.subsubdossier.reindexObject()
+        self.document.reindexObject()
+        self.subdocument.reindexObject()
+        self.subsubdocument.reindexObject()
+        self.commit_solr()
+
+        query = {"q": "Client1 11-1.1.1-23", "fl": "@id,reference_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(1, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in search["items"]])
+
+        query = {"q": "Client1 11-1.1.1", "fl": "@id,reference_number"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in livesearch["items"]])
+        self.assertEqual(2, search["items_total"])
+        self.assertItemsEqual(
+            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
+            [item["reference_number"] for item in search["items"]])
+
+    @browsing
+    def test_querying_filenames(self, browser):
+        self.login(self.regular_user, browser=browser)
+        self.document.title = "20221121_some_file-name"
+        self.document.reindexObject(idxs=["Title", "filename"])
+        self.commit_solr()
+
+        # partial filename is only found with livesearch
+        query = {"q": "20221121"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        query = {"q": "20221121_some"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        # full filename without extension is found by both
+        query = {"q": "20221121_some_file-name"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertEqual(1, livesearch["items_total"])
+
+        # full filename with extension is not found by any, as we do not
+        # not search the filename field, only the title field.
+        query = {"q": "20221121_some_file-name.docx"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+        # when specifically searching the filename field, splitting at
+        # hyphens can come in the way in the livesearch
+        query = {"q": "filename:20221121_some_file-name.docx"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
+
+    @browsing
+    def test_only_preprocess_query(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
+        self.solr_livesearch(browser, query)
+        self.assertEqual(
+            {u'preprocessed_query': u'(some*) (word with hyhpen*)'},
+            browser.json)
+
+
+class TestSolrLiveSearchPost(TestSolrLiveSearchGet):
+
+    def solr_search(self, browser, query):
+        url = u'{}/@solrsearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
+        return browser.json
+
+    def solr_livesearch(self, browser, query):
+        url = u'{}/@solrlivesearch'.format(self.portal.absolute_url())
+        browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
+        return browser.json

@@ -5,6 +5,7 @@ from ftw.solr.query import make_path_filter
 from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
+from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr.fields import relative_to_physical_path
@@ -71,6 +72,10 @@ class SolrSearchGet(SolrQueryBaseService):
             del params['q.raw']
         else:
             query = '*'
+        return query
+
+    @staticmethod
+    def preprocess_query(query):
         return query
 
     def extract_filters(self, params):
@@ -307,6 +312,17 @@ class SolrSearchGet(SolrQueryBaseService):
                 obj, self.request).get_serialized_breadcrumbs()
 
         return data
+
+
+class SolrLiveSearchGet(LiveSearchQueryPreprocessingMixin, SolrSearchGet):
+    """REST API endpoint for querying Solr
+    """
+
+    def reply(self):
+        if self.request_payload.get("only_preprocess_query"):
+            return {"preprocessed_query": self.preprocess_query(
+                self.extract_query(self.request_payload))}
+        return super(SolrLiveSearchGet, self).reply()
 
 
 class TeamraumSolrSearchGet(Service):

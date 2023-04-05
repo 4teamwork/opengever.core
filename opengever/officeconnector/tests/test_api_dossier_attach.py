@@ -298,6 +298,9 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
+
+        self.assertItemsEqual(token.pop('documents'), expected_token.pop('documents'))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -326,8 +329,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
                 u'version': None,
                 },
             ]
-        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertItemsEqual(payloads, expected_payloads)
 
     @browsing
     def test_attach_many_to_email_inactive(self, browser):
@@ -364,6 +366,9 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
+
+        self.assertItemsEqual(token.pop('documents'), expected_token.pop('documents'))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -390,8 +395,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
                 u'version': None,
                 },
             ]
-        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertItemsEqual(payloads, expected_payloads)
 
     @browsing
     def test_attach_many_to_email_resolved(self, browser):
@@ -428,6 +432,9 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             }
         raw_token = oc_url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
+        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
+
+        self.assertItemsEqual(token.pop('documents'), expected_token.pop('documents'))
         self.assertEqual(expected_token, token)
 
         expected_payloads = [
@@ -454,8 +461,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
                 u'version': None,
                 },
             ]
-        payloads = self.fetch_document_attach_payloads(browser, raw_token, token)
-        self.assertEqual(payloads, expected_payloads)
+        self.assertItemsEqual(payloads, expected_payloads)
 
     @browsing
     def test_attach_multiple_documents_sets_flags(self, browser):
@@ -593,8 +599,9 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
         raw_token = url.split(':')[-1]
         token = jwt.decode(raw_token, JWT_SIGNING_SECRET_PLONE, algorithms=('HS256',))
         with self.login(self.regular_user):
-            self.assertEqual([IUUID(self.document), IUUID(self.subdocument), IUUID(self.mail_eml)],
-                             token['documents'])
+            self.assertItemsEqual(
+                [IUUID(self.document), IUUID(self.subdocument), IUUID(self.mail_eml)],
+                token['documents'])
 
     @browsing
     def test_attach_multiple_documents_does_not_set_links_flag(self, browser):

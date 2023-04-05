@@ -1,4 +1,5 @@
 from ftw.solr.query import make_path_filter
+from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
 from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
@@ -117,7 +118,7 @@ class ListingFieldMapper(SolrFieldMapper):
         )
 
 
-class ListingGet(SolrQueryBaseService):
+class ListingGet(LiveSearchQueryPreprocessingMixin, SolrQueryBaseService):
     """List of content items"""
 
     field_mapper = ListingFieldMapper
@@ -129,9 +130,6 @@ class ListingGet(SolrQueryBaseService):
         query = params.get('search', '').strip()
         if not query:
             return '*'
-
-        if not query.endswith('"'):
-            query += '*'
 
         return query
 

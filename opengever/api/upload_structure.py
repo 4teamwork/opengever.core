@@ -73,7 +73,6 @@ class DefaultUploadStructureAnalyser(object):
 
     def find_possible_duplicates(self, files):
         solr = getUtility(ISolrSearch)
-
         if not self.duplicate_search_root:
             self.structure['possible_duplicates'] = {}
             return
@@ -89,7 +88,7 @@ class DefaultUploadStructureAnalyser(object):
 
         quoted_filenames = ['"{}"'.format(el) for el in normalized_filenames.values()]
         filters.append(
-            u'filename:({})'.format(' or '.join(quoted_filenames))
+            u'filename:({})'.format(' OR '.join(quoted_filenames))
         )
 
         resp = solr.search(

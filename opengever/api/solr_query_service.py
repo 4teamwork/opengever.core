@@ -12,6 +12,7 @@ from plone.restapi.services import Service
 from Products.ZCatalog.Lazy import LazyMap
 from zExceptions import BadRequest
 from zope.component import getUtility
+import re
 
 
 class SolrQueryBaseService(Service):
@@ -43,7 +44,7 @@ class SolrQueryBaseService(Service):
         """ Extract the requested parameters and prepare the solr query
         """
         params = params.copy()
-        query = self.extract_query(params)
+        query = self.preprocess_query(self.extract_query(params))
         filters = self.extract_filters(params)
         start = self.extract_start(params)
         rows = self.extract_rows(params)
@@ -76,6 +77,10 @@ class SolrQueryBaseService(Service):
 
     def extract_query(self, params):
         return "*"
+
+    @staticmethod
+    def preprocess_query(query):
+        return query
 
     def extract_filters(self, params):
         return []
@@ -164,3 +169,64 @@ class SolrQueryBaseService(Service):
         response['items_total'] = batch.items_total
         if batch.links:
             response['batching'] = batch.links
+
+
+OPERATORS = ["and", "or", "&&", "||", "not", "!"]
+IGNORED_TOKENS = ["/"]
+TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@"]
+term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS))
+part_split_pattern = re.compile(r'; |, |\. |\s')
+
+
+class LiveSearchQueryPreprocessingMixin(object):
+
+    @staticmethod
+    def _preprocess_term(term):
+        if term.lower() in OPERATORS:
+            return term
+        if term in IGNORED_TOKENS:
+            return None
+        prefix = ""
+        term = term.rstrip(";,.")
+        if term.startswith("-"):
+            prefix = "-"
+            term = term.lstrip("-")
+        elif term.startswith("+"):
+            prefix = "+"
+            term = term.lstrip("+")
+        tokens = ["{}{}".format(prefix, token)
+                  for token in term_split_pattern.split(term)]
+
+        # Handle bracket and add wildcard to last token
+        last_token = tokens[-1]
+        n_brackets = len(last_token) - len(last_token.rstrip(")"))
+        last_token = last_token.rstrip(")") + "*" + n_brackets * ")"
+        tokens[-1] = last_token
+
+        return "({})".format(" ".join(tokens))
+
+    @staticmethod
+    def _preprocess_phrase(phrase, phrase_prefix):
+        return '{}"{}"'.format(phrase_prefix, phrase)
+
+    def preprocess_query(self, query):
+        preprocessed_query = []
+        parts = query.split('"')
+        for i, part in enumerate(parts):
+            if i % 2 == 0 or i == len(parts) - 1:
+                if part.endswith("-"):
+                    following_phrase_prefix = "-"
+                    part = part.rstrip("-")
+                elif part.endswith("+"):
+                    following_phrase_prefix = "+"
+                    part = part.rstrip("+")
+                else:
+                    following_phrase_prefix = ""
+
+                terms = filter(None, part_split_pattern.split(part))
+                for term in terms:
+                    preprocessed_query.append(self._preprocess_term(term))
+            else:
+                preprocessed_query.append(
+                    self._preprocess_phrase(part, following_phrase_prefix))
+        return " ".join(filter(None, preprocessed_query))

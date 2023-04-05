@@ -707,6 +707,7 @@
     <lst name="defaults">
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
+      <str name="q.op">AND</str>
       <!-- Default search field
          <str name="df">text</str>
         -->
@@ -783,6 +784,7 @@
       <!-- Do not allow querying allowedRolesAndUsers or embedded queries -->
       <str name="uf">* -allowedRolesAndUsers -_query_</str>
       <bool name="lowercaseOperators">true</bool>
+      <str name="bq">{!func}recip(ms(NOW,changed),3.858e-10,10,1)</str>
     </lst>
     <!-- If the default list of SearchComponents is not desired, that
          list can either be overridden completely, or components can be
