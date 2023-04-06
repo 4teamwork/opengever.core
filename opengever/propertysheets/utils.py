@@ -1,7 +1,16 @@
+from datetime import datetime
 from opengever.document.behaviors import IBaseDocument
 from opengever.propertysheets.definition import SolrDynamicField
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from zope.schema import getFields
+from zope.schema._field import Date
+
+
+def cast_custom_property_value(value, field):
+    if isinstance(field, Date):
+        if type(value) == datetime:
+            return value.date()
+    return value
 
 
 def get_customproperties_behavior(obj):
@@ -63,10 +72,14 @@ def set_custom_property(obj, fieldname, value, reindex=False):
         if not definition:
             continue
 
-        if fieldname in definition.get_fieldnames():
+        for slot_fieldname, slot_field in definition.get_fields():
+            if fieldname != slot_fieldname:
+                continue
+
             if slot not in custom_props:
                 custom_props[slot] = {}
-            custom_props[slot][fieldname] = value
+
+            custom_props[slot][fieldname] = cast_custom_property_value(value, slot_field)
 
             field.set(field.interface(obj), custom_props)
             if reindex:
