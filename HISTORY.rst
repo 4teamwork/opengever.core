@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.5.2 (2023-04-06)
+---------------------
+
+Other changes:
+
+
+- Cast datetime values to date objects for customproperty date fields. [elioschmutz]
+
+
 2023.5.1 (2023-03-23)
 ---------------------
 
