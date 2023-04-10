@@ -10,6 +10,33 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.0 (2023-04-10)
+---------------------
+
+New features:
+
+
+- Add @solrlivesearch endpoint and improve solr configuration. [njohner]
+- Use Bcc when sharing content in Teamraum with all participants. [njohner]
+- Handle extra address lines in address block. [njohner]
+
+
+Bug fixes:
+
+
+- Handle long dossier and subdossier titles in task sync. [njohner]
+- Bump ftw.mail to version 2.7.7 to improve attachment filename extraction. [njohner]
+- Make sure to register @ogds-sync file logger only once. [njohner]
+- Fix workspace invitation redirects for already accepted invitations. [phgross]
+- Prevent document finalization if document is referenced by a pending approval task. [phgross]
+
+
+Other changes:
+
+
+- Cast datetime values to date objects for customproperty date fields. [elioschmutz]
+
+
 2023.5.0 (2023-03-23)
 ---------------------
 
