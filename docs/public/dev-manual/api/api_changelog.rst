@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2023.6.0 (unreleased)
+2023.7.0 (unreleased)
 ---------------------
 
 Breaking Changes
@@ -11,6 +11,11 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+
+2023.6.0 (2023-04-10)
+---------------------
+
+Nothing changed in this version.
 
 
 2023.5.0 (2023-03-23)
