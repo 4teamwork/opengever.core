@@ -3,7 +3,7 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
-from datetime import datetime
+from datetime import date
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -88,7 +88,7 @@ def deadline_default():
         interface=ITaskSettings,
     )
 
-    return get_date_with_delta_excluding_weekends(datetime.today(), offset).date()
+    return get_date_with_delta_excluding_weekends(date.today(), offset)
 
 
 class ITask(model.Schema):
