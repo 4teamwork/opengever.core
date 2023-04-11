@@ -15,8 +15,9 @@ class XLSXWalker(XlsSource):
     we extend from the section blueprint. We customize it so that it only
     handles one excel file and can be used outside transmogrifier.
     """
-    def __init__(self, xls_path):
+    def __init__(self, xls_path, repository_id=None):
         self.xls_path = xls_path
+        self.repository_id = repository_id
         self.refnum_to_guid = {}
 
     def __iter__(self):
@@ -24,7 +25,8 @@ class XLSXWalker(XlsSource):
             yield XLSXNode(item, self.refnum_to_guid)
 
     def walk(self):
-        repository_id = os.path.basename(self.xls_path)
+        if self.repository_id is None:
+            repository_id = os.path.basename(self.xls_path)
 
         keys, sheet_data = self.read_excel_file(self.xls_path)
         for rownum, row in enumerate(sheet_data):
