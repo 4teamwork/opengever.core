@@ -82,7 +82,7 @@ class XlsSource(object):
         """Return wheter we should attempt to parse the file based on its
         filename.
 
-        Microsoft office crates temp files in the same directory and prefixes
+        Microsoft office creates temp files in the same directory and prefixes
         them with a tilde.
         """
         if filename.startswith('.') or filename.startswith('~'):
