@@ -77,3 +77,18 @@ class TestDispositionExcelExport(IntegrationTestCase):
             "content-disposition").split(";")[1].split("=")[1])
         expected = "liste_evaluations_angebot-31-8-2016.xlsx"
         self.assertEquals(expected, fname)
+
+    @browsing
+    def test_escape_invalid_chars_in_sheet_title(self, browser):
+        self.login(self.records_manager, browser)
+        self.disposition.title = u'Angebot 06.04.2023: Rechtsdienst'
+        browser.open(self.disposition, view='download_excel')
+
+        data = browser.contents
+        with NamedTemporaryFile(suffix='.xlsx') as tmpfile:
+            tmpfile.write(data)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+            self.assertEquals([u'Angebot 06.04.2023 Rechtsdien'],
+                              [sheet.title for sheet in workbook.worksheets])

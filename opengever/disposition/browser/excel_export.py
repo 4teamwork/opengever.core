@@ -7,12 +7,14 @@ from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.disposition import _
 from opengever.dossier import _ as dossier_mf
+from openpyxl.workbook.child import INVALID_TITLE_REGEX
 from plone import api
 from plone.i18n.normalizer.interfaces import IIDNormalizer
 from Products.Five.browser import BrowserView
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+import re
 
 
 def readable_appraisal(value):
@@ -101,4 +103,4 @@ class DispositionExcelExport(BrowserView):
         """Returns current disposition title. Crop it to 30 characters
         because openpyxl only accepts sheet titles with max 30 characters.
         """
-        return self.context.title[:30]
+        return re.sub(INVALID_TITLE_REGEX, '', self.context.title[:30])
