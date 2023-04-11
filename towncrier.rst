@@ -13,7 +13,7 @@
 
 {% if definitions[category]['showcontent'] %}
 {% for text, values in sections[section][category].items() %}
-- {{ text }}
+- {{ text }}{{ issue }}
 {% endfor %}
 
 {% else %}
