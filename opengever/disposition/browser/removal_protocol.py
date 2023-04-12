@@ -116,7 +116,8 @@ class RemovalProtocolLaTeXView(MakoLaTeXView):
                 self.context.get_dossier_representations()),
             'label_history': translate(
                 _('label_history', default="History"), context=self.request),
-            'history': history_listener.get_listing(self.context.get_history())
+            'history': history_listener.get_listing(
+                reversed(self.context.get_history()))
         }
 
     def get_disposition_metadata(self):
