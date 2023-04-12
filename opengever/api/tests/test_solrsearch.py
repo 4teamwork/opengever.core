@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
 from opengever.api.solrsearch import SolrSearchGet
 from opengever.base.handlers import update_changed_date
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -14,6 +15,7 @@ from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
+from unittest import TestCase
 from urllib import urlencode
 from zope.component import getMultiAdapter
 import json
@@ -1856,7 +1858,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
-            {u'preprocessed_query': u'(some*) (word with hyhpen*)'},
+            {u'preprocessed_query': u'some* (word with hyhpen*)'},
             browser.json)
 
 
@@ -1871,3 +1873,23 @@ class TestSolrLiveSearchPost(TestSolrLiveSearchGet):
         url = u'{}/@solrlivesearch'.format(self.portal.absolute_url())
         browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
         return browser.json
+
+
+class TestSolrLiveSearchQueryPreprocessing(TestCase):
+
+    def test_preprocessing_handles_trailing_wildcard(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("*", preprocessor.preprocess_query("*"))
+        self.assertEqual("(my* hyphenated word*)", preprocessor.preprocess_query("my*-hyphenated-word*"))
+        self.assertEqual("my* oh* my*", preprocessor.preprocess_query("my* oh my*"))
+
+    def test_preprocessing_handles_brakets(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("(this* OR that*) (even* OR more*)",
+                         preprocessor.preprocess_query("(this OR that) (even OR more)"))
+        self.assertEqual("(this* AND that*) OR (even* AND more*)",
+                         preprocessor.preprocess_query("(this AND that) OR (even AND more)"))
+        self.assertEqual("((this* that*) OR another*) (even* more*))",
+                         preprocessor.preprocess_query("((this that) OR another) (even more))"))
+        self.assertEqual("(hyphenated word*) OR another*",
+                         preprocessor.preprocess_query("hyphenated-word OR another"))
