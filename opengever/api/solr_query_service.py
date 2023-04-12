@@ -203,7 +203,9 @@ class LiveSearchQueryPreprocessingMixin(object):
         last_token = last_token.rstrip(")").rstrip("*") + "*" + n_brackets * ")"
         tokens[-1] = last_token
 
-        return "({})".format(" ".join(tokens))
+        if len(tokens) > 1:
+            return "({})".format(" ".join(tokens))
+        return tokens[0]
 
     @staticmethod
     def _preprocess_phrase(phrase, phrase_prefix):

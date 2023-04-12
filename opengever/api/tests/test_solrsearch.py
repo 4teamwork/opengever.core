@@ -1858,7 +1858,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
-            {u'preprocessed_query': u'(some*) (word with hyhpen*)'},
+            {u'preprocessed_query': u'some* (word with hyhpen*)'},
             browser.json)
 
 
@@ -1879,6 +1879,17 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
 
     def test_preprocessing_handles_trailing_wildcard(self):
         preprocessor = LiveSearchQueryPreprocessingMixin()
-        self.assertEqual("(*)", preprocessor.preprocess_query("*"))
+        self.assertEqual("*", preprocessor.preprocess_query("*"))
         self.assertEqual("(my* hyphenated word*)", preprocessor.preprocess_query("my*-hyphenated-word*"))
-        self.assertEqual("(my*) (oh*) (my*)", preprocessor.preprocess_query("my* oh my*"))
+        self.assertEqual("my* oh* my*", preprocessor.preprocess_query("my* oh my*"))
+
+    def test_preprocessing_handles_brakets(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("(this* OR that*) (even* OR more*)",
+                         preprocessor.preprocess_query("(this OR that) (even OR more)"))
+        self.assertEqual("(this* AND that*) OR (even* AND more*)",
+                         preprocessor.preprocess_query("(this AND that) OR (even AND more)"))
+        self.assertEqual("((this* that*) OR another*) (even* more*))",
+                         preprocessor.preprocess_query("((this that) OR another) (even more))"))
+        self.assertEqual("(hyphenated word*) OR another*",
+                         preprocessor.preprocess_query("hyphenated-word OR another"))
