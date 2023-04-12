@@ -171,7 +171,6 @@ class BundleLoader(object):
 
     def _validate_schema(self, items, json_name):
         schema = self.json_schemas[json_name]
-        # May raise jsonschema.ValidationError
         return validate(items, schema, format_checker=FormatChecker())
 
 
@@ -184,6 +183,13 @@ def validate(instance, schema, cls=None, *args, **kwargs):
     cls.check_schema(schema)
     errors = []
     for error in cls(schema, *args, **kwargs).iter_errors(instance):
+        # safely try to get the title of the item and the field
+        try:
+            item = instance[error.path[0]]
+            error.item_title = item.get("title") or item.get("title_de") or item.get("title_fr") or item.get("title_en")
+            error.field = error.schema_path[-2]
+        except Exception:
+            pass
         errors.append(error)
     return errors
 

@@ -36,6 +36,9 @@ class GeverErrorHandling(ErrorHandling):
                     'translated_message': translate(
                         error.get('message'), context=self.request)
                 })
+                # bundle validation
+                if error.get("item_title"):
+                    fields[-1]["item_title"] = error.get("item_title")
 
             result['additional_metadata'] = {'fields': fields}
             result['translated_message'] = translate(

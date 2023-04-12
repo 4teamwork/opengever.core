@@ -70,7 +70,16 @@ class TestValidateRepository(IntegrationTestCase):
             browser.open(self.portal.absolute_url(), view='/@validate-repository',
                          method='POST', headers=self.api_headers, data=data)
 
+        self.assertEqual(u'BadRequest', browser.json['type'])
+        self.assertEqual(u'Inputs not valid', browser.json['translated_message'])
         self.assertEqual(
-            {u'message': u'50 is not one of [None, 5, 10, 15, 20, 25]',
-             u'type': u'BadRequest'},
-            browser.json)
+            [{u'field': u'retention_period',
+              u'item_title': u'F\xfchrung',
+              u'translated_message': u'50 is not one of [None, 5, 10, 15, 20, 25]',
+              u'type': u'ValidationError'},
+             {u'field': u'archival_value',
+              u'item_title': u'Gemeinderecht',
+              u'translated_message': (u"'Keine' is not one of [None, u'unchecked', u'prompt', u'archival worthy',"
+                                      u" u'not archival worthy', u'archival worthy with sampling']"),
+              u'type': u'ValidationError'}],
+            browser.json['additional_metadata']['fields'])

@@ -49,5 +49,16 @@ class ValidateRepository(Service):
                 loader = BundleLoader(os.path.join(factory.target_dir, factory.bundle_name))
                 loader.load()
 
-        except (ValidationError, InvalidXLSXException) as exc:
+        except InvalidXLSXException as exc:
             raise NotReportedBadRequest(exc.message)
+
+        except ValidationError as exc:
+            errors = [{'error': "ValidationError",
+                       "message": error.message,
+                       "field": getattr(error, "field", None),
+                       "item_title": getattr(error, "item_title", None)}
+                      for error in loader.validation_errors]
+            raise NotReportedBadRequest(errors)
+
+        except Exception as exc:
+            raise exc
