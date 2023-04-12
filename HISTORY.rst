@@ -10,6 +10,22 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.1 (2023-04-12)
+---------------------
+
+Bug fixes:
+
+
+- Fix handling of trailing wildcard in query preprocessing. [njohner]
+- Escape invalid characters in the sheet title of disposition exports. [phgross]
+
+
+Other changes:
+
+
+- Bump ftw.solr to Python 3 compatible version. [lgraf]
+
+
 2023.6.0 (2023-04-10)
 ---------------------
 
