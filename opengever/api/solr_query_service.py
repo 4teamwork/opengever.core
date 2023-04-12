@@ -200,7 +200,7 @@ class LiveSearchQueryPreprocessingMixin(object):
         # Handle bracket and add wildcard to last token
         last_token = tokens[-1]
         n_brackets = len(last_token) - len(last_token.rstrip(")"))
-        last_token = last_token.rstrip(")") + "*" + n_brackets * ")"
+        last_token = last_token.rstrip(")").rstrip("*") + "*" + n_brackets * ")"
         tokens[-1] = last_token
 
         return "({})".format(" ".join(tokens))

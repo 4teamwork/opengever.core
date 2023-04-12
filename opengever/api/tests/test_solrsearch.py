@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
 from opengever.api.solrsearch import SolrSearchGet
 from opengever.base.handlers import update_changed_date
 from opengever.base.interfaces import IReferenceNumberSettings
@@ -14,6 +15,7 @@ from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.utils import getToolByName
 from unittest import skip
+from unittest import TestCase
 from urllib import urlencode
 from zope.component import getMultiAdapter
 import json
@@ -1871,3 +1873,12 @@ class TestSolrLiveSearchPost(TestSolrLiveSearchGet):
         url = u'{}/@solrlivesearch'.format(self.portal.absolute_url())
         browser.open(url, method='POST', data=json.dumps(query), headers=self.api_headers)
         return browser.json
+
+
+class TestSolrLiveSearchQueryPreprocessing(TestCase):
+
+    def test_preprocessing_handles_trailing_wildcard(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("(*)", preprocessor.preprocess_query("*"))
+        self.assertEqual("(my* hyphenated word*)", preprocessor.preprocess_query("my*-hyphenated-word*"))
+        self.assertEqual("(my*) (oh*) (my*)", preprocessor.preprocess_query("my* oh my*"))
