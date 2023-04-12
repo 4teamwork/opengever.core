@@ -42,7 +42,9 @@ class ValidateRepository(Service):
                                        tmpdirname,
                                       '--users-group', 'Test group'])
                     factory = BundleFactory(args)
-                    factory.dump_bundle()
+                    # Validation will happen when loading the bundle, so we do
+                    # not want to raise errors while dumping the bundle.
+                    factory.dump_bundle(raise_on_error=False)
 
                 loader = BundleLoader(os.path.join(factory.target_dir, factory.bundle_name))
                 loader.load()

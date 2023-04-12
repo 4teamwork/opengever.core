@@ -103,7 +103,7 @@ class XlsSource(object):
         del sheet_data[0]
         return keys, sheet_data
 
-    def process_row(self, row, rownum, keys, repository_id):
+    def process_row(self, row, rownum, keys, repository_id, raise_on_error=True):
         data = {}
         # repofolder or reporoot
         if rownum == 0:
@@ -139,7 +139,10 @@ class XlsSource(object):
 
                 # Data not already a valid term
                 if cell not in mapping.values():
-                    cell = mapping[cell.lower()]
+                    if cell.lower() in mapping:
+                        cell = mapping[cell.lower()]
+                    elif raise_on_error:
+                        mapping[cell.lower()]
 
             data[key] = cell
 

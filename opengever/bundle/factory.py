@@ -320,7 +320,7 @@ class BundleFactory(object):
         ts = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         return 'Sample-%s.oggbundle' % ts
 
-    def dump_bundle(self):
+    def dump_bundle(self, raise_on_error=True):
         bundle_dir = pjoin(self.target_dir, self.bundle_name)
         os.makedirs(bundle_dir)
         print("Created %s" % bundle_dir)
@@ -337,7 +337,7 @@ class BundleFactory(object):
                                       followlinks=True,
                                       skip_top=self.partial_bundle)
         elif self.source_xlsx:
-            walker = XLSXWalker(self.source_xlsx)
+            walker = XLSXWalker(self.source_xlsx, raise_on_error=raise_on_error)
 
         for node in walker:
             item = self.item_creator(node)

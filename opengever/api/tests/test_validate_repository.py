@@ -34,7 +34,7 @@ class TestValidateRepository(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
     @browsing
-    def test_invalid_repository_validation_raises_bad_request(self, browser):
+    def test_validating_repository_with_missing_parent_position_raises_bad_request(self, browser):
         self.login(self.regular_user, browser)
         file_data = resource_string('opengever.bundle.tests',
                                     'assets/invalid_repository_missing_parent.xlsx')
@@ -51,5 +51,26 @@ class TestValidateRepository(IntegrationTestCase):
 
         self.assertEqual(
             {u'message': u'Parent position 0.0 for 0.0.0 does not exist!',
+             u'type': u'BadRequest'},
+            browser.json)
+
+    @browsing
+    def test_validating_repository_not_satisfying_schema_raises_bad_request(self, browser):
+        self.login(self.regular_user, browser)
+        file_data = resource_string('opengever.bundle.tests',
+                                    'assets/invalid_repository_schema_not_satisfied.xlsx')
+        data = json.dumps({
+            "file": {
+                "filename": "ordnungssystem.xlsx",
+                "data": b64encode(file_data),
+                "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            },
+        })
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal.absolute_url(), view='/@validate-repository',
+                         method='POST', headers=self.api_headers, data=data)
+
+        self.assertEqual(
+            {u'message': u'50 is not one of [None, 5, 10, 15, 20, 25]',
              u'type': u'BadRequest'},
             browser.json)
