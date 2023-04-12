@@ -3,7 +3,7 @@ from collections import Mapping
 from collections import OrderedDict
 from datetime import datetime
 from jsonschema import FormatChecker
-from jsonschema import validate
+from jsonschema.validators import validator_for
 from opengever.document.document import MAIL_EXTENSIONS
 from pkg_resources import resource_filename as rf
 import codecs
@@ -102,6 +102,7 @@ class BundleLoader(object):
         self.bundle_path = bundle_path
         self.json_schemas = self._load_schemas()
         self._stats = {'bundle_counts_raw': {}, 'timings': {}}
+        self.validation_errors = []
 
     def load(self, ingestion_settings=None):
         """Load the bundle from disk and return an iterable Bundle.
@@ -146,11 +147,13 @@ class BundleLoader(object):
                 continue
 
             self._stats['bundle_counts_raw'][json_name] = len(items)
-            self._validate_schema(items, json_name)
+            self.validation_errors.extend(self._validate_schema(items, json_name))
             for item in items:
                 # Apply required preprocessing to items (in-place)
                 ItemPreprocessor(item, json_name).process()
                 self._items.append(item)
+        if self.validation_errors:
+            raise self.validation_errors[0]
 
     def _load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')
@@ -169,7 +172,20 @@ class BundleLoader(object):
     def _validate_schema(self, items, json_name):
         schema = self.json_schemas[json_name]
         # May raise jsonschema.ValidationError
-        validate(items, schema, format_checker=FormatChecker())
+        return validate(items, schema, format_checker=FormatChecker())
+
+
+def validate(instance, schema, cls=None, *args, **kwargs):
+    """Copy of jsonschema.validators.validate but we return a list
+    of errors instead of raising the first error
+    """
+    if cls is None:
+        cls = validator_for(schema)
+    cls.check_schema(schema)
+    errors = []
+    for error in cls(schema, *args, **kwargs).iter_errors(instance):
+        errors.append(error)
+    return errors
 
 
 class ItemPreprocessor(object):
