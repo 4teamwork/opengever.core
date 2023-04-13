@@ -50,7 +50,9 @@ class TestValidateRepository(IntegrationTestCase):
                          method='POST', headers=self.api_headers, data=data)
 
         self.assertEqual(
-            {u'message': u'Parent position 0.0 for 0.0.0 does not exist!',
+            {u'additional_metadata': {},
+             u'message': u'missing_parent_position',
+             u'translated_message': u'Parent position 0.0 for 0.0.0 does not exist!',
              u'type': u'BadRequest'},
             browser.json)
 

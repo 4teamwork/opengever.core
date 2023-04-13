@@ -1,7 +1,7 @@
 from z3c.form import widget
 from z3c.form.browser.file import FileWidget
 from z3c.form.converter import FileUploadDataConverter
-from z3c.form.i18n import MessageFactory as _
+from z3c.form.i18n import MessageFactory as zf_mf
 from z3c.form.interfaces import IFieldWidget
 from z3c.form.interfaces import IFileWidget
 from z3c.form.interfaces import IFormLayer
@@ -63,7 +63,7 @@ class MultiFileUploadDataConverter(FileUploadDataConverter):
             seek = upload.seek
             read = upload.read
         except AttributeError as e:
-            raise ValueError(_('Bytes data are not a file object'), e)
+            raise ValueError(zf_mf('Bytes data are not a file object'), e)
         else:
             seek(0)
             data = read()

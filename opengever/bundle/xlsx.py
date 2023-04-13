@@ -1,3 +1,4 @@
+from opengever.bundle import _
 from opengever.setup.sections.xlssource import XlsSource
 from plone.i18n.normalizer.de import normalizer
 from uuid import uuid4
@@ -54,10 +55,12 @@ class XLSXNode(object):
             reference_number_prefix = reference_number.split('.')[-1]
             parts = reference_number.split('.')
             if any(len(part) >= 3 for part in parts):
-                raise InvalidXLSXException(
-                    "It looks like reference number {} uses the"
-                    "'grouped_by_three' formatter which is currently not "
-                    "supported by bundle factory".format(reference_number))
+                raise InvalidXLSXException(_(
+                    u'unsupported_grouped_by_three',
+                    default=u"It looks like reference number ${reference_number} "
+                            u"uses the 'grouped_by_three' formatter which is "
+                            u"currently not supported by bundle factory",
+                    mapping={'reference_number': reference_number}))
         else:
             level = 0
             reference_number = None
@@ -73,9 +76,11 @@ class XLSXNode(object):
 
         parent = self.reference_number.rsplit('.', 1)[0]
         if self.level and parent not in refnum_to_guid:
-            raise InvalidXLSXException(
-                "Parent position {} for {} does not "
-                "exist!".format(parent, self.reference_number))
+            raise InvalidXLSXException(_(
+                u'missing_parent_position',
+                default=u'Parent position ${parent} for ${reference_number} '
+                        'does not exist!',
+                mapping={"parent": parent, "reference_number": self.reference_number}))
         return parent
 
     def make_guid(self):
