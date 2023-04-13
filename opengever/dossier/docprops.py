@@ -51,7 +51,7 @@ class DocPropertyProvider(BaseDocPropertyProvider):
             key_with_prefix = u"cp.{}".format(key)
             if isinstance(value, date):
                 custom_properties[key_with_prefix] = self._as_datetime(value)
-            elif isinstance(value, set):
+            elif isinstance(value, set) or isinstance(value, list):
                 custom_properties[key_with_prefix] = u', '.join(value)
             elif isinstance(value, unicode):
                 custom_properties[key_with_prefix] = value.replace(u'\n', u' ')
