@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.2 (2023-04-13)
+---------------------
+
+Bug fixes:
+
+
+- Change history order in the disposition removal protocol. [phgross]
+- Fix docproperty collector for custom_properties with a list as value. [phgross]
+
+
 2023.6.1 (2023-04-12)
 ---------------------
 
