@@ -14,6 +14,7 @@ from opengever.dossier.tests import EXPECTED_DOSSIER_PROPERTIES
 from opengever.dossier.tests import EXPECTED_PROPOSALDOC_PROPERTIES
 from opengever.dossier.tests import EXPECTED_TASKDOC_PROPERTIES
 from opengever.dossier.tests import EXPECTED_USER_DOC_PROPERTIES
+from opengever.propertysheets.utils import set_custom_property
 from opengever.testing import IntegrationTestCase
 from zope.component import getAdapter
 import json
@@ -134,6 +135,12 @@ class TestDocProperties(IntegrationTestCase):
 
         self.assertEqual(expected_properties,
                          dossier_adapter.get_properties())
+
+        # handle lists correctly
+        set_custom_property(self.dossier, 'labels', value=['Gamma'])
+        self.assertEqual(
+            u'Gamma',
+            dossier_adapter.get_properties().get('ogg.dossier.cp.labels'))
 
     @browsing
     def test_doc_properties_for_document_with_custom_fields(self, browser):
