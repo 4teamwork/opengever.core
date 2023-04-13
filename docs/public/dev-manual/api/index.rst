@@ -76,4 +76,5 @@ Inhalt:
    out_of_office.rst
    substitutes.rst
    config_checks.rst
+   validate_repository.rst
    examples/index.rst
