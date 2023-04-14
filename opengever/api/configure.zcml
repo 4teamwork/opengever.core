@@ -213,6 +213,14 @@
 
   <plone:service
       method="POST"
+      name="@validate-repository"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".validate_repository.ValidateRepository"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
       name="@copy"
       for="Products.CMFCore.interfaces.IFolderish"
       factory=".copy_.Copy"

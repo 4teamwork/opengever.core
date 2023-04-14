@@ -12,6 +12,8 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- Add new ``@validate-repository`` endpoint.
+
 2023.6.0 (2023-04-10)
 ---------------------
 

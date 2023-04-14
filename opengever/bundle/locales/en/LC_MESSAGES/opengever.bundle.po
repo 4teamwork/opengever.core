@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2023-04-13 07:22+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+
+#. Default: "Parent position ${parent} for ${reference_number} does not exist!"
+#: ./opengever/bundle/xlsx.py
+msgid "missing_parent_position"
+msgstr "Parent position ${parent} for ${reference_number} does not exist!"
+
+#. Default: "It looks like reference number ${reference_number} uses the 'grouped_by_three' formatter which is currently not supported by bundle factory"
+#: ./opengever/bundle/xlsx.py
+msgid "unsupported_grouped_by_three"
+msgstr "It looks like reference number ${reference_number} uses the 'grouped_by_three' formatter which is currently not supported by bundle factory."

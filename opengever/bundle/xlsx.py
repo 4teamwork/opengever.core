@@ -1,3 +1,4 @@
+from opengever.bundle import _
 from opengever.setup.sections.xlssource import XlsSource
 from plone.i18n.normalizer.de import normalizer
 from uuid import uuid4
@@ -15,20 +16,23 @@ class XLSXWalker(XlsSource):
     we extend from the section blueprint. We customize it so that it only
     handles one excel file and can be used outside transmogrifier.
     """
-    def __init__(self, xls_path):
+    def __init__(self, xls_path, repository_id=None, raise_on_error=True):
         self.xls_path = xls_path
+        self.repository_id = repository_id
         self.refnum_to_guid = {}
+        self.raise_on_error = raise_on_error
 
     def __iter__(self):
         for item in self.walk():
             yield XLSXNode(item, self.refnum_to_guid)
 
     def walk(self):
-        repository_id = os.path.basename(self.xls_path)
+        if self.repository_id is None:
+            repository_id = os.path.basename(self.xls_path)
 
         keys, sheet_data = self.read_excel_file(self.xls_path)
         for rownum, row in enumerate(sheet_data):
-            yield self.process_row(row, rownum, keys, repository_id)
+            yield self.process_row(row, rownum, keys, repository_id, self.raise_on_error)
 
 
 class XLSXNode(object):
@@ -51,10 +55,12 @@ class XLSXNode(object):
             reference_number_prefix = reference_number.split('.')[-1]
             parts = reference_number.split('.')
             if any(len(part) >= 3 for part in parts):
-                raise InvalidXLSXException(
-                    "It looks like reference number {} uses the"
-                    "'grouped_by_three' formatter which is currently not "
-                    "supported by bundle factory".format(reference_number))
+                raise InvalidXLSXException(_(
+                    u'unsupported_grouped_by_three',
+                    default=u"It looks like reference number ${reference_number} "
+                            u"uses the 'grouped_by_three' formatter which is "
+                            u"currently not supported by bundle factory",
+                    mapping={'reference_number': reference_number}))
         else:
             level = 0
             reference_number = None
@@ -70,9 +76,11 @@ class XLSXNode(object):
 
         parent = self.reference_number.rsplit('.', 1)[0]
         if self.level and parent not in refnum_to_guid:
-            raise InvalidXLSXException(
-                "Parent position {} for {} does not "
-                "exist!".format(parent, self.reference_number))
+            raise InvalidXLSXException(_(
+                u'missing_parent_position',
+                default=u'Parent position ${parent} for ${reference_number} '
+                        'does not exist!',
+                mapping={"parent": parent, "reference_number": self.reference_number}))
         return parent
 
     def make_guid(self):
