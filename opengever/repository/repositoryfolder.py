@@ -3,7 +3,6 @@ from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import IReferenceNumber
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
-from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
 from plone.dexterity import content
 from plone.supermodel import model
@@ -84,7 +83,7 @@ class IRepositoryFolderSchema(model.Schema):
     )
 
 
-class RepositoryFolder(content.Container, RepositoryMixin):
+class RepositoryFolder(content.Container):
 
     implements(IRepositoryFolder)
 
