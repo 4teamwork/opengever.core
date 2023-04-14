@@ -58,3 +58,14 @@ class TestWorkspaceSerializer(IntegrationTestCase):
 
         browser.open(self.workspace, headers=self.api_headers)
         self.assertFalse(browser.json['can_access_members'])
+
+    @browsing
+    def test_workspace_serialization_contains_main_dossier(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(
+            self.workspace.absolute_url() + '?expand=main-dossier',
+            headers={'Accept': 'application/json'}).json
+
+        self.assertEquals(
+            self.workspace.title,
+            browser.json['@components']['main-dossier']['title'])

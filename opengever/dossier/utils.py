@@ -4,6 +4,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.inbox.inbox import IInbox
+from opengever.workspace.interfaces import IWorkspace
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 import unicodedata
 
@@ -35,14 +36,15 @@ def find_parent_dossier(content):
 
 
 def get_main_dossier(obj):
-    """Helper method which returns the main dossier (or inbox) of the given
-    object.
-    If the given object is not storred inside a dossier it returns None."""
+    """Helper method which returns the main dossier/workspace (or inbox) of
+    the given object.
+    If the given object is not storred inside any main content it returns None."""
 
     dossier = None
     while obj and not IPloneSiteRoot.providedBy(obj):
         if IDossierMarker.providedBy(obj) or \
            IInbox.providedBy(obj) or \
+           IWorkspace.providedBy(obj) or \
            IDossierTemplateSchema.providedBy(obj):
             dossier = obj
 
