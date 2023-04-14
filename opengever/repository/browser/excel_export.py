@@ -190,13 +190,13 @@ def generate_report(request, context):
         return XLSReporter(
             request,
             column_map,
-            [WrapperRepo(folder) for folder in repository_folders],
+            [RepositoryFolderWrapper(folder) for folder in repository_folders],
             sheet_title=repository_translater(u'RepositoryRoot'),
             blank_header_rows=4,
         )()
 
 
-class WrapperRepo(object):
+class RepositoryFolderWrapper(object):
     """Wrapper object to avoid fetching role_settings multiple times."""
 
     def __init__(self, repofolder):
@@ -209,7 +209,7 @@ class WrapperRepo(object):
     def _fetch_role_settings(self):
         if not self._local_roles_cache:
             sharing_view = getMultiAdapter((self._repofolder, self.REQUEST), name="sharing")
-            self._local_roles_cache = sharing_view.role_settings()
+            self._local_roles_cache = sharing_view.existing_role_settings()
 
         return self._local_roles_cache
 
@@ -224,7 +224,7 @@ class WrapperRepo(object):
     def get_groupnames_with_local_or_inherited_role(self, rolename):
         groups = []
         for role in self._fetch_role_settings():
-            if role['computed_roles'].get(rolename):
+            if role['roles'].get(rolename):
                 groups.append(role.get('id'))
         return groups
 
