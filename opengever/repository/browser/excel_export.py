@@ -9,6 +9,7 @@ from opengever.sharing.security import disabled_permission_check
 from plone import api
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.component import getMultiAdapter
 from zope.component import queryAdapter
 
 
@@ -189,7 +190,82 @@ def generate_report(request, context):
         return XLSReporter(
             request,
             column_map,
-            repository_folders,
+            [RepositoryFolderWrapper(folder) for folder in repository_folders],
             sheet_title=repository_translater(u'RepositoryRoot'),
             blank_header_rows=4,
         )()
+
+
+class RepositoryFolderWrapper(object):
+    """Wrapper object to avoid fetching role_settings multiple times."""
+
+    def __init__(self, repofolder):
+        self._repofolder = repofolder
+        self._local_roles_cache = None
+
+    def __getattr__(self, name):
+        return getattr(self._repofolder, name)
+
+    def _fetch_role_settings(self):
+        if not self._local_roles_cache:
+            sharing_view = getMultiAdapter((self._repofolder, self.REQUEST), name="sharing")
+            self._local_roles_cache = sharing_view.existing_role_settings()
+
+        return self._local_roles_cache
+
+    def get_groupnames_with_local_role(self, rolename):
+        return ','.join(set([
+            group
+            for group, roles in self._repofolder.get_local_roles()
+            for role in roles
+            if role == rolename
+        ]))
+
+    def get_groupnames_with_local_or_inherited_role(self, rolename):
+        groups = []
+        for role in self._fetch_role_settings():
+            if role['roles'].get(rolename):
+                groups.append(role.get('id'))
+        return groups
+
+    def get_groupnames_with_local_reader_role(self):
+        return self.get_groupnames_with_local_role('Reader')
+
+    def get_groupnames_with_local_contributor_role(self):
+        return self.get_groupnames_with_local_role('Contributor')
+
+    def get_groupnames_with_local_editor_role(self):
+        return self.get_groupnames_with_local_role('Editor')
+
+    def get_groupnames_with_local_reviewer_role(self):
+        return self.get_groupnames_with_local_role('Reviewer')
+
+    def get_groupnames_with_local_publisher_role(self):
+        return self.get_groupnames_with_local_role('Publisher')
+
+    def get_groupnames_with_local_manager_role(self):
+        return self.get_groupnames_with_local_role('Manager')
+
+    def get_groupnames_with_local_taskresponsible_role(self):
+        return self.get_groupnames_with_local_role('TaskResponsible')
+
+    def get_groupnames_with_local_or_inherited_reader_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Reader')
+
+    def get_groupnames_with_local_or_inherited_contributor_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Contributor')
+
+    def get_groupnames_with_local_or_inherited_editor_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Editor')
+
+    def get_groupnames_with_local_or_inherited_reviewer_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Reviewer')
+
+    def get_groupnames_with_local_or_inherited_publisher_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Publisher')
+
+    def get_groupnames_with_local_or_inherited_manager_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('Manager')
+
+    def get_groupnames_with_local_or_inherited_taskresponsible_role(self):
+        return self.get_groupnames_with_local_or_inherited_role('TaskResponsible')

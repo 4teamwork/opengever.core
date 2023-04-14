@@ -2,7 +2,6 @@ from opengever.base import _ as bmf
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.behaviors.translated_title import TranslatedTitleMixin
 from opengever.repository import _
-from opengever.repository.mixin import RepositoryMixin
 from plone.app.content.interfaces import INameFromTitle
 from plone.autoform import directives as form
 from plone.dexterity.content import Container
@@ -52,7 +51,7 @@ class IRepositoryRoot(model.Schema):
     )
 
 
-class RepositoryRoot(Container, RepositoryMixin, TranslatedTitleMixin):
+class RepositoryRoot(Container, TranslatedTitleMixin):
     """A Repositoryroot.
     """
 
