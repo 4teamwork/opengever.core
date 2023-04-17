@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@navigation`` endpoint excludes trashed items.
 
 - Add new ``@validate-repository`` endpoint.
 

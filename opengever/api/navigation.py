@@ -110,6 +110,7 @@ class Navigation(object):
         query = {
             'object_provides': [i.__identifier__ for i in content_interfaces],
             'path_parent': '/'.join(root.getPhysicalPath()),
+            'trashed': 'false',
         }
 
         review_states = self.request.form.get('review_state', [])

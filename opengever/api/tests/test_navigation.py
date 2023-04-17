@@ -3,6 +3,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.testing import obj2brain
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.helpers import MockDossierTypes
+from opengever.trash.trash import ITrasher
 from plone import api
 from urllib import urlencode
 import Missing
@@ -481,3 +482,27 @@ class TestNavigation(SolrIntegrationTestCase):
             tree[2]['text'],
         ]
         self.assertEqual(expected, actual)
+
+    @browsing
+    def test_navigation_excludes_trashed_objects(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('content_interfaces', 'opengever.document.document.IDocumentSchema'),
+        ]
+
+        browser.open(
+            self.dossier.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        items_count_before_trash = len(flatten_tree(browser.json['tree']))
+
+        ITrasher(self.document).trash()
+        self.commit_solr()
+
+        browser.open(
+            self.dossier.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        items_count_after_trash = len(flatten_tree(browser.json['tree']))
+
+        self.assertEqual(items_count_before_trash - 1, items_count_after_trash)
