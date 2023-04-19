@@ -4,7 +4,7 @@ filename = "HISTORY.rst"
 directory = "changes/"
 template = "towncrier.rst"
 underlines = ["-", ""]
-issue_format = "[{issue}]"
+issue_format = "{issue}"
 
 [[tool.towncrier.type]]
 directory = "feature"
