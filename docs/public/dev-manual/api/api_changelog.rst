@@ -3,11 +3,18 @@
 API Changelog
 =============
 
-2023.7.0 (unreleased)
+2023.8.0 (unreleased)
 ---------------------
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2023.7.0 (2023-04-19)
+---------------------
 
 Other Changes
 ^^^^^^^^^^^^^
