@@ -10,6 +10,23 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.7.0 (2023-04-19)
+---------------------
+
+New features:
+
+
+- Add @validate-repository endpoint. [njohner] [CA-5609]
+
+
+Other changes:
+
+
+- @navigation endpoint excludes trashed items. [elioschmutz] [CA-5584]
+- Register workspaces as a main_dossiers for the main-dossier expansion. [elioschmutz] [CA-5584-2]
+- Speed up excel exports of repositories. [phgross] [CA-5643]
+
+
 2023.6.2 (2023-04-13)
 ---------------------
 
