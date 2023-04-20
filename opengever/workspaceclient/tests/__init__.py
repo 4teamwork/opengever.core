@@ -10,7 +10,6 @@ from opengever.workspaceclient.session import SESSION_STORAGE
 from plone import api
 from zope.component import queryUtility
 from zope.ramcache.interfaces.ram import IRAMCache
-import os
 import transaction
 
 
@@ -58,18 +57,6 @@ class FunctionalWorkspaceClientTestCase(SolrFunctionalTestCase):
 
         self.enable_feature()
         self.invalidate_cache()
-
-    @contextmanager
-    def env(self, **env):
-        """Temporary set env variables.
-        """
-        original = os.environ.copy()
-        os.environ.update(env)
-        try:
-            yield
-        finally:
-            os.environ.clear()
-            os.environ.update(original)
 
     def enable_feature(self, enabled=True):
         api.portal.set_registry_record(
