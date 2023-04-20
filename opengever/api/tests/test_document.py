@@ -278,6 +278,22 @@ class TestDocumentSerializer(IntegrationTestCase):
               u'version_id': 1}],
             browser.json['@components']['approvals'])
 
+    @browsing
+    def test_document_serialization_contains_workspace_document_links(self, browser):
+        self.login(self.workspace_member, browser)
+
+        adapter = ILinkedDocuments(self.document)
+        adapter.link_workspace_document(IUUID(self.workspace_document))
+        adapter.link_workspace_document(IUUID(self.workspace_folder_document))
+
+        with self.env(TEAMRAUM_URL='https://example.com/teamraum'):
+            browser.open(self.document, headers={'Accept': 'application/json'})
+
+            self.assertEqual(
+                [u'https://example.com/teamraum/redirect-to-uuid/createworkspace00000000000000003',
+                 u'https://example.com/teamraum/redirect-to-uuid/createworkspace00000000000000005'],
+                browser.json["workspace_document_urls"])
+
 
 class TestDocumentPost(IntegrationTestCase):
 
