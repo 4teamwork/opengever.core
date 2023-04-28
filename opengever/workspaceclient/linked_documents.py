@@ -1,4 +1,5 @@
 from opengever.document.behaviors import IBaseDocument
+from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from operator import itemgetter
 from persistent.list import PersistentList
@@ -79,3 +80,8 @@ class LinkedDocuments(object):
         if persistent:
             return annotations.setdefault(self.storage_key, PersistentMapping())
         return dict(annotations.get(self.storage_key, {}))
+
+    def get_workspace_document_urls(self):
+        return [
+            '/'.join([WorkspaceClient().workspace_url, 'redirect-to-uuid', doc.get('UID')])
+            for doc in self.linked_workspace_documents]

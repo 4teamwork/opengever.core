@@ -77,6 +77,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'current_version_id': obj.get_current_version_id(
                 missing_as_zero=True),
             'teamraum_connect_links': ILinkedDocuments(obj).serialize(),
+            'workspace_document_urls': ILinkedDocuments(obj).get_workspace_document_urls(),
             'creator': serialize_actor_id_to_json_summary(obj.Creator()),
         }
 

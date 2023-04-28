@@ -36,6 +36,7 @@ from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
 import json
+import os
 import transaction
 import unittest
 
@@ -118,6 +119,18 @@ class TestCase(unittest.TestCase):
         reminders['after'] = obj.get_reminders()
         reminders['added'] = [r for r in reminders['after'] if r not in reminders['before']]
         reminders['removed'] = [r for r in reminders['before'] if r not in reminders['after']]
+
+    @contextmanager
+    def env(self, **env):
+        """Temporary set env variables.
+        """
+        original = os.environ.copy()
+        os.environ.update(env)
+        try:
+            yield
+        finally:
+            os.environ.clear()
+            os.environ.update(original)
 
 
 class FunctionalTestCase(TestCase):

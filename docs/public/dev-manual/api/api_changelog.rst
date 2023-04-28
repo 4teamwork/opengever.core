@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add ``workspace_document_urls`` in document serialization.
 
 
 2023.7.0 (2023-04-19)
