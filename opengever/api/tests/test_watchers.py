@@ -3,6 +3,7 @@ from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.base.model import create_session
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
@@ -327,6 +328,24 @@ class TestWatchersGet(SolrIntegrationTestCase):
                          headers=self.api_headers)
         browser.open(self.dossier, method='GET', headers=self.api_headers)
         self.assertNotIn('watchers', browser.json['@components'])
+
+    @browsing
+    def test_get_watchers_hides_inactive_users(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+
+        center.add_watcher_to_resource(self.document, self.dossier_responsible.id, WATCHER_ROLE)
+        User.get(self.dossier_responsible.id).active = False
+
+        browser.open(self.document.absolute_url() + '?expand=watchers',
+                     method='GET', headers=self.api_headers)
+
+        expected_json = {u'@id': self.document.absolute_url() + '/@watchers',
+                         u'referenced_users': [],
+                         u'referenced_actors': [],
+                         u'referenced_watcher_roles': [],
+                         u'watchers_and_roles': {}}
+        self.assertEqual(expected_json, browser.json['@components']['watchers'])
 
 
 class TestWatchersSolr(SolrIntegrationTestCase):
@@ -713,6 +732,22 @@ class TestPossibleWatchers(IntegrationTestCase):
             u'items_total': 0}
 
         self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_possible_watchers_only_returns_active_users(self, browser):
+        center = notification_center()
+        self.login(self.regular_user, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(['faivel.fruhling'],
+                         [item['token'] for item in browser.json['items']])
+
+        User.get('faivel.fruhling').active = False
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual([],
+                         [item['token'] for item in browser.json['items']])
 
     @browsing
     def test_get_possible_watchers_for_document(self, browser):

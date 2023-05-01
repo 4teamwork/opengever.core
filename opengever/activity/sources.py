@@ -14,6 +14,8 @@ class PossibleWatchersSource(AssignedUsersSource):
     available.
     """
 
+    search_only_active_users = True
+
     @property
     def base_query(self):
         query = super(PossibleWatchersSource, self).base_query

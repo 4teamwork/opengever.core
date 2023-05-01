@@ -39,8 +39,10 @@ class Watchers(object):
         roles = set()
         watchers_and_roles = defaultdict(list)
         for subscription in self.center.get_subscriptions(self.context):
-            watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
-            roles.add(subscription.role)
+            actor = ActorLookup(subscription.watcher.actorid).lookup()
+            if actor.is_active:
+                watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
+                roles.add(subscription.role)
 
         portal_url = api.portal.get().absolute_url()
         referenced_users = []
