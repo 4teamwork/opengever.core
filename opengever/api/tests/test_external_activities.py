@@ -196,7 +196,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
 
         activity = Activity.query.all()[-1]
         self.assertItemsEqual(
-            [user.userid for user in group.users],
+            [user.userid for user in group.users if user.active],
             [notification.userid for notification in activity.notifications],
         )
 
@@ -361,8 +361,9 @@ class TestExternalActivitiesPost(IntegrationTestCase):
             }], browser.json['errors'])
 
         activity = Activity.query.all()[-1]
+
         self.assertItemsEqual(
-            [user.userid for user in group.users],
+            [user.userid for user in group.users if user.active],
             [notification.userid for notification in activity.notifications],
         )
 

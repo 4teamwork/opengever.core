@@ -8,6 +8,7 @@ from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import UnicodeCoercingText
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.models.user import User
 from opengever.ogds.models.user_settings import UserSettings
 from plone.restapi.serializer.converters import json_compatible
 from sqlalchemy import Column
@@ -77,6 +78,11 @@ class Activity(Base, Translatable):
         for userid in userids:
             if (self.is_current_user(userid) and not
                     self.user_wants_own_action_notifications(userid)):
+                continue
+
+            # Skip inactive users
+            user = User.query.get(userid)
+            if user and not user.active:
                 continue
 
             notifications.append(
