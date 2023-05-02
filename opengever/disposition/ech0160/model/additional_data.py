@@ -1,3 +1,4 @@
+from datetime import date
 from opengever.disposition import _
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.propertysheets.utils import get_custom_properties
@@ -25,6 +26,9 @@ def get_additional_data(obj):
 
         if isinstance(value, int):
             value = str(value)
+
+        if isinstance(value, date):
+            value = value.isoformat()
 
         zusatzdaten.merkmal.append(value)
         zusatzdaten.merkmal[-1].name = key
