@@ -385,11 +385,11 @@ class TestAddActivity(IntegrationTestCase):
             {'en': 'Task bla added by Hugo'},
             'hugo.boss',
             {'en': None},
-            notification_recipients=[peter, nadja]).get('activity')
+            notification_recipients=['peter', 'nadja']).get('activity')
 
         self.assertEqual(2, len(activity.notifications))
         self.assertEqual(['peter', 'nadja'],
-                         [notification.userid.actorid for notification in activity.notifications])
+                         [notification.userid for notification in activity.notifications])
 
     def test_does_not_create_notification_for_actor_if_notify_own_actions_disabled(self):
         create(Builder('ogds_user').id('peter'))
