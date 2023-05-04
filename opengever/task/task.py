@@ -4,6 +4,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
+from DateTime import DateTime
 from ftw.datepicker.widget import DatePickerFieldWidget
 from ftw.keywordwidget.widget import KeywordFieldWidget
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
@@ -821,6 +822,43 @@ class Task(Container, TaskReminderSupport):
             return related_documents
 
         return _get_documents() + _get_related_documents()
+
+    def _fix_review_state_mismatch(self):
+        """Check if there is a review_state mismatch between the predecessor
+        and successor pair and fix it.
+
+        Returns true if there was a mismatch to fix.
+        """
+        sql_task = self.get_sql_object()
+
+        # predecessor
+        if sql_task.has_remote_predecessor:
+            if sql_task.predecessor.review_state != sql_task.review_state:
+                self._set_review_state(sql_task.predecessor.review_state)
+                return True
+
+        if sql_task.has_remote_successor:
+            # When having a remote successor there can only be one predecessor,
+            # so it's safe to get the state from the first one
+            if sql_task.successors[0].review_state != sql_task.review_state:
+                self._set_review_state(sql_task.successors[0].review_state)
+                return True
+
+        return False
+
+    def _set_review_state(self, review_state):
+        wftool = api.portal.get_tool('portal_workflow')
+        wf_id = wftool.getWorkflowsFor(self)[0].id
+        wftool.setStatusOf(wf_id, self,
+                           {'review_state': review_state,
+                            'action': review_state,
+                            'actor': 'zopemaster',
+                            'time': DateTime(),
+                            'comments': 'Review state mismatch synchronisation'})
+        wftool.getWorkflowsFor(self)[0].updateRoleMappingsFor(self)
+
+        self.sync()
+        self.reindexObject()
 
 
 def related_document(context):
