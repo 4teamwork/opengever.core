@@ -1,8 +1,10 @@
+from DateTime import DateTime
 from opengever.base.security import elevated_privileges
 from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
 from plone import api
+from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.utils import safe_unicode
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -59,7 +61,51 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
             # Because this is already teh syncing of the foreign side, we need
             # to disable syncing of the transition, otherwise it would end in
             # a snycing-loop
-            wftool.doActionFor(
-                self.context, transition, disable_sync=True, transition_params=data)
+            try:
+                wftool.doActionFor(
+                    self.context, transition, disable_sync=True, transition_params=data)
+            except WorkflowException:
+                missmatch_fixed = self._fix_review_state_missmatch()
+                if missmatch_fixed:
+                    wftool.doActionFor(
+                        self.context, transition,
+                        disable_sync=True, transition_params=data)
 
         notify(ObjectModifiedEvent(self.context))
+
+    def _fix_review_state_missmatch(self):
+        """Check if there is a review_state missmatch between the predecessor
+        and successor pair and fix it.
+
+        Returns true if there was a missmatch to fix.
+        """
+        sql_task = self.context.get_sql_object()
+
+        # predecessor
+        if sql_task.has_remote_predecessor:
+            if sql_task.predecessor.review_state != sql_task.review_state:
+                self._set_review_state(sql_task.predecessor.review_state)
+                return True
+
+        if sql_task.has_remote_successor:
+            # When having a remote successor there can only be one predecessor,
+            # so it's safe to get the state from the first one
+            if sql_task.successors[0].review_state != sql_task.review_state:
+                self._set_review_state(sql_task.successors[0].review_state)
+                return True
+
+        return False
+
+    def _set_review_state(self, review_state):
+        wftool = api.portal.get_tool('portal_workflow')
+        wf_id = wftool.getWorkflowsFor(self.context)[0].id
+        wftool.setStatusOf(wf_id, self.context,
+                           {'review_state': review_state,
+                            'action': review_state,
+                            'actor': 'zopemaster',
+                            'time': DateTime(),
+                            'comments': 'Review state missmatch synchronisation'})
+        wftool.getWorkflowsFor(self.context)[0].updateRoleMappingsFor(self.context)
+
+        self.context.sync()
+        self.context.reindexObject()
