@@ -385,11 +385,11 @@ class TestAddActivity(IntegrationTestCase):
             {'en': 'Task bla added by Hugo'},
             'hugo.boss',
             {'en': None},
-            notification_recipients=[peter, nadja]).get('activity')
+            notification_recipients=['peter', 'nadja']).get('activity')
 
         self.assertEqual(2, len(activity.notifications))
         self.assertEqual(['peter', 'nadja'],
-                         [notification.userid.actorid for notification in activity.notifications])
+                         [notification.userid for notification in activity.notifications])
 
     def test_does_not_create_notification_for_actor_if_notify_own_actions_disabled(self):
         create(Builder('ogds_user').id('peter'))
@@ -436,6 +436,29 @@ class TestAddActivity(IntegrationTestCase):
 
         self.assertEquals(1, Notification.query.by_user('hugo').count())
         self.assertEquals(1, Notification.query.by_user('peter').count())
+
+    def test_does_not_create_notification_for_inactive_users(self):
+        peter_user = create(Builder('ogds_user').id('peter'))
+        peter = create(Builder('watcher').having(actorid='peter'))
+
+        create(Builder('ogds_user').id('hugo'))
+        hugo = create(Builder('watcher').having(actorid='hugo'))
+
+        peter_user.active = False
+
+        create(Builder('resource').oguid('fd:123').watchers([hugo, peter]))
+
+        self.center.add_activity(
+            Oguid('fd', '123'),
+            'TASK_ADDED',
+            {'en': 'Kennzahlen 2014 erfassen'},
+            {'en': 'Task accepted'},
+            {'en': 'Task bla added by Peter'},
+            'peter',
+            {'en': None})
+
+        self.assertEquals(1, Notification.query.by_user('hugo').count())
+        self.assertEquals(0, Notification.query.by_user('peter').count())
 
 
 class TestNotificationHandling(IntegrationTestCase):
