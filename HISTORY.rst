@@ -10,6 +10,29 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.0 (2023-05-05)
+---------------------
+
+New features:
+
+
+- Add workspace document urls in document serialization. [phgross] [CA-5562]
+
+
+Bug fixes:
+
+
+- Handle review_state missmatch between successor/predecessor pairs gracefully. [phgross] [CA-5363]
+- Hide and skip inactive users in the @watchers endpoints. [phgross] [CA-5400]
+- Support date custom fields in ech0160 export. [njohner] [CA-5697]
+
+
+Other changes:
+
+
+- Reindex maybe not properly indexed files. [elioschmutz] [CA-5726]
+
+
 2023.7.0 (2023-04-19)
 ---------------------
 
