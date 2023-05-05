@@ -6,9 +6,6 @@ API Changelog
 2023.8.0 (unreleased)
 ---------------------
 
-Breaking Changes
-^^^^^^^^^^^^^^^^
-
 Other Changes
 ^^^^^^^^^^^^^
 - Add ``workspace_document_urls`` in document serialization.
