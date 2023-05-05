@@ -423,6 +423,48 @@ class TestWorkflowSyncerReceiver(FunctionalTestCase):
 
         self.assertEqual('task-state-resolved', api.content.get_state(task))
 
+    def test_handles_review_state_mismatch_called_from_predecessor(self):
+        predecessor = create(Builder('task')
+                             .having(responsible_client='org-unit-1')
+                             .in_state('task-state-resolved'))
+
+        task = create(Builder('task')
+                      .in_state('task-state-in-progress')
+                      .having(responsible_client='org-unit-1')
+                      .successor_from(predecessor))
+
+        # make predecessor remote
+        predecessor.get_sql_object().admin_unit_id = 'additional'
+
+        self.prepare_request(task, text=u'I am done!',
+                             transition='task-transition-resolved-tested-and-closed')
+
+        task.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(task))
+
+    def test_handles_review_state_mismatch_called_from_successor(self):
+        predecessor = create(Builder('task')
+                             .having(responsible_client='org-unit-1',
+                                     task_type='direct-execution')
+                             .in_state('task-state-in-progress'))
+
+        successor = create(Builder('task')
+                           .in_state('task-state-resolved')
+                           .having(responsible_client='org-unit-1',
+                                   task_type='direct-execution')
+                           .successor_from(predecessor))
+
+        # make predecessor remote
+        successor.get_sql_object().admin_unit_id = 'additional'
+
+        self.prepare_request(predecessor, text=u'I am done!',
+                             transition='task-transition-resolved-tested-and-closed')
+
+        predecessor.unrestrictedTraverse(self.RECEIVER_VIEW_NAME)()
+
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(predecessor))
+
 
 class TestModifyDeadlineSyncerReceiver(FunctionalTestCase):
 

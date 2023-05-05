@@ -3,6 +3,7 @@ from opengever.task.response_syncer import BaseResponseSyncerReceiver
 from opengever.task.response_syncer import BaseResponseSyncerSender
 from opengever.task.response_syncer import ResponseSyncerSenderException
 from plone import api
+from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.CMFPlone.utils import safe_unicode
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
@@ -59,7 +60,14 @@ class WorkflowResponseSyncerReceiver(BaseResponseSyncerReceiver):
             # Because this is already teh syncing of the foreign side, we need
             # to disable syncing of the transition, otherwise it would end in
             # a snycing-loop
-            wftool.doActionFor(
-                self.context, transition, disable_sync=True, transition_params=data)
+            try:
+                wftool.doActionFor(
+                    self.context, transition, disable_sync=True, transition_params=data)
+            except WorkflowException:
+                mismatch_fixed = self.context._fix_review_state_mismatch()
+                if mismatch_fixed:
+                    wftool.doActionFor(
+                        self.context, transition,
+                        disable_sync=True, transition_params=data)
 
         notify(ObjectModifiedEvent(self.context))

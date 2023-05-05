@@ -22,6 +22,7 @@ from opengever.task.validators import NoCheckedoutDocsValidator
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.WorkflowCore import WorkflowException
 from Products.Five.browser import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
 from z3c.form import validator
@@ -247,10 +248,19 @@ class CompleteSuccessorTaskReceiveDelivery(BrowserView):
 
         # This view is only called as the receiving part of a transition
         # syncing, so no workflow syncing is necessary.
-        util.change_task_workflow_state(
-            self.context, data['transition'], text=data['text'],
-            disable_sync=True, added_objects=documents,
-            pass_documents_to_next_task=data.get('pass_documents_to_next_task', False))
+        try:
+            util.change_task_workflow_state(
+                self.context, data['transition'], text=data['text'],
+                disable_sync=True, added_objects=documents,
+                pass_documents_to_next_task=data.get('pass_documents_to_next_task', False))
+
+        except WorkflowException:
+            mismatch_fixed = self.context._fix_review_state_mismatch()
+            if mismatch_fixed:
+                util.change_task_workflow_state(
+                    self.context, data['transition'], text=data['text'],
+                    disable_sync=True, added_objects=documents,
+                    pass_documents_to_next_task=data.get('pass_documents_to_next_task', False))
 
         return ok_response()
 
