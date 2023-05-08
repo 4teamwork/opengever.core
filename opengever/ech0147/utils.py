@@ -4,6 +4,7 @@ from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
 from opengever.ech0147.serializer import ECH0147Serializer
+from plone.dexterity.utils import safe_utf8
 from plone.restapi.interfaces import IDeserializeFromJson
 from random import randint
 from zope.component import queryMultiAdapter
@@ -108,7 +109,14 @@ def create_document(container, document, zipfile):
         try:
             zipinfo = zipfile.getinfo(file_.pathFileName)
         except KeyError:
-            raise ValueError('Missing file {}'.format(file_.pathFileName))
+            # This error is generally raised if a file is referenced in the
+            # .xml file but does not exist in the zipfile.
+            #
+            # Another known reason for this case is a path normalization done by pyxb
+            # which changes the given path in the .xml file. Thus the file itself
+            # can no longer be found.
+            # See https://github.com/4teamwork/opengever.core/pull/7720#issuecomment-1539660053
+            raise ValueError('Missing file {}'.format(safe_utf8(file_.pathFileName)))
 
         file_field = IDocumentSchema['file']
         filename = os.path.basename(file_.pathFileName)
