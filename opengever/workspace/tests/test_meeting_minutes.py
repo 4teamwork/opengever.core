@@ -48,3 +48,92 @@ class TestMeetingMinutes(IntegrationTestCase):
 
         self.assertEqual(['Decision:'], browser.css('h3').text)
         self.assertEqual([], browser.css('ul.related_items a').text)
+
+    @browsing
+    def test_meeting_minutes_header_uses_definition_on_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.workspace.meeting_template_header = {
+            'left': '4teamwork AG',
+            'center': '',
+            'right': 'Musterstrasse 43',
+        }
+
+        view = MeetingMinutesPDFView(self.workspace_meeting, getRequest())
+        html = view.meeting_minutes_html()
+
+        expected_header = """
+  @top-left {
+    content: "4teamwork AG";
+    white-space: pre;
+  }
+  @top-center {
+    content: "";
+    white-space: pre;
+  }
+  @top-right {
+    content: "Musterstrasse 43";
+    white-space: pre;
+  }
+"""
+        self.assertIn(expected_header, html)
+
+    @browsing
+    def test_meeting_minutes_footer_uses_definition_on_workspace(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.workspace.meeting_template_footer = {
+            'left': '4teamwork AG',
+            'center': 'Musterstrasse 43',
+            'right': '3001 Bern',
+        }
+
+        view = MeetingMinutesPDFView(self.workspace_meeting, getRequest())
+        html = view.meeting_minutes_html()
+
+        expected_header = """
+  @bottom-left {
+    content: "4teamwork AG";
+    white-space: pre;
+  }
+  @bottom-center {
+    content: "Musterstrasse 43";
+    white-space: pre;
+  }
+  @bottom-right {
+    content: "3001 Bern";
+    white-space: pre;
+  }
+"""
+        self.assertIn(expected_header, html)
+
+    @browsing
+    def test_meeting_minutes_header_dynamic_content(self, browser):
+        self.login(self.workspace_member, browser)
+
+        self.workspace.meeting_template_header = {
+            'left': '{print_date}',
+            'center': '',
+            'right': '{page_number} / {number_of_pages}',
+        }
+
+        with freeze(datetime(2023, 5, 10)):
+            view = MeetingMinutesPDFView(self.workspace_meeting, getRequest())
+            html = view.meeting_minutes_html()
+
+        expected_header = """
+  @top-left {
+    content: "May 10, 2023";
+    white-space: pre;
+  }
+  @top-center {
+    content: "";
+    white-space: pre;
+  }
+  @top-right {
+    content: ""counter(page)" / "counter(pages)"";
+    white-space: pre;
+  }
+"""
+
+        self.assertIn(expected_header, html)

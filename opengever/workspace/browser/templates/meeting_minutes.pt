@@ -75,11 +75,30 @@ a {
   margin-right: 2.5cm;
   font-family: Helvetica, Arial, Sans-serif;
   font-size: 10pt;
-  @bottom-right {
-    content: counter(page) "/" counter(pages);
+
+  @top-left {
+    content: ${python:options['header']['left']};
+    white-space: pre;
+  }
+  @top-center {
+    content: ${python:options['header']['center']};
+    white-space: pre;
+  }
+  @top-right {
+    content: ${python:options['header']['right']};
+    white-space: pre;
   }
   @bottom-left {
-    content: "${python:toLocalizedTime(options['print_date'], long_format=True)}";
+    content: ${python:options['footer']['left']};
+    white-space: pre;
+  }
+  @bottom-center {
+    content: ${python:options['footer']['center']};
+    white-space: pre;
+  }
+  @bottom-right {
+    content: ${python:options['footer']['right']};
+    white-space: pre;
   }
 }
 </style>

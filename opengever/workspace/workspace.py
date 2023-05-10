@@ -82,16 +82,16 @@ class IWorkspaceSchema(model.Schema):
     meeting_template_header = JSONField(
         title=_(u'label_workspace_meeting_template_header',
                 default=u'Meeting minutes header'),
-        description=_(u'help_workspace_meeting_template_header',
-                      default=u'Define the header of meeting minutes'),
+        description=_(u'help_workspace_header_and_footer',
+                      default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
         schema=HEADER_FOOTER_FORMAT,
         required=False,
     )
     meeting_template_footer = JSONField(
         title=_(u'label_workspace_meeting_template_footer',
                 default=u'Meeting minutes footer'),
-        description=_(u'help_workspace_meeting_template_footer',
-                      default=u'Define the footer of meeting minutes'),
+        description=_(u'help_workspace_header_and_footer',
+                      default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
         schema=HEADER_FOOTER_FORMAT,
         required=False,
     )

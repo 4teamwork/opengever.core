@@ -1,4 +1,4 @@
-from DateTime import DateTime
+from datetime import datetime
 from logging import getLogger
 from opengever.base.helpers import display_name
 from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
@@ -40,12 +40,27 @@ class MeetingMinutesPDFView(BrowserView):
             self.request.response.setHeader('Content-Type', 'application/pdf')
             return resp.content
 
+    def prepare_header_and_footer(self):
+        header = self.context.meeting_template_header or {}
+        footer = self.context.meeting_template_footer or {}
+
+        return self._format_strings(header), self._format_strings(footer)
+
+    def _format_strings(self, data):
+        dynamic_information = {
+            'page_number': '"counter(page)"',
+            'number_of_pages': '"counter(pages)"',
+            'print_date': self.context.toLocalizedTime(datetime.now()),
+        }
+
+        return {key: '"{}"'.format(data.get(key, '').format(**dynamic_information))
+                for key in ['left', 'center', 'right']}
+
     def meeting_minutes_html(self):
         data = {}
         portal_state = getMultiAdapter((self.context, self.request),
                                        name=u'plone_portal_state')
         data['generator'] = portal_state.portal_title()
-        data['print_date'] = DateTime()
         data['responsible'] = display_name(self.context.responsible)
         data['chair'] = display_name(self.context.chair)
         data['secretary'] = display_name(self.context.secretary)
@@ -72,5 +87,7 @@ class MeetingMinutesPDFView(BrowserView):
                     {'title': item.Title(), 'url': item.absolute_url()}
                     for item in related_items]
             })
+
+        data['header'], data['footer'] = self.prepare_header_and_footer()
 
         return self.template(self, **data)
