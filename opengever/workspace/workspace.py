@@ -12,6 +12,7 @@ from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
+from plone.schema import JSONField
 from plone.supermodel import model
 from zExceptions import Forbidden
 from zExceptions import Unauthorized
@@ -19,6 +20,14 @@ from zope import schema
 from zope.interface import implements
 from zope.interface import provider
 import uuid
+import json
+
+
+HEADER_FOOTER_FORMAT = json.dumps({
+    'left': '',
+    'center': '',
+    'right': '',
+})
 
 
 def videoconferencing_url_default():
@@ -68,6 +77,22 @@ class IWorkspaceSchema(model.Schema):
     hide_members_for_guests = schema.Bool(
         title=_(u'label_hide_members_for_guests',
                 default=u'Hide workspace members for workspace guests'),
+        required=False,
+    )
+    meeting_template_header = JSONField(
+        title=_(u'label_workspace_meeting_template_header',
+                default=u'Meeting minutes header'),
+        description=_(u'help_workspace_meeting_template_header',
+                      default=u'Define the header of meeting minutes'),
+        schema=HEADER_FOOTER_FORMAT,
+        required=False,
+    )
+    meeting_template_footer = JSONField(
+        title=_(u'label_workspace_meeting_template_footer',
+                default=u'Meeting minutes footer'),
+        description=_(u'help_workspace_meeting_template_footer',
+                      default=u'Define the footer of meeting minutes'),
+        schema=HEADER_FOOTER_FORMAT,
         required=False,
     )
 

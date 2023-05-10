@@ -57,6 +57,24 @@
                     "description": "",
                     "_zope_schema_type": "Bool"
                 },
+                "meeting_template_header": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Kopfzeile von Meeting-Protokollen",
+                    "description": "Definieren sie die Fusszeile von Meeting-Protokollen",
+                    "_zope_schema_type": "JSONField"
+                },
+                "meeting_template_footer": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Fusszeile von Meeting-Protokollen",
+                    "description": "Definieren sie die Kopfzeile von Meeting-Protokollen",
+                    "_zope_schema_type": "JSONField"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -147,6 +165,8 @@
                 "external_reference",
                 "gever_url",
                 "hide_members_for_guests",
+                "meeting_template_header",
+                "meeting_template_footer",
                 "changed",
                 "title",
                 "description",
