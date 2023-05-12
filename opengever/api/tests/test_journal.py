@@ -2,6 +2,7 @@ from DateTime import DateTime
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.base.behaviors.touched import ITouched
 from opengever.journal.manager import JournalManager
 from opengever.testing import IntegrationTestCase
 import json
@@ -86,6 +87,25 @@ class TestJournalPost(IntegrationTestCase):
 
         entry = self.journal_entries(self.dossier)[-1]
         self.assertEqual('<p>Danger text</p>', entry['comments'])
+
+    @browsing
+    def test_add_journal_entry_updates_touched_date(self, browser):
+        self.login(self.regular_user, browser)
+        payload = {
+            'comment': 'example comment',
+            'category': {'token': 'information'},
+        }
+
+        self.assertEqual("2016-08-31", str(ITouched(self.dossier).touched))
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(
+                self.dossier.absolute_url() + '/@journal',
+                data=json.dumps(payload),
+                method='POST',
+                headers=http_headers(),
+            )
+
+        self.assertEqual("2020-06-13", str(ITouched(self.dossier).touched))
 
 
 class TestJournalGet(IntegrationTestCase):
@@ -413,6 +433,26 @@ class TestJournalDelete(IntegrationTestCase):
             {u'message': u'Only manual journal entries can be removed',
              u'type': u'Forbidden'}, browser.json)
 
+    @browsing
+    def test_delete_journal_entry_updates_touched_date(self, browser):
+        self.login(self.regular_user, browser)
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'first')
+
+        self.assertEqual("2016-08-31", str(ITouched(self.dossier).touched))
+        first_entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(first_entry.get('@id'), method='DELETE', headers=http_headers())
+
+        self.assertEqual("2020-06-13", str(ITouched(self.dossier).touched))
+
 
 class TestJournalPatch(IntegrationTestCase):
 
@@ -592,3 +632,32 @@ class TestJournalPatch(IntegrationTestCase):
         ).json.get('items')[-1]
 
         self.assertEqual('<p>Danger text</p>', entry['comment'])
+
+    @browsing
+    def test_patch_journal_entry_updates_touched_date(self, browser):
+        self.login(self.regular_user, browser)
+
+        manager = JournalManager(self.dossier)
+        manager.clear()
+
+        manager.add_manual_entry('information', 'is an agent')
+
+        entry = browser.open(
+            self.dossier.absolute_url() + '/@journal',
+            method='GET',
+            headers=http_headers(),
+        ).json.get('items')[-1]
+
+        self.assertEqual("2016-08-31", str(ITouched(self.dossier).touched))
+        with freeze(datetime(2020, 6, 13)):
+            browser.open(entry.get('@id'),
+                         method='PATCH',
+                         data=json.dumps({
+                             "comment": "my new comment",
+                             "category": "phone-call",
+                             'related_documents': [self.document.absolute_url()],
+                             'time': u'2017-10-16T00:00:00+00:00',
+                         }),
+                         headers=http_headers())
+
+        self.assertEqual("2020-06-13", str(ITouched(self.dossier).touched))
