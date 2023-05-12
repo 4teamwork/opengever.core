@@ -108,6 +108,13 @@ def create_document(container, document, zipfile):
         try:
             zipinfo = zipfile.getinfo(file_.pathFileName)
         except KeyError:
+            # This error is generally raised if a file is referenced in the
+            # .xml file but does not exist in the zipfile.
+            #
+            # Another known reason for this case is a path normalization done by pyxb
+            # which changes the given path in the .xml file. Thus the file itself
+            # can no longer be found.
+            # See https://github.com/4teamwork/opengever.core/pull/7720#issuecomment-1539660053
             raise ValueError('Missing file {}'.format(file_.pathFileName))
 
         file_field = IDocumentSchema['file']
