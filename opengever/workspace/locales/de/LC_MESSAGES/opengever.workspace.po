@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-02-21 18:23+0000\n"
+"POT-Creation-Date: 2023-05-12 05:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -132,6 +132,11 @@ msgstr "Protokoll: ${title}"
 #: ./opengever/workspace/workspace.py
 msgid "help_videoconferencing_url"
 msgstr "Verwendete URL um eine Videokonferenz für diesen Teamraum zu starten."
+
+#. Default: "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}"
+#: ./opengever/workspace/workspace.py
+msgid "help_workspace_header_and_footer"
+msgstr "Dynamische Textinhalte sind {page_number}, {number_of_pages} und {print_date}"
 
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
@@ -333,6 +338,16 @@ msgstr "Video-Call Link"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
 msgstr "Videokonferenz URL"
+
+#. Default: "Meeting minutes footer"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_meeting_template_footer"
+msgstr "Fusszeile von Meeting-Protokollen"
+
+#. Default: "Meeting minutes header"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_meeting_template_header"
+msgstr "Kopfzeile von Meeting-Protokollen"
 
 #. Default: "Added to the workspace"
 #: ./opengever/workspace/activities.py
