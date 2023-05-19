@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.1 (2023-05-19)
+---------------------
+
+Bug fixes:
+
+
+- Fix ech0147 import if there are umlauts in the filenames. [elioschmutz] [CA-5673]
+
+
 2023.8.0 (2023-05-05)
 ---------------------
 
