@@ -4,6 +4,7 @@ from opengever.ech0147.mappings import INV_CLASSIFICATION_MAPPING
 from opengever.ech0147.mappings import INV_PRIVACY_LAYER_MAPPING
 from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
 from opengever.ech0147.serializer import ECH0147Serializer
+from plone.dexterity.utils import safe_utf8
 from plone.restapi.interfaces import IDeserializeFromJson
 from random import randint
 from zope.component import queryMultiAdapter
@@ -13,6 +14,20 @@ from zope.lifecycleevent import ObjectModifiedEvent
 import json
 import os.path
 import transaction
+import unicodedata
+
+
+def normalize_filename(unicode_string):
+    """A python zipfile provides file information by filename: zipfile.NameToInfo
+
+    The filename is encoded as utf-8 in the NFD-normal-form (canonical decomposition).
+    See: https://docs.python.org/2/library/unicodedata.html#unicodedata.normalize
+
+    This function normalizes a given unicode string to the format used internally
+    by the ZipFile-object. This fixes an issue where it was not possible to
+    lookup a zipfile object by its filename when umlauts were part of the filename.
+    """
+    return unicodedata.normalize('NFD', unicode_string).encode('utf-8')
 
 
 def sanitize_metadata(metadata):
@@ -106,7 +121,7 @@ def create_document(container, document, zipfile):
     if document.files:
         file_ = document.files.file[0]
         try:
-            zipinfo = zipfile.getinfo(file_.pathFileName)
+            zipinfo = zipfile.getinfo(normalize_filename(file_.pathFileName))
         except KeyError:
             # This error is generally raised if a file is referenced in the
             # .xml file but does not exist in the zipfile.
@@ -115,7 +130,7 @@ def create_document(container, document, zipfile):
             # which changes the given path in the .xml file. Thus the file itself
             # can no longer be found.
             # See https://github.com/4teamwork/opengever.core/pull/7720#issuecomment-1539660053
-            raise ValueError('Missing file {}'.format(file_.pathFileName))
+            raise ValueError('Missing file {}'.format(safe_utf8(file_.pathFileName)))
 
         file_field = IDocumentSchema['file']
         filename = os.path.basename(file_.pathFileName)

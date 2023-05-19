@@ -123,7 +123,7 @@ class TestImport(IntegrationTestCase):
             }).submit()
         docs = self.dossier.objectValues()[-2:]
         self.assertEqual(docs[0].Title(), 'Kaufvertrag')
-        self.assertEqual(docs[1].Title(), 'Grundrissplan')
+        self.assertEqual(docs[1].Title(), 'Grundrisspl\xc3\xa4n')
 
         self.assertIsNotNone(obj2brain(docs[0]).bumblebee_checksum)
 
