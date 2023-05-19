@@ -6,6 +6,7 @@ from opengever.journal.form import IManualJournalEntry
 from opengever.journal.manager import AutoEntryManipulationException
 from opengever.journal.manager import JournalManager
 from opengever.journal.manager import MANUAL_JOURNAL_ENTRY
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
@@ -18,13 +19,30 @@ from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.component import queryMultiAdapter
+from zope.component.interfaces import ObjectEvent
+from zope.event import notify
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implements
+from zope.interface import Interface
 from zope.publisher.interfaces import IPublishTraverse
 from zope.schema.interfaces import ConstraintNotSatisfied
 
 
 DEFAULT_COMMENT_CATEGORY = 'information'
+
+
+class IManualJournalUpdateEvent(Interface):
+    """
+    """
+
+
+class ManualJournalUpdateEvent(ObjectEvent):
+    """An event indicating that any manual journal entry have been
+    added/modified/deleted
+    """
+
+    implements(IManualJournalUpdateEvent)
 
 
 class JournalService(Service):
@@ -72,6 +90,9 @@ class JournalPost(JournalService):
     """Adds a journal-entry"""
 
     def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         data = self._deserialize_data(json_body(self.request))
         comment = data.get('comment')
         category = data.get('category', DEFAULT_COMMENT_CATEGORY)
@@ -81,6 +102,7 @@ class JournalPost(JournalService):
         JournalManager(self.context).add_manual_entry(
             category, comment, documents, time)
 
+        notify(ManualJournalUpdateEvent(self.context))
         self.request.response.setStatus(204)
         return super(JournalPost, self).reply()
 
@@ -204,6 +226,9 @@ class JournalDelete(JournalService):
     implements(IPublishTraverse)
 
     def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         entry_id = self.read_params()
         try:
             JournalManager(self.context).remove(entry_id)
@@ -212,6 +237,7 @@ class JournalDelete(JournalService):
         except AutoEntryManipulationException:
             raise Forbidden("Only manual journal entries can be removed")
 
+        notify(ManualJournalUpdateEvent(self.context))
         self.request.response.setStatus(204)
         return None
 
@@ -229,6 +255,9 @@ class JournalPatch(JournalService):
     implements(IPublishTraverse)
 
     def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
         entry_id = self.read_params()
 
         try:
@@ -246,5 +275,6 @@ class JournalPatch(JournalService):
         except AutoEntryManipulationException:
             raise Forbidden("Only manual journal entries can be updated")
 
+        notify(ManualJournalUpdateEvent(self.context))
         self.request.response.setStatus(204)
         return None

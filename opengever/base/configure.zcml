@@ -415,6 +415,12 @@
       />
 
   <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           opengever.api.journal.IManualJournalUpdateEvent"
+      handler=".handlers.update_touched_date"
+      />
+
+  <subscriber
       for="opengever.meeting.proposal.IBaseProposal
            Products.CMFCore.interfaces.IActionSucceededEvent"
       handler=".handlers.update_touched_date"
