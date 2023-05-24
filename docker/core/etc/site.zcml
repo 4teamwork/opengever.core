@@ -167,6 +167,7 @@
   <include package="collective.js.extjs" file="configure.zcml" />
   <include package="ftw.monitor" file="configure.zcml" />
   <include package="ftw.zopemaster" file="configure.zcml" />
+  <include package="ftw.slacker" file="configure.zcml" />
   <includeOverrides package="opengever.base" file="overrides.zcml" />
   <includeOverrides package="opengever.bumblebee" file="overrides.zcml" />
   <includeOverrides package="opengever.core" file="overrides.zcml" />
