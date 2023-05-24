@@ -36,6 +36,7 @@ tests_require = [
     'z3c.blobfile',
     'z3c.form',
     'z3c.saconfig',
+    'zc.buildout',  # Undeclared dependency of ftw.testing, should be removed once it's properly declared in ftw.testing
     'zope.globalrequest',
     'zope.testing',
 ]

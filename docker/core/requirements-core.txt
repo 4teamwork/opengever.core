@@ -303,7 +303,7 @@ urllib3==1.22
 vs.genericsetup.ldap==1.2
 wicked==1.1.12
 xlrd==1.1.0
-z3c.autoinclude==0.4.0
+z3c.autoinclude==0.4.1
 z3c.caching==2.0
 z3c.form==3.2.11
 z3c.formwidget.query==0.17
@@ -313,7 +313,6 @@ z3c.relationfield==0.6.3
 z3c.saconfig==0.14
 z3c.unconfigure==1.0.1
 z3c.zcmlhook==1.0b1
-zc.buildout==2.13.3
 zc.lockfile==1.0.2
 zc.relation==1.0
 ZConfig==2.9.3
