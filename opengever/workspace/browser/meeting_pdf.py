@@ -1,14 +1,17 @@
 from datetime import datetime
 from logging import getLogger
 from opengever.base.helpers import display_name
+from opengever.base.interfaces import IWhiteLabelingSettings
 from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
 from opengever.workspace.workspace_meeting import ALLOWED_ATTENDEES_PRESENCE_STATES
 from os import environ
+from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+import base64
 import requests
 
 
@@ -27,9 +30,15 @@ class MeetingMinutesPDFView(BrowserView):
             return 'PDF generation failed.'
 
         resp = None
+
+        files = {'html': self.meeting_minutes_html()}
+        customer_logo = self.get_customer_logo_src()
+        if customer_logo:
+            files['asset.customer_logo.png'] = customer_logo
+
         try:
-            resp = requests.post(
-                weasyprint_url, files={'html': self.meeting_minutes_html()})
+            resp = requests.post(weasyprint_url, files=files)
+
             resp.raise_for_status()
         except requests.exceptions.RequestException:
             details = resp.content[:200] if resp is not None else ''
@@ -46,11 +55,16 @@ class MeetingMinutesPDFView(BrowserView):
 
         return self._format_strings(header), self._format_strings(footer)
 
+    def get_customer_logo_src(self):
+        return api.portal.get_registry_record(
+            'logo_src', interface=IWhiteLabelingSettings)
+
     def _format_strings(self, data):
         dynamic_information = {
             'page_number': '"counter(page)"',
             'number_of_pages': '"counter(pages)"',
             'print_date': self.context.toLocalizedTime(datetime.now()),
+            'customer_logo': '"url(\"asset.customer_logo.png\")"',
         }
 
         return {key: '"{}"'.format(data.get(key, '').format(**dynamic_information))

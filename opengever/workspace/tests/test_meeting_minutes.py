@@ -1,4 +1,6 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.base.interfaces import IDeleter
 from opengever.core.testing import WEASYPRINT_SERVICE_INTEGRATION_TESTING
 from opengever.testing import IntegrationTestCase
@@ -113,7 +115,7 @@ class TestMeetingMinutes(IntegrationTestCase):
 
         self.workspace.meeting_template_header = {
             'left': '{print_date}',
-            'center': '',
+            'center': '{customer_logo}',
             'right': '{page_number} / {number_of_pages}',
         }
 
@@ -127,7 +129,7 @@ class TestMeetingMinutes(IntegrationTestCase):
     white-space: pre;
   }
   @top-center {
-    content: "";
+    content: ""url("asset.customer_logo.png")"";
     white-space: pre;
   }
   @top-right {
