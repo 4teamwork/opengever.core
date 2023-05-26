@@ -63,11 +63,13 @@ class ReferenceNumberPrefixAdpater(object):
             reference_mapping[CHILD_REF_KEY] = PersistentDict()
         return reference_mapping.get(CHILD_REF_KEY, None)
 
-    def get_prefix_mapping(self, obj=None):
-        reference_mapping = self.get_reference_mapping(obj)
-        if PREFIX_REF_KEY not in reference_mapping:
-            reference_mapping[PREFIX_REF_KEY] = PersistentDict()
-        return reference_mapping.get(PREFIX_REF_KEY, None)
+    def get_number_by_int_id(self, obj=None):
+        child_mapping = self.get_child_mapping(obj)
+        prefix_mapping = {}
+        for number, intid in child_mapping.items():
+            prefix_mapping[intid] = number
+
+        return prefix_mapping
 
     def get_type_key(self, obj=None):
         if obj and IDossierMarker.providedBy(obj):
@@ -88,16 +90,10 @@ class ReferenceNumberPrefixAdpater(object):
         """
 
         child_mapping = self.get_child_mapping(obj)
-        prefix_mapping = self.get_prefix_mapping(obj)
-        intid = obj and getUtility(IIntIds).getId(aq_base(obj))
 
         if not child_mapping.keys():
             # It's the first number ever issued
             return self.get_first_number(obj)
-        elif intid and intid in prefix_mapping:
-            # Moving back? The object already used to have a number
-            # here - lets recycle it!
-            return prefix_mapping[intid]
         else:
             prefixes_in_use = child_mapping.keys()
             # Sort the list of unicode strings *numerically*
@@ -142,7 +138,7 @@ class ReferenceNumberPrefixAdpater(object):
         except KeyError:
             return None
 
-        prefix_mapping = self.get_prefix_mapping(obj)
+        prefix_mapping = self.get_number_by_int_id(obj)
         if intid in prefix_mapping:
             return prefix_mapping.get(intid)
         return None
@@ -160,15 +156,17 @@ class ReferenceNumberPrefixAdpater(object):
         if not isinstance(number, unicode):
             number = unicode(number)
 
-        self.get_prefix_mapping(obj)[intid] = number
+        old_number = self.get_number_by_int_id(obj).get(intid)
+        if old_number:
+            self.get_child_mapping(obj)[old_number] = None
         self.get_child_mapping(obj)[number] = intid
         return number
 
     def is_valid_number(self, number, obj=None):
         """ check the given reference number for the given context """
 
-        child_mapping = self.get_child_mapping(obj)
-        if number not in child_mapping.keys():
+        existing_assignemnt = self.get_child_mapping(obj).get(number)
+        if not existing_assignemnt:
             return True
 
         elif obj is not None:
@@ -176,7 +174,7 @@ class ReferenceNumberPrefixAdpater(object):
             intids = getUtility(IIntIds)
             intid = intids.getId(aq_base(obj))
 
-            if child_mapping[number] == intid:
+            if existing_assignemnt == intid:
                 return True
 
         return False
@@ -189,35 +187,25 @@ class ReferenceNumberPrefixAdpater(object):
         intid_util = getUtility(IIntIds)
         intid = self.get_child_mapping().get(prefix)
 
-        if intid_util.queryObject(intid) is None:
-            # Repositoryfolder is already removed, so the prefix is not in use.
-            # This special handling could be removed when repository deleting
-            # is implemented save (see OGIP 3).
-            return False
-
-        return prefix in self.get_reference_mapping()['reference_prefix'].values()
+        return intid and intid_util.queryObject(intid) is not None
 
     def get_number_mapping(self, missing_title_as_none=False):
         items = []
         intid_util = getUtility(IIntIds)
 
         for prefix, intid in self.get_child_mapping().iteritems():
-            obj = intid_util.queryObject(intid)
+            obj = intid and intid_util.queryObject(intid)
 
             if obj:
                 title = ITranslatedTitle(obj).translated_title()
-                active = (self.get_prefix_mapping()[intid] == prefix)
+                active = True
             else:
-                # if a repositoryfolder is already removed the intid
-                # utility raises an KeyError. But the number should still
-                # be in the list, because it should be available to remove
-                # via the reference prefix manager.
                 active = False
                 if missing_title_as_none:
                     title = None
                 else:
-                    title = _('label_already_removed',
-                              '-- Already removed object --')
+                    title = _('label_not_in_use',
+                              default=u'Number not in use')
 
             items.append({'prefix': prefix, 'title': title, 'active': active})
 
