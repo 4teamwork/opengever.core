@@ -374,6 +374,11 @@
       name="containing_dossier"
       />
 
+  <adapter
+      factory=".indexers.related_items"
+      name="related_items"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

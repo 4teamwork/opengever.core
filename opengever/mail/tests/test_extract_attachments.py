@@ -9,6 +9,8 @@ from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from pkg_resources import resource_string
 import transaction
 
@@ -88,19 +90,6 @@ class TestExtractAttachmentView(FunctionalTestCase):
                           browser.url)
 
     @browsing
-    def test_creates_document_in_parent_dossier(self, browser):
-        browser.login().open(self.mail, view='extract_attachments')
-        browser.fill({'attachments:list': ['1']}).submit()
-
-        doc = self.dossier.listFolderContents(
-            {'portal_type': 'opengever.document.document'})[0]
-
-        self.assertEquals('B\xc3\xbccher', doc.Title())
-        self.assertEquals(doc.document_date, date.today())
-
-        self.assertEquals(obj2brain(doc).document_date, date.today())
-
-    @browsing
     def test_extract_attachment_without_docs_shows_warning_message(self, browser):
         mail = create(Builder('mail').within(self.dossier))
         browser.login().open(mail, view='extract_attachments')
@@ -170,6 +159,32 @@ class TestExtractAttachments(IntegrationTestCase):
         self.assertEqual(1, len(children["added"]))
         doc = children["added"].pop()
         self.assertEquals('word_document', doc.Title())
+
+
+class TestExtractAttachmentsSolr(SolrIntegrationTestCase):
+
+    @browsing
+    def test_creates_document_in_parent_dossier(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.empty_dossier)
+                      .with_asset_message(
+                          'mail_with_one_docx_attachment.eml'))
+
+        with self.observe_children(self.empty_dossier) as children:
+            browser.open(mail, view='extract_attachments')
+            browser.fill({'attachments:list': ['2']}).submit()
+
+        self.commit_solr(avoid_blob_extraction=True)
+
+        self.assertEqual(1, len(children["added"]))
+        doc = children["added"].pop()
+
+        self.assertEquals('word_document', doc.Title())
+        self.assertEquals(doc.document_date, date.today())
+        self.assertEquals(obj2brain(doc).document_date, date.today())
+        self.assertEqual([mail], doc.related_items())
+        self.assertEqual([mail.UID()], solr_data_for(doc, "related_items"))
 
 
 class TestContentTypeHelper(FunctionalTestCase):

@@ -1,6 +1,7 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
@@ -502,3 +503,18 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         indexed_value = solr_data_for(self.document, 'filename')
 
         self.assertEqual(u'Vertraegsentwurf.docx', indexed_value)
+
+    @browsing
+    def test_related_items_is_updated_when_forward_relations_are_modified(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertEqual([], self.document.related_items())
+        self.assertEqual(None, solr_data_for(self.document, 'related_items'))
+
+        browser.open(self.document, view='edit')
+        browser.fill({'Related documents': [self.subdocument.absolute_url_path()]})
+        browser.find('Save').click()
+
+        self.commit_solr()
+        self.assertEqual([self.subdocument], self.document.related_items())
+        self.assertEqual([self.subdocument.UID()],
+                          solr_data_for(self.document, 'related_items'))
