@@ -35,7 +35,7 @@ class Repository(object):
     def binding(self):
         """Return XML binding"""
         os = arelda.ordnungssystemGeverSIP()
-        os.name = self.obj.Title()
+        os.name = self.obj.Title().decode('utf8')
 
         if self.obj.version:
             os.generation = self.obj.version
