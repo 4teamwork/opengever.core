@@ -1,7 +1,6 @@
 from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.solr.interfaces import ISolrSettings
 from ftw.testing import freeze
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
@@ -27,11 +26,9 @@ from plone import api
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
-from plone.registry.interfaces import IRegistry
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
-from zope.component import queryUtility
 import datetime
 import pytz
 
@@ -450,12 +447,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         copied_doc = api.content.copy(self.document, target=self.subdossier)
 
-        # We need to execute the update commands but avoid extracting from the
-        # blob, which fails as the zope transaction is not committed.
-        registry = queryUtility(IRegistry)
-        settings = registry.forInterface(ISolrSettings)
-        settings.enable_updates_in_post_commit_hook = False
-        self.commit_solr(after_commit=True)
+        self.commit_solr(avoid_blob_extraction=True)
 
         indexed_value = solr_data_for(copied_doc, 'approval_state')
         self.assertEqual(APPROVED_IN_CURRENT_VERSION, indexed_value)
@@ -480,12 +472,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         copied_doc = api.content.copy(self.document, target=self.subdossier)
 
-        # We need to execute the update commands but avoid extracting from the
-        # blob, which fails as the zope transaction is not committed.
-        registry = queryUtility(IRegistry)
-        settings = registry.forInterface(ISolrSettings)
-        settings.enable_updates_in_post_commit_hook = False
-        self.commit_solr(after_commit=True)
+        self.commit_solr(avoid_blob_extraction=True)
 
         indexed_value = solr_data_for(copied_doc, 'approval_state')
         self.assertEqual(None, indexed_value)
