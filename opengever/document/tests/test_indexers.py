@@ -11,6 +11,7 @@ from opengever.document.approvals import APPROVED_IN_OLDER_VERSION
 from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.checkout.manager import CHECKIN_CHECKOUT_ANNOTATIONS_KEY
 from opengever.document.indexers import DefaultDocumentIndexer
 from opengever.document.indexers import filename as filename_indexer
@@ -24,12 +25,16 @@ from opengever.testing import obj2brain
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
+from plone.app.relationfield.event import update_behavior_relations
 from plone.app.testing import TEST_USER_NAME
 from plone.dexterity.utils import createContentInContainer
 from plone.namedfile.file import NamedBlobFile
+from z3c.relationfield.relation import RelationValue
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
+from zope.component import getUtility
+from zope.intid.interfaces import IIntIds
 import datetime
 import pytz
 
@@ -517,4 +522,31 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.commit_solr()
         self.assertEqual([self.subdocument], self.document.related_items())
         self.assertEqual([self.subdocument.UID()],
-                          solr_data_for(self.document, 'related_items'))
+                         solr_data_for(self.document, 'related_items'))
+
+    @browsing
+    def test_related_items_is_updated_when_related_item_is_deleted(self, browser):
+        self.login(self.regular_user, browser)
+        intids = getUtility(IIntIds)
+        IRelatedDocuments(self.document).relatedItems = [
+            RelationValue(intids.getId(self.subdocument))]
+        update_behavior_relations(self.document, None)
+        self.document.reindexObject(idxs=["related_items"])
+        self.commit_solr()
+
+        self.assertEqual(
+            [self.subdocument],
+            [rel.to_object for rel in IRelatedDocuments(self.document).relatedItems])
+        self.assertEqual([self.subdocument.UID()],
+                         solr_data_for(self.document, 'related_items'))
+
+        with self.login(self.manager):
+            api.content.delete(self.subdocument)
+
+        self.commit_solr()
+        # Relations do not get deleted, only broken
+        relations = IRelatedDocuments(self.document).relatedItems
+        self.assertEqual(1, len(relations))
+        self.assertTrue(relations[0].isBroken())
+        # Index should only contain unbroken relations
+        self.assertEqual(None, solr_data_for(self.document, 'related_items'))

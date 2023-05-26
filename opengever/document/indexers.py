@@ -269,5 +269,5 @@ def containing_dossier_title(obj):
 @indexer(IDocumentSchema)
 def related_items(obj):
     brains = [unrestrictedPathToCatalogBrain(rel.to_path)
-              for rel in IRelatedDocuments(obj).relatedItems]
+              for rel in IRelatedDocuments(obj).relatedItems if not rel.isBroken()]
     return [brain.UID for brain in brains if brain]
