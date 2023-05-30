@@ -6,6 +6,7 @@ from opengever.ogds.auth.testing import OGDSAuthTestCase
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.app.testing import TEST_USER_ID
+from Products.PlonePAS.plugins.group import PloneGroup
 from Products.PlonePAS.plugins.ufactory import PloneUser
 from zope.component import getMultiAdapter
 
@@ -428,6 +429,69 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
             negative_cache_hit = self.plugin.getGroupsForPrincipal(franzi)
             self.assertEqual(3, mock_query_ogds.call_count)
             self.assertEqual(negative_cache_hit, negative_cache_miss)
+
+
+class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
+    """Tests for the IGroupIntrospection plugin interface.
+    """
+
+    def test_get_group_by_id_returns_plone_group(self):
+        group = self.plugin.getGroupById('fa_users')
+        self.assertIsInstance(group, PloneGroup)
+        self.assertEqual(group.getProperty('title'), 'fa Users Group')
+        self.assertEqual(group.getRoles(), ['Authenticated'])
+
+    def test_get_group_by_id_for_unknown_id_returns_none(self):
+        group = self.plugin.getGroupById('unknown_group')
+        self.assertEqual(group, None)
+
+    def test_get_groups_returns_list_of_plone_groups(self):
+        groups = self.plugin.getGroups()
+        for group in groups:
+            self.assertIsInstance(group, PloneGroup)
+
+    def test_get_group_ids_returns_list_of_group_ids(self):
+        group_ids = self.plugin.getGroupIds()
+        self.assertEqual(group_ids, [
+            'committee_rpk_group',
+            'committee_ver_group',
+            'fa_inbox_users',
+            'fa_users',
+            'projekt_a',
+            'projekt_b',
+            'projekt_laeaer',
+            'rk_inbox_users',
+            'rk_users',
+        ])
+
+    def test_get_group_members_returns_list_of_user_ids(self):
+        user_ids = self.plugin.getGroupMembers('fa_users')
+        self.assertEqual(user_ids, [
+            'beatrice.schrodinger',
+            'committee.secretary',
+            'david.meier',
+            'faivel.fruhling',
+            'franzi.muller',
+            'fridolin.hugentobler',
+            'gunther.frohlich',
+            'hans.peter',
+            'herbert.jager',
+            'inactive.user',
+            'jurgen.fischer',
+            'jurgen.konig',
+            'kathi.barfuss',
+            'maja.harzig',
+            'nicole.kohler',
+            'propertysheets.manager',
+            'ramon.flucht',
+            'robert.ziegler',
+            'service.user',
+            'webaction.manager',
+        ])
+
+    def test_get_group_members_for_unknown_id_returns_empty_list(self):
+        user_ids = self.plugin.getGroupMembers('unknown_group')
+        self.assertEqual(user_ids, [])
 
 
 class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):

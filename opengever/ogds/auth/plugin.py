@@ -10,9 +10,12 @@ from plone import api
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFPlone.utils import safe_unicode
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.PlonePAS.interfaces.group import IGroupIntrospection
+from Products.PlonePAS.plugins.group import PloneGroup
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
+from Products.PluggableAuthService.interfaces.plugins import IRolesPlugin  # noqa
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin  # noqa
 from Products.PluggableAuthService.plugins.BasePlugin import BasePlugin
 from sqlalchemy import func
@@ -58,6 +61,7 @@ def install_ogds_auth_plugin(id_='ogds_auth', title=None,
             plugin.manage_activateInterfaces([
                 'IUserEnumerationPlugin',
                 'IGroupEnumerationPlugin',
+                'IGroupIntrospection',
                 'IGroupsPlugin',
                 'IPropertiesPlugin',
             ])
@@ -84,6 +88,7 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
     implements(
         IUserEnumerationPlugin,
         IGroupEnumerationPlugin,
+        IGroupIntrospection,
         IGroupsPlugin,
         IPropertiesPlugin,
     )
@@ -359,6 +364,75 @@ class OGDSAuthenticationPlugin(BasePlugin, Cacheable):
         return results
 
     security.declarePrivate('getPropertiesForUser')
+
+    # IGroupIntrospection implementation
+    def getGroupById(self, group_id, default=None):
+        self.log('Getting group by id={!r}'.format(group_id))
+
+        query = (
+            select([Group.groupname])
+            .where(Group.active == true())
+            .where(func.lower(Group.groupid) == group_id.lower())
+        )
+        res = self.query_ogds(query).fetchone()
+
+        if not res:
+            return default
+
+        groupname = res[0].encode('utf-8')
+        group = self._make_group(group_id, groupname)
+
+        self.log('Found group: {!r}'.format(group))
+        return group
+
+    def _make_group(self, group_id, groupname):
+        # Creates a decorated Plone group from a group_id.
+        # Based on PlonePAS.plugins.group._findGroup
+
+        group = PloneGroup(group_id, groupname)
+        plugins = self._getPAS()._getOb('plugins')
+
+        propfinders = plugins.listPlugins(IPropertiesPlugin)
+        for propfinder_id, propfinder in propfinders:
+            data = propfinder.getPropertiesForUser(group, None)
+            if data:
+                group.addPropertysheet(propfinder_id, data)
+
+        groups = self._getPAS()._getGroupsForPrincipal(group, None,
+                                                       plugins=plugins)
+        group._addGroups(groups)
+
+        rolemakers = plugins.listPlugins(IRolesPlugin)
+        for rolemaker_id, rolemaker in rolemakers:
+            roles = rolemaker.getRolesForPrincipal(group, None)
+            if roles:
+                group._addRoles(roles)
+
+        group._addRoles(['Authenticated'])
+
+        return group.__of__(self)
+
+    def getGroups(self):
+        self.log('Getting all groups')
+        return map(self.getGroupById, self.getGroupIds())
+
+    def getGroupIds(self):
+        self.log('Getting all group ids')
+        query = (
+            select([Group.groupid])
+            .where(Group.active == true())
+            .order_by(Group.groupid)
+        )
+        return [self.to_ascii(value) for value, in self.query_ogds(query)]
+
+    def getGroupMembers(self, group_id):
+        self.log('Getting group members for group={!r}'.format(group_id))
+        query = (
+            select([groups_users.c.userid])
+            .where(groups_users.c.groupid == group_id)
+            .order_by(groups_users.c.userid)
+        )
+        return [self.to_ascii(value) for value, in self.query_ogds(query)]
 
     # IPropertiesPlugin implementation
     def getPropertiesForUser(self, user, request=None):
