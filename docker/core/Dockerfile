@@ -64,6 +64,9 @@ RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
+COPY ./docker/core/patches/z3c_autoinclude_utils.py /app/lib/python2.7/site-packages/z3c/autoinclude/utils.py
+RUN python2.7 -m compileall /app/lib/python2.7/site-packages/z3c/autoinclude/utils.py
+
 FROM 4teamwork/plone:4.3.20
 
 USER root

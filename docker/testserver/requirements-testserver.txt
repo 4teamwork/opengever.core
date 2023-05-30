@@ -13,4 +13,5 @@ robotframework==3.0.4
 robotframework_selenium2library==1.7.4
 robotsuite==1.7.0
 selenium==3.141.0
+zc.buildout==2.13.3
 zope.testrunner==4.8.1
