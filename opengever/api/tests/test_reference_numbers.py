@@ -219,13 +219,13 @@ class TestReferenceNumbersDelete(IntegrationTestCase):
             get_numbers(self.branch_repofolder))
 
         # And should be removeable again
-        with browser.expect_http_error(code=400):
-            browser.open(self.branch_repofolder,
-                         view="@reference-numbers/2",
-                         method='DELETE',
-                         headers=self.api_headers)
+        browser.open(self.branch_repofolder,
+                     view="@reference-numbers/2",
+                     method='DELETE',
+                     headers=self.api_headers)
 
         self.assertEqual(
-            {u'type': u'BadRequest',
-             u'message': u'Number still in use.'},
-            browser.json)
+            [{u'active': True,
+              u'prefix': u'1',
+              u'title': u'Vertr\xe4ge und Vereinbarungen'}],
+            get_numbers(self.branch_repofolder))

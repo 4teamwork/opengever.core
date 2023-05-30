@@ -195,7 +195,7 @@ class ReferenceNumberPrefixAdpater(object):
             # is implemented save (see OGIP 3).
             return False
 
-        return prefix in self.get_reference_mapping()['reference_prefix'].values()
+        return self.get_prefix_mapping()[intid] == prefix
 
     def get_number_mapping(self, missing_title_as_none=False):
         items = []
