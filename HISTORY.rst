@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.9.0 (2023-05-30)
+---------------------
+
+Bug fixes:
+
+
+- Fix ech0147 import if there are umlauts in the filenames. [elioschmutz] [CA-5673]
+- Add/modify/delete manual journal entry will updated the touched-date. [elioschmutz] [CA-5735]
+- Docker: add missing zcml include for ftw.slacker. [buchi] [CA-5766]
+- Fix ech0160 when submitting disposition if there are umlauts in a repository title. [elioschmutz] [CA-5850]
+
+
+Other changes:
+
+
+- Speed-up upgrade steps reindexing workspace documents'workflow. [njohner] [CA-5556]
+- Docker: patch z3c.autoinclude to improve container startup time. [buchi] [CA-5766]
+- Implement IGroupIntrospection for OGDS auth plugin. [buchi] [CA-5766a]
+
+
 2023.8.0 (2023-05-05)
 ---------------------
 
