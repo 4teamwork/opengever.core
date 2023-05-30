@@ -10,6 +10,22 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.3 (2023-05-30)
+---------------------
+
+Bug fixes:
+
+
+- Fix ech0160 when submitting disposition if there are umlauts in a repository title. [elioschmutz]
+
+
+Other changes:
+
+
+- Speed-up upgrade steps reindexing workspace documents'workflow. [njohner]
+- Speed up excel exports of repositories. [phgross]
+
+
 2023.6.2 (2023-04-13)
 ---------------------
 
