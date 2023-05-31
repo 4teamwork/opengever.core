@@ -1153,10 +1153,42 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
              (self.document, self.subdocument, self.subsubdocument)],
             [item["@id"] for item in browser.json[u'items']])
 
+    @browsing
+    def test_get_related_and_contained_documents(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        # Create document inside subtask and modify its related items
+        document = create(Builder("document").within(self.subtask))
+        self.set_related_items(self.subtask, [self.subdocument, self.mail_eml])
+        self.subtask.reindexObject()
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?fl=UID,related_items,portal_type&fq=path_parent:{}'.format(
+            self.portal.absolute_url(), self.task.absolute_url()
+                .replace(self.portal.absolute_url(), '').replace("/", "\\/"))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        related_items = set()
+        for item in browser.json["items"]:
+            if item["portal_type"] == "opengever.task.task" and item["related_items"]:
+                related_items.update({uid for uid in item["related_items"]})
+            elif item["portal_type"] in ['opengever.document.document', 'opengever.mail.mail']:
+                related_items.add(item["UID"])
+
+        url = u'{}/@solrsearch?fl=UID,Title&fq=UID:({})'.format(
+            self.portal.absolute_url(), " OR ".join(related_items))
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual(5, browser.json["items_total"])
+        self.assertItemsEqual(
+            [item.UID() for item in
+             (self.document, self.taskdocument, self.subdocument, document, self.mail_eml)],
+            [item["UID"] for item in browser.json[u'items']])
+
 
 class TestSolrSearchPost(SolrIntegrationTestCase):
     """The POST endpoint should behave exactly the same as the GET endpoint. We do not
-    copy all the tests of 'TestSolrSearchGet' but rewrite the most important once.
+    copy all the tests of 'TestSolrSearchGet' but rewrite the most important ones.
     """
     features = ('bumblebee', 'solr')
 

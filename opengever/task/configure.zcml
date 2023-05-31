@@ -200,6 +200,11 @@
       name="watchers"
       />
 
+  <adapter
+      factory=".indexers.related_items"
+      name="related_items"
+      />
+
   <subscriber
       for="opengever.task.task.ITask
            zope.lifecycleevent.interfaces.IObjectAddedEvent"

@@ -1,6 +1,7 @@
 from ftw.upgrade import UpgradeStep
 from opengever.core.upgrade import NightlyIndexer
 from opengever.document.document import IDocumentSchema
+from opengever.task.task import ITask
 
 
 class AddRelatedItemsSolrIndex(UpgradeStep):
@@ -10,7 +11,8 @@ class AddRelatedItemsSolrIndex(UpgradeStep):
     deferrable = True
 
     def __call__(self):
-        query = {'object_provides': IDocumentSchema.__identifier__}
+        query = {'object_provides': [IDocumentSchema.__identifier__,
+                                     ITask.__identifier__]}
 
         with NightlyIndexer(idxs=["related_items"],
                             index_in_solr_only=True) as indexer:
