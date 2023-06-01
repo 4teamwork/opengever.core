@@ -159,6 +159,8 @@ class IResponse(Interface):
 
     changes = schema.List(required=False, value_type=schema.Dict())
 
+    additional_data = schema.Dict(required=False)
+
 
 class Response(Persistent):
     """A persistent lightweight object which represents a single response.
@@ -177,6 +179,7 @@ class Response(Persistent):
 
         self.text = u''
         self.changes = PersistentList()
+        self.additional_data = PersistentDict()
 
         self.modified = None
         self.modifier = None
