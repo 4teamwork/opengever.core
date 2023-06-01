@@ -194,6 +194,7 @@ class Response(Persistent):
 
 
 COMMENT_RESPONSE_TYPE = 'comment'
+COMMENT_REMOVED_RESPONSE_TYPE = 'comment_removed'
 SCHEMA_FIELD_CHANGE_RESPONSE_TYPE = 'schema_field'
 MOVE_RESPONSE_TYPE = 'move'
 
