@@ -38,6 +38,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
               u'mimetype': u'',
               u'modified': None,
               u'modifier': None,
+              u'additional_data':{},
               u'subtask': None,
               u'successor_oguid': u'',
               u'rendered_text': u'',

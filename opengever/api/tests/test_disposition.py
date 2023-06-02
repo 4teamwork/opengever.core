@@ -238,6 +238,7 @@ class TestDispositionSerialization(IntegrationTestCase):
                  u'created': u'2016-08-31T19:09:33',
                  u'modified': None,
                  u'modifier': None,
+                 u'additional_data':{},
                  u'response_id': 1472663373000000,
                  u'response_type': u'added',
                  u'dossiers': [
@@ -254,6 +255,7 @@ class TestDispositionSerialization(IntegrationTestCase):
                  u'created': u'2016-08-31T19:11:33',
                  u'modified': None,
                  u'modifier': None,
+                 u'additional_data':{},
                  u'response_id': 1472663493000000,
                  u'response_type': u'disposition-transition-dispose',
                  u'dossiers': [

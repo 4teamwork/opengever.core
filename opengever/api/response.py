@@ -1,11 +1,13 @@
 from datetime import datetime
 from opengever.api import _
 from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRequest
+from opengever.base.response import COMMENT_REMOVED_RESPONSE_TYPE
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponse
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.ogds.base.actor import Actor
+from persistent.dict import PersistentDict
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -216,5 +218,15 @@ class ResponseDelete(Service):
                 _(u'only_comment_type_can_be_deleted',
                   default=u'Only responses of type "Comment" can be deleted.'))
 
+        self.create_response(response)
         response_container.delete(response.response_id)
         return self.reply_no_content()
+
+    def create_response(self, deleted_response):
+        response = Response(COMMENT_REMOVED_RESPONSE_TYPE)
+
+        response.additional_data = PersistentDict({
+            'deleted_response_creation_date': deleted_response.created
+        })
+        IResponseContainer(self.context).add(response)
+        return response
