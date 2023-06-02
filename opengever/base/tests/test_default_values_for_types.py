@@ -376,6 +376,7 @@ DOSSIER_TEMPLATE_DEFAULTS = {
     'description': u'',
     'keywords': (),
     'predefined_keywords': True,
+    'related_documents': [],
     'restrict_keywords': False,
     'title_help': u'',
 }

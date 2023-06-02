@@ -37,7 +37,7 @@ class TestDossierTemplateSchema(unittest.TestCase):
     def test_idossiertemplate_fields_almost_all_match_idossier_fields(self):
         idossiertemplate_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossierTemplate)
-            if fieldname != 'comments'
+            if fieldname not in ['comments', 'related_documents']
         }
         idossier_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossier)
@@ -88,7 +88,8 @@ class TestDossierTemplate(IntegrationTestCase):
 
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({'Title': 'Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEquals(['Template'], browser.css('h1').text)
@@ -107,7 +108,8 @@ class TestDossierTemplate(IntegrationTestCase):
         browser.open(self.dossiertemplate)
 
         factoriesmenu.add('Subdossier')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({'Title': 'Template'})
+        browser.click_on('Save')
 
         self.assertTrue(IDossierTemplateSchema.providedBy(browser.context))
 
@@ -159,7 +161,6 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-
         self.assertEqual([
             u'Title hint',
             u'Title',
@@ -168,6 +169,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -185,6 +188,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -195,7 +200,6 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-
         self.assertEqual([
             u'Title hint',
             u'Title',
@@ -205,6 +209,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Checklist',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -223,6 +229,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Checklist',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -263,7 +271,8 @@ class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
 
         browser.open(self.dossiertemplate)
         browser.find('Edit').click()
-        browser.fill({'Title': 'Edited Template'}).submit()
+        browser.fill({'Title': 'Edited Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())
         self.assertEquals(['Edited Template'], browser.css('h1').text)
@@ -745,7 +754,8 @@ class TestSubDossierTemplateHandling(IntegrationTestCase):
 
         browser.open(self.subdossiertemplate)
         factoriesmenu.add('Subdossier')
-        browser.fill({'Title': u'Sub Sub Template'}).submit()
+        browser.fill({'Title': u'Sub Sub Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEqual(u'Sub Sub Template', browser.context.title)
