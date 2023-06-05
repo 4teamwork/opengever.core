@@ -65,10 +65,8 @@ class GeverUsersPatch(UsersPatch):
             return
 
         if 'portrait' in data and portrait is None:
-            user = self._get_user(self._get_user_id)
             portal_membership = api.portal.get_tool('portal_membership')
-            safe_id = portal_membership._getSafeMemberId(user.getId())
-            portal_membership.deletePersonalPortrait(str(safe_id))
+            portal_membership.deletePersonalPortrait(str(self._get_user_id))
 
 
 @implementer(ISerializeToJson)
