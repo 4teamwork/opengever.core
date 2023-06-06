@@ -441,6 +441,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'file_extension',
             u'filename',
             u'filesize',
+            u'related_items',
             u'Subject',
         ]
 
