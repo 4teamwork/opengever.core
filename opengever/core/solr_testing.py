@@ -43,6 +43,8 @@ class SolrServer(object):
         command = [
             'docker',
             'run',
+            '--pull',
+            'always',
             '-d',
             '--rm',
             '-p',
