@@ -213,7 +213,9 @@ class MaintenanceQueuesManager(object):
             for variable_argument in job_arguments:
                 yield MaintenanceJob(job_type, variable_argument)
 
-    def get_jobs_count(self):
+    def get_jobs_count(self, queue_key=None):
+        if queue_key:
+            return len(self.get_queues()[queue_key]['queue'])
         return sum(len(queue['queue']) for queue in self.get_queues().values())
 
 
@@ -226,6 +228,7 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
         super(NightlyMaintenanceJobsProvider, self).__init__(context, request, logger)
         self.queues_manager = MaintenanceQueuesManager(context)
         self.job_counter = Counter()
+        self.current_job_type = None
 
     def __iter__(self):
         return self.queues_manager.jobs
@@ -236,12 +239,25 @@ class NightlyMaintenanceJobsProvider(NightlyJobProviderBase):
     def run_job(self, job, interrupt_if_necessary):
         """Run the job.
         """
-        self.logger.info('Executing maintenance job: %r' % job)
+        key = self.queues_manager.queue_key_for_job_type(job.job_type)
+        self.job_counter[key] += 1
+
+        if key != self.current_job_type:
+            self.current_job_type = key
+            self.logger.info('Starting execution of {} jobs with key {}'.format(
+                self.queues_manager.get_jobs_count(key), key))
 
         job.execute()
         self.queues_manager.remove_job(job)
-        key = self.queues_manager.queue_key_for_job_type(job.job_type)
-        self.job_counter[key] += 1
+
+        if self.job_counter[key] % 5000 == 0:
+            self.logger.info('{}: Done {}, {} remaining'.format(
+                key,
+                self.job_counter[key],
+                self.queues_manager.get_jobs_count(key)))
+            self.logger.info('Total: Done {}, {} remaining'.format(
+                sum(self.job_counter.values()),
+                self.queues_manager.get_jobs_count()))
 
     def maybe_commit(self, job):
         key = self.queues_manager.queue_key_for_job_type(job.job_type)

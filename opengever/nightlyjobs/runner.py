@@ -161,7 +161,7 @@ class NightlyJobRunner(object):
         self.update_last_run_timestamp()
 
         for provider_name, provider in self.job_providers.items():
-            self.log.info('Executing jobs for provider %r' % provider_name)
+            self.log.info('Executing %s jobs for provider %r' % (len(provider), provider_name))
             for job in provider:
                 try:
                     self.interrupt_if_necessary()
@@ -199,7 +199,8 @@ class NightlyJobRunner(object):
 
     def process_task_queue(self):
         queue = self._task_queue.queue
-
+        if queue.qsize() == 0:
+            return
         self.log.info('Processing %d task queue jobs...' % queue.qsize())
         request = getRequest()
         alsoProvides(request, ITaskQueueLayer)
