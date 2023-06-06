@@ -14,9 +14,13 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
+from z3c.relationfield.relation import RelationValue
 from zExceptions import Unauthorized
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 from zope.schema import getFieldsInOrder
 import unittest
 
@@ -305,6 +309,23 @@ class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
             ]
 
         self.assertEqual(expected_documents, browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_related_items_index_for_dossier_template(self, browser):
+        self.login(self.administrator, browser)
+        self.assertEqual([], IDossierTemplate(self.dossiertemplate).related_documents)
+        self.assertEqual(None, solr_data_for(self.dossiertemplate, 'related_items'))
+
+        browser.open(self.dossiertemplate, view='edit')
+        browser.fill({'Related documents': [self.empty_template.absolute_url_path()]})
+        browser.find('Save').click()
+
+        self.commit_solr()
+        self.assertEqual(
+            [self.empty_template],
+            [obj.to_object for obj in IDossierTemplate(self.dossiertemplate).related_documents])
+        self.assertEqual([self.empty_template.UID()],
+                         solr_data_for(self.dossiertemplate, 'related_items'))
 
 
 class TestDossierTemplateAddWizard(IntegrationTestCase):
