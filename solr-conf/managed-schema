@@ -166,6 +166,7 @@
     <field name="public_trial" type="string" indexed="true" stored="false" />
     <field name="receipt_date" type="pdate" indexed="true" stored="false" />
     <field name="reference" type="string" indexed="true" stored="false" />
+    <field name="related_items" type="string" indexed="false" stored="true" multiValued="true" />
     <field name="sortable_reference" type="string" indexed="true" stored="false" />
     <field name="responsible" type="string" indexed="true" stored="false" />
     <field name="retention_expiration" type="pdate" indexed="true" stored="false" />

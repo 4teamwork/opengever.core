@@ -1,6 +1,5 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.solr.interfaces import ISolrSettings
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import editbar
 from ftw.testbrowser.pages import factoriesmenu
@@ -24,13 +23,11 @@ from opengever.testing.event_recorder import register_event_recorder
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.protect import createToken
-from plone.registry.interfaces import IRegistry
 from requests_toolbelt.utils import formdata
 from StringIO import StringIO
 from zc.relation.interfaces import ICatalog
 from zExceptions import Unauthorized
 from zope.component import getUtility
-from zope.component import queryUtility
 import json
 
 
@@ -155,10 +152,7 @@ class TestProposalSolr(SolrIntegrationTestCase):
 
         statusmessages.assert_no_error_messages()
 
-        registry = queryUtility(IRegistry)
-        settings = registry.forInterface(ISolrSettings)
-        settings.enable_updates_in_post_commit_hook = False
-        self.commit_solr(after_commit=True)
+        self.commit_solr(avoid_blob_extraction=True)
 
         self.assertIn('external_edit', browser.css('.redirector').first.text,
                       'External editor should have been triggered.')

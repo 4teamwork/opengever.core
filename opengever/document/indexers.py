@@ -7,10 +7,12 @@ from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import ensure_str
+from opengever.base.utils import unrestrictedPathToCatalogBrain
 from opengever.document.approvals import IApprovalList
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
@@ -262,3 +264,10 @@ def containing_dossier_title(obj):
     languages = api.portal.get_tool('portal_languages').getSupportedLanguages()
     titles = [templatefolder.Title(language.split('-')[0]) for language in languages]
     return ' / '.join(titles)
+
+
+@indexer(IDocumentSchema)
+def related_items(obj):
+    brains = [unrestrictedPathToCatalogBrain(rel.to_path)
+              for rel in IRelatedDocuments(obj).relatedItems if not rel.isBroken()]
+    return [brain.UID for brain in brains if brain]

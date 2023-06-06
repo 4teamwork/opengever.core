@@ -1,16 +1,13 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from ftw.solr.interfaces import ISolrSettings
 from OFS.interfaces import IObjectWillBeRemovedEvent
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.event_recorder import get_recorded_events
 from opengever.testing.event_recorder import register_event_recorder
 from plone import api
-from plone.registry.interfaces import IRegistry
 from zope.app.intid.interfaces import IIntIds
 from zope.component import getUtility
-from zope.component import queryUtility
 
 
 class TestCopyDossiers(SolrIntegrationTestCase):
@@ -58,12 +55,7 @@ class TestCopyDossiers(SolrIntegrationTestCase):
         dossier_copy = api.content.copy(
             source=self.subdossier, target=self.leaf_repofolder)
 
-        # We need to execute the update commands but avoid extracting from the
-        # blob, which fails as the zope transaction is not committed.
-        registry = queryUtility(IRegistry)
-        settings = registry.forInterface(ISolrSettings)
-        settings.enable_updates_in_post_commit_hook = False
-        self.commit_solr(after_commit=True)
+        self.commit_solr(avoid_blob_extraction=True)
 
         subdossier_copy = api.content.find(
             context=dossier_copy, portal_type='opengever.dossier.businesscasedossier',

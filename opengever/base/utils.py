@@ -328,6 +328,25 @@ def unrestrictedUuidToCatalogBrain(uuid):
     return result[0]
 
 
+def unrestrictedPathToCatalogBrain(path):
+    """Given a path, attempt to return a catalog brain.
+    """
+
+    site = getSite()
+    if site is None:
+        return None
+
+    catalog = api.portal.get_tool('portal_catalog')
+    if catalog is None:
+        return None
+
+    result = catalog.unrestrictedSearchResults(path=path)
+    if len(result) != 1:
+        return None
+
+    return result[0]
+
+
 def get_date_with_delta_excluding_weekends(start_date, days_delta):
     calculated_delta = 0
     end_date = start_date

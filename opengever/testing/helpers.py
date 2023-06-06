@@ -2,6 +2,7 @@ from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from contextlib import contextmanager
 from datetime import datetime
 from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.interfaces import ISolrSettings
 from lxml.cssselect import LxmlTranslator
 from opengever.base.date_time import as_utc
 from opengever.base.solr import OGSolrDocument
@@ -10,10 +11,12 @@ from opengever.document.versioner import Versioner
 from opengever.testing.assets import path_to_asset
 from operator import attrgetter
 from plone import api
+from plone.registry.interfaces import IRegistry
 from Products.CMFCore.utils import getToolByName
 from Products.PloneLanguageTool.LanguageTool import LanguageBinding
 from zope.component import getSiteManager
 from zope.component import getUtility
+from zope.component import queryUtility
 from zope.component.hooks import getSite
 from zope.interface import implements
 from zope.intid.interfaces import IIntIds
@@ -241,8 +244,16 @@ class CapturingLogHandler(logging.NullHandler):
 
 class SolrTestMixin(object):
 
-    def commit_solr(self, after_commit=False):
-        SolrServer.get_instance().commit(after_commit=after_commit)
+    def commit_solr(self, avoid_blob_extraction=False):
+        if not avoid_blob_extraction:
+            SolrServer.get_instance().commit(after_commit=False)
+        else:
+            # We need to execute the update commands but avoid extracting from
+            # the blob, which fails as the zope transaction is not committed.
+            registry = queryUtility(IRegistry)
+            settings = registry.forInterface(ISolrSettings)
+            settings.enable_updates_in_post_commit_hook = False
+            SolrServer.get_instance().commit(after_commit=True)
 
     def get_solr_connection(self):
         return SolrServer.get_instance().connection

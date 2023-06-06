@@ -1,6 +1,7 @@
 from collective import dexteritytextindexer
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.base.utils import unrestrictedPathToCatalogBrain
 from opengever.task.task import ITask
 from plone import api
 from plone.indexer import indexer
@@ -62,3 +63,10 @@ def watchers(obj):
     center = notification_center()
     watchers = center.get_watchers(obj, role=WATCHER_ROLE)
     return [watcher.actorid for watcher in watchers]
+
+
+@indexer(ITask)
+def related_items(obj):
+    brains = [unrestrictedPathToCatalogBrain(rel.to_path)
+              for rel in ITask(obj).relatedItems if not rel.isBroken()]
+    return [brain.UID for brain in brains if brain]
