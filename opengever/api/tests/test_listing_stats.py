@@ -292,3 +292,18 @@ class TestListingStatsPost(SolrIntegrationTestCase):
              u'queries': {u'depth:1': 4}
              },
             self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_complex_queries(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats'.format(self.repository_root.absolute_url()),
+            data=json.dumps({'queries': ['UID:({} OR {})'.format(
+                self.document.UID(), self.subdocument.UID())]}),
+            method='POST',
+            headers=self.api_headers
+        )
+
+        self.assertDictEqual(
+            {u'UID:(createtreatydossiers000000000002 OR createtreatydossiers000000000017)': 2},
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents').get('queries'))

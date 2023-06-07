@@ -13,6 +13,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - Whitelist the ``related_items`` field for the ``@listing`` endpoint
 - ``@listing-stats``: Allow POST requests against the endpoint. This allows us to get around the length-limit of GET requests.
+- ``@listing-stats``: No longer escapes querie-chars to allow complex queries
 
 2023.9.0 (2023-05-30)
 ---------------------

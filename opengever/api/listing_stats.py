@@ -44,8 +44,7 @@ class ListingStats(object, RequestPayloadMixin):
     def __init__(self, context, request):
         self.context = context
         self.request = request
-
-        queries = self.request.form.get("queries", [])
+        queries = self.request_payload.get("queries", [])
         if isinstance(queries, basestring):
             queries = [queries]
         self.facet_queries = [self._escape_query(query) for query in queries]
@@ -54,7 +53,7 @@ class ListingStats(object, RequestPayloadMixin):
 
     @staticmethod
     def _escape_query(query):
-        return u":".join(escape(safe_unicode(el)) for el in query.split(":"))
+        return u":".join(safe_unicode(el) for el in query.split(":"))
 
     def __call__(self, expand=False):
         result = {
