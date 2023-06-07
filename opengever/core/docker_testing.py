@@ -22,7 +22,7 @@ class DockerServiceLayer(Layer):
         base_name = self.image_name.split(':')[0].replace('/', '_')
         self.container_name = '{}_{}'.format(base_name, self.port)
         self.run(
-            'docker run -d -p {}:8080 --name {} {}'.format(
+            'docker run --pull always -d -p {}:8080 --name {} {}'.format(
                 self.port, self.container_name, self.image_name))
         self.wait_until_ready('http://localhost:{}/healthcheck'.format(self.port))
         os.environ[self.service_url_env] = 'http://localhost:{}/'.format(self.port)
