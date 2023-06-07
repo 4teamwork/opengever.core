@@ -1,6 +1,7 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.api.listing import FILTERS
+from opengever.api.solr_query_service import RequestPayloadMixin
 from opengever.base.interfaces import IOpengeverBaseLayer
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.services import Service
@@ -19,7 +20,7 @@ def get_path_depth(context):
 
 @implementer(IExpandableElement)
 @adapter(Interface, IOpengeverBaseLayer)
-class ListingStats(object):
+class ListingStats(object, RequestPayloadMixin):
     """Returns a facet pivot of the current object.
 
     The format is based on the solr facet pivot format:

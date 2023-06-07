@@ -15,7 +15,21 @@ from zope.component import getUtility
 import re
 
 
-class SolrQueryBaseService(Service):
+class RequestPayloadMixin:
+    @property
+    @memoize
+    def request_payload(self):
+        """Returns the request payload depending on the http request method.
+        """
+        if self.request.method == 'POST':
+            # JSON always returns unicode strings. We need to encode the values
+            # to utf-8 to get the same encoding as with a GET reqeust.
+            return recursive_encode(json_body(self.request))
+        else:
+            return self.request.form
+
+
+class SolrQueryBaseService(Service, RequestPayloadMixin):
 
     field_mapper = SolrFieldMapper
 
@@ -27,18 +41,6 @@ class SolrQueryBaseService(Service):
         self.default_sort_index = DEFAULT_SORT_INDEX
         self.response_fields = None
         self.facets = []
-
-    @property
-    @memoize
-    def request_payload(self):
-        """Returns the request payload depending on the http request method.
-        """
-        if self.request.method == 'GET':
-            return self.request.form
-        elif self.request.method == 'POST':
-            # JSON always returns unicode strings. We need to encode the values
-            # to utf-8 to get the same encoding as with a GET reqeust.
-            return recursive_encode(json_body(self.request))
 
     def prepare_solr_query(self, params):
         """ Extract the requested parameters and prepare the solr query

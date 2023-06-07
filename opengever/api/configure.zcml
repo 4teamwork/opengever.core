@@ -547,6 +547,14 @@
       />
 
   <plone:service
+      method="POST"
+      for="Products.CMFCore.interfaces.IFolderish"
+      factory=".listing_stats.ListingStatsGet"
+      name="@listing-stats"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".ogdsuserlisting.OGDSUserListingGet"
