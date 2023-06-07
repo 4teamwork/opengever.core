@@ -11,7 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Whitelist the ``related_items`` field for the ``@listing`` endpoint
 
 2023.9.0 (2023-05-30)
 ---------------------

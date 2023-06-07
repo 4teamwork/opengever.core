@@ -31,6 +31,7 @@ OTHER_ALLOWED_FIELDS = set([
     'trashed',
     'UID',
     'watchers',
+    'related_items',
 ])
 
 ALLOWED_ORDER_GROUP_FIELDS = set([
