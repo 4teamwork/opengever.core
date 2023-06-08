@@ -222,6 +222,28 @@ Solr
 
 Solr is provided as a Docker image and started with other services using `docker-compose`.
 
+Building a new Solr image
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For Solr we need to build multi-platform images, which we do using `buildx`. First time you will need to
+create a builder:
+
+.. code::
+
+    docker buildx create --name mybuilder --bootstrap --use
+
+After that you can create a new image using
+
+.. code::
+
+    docker buildx build --platform linux/amd64,linux/arm64 -f ./docker/solr/Dockerfile -t 4teamwork/ogsolr:latest --push .
+
+We also want to give that version another tag than latest. For this you can use `regctl` (binary can be downloaded from github, see https://github.com/regclient/regclient/blob/main/docs/regctl.md)
+
+.. code::
+
+    regctl image copy 4teamwork/ogsolr:latest 4teamwork/ogsolr:8.11-2
+
 
 Activating Solr update chain
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
