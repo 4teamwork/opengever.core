@@ -416,6 +416,9 @@ class UIDMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
     def add_by_brain(self, brain):
         self._add_by_key(brain.UID)
 
+    def add_by_solr_document(self, doc):
+        self._add_by_key(doc.get('UID'))
+
 
 class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
 
