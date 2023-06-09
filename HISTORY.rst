@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.4 (2023-06-09)
+---------------------
+
+Bug fixes:
+
+
+- Improve search behavior for english and french content. [phgross]
+
+
 2023.6.3 (2023-05-30)
 ---------------------
 
