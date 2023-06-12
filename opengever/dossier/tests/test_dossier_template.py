@@ -14,9 +14,13 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.dossiertemplate.interfaces import IDossierTemplateSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import IntegrationTestCase
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
+from z3c.relationfield.relation import RelationValue
 from zExceptions import Unauthorized
+from zope.app.intid.interfaces import IIntIds
+from zope.component import getUtility
 from zope.schema import getFieldsInOrder
 import unittest
 
@@ -37,7 +41,7 @@ class TestDossierTemplateSchema(unittest.TestCase):
     def test_idossiertemplate_fields_almost_all_match_idossier_fields(self):
         idossiertemplate_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossierTemplate)
-            if fieldname != 'comments'
+            if fieldname not in ['comments', 'related_documents']
         }
         idossier_fields = {
             fieldname for fieldname, field in getFieldsInOrder(IDossier)
@@ -88,7 +92,8 @@ class TestDossierTemplate(IntegrationTestCase):
 
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({'Title': 'Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEquals(['Template'], browser.css('h1').text)
@@ -107,7 +112,8 @@ class TestDossierTemplate(IntegrationTestCase):
         browser.open(self.dossiertemplate)
 
         factoriesmenu.add('Subdossier')
-        browser.fill({'Title': 'Template'}).submit()
+        browser.fill({'Title': 'Template'})
+        browser.click_on('Save')
 
         self.assertTrue(IDossierTemplateSchema.providedBy(browser.context))
 
@@ -159,7 +165,6 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-
         self.assertEqual([
             u'Title hint',
             u'Title',
@@ -168,6 +173,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -185,6 +192,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Prefill keywords',
             u'Restrict keywords',
             u'Dossier type',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -195,7 +204,6 @@ class TestDossierTemplate(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.templates)
         factoriesmenu.add('Dossier template')
-
         self.assertEqual([
             u'Title hint',
             u'Title',
@@ -205,6 +213,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Checklist',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -223,6 +233,8 @@ class TestDossierTemplate(IntegrationTestCase):
             u'Restrict keywords',
             u'Dossier type',
             u'Checklist',
+            u'Related documents',
+            u'',  # label of the relation text field
             u'Filing number prefix'],
             browser.css('#content fieldset label').text
         )
@@ -263,7 +275,8 @@ class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
 
         browser.open(self.dossiertemplate)
         browser.find('Edit').click()
-        browser.fill({'Title': 'Edited Template'}).submit()
+        browser.fill({'Title': 'Edited Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Changes saved'], info_messages())
         self.assertEquals(['Edited Template'], browser.css('h1').text)
@@ -296,6 +309,23 @@ class TestDossierTemplateWithSolr(SolrIntegrationTestCase):
             ]
 
         self.assertEqual(expected_documents, browser.css('.listing td .linkWrapper').text)
+
+    @browsing
+    def test_related_items_index_for_dossier_template(self, browser):
+        self.login(self.administrator, browser)
+        self.assertEqual([], IDossierTemplate(self.dossiertemplate).related_documents)
+        self.assertEqual(None, solr_data_for(self.dossiertemplate, 'related_items'))
+
+        browser.open(self.dossiertemplate, view='edit')
+        browser.fill({'Related documents': [self.empty_template.absolute_url_path()]})
+        browser.find('Save').click()
+
+        self.commit_solr()
+        self.assertEqual(
+            [self.empty_template],
+            [obj.to_object for obj in IDossierTemplate(self.dossiertemplate).related_documents])
+        self.assertEqual([self.empty_template.UID()],
+                         solr_data_for(self.dossiertemplate, 'related_items'))
 
 
 class TestDossierTemplateAddWizard(IntegrationTestCase):
@@ -745,7 +775,8 @@ class TestSubDossierTemplateHandling(IntegrationTestCase):
 
         browser.open(self.subdossiertemplate)
         factoriesmenu.add('Subdossier')
-        browser.fill({'Title': u'Sub Sub Template'}).submit()
+        browser.fill({'Title': u'Sub Sub Template'})
+        browser.click_on('Save')
 
         self.assertEquals(['Item created'], info_messages())
         self.assertEqual(u'Sub Sub Template', browser.context.title)

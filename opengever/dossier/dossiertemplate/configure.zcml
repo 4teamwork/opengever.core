@@ -23,6 +23,11 @@
       name="IDossierTemplate"
       />
 
+  <adapter
+      factory=".indexers.related_items"
+      name="related_items"
+      />
+
   <browser:page
       for="opengever.repository.interfaces.IRepositoryFolder"
       name="dossier_with_template"

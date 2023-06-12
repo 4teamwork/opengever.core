@@ -203,6 +203,12 @@ class CreateDossierContentFromTemplateMixin(object):
     def recursive_content_creation(self, template_obj, target_container):
         responsible = IDossier(target_container).responsible
 
+        for related_document_template in IDossierTemplate(
+                template_obj).related_documents:
+            template = related_document_template.to_object
+            CreateDocumentFromTemplateCommand(
+                target_container, template, template.title).execute()
+
         for child_obj in template_obj.listFolderContents():
             if IDossierTemplateSchema.providedBy(child_obj):
                 dossier = CreateDossierFromTemplateCommand(

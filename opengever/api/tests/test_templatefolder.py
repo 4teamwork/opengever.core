@@ -7,7 +7,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.base.response import IResponseContainer
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.utils import get_date_with_delta_excluding_weekends
@@ -679,6 +678,39 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
             {"message": "Invalid token '{}'".format(token),
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_create_dossier_from_template_with_related_documents(self, browser):
+        self.login(self.administrator, browser)
+
+        self.set_related_items(
+            IDossierTemplate(self.dossiertemplate), [self.empty_template, ],
+            fieldname='related_documents')
+
+        self.set_related_items(
+            IDossierTemplate(self.subdossiertemplate), [self.normal_template, ],
+            fieldname='related_documents')
+
+        data = {'template': { 'token': self.dossiertemplate.UID()},
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        dossier = children['added'].pop()
+
+        self.assertEqual([
+            u'T\xc3\xb6mpl\xc3\xb6te Leer', u'Werkst\xe4tte', u'Anfragen'],
+            [obj.title for obj in dossier.listFolderContents()])
+
+        subdossier = dossier.listFolderContents()[-1]
+        self.assertEqual([u'T\xc3\xb6mpl\xc3\xb6te Normal', u'Baumsch\xfctze'],
+                         [obj.title for obj in subdossier.listFolderContents()])
 
 
 class TestTriggerTaskTemplatePost(IntegrationTestCase):

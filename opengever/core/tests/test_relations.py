@@ -139,6 +139,7 @@ EXPECTED_INTERFACES = [
 EXPECTED_TYPES_WITH_RELATIONS = [
     'opengever.document.document',
     'opengever.dossier.businesscasedossier',
+    'opengever.dossier.dossiertemplate',
     'opengever.repository.repositoryfolder',
     'opengever.task.task',
     'opengever.inbox.forwarding',

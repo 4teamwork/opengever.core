@@ -88,6 +88,7 @@ class IDossierTemplate(model.Schema):
             u'keywords',
             u'dossier_type',
             u'checklist',
+            u'related_documents',
         ],
     )
 
@@ -108,6 +109,24 @@ class IDossierTemplate(model.Schema):
         source=wrap_vocabulary(
             'opengever.dossier.dossier_types',
             hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types'),
+        required=False,
+    )
+
+    related_documents = RelationList(
+        title=_(u'label_related_documents',
+                default=u'Related documents'),
+        default=list(),
+        missing_value=list(),
+        value_type=RelationChoice(
+            title=u'Related document templates',
+            source=SolrObjPathSourceBinder(
+                object_provides=("opengever.document.interfaces.ITemplateDocumentMarker", ),
+                navigation_tree_query={
+                    'object_provides':
+                    ['opengever.dossier.templatefolder.interfaces.ITemplateFolder',
+                     'opengever.document.document.IDocumentSchema']
+                }),
+        ),
         required=False,
     )
 

@@ -1,5 +1,6 @@
 from collective import dexteritytextindexer
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.utils import unrestrictedPathToCatalogBrain
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from plone.indexer import indexer
@@ -53,3 +54,10 @@ class DossierTemplateSearchableTextExtender(object):
 @indexer(IDossierTemplateMarker)
 def is_subdossier(obj):
     return obj.is_subdossier()
+
+
+@indexer(IDossierTemplateMarker)
+def related_items(obj):
+    brains = [unrestrictedPathToCatalogBrain(rel.to_path)
+              for rel in IDossierTemplate(obj).related_documents if not rel.isBroken()]
+    return [brain.UID for brain in brains if brain]

@@ -3,9 +3,10 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.listing import FILTERS
 from opengever.testing.integration_test_case import SolrIntegrationTestCase
+import json
 
 
-class TestListingStats(SolrIntegrationTestCase):
+class TestListingStatsGet(SolrIntegrationTestCase):
 
     features = ['solr']
 
@@ -263,3 +264,46 @@ class TestListingStats(SolrIntegrationTestCase):
              u'queries': {u'Title_de:Vertr\xe4ge': 7}
              },
             self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
+
+
+class TestListingStatsPost(SolrIntegrationTestCase):
+    """The POST endpoint should behave exactly the same as the GET endpoint. We do not
+    copy all the tests of 'TestListingStatsGet'.
+    """
+
+    features = ['solr']
+
+    def get_facet_by_value(self, pivot, value):
+        return filter(lambda p: p.get('value') == value, pivot)[0]
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_depth(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats'.format(self.dossier.absolute_url()),
+            data=json.dumps({'queries': ['depth:1']}),
+            method='POST',
+            headers=self.api_headers
+        )
+        self.assertDictEqual(
+            {u'count': 12,
+             u'field': u'listing_name',
+             u'value': u'documents',
+             u'queries': {u'depth:1': 4}
+             },
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents'))
+
+    @browsing
+    def test_listing_stats_pivot_queries_supports_complex_queries(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(
+            '{}/@listing-stats'.format(self.repository_root.absolute_url()),
+            data=json.dumps({'queries': ['UID:({} OR {})'.format(
+                self.document.UID(), self.subdocument.UID())]}),
+            method='POST',
+            headers=self.api_headers
+        )
+
+        self.assertDictEqual(
+            {u'UID:(createtreatydossiers000000000002 OR createtreatydossiers000000000017)': 2},
+            self.get_facet_by_value(browser.json['facet_pivot']['listing_name'], 'documents').get('queries'))
