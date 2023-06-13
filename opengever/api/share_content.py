@@ -24,7 +24,7 @@ class ShareContentPost(Service):
 
         for actor in actors:
             for representative in ActorLookup(getToken(actor)).lookup().representatives():
-                if representative.active:
+                if representative.active and representative.email:
                     emails.add(representative.email)
         return ', '.join(emails)
 
