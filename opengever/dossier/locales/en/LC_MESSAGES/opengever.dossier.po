@@ -917,7 +917,7 @@ msgstr "Reference number"
 #. Default: "Related documents"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_related_documents"
-msgstr ""
+msgstr "Related documents"
 
 #. German translation: Verwandte Dossiers
 #. Default: "Related Dossier"

@@ -755,7 +755,7 @@ msgstr "Numéro de référence"
 #. Default: "Related documents"
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "label_related_documents"
-msgstr ""
+msgstr "Documents liés"
 
 #. Default: "Related Dossier"
 #: ./opengever/dossier/behaviors/dossier.py
