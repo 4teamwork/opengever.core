@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.10.0 (2023-06-14)
+----------------------
+
+New features:
+
+
+- Dossier templates can reference document templates. [elioschmutz] [CA-4519]
+- Whitelist the related_items field for the @listing endpoint. [elioschmutz] [CA-4519-2]
+- @listing-stats: Allow POST requests against the endpoint. [elioschmutz] [CA-4519-3]
+- Index document and task related items in solr. [njohner] [CA-5463]
+- Log removed manual journal entries for todos with a new journal entry. [elioschmutz] [CA-5578]
+
+
+Bug fixes:
+
+
+- Fix releasing unused reference numbers in the reference number manager. [elioschmutz] [CA-5692]
+- Fix portrait removal for users with mail address as userid. [phgross] [CA-5831]
+- Improve search behavior for english and french content. [phgross] [CA-5898]
+
+
+Other changes:
+
+
+- @listing-stats: No longer escapes querie-chars to allow complex queries . [elioschmutz] [CA-4519-3]
+- Always pull latest docker images for testing. [njohner] [CA-5463]
+- Improve logging of nightly maintenance jobs. [njohner] [CA-5702]
+
+
 2023.9.0 (2023-05-30)
 ---------------------
 
