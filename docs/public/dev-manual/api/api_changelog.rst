@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@tus-upload``: Allow to pass a ``document_date`` metadata header to manually set the documents date
 
 2023.10.0 (2023-06-14)
 ----------------------
