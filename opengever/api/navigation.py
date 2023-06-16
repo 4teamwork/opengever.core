@@ -96,6 +96,7 @@ class Navigation(object):
                 filters=make_filters(
                     object_provides=root_interface.__identifier__),
                 sort='path asc',
+                fl=["path"],
             )
             roots = [OGSolrDocument(d) for d in response.docs]
 
