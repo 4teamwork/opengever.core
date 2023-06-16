@@ -1,6 +1,4 @@
 from ftw.testbrowser import browsing
-from opengever.task.browser.related_documents import RelatedDocumentsCatalogTableSource
-from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 
 

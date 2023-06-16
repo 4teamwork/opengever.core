@@ -178,9 +178,7 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         if self.select_all:
             fl = ['path']
         else:
-            fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
-                  'bumblebee_checksum']
-            fl = fl + [c['column'] for c in self.config.columns if c['column']]
+            fl = self._query_fields
         params = {
             'fl': fl,
             'q.op': 'AND',
@@ -206,6 +204,13 @@ class GeverCatalogTableSource(FilteredTableSourceMixin, CatalogTableSource):
         )
 
         return BatchableSolrResults(resp)
+
+    @property
+    def _query_fields(self):
+        fl = ['UID', 'getIcon', 'portal_type', 'path', 'id',
+              'bumblebee_checksum']
+        fl = fl + [c['column'] for c in self.config.columns if c['column']]
+        return fl
 
 
 class BatchableSolrResults:
