@@ -202,7 +202,7 @@ class TransferDossierPost(ExtractOldNewUserMixin, Service):
                      'responsible': old_userid,
                      'review_state': DOSSIER_STATES_OPEN}
             dossiers_to_transfer = [OGSolrDocument(doc).getObject() for doc in
-                                    solr.search(filters=make_filters(**query)).docs]
+                                    solr.search(filters=make_filters(**query), fl=["path"]).docs]
         else:
             dossiers_to_transfer = [self.context]
 
