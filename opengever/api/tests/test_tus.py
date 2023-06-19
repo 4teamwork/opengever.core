@@ -1,4 +1,5 @@
 from base64 import b64encode
+from datetime import date
 from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
@@ -313,3 +314,20 @@ class TestTUSUpload(IntegrationTestCase):
         doc = self.assert_tus_upload_succeeds(
             self.dossier, browser, upload_metadata=upload_metadata)
         self.assertEqual('text/plain', doc.content_type())
+
+    @browsing
+    def test_tus_upload_can_set_document_date(self, browser):
+        self.login(self.regular_user, browser)
+        upload_metadata = UPLOAD_METADATA + ',document_date MjAxNS0wOC0yMQ=='
+        doc = self.assert_tus_upload_succeeds(self.dossier, browser, upload_metadata=upload_metadata)
+        self.assertEqual(date(2015, 8, 21), doc.document_date)
+
+    @browsing
+    def test_tus_replace_does_not_update_document_date(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout(self.document, browser)
+
+        current_date = self.document.document_date
+        upload_metadata = UPLOAD_METADATA + ',document_date MjAxNS0wOC0yMQ=='
+        self.assert_tus_replace_succeeds(self.document, browser, headers={"Upload-Metadata": upload_metadata})
+        self.assertEqual(current_date, self.document.document_date)

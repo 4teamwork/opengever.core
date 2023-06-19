@@ -6,9 +6,11 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.meeting.proposaltemplate import IProposalTemplate
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.quota.exceptions import ForbiddenByQuota
+from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.services.content.tus import UploadPatch
 from zExceptions import Forbidden
 from zope.component import getMultiAdapter
+from zope.component import queryMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
@@ -57,12 +59,26 @@ class GeverUploadPatch(UploadPatch):
 
         if created_doc:
             initialize_customproperties_defaults(created_doc)
+            self.add_additional_metadata(tus_upload.metadata(), created_doc)
         return result
 
     def fix_content_type(self, tus_upload):
         metadata = tus_upload.metadata()
         content_type = get_content_type(self.context, None, metadata.get("filename", ""))
         metadata["content-type"] = content_type
+
+    def add_additional_metadata(self, metadata, obj):
+        if not metadata.get("mode", "create") == 'create':
+            return
+
+        data = {}
+        document_date = metadata.get('document_date')
+        if document_date:
+            data['document_date'] = document_date
+
+        if data:
+            deserializer = queryMultiAdapter((obj, self.request), IDeserializeFromJson)
+            deserializer(data=data)
 
 
 @implementer(IPublishTraverse)
