@@ -75,7 +75,7 @@ class RelatedDocumentsCatalogTableSource(GeverCatalogTableSource):
 
             if obj.portal_type in ['opengever.document.document', 'ftw.mail.mail']:
 
-                brain = solr_doc_from_uuid(IUUID(obj))
+                brain = solr_doc_from_uuid(IUUID(obj), self._query_fields)
 
                 if not brain:
                     # the document is trashed
