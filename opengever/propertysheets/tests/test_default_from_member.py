@@ -74,6 +74,16 @@ class TestDefaultFromMemberDefaultFactory(IntegrationTestCase):
                     }
                 )))
 
+    def test_returns_fallback_for_unauthorized_requests(self):
+        self.assertEqual(
+            u'<No description>',
+            member_property_default_factory(
+                json.dumps({
+                    'property': 'description',
+                    'fallback': u'<No description>'
+                    }
+                )))
+
     def test_uses_fallback_for_unmapped_value_by_default(self):
         self.login(self.regular_user)
 

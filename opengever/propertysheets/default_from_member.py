@@ -50,6 +50,10 @@ def member_property_default_factory(default_from_member_options):
 
     result = None
     try:
+        # use fallback for anonymous user
+        if member.getUserName() == 'Anonymous User':
+            return fallback
+
         result = member.getProperty(property_name, default=None)
         if not result:
             result = fallback
