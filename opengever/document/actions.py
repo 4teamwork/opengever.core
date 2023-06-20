@@ -132,6 +132,15 @@ class TemplateDocumentListingActions(BaseDocumentListingActions):
 
 class WorkspaceDocumentListingActions(BaseDocumentListingActions):
 
+    def is_copy_items_available(self):
+        return api.user.has_permission('Add portal content', obj=self.context)
+
+    def is_edit_items_available(self):
+        return api.user.has_permission('Modify portal content', obj=self.context)
+
+    def is_move_items_available(self):
+        return api.user.has_permission('Add portal content', obj=self.context)
+
     def is_delete_available(self):
         return False
 

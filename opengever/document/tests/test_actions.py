@@ -79,10 +79,16 @@ class TestDocumentListingActions(IntegrationTestCase):
         self.assertIn(u'delete', self.get_actions(self.templates))
         self.assertIn(u'delete', self.get_actions(self.dossiertemplate))
 
-    def test_document_actions_for_workspace_and_workspace_folder(self):
+    def test_document_actions_in_workspace_and_workspace_folder_for_member(self):
         self.login(self.workspace_member)
         expected_actions = [u'edit_items', u'attach_documents', u'copy_items', u'move_items',
                             u'zip_selected', u'export_documents', u'trash_content']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace))
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
+    def test_document_actions_in_workspace_and_workspace_folder_for_guest(self):
+        self.login(self.workspace_guest)
+        expected_actions = [u'attach_documents', u'zip_selected', u'export_documents']
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
