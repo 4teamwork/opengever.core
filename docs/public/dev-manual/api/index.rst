@@ -34,6 +34,7 @@ Inhalt:
    propertysheets.rst
    metadata.rst
    config.rst
+   system_information.rst
    favorite.rst
    dashboard.rst
    notifications.rst

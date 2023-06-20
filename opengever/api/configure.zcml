@@ -247,6 +247,14 @@
 
   <plone:service
       method="GET"
+      name="@system-information"
+      for="*"
+      factory=".system_information.SystemInformationGet"
+      permission="zope.Public"
+      />
+
+  <plone:service
+      method="GET"
       name="@accessible-workspaces"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".accessible_workspaces.AccessibleWorkspacesGet"
