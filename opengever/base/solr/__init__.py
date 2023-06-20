@@ -5,9 +5,9 @@ from opengever.base.solr.contentlisting import OGSolrDocument
 from zope.component import getUtility
 
 
-def solr_doc_from_uuid(uuid):
+def solr_doc_from_uuid(uuid, fields):
     solr = getUtility(ISolrSearch)
-    resp = solr.search(filters=("UID:{}".format(uuid)))
+    resp = solr.search(filters=("UID:{}".format(uuid)), fl=fields)
     if not resp.docs:
         return None
     return OGSolrDocument(resp.docs[0])

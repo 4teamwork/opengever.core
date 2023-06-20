@@ -3,7 +3,6 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.base.model import create_session
 from opengever.testing import SolrIntegrationTestCase
 import json
 

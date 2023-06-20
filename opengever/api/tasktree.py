@@ -112,7 +112,8 @@ class TaskTree(object):
     def task_tree(self):
         main_task = self.get_main_task()
         path = '/'.join(main_task.getPhysicalPath())
-        resp = self.solr.search(filters=make_path_filter(path, 0))
+        resp = self.solr.search(filters=make_path_filter(path, 0),
+                                fl=self.fieldlist)
 
         if not resp.docs:
             return []
