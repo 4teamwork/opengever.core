@@ -168,7 +168,7 @@ class TestNavigation(SolrIntegrationTestCase):
             [item.get('uid') for item in items])
 
     @browsing
-    def test_lookup_propper_root_if_root_interface_is_within_content_interfaces(self, browser):
+    def test_lookup_proper_root_if_root_interface_is_within_content_interfaces(self, browser):
         self.login(self.workspace_member, browser)
         params = [
             ('root_interface', 'opengever.dossier.businesscase.IBusinessCaseDossier'),
@@ -185,6 +185,24 @@ class TestNavigation(SolrIntegrationTestCase):
             self.dossier.UID(),
             browser.json.get('tree')[0].get('uid'),
             "The root-object needs to be the last IBusinessCaseDossier")
+
+    @browsing
+    def test_lookup_proper_root_if_root_is_not_within_acquisition_chain_of_context(self, browser):
+        self.login(self.regular_user, browser)
+        params = [
+            ('root_interface', 'opengever.repository.repositoryroot.IRepositoryRoot'),
+            ('content_interfaces', 'opengever.repository.interfaces.IRepositoryFolder'),
+            ('include_root', True)
+        ]
+
+        browser.open(
+            self.private_dossier.absolute_url() + '/@navigation?{}'.format(urlencode(params)),
+            headers={'Accept': 'application/json'},
+        )
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(
+            self.repository_root.UID(),
+            browser.json.get('tree')[0].get('uid'))
 
     @browsing
     def test_raises_bad_request_when_not_existing_root_interface_provided(self, browser):

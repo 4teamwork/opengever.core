@@ -1,5 +1,6 @@
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_filters
+from opengever.api.solrsearch import SolrSearchFieldMapper
 from opengever.base.browser.helper import get_css_class
 from opengever.base.interfaces import IRecentlyTouchedSettings
 from opengever.base.solr import OGSolrDocument
@@ -7,7 +8,8 @@ from opengever.base.touched import RECENTLY_TOUCHED_INTERFACES_TO_TRACK
 from opengever.base.touched import RECENTLY_TOUCHED_KEY
 from plone import api
 from plone.api.portal import get_registry_record
-from plone.restapi.serializer.summary import ISerializeToJsonSummary
+from plone.restapi.interfaces import ISerializeToJsonSummary
+from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from plone.restapi.services import Service
 from pytz import timezone
 from zExceptions import BadRequest
@@ -36,6 +38,20 @@ class RecentlyTouchedGet(Service):
         self.params = []
         self._checked_out_solr_docs = None
         self.solr = getUtility(ISolrSearch)
+        self._fields = None
+
+    @property
+    def fields(self):
+        if not self._fields:
+            fields = DefaultJSONSummarySerializer(self.context, self.request).metadata_fields()
+            field_mapper = SolrSearchFieldMapper(self.solr)
+            fields.update({"portal_type",
+                           "getIcon",
+                           "modified",
+                           "file_extension",
+                           "checked_out"})
+            self._fields = field_mapper.get_query_fields(fields)
+        return self._fields
 
     def publishTraverse(self, request, name):
         # Consume any path segments after /@recently-touched as parameters
@@ -68,6 +84,7 @@ class RecentlyTouchedGet(Service):
                     checked_out=user_id,
                 ),
                 sort='modified desc',
+                fl=self.fields,
             )
             self._checked_out_solr_docs = [OGSolrDocument(d) for d in response.docs]
 
@@ -121,6 +138,7 @@ class RecentlyTouchedGet(Service):
                         i.__identifier__ for i in
                         RECENTLY_TOUCHED_INTERFACES_TO_TRACK],
                 ),
+                fl=self.fields,
             )
         else:
             return []

@@ -454,7 +454,8 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
         solr = getUtility(ISolrSearch)
         query = u'text:{}*'.format(escape(safe_unicode(query_string)))
         filters = [u'object_provides:{}'.format(IContact.__identifier__)]
-        resp = solr.search(query=query, filters=filters)
+        resp = solr.search(query=query, filters=filters,
+                           fl=['email', 'id', 'Title'])
         for result in resp.docs:
             self.terms.append(self.getTerm(solr_doc=result))
 
@@ -760,7 +761,8 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         solr = getUtility(ISolrSearch)
         query = u'text:{}*'.format(query_string)
         filters = u'object_provides:{}'.format(IContact.__identifier__)
-        resp = solr.search(query=query, filters=filters)
+        resp = solr.search(query=query, filters=filters,
+                           fl=['email', 'email2', 'id', 'Title'])
         for result in resp.docs:
             if 'email' in result:
                 self.terms.append(self.getTerm(solr_doc=result))
