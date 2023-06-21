@@ -6,6 +6,7 @@ from opengever.activity.mailer import process_mail_queue
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from plone import api
 import email
@@ -268,3 +269,27 @@ class TestShareContentPost(IntegrationTestCase):
         self.assertIsNone(mail['Cc'])
         self.assertIsNone(mail['Bcc'])
         self.assertIn('Check out this fantastic w=C3=B6rkspace!', mail.as_string())
+
+    @browsing
+    def test_share_workspace_handles_missing_email_address(self, browser):
+        self.login(self.workspace_member, browser=browser)
+        User.query.get_by_userid(self.workspace_member.getId()).email = ""
+        process_mail_queue()
+        mailing = Mailing(self.portal)
+        mailing.reset()
+
+        data = json.dumps({
+            'actors_to': [{'token': self.workspace_member.getId()},
+                          {'token': self.workspace_guest.getId()}],
+            'comment': u'Check out this fantastic w\xf6rkspace!',
+        })
+
+        browser.open(self.workspace_folder, view='@share-content', method='POST',
+                     headers=self.api_headers, data=data)
+
+        expected_to = [self.workspace_guest.getProperty('email')]
+
+        process_mail_queue()
+        self.assertItemsEqual(
+            expected_to,
+            mailing.get_mailhost().messages[0].mto)
