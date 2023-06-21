@@ -1,0 +1,1 @@
+Bump ftw.solr to version 2.13.1 to get fix of maintenance commands and warning for searches not specifying the fl parameter. [njohner]
