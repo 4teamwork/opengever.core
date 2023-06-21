@@ -110,13 +110,19 @@ class TestMeetingMinutes(IntegrationTestCase):
         self.assertIn(expected_header, html)
 
     @browsing
-    def test_meeting_minutes_header_dynamic_content(self, browser):
+    def test_meeting_minutes_header_and_footer_dynamic_content(self, browser):
         self.login(self.workspace_member, browser)
 
         self.workspace.meeting_template_header = {
             'left': '{print_date}',
             'center': '{customer_logo}',
             'right': '{page_number} / {number_of_pages}',
+        }
+
+        self.workspace.meeting_template_footer = {
+            'left': '{workspace_logo}',
+            'center': '',
+            'right': '',
         }
 
         with freeze(datetime(2023, 5, 10)):
@@ -129,11 +135,15 @@ class TestMeetingMinutes(IntegrationTestCase):
     white-space: pre;
   }
   @top-center {
-    content: ""url("asset.customer_logo.png")"";
+    content: ""url("asset.customer_logo")"";
     white-space: pre;
   }
   @top-right {
     content: ""counter(page)" / "counter(pages)"";
+    white-space: pre;
+  }
+  @bottom-left {
+    content: ""url("asset.workspace_logo")"";
     white-space: pre;
   }
 """

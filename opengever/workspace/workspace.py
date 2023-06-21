@@ -10,6 +10,7 @@ from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.namedfile.field import NamedImage
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
 from plone.schema import JSONField
@@ -19,8 +20,8 @@ from zExceptions import Unauthorized
 from zope import schema
 from zope.interface import implements
 from zope.interface import provider
-import uuid
 import json
+import uuid
 
 
 HEADER_FOOTER_FORMAT = json.dumps({
@@ -93,6 +94,10 @@ class IWorkspaceSchema(model.Schema):
         description=_(u'help_workspace_header_and_footer',
                       default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
         schema=HEADER_FOOTER_FORMAT,
+        required=False,
+    )
+    workspace_logo = NamedImage(
+        title=_(u'label_workspace_logo', default='Workspace logo'),
         required=False,
     )
 

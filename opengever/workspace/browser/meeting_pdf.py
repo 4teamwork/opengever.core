@@ -1,7 +1,10 @@
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from datetime import datetime
 from logging import getLogger
 from opengever.base.helpers import display_name
 from opengever.base.interfaces import IWhiteLabelingSettings
+from opengever.dossier.utils import get_main_dossier
 from opengever.workspace.interfaces import IWorkspaceMeetingAttendeesPresenceStateStorage
 from opengever.workspace.workspace_meeting import ALLOWED_ATTENDEES_PRESENCE_STATES
 from os import environ
@@ -11,7 +14,6 @@ from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getMultiAdapter
 from zope.i18n import translate
-import base64
 import requests
 
 
@@ -34,7 +36,11 @@ class MeetingMinutesPDFView(BrowserView):
         files = {'html': self.meeting_minutes_html()}
         customer_logo = self.get_customer_logo_src()
         if customer_logo:
-            files['asset.customer_logo.png'] = customer_logo
+            files['asset.customer_logo'] = customer_logo
+
+        workspace = get_main_dossier(self.context)
+        if workspace.workspace_logo:
+            files['asset.workspace_logo'] = workspace.workspace_logo.data
 
         try:
             resp = requests.post(weasyprint_url, files=files)
@@ -64,7 +70,8 @@ class MeetingMinutesPDFView(BrowserView):
             'page_number': '"counter(page)"',
             'number_of_pages': '"counter(pages)"',
             'print_date': self.context.toLocalizedTime(datetime.now()),
-            'customer_logo': '"url(\"asset.customer_logo.png\")"',
+            'customer_logo': '"url(\"asset.customer_logo\")"',
+            'workspace_logo': '"url(\"asset.workspace_logo\")"',
         }
 
         return {key: '"{}"'.format(data.get(key, '').format(**dynamic_information))
