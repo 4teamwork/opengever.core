@@ -543,6 +543,19 @@ class TestNotificationHandling(IntegrationTestCase):
         self.assertEquals([],
                           self.center.get_users_notifications('franz').all())
 
+    def test_get_users_notifications_are_sorted_unread_first(self):
+        notifications = self.center.get_users_notifications('peter')
+
+        self.assertEquals(
+            [self.activity_4, self.activity_2, self.activity_1],
+            [notification.activity for notification in notifications])
+
+        self.center.mark_notification_as_read(notifications[0].notification_id)
+
+        self.assertEquals(
+            [self.activity_2, self.activity_1, self.activity_4],
+            [notification.activity for notification in notifications])
+
     def test_mark_notification_as_read(self):
         notification = Notification.query.by_user('peter').first()
         self.center.mark_notification_as_read(notification.notification_id)
