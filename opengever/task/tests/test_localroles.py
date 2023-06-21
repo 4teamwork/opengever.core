@@ -253,6 +253,13 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.assertEqual(
             [], [assignment['principal'] for assignment in assignments])
 
+    def test_setting_local_roles_on_inactive_subdossier(self):
+        self.login(self.regular_user)
+        api.content.transition(obj=self.subdossier, transition='dossier-transition-deactivate')
+        self.dossier.__ac_local_roles_block__ = True
+        self.dossier.reindexObjectSecurity()
+        notify(ObjectModifiedEvent(self.task))
+
 
 class TestLocalRolesRevoking(IntegrationTestCase):
 
