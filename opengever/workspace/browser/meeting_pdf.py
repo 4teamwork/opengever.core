@@ -59,23 +59,45 @@ class MeetingMinutesPDFView(BrowserView):
         header = self.context.meeting_template_header or {}
         footer = self.context.meeting_template_footer or {}
 
-        return self._format_strings(header), self._format_strings(footer)
+        return self._generate_css_content(header), self._generate_css_content(footer)
 
     def get_customer_logo_src(self):
         return api.portal.get_registry_record(
             'logo_src', interface=IWhiteLabelingSettings)
 
-    def _format_strings(self, data):
+    def _generate_css_content(self, data):
         dynamic_information = {
             'page_number': '"counter(page)"',
             'number_of_pages': '"counter(pages)"',
             'print_date': self.context.toLocalizedTime(datetime.now()),
-            'customer_logo': '"url(\"asset.customer_logo\")"',
-            'workspace_logo': '"url(\"asset.workspace_logo\")"',
+            'customer_logo': '',
+            'workspace_logo': '',
         }
+        content_only_template = '''content: "{content}";
+    white-space: pre;'''
+        image_template = '''content: "{content}";
+    width: 100px;
+    height: 100%;
+    background-image: url("{image_name}");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;'''
 
-        return {key: '"{}"'.format(data.get(key, '').format(**dynamic_information))
-                for key in ['left', 'center', 'right']}
+        css = {}
+        for key in ['left', 'center', 'right']:
+            configuration = data.get(key, '')
+            content = configuration.format(**dynamic_information)
+
+            if '{customer_logo}' in configuration:
+                css_string = image_template.format(content=content, image_name='asset.customer_logo')
+            elif '{workspace_logo}' in configuration:
+                css_string = image_template.format(content=content, image_name='asset.workspace_logo')
+            else:
+                css_string = content_only_template.format(content=content)
+
+            css[key] = css_string
+
+        return css
 
     def meeting_minutes_html(self):
         data = {}

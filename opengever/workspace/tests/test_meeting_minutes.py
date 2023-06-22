@@ -135,16 +135,26 @@ class TestMeetingMinutes(IntegrationTestCase):
     white-space: pre;
   }
   @top-center {
-    content: ""url("asset.customer_logo")"";
-    white-space: pre;
+    content: "";
+    width: 100px;
+    height: 100%;
+    background-image: url("asset.customer_logo");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
   @top-right {
     content: ""counter(page)" / "counter(pages)"";
     white-space: pre;
   }
   @bottom-left {
-    content: ""url("asset.workspace_logo")"";
-    white-space: pre;
+    content: "";
+    width: 100px;
+    height: 100%;
+    background-image: url("asset.workspace_logo");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
   }
 """
 

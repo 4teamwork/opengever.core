@@ -77,28 +77,22 @@ a {
   font-size: 10pt;
 
   @top-left {
-    content: ${python:options['header']['left']};
-    white-space: pre;
+    ${python:options['header']['left']}
   }
   @top-center {
-    content: ${python:options['header']['center']};
-    white-space: pre;
+    ${python:options['header']['center']}
   }
   @top-right {
-    content: ${python:options['header']['right']};
-    white-space: pre;
+    ${python:options['header']['right']}
   }
   @bottom-left {
-    content: ${python:options['footer']['left']};
-    white-space: pre;
+    ${python:options['footer']['left']}
   }
   @bottom-center {
-    content: ${python:options['footer']['center']};
-    white-space: pre;
+    ${python:options['footer']['center']}
   }
   @bottom-right {
-    content: ${python:options['footer']['right']};
-    white-space: pre;
+    ${python:options['footer']['right']}
   }
 }
 </style>
