@@ -148,8 +148,7 @@ class NotificationCenter(object):
         if badge_only:
             query = query.filter(Notification.is_badge == true())
 
-        query = query.join(
-            Notification.activity).order_by(desc(Activity.created))
+        query = query.order_by(desc(Notification.notification_id))
         return query
 
     def count_users_unread_notifications(self, userid, badge_only=False):
