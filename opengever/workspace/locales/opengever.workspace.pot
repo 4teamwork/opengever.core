@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-05-12 05:59+0000\n"
+"POT-Creation-Date: 2023-06-22 07:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -136,9 +136,14 @@ msgstr ""
 msgid "help_videoconferencing_url"
 msgstr ""
 
-#. Default: "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}"
+#. Default: "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}, as well as the image placeholders {customer_logo} and {workspace_logo}"
 #: ./opengever/workspace/workspace.py
 msgid "help_workspace_header_and_footer"
+msgstr ""
+
+#. Default: "Can be used in headers and footers of meeting minutes"
+#: ./opengever/workspace/workspace.py
+msgid "help_workspace_logo"
 msgstr ""
 
 #. Default: "Invitation"
@@ -340,6 +345,11 @@ msgstr ""
 #. Default: "Videoconferencing URL"
 #: ./opengever/workspace/workspace.py
 msgid "label_videoconferencing_url"
+msgstr ""
+
+#. Default: "Workspace logo"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_logo"
 msgstr ""
 
 #. Default: "Meeting minutes footer"

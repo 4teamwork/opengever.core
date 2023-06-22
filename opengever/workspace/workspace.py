@@ -90,7 +90,9 @@ class IWorkspaceSchema(model.Schema):
         title=_(u'label_workspace_meeting_template_header',
                 default=u'Meeting minutes header'),
         description=_(u'help_workspace_header_and_footer',
-                      default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
+                      default=u'Dynamic content placeholders are {page_number}, '
+                      u'{number_of_pages} and {print_date}, as well as the image '
+                      u'placeholders {customer_logo} and {workspace_logo}'),
         schema=HEADER_FOOTER_FORMAT,
         required=False,
     )
@@ -98,13 +100,18 @@ class IWorkspaceSchema(model.Schema):
         title=_(u'label_workspace_meeting_template_footer',
                 default=u'Meeting minutes footer'),
         description=_(u'help_workspace_header_and_footer',
-                      default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
+                      default=u'Dynamic content placeholders are {page_number}, '
+                      u'{number_of_pages} and {print_date}, as well as the image '
+                      u'placeholders {customer_logo} and {workspace_logo}'),
         schema=HEADER_FOOTER_FORMAT,
         default=dict(FOOTER_DEFAULT_FORMAT),
         required=False,
     )
     workspace_logo = NamedImage(
         title=_(u'label_workspace_logo', default='Workspace logo'),
+        description=_(u'help_workspace_logo',
+                      default=u'Can be used in headers and footers of meeting '
+                      u'minutes'),
         required=False,
     )
 
