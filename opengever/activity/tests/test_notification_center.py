@@ -535,13 +535,13 @@ class TestNotificationHandling(IntegrationTestCase):
         self.center.mark_notification_as_read(notifications[0].notification_id)
 
         peters_notifications = self.center.get_users_notifications('peter', only_unread=True)
-        self.assertEquals(2, len(peters_notifications))
+        self.assertEquals(2, peters_notifications.count())
 
-    def test_get_users_notifications_retuns_empty_list_when_no_notifications_for_this_user_exists(self):
+    def test_get_users_notifications_when_no_notifications_for_this_user_exists(self):
         create(Builder('watcher').having(actorid='franz'))
 
         self.assertEquals([],
-                          self.center.get_users_notifications('franz'))
+                          self.center.get_users_notifications('franz').all())
 
     def test_mark_notification_as_read(self):
         notification = Notification.query.by_user('peter').first()

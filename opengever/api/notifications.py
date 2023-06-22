@@ -1,8 +1,8 @@
 from opengever.activity import notification_center
 from opengever.activity.model.notification import Notification
+from opengever.api.batch import SQLHypermediaBatch
 from opengever.readonly import is_in_readonly_mode
 from plone import api
-from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from sqlalchemy.sql.expression import false
@@ -56,7 +56,9 @@ class NotificationsGet(Service):
 
     def get_user_notifications(self):
         notifications = self.center.get_current_users_notifications(badge_only=True)
-        batch = HypermediaBatch(self.request, notifications)
+        batch = SQLHypermediaBatch(self.request,
+                                   notifications,
+                                   unique_sort_key='id')
 
         result = {
             '@id': batch.canonical_url,
