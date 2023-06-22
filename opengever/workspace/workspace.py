@@ -30,6 +30,12 @@ HEADER_FOOTER_FORMAT = json.dumps({
     'right': '',
 })
 
+FOOTER_DEFAULT_FORMAT = {
+    'left': '{print_date}',
+    'center': '',
+    'right': '{page_number}/{number_of_pages}',
+}
+
 
 def videoconferencing_url_default():
     """Concatenate base_url with a random UUID.
@@ -94,6 +100,7 @@ class IWorkspaceSchema(model.Schema):
         description=_(u'help_workspace_header_and_footer',
                       default=u'Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}'),
         schema=HEADER_FOOTER_FORMAT,
+        default=dict(FOOTER_DEFAULT_FORMAT),
         required=False,
     )
     workspace_logo = NamedImage(
