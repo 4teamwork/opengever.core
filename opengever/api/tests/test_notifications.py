@@ -15,7 +15,7 @@ class TestNotificationsGet(IntegrationTestCase):
     features = ('activity', )
 
     @browsing
-    def test_list_all_notifications_for_the_given_userid(self, browser):
+    def test_returns_notifications_for_the_given_userid(self, browser):
         self.login(self.administrator, browser=browser)
 
         center = notification_center()
@@ -101,10 +101,10 @@ class TestNotificationsGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         batch_size = 2
-        url = '{}/@notifications/{}?b_size={}'.format(
+        base_url = '{}/@notifications/{}'.format(
             self.portal.absolute_url(),
-            self.regular_user.getId(),
-            batch_size)
+            self.regular_user.getId())
+        url = '{}?b_size={}'.format(base_url, batch_size)
 
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
 
@@ -112,6 +112,13 @@ class TestNotificationsGet(IntegrationTestCase):
 
         self.assertEquals(5, browser.json.get('items_total'))
         self.assertEquals(2, len(browser.json.get('items')))
+        self.assertDictEqual(
+            {"@id": url,
+             "first": '{}?b_start=0&b_size={}'.format(base_url, batch_size),
+             "last": '{}?b_start=4&b_size={}'.format(base_url, batch_size),
+             "next": '{}?b_start=2&b_size={}'.format(base_url, batch_size)},
+            browser.json.get('batching')
+        )
 
         url = browser.json.get('batching').get('last')
         browser.open(url, method='GET', headers={'Accept': 'application/json'})
