@@ -190,6 +190,30 @@ class TestNotificationsGet(IntegrationTestCase):
             browser.json)
 
     @browsing
+    def test_returned_notifications_are_sorted_unread_first(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+        TaskAddedActivity(self.task, self.request).record()
+
+        self.login(self.regular_user, browser=browser)
+        url = '{}/@notifications/{}'.format(self.portal.absolute_url(),
+                                            self.regular_user.getId())
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(3, browser.json['items_total'])
+        notification_ids = [el['notification_id'] for el in browser.json['items']]
+
+        Notification.query.filter(Notification.notification_id ==
+                                  notification_ids[0]).one().is_read = True
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(3, browser.json['items_total'])
+        notification_ids.append(notification_ids.pop(0))
+        self.assertEqual(
+            notification_ids,
+            [el['notification_id'] for el in browser.json['items']])
+
+    @browsing
     def test_raises_bad_request_when_userid_is_missing(self, browser):
         self.login(self.regular_user, browser=browser)
 
