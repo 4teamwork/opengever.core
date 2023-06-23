@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.6.5 (2023-06-23)
+---------------------
+
+Bug fixes:
+
+
+- Fix releasing unused reference numbers in the reference number manager. [elioschmutz]
+- Adjust french translation in invitation mail title. [phgross]
+
+
+Other changes:
+
+
+- Massively improve performance of @recently-touched endpoint. [njohner]
+- Avoid ever getting the searchableText from solr. [njohner]
+- Improve performance of @notifications endpoint. [njohner]
+
+
 2023.6.4 (2023-06-09)
 ---------------------
 
