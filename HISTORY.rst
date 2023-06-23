@@ -10,6 +10,23 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.2 (2023-06-23)
+---------------------
+
+Bug fixes:
+
+
+- Fix releasing unused reference numbers in the reference number manager. [elioschmutz] [CA-5692]
+
+
+Other changes:
+
+
+- Massively improve performance of @recently-touched endpoint. [njohner] [CA-5921]
+- Avoid ever getting the searchableText from solr. [njohner] [CA-5921_2]
+- Improve performance of @notifications endpoint. [njohner] [CA-5939]
+
+
 2023.8.1 (2023-05-19)
 ---------------------
 
