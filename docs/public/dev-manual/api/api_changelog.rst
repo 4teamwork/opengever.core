@@ -11,6 +11,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Expose ``property_sheets`` in the @system-information endpoint.
+- Expose ``dossier_participation_roles`` in the @system-information endpoint.
+- Add a new endpoint: ``@system-information`` which provides additional information about the current deployment.
 - ``@tus-upload``: Allow to pass a ``document_date`` metadata header to manually set the documents date
 - ``@notifications``: GET now returns unread notifications sorted first.
 
