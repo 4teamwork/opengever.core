@@ -16,6 +16,7 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentSavedAsPDFMarker
+from opengever.document.interfaces import IDocumentSettings
 from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.meeting.proposal import ISubmittedProposal
@@ -132,6 +133,19 @@ class IDocumentSchema(model.Schema):
         if data.file:
             validateUploadForFieldIfNecessary(
                 "file", data.file.filename, data.file.open(), getRequest())
+
+    @invariant
+    def disallow_blacklisted_mimetypes(data):
+        if not data.file:
+            return
+
+        blacklisted_mimetypes = api.portal.get_registry_record(
+            name='upload_mimetype_blacklist', interface=IDocumentSettings)
+
+        if data.file.contentType in blacklisted_mimetypes:
+            raise Invalid(
+                _('error_blocked_mimetype_by_blacklist',
+                  default="It is not allowed to upload this file format"))
 
 
 class UploadValidator(Z3CFormClamavValidator):
