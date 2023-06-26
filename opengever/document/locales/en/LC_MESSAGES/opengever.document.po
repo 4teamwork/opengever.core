@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-02-06 17:59+0000\n"
+"POT-Creation-Date: 2023-06-23 10:57+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -243,6 +243,11 @@ msgstr "Document-ID"
 #: ./opengever/document/forms.py
 msgid "error_NotInContentTypes"
 msgstr "You're not allowed to add documents in the target container."
+
+#. Default: "It is not allowed to upload this file format"
+#: ./opengever/document/document.py
+msgid "error_blocked_mimetype_by_blacklist"
+msgstr ""
 
 #. German translation: Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop).
 #. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."

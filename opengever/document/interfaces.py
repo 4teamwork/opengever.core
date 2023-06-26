@@ -82,6 +82,13 @@ class IDocumentSettings(Interface):
         default=PRESERVED_AS_PAPER_DEFAULT,
     )
 
+    upload_mimetype_blacklist = schema.List(
+        title=u'MIME types upload blacklist',
+        description=u'A list of blacklisted MIME types.'
+        u'An error will be raised if a user tries to upload a file of one of'
+        u'the listed MIME types',
+        default=list())
+
 
 class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.
