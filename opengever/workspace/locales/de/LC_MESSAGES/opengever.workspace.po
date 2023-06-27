@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-22 07:37+0000\n"
+"POT-Creation-Date: 2023-06-27 10:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -368,6 +368,11 @@ msgstr "Zum Teamraum hinzugefügt worden"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Teamräume"
+
+#. Default: "Invalid meeting minutes configuration, not supported placeholders \"${placeholder}\" are used."
+#: ./opengever/workspace/workspace.py
+msgid "msg_invalid_placholders_in_meeting_settings"
+msgstr "Ungültige Protokoll Einstellungen, der nicht unterstützte Platzhalter \"${placeholder}\" wird verwendet."
 
 #. Default: "At least one principal must remain admin."
 #: ./opengever/workspace/participation/browser/manage_participants.py

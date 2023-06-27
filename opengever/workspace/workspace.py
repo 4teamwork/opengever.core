@@ -5,6 +5,7 @@ from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_meeting_feature_enabled
 from opengever.workspace.base import WorkspaceBase
+from opengever.workspace.browser.meeting_pdf import validate_header_footer
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
@@ -19,6 +20,8 @@ from zExceptions import Forbidden
 from zExceptions import Unauthorized
 from zope import schema
 from zope.interface import implements
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
 import json
 import uuid
@@ -114,6 +117,19 @@ class IWorkspaceSchema(model.Schema):
                       u'minutes'),
         required=False,
     )
+
+    @invariant
+    def validate_meeting_minutes_header_and_footer(data):
+        try:
+            validate_header_footer(data.meeting_template_header)
+            validate_header_footer(data.meeting_template_footer)
+
+        except KeyError as e:
+            raise Invalid(
+                _(u'msg_invalid_placholders_in_meeting_settings',
+                  default=u'Invalid meeting minutes configuration, not '
+                  u'supported placeholders "${placeholder}" are used.',
+                  mapping={'placeholder': e.message}))
 
 
 class Workspace(WorkspaceBase):

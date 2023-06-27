@@ -1,5 +1,3 @@
-from Acquisition import aq_inner
-from Acquisition import aq_parent
 from datetime import datetime
 from logging import getLogger
 from opengever.base.helpers import display_name
@@ -18,6 +16,19 @@ import requests
 
 
 logger = getLogger('opengever.workspace')
+
+DYNAMIC_CONTENT_PLACEHOLDERS = [
+    'page_number', 'number_of_pages', 'print_date',
+    'customer_logo', 'workspace_logo']
+
+
+def validate_header_footer(configuration):
+    if not configuration:
+        return
+
+    for allignment in ['left', 'center', 'right']:
+        value = configuration.get(allignment, '')
+        value.format(**{k: '' for k in DYNAMIC_CONTENT_PLACEHOLDERS})
 
 
 class MeetingMinutesPDFView(BrowserView):
