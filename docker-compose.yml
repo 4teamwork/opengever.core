@@ -34,9 +34,12 @@ services:
     ports:
       - 8093:8080
   clamav:
-    image: mkodockx/docker-clamav:alpine
+    image: clamav/clamav:latest
     ports:
-      - 3310:3310
+      - '3310:3310'
+    volumes:
+      - clam_db:/var/lib/clamav
+      - ./clamav/clamd.conf:/etc/clamav/clamd.conf
     profiles:
       - clamav
   ogui:
@@ -186,6 +189,8 @@ services:
     profiles:
       - testserver
 
+volumes:
+    clam_db:
 
 networks:
   default:
