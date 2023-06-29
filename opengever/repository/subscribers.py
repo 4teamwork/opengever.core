@@ -1,6 +1,7 @@
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
 from opengever.repository.interfaces import IDuringRepositoryDeletion
+from opengever.repository.interfaces import IRepositoryFolder
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -41,6 +42,13 @@ def update_reference_prefixes(obj, event):
                     idxs.append('metadata')
                 else:
                     idxs.append('SearchableText')
+
+                if IRepositoryFolder.providedBy(obj):
+                    idxs += ['Title',
+                             'sortable_title',
+                             'title_de',
+                             'title_fr',
+                             'title_en']
 
                 obj.reindexObject(idxs=idxs)
 

@@ -77,3 +77,45 @@ class TestReferencePrefixUpdating(SolrIntegrationTestCase):
         self.login(self.manager, browser)
         self.assertEquals('Client1 1.7 / 1.1 / 24',
                           solr_data_for(self.empty_document, 'reference'))
+
+    @browsing
+    def test_reference_number_in_repositoryfolder_titles_gets_updated(self, browser):
+        self.login(self.administrator, browser)
+
+        self.assertEquals(
+            u'1.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'Title'))
+        self.assertEquals(
+            u'0001.0001. vertrage und vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'sortable_title'))
+        self.assertEquals(
+            u'1.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'title_de'))
+        self.assertEquals(
+            u'1.1. Contrats et accords',
+            solr_data_for(self.leaf_repofolder, 'title_fr'))
+        self.assertEquals(
+            u'1.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'title_en'))
+
+        browser.open(self.branch_repofolder, view='edit')
+        browser.fill({'Repository number': u'8'}).save()
+        self.commit_solr()
+
+        self.login(self.manager, browser)
+
+        self.assertEquals(
+            u'8.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'Title'))
+        self.assertEquals(
+            u'0008.0001. vertrage und vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'sortable_title'))
+        self.assertEquals(
+            u'8.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'title_de'))
+        self.assertEquals(
+            u'8.1. Contrats et accords',
+            solr_data_for(self.leaf_repofolder, 'title_fr'))
+        self.assertEquals(
+            u'8.1. Vertr\xe4ge und Vereinbarungen',
+            solr_data_for(self.leaf_repofolder, 'title_en'))
