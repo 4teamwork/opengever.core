@@ -3,7 +3,7 @@ from setuptools import setup
 import os
 
 
-version = '2023.11.0'
+version = '2023.11.1.dev0'
 maintainer = '4teamwork AG'
 
 
