@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.11.0 (2023-06-29)
+----------------------
+
+New features:
+
+
+- Allow to configure an upload mimetype blacklist. [elioschmutz] [CA-4999]
+- @tus-upload can directly set a custom document_date. [elioschmutz] [CA-5001]
+- Introduce new @system-information endpoint. [elioschmutz] [CA-5543]
+- Expose "dossier_participation_roles" in the @system-information endpoint. [elioschmutz] [CA-5543-2]
+- Expose "property_sheets" in the @system-information endpoint. [elioschmutz] [CA-5543-3]
+- Hide copy, move and edit items actions for workspace guests on document listings. [njohner] [CA-5929]
+
+
+Bug fixes:
+
+
+- Fix member default gettter for propertysheet fields. [phgross] [CA-4911]
+- Fix accepting task when dossier contains inactive subdossiers. [njohner] [CA-5897]
+- Handle users without E-mail address in @share-content endpoint. [njohner] [CA-5912]
+- Sort unread notifications first in @notifications endpoint. [njohner] [CA-5959]
+- Adjust french translation in invitation mail title. [phgross] [CA-5963]
+
+
+Other changes:
+
+
+- Massively improve performance of @recently-touched endpoint. [njohner] [CA-5921]
+- Avoid ever getting the searchableText from solr. [njohner] [CA-5921_2]
+- Bump ftw.solr to version 2.13.1 to get fix of maintenance commands and warning for searches not specifying the fl parameter. [njohner] [CA-5921_3]
+- Improve performance of @notifications endpoint. [njohner] [CA-5939]
+
+
 2023.10.0 (2023-06-14)
 ----------------------
 
