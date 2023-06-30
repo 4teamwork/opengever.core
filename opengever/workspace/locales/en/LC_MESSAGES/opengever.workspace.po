@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-02-21 18:23+0000\n"
+"POT-Creation-Date: 2023-06-27 10:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -153,6 +153,16 @@ msgstr "Meeting Minutes: ${title}"
 #: ./opengever/workspace/workspace.py
 msgid "help_videoconferencing_url"
 msgstr "URL to launch a video conference for this workspace"
+
+#. Default: "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}, as well as the image placeholders {customer_logo} and {workspace_logo}"
+#: ./opengever/workspace/workspace.py
+msgid "help_workspace_header_and_footer"
+msgstr "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}, as well as the image placeholders {customer_logo} and {workspace_logo}"
+
+#. Default: "Can be used in headers and footers of meeting minutes"
+#: ./opengever/workspace/workspace.py
+msgid "help_workspace_logo"
+msgstr "Can be used in headers and footers of meeting minutes"
 
 #. German translation: Einladung
 #. Default: "Invitation"
@@ -380,6 +390,21 @@ msgstr "Video call link"
 msgid "label_videoconferencing_url"
 msgstr "Video conferencing URL"
 
+#. Default: "Workspace logo"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_logo"
+msgstr "Workspace logo"
+
+#. Default: "Meeting minutes footer"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_meeting_template_footer"
+msgstr "Meeting minutes footer"
+
+#. Default: "Meeting minutes header"
+#: ./opengever/workspace/workspace.py
+msgid "label_workspace_meeting_template_header"
+msgstr "Meeting minutes header"
+
 #. Default: "Added to the workspace"
 #: ./opengever/workspace/activities.py
 msgid "label_workspace_participation_added"
@@ -390,6 +415,11 @@ msgstr "Added to the workspace"
 #: ./opengever/workspace/browser/tabbed.py
 msgid "label_workspaces"
 msgstr "Workspaces"
+
+#. Default: "Invalid meeting minutes configuration, not supported placeholders \"${placeholder}\" are used."
+#: ./opengever/workspace/workspace.py
+msgid "msg_invalid_placholders_in_meeting_settings"
+msgstr "Invalid meeting minutes configuration, not supported placeholders \"${placeholder}\" are used."
 
 #. Default: "At least one principal must remain admin."
 #: ./opengever/workspace/participation/browser/manage_participants.py

@@ -57,6 +57,38 @@
                     "description": "",
                     "_zope_schema_type": "Bool"
                 },
+                "meeting_template_header": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Kopfzeile von Meeting-Protokollen",
+                    "description": "Dynamische Textinhalte sind {page_number}, {number_of_pages} und {print_date}, sowie die Bild-Platzhalter {customer_logo} und {workspace_logo}",
+                    "_zope_schema_type": "JSONField"
+                },
+                "meeting_template_footer": {
+                    "type": [
+                        "null",
+                        "object"
+                    ],
+                    "title": "Fusszeile von Meeting-Protokollen",
+                    "description": "Dynamische Textinhalte sind {page_number}, {number_of_pages} und {print_date}, sowie die Bild-Platzhalter {customer_logo} und {workspace_logo}",
+                    "_zope_schema_type": "JSONField",
+                    "default": {
+                        "right": "{page_number}/{number_of_pages}",
+                        "center": "",
+                        "left": "{print_date}"
+                    }
+                },
+                "workspace_logo": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Teamraum logo",
+                    "description": "Kann in Kopf- und Fusszeilen von Protokollen verwendet werden.",
+                    "_zope_schema_type": "NamedImage"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -147,6 +179,9 @@
                 "external_reference",
                 "gever_url",
                 "hide_members_for_guests",
+                "meeting_template_header",
+                "meeting_template_footer",
+                "workspace_logo",
                 "changed",
                 "title",
                 "description",

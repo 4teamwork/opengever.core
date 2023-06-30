@@ -75,11 +75,24 @@ a {
   margin-right: 2.5cm;
   font-family: Helvetica, Arial, Sans-serif;
   font-size: 10pt;
-  @bottom-right {
-    content: counter(page) "/" counter(pages);
+
+  @top-left {
+    ${python:options['header']['left']}
+  }
+  @top-center {
+    ${python:options['header']['center']}
+  }
+  @top-right {
+    ${python:options['header']['right']}
   }
   @bottom-left {
-    content: "${python:toLocalizedTime(options['print_date'], long_format=True)}";
+    ${python:options['footer']['left']}
+  }
+  @bottom-center {
+    ${python:options['footer']['center']}
+  }
+  @bottom-right {
+    ${python:options['footer']['right']}
   }
 }
 </style>

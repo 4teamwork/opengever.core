@@ -5,20 +5,39 @@ from opengever.workspace import _
 from opengever.workspace import is_todo_feature_enabled
 from opengever.workspace import is_workspace_meeting_feature_enabled
 from opengever.workspace.base import WorkspaceBase
+from opengever.workspace.browser.meeting_pdf import validate_header_footer
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
 from plone.autoform import directives
 from plone.autoform.interfaces import IFormFieldProvider
+from plone.namedfile.field import NamedImage
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.content.update import ContentPatch
+from plone.schema import JSONField
 from plone.supermodel import model
 from zExceptions import Forbidden
 from zExceptions import Unauthorized
 from zope import schema
 from zope.interface import implements
+from zope.interface import Invalid
+from zope.interface import invariant
 from zope.interface import provider
+import json
 import uuid
+
+
+HEADER_FOOTER_FORMAT = json.dumps({
+    'left': '',
+    'center': '',
+    'right': '',
+})
+
+FOOTER_DEFAULT_FORMAT = {
+    'left': '{print_date}',
+    'center': '',
+    'right': '{page_number}/{number_of_pages}',
+}
 
 
 def videoconferencing_url_default():
@@ -70,6 +89,47 @@ class IWorkspaceSchema(model.Schema):
                 default=u'Hide workspace members for workspace guests'),
         required=False,
     )
+    meeting_template_header = JSONField(
+        title=_(u'label_workspace_meeting_template_header',
+                default=u'Meeting minutes header'),
+        description=_(u'help_workspace_header_and_footer',
+                      default=u'Dynamic content placeholders are {page_number}, '
+                      u'{number_of_pages} and {print_date}, as well as the image '
+                      u'placeholders {customer_logo} and {workspace_logo}'),
+        schema=HEADER_FOOTER_FORMAT,
+        required=False,
+    )
+    meeting_template_footer = JSONField(
+        title=_(u'label_workspace_meeting_template_footer',
+                default=u'Meeting minutes footer'),
+        description=_(u'help_workspace_header_and_footer',
+                      default=u'Dynamic content placeholders are {page_number}, '
+                      u'{number_of_pages} and {print_date}, as well as the image '
+                      u'placeholders {customer_logo} and {workspace_logo}'),
+        schema=HEADER_FOOTER_FORMAT,
+        default=dict(FOOTER_DEFAULT_FORMAT),
+        required=False,
+    )
+    workspace_logo = NamedImage(
+        title=_(u'label_workspace_logo', default='Workspace logo'),
+        description=_(u'help_workspace_logo',
+                      default=u'Can be used in headers and footers of meeting '
+                      u'minutes'),
+        required=False,
+    )
+
+    @invariant
+    def validate_meeting_minutes_header_and_footer(data):
+        try:
+            validate_header_footer(data.meeting_template_header)
+            validate_header_footer(data.meeting_template_footer)
+
+        except KeyError as e:
+            raise Invalid(
+                _(u'msg_invalid_placholders_in_meeting_settings',
+                  default=u'Invalid meeting minutes configuration, not '
+                  u'supported placeholders "${placeholder}" are used.',
+                  mapping={'placeholder': e.message}))
 
 
 class Workspace(WorkspaceBase):

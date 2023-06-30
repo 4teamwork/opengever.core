@@ -6,6 +6,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.testing import IntegrationTestCase
+from opengever.workspace.workspace import FOOTER_DEFAULT_FORMAT
 from zope.component import getUtility
 import json
 
@@ -127,6 +128,32 @@ class TestWorkspaceWorkspace(IntegrationTestCase):
 
         browser.open(querysource_url, method='GET', headers=self.api_headers)
         self.assertEqual([], browser.json['items'])
+
+    @browsing
+    def test_header_and_footer_configuration_placeholders_are_validated(self, browser):
+        self.login(self.workspace_admin, browser)
+
+        footer = dict(FOOTER_DEFAULT_FORMAT)
+        browser.open(self.workspace_root, method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps(
+                         {'@type': 'opengever.workspace.workspace',
+                          'title': u'\xfcberarbeitungsphase',
+                          'meeting_template_footer': footer}))
+
+        footer['center'] = '{print_date} and {invalid_placeholder}'
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.workspace_root, method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps(
+                             {'@type': 'opengever.workspace.workspace',
+                              'title': u'\xfcberarbeitungsphase',
+                              'meeting_template_header': footer}))
+
+        self.assertEqual(
+            u'Invalid meeting minutes configuration, not supported '
+            'placeholders "invalid_placeholder" are used.',
+            browser.json['translated_message'])
 
     @browsing
     def test_security_view_access(self, browser):
