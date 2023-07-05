@@ -23,12 +23,12 @@ class TestSIPPackageIntegration(IntegrationTestCase):
 
         with freeze(datetime(2016, 11, 6)):
             self.assertEquals(
-                'SIP_20161106_PLONE', package.get_folder_name())
+                'SIP_20161106_PLONE_1', package.get_folder_name())
 
         self.disposition.transfer_number = u'10\xe434'
         with freeze(datetime(2016, 11, 6)):
             self.assertEquals(
-                u'SIP_20161106_PLONE_10\xe434', package.get_folder_name())
+                u'SIP_20161106_PLONE_1_10\xe434', package.get_folder_name())
 
     def test_ablieferungs_metadata(self):
         rm_user = ogds_service().fetch_user(self.records_manager.getId())
@@ -113,24 +113,23 @@ class TestSIPPackage(FunctionalTestCase):
 
             package = SIPPackage(disposition)
             package.write_to_zipfile(zip_file)
-
             self.assertItemsEqual(
-                ['SIP_20160611_PLONE_10xy/header/xsd/ablieferung.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/archivischeNotiz.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/archivischerVorgang.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/arelda.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/base.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/datei.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/dokument.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/dossier.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/ordner.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/ordnungssystem.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/ordnungssystemposition.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/paket.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/provenienz.xsd',
-                 'SIP_20160611_PLONE_10xy/header/xsd/zusatzDaten.xsd',
-                 'SIP_20160611_PLONE_10xy/content/d000001/p000001.doc',
-                 'SIP_20160611_PLONE_10xy/content/d000002/p000002.pdf',
-                 'SIP_20160611_PLONE_10xy/content/d000002/p000003.doc',
-                 'SIP_20160611_PLONE_10xy/header/metadata.xml'],
+                ['SIP_20160611_PLONE_1_10xy/header/xsd/ablieferung.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/archivischeNotiz.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/archivischerVorgang.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/arelda.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/base.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/datei.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/dokument.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/dossier.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/ordner.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/ordnungssystem.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/ordnungssystemposition.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/paket.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/provenienz.xsd',
+                 'SIP_20160611_PLONE_1_10xy/header/xsd/zusatzDaten.xsd',
+                 'SIP_20160611_PLONE_1_10xy/content/d000001/p000001.doc',
+                 'SIP_20160611_PLONE_1_10xy/content/d000002/p000002.pdf',
+                 'SIP_20160611_PLONE_1_10xy/content/d000002/p000003.doc',
+                 'SIP_20160611_PLONE_1_10xy/header/metadata.xml'],
                 zip_file.namelist())
