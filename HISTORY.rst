@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.3 (2023-07-06)
+---------------------
+
+Bug fixes:
+
+
+- Fix accepting task when dossier contains inactive subdossiers. [njohner] [CA-5897]
+
+
 2023.8.2 (2023-06-23)
 ---------------------
 
