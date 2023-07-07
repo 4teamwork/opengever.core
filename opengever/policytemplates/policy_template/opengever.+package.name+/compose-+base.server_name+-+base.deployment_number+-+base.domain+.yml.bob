@@ -1,0 +1,8 @@
+version: "3.8"
+
+services:
+  gever-ui:
+    image: ghcr.io/4teamwork/gever-ui:20XX.Y.Z
+    restart: always
+    ports:
+      - '1{{{base.deployment_number}}}34:80'
