@@ -2,6 +2,7 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
 from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
@@ -11,6 +12,7 @@ from opengever.repository.repositoryroot import IRepositoryRoot
 from pkg_resources import resource_filename
 from plone import api
 from pyxb.namespace import XMLSchema_instance as xsi
+from zope.component import getUtility
 import os.path
 
 
@@ -106,9 +108,10 @@ class SIPPackage(object):
         return ITranslatedTitle(parent).translated_title()
 
     def get_folder_name(self):
-        name = u'SIP_{}_{}'.format(
+        seq_number = getUtility(ISequenceNumber).get_number(self.disposition)
+        name = u'SIP_{}_{}_{}'.format(
             DateTime().strftime('%Y%m%d'),
-            api.portal.get().getId().upper())
+            api.portal.get().getId().upper(), seq_number)
         if self.disposition.transfer_number:
             name = u'{}_{}'.format(name, self.disposition.transfer_number)
 

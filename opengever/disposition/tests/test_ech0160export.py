@@ -4,7 +4,6 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from ftw.testing import freeze
 from opengever.testing import IntegrationTestCase
-import os
 
 
 class TesteCH0160Deployment(IntegrationTestCase):
@@ -23,7 +22,7 @@ class TesteCH0160Deployment(IntegrationTestCase):
                 'application/zip',
                 self.request.response.headers.get('content-type'))
             self.assertEquals(
-                'inline; filename="SIP_20160611_PLONE_10xy.zip"',
+                'inline; filename="SIP_20160611_PLONE_1_10xy.zip"',
                 self.request.response.headers.get('content-disposition'))
 
 
