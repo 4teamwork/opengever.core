@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``@schema`` endpoint supports now a display mode.
 
 2023.11.0 (2023-06-29)
 ----------------------

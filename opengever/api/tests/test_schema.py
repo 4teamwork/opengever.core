@@ -91,6 +91,29 @@ class TestSchemaEndpoint(IntegrationTestCase):
         self.assertNotIn('privacy_layer', fieldset['fields'])
 
     @browsing
+    def test_add_schema_does_contain_protected_fields_if_display_mode(self, browser):
+        self.login(self.regular_user, browser)
+        response = browser.open(
+            self.leaf_repofolder, view='@schema/opengever.dossier.businesscasedossier',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertIn('classification', fieldset['fields'])
+        self.assertIn('privacy_layer', fieldset['fields'])
+
+        self.leaf_repofolder.manage_permission("Edit lifecycle and classification", roles=[])
+        response = browser.open(
+            self.leaf_repofolder,
+            view='@schema/opengever.dossier.businesscasedossier?mode=display',
+            method='GET',
+            headers=self.api_headers,
+        ).json
+        fieldset = self._get_schema_fieldset(response, "classification")
+        self.assertIn('classification', fieldset['fields'])
+        self.assertIn('privacy_layer', fieldset['fields'])
+
+    @browsing
     def test_edit_schema_only_contains_translated_title_fields_for_active_languages(self, browser):
         self.login(self.regular_user, browser)
 
