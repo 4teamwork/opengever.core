@@ -5,7 +5,7 @@ from zope.interface import classProvides
 from zope.interface import implements
 
 
-class ManualJournalEntrySection(object):
+class ManualJournalActorSection(object):
     """Add request flag to create journal entries with the items creator
     if given in the bundle.
     """
