@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.4 (2023-07-18)
+---------------------
+
+Bug fixes:
+
+
+- Show lifecycle fields in schema display mode. [phgross] [CA-6037]
+
+
 2023.8.3 (2023-07-06)
 ---------------------
 
