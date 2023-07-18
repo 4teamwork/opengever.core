@@ -31,6 +31,7 @@ from .readonly import PatchPloneUserAllowed
 from .readonly import PatchPloneUserGetRolesInContext
 from .relation_fields import PatchRelationFieldEventHandlers
 from .resource_registries_url_regex import PatchResourceRegistriesURLRegex
+from .restapi_utils import PatchRestAPICreateForm
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
 from .session import PatchSessionCookie
@@ -72,6 +73,7 @@ PatchOFSRoleManager()()
 PatchPlone43RC1Upgrade()()
 PatchPloneProtectOnUserLogsIn()()
 PatchRelationFieldEventHandlers()()
+PatchRestAPICreateForm()()
 PatchResourceRegistriesURLRegex()()
 PatchSessionCookie()()
 PatchTransmogrifyDXSchemaUpdater()()
