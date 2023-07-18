@@ -404,6 +404,48 @@
                         }
                     }
                 },
+                "_journal_entries": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "items": {
+                        "type": "object",
+                        "title": "opengever.journal.form.IManualJournalEntry",
+                        "additionalProperties": false,
+                        "properties": {
+                            "category": {
+                                "type": "string",
+                                "title": "Kategorie",
+                                "description": "",
+                                "_zope_schema_type": "Choice",
+                                "enum": [
+                                    "information",
+                                    "meeting",
+                                    "other",
+                                    "phone-call",
+                                    "appointment"
+                                ]
+                            },
+                            "comment": {
+                                "type": "string",
+                                "title": "Kommentar",
+                                "description": "",
+                                "_zope_schema_type": "Text"
+                            },
+                            "related_documents": {
+                                "type": "array",
+                                "title": "Dokumentverweise",
+                                "description": "",
+                                "_zope_schema_type": "RelationList",
+                                "default": []
+                            }
+                        },
+                        "required": [
+                            "category"
+                        ]
+                    }
+                },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
                 },
