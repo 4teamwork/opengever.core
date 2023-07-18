@@ -26,12 +26,18 @@ class RemoveInactiveGroupMemberships(SchemaMigration):
     """
 
     def migrate(self):
-
-        rows = self.execute(
-            select([groups_table.c.groupid])
-            .where(groups_table.c.active.is_(False))
-            .where(groups_table.c.is_local.is_(False))
-        ).fetchall()
+        if self.is_oracle:
+            rows = self.execute(
+                select([groups_table.c.groupid])
+                .where(groups_table.c.active == False)  # noqa
+                .where(groups_table.c.is_local == False)  # noqa
+            ).fetchall()
+        else:
+            rows = self.execute(
+                select([groups_table.c.groupid])
+                .where(groups_table.c.active.is_(False))
+                .where(groups_table.c.is_local.is_(False))
+            ).fetchall()
 
         groupids = [row[0] for row in rows]
 
