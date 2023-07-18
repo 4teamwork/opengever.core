@@ -10,12 +10,19 @@
     "start": "2010-11-11",
     "_creator": "philippe.gross",
     "title": "Dossier Peter Schneider",
-      "_participations": [
+    "_participations": [
           {"participant_id": "person:c2a9c298-a769-4c52-affe-0803c11cb571",
            "roles": ["regard", "participation"]},
           {"participant_id": "organization:e66b4572-5244-491c-bbe8-32295f8da070",
            "roles": ["regard"]}
-      ]
+    ],
+    "_journal_entries": [
+        {"category": "phone-call",
+         "comment": "Anfrage bezüglich dem Jahr 2016 von Herr Meier"},
+        {"category": "meeting",
+         "comment": "Diskussion Herr Meier",
+         "time": "2021-12-06T16:12:43.219128"}
+    ]
   },  {
     "guid": "4ed93561c4004c668feb8124b55897fc",
     "parent_reference": [
