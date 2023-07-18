@@ -439,6 +439,14 @@
                                 "description": "",
                                 "_zope_schema_type": "RelationList",
                                 "default": []
+                            },
+                            "time": {
+                                "_zope_schema_type": "Datetime",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "datetime"
                             }
                         },
                         "required": [

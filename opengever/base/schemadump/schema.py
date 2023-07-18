@@ -420,6 +420,9 @@ class OGGBundleJSONSchemaBuilder(object):
         if self.portal_type == 'opengever.dossier.businesscasedossier':
             subschema = JSONSchemaBuilder(IManualJournalEntry).build_schema().serialize()
             subschema.pop('$schema')
+            subschema["properties"]["time"] = {"type": ["null", "string"],
+                                               "format": "datetime",
+                                               "_zope_schema_type": "Datetime"}
             self.ct_schema.add_property('_journal_entries', {
                 'type': 'array',
                 "items": subschema
