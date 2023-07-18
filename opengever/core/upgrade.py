@@ -217,6 +217,12 @@ class SchemaMigration(SQLUpgradeStep):
         return []
 
     def has_index(self, idx_name, table_name):
+        if self.is_oracle:
+            query = "SELECT * from all_objects WHERE object_name='{}'".format(idx_name)
+            if len(self.connection.execute(query).fetchall()) > 0:
+                return True
+            return False
+
         index_names = self.get_index_names(table_name)
         return idx_name in index_names
 
