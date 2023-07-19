@@ -439,7 +439,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
                         'title': u'label_manual_journal_entry'},
              'time': DateTime("2021-12-06T16:12:43.219128"),
              'id': manual_journal_entries[1]["id"],
-             'actor': 'admin',
+             'actor': 'robert.ziegler',
              'comments': u'Diskussion Herr Meier'})
 
         participations = IAnnotations(dossier)['participations']

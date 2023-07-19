@@ -447,6 +447,15 @@
                                     "string"
                                 ],
                                 "format": "datetime"
+                            },
+                            "actor": {
+                                "_vocabulary": "<G\\u00fcltige User-ID>",
+                                "_zope_schema_type": "Choice",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "format": "datetime"
                             }
                         },
                         "required": [

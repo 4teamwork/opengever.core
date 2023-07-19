@@ -423,6 +423,10 @@ class OGGBundleJSONSchemaBuilder(object):
             subschema["properties"]["time"] = {"type": ["null", "string"],
                                                "format": "datetime",
                                                "_zope_schema_type": "Datetime"}
+            subschema["properties"]["actor"] = {"type": ["null", "string"],
+                                                "format": "datetime",
+                                                "_zope_schema_type": "Choice",
+                                                "_vocabulary": "<G\u00fcltige User-ID>"}
             self.ct_schema.add_property('_journal_entries', {
                 'type': 'array',
                 "items": subschema

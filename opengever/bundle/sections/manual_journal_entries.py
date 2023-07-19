@@ -65,5 +65,6 @@ class ManualJournalEntriesSection(object):
             category = journal_entry.get('category', DEFAULT_COMMENT_CATEGORY)
             documents = journal_entry.get('related_documents', [])
             time = datify(journal_entry.get('time', DateTime()))
+            actor = journal_entry.get('actor')
             JournalManager(obj).add_manual_entry(
-                category, comment, documents, time)
+                category, comment, documents, time, actor=actor)
