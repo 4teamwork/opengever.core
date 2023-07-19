@@ -116,7 +116,6 @@ class FieldDumper(object):
         Loosely based on z3c.form.widget.Widget.update().
         """
         # XXX: Refactor this method
-
         field_vocab = None
         vf = None
         if isinstance(field, Choice):
@@ -155,6 +154,8 @@ class FieldDumper(object):
 
             if isinstance(wrapped_vocab, VdexVocabulary):
                 order_significant = wrapped_vocab.vdex.isOrderSignificant()
+            elif isinstance(vf, VdexVocabulary):
+                order_significant = vf.vdex.isOrderSignificant()
 
             # XXX: The getTaskTypeVocabulary() factory destroys the reference
             # to the underlying VDEX vocabulary by incorrectly wrapping it.

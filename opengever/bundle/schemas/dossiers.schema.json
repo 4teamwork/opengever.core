@@ -420,11 +420,11 @@
                                 "description": "",
                                 "_zope_schema_type": "Choice",
                                 "enum": [
+                                    "appointment",
                                     "information",
                                     "meeting",
                                     "other",
-                                    "phone-call",
-                                    "appointment"
+                                    "phone-call"
                                 ]
                             },
                             "comment": {
