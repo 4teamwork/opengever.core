@@ -22,7 +22,8 @@
         {"category": "meeting",
          "comment": "Diskussion Herr Meier",
          "time": "2021-12-06T16:12:43.219128",
-         "actor": "robert.ziegler"}
+         "actor": "robert.ziegler",
+         "related_documents": ["d65317ece1cb4dc797de1fc1e32bb4eb", "0970e3800a78407ea2558d718739961f"]}
     ]
   },  {
     "guid": "4ed93561c4004c668feb8124b55897fc",

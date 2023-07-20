@@ -429,14 +429,18 @@ class TestOggBundlePipeline(IntegrationTestCase):
              'actor': 'admin',
              'comments': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier'}
         )
-
         self.assertItemsEqual(
             manual_journal_entries[1],
             {'action': {'category': 'meeting',
                         'visible': True,
-                        'documents': [],
                         'type': 'manually-journal-entry',
-                        'title': u'label_manual_journal_entry'},
+                        'title': u'label_manual_journal_entry',
+                        'documents': [
+                            {'id': u'plone:951567498',
+                             'title': u'Bewerbung Hanspeter M\xfcller'},
+                            {'id': u'plone:951567508',
+                             'title': u'Mail in bestehendem Examplecontent Dossier'}
+                        ]},
              'time': DateTime("2021-12-06T16:12:43.219128"),
              'id': manual_journal_entries[1]["id"],
              'actor': 'robert.ziegler',
