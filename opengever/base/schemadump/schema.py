@@ -19,6 +19,7 @@ from opengever.base.schemadump.helpers import DirectoryHelperMixin
 from opengever.base.schemadump.helpers import mkdir_p
 from opengever.base.schemadump.helpers import translate_de
 from opengever.base.schemadump.json_schema_helper import JSONSchema
+from opengever.journal.form import IManualJournalEntry
 from os.path import join as pjoin
 from pkg_resources import resource_filename
 from plone import api
@@ -176,48 +177,24 @@ class SQLTypeDumper(object):
 
 
 class JSONSchemaBuilder(object):
-    """Builds a JSON Schema representation of a single GEVER type.
+    """Builds a JSON Schema representation of a single Schema.
     """
 
-    def __init__(self, portal_type):
-        self.portal_type = portal_type
-        self.schema = None
+    def __init__(self, schema):
+        self.schema = schema
 
-        if portal_type in GEVER_TYPES:
-            self.type_dumper = TypeDumper()
-        elif portal_type in GEVER_SQL_TYPES:
-            self.type_dumper = SQLTypeDumper()
-        else:
-            raise Exception("Unmapped type: %r" % portal_type)
-
-    def build_schema(self):
-        type_dump = self.type_dumper.dump(self.portal_type)
+    def build_schema(self, additional_properties=False):
+        schema_dump = SchemaDumper().dump(self.schema)
 
         self.schema = JSONSchema(
-            title=type_dump['title'],
-            additional_properties=False,
+            title=schema_dump['name'],
+            additional_properties=additional_properties,
         )
-        field_order = []
-        # Collect field info from all schemas (base schema + behaviors)
-        for _schema in type_dump['schemas']:
-            # Note: This is not the final / "correct" field order as displayed
-            # in the user interface (which should eventually honor fieldsets
-            # and plone.autoform directives).
-            # The intent here is rather to keep a *consistent* order for now.
-            field_order.extend([field['name'] for field in _schema['fields']])
 
-            translated_title_fields = []
-            for field in _schema['fields']:
-                prop_def = self._property_definition_from_field(field)
-                self.schema.add_property(field['name'], prop_def)
+        for field in schema_dump['fields']:
+            prop_def = self._property_definition_from_field(field)
+            self.schema.add_property(field['name'], prop_def)
 
-                if field['name'] in TRANSLATED_TITLE_NAMES:
-                    translated_title_fields.append(field['name'])
-
-            if translated_title_fields:
-                self.schema.require_any_of(translated_title_fields)
-
-        self.schema.set_field_order(field_order)
         return self.schema
 
     def _property_definition_from_field(self, field):
@@ -278,6 +255,52 @@ class JSONSchemaBuilder(object):
                 self.schema.set_required(field['name'])
 
 
+class PortalTypeJSONSchemaBuilder(JSONSchemaBuilder):
+    """Builds a JSON Schema representation of a single GEVER type.
+    """
+
+    def __init__(self, portal_type):
+        self.portal_type = portal_type
+        self.schema = None
+
+        if portal_type in GEVER_TYPES:
+            self.type_dumper = TypeDumper()
+        elif portal_type in GEVER_SQL_TYPES:
+            self.type_dumper = SQLTypeDumper()
+        else:
+            raise Exception("Unmapped type: %r" % portal_type)
+
+    def build_schema(self):
+        type_dump = self.type_dumper.dump(self.portal_type)
+
+        self.schema = JSONSchema(
+            title=type_dump['title'],
+            additional_properties=False,
+        )
+        field_order = []
+        # Collect field info from all schemas (base schema + behaviors)
+        for _schema in type_dump['schemas']:
+            # Note: This is not the final / "correct" field order as displayed
+            # in the user interface (which should eventually honor fieldsets
+            # and plone.autoform directives).
+            # The intent here is rather to keep a *consistent* order for now.
+            field_order.extend([field['name'] for field in _schema['fields']])
+
+            translated_title_fields = []
+            for field in _schema['fields']:
+                prop_def = self._property_definition_from_field(field)
+                self.schema.add_property(field['name'], prop_def)
+
+                if field['name'] in TRANSLATED_TITLE_NAMES:
+                    translated_title_fields.append(field['name'])
+
+            if translated_title_fields:
+                self.schema.require_any_of(translated_title_fields)
+
+        self.schema.set_field_order(field_order)
+        return self.schema
+
+
 class OGGBundleJSONSchemaBuilder(object):
     """Builds a JSON Schema representation of a single OGGBundle type.
     """
@@ -300,13 +323,14 @@ class OGGBundleJSONSchemaBuilder(object):
             "$ref": "#/definitions/%s" % self.short_name}
 
         # Build the standard content type schema
-        self.ct_schema = JSONSchemaBuilder(self.portal_type).build_schema()
+        self.ct_schema = PortalTypeJSONSchemaBuilder(self.portal_type).build_schema()
 
         # Tweak the content type schema for use in OGGBundles
         self._add_review_state_property()
         self._add_creator_property()
         self._add_guid_properties()
         self._add_participation_property()
+        self._add_journal_property()
         self._add_permissions_property()
         self._add_file_properties()
         self._add_sequence_number_property()
@@ -392,6 +416,22 @@ class OGGBundleJSONSchemaBuilder(object):
                 }
             })
 
+    def _add_journal_property(self):
+        if self.portal_type == 'opengever.dossier.businesscasedossier':
+            subschema = JSONSchemaBuilder(IManualJournalEntry).build_schema().serialize()
+            subschema.pop('$schema')
+            subschema["properties"]["time"] = {"type": ["null", "string"],
+                                               "format": "datetime",
+                                               "_zope_schema_type": "Datetime"}
+            subschema["properties"]["actor"] = {"type": ["null", "string"],
+                                                "format": "datetime",
+                                                "_zope_schema_type": "Choice",
+                                                "_vocabulary": "<G\u00fcltige User-ID>"}
+            self.ct_schema.add_property('_journal_entries', {
+                'type': 'array',
+                "items": subschema
+            })
+
     def _build_permission_subschema(self):
         subschema = JSONSchema(additional_properties=False)
         string_array = {
@@ -472,7 +512,7 @@ class OGGBundleJSONSchemaSQLBuilder(OGGBundleJSONSchemaBuilder):
             "$ref": "#/definitions/%s" % self.short_name}
 
         # Build the standard content type schema
-        self.ct_schema = JSONSchemaBuilder(self.portal_type).build_schema()
+        self.ct_schema = PortalTypeJSONSchemaBuilder(self.portal_type).build_schema()
 
         # Tweak the content type schema for use in OGGBundles
         self._add_guid_properties(with_parent_reference=False)
@@ -513,7 +553,7 @@ def build_all_gever_schemas():
     """Collects JSON Schema representations of common GEVER types.
     """
     for portal_type in GEVER_TYPES + GEVER_SQL_TYPES:
-        builder = JSONSchemaBuilder(portal_type)
+        builder = PortalTypeJSONSchemaBuilder(portal_type)
         schema = builder.build_schema()
         filename = '%s.schema.json' % portal_type
         yield filename, schema

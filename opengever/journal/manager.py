@@ -36,7 +36,9 @@ class JournalManager(object):
         if value and not isinstance(value, DateTime):
             raise ValueError("time should be a zope DateTime not {}".format(type(value)))
 
-    def add_manual_entry(self, category, comment, documents=None, time=None):
+    def add_manual_entry(self, category, comment, documents=None, time=None, actor=None):
+        if actor is None:
+            actor = api.user.get_current().getId()
         entry_obj = {'obj': self.context,
                      'action': PersistentDict({
                          'type': MANUAL_JOURNAL_ENTRY,
@@ -44,7 +46,7 @@ class JournalManager(object):
                          'title': self._get_manual_entry_title(category),
                          'visible': True,
                          'documents': self._serialize_documents(documents)}),
-                     'actor': api.user.get_current().getId(),
+                     'actor': actor,
                      'comment': self._serialize_comment(comment),
                      'time': time}
 

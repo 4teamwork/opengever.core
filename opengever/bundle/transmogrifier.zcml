@@ -94,7 +94,12 @@
       />
 
   <utility
-      component=".sections.manual_journal_entries.ManualJournalEntrySection"
+      component=".sections.manual_journal_entries.ManualJournalEntriesSection"
+      name="opengever.bundle.manual_journal_entries"
+      />
+
+  <utility
+      component=".sections.manual_journal_actor.ManualJournalActorSection"
       name="opengever.bundle.manual_journal_actor"
       />
 

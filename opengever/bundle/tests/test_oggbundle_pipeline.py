@@ -16,6 +16,7 @@ from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.journal.manager import JournalManager
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.ogds.models.user import User
 from opengever.propertysheets.utils import get_custom_properties
@@ -411,6 +412,40 @@ class TestOggBundlePipeline(IntegrationTestCase):
             IAnnotations(dossier)[BUNDLE_GUID_KEY],
             index_data_for(dossier)[GUID_INDEX_NAME])
 
+        manual_journal_entries = [
+            entry for entry in JournalManager(dossier).list()
+            if entry["action"]["type"] == 'manually-journal-entry']
+        self.assertEqual(2, len(manual_journal_entries))
+
+        self.assertItemsEqual(
+            manual_journal_entries[0],
+            {'action': {'category': 'phone-call',
+                        'visible': True,
+                        'documents': [],
+                        'type': 'manually-journal-entry',
+                        'title': u'label_manual_journal_entry'},
+             'time': DateTime(FROZEN_NOW),
+             'id': manual_journal_entries[0]["id"],
+             'actor': 'admin',
+             'comments': u'Anfrage bez\xfcglich dem Jahr 2016 von Herr Meier'}
+        )
+        self.assertItemsEqual(
+            manual_journal_entries[1],
+            {'action': {'category': 'meeting',
+                        'visible': True,
+                        'type': 'manually-journal-entry',
+                        'title': u'label_manual_journal_entry',
+                        'documents': [
+                            {'id': u'plone:951567498',
+                             'title': u'Bewerbung Hanspeter M\xfcller'},
+                            {'id': u'plone:951567508',
+                             'title': u'Mail in bestehendem Examplecontent Dossier'}
+                        ]},
+             'time': DateTime("2021-12-06T16:12:43.219128"),
+             'id': manual_journal_entries[1]["id"],
+             'actor': 'robert.ziegler',
+             'comments': u'Diskussion Herr Meier'})
+
         participations = IAnnotations(dossier)['participations']
         self.assertEqual(
             ['person:c2a9c298-a769-4c52-affe-0803c11cb571',
@@ -427,7 +462,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
 
         # creator is journal actor
         self.assertEqual('philippe.gross', dossier.Creator())
-        entry = get_journal_entry(dossier)
+        entry = get_journal_entry(dossier, -3)
         self.assertEqual('philippe.gross', entry['actor'])
 
     def assert_dossier2_created(self):
