@@ -1,0 +1,1 @@
+Read OGDS sync timestamp from OGDS instead of ZODB, as the new OGDS sync service only sets it in OGDS. [buchi]

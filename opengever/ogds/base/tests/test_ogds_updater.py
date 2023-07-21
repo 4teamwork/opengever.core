@@ -3,12 +3,13 @@ from datetime import datetime
 from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.testing.freezer import freeze
 from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
 from opengever.ogds.base.interfaces import IOGDSUpdater
-from opengever.ogds.base.interfaces import ISyncStamp
 from opengever.ogds.base.sync.import_stamp import get_ogds_sync_stamp
 from opengever.ogds.base.sync.import_stamp import ogds_sync_within_24h
+from opengever.ogds.base.sync.import_stamp import update_sync_stamp
 from opengever.ogds.base.sync.ogds_updater import CaseInsensitiveDict
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPPlugin
 from opengever.ogds.base.tests.ldaphelpers import FakeLDAPSearchUtility
@@ -21,8 +22,6 @@ from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from unittest import TestCase
-from zope.annotation import IAnnotations
-from zope.component import getUtility
 import transaction
 
 
@@ -450,26 +449,23 @@ class TestOGDSUpdater(FunctionalTestCase):
 class TestImportStamp(IntegrationTestCase):
 
     def test_get_ogds_sync_stamp(self):
-        util = getUtility(ISyncStamp)
-
         self.assertIsNone(get_ogds_sync_stamp())
 
-        util.set_sync_stamp(datetime(2021, 9, 11, 12, 45).isoformat())
+        with freeze(datetime(2021, 9, 11, 12, 45)):
+            update_sync_stamp(self.portal)
+
         self.assertEqual(datetime(2021, 9, 11, 12, 45), get_ogds_sync_stamp())
 
     def test_ogds_sync_within_24h_helper(self):
-        util = getUtility(ISyncStamp)
+        self.assertIsNone(get_ogds_sync_stamp())
+        self.assertFalse(ogds_sync_within_24h())
 
-        util.set_sync_stamp((datetime.now() - timedelta(hours=23)).isoformat())
+        with freeze((datetime.now() - timedelta(hours=23))):
+            update_sync_stamp(self.portal)
         self.assertTrue(ogds_sync_within_24h())
 
-        util.set_sync_stamp((datetime.now() - timedelta(hours=25)).isoformat())
-        self.assertFalse(ogds_sync_within_24h())
-
-        IAnnotations(self.portal)['sync_stamp'] = None
-        self.assertFalse(ogds_sync_within_24h())
-
-        IAnnotations(self.portal).pop('sync_stamp')
+        with freeze((datetime.now() - timedelta(hours=25))):
+            update_sync_stamp(self.portal)
         self.assertFalse(ogds_sync_within_24h())
 
 
