@@ -67,6 +67,9 @@ class SubDossierListingActions(DossierListingActions):
         linked_workspaces_manager = ILinkedWorkspaces(self.context.get_main_dossier())
         return linked_workspaces_manager.has_linked_workspaces()
 
+    def is_create_disposition_available(self):
+        return False
+
 
 @adapter(IDossierMarker, IOpengeverBaseLayer)
 class DossierContextActions(BaseContextActions):
