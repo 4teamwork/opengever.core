@@ -42,13 +42,13 @@ class TestDossierListingActions(IntegrationTestCase):
         self.login(self.archivist)
         self.assertIn(u'create_disposition', self.get_actions(self.repository_root))
         self.assertIn(u'create_disposition', self.get_actions(self.branch_repofolder))
-        self.assertIn(u'create_disposition', self.get_actions(self.dossier))
+        self.assertNotIn(u'create_disposition', self.get_actions(self.dossier))
 
     def test_create_disposition_available_for_records_manager(self):
         self.login(self.records_manager)
         self.assertIn(u'create_disposition', self.get_actions(self.repository_root))
         self.assertIn(u'create_disposition', self.get_actions(self.branch_repofolder))
-        self.assertIn(u'create_disposition', self.get_actions(self.dossier))
+        self.assertNotIn(u'create_disposition', self.get_actions(self.dossier))
 
     def test_dossier_actions_for_private_dossier_and_private_folder(self):
         self.login(self.regular_user)
