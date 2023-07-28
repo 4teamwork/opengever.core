@@ -24,7 +24,7 @@ msgstr "Complété par ${user}"
 
 #: ./opengever/workspace/activities.py
 msgid "Commented by ${user}"
-msgstr "Kommentiert durch ${user}"
+msgstr "Commenté par ${user}"
 
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Delete"
