@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.5 (2023-08-12)
+---------------------
+
+Other changes:
+
+
+- Speed-up upgrade steps reindexing workspace documents'workflow. [njohner] [CA-5556]
+
+
 2023.8.4 (2023-07-18)
 ---------------------
 
