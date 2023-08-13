@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from ftw.mail.interfaces import IEmailAddress
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.ip_range import is_in_ip_range
@@ -223,3 +224,7 @@ def create_oc_url(request, context, payload):
         return url
 
     return None
+
+
+def get_email(container, request):
+    return IEmailAddress(request).get_email_for_object(container)

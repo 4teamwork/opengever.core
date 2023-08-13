@@ -1,10 +1,10 @@
 from collections import OrderedDict
-from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import get_email
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
@@ -195,7 +195,7 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             parent_dossier = document.get_parent_dossier()
 
             if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
-                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_dossier)
+                payload['bcc'] = get_email(parent_dossier, self.request)
 
                 parent_dossier_uuid = api.content.get_uuid(parent_dossier)
 
@@ -214,7 +214,7 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
             parent_container = document.get_parent_workspace_container()
 
             if parent_container:
-                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_container)
+                payload['bcc'] = get_email(parent_container, self.request)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
