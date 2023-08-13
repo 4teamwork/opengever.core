@@ -6,6 +6,7 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import group_payloads_by_parent
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import parse_document_uids
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api
@@ -158,6 +159,49 @@ class OfficeConnectorPayload(Service):
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         return json.dumps(self.get_base_payload())
+
+
+class OfficeConnectorAttachIsMailFileable(OfficeConnectorPayload):
+    """Check if copy of mail with attachments can be filed in dossier.
+
+    Returns True if the document selection allows for a copy of the
+    mail to be filed, and False otherwise.
+
+    Reasons for why the mail can't be filed could be because the containing
+    dossier is in a closed state, or the document selection is spread across
+    multiple dossiers, etc.
+
+    This determination is made by using the same strategy to find valid
+    parent containers as the OfficeConnectorAttachPayload endpoint below.
+
+    This is not a regular OfficeConnectorPayload view. It's not getting called
+    by OC, but the gever-ui instead. It expects a {"documents": list_of_paths}
+    mapping in the request body, same as the OfficeConnectorURL endpoints.
+    It then resolves those paths to UUIDs, and only then starts using
+    functionality from OfficeConnectorPayload to process them as payloads.
+    """
+
+    def __init__(self, context, request):
+        super(OfficeConnectorAttachIsMailFileable, self).__init__(context, request)
+        self.uuids = []
+
+    def render(self):
+        self.request.response.setHeader('Content-type', 'application/json')
+
+        self.uuids = parse_document_uids(self.request, self.context, action='attach')
+        if not self.uuids:
+            raise NotFound
+
+        payloads = self.get_base_payloads()
+        group_payloads_by_parent(payloads, self.request)
+
+        # This mirrors the logic that OC does on the client side: Only add
+        # BCC if there's exactly one unique BCC address across payloads.
+        bcc_addresses = {payload.get('bcc') for payload in payloads}
+        if len(bcc_addresses) == 1 and bcc_addresses.pop():
+            return json.dumps({'fileable': True})
+
+        return json.dumps({'fileable': False})
 
 
 class OfficeConnectorAttachPayload(OfficeConnectorPayload):
