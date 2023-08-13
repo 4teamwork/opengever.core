@@ -3,8 +3,7 @@ from opengever.document.events import FileAttachedToEmailEvent
 from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
-from opengever.officeconnector.helpers import get_email
-from opengever.officeconnector.helpers import get_valid_parent_container
+from opengever.officeconnector.helpers import group_payloads_by_parent
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
@@ -170,51 +169,25 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
+        payloads_by_parent = group_payloads_by_parent(payloads, self.request)
 
-        if is_workspace_feature_enabled():
-            self.process_teamraum_payload(payloads)
-        else:
-            self.process_gever_payload(payloads)
+        for container_uuid, payloads in payloads_by_parent.items():
 
-        for payload in payloads:
-            document = payload['document']
-            payload['title'] = document.title_or_id()
-            payload['content-type'] = document.get_file().contentType
-            payload['download'] = document.get_download_view_name()
-            payload['filename'] = document.get_filename()
-            del payload['document']
-            notify(FileAttachedToEmailEvent(document))
+            if container_uuid and not is_workspace_feature_enabled():
+                dossier = api.content.get(UID=container_uuid)
+                documents = [p['document'] for p in payloads]
+                notify(DossierAttachedToEmailEvent(dossier, documents))
+
+            for payload in payloads:
+                document = payload['document']
+                payload['title'] = document.title_or_id()
+                payload['content-type'] = document.get_file().contentType
+                payload['download'] = document.get_download_view_name()
+                payload['filename'] = document.get_filename()
+                del payload['document']
+                notify(FileAttachedToEmailEvent(document))
 
         return json.dumps(payloads)
-
-    def process_gever_payload(self, payloads):
-        dossier_notifications = {}
-
-        for payload in payloads:
-            document = payload['document']
-            parent_container = get_valid_parent_container(document, self.request)
-
-            if parent_container:
-                payload['bcc'] = get_email(parent_container, self.request)
-
-                parent_dossier_uuid = api.content.get_uuid(parent_container)
-
-                if parent_dossier_uuid not in dossier_notifications:
-                    dossier_notifications[parent_dossier_uuid] = []
-
-                dossier_notifications[parent_dossier_uuid].append(document)
-
-        for uuid, documents in dossier_notifications.iteritems():
-            dossier = api.content.get(UID=uuid)
-            notify(DossierAttachedToEmailEvent(dossier, documents))
-
-    def process_teamraum_payload(self, payloads):
-        for payload in payloads:
-            document = payload['document']
-            parent_container = get_valid_parent_container(document, self.request)
-
-            if parent_container:
-                payload['bcc'] = get_email(parent_container, self.request)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):

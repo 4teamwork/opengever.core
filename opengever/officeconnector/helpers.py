@@ -1,5 +1,6 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from collections import defaultdict
 from ftw.mail.interfaces import IEmailAddress
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
@@ -248,3 +249,23 @@ def get_valid_parent_container(document, request):
             parent_container = parent_dossier
 
     return parent_container
+
+
+def group_payloads_by_parent(payloads, request):
+    """Group OC attachment payloads by their valid parent container's UUID.
+
+    If a valid parent container is present, also add its email address to the
+    payload as the BCC address.
+    """
+    by_parent_uuid = defaultdict(list)
+    for payload in payloads:
+        document = payload['document']
+        parent_container = get_valid_parent_container(document, request)
+
+        if parent_container:
+            payload['bcc'] = get_email(parent_container, request)
+            uuid = api.content.get_uuid(parent_container)
+            by_parent_uuid[uuid].append(payload)
+        else:
+            by_parent_uuid[''].append(payload)
+    return by_parent_uuid
