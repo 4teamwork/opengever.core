@@ -6,7 +6,9 @@ from ftw.solr.query import escape
 from opengever.base.ip_range import is_in_ip_range
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.workspace import is_workspace_feature_enabled
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # noqa
@@ -228,3 +230,21 @@ def create_oc_url(request, context, payload):
 
 def get_email(container, request):
     return IEmailAddress(request).get_email_for_object(container)
+
+
+def get_valid_parent_container(document, request):
+    """Return a valid parent container for a document, or None.
+
+    A container is considered valid here if it is suitable to file a copy of
+    the email when sending documents by mail via OfficeConnector.
+    """
+    parent_container = None
+
+    if is_workspace_feature_enabled():
+        parent_container = document.get_parent_workspace_container()
+    else:
+        parent_dossier = document.get_parent_dossier()
+        if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
+            parent_container = parent_dossier
+
+    return parent_container

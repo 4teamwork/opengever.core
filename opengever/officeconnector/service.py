@@ -1,10 +1,10 @@
 from collections import OrderedDict
 from opengever.document.events import FileAttachedToEmailEvent
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.officeconnector.helpers import get_email
+from opengever.officeconnector.helpers import get_valid_parent_container
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
@@ -192,12 +192,12 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
 
         for payload in payloads:
             document = payload['document']
-            parent_dossier = document.get_parent_dossier()
+            parent_container = get_valid_parent_container(document, self.request)
 
-            if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
-                payload['bcc'] = get_email(parent_dossier, self.request)
+            if parent_container:
+                payload['bcc'] = get_email(parent_container, self.request)
 
-                parent_dossier_uuid = api.content.get_uuid(parent_dossier)
+                parent_dossier_uuid = api.content.get_uuid(parent_container)
 
                 if parent_dossier_uuid not in dossier_notifications:
                     dossier_notifications[parent_dossier_uuid] = []
@@ -211,7 +211,7 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     def process_teamraum_payload(self, payloads):
         for payload in payloads:
             document = payload['document']
-            parent_container = document.get_parent_workspace_container()
+            parent_container = get_valid_parent_container(document, self.request)
 
             if parent_container:
                 payload['bcc'] = get_email(parent_container, self.request)
