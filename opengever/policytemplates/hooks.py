@@ -65,7 +65,6 @@ IGNORED_FILES = {
 
 VARIABLE_VALUES = {
     'teamraum': {
-        'setup.geverui': True,
         'setup.bumblebee_auto_refresh': True,
         'setup.enable_activity_feature': True,
         'setup.maximum_mail_size': DEFAULT_MAIL_MAX_SIZE,

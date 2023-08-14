@@ -41,12 +41,6 @@
   </records>
 
 {{% endif %}}
-{{% if setup.geverui %}}
-  <records interface="opengever.base.interfaces.IGeverUI">
-    <value key="is_feature_enabled">True</value>
-  </records>
-
-{{% endif %}}
 {{% if setup.hubspot %}}
   <records interface="opengever.base.interfaces.IHubSpotSettings">
     <value key="is_feature_enabled">True</value>
