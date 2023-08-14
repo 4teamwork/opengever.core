@@ -5,24 +5,24 @@ from opengever.testing import IntegrationTestCase
 
 class TestGeverUIAction(IntegrationTestCase):
 
-    def test_feature_disabled_by_default(self):
+    def test_feature_enabled_by_default(self):
         self.login(self.regular_user)
         settings = IGeverSettings(self.portal).get_features()
         self.assertIn("gever_ui_enabled", settings)
-        self.assertFalse(settings.get("gever_ui_enabled"))
+        self.assertTrue(settings.get("gever_ui_enabled"))
 
     @browsing
-    def test_action_is_visible_when_feature_enabled(self, browser):
+    def test_action_is_invisible_when_feature_disabled(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.repository_root)
 
         self.assertEqual(
-            [],
+            ['Switch to new UI'],
             browser.css('#portal-personaltools #personaltools-switch_ui').text)
 
-        self.activate_feature("gever_ui")
+        self.deactivate_feature("gever_ui")
         browser.open(self.repository_root)
 
         self.assertEqual(
-            ['Switch to new UI'],
+            [],
             browser.css('#portal-personaltools #personaltools-switch_ui').text)

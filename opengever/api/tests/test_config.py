@@ -71,7 +71,7 @@ class TestConfig(IntegrationTestCase):
                 u'ech0147_import': False,
                 u'favorites': True,
                 u'filing_number': False,
-                u'gever_ui_enabled': False,
+                u'gever_ui_enabled': True,
                 u'hubspot': False,
                 u'journal_pdf': False,
                 u'meetings': False,
