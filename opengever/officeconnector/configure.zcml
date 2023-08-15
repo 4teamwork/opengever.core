@@ -62,6 +62,15 @@
       method="POST"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       accept="application/json"
+      factory=".service.OfficeConnectorAttachIsMailFileable"
+      name="oc_attach_is_mail_fileable"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      accept="application/json"
       factory=".service.OfficeConnectorAttachPayload"
       name="oc_attach"
       permission="zope2.View"

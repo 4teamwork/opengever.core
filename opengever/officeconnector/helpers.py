@@ -1,11 +1,15 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from collections import defaultdict
+from ftw.mail.interfaces import IEmailAddress
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from opengever.base.ip_range import is_in_ip_range
 from opengever.base.sentry import log_msg_to_sentry
 from opengever.document.behaviors import IBaseDocument
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.officeconnector.interfaces import IOfficeConnectorSettings
+from opengever.workspace import is_workspace_feature_enabled
 from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.PluggableAuthService.interfaces.plugins import IAuthenticationPlugin  # noqa
@@ -223,3 +227,45 @@ def create_oc_url(request, context, payload):
         return url
 
     return None
+
+
+def get_email(container, request):
+    return IEmailAddress(request).get_email_for_object(container)
+
+
+def get_valid_parent_container(document, request):
+    """Return a valid parent container for a document, or None.
+
+    A container is considered valid here if it is suitable to file a copy of
+    the email when sending documents by mail via OfficeConnector.
+    """
+    parent_container = None
+
+    if is_workspace_feature_enabled():
+        parent_container = document.get_parent_workspace_container()
+    else:
+        parent_dossier = document.get_parent_dossier()
+        if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
+            parent_container = parent_dossier
+
+    return parent_container
+
+
+def group_payloads_by_parent(payloads, request):
+    """Group OC attachment payloads by their valid parent container's UUID.
+
+    If a valid parent container is present, also add its email address to the
+    payload as the BCC address.
+    """
+    by_parent_uuid = defaultdict(list)
+    for payload in payloads:
+        document = payload['document']
+        parent_container = get_valid_parent_container(document, request)
+
+        if parent_container:
+            payload['bcc'] = get_email(parent_container, request)
+            uuid = api.content.get_uuid(parent_container)
+            by_parent_uuid[uuid].append(payload)
+        else:
+            by_parent_uuid[''].append(payload)
+    return by_parent_uuid

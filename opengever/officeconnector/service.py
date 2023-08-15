@@ -1,12 +1,12 @@
 from collections import OrderedDict
-from ftw.mail.interfaces import IEmailAddress
 from opengever.document.events import FileAttachedToEmailEvent
-from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.events import DossierAttachedToEmailEvent
 from opengever.officeconnector import _
 from opengever.officeconnector.helpers import create_oc_url
+from opengever.officeconnector.helpers import group_payloads_by_parent
 from opengever.officeconnector.helpers import is_officeconnector_attach_feature_enabled  # noqa
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled  # noqa
+from opengever.officeconnector.helpers import parse_document_uids
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from plone import api
@@ -161,6 +161,49 @@ class OfficeConnectorPayload(Service):
         return json.dumps(self.get_base_payload())
 
 
+class OfficeConnectorAttachIsMailFileable(OfficeConnectorPayload):
+    """Check if copy of mail with attachments can be filed in dossier.
+
+    Returns True if the document selection allows for a copy of the
+    mail to be filed, and False otherwise.
+
+    Reasons for why the mail can't be filed could be because the containing
+    dossier is in a closed state, or the document selection is spread across
+    multiple dossiers, etc.
+
+    This determination is made by using the same strategy to find valid
+    parent containers as the OfficeConnectorAttachPayload endpoint below.
+
+    This is not a regular OfficeConnectorPayload view. It's not getting called
+    by OC, but the gever-ui instead. It expects a {"documents": list_of_paths}
+    mapping in the request body, same as the OfficeConnectorURL endpoints.
+    It then resolves those paths to UUIDs, and only then starts using
+    functionality from OfficeConnectorPayload to process them as payloads.
+    """
+
+    def __init__(self, context, request):
+        super(OfficeConnectorAttachIsMailFileable, self).__init__(context, request)
+        self.uuids = []
+
+    def render(self):
+        self.request.response.setHeader('Content-type', 'application/json')
+
+        self.uuids = parse_document_uids(self.request, self.context, action='attach')
+        if not self.uuids:
+            raise NotFound
+
+        payloads = self.get_base_payloads()
+        group_payloads_by_parent(payloads, self.request)
+
+        # This mirrors the logic that OC does on the client side: Only add
+        # BCC if there's exactly one unique BCC address across payloads.
+        bcc_addresses = {payload.get('bcc') for payload in payloads}
+        if len(bcc_addresses) == 1 and bcc_addresses.pop():
+            return json.dumps({'fileable': True})
+
+        return json.dumps({'fileable': False})
+
+
 class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     """Issue JSON instruction payloads for OfficeConnector.
 
@@ -170,51 +213,25 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
     def render(self):
         self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
+        payloads_by_parent = group_payloads_by_parent(payloads, self.request)
 
-        if is_workspace_feature_enabled():
-            self.process_teamraum_payload(payloads)
-        else:
-            self.process_gever_payload(payloads)
+        for container_uuid, payloads in payloads_by_parent.items():
 
-        for payload in payloads:
-            document = payload['document']
-            payload['title'] = document.title_or_id()
-            payload['content-type'] = document.get_file().contentType
-            payload['download'] = document.get_download_view_name()
-            payload['filename'] = document.get_filename()
-            del payload['document']
-            notify(FileAttachedToEmailEvent(document))
+            if container_uuid and not is_workspace_feature_enabled():
+                dossier = api.content.get(UID=container_uuid)
+                documents = [p['document'] for p in payloads]
+                notify(DossierAttachedToEmailEvent(dossier, documents))
+
+            for payload in payloads:
+                document = payload['document']
+                payload['title'] = document.title_or_id()
+                payload['content-type'] = document.get_file().contentType
+                payload['download'] = document.get_download_view_name()
+                payload['filename'] = document.get_filename()
+                del payload['document']
+                notify(FileAttachedToEmailEvent(document))
 
         return json.dumps(payloads)
-
-    def process_gever_payload(self, payloads):
-        dossier_notifications = {}
-
-        for payload in payloads:
-            document = payload['document']
-            parent_dossier = document.get_parent_dossier()
-
-            if parent_dossier and IDossierMarker.providedBy(parent_dossier) and parent_dossier.is_open():
-                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_dossier)
-
-                parent_dossier_uuid = api.content.get_uuid(parent_dossier)
-
-                if parent_dossier_uuid not in dossier_notifications:
-                    dossier_notifications[parent_dossier_uuid] = []
-
-                dossier_notifications[parent_dossier_uuid].append(document)
-
-        for uuid, documents in dossier_notifications.iteritems():
-            dossier = api.content.get(UID=uuid)
-            notify(DossierAttachedToEmailEvent(dossier, documents))
-
-    def process_teamraum_payload(self, payloads):
-        for payload in payloads:
-            document = payload['document']
-            parent_container = document.get_parent_workspace_container()
-
-            if parent_container:
-                payload['bcc'] = IEmailAddress(self.request).get_email_for_object(parent_container)
 
 
 class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):

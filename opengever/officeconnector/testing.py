@@ -105,6 +105,26 @@ class OCSolrIntegrationTestCase(SolrIntegrationTestCase):
 
         return url
 
+    def fetch_oc_attach_is_mail_fileable(self, browser, documents):
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+
+        data = json.dumps(dict(
+            documents=['/'.join(doc.getPhysicalPath()) for doc in documents],
+        ))
+
+        fileable = browser.open(
+            self.portal,
+            data=data,
+            headers=headers,
+            method='POST',
+            view='oc_attach_is_mail_fileable',
+        ).json.get('fileable', None)
+
+        return fileable
+
     def fetch_document_attach_payloads(self, browser, raw_token, token):
         with self.as_officeconnector(browser):
             headers = {
