@@ -430,7 +430,7 @@ class IGeverUI(Interface):
     is_feature_enabled = schema.Bool(
         title=u'Enable new GEVER UI',
         description=u'Whether new GEVER UI is enabled',
-        default=False)
+        default=True)
 
     custom_dashboard_cards = schema.Text(
         title=u'custom dashboard cards',
