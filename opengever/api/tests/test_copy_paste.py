@@ -4,8 +4,10 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.testing import assets
 from opengever.testing import IntegrationTestCase
+from plone.locking.interfaces import ILockable
 from plone.namedfile.file import NamedBlobFile
 from zope.component import getUtility
 import json
@@ -96,6 +98,55 @@ class TestCopyPasteAPI(IntegrationTestCase):
              u'additional_metadata': {},
              u'type': u'CopyError'},
             browser.json)
+
+    @browsing
+    def test_can_copy_paste_meeting_excerpt_document(self, browser):
+        self.login(self.meeting_user, browser)
+        excerpt = self.decided_proposal.load_model().resolve_excerpt_document()
+        self.assertTrue(ILockable(excerpt).locked())
+        self.assertEqual(MEETING_EXCERPT_LOCK.__name__,
+                         ILockable(excerpt).lock_info()[0]['type'].__name__)
+
+        payload = {
+            u'source': excerpt.absolute_url(),
+        }
+        browser.open(
+            self.dossier.absolute_url() + '/@copy',
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers,
+        )
+
+        target_id = browser.json[0][u'target'].split('/')[-1]
+        target = self.dossier[target_id]
+
+        self.assertFalse(ILockable(target).locked())
+        self.assertEqual(u"Copy of {}".format(excerpt.title), target.title)
+
+    @browsing
+    def test_can_copy_paste_dossier_containing_meeting_excerpt_document(self, browser):
+        self.login(self.regular_user, browser)
+        # we lock the subsubdocument, simulating a locked meeting excerpt
+        ILockable(self.subsubdocument).lock(MEETING_EXCERPT_LOCK)
+        self.assertTrue(ILockable(self.subsubdocument).locked())
+        self.assertEqual(
+            MEETING_EXCERPT_LOCK.__name__,
+            ILockable(self.subsubdocument).lock_info()[0]['type'].__name__)
+
+        payload = {
+            u'source': self.subsubdossier.absolute_url(),
+        }
+        browser.open(
+            self.empty_dossier.absolute_url() + '/@copy',
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers,
+        )
+        target_id = browser.json[0][u'target'].split('/')[-1]
+        target = self.empty_dossier[target_id]
+        copied_doc = target.objectValues()[0]
+        self.assertFalse(ILockable(copied_doc).locked())
+        self.assertEqual(self.subsubdocument.title, copied_doc.title)
 
     @browsing
     def test_copying_object_with_read_permissions_is_forbidden(self, browser):
