@@ -1355,10 +1355,51 @@ Example for a ``configuration.json``:
       }
     }
 
+
+Because in policyless deployments no LDAP Plugin will be installed, the ``ogds-sync`` service is required to get a functioning OGDS. For local development, the ``ogds-sync`` service can be installed as follows:
+
+.. code:: bash
+
+    cd ~/src
+    git clone git@github.com:4teamwork/ogds-sync.git
+    cd ogds-sync
+    cp .env.sample .env
+    vim .env
+
+You can use the following as a base for an `.env` file for local development (substituting the LDAP_BIND_PASSWORD from your local ``~/.opengever/ldap/ldap.4teamwork.ch.json``):
+
+.. code:: bash
+
+    OGDS_DSN=postgresql://<your-macos-username>@host.docker.internal/<ogds-db-name>
+
+    LDAP_PROFILE=DS389
+    LDAP_URL=ldaps://ldap.4teamwork.ch
+    LDAP_BIND_DN=cn=OGAdmin,ou=OneGovGEVER,dc=4teamwork,dc=ch
+    LDAP_BIND_PASSWORD='REPLACEME'
+    LDAP_USER_BASE_DN=ou=Users,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch
+    LDAP_GROUP_BASE_DN=ou=Groups,ou=Dev,ou=OneGovGEVER,dc=4teamwork,dc=ch
+
+After a policyless GEVER Plone site has been set up, and the SQL tables created, you can perform the initial sync:
+
+.. code:: bash
+    docker compose run --rm ogds-sync ogds-sync
+
+And then start the ogds-sync service:
+
+.. code:: bash
+    docker compose up
+
+
+In order for authentication to work on a local policyless deployment, you need to configure a CAS portal. You can run one locally, or just configure the DEV one:
+
+- http://localhost:8080/ogsite/acl_users/cas_auth/manage_config
+- Set ``https://dev.onegovgever.ch/portal/cas`` for the CAS Server URL
+
+
 OGDS PAS Plugin
 ^^^^^^^^^^^^^^^
 
-This plugin serves as a replacement for the LDAP/AD PAS plugins to enumerate users and groups from OGDS instead of LDAP. Because it's still experimental, it's not installed by default. In order to install it, and have it function as intended, the following needs to be done:
+This plugin serves as a replacement for the LDAP/AD PAS plugins to enumerate users and groups from OGDS instead of LDAP. Because it's still experimental, it's not installed by default, expect for policyless deployments. In order to install it, and have it function as intended, the following needs to be done:
 
 - Make sure a plugin is present that can perform authentication (e.g. ``cas_auth``)
 - Add an instance of "OGDS Authentication Plugin" in ZMI
