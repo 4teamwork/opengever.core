@@ -349,6 +349,12 @@
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
+                "_id": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [

@@ -75,6 +75,12 @@
                     "description": "",
                     "_zope_schema_type": "TranslatedTextLine"
                 },
+                "_id": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [

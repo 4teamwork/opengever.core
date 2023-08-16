@@ -91,6 +91,11 @@ class ConstructorSection(object):
             raise InvalidType(portal_type)
         return fti
 
+    def _get_id_args(self, fti, item):
+        if '_id' in item:
+            return {'id': item['_id']}
+        return {}
+
     def _get_title_args(self, fti, item):
         # we need the title sometimes to auto-generate ids
         # XXX maybe be a bit more intelligent here and set all required
@@ -119,13 +124,16 @@ class ConstructorSection(object):
     def _construct_object(self, container, item):
         portal_type = item['_type']
         fti = self._get_fti(portal_type)
-        title_args = self._get_title_args(fti, item)
+
+        kwargs = {}
+        kwargs.update(self._get_id_args(fti, item))
+        kwargs.update(self._get_title_args(fti, item))
 
         with NoDossierReferenceNumbersIssued():
             # Create the object without automatically issuing a
             # reference number - we might want to set it explicitly
             obj = createContentInContainer(
-                container, portal_type, **title_args)
+                container, portal_type, **kwargs)
 
             if IDossierMarker.providedBy(obj):
                 prefix_adapter = IReferenceNumberPrefix(container)

@@ -210,6 +210,12 @@
                     "description": "Enth\u00e4lt die Daten f\u00fcr die benutzerdefinierten Felder.",
                     "_zope_schema_type": "PropertySheetField"
                 },
+                "_id": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [

@@ -291,6 +291,12 @@
                     "description": "",
                     "_zope_schema_type": "TextLine"
                 },
+                "_id": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
                 "review_state": {
                     "type": "string",
                     "enum": [

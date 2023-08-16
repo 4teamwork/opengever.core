@@ -29,7 +29,7 @@ class TestInitialContentCreation(FunctionalTestCase):
         self.assert_private_root_created()
 
     def assert_private_root_created(self):
-        private_root = self.portal.get('opengever-private.root')
+        private_root = self.portal.get('private')
         self.assertEqual('Meine Ablage', private_root.title_de)
         self.assertEqual('Dossier personnel', private_root.title_fr)
         self.assertEqual(
