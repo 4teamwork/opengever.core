@@ -30,7 +30,7 @@ def get_ogds_sync_stamp():
     This function is used by the @@health-check view in og.maintenance.
     Don't change it without testing that the health check still works!
     """
-    sync_stamp = getUtility(ISyncStamp).get_sync_stamp()
+    sync_stamp = dictstorage.get(DICTSTORAGE_SYNC_KEY)
 
     if sync_stamp:
         return dateutil.parser.parse(sync_stamp)
