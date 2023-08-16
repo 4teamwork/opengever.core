@@ -19,6 +19,7 @@ log.setLevel(logging.INFO)
 BUNDLE_JSON_TYPES = OrderedDict([
     ('reporoots.json', 'opengever.repository.repositoryroot'),
     ('repofolders.json', 'opengever.repository.repositoryfolder'),
+    ('privateroots.json', 'opengever.private.root'),
     ('workspaceroots.json', 'opengever.workspace.root'),
     ('workspaces.json', 'opengever.workspace.workspace'),
     ('workspacefolders.json', 'opengever.workspace.folder'),
@@ -32,6 +33,7 @@ BUNDLE_JSON_TYPES = OrderedDict([
 PORTAL_TYPES_TO_JSON_NAME = OrderedDict([
     ('opengever.repository.repositoryroot', 'reporoots.json'),
     ('opengever.repository.repositoryfolder', 'repofolders.json'),
+    ('opengever.private.root', 'privateroots.json'),
     ('opengever.workspace.root', 'workspaceroots.json'),
     ('opengever.workspace.workspace', 'workspaces.json'),
     ('opengever.workspace.folder', 'workspacefolders.json'),
