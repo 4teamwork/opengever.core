@@ -7,7 +7,9 @@ from opengever.base import _ as base_mf
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Copy
 from zope.container.interfaces import INameChooser
@@ -90,6 +92,14 @@ class Copy(Copy):
                 # in bumblebee if its parent is also renamed, because it's path
                 # will have changed when the task queue is processed.
                 docs_to_update.add(obj)
+
+                # Locks are copied with the objects, which prevents their
+                # renaming. For excerpts the copy does not need to be locked
+                # so we remove the corresponding locks here.
+                lockable = ILockable(obj)
+                if lockable.locked():
+                    lockable.unlock(MEETING_EXCERPT_LOCK)
+
             parent.manage_renameObject(old_id, new_id)
 
         if old_id.startswith('copy_of'):

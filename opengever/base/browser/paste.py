@@ -3,7 +3,9 @@ from opengever.base.clipboard import Clipboard
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from plone import api
+from plone.locking.interfaces import ILockable
 from Products.Five import BrowserView
 from zope.container.interfaces import INameChooser
 from zope.globalrequest import getRequest
@@ -128,6 +130,12 @@ class PasteClipboardView(BrowserView):
 
         for child in obj.getFolderContents():
             self._recursive_rename(child.getObject(), docs_to_update)
+
+        # Locks are copied with the objects, which prevents their
+        # renaming. For excerpts the copy does not need to be locked
+        # so we remove the corresponding locks here.
+        if IBaseDocument.providedBy(obj) and ILockable(obj).locked():
+            ILockable(obj).unlock(MEETING_EXCERPT_LOCK)
         return api.content.rename(obj, new_id=self.get_new_id(obj))
 
     def get_new_id(self, obj):

@@ -14,7 +14,9 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_TASK_AGENCY
 from opengever.base.role_assignments import assignments_kept_when_copying
 from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
+from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.testing import IntegrationTestCase
+from plone.locking.interfaces import ILockable
 from plone.protect import createToken
 from zope.component import getUtility
 
@@ -230,6 +232,48 @@ class TestCopyPaste(IntegrationTestCase):
 
         dossier_copy = self.leaf_repofolder.objectValues()[-1]
         self.assertEqual(1, len(dossier_copy.listFolderContents()))
+
+    @browsing
+    def test_can_copy_paste_meeting_excerpt_document(self, browser):
+        self.login(self.meeting_user, browser)
+        excerpt = self.decided_proposal.load_model().resolve_excerpt_document()
+
+        self.assertTrue(ILockable(excerpt).locked())
+        self.assertEqual(MEETING_EXCERPT_LOCK.__name__,
+                         ILockable(excerpt).lock_info()[0]['type'].__name__)
+
+        browser.open(excerpt, view='copy_item')
+        browser.open(self.empty_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        self.assertEqual(['Objects from clipboard pasted successfully.'],
+                         info_messages())
+        copy = self.empty_dossier.objectValues()[0]
+        self.assertFalse(ILockable(copy).locked())
+        self.assertEqual(u"Copy of {}".format(excerpt.title), copy.title)
+
+    @browsing
+    def test_can_copy_paste_dossier_containing_meeting_excerpt_document(self, browser):
+        self.login(self.regular_user, browser)
+        # we lock the subsubdocument, simulating a locked meeting excerpt
+        ILockable(self.subsubdocument).lock(MEETING_EXCERPT_LOCK)
+        self.assertTrue(ILockable(self.subsubdocument).locked())
+        self.assertEqual(
+            MEETING_EXCERPT_LOCK.__name__,
+            ILockable(self.subsubdocument).lock_info()[0]['type'].__name__)
+
+        browser.open(self.subsubdossier, view='copy_item')
+        browser.open(self.empty_dossier, view='tabbed_view')
+        browser.css('#contentActionMenus a#paste').first.click()
+
+        self.assertEqual(['Some local roles were copied with the objects',
+                          'Objects from clipboard pasted successfully.'],
+                         info_messages())
+        dossier_copy = self.empty_dossier.objectValues()[0]
+        document_copy = dossier_copy.objectValues()[0]
+        self.assertFalse(ILockable(document_copy).locked())
+        self.assertEqual(u"Copy of {}".format(self.subsubdocument.title),
+                         document_copy.title)
 
     @browsing
     def test_object_renaming_is_not_journalized(self, browser):
