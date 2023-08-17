@@ -781,6 +781,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
                 'opengever.private.root',
+                'opengever.dossier.templatefolder',
                 'opengever.workspace.root',
                 'opengever.workspace.workspace',
                 'opengever.workspace.folder',
@@ -793,6 +794,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
         privateroots = metadata['opengever.private.root']
+        templatefolders = metadata['opengever.dossier.templatefolder']
         workspaceroots = metadata['opengever.workspace.root']
         workspaces = metadata['opengever.workspace.workspace']
         workspacefolders = metadata['opengever.workspace.folder']
@@ -804,6 +806,7 @@ class TestOggBundlePipeline(IntegrationTestCase):
         self.assertEqual(1, len(reporoots))
         self.assertEqual(3, len(repofolders))
         self.assertEqual(0, len(privateroots))
+        self.assertEqual(0, len(templatefolders))
         self.assertEqual(0, len(workspaceroots))
         self.assertEqual(0, len(workspaces))
         self.assertEqual(0, len(workspacefolders))

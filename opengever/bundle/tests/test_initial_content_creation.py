@@ -30,6 +30,7 @@ class TestInitialContentCreation(FunctionalTestCase):
             transmogrifier(u'opengever.bundle.oggbundle')
 
         self.assert_private_root_created(mtool)
+        self.assert_templatefolder_created()
 
     def assert_private_root_created(self, mtool):
         private_root = self.portal.get('private')
@@ -43,3 +44,13 @@ class TestInitialContentCreation(FunctionalTestCase):
         self.assertEqual(1, mtool.getMemberareaCreationFlag())
 
         return private_root
+
+    def assert_templatefolder_created(self):
+        templatefolder = self.portal.get('vorlagen')
+        self.assertEqual(u'Vorlagen', templatefolder.title_de)
+        self.assertEqual(u'Mod\xe8les', templatefolder.title_fr)
+        self.assertEqual(
+            'templatefolder-state-active',
+            api.content.get_state(templatefolder))
+
+        return templatefolder

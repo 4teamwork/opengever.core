@@ -1,0 +1,143 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "array",
+    "items": {
+        "$ref": "#/definitions/templatefolder"
+    },
+    "definitions": {
+        "templatefolder": {
+            "type": "object",
+            "title": "Vorlagenordner",
+            "additionalProperties": false,
+            "properties": {
+                "title_de": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (deutsch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
+                "title_fr": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (franz\u00f6sisch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
+                "title_en": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (englisch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
+                "_id": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "review_state": {
+                    "type": "string",
+                    "enum": [
+                        "templatefolder-state-active"
+                    ]
+                },
+                "_creator": {
+                    "type": [
+                        "null",
+                        "string"
+                    ]
+                },
+                "guid": {
+                    "type": "string"
+                },
+                "_permissions": {
+                    "$ref": "#/definitions/permission"
+                },
+                "_old_paths": {
+                    "type": [
+                        "null",
+                        "array"
+                    ],
+                    "title": "Earlier path"
+                }
+            },
+            "required": [
+                "review_state",
+                "guid"
+            ],
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "title_de"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_fr"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_en"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "field_order": [
+                "title_de",
+                "title_fr",
+                "title_en"
+            ]
+        },
+        "permission": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "block_inheritance": {
+                    "type": "boolean"
+                },
+                "read": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "add": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
