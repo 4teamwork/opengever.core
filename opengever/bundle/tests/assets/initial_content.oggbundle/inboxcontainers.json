@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "8a5ab1-inbox-container",
+    "_id": "eingangskorb",
+    "review_state": "inbox-state-default",
+    "title_de": "Eingangskorb",
+    "title_fr": "Boîte de réception",
+    "_permissions": {
+      "read": [
+        "og_demo-ftw_users"
+      ],
+      "add": [
+        "gever_admins"
+      ],
+      "edit": [
+        "gever_admins"
+      ]
+    }
+  }
+]
