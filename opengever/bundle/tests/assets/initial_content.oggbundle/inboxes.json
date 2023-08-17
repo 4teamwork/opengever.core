@@ -1,0 +1,44 @@
+[
+  {
+    "guid": "163c069a7f834dbb9c52bf733134fc1a",
+    "parent_guid": "8a5ab1-inbox-container",
+    "_id": "finanzdepartement",
+    "review_state": "inbox-state-default",
+    "title_de": "Eingangskorb FD - Finanzdepartement",
+    "title_fr": "Boîte de réception FD - Finanzdepartement",
+    "responsible_org_unit": "finanzdepartement",
+    "_permissions": {
+      "block_inheritance": true,
+      "read": [
+        "og_demo-ftw_users"
+      ],
+      "add": [
+        "gever_admins"
+      ],
+      "edit": [
+        "gever_admins"
+      ]
+    }
+  },
+  {
+    "guid": "bfd1366a660f419f85949e7923ec26f0",
+    "parent_guid": "8a5ab1-inbox-container",
+    "_id": "baudepartement",
+    "review_state": "inbox-state-default",
+    "title_de": "Eingangskorb BD - Baudepartement",
+    "title_fr": "Boîte de réception BD - Baudepartement",
+    "responsible_org_unit": "baudepartement",
+    "_permissions": {
+      "block_inheritance": true,
+      "read": [
+        "og_demo-ftw_users"
+      ],
+      "add": [
+        "gever_admins"
+      ],
+      "edit": [
+        "gever_admins"
+      ]
+    }
+  }
+]

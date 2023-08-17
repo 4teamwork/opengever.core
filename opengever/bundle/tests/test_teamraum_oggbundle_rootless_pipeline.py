@@ -133,6 +133,8 @@ class TestTeamraumOggBundleRootlessPipeline(IntegrationTestCase):
             set([
                 'opengever.repository.repositoryroot',
                 'opengever.repository.repositoryfolder',
+                'opengever.inbox.container',
+                'opengever.inbox.inbox',
                 'opengever.private.root',
                 'opengever.dossier.templatefolder',
                 'opengever.workspace.root',
@@ -149,6 +151,8 @@ class TestTeamraumOggBundleRootlessPipeline(IntegrationTestCase):
         workspacefolders = metadata['opengever.workspace.folder']
         reporoots = metadata['opengever.repository.repositoryroot']
         repofolders = metadata['opengever.repository.repositoryfolder']
+        inboxcontainers = metadata['opengever.inbox.container']
+        inboxes = metadata['opengever.inbox.inbox']
         privateroots = metadata['opengever.private.root']
         templatefolders = metadata['opengever.dossier.templatefolder']
         dossiers = metadata['opengever.dossier.businesscasedossier']
@@ -161,6 +165,8 @@ class TestTeamraumOggBundleRootlessPipeline(IntegrationTestCase):
         self.assertEqual(1, len(workspacefolders))
         self.assertEqual(0, len(reporoots))
         self.assertEqual(0, len(repofolders))
+        self.assertEqual(0, len(inboxcontainers))
+        self.assertEqual(0, len(inboxes))
         self.assertEqual(0, len(privateroots))
         self.assertEqual(0, len(templatefolders))
         self.assertEqual(0, len(dossiers))

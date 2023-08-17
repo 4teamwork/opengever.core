@@ -3,6 +3,7 @@ from datetime import datetime
 from ftw.testing import freeze
 from opengever.bundle.console import add_guid_index
 from opengever.bundle.sections.bundlesource import BUNDLE_PATH_KEY
+from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from opengever.testing import FunctionalTestCase
 from pkg_resources import resource_filename
 from plone import api
@@ -29,8 +30,49 @@ class TestInitialContentCreation(FunctionalTestCase):
         with freeze(FROZEN_NOW):
             transmogrifier(u'opengever.bundle.oggbundle')
 
+        inboxcontainer = self.assert_inboxcontainer_created()
+        self.assert_inboxes_created(inboxcontainer)
         self.assert_private_root_created(mtool)
         self.assert_templatefolder_created()
+
+    def assert_inboxcontainer_created(self):
+        inboxcontainer = self.portal.get('eingangskorb')
+        self.assertEqual(u'Eingangskorb', inboxcontainer.title_de)
+        self.assertEqual(u'Bo\xeete de r\xe9ception', inboxcontainer.title_fr)
+        self.assertEqual(
+            'inbox-state-default',
+            api.content.get_state(inboxcontainer))
+
+        return inboxcontainer
+
+    def assert_inboxes_created(self, inboxcontainer):
+        inbox_fd = inboxcontainer.get('finanzdepartement')
+        self.assertEqual(
+            u'finanzdepartement',
+            IResponsibleOrgUnit(inbox_fd).responsible_org_unit)
+        self.assertEqual(
+            u'Eingangskorb FD - Finanzdepartement',
+            inbox_fd.title_de)
+        self.assertEqual(
+            u'Bo\xeete de r\xe9ception FD - Finanzdepartement',
+            inbox_fd.title_fr)
+        self.assertEqual(
+            'inbox-state-default',
+            api.content.get_state(inbox_fd))
+
+        inbox_bd = inboxcontainer.get('baudepartement')
+        self.assertEqual(
+            u'baudepartement',
+            IResponsibleOrgUnit(inbox_bd).responsible_org_unit)
+        self.assertEqual(
+            u'Eingangskorb BD - Baudepartement',
+            inbox_bd.title_de)
+        self.assertEqual(
+            u'Bo\xeete de r\xe9ception BD - Baudepartement',
+            inbox_bd.title_fr)
+        self.assertEqual(
+            'inbox-state-default',
+            api.content.get_state(inbox_bd))
 
     def assert_private_root_created(self, mtool):
         private_root = self.portal.get('private')

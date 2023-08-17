@@ -11,6 +11,8 @@ GEVER_TYPES = [
     'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
+    'opengever.inbox.container',
+    'opengever.inbox.inbox',
     'opengever.private.root',
     'opengever.dossier.templatefolder',
     'opengever.workspace.root',
@@ -26,6 +28,8 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.dossier.businesscasedossier': 'dossier',
     'opengever.repository.repositoryfolder': 'repofolder',
     'opengever.repository.repositoryroot': 'reporoot',
+    'opengever.inbox.container': 'inboxcontainer',
+    'opengever.inbox.inbox': 'inbox',
     'opengever.private.root': 'privateroot',
     'opengever.dossier.templatefolder': 'templatefolder',
     'opengever.workspace.root': 'workspaceroot',
@@ -33,11 +37,17 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.workspace.folder': 'workspacefolder',
 }
 
+# Plural forms where just appending an 's' at the end is not enough
+IRREGULAR_PLURALS = {
+    'inbox': 'inboxes',
+}
+
 # Types that don't need a parent_guid / parent_reference during import, but
 # instead will (always) be created directly below the Plone site root.
 ROOT_TYPES = [
     'opengever.repository.repositoryroot',
     'opengever.workspace.root',
+    'opengever.inbox.container',
     'opengever.private.root',
     'opengever.dossier.templatefolder',
 ]
@@ -60,6 +70,12 @@ ALLOWED_REVIEW_STATES = {
     'opengever.repository.repositoryfolder': [
         'repositoryfolder-state-active',
         # 'repositoryfolder-state-inactive',
+    ],
+    'opengever.inbox.container': [
+        'inbox-state-default',
+    ],
+    'opengever.inbox.inbox': [
+        'inbox-state-default',
     ],
     'opengever.private.root': [
         'repositoryroot-state-active',  # [sic] WF definition contains typo
