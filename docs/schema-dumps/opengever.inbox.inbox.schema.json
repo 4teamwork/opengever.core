@@ -1,0 +1,75 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "title": "Eingangskorb",
+    "additionalProperties": false,
+    "properties": {
+        "inbox_group": {
+            "type": "string",
+            "title": "Eingangskorb Gruppe",
+            "description": "Diese Gruppe wird berechtigt, wenn dem Eingangskorb eine Aufgabe zugewiesen wird.",
+            "_zope_schema_type": "TextLine"
+        },
+        "changed": {
+            "type": "string",
+            "title": "Zuletzt ver\u00e4ndert",
+            "format": "datetime",
+            "description": "",
+            "_zope_schema_type": "Datetime"
+        },
+        "title_de": {
+            "type": "string",
+            "title": "Titel (deutsch)",
+            "description": "",
+            "_zope_schema_type": "TranslatedTextLine"
+        },
+        "title_fr": {
+            "type": "string",
+            "title": "Titel (franz\u00f6sisch)",
+            "description": "",
+            "_zope_schema_type": "TranslatedTextLine"
+        },
+        "title_en": {
+            "type": "string",
+            "title": "Titel (englisch)",
+            "description": "",
+            "_zope_schema_type": "TranslatedTextLine"
+        },
+        "responsible_org_unit": {
+            "type": "string",
+            "title": "Federf\u00fchrendes Amt",
+            "maxLength": 30,
+            "description": "",
+            "_zope_schema_type": "TextLine"
+        }
+    },
+    "allOf": [
+        {
+            "anyOf": [
+                {
+                    "required": [
+                        "title_de"
+                    ]
+                },
+                {
+                    "required": [
+                        "title_fr"
+                    ]
+                },
+                {
+                    "required": [
+                        "title_en"
+                    ]
+                }
+            ]
+        }
+    ],
+    "field_order": [
+        "inbox_group",
+        "changed",
+        "title_de",
+        "title_fr",
+        "title_en",
+        "responsible_org_unit"
+    ]
+}
