@@ -1,0 +1,20 @@
+[
+  {
+    "guid": "854f13dc57934a97b63ce53b65d10510",
+    "_id": "vorlagen",
+    "review_state": "templatefolder-state-active",
+    "title_de": "Vorlagen",
+    "title_fr": "Modèles",
+    "_permissions": {
+      "read": [
+        "og_demo-ftw_users"
+      ],
+      "add": [
+        "gever_admins"
+      ],
+      "edit": [
+        "gever_admins"
+      ]
+    }
+  }
+]
