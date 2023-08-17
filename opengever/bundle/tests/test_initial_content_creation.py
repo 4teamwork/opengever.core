@@ -23,16 +23,23 @@ class TestInitialContentCreation(FunctionalTestCase):
             'opengever.bundle.tests',
             'assets/initial_content.oggbundle')
 
+        mtool = api.portal.get_tool('portal_membership')
+        mtool.memberareaCreationFlag = 0
+
         with freeze(FROZEN_NOW):
             transmogrifier(u'opengever.bundle.oggbundle')
 
-        self.assert_private_root_created()
+        self.assert_private_root_created(mtool)
 
-    def assert_private_root_created(self):
+    def assert_private_root_created(self, mtool):
         private_root = self.portal.get('private')
         self.assertEqual('Meine Ablage', private_root.title_de)
         self.assertEqual('Dossier personnel', private_root.title_fr)
         self.assertEqual(
             'repositoryroot-state-active',  # [sic] WF contains typo
             api.content.get_state(private_root))
+
+        # Feature should be enabled after private root import
+        self.assertEqual(1, mtool.getMemberareaCreationFlag())
+
         return private_root

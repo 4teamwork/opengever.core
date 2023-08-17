@@ -12,6 +12,7 @@ from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.models.user import User
+from opengever.private import enable_opengever_private
 from plone import api
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation import IAnnotations
@@ -289,6 +290,10 @@ class ConstructorSection(object):
                     u'Could not create object at {} with guid {}. {}'.format(
                         parent_path, item['guid'], e.message))
                 continue
+
+            # If a private root was just constructed, enable the feature
+            if item['_type'] == 'opengever.private.root':
+                enable_opengever_private()
 
             # build path relative to plone site
             item['_path'] = '/'.join(obj.getPhysicalPath()[2:])
