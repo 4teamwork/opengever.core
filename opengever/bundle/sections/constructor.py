@@ -12,6 +12,7 @@ from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.models.user import User
+from opengever.private import enable_opengever_private
 from plone import api
 from plone.dexterity.utils import createContentInContainer
 from zope.annotation import IAnnotations
@@ -91,6 +92,11 @@ class ConstructorSection(object):
             raise InvalidType(portal_type)
         return fti
 
+    def _get_id_args(self, fti, item):
+        if '_id' in item:
+            return {'id': item['_id']}
+        return {}
+
     def _get_title_args(self, fti, item):
         # we need the title sometimes to auto-generate ids
         # XXX maybe be a bit more intelligent here and set all required
@@ -119,13 +125,16 @@ class ConstructorSection(object):
     def _construct_object(self, container, item):
         portal_type = item['_type']
         fti = self._get_fti(portal_type)
-        title_args = self._get_title_args(fti, item)
+
+        kwargs = {}
+        kwargs.update(self._get_id_args(fti, item))
+        kwargs.update(self._get_title_args(fti, item))
 
         with NoDossierReferenceNumbersIssued():
             # Create the object without automatically issuing a
             # reference number - we might want to set it explicitly
             obj = createContentInContainer(
-                container, portal_type, **title_args)
+                container, portal_type, **kwargs)
 
             if IDossierMarker.providedBy(obj):
                 prefix_adapter = IReferenceNumberPrefix(container)
@@ -281,6 +290,10 @@ class ConstructorSection(object):
                     u'Could not create object at {} with guid {}. {}'.format(
                         parent_path, item['guid'], e.message))
                 continue
+
+            # If a private root was just constructed, enable the feature
+            if item['_type'] == 'opengever.private.root':
+                enable_opengever_private()
 
             # build path relative to plone site
             item['_path'] = '/'.join(obj.getPhysicalPath()[2:])

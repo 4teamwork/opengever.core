@@ -11,6 +11,7 @@ GEVER_TYPES = [
     'opengever.task.task',
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
+    'opengever.private.root',
     'opengever.workspace.root',
     'opengever.workspace.workspace',
     'opengever.workspace.folder',
@@ -24,6 +25,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.dossier.businesscasedossier': 'dossier',
     'opengever.repository.repositoryfolder': 'repofolder',
     'opengever.repository.repositoryroot': 'reporoot',
+    'opengever.private.root': 'privateroot',
     'opengever.workspace.root': 'workspaceroot',
     'opengever.workspace.workspace': 'workspace',
     'opengever.workspace.folder': 'workspacefolder',
@@ -33,7 +35,8 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
 # instead will (always) be created directly below the Plone site root.
 ROOT_TYPES = [
     'opengever.repository.repositoryroot',
-    'opengever.workspace.root'
+    'opengever.workspace.root',
+    'opengever.private.root',
 ]
 
 # Types that can unambiguously be parented to an existing container, and
@@ -54,6 +57,9 @@ ALLOWED_REVIEW_STATES = {
     'opengever.repository.repositoryfolder': [
         'repositoryfolder-state-active',
         # 'repositoryfolder-state-inactive',
+    ],
+    'opengever.private.root': [
+        'repositoryroot-state-active',  # [sic] WF definition contains typo
     ],
     'opengever.workspace.root': [
         'opengever_workspace_root--STATUS--active',

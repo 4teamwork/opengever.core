@@ -2,38 +2,40 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "array",
     "items": {
-        "$ref": "#/definitions/workspacefolder"
+        "$ref": "#/definitions/privateroot"
     },
     "definitions": {
-        "workspacefolder": {
+        "privateroot": {
             "type": "object",
-            "title": "Ordner",
+            "title": "Pers\u00f6nliches Verzeichnis",
             "additionalProperties": false,
             "properties": {
-                "changed": {
+                "title_de": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Zuletzt ver\u00e4ndert",
-                    "format": "datetime",
+                    "title": "Titel (deutsch)",
                     "description": "",
-                    "_zope_schema_type": "Datetime"
+                    "_zope_schema_type": "TranslatedTextLine"
                 },
-                "title": {
-                    "type": "string",
-                    "title": "Titel",
-                    "description": "",
-                    "_zope_schema_type": "TextLine"
-                },
-                "description": {
+                "title_fr": {
                     "type": [
                         "null",
                         "string"
                     ],
-                    "title": "Beschreibung",
+                    "title": "Titel (franz\u00f6sisch)",
                     "description": "",
-                    "_zope_schema_type": "Text"
+                    "_zope_schema_type": "TranslatedTextLine"
+                },
+                "title_en": {
+                    "type": [
+                        "null",
+                        "string"
+                    ],
+                    "title": "Titel (englisch)",
+                    "description": "",
+                    "_zope_schema_type": "TranslatedTextLine"
                 },
                 "_id": {
                     "type": [
@@ -44,7 +46,7 @@
                 "review_state": {
                     "type": "string",
                     "enum": [
-                        "opengever_workspace_folder--STATUS--active"
+                        "repositoryroot-state-active"
                     ]
                 },
                 "_creator": {
@@ -55,24 +57,6 @@
                 },
                 "guid": {
                     "type": "string"
-                },
-                "parent_guid": {
-                    "type": [
-                        "null",
-                        "string"
-                    ]
-                },
-                "parent_reference": {
-                    "type": [
-                        "null",
-                        "array"
-                    ],
-                    "items": {
-                        "items": {
-                            "type": "integer"
-                        },
-                        "type": "array"
-                    }
                 },
                 "_permissions": {
                     "$ref": "#/definitions/permission"
@@ -86,7 +70,6 @@
                 }
             },
             "required": [
-                "title",
                 "review_state",
                 "guid"
             ],
@@ -95,21 +78,26 @@
                     "anyOf": [
                         {
                             "required": [
-                                "parent_guid"
+                                "title_de"
                             ]
                         },
                         {
                             "required": [
-                                "parent_reference"
+                                "title_fr"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "title_en"
                             ]
                         }
                     ]
                 }
             ],
             "field_order": [
-                "changed",
-                "title",
-                "description"
+                "title_de",
+                "title_fr",
+                "title_en"
             ]
         },
         "permission": {
@@ -119,19 +107,31 @@
                 "block_inheritance": {
                     "type": "boolean"
                 },
-                "workspace_admin": {
+                "read": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "workspace_member": {
+                "add": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "workspace_guest": {
+                "edit": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "close": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "reactivate": {
                     "type": "array",
                     "items": {
                         "type": "string"

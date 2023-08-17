@@ -33,7 +33,10 @@ class DataCollector(object):
 
     def __init__(self, bundle):
         self.bundle = bundle
-        self.au_abbreviation = get_current_admin_unit().abbreviation
+
+        au = get_current_admin_unit()
+        self.au_abbreviation = au.abbreviation if au else ''
+
         self.catalog = api.portal.get_tool('portal_catalog')
 
     def __call__(self):
