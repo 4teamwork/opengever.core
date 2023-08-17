@@ -12,6 +12,7 @@ GEVER_TYPES = [
     'opengever.repository.repositoryfolder',
     'opengever.repository.repositoryroot',
     'opengever.private.root',
+    'opengever.dossier.templatefolder',
     'opengever.workspace.root',
     'opengever.workspace.workspace',
     'opengever.workspace.folder',
@@ -26,6 +27,7 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.repository.repositoryfolder': 'repofolder',
     'opengever.repository.repositoryroot': 'reporoot',
     'opengever.private.root': 'privateroot',
+    'opengever.dossier.templatefolder': 'templatefolder',
     'opengever.workspace.root': 'workspaceroot',
     'opengever.workspace.workspace': 'workspace',
     'opengever.workspace.folder': 'workspacefolder',
@@ -37,6 +39,7 @@ ROOT_TYPES = [
     'opengever.repository.repositoryroot',
     'opengever.workspace.root',
     'opengever.private.root',
+    'opengever.dossier.templatefolder',
 ]
 
 # Types that can unambiguously be parented to an existing container, and
@@ -60,6 +63,9 @@ ALLOWED_REVIEW_STATES = {
     ],
     'opengever.private.root': [
         'repositoryroot-state-active',  # [sic] WF definition contains typo
+    ],
+    'opengever.dossier.templatefolder': [
+        'templatefolder-state-active',
     ],
     'opengever.workspace.root': [
         'opengever_workspace_root--STATUS--active',
