@@ -35,11 +35,14 @@ teamraum_request_error_handler = create_proxy_request_error_handler(
 
 
 class LinkedWorkspacesService(Service):
+
+    forbidden_on_subdossiers = True
+
     def render(self):
         if not is_workspace_client_feature_available():
             raise NotFound
 
-        if self.context.is_subdossier():
+        if self.forbidden_on_subdossiers and self.context.is_subdossier():
             raise BadRequest
 
         return super(LinkedWorkspacesService, self).render()
@@ -68,10 +71,13 @@ class ProxyHypermediaBatch(LinkedWorkspacesService):
 class LinkedWorkspacesGet(ProxyHypermediaBatch):
     """API Endpoint to get all linked workspaces for a specific context
     """
+    forbidden_on_subdossiers = False
+
     def get_remote_client_reply(self):
-        response = ILinkedWorkspaces(self.context).list(**self.request.form)
+        main_dossier = self.context.get_main_dossier()
+        response = ILinkedWorkspaces(main_dossier).list(**self.request.form)
         response['workspaces_without_view_permission'] = bool(ILinkedWorkspaces(
-            self.context).number_of_linked_workspaces() - response['items_total'])
+            main_dossier).number_of_linked_workspaces() - response['items_total'])
         return response
 
 

@@ -360,17 +360,25 @@ class TestLinkedWorkspacesGet(FunctionalWorkspaceClientTestCase):
                 [workspace.get('@id') for workspace in response.get('items')])
 
     @browsing
-    def test_raise_exception_for_subdossiers(self, browser):
+    def test_lists_workspaces_for_main_dossier_when_called_on_subdossier(self, browser):
+        manager = ILinkedWorkspaces(self.dossier)
+        manager.storage.add(self.workspace.UID())
+
         subdossier = create(Builder('dossier').within(self.dossier))
         transaction.commit()
+
         browser.login()
 
         with self.workspace_client_env():
-            browser.exception_bubbling = True
-            with self.assertRaises(BadRequest):
-                browser.open(
-                    subdossier.absolute_url() + '/@linked-workspaces',
-                    method='GET', headers={'Accept': 'application/json'}).json
+            response = browser.open(
+                subdossier.absolute_url() + '/@linked-workspaces',
+                method='GET', headers={'Accept': 'application/json'}).json
+
+        self.assertEqual(
+            [self.workspace.absolute_url()],
+            [workspace.get('@id') for workspace in response.get('items')])
+
+        self.assertFalse(response['workspaces_without_view_permission'])
 
     @browsing
     def test_request_error_handling(self, browser):
