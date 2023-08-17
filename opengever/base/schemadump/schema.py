@@ -8,6 +8,7 @@ from opengever.base.schemadump.config import GEVER_TYPES
 from opengever.base.schemadump.config import GEVER_TYPES_TO_OGGBUNDLE_TYPES
 from opengever.base.schemadump.config import IGNORED_FIELDS
 from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
+from opengever.base.schemadump.config import IRREGULAR_PLURALS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
 from opengever.base.schemadump.config import PARENTABLE_TYPES
@@ -563,19 +564,27 @@ def build_all_gever_schemas():
         yield filename, schema
 
 
+def get_plural(short_name):
+    return IRREGULAR_PLURALS.get(short_name, '%ss' % short_name)
+
+
+def get_bundle_schema_filename(short_name):
+    return '%s.schema.json' % get_plural(short_name)
+
+
 def build_all_bundle_schemas():
     """Collects JSON Schema representations of OGGBundle types.
     """
     for portal_type, short_name in GEVER_TYPES_TO_OGGBUNDLE_TYPES.items():
         builder = OGGBundleJSONSchemaBuilder(portal_type)
         schema = builder.build_schema()
-        filename = '%ss.schema.json' % short_name
+        filename = get_bundle_schema_filename(short_name)
         yield filename, schema
 
     for portal_type, short_name in GEVER_SQL_TYPES_TO_OGGBUNDLE_TYPES.items():
         builder = OGGBundleJSONSchemaSQLBuilder(portal_type)
         schema = builder.build_schema()
-        filename = '%ss.schema.json' % short_name
+        filename = get_bundle_schema_filename(short_name)
         yield filename, schema
 
 

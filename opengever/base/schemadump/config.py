@@ -37,6 +37,11 @@ GEVER_TYPES_TO_OGGBUNDLE_TYPES = {
     'opengever.workspace.folder': 'workspacefolder',
 }
 
+# Plural forms where just appending an 's' at the end is not enough
+IRREGULAR_PLURALS = {
+    'inbox': 'inboxes',
+}
+
 # Types that don't need a parent_guid / parent_reference during import, but
 # instead will (always) be created directly below the Plone site root.
 ROOT_TYPES = [
