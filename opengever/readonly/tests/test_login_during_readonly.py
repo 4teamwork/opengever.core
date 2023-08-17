@@ -10,6 +10,7 @@ from plone import api
 from plone.app.contentrules import handlers as contentrules_handlers
 from plone.app.testing import applyProfile
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.protect import subscribers as plone_protect_subscribers
 from Products.PlonePAS.events import UserLoggedInEvent
 import transaction
@@ -110,7 +111,7 @@ class TestLoginDuringReadOnlyMode(FunctionalTestCase):
         # trigger a ReadOnlyError during commit() below
         transaction.commit()
 
-        mock_validate_ticket.return_value = TEST_USER_ID
+        mock_validate_ticket.return_value = TEST_USER_NAME
         creds = {
             'extractor': cas_plugin.getId(),
             'ticket': 'ST-001-abc',
@@ -122,4 +123,4 @@ class TestLoginDuringReadOnlyMode(FunctionalTestCase):
             transaction.commit()
 
         self.assertEqual(TEST_USER_ID, userid)
-        self.assertEqual(TEST_USER_ID, login)
+        self.assertEqual(TEST_USER_NAME, login)
