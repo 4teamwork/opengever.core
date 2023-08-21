@@ -14,6 +14,7 @@ logger.setLevel(logging.INFO)
 BUNDLE_KEY = 'opengever.bundle.bundle'
 BUNDLE_PATH_KEY = 'opengever.bundle.bundle_path'
 BUNDLE_INGESTION_SETTINGS_KEY = 'opengever.bundle.ingestion_settings'
+BUNDLE_INJECT_INITIAL_CONTENT_KEY = 'opengever.bundle.inject_initial_content'
 
 
 class BundleSourceSection(object):
@@ -38,7 +39,12 @@ class BundleSourceSection(object):
                 "'/path/to/bundle'")
 
         ingestion_settings = annotations.get(BUNDLE_INGESTION_SETTINGS_KEY)
-        self.bundle = BundleLoader(bundle_path).load(ingestion_settings)
+
+        inject_initial_content = annotations.get(BUNDLE_INJECT_INITIAL_CONTENT_KEY, False)
+        self.bundle = BundleLoader(
+            bundle_path,
+            inject_initial_content=inject_initial_content
+        ).load(ingestion_settings)
         annotations[BUNDLE_KEY] = self.bundle
 
     def __iter__(self):

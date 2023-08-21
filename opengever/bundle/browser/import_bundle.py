@@ -39,6 +39,13 @@ class IImportBundleSchema(model.Schema):
         default=True,
         required=True)
 
+    create_initial_content = schema.Bool(
+        title=u'Create default initial content (if not in bundle)',
+        description=u'Create inboxes, template folder and private root if no '
+                    u'content for these types is defined in the bundle.',
+        default=True,
+        required=True)
+
 
 class ImportBundleForm(AutoExtensibleForm, Form):
 
@@ -78,6 +85,7 @@ class ImportBundleForm(AutoExtensibleForm, Form):
                 possibly_unpatch_collective_indexing=False,
                 no_separate_connection_for_sequence_numbers=False,
                 skip_report=True,
+                create_initial_content=data['create_initial_content'],
             )
             bundle_importer.run()
 
