@@ -52,6 +52,13 @@ ROOT_TYPES = [
     'opengever.dossier.templatefolder',
 ]
 
+# Types that may or may not be created directly below the Plone site root.
+# Their schema supports parent pointers, but they are optional.
+OPTIONAL_ROOT_TYPES = [
+    'opengever.inbox.inbox',
+
+]
+
 # Types that can unambiguously be parented to an existing container, and
 # therefore don't require a parent_guid / parent_reference
 PARENTABLE_TYPES = [
