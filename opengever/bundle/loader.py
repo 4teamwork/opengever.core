@@ -4,6 +4,7 @@ from collections import OrderedDict
 from datetime import datetime
 from jsonschema import FormatChecker
 from jsonschema.validators import validator_for
+from opengever.bundle.initial_content import InitialContentFactory
 from opengever.document.document import MAIL_EXTENSIONS
 from pkg_resources import resource_filename as rf
 import codecs
@@ -106,8 +107,9 @@ class BundleLoader(object):
     opengever.bundle.schemas and to be up to date.
     """
 
-    def __init__(self, bundle_path):
+    def __init__(self, bundle_path, inject_initial_content=False):
         self.bundle_path = bundle_path
+        self.inject_initial_content = inject_initial_content
         self.json_schemas = self._load_schemas()
         self._stats = {'bundle_counts_raw': {}, 'timings': {}}
         self.validation_errors = []
@@ -121,6 +123,7 @@ class BundleLoader(object):
         bundle = Bundle(
             self._items, self.bundle_path, self.json_schemas, self._stats,
             ingestion_settings, configuration)
+
         self._display_stats(bundle)
         return bundle
 
@@ -160,8 +163,25 @@ class BundleLoader(object):
                 # Apply required preprocessing to items (in-place)
                 ItemPreprocessor(item, json_name).process()
                 self._items.append(item)
+
+        if self.inject_initial_content:
+            self._inject_initial_content_items()
+
         if self.validation_errors:
             raise self.validation_errors[0]
+
+    def _inject_initial_content_items(self):
+        initial_content_items = InitialContentFactory().generate(
+            self._stats['bundle_counts_raw'])
+
+        # Since initial_content_items contains the items in the order in which
+        # they should be created, iterate over them in *reverse* order since
+        # we're inserting each item at the beginning of the list.
+        for json_name, items in reversed(initial_content_items.items()):
+            self.validation_errors.extend(self._validate_schema(items, json_name))
+            for item in reversed(items):
+                ItemPreprocessor(item, json_name).process()
+                self._items.insert(0, item)
 
     def _load_schemas(self):
         schema_dir = rf('opengever.bundle', 'schemas/')

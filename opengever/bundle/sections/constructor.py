@@ -7,6 +7,7 @@ from opengever.base.interfaces import IDontIssueDossierReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.model import create_session
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
+from opengever.base.schemadump.config import OPTIONAL_ROOT_TYPES
 from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
@@ -236,9 +237,11 @@ class ConstructorSection(object):
         elif formatted_parent_refnum is not None:
             parent_path = self.path_from_refnum(formatted_parent_refnum)
 
-        elif item['_type'] in ROOT_TYPES:
-            # Repo roots and workspace roots don't require a parent pointer,
-            # and get constructed directly in the Plone site
+        elif item['_type'] in ROOT_TYPES or item['_type'] in OPTIONAL_ROOT_TYPES:
+            # ROOT_TYPES don't support a parent pointer, and get constructed
+            # directly in the Plone site. OPTIONAL_ROOT_TYPES may or may not
+            # have one. In this case they don't, and also get constructed
+            # directly in the site root.
             container = self.site
             parent_path = '/'
 

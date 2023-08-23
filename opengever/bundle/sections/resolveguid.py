@@ -4,6 +4,7 @@ from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.schemadump.config import GEVER_SQL_TYPES
+from opengever.base.schemadump.config import OPTIONAL_ROOT_TYPES
 from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.bundle.loader import PORTAL_TYPES_TO_JSON_NAME
@@ -212,8 +213,9 @@ class ResolveGUIDSection(object):
             elif parent_reference is not None:
                 roots.append(item)
 
-            elif item['_type'] in ROOT_TYPES or item['_type'] in GEVER_SQL_TYPES:
-                # Repo roots and workspace roots are the only types
+            elif any(item['_type'] in lst for lst in
+                     [ROOT_TYPES, OPTIONAL_ROOT_TYPES, GEVER_SQL_TYPES]):
+                # Repo roots and workspace roots are typical types
                 # without a parent pointer. Also SQL objects are not part of
                 # the repo tree and must therefore be treated as "roots".
                 roots.append(item)

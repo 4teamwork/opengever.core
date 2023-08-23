@@ -139,20 +139,6 @@
                             ]
                         }
                     ]
-                },
-                {
-                    "anyOf": [
-                        {
-                            "required": [
-                                "parent_guid"
-                            ]
-                        },
-                        {
-                            "required": [
-                                "parent_reference"
-                            ]
-                        }
-                    ]
                 }
             ],
             "field_order": [

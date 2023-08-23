@@ -11,6 +11,7 @@ from opengever.base.schemadump.config import IGNORED_OGGBUNDLE_FIELDS
 from opengever.base.schemadump.config import IRREGULAR_PLURALS
 from opengever.base.schemadump.config import JSON_SCHEMA_FIELD_TYPES
 from opengever.base.schemadump.config import MANAGEABLE_ROLES_BY_TYPE
+from opengever.base.schemadump.config import OPTIONAL_ROOT_TYPES
 from opengever.base.schemadump.config import PARENTABLE_TYPES
 from opengever.base.schemadump.config import ROOT_TYPES
 from opengever.base.schemadump.config import SEQUENCE_NUMBER_LABELS
@@ -368,10 +369,11 @@ class OGGBundleJSONSchemaBuilder(object):
 
     def _add_guid_properties(self, with_parent_reference=True):
         self.ct_schema.add_property('guid', {'type': 'string'}, required=True)
+        pt = self.portal_type
 
-        if self.portal_type not in ROOT_TYPES:
-            # Everything except repository roots or workspace roots
-            # supports a parent_guid or a parent_reference.
+        if pt not in ROOT_TYPES or pt in OPTIONAL_ROOT_TYPES:
+            # Most types support a parent_guid or a parent_reference, except
+            # ones that can *only* be constructed directly at the site root.
             self.ct_schema.add_property('parent_guid', {'type': 'string'})
             if not with_parent_reference:
                 return
@@ -383,9 +385,10 @@ class OGGBundleJSONSchemaBuilder(object):
             self.ct_schema.add_property(
                 'parent_reference', {'type': 'array', 'items': array_of_ints})
 
-            if self.portal_type not in PARENTABLE_TYPES:
-                # Parent pointers are optional for parentable types. For any
-                # other non-root types, they're required
+            if pt not in PARENTABLE_TYPES and pt not in OPTIONAL_ROOT_TYPES:
+                # Parent pointers are optional for parentable types and types
+                # that *may* be constructed at the site root, like inboxes.
+                # For any other non-root types, they're required
                 self.ct_schema.require_any_of(['parent_guid', 'parent_reference'])
 
     def _add_permissions_property(self):
