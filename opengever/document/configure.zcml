@@ -450,7 +450,6 @@
            opengever.base.interfaces.IOpengeverBaseLayer"
       />
 
-  <adapter factory=".actions.BaseDocumentContextActions" />
   <adapter factory=".actions.DocumentSchemaContextActions" />
 
   <!-- transitions -->

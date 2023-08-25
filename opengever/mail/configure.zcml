@@ -29,6 +29,8 @@
 
   <adapter factory=".zipexport.OGMailZipExport" />
 
+  <adapter factory=".actions.MailContextActions" />
+
   <adapter
       factory=".indexer.checked_out"
       name="checked_out"
