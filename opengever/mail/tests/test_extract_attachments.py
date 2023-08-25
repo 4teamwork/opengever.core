@@ -160,6 +160,23 @@ class TestExtractAttachments(IntegrationTestCase):
         doc = children["added"].pop()
         self.assertEquals('word_document', doc.Title())
 
+    @browsing
+    def test_returns_error_when_extraction_parent_is_not_open(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.inactive_dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.inactive_dossier) as children:
+            browser.login().open(mail, view='extract_attachments')
+
+        self.assertEquals(
+            ['You are not allowed to extract attachments from this Email'],
+            statusmessages.warning_messages())
+
+        self.assertEqual(0, len(children['added']))
+
 
 class TestExtractAttachmentsSolr(SolrIntegrationTestCase):
 

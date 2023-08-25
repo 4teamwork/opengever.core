@@ -1368,7 +1368,7 @@
       name="@extract-attachments"
       for="opengever.mail.mail.IOGMailMarker"
       factory=".mail.ExtractAttachments"
-      permission="opengever.document.AddDocument"
+      permission="zope2.View"
       />
 
   <plone:service

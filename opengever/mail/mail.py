@@ -176,6 +176,10 @@ class OGMail(Mail, BaseDocumentMixin):
             return tuple(info for info in self.attachment_infos if not info.get('extracted'))
         return self.attachment_infos
 
+    def can_extract_attachments_to_parent(self):
+        parent = self.get_extraction_parent()
+        return api.user.has_permission('opengever.document: Add document', obj=parent)
+
     def has_attachments(self):
         """Return whether this mail has attachments."""
         return len(self.get_attachments()) > 0
