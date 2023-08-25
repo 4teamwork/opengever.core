@@ -1,7 +1,9 @@
 from ftw.mail.mail import IMail
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.document import SerializeDocumentToJson
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.transforms.msg2mime import Msg2MimeTransform
+from opengever.mail import _ as mail_mf
 from opengever.mail.exceptions import AlreadyExtractedError
 from opengever.mail.exceptions import InvalidAttachmentPosition
 from opengever.mail.mail import initialize_metadata
@@ -73,6 +75,10 @@ class SerializeMailToJson(SerializeDocumentToJson):
 class ExtractAttachments(Service):
 
     def reply(self):
+        if not self.context.can_extract_attachments_to_parent():
+            raise NotReportedForbidden(mail_mf(
+                'attachment_extraction_disallowed',
+                default=u'You are not allowed to extract attachments from this Email'))
 
         # Disable CSRF protection, as POST requests cannot include the needed
         # X-CSRF-TOKEN to pass plone's autoprotect.

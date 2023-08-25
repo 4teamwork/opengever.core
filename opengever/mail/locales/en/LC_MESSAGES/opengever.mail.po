@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-01-18 12:35+0000\n"
+"POT-Creation-Date: 2023-08-25 06:41+0000\n"
 "PO-Revision-Date: 2016-07-22 16:52+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-mail/de/>\n"
@@ -45,6 +45,11 @@ msgstr "The files you selected exceed the maximum allowed size."
 #: ./opengever/mail/browser/send_document.py
 msgid "You have to select a intern                             or enter a extern mail-addres"
 msgstr "Select at least one internal or external email address."
+
+#. Default: "You are not allowed to extract attachments from this Email"
+#: ./opengever/mail/browser/extract_attachments.py
+msgid "attachment_extraction_disallowed"
+msgstr "You are not allowed to extract attachments from this Email"
 
 #. German translation: Senden
 #. Default: "Send"

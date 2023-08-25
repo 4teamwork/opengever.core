@@ -122,6 +122,12 @@ class ExtractAttachments(BrowserView):
     def __call__(self):
         disable_edit_bar()
 
+        if not self.context.can_extract_attachments_to_parent():
+            msg = _('attachment_extraction_disallowed',
+                    default=u'You are not allowed to extract attachments from this Email')
+            api.portal.show_message(msg, request=self.request, type='warning')
+            return self.request.RESPONSE.redirect(self.context.absolute_url())
+
         if not self.context.has_attachments():
             msg = _(u'error_no_attachments_to_extract',
                     default=u'This mail has no attachments to extract.')

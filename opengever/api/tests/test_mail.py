@@ -297,6 +297,49 @@ class TestExtractAttachments(IntegrationTestCase):
         self.assertEqual(1, len(children['added']))
 
     @browsing
+    def test_can_extract_from_mail_in_resolved_task(self, browser):
+        self.login(self.dossier_responsible, browser)
+        mail = create(Builder('mail')
+                      .within(self.subtask)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.dossier) as children:
+            browser.open(
+                "/".join([mail.absolute_url(), "@extract-attachments"]),
+                data=json.dumps({'positions': [4]}),
+                method='POST',
+                headers=self.api_headers)
+
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(1, len(children['added']))
+        self.assertEquals('word_document', children['added'].pop().Title())
+
+    @browsing
+    def test_returns_error_when_extraction_parent_is_not_open(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail')
+                      .within(self.inactive_dossier)
+                      .with_asset_message(
+                          'mail_with_multiple_attachments.eml'))
+
+        with self.observe_children(self.inactive_dossier) as children:
+            with browser.expect_http_error(code=403, reason='Forbidden'):
+                browser.open(
+                    "/".join([mail.absolute_url(), "@extract-attachments"]),
+                    data=json.dumps({'positions': [4]}),
+                    method='POST',
+                    headers=self.api_headers)
+
+        self.assertEqual(0, len(children['added']))
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'attachment_extraction_disallowed',
+             u'translated_message': u'You are not allowed to extract attachments from this Email',
+             u'type': u'Forbidden'},
+            browser.json)
+
+    @browsing
     def test_returns_error_when_specified_positions_are_not_valid_for_extraction(self, browser):
         self.login(self.regular_user, browser)
         mail = create(Builder('mail')
