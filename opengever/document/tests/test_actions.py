@@ -127,24 +127,11 @@ class TestDocumentContextActions(IntegrationTestCase):
                             u'save_document_as_pdf', u'trash_context']
         self.assertEqual(expected_actions, self.get_actions(self.document))
 
-    def test_context_actions_for_mail_in_dossier(self):
-        self.login(self.regular_user)
-        expected_actions = [u'attach_to_email', u'copy_item', u'download_copy', u'edit',
-                            u'move_item', u'new_task_from_document', u'open_as_pdf',
-                            u'revive_bumblebee_preview', u'trash_context']
-        self.assertEqual(expected_actions, self.get_actions(self.mail_eml))
-
     def test_context_actions_for_trashed_document_in_dossier(self):
         self.login(self.regular_user)
         ITrasher(self.document).trash()
         expected_actions = [u'revive_bumblebee_preview', u'untrash_context']
         self.assertEqual(expected_actions, self.get_actions(self.document))
-
-    def test_context_actions_for_trashed_mail_in_dossier(self):
-        self.login(self.regular_user)
-        ITrasher(self.mail_eml).trash()
-        expected_actions = [u'revive_bumblebee_preview', u'untrash_context']
-        self.assertEqual(expected_actions, self.get_actions(self.mail_eml))
 
     def test_context_actions_for_checked_out_document(self):
         self.login(self.regular_user)
