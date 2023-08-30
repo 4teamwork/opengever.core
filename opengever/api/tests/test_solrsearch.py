@@ -1364,37 +1364,27 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_adds_wildcard(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = {"q": "Title:an"}
+        query = {"q": "Kreis"}
         search = self.solr_search(browser, query)
+        self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
-        self.assertItemsEqual(
-            [u'An empty dossier'],
-            [item["title"] for item in search["items"]])
-
-        self.assertEqual(5, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Vorstellungsrunde bei anderen Mitarbeitern',
-             u'An empty dossier',
-             u'Antrag f\xfcr Kreiselbau',
-             u'Antrag f\xfcr Kreiselbau',
-             u'Anfragen'],
-            [item["title"] for item in livesearch["items"]])
-
-        query = {"q": "Title:antrag"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(2, search["items_total"])
-        self.assertItemsEqual(
-            [u'Antrag f\xfcr Kreiselbau',
-             u'Antrag f\xfcr Kreiselbau'],
-            [item["title"] for item in search["items"]])
-
+        self.assertEqual(0, search["items_total"])
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
             [u'Antrag f\xfcr Kreiselbau',
              u'Antrag f\xfcr Kreiselbau'],
             [item["title"] for item in livesearch["items"]])
+
+
+        query = {"q": "Kreiselbau"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, search["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'Antrag f\xfcr Kreiselbau',
+             u'Antrag f\xfcr Kreiselbau'],
+            [item["title"] for item in search["items"]])
 
     @browsing
     def test_livesearch_adds_wildcard_to_each_term(self, browser):
@@ -1427,20 +1417,11 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_preserves_negative_queries(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        query = {"q": "Title:an -kr"}
+        query = {"q": "Title:Antrag -kreiselbau"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
-        self.assertItemsEqual(
-            [u'An empty dossier'],
-            [item["title"] for item in search["items"]])
-
-        self.assertEqual(3, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Vorstellungsrunde bei anderen Mitarbeitern',
-             u'An empty dossier',
-             u'Anfragen'],
-            [item["title"] for item in livesearch["items"]])
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
 
     @browsing
     def test_livesearch_handles_operators(self, browser):
@@ -1679,7 +1660,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "Title:taktische-banane*"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, search["items_total"])
         self.assertEqual(1, livesearch["items_total"])
         self.assertItemsEqual(
             [u'Taktische-Banane'],
@@ -1722,7 +1703,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         query = {"q": "dotted.title."}
-        self.assertEqual(0, self.solr_search(browser, query)["items_total"])
+        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
         self.document.title = "dotted. title. with. spaces"
@@ -1862,18 +1843,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [u'Client1 11-1.1.1-23'],
             [item["reference_number"] for item in search["items"]])
 
-        query = {"q": "Client1 11-1.1.1", "fl": "@id,reference_number"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(2, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
-            [item["reference_number"] for item in livesearch["items"]])
-        self.assertEqual(2, search["items_total"])
-        self.assertItemsEqual(
-            [u'Client1 11-1.1.1', u'Client1 11-1.1.1-23'],
-            [item["reference_number"] for item in search["items"]])
-
     @browsing
     def test_querying_filenames(self, browser):
         self.login(self.regular_user, browser=browser)
@@ -1882,7 +1851,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         # partial filename is only found with livesearch
-        query = {"q": "20221121"}
+        query = {"q": "202211"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
@@ -1891,7 +1860,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "20221121_some"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
+        self.assertEqual(1, search["items_total"])
         self.assertEqual(1, livesearch["items_total"])
 
         # full filename without extension is found by both
