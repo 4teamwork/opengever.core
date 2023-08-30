@@ -323,6 +323,17 @@
         <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -337,17 +348,39 @@
     <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" /> -->
         <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
-        <filter class="solr.FlattenGraphFilterFactory"/>
         -->
         <filter class="solr.LowerCaseFilterFactory"/>
       </analyzer>
       <analyzer type="query">
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" /> -->
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -361,7 +394,8 @@
          also applies synonyms from synonyms.txt. -->
     <fieldType name="text_en" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.KeywordRepeatFilterFactory" />
         <!-- in this example, we will only use synonyms at query time
         <filter class="solr.SynonymGraphFilterFactory" synonyms="index_synonyms.txt" ignoreCase="true" expand="false"/>
         <filter class="solr.FlattenGraphFilterFactory"/>
@@ -372,10 +406,20 @@
                 ignoreCase="true"
                 words="lang/stopwords_en.txt"
                 /> -->
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
         <filter class="solr.EnglishPossessiveFilterFactory"/>
-        <filter class="solr.KeywordRepeatFilterFactory" />
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt"/>
         <!-- Optionally you may want to use this less aggressive stemmer instead of PorterStemFilterFactory:
               <filter class="solr.EnglishMinimalStemFilterFactory"/>
@@ -384,7 +428,18 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
       </analyzer>
       <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
 <!--         <filter class="solr.StopFilterFactory"
                 ignoreCase="true"
@@ -405,9 +460,20 @@
     <!-- German -->
     <fieldType name="text_de" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
+        <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.HyphenationCompoundWordTokenFilterFactory" hyphenator="lang/hyph_de.xml" dictionary="lang/compound_stems_de.txt"/>
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" /> -->
         <filter class="solr.GermanNormalizationFilterFactory"/>
@@ -418,7 +484,18 @@
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
       </analyzer>
       <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.LowerCaseFilterFactory"/>
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_de.txt" format="snowball" /> -->
         <filter class="solr.KeywordRepeatFilterFactory" />
@@ -432,12 +509,23 @@
 
     <!-- French -->
     <fieldType name="text_fr" class="solr.TextField" positionIncrementGap="100">
-      <analyzer> 
-        <tokenizer class="solr.StandardTokenizerFactory"/>
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.KeywordRepeatFilterFactory" />
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnCaseChange="1"
+                splitOnNumerics="1"
+                stemEnglishPossessive="1"
+                generateWordParts="1"
+                generateNumberParts="1"
+                catenateWords="1"
+                catenateNumbers="1"
+                catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.FlattenGraphFilterFactory" />
         <!-- removes l', etc -->
         <filter class="solr.ElisionFilterFactory" ignoreCase="true" articles="lang/contractions_fr.txt"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.KeywordRepeatFilterFactory" />
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_fr.txt" format="snowball" /> -->
         <filter class="solr.ASCIIFoldingFilterFactory" preserveOriginal="true" />
         <filter class="solr.FrenchLightStemFilterFactory"/>

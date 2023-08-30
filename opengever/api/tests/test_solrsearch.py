@@ -1515,6 +1515,39 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch[u'items']])
 
     @browsing
+    def test_splits_on_underscores(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.document.title = "vorbereitung_103"
+        self.document.reindexObject(idxs=["Title"])
+        self.subdocument.title = "vorbereitung_104"
+        self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "nachbearbeitung_104"
+        self.subsubdocument.reindexObject(idxs=["Title"])
+        self.commit_solr()
+
+        query = {"q": "104"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'vorbereitung_104', u'nachbearbeitung_104'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": "vorbereitung"}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(2, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'vorbereitung_103', u'vorbereitung_104'],
+            [item["title"] for item in livesearch[u'items']])
+
+        query = {"q": '"vorbereitung_104"'}
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(1, livesearch["items_total"])
+        self.assertItemsEqual(
+            [u'vorbereitung_104'],
+            [item["title"] for item in livesearch[u'items']])
+
+    @browsing
     def test_livesearch_handles_brackets(self, browser):
         self.login(self.regular_user, browser=browser)
 
