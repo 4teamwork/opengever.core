@@ -765,14 +765,14 @@
           Title_de^10 Title_en^10 Title_fr^10 Title_general^10
           Description_de^5 Description_en^5 Description_fr^5 Description_general^5
           SearchableText_de SearchableText_en SearchableText_fr SearchableText_general
-          sequence_number_string^1000 metadata^5
+          sequence_number_string^1000 metadata^5 reference^1500
      </str>
      <!-- Phrase fields -->
       <str name="pf">
           Title_de^100 Title_en^100 Title_fr^100 Title_general^100
           Description_de^50 Description_en^50 Description_fr^50 Description_general^50
           SearchableText_de^20 SearchableText_en^20 SearchableText_fr^20 SearchableText_general^20
-          metadata^50
+          metadata^50 reference^1500
      </str>
       <!-- Field aliases -->
       <str name="f.title.qf">Title_de Title_en Title_fr Title_general</str>
