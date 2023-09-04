@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.6 (2023-09-04)
+---------------------
+
+Bug fixes:
+
+
+- Improve solr-indexing for words combined with underscores. [phgross] [CA-6136]
+
+
 2023.8.5 (2023-08-12)
 ---------------------
 
