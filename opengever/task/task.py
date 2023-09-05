@@ -462,6 +462,13 @@ class Task(Container, TaskReminderSupport):
     def get_responsible_actor(self):
         return Actor.lookup(self.responsible)
 
+    def is_current_user_responsible(self):
+        """Checks if the current user is the responsible itself or it belongs
+        to representive group."""
+        representatives = Actor.lookup(self.responsible).representatives()
+        current_user_id = api.user.get_current().id
+        return current_user_id in [user.userid for user in representatives]
+
     def get_issuer_actor(self):
         return Actor.lookup(self.issuer)
 

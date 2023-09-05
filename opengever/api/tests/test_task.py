@@ -324,6 +324,27 @@ class TestTaskSerialization(SolrIntegrationTestCase):
         browser.open(self.task, method="GET", headers=self.api_headers)
         self.assertFalse(browser.json['has_sequential_successor'])
 
+    @browsing
+    def test_contains_is_current_user_responsible_flag(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertTrue(browser.json['is_current_user_responsible'])
+
+        self.task.responsible = self.dossier_responsible.id
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['is_current_user_responsible'])
+
+        # team: projekt_a
+        self.task.responsible = 'team:1'
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertTrue(browser.json['is_current_user_responsible'])
+
+        # inbox group
+        self.task.responsible = 'inbox:fa'
+        browser.open(self.task, method="GET", headers=self.api_headers)
+        self.assertFalse(browser.json['is_current_user_responsible'])
+
 
 class TestTaskCommentSync(FunctionalTestCase):
 

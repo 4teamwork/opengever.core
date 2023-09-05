@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The task api serialization provides a new ``is_current_user_responsible`` flag.
 - ``oc_attach_is_mail_fileable``: New endpoint to check if OC attach mail will be fileable.
 - The ``@schema`` endpoint supports now a display mode.
 
