@@ -136,12 +136,12 @@ msgstr "URL utilisée pour lancer une vidéoconférence pour cet espace partagé
 #. Default: "Dynamic content placeholders are {page_number}, {number_of_pages} and {print_date}, as well as the image placeholders {customer_logo} and {workspace_logo}"
 #: ./opengever/workspace/workspace.py
 msgid "help_workspace_header_and_footer"
-msgstr ""
+msgstr "Les contenus contextuels dynamiques sont {page_number}, {number_of_pages} et {print_date}, ainsi que les emplacements d'image {customer_logo} et {workspace_logo}."
 
 #. Default: "Can be used in headers and footers of meeting minutes"
 #: ./opengever/workspace/workspace.py
 msgid "help_workspace_logo"
-msgstr ""
+msgstr "Peut être utilisé dans les en-têtes et les pieds de page des procès-verbaux de réunions."
 
 #. Default: "Invitation"
 #: ./opengever/workspace/participation/__init__.py
@@ -347,17 +347,17 @@ msgstr "URL de vidéoconférence"
 #. Default: "Workspace logo"
 #: ./opengever/workspace/workspace.py
 msgid "label_workspace_logo"
-msgstr ""
+msgstr "Logo teamraum"
 
 #. Default: "Meeting minutes footer"
 #: ./opengever/workspace/workspace.py
 msgid "label_workspace_meeting_template_footer"
-msgstr ""
+msgstr "Pied de page des procès-verbaux de réunion"
 
 #. Default: "Meeting minutes header"
 #: ./opengever/workspace/workspace.py
 msgid "label_workspace_meeting_template_header"
-msgstr ""
+msgstr "En-tête de page des procès-verbaux de réunion"
 
 #. Default: "Added to the workspace"
 #: ./opengever/workspace/activities.py
@@ -372,7 +372,7 @@ msgstr "Teamraüme"
 #. Default: "Invalid meeting minutes configuration, not supported placeholders \"${placeholder}\" are used."
 #: ./opengever/workspace/workspace.py
 msgid "msg_invalid_placholders_in_meeting_settings"
-msgstr ""
+msgstr "Paramètres de protocole invalides, l'emplacement non valide a été remplacé par \"${placeholder}\" ."
 
 #. Default: "At least one principal must remain admin."
 #: ./opengever/workspace/participation/browser/manage_participants.py
