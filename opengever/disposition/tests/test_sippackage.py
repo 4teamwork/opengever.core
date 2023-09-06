@@ -2,7 +2,9 @@ from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
+from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.ech0160.sippackage import SIPPackage
+from opengever.disposition.interfaces import IAppraisal
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
@@ -59,11 +61,20 @@ class TestSIPPackage(FunctionalTestCase):
         self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
 
     def test_adds_all_dossiers_documents_and_mails(self):
-        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_a = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
         create(Builder('document').with_dummy_content().within(dossier_a))
         create(Builder('mail').with_dummy_message().within(dossier_a))
-        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
-        create(Builder('dossier').within(self.folder).as_expired())
+        dossier_b = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+        create(Builder('dossier')
+               .within(self.folder)
+               .as_expired()
+               .having(archival_value=ARCHIVAL_VALUE_WORTHY))
         disposition = create(Builder('disposition')
                              .having(dossiers=[dossier_a, dossier_b])
                              .within(self.folder))
@@ -80,8 +91,42 @@ class TestSIPPackage(FunctionalTestCase):
         self.assertEquals(2, len(dossier_a_model.files))
         self.assertEquals(0, len(dossier_b_model.files))
 
+    def test_adds_only_dossiers_with_positive_appraisal(self):
+        dossier_a = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+        dossier_b = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+        disposition = create(Builder('disposition')
+                             .having(dossiers=[dossier_a, dossier_b])
+                             .within(self.folder))
+
+        package = SIPPackage(disposition)
+
+        # test both dossiers are included
+        self.assertEquals(2, len(package.dossiers))
+        self.assertItemsEqual([dossier_a, dossier_b],
+                              [dossier.obj for dossier in package.dossiers])
+        self.assertEquals(2, len(package.content_folder.folders))
+
+        IAppraisal(disposition).update(dossier=dossier_a, archive=False)
+
+        package = SIPPackage(disposition)
+
+        # test only archival worthy dossier is included
+        self.assertEquals(1, len(package.dossiers))
+        self.assertItemsEqual([dossier_b],
+                              [dossier.obj for dossier in package.dossiers])
+        self.assertEquals(1, len(package.content_folder.folders))
+
     def test_handles_documents_without_a_file_correctly(self):
-        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_a = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
         create(Builder('document').with_dummy_content().within(dossier_a))
         create(Builder('document').within(dossier_a))
         disposition = create(Builder('disposition')
@@ -95,8 +140,14 @@ class TestSIPPackage(FunctionalTestCase):
         self.assertEquals(2, len(package.dossiers[0].documents))
 
     def test_zipfile_structure(self):
-        dossier_a = create(Builder('dossier').within(self.folder).as_expired())
-        dossier_b = create(Builder('dossier').within(self.folder).as_expired())
+        dossier_a = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+        dossier_b = create(Builder('dossier')
+                           .within(self.folder)
+                           .as_expired()
+                           .having(archival_value=ARCHIVAL_VALUE_WORTHY))
         create(Builder('document').with_dummy_content().within(dossier_a))
         create(Builder('document')
                .with_dummy_content()
