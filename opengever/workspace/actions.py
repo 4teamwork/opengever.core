@@ -23,6 +23,9 @@ class WorkspaceFolderListingActions(BaseListingActions):
     def is_move_items_available(self):
         return True
 
+    def is_zip_selected_available(self):
+        return True
+
     def is_trash_content_available(self):
         return api.user.has_permission('opengever.trash: Trash content', obj=self.context)
 
