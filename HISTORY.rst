@@ -10,6 +10,45 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.12.0 (2023-09-08)
+----------------------
+
+New features:
+
+
+- Introduce header and footer configuration for meeting minutes. [phgross] [CA-1971]
+- Add support for manual journal entries in OGG bundles. [njohner] [CA-5758]
+- Add bundle import support for private roots. [lgraf] [CA-6039-2]
+- Bundle content creation: Add support for setting 'id' of created objects. [lgraf] [CA-6039-3]
+- Add bundle import support for templatefolders. [lgraf] [CA-6039-4]
+- Add bundle import support for inboxes and inbox containers. [lgraf] [CA-6039-5]
+- Policyless bundle import: Add support for creating initial content. [lgraf] [CA-6039-6]
+- Getting @linked-workspaces on subdossier returns workspaces linked to main dossier. [njohner] [CA-6104]
+
+
+Bug fixes:
+
+
+- Fix title updating of sub repositoryfolder when prefix changes. [phgross] [CA-5949]
+- Allow copying dossiers containing locked excerpt documents. [njohner] [CA-5991]
+- Show lifecycle fields in schema display mode. [phgross] [CA-6037]
+- Policyless deployments: Fix link to bundle import view. [lgraf] [CA-6039-1]
+- Do not display create_disposition action on subdossier listings. [njohner] [CA-6061]
+- Fix extraction of attachments from mails in closed tasks. [njohner] [CA-6128]
+- Improve solr-indexing for words combined with underscores. [phgross] [CA-6136]
+
+
+Other changes:
+
+
+- Add gever-ui docker-compose file to policytemplates. [njohner] [CA-5602]
+- Add endpoint to check if OC attach mail can be filed. [lgraf] [CA-5662]
+- Read OGDS sync timestamp from OGDS instead of ZODB, as the new OGDS sync service only sets it in OGDS. [buchi] [CA-5766]
+- Add disposition sequence number to SIP folder name. [njohner] [CA-5857]
+- Enable GEVER UI registry feature by default. [lgraf] [CA-6039]
+- Add extract_attachments context action for mails. [njohner] [CA-6128]
+
+
 2023.11.0 (2023-06-29)
 ----------------------
 
