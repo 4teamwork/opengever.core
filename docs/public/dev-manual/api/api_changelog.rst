@@ -3,7 +3,16 @@
 API Changelog
 =============
 
-2023.12.0 (unreleased)
+2023.13.0 (unreleased)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+Other Changes
+^^^^^^^^^^^^^
+
+2023.12.0 (2023-09-08)
 ----------------------
 
 Breaking Changes
