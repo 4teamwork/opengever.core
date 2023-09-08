@@ -17,7 +17,7 @@ class TestWorkspaceFolderListingActions(IntegrationTestCase):
 
     def test_workspace_folder_actions_for_workspace_and_workspace_folder(self):
         self.login(self.workspace_member)
-        expected_actions = [u'copy_items', u'move_items', u'trash_content']
+        expected_actions = [u'copy_items', u'move_items', u'zip_selected', u'trash_content']
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
