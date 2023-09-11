@@ -52,6 +52,7 @@ class SerializeTaskToJson(GeverSerializeFolderToJson):
         result[u'has_remote_predecessor'] = model.has_remote_predecessor
         result[u'has_sequential_successor'] = model.has_sequential_successor
         result[u'responsible_admin_unit_url'] = model.get_assigned_org_unit().admin_unit.public_url
+        result[u'is_current_user_responsible'] = self.context.is_current_user_responsible()
         return result
 
     def _get_containing_dossier_summary(self):
