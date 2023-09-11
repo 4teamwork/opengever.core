@@ -253,6 +253,10 @@ class Disposition(Container):
     def get_dossiers(self):
         return [relation.to_object for relation in self.dossiers]
 
+    def get_dossiers_with_positive_appraisal(self):
+        appraisal = IAppraisal(self)
+        return [dossier for dossier in self.get_dossiers() if appraisal.get(dossier)]
+
     def get_history(self):
         history = [DispositionHistory.get(response)
                    for response in IResponseContainer(self)]

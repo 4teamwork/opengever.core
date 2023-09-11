@@ -32,7 +32,8 @@ class SIPPackage(object):
     def __init__(self, disposition):
         self.xsd = self.create_xsd()
         self.disposition = disposition
-        self.dossiers = self.create_dossiers(self.disposition.get_dossiers())
+        self.dossiers = self.create_dossiers(
+            self.disposition.get_dossiers_with_positive_appraisal())
         self.repo = self.create_repository()
         self.content_folder = self.create_content_folder()
         self.ablieferung = self.create_ablieferung()
