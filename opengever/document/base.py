@@ -10,6 +10,7 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.utils import get_main_dossier
 from opengever.inbox.inbox import IInbox
+from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IBaseProposal
 from opengever.meeting.proposal import ISubmittedProposal
@@ -20,6 +21,7 @@ from opengever.workspace.interfaces import IWorkspaceFolder
 from plone import api
 from plone.dexterity.content import Item
 from plone.locking.interfaces import ILockable
+from plone.restapi.services.locking.locking import lock_info
 from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from Products.MimetypesRegistry.interfaces import IMimetype
@@ -278,6 +280,10 @@ class BaseDocumentMixin(object):
 
     def is_locked(self):
         return False
+
+    def is_locked_by_copy_to_workspace(self):
+        info = lock_info(self)
+        return info and info.get('name') == LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 
     def is_archival_file_conversion_skipped(self):
         """The archival file conversion can be skipped for some mimetypes

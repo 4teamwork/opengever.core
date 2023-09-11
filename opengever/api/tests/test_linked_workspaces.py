@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import HTTPServerError
+from mock import patch
 from opengever.base.command import CreateEmailCommand
 from opengever.base.oguid import Oguid
 from opengever.document.behaviors.metadata import IDocumentMetadata
@@ -904,21 +905,26 @@ class TestCopyDocumentToWorkspacePost(FunctionalWorkspaceClientTestCase):
         lockable = ILockable(document)
         self.assertFalse(lockable.locked())
 
-        with self.workspace_client_env():
-            manager = ILinkedWorkspaces(self.dossier)
-            manager.storage.add(self.workspace.UID())
-            transaction.commit()
+        # Reindex the catalog through the workspace-client will end up in a conflict
+        # error in integration tests.
+        with patch('opengever.locking.lockable.GeverLockable.reindex') as mock_reindex:
+            mock_reindex.return_value = True
 
-            browser.login()
-            fix_publisher_test_bug(browser, document)
-            with self.observe_children(self.workspace) as children:
-                browser.open(
-                    self.dossier.absolute_url() + '/@copy-document-to-workspace',
-                    data=json.dumps(payload),
-                    method='POST',
-                    headers={'Accept': 'application/json',
-                             'Content-Type': 'application/json'},
-                )
+            with self.workspace_client_env():
+                manager = ILinkedWorkspaces(self.dossier)
+                manager.storage.add(self.workspace.UID())
+                transaction.commit()
+
+                browser.login()
+                fix_publisher_test_bug(browser, document)
+                with self.observe_children(self.workspace) as children:
+                    browser.open(
+                        self.dossier.absolute_url() + '/@copy-document-to-workspace',
+                        data=json.dumps(payload),
+                        method='POST',
+                        headers={'Accept': 'application/json',
+                                 'Content-Type': 'application/json'},
+                    )
 
         # XXX: This is incorrect, only one document should be added. This
         # is a testing issue (doesn't happen in production) that was never

@@ -10,8 +10,9 @@ from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.locking.lock import MEETING_SUBMITTED_LOCK
 from opengever.locking.model import Lock
-from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2brain
+from opengever.testing import solr_data_for
+from opengever.testing import SolrIntegrationTestCase
 from opengever.trash.trash import ITrashed
 from plone.app.testing import TEST_USER_ID
 from plone.locking.interfaces import ILockable
@@ -84,7 +85,7 @@ class TestUnitLocks(TestCase):
         transaction.abort()
 
 
-class TestDocumentsLockedWithMeetingSubmittedLock(IntegrationTestCase, MoveItemsHelper):
+class TestDocumentsLockedWithMeetingSubmittedLock(SolrIntegrationTestCase, MoveItemsHelper):
 
     lock_type = MEETING_SUBMITTED_LOCK
 
@@ -278,4 +279,59 @@ class TestDocumentsLockedWithMeetingExcerptLock(TestDocumentsLockedWithMeetingSu
 
 class TestDocumentsLockedWithCopiedToWorkspaceLock(TestDocumentsLockedWithMeetingSubmittedLock):
 
+    features = ('workspace_client', )
+
     lock_type = COPIED_TO_WORKSPACE_LOCK
+
+    def test_indexes_the_is_locked_by_copy_to_workspace_state(self):
+        self.login(self.regular_user)
+
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).lock(self.lock_type)
+
+        self.commit_solr()
+        self.assertTrue(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).unlock(self.lock_type)
+        self.commit_solr()
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+    def test_indexes_the_is_locked_by_copy_to_workspace_state_when_clearing_all_locks(self):
+        self.login(self.regular_user)
+
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).lock(self.lock_type)
+
+        self.commit_solr()
+        self.assertTrue(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).clear_locks()
+        self.commit_solr()
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+    def test_do_not_index_the_is_locked_by_copy_to_workspace_state_for_other_locktypes(self):
+        self.login(self.regular_user)
+
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).lock()
+
+        self.commit_solr()
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).unlock()
+        self.commit_solr()
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+    def test_do_not_index_the_is_locked_by_copy_to_workspace_state_if_workspace_client_is_deactivated(self):
+        self.deactivate_feature('workspace_client')
+        self.login(self.regular_user)
+
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))
+
+        ILockable(self.document).lock(self.lock_type)
+
+        self.commit_solr()
+        self.assertFalse(solr_data_for(self.document, 'is_locked_by_copy_to_workspace'))

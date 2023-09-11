@@ -17,6 +17,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.document.interfaces import ITemplateDocumentMarker
+from opengever.workspaceclient import is_workspace_client_feature_enabled
 from plone import api
 from plone.indexer import indexer
 from Products.CMFDiffTool.utils import safe_utf8
@@ -271,3 +272,11 @@ def related_items(obj):
     brains = [unrestrictedPathToCatalogBrain(rel.to_path)
               for rel in IRelatedDocuments(obj).relatedItems if not rel.isBroken()]
     return [brain.UID for brain in brains if brain]
+
+
+@indexer(IDocumentSchema)
+def is_locked_by_copy_to_workspace(obj):
+    if not is_workspace_client_feature_enabled():
+        return False
+
+    return obj.is_locked_by_copy_to_workspace()

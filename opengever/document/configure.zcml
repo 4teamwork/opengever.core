@@ -379,6 +379,11 @@
       name="related_items"
       />
 
+  <adapter
+      factory=".indexers.is_locked_by_copy_to_workspace"
+      name="is_locked_by_copy_to_workspace"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

@@ -1,14 +1,35 @@
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
+from opengever.document.behaviors import IBaseDocument
 from opengever.locking.interfaces import ISQLLockable
 from opengever.locking.model import Lock
 from plone import api
 from plone.locking.interfaces import INonStealableLock
 from plone.locking.interfaces import IRefreshableLockable
 from plone.locking.interfaces import STEALABLE_LOCK
+from plone.locking.lockable import TTWLockable
 from sqlalchemy import inspect
 from zope.component import adapts
 from zope.interface import implements
+
+
+class GeverLockable(TTWLockable):
+    def lock(self, *args, **kwargs):
+        super(GeverLockable, self).lock(*args, **kwargs)
+        self.reindex()
+
+    def unlock(self, *args, **kwargs):
+        super(GeverLockable, self).unlock(*args, **kwargs)
+        self.reindex()
+
+    def clear_locks(self):
+        super(GeverLockable, self).clear_locks()
+        self.reindex()
+
+    def reindex(self):
+        if IBaseDocument.providedBy(self.context):
+            self.context.reindexObject(
+                idxs=['is_locked_by_copy_to_workspace', 'UID'])
 
 
 class SQLLockable(object):
