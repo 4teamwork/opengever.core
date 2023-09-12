@@ -4,8 +4,10 @@ from ftw.testbrowser import browsing
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import MockDossierTypes
+from plone.locking.interfaces import ILockable
 from plone.uuid.interfaces import IUUID
 import json
 
@@ -104,6 +106,23 @@ class TestFavoritesGet(IntegrationTestCase):
              u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
             browser.json)
+
+    @browsing
+    def test_includes_is_locked_by_copy_to_workspace_if_workspace_client_feature_is_enabled(self, browser):
+        self.activate_feature('workspace_client')
+        self.login(self.regular_user, browser=browser)
+        ILockable(self.document).lock(COPIED_TO_WORKSPACE_LOCK)
+
+        create(Builder('favorite')
+               .for_user(self.regular_user)
+               .for_object(self.document))
+
+        url = '{}/@favorites/{}/1'.format(
+            self.portal.absolute_url(), self.regular_user.getId())
+        browser.open(url, view="?resolve=true", method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json.get('is_locked_by_copy_to_workspace'))
 
     @browsing
     def test_raises_when_userid_is_missing(self, browser):
