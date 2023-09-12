@@ -13,6 +13,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
+from opengever.workspaceclient import is_workspace_client_feature_enabled
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IExpandableElement
@@ -61,6 +62,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         if is_meeting_feature_enabled():
             self.extend_with_meeting_metadata(result)
+
+        if is_workspace_client_feature_enabled():
+            result['is_locked_by_copy_to_workspace'] = obj.is_locked_by_copy_to_workspace()
 
         additional_metadata = {
             'checked_out': checked_out_by,
