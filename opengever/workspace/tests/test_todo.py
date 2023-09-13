@@ -210,14 +210,14 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.login(self.workspace_member, browser)
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEqual(0, len(responses))
+        self.assertEqual(1, len(responses))
 
         browser.open(self.todo, method='PATCH',
                      headers=self.api_headers,
                      data=json.dumps({'title': u'\xc4 new login'}))
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEqual(1, len(responses))
+        self.assertEqual(2, len(responses))
 
         last_response = responses[-1]
         self.assertEqual('', last_response.text)

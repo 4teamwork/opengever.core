@@ -1,6 +1,10 @@
 from ftw.upgrade.interfaces import IDuringUpgrade
 from opengever.base.placeful_workflow import assign_placeful_workflow
 from opengever.base.response import COMMENT_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
+from opengever.base.response import OBJECT_CREATED_RESPONSE_TYPE
+from opengever.base.response import Response
+from opengever.base.response import TRANSITION_RESPONSE_TYPE
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import ToDoAssignedActivity
@@ -12,6 +16,7 @@ from opengever.workspace.indexers import INDEXED_IN_MEETING_SEARCHABLE_TEXT
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.todo import COMPLETE_TODO_TRANSITION
 from opengever.workspace.workspace import IWorkspaceSchema
+from persistent.dict import PersistentDict
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 from zope.container.interfaces import IContainerModifiedEvent
 from zope.globalrequest import getRequest
@@ -72,6 +77,8 @@ def todo_added(todo, event):
     if todo.responsible is not None:
         ToDoAssignedActivity(todo, getRequest()).record()
 
+    IResponseContainer(todo).add(Response(OBJECT_CREATED_RESPONSE_TYPE))
+
 
 def todo_review_state_changed(todo, event):
     if not IDuringUpgrade.providedBy(getRequest()):
@@ -87,6 +94,19 @@ def todo_review_state_changed(todo, event):
             ToDoReopenedActivity(todo, getRequest()).record()
 
     todo.reindexObject(idxs=['is_completed'])
+
+
+def todo_handle_transition(todo, event):
+    if not event.status.get('action'):
+        return  # Initial transition.
+
+    response = Response(TRANSITION_RESPONSE_TYPE)
+    response.additional_data = PersistentDict({
+        'new_state': event.new_state.id,
+        'old_state': event.old_state.id,
+        'action': event.status.get('action'),
+    })
+    IResponseContainer(todo).add(response)
 
 
 def todo_modified(todo, event):

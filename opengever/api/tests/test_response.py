@@ -1,10 +1,14 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.response import COMMENT_REMOVED_RESPONSE_TYPE
 from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
+from opengever.base.response import OBJECT_CREATED_RESPONSE_TYPE
 from opengever.base.response import Response
+from opengever.base.response import TRANSITION_RESPONSE_TYPE
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -17,7 +21,7 @@ class TestResponseGETSerialization(IntegrationTestCase):
 
         # Todo
         browser.open(self.todo, method="GET", headers=self.api_headers)
-        self.assertEqual([], browser.json['responses'])
+        self.assertEqual(1, len(browser.json['responses']))
 
         # Dossier
         browser.open(self.dossier, method="GET", headers=self.api_headers)
@@ -46,7 +50,19 @@ class TestResponseGETSerialization(IntegrationTestCase):
 
         browser.open(self.todo, method="GET", headers=self.api_headers)
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
+            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1472660373000000',
+              u'additional_data': {},
+              u'changes': [],
+              u'created': u'2016-08-31T18:19:33',
+              u'creator': {u'title': u'Fr\xf6hlich G\xfcnther',
+                           u'token': u'gunther.frohlich'},
+              u'modified': None,
+              u'modifier': None,
+              u'response_id': 1472660373000000,
+              u'response_type': u'object_created',
+              u'text': u''
+              },
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1481272800000000',
               u'changes': [],
               u'created': u'2016-12-09T09:40:00',
               u'creator': {
@@ -54,7 +70,7 @@ class TestResponseGETSerialization(IntegrationTestCase):
                   u'token': u'beatrice.schrodinger'},
               u'modified': None,
               u'modifier': None,
-              u'additional_data':{},
+              u'additional_data': {},
               u'response_id': 1481272800000000,
               u'response_type': u'default',
               u'text': u'Ich bin hier anderer Meinung!',
@@ -131,7 +147,7 @@ class TestResponsePost(IntegrationTestCase):
     def test_adding_a_response_sucessful(self, browser):
         self.login(self.workspace_member, browser=browser)
 
-        self.assertEquals([], IResponseContainer(self.todo).list())
+        self.assertEquals(1, len(IResponseContainer(self.todo).list()))
 
         with freeze(datetime(2016, 12, 9, 9, 40)):
             url = '{}/@responses'.format(self.todo.absolute_url())
@@ -139,8 +155,8 @@ class TestResponsePost(IntegrationTestCase):
                          data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEquals(1, len(responses))
-        self.assertEquals(u'Angebot \xfcberpr\xfcft', responses[0].text)
+        self.assertEquals(2, len(responses))
+        self.assertEquals(u'Angebot \xfcberpr\xfcft', responses[-1].text)
 
         self.assertEquals(201, browser.status_code)
         self.assertEquals(
@@ -231,10 +247,10 @@ class TestResponsePatch(IntegrationTestCase):
                          data=json.dumps({'text': u'Angebot \xfcberpr\xfcft'}))
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEqual(1, len(responses))
-        self.assertEqual(u'Angebot \xfcberpr\xfcft', responses[0].text)
-        self.assertEqual(self.workspace_member.getId(), responses[0].modifier)
-        self.assertEqual(datetime(2018, 10, 10, 9, 15), responses[0].modified)
+        self.assertEqual(2, len(responses))
+        self.assertEqual(u'Angebot \xfcberpr\xfcft', responses[-1].text)
+        self.assertEqual(self.workspace_member.getId(), responses[-1].modifier)
+        self.assertEqual(datetime(2018, 10, 10, 9, 15), responses[-1].modified)
 
         self.assertEquals(204, browser.status_code)
 
@@ -254,7 +270,7 @@ class TestResponsePatch(IntegrationTestCase):
         self.assertEquals(
             {u'message': u"Property 'text' is required", u'type': u'BadRequest'},
             browser.json)
-        self.assertEquals('Test', IResponseContainer(self.todo).list()[0].text)
+        self.assertEquals('Test', IResponseContainer(self.todo).list()[-1].text)
 
     @browsing
     def test_cannot_edit_response_that_is_not_of_type_comment(self, browser):
@@ -292,22 +308,22 @@ class TestResponseDelete(IntegrationTestCase):
     @browsing
     def test_delete_a_response_sucessful(self, browser):
         self.login(self.workspace_member, browser=browser)
-        with freeze(datetime(2016, 12, 9, 9, 40)):
+        with freeze(datetime(2023, 12, 9, 9, 40)):
             response = Response()
             response.text = 'Test'
             response.response_type = COMMENT_RESPONSE_TYPE
             IResponseContainer(self.todo).add(response)
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEqual(1, len(responses))
-        self.assertEqual(COMMENT_RESPONSE_TYPE, responses[0].response_type)
+        self.assertEqual(2, len(responses))
+        self.assertEqual(COMMENT_RESPONSE_TYPE, responses[-1].response_type)
 
-        url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
+        url = '{}/@responses/{}'.format(self.todo.absolute_url(), responses[-1].response_id)
         browser.open(url, method="DELETE", headers=self.api_headers)
 
         responses = IResponseContainer(self.todo).list()
-        self.assertEqual(1, len(responses))
-        self.assertEqual(COMMENT_REMOVED_RESPONSE_TYPE, responses[0].response_type)
+        self.assertEqual(2, len(responses))
+        self.assertEqual(COMMENT_REMOVED_RESPONSE_TYPE, responses[-1].response_type)
 
     @browsing
     def test_cannot_delete_response_that_is_not_of_type_comment(self, browser):
@@ -337,22 +353,98 @@ class TestResponseDelete(IntegrationTestCase):
             response.response_type = COMMENT_RESPONSE_TYPE
             IResponseContainer(self.todo).add(response)
 
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(2, len(browser.json['responses']))
         url = '{}/@responses/1481272800000000'.format(self.todo.absolute_url())
         with freeze(datetime(2023, 6, 1, 8, 12)):
             browser.open(url, method="DELETE", headers=self.api_headers)
 
         browser.open(self.todo, method="GET", headers=self.api_headers)
-        self.assertEquals([
-            {
-                u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599920000000',
-                u'changes': [],
-                u'created': u'2023-06-01T08:12:00',
-                u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
-                             u'token': u'beatrice.schrodinger'},
-                u'modified': None,
-                u'modifier': None,
-                u'additional_data': {u'deleted_response_creation_date': u'2016-12-09T09:40:00'},
-                u'response_id': 1685599920000000,
-                u'response_type': u'comment_removed',
-                u'text': u''}
-        ], browser.json['responses'])
+        self.assertEquals(2, len(browser.json['responses']))
+        self.assertEquals({
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599920000000',
+            u'changes': [],
+            u'created': u'2023-06-01T08:12:00',
+            u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                         u'token': u'beatrice.schrodinger'},
+            u'modified': None,
+            u'modifier': None,
+            u'additional_data': {u'deleted_response_creation_date': u'2016-12-09T09:40:00'},
+            u'response_id': 1685599920000000,
+            u'response_type': u'comment_removed',
+            u'text': u''
+        }, browser.json['responses'][-1])
+
+    @browsing
+    def test_add_an_object_creates_a_new_response_about_the_added_object(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        todo = create(Builder('todo')
+                      .titled(u'Fix user login')
+                      .within(self.workspace))
+
+        browser.open(todo, method="GET", headers=self.api_headers)
+        self.assertEquals(1, len(browser.json['responses']))
+        self.assertEquals(OBJECT_CREATED_RESPONSE_TYPE, browser.json['responses'][0].get('response_type'))
+
+    @browsing
+    def test_close_a_todo_creates_a_new_response(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(1, len(browser.json['responses']))  # created response only
+
+        with freeze(datetime(2023, 6, 1, 8, 12)):
+            self.todo.toggle()
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+
+        self.assertEquals(2, len(browser.json['responses']))
+
+        self.assertEquals({
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599920000000',
+            u'additional_data': {u'action': u'opengever_workspace_todo--TRANSITION--complete--active_completed',
+                                 u'new_state': u'opengever_workspace_todo--STATUS--completed',
+                                 u'old_state': u'opengever_workspace_todo--STATUS--active'},
+            u'changes': [],
+            u'created': u'2023-06-01T08:12:00',
+            u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                         u'token': u'beatrice.schrodinger'},
+            u'modified': None,
+            u'modifier': None,
+            u'response_id': 1685599920000000,
+            u'response_type': TRANSITION_RESPONSE_TYPE,
+            u'text': u''},
+            browser.json['responses'][-1])
+
+    @browsing
+    def test_reopen_a_todo_creates_a_new_response(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(1, len(browser.json['responses']))  # created response only
+
+        with freeze(datetime(2023, 6, 1, 8, 12)):
+            self.todo.toggle()  # close
+
+        with freeze(datetime(2023, 6, 1, 8, 13)):
+            self.todo.toggle()  # reopen
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(3, len(browser.json['responses']))
+
+        self.assertEquals({
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599980000000',
+            u'additional_data': {u'action': u'opengever_workspace_todo--TRANSITION--open--completed_active',
+                                 u'new_state': u'opengever_workspace_todo--STATUS--active',
+                                 u'old_state': u'opengever_workspace_todo--STATUS--completed'},
+            u'changes': [],
+            u'created': u'2023-06-01T08:13:00',
+            u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                         u'token': u'beatrice.schrodinger'},
+            u'modified': None,
+            u'modifier': None,
+            u'response_id': 1685599980000000,
+            u'response_type': TRANSITION_RESPONSE_TYPE,
+            u'text': u''},
+            browser.json['responses'][-1])

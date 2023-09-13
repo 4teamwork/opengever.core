@@ -30,40 +30,37 @@ class TestResponseContainer(IntegrationTestCase):
         self.login(self.workspace_member)
 
         annotations = IAnnotations(self.todo)
-        self.assertNotIn(ResponseContainer.ANNOTATION_KEY, annotations.keys())
 
         response = Response()
         container = IResponseContainer(self.todo)
         container.add(response)
 
         storage = annotations[ResponseContainer.ANNOTATION_KEY]
-        self.assertEqual([response], list(storage.values()))
+        self.assertEqual(response, list(storage.values())[-1])
 
     def test_add_expects_response_objects(self):
         self.login(self.workspace_member)
 
-        annotations = IAnnotations(self.todo)
-        self.assertNotIn(ResponseContainer.ANNOTATION_KEY, annotations.keys())
+        self.assertEqual(1, len(IResponseContainer(self.todo).list()))
 
         container = IResponseContainer(self.todo)
         with self.assertRaises(ValueError):
             container.add(object())
 
-        storage = annotations[ResponseContainer.ANNOTATION_KEY]
-        self.assertEqual([], list(storage.keys()))
+        self.assertEqual(1, len(IResponseContainer(self.todo).list()))
 
-    def test_list_returns_response_in_add_order(self):
+    def test_list_returns_response_in_add_order__(self):
         self.login(self.workspace_member)
-        IResponseContainer(self.todo).list()
 
         container = IResponseContainer(self.todo)
 
         responses = [Response(), Response(), Response()]
         [container.add(response) for response in responses]
-        self.assertEqual(responses, container.list())
+        self.assertEqual(responses, container.list()[1:])
 
     def test_list_does_not_initalize_the_annotation_list(self):
         self.login(self.workspace_member)
+        del IAnnotations(self.todo)[ResponseContainer.ANNOTATION_KEY]
         self.assertEqual([], IResponseContainer(self.todo).list())
         self.assertNotIn(
             ResponseContainer.ANNOTATION_KEY, IAnnotations(self.todo).keys())
@@ -153,13 +150,15 @@ class TestAutoResponseChangesTracker(IntegrationTestCase):
                     'field_title': '',
                 }
             ],
-            IResponseContainer(self.todo).list()[0].changes)
+            IResponseContainer(self.todo).list()[-1].changes)
 
     def test_do_not_create_a_response_object_if_there_are_no_changes(self):
         self.login(self.workspace_member)
+
+        self.assertEqual(1, len(IResponseContainer(self.todo).list()))
 
         changes_tracker = AutoResponseChangesTracker(self.todo, self.request)
         with changes_tracker.track_changes(['title']):
             pass
 
-        self.assertEqual([], IResponseContainer(self.todo).list())
+        self.assertEqual(1, len(IResponseContainer(self.todo).list()))
