@@ -32,6 +32,7 @@ OTHER_ALLOWED_FIELDS = set([
     'UID',
     'watchers',
     'related_items',
+    'is_locked_by_copy_to_workspace',
 ])
 
 ALLOWED_ORDER_GROUP_FIELDS = set([

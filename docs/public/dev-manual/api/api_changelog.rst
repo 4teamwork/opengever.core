@@ -11,6 +11,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- @favorites: return ``is_locked_by_copy_to_workspace`` for resolved documents if the ``workspace_client`` feature is activated.
+- Exposes the ``is_locked_by_copy_to_workspace`` attribute for document serializers if the ``workspace_client`` feature is activated.
+- ``@solrsearch`` and ``@listing``: ``is_locked_by_copy_to_workspace`` is provided for documents if the ``workspace_client`` feature is activated.
 
 2023.12.0 (2023-09-08)
 ----------------------

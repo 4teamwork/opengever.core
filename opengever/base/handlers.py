@@ -36,7 +36,7 @@ from zope.lifecycleevent.interfaces import IObjectMovedEvent
 from zope.sqlalchemy.datamanager import mark_changed
 
 
-reindex_after_copy = ['created']
+reindex_after_copy = ['created', 'is_locked_by_copy_to_workspace']
 
 CONTAINERS_SUPPORTING_OBJ_POSITION_IN_PARENT = (IWorkspace,
                                                 IToDoList,

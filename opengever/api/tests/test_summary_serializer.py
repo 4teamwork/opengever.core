@@ -1,8 +1,10 @@
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import MockDossierTypes
+from plone.locking.interfaces import ILockable
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from zope.component import getMultiAdapter
 
@@ -52,6 +54,18 @@ class TestGeverSummarySerializer(IntegrationTestCase):
             serilized_doc)
 
     @browsing
+    def test_document_summary_includes_is_locked_by_copy_to_workspace_as_metadata_fields(self, browser):
+        self.activate_feature('workspace_client')
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock(COPIED_TO_WORKSPACE_LOCK)
+
+        serializer = getMultiAdapter(
+            (self.document, self.request),
+            ISerializeToJsonSummary)
+        serialized_doc = serializer()
+        self.assertTrue(serialized_doc.get('is_locked_by_copy_to_workspace'))
+
+    @browsing
     def test_mail_summary_supports_filename_filesize_and_mimetype_as_metadata_fields(self, browser):
         self.login(self.regular_user, browser)
 
@@ -92,6 +106,18 @@ class TestGeverSummarySerializer(IntegrationTestCase):
              'review_state': u'mail-state-active',
              'title': u'Die B\xfcrgschaft'},
             serilized_doc)
+
+    @browsing
+    def test_mail_summary_includes_is_locked_by_copy_to_workspace_as_metadata_fields(self, browser):
+        self.activate_feature('workspace_client')
+        self.login(self.regular_user, browser)
+        ILockable(self.mail_eml).lock(COPIED_TO_WORKSPACE_LOCK)
+
+        serializer = getMultiAdapter(
+            (self.mail_eml, self.request),
+            ISerializeToJsonSummary)
+        serialized_doc = serializer()
+        self.assertTrue(serialized_doc.get('is_locked_by_copy_to_workspace'))
 
     @browsing
     def test_dossier_summary_includes_dossier_type(self, browser):

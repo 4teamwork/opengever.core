@@ -175,6 +175,7 @@
   <includeOverrides package="opengever.mail" file="overrides.zcml" />
   <includeOverrides package="opengever.readonly" file="overrides.zcml" />
   <includeOverrides package="opengever.setup" file="overrides.zcml" />
+  <includeOverrides package="opengever.locking" file="overrides.zcml" />
   <includeOverrides package="plone.app.dexterity" file="overrides.zcml" />
   <includeOverrides package="ftw.lawgiver" file="overrides.zcml" />
 

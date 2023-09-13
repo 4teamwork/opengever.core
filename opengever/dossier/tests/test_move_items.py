@@ -443,6 +443,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'filesize',
             u'related_items',
             u'Subject',
+            u'is_locked_by_copy_to_workspace',
         ]
 
         unchanged_solrdata += self.common_unchanged_solrdata
@@ -672,6 +673,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'filename',
             u'filesize',
             u'receipt_date',
+            u'is_locked_by_copy_to_workspace',
         ]
 
         unchanged_solrdata += self.common_unchanged_solrdata

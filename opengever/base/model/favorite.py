@@ -21,6 +21,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.workspaceclient import is_workspace_client_feature_enabled
 from plone import api
 from plone.uuid.interfaces import IUUID
 from Products.CMFCore.WorkflowCore import WorkflowException
@@ -158,6 +159,9 @@ class Favorite(Base):
 
         if resolved_obj and IDossierMarker.providedBy(resolved_obj):
             result['dossier_type'] = IDossier(resolved_obj).dossier_type
+
+        if is_workspace_client_feature_enabled() and IBaseDocument.providedBy(resolved_obj):
+            result['is_locked_by_copy_to_workspace'] = resolved_obj.is_locked_by_copy_to_workspace()
 
         return result
 

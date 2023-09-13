@@ -1,0 +1,24 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="opengever.locking">
+
+  <include package="z3c.unconfigure" file="meta.zcml" />
+
+  <unconfigure>
+
+    <adapter
+        for="plone.locking.interfaces.ITTWLockable"
+        factory="plone.locking.lockable.TTWLockable"
+        />
+
+  </unconfigure>
+
+  <adapter
+      factory=".lockable.GeverLockable"
+      for="plone.locking.interfaces.ITTWLockable"
+      />
+
+</configure>

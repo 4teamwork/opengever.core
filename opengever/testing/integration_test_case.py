@@ -88,7 +88,7 @@ FEATURE_FLAGS = {
     'repositoryfolder-tasks-tab': 'opengever.repository.interfaces.IRepositoryFolderRecords.show_tasks_tab',
     'tasktemplatefolder_nesting': 'opengever.tasktemplates.interfaces.ITaskTemplateSettings.is_tasktemplatefolder_nesting_enabled',  # noqa
     'workspace': 'opengever.workspace.interfaces.IWorkspaceSettings.is_feature_enabled',
-    'workspace_client': 'opengever.workspace.interfaces.IWorkspaceClientSettings.is_feature_enabled',
+    'workspace_client': 'opengever.workspaceclient.interfaces.IWorkspaceClientSettings.is_feature_enabled',
     'workspace-meeting': 'opengever.workspace.interfaces.IWorkspaceMeetingSettings.is_feature_enabled',
     'workspace-todo': 'opengever.workspace.interfaces.IToDoSettings.is_feature_enabled',
     'favorites': 'opengever.base.interfaces.IFavoritesSettings.is_feature_enabled',

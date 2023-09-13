@@ -3,10 +3,12 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
+from plone.locking.interfaces import ILockable
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
@@ -245,6 +247,15 @@ class TestDocumentSerializer(IntegrationTestCase):
             browser.json.get(u'oguid'))
 
     @browsing
+    def test_document_serialization_contains_is_locked_by_copy_to_workspace(self, browser):
+        self.activate_feature('workspace_client')
+        self.login(self.regular_user, browser)
+        ILockable(self.document).lock(COPIED_TO_WORKSPACE_LOCK)
+        browser.open(self.document, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json.get('is_locked_by_copy_to_workspace'))
+
+    @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.mail_eml, headers=self.api_headers)
@@ -279,6 +290,15 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(
             u'plone:%s' % int_id,
             browser.json.get(u'oguid'))
+
+    @browsing
+    def testmail_serialization_contains_is_locked_by_copy_to_workspace(self, browser):
+        self.activate_feature('workspace_client')
+        self.login(self.regular_user, browser)
+        ILockable(self.mail_eml).lock(COPIED_TO_WORKSPACE_LOCK)
+        browser.open(self.mail_eml, headers=self.api_headers)
+        self.assertEqual(200, browser.status_code)
+        self.assertTrue(browser.json.get('is_locked_by_copy_to_workspace'))
 
 
 class TestInboxSerializer(IntegrationTestCase):

@@ -26,6 +26,7 @@ from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
 from opengever.private.folder import IPrivateFolder
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.workspaceclient import is_workspace_client_feature_enabled
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from plone.dexterity.interfaces import IDexterityContent
@@ -96,6 +97,12 @@ def extend_with_is_subdossier(result, context, request):
 def extend_with_dossier_type(result, context, request):
     if IDossierMarker.providedBy(context):
         result['dossier_type'] = IDossier(context).dossier_type
+
+
+def extend_with_is_locked_by_copy_to_workspace(result, context, request):
+    if is_workspace_client_feature_enabled():
+        result['is_locked_by_copy_to_workspace'] = \
+            context.is_locked_by_copy_to_workspace()
 
 
 def extend_with_groupurl(result, context, request):
@@ -462,6 +469,7 @@ class GeverSerializeToJsonSummary(DefaultJSONSummarySerializer):
         if IBaseDocument.providedBy(self.context):
             summary['checked_out'] = self.context.checked_out_by()
             summary['file_extension'] = self.context.get_file_extension()
+            extend_with_is_locked_by_copy_to_workspace(summary, self.context, self.request)
 
         return summary
 
