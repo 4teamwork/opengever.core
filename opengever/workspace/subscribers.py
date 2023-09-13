@@ -1,6 +1,9 @@
 from ftw.upgrade.interfaces import IDuringUpgrade
 from opengever.base.placeful_workflow import assign_placeful_workflow
 from opengever.base.response import COMMENT_RESPONSE_TYPE
+from opengever.base.response import IResponseContainer
+from opengever.base.response import OBJECT_CREATED_RESPONSE_TYPE
+from opengever.base.response import Response
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.workspace.activities import ToDoAssignedActivity
@@ -71,6 +74,8 @@ def todo_added(todo, event):
     WorkspaceWatcherManager(workspace).new_todo_added(todo)
     if todo.responsible is not None:
         ToDoAssignedActivity(todo, getRequest()).record()
+
+    IResponseContainer(todo).add(Response(OBJECT_CREATED_RESPONSE_TYPE))
 
 
 def todo_review_state_changed(todo, event):
