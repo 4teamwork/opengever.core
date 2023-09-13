@@ -71,6 +71,12 @@
       />
 
   <subscriber
+      for="opengever.workspace.interfaces.IToDo
+           Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+      handler=".subscribers.todo_handle_transition"
+      />
+
+  <subscriber
       for="opengever.workspace.interfaces.IWorkspaceMeetingAgendaItem
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
       handler=".subscribers.workspace_meeting_agendaitem_added"

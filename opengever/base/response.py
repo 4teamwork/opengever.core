@@ -198,6 +198,7 @@ COMMENT_REMOVED_RESPONSE_TYPE = 'comment_removed'
 SCHEMA_FIELD_CHANGE_RESPONSE_TYPE = 'schema_field'
 MOVE_RESPONSE_TYPE = 'move'
 OBJECT_CREATED_RESPONSE_TYPE = 'object_created'
+TRANSITION_RESPONSE_TYPE = 'transition'
 
 
 class AutoResponseChangesTracker(object):

@@ -8,6 +8,7 @@ from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
 from opengever.base.response import OBJECT_CREATED_RESPONSE_TYPE
 from opengever.base.response import Response
+from opengever.base.response import TRANSITION_RESPONSE_TYPE
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -385,3 +386,65 @@ class TestResponseDelete(IntegrationTestCase):
         browser.open(todo, method="GET", headers=self.api_headers)
         self.assertEquals(1, len(browser.json['responses']))
         self.assertEquals(OBJECT_CREATED_RESPONSE_TYPE, browser.json['responses'][0].get('response_type'))
+
+    @browsing
+    def test_close_a_todo_creates_a_new_response(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(1, len(browser.json['responses']))  # created response only
+
+        with freeze(datetime(2023, 6, 1, 8, 12)):
+            self.todo.toggle()
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+
+        self.assertEquals(2, len(browser.json['responses']))
+
+        self.assertEquals({
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599920000000',
+            u'additional_data': {u'action': u'opengever_workspace_todo--TRANSITION--complete--active_completed',
+                                 u'new_state': u'opengever_workspace_todo--STATUS--completed',
+                                 u'old_state': u'opengever_workspace_todo--STATUS--active'},
+            u'changes': [],
+            u'created': u'2023-06-01T08:12:00',
+            u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                         u'token': u'beatrice.schrodinger'},
+            u'modified': None,
+            u'modifier': None,
+            u'response_id': 1685599920000000,
+            u'response_type': TRANSITION_RESPONSE_TYPE,
+            u'text': u''},
+            browser.json['responses'][-1])
+
+    @browsing
+    def test_reopen_a_todo_creates_a_new_response(self, browser):
+        self.login(self.workspace_member, browser=browser)
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(1, len(browser.json['responses']))  # created response only
+
+        with freeze(datetime(2023, 6, 1, 8, 12)):
+            self.todo.toggle()  # close
+
+        with freeze(datetime(2023, 6, 1, 8, 13)):
+            self.todo.toggle()  # reopen
+
+        browser.open(self.todo, method="GET", headers=self.api_headers)
+        self.assertEquals(3, len(browser.json['responses']))
+
+        self.assertEquals({
+            u'@id': u'http://nohost/plone/workspaces/workspace-1/todo-1/@responses/1685599980000000',
+            u'additional_data': {u'action': u'opengever_workspace_todo--TRANSITION--open--completed_active',
+                                 u'new_state': u'opengever_workspace_todo--STATUS--active',
+                                 u'old_state': u'opengever_workspace_todo--STATUS--completed'},
+            u'changes': [],
+            u'created': u'2023-06-01T08:13:00',
+            u'creator': {u'title': u'Schr\xf6dinger B\xe9atrice',
+                         u'token': u'beatrice.schrodinger'},
+            u'modified': None,
+            u'modifier': None,
+            u'response_id': 1685599980000000,
+            u'response_type': TRANSITION_RESPONSE_TYPE,
+            u'text': u''},
+            browser.json['responses'][-1])
