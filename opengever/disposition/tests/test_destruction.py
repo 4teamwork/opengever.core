@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
@@ -32,12 +34,12 @@ class TestDestruction(IntegrationTestCase):
         expected = []
         for dossier in (self.offered_dossier_to_archive, self.offered_dossier_to_destroy):
             expected.append(
-              {'intid': intids.getId(dossier),
-               'title': dossier.title,
-               'appraisal': ILifeCycle(dossier).archival_value == ARCHIVAL_VALUE_WORTHY,
-               'reference_number': dossier.get_reference_number(),
-               'repository_title': safe_unicode(self.leaf_repofolder.Title()),
-               'former_state': dossier.get_former_state()})
+                {'intid': intids.getId(dossier),
+                 'title': dossier.title,
+                 'appraisal': ILifeCycle(dossier).archival_value == ARCHIVAL_VALUE_WORTHY,
+                 'reference_number': dossier.get_reference_number(),
+                 'repository_title': safe_unicode(self.leaf_repofolder.Title()),
+                 'former_state': dossier.get_former_state()})
 
         self.close_disposition()
 
@@ -80,6 +82,37 @@ class TestDestruction(IntegrationTestCase):
         api.content.transition(obj=self.disposition,
                                transition='disposition-transition-appraised-to-closed')
         content_after = self.leaf_repofolder.listFolderContents()
+        self.assertItemsEqual(expected_difference,
+                              set(content_before).difference(set(content_after)))
+
+    def test_destruction_handles_documents_extracted_from_mails(self):
+        self.login(self.manager)
+
+        api.content.transition(self.offered_dossier_to_destroy,
+                               to_state='dossier-state-resolved')
+
+        with self.login(self.administrator):
+            api.content.transition(self.offered_dossier_to_destroy,
+                                   to_state='dossier-state-active')
+        mail = create(Builder('mail')
+                      .within(self.offered_dossier_to_destroy)
+                      .with_asset_message(
+                          'mail_with_one_docx_attachment.eml'))
+        mail.extract_attachments_into_parent([2])
+
+        api.content.transition(self.offered_dossier_to_destroy,
+                               to_state='dossier-state-resolved')
+
+        self.login(self.records_manager)
+        api.content.transition(self.offered_dossier_to_destroy,
+                               to_state='dossier-state-offered')
+        expected_difference = [self.offered_dossier_to_archive,
+                               self.offered_dossier_to_destroy]
+        content_before = self.leaf_repofolder.listFolderContents()
+
+        self.close_disposition()
+        content_after = self.leaf_repofolder.listFolderContents()
+
         self.assertItemsEqual(expected_difference,
                               set(content_before).difference(set(content_after)))
 

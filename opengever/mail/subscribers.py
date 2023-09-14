@@ -1,7 +1,6 @@
 from opengever.base.utils import unrestrictedUuidToObject
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.subscribers import resolve_document_author
-from opengever.mail.exceptions import SourceMailNotFound
 from opengever.mail.interfaces import IExtractedFromMail
 from opengever.mail.mail import IOGMailMarker
 from plone.uuid.interfaces import IUUID
@@ -44,7 +43,6 @@ def extracted_attachment_deleted(doc, event):
                     extracted=False,
                     extracted_document_uid=None)
                 return
-    raise SourceMailNotFound("Source Mail not found when Extracted attachment moved.")
 
 
 def mail_deleted(doc, event):
@@ -62,4 +60,7 @@ def mail_deleted(doc, event):
         if not info.get('extracted'):
             continue
         extracted_doc = unrestrictedUuidToObject(info.get('extracted_document_uid'))
-        noLongerProvides(extracted_doc, IExtractedFromMail)
+        # When deleting the dossier, it can happen that the extracted doc
+        # was already deleted
+        if extracted_doc:
+            noLongerProvides(extracted_doc, IExtractedFromMail)
