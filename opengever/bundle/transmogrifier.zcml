@@ -64,6 +64,11 @@
       />
 
   <utility
+      component=".sections.map_principal_names_to_ids.MapPrincipalNamesToIDsSection"
+      name="opengever.bundle.map_principal_names_to_ids"
+      />
+
+  <utility
       component=".sections.progress.ProgressSection"
       name="opengever.bundle.progress"
       />
