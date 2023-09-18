@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.12.1 (2023-09-18)
+----------------------
+
+Bug fixes:
+
+
+- Bump ftw.casauth. [phgross] [CA-6214]
+
+
 2023.12.0 (2023-09-08)
 ----------------------
 
