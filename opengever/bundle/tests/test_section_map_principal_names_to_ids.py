@@ -2,6 +2,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.model import create_session
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
+from opengever.bundle.sections.map_principal_names_to_ids import AmbiguousPrincipalNames
 from opengever.bundle.sections.map_principal_names_to_ids import MapPrincipalNamesToIDsSection
 from opengever.bundle.tests import MockBundle
 from opengever.bundle.tests import MockTransmogrifier
@@ -322,3 +323,46 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
         ]
 
         self.assertEquals(expected, transformed_items)
+
+    def test_raises_on_ambiguous_names_in_ogds(self):
+        lower_group = Group(
+            groupid='11111',
+            groupname='group1',
+            external_id=uuid4().hex,
+        )
+        upper_group = Group(
+            groupid='22222',
+            groupname='GROUP1',
+            external_id=uuid4().hex,
+        )
+
+        lower_user = User(
+            userid='33333',
+            username='user1',
+            external_id=uuid4().hex,
+        )
+        upper_user = User(
+            userid='44444',
+            username='USER1',
+            external_id=uuid4().hex,
+        )
+
+        for obj in (lower_group, upper_group, lower_user, upper_user):
+            self.session.add(obj)
+        self.session.flush()
+
+        items = [
+            {
+                'guid': 'mapped-groups',
+                '_type': 'opengever.dossier.businesscasedossier',
+                '_permissions': {
+                    'read': ['group1'],
+                    'add': ['user1'],
+                },
+            },
+
+        ]
+
+        with self.assertRaises(AmbiguousPrincipalNames):
+            section = self.setup_section(previous=items)
+            list(section)
