@@ -6,6 +6,7 @@ from opengever.disposition import _
 from opengever.latex.listing import Column
 from opengever.latex.listing import ILaTexListing
 from opengever.latex.listing import LaTexListing
+from Products.CMFPlone.utils import safe_unicode
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
@@ -133,7 +134,8 @@ class RemovalProtocolLaTeXView(MakoLaTeXView):
 
         for row in config:
             label = translate(row.get('label'), context=self.request)
-            rows.append(u'\\bf {} & {} \\\\%%'.format(
-                self.convert_plain(label), row.get('value')))
+            row_label = safe_unicode(self.convert_plain(label))
+            value = safe_unicode(row.get('value'))
+            rows.append(u'\\bf {} & {} \\\\%%'.format(row_label, value))
 
-        return '\n'.join(rows)
+        return u'\n'.join(rows)

@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from opengever.disposition.browser.removal_protocol import IRemovalProtocolLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.testing import IntegrationTestCase
+from plone import api
 from zope.component import getMultiAdapter
 
 
@@ -32,4 +33,23 @@ class TestRemovalProtocolLaTeXView(IntegrationTestCase):
 
         self.assertEquals(
             'attachment; filename="Removal protocol for {}.pdf"'.format(self.disposition.title),
+            browser.headers.get('content-disposition'))
+
+
+class TestRemovalProtocolLaTeXViewInFrench(TestRemovalProtocolLaTeXView):
+
+    def setUp(self):
+        super(TestRemovalProtocolLaTeXViewInFrench, self).setUp()
+
+        lang_tool = api.portal.get_tool('portal_languages')
+        lang_tool.setDefaultLanguage('fr-ch')
+
+    @browsing
+    def test_pdf_title_is_removal_protocol_for_disposition_title(self, browser):
+        self.login(self.records_manager, browser)
+        browser.open(self.disposition, view='removal_protocol')
+
+        self.assertEquals(
+            'attachment; filename="Protocole de suppression pour {}.pdf"'.format(
+                self.disposition.title),
             browser.headers.get('content-disposition'))
