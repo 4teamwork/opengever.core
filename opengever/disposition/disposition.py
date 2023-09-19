@@ -358,7 +358,8 @@ class Disposition(Container):
             center.add_watcher_to_resource(
                 self, archivist, DISPOSITION_ARCHIVIST_ROLE)
 
-    def get_all_archivists(self):
+    @staticmethod
+    def get_archivists_infos():
         archivists = []
         acl_users = api.portal.get_tool('acl_users')
         role_manager = acl_users.get('portal_role_manager')
@@ -369,7 +370,14 @@ class Disposition(Container):
             # skip not existing or duplicated groups or users
             if len(info) != 1:
                 continue
+            archivists.append((principal, info))
 
+        return archivists
+
+    def get_all_archivists(self):
+        archivists_infos = self.get_archivists_infos()
+        archivists = []
+        for principal, info in archivists_infos:
             if info[0].get('principal_type') == 'group':
                 archivists += [user.userid for user in
                                ogds_service().fetch_group(principal).users]
