@@ -235,6 +235,8 @@ class Disposition(Container):
         super(Disposition, self).__init__(*args, **kwargs)
         self.appraisal = {}
         self._dossiers = PersistentList()
+        self._dossiers_with_missing_permissions = PersistentList()
+        self._dossiers_with_extra_permissions = PersistentList()
 
     @property
     def dossiers(self):
@@ -277,6 +279,26 @@ class Disposition(Container):
         IAnnotations(self)[self.destroyed_key] = value
 
     @property
+    def dossiers_with_missing_permissions(self):
+        return self._dossiers_with_missing_permissions
+
+    @dossiers_with_missing_permissions.setter
+    def dossiers_with_missing_permissions(self, dossiers):
+        self._dossiers_with_missing_permissions = PersistentList(dossiers)
+
+    @property
+    def dossiers_with_extra_permissions(self):
+        return self._dossiers_with_extra_permissions
+
+    @dossiers_with_extra_permissions.setter
+    def dossiers_with_extra_permissions(self, dossiers):
+        self._dossiers_with_extra_permissions = PersistentList(dossiers)
+
+    @property
+    def has_dossiers_with_pending_permissions_changes(self):
+        return bool(self.dossiers_with_missing_permissions or self.dossiers_with_extra_permissions)
+
+    @property
     def is_closed(self):
         return api.content.get_state(self) == 'disposition-state-closed'
 
@@ -314,11 +336,27 @@ class Disposition(Container):
         for dossier in dossiers:
             dossier.offer()
             IAppraisal(self).initialize(dossier)
+            # Remember which dossiers need their permissions updated
+            uid = dossier.UID()
+            if uid in self.dossiers_with_extra_permissions:
+                # if that dossier was dropped before but its permissions
+                # not updated yet, then its permissions are already correct
+                self.dossiers_with_extra_permissions.remove(uid)
+            else:
+                self.dossiers_with_missing_permissions.append(uid)
 
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
             dossier.retract()
             IAppraisal(self).drop(dossier)
+            # Remember which dossiers need their permissions updated
+            uid = dossier.UID()
+            if uid in self.dossiers_with_missing_permissions:
+                # if that dossier was added before but its permissions
+                # not updated yet, then its permissions are already correct
+                self.dossiers_with_missing_permissions.remove(uid)
+            else:
+                self.dossiers_with_extra_permissions.append(uid)
 
     def finalize_appraisal(self):
         """Write back the appraisal value to the dossiers.

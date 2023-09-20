@@ -197,6 +197,65 @@ class TestDisposition(IntegrationTestCase):
             self.assertEquals(date.today(),
                               ILifeCycle(self.inactive_dossier).date_of_submission)
 
+    def test_has_dossiers_with_pending_permissions_changes(self):
+        self.login(self.records_manager)
+        self.assertTrue(self.disposition.dossiers_with_missing_permissions)
+        self.assertFalse(self.disposition.dossiers_with_extra_permissions)
+        self.assertTrue(self.disposition.has_dossiers_with_pending_permissions_changes)
+
+        self.disposition.dossiers_with_missing_permissions = []
+        self.assertFalse(self.disposition.has_dossiers_with_pending_permissions_changes)
+
+        self.disposition.dossiers_with_extra_permissions = [self.expired_dossier.UID()]
+        self.assertTrue(self.disposition.has_dossiers_with_pending_permissions_changes)
+
+    @browsing
+    def test_dossiers_with_missing_permissions_are_stored(self, browser):
+        self.login(self.records_manager, browser)
+
+        with freeze(datetime(2037, 1, 1)), self.observe_children(self.repository_root) as children:
+            data = {'paths:list': obj2paths([self.expired_dossier, self.inactive_dossier]),
+                    '_authenticator': createToken()}
+            browser.open(self.repository_root,
+                         view='++add++opengever.disposition.disposition',
+                         data=data)
+            browser.find('Save').click()
+
+        self.assertEqual(len(children["added"]), 1)
+        disposition = children["added"].pop()
+        self.assertItemsEqual([self.expired_dossier.UID(),
+                               self.inactive_dossier.UID()],
+                              disposition.dossiers_with_missing_permissions)
+
+    @browsing
+    def test_dossiers_with_missing_or_extra_permissions_are_updated_correctly(self, browser):
+        self.login(self.records_manager, browser)
+
+        self.assertItemsEqual(
+            [self.offered_dossier_to_archive.UID(),
+             self.offered_dossier_to_destroy.UID()],
+            self.disposition.dossiers_with_missing_permissions)
+
+        self.assertEqual([], self.disposition.dossiers_with_extra_permissions)
+
+        # We fake that permissions have been updated for offered_dossier_to_destroy
+        self.disposition.dossiers_with_missing_permissions.remove(
+            self.offered_dossier_to_destroy.UID())
+
+        browser.open(self.disposition, view='edit')
+        browser.fill({'Dossiers': [self.expired_dossier]})
+        browser.find('Save').click()
+
+        self.assertItemsEqual(
+            [self.expired_dossier.UID()],
+            self.disposition.dossiers_with_missing_permissions)
+
+        # self.offered_dossier_to_archive does not have extra permissions
+        # as the permissions had not been set
+        self.assertItemsEqual(
+            [self.offered_dossier_to_destroy.UID()],
+            self.disposition.dossiers_with_extra_permissions)
+
 
 class TestDispositionEditForm(IntegrationTestCase):
 
