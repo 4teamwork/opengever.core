@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-10 12:25+0000\n"
+"POT-Creation-Date: 2023-09-21 13:00+0000\n"
 "PO-Revision-Date: 2017-11-29 10:53+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-base/fr/>\n"
@@ -232,6 +232,11 @@ msgstr "Commentaire concernant la valeur archivistique"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_committee_group"
 msgstr "Par l'appartenance au groupe de la commission"
+
+#. Default: "Via disposition"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_disposition"
+msgstr "Par offre"
 
 #. Default: "By protect dossier"
 #: ./opengever/base/role_assignments.py

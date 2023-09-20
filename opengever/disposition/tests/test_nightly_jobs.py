@@ -1,9 +1,13 @@
 from datetime import datetime
 from ftw.testing import freeze
+from opengever.base.oguid import Oguid
+from opengever.base.role_assignments import ASSIGNMENT_VIA_DISPOSITION
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.delivery import STATUS_SCHEDULED
 from opengever.disposition.delivery import STATUS_SUCCESS
 from opengever.disposition.nightly_jobs import NightlyDossierJournalPDF
+from opengever.disposition.nightly_jobs import NightlyDossierPermissionSetter
 from opengever.disposition.nightly_jobs import NightlySIPDelivery
 from opengever.disposition.tests.test_delivery import TestFilesystemTransportBase
 from opengever.testing import IntegrationTestCase
@@ -143,3 +147,92 @@ class TestNightlyDossierJournalPDF(IntegrationTestCase):
         self.execute_nightly_jobs(1)
 
         self.assertEqual(0, len(self.nightly_job_provider))
+
+
+class TestNightlyDossierPermissionSetter(IntegrationTestCase):
+
+    def interrupt_if_necessary(self):
+        """Stub out the runner's `interrupt_if_necessary` function.
+        """
+
+    def execute_nightly_jobs(self, expected=None, logger=None):
+        if not logger:
+            logger = logging.getLogger('opengever.nightlyjobs')
+            logger.addHandler(logging.NullHandler())
+
+        nightly_job_provider = NightlyDossierPermissionSetter(
+            self.portal, self.request, logger)
+
+        jobs = list(nightly_job_provider)
+        if expected:
+            self.assertEqual(expected, len(jobs))
+            self.assertEqual(expected, len(nightly_job_provider))
+
+        for job in jobs:
+            nightly_job_provider.run_job(job, self.interrupt_if_necessary)
+
+    def test_sets_permissions_for_dossiers_with_missing_permissions(self):
+        self.login(self.records_manager)
+        self.disposition_with_sip.dossiers_with_missing_permissions = []
+
+        self.assertTrue(self.disposition.has_dossiers_with_pending_permissions_changes)
+        self.assertItemsEqual(
+            [self.offered_dossier_to_archive.UID(),
+             self.offered_dossier_to_destroy.UID()],
+            self.disposition.dossiers_with_missing_permissions)
+        self.assertEqual([], self.disposition.dossiers_with_extra_permissions)
+
+        archive_manager = RoleAssignmentManager(self.offered_dossier_to_archive)
+        destroy_manager = RoleAssignmentManager(self.offered_dossier_to_destroy)
+        self.assertEqual(
+            [], archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION))
+        self.assertEqual(
+            [], destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION))
+
+        self.execute_nightly_jobs(expected=1)
+
+        self.assertFalse(self.disposition.has_dossiers_with_pending_permissions_changes)
+
+        assignments = archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)
+        self.assertEqual(1, len(assignments))
+        self.assertEqual(
+            {'cause': 7,
+             'roles': ['Reader'],
+             'reference': Oguid.for_object(self.disposition).id,
+             'principal': 'jurgen.fischer'},
+            assignments[0])
+
+        assignments = destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)
+        self.assertEqual(1, len(assignments))
+        self.assertEqual(
+            {'cause': 7,
+             'roles': ['Reader'],
+             'reference': Oguid.for_object(self.disposition).id,
+             'principal': 'jurgen.fischer'},
+            assignments[0])
+
+        self.execute_nightly_jobs(expected=0)
+
+    def test_removes_permissions_for_dossiers_with_extra_permissions(self):
+        self.login(self.records_manager)
+        self.disposition_with_sip.dossiers_with_missing_permissions = []
+        self.execute_nightly_jobs()
+
+        archive_manager = RoleAssignmentManager(self.offered_dossier_to_archive)
+        destroy_manager = RoleAssignmentManager(self.offered_dossier_to_destroy)
+
+        self.assertEqual(
+            1, len(archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+        self.assertEqual(
+            1, len(destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+
+        self.assertFalse(self.disposition.has_dossiers_with_pending_permissions_changes)
+        self.disposition.dossiers = [el for el in self.disposition.dossiers
+                                     if el.to_object != self.offered_dossier_to_archive]
+        self.assertTrue(self.disposition.has_dossiers_with_pending_permissions_changes)
+
+        self.execute_nightly_jobs(expected=1)
+        self.assertEqual(
+            0, len(archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+        self.assertEqual(
+            1, len(destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))

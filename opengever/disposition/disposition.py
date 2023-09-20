@@ -10,6 +10,8 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.base.role_assignments import ArchivistRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
@@ -487,3 +489,11 @@ class Disposition(Container):
             {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=getRequest())}
             for n, s in statuses.items()]
         return status_infos
+
+    def give_view_permissions_to_archivists_on_dossier(self, dossier):
+        assignments = [ArchivistRoleAssignment(principal, ["Reader"], self)
+                       for principal, info in self.get_archivists_infos()]
+        RoleAssignmentManager(dossier).add_or_update_assignments(assignments)
+
+    def revoke_view_permissions_from_archivists_on_dossier(self, dossier):
+        RoleAssignmentManager(dossier).clear_by_reference(self)
