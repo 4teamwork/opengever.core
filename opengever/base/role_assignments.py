@@ -332,6 +332,10 @@ class RoleAssignmentManager(object):
         return [RoleAssignment.get(**data) for data
                 in self.storage.get_by_principal(principal_id)]
 
+    def get_assignments_by_reference(self, reference):
+        return [RoleAssignment.get(**data) for data
+                in self.storage.get_by_reference(Oguid.for_object(reference).id)]
+
     def get_roles_by_principal_id(self, principal_id):
         roles = set()
         for assignment_data in self.storage.get_by_principal(principal_id):

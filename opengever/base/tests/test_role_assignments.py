@@ -195,6 +195,19 @@ class TestRoleAssignmentManager(IntegrationTestCase):
             set(['TaskResponsible']),
             manager.get_roles_by_principal_id(self.regular_user.id))
 
+    def test_get_assignments_by_reference(self):
+        self.login(self.regular_user)
+
+        manager = RoleAssignmentManager(self.dossier)
+        assignments = manager.get_assignments_by_reference(self.task)
+
+        self.assertItemsEqual(
+            [('kathi.barfuss', 1, ['TaskResponsible']),
+             ('fa_inbox_users', 2, ['TaskResponsible'])],
+            [(assignment.principal, assignment.cause, assignment.roles)
+             for assignment in assignments]
+        )
+
 
 class TestManageRoleAssignmentsView(IntegrationTestCase):
 
