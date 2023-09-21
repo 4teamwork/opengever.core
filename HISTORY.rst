@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.13.0 (2023-09-21)
+----------------------
+
+New features:
+
+
+- Add a response object for created, closed and reopened todos [elioschmutz] [CA-5099]
+- Activate zip_export action for workspace folders. [elioschmutz] [CA-5554]
+- Add new solr index `is_locked_by_copy_to_workspace` and provide it in all necessary api endpoints [elioschmutz] [CA-5563]
+- Add is_current_user_responsible flag to task api serialization. [phgross] [CA-6021]
+- Bundle import: Map principal names to ids in local roles. [lgraf] [CA-6039]
+
+
+Bug fixes:
+
+
+- Disposition: Fix UnicodeError in removal protocol download. [lgraf] [CA-6141]
+- Include only dossiers with posotive appraisal in the SIP package. [phgross] [CA-6168]
+
+
 2023.12.0 (2023-09-08)
 ----------------------
 

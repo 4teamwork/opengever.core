@@ -1,1 +1,0 @@
-Bundle import: Map principal names to ids in local roles. [lgraf]
