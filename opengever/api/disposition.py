@@ -70,6 +70,7 @@ class SerializeDispositionToJson(GeverSerializeFolderToJson):
         result[u'sip_filename'] = self.context.get_sip_filename()
         result[u'sip_delivery_status'] = self.context.get_delivery_status_infos()
         result[u'dossier_details'] = self.get_dossier_details()
+        result[u'has_dossiers_with_pending_permissions_changes'] = self.context.has_dossiers_with_pending_permissions_changes
         return result
 
     def get_dossier_details(self):
