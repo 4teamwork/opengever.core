@@ -1,4 +1,6 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_DISPOSITION
@@ -171,6 +173,10 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
         for job in jobs:
             nightly_job_provider.run_job(job, self.interrupt_if_necessary)
 
+    def get_assignments_via_disposition(self, obj):
+        manager = RoleAssignmentManager(obj)
+        return manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)
+
     def test_sets_permissions_for_dossiers_with_missing_permissions(self):
         self.login(self.records_manager)
         self.disposition_with_sip.dossiers_with_missing_permissions = []
@@ -182,18 +188,16 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
             self.disposition.dossiers_with_missing_permissions)
         self.assertEqual([], self.disposition.dossiers_with_extra_permissions)
 
-        archive_manager = RoleAssignmentManager(self.offered_dossier_to_archive)
-        destroy_manager = RoleAssignmentManager(self.offered_dossier_to_destroy)
         self.assertEqual(
-            [], archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION))
+            [], self.get_assignments_via_disposition(self.offered_dossier_to_archive))
         self.assertEqual(
-            [], destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION))
+            [], self.get_assignments_via_disposition(self.offered_dossier_to_destroy))
 
         self.execute_nightly_jobs(expected=1)
 
         self.assertFalse(self.disposition.has_dossiers_with_pending_permissions_changes)
 
-        assignments = archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)
+        assignments = self.get_assignments_via_disposition(self.offered_dossier_to_archive)
         self.assertEqual(1, len(assignments))
         self.assertEqual(
             {'cause': 7,
@@ -202,7 +206,7 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
              'principal': 'jurgen.fischer'},
             assignments[0])
 
-        assignments = destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)
+        assignments = self.get_assignments_via_disposition(self.offered_dossier_to_destroy)
         self.assertEqual(1, len(assignments))
         self.assertEqual(
             {'cause': 7,
@@ -222,9 +226,9 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
         destroy_manager = RoleAssignmentManager(self.offered_dossier_to_destroy)
 
         self.assertEqual(
-            1, len(archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+            1, len(self.get_assignments_via_disposition(self.offered_dossier_to_archive)))
         self.assertEqual(
-            1, len(destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+            1, len(self.get_assignments_via_disposition(self.offered_dossier_to_destroy)))
 
         self.assertFalse(self.disposition.has_dossiers_with_pending_permissions_changes)
         self.disposition.dossiers = [el for el in self.disposition.dossiers
@@ -233,6 +237,51 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
 
         self.execute_nightly_jobs(expected=1)
         self.assertEqual(
-            0, len(archive_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+            0, len(self.get_assignments_via_disposition(self.offered_dossier_to_archive)))
         self.assertEqual(
-            1, len(destroy_manager.get_assignments_by_cause(ASSIGNMENT_VIA_DISPOSITION)))
+            1, len(self.get_assignments_via_disposition(self.offered_dossier_to_destroy)))
+
+    def test_handles_subdossiers_with_blocked_role_inheritance(self):
+        self.login(self.records_manager)
+        self.disposition_with_sip.dossiers_with_missing_permissions = []
+
+        protected_subdossier = create(Builder('dossier').within(self.offered_dossier_to_archive))
+        protected_subdossier.__ac_local_roles_block__ = True
+        protected_subdossier.reindexObject()
+        unprotected_subdossier = create(Builder('dossier').within(self.offered_dossier_to_archive))
+        protected_subsubdossier = create(Builder('dossier').within(unprotected_subdossier))
+        protected_subsubdossier.__ac_local_roles_block__ = True
+        protected_subsubdossier.reindexObject()
+
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(self.offered_dossier_to_archive)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(protected_subdossier)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(unprotected_subdossier)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(protected_subsubdossier)))
+
+        self.execute_nightly_jobs(expected=1)
+        self.assertEqual(
+            1, len(self.get_assignments_via_disposition(self.offered_dossier_to_archive)))
+        self.assertEqual(
+            1, len(self.get_assignments_via_disposition(protected_subdossier)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(unprotected_subdossier)))
+        self.assertEqual(
+            1, len(self.get_assignments_via_disposition(protected_subsubdossier)))
+
+        protected_subsubdossier.__ac_local_roles_block__ = False
+        protected_subsubdossier.reindexObject()
+        self.disposition.dossiers = [el for el in self.disposition.dossiers
+                                     if el.to_object != self.offered_dossier_to_archive]
+        self.execute_nightly_jobs(expected=1)
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(self.offered_dossier_to_archive)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(protected_subdossier)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(unprotected_subdossier)))
+        self.assertEqual(
+            0, len(self.get_assignments_via_disposition(protected_subsubdossier)))

@@ -492,12 +492,35 @@ class Disposition(Container):
         return status_infos
 
     def give_view_permissions_to_archivists_on_dossier(self, dossier):
+        """We need to give permissions on the dossier but also on the
+        subdossiers with blocked inheritance
+        """
         assignments = [ArchivistRoleAssignment(principal, ["Reader"], self)
                        for principal, info in self.get_archivists_infos()]
+
         RoleAssignmentManager(dossier).add_or_update_assignments(assignments)
 
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(dossier.getPhysicalPath()),
+            blocked_local_roles=True)
+
+        for brain in brains:
+            obj = brain._unrestrictedGetObject()
+            if obj != dossier and obj is not None:
+                RoleAssignmentManager(obj).add_or_update_assignments(assignments)
+
     def revoke_view_permissions_from_archivists_on_dossier(self, dossier):
-        RoleAssignmentManager(dossier).clear_by_reference(self)
+        """We clear the permissions on the dossier and all subdossiers
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(dossier.getPhysicalPath()))
+        for brain in brains:
+            obj = brain._unrestrictedGetObject()
+            manager = RoleAssignmentManager(obj)
+            if manager.get_assignments_by_reference(self):
+                manager.clear_by_reference(self)
 
     @property
     def creation_activity_recorded(self):
