@@ -1,5 +1,6 @@
 from BTrees.IIBTree import IITreeSet
 from opengever.disposition import DISPOSITION_ACTIVE_STATES
+from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IDisposition
 from opengever.nightlyjobs.provider import NightlyJobProviderBase
@@ -156,4 +157,8 @@ class NightlyDossierPermissionSetter(NightlyJobProviderBase):
             transaction.commit()
             self.logger.info("Added permissions on %r" % dossier)
 
+        if not disposition.creation_activity_recorded:
+            DispositionAddedActivity(disposition, self.request).record()
+            disposition.creation_activity_recorded = True
+            transaction.commit()
         self.logger.info("Finished setting permissions for %r" % disposition)

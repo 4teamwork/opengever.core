@@ -8,18 +8,33 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
+from opengever.disposition.nightly_jobs import NightlyDossierPermissionSetter
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from plone import api
+import logging
 
 
 class TestDispositionNotifications(IntegrationTestCase):
 
     features = ('activity', )
 
+    def run_nightly_jobs(self, expected):
+        logger = logging.getLogger('opengever.nightlyjobs')
+        logger.addHandler(logging.NullHandler())
+        nightly_job_provider = NightlyDossierPermissionSetter(
+            self.portal, self.request, logger)
+        jobs = list(nightly_job_provider)
+        self.assertEqual(expected, len(jobs))
+        for job in jobs:
+            nightly_job_provider.run_job(job, None)
+
     def test_creator_and_all_archivist_are_registered_as_watchers(self):
-        self.login(self.regular_user)
-        disposition = create(Builder('disposition'))
+        self.login(self.manager)
+        self.disposition.dossiers_with_missing_permissions = []
+        self.disposition_with_sip.dossiers_with_missing_permissions = []
+        disposition = create(Builder('disposition').having(dossiers=[self.expired_dossier]))
+        self.run_nightly_jobs(expected=1)
         resource = Resource.query.get_by_oguid(Oguid.for_object(disposition))
 
         archivist_watchers = [
@@ -29,13 +44,22 @@ class TestDispositionNotifications(IntegrationTestCase):
             sub.watcher.actorid for sub in resource.subscriptions
             if sub.role == DISPOSITION_RECORDS_MANAGER_ROLE]
 
-        self.assertItemsEqual([self.regular_user.getId()], records_manager_watchers)
+        self.assertItemsEqual([self.manager.getId()], records_manager_watchers)
         self.assertItemsEqual([self.archivist.getId()], archivist_watchers)
 
-    def test_added_activity_is_recorded_when_a_disposition_is_created(self):
-        self.login(self.regular_user)
-        actor = ActorLookup(self.regular_user.getId()).lookup()
-        create(Builder('disposition').titled(u'Angebot 13.49'))
+    def test_added_activity_is_recorded_after_permissions_are_set(self):
+        self.login(self.manager)
+        self.disposition.dossiers_with_missing_permissions = []
+        self.disposition_with_sip.dossiers_with_missing_permissions = []
+
+        actor = ActorLookup(self.manager.getId()).lookup()
+        disposition = create(Builder('disposition')
+                             .titled(u'Angebot 13.49')
+                             .having(dossiers=[self.expired_dossier]))
+        self.assertFalse(disposition.creation_activity_recorded)
+        self.assertEquals(0, Activity.query.count())
+
+        self.run_nightly_jobs(expected=1)
 
         activity = Activity.query.one()
         self.assertEquals('disposition-added', activity.kind)
@@ -46,6 +70,13 @@ class TestDispositionNotifications(IntegrationTestCase):
         self.assertEquals(u'Offer added', activity.label)
         self.assertIsNone(activity.description)
         self.assertEquals(u'Angebot 13.49', activity.title)
+
+        self.assertTrue(disposition.creation_activity_recorded)
+
+        # Activity should only be created once and not when dossiers is modified.
+        disposition.dossiers = []
+        self.run_nightly_jobs(expected=1)
+        self.assertEqual(1, Activity.query.count())
 
     def test_appraise_activity_is_recorded(self):
         self.login(self.archivist)

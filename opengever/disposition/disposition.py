@@ -232,6 +232,7 @@ class Disposition(Container):
     implements(IDisposition, IResponseSupported)
 
     destroyed_key = 'destroyed_dossiers'
+    creation_activity_recorded_key = 'creation_activity_recorded'
 
     def __init__(self, *args, **kwargs):
         super(Disposition, self).__init__(*args, **kwargs)
@@ -497,3 +498,11 @@ class Disposition(Container):
 
     def revoke_view_permissions_from_archivists_on_dossier(self, dossier):
         RoleAssignmentManager(dossier).clear_by_reference(self)
+
+    @property
+    def creation_activity_recorded(self):
+        return IAnnotations(self).get(self.creation_activity_recorded_key, False)
+
+    @creation_activity_recorded.setter
+    def creation_activity_recorded(self, value):
+        IAnnotations(self)[self.creation_activity_recorded_key] = value
