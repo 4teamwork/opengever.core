@@ -27,7 +27,7 @@ class TestDispositionNotifications(IntegrationTestCase):
         jobs = list(nightly_job_provider)
         self.assertEqual(expected, len(jobs))
         for job in jobs:
-            nightly_job_provider.run_job(job, None)
+            nightly_job_provider.run_job(job, lambda: False)
 
     def test_creator_and_all_archivist_are_registered_as_watchers(self):
         self.login(self.manager)

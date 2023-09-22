@@ -150,6 +150,8 @@ class NightlyDossierPermissionSetter(NightlyJobProviderBase):
                     disposition.give_view_permissions_to_archivists_on_dossier(dossier)
                     transaction.commit()
                     self.logger.info("Added permissions on %r" % dossier)
+                    if self.should_check_interruption(disposition):
+                        interrupt_if_necessary()
 
             while disposition.dossiers_with_extra_permissions:
                 uid = disposition.dossiers_with_extra_permissions.pop()
@@ -158,9 +160,18 @@ class NightlyDossierPermissionSetter(NightlyJobProviderBase):
                     disposition.revoke_view_permissions_from_archivists_on_dossier(dossier)
                     transaction.commit()
                     self.logger.info("Removed permissions from %r" % dossier)
+                    if self.should_check_interruption(disposition):
+                        interrupt_if_necessary()
 
             if not disposition.creation_activity_recorded:
                 DispositionAddedActivity(disposition, self.request).record()
                 disposition.creation_activity_recorded = True
                 transaction.commit()
         self.logger.info("Finished setting permissions for %r" % disposition)
+
+    def should_check_interruption(self, disposition):
+        """We should not interrupt if we just set the permmissions on the last
+        dossier and have yet to create the activity
+        """
+        return (disposition.creation_activity_recorded
+                or disposition.has_dossiers_with_pending_permissions_changes)
