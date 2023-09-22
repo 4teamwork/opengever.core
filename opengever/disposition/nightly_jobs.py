@@ -1,4 +1,5 @@
 from BTrees.IIBTree import IITreeSet
+from opengever.base.security import elevated_privileges
 from opengever.disposition import DISPOSITION_ACTIVE_STATES
 from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.delivery import DeliveryScheduler
@@ -139,26 +140,27 @@ class NightlyDossierPermissionSetter(NightlyJobProviderBase):
         return len(list(self._get_dispositions_with_pending_permissions_changes()))
 
     def run_job(self, job, interrupt_if_necessary):
-        disposition = job
-        self.logger.info("Setting permissions on dossiers for %r" % disposition)
-        while disposition.dossiers_with_missing_permissions:
-            uid = disposition.dossiers_with_missing_permissions.pop()
-            dossier = uuidToObject(uid)
-            if dossier is not None:
-                disposition.give_view_permissions_to_archivists_on_dossier(dossier)
-            transaction.commit()
-            self.logger.info("Added permissions on %r" % dossier)
+        with elevated_privileges():
+            disposition = job
+            self.logger.info("Setting permissions on dossiers for %r" % disposition)
+            while disposition.dossiers_with_missing_permissions:
+                uid = disposition.dossiers_with_missing_permissions.pop()
+                dossier = uuidToObject(uid)
+                if dossier is not None:
+                    disposition.give_view_permissions_to_archivists_on_dossier(dossier)
+                    transaction.commit()
+                    self.logger.info("Added permissions on %r" % dossier)
 
-        while disposition.dossiers_with_extra_permissions:
-            uid = disposition.dossiers_with_extra_permissions.pop()
-            dossier = uuidToObject(uid)
-            if dossier is not None:
-                disposition.revoke_view_permissions_from_archivists_on_dossier(dossier)
-            transaction.commit()
-            self.logger.info("Added permissions on %r" % dossier)
+            while disposition.dossiers_with_extra_permissions:
+                uid = disposition.dossiers_with_extra_permissions.pop()
+                dossier = uuidToObject(uid)
+                if dossier is not None:
+                    disposition.revoke_view_permissions_from_archivists_on_dossier(dossier)
+                    transaction.commit()
+                    self.logger.info("Removed permissions from %r" % dossier)
 
-        if not disposition.creation_activity_recorded:
-            DispositionAddedActivity(disposition, self.request).record()
-            disposition.creation_activity_recorded = True
-            transaction.commit()
+            if not disposition.creation_activity_recorded:
+                DispositionAddedActivity(disposition, self.request).record()
+                disposition.creation_activity_recorded = True
+                transaction.commit()
         self.logger.info("Finished setting permissions for %r" % disposition)
