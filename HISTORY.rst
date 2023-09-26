@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.8.7 (2023-09-26)
+---------------------
+
+Bug fixes:
+
+
+- Fix ech-0147 import if using consecutive whitespaces in filenames. [elioschmutz] [CA-6194]
+
+
 2023.8.6 (2023-09-04)
 ---------------------
 
