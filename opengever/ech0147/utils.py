@@ -6,6 +6,7 @@ from opengever.ech0147.mappings import INV_PUBLIC_TRIAL_MAPPING
 from opengever.ech0147.serializer import ECH0147Serializer
 from plone.dexterity.utils import safe_utf8
 from plone.restapi.interfaces import IDeserializeFromJson
+from Products.CMFPlone.utils import safe_unicode
 from random import randint
 from zope.component import queryMultiAdapter
 from zope.container.interfaces import INameChooser
@@ -13,21 +14,47 @@ from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 import json
 import os.path
+import re
 import transaction
 import unicodedata
 
 
-def normalize_filename(unicode_string):
+consecutive_whitespace_pattern = re.compile(" {2,}")
+
+
+def normalize_filename(string):
     """A python zipfile provides file information by filename: zipfile.NameToInfo
 
-    The filename is encoded as utf-8 in the NFD-normal-form (canonical decomposition).
-    See: https://docs.python.org/2/library/unicodedata.html#unicodedata.normalize
+    This function normalizes a given string to our default NFC-format
+    and returns a utf-8 encoded string.
 
-    This function normalizes a given unicode string to the format used internally
-    by the ZipFile-object. This fixes an issue where it was not possible to
-    lookup a zipfile object by its filename when umlauts were part of the filename.
     """
-    return unicodedata.normalize('NFD', unicode_string).encode('utf-8')
+    return unicodedata.normalize('NFC', safe_unicode(string)).encode('utf-8')
+
+
+def get_path_mapping(zipfile):
+    """The file-list of a python zipfile can be provided as unicode or as
+    utf-8 in the NFD-normal form
+    (See: https://docs.python.org/2/library/unicodedata.html#unicodedata.normalize)
+
+    In addition, the zipfile.namelist() returns the real file names which can contain
+    consecutive whitespacesit, but the ech-0147 standard defines the pathFileName
+    as an xs:token which provides a string without consecutive whitespaces.
+
+    https://www.data2type.de/xml-xslt-xslfo/xml-schema/datentypen-referenz/xs-token/
+
+    This makes it hard to lookup the files in the zip-file.
+
+    To be able to properly lookup the files, we'll create a path mapping which
+    maps normalized paths in the format:
+
+    utf-8 strings in the NFC-normal form without consecutive whitespaces to
+    the real underlying file path within the zipfile.
+    """
+    return {
+        normalize_filename(consecutive_whitespace_pattern.sub(' ', path)): path
+        for path in zipfile.namelist()
+    }
 
 
 def sanitize_metadata(metadata):
@@ -84,6 +111,7 @@ def create_dossier(container, dossier, zipfile, responsible):
 
 
 def create_document(container, document, zipfile):
+    path_mapping = get_path_mapping(zipfile)
     temp_id = 'document.temp.{}'.format(randint(0, 999999))
     id_ = container.invokeFactory(
         'opengever.document.document', temp_id)
@@ -120,8 +148,9 @@ def create_document(container, document, zipfile):
 
     if document.files:
         file_ = document.files.file[0]
+        file_path = path_mapping.get(safe_utf8(file_.pathFileName))
         try:
-            zipinfo = zipfile.getinfo(normalize_filename(file_.pathFileName))
+            zipinfo = zipfile.getinfo(file_path)
         except KeyError:
             # This error is generally raised if a file is referenced in the
             # .xml file but does not exist in the zipfile.
@@ -130,7 +159,7 @@ def create_document(container, document, zipfile):
             # which changes the given path in the .xml file. Thus the file itself
             # can no longer be found.
             # See https://github.com/4teamwork/opengever.core/pull/7720#issuecomment-1539660053
-            raise ValueError('Missing file {}'.format(safe_utf8(file_.pathFileName)))
+            raise ValueError('Missing file {}'.format(file_path or file_.pathFileName))
 
         file_field = IDocumentSchema['file']
         filename = os.path.basename(file_.pathFileName)

@@ -113,6 +113,23 @@ class TestImport(IntegrationTestCase):
                     self.assertEqual(field._type, type(value), 'Wrong type for value of field: {}'.format(name))
 
     @browsing
+    def test_import_folders_and_files_with_double_spaces(self, browser):
+        self.activate_feature('ech0147-import')
+        self.login(self.regular_user, browser)
+        browser.open(self.dossier, view='ech0147_import')
+
+        with self.observe_children(self.dossier) as children:
+            with open(get_path('message_double_spaces.zip')) as file_:
+                browser.forms['form'].fill({
+                    'File': file_,
+                }).submit()
+
+        dossier, = children['added']
+        self.assertEqual(1, len(dossier.listFolderContents()))
+        document = dossier.listFolderContents()[0]
+        self.assertEqual(u"A document", document.title)
+
+    @browsing
     def test_import_toplevel_documents_in_dossier(self, browser):
         self.activate_feature('ech0147-import')
         self.login(self.regular_user, browser)
