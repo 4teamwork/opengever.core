@@ -16,12 +16,14 @@ ASSIGNMENT_VIA_PROTECT_DOSSIER = 4
 ASSIGNMENT_VIA_INVITATION = 5
 ASSIGNMENT_VIA_COMMITTEE_GROUP = 6
 ASSIGNMENT_VIA_DISPOSITION = 7
+ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE = 8
 
 # When copying a dossier, we keep or drop local roles depending on
 # their assignment cause.
 assignments_kept_when_copying = (ASSIGNMENT_VIA_SHARING,
                                  ASSIGNMENT_VIA_PROTECT_DOSSIER,
-                                 ASSIGNMENT_VIA_INVITATION)
+                                 ASSIGNMENT_VIA_INVITATION,
+                                 ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE)
 
 
 class RoleAssignment(object):
@@ -185,6 +187,23 @@ class CommitteeGroupAssignment(RoleAssignment):
 
 
 RoleAssignment.register(CommitteeGroupAssignment)
+
+
+class DossierResponsibleRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignment_via_dossier_responsible',
+                 default=u'By dossier responsible')
+
+
+RoleAssignment.register(DossierResponsibleRoleAssignment)
 
 
 class RoleAssignmentStorage(object):
