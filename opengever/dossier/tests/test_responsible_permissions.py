@@ -55,3 +55,28 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
              'reference': Oguid.for_object(self.dossier).id,
              'principal': 'nicole.kohler'},
             assignments[0])
+
+    @browsing
+    def test_role_manager_permission_is_needed_to_change_responsible(self, browser):
+        self.login(self.dossier_responsible, browser)
+        self.assertEqual('robert.ziegler', IDossier(self.dossier).responsible)
+
+        data = {"responsible": {'token': "nicole.kohler"}}
+        with browser.expect_http_error(code=403):
+            browser.open(self.dossier, json.dumps(data),
+                         method="PATCH", headers=self.api_headers)
+
+        self.assertEqual(
+            {u'additional_metadata': {},
+             u'message': u'changing_responsible_disallowed',
+             u'translated_message': u'You are not allowed to change the responsible.',
+             u'type': u'Forbidden'},
+            browser.json)
+
+        # dossier_responsible does not have the role manager role, because
+        # the feature is not active when the fixture is generated.
+        self.dossier.give_permissions_to_responsible()
+        browser.open(self.dossier, json.dumps(data),
+                     method="PATCH", headers=self.api_headers)
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('nicole.kohler', IDossier(self.dossier).responsible)

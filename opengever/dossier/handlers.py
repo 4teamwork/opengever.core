@@ -210,4 +210,9 @@ def update_responsible_role(obj, event):
     if 'IDossier.responsible' not in attrs:
         return
 
+    if not api.user.has_permission('Sharing page: Delegate roles', obj=obj):
+        raise NotReportedForbidden(
+            _('changing_responsible_disallowed',
+              default=u'You are not allowed to change the responsible.'))
+
     obj.give_permissions_to_responsible()
