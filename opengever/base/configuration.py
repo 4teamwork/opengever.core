@@ -22,6 +22,7 @@ from opengever.dossier.filing.interfaces import IFilingNumberActivatedLayer
 from opengever.dossier.interfaces import IDossierChecklistSettings
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.dossier.interfaces import IDossierSettings
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.vocabularies import count_available_dossier_types
 from opengever.ech0147.interfaces import IECH0147Settings
@@ -152,6 +153,7 @@ class GeverSettingsAdpaterV1(object):
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
         features['filing_number'] = self.is_filing_number_feature_installed()
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
+        features['grant_role_manager_to_responsible'] = api.portal.get_registry_record('grant_role_manager_to_responsible', interface=IDossierSettings)  # noqa
         features['hubspot'] = api.portal.get_registry_record('is_feature_enabled', interface=IHubSpotSettings)  # noqa
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['tasks_pdf'] = api.portal.get_registry_record('tasks_pdf_enabled', interface=IDossierResolveProperties)

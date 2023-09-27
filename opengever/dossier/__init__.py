@@ -10,3 +10,10 @@ def is_dossier_checklist_feature_enabled():
     from opengever.dossier.interfaces import IDossierChecklistSettings
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=IDossierChecklistSettings)
+
+
+def is_grant_role_manager_to_responsible_enabled():
+    # Avoid circular imports
+    from opengever.dossier.interfaces import IDossierSettings
+    return api.portal.get_registry_record(
+        'grant_role_manager_to_responsible', interface=IDossierSettings)
