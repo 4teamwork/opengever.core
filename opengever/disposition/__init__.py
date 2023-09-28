@@ -13,3 +13,9 @@ def only_attach_original_enabled():
     return api.portal.get_registry_record(
         'only_attach_original_if_conversion_is_missing',
         interface=IDispositionSettings)
+
+
+DISPOSITION_ACTIVE_STATES = ["disposition-state-in-progress",
+                             "disposition-state-appraised",
+                             "disposition-state-archived",
+                             "disposition-state-disposed"]

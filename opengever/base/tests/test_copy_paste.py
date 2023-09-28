@@ -6,6 +6,7 @@ from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import ASSIGNMENT_VIA_COMMITTEE_GROUP
+from opengever.base.role_assignments import ASSIGNMENT_VIA_DISPOSITION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
@@ -589,7 +590,8 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
     def test_all_assignment_types_are_handled(self):
         assignments_dropped_when_copying = [ASSIGNMENT_VIA_TASK,
                                             ASSIGNMENT_VIA_TASK_AGENCY,
-                                            ASSIGNMENT_VIA_COMMITTEE_GROUP]
+                                            ASSIGNMENT_VIA_COMMITTEE_GROUP,
+                                            ASSIGNMENT_VIA_DISPOSITION]
 
         for assignment in assignments_kept_when_copying:
             assignment_class = RoleAssignment.registry[assignment]
@@ -601,7 +603,7 @@ class TestCopyPastePermissionHandling(IntegrationTestCase):
         handled_assignments = assignments_dropped_when_copying + list(assignments_kept_when_copying)
 
         for key in RoleAssignment.registry:
-            assignment_class = RoleAssignment.registry[assignment]
+            assignment_class = RoleAssignment.registry[key]
             self.assertIn(key, handled_assignments,
                           "local roles for {} are dropped during copy/paste. If this"
                           " is on purpose, please adapt this test.".format(assignment_class))

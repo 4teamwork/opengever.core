@@ -1,5 +1,4 @@
 from opengever.base.response import IResponseContainer
-from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.activities import DispositionStateChangedActivity
 from opengever.disposition.interfaces import IDuringDossierDestruction
 from opengever.disposition.response import DispositionResponse
@@ -46,7 +45,6 @@ def disposition_added(context, event):
                          in context.get_dossier_representations()]
 
     IResponseContainer(context).add(response)
-    DispositionAddedActivity(context, getRequest()).record()
 
 
 def disposition_modified(context, event):

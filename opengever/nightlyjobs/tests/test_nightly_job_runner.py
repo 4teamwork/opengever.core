@@ -382,6 +382,7 @@ class TestNightlyJobRunner(IntegrationTestCase):
             u'document-title': 1,
             u'execute-after-resolve-jobs': 0,
             u'maintenance-jobs': 0,
+            u'update-disposition-permissions': 2
         }
 
         self.assertEqual(expected, get_job_counts())

@@ -35,6 +35,10 @@ class DispositionAddedActivity(BaseActivity):
     def before_recording(self):
         self.context.register_watchers()
 
+    @property
+    def actor_id(self):
+        return self.context.Creator()
+
 
 class DispositionStateChangedActivity(BaseActivity):
 

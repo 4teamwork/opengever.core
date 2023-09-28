@@ -1,12 +1,17 @@
 from BTrees.IIBTree import IITreeSet
+from opengever.base.security import elevated_privileges
+from opengever.disposition import DISPOSITION_ACTIVE_STATES
+from opengever.disposition.activities import DispositionAddedActivity
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IDisposition
 from opengever.nightlyjobs.provider import NightlyJobProviderBase
 from plone import api
+from plone.app.uuid.utils import uuidToObject
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from zope.annotation import IAnnotations
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import transaction
 
 
 class NightlySIPDelivery(NightlyJobProviderBase):
@@ -101,3 +106,72 @@ class NightlyDossierJournalPDF(NightlyJobProviderBase):
 
         queue = self.get_queue()
         queue.remove(job)
+
+
+class NightlyDossierPermissionSetter(NightlyJobProviderBase):
+    """Nightly job provider that sets permissions for archivists on offered dossiers
+    """
+
+    def __init__(self, context, request, logger):
+        super(NightlyDossierPermissionSetter, self).__init__(context, request, logger)
+        self.catalog = api.portal.get_tool('portal_catalog')
+
+    def maybe_commit(self, job):
+        pass
+
+    def _get_dispositions_with_pending_permissions_changes(self):
+        """Get all dispositions that are in status 'disposed' and have a SIP.
+        """
+        query = dict(
+            object_provides=IDisposition.__identifier__,
+            review_state=DISPOSITION_ACTIVE_STATES,
+        )
+        brains = self.catalog.unrestrictedSearchResults(query)
+        for brain in brains:
+            disposition = brain.getObject()
+            if not disposition.has_dossiers_with_pending_permissions_changes:
+                continue
+            yield disposition
+
+    def __iter__(self):
+        return iter(list(self._get_dispositions_with_pending_permissions_changes()))
+
+    def __len__(self):
+        return len(list(self._get_dispositions_with_pending_permissions_changes()))
+
+    def run_job(self, job, interrupt_if_necessary):
+        with elevated_privileges():
+            disposition = job
+            self.logger.info("Setting permissions on dossiers for %r" % disposition)
+            while disposition.dossiers_with_missing_permissions:
+                uid = disposition.dossiers_with_missing_permissions.pop()
+                dossier = uuidToObject(uid)
+                if dossier is not None:
+                    disposition.give_view_permissions_to_archivists_on_dossier(dossier)
+                    transaction.commit()
+                    self.logger.info("Added permissions on %r" % dossier)
+                    if self.should_check_interruption(disposition):
+                        interrupt_if_necessary()
+
+            while disposition.dossiers_with_extra_permissions:
+                uid = disposition.dossiers_with_extra_permissions.pop()
+                dossier = uuidToObject(uid)
+                if dossier is not None:
+                    disposition.revoke_view_permissions_from_archivists_on_dossier(dossier)
+                    transaction.commit()
+                    self.logger.info("Removed permissions from %r" % dossier)
+                    if self.should_check_interruption(disposition):
+                        interrupt_if_necessary()
+
+            if not disposition.creation_activity_recorded:
+                DispositionAddedActivity(disposition, self.request).record()
+                disposition.creation_activity_recorded = True
+                transaction.commit()
+        self.logger.info("Finished setting permissions for %r" % disposition)
+
+    def should_check_interruption(self, disposition):
+        """We should not interrupt if we just set the permmissions on the last
+        dossier and have yet to create the activity
+        """
+        return (disposition.creation_activity_recorded
+                or disposition.has_dossiers_with_pending_permissions_changes)

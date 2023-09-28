@@ -36,6 +36,11 @@
       name="create-dossier-journal-pdf"
       />
 
+  <adapter
+      factory=".nightly_jobs.NightlyDossierPermissionSetter"
+      name="update-disposition-permissions"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.disposition"

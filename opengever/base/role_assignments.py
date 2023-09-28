@@ -15,6 +15,7 @@ ASSIGNMENT_VIA_SHARING = 3
 ASSIGNMENT_VIA_PROTECT_DOSSIER = 4
 ASSIGNMENT_VIA_INVITATION = 5
 ASSIGNMENT_VIA_COMMITTEE_GROUP = 6
+ASSIGNMENT_VIA_DISPOSITION = 7
 
 # When copying a dossier, we keep or drop local roles depending on
 # their assignment cause.
@@ -116,6 +117,23 @@ class TaskAgencyRoleAssignment(RoleAssignment):
 
 
 RoleAssignment.register(TaskAgencyRoleAssignment)
+
+
+class ArchivistRoleAssignment(RoleAssignment):
+
+    cause = ASSIGNMENT_VIA_DISPOSITION
+
+    def __init__(self, principal, roles, reference):
+        self.principal = principal
+        self.roles = roles
+        self.reference = reference
+
+    def cause_title(self):
+        return _(u'label_assignment_via_disposition',
+                 default=u'Via disposition')
+
+
+RoleAssignment.register(ArchivistRoleAssignment)
 
 
 class ProtectDossierRoleAssignment(RoleAssignment):
@@ -313,6 +331,10 @@ class RoleAssignmentManager(object):
     def get_assignments_by_principal_id(self, principal_id):
         return [RoleAssignment.get(**data) for data
                 in self.storage.get_by_principal(principal_id)]
+
+    def get_assignments_by_reference(self, reference):
+        return [RoleAssignment.get(**data) for data
+                in self.storage.get_by_reference(Oguid.for_object(reference).id)]
 
     def get_roles_by_principal_id(self, principal_id):
         roles = set()

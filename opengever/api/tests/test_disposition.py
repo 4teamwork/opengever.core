@@ -125,6 +125,13 @@ class TestDispositionSerialization(IntegrationTestCase):
             browser.json['sip_delivery_status'])
 
     @browsing
+    def test_includes_has_dossiers_with_pending_permissions_changes(self, browser):
+        self.login(self.records_manager, browser)
+
+        browser.open(self.disposition, method='GET', headers=self.api_headers)
+        self.assertTrue(browser.json['has_dossiers_with_pending_permissions_changes'])
+
+    @browsing
     def test_provides_dossier_details(self, browser):
         self.login(self.records_manager, browser)
         browser.open(self.disposition, method='GET', headers=self.api_headers)

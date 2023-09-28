@@ -10,6 +10,8 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
+from opengever.base.role_assignments import ArchivistRoleAssignment
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.disposition import _
@@ -230,11 +232,14 @@ class Disposition(Container):
     implements(IDisposition, IResponseSupported)
 
     destroyed_key = 'destroyed_dossiers'
+    creation_activity_recorded_key = 'creation_activity_recorded'
 
     def __init__(self, *args, **kwargs):
         super(Disposition, self).__init__(*args, **kwargs)
         self.appraisal = {}
         self._dossiers = PersistentList()
+        self._dossiers_with_missing_permissions = PersistentList()
+        self._dossiers_with_extra_permissions = PersistentList()
 
     @property
     def dossiers(self):
@@ -277,6 +282,26 @@ class Disposition(Container):
         IAnnotations(self)[self.destroyed_key] = value
 
     @property
+    def dossiers_with_missing_permissions(self):
+        return self._dossiers_with_missing_permissions
+
+    @dossiers_with_missing_permissions.setter
+    def dossiers_with_missing_permissions(self, dossiers):
+        self._dossiers_with_missing_permissions = PersistentList(dossiers)
+
+    @property
+    def dossiers_with_extra_permissions(self):
+        return self._dossiers_with_extra_permissions
+
+    @dossiers_with_extra_permissions.setter
+    def dossiers_with_extra_permissions(self, dossiers):
+        self._dossiers_with_extra_permissions = PersistentList(dossiers)
+
+    @property
+    def has_dossiers_with_pending_permissions_changes(self):
+        return bool(self.dossiers_with_missing_permissions or self.dossiers_with_extra_permissions)
+
+    @property
     def is_closed(self):
         return api.content.get_state(self) == 'disposition-state-closed'
 
@@ -314,11 +339,27 @@ class Disposition(Container):
         for dossier in dossiers:
             dossier.offer()
             IAppraisal(self).initialize(dossier)
+            # Remember which dossiers need their permissions updated
+            uid = dossier.UID()
+            if uid in self.dossiers_with_extra_permissions:
+                # if that dossier was dropped before but its permissions
+                # not updated yet, then its permissions are already correct
+                self.dossiers_with_extra_permissions.remove(uid)
+            else:
+                self.dossiers_with_missing_permissions.append(uid)
 
     def update_dropped_dossiers(self, dossiers):
         for dossier in dossiers:
             dossier.retract()
             IAppraisal(self).drop(dossier)
+            # Remember which dossiers need their permissions updated
+            uid = dossier.UID()
+            if uid in self.dossiers_with_missing_permissions:
+                # if that dossier was added before but its permissions
+                # not updated yet, then its permissions are already correct
+                self.dossiers_with_missing_permissions.remove(uid)
+            else:
+                self.dossiers_with_extra_permissions.append(uid)
 
     def finalize_appraisal(self):
         """Write back the appraisal value to the dossiers.
@@ -358,7 +399,8 @@ class Disposition(Container):
             center.add_watcher_to_resource(
                 self, archivist, DISPOSITION_ARCHIVIST_ROLE)
 
-    def get_all_archivists(self):
+    @staticmethod
+    def get_archivists_infos():
         archivists = []
         acl_users = api.portal.get_tool('acl_users')
         role_manager = acl_users.get('portal_role_manager')
@@ -369,7 +411,14 @@ class Disposition(Container):
             # skip not existing or duplicated groups or users
             if len(info) != 1:
                 continue
+            archivists.append((principal, info))
 
+        return archivists
+
+    def get_all_archivists(self):
+        archivists_infos = self.get_archivists_infos()
+        archivists = []
+        for principal, info in archivists_infos:
             if info[0].get('principal_type') == 'group':
                 archivists += [user.userid for user in
                                ogds_service().fetch_group(principal).users]
@@ -441,3 +490,42 @@ class Disposition(Container):
             {'name': n, 'status': translate(DELIVERY_STATUS_LABELS[s], context=getRequest())}
             for n, s in statuses.items()]
         return status_infos
+
+    def give_view_permissions_to_archivists_on_dossier(self, dossier):
+        """We need to give permissions on the dossier but also on the
+        subdossiers with blocked inheritance
+        """
+        assignments = [ArchivistRoleAssignment(principal, ["Reader"], self)
+                       for principal, info in self.get_archivists_infos()]
+
+        RoleAssignmentManager(dossier).add_or_update_assignments(assignments)
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(dossier.getPhysicalPath()),
+            blocked_local_roles=True)
+
+        for brain in brains:
+            obj = brain._unrestrictedGetObject()
+            if obj != dossier and obj is not None:
+                RoleAssignmentManager(obj).add_or_update_assignments(assignments)
+
+    def revoke_view_permissions_from_archivists_on_dossier(self, dossier):
+        """We clear the permissions on the dossier and all subdossiers
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog.unrestrictedSearchResults(
+            path='/'.join(dossier.getPhysicalPath()))
+        for brain in brains:
+            obj = brain._unrestrictedGetObject()
+            manager = RoleAssignmentManager(obj)
+            if manager.get_assignments_by_reference(self):
+                manager.clear_by_reference(self)
+
+    @property
+    def creation_activity_recorded(self):
+        return IAnnotations(self).get(self.creation_activity_recorded_key, False)
+
+    @creation_activity_recorded.setter
+    def creation_activity_recorded(self, value):
+        IAnnotations(self)[self.creation_activity_recorded_key] = value
