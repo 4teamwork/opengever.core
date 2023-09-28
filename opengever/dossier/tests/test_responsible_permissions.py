@@ -83,7 +83,7 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
         self.assertEqual(
             {u'additional_metadata': {},
              u'message': u'changing_responsible_disallowed',
-             u'translated_message': u'You are not allowed to change the responsible.',
+             u'translated_message': u'Insufficient privileges to modify the responsible.',
              u'type': u'Forbidden'},
             browser.json)
 

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-02 12:52+0000\n"
+"POT-Creation-Date: 2023-09-28 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,6 +294,11 @@ msgstr ""
 #. Default: "Move"
 #: ./opengever/dossier/move_items.py
 msgid "button_submit"
+msgstr ""
+
+#. Default: "You are not allowed to change the responsible."
+#: ./opengever/dossier/handlers.py
+msgid "changing_responsible_disallowed"
 msgstr ""
 
 #. Default: "Contact"

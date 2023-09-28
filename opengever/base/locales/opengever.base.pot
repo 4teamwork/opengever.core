@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-09-21 13:00+0000\n"
+"POT-Creation-Date: 2023-09-28 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -234,6 +234,11 @@ msgstr ""
 #. Default: "Via disposition"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_disposition"
+msgstr ""
+
+#. Default: "By dossier responsible"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_dossier_responsible"
 msgstr ""
 
 #. Default: "By protect dossier"

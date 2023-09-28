@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-06-02 12:52+0000\n"
+"POT-Creation-Date: 2023-09-28 15:30+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -370,6 +370,11 @@ msgstr "Save"
 #: ./opengever/dossier/move_items.py
 msgid "button_submit"
 msgstr "Move"
+
+#. Default: "You are not allowed to change the responsible."
+#: ./opengever/dossier/handlers.py
+msgid "changing_responsible_disallowed"
+msgstr "Insufficient privileges to modify the responsible."
 
 #. German translation: Kontakt
 #. Default: "Contact"
