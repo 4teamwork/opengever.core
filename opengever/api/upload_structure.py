@@ -6,7 +6,6 @@ from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRe
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.document.document import is_email_upload
 from opengever.dossier.behaviors.dossier import IDossierMarker
-from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.dossier.utils import get_main_dossier
@@ -188,11 +187,8 @@ class DossierDepthCheckMixin(object):
         if self.structure["max_container_depth"] == 0:
             return
 
-        max_depth = api.portal.get_registry_record(
-            name='maximum_dossier_depth',
-            interface=IDossierContainerTypes
-        )
-        if self.current_depth + self.structure["max_container_depth"] > max_depth + 1:
+        if not self.context.is_dossier_structure_addable(
+                self.structure["max_container_depth"]):
             raise MaximalDepthExceeded(
                 _(u'msg_max_dossier_depth_exceeded',
                   default=u'Maximum dossier depth exceeded'))

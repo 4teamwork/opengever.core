@@ -3,7 +3,9 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.upload_structure import IUploadStructureAnalyser
 from opengever.contact.tests import create_contacts
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.testing import SolrIntegrationTestCase
+from plone import api
 import json
 
 
@@ -178,6 +180,43 @@ class TestUploadStructure(SolrIntegrationTestCase):
             browser,
             subsubdossier,
             ['file.txt'])
+
+    @browsing
+    def test_upload_structure_respects_local_dossier_depth(self, browser):
+        self.login(self.regular_user, browser)
+
+        # validate the max_dossier_depth
+        self.assertEqual(1, api.portal.get_registry_record(
+            name='maximum_dossier_depth', interface=IDossierContainerTypes))
+
+        # Uploading a structure to this brand new dossier will not be possible
+        # because the global max_depth will will be exceeded.
+        dossier = create(Builder('dossier').within(self.leaf_repofolder))
+        self.assert_upload_structure_raises_bad_request(
+            browser,
+            dossier,
+            ['/folder1/folder2/file.txt'],
+            u'Maximum dossier depth exceeded')
+
+        # We now create some subdossier up to a depth of three which is more
+        # than the allowed global depth. So the local allowed depth will be 3
+        # for this dossier-tree.
+        #
+        # Uploading a structure up to a depth of three to the dossier should be
+        # possible now.
+        subdossier = create(Builder('dossier').within(dossier))
+        create(Builder('dossier').within(subdossier))
+        self.assert_upload_structure_returns_ok(
+            browser,
+            dossier,
+            ['/folder1/folder2/file.txt'])
+
+        # but will still raise if the upload structure exceeds the local limit
+        self.assert_upload_structure_raises_bad_request(
+            browser,
+            dossier,
+            ['/folder1/folder2/folder3/file.txt'],
+            u'Maximum dossier depth exceeded')
 
     @browsing
     def test_upload_structure_ignores_maximal_depth_in_workspace_area(self, browser):
