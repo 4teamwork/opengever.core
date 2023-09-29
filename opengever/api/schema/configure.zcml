@@ -99,5 +99,9 @@
   <adapter factory=".adapters.GEVERChoiceslessRelationListSchemaProvider" />
   <adapter factory=".adapters.GEVERMultiTypeFieldJsonSchemaProvider" />
   <adapter factory=".adapters.GEVERIdentifierJsonSchemaProvider" />
+  <adapter
+      factory=".adapters.DossierResponsibleJsonSchemaProvider"
+      name="IDossier.responsible"
+      />
 
 </configure>

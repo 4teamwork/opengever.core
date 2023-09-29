@@ -158,6 +158,21 @@ class TestSchemaEndpoint(IntegrationTestCase):
         self.assertNotIn('privacy_layer', fieldset['fields'])
 
     @browsing
+    def test_edit_schema_sets_display_mode_for_responsible_field_when_necessary(self, browser):
+        self.login(self.regular_user, browser)
+        response = browser.open(
+            self.dossier, view='@schema', method='GET',
+            headers=self.api_headers,).json
+        self.assertNotIn('mode', response['properties']["responsible"])
+
+        self.activate_feature('grant_role_manager_to_responsible')
+        response = browser.open(
+            self.dossier, view='@schema', method='GET',
+            headers=self.api_headers,).json
+        self.assertIn('mode', response['properties']["responsible"])
+        self.assertTrue(response['properties']["responsible"]['mode'])
+
+    @browsing
     def test_schema_endpoint_returns_jsonschema_for_propertysheets(self, browser):
         """This just tests that the @schema endpoint returns JSON schemas
         for propertysheets at all.

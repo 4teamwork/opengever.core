@@ -3,6 +3,8 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.schema import IIdentifier
 from opengever.base.schema import IMultiTypeField
 from opengever.base.vocabulary import WrapperBase
+from opengever.dossier import is_grant_role_manager_to_responsible_enabled
+from plone import api
 from plone.restapi.types.adapters import ASCIILineJsonSchemaProvider
 from plone.restapi.types.adapters import ChoiceJsonSchemaProvider
 from plone.restapi.types.adapters import CollectionJsonSchemaProvider
@@ -65,6 +67,22 @@ class GEVERChoiceJsonSchemaProvider(ChoiceJsonSchemaProvider):
                 vocab_name = vocab_url.split('/')[-1]
                 result['vocabulary']['@id'] = get_vocabulary_url(vocab_name, self.context, self.request)
 
+        return result
+
+
+@adapter(IChoice, Interface, IOpengeverBaseLayer)
+@implementer(IJsonSchemaProvider)
+class DossierResponsibleJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
+    """We specifically overwrite the dossier responsible field serializer to
+    include display mode when the user is not allowed to modify the dossier
+    responsible.
+    """
+    def additional(self):
+        result = super(DossierResponsibleJsonSchemaProvider, self).additional()
+        if is_grant_role_manager_to_responsible_enabled() and\
+           not IAnnotations(self.request).get(TYPE_TO_BE_ADDED_KEY) and\
+           not api.user.has_permission("Sharing page: Delegate roles"):
+            result['mode'] = 'display'
         return result
 
 # These IJsonSchemaProviders below are customized so that we can retain
