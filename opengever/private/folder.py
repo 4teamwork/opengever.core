@@ -1,4 +1,5 @@
 from opengever.base.default_values import set_default_values
+from opengever.dossier.utils import check_subdossier_depth_allowed
 from opengever.ogds.base.actor import Actor
 from opengever.private.interfaces import IPrivateContainer
 from opengever.repository.repositoryfolder import IRepositoryFolderSchema
@@ -39,3 +40,6 @@ class PrivateFolder(Container):
         # creation, that doesn't properly set default values. We therefore
         # apply them here after creation.
         set_default_values(self, self.aq_parent, {})
+
+    def is_dossier_structure_addable(self, depth=1):
+        return check_subdossier_depth_allowed(depth - 1)

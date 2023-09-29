@@ -3,8 +3,10 @@ from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
+from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.inbox.inbox import IInbox
 from opengever.workspace.interfaces import IWorkspace
+from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
 import unicodedata
 
@@ -78,3 +80,16 @@ def supports_is_subdossier(obj):
     the is_subdossier index / method.
     """
     return IDossierMarker.providedBy(obj) or IDossierTemplateMarker.providedBy(obj)
+
+
+def check_subdossier_depth_allowed(subdossier_depth=1):
+    """Checks if the maximum dossier depth will be exceeded for a specific
+    target depth.
+    """
+    max_subdossier_depth = api.portal.get_registry_record(
+        name='maximum_dossier_depth',
+        interface=IDossierContainerTypes,
+        default=100,
+    )
+
+    return subdossier_depth <= max_subdossier_depth

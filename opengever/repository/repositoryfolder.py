@@ -1,6 +1,7 @@
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier.utils import check_subdossier_depth_allowed
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from plone.app.content.interfaces import INameFromTitle
@@ -148,6 +149,9 @@ class RepositoryFolder(content.Container):
             else:
                 return True
         return True
+
+    def is_dossier_structure_addable(self, depth=1):
+        return check_subdossier_depth_allowed(depth - 1)
 
 
 @implementer(INameFromTitle)
