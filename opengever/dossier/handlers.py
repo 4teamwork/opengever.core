@@ -215,4 +215,4 @@ def update_responsible_role(obj, event):
             _('changing_responsible_disallowed',
               default=u'You are not allowed to change the responsible.'))
 
-    obj.give_permissions_to_responsible()
+    obj.give_permissions_to_responsible(remove_existing=True)

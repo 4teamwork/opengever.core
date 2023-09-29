@@ -8,6 +8,7 @@ from opengever.base.command import CreateDocumentCommand
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.response import IResponseSupported
+from opengever.base.role_assignments import ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE
 from opengever.base.role_assignments import DossierResponsibleRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.security import elevated_privileges
@@ -611,11 +612,15 @@ class DossierContainer(Container):
     def set_custom_property(self, fieldname, value, reindex=False):
         set_custom_property(self, fieldname, value, reindex)
 
-    def give_permissions_to_responsible(self):
+    def give_permissions_to_responsible(self, remove_existing=False):
+        manager = RoleAssignmentManager(self)
+        if remove_existing:
+            manager.clear_by_causes([ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE])
+
         assignment = DossierResponsibleRoleAssignment(
             IDossier(self).responsible, ["Role Manager"], self)
 
-        RoleAssignmentManager(self).add_or_update_assignments([assignment])
+        manager.add_or_update_assignments([assignment])
 
 
 @implementer(IConstrainTypeDecider)

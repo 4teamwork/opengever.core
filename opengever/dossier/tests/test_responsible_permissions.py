@@ -56,6 +56,20 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
              'principal': 'nicole.kohler'},
             assignments[0])
 
+        data = {"responsible": {'token': "kathi.barfuss"}}
+        browser.open(self.dossier, json.dumps(data), method="PATCH", headers=self.api_headers)
+
+        self.assertEqual('kathi.barfuss', IDossier(self.dossier).responsible)
+
+        assignments = self.get_assignments_via_responsible(self.dossier)
+        self.assertEqual(1, len(assignments))
+        self.assertEqual(
+            {'cause': 8,
+             'roles': ['Role Manager'],
+             'reference': Oguid.for_object(self.dossier).id,
+             'principal': 'kathi.barfuss'},
+            assignments[0])
+
     @browsing
     def test_role_manager_permission_is_needed_to_change_responsible(self, browser):
         self.login(self.dossier_responsible, browser)
