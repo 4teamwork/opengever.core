@@ -260,6 +260,7 @@ WRITE_PERMISSIONS = [
     'Edit lifecycle and classification',
 
     'Set own properties',
+    'Sharing page: Delegate Role Manager role',
 ]
 
 

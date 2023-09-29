@@ -73,6 +73,35 @@ class TestOpengeverSharing(IntegrationTestCase):
             browser.json['entries'][0]['roles'].keys())
 
     @browsing
+    def test_show_role_manager_on_dossier_when_feature_active(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.dossier, view='@sharing?ignore_permissions=1',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader', u'Contributor', u'Editor', u'Reviewer',
+             u'Publisher', u'DossierManager', u'TaskResponsible'],
+            [role['id'] for role in browser.json.get('available_roles')])
+        self.assertEqual(
+            [u'Publisher', u'TaskResponsible', u'DossierManager', u'Editor',
+             u'Reader', u'Contributor', u'Reviewer'],
+            browser.json['entries'][0]['roles'].keys())
+
+        self.activate_feature("grant_role_manager_to_responsible")
+        browser.open(self.dossier, view='@sharing?ignore_permissions=1',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader', u'Contributor', u'Editor', u'Reviewer', u'Publisher',
+             u'DossierManager', u'TaskResponsible', u'Role Manager'],
+            [role['id'] for role in browser.json.get('available_roles')])
+        self.assertEqual(
+            [u'Publisher', u'Role Manager', u'TaskResponsible', u'DossierManager',
+             u'Editor', u'Reader', u'Contributor', u'Reviewer'],
+            browser.json['entries'][0]['roles'].keys())
+
+    @browsing
     def test_sets_role_assignments_and_updates_local_roles(self, browser):
         self.login(self.administrator, browser=browser)
 

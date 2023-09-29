@@ -53,9 +53,9 @@ class TestExcelRoleAssignmentReport(IntegrationTestCase):
         self.assertSequenceEqual(
             [[u'Title', u'Read', u'Add dossiers', u'Edit dossiers',
               u'Resolve dossiers', u'Reactivate dossiers', u'Manage dossiers',
-              u'Task responsible'],
-             [u'Ordnungssystem', None, u'x', None, None, None, None, None],
-             [u'Subsubdossier', u'x', None, u'x', u'x', None, None, None],
+              u'Task responsible', u'Role manager'],
+             [u'Ordnungssystem', None, u'x', None, None, None, None, None, None],
+             [u'Subsubdossier', u'x', None, u'x', u'x', None, None, None, None],
              [u'2. Rechnungspr\xfcfungskommission',
-              None, u'x', None, None, u'x', None, None]],
+              None, u'x', None, None, u'x', None, None, None]],
             [[cell.value for cell in row] for row in rows])

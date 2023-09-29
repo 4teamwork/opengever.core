@@ -40,7 +40,6 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
         self.login(self.administrator, browser=browser)
         browser.open(self.portal.absolute_url() + '/@role-assignment-reports/report_0',
                      method='GET', headers=self.api_headers)
-
         self.assertEqual(
             {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
              u'@type': u'virtual.report.roleassignmentreport',
@@ -50,7 +49,8 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
                                    {u'id': u'Reviewer', u'title': u'Resolve'},
                                    {u'id': u'Publisher', u'title': u'Reactivate'},
                                    {u'id': u'DossierManager', u'title': u'Manage dossiers'},
-                                   {u'id': u'TaskResponsible', u'title': u'Task responsible'}],
+                                   {u'id': u'TaskResponsible', u'title': u'Task responsible'},
+                                   {u'id': u'Role Manager', u'title': u'Role Manager'}],
              u'items': [{u'UID': u'createrepositorytree000000000001',
                          u'roles': [u'Contributor'],
                          u'title': u'Ordnungssystem',
