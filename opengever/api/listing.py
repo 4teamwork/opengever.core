@@ -31,6 +31,7 @@ OTHER_ALLOWED_FIELDS = set([
     'trashed',
     'UID',
     'watchers',
+    'location',
     'related_items',
     'is_locked_by_copy_to_workspace',
 ])
