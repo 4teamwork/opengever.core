@@ -25,7 +25,7 @@ class TestActorSummarySerialization(IntegrationTestCase):
 
     def test_serialize_actor_id_to_json_summary(self):
         self.assertDictEqual(
-            {'@idD': self.actors_url + "/some_id",
+            {'@idD1': self.actors_url + "/some_id",
              'identifier': 'some_id'},
             serialize_actor_id_to_json_summary('some_id'))
 
