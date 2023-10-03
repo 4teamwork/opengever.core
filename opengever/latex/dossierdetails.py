@@ -200,7 +200,7 @@ class DossierDetailsLaTeXView(MakoLaTeXView):
                         else translate(_('label_no', default=u"No"), context=self.request))
                 elif isinstance(custom_field_value, date):
                     custom_field_value = helper.readable_date(self.context, custom_field_value)
-                elif isinstance(custom_field_value, set):
+                elif isinstance(custom_field_value, set) or isinstance(custom_field_value, list):
                     if not custom_field_value:
                         continue
                     custom_field_value = u', '.join(custom_field_value)
