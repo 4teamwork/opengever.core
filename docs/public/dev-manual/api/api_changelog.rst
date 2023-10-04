@@ -11,6 +11,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@listing`` endpoint whitelists the ``location`` field.
 
 2023.13.0 (2023-09-21)
 ----------------------
