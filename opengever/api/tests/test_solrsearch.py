@@ -1476,7 +1476,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch[u'items']])
 
     @browsing
-    def test_livesearch_handles_or_whilst_splitting_terms(self, browser):
+    def test_livesearch_handles_for_hyphenated_terms(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.document.title = "md-103"
@@ -1495,7 +1495,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["title"] for item in livesearch[u'items']])
 
     @browsing
-    def test_splits_on_underscores(self, browser):
+    def test_handles_underscores(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.document.title = "vorbereitung_103"
@@ -1608,29 +1608,31 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             [item["@id"] for item in livesearch[u'items']])
 
     @browsing
-    def test_livesearch_splits_hyphenated_terms_and_adds_wildcard_to_last_token(self, browser):
+    def test_livesearch_handles_hyphens(self, browser):
         self.login(self.regular_user, browser=browser)
         self.document.title = "Taktische"
         self.document.reindexObject(idxs=["Title"])
         self.subdocument.title = "Taktische-Banane"
         self.subdocument.reindexObject(idxs=["Title"])
+        self.subsubdocument.title = "Taktische-Super-Banane"
+        self.subsubdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        # first token "takt" does not get postfixed with wildcard
+        # Term is not split
         query = {"q": "Title:takt-ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
         self.assertEqual(0, livesearch["items_total"])
 
-        # first token "takt" explicit wildcard is preserved
+        # explicit wildcard is preserved
         query = {"q": "Title:takt*-ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane'],
+            [u'Taktische-Banane', u'Taktische-Super-Banane'],
             [item["title"] for item in livesearch["items"]])
 
         query = {"q": "Title:taktische-ba"}
@@ -1645,25 +1647,29 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "Title:taktische-banane"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
+        self.assertEqual(2, search["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane'],
+            [u'Taktische-Banane', u'Taktische-Super-Banane'],
             [item["title"] for item in search["items"]])
         self.assertEqual(1, livesearch["items_total"])
         self.assertItemsEqual(
             [u'Taktische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
-        # Note that adding a wildcard to normal search does not lead to the
-        # expected behavior for the customer
-        query = {"q": "Title:taktische-banane*"}
+        query = {"q": "Title:sup"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(1, search["items_total"])
         self.assertEqual(1, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane'],
+            [u'Taktische-Super-Banane'],
             [item["title"] for item in livesearch["items"]])
+
+        query = {"q": "Title:super-ban"}
+        search = self.solr_search(browser, query)
+        livesearch = self.solr_livesearch(browser, query)
+        self.assertEqual(0, search["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
 
     @browsing
     def test_livesearch_works_with_other_special_characters(self, browser):
@@ -1853,7 +1859,8 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         queries = [{"q": "4A.BE.2301-11B/C32"},
                    {"q": "4A.BE.2301-11"},
-                   {"q": "4A.BE"}]
+                   {"q": "4A.BE"},
+                   {"q": "2301"}]
         for query in queries:
             search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
@@ -1862,6 +1869,20 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in livesearch[u'items']])
+            self.assertItemsEqual(
+                [self.document.absolute_url()],
+                [item["@id"] for item in search[u'items']])
+
+        # Because search term does not get split, parts from the center
+        # of the token cannot be found
+        queries = [{"q": "BE.2301"},
+                   {"q": "11B"},
+                   {"q": "B/C"}]
+        for query in queries:
+            search = self.solr_search(browser, query)
+            livesearch = self.solr_livesearch(browser, query)
+            self.assertEqual(1, search["items_total"])
+            self.assertEqual(0, livesearch["items_total"])
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in search[u'items']])
