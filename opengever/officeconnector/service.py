@@ -214,15 +214,14 @@ class OfficeConnectorAttachPayload(OfficeConnectorPayload):
         self.request.response.setHeader('Content-type', 'application/json')
         payloads = self.get_base_payloads()
         payloads_by_parent = group_payloads_by_parent(payloads, self.request)
-
-        for container_uuid, payloads in payloads_by_parent.items():
+        for container_uuid, container_payloads in payloads_by_parent.items():
 
             if container_uuid and not is_workspace_feature_enabled():
                 dossier = api.content.get(UID=container_uuid)
-                documents = [p['document'] for p in payloads]
+                documents = [p['document'] for p in container_payloads]
                 notify(DossierAttachedToEmailEvent(dossier, documents))
 
-            for payload in payloads:
+            for payload in container_payloads:
                 document = payload['document']
                 payload['title'] = document.title_or_id()
                 payload['content-type'] = document.get_file().contentType
