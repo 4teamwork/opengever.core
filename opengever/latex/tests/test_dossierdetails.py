@@ -10,6 +10,7 @@ from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.latex.dossierdetails import IDossierDetailsLayer
 from opengever.latex.layouts.default import DefaultLayout
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
+from opengever.propertysheets.utils import set_custom_property
 from opengever.testing import IntegrationTestCase
 from zope.component import getMultiAdapter
 import json
@@ -93,6 +94,17 @@ class TestDossierDetails(TestDossierDetailsBase):
         dossierdetails = self.get_dossierdetails_view(dossier)
         self.assertEqual('\\bf Choose & zw\xc3\xb6i \\\\%%\n'
                          '\\bf Choose Multi & three, one \\\\%%\n'
+                         '\\bf A line of text & bl\xc3\xa4 \\\\%%\n'
+                         '\\bf Birthday & 30.01.2022 \\\\%%\n'
+                         '\\bf Number & 12 \\\\%%\n'
+                         '\\bf Some lines of text & Irgend \xc3\xa4 Texscht \\\\%%\n'
+                         '\\bf Yes or no & Yes \\\\%%', dossierdetails.get_custom_fields_data())
+
+        # handle lists correctly
+        set_custom_property(dossier, 'choosemulti', value=["two", "three"])
+        dossierdetails = self.get_dossierdetails_view(dossier)
+        self.assertEqual('\\bf Choose & zw\xc3\xb6i \\\\%%\n'
+                         '\\bf Choose Multi & two, three \\\\%%\n'
                          '\\bf A line of text & bl\xc3\xa4 \\\\%%\n'
                          '\\bf Birthday & 30.01.2022 \\\\%%\n'
                          '\\bf Number & 12 \\\\%%\n'
