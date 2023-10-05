@@ -38,7 +38,9 @@ class GEVERWarmupPerformer(DefaultWarmupPerformer):
             'opengever.repository.interfaces.IRepositoryFolder',
             'opengever.workspace.interfaces.IWorkspace']
 
-        with plone.api.env.adopt_user(username=self.context.getOwner().getId()):
+        # certain deployments have a PloneSite owned by anonymous.
+        userid = self.context.getOwner().getId() or "zopemaster"
+        with plone.api.env.adopt_user(username=userid):
             for view_name in self.VIEW_NAMES:
                 view = getMultiAdapter((self.context, self.request), name=view_name)
                 view()
