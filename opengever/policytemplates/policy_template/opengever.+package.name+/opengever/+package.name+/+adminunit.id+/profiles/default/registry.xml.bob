@@ -120,6 +120,12 @@
   </records>
 
 {{% endif %}}
+{{% if setup.use_lenient_dossier_resolver %}}
+  <records interface="opengever.dossier.interfaces.IDossierResolveProperties">
+    <value key="resolver_name">lenient</value>
+  </records>
+
+{{% endif %}}
 {{% if not setup.preserved_as_paper %}}
   <records interface="opengever.document.interfaces.IDocumentSettings">
       <value key="preserved_as_paper_default">False</value>
