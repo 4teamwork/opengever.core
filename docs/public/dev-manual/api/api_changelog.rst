@@ -13,11 +13,10 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@listing`` endpoint whitelists the ``location`` field.
 
+- ``@config``: Add ``grant_role_manager_to_responsible`` feature flag.
+
 2023.13.0 (2023-09-21)
 ----------------------
-
-Breaking Changes
-^^^^^^^^^^^^^^^^
 
 Other Changes
 ^^^^^^^^^^^^^

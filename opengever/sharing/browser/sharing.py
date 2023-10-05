@@ -11,6 +11,7 @@ from opengever.base.handlebars import get_handlebars_template
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.dossier import is_grant_role_manager_to_responsible_enabled
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.inbox.inbox import IInbox
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
@@ -51,7 +52,7 @@ ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'Publisher', 'DossierManager',
                'MeetingUser', 'CommitteeAdministrator',
                'CommitteeResponsible', 'CommitteeMember', 'TaskResponsible',
-               'WorkspaceAdmin', 'WorkspacesCreator',
+               'Role Manager', 'WorkspaceAdmin', 'WorkspacesCreator',
                'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
 
 
@@ -63,6 +64,7 @@ ROLE_MAPPING = OrderedDict([
     (u'Publisher', _('sharing_dossier_publisher')),
     (u'DossierManager', _('sharing_dossier_manager')),
     (u'TaskResponsible', _('sharing_task_responsible')),
+    (u'Role Manager', _('sharing_role_manager')),
 ])
 
 
@@ -164,6 +166,7 @@ class OpengeverSharingView(SharingView):
     @memoize
     def roles(self):
         super_roles = self._roles()
+
         if get_specification_for(self.context) is not None:
             # In lawgiver workflow specifications we can configure the
             # "visible roles", therefore we dont need to overwrite the
@@ -179,6 +182,9 @@ class OpengeverSharingView(SharingView):
 
         if IDossierMarker.providedBy(self.context) or IInbox.providedBy(self.context):
             available_roles.append(u'TaskResponsible')
+
+        if IDossierMarker.providedBy(self.context) and is_grant_role_manager_to_responsible_enabled():
+            available_roles.append(u'Role Manager')
 
         result = []
         for role in [r.get('id') for r in super_roles]:

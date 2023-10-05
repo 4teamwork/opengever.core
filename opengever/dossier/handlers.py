@@ -2,17 +2,21 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_path_filter
+from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
 from opengever.base.security import elevated_privileges
 from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
+from opengever.dossier import _
+from opengever.dossier import is_grant_role_manager_to_responsible_enabled
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
 from zope.component import getAdapter
 from zope.component import queryUtility
@@ -185,3 +189,30 @@ def dossier_comment_added(obj, event):
     """
 
     obj.reindexObject(idxs='searchableText')
+
+
+def set_responsible_role(obj, event):
+    if not is_grant_role_manager_to_responsible_enabled():
+        return
+
+    obj.give_permissions_to_responsible()
+
+
+def update_responsible_role(obj, event):
+    if not is_grant_role_manager_to_responsible_enabled():
+        return
+
+    attrs = tuple(
+        attr
+        for descr in event.descriptions
+        for attr in descr.attributes
+    )
+    if 'IDossier.responsible' not in attrs:
+        return
+
+    if not api.user.has_permission('Sharing page: Delegate roles', obj=obj):
+        raise NotReportedForbidden(
+            _('changing_responsible_disallowed',
+              default=u'You are not allowed to change the responsible.'))
+
+    obj.give_permissions_to_responsible(remove_existing=True)

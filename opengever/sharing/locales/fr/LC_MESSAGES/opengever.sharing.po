@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-11-17 12:56+0000\n"
+"POT-Creation-Date: 2023-10-03 11:32+0000\n"
 "PO-Revision-Date: 2017-12-03 11:34+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-sharing/fr/>\n"
@@ -89,6 +89,10 @@ msgstr "Lire les dossiers"
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_dossier_reviewer"
 msgstr "Clôturer les dossiers"
+
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_role_manager"
+msgstr "Role manager"
 
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_task_responsible"

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-09-21 13:00+0000\n"
+"POT-Creation-Date: 2023-09-28 15:26+0000\n"
 "PO-Revision-Date: 2014-09-04 01:03+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -284,6 +284,11 @@ msgstr "Via committee group"
 #: ./opengever/base/role_assignments.py
 msgid "label_assignment_via_disposition"
 msgstr "Via disposition"
+
+#. Default: "By dossier responsible"
+#: ./opengever/base/role_assignments.py
+msgid "label_assignment_via_dossier_responsible"
+msgstr "Via dossier responsible"
 
 #. German translation: Durch «Dossier schützen»
 #. Default: "By protect dossier"

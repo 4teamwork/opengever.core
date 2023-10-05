@@ -13,6 +13,7 @@
   <lawgiver:role name="Publisher" />
   <lawgiver:role name="DossierManager" />
   <lawgiver:role name="TaskResponsible" />
+  <lawgiver:role name="Role Manager" />
 
   <lawgiver:role name="WorkspaceAdmin" />
   <lawgiver:role name="WorkspaceGuest" />

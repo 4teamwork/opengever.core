@@ -71,6 +71,7 @@ GEVER-Mandanten abgefragt werden.
               "ech0147_import": true,
               "favorites": true,
               "gever_ui_enabled": false,
+              "grant_role_manager_to_responsible": false,
               "hubspot": false,
               "journal_pdf": false,
               "meetings": true,
@@ -197,6 +198,9 @@ features
 
     gever_ui_enabled
         Neue Benutzeroberfläche aktiviert
+
+    grant_role_manager_to_responsible
+        Dossier Verantwortliche dürfen im Dossier Berechtigungen vergeben.
 
     hubspot
         Einbindung von HubSpot Chat in der neuen Benutzeroberfläche
