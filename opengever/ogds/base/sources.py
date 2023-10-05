@@ -917,9 +917,16 @@ class AllGroupsSource(BaseSQLModelSource):
 
     model_class = Group
 
+    def __init__(self, context, include_inactive_groups=False, **kwargs):
+        super(AllGroupsSource, self).__init__(context, **kwargs)
+        if include_inactive_groups:
+            self._base_query = Group.query
+        else:
+            self._base_query = Group.query.filter(Group.active == True)  # noqa
+
     @property
     def base_query(self):
-        return Group.query.filter(Group.active == True)  # noqa
+        return self._base_query
 
     @property
     def search_query(self):
@@ -996,11 +1003,12 @@ class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
     source_classes = [AllFilteredGroupsSourcePrefixed, AllUsersSource]
 
-    def __init__(self, context, only_active_orgunits=True):
+    def __init__(self, context, only_active_orgunits=True, include_inactive_groups=False):
         super(AllUsersAndGroupsSource, self).__init__(context)
 
         self.source_instances = [
-            source_class(context, only_active_orgunits=only_active_orgunits)
+            source_class(context, only_active_orgunits=only_active_orgunits,
+                         include_inactive_groups=include_inactive_groups)
             for source_class in self.source_classes
         ]
 
@@ -1008,9 +1016,12 @@ class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 @implementer(IContextSourceBinder)
 class AllUsersAndGroupsSourceBinder(object):
 
-    def __init__(self, only_active_orgunits=True):
+    def __init__(self, only_active_orgunits=True, include_inactive_groups=False):
         self.only_active_orgunits = only_active_orgunits
+        self.include_inactive_groups = include_inactive_groups
 
     def __call__(self, context):
         return AllUsersAndGroupsSource(
-            context, only_active_orgunits=self.only_active_orgunits)
+            context,
+            only_active_orgunits=self.only_active_orgunits,
+            include_inactive_groups=self.include_inactive_groups)

@@ -81,6 +81,23 @@ class TestGlobalSourcesGet(IntegrationTestCase):
              u'items_total': 2},
             browser.json)
 
+    @browsing
+    def test_all_users_and_groups_find_also_inactive_groups(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(Builder('ogds_group').having(groupid='inactive_group',
+                                            title="Inaktiv",
+                                            active=False))
+
+        url = '{}/@globalsources/all_users_and_groups?query=inak'.format(
+            self.portal.absolute_url())
+        browser.open(url, headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups?query=inak',
+             u'items': [{u'title': u'Inaktiv', u'token': u'group:inactive_group'}],
+             u'items_total': 1},
+            browser.json)
+
 
 class TestGlobalSourcesGetInTeamraum(IntegrationTestCase):
 
