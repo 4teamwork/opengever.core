@@ -22,6 +22,7 @@ from opengever.dossier.behaviors.participation import IParticipationAwareMarker
 from opengever.dossier.interfaces import IConstrainTypeDecider
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.dossier.interfaces import IDossierResolveProperties
+from opengever.dossier.utils import check_subdossier_depth_allowed
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.ogds.base.actor import Actor
@@ -175,13 +176,8 @@ class DossierContainer(Container):
         """Checks if the maximum dossier depth allows additional_depth levels
         of subdossiers but not for permissions.
         """
-        max_depth = api.portal.get_registry_record(
-            name='maximum_dossier_depth',
-            interface=IDossierContainerTypes,
-            default=100,
-        )
-        max_depth_respected = (
-            self._get_dossier_depth() + additional_depth <= max_depth + 1)
+        max_depth_respected = check_subdossier_depth_allowed(
+            self._get_dossier_depth() - 1 + additional_depth)
 
         if max_depth_respected:
             return True
