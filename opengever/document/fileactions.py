@@ -51,6 +51,9 @@ class BaseDocumentFileActions(object):
     def is_office_online_edit_action_available(self):
         return False
 
+    def is_oc_view_action_available(self):
+        return self.context.has_file()
+
     def is_oc_direct_checkout_action_available(self):
         return False
 
@@ -176,6 +179,15 @@ class DocumentFileActions(BaseDocumentFileActions):
                 and self.context.is_checkout_permitted()
                 and self.context.is_office_online_editable()
                 and self._can_edit_with_office_online())
+
+    def is_oc_view_action_available(self):
+        manager = getMultiAdapter(
+            (self.context, self.request), ICheckinCheckoutManager)
+
+        return (
+            self.context.has_file()
+            and not manager.is_checked_out_by_current_user()
+        )
 
     def is_oc_direct_checkout_action_available(self):
         return (self.is_any_checkout_or_edit_available()

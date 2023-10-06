@@ -2,6 +2,15 @@
 
     <div class="file-action-buttons">
 
+        <tal:oc_view tal:condition="view/is_oc_view_action_available">
+            <a tal:attributes="href view/get_oc_view_url;
+                               data-document-url context/absolute_url"
+                class="function-view-details oc-view"
+                i18n:translate="label_view">
+                View
+            </a>
+        </tal:oc_view>
+
         <tal:edit_metadata tal:condition="view/is_edit_metadata_action_visible">
             <a class="function-edit-metadata"
                 tal:attributes="href view/get_edit_metadata_url"

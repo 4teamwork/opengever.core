@@ -564,6 +564,31 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.assertEqual(expected_file_actions,
                          self.get_file_actions(browser, self.document))
 
+    @browsing
+    def test_oc_view_available_if_document_has_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.document)
+        )
+
+    @browsing
+    def test_oc_view_not_available_if_document_has_no_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertNotIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.empty_document)
+        )
+
+    @browsing
+    def test_oc_view_not_available_if_document_is_checked_out_by_current_user(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        self.assertNotIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.document)
+        )
+
 
 class TestTrashingActionsForDocuments(FileActionsTestBase):
 

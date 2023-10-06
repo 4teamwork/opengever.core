@@ -75,6 +75,12 @@ class VisibleActionButtonRendererMixin(FileActionAvailabilityMixin):
     def is_open_as_pdf_action_visible(self):
         return False
 
+    def get_oc_view_url(self):
+        return (
+            u"javascript:officeConnectorCheckout("
+            "'{}/officeconnector_view_url'"
+            ");".format(self.context.absolute_url()))
+
     def get_oc_direct_checkout_url(self):
         return (
             u"javascript:officeConnectorCheckout("

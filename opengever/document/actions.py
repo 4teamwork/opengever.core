@@ -261,6 +261,9 @@ class DocumentSchemaContextActions(BaseDocumentContextActions):
     def is_oc_direct_edit_available(self):
         return self.file_actions.is_oc_direct_edit_action_available()
 
+    def is_oc_view_available(self):
+        return self.file_actions.is_oc_view_action_available()
+
     def is_office_online_edit_available(self):
         return self.file_actions.is_office_online_edit_action_available()
 

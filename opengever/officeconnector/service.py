@@ -94,6 +94,18 @@ class OfficeConnectorCheckoutURL(OfficeConnectorURL):
         raise NotFound
 
 
+class OfficeConnectorViewURL(OfficeConnectorURL):
+    """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
+
+    Instruct where to fetch an OfficeConnector 'view' action payload for this
+    document.
+    """
+
+    def render(self):
+        payload = {'action': 'view'}
+        return self.create_officeconnector_url_json(payload)
+
+
 class OfficeConnectorOneOffixxURL(OfficeConnectorURL):
     """Create oc:<JWT> URLs for javascript to fetch and pass to the OS.
 
@@ -287,6 +299,24 @@ class OfficeConnectorCheckoutPayload(OfficeConnectorPayload):
                 raise Forbidden
 
         self.request.response.setHeader('Content-type', 'application/json')
+
+        return json.dumps(payloads)
+
+
+class OfficeConnectorViewPayload(OfficeConnectorPayload):
+    """Issue JSON instruction payloads for OfficeConnector.
+
+    Consists of the minimal instruction set with which to perform a view
+    document action.
+    """
+    def render(self):
+        self.request.response.setHeader('Content-type', 'application/json')
+        payloads = self.get_base_payloads()
+        for payload in payloads:
+            document = payload.pop('document')
+            payload['content-type'] = document.get_file().contentType
+            payload['filename'] = document.get_filename()
+            payload['download'] = document.get_download_view_name()
 
         return json.dumps(payloads)
 

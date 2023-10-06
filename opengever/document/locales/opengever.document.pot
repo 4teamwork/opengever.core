@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-23 10:57+0000\n"
+"POT-Creation-Date: 2023-10-06 14:48+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -683,6 +683,11 @@ msgstr ""
 #. Default: "Version"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
+msgstr ""
+
+#. Default: "View"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_view"
 msgstr ""
 
 #. Default: "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
