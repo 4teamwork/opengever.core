@@ -121,56 +121,117 @@ class TestDocumentContextActions(IntegrationTestCase):
 
     def test_context_actions_for_document_in_dossier(self):
         self.login(self.regular_user)
-        expected_actions = [u'attach_to_email', u'checkout_document', u'copy_item',
-                            u'download_copy', u'edit', u'move_item', u'new_task_from_document',
-                            u'oc_direct_checkout', u'open_as_pdf', u'revive_bumblebee_preview',
-                            u'save_document_as_pdf', u'trash_context']
+        expected_actions = [
+            u'attach_to_email',
+            u'checkout_document',
+            u'copy_item',
+            u'download_copy',
+            u'edit',
+            u'move_item',
+            u'new_task_from_document',
+            u'oc_direct_checkout',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+            u'trash_context',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.document))
 
     def test_context_actions_for_trashed_document_in_dossier(self):
         self.login(self.regular_user)
         ITrasher(self.document).trash()
-        expected_actions = [u'revive_bumblebee_preview', u'untrash_context']
+        expected_actions = [
+            u'oc_view',
+            u'revive_bumblebee_preview',
+            u'untrash_context',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.document))
 
     def test_context_actions_for_checked_out_document(self):
         self.login(self.regular_user)
         self.assertIn(u'copy_item', self.get_actions(self.document))
         queryMultiAdapter((self.document, self.request), ICheckinCheckoutManager).checkout()
-        expected_actions = [u'attach_to_email', u'cancel_checkout', u'checkin_with_comment',
-                            u'checkin_without_comment', u'download_copy', u'edit',
-                            u'new_task_from_document', u'oc_direct_edit', u'open_as_pdf',
-                            u'revive_bumblebee_preview']
+        expected_actions = [
+            u'attach_to_email',
+            u'cancel_checkout',
+            u'checkin_with_comment',
+            u'checkin_without_comment',
+            u'download_copy',
+            u'edit',
+            u'new_task_from_document',
+            u'oc_direct_edit',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.document))
 
     def test_context_actions_for_document_in_inbox(self):
         self.login(self.secretariat_user)
-        expected_actions = [u'attach_to_email', u'checkout_document', u'copy_item',
-                            u'create_forwarding', u'download_copy', u'edit', u'move_item',
-                            u'oc_direct_checkout', u'open_as_pdf', u'revive_bumblebee_preview',
-                            u'save_document_as_pdf', u'trash_context']
+        expected_actions = [
+            u'attach_to_email',
+            u'checkout_document',
+            u'copy_item',
+            u'create_forwarding',
+            u'download_copy',
+            u'edit',
+            u'move_item',
+            u'oc_direct_checkout',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+            u'trash_context',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.inbox_document))
 
     def test_context_actions_for_proposal_document(self):
         self.login(self.regular_user)
-        expected_actions = [u'attach_to_email', u'copy_item', u'download_copy',
-                            u'new_task_from_document', u'open_as_pdf',
-                            u'revive_bumblebee_preview', u'save_document_as_pdf']
+        expected_actions = [
+            u'attach_to_email',
+            u'copy_item',
+            u'download_copy',
+            u'new_task_from_document',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.proposaldocument))
 
     def test_context_actions_for_task_document(self):
         self.login(self.regular_user)
-        expected_actions = [u'attach_to_email', u'checkout_document', u'copy_item',
-                            u'download_copy', u'edit', u'new_task_from_document',
-                            u'oc_direct_checkout', u'open_as_pdf', u'revive_bumblebee_preview',
-                            u'save_document_as_pdf', u'trash_context']
+        expected_actions = [
+            u'attach_to_email',
+            u'checkout_document',
+            u'copy_item',
+            u'download_copy',
+            u'edit',
+            u'new_task_from_document',
+            u'oc_direct_checkout',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+            u'trash_context',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.taskdocument))
 
     def test_context_actions_for_template_document(self):
         self.login(self.administrator)
-        expected_actions = [u'checkout_document', u'copy_item', u'delete', u'download_copy',
-                            u'edit', u'move_item', u'oc_direct_checkout', u'open_as_pdf',
-                            u'revive_bumblebee_preview', u'save_document_as_pdf']
+        expected_actions = [
+            u'checkout_document',
+            u'copy_item',
+            u'delete',
+            u'download_copy',
+            u'edit',
+            u'move_item',
+            u'oc_direct_checkout',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.normal_template))
 
     def test_context_actions_for_document_in_dossier_template(self):
@@ -179,7 +240,17 @@ class TestDocumentContextActions(IntegrationTestCase):
                           .within(self.dossiertemplate)
                           .titled(u'Werkst\xe4tte')
                           .with_dummy_content())
-        expected_actions = [u'checkout_document', u'copy_item', u'delete', u'download_copy',
-                            u'edit', u'move_item', u'oc_direct_checkout', u'open_as_pdf',
-                            u'revive_bumblebee_preview', u'save_document_as_pdf']
+        expected_actions = [
+            u'checkout_document',
+            u'copy_item',
+            u'delete',
+            u'download_copy',
+            u'edit',
+            u'move_item',
+            u'oc_direct_checkout',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+        ]
         self.assertEqual(expected_actions, self.get_actions(template))

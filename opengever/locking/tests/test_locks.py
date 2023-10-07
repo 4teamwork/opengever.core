@@ -172,6 +172,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(SolrIntegrationTestCase, MoveI
                      method='GET', headers=self.api_headers)
 
         expected_file_actions = [
+            u'oc_view',
             u'oc_direct_checkout',
             u'download_copy',
             u'attach_to_email',
@@ -187,6 +188,7 @@ class TestDocumentsLockedWithMeetingSubmittedLock(SolrIntegrationTestCase, MoveI
                      method='GET', headers=self.api_headers)
 
         expected_file_actions = [
+            u'oc_view',
             u'download_copy',
             u'attach_to_email',
             u'new_task_from_document',

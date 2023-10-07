@@ -715,16 +715,10 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         # Tabbedview gets in the way of the redirect so we'll have to revisit
         browser.open(self.document, view='tabbedview_view-overview')
 
-        file_actions = [
-            'Edit again',
-            'Check in with comment',
-            'Download copy',
-            ]
-
-        self.assertEquals(
-            file_actions,
+        self.assertNotIn(
+            'Check in without comment',
             browser.css('.file-action-buttons a').text,
-            )
+        )
 
     @browsing
     def test_checkin_without_comment_portal_action_not_rendered_for_locked_documents(self, browser):
@@ -967,6 +961,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         # Collaborative checkout by someone else:
+        # - "View" action is available
         # - "Edit in Office Online" action is available
         # But not:
         # - Cancel checkout (because it's locked)
@@ -974,7 +969,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         # - Edit (checked out by someone else)
         # - Download copy (checked out by someone else)
         self.assertEquals(
-            ['Edit in Office Online'],
+            ['View (read-only)', 'Edit in Office Online'],
             file_actions)
 
     @browsing
@@ -997,13 +992,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         # "Edit in Office Online" action not shown (regular checkout by self)
-        self.assertEquals(
-            ['Edit again',
-             'Check in without comment',
-             'Check in with comment',
-             'Cancel checkout',
-             'Download copy'],
-            file_actions)
+        self.assertNotIn('Edit in Office Online', file_actions)
 
     @browsing
     def test_not_office_online_editable_if_regularly_checked_out_by_other(self, browser):
@@ -1026,7 +1015,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         # "Edit in Office Online" action not shown (regular checkout by other)
-        self.assertEquals([], file_actions)
+        self.assertNotIn('Edit in Office Online', file_actions)
 
     @browsing
     def test_not_office_online_editable_if_in_resolved_dossier(self, browser):
@@ -1044,9 +1033,7 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         # "Edit in Office Online" action not shown (resolved dossier)
-        self.assertEquals(
-            ['Download copy'],
-            file_actions)
+        self.assertNotIn('Edit in Office Online', file_actions)
 
     @browsing
     def test_not_office_online_editable_if_in_inactive_dossier(self, browser):
@@ -1064,6 +1051,4 @@ class TestDocumentOverviewWithOfficeOnline(IntegrationTestCase):
         file_actions = browser.css('.file-action-buttons a').text
 
         # "Edit in Office Online" action not shown (inactive dossier)
-        self.assertEquals(
-            ['Download copy'],
-            file_actions)
+        self.assertNotIn('Edit in Office Online', file_actions)

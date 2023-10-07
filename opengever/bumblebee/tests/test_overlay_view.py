@@ -172,6 +172,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Edit metadata',
                 'Check out and edit',
                 'Download copy',
@@ -233,6 +234,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Open as PDF',
                 'Open detail view',
                 ],
@@ -247,6 +249,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Edit metadata',
                 'Download copy',
                 'Attach to email',
@@ -268,6 +271,7 @@ class TestBumblebeeOverlayListing(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Download copy',
                 'Attach to email',
                 'Restore this version',
@@ -342,6 +346,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Edit metadata',
                 'Check out and edit',
                 'Download copy',
@@ -400,6 +405,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Open as PDF',
                 ],
             browser.css('.file-action-buttons a').text,
@@ -413,6 +419,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Edit metadata',
                 'Download copy',
                 'Attach to email',
@@ -433,6 +440,7 @@ class TestBumblebeeOverlayDocument(IntegrationTestCase):
 
         self.assertEqual(
             [
+                'View (read-only)',
                 'Download copy',
                 'Attach to email',
                 'Restore this version',
