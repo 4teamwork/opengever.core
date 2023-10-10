@@ -106,3 +106,6 @@ class OGDSAuthTestCase(IntegrationTestCase):
 
     def ids(self, sequence):
         return tuple((item['id'] for item in sequence))
+
+    def logins(self, sequence):
+        return tuple((item.get('login') for item in sequence))
