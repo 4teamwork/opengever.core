@@ -131,7 +131,7 @@ class User(Base):
         if not with_principal:
             return self.fullname()
 
-        return u"%s (%s)" % (self.fullname(), self.userid)
+        return u"%s (%s)" % (self.fullname(), self.username)
 
     def fullname(self):
         """Return a visual representation of the user's full name.
