@@ -32,7 +32,15 @@ class GEVERWarmupPerformer(DefaultWarmupPerformer):
         noLongerProvides(self.request, IDefaultBrowserLayer)
         alsoProvides(self.request, IDefaultBrowserLayer)
 
-        with plone.api.env.adopt_user(username=self.context.getOwner().getId()):
+        # Make sure @navigation endpoint also works for teamraum deployments
+        self.request.form["root_interface"] = 'Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot'
+        self.request.form["content_interfaces"] = [
+            'opengever.repository.interfaces.IRepositoryFolder',
+            'opengever.workspace.interfaces.IWorkspace']
+
+        # certain deployments have a PloneSite owned by anonymous.
+        userid = self.context.getOwner().getId() or "zopemaster"
+        with plone.api.env.adopt_user(username=userid):
             for view_name in self.VIEW_NAMES:
                 view = getMultiAdapter((self.context, self.request), name=view_name)
                 view()
