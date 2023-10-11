@@ -1035,7 +1035,7 @@ class TestAllGroupsSource(IntegrationTestCase):
     def test_not_existing_org_unit_ids(self):
         self.assertNotIn('not', self.source)
 
-    def test_search_finds_only_enabled_org_units(self):
+    def test_search_only_finds_inactive_groups_when_requested(self):
         result = self.source.search('projek')
         self.assertEqual(3, len(result), 'Expected three results.')
         self.assertEquals(['projekt_a', 'projekt_b', 'projekt_laeaer'], [item.value for item in result])
@@ -1045,6 +1045,11 @@ class TestAllGroupsSource(IntegrationTestCase):
         group.active = False
         result = self.source.search('projek')
         self.assertEqual(2, len(result), 'Expected two results.')
+
+        source = AllGroupsSource(self.portal, include_inactive_groups=True)
+        result = source.search('projek')
+        self.assertEqual(3, len(result), 'Expected three results.')
+        self.assertEquals(['projekt_a', 'projekt_b', 'projekt_laeaer'], [item.value for item in result])
 
     def test_invalid_token_raises_lookup_error(self):
         with self.assertRaises(LookupError):

@@ -11,6 +11,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+
+- ``@globalsources``: The ``all_users_and_groups`` source now also returns inactive groups.
+
 - ``@listing`` endpoint whitelists the ``location`` field.
 
 - ``@config``: Add ``grant_role_manager_to_responsible`` feature flag.

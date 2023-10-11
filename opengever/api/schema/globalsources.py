@@ -13,7 +13,8 @@ from zope.schema import getFieldsInOrder
 class IGlobalSourceSchema(model.Schema):
 
     all_users_and_groups = schema.Choice(
-        source=AllUsersAndGroupsSourceBinder(only_active_orgunits=False),
+        source=AllUsersAndGroupsSourceBinder(only_active_orgunits=False,
+                                             include_inactive_groups=True),
     )
 
     filtered_groups = schema.Choice(
