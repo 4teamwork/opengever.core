@@ -177,8 +177,7 @@ class OpengeverSharingView(SharingView):
             available_roles = [u'Reader', u'Contributor', u'Editor', u'Reviewer',
                                u'Publisher', u'DossierManager']
         else:
-            available_roles = [u'Reader', u'Contributor', u'Editor',
-                               u'Role Manager']
+            available_roles = [u'Reader', u'Contributor', u'Editor']
 
         if IDossierMarker.providedBy(self.context) or IInbox.providedBy(self.context):
             available_roles.append(u'TaskResponsible')

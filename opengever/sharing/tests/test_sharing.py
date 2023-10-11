@@ -51,6 +51,71 @@ class TestOpengeverSharing(IntegrationTestCase):
             [role['id'] for role in browser.json.get('available_roles')])
 
     @browsing
+    def test_available_roles_on_templatefolder(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.templates, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader', u'Contributor', u'Editor'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_inbox(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.inbox, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader', u'Contributor', u'Editor', u'TaskResponsible'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_repository_root(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.repository_root, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader',
+             u'Contributor',
+             u'Editor',
+             u'Reviewer',
+             u'Publisher',
+             u'DossierManager'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_repository_folder(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.leaf_repofolder, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader',
+             u'Contributor',
+             u'Editor',
+             u'Reviewer',
+             u'Publisher',
+             u'DossierManager'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
+    def test_available_roles_on_task(self, browser):
+        self.login(self.manager, browser=browser)
+
+        browser.open(self.task, view='@sharing',
+                     method='GET', headers={'Accept': 'application/json'})
+
+        self.assertEqual(
+            [u'Reader', u'Contributor', u'Editor'],
+            [role['id'] for role in browser.json.get('available_roles')])
+
+    @browsing
     def test_consider_the_ignore_permissions_flag(self, browser):
         self.login(self.regular_user, browser=browser)
 
