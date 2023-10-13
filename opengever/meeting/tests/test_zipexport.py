@@ -55,6 +55,34 @@ class TestZipExporter(IntegrationTestCase):
             {'status': 'converting'},
             doc_job)
 
+    def test_mark_unconverted_docs_as_skipped(self):
+        self.login(self.meeting_user)
+        self.schedule_proposal(self.meeting, self.submitted_proposal)
+        self.schedule_ad_hoc(self.meeting, 'ad-hoc agenda item')
+        reset_queue()
+
+        exporter = MeetingZipExporter(self.meeting.model)
+        job = exporter.demand_pdfs()
+
+        self.assertFalse(exporter.is_finished_converting())
+        self.assertEqual(
+            {'skipped': 0,
+             'finished': 0,
+             'converting': 3,
+             'zipped': 0,
+             'is_finished': False},
+            job.get_progress())
+
+        exporter.mark_unconverted_docs_as_skipped()
+        self.assertTrue(exporter.is_finished_converting())
+        self.assertEqual(
+            {'skipped': 3,
+             'finished': 0,
+             'converting': 0,
+             'zipped': 0,
+             'is_finished': False},
+            job.get_progress())
+
 
 class TestZipJobManager(IntegrationTestCase):
 
