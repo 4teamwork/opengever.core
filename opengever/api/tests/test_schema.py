@@ -159,7 +159,7 @@ class TestSchemaEndpoint(IntegrationTestCase):
 
     @browsing
     def test_edit_schema_sets_display_mode_for_responsible_field_when_necessary(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.dossier_responsible, browser)
         response = browser.open(
             self.dossier, view='@schema', method='GET',
             headers=self.api_headers,).json
@@ -170,7 +170,13 @@ class TestSchemaEndpoint(IntegrationTestCase):
             self.dossier, view='@schema', method='GET',
             headers=self.api_headers,).json
         self.assertIn('mode', response['properties']["responsible"])
-        self.assertTrue(response['properties']["responsible"]['mode'])
+        self.assertEqual("display", response['properties']["responsible"]['mode'])
+
+        self.dossier.give_permissions_to_responsible()
+        response = browser.open(
+            self.dossier, view='@schema', method='GET',
+            headers=self.api_headers,).json
+        self.assertNotIn('mode', response['properties']["responsible"])
 
     @browsing
     def test_schema_endpoint_returns_jsonschema_for_propertysheets(self, browser):
