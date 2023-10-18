@@ -199,6 +199,10 @@ def set_responsible_role(obj, event):
 
 
 def update_responsible_role(obj, event):
+    if ILocalrolesModifiedEvent.providedBy(event) or \
+       IContainerModifiedEvent.providedBy(event):
+        return
+
     if not is_grant_role_manager_to_responsible_enabled():
         return
 
