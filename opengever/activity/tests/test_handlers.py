@@ -26,7 +26,7 @@ class TestNotificationEventHandler(IntegrationTestCase):
         self.assertEquals('task-transition-open-in-progress', activity.kind)
         self.assertEquals('Task accepted by Robert Ziegler.', activity.summary)
         self.assertEquals('Task accepted', activity.label)
-        self.assertEquals('robert.ziegler', activity.actor_id)
+        self.assertEquals('dossier_responsible', activity.actor_id)
         self.assertEquals('Lorem ipsum', activity.description)
 
 
@@ -53,7 +53,7 @@ class TestWatcherAddedEventHandler(IntegrationTestCase):
         activity = Activity.query.first()
         self.assertEqual('task-watcher-added', activity.kind)
         self.assertEqual('Added as watcher of task', activity.label)
-        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual('regular_user', activity.actor_id)
         self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
-                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         u'@@user-details/regular_user">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
                          activity.summary)
