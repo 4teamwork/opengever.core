@@ -516,7 +516,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
 
         token = value
         title = u'{} ({})'.format(user.fullname(),
-                                  user.userid)
+                                  user.username)
         return SimpleTerm(value, token, title)
 
     def search(self, query_string):
