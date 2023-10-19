@@ -245,7 +245,7 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         token = u'{}:{}'.format(orgunit_id, user.userid)
         title = u'{}: {} ({})'.format(orgunit.title,
                                       user.fullname(),
-                                      user.userid)
+                                      user.username)
         return SimpleTerm(value, token, title)
 
     def getTermByToken(self, token):
@@ -420,7 +420,7 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
             user = self.base_query.filter(User.username == value).one()
 
         title = u'{} ({})'.format(user.fullname(),
-                                  user.userid)
+                                  user.username)
         return SimpleTerm(user.userid, user.userid, title)
 
     def getTermByToken(self, token):
@@ -525,7 +525,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
                     'No row was found with userid or username: {}'.format(value))
 
         title = u'{} ({})'.format(user.fullname(),
-                                  user.userid)
+                                  user.username)
         return SimpleTerm(user.userid, user.userid, title)
 
     def search(self, query_string):
@@ -710,7 +710,7 @@ class AllEmailContactsAndUsersSource(UsersContactsInboxesSource):
         if user_result:
             user = user_result[0]
             title = u'{} ({}, {})'.format(user.fullname(),
-                                          user.userid, email)
+                                          user.username, email)
 
         else:
             if not brain:
