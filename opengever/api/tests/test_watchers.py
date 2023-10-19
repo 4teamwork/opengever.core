@@ -743,7 +743,7 @@ class TestPossibleWatchers(IntegrationTestCase):
         self.assertEqual(['faivel.fruhling'],
                          [item['token'] for item in browser.json['items']])
 
-        User.get('faivel.fruhling').active = False
+        User.get('dossier_manager').active = False
 
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual([],

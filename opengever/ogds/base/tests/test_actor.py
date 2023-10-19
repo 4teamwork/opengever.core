@@ -155,7 +155,7 @@ class TestActorLookup(IntegrationTestCase):
     def test_get_link_returns_safe_html(self):
         self.login(self.regular_user)
 
-        user = User.get("kathi.barfuss")
+        user = User.get("regular_user")
         user.firstname = "Foo <b onmouseover=alert('Foo!')>click me!</b>"
 
         actor = Actor.lookup('kathi.barfuss')
