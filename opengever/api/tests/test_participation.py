@@ -71,7 +71,7 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertItemsEqual(
-            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
+            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_member',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
@@ -85,7 +85,7 @@ class TestParticipationGet(IntegrationTestCase):
                                u'is_local': None,
                                u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)'},
               u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_admin',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
@@ -99,7 +99,7 @@ class TestParticipationGet(IntegrationTestCase):
                                u'is_local': None,
                                u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_owner',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
@@ -113,7 +113,7 @@ class TestParticipationGet(IntegrationTestCase):
                                u'is_local': None,
                                u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'},
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
@@ -168,10 +168,10 @@ class TestParticipationGet(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_member',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_admin',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_owner',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
             ], [item.get('@id') for item in response.get('items')])
 
     @browsing
@@ -189,10 +189,10 @@ class TestParticipationGet(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/beatrice.schrodinger',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/fridolin.hugentobler',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/gunther.frohlich',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/hans.peter',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_member',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_admin',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_owner',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_guest',
             ], [item.get('@id') for item in response.get('items')])
 
     @browsing
@@ -304,7 +304,7 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual(
-            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
              u'@type': u'virtual.participations.user',
              u'is_editable': True,
              u'participant_actor': {
