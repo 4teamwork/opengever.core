@@ -55,5 +55,5 @@ class TestWatcherAddedEventHandler(IntegrationTestCase):
         self.assertEqual('Added as watcher of task', activity.label)
         self.assertEqual('regular_user', activity.actor_id)
         self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
-                         u'@@user-details/regular_user">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
                          activity.summary)

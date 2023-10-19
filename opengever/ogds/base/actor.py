@@ -539,7 +539,7 @@ class OGDSUserActor(Actor):
         return self.user.label(with_principal=with_principal)
 
     def get_profile_url(self):
-        return UserDetails.url_for(self.user.userid)
+        return UserDetails.url_for(self.user.username)
 
     @property
     def is_active(self):
