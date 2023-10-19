@@ -38,7 +38,7 @@ class TestParticipationsGet(IntegrationTestCase):
                                   u'active': True},
                                  ],
             u'items': [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                        u'vertrage-und-vereinbarungen/dossier-1/@participations/kathi.barfuss',
+                        u'vertrage-und-vereinbarungen/dossier-1/@participations/regular_user',
                         u'participant_id': u'kathi.barfuss',
                         u'participant_title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
                         u'participant_actor': {
@@ -46,7 +46,7 @@ class TestParticipationsGet(IntegrationTestCase):
                             u'identifier': u'kathi.barfuss'},
                         u'roles': [u'regard', u'participation', u'final-drawing']},
                        {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
-                        u'vertrage-und-vereinbarungen/dossier-1/@participations/robert.ziegler',
+                        u'vertrage-und-vereinbarungen/dossier-1/@participations/dossier_responsible',
                         u'participant_id': u'robert.ziegler',
                         u'participant_title': u'Ziegler Robert (robert.ziegler)',
                         u'participant_actor': {
