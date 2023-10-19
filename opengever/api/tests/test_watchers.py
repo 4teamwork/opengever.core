@@ -27,12 +27,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'dossier-1/task-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
                     u'id': u'kathi.barfuss'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
                     u'id': u'robert.ziegler'
                 }
@@ -91,12 +91,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
                     u'id': u'kathi.barfuss'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
                     u'id': u'robert.ziegler'
                 }
@@ -153,7 +153,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
                     u'id': u'robert.ziegler'
                 }
@@ -196,7 +196,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
                     u'id': u'robert.ziegler'
                 }

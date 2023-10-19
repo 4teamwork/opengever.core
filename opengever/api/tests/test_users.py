@@ -46,7 +46,7 @@ class TestUsersGet(IntegrationTestCase):
              u'location': None,
              u'portrait': None,
              u'fullname': u'Ziegler Robert',
-             u'@id': u'http://nohost/plone/@users/robert.ziegler',
+             u'@id': u'http://nohost/plone/@users/dossier_responsible',
              u'id': u'robert.ziegler'}, browser.json)
 
     @browsing
