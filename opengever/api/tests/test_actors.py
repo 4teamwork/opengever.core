@@ -63,11 +63,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                        u'@id': u'http://nohost/plone/@actors/regular_user',
                         u'identifier': u'kathi.barfuss',
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                        u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                         u'identifier': u'robert.ziegler',
                     },
                 ],
@@ -112,7 +112,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Inbox: Finanz\xe4mt',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
                         u'identifier': u'jurgen.konig',
                     },
                 ],
@@ -198,11 +198,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Rechnungspr\xfcfungskommission',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/nicole.kohler',
+                        u'@id': u'http://nohost/plone/@actors/administrator',
                         u'identifier': u'nicole.kohler',
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/franzi.muller',
+                        u'@id': u'http://nohost/plone/@actors/committee_responsible',
                         u'identifier': u'franzi.muller',
                     },
                 ],
@@ -245,7 +245,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
                         u'identifier': u'jurgen.konig',
                     },
                 ],
@@ -290,7 +290,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
                         u'identifier': u'jurgen.konig',
                     },
                 ],
@@ -322,11 +322,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
                         'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -357,11 +357,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
                         'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -612,11 +612,11 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/regular_user',
                             u'identifier': u'kathi.barfuss',
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                             u'identifier': u'robert.ziegler',
                         },
                     ],
@@ -635,7 +635,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Inbox: Finanz\xe4mt',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/jurgen.konig',
+                            u'@id': u'http://nohost/plone/@actors/secretariat_user',
                             u'identifier': u'jurgen.konig',
                         },
                     ],
@@ -671,11 +671,11 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/regular_user',
                             u'identifier': u'kathi.barfuss',
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                             u'identifier': u'robert.ziegler',
                         },
                     ],

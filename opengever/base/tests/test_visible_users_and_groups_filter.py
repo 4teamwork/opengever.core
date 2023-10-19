@@ -183,7 +183,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
 
         self.assertDictEqual(
             {
-                u'@id': 'http://nohost/plone/@actors/fridolin.hugentobler',
+                u'@id': 'http://nohost/plone/@actors/workspace_admin',
                 u'@type': u'virtual.ogds.actor',
                 u'active': False,
                 u'actor_type': u'null',
@@ -204,7 +204,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
 
         self.assertDictEqual(
             {
-                u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                u'@id': u'http://nohost/plone/@actors/workspace_admin',
                 u'@type': u'virtual.ogds.actor',
                 u'active': True,
                 u'actor_type': u'user',
@@ -212,7 +212,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                 u'is_absent': False,
                 u'label': u'Hugentobler Fridolin',
                 u'portrait_url': None,
-                u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                u'representatives': [{u'@id': u'http://nohost/plone/@actors/workspace_admin',
                                       u'identifier': u'fridolin.hugentobler'}],
                 u'represents': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler'}
             },
@@ -274,7 +274,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/@actors',
                 u'items': [
-                    {u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                    {u'@id': u'http://nohost/plone/@actors/workspace_admin',
                      u'@type': u'virtual.ogds.actor',
                      u'active': False,
                      u'actor_type': u'null',
@@ -302,7 +302,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/@actors',
                 u'items': [
-                    {u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                    {u'@id': u'http://nohost/plone/@actors/workspace_admin',
                      u'@type': u'virtual.ogds.actor',
                      u'active': True,
                      u'actor_type': u'user',
@@ -310,7 +310,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                      u'is_absent': False,
                      u'label': u'Hugentobler Fridolin',
                      u'portrait_url': None,
-                     u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                     u'representatives': [{u'@id': u'http://nohost/plone/@actors/workspace_admin',
                                            u'identifier': u'fridolin.hugentobler'}],
                      u'represents': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler'}}
                 ]

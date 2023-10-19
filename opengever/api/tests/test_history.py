@@ -340,7 +340,7 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
 
         expected_data = {
             u'@id': "{}/@versions/0".format(self.document.absolute_url()),
-            u'actor': {u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+            u'actor': {u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                        u'identifier': u'robert.ziegler'},
             u'comments': u'Initial version',
             u'may_revert': False,

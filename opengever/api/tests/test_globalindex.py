@@ -37,7 +37,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
              u'issuer': u'robert.ziegler',
              u'issuer_fullname': u'Ziegler Robert',
              u'issuer_actor': {
-                u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                 u'identifier': u'robert.ziegler'},
              u'issuing_org_unit': u'fa',
              u'modified': u'2016-08-31T18:27:33',

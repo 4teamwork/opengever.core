@@ -82,7 +82,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(0, browser.json['current_version_id'])
         self.assertDictEqual({
             u'identifier': u'robert.ziegler',
-            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+            u'@id': u'http://nohost/plone/@actors/dossier_responsible',
         }, browser.json['creator'])
 
     @browsing

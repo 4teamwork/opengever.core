@@ -75,7 +75,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/beatrice.schrodinger',
+                  u'@id': u'http://nohost/plone/@actors/workspace_member',
                   u'identifier': u'beatrice.schrodinger'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/beatrice.schrodinger',
                                u'@type': u'virtual.ogds.user',
@@ -89,7 +89,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
+                  u'@id': u'http://nohost/plone/@actors/workspace_admin',
                   u'identifier': u'fridolin.hugentobler'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
                                u'@type': u'virtual.ogds.user',
@@ -117,7 +117,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/hans.peter',
+                  u'@id': u'http://nohost/plone/@actors/workspace_guest',
                   u'identifier': u'hans.peter'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                                u'@type': u'virtual.ogds.user',
@@ -308,7 +308,7 @@ class TestParticipationGet(IntegrationTestCase):
              u'@type': u'virtual.participations.user',
              u'is_editable': True,
              u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/hans.peter',
+                  u'@id': u'http://nohost/plone/@actors/workspace_guest',
                   u'identifier': u'hans.peter'},
              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                               u'@type': u'virtual.ogds.user',
