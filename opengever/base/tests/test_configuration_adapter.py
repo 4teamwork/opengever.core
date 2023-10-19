@@ -25,7 +25,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('description', None),
                 ('roles', ['Member', 'WorkspaceClientUser']),
                 ('home_page', None),
-                ('roles_and_principals', ['principal:kathi.barfuss',
+                ('roles_and_principals', ['principal:regular_user',
                                           'Member',
                                           'WorkspaceClientUser',
                                           'Authenticated',
