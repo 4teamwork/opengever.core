@@ -81,7 +81,7 @@ class DossierResponsibleJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
         result = super(DossierResponsibleJsonSchemaProvider, self).additional()
         if is_grant_role_manager_to_responsible_enabled() and\
            not IAnnotations(self.request).get(TYPE_TO_BE_ADDED_KEY) and\
-           not api.user.has_permission("Sharing page: Delegate roles"):
+           not api.user.has_permission("Sharing page: Delegate roles", obj=self.context):
             result['mode'] = 'display'
         return result
 
