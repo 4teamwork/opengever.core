@@ -37,7 +37,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('portrait', None),
                 ('fullname', u'B\xe4rfuss K\xe4thi'),
                 ('@id', 'http://nohost/plone/@users/regular_user'),
-                ('id', 'kathi.barfuss')])),
+                ('id', 'regular_user')])),
             ('max_dossier_levels', 2),
             ('max_repositoryfolder_levels', 3),
             ('recently_touched_limit', 10),

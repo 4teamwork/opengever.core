@@ -29,12 +29,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'id': u'regular_user'
                 },
                 {
                     u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
@@ -93,12 +93,12 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'id': u'regular_user'
                 },
                 {
                     u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
@@ -155,7 +155,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
@@ -198,7 +198,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [

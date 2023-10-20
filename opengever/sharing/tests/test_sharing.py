@@ -343,7 +343,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                   u'actor': {u'@id': u'http://nohost/plone/@actors/dossier_responsible',
                              u'identifier': u'robert.ziegler'},
                   u'type': u'user',
-                  u'id': u'robert.ziegler'}]},
+                  u'id': u'dossier_responsible'}]},
             browser.json)
 
     @browsing
@@ -378,7 +378,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                  u'Reader': True,
                                  u'Reviewer': False},
              u'disabled': False,
-             u'id': u'kathi.barfuss',
+             u'id': u'regular_user',
              u'login': u'kathi.barfuss',
              u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
                                u'@type': u'virtual.ogds.user',

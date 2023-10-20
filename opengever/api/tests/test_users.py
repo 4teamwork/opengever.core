@@ -47,7 +47,7 @@ class TestUsersGet(IntegrationTestCase):
              u'portrait': None,
              u'fullname': u'Ziegler Robert',
              u'@id': u'http://nohost/plone/@users/dossier_responsible',
-             u'id': u'robert.ziegler'}, browser.json)
+             u'id': u'dossier_responsible'}, browser.json)
 
     @browsing
     def test_unuathorized_accessing_an_other_user_raises(self, browser):

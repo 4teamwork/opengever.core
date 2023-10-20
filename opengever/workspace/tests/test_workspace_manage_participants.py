@@ -224,7 +224,7 @@ class TestWorkspaceManageParticipants(IntegrationTestCase):
              u'pagination': {u'more': False},
              u'page': 1,
              u'results': [{u'_resultId': u'kathi.barfuss',
-                           u'id': u'kathi.barfuss',
+                           u'id': u'regular_user',
                            u'text': u'B\xe4rfuss K\xe4thi (kathi.barfuss)'}]},
             browser.json)
 
