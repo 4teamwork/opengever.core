@@ -52,6 +52,9 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from Products.CMFDiffTool.utils import safe_utf8
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupIntrospection
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 from sqlalchemy.sql.expression import desc
 from urllib import urlencode
@@ -147,6 +150,12 @@ class IntegrationTestCase(TestCase):
         # Move user enumeration plugin to top position
         while not self.portal.acl_users.plugins.listPluginIds(IUserEnumerationPlugin)[0] == plugin.getId():
             self.portal.acl_users.plugins.movePluginsUp(IUserEnumerationPlugin, [plugin.getId()])
+        while not self.portal.acl_users.plugins.listPluginIds(IGroupEnumerationPlugin)[0] == plugin.getId():
+            self.portal.acl_users.plugins.movePluginsUp(IGroupEnumerationPlugin, [plugin.getId()])
+        while not self.portal.acl_users.plugins.listPluginIds(IGroupIntrospection)[0] == plugin.getId():
+            self.portal.acl_users.plugins.movePluginsUp(IGroupIntrospection, [plugin.getId()])
+        while not self.portal.acl_users.plugins.listPluginIds(IGroupsPlugin)[0] == plugin.getId():
+            self.portal.acl_users.plugins.movePluginsUp(IGroupsPlugin, [plugin.getId()])
 
     @staticmethod
     def open_flamegraph(func):
