@@ -25,6 +25,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.journal.tests.utils import get_journal_entry
 from opengever.meeting.model.agendaitem import AgendaItem
 from opengever.meeting.wrapper import MeetingWrapper
+from opengever.ogds.auth.plugin import install_ogds_auth_plugin
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.org_unit import OrgUnit
@@ -51,6 +52,7 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from Products.CMFDiffTool.utils import safe_utf8
+from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 from sqlalchemy.sql.expression import desc
 from urllib import urlencode
 from z3c.relationfield.relation import RelationValue
@@ -123,6 +125,7 @@ class IntegrationTestCase(TestCase):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         self.deactivate_extjs()
+        self.install_ogds_plugin()
         map(self.parse_feature, self.features)
         if 'activity' in self.features:
             Mailing(self.portal).set_up()
@@ -133,6 +136,17 @@ class IntegrationTestCase(TestCase):
         if 'activity' in self.features:
             process_mail_queue()
             Mailing(self.portal).tear_down()
+
+    def install_ogds_plugin(self):
+        install_ogds_auth_plugin()
+        plugin = self.portal.acl_users['ogds_auth']
+
+        # Disable RAMCache by default, tests will enable it when needed
+        plugin.ZCacheable_setManagerId(None)
+
+        # Move user enumeration plugin to top position
+        while not self.portal.acl_users.plugins.listPluginIds(IUserEnumerationPlugin)[0] == plugin.getId():
+            self.portal.acl_users.plugins.movePluginsUp(IUserEnumerationPlugin, [plugin.getId()])
 
     @staticmethod
     def open_flamegraph(func):
