@@ -341,7 +341,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                     u'title': u'Ziegler Robert',
                                     u'userid': u'robert.ziegler'},
                   u'actor': {u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                             u'identifier': u'robert.ziegler'},
+                             u'identifier': u'dossier_responsible'},
                   u'type': u'user',
                   u'id': u'dossier_responsible'}]},
             browser.json)
@@ -397,7 +397,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                u'title': u'B\xe4rfuss K\xe4thi',
                                u'userid': u'kathi.barfuss'},
              u'actor': {u'@id': u'http://nohost/plone/@actors/regular_user',
-                        u'identifier': u'kathi.barfuss'},
+                        u'identifier': u'regular_user'},
              u'roles': {u'Contributor': True,
                         u'Editor': True,
                         u'Publisher': False,

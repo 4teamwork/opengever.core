@@ -40,11 +40,11 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/regular_user',
-                    u'identifier': u'kathi.barfuss'
+                    u'identifier': u'regular_user'
                 },
                 {
                     u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                    u'identifier': u'robert.ziegler'
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -104,11 +104,11 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/regular_user',
-                    u'identifier': u'kathi.barfuss'
+                    u'identifier': u'regular_user'
                 },
                 {
                     u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                    u'identifier': u'robert.ziegler'
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -161,7 +161,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                    u'identifier': u'robert.ziegler'
+                    u'identifier': u'dossier_responsibler'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -204,7 +204,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                    u'identifier': u'robert.ziegler'
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [

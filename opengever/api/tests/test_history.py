@@ -341,7 +341,7 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
         expected_data = {
             u'@id': "{}/@versions/0".format(self.document.absolute_url()),
             u'actor': {u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                       u'identifier': u'robert.ziegler'},
+                       u'identifier': u'dossier_responsible'},
             u'comments': u'Initial version',
             u'may_revert': False,
             u'time': u'2016-08-31T16:07:33',

@@ -81,7 +81,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
         self.assertDictEqual({
-            u'identifier': u'robert.ziegler',
+            u'identifier': u'dossier_responsible',
             u'@id': u'http://nohost/plone/@actors/dossier_responsible',
         }, browser.json['creator'])
 

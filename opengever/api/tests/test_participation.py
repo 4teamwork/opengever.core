@@ -76,7 +76,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'is_editable': True,
               u'participant_actor': {
                   u'@id': u'http://nohost/plone/@actors/workspace_member',
-                  u'identifier': u'beatrice.schrodinger'},
+                  u'identifier': u'workspace_member'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/beatrice.schrodinger',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -90,7 +90,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'is_editable': True,
               u'participant_actor': {
                   u'@id': u'http://nohost/plone/@actors/workspace_admin',
-                  u'identifier': u'fridolin.hugentobler'},
+                  u'identifier': u'workspace_admin'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -103,8 +103,8 @@ class TestParticipationGet(IntegrationTestCase):
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/gunther.frohlich',
-                  u'identifier': u'gunther.frohlich'},
+                  u'@id': u'http://nohost/plone/@actors/workspace_owner',
+                  u'identifier': u'workspace_owner'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/gunther.frohlich',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
@@ -118,7 +118,7 @@ class TestParticipationGet(IntegrationTestCase):
               u'is_editable': True,
               u'participant_actor': {
                   u'@id': u'http://nohost/plone/@actors/workspace_guest',
-                  u'identifier': u'hans.peter'},
+                  u'identifier': u'workspace_guest'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,

@@ -64,11 +64,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/regular_user',
-                        u'identifier': u'kathi.barfuss',
+                        u'identifier': u'regular_user',
                     },
                     {
                         u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                        u'identifier': u'robert.ziegler',
+                        u'identifier': u'dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -113,7 +113,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/secretariat_user',
-                        u'identifier': u'jurgen.konig',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -199,11 +199,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/administrator',
-                        u'identifier': u'nicole.kohler',
+                        u'identifier': u'administrator',
                     },
                     {
                         u'@id': u'http://nohost/plone/@actors/committee_responsible',
-                        u'identifier': u'franzi.muller',
+                        u'identifier': u'committee_responsible',
                     },
                 ],
                 u'represents': {
@@ -246,7 +246,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/secretariat_user',
-                        u'identifier': u'jurgen.konig',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -291,7 +291,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/secretariat_user',
-                        u'identifier': u'jurgen.konig',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -321,11 +321,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt A',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
+                        'identifier': u'regular_user',
                         '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
-                        'identifier': u'robert.ziegler',
+                        'identifier': u'dossier_responsible',
                         '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
@@ -356,11 +356,11 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt A',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
+                        'identifier': u'regular_user',
                         '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
-                        'identifier': u'robert.ziegler',
+                        'identifier': u'regular_user',
                         '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
@@ -613,11 +613,11 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/regular_user',
-                            u'identifier': u'kathi.barfuss',
+                            u'identifier': u'regular_user',
                         },
                         {
                             u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                            u'identifier': u'robert.ziegler',
+                            u'identifier': u'dossier_responsible',
                         },
                     ],
                     u'represents': {
@@ -636,7 +636,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/secretariat_user',
-                            u'identifier': u'jurgen.konig',
+                            u'identifier': u'secretariat_user',
                         },
                     ],
                     u'represents': {
@@ -672,11 +672,11 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/regular_user',
-                            u'identifier': u'kathi.barfuss',
+                            u'identifier': u'regular_user',
                         },
                         {
                             u'@id': u'http://nohost/plone/@actors/dossier_responsible',
-                            u'identifier': u'robert.ziegler',
+                            u'identifier': u'dossier_responsible',
                         },
                     ],
                     u'represents': {
