@@ -1,167 +1,166 @@
 .. _kapitel-oggbundle:
 
-=======================
-Spezifikation OGGBundle
-=======================
+=================================
+Specification of format OGGBundle
+=================================
 
-Dieses Dokument beschreibt die Spezifikation der Datenschnittstelle zur Migration eines Mandanten aus dem OS-Laufwerk in den zugehörigen GEVER-Mandanten.
+This document describes the specification of the data interface for migrating data from a third party repository into OneGov GEVER.
 
 Changelog:
 
 +---------------+--------------+-------------+--------------------------------------------------------+
-| **Version**   | **Datum**    | **Autor**   | **Kommentar**                                          |
+| **Version**   | **Date**     | **Author**  | **Comment**                                            |
 +===============+==============+=============+========================================================+
-| 1.3           | 20.06.2022   | PG          | Ergänzt: Ersteller                                     |
+| 1.3           | 20.06.2022   | PG          | Added: Creator                                         |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 1.2           | 16.06.2022   | PG          | Import von OGDS Usern                                  |
+| 1.2           | 16.06.2022   | PG          | Import of OGDS users                                   |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 1.1           | 10.08.2020   | LG          | Import von Teamräumen                                  |
+| 1.1           | 10.08.2020   | LG          | Import of workspaces                                   |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 1.0           | 16.10.2017   | LG, PG      | Referenzierung von bestehendem Inhalt via Aktenzeichen |
+| 1.0           | 16.10.2017   | LG, PG      | Referencing existing content via file number           |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 0.1.3         | 10.02.2017   | LG          | Ergänzt: Setzen des Workflow-Status                    |
+| 0.1.3         | 10.02.2017   | LG          | Added: Setting the workflow status                     |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 0.1.2         | 16.01.2017   | LG          | JSON-Schemas referenziert                              |
+| 0.1.2         | 16.01.2017   | LG          | JSON schemas referenced                                |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 0.1.1         | 12.01.2017   | LG          | Nicht erlaubte Dateiformate definiert                  |
+| 0.1.1         | 12.01.2017   | LG          | Not allowed file formats defined                       |
 +---------------+--------------+-------------+--------------------------------------------------------+
-| 0.1           | 26.11.2016   | LG, DE      | Initialer Entwurf                                      |
+| 0.1           | 26.11.2016   | LG, DE      | Initial draft                                          |
 +---------------+--------------+-------------+--------------------------------------------------------+
 
-Status: In Arbeit
+Status: in progress
 
-Die hier beschriebene Schnittstelle dient dem einmaligen Import eines Ordnungssystems, seiner Ordnungspositionen, Dossiers/Subdossiers und Dokumente/Mails nach OneGov GEVER. Die Migration findet ab einem JSON-basierten Zwischenformat statt. Dieses muss einem validen Schema entsprechen, und die darin enthaltenen Daten müssen die in OneGov GEVER geltenden Geschäftsregeln erfüllen.
+The interface described here is used for the one-time import of a repository, its filing positions, dossiers/subdossiers and documents/mails into OneGov GEVER. The migration takes place from a JSON-based intermediate format. This must correspond to a valid schema and the data it contains must comply with the business rules applicable in OneGov GEVER.
 
-Importierbare Inhaltstypen
---------------------------
+Importable content types
+------------------------
 
 +------------------------------+-------------+
-| **Ordnungssysteme**          | Ja          |
+| **Repositories**             | Yes         |
 +------------------------------+-------------+
-| **Ordnungspositionen**       | Ja          |
+| **Repository folders**       | Yes         |
 +------------------------------+-------------+
-| **Teamraum-Roots**           | Ja          |
+| **Workspace roots**          | Yes         |
 +------------------------------+-------------+
-| **Teamräume**                | Ja          |
+| **Workspaces**               | Yes         |
 +------------------------------+-------------+
-| **Teamraum-Ordner**          | Ja          |
+| **Workspace folders**        | Yes         |
 +------------------------------+-------------+
-| **Dossiers**                 | Ja          |
+| **Dossiers**                 | Yes         |
 +------------------------------+-------------+
-| **Dokumente**                | Ja          |
+| **Documents**                | Yes         |
 +------------------------------+-------------+
-| **Mails**                    | Ja          |
+| **Mails**                    | Yes         |
 +------------------------------+-------------+
-| **OGDS Users**               | Ja          |
+| **OGDS Users**               | Yes         |
 +------------------------------+-------------+
-| Kontakte                     | Nein \*     |
+| Contacts                     | No \*       |
 +------------------------------+-------------+
-| Organisationseinheiten       | Nein \*\*   |
+| Org units                    | No          |
 +------------------------------+-------------+
-| Sitzungen                    | Nein        |
+| Meetings                     | No          |
 +------------------------------+-------------+
-| Aufgaben / Weiterleitungen   | Nein        |
+| Tasks / forwardings          | No          |
 +------------------------------+-------------+
 
-\* *“Kontakte” bezeichnet in diesem Zusammenhang einen speziellen Inhaltstyp in OneGov GEVER, mit welchem Adressdaten direkt in GEVER erfasst werden können, welche nicht in anderen Systemen wie z.B. AD geführt werden. Benutzer aus dem AD werden hingegen in OneGov GEVER auch importiert werden, allerdings direkt aus dem AD, nicht als Teil des Zwischenformats*
+\* *"Contacts" in this context refers to a special content type in OneGov GEVER that can be used to enter address data directly in GEVER that is not kept in other systems such as AD. Users from AD, on the other hand, will also be imported into OneGov GEVER, but directly from AD, not as part of the intermediate format*.
 
-\*\* *Details wie die mit Organisationseinheiten verknüpften Berechtigungen aus OS-Laufwerk genau migriert werden müssen noch geklärt werden. Die Organisationseinheiten selbst müssen jedoch nicht migriert werden.*
 
-Inhalt:
--------
+Content:
+--------
 .. contents::
 
 OneGov GEVER Bundle (OGGBundle)
 -------------------------------
 
-Das Zwischenformat für den Export von Daten aus OS-Laufwerk und dem Import in OneGov GEVER wird als OneGov GEVER Bundle (**OGGBundle**) bezeichnet.
+The intermediate format for exporting data from a third party repository and importing it into OneGov GEVER is called the OneGov GEVER Bundle (**OGGBundle**).
 
-Das Bundle kann als "virtuelles Verzeichnis" verstanden werden: Es folgt einer Verzeichnisstruktur, welche nach einem bestimmten Muster aufgebaut ist, und alle nötigen Informationen des Exports enthält. Das Bundle kann somit für sehr kleine Datenmengen als ZIP-Datei mit der Endung **.oggbundle** (z.B. **testinhalte.oggbundle**) abgeliefert werden, oder auch als Verzeichnis mit der Endung **.oggbundle** auf einem Server hinterlegt oder gemountet werden. Der konkrete Transportmechanismus ist nicht Teil dieser Spezifikation, und kann dem Anwendungszweck gemäss gewählt werden.
+The bundle can be understood as a "virtual directory": It follows a directory structure, which is built according to a certain pattern, and contains all the necessary information of the export. The bundle can thus be delivered for very small amounts of data as a ZIP file with the extension **.oggbundle** (e.g. **testinhalte.oggbundle**), or it can also be deposited or mounted on a server as a directory with the extension **.oggbundle**. The specific transport mechanism is not part of this specification, and can be chosen according to the application purpose.
 
-Alle Pfad-Angaben in einem Bundle sind relativ zum root des Bundles.
+All path specifications in a bundle are relative to the root of the bundle.
 
-Das Bundle besteht aus einer Sammlung von JSON-Dateien, deren Inhalt einem bestimmten Schema folgen muss, und einem Unterverzeichnis :ref:`files/ <files>` welches die Dateien für Dokumente (Primärdaten) enthält.
+The bundle consists of a collection of JSON files whose contents must follow a specific schema, and a subdirectory :ref:`files/ <files>` which contains the files for documents (primary data).
 
 ----
 
-Ein Bundle beinhaltet eine Datei pro zu importierendem Inhaltstyp. Darin müssen die jeweiligen Inhalte flach (ohne Verschachtelung) im JSON-Format gespeichert werden. Für jede solche Datei wird ein `JSON-Schema <http://json-schema.org/>`__ zur Verfügung gestellt, welches den Aufbau der JSON-Datei genau beschreibt und mit dem die Inhalte vor einem Import validiert werden müssen. Die folgenden Abschnitte beschreiben die im Moment unterstützten Inhaltstypen und die damit assoziierten Dateien im Bundle.
+A bundle contains one file per content type to be imported. In it, the respective content must be stored flat (without nesting) in JSON format. For each such file, a `JSON schema <http://json-schema.org/>`__ is provided, which precisely describes the structure of the JSON file and with which the content must be validated before an import. The following sections describe the content types currently supported and the associated files in the bundle.
 
 |img-image-1|
 
-Konfiguration und Bundle-Metadaten
-----------------------------------
+Configuration and bundle metadata
+---------------------------------
 
 metadata.json
 ~~~~~~~~~~~~~
 
-Diese Datei beinhaltet Metadaten über das Bundle, z.B. den Erstellungszeitpunkt und Ersteller des Bundles oder den Verwendungszweck (optional).
+This file contains metadata about the bundle, e.g. the creation date and creator of the bundle or the intended use (optional).
 
 configuration.json
 ~~~~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet die Konfiguration des Mandanten, insbesondere auch die zur Validierung der Inhalte benötigten Wertebereiche, welche für gewisse Felder pro Mandant konfigurierbar sind.
+This file contains the configuration of the client, especially the value ranges needed to validate the contents, which are configurable for certain fields per client.
 
-JSON Schema: :ref:`configuration.schema.json <configuration_schema_json>`
+JSON schema: :ref:`configuration.schema.json <configuration_schema_json>`
 
-Daten für Inhaltstypen
+Data for content types
 ----------------------
 
 reporoots.json
 ~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet ein oder mehrere Ordnungssystem-Wurzeln.
+This file contains one or more classification system (repository) roots.
 
 JSON Schema: :ref:`reporoots.schema.json <reporoots_schema_json>`
 
 repofolders.json
 ~~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet die einzelnen Ordnungspositionen, die in den Ordnungssystem-Wurzeln abgelegt werden.
+This file contains the individual repository folders that are stored in the repository root.
 
 JSON Schema: :ref:`repofolders.schema.json <repofolders_schema_json>`
 
 workspaceroots.json
 ~~~~~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet ein Teamraum-Root.
+This file contains a workspace root.
 
-Falls auf der Installation, in welche ein OGGBundle mit Teamräumen importiert wird, bereits ein Teamraum-Root existiert, kann diese Datei weggelassen werden. Beim Import wird dann vorausgesetzt, dass genau ein Teamraum-Root bereits existiert, und die Teamräume werden in dieses Teamraum-Root importiert.
+If a workspace root already exists on the installation into which an OGGBundle with workspaces is imported, this file can be omitted. During the import, it is then assumed that exactly one workspace root already exists and the workspaces are imported into this workspace root.
 
-In diesem Fall dürfen die Teamräume keine ``parent_guid`` gesetzt haben.
+In this case, the workspace must not have a ``parent_guid`` set.
 
 JSON Schema: :ref:`workspaceroots.schema.json <workspaceroots_schema_json>`
 
 workspaces.json
 ~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet einen oder mehrere Teamräume.
+This file contains one or more workspaces.
 
-Die Teamräume werden über die ``parent_guid`` einem Teamraum-Root zugeordnet, welches ebenfalls im Bundle enthalten ist.
+The workspaces are assigned to a workspace root via the ``parent_guid``, which is also included in the bundle.
 
-Alternativ kann die ``parent_guid`` für Teamräume, und die Definition eines Workspace-Roots im ``workspaceroots.json`` weggelassen werden - die Teamräume werden dann in ein bereits existierendes Workspace-Root importiert.
+Alternatively, the ``parent_guid`` for workspaces, and the definition of a workspace root in the ``workspaceroots.json`` can be omitted - the workspaces will then be imported into an already existing workspace root.
 
-JSON Schema: :ref:`workspaces.schema.json <workspaces_schema_json>`
+JSON schema: :ref:`workspaces.schema.json <workspaces_schema_json>`
 
 workspacefolders.json
 ~~~~~~~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet einen oder mehrere Teamraum-Ordner.
+This file contains one or more workspaces folders.
 
 JSON Schema: :ref:`workspacefolders.schema.json <workspacefolders_schema_json>`
 
 dossiers.json
 ~~~~~~~~~~~~~
 
-Diese Datei beinhaltet Dossiers und Subdossiers, diese können in den Ordnungspositionen abgelegt werden.
+This file contains dossiers and subdossiers, these can be stored in the repository folder (classification items).
 
-JSON Schema: :ref:`dossiers.schema.json <dossiers_schema_json>`
+JSON schema: :ref:`dossiers.schema.json <dossiers_schema_json>`
 
 documents.json
 ~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet die Metadaten der Dokumente. Die Binärdateien werden im Ordner **files/** zur Verfügung gestellt und müssen mit einem zum Bundle relativen Pfad referenziert werden. Die Metadaten beinhalten unter anderem auch den Dateinamen, der Dateiname der Datei auf dem Filesystem wird nicht verwendet, sondern von den Metadaten überschrieben.
+This file contains the metadata of the documents. The binary files are provided in the **files/** folder and must be referenced with a path relative to the bundle. The metadata includes, among other things, the file name. The file name of the file on the file system is not used, but is overwritten by the metadata.
 
-Siehe untenstehende Erläuterungen im Abschnitt :ref:`files/ <files>` zu Details bezüglich den Dateipfaden.
+See the explanation below in the section :ref:`files/ <files>` for details regarding file paths.
 
 JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
 
@@ -170,38 +169,38 @@ JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
 ogds_users.json
 ~~~~~~~~~~~~~~~~
 
-Diese Datei beinhaltet die Benutzer welche ins OGDS importiert werden sollen. In der Regel sind es ehemalige, nicht mehr aktive Benutzer welche so importiert werden können.
+This file contains the users to be imported into the OGDS. As a rule, these are former, no longer active users who can be imported in this way.
 
-Der Wert ``guid`` muss der ``userid`` entsprechen.
+The value ``guid`` must correspond to the ``userid``.
 
-JSON Schema: :ref:`ogds_users.schema.json <ogds_users_schema_json>`
+JSON schema: :ref:`ogds_users.schema.json <ogds_users_schema_json>`
 
 
 files/
 ~~~~~~
 
-Dieser Ordner beinhaltet die Primärdateien der Dokumente. Ob die Dateien flach abgelegt werden, oder in weitere Unterordner verschachtelt werden ist nicht vorgegeben - die Strukturierung dieses Verzeichnisses ist dem Lieferanten des Bundle überlassen. Die Dateinamen müssen jedoch normalisiert werden um Inkompatibilitäten zu vermeiden, die Aufgrund unterschiedlicher Zeichensätzen in unterschiedlichen Umgebungen entstehen können. Wir empfehlen ein einfaches Schema mit aufsteigender Nummerierung wie z.B. **file\_00123.pdf**.
+This folder contains the primary files of the documents. Whether the files are stored flat, or nested in further subfolders is not specified - the structuring of this directory is left to the supplier of the bundle. However, the file names must be normalised to avoid incompatibilities that can arise due to different character sets in different environments. We recommend a simple scheme with ascending numbering such as **file\_00123.pdf**.
 
-Der tatsächlich in OneGov GEVER verwendete Titel / Dateiname wird gesteuert über das Attribut **title** in den im **documents.json** gelieferten Metadaten: Im Attribut **title** soll der ursprüngliche Dateiname, inklusive Dateiendung geliefert werden. In OneGov GEVER wird der Titel des Dokuments dann von diesem Attribut abgeleitet, indem die Dateiendung entfernt wird. Die Dateiendung selbst hingegen wird zur Bestimmung des Inhaltstyps (MIME-Type) verwendet.
+The actual title / file name used in OneGov GEVER is controlled by the **title** attribute in the metadata supplied in **documents.json**: In the **title** attribute, the original file name, including file extension, should be supplied. In OneGov GEVER, the title of the document is then derived from this attribute by removing the file extension. The file extension itself, on the other hand, is used to determine the content type (MIME type).
 
-Folgende Dateitypen sind in OGGBundles nicht erlaubt:
+The following file types are not allowed in OGGBundles:
 
--  **.exe**
+- **.exe**
 
--  **.dll**
+- **.dll**
 
-Pfade / Dateinamen dürfen nur alphanumerische Zeichen, Unterstrich und Bindestrich enthalten (**[0-9][a-zA-Z][-\_]**). Alle Pfade sind case-sensitive, und dürfen eine maximale Länge von 255 Zeichen nicht überschreiten. Die Pfade sind als UNIX-Pfade relativ zum root des Bundles anzugeben (getrennt mit Forward-Slash).
+Paths / file names may only contain alphanumeric characters, underscore and hyphen (**[0-9][a-zA-Z][-\_]**). All paths are case-sensitive, and must not exceed a maximum length of 255 characters. The paths are to be specified as UNIX paths relative to the root of the bundle (separated with forward slash).
 
-Abbildung von Verschachtelung (containment)
--------------------------------------------
+Mapping of nesting (containment)
+--------------------------------
 
-Die hierarchische Beziehung zwischen Objekten wird mittels Parent-Pointers abgebildet.
+The hierarchical relationship between objects is mapped using parent pointers.
 
 
 parent_guid
 ~~~~~~~~~~~
 
-Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nötig diese Verschachtelung während dem Import aufzulösen. Diese Verschachtelung wird mittels global eindeutiger ID (GUID) und einem Pointer von Children auf das enthaltende Parent abgebildet. Dazu muss jedes Objekt über eine GUID verfügen. Diese muss im Attribut **guid** gespeichert werden. Die Verschachtelung wird mittels einer Referenz auf das Parent hergestellt, dazu muss jedes Objekt, das ein Parent besitzt, das Attribut **parent\_guid** definieren, und damit auf das Parent referenzieren:
+Since the data in the JSON files is not stored in a nested manner, it is necessary to resolve this nesting during the import. This nesting is mapped by means of a globally unique ID (GUID) and a pointer from children to the containing parent. For this purpose, each object must have a GUID. This must be stored in the attribute **guid**. The nesting is established by means of a reference to the parent. For this purpose, each object that has a parent must define the attribute **parent\_guid** and thus reference the parent:
 
 .. code::
 
@@ -215,41 +214,41 @@ Da die Daten in den JSON-Dateien nicht verschachtelt abgelegt werden, ist es nö
   ...
   }
 
-Es ist auch möglich, über die ``parent_guid`` ein Objekt als Parent zu referenzieren, das sich aufgrund eines früheren Imports bereits im System befindet. Dieses Parent-Item muss dann im Bundle nicht mehr mitgeliefert werden (darf aber, solang die GUID gleich bleibt).
+It is also possible to reference an object as a parent via the ``parent_guid`` that is already in the system due to a previous import. This parent item then does not have to be supplied in the bundle (but may be, as long as the GUID remains the same).
 
-Wenn sowohl im Bundle ein Item mit einer bestimmten GUID geliefert wird, und sich auch im System bereits ein Objekt mit identischer GUID befindet, wird das Item aus dem Bundle ignoriert und übersprungen (es werden also auch keine Metadaten des bereits existierenden Objekts aktualisiert).
+If both an item with a specific GUID is delivered in the bundle and there is also an item with an identical GUID already in the system, the item from the bundle is ignored and skipped (so no metadata of the already existing item is updated either).
 
-Dies bedeutet, wenn nacheinander zwei Bundles importiert werden, von denen das zweite *zusätzliche* Daten enthält, wird nur die Differenz importiert (Objekte mit GUIDs welche im ersten Bundle noch nicht existiert haben). Dies setzt aber zwingend voraus, dass für Objekte die als "gleich" / "schon vorhanden" erkannt werden sollen, sich die GUID nicht ändert (ansonsten werden die Objekte erneut importiert werden, und dementsprechend doppelt vorhanden sein).
+This means that if two bundles are imported one after the other, of which the second contains *additional* data, only the difference is imported (objects with GUIDs that did not yet exist in the first bundle). However, this requires that the GUIDs of objects that are to be recognised as "equal" / "already exist" do not change (otherwise the objects will be imported again and will therefore exist twice).
 
 
 parent_reference
 ~~~~~~~~~~~~~~~~
 
-Alternativ zur GUID kann auch das Akzenzeichen eines Objekts als eindeutige Referenz auf das Parent verwendet werden. Die Verwendung des Aktenzeichens als Parent-Pointer erlaubt es, bereits existierende Objekte über deren eindeutiges Aktenzeichen zu referenzieren, und ermöglicht so partielle Importe. So ist z.B. das importieren von Dokumenten in ein bestehendes Dossier möglich, indem dieses Dossier über sein Aktenzeichen referenziert wird.
+As an alternative to the GUID, the reference number of an object can also be used as a unique reference to the parent. The use of the reference number as a parent pointer allows already existing objects to be referenced via their unique reference number, thus enabling partial imports. For example, it is possible to import documents into an existing dossier by referencing this dossier via its reference number.
 
-Wird zur Referenzierung das Aktenzeichen verwendet, muss dazu das Attribut **parent\_reference** (statt **parent\_guid**) gesetzt werden. Das Aktenzeichen in diesem Attribut wird als verschachtelte Arrays von Integern erwartet, welche die einzelnen Komponenten des Aktenzeichens (ohne Formatierung) abbilden. Beispiel: `[[1, 3, 5], [472, 9]` entspricht dem Aktenzeichen `1.3.5 / 472.9` (Position 1.3.5, Dossier 472, Subdossier 9):
+If the reference number is used for referencing, the attribute **parent\_reference** (instead of **parent\_guid**) must be set. The file number in this attribute is expected to be a nested array of integers that map the individual components of the file number (without formatting). Example: `[[1, 3, 5], [472, 9]` corresponds to the reference number `1.3.5 / 472.9` (position 1.3.5, dossier 472, subdossier 9):
 
 .. code::
 
   {
-  "guid": "9999-0000-0000-0000",
+  "guid": "9999-0000-0000",
   "parent_reference": [[1, 3, 5], [472, 9],
   ...
   }
 
 
-Siehe auch Abschnitt :ref:`Geschäftsregeln <geschaeftsregeln>` für Angaben, welche Inhaltstypen wie verschachtelt werden dürfen.
+See also section :ref:`Business rules <business_rules>` for details of which content types may be nested and how.
 
-Berechtigungen
---------------
+Permissions
+-----------
 
-Berechtigungen werden in OneGov GEVER standardmässig auf die Children vererbt. Es ist auf den Stufen Ordnungssystem, Ordnungsposition und Dossier erlaubt die Berechtigungen zu setzen, wobei Berechtigungen auf Stufe Dossier die Ausnahme sein sollten.
+Permissions are inherited by default to children in OneGov GEVER. It is permitted to set permissions at the level of the repositoryroot, repositoryfolder and dossier, whereby permissions at the level of the dossier should be the exception.
 
-Die möglichen Berechtigungen sind grundsätzlich vom jeweiligen Inhaltstyp abhängig. Die konkret erlaubten Werte können dem JSON Schema für den Typ entnommen werden. Für die meisten GEVER Inhalte sind die steuerbaren Berechtigungen jedoch identisch - die Ausnahme bilden Teamraum-Inhalte.
+The possible permissions are basically dependent on the respective content type. The permitted values can be taken from the JSON schema for the type. For most GEVER content, however, the controllable permissions are identical - the exception being workspace content.
 
-Berechtigungen werden gesetzt, indem im ``_permissions`` Property des ensprechenden Items ein Mapping gemäss Schema angegeben wird.
+Permissions are set by specifying a mapping according to the schema in the ``_permissions`` property of the item.
 
-Beispiel:
+Example:
 
 .. code::
 
@@ -276,21 +275,21 @@ Beispiel:
     }
   }
 
-Die Berechtigungen können granular für die folgenden Rollen vergeben werden:
+Permissions can be assigned granularly for the following roles:
 
--  ``read`` (Lesen)
+- ``read`` (read)
 
--  ``add`` (Dossiers hinzufügen)
+- ``add`` (add dossiers)
 
--  ``edit`` (Dossiers bearbeiten)
+- ``edit`` (edit dossiers)
 
--  ``close`` (Dossiers abschliessen)
+- ``close`` (close dossiers)
 
--  ``reactivate`` (Dossiers reaktivieren)
+- ``reactivate`` (reactivate dossiers)
 
--  ``manage_dossiers`` (Dossiers verwalten)
+- ``manage_dossiers`` (manage dossiers)
 
-Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob die Vererbung der Berechtigungen auf dieser Stufe unterbrochen werden soll. Dies führt dazu, dass ab dieser Stufe nur die explizit definierten Zugriffsberechtigungen gültig sind, und keine Berechtigungen mehr via Vererbung vom Parent übernommen werden:
+In addition, a **block\_inheritance** flag can be used to specify whether the inheritance of permissions should be interrupted at this level. This means that from this level onwards, only the explicitly defined access authorizations are valid and no authorizations are taken over from the parent via inheritance:
 
 .. code::
 
@@ -299,59 +298,59 @@ Zusätzlich kann mit einem **block\_inheritance** Flag spezifiziert werden, ob d
     ...
   }
 
-Berechtigungen werden an einen oder mehrere “Principals” vergeben, dies entspricht einem Benutzer oder einer Gruppe.
+Permissions are assigned to one or more "principals", this corresponds to a user or a group.
 
 --------------
 
-Für **Teamräume** gibt es separate Rollen welche auf unterschiedlichen Stufen gesetzt werden können.
+For **workspaces** there are separate roles which can be set at different levels.
 
-Auf der Ebene des Teamraum-Roots können folgende Rollen vergeben werden:
+The following roles can be assigned at the workspace root level:
 
--  ``workspaces_creator`` (Teamräume erstellen)
--  ``workspaces_user`` (Teamräume auflisten)
+- ``workspaces_creator`` (create workspaces)
+- ``workspaces_user`` (list workspaces)
 
-Auf der Ebene eines einzelnen Teamraums oder eines Teamraum-Ordners können die folgenden Rollen vergeben werden:
+At the level of a single workspace or a workspace folder, the following roles can be assigned:
 
--  ``workspace_admin`` (Admin)
--  ``workspace_member`` (Teammitglied)
--  ``workspace_guest`` (Gast)
+- ``workspace_admin`` (admin)
+- ``workspace_member`` (member)
+- ``workspace_guest`` (guest)
 
-**Beteiligungen** (participations) in Teamräumen werden über lokale Rollen abgebildet. Um eine Beteiligung eines Benutzers an einem Teamraum zu importieren, genügt es daher die Art der Beteiligung über ein entsprechendes local role assignment im ``_permissions`` property auszudrücken.
+**Participations in workspaces are mapped via local roles. To import a user's participation in a workspace, it is therefore sufficient to express the type of participation via a corresponding local role assignment in the ``_permissions`` property.**
 
 
-Setzen von Werten
------------------
+Setting values
+--------------
 
-Defaultwerte werden nur gesetzt, falls die entsprechenden Attribute im gelieferten JSON nicht vorhanden sind.
+Default values are only set if the corresponding attributes are not available in the supplied JSON.
 
-Setzen des Workflow-Status
---------------------------
+Setting the workflow status
+---------------------------
 
-Für Objekte mit einem Workflow kann über das Property ``review_state`` angegeben werden, in welchem Status das Objekt erstellt werden kann.
+For objects with a workflow, the property ``review_state`` can be used to specify in which state the object can be created.
 
-Die vollständige Liste der gültigen Workflow-States ist im Schema der entsprechenden Objekte definiert.
+The complete list of valid workflow states is defined in the schema of the corresponding objects.
 
-Ordnungssysteme
-~~~~~~~~~~~~~~~
+Repositories
+~~~~~~~~~~~~
 | 
 
 +-----------------------------------+---------+
-| ``repositoryroot-state-active``   | Aktiv   |
+| ``repositoryroot-state-active``   | Active  |
 +-----------------------------------+---------+
 
-Initial-Zustand: ``repositoryroot-state-active``
+Initial state: ``repositoryroot-state-active``
 
 JSON Schema: :ref:`reporoots.schema.json <reporoots_schema_json>`
 
-Ordnungspositionen
-~~~~~~~~~~~~~~~~~~
+Repositoryfolders
+~~~~~~~~~~~~~~~~~
 | 
 
 +-------------------------------------+---------+
-| ``repositoryfolder-state-active``   | Aktiv   |
+| ``repositoryfolder-state-active``   | Active  |
 +-------------------------------------+---------+
 
-Initial-Zustand: ``repositoryfolder-state-active``
+Initial state: ``repositoryfolder-state-active``
 
 JSON Schema: :ref:`repofolders.schema.json <repofolders_schema_json>`
 
@@ -360,144 +359,143 @@ Dossiers
 | 
 
 +------------------------------+------------------+
-| ``dossier-state-active``     | In Bearbeitung   |
+| ``dossier-state-active``     | Active           |
 +------------------------------+------------------+
-| ``dossier-state-resolved``   | Abgeschlossen    |
+| ``dossier-state-resolved``   | Resolved         |
 +------------------------------+------------------+
 
-Initial-Zustand: ``dossier-state-active``
+Initial state: ``dossier-state-active``
 
-Um ein Dossier im abgeschlossenen Zustand abzuliefern, wird daher der
-``review_state`` auf den entsprechenden Wert gesetzt:
+Therefore, to deliver a dossier in the completed state, the
+``review_state`` is set to the appropriate value:
 
   ...
 
-  "review_state": "dossier-state-resolved",
+  "``review_state``: ``dossier-state-resolved``,
 
   ...
 
-Wenn ein Dossier im abgeschlossenen Zustand abgeliefert wird, MUSS jedes darin enthaltene Subdossier ebenfalls den Status ``dossier-state-resolved`` haben. Das Erfüllen der Regeln zu “losen Blättern” und Datumsbereichen hingegen ist empfohlen, wird aber für den Import nicht strikt verlangt (wird protokolliert, aber “as-is” importiert).
+When a dossier is delivered in the resolved state, each contained subdossier MUST also have the status ``dossier-state-resolved``. Fulfilment of the rules on ``loose sheets`` and date ranges, on the other hand, is recommended but not strictly required for import (will be logged but imported ``as-is``).
 
 JSON Schema: :ref:`dossiers.schema.json <dossiers_schema_json>`
 
-Dokumente
+Documents
 ~~~~~~~~~
 | 
 
 +----------------------------+----------------------+
-| ``document-state-draft``   | (Standard-Zustand)   |
+| ``document-state-draft``   | (default state)      |
 +----------------------------+----------------------+
 
-Initial-Zustand: ``document-state-draft``
+Inital state: ``document-state-draft``
 
 JSON Schema: :ref:`documents.schema.json <documents_schema_json>`
 
 
-Ersteller
----------
+Creator
+-------
 
-Der Ersteller eines Objekts lässt sich für alle Inhalte mit dem Property ``_creator`` setzen. Auch die entsprechenden Journaleinträge, werden im Namen des Erstellers eines jeweiligen Objektes erfasst.
-
-
-Redirects zu früheren Pfäden
-----------------------------
-Um bspw. bei Migrationen sicherstellen zu können, dass alte Links auf den ursprünglichen Pfad eines Dokuments oder Dossiers nach wie vor funktionieren, können die ursprünglichen Pfade unter dem Key ``_old_paths`` mitgegeben werden. So führen die alten URLs mit einem Redirect zum neu erstellten Objekt.
+The creator of an object can be set for all contents with the property ``_creator``. The corresponding journal entries are also recorded in the name of the creator of the respective object.
 
 
-Zusätzliche Validierung
------------------------
+Redirects to previous URL paths
+-------------------------------
+In order to ensure that old links to the original path of a document or dossier still work, the original paths can be specified under the key ``_old_paths``. This way, the old URLs lead to the newly created object with a redirect.
+
+
+Additional validation
+---------------------
 
 Schema
 ~~~~~~
 
--  Die GUID eines jeden eingelesenen Objektes muss zwingend eindeutig sein.
+- The GUID of each imported object must be unique.
 
--  Das Aktenzeichen eines Dossiers/Dokumentes muss zwingend eindeutig sein, ebenso die Positionsnummer einer Ordnungsposition.
+- The reference number of a dossier/document must be unique, also the position number of an item.
 
--  Date und DateTime Felder müssen gemäss `RFC 3339 <http://www.ietf.org/rfc/rfc3339.txt>`__ formatiert werden.
+- Date and DateTime fields must be formatted according to `RFC 3339 <http://www.ietf.org/rfc/rfc3339.txt>`__.
 
-.. _geschaeftsregeln:
+.. _business_rules:
 
-Geschäftsregeln
+Business Rules
 ~~~~~~~~~~~~~~~
 
-Die folgenden Geschäftsregeln gelten in OneGov GEVER:
+The following business rules apply in OneGov GEVER:
 
--  Die Konfigurationsvariable **maximum\_repository\_depth** und **maximum\_dossier\_depth** definieren wie tief Ordnungspositionen und Dossiers ineinander verschachtelt werden dürfen.
+- The configuration variable **maximum\_repository\_depth** and **maximum\_dossier\_depth** define how deep folder items and dossiers may be nested within each other.
 
--  Abgeschlossene Dossiers:
+- Closed dossiers:
 
-   -  Abgeschlossene Dossiers dürfen keine offenen Subdossiers enthalten.
+   - Closed dossiers may not contain open subdossiers.
 
-   -  Ist ein Dossier abgeschlossen und hat Subdossiers, so müssen alle Dokumente einem Subdossier zugeordnet werden, das Hauptdossier darf keine ihm direkt zugeordneten Dokumente enthalten (“keine losen Blätter”).
+   - If a dossier is closed and has subdossiers, all documents must be assigned to a subdossier, the main dossier must not contain any documents directly assigned to it ("no loose sheets").
 
-   -  Das Enddatum eines abgeschlossenen Dossiers muss immer grösser oder gleich dem Enddatum aller seiner Subdossiers, und grösser oder gleich dem Dokumentdatum eines enthaltenen Dokumentes sein.
+   - The end date of a resolved dossier must always be greater than or equal to the end date of all its subdossiers, and greater than or equal to the document date of a contained document.
 
--  Eine Ordnungsposition kann nur entweder Dossiers oder weitere Ordnungspositionen enthalten, nie Objekte beider Inhaltstypen gleichzeitig. Dossiers dürfen dementsprechend nur in Leaf-Nodes (Rubriken) des Ordnungssystems enthalten sein.
+- A repositoryfolder can only contain either dossiers or further repositoryfolders, never objects of both content types at the same time. Accordingly, dossiers may only be contained in leaf nodes of the repository.
 
--  Bei den folgenden Feldern ist die Auswahlmöglichkeit durch den Parent eingeschränkt:
+- For the following fields, the choice is restricted by the parent:
 
-   -  ``custody_period`` (Archivische Schutzfrist)
+   - ``custody_period``
 
-   -  ``archival_value`` (Archivwürdigkeit)
+   - ``archival_value``
 
-   -  ``classification`` (Klassifikation)
+   - ``classification``
 
-   -  ``privacy_layer`` (Datenschutzstufe)
+   - ``privacy_layer``
 
-   -  ``retention_period`` (Aufbewahrungsdauer) - *Je nach Konfiguration ist diese Regel auch nicht aktiv*
+   - ``retention_period`` - *Depending on the configuration, this rule may not be active*.
 
-   Einschränken bedeutet in diesem Zusammenhang, dass die Liste der zur
-   Verfügung stehenden Elemente gemäss JSON-Schema Definition auf das
-   vom Parent ausgewählte Element und alle Folge-Elemente reduziert
-   wird.
+   Restricting in this context means that the list of available
+   available elements according to the JSON schema definition to the element
+   selected by the parent and all subsequent elements is reduced.
 
-Aktenzeichen und Laufnummern
-----------------------------
+Reference and sequence numbers
+------------------------------
 
-In OneGov GEVER werden Aktenzeichen geführt, und auf den Ebenen Dossier und Dokument dargestellt. Das Darstellungsformat des Aktenzeichens (Gruppierung, Trennzeichen) ist pro Mandant konfigurierbar, und die einzelnen Bestandteile werden unabhängig vom formatierten String separat gespeichert.
+In OneGov GEVER, reference numbers are kept and displayed on the dossier and document levels. The display format of the reference number (grouping, separator) is configurable per client and the individual components are stored separately, independent of the formatted string.
 
-| Ein Beispiel für das Aktenzeichen eines Dokumentes in GEVER sieht wie folgt aus:
+| An example of the reference number of a document in GEVER looks as follows:
 | **FD 0.7.1.1 / 5.3 / 54**
 
-Die einzelnen Komponenten stehen hier für folgendes:
+The individual components here stand for the following:
 
--  **FD** - ein pro Mandant konfigurierbares Kürzel das im Aktenzeichen verwendet wird
+- **FD** - an abbreviation that can be configured per client and is used in the reference number.
 
--  **0.7.1.1** - die Nummer der Ordnungsposition. Zusammengesetzt aus den Einzelkomponenten (**0**, **7**, **1**, und **1**) welche lokal auf den entsprechenden Ordnungspositionen geführt werden / gespeichert sind. Separiert durch ein konfigurierbares Trennzeichen (Standardmässig Punkt).
+- **0.7.1.1** - the number of the repositoryfolder. Composed of the individual components (**0**, **7**, **1**, and **1**) which are managed / stored locally on the corresponding repositoryfolders. Separated by a configurable separator (point by default).
 
--  **5** - die Nummer des Dossiers innerhalb der Rubrik (aufsteigender Zähler pro Rubrik)
+- **5** - the number of the dossier within the leaf repositoryfolder (ascending counter per heading).
 
--  **3** - die Nummer eines Subdossiers innerhalb des Dossiers, falls Subdossiers existieren
+- **3** - the number of a subdossier within the dossier, if subdossiers exist.
 
--  **54** - die global eindeutige Laufnummer des Dokuments (auch ohne den Rest des Aktenzeichens eindeutig)
+- **54** - the globally unique sequence number of the document (also unique without the rest of the reference number).
 
-Die Aktenzeichen für Dossiers/Subdossiers lassen den letzten Teil
-(Laufnummer des Dokuments) weg.
+The reference numbers for dossiers/subdossiers leave out the last part
+(sequence number of the document).
 
-Abgrenzungen
-------------
+Delimitations
+-------------
 
--  Es können vorerst nur die erwähnten Inhaltstypen importiert werden, nicht alle in OneGov GEVER verfügbaren Typen.
+- For the time being, only the mentioned content types can be imported, not all types available in OneGov GEVER.
 
--  Dokument-Versionen können nicht importiert werden.
+- Document versions cannot be imported.
 
--  Mails können beim automatischen import nicht verlustlos von *\*.msg* nach *\*.eml* konvertiert werden, daher müssen diese Vorgängig nach \*.eml konvertiert werden.
+- Mails cannot be converted losslessly from *\*.msg* to *\*.eml* during automatic import, so they must first be converted to \*.eml.
 
--  Es kann nicht überprüft werden, ob die Rechte “sinnvoll” gesetzt sind (optimale Nutzung des Vererbungsmechanismus, keine Redundanzen). Eine allfällige Vereinfachung der Berechtigungen muss vor einem Import der Daten nach OneGov GEVER durchgeführt werden.
+- It cannot be checked whether the rights are set "sensibly" (optimal use of the inheritance mechanism, no redundancies). Any simplification of the permissions must be carried out before importing the data into OneGov GEVER.
 
 .. |img-image-1| image:: img/image1.png
 
-.. _kapitel-oggbundle-anhang:
+.. _chapter-oggbundle-appendix:
 
-Anhang
-------
+Appendix
+--------
 
 Schemas
 ~~~~~~~
 
 
-Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten definieren, sind hier abgelegt:
+The JSON schemas that define the structure of the JSON files for the metadata are stored here:
 
 .. _configuration_schema_json:
 
@@ -638,24 +636,24 @@ Die JSON-Schemas, welche die Struktur der JSON-Dateien für die Metadaten defini
        :language: json
 
 
-========================
-Generieren von OGGBundle
-========================
+==================
+Generate OGGBundle
+==================
 
-Mit ``bin/create-bundle`` kann ein ``OGGBundle`` von einem Datenverzeichnis oder einer Excel-Datei, die ein Ordnungssystem beinhaltet, generiert werden.
+With ``bin/create-bundle`` a ``OGGBundle`` can be generated from a data directory or an Excel file containing a classification system.
 
-Für das Erstellen eines Bundles ab Filesystem gilt folgendes:
+The following applies to creating a bundle from a filesystem:
 
--  Wenn ``--repo-nesting-depth`` gesetzt ist, wird das Skript ein ``OGGBundle`` für ein komplettes ``Ordnungssystem`` generieren. In diesem Fall wird das ``source_dir`` im ``OGGBundle`` als ein ``reporoot`` abgebildet, und alle Verzeichnisse welche eine Verschachtelungstiefe geringer als ``--repo-nesting-depth`` haben werden als ``repofolders`` abgebildet. Andere Verzeichnisse als ``dossiers`` und Dateien als ``documents``.
+- If ``--repo-nesting-depth`` is set, the script will generate a ``OGGBundle`` for a complete ``repository``. In this case, the ``source_dir`` in the ``OGGBundle`` is mapped as a ``reporoot``, and all directories that have a nesting depth less than ``--repo-nesting-depth`` are mapped as ``repofolders``. Other directories as ``dossiers`` and files as ``documents``.
 
-- Wenn ``--repo-nesting-depth`` nicht gesetzt ist (``--repo-nesting-depth=-1``), dann generiert das Skript ein ``OGGBundle`` für einen partiellen Import. In diesem Fall wird das ``source_dir`` im ``OGGBundle`` nicht abgebildet, alle enthaltenen Verzeichnisse werden als ``dossiers`` abgebildet und Dateien als ``documents``. Die Ordnungsposition oder das Dossier in welches das ``OGGBundle`` importiert werden soll, muss man mit ``--import-repository-references`` und optional ``--import-dossier-reference`` spezifizieren.
+- If ``--repo-nesting-depth`` is not set (``--repo-nesting-depth=-1``), then the script generates a ``OGGBundle`` for a partial import. In this case the ``source_dir`` is not mapped in the ``OGGBundle``, all contained directories are mapped as ``dossiers`` and files as ``documents``. The folder location or dossier into which the ``OGGBundle`` is to be imported must be specified with ``--import-repository-references`` and optionally ``--import-dossier-reference``.
 
-Für das Erstellen eines Bundles ab Excel sind nur gewisse Argumente zugelassen. Zudem können keine Dossiers und Dokumente erstellt werden,
-da das Excel nur das Ordnungssystem beinhaltet.
+Only certain arguments are allowed for creating a bundle from Excel. In addition, dossiers and documents cannot be created,
+as the Excel only contains the repository.
 
-Mit ``bin/create-bundle --help`` kann eine vollständige Liste der möglichen Argumente angezeigt werden.
+With ``bin/create-bundle --help`` a complete list of possible arguments can be displayed.
 
-Metadaten
+Metadata
 ---------
 
-Das Erstelldatum von einer Datei wird als ``document_date`` im entsprechendem OGG Objekt verwendet und das Modifikationsdatum der Datei wird als Änderungsdatum verwendent.
+The creation date of a file is used as ``document_date`` in the corresponding OGG object and the modification date of the file is used as the modification date.
