@@ -1,6 +1,7 @@
 from ftw.zipexport.generation import ZipGenerator
 from ftw.zipexport.utils import normalize_path
 from logging import getLogger
+from opengever.base import utils
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.handlebars import get_handlebars_template
 from opengever.base.utils import disable_edit_bar
@@ -209,6 +210,13 @@ class DemandMeetingZip(BrowserView):
     def zip_export_url(self):
         return self.model.get_url(view='export-meeting-zip')
 
+    def skip_unconverted_url(self):
+        return "{}/@@skip_unconverted?job_id={}".format(
+            self.context.absolute_url(), self.job_id)
+
+    def is_manager(self):
+        return utils.is_manager()
+
 
 class MeetingZipExportOriginals(BrowserView):
     """Iterate over meeting contents and return results in a .zip archive."""
@@ -235,3 +243,22 @@ class MeetingZipExportOriginals(BrowserView):
                 'Content-Length', os.stat(zip_file.name).st_size)
 
             return filestream_iterator(zip_file.name, 'rb')
+
+
+class MeetingSkipUnconverted(BrowserView):
+    """View to skip unconveretd files in meeting Zip job."""
+
+    def __init__(self, context, request):
+        super(MeetingSkipUnconverted, self).__init__(context, request)
+        self.model = self.context.model
+
+    def __call__(self):
+        job_id = require_job_id_parameter(self.request)
+        job = require_job(self.request, self.model, job_id)
+
+        exporter = MeetingZipExporter(self.model, job_id)
+        exporter.mark_unconverted_docs_as_skipped()
+
+        url = "{}/@@demand_meeting_zip?job_id={}".format(
+            self.context.absolute_url(), job.job_id)
+        return self.request.RESPONSE.redirect(url)

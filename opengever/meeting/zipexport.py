@@ -464,3 +464,15 @@ class MeetingZipExporter(object):
 
     def _collect_meeting_documents(self):
         return ZipExportDocumentCollector(self.meeting).get_documents()
+
+    def mark_unconverted_docs_as_skipped(self):
+        """This is a helper method that will fix the Zip export if any documents
+        cannot be converted. It will basically mark the documents that still
+        have status converting as skipped, which will lead to attaching the
+        original document instead of the PDF to the zip file."""
+        if self.is_finished_converting():
+            return
+
+        for docid in self.zip_job.list_document_ids():
+            if self.zip_job.get_doc_status(docid)['status'] == 'converting':
+                self.zip_job.update_doc_status(docid, {'status': 'skipped'})

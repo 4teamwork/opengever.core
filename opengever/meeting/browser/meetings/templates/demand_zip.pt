@@ -40,6 +40,9 @@
           </a>
         </div>
       </div>
+      <div tal:condition="view/is_manager" class="button confirm">
+        <a tal:attributes="href view/skip_unconverted_url;" i18n:translate="label_skip_unconverted_files">Skip unconverted files.</a>
+      </div>
     </div>
 
   </div>
