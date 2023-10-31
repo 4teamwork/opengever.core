@@ -349,6 +349,16 @@ class TestDispositionEditForm(IntegrationTestCase):
         self.assertEquals(['Item state changed.'], info_messages())
         self.assertFalse(self.disposition.has_sip_package())
 
+    @browsing
+    def test_can_overwrite_transferring_office(self, browser):
+        self.login(self.records_manager, browser)
+        self.assertEqual(u'Hauptmandant', self.disposition.transferring_office)
+
+        browser.open(self.disposition, view='edit')
+        browser.fill({'Transferring office (AktenbildnerName)': "Foo"})
+        browser.find('Save').click()
+        self.assertEqual(u'Foo', self.disposition.transferring_office)
+
 
 class TestDispositionDelivery(IntegrationTestCase):
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-12-22 20:31+0000\n"
+"POT-Creation-Date: 2023-10-31 14:16+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -253,6 +253,11 @@ msgstr "Titel"
 #: ./opengever/disposition/disposition.py
 msgid "label_transfer_number"
 msgstr "Ablieferungsnummer"
+
+#. Default: "Transferring office"
+#: ./opengever/disposition/disposition.py
+msgid "label_transferring_office"
+msgstr "Aktenbildner Name"
 
 #. Default: "Yes"
 #: ./opengever/disposition/browser/removal_protocol.py
