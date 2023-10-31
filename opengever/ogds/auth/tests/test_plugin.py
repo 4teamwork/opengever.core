@@ -568,7 +568,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             'firstname': '',
             'lastname': '',
             'objectSid': '',
-            'fullname': '',
+            'fullname': 'B\xc3\xa4rfuss K\xc3\xa4thi',
         }
         self.assertEqual(expected, results)
 
