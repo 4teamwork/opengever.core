@@ -144,6 +144,13 @@
 
   <browser:page
       for="opengever.meeting.interfaces.IMeetingWrapper"
+      name="skip_unconverted"
+      class=".zipexport.MeetingSkipUnconverted"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="opengever.meeting.interfaces.IMeetingWrapper"
       name="reopen_meeting"
       class=".reopen.ReopenMeetingForm"
       permission="cmf.ManagePortal"

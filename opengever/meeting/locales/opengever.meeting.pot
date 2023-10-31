@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2022-04-27 16:29+0000\n"
+"POT-Creation-Date: 2023-10-31 07:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1366,6 +1366,11 @@ msgstr ""
 #. Default: "Secretary"
 #: ./opengever/meeting/browser/meetings/protocol.py
 msgid "label_secretary"
+msgstr ""
+
+#. Default: "Skip unconverted files."
+#: ./opengever/meeting/browser/meetings/templates/demand_zip.pt
+msgid "label_skip_unconverted_files"
 msgstr ""
 
 #. Default: "Start"
