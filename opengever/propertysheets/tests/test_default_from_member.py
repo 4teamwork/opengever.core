@@ -87,9 +87,6 @@ class TestDefaultFromMemberDefaultFactory(IntegrationTestCase):
     def test_uses_fallback_for_unmapped_value_by_default(self):
         self.login(self.regular_user)
 
-        member = api.user.get_current()
-        member.setProperties({'email': 'notmapped@example.org'})
-
         self.assertEqual(
             u'FALLBACK',
             member_property_default_factory(
@@ -97,7 +94,7 @@ class TestDefaultFromMemberDefaultFactory(IntegrationTestCase):
                     'property': 'email',
                     'fallback': u'FALLBACK',
                     'mapping': {
-                        u'foo@example.com': u'FOO@EXAMPLE.COM',
+                        u'doesnt.match@example.com': u'DOESNT.MATCH@EXAMPLE.COM',
                     }
                 })))
 
@@ -105,16 +102,15 @@ class TestDefaultFromMemberDefaultFactory(IntegrationTestCase):
         self.login(self.regular_user)
 
         member = api.user.get_current()
-        member.setProperties({'email': 'notmapped@example.org'})
 
         self.assertEqual(
-            u'notmapped@example.org',
+            member.getProperty('email'),
             member_property_default_factory(
                 json.dumps({
                     'property': 'email',
                     'fallback': u'FALLBACK',
                     'allow_unmapped': True,
                     'mapping': {
-                        u'foo@example.com': u'FOO@EXAMPLE.COM',
+                        u'doesnt.match@example.com': u'DOESNT.MATCH@EXAMPLE.COM',
                     }
                 })))
