@@ -46,9 +46,17 @@ class TestSIPPackageIntegration(IntegrationTestCase):
             u'Hauptmand\xe4nt, Flucht R\xe4mon',
             package.ablieferung.ablieferndeStelle)
         self.assertEquals(
-            u'Hauptmand\xe4nt', package.ablieferung.provenienz.aktenbildnerName)
-        self.assertEquals(
             u'Ordnungssystem', package.ablieferung.provenienz.registratur)
+        # aktenbildnerName default is admin unit label, but it was set
+        # before the change done above
+        self.assertEquals(
+            u'Hauptmandant', package.ablieferung.provenienz.aktenbildnerName)
+
+        # Can overwrite aktenbildnerName
+        self.disposition.transferring_office = "my custom transferring office"
+        package = SIPPackage(self.disposition)
+        self.assertEquals(
+            u'my custom transferring office', package.ablieferung.provenienz.aktenbildnerName)
 
 
 class TestSIPPackage(FunctionalTestCase):

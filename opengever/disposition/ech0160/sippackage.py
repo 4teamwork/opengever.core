@@ -70,7 +70,7 @@ class SIPPackage(object):
         ablieferung.ablieferungstyp = ABLIEFERUNGSTYP
         ablieferung.ablieferndeStelle = self.get_transferring_office()
         ablieferung.provenienz = arelda.provenienzGeverSIP()
-        ablieferung.provenienz.aktenbildnerName = get_current_admin_unit().label()
+        ablieferung.provenienz.aktenbildnerName = self.disposition.transferring_office
         ablieferung.provenienz.registratur = self.get_repository_title()
 
         ablieferung.ordnungssystem = self.repo.binding()

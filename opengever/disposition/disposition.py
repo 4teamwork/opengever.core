@@ -185,12 +185,16 @@ def title_default():
         api.portal.get_localized_time(date.today(), long_format=False))
 
 
+def transferring_office_default():
+    return get_current_admin_unit().label()
+
+
 class IDispositionSchema(model.Schema):
 
     model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
-        fields=[u'title', u'dossiers', u'transfer_number'],
+        fields=[u'title', u'dossiers', u'transfer_number', u'transferring_office'],
     )
 
     dexteritytextindexer.searchable('title')
@@ -225,6 +229,12 @@ class IDispositionSchema(model.Schema):
     transfer_number = schema.TextLine(
         title=_(u"label_transfer_number", default=u"Transfer number"),
         required=False,
+    )
+
+    transferring_office = schema.TextLine(
+        title=_(u"label_transferring_office", default=u"Transferring office"),
+        required=False,
+        defaultFactory=transferring_office_default
     )
 
 
