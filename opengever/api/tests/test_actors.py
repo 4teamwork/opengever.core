@@ -228,11 +228,10 @@ class TestActorsGet(IntegrationTestCase):
     def test_actors_response_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = 'secretariat_user'
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -259,7 +258,7 @@ class TestActorsGet(IntegrationTestCase):
     def test_full_representation_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = 'secretariat_user'
         url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -273,11 +272,10 @@ class TestActorsGet(IntegrationTestCase):
     def test_actors_response_for_ogds_user_with_orgunit(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'fa:jurgen.konig'
+        actor_id = 'fa:secretariat_user'
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -343,7 +341,6 @@ class TestActorsGet(IntegrationTestCase):
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -360,7 +357,7 @@ class TestActorsGet(IntegrationTestCase):
                         '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
-                        'identifier': u'regular_user',
+                        'identifier': u'dossier_responsible',
                         '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
