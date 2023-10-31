@@ -332,10 +332,10 @@ class TestVirusScanValidator(IntegrationTestCase):
 
     def test_inbound_mail_scans_for_virus_when_enabled(self):
         self.login(self.regular_user)
-        self.regular_user.setMemberProperties(dict(email='from@example.org'))
         mail_to = IEmailAddress(self.request).get_email_for_object(self.empty_dossier)
+        mail_from = self.regular_user.getProperty('email')
         mail = EICAR_MAIL_TEMPLATE.format(
-            from_address='from@example.org', to_address=mail_to)
+            from_address=mail_from, to_address=mail_to)
 
         with self.observe_children(self.empty_dossier) as children:
             self.request.set('mail', mail)
