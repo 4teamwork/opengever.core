@@ -40,6 +40,7 @@ class TestUsersGet(IntegrationTestCase):
                                        u'Member',
                                        u'Authenticated',
                                        u'principal:AuthenticatedUsers',
+                                       u'principal:projekt_a',
                                        u'principal:fa_users',
                                        u'Anonymous'],
              u'home_page': None,
