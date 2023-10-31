@@ -554,6 +554,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         ogds_user = ogds_service().fetch_user('kathi.barfuss')
         ogds_user.firstname = None
         ogds_user.lastname = None
+        ogds_user.display_name = None
         ogds_user.email = None
         ogds_user.object_sid = None
         ogds_service().session.flush()
