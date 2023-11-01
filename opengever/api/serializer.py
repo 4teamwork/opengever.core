@@ -582,7 +582,7 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
     )
 
     content_type = 'virtual.ogds.user'
-    id_attribute_name = 'userid'
+    id_attribute_name = 'username'
     endpoint_name = '@ogds-users'
 
     def add_additional_metadata(self, data):

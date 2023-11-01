@@ -29,9 +29,9 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     """
 
     def test_enum_users_by_id(self):
-        results = self.plugin.enumerateUsers('kathi.barfuss')
+        results = self.plugin.enumerateUsers('regular_user')
         expected = ({
-            'id': 'kathi.barfuss',
+            'id': 'regular_user',
             'login': 'kathi.barfuss',
             'pluginid': 'ogds_auth',
         },)
@@ -41,12 +41,12 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     def test_enum_users_by_login(self):
         results = self.plugin.enumerateUsers(login='kathi.barfuss')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_id_takes_precedence_over_login(self):
-        results = self.plugin.enumerateUsers(id='kathi.barfuss', login='foo')
+        results = self.plugin.enumerateUsers(id='regular_user', login='foo')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_by_login_maps_to_username(self):
         create(
@@ -65,27 +65,27 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
     def test_enum_users_with_exact_match_true(self):
-        results = self.plugin.enumerateUsers('kathi', exact_match=True)
+        results = self.plugin.enumerateUsers('regular', exact_match=True)
         expected = ()
         self.assertEqual(expected, results)
 
-        results = self.plugin.enumerateUsers('kathi.barfuss', exact_match=True)
+        results = self.plugin.enumerateUsers('regular_user', exact_match=True)
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_with_exact_match_is_case_insensitive(self):
-        results = self.plugin.enumerateUsers('KATHI.BARFUSS', exact_match=True)
+        results = self.plugin.enumerateUsers('REGULAR_USER', exact_match=True)
         expected = ({
-            'id': 'kathi.barfuss',
+            'id': 'regular_user',
             'login': 'kathi.barfuss',
             'pluginid': 'ogds_auth',
         },)
         self.assertEqual(expected, results)
 
     def test_enum_users_with_exact_match_false_does_ci_substring_search(self):
-        results = self.plugin.enumerateUsers('atHI.BArfu', exact_match=False)
+        results = self.plugin.enumerateUsers('gUlaR_uSE', exact_match=False)
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_with_no_match_returns_empty_tuple(self):
         results = self.plugin.enumerateUsers(id='doesnt-exist')
@@ -118,7 +118,7 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'service.user',
             'webaction.manager',
         )
-        self.assertEqual(expected, self.ids(results))
+        self.assertItemsEqual(expected, self.logins(results))
 
     def test_enum_users_with_unknown_search_criteria_returns_empty_tuple(self):
         results = self.plugin.enumerateUsers(unkown_attr='foo')
@@ -132,7 +132,7 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'jurgen.fischer',
             'jurgen.konig',
         )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_attribute_search_with_exact_match_false(self):
         results = self.plugin.enumerateUsers(lastname='LER')
@@ -142,32 +142,32 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'nicole.kohler',
             'robert.ziegler',
         )
-        self.assertEqual(expected, self.ids(results))
+        self.assertItemsEqual(expected, self.logins(results))
 
     def test_enum_users_can_search_by_fullname_with_exact_match_true(self):
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
         ogds_service().session.flush()
 
         results = self.plugin.enumerateUsers(
             fullname='K\xc3\xa4thi B\xc3\xa4rFUSS (FD-AFI)', exact_match=True)
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_can_search_by_fullname_with_exact_match_false(self):
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
         ogds_service().session.flush()
 
         results = self.plugin.enumerateUsers(fullname='THI B\xc3\xa4rFUSS')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_can_search_by_name_and_login(self):
         # Workaround to accomodate the sharing view's search for users
         results = self.plugin.enumerateUsers(name='kathi.', login='kathi.')
         expected = ('kathi.barfuss', )
-        self.assertEqual(expected, self.ids(results))
+        self.assertEqual(expected, self.logins(results))
 
     def test_enum_users_supports_max_results(self):
         results = self.plugin.enumerateUsers(max_results=3)
@@ -175,15 +175,15 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
 
     def test_enum_users_filters_inactive_users(self):
         # Guard assertion: User exists and is inactive
-        user = ogds_service().fetch_user('inactive.user')
+        user = ogds_service().fetch_user('inactive_user')
         self.assertFalse(user.active)
 
-        results = self.plugin.enumerateUsers('inactive.user')
+        results = self.plugin.enumerateUsers('inactive_user')
         expected = ()
         self.assertEqual(expected, results)
 
     def test_enum_users_returns_bytestring_values(self):
-        results = self.plugin.enumerateUsers('kathi.barfuss')
+        results = self.plugin.enumerateUsers('regular_user')
         self.assertTrue(len(results) > 0)
 
         for key, value in results[0].items():
@@ -195,12 +195,12 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     def test_enum_users_is_cached(self, mock_query_ogds):
         self.plugin.ZCacheable_setManagerId('RAMCache')
 
-        results = self.plugin.enumerateUsers('kathi.barfuss')
-        cached_results = self.plugin.enumerateUsers('kathi.barfuss')
+        results = self.plugin.enumerateUsers('regular_user')
+        cached_results = self.plugin.enumerateUsers('regular_user')
         self.assertEqual(results, cached_results)
         self.assertEqual(1, mock_query_ogds.call_count)
 
-        cache_miss = self.plugin.enumerateUsers('robert.ziegler')
+        cache_miss = self.plugin.enumerateUsers('dossier_responsible')
         self.assertNotEqual(cache_miss, cached_results)
         self.assertEqual(2, mock_query_ogds.call_count)
 
@@ -337,15 +337,15 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
     """
 
     def test_groups_for_principal(self):
-        member = api.user.get('kathi.barfuss')
+        member = api.user.get('regular_user')
         results = self.plugin.getGroupsForPrincipal(member)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
         self.assertIsInstance(results, tuple)
 
     def test_groups_for_principal_without_groups_returns_empty_tuple(self):
-        member = api.user.get('robert.ziegler')
-        ogds_service().fetch_user('robert.ziegler').groups = []
+        member = api.user.get('dossier_responsible')
+        ogds_service().fetch_user('dossier_responsible').groups = []
         ogds_service().session.flush()
 
         results = self.plugin.getGroupsForPrincipal(member)
@@ -354,14 +354,14 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
         self.assertIsInstance(results, tuple)
 
     def test_groups_for_principal_returns_bytestring_values(self):
-        member = api.user.get('kathi.barfuss')
+        member = api.user.get('regular_user')
         results = self.plugin.getGroupsForPrincipal(member)
 
         for groupid in results:
             self.assertIsInstance(groupid, str)
 
     def test_groups_for_principal_filters_inactive_groups(self):
-        user = ogds_service().fetch_user('robert.ziegler')
+        user = ogds_service().fetch_user('dossier_responsible')
         create(
             Builder('ogds_group')
             .having(groupid='inactive.group',
@@ -370,13 +370,13 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
                     users=[user]))
         ogds_service().session.flush()
 
-        member = api.user.get('robert.ziegler')
+        member = api.user.get('dossier_responsible')
         results = self.plugin.getGroupsForPrincipal(member)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
 
     def test_groups_for_principal_filters_non_ascii_groups(self):
-        user = ogds_service().fetch_user('robert.ziegler')
+        user = ogds_service().fetch_user('dossier_responsible')
         create(
             Builder('ogds_group')
             .having(groupid=u'gruppe_mit_uml\xe4uten',
@@ -385,29 +385,29 @@ class TestOGDSAuthPluginIGroups(TestOGDSAuthPluginBase):
                     users=[user]))
         ogds_service().session.flush()
 
-        member = api.user.get('robert.ziegler')
+        member = api.user.get('dossier_responsible')
         results = self.plugin.getGroupsForPrincipal(member)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
 
     def test_groups_for_principal_is_case_insensitive(self):
-        user = PloneUser('KATHI.BARFUSS')
+        user = PloneUser('REGULAR_USER')
         results = self.plugin.getGroupsForPrincipal(user)
         expected = ('fa_users', 'projekt_a')
         self.assertEqual(expected, results)
 
     def test_groups_for_principal_is_cached(self):
-        kathi = api.user.get('kathi.barfuss')
-        robert = api.user.get('robert.ziegler')
-        franzi = api.user.get('franzi.muller')
+        kathi = api.user.get('regular_user')
+        robert = api.user.get('dossier_responsible')
+        franzi = api.user.get('committee_responsible')
 
-        user = ogds_service().fetch_user('robert.ziegler')
+        user = ogds_service().fetch_user('dossier_responsible')
         create(
             Builder('ogds_group')
             .having(groupid='additional.group',
                     users=[user]))
 
-        ogds_service().fetch_user('franzi.muller').groups = []
+        ogds_service().fetch_user('committee_responsible').groups = []
         ogds_service().session.flush()
 
         self.plugin.ZCacheable_setManagerId('RAMCache')
@@ -467,26 +467,26 @@ class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
     def test_get_group_members_returns_list_of_user_ids(self):
         user_ids = self.plugin.getGroupMembers('fa_users')
         self.assertEqual(user_ids, [
-            'beatrice.schrodinger',
+            'administrator',
+            'archivist',
             'committee.secretary',
-            'david.meier',
-            'faivel.fruhling',
-            'franzi.muller',
-            'fridolin.hugentobler',
-            'gunther.frohlich',
-            'hans.peter',
-            'herbert.jager',
-            'inactive.user',
-            'jurgen.fischer',
-            'jurgen.konig',
-            'kathi.barfuss',
-            'maja.harzig',
-            'nicole.kohler',
-            'propertysheets.manager',
-            'ramon.flucht',
-            'robert.ziegler',
-            'service.user',
-            'webaction.manager',
+            'committee_responsible',
+            'dossier_manager',
+            'dossier_responsible',
+            'inactive_user',
+            'limited_admin',
+            'meeting_user',
+            'member_admin',
+            'propertysheets_manager',
+            'records_manager',
+            'regular_user',
+            'secretariat_user',
+            'service_user',
+            'webaction_manager',
+            'workspace_admin',
+            'workspace_guest',
+            'workspace_member',
+            'workspace_owner',
         ])
 
     def test_get_group_members_for_unknown_id_returns_empty_list(self):
@@ -499,15 +499,15 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
     """
 
     def test_get_properties_for_user(self):
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.object_sid = u'S-1-5-21-2109130332-968164008-972369679-13586'
         ogds_user.display_name = u'K\xe4thi B\xe4rfuss (FD-AFI)'
         ogds_service().session.flush()
 
-        member = api.user.get('kathi.barfuss')
+        member = api.user.get('regular_user')
         results = self.plugin.getPropertiesForUser(member)
         expected = {
-            'userid': 'kathi.barfuss',
+            'userid': 'regular_user',
             'email': 'foo@example.com',
             'firstname': 'K\xc3\xa4thi',
             'lastname': 'B\xc3\xa4rfuss',
@@ -533,17 +533,17 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
     def test_get_properties_for_user_only_returns_props_for_active_users(self):
-        ogds_user = ogds_service().fetch_user('robert.ziegler')
+        ogds_user = ogds_service().fetch_user('dossier_responsible')
         ogds_user.active = False
         ogds_service().session.flush()
 
-        inactive_member = api.user.get('robert.ziegler')
+        inactive_member = api.user.get('dossier_responsible')
         results = self.plugin.getPropertiesForUser(inactive_member)
         expected = {}
         self.assertEqual(expected, results)
 
     def test_get_properties_for_user_returns_bytestring_values(self):
-        member = api.user.get('kathi.barfuss')
+        member = api.user.get('regular_user')
         results = self.plugin.getPropertiesForUser(member)
 
         for key, value in results.items():
@@ -551,19 +551,19 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
             self.assertIsInstance(value, str)
 
     def test_get_properties_for_user_replaces_none_values_with_empty_str(self):
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.firstname = None
         ogds_user.lastname = None
         ogds_user.email = None
         ogds_user.object_sid = None
         ogds_service().session.flush()
-        member = api.user.get('kathi.barfuss')
+        member = api.user.get('regular_user')
 
         # Note: Property values must never be `None`, otherwise the
         # propertysheet mechanism will blow up.
         results = self.plugin.getPropertiesForUser(member)
         expected = {
-            'userid': 'kathi.barfuss',
+            'userid': 'regular_user',
             'email': '',
             'firstname': '',
             'lastname': '',
@@ -573,13 +573,13 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
     def test_get_properties_for_user_is_case_insensitive(self):
-        user = PloneUser('KATHI.BARFUSS')
+        user = PloneUser('REGULAR_USER')
         results = self.plugin.getPropertiesForUser(user)
-        self.assertEqual('kathi.barfuss', results['userid'])
+        self.assertEqual('regular_user', results['userid'])
 
     def test_get_properties_for_user_is_cached(self):
-        kathi = api.user.get('kathi.barfuss')
-        robert = api.user.get('robert.ziegler')
+        kathi = api.user.get('regular_user')
+        robert = api.user.get('dossier_responsible')
         member_not_in_ogds = api.user.get(TEST_USER_ID)
 
         self.plugin.ZCacheable_setManagerId('RAMCache')
@@ -622,18 +622,18 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
             # With the OGDS auth plugin enabled, it should succeed
             self.install_ogds_plugin()
             self.login('kathi.barfuss')
-            self.assertEqual('kathi.barfuss', api.user.get_current().getId())
+            self.assertEqual('regular_user', api.user.get_current().getId())
             self.logout()
 
     def test_get_groups(self):
         with self.disabled_group_plugins:
             # Guard assertion: Disabling IGroupsPlugins results in empty groups
-            member = api.user.get('kathi.barfuss')
+            member = api.user.get('regular_user')
             self.assertEqual([], member.getGroups())
 
             # With the OGDS auth plugin enabled, groups should be listed
             self.install_ogds_plugin()
-            member = api.user.get('kathi.barfuss')
+            member = api.user.get('regular_user')
             self.assertEqual(['projekt_a', 'fa_users'], member.getGroups())
 
     def test_pas_search_users_without_criteria_lists_all_users(self):
@@ -641,7 +641,7 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
         pas = api.portal.get_tool('acl_users')
         users = pas.searchUsers()
         self.assertGreater(len(users), 5)
-        self.assertIn('kathi.barfuss', self.ids(users))
+        self.assertIn('kathi.barfuss', self.logins(users))
 
     def test_pas_search_groups_without_criteria_lists_all_groups(self):
         self.install_ogds_plugin()
@@ -651,20 +651,20 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
         self.assertIn('fa_users', self.ids(groups))
 
     def test_get_property_on_member(self):
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.email = u'totally.unique@example.org'
         ogds_service().session.flush()
 
         with self.disabled_property_plugins, self.disabled_user_plugins:
             self.install_ogds_plugin()
-            user = api.user.get('kathi.barfuss')
+            user = api.user.get('regular_user')
             self.assertEqual(
                 'totally.unique@example.org', user.getProperty('email'))
 
     def test_pas_search_by_attribute(self):
         """This covers functionality needed in og.mail.browser.inbound
         """
-        ogds_user = ogds_service().fetch_user('kathi.barfuss')
+        ogds_user = ogds_service().fetch_user('regular_user')
         ogds_user.email = u'totally.unique@example.org'
         ogds_service().session.flush()
 
@@ -676,11 +676,11 @@ class TestOGDSAuthPluginPloneIntegration(OGDSAuthTestCase):
                 email='totally.unique@example.org', exact_match=False)
 
             expected = [{
-                'id': 'kathi.barfuss',
+                'id': 'regular_user',
                 'login': 'kathi.barfuss',
                 'pluginid': 'ogds_auth',
                 'principal_type': 'user',
                 'title': 'kathi.barfuss',
-                'userid': 'kathi.barfuss',
+                'userid': 'regular_user',
             }]
             self.assertEqual(expected, matches)

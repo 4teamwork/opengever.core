@@ -40,6 +40,7 @@ from opengever.kub.entity import KuBEntity
 from opengever.ogds.base import _
 from opengever.ogds.base.browser.userdetails import UserDetails
 from opengever.ogds.base.interfaces import IActor
+from opengever.ogds.base.mappings import userid_to_username
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.service import ogds_service
@@ -538,7 +539,7 @@ class OGDSUserActor(Actor):
         return self.user.label(with_principal=with_principal)
 
     def get_profile_url(self):
-        return UserDetails.url_for(self.user.userid)
+        return UserDetails.url_for(self.user.username)
 
     @property
     def is_active(self):
@@ -563,8 +564,9 @@ class OGDSUserActor(Actor):
         return self.user
 
     def represents_url(self):
+        username = userid_to_username(self.identifier.split(':')[-1])
         return '{}/@ogds-users/{}'.format(
-            api.portal.get().absolute_url(), self.identifier.split(':')[-1])
+            api.portal.get().absolute_url(), username)
 
     def get_portrait_url(self):
         return UserAvatar(self.user.userid).get_portrait_url()

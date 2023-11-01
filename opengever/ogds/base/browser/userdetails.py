@@ -1,4 +1,5 @@
 from opengever.contact.utils import get_contactfolder_url
+from opengever.ogds.base.mappings import username_to_userid
 from opengever.ogds.base.utils import groupmembers_url
 from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.service import ogds_service
@@ -16,10 +17,10 @@ class UserDetails(BrowserView):
     """
 
     @classmethod
-    def url_for(cls, userid):
+    def url_for(cls, username):
         portal = getSite()
         return '/'.join((portal.portal_url(), '@@user-details',
-                         userid))
+                         username))
 
     def user_details_table(self):
         template = ViewPageTemplateFile('templates/userdetails_table.pt')
@@ -29,7 +30,7 @@ class UserDetails(BrowserView):
         """Returns a dict of information about a specific user
         """
         try:
-            user = ogds_service().find_user(self.userid)
+            user = ogds_service().find_user(username_to_userid(self.username))
         except RecordNotFound:
             raise NotFound
 
@@ -42,7 +43,7 @@ class UserDetails(BrowserView):
     def publishTraverse(self, request, name):  # noqa
         """The name is the userid of the user who should be displayed.
         """
-        self.userid = name
+        self.username = name
         return self
 
     def contactfolder_url(team_id):

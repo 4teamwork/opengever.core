@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.serializer import SerializeUserModelToJson
+from opengever.ogds.base.mappings import userid_to_username
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.tests.base import OGDSTestCase
@@ -141,9 +142,9 @@ class TestOGDSUserGet(IntegrationTestCase):
     @browsing
     def test_last_login_is_visible(self, browser):
         self.login(self.administrator, browser=browser)
-
+        username = userid_to_username(self.administrator.getId())
         browser.open(self.portal,
-                     view='@ogds-users/{}'.format(self.administrator.getId()),
+                     view='@ogds-users/{}'.format(username),
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertIn('last_login', browser.json)
@@ -167,11 +168,11 @@ class TestOGDSUserGet(IntegrationTestCase):
                          headers=self.api_headers)
 
     @browsing
-    def test_handles_non_ascii_userids(self, browser):
+    def test_handles_non_ascii_usernames(self, browser):
         self.login(self.regular_user, browser=browser)
 
         ogds_user = User.query.get_by_userid(self.reader_user.id)
-        ogds_user.userid = u'l\xfccklicher.laser'
+        ogds_user.username = u'l\xfccklicher.laser'
 
         browser.open(u'http://nohost/plone/@ogds-users/l\xfccklicher.laser',
                      headers=self.api_headers)
@@ -182,7 +183,7 @@ class TestOGDSUserGet(IntegrationTestCase):
 
         self.assertEqual(
             u'l\xfccklicher.laser',
-            browser.json['userid'])
+            browser.json['username'])
 
 
 class TestAssignedGroupsMethod(OGDSTestCase):

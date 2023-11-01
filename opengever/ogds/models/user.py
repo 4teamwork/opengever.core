@@ -22,6 +22,9 @@ class UserQuery(BaseQuery):
     def get_by_userid(self, userid):
         return self.filter_by(userid=userid).first()
 
+    def get_by_username(self, username):
+        return self.filter_by(username=username).first()
+
 
 class User(Base):
     """User model
@@ -131,7 +134,7 @@ class User(Base):
         if not with_principal:
             return self.fullname()
 
-        return u"%s (%s)" % (self.fullname(), self.userid)
+        return u"%s (%s)" % (self.fullname(), self.username)
 
     def fullname(self):
         """Return a visual representation of the user's full name.

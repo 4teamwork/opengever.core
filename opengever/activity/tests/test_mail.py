@@ -112,7 +112,7 @@ class TestEmailNotification(IntegrationTestCase):
     @browsing
     def test_add_task_notification_mail_includes_info_at(self, browser):
         self.login(self.dossier_responsible, browser)
-        self.create_task_via_browser(browser, info_at=['nicole.kohler', 'kathi.barfuss'])
+        self.create_task_via_browser(browser, info_at=['administrator', 'regular_user'])
         process_mail_queue()
 
         mails = Mailing(self.portal).get_messages()

@@ -71,59 +71,59 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertItemsEqual(
-            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
+            [{u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_member',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/beatrice.schrodinger',
-                  u'identifier': u'beatrice.schrodinger'},
+                  u'@id': u'http://nohost/plone/@actors/workspace_member',
+                  u'identifier': u'workspace_member'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/beatrice.schrodinger',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
                                u'email': u'beatrice.schrodinger@gever.local',
-                               u'id': u'beatrice.schrodinger',
+                               u'id': u'workspace_member',
                                u'is_local': None,
                                u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)'},
               u'role': {u'title': u'Member', u'token': u'WorkspaceMember'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_admin',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
-                  u'identifier': u'fridolin.hugentobler'},
+                  u'@id': u'http://nohost/plone/@actors/workspace_admin',
+                  u'identifier': u'workspace_admin'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/fridolin.hugentobler',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
                                u'email': u'fridolin.hugentobler@gever.local',
-                               u'id': u'fridolin.hugentobler',
+                               u'id': u'workspace_admin',
                                u'is_local': None,
                                u'title': u'Hugentobler Fridolin (fridolin.hugentobler)'},
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_owner',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/gunther.frohlich',
-                  u'identifier': u'gunther.frohlich'},
+                  u'@id': u'http://nohost/plone/@actors/workspace_owner',
+                  u'identifier': u'workspace_owner'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/gunther.frohlich',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
                                u'email': u'gunther.frohlich@gever.local',
-                               u'id': u'gunther.frohlich',
+                               u'id': u'workspace_owner',
                                u'is_local': None,
                                u'title': u'Fr\xf6hlich G\xfcnther (gunther.frohlich)'},
               u'role': {u'title': u'Admin', u'token': u'WorkspaceAdmin'}},
-             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+             {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
               u'@type': u'virtual.participations.user',
               u'is_editable': True,
               u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/hans.peter',
-                  u'identifier': u'hans.peter'},
+                  u'@id': u'http://nohost/plone/@actors/workspace_guest',
+                  u'identifier': u'workspace_guest'},
               u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
                                u'email': u'hans.peter@gever.local',
-                               u'id': u'hans.peter',
+                               u'id': u'workspace_guest',
                                u'is_local': None,
                                u'title': u'Peter Hans (hans.peter)'},
               u'role': {u'title': u'Guest', u'token': u'WorkspaceGuest'}},
@@ -168,10 +168,10 @@ class TestParticipationGet(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'http://nohost/plone/workspaces/workspace-1/@participations/beatrice.schrodinger',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/fridolin.hugentobler',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/gunther.frohlich',
-                u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_member',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_admin',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_owner',
+                u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
             ], [item.get('@id') for item in response.get('items')])
 
     @browsing
@@ -189,10 +189,10 @@ class TestParticipationGet(IntegrationTestCase):
 
         self.assertItemsEqual(
             [
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/beatrice.schrodinger',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/fridolin.hugentobler',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/gunther.frohlich',
-                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/hans.peter',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_member',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_admin',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_owner',
+                u'http://nohost/plone/workspaces/workspace-1/folder-1/@participations/workspace_guest',
             ], [item.get('@id') for item in response.get('items')])
 
     @browsing
@@ -304,17 +304,17 @@ class TestParticipationGet(IntegrationTestCase):
         ).json
 
         self.assertDictEqual(
-            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/hans.peter',
+            {u'@id': u'http://nohost/plone/workspaces/workspace-1/@participations/workspace_guest',
              u'@type': u'virtual.participations.user',
              u'is_editable': True,
              u'participant_actor': {
-                  u'@id': u'http://nohost/plone/@actors/hans.peter',
+                  u'@id': u'http://nohost/plone/@actors/workspace_guest',
                   u'identifier': u'hans.peter'},
              u'participant': {u'@id': u'http://nohost/plone/@ogds-users/hans.peter',
                               u'@type': u'virtual.ogds.user',
                               u'active': True,
                               u'email': u'hans.peter@gever.local',
-                              u'id': u'hans.peter',
+                              u'id': u'workspace_guest',
                               u'is_local': None,
                               u'title': u'Peter Hans (hans.peter)'},
              u'role': {u'title': u'Guest', u'token': u'WorkspaceGuest'}},

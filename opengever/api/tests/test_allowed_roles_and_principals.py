@@ -31,13 +31,13 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
             u'TaskResponsible',
             u'principal:fa_inbox_users',
             u'principal:fa_users',
-            u'principal:jurgen.fischer',
-            u'principal:kathi.barfuss',
+            u'principal:archivist',
+            u'principal:regular_user',
         }
         self.assertEqual(url, browser.json['@id'])
         self.assertEqual(allowed_roles_and_principals,
                          set(browser.json['allowed_roles_and_principals']))
-        self.assertNotIn(u'principal:robert.ziegler',
+        self.assertNotIn(u'principal:dossier_responsible',
                          browser.json.get('allowed_roles_and_principals'))
 
         RoleAssignmentManager(self.dossier).add_or_update_assignment(
@@ -45,4 +45,4 @@ class TestAllowedRolesAndPrincipalsAPI(IntegrationTestCase):
         browser.open(self.dossier.absolute_url() + '/@allowed-roles-and-principals',
                      method='GET', headers={'Accept': 'application/json'})
 
-        self.assertIn(u'principal:robert.ziegler', browser.json.get('allowed_roles_and_principals'))
+        self.assertIn(u'principal:dossier_responsible', browser.json.get('allowed_roles_and_principals'))

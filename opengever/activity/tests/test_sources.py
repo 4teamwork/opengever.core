@@ -24,13 +24,13 @@ class TestPossibleWatchersSource(IntegrationTestCase):
 
         subscriptions = center.get_subscriptions(self.task)
         self.assertEqual([], [s.watcher.actorid for s in subscriptions])
-        self.assertIn(u'kathi.barfuss', [term.value for term in source.search('')])
+        self.assertIn(u'regular_user', [term.value for term in source.search('')])
 
         center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
 
         subscriptions = center.get_subscriptions(self.task)
-        self.assertEqual(['kathi.barfuss'], [s.watcher.actorid for s in subscriptions])
-        self.assertNotIn(u'kathi.barfuss', [term.value for term in source.search('')])
+        self.assertEqual(['regular_user'], [s.watcher.actorid for s in subscriptions])
+        self.assertNotIn(u'regular_user', [term.value for term in source.search('')])
 
     def test_current_user_is_always_on_first_position_if_available(self):
         self.login(self.regular_user)
@@ -48,12 +48,11 @@ class TestPossibleWatchersSource(IntegrationTestCase):
     def test_filter_by_title_returns_the_filtered_users(self):
         self.login(self.regular_user)
         source = PossibleWatchersSource(self.task)
-
         self.assertEqual([
-            u'gunther.frohlich',
-            u'faivel.fruhling',
-            u'fridolin.hugentobler',
-            u'franzi.muller'],
+            u'workspace_owner',
+            u'dossier_manager',
+            u'workspace_admin',
+            u'committee_responsible'],
             [term.value for term in source.search('fr')])
 
     def test_search_is_case_insensitive(self):
@@ -61,17 +60,17 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         source = PossibleWatchersSource(self.task)
 
         self.assertEqual([
-            u'gunther.frohlich',
-            u'faivel.fruhling',
-            u'fridolin.hugentobler',
-            u'franzi.muller'],
+            u'workspace_owner',
+            u'dossier_manager',
+            u'workspace_admin',
+            u'committee_responsible'],
             [term.value for term in source.search('FR')])
 
     def test_term_title_is_user_display_name(self):
         self.login(self.regular_user)
         source = PossibleWatchersSource(self.task)
         self.assertEqual(u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                         source.search('kathi.barfuss')[0].title)
+                         source.search('regular_user')[0].title)
 
     def test_search_with_umlaut_works_properly(self):
         self.login(self.regular_user)

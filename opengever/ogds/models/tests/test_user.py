@@ -33,9 +33,9 @@ class TestUserModel(OGDSTestCase):
     def test_fullname_is_userid_if_no_name_given(self):
         self.assertEqual('admin', self.admin.fullname())
 
-    def test_label_is_the_fullname_with_userid_in_braces(self):
-        sammy = User('sammy', firstname='Samuel', lastname='Jackson')
-        self.assertEqual('Jackson Samuel (sammy)', sammy.label())
+    def test_label_is_the_fullname_with_username_in_braces(self):
+        sammy = User('sammy', firstname='Samuel', lastname='Jackson', username="sjackson")
+        self.assertEqual('Jackson Samuel (sjackson)', sammy.label())
 
     def test_create_sets_attrs(self):
         attrs = {
@@ -76,5 +76,8 @@ class TestUserModel(OGDSTestCase):
 
     def test_supports_non_ascii_userid(self):
         self.john.userid = u'J\xf6hn'
-        self.assertEqual(u'Smith John (J\xf6hn)', self.john.label())
         self.assertEqual("<User u'J\\xf6hn'>", str(self.john))
+
+    def test_supports_non_ascii_username(self):
+        self.john.username = u'J\xf6hn'
+        self.assertEqual(u'Smith John (J\xf6hn)', self.john.label())

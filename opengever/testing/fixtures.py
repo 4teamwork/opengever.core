@@ -4,8 +4,8 @@ from contextlib import contextmanager
 from contextlib import nested
 from datetime import date
 from datetime import datetime
-from datetime import timedelta
 from DateTime import DateTime
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.builder import ticking_creator
@@ -42,8 +42,10 @@ from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
 from plone.app.textfield.value import RichTextValue
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from time import time
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 import json
@@ -1999,25 +2001,33 @@ class OpengeverContentFixture(object):
         from within tests.
         """
         globalroles = ['Member'] + list(globalroles)
+        userid = kwargs.pop('userid', attrname)
+
+        if 'username' in kwargs:
+            username = kwargs.pop('username')
+        else:
+            normalizer = getUtility(IIDNormalizer)
+            first = normalizer.normalize(firstname)
+            last = normalizer.normalize(lastname)
+            username = '.'.join((first, last))
+
+        email = kwargs.pop('email', '{}@gever.local'.format(username))
+
         builder = (
             Builder('user')
+            .with_userid(userid)
             .named(firstname, lastname)
             .with_roles(*globalroles)
             .in_groups(self.org_unit_fa.users_group_id)
+            .having(username=username, email=email)
         )
 
-        builder.update_properties()  # updates builder.userid
-        if 'email' in kwargs:
-            email = kwargs['email']
-        else:
-            email = '{}@gever.local'.format(builder.userid)
-
-        plone_user = create(builder.with_email(email))
+        plone_user = create(builder)
 
         create(
             Builder('ogds_user')
             .id(plone_user.getId())
-            .having(firstname=firstname, lastname=lastname, email=email)
+            .having(firstname=firstname, lastname=lastname, email=email, username=username)
             .assign_to_org_units([self.org_unit_fa])
             .in_group(group)
             .having(**kwargs)

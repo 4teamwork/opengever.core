@@ -27,24 +27,24 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'dossier-1/task-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'id': u'regular_user'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                    u'identifier': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@actors/regular_user',
+                    u'identifier': u'regular_user'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -91,24 +91,24 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
+                    u'@id': u'http://nohost/plone/@users/regular_user',
                     u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'id': u'regular_user'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                    u'identifier': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@actors/regular_user',
+                    u'identifier': u'regular_user'
                 },
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -153,15 +153,15 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                    u'identifier': u'dossier_responsibler'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -196,15 +196,15 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/dossier_responsible',
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': u'dossier_responsible'
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                    u'identifier': u'dossier_responsible'
                 }
             ],
             u'referenced_watcher_roles': [
@@ -743,7 +743,7 @@ class TestPossibleWatchers(IntegrationTestCase):
         self.assertEqual(['faivel.fruhling'],
                          [item['token'] for item in browser.json['items']])
 
-        User.get('faivel.fruhling').active = False
+        User.get('dossier_manager').active = False
 
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual([],

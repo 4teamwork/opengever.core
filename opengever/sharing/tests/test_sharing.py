@@ -340,10 +340,10 @@ class TestOpengeverSharing(IntegrationTestCase):
                                     u'phone_office': None,
                                     u'title': u'Ziegler Robert',
                                     u'userid': u'robert.ziegler'},
-                  u'actor': {u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                             u'identifier': u'robert.ziegler'},
+                  u'actor': {u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                             u'identifier': u'dossier_responsible'},
                   u'type': u'user',
-                  u'id': u'robert.ziegler'}]},
+                  u'id': u'dossier_responsible'}]},
             browser.json)
 
     @browsing
@@ -378,7 +378,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                  u'Reader': True,
                                  u'Reviewer': False},
              u'disabled': False,
-             u'id': u'kathi.barfuss',
+             u'id': u'regular_user',
              u'login': u'kathi.barfuss',
              u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
                                u'@type': u'virtual.ogds.user',
@@ -396,8 +396,8 @@ class TestOpengeverSharing(IntegrationTestCase):
                                u'phone_office': u'012 34 56 78',
                                u'title': u'B\xe4rfuss K\xe4thi',
                                u'userid': u'kathi.barfuss'},
-             u'actor': {u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                        u'identifier': u'kathi.barfuss'},
+             u'actor': {u'@id': u'http://nohost/plone/@actors/regular_user',
+                        u'identifier': u'regular_user'},
              u'roles': {u'Contributor': True,
                         u'Editor': True,
                         u'Publisher': False,

@@ -63,12 +63,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                        u'identifier': u'kathi.barfuss',
+                        u'@id': u'http://nohost/plone/@actors/regular_user',
+                        u'identifier': u'regular_user',
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                        u'identifier': u'robert.ziegler',
+                        u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                        u'identifier': u'dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -112,8 +112,8 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Inbox: Finanz\xe4mt',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -198,12 +198,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Rechnungspr\xfcfungskommission',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/nicole.kohler',
-                        u'identifier': u'nicole.kohler',
+                        u'@id': u'http://nohost/plone/@actors/administrator',
+                        u'identifier': u'administrator',
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/franzi.muller',
-                        u'identifier': u'franzi.muller',
+                        u'@id': u'http://nohost/plone/@actors/committee_responsible',
+                        u'identifier': u'committee_responsible',
                     },
                 ],
                 u'represents': {
@@ -228,11 +228,10 @@ class TestActorsGet(IntegrationTestCase):
     def test_actors_response_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = 'secretariat_user'
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -245,8 +244,8 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -259,7 +258,7 @@ class TestActorsGet(IntegrationTestCase):
     def test_full_representation_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = 'secretariat_user'
         url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -273,11 +272,10 @@ class TestActorsGet(IntegrationTestCase):
     def test_actors_response_for_ogds_user_with_orgunit(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'fa:jurgen.konig'
+        actor_id = 'fa:secretariat_user'
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -290,8 +288,8 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'K\xf6nig J\xfcrgen',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/secretariat_user',
+                        u'identifier': u'secretariat_user',
                     },
                 ],
                 u'represents': {
@@ -321,12 +319,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt A',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        'identifier': u'regular_user',
+                        '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
-                        'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        'identifier': u'dossier_responsible',
+                        '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -343,7 +341,6 @@ class TestActorsGet(IntegrationTestCase):
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-
         self.assertDictEqual(
             {
                 u'@id': url,
@@ -356,12 +353,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'label': u'Projekt A',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        'identifier': u'regular_user',
+                        '@id': 'http://nohost/plone/@actors/regular_user',
                     },
                     {
-                        'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        'identifier': u'dossier_responsible',
+                        '@id': 'http://nohost/plone/@actors/dossier_responsible',
                     },
                 ],
                 u'represents': {
@@ -612,12 +609,12 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                            u'identifier': u'kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/regular_user',
+                            u'identifier': u'regular_user',
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                            u'identifier': u'robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                            u'identifier': u'dossier_responsible',
                         },
                     ],
                     u'represents': {
@@ -635,8 +632,8 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Inbox: Finanz\xe4mt',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                            u'identifier': u'jurgen.konig',
+                            u'@id': u'http://nohost/plone/@actors/secretariat_user',
+                            u'identifier': u'secretariat_user',
                         },
                     ],
                     u'represents': {
@@ -671,12 +668,12 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                            u'identifier': u'kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/regular_user',
+                            u'identifier': u'regular_user',
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                            u'identifier': u'robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/dossier_responsible',
+                            u'identifier': u'dossier_responsible',
                         },
                     ],
                     u'represents': {

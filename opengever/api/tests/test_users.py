@@ -31,12 +31,11 @@ class TestUsersGet(IntegrationTestCase):
         url = '{}/@users/{}'.format(
             self.portal.absolute_url(), self.dossier_responsible.id)
         browser.open(url, headers=self.api_headers)
-
         self.assertEquals(
             {u'username': u'robert.ziegler',
              u'description': None,
              u'roles': [u'Member'],
-             u'roles_and_principals': [u'principal:robert.ziegler',
+             u'roles_and_principals': [u'principal:dossier_responsible',
                                        u'Member',
                                        u'Authenticated',
                                        u'principal:AuthenticatedUsers',
@@ -47,8 +46,8 @@ class TestUsersGet(IntegrationTestCase):
              u'location': None,
              u'portrait': None,
              u'fullname': u'Ziegler Robert',
-             u'@id': u'http://nohost/plone/@users/robert.ziegler',
-             u'id': u'robert.ziegler'}, browser.json)
+             u'@id': u'http://nohost/plone/@users/dossier_responsible',
+             u'id': u'dossier_responsible'}, browser.json)
 
     @browsing
     def test_unuathorized_accessing_an_other_user_raises(self, browser):

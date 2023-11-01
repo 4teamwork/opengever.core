@@ -415,7 +415,7 @@ class TestGetQuerySourcesSolr(SolrIntegrationTestCase):
     def test_get_task_issuer_escaping_for_solr(self, browser):
         self.login(self.secretariat_user, browser)
 
-        user = User.get("kathi.barfuss")
+        user = User.get("regular_user")
         user.firstname = 'Super:franz'
 
         self.commit_solr()

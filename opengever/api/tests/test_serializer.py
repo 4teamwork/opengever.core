@@ -159,7 +159,7 @@ class TestDossierSerializer(IntegrationTestCase):
         browser.open(self.dossier, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            {'@id': self.portal.absolute_url() + u'/@actors/robert.ziegler',
+            {'@id': self.portal.absolute_url() + u'/@actors/dossier_responsible',
              'identifier': 'robert.ziegler'},
             browser.json.get(u'responsible_actor'))
 

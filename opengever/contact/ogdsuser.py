@@ -5,6 +5,7 @@ from opengever.contact.docprops import PersonDocPropertyProvider
 from opengever.contact.docprops import PhoneNumberDocPropertyProvider
 from opengever.contact.docprops import URLDocPropertyProvider
 from opengever.ogds.base.browser.userdetails import UserDetails
+from opengever.ogds.base.mappings import userid_to_username
 from opengever.ogds.models.service import ogds_service
 
 
@@ -154,7 +155,7 @@ class OgdsUserToContactAdapter(BaseAdapter):
         return self.ogds_user.label(with_principal=with_former_id)
 
     def get_url(self):
-        return UserDetails.url_for(self.id)
+        return UserDetails.url_for(userid_to_username(self.id))
 
     def get_css_class(self):
         return 'contenttype-person'
