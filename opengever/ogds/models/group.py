@@ -104,7 +104,7 @@ class Group(Base):
         return self.groupid
 
     def label(self):
-        return self.title or self.groupid
+        return self.title or self.groupname
 
 
 def create_additional_group_indexes(table, connection, *args, **kw):
