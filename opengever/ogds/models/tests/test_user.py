@@ -1,5 +1,10 @@
+from opengever.base.model import create_session
+from opengever.ogds.base.sync.import_stamp import update_sync_stamp
 from opengever.ogds.models.tests.base import OGDSTestCase
 from opengever.ogds.models.user import User
+from opengever.ogds.models.utils import userid_to_username
+from opengever.ogds.models.utils import username_to_userid
+from opengever.testing import IntegrationTestCase
 
 
 class TestUserModel(OGDSTestCase):
@@ -81,3 +86,33 @@ class TestUserModel(OGDSTestCase):
     def test_supports_non_ascii_username(self):
         self.john.username = u'J\xf6hn'
         self.assertEqual(u'Smith John (J\xf6hn)', self.john.label())
+
+
+class TestUseridUsernameMappings(IntegrationTestCase):
+
+    def setUp(self):
+        super(TestUseridUsernameMappings, self).setUp()
+        self.session = create_session()
+        self.sammy = User('sammy', username="sjackson", external_id="foo")
+        self.session.add(self.sammy)
+        self.session.flush()
+
+    def test_userid_to_username(self):
+        self.assertEqual('sjackson', userid_to_username('sammy'))
+
+    def test_userid_to_username_is_cached(self):
+        self.assertEqual('sjackson', userid_to_username('sammy'))
+        self.sammy.username = "samuel.jackson"
+        self.assertEqual('sjackson', userid_to_username('sammy'))
+        update_sync_stamp(self.portal)
+        self.assertEqual('samuel.jackson', userid_to_username('sammy'))
+
+    def test_username_to_userid(self):
+        self.assertEqual('sammy', username_to_userid('sjackson'))
+
+    def test_username_to_userid_is_cached(self):
+        self.assertEqual('sammy', username_to_userid('sjackson'))
+        self.sammy.userid = "sam"
+        self.assertEqual('sammy', username_to_userid('sjackson'))
+        update_sync_stamp(self.portal)
+        self.assertEqual('sam', username_to_userid('sjackson'))

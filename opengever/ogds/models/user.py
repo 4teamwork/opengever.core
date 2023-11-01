@@ -22,6 +22,9 @@ class UserQuery(BaseQuery):
     def get_by_userid(self, userid):
         return self.filter_by(userid=userid).first()
 
+    def get_by_username(self, username):
+        return self.filter_by(username=username).first()
+
 
 class User(Base):
     """User model
