@@ -43,3 +43,9 @@ class TestGroupModel(OGDSTestCase):
 
         self.members_b.users.remove(self.john)
         self.assertNotIn(self.john, self.members_b.users)
+
+    def test_label_displays_title_or_groupanem(self):
+        group = Group(groupid='group1', groupname='One')
+        self.assertEqual('One', group.label())
+        group.title = "Group One"
+        self.assertEqual('Group One', group.label())
