@@ -241,7 +241,7 @@ class OGDSUserBuilder(SqlObjectBuilder):
         self.groups = []
         self.arguments['userid'] = 'test'
         self.arguments['email'] = 'test@example.org'
-        self.arguments[self.id_argument_name] = TEST_USER_ID
+        self.arguments[self.id_argument_name] = 'default_test_user_id'
         self.user_settings = {}
 
     def as_contact_adapter(self):
