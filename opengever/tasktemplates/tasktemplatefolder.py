@@ -1,3 +1,4 @@
+from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
@@ -234,8 +235,7 @@ class ProcessCreator(object):
         main_task_data = self.process_data["process"]
         main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        self.create_subtasks(main_task, self.process_data["process"],
-                             main_task_data['sequence_type'])
+        self.create_subtasks(main_task, self.process_data["process"], main_task)
 
         if self.start_immediately:
             self.start_first_task(main_task)
@@ -265,15 +265,15 @@ class ProcessCreator(object):
         wftool.getWorkflowsFor(task)[0].updateRoleMappingsFor(task)
         return initial_state
 
-    def create_subtasks(self, container, data, main_sequence_type):
+    def create_subtasks(self, container, data, main_task):
         # Subtasks can only be added to a task that is in progress.
         initial_state = self.set_state(container, "task-state-in-progress")
 
         subtasks = []
         for i, subtask_data in enumerate(data["items"]):
-            subtask = self.create_subtask(container, subtask_data, main_sequence_type)
+            subtask = self.create_subtask(container, subtask_data, main_task)
             if self.has_children(subtask_data):
-                self.create_subtasks(subtask, subtask_data, main_sequence_type)
+                self.create_subtasks(subtask, subtask_data, main_task)
             subtasks.append(subtask)
 
         self.set_state(container, initial_state)
@@ -282,11 +282,11 @@ class ProcessCreator(object):
 
         container.set_tasktemplate_order(subtasks)
 
-    def create_subtask(self, main_task, data, main_sequence_type):
+    def create_subtask(self, container, data, main_task):
         task = self.add_task(
-            main_task, data, related_documents=self.related_documents)
+            container, data, related_documents=self.related_documents)
 
-        self.set_initial_state(task)
+        self.set_initial_state(task, main_task)
         task.reindexObject()
         task.get_sql_object().sync_with(task)
 
@@ -297,18 +297,21 @@ class ProcessCreator(object):
 
         return task
 
-    def set_initial_state(self, task):
-        # Part of sequential process
-        if IPartOfSequentialProcess.providedBy(task):
-            task.set_to_planned_state()
+    def set_initial_state(self, task, main_task):
+        # Always set tasks to state "planned" if any of the parent tasks
+        # is a sequential process.
+        for obj in aq_chain(aq_inner(task)):
+            if not ITask.providedBy(obj):
+                break
 
-        if IPartOfParallelProcess.providedBy(task):
-            parent = aq_parent(aq_inner(task))
-            if IPartOfSequentialProcess.providedBy(parent):
+            if IContainSequentialProcess.providedBy(obj):
                 task.set_to_planned_state()
+                return
 
-            elif IContainParallelProcess.providedBy(task):
-                task._set_in_progress()
+        # Set a parallalel process container to "in progress". All subtasks
+        # will be in state "open" which is the default state.
+        if IContainParallelProcess.providedBy(task):
+            task._set_in_progress()
 
     def start_first_task(self, main_task):
         if not IContainSequentialProcess.providedBy(main_task):

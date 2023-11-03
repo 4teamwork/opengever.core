@@ -195,6 +195,30 @@ class TestProcessPost(IntegrationTestCase):
                                 "task_type": "direct-execution",
                                 "is_private": False,
                             },
+                            {
+                                "title": "Other apps",
+                                "sequence_type": "parallel",
+                                "deadline": "2022-03-10",
+                                "items": [
+                                    {
+                                        "title": "App 1",
+                                        "responsible": "fa:{}".format(self.regular_user.id),
+                                        "issuer": self.dossier_responsible.id,
+                                        "deadline": "2022-03-10",
+                                        "task_type": "direct-execution",
+                                        "is_private": False,
+                                    },
+                                    {
+                                        "title": "App 2",
+                                        "responsible": "fa:{}".format(self.regular_user.id),
+                                        "issuer": self.dossier_responsible.id,
+                                        "deadline": "2022-03-10",
+                                        "task_type": "direct-execution",
+                                        "is_private": False,
+                                    },
+                                ]
+
+                            }
                         ]
 
                     }
@@ -214,30 +238,35 @@ class TestProcessPost(IntegrationTestCase):
         subtasks = main_task.listFolderContents()
         self.assertEqual(2, len(subtasks))
         subtask = subtasks[0]
-        subtask_container = subtasks[1]
+        training_container = subtasks[1]
 
         self.assertEqual(0, len(subtask.listFolderContents()))
-        subsubtasks = subtask_container.listFolderContents()
-        self.assertEqual(2, len(subsubtasks))
-        subsubtask1, subsubtask2 = subsubtasks
+        training_container_items = training_container.listFolderContents()
+        self.assertEqual(3, len(training_container_items))
+        present_gever, present_teamraum, other_apps = training_container_items
+        app_1, app_2 = other_apps.listFolderContents()
 
         # Check data that is automatically set for the subtask container
-        self.assertEqual(u'Training', subtask_container.title)
-        self.assertEqual(self.regular_user.getId(), subtask_container.issuer)
-        self.assertEqual(self.regular_user.getId(), subtask_container.responsible)
-        self.assertEqual('fa', subtask_container.responsible_client)
-        self.assertEqual('direct-execution', subtask_container.task_type)
+        self.assertEqual(u'Training', training_container.title)
+        self.assertEqual(self.regular_user.getId(), training_container.issuer)
+        self.assertEqual(self.regular_user.getId(), training_container.responsible)
+        self.assertEqual('fa', training_container.responsible_client)
+        self.assertEqual('direct-execution', training_container.task_type)
         # Only state of main task is set to in progress
         self.assertEqual('task-state-in-progress',
                          api.content.get_state(main_task))
         self.assertEqual('task-state-open', api.content.get_state(subtask))
         self.assertEqual('task-state-planned',
-                         api.content.get_state(subtask_container))
-
+                         api.content.get_state(training_container))
+        self.assertEqual('task-state-planned',
+                         api.content.get_state(app_1))
+        self.assertEqual('task-state-planned',
+                         api.content.get_state(app_2))
         # Check deadline propagation
-        self.assertEqual(date(2022, 3, 10), subsubtask1.deadline)
-        self.assertEqual(date(2022, 3, 12), subsubtask2.deadline)
-        self.assertEqual(date(2022, 3, 18), subtask_container.deadline)
+
+        self.assertEqual(date(2022, 3, 10), present_gever.deadline)
+        self.assertEqual(date(2022, 3, 12), present_teamraum.deadline)
+        self.assertEqual(date(2022, 3, 18), training_container.deadline)
         self.assertEqual(date(2022, 3, 1), subtask.deadline)
         self.assertEqual(date(2022, 3, 25), main_task.deadline)
 
@@ -246,11 +275,11 @@ class TestProcessPost(IntegrationTestCase):
 
         self.assertTrue(IPartOfSequentialProcess.providedBy(subtask))
 
-        self.assertTrue(IPartOfSequentialProcess.providedBy(subtask_container))
-        self.assertTrue(IContainParallelProcess.providedBy(subtask_container))
+        self.assertTrue(IPartOfSequentialProcess.providedBy(training_container))
+        self.assertTrue(IContainParallelProcess.providedBy(training_container))
 
-        self.assertTrue(IPartOfParallelProcess.providedBy(subsubtask1))
-        self.assertTrue(IPartOfParallelProcess.providedBy(subsubtask2))
+        self.assertTrue(IPartOfParallelProcess.providedBy(present_gever))
+        self.assertTrue(IPartOfParallelProcess.providedBy(present_teamraum))
 
     @browsing
     def test_can_set_deadline_on_task_template_folder(self, browser):
