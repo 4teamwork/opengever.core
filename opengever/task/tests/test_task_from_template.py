@@ -368,7 +368,14 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                                           issuer=self.dossier_responsible.getId(),
                                           task_type='correction')
                                   .in_state('task-state-planned'))
-
+        alsoProvides(subprocess_task2, IContainParallelProcess)
+        subprocess_task2_task1 = create(Builder('task')
+                                        .within(subprocess_task2)
+                                        .having(responsible_client='fa',
+                                                responsible=self.regular_user.getId(),
+                                                issuer=self.dossier_responsible.getId(),
+                                                task_type='correction')
+                                        .in_state('task-state-planned'))
         api.content.transition(
             obj=self.seq_subtask_1,
             transition='task-transition-open-tested-and-closed')
@@ -377,6 +384,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
             'task-state-open', api.content.get_state(subprocess_task1))
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task2))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task2_task1))
 
     def test_starts_sequential_subprocess(self):
         self.login(self.secretariat_user)
@@ -390,6 +399,16 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                                           issuer=self.dossier_responsible.getId(),
                                           task_type='correction')
                                   .in_state('task-state-planned'))
+
+        alsoProvides(subprocess_task1, IContainSequentialProcess)
+        subprocess_task1_task1 = create(Builder('task')
+                                        .within(subprocess_task1)
+                                        .having(responsible_client='fa',
+                                                responsible=self.regular_user.getId(),
+                                                issuer=self.dossier_responsible.getId(),
+                                                task_type='correction')
+                                        .in_state('task-state-planned'))
+
         subprocess_task2 = create(Builder('task')
                                   .within(self.seq_subtask_2)
                                   .having(responsible_client='fa',
@@ -406,6 +425,8 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task1_task1))
         self.assertEquals(
             'task-state-planned', api.content.get_state(subprocess_task2))
 
