@@ -1838,14 +1838,17 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_handles_alphanumeric_tokens(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.document.title = "4A.BE.2301-11B/C32"
+        self.document.title = "4A.BE.2301-43B/C32"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        queries = [{"q": "4A.BE.2301-11B/C32"},
-                   {"q": "4A.BE.2301-11"},
+        queries = [{"q": "4A.BE.2301-43B/C32"},
+                   {"q": "4A.BE.2301-43"},
                    {"q": "4A.BE"},
-                   {"q": "2301"}]
+                   {"q": "2301"},
+                   {"q": "BE.2301"},
+                   {"q": "43B"},
+                   {"q": "B/C"}]
         for query in queries:
             search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
@@ -1854,20 +1857,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in livesearch[u'items']])
-            self.assertItemsEqual(
-                [self.document.absolute_url()],
-                [item["@id"] for item in search[u'items']])
-
-        # Because search term does not get split, parts from the center
-        # of the token cannot be found
-        queries = [{"q": "BE.2301"},
-                   {"q": "11B"},
-                   {"q": "B/C"}]
-        for query in queries:
-            search = self.solr_search(browser, query)
-            livesearch = self.solr_livesearch(browser, query)
-            self.assertEqual(1, search["items_total"])
-            self.assertEqual(0, livesearch["items_total"])
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in search[u'items']])

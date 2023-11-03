@@ -176,7 +176,8 @@ class SolrQueryBaseService(Service, RequestPayloadMixin):
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
 IGNORED_TOKENS = ["/"]
 TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@", "\\.", "_"]
-term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS))
+ALPHA_NUM_SPLIT = r'(\d+)'
+term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS + [ALPHA_NUM_SPLIT]))
 part_split_pattern = re.compile(r'; |, |\. |\s')
 
 
@@ -197,7 +198,7 @@ class LiveSearchQueryPreprocessingMixin(object):
             prefix = "+"
             term = term.lstrip("+")
         tokens = ["{}{}".format(prefix, token)
-                  for token in term_split_pattern.split(term)]
+                  for token in filter(None, term_split_pattern.split(term))]
 
         # Handle bracket and add wildcard to last token
         last_token = tokens[-1]
