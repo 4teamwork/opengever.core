@@ -3,6 +3,7 @@ from docxcompose.properties import CustomProperties
 from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.docprops import TemporaryDocFile
+from opengever.document.versioner import Versioner
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
@@ -58,6 +59,30 @@ class TestCreateDocumentFromTemplateCommand(IntegrationTestCase):
         self.assertEquals(
             u'B\xe4rfuss K\xe4thi',
             properties['ogg.user.title'])
+
+    def test_docproperties_is_updated_before_the_initial_version(self):
+        self.login(self.regular_user)
+        template = create(Builder('document')
+                          .within(self.dossiertemplate)
+                          .with_asset_file('with_gever_properties.docx'))
+
+        with TemporaryDocFile(template.file) as tmpfile:
+            template_properties = CustomProperties(Document(tmpfile.path)).items()
+
+        self.assertItemsEqual(
+            [('ogg.dossier.reference_number', 'Client1 / 2')],
+            template_properties)
+
+        command = CreateDocumentFromTemplateCommand(self.dossier, template, 'My title')
+        document = command.execute()
+        versioner = Versioner(document)
+
+        self.assertFalse(versioner.has_initial_version())
+        with TemporaryDocFile(document.file) as tmpfile:
+            properties = CustomProperties(Document(tmpfile.path))
+
+        self.assertEquals('Client1 1.1 / 1',
+                          properties['ogg.dossier.reference_number'])
 
 
 class TestCreateDossierFromTemplateCommand(IntegrationTestCase):

@@ -6,11 +6,32 @@ from Products.CMFEditions.Permissions import SaveNewVersion
 from zope.annotation import IAnnotations
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.interface import alsoProvides
+from zope.interface import Interface
+from zope.interface import noLongerProvides
 import time
 import transaction
 
 
 CUSTOM_INITIAL_VERSION_COMMENT = 'custom_initial_version_comment'
+
+
+class IAvoidInitialVersion(Interface):
+    """Brower marker interface to avoid initial version creation."""
+
+
+class AvoidInitialVersion(object):
+    """Contextmanager that avoids the creation of the initial version,
+    which is done regulary by the file setter of a document and mail.
+    """
+
+    def __enter__(self):
+        request = getRequest()
+        alsoProvides(request, IAvoidInitialVersion)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        request = getRequest()
+        noLongerProvides(request, IAvoidInitialVersion)
 
 
 class Versioner(object):
@@ -69,6 +90,9 @@ class Versioner(object):
         Copied from `Products.CMFEditions.CopyModifyMergeRepositoryTool.save`
         only the timestamp is changed to the creation timestamp.
         """
+        if IAvoidInitialVersion.providedBy(getRequest()):
+            return
+
         if self.has_initial_version():
             return
 
