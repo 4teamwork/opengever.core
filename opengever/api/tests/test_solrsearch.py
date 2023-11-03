@@ -1614,62 +1614,48 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.document.reindexObject(idxs=["Title"])
         self.subdocument.title = "Taktische-Banane"
         self.subdocument.reindexObject(idxs=["Title"])
-        self.subsubdocument.title = "Taktische-Super-Banane"
+        self.subsubdocument.title = "Taktische-Fantastische-Banane"
         self.subsubdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        # Term is not split
+        # First term does not get a wildcard appended
         query = {"q": "Title:takt-ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
         self.assertEqual(0, livesearch["items_total"])
 
-        # explicit wildcard is preserved
-        query = {"q": "Title:takt*-ba"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(2, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Banane', u'Taktische-Super-Banane'],
-            [item["title"] for item in livesearch["items"]])
-
-        query = {"q": "Title:taktische-ba"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Banane'],
-            [item["title"] for item in livesearch["items"]])
-
         query = {"q": "Title:taktische-banane"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(2, search["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane', u'Taktische-Super-Banane'],
+            [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
             [item["title"] for item in search["items"]])
-        self.assertEqual(1, livesearch["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane'],
+            [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
-        query = {"q": "Title:sup"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Super-Banane'],
-            [item["title"] for item in livesearch["items"]])
+        for query in [{"q": "Title:takt*-ba"},
+                      {"q": "Title:taktische-ba"}]:
+            search = self.solr_search(browser, query)
+            livesearch = self.solr_livesearch(browser, query)
+            self.assertEqual(0, search["items_total"])
+            self.assertEqual(2, livesearch["items_total"])
+            self.assertItemsEqual(
+                [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
+                [item["title"] for item in livesearch["items"]])
 
-        query = {"q": "Title:super-ban"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(0, livesearch["items_total"])
+        for query in [{"q": "Title:fanta"},
+                      {"q": "Title:fantastische-ban"}]:
+            search = self.solr_search(browser, query)
+            livesearch = self.solr_livesearch(browser, query)
+            self.assertEqual(0, search["items_total"])
+            self.assertEqual(1, livesearch["items_total"])
+            self.assertItemsEqual(
+                [u'Taktische-Fantastische-Banane'],
+                [item["title"] for item in livesearch["items"]])
 
     @browsing
     def test_livesearch_splits_terms_at_other_special_characters(self, browser):

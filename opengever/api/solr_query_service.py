@@ -175,7 +175,7 @@ class SolrQueryBaseService(Service, RequestPayloadMixin):
 
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
 IGNORED_TOKENS = ["/"]
-TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@"]
+TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@", "\\.", "_"]
 term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS))
 part_split_pattern = re.compile(r'; |, |\. |\s')
 
