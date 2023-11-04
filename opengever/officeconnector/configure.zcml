@@ -51,6 +51,15 @@
 
   <plone:service
       method="GET"
+      for="opengever.mail.mail.IOGMailMarker"
+      accept="application/json"
+      factory=".service.OfficeConnectorViewURL"
+      name="officeconnector_view_url"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
       for="opengever.document.document.IDocumentSchema"
       accept="application/json"
       factory=".service.OfficeConnectorCheckoutURL"
