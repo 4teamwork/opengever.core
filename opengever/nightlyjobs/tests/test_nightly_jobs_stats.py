@@ -3,10 +3,23 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.core.upgrade import NightlyWorkflowSecurityUpdater
 from opengever.nightlyjobs.runner import NightlyJobRunner
+from opengever.ogds.auth.testing import DisabledUserPlugins
 from opengever.testing import IntegrationTestCase
 
 
 class TestNightlyJobsStats(IntegrationTestCase):
+
+    def setUp(self):
+        # XXX: Move this onto the layer once remaining tests are fixed.
+
+        # Disable userEnumeration for source_users to avoid MultiplePrincipalError.
+        self.disabled_source_users = DisabledUserPlugins(self.layer['portal'].acl_users)
+        self.disabled_source_users.__enter__()
+        super(TestNightlyJobsStats, self).setUp()
+
+    def tearDown(self):
+        super(TestNightlyJobsStats, self).tearDown()
+        self.disabled_source_users.__exit__(None, None, None)
 
     @browsing
     def test_nightly_jobs_stats(self, browser):
