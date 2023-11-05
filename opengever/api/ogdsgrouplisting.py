@@ -15,6 +15,7 @@ class OGDSGroupListingGet(OGDSListingBaseService):
 
     searchable_columns = (
         Group.groupid,
+        Group.groupname,
         Group.active,
         Group.title,
         Group.is_local,
