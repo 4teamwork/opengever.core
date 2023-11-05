@@ -9,6 +9,7 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.base.oguid import Oguid
 from opengever.disposition.nightly_jobs import NightlyDossierPermissionSetter
+from opengever.ogds.auth.testing import DisabledUserPlugins
 from opengever.ogds.base.actor import ActorLookup
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -18,6 +19,18 @@ import logging
 class TestDispositionNotifications(IntegrationTestCase):
 
     features = ('activity', )
+
+    def setUp(self):
+        # XXX: Move this onto the layer once remaining tests are fixed.
+
+        # Disable userEnumeration for source_users to avoid MultiplePrincipalError.
+        self.disabled_source_users = DisabledUserPlugins(self.layer['portal'].acl_users)
+        self.disabled_source_users.__enter__()
+        super(TestDispositionNotifications, self).setUp()
+
+    def tearDown(self):
+        super(TestDispositionNotifications, self).tearDown()
+        self.disabled_source_users.__exit__(None, None, None)
 
     def run_nightly_jobs(self, expected):
         logger = logging.getLogger('opengever.nightlyjobs')
