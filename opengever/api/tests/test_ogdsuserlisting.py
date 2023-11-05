@@ -32,7 +32,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': u'012 34 56 76',
              u'phone_office': u'012 34 56 78',
              u'title': u'B\xe4rfuss K\xe4thi',
-             u'userid': u'kathi.barfuss'},
+             u'userid': u'kathi.barfuss',
+             u'username': u'kathi.barfuss'},
             {u'@id': u'http://nohost/plone/@ogds-users/james.bond',
              u'@type': u'virtual.ogds.user',
              u'active': True,
@@ -47,7 +48,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': None,
              u'phone_office': None,
              u'title': u'B\xf6nd James',
-             u'userid': u'james.bond'}],
+             u'userid': u'james.bond',
+             u'username': u'james.bond'}],
             browser.json.get('items')[1:3])
         self.assertEqual(23, browser.json['items_total'])
 
@@ -193,7 +195,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': None,
              u'phone_office': None,
              u'title': u'L\xe4ser L\xfccklicher',
-             u'userid': u'lucklicher.laser'}],
+             u'userid': u'lucklicher.laser',
+             u'username': u'lucklicher.laser'}],
             browser.json['items'])
         self.assertEqual(1, browser.json['items_total'])
 
@@ -220,7 +223,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': None,
              u'phone_office': None,
              u'title': u'Hugentobler Fridolin',
-             u'userid': u'fridolin.hugentobler'}],
+             u'userid': u'fridolin.hugentobler',
+             u'username': u'fridolin.hugentobler'}],
             browser.json['items'])
         self.assertEqual(1, browser.json['items_total'])
 
@@ -321,7 +325,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': None,
              u'phone_office': None,
              u'title': u'L\xe4ser L\xfccklicher',
-             u'userid': u'l\xfccklicher.laser'}],
+             u'userid': u'l\xfccklicher.laser',
+             u'username': u'lucklicher.laser'}],
             browser.json['items'])
         self.assertEqual(1, browser.json['items_total'])
 

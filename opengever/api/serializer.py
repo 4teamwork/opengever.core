@@ -579,6 +579,7 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
         'phone_mobile',
         'phone_fax',
         'userid',
+        'username',
     )
 
     content_type = 'virtual.ogds.user'
@@ -606,6 +607,7 @@ class SerializeGroupModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
 
     item_columns = (
         'groupid',
+        'groupname',
         'title',
         'active',
         'is_local',
