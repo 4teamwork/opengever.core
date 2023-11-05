@@ -162,6 +162,10 @@ class Actor(object):
         raise NotImplementedError()
 
     @property
+    def login_name(self):
+        return None
+
+    @property
     def permission_identifier(self):
         raise NotImplementedError()
 
@@ -211,6 +215,10 @@ class NullActor(object):
     def is_absent(self):
         return False
 
+    @property
+    def login_name(self):
+        return safe_unicode(self.identifier) or u''
+
     def represents(self):
         return None
 
@@ -257,6 +265,10 @@ class SystemActor(object):
     def is_absent(self):
         return False
 
+    @property
+    def login_name(self):
+        return safe_unicode(self.identifier)
+
     def represents(self):
         return None
 
@@ -299,6 +311,10 @@ class InboxActor(Actor):
     @property
     def is_active(self):
         return self.org_unit.enabled
+
+    @property
+    def login_name(self):
+        return self.org_unit.inbox_group.groupname
 
     @property
     def permission_identifier(self):
@@ -510,6 +526,10 @@ class PloneUserActor(Actor):
     def get_profile_url(self):
         return self.user.getHomeUrl()
 
+    @property
+    def login_name(self):
+        return safe_unicode(self.user.getUserName())
+
     def representatives(self):
         return []
 
@@ -553,6 +573,10 @@ class OGDSUserActor(Actor):
         return False
 
     @property
+    def login_name(self):
+        return self.user.username
+
+    @property
     def permission_identifier(self):
         return self.identifier
 
@@ -591,6 +615,10 @@ class OGDSGroupActor(Actor):
     @property
     def is_active(self):
         return self.group.active
+
+    @property
+    def login_name(self):
+        return self.group.groupname
 
     @property
     def permission_identifier(self):

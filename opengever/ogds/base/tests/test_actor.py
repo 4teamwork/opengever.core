@@ -35,6 +35,7 @@ class TestActorLookup(IntegrationTestCase):
         self.assertEqual('Unknown ID (not-existing)', actor.get_label())
         self.assertIsNone(actor.get_profile_url())
         self.assertEqual('not-existing', actor.get_link())
+        self.assertEqual(u'not-existing', actor.login_name)
 
     def test_inbox_actor_lookup(self):
         actor = Actor.lookup('inbox:fa')
@@ -47,6 +48,7 @@ class TestActorLookup(IntegrationTestCase):
         self.assertEqual(
             u'<span class="actor-label actor-inbox">Inbox: Finanz\xe4mt</span>',
             actor.get_link(with_icon=True))
+        self.assertEqual(u'fa_inbox_users', actor.login_name)
 
     def test_contact_actor_lookup(self):
         create_contacts(self)
@@ -63,6 +65,8 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIn(actor.get_label(), link)
         self.assertIn(actor.get_profile_url(), link)
         self.assertIn('class="actor-label actor-contact"', link)
+
+        self.assertEqual(None, actor.login_name)
 
     def test_committee_actor_lookup(self):
         self.login(self.meeting_user)
@@ -86,6 +90,8 @@ class TestActorLookup(IntegrationTestCase):
             u'</a>'.format(self.committee.absolute_url()),
             actor.get_link(with_icon=False))
 
+        self.assertEqual(None, actor.login_name)
+
     def test_team_actor_lookup(self):
         self.login(self.regular_user)
         actor = Actor.lookup('team:1')
@@ -103,6 +109,8 @@ class TestActorLookup(IntegrationTestCase):
         self.assertEqual(
             u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
             actor.get_link())
+
+        self.assertEqual(None, actor.login_name)
 
     def test_team_profile_url_for_foreign_user(self):
         self.login(self.foreign_contributor)
@@ -132,6 +140,8 @@ class TestActorLookup(IntegrationTestCase):
             u'(jurgen.konig)</a>',
             actor.get_link(with_icon=True))
 
+        self.assertEqual(u'jurgen.konig', actor.login_name)
+
     def test_group_actor_lookup(self):
         self.login(self.regular_user)
         actor = Actor.lookup('projekt_a')
@@ -151,6 +161,8 @@ class TestActorLookup(IntegrationTestCase):
             u'<a href="http://nohost/plone/@@list_groupmembers?group=projekt_a">'
             'Projekt A</a>',
             actor.get_link())
+
+        self.assertEqual(u'projekt_a', actor.login_name)
 
     def test_get_link_returns_safe_html(self):
         self.login(self.regular_user)
@@ -173,11 +185,13 @@ class TestActorLookup(IntegrationTestCase):
         self.assertIsInstance(responsible_actor, InteractiveActor)
         self.assertEqual('Responsible',
                          responsible_actor.get_label())
+        self.assertEqual(None, responsible_actor.login_name)
 
         current_user_actor = Actor.lookup(INTERACTIVE_ACTOR_CURRENT_USER_ID)
         self.assertIsInstance(current_user_actor, InteractiveActor)
         self.assertEqual('Logged in user',
                          current_user_actor.get_label())
+        self.assertEqual(None, current_user_actor.login_name)
 
     def test_interactive_actor_lookup_raises_an_error_for_unknown_actors(self):
         self.login(self.regular_user)
@@ -257,6 +271,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
                 u'identifier': self.person_jean,
                 u'is_absent': False,
                 u'label': u'Dupont Jean',
+                u'login_name': None,
                 u'portrait_url': None,
                 u'representatives': [],
                 u'represents': {
