@@ -51,6 +51,7 @@ class BaseContextActions(object):
         self.maybe_add_new_task_from_document()
         self.maybe_add_oc_direct_checkout()
         self.maybe_add_oc_direct_edit()
+        self.maybe_add_oc_view()
         self.maybe_add_office_online_edit()
         self.maybe_add_oneoffixx_retry()
         self.maybe_add_open_as_pdf()
@@ -187,6 +188,9 @@ class BaseContextActions(object):
         return False
 
     def is_oc_direct_edit_available(self):
+        return False
+
+    def is_oc_view_available(self):
         return False
 
     def is_office_online_edit_available(self):
@@ -388,6 +392,10 @@ class BaseContextActions(object):
     def maybe_add_oc_direct_edit(self):
         if self.is_oc_direct_edit_available():
             self.add_action(u'oc_direct_edit')
+
+    def maybe_add_oc_view(self):
+        if self.is_oc_view_available():
+            self.add_action(u'oc_view')
 
     def maybe_add_office_online_edit(self):
         if self.is_office_online_edit_available():

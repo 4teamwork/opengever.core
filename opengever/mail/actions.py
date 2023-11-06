@@ -18,3 +18,6 @@ class MailContextActions(BaseDocumentContextActions):
 
     def is_extract_attachments_available(self):
         return self.context.can_extract_attachments_to_parent()
+
+    def is_oc_view_available(self):
+        return True

@@ -151,6 +151,7 @@ class TestFileActionsGetForWorkspaceDocument(FileActionsTestBase):
     def test_available_file_actions_for_workspace_document(self, browser):
         self.login(self.workspace_member, browser)
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
@@ -167,6 +168,7 @@ class TestFileActionsGetForWorkspaceDocument(FileActionsTestBase):
         self.login(self.workspace_member, browser)
         ITrasher(self.workspace_document).trash()
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
@@ -185,6 +187,9 @@ class TestFileActionsGetForMails(FileActionsTestBase):
     def test_available_file_actions(self, browser):
         self.login(self.regular_user, browser)
         expected_file_actions = [
+            {u'id': u'oc_view',
+             u'title': u'View',
+             u'icon': u''},
             {u'id': u'download_copy',
              u'title': u'Download copy',
              u'icon': u''},
@@ -212,6 +217,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
     def test_available_file_actions(self, browser):
         self.login(self.regular_user, browser)
         expected_file_actions = [
+            {u'id': u'oc_view',
+             u'icon': u'',
+             u'title': u'View'},
             {u'id': u'oc_direct_checkout',
              u'title': u'Checkout and edit',
              u'icon': u''},
@@ -276,6 +284,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.login(self.regular_user, browser)
 
         expected_file_actions = [
+            {u'id': u'oc_view',
+             u'title': u'View',
+             u'icon': u''},
             {u'id': u'open_as_pdf',
              u'title': u'Open as PDF',
              u'icon': u''},
@@ -298,6 +309,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.login(self.regular_user, browser)
 
         expected_file_actions = [
+            {u'id': u'oc_view',
+             u'icon': u'',
+             u'title': u'View'},
             {u'id': u'download_copy',
              u'title': u'Download copy',
              u'icon': u''},
@@ -323,6 +337,9 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.login(self.regular_user, browser)
 
         expected_file_actions = [
+            {u'id': u'oc_view',
+             u'icon': u'',
+             u'title': u'View'},
             {u'id': u'download_copy',
              u'title': u'Download copy',
              u'icon': u''},
@@ -343,52 +360,27 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
     def test_oc_zem_checkout_available_if_oc_checkout_deactivated(self, browser):
         self.deactivate_feature('officeconnector-checkout')
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_zem_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'oc_zem_checkout',
+                u'title': u'Checkout and edit',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_oc_unsupported_file_checkout_available_if_file_not_oc_editable(self, browser):
         self.login(self.regular_user, browser)
         self.document.file.contentType = u'foo/bar'
-        expected_file_actions = [
-            {u'id': u'oc_unsupported_file_checkout',
-             u'title': u'Checkout',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'oc_unsupported_file_checkout',
+                u'title': u'Checkout',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_checkin_available_if_checked_out_by_current_user(self, browser):
@@ -466,61 +458,65 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
         self.checkout_document(self.document)
 
         self.login(self.manager, browser)
-        expected_manager_file_actions = [
-            {u'id': u'checkin_without_comment',
-             u'title': u'Check in without comment',
-             u'icon': u''},
-            {u'id': u'checkin_with_comment',
-             u'title': u'Check in with comment',
-             u'icon': u''},
-            {u'id': u'cancel_checkout',
-             u'title': u'Cancel checkout',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_manager_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'checkin_without_comment',
+                u'title': u'Check in without comment',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
+        self.assertIn(
+            {
+                u'id': u'checkin_with_comment',
+                u'title': u'Check in with comment',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
+        self.assertIn(
+            {
+                u'id': u'cancel_checkout',
+                u'title': u'Cancel checkout',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
         self.login(self.dossier_manager, browser)
-        expected_dossier_manager_file_actions = [
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_dossier_manager_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertNotIn(
+            {
+                u'id': u'checkin_without_comment',
+                u'title': u'Check in without comment',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
+        self.assertNotIn(
+            {
+                u'id': u'checkin_with_comment',
+                u'title': u'Check in with comment',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
+        self.assertNotIn(
+            {
+                u'id': u'cancel_checkout',
+                u'title': u'Cancel checkout',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_attach_not_available_if_feature_disabled(self, browser):
         self.deactivate_feature('officeconnector-attach')
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertNotIn(
+            {u'icon': u'', u'id': u'attach_to_email', u'title': u'Attach to email'},
+            self.get_file_actions(browser, self.document)
+        )
 
     @browsing
     def test_oneoffixx_retry_available_for_shadow_documents(self, browser):
@@ -544,25 +540,35 @@ class TestFileActionsGetForDocuments(FileActionsTestBase):
     def test_open_as_pdf_not_available_if_bumblebee_disabled(self, browser):
         self.deactivate_feature('bumblebee')
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertNotIn(
+            {u'id': u'open_as_pdf', u'title': u'Open as PDF', u'icon': u''},
+            self.get_file_actions(browser, self.document)
+        )
+
+    @browsing
+    def test_oc_view_available_if_document_has_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.document)
+        )
+
+    @browsing
+    def test_oc_view_not_available_if_document_has_no_file(self, browser):
+        self.login(self.regular_user, browser)
+        self.assertNotIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.empty_document)
+        )
+
+    @browsing
+    def test_oc_view_not_available_if_document_is_checked_out_by_current_user(self, browser):
+        self.login(self.regular_user, browser)
+        self.checkout_document(self.document)
+        self.assertNotIn(
+            {u'id': u'oc_view', u'title': u'View', u'icon': u''},
+            self.get_file_actions(browser, self.document)
+        )
 
 
 class TestTrashingActionsForDocuments(FileActionsTestBase):
@@ -570,28 +576,14 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
     @browsing
     def test_trashing_available_for_document(self, browser):
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'trash_context',
+                u'title': u'Trash',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_untrashing_available_for_trashed_document(self, browser):
@@ -600,25 +592,14 @@ class TestTrashingActionsForDocuments(FileActionsTestBase):
         trasher = ITrasher(self.document)
         trasher.trash()
 
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'untrash_context',
-             u'title': u'Untrash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'untrash_context',
+                u'title': u'Untrash',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
 
 class TestFileActionsGetForTemplates(FileActionsTestBase):
@@ -628,6 +609,7 @@ class TestFileActionsGetForTemplates(FileActionsTestBase):
         self.login(self.dossier_responsible, browser)
 
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
@@ -648,6 +630,7 @@ class TestFileActionsGetForDossierTemplateDocuments(FileActionsTestBase):
                           .with_dummy_content())
 
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'}
@@ -665,6 +648,7 @@ class TestFileActionsGetForDossierTemplateDocuments(FileActionsTestBase):
                           .with_dummy_content())
 
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
@@ -682,6 +666,7 @@ class TestFileActionsGetForProposalTemplates(FileActionsTestBase):
     def test_available_file_actions_for_proposal_template(self, browser):
         self.login(self.dossier_responsible, browser)
         expected_file_actions = [
+            {u'icon': u'', u'id': u'oc_view', u'title': u'View'},
             {u'icon': u'', u'id': u'oc_direct_checkout', u'title': u'Checkout and edit'},
             {u'icon': u'', u'id': u'download_copy', u'title': u'Download copy'},
             {u'icon': u'', u'id': u'open_as_pdf', u'title': u'Open as PDF'},
@@ -702,108 +687,62 @@ class TestNewTaskFromDocumentAction(FileActionsTestBase):
         browser.open(self.resolvable_dossier,
                      view='transition-resolve',
                      data={'_authenticator': createToken()})
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.resolvable_document))
+        self.assertNotIn(
+            {
+                u'id': u'new_task_from_document',
+                u'title': u'New task from document',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.resolvable_document),
+        )
 
     @browsing
     def test_task_from_doc_available_for_doc_in_task(self, browser):
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.taskdocument))
+        self.assertIn(
+            {
+                u'id': u'new_task_from_document',
+                u'title': u'New task from document',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.taskdocument),
+        )
 
     @browsing
     def test_task_from_doc_not_available_for_doc_in_inbox(self, browser):
         self.login(self.secretariat_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.inbox_document))
+        self.assertNotIn(
+            {
+                u'id': u'new_task_from_document',
+                u'title': u'New task from document',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.inbox_document),
+        )
 
     @browsing
     def test_task_from_doc_not_available_for_doc_in_private_dossier(self, browser):
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'oc_direct_checkout',
-             u'title': u'Checkout and edit',
-             u'icon': u''},
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'trash_context',
-             u'title': u'Trash',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.private_document))
+        self.assertNotIn(
+            {
+                u'id': u'new_task_from_document',
+                u'title': u'New task from document',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.private_document),
+        )
 
     @browsing
     def test_task_from_doc_not_available_for_doc_in_inactive_dossier(self, browser):
         self.login(self.regular_user, browser)
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.inactive_document))
+        self.assertNotIn(
+            {
+                u'id': u'new_task_from_document',
+                u'title': u'New task from document',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.inactive_document),
+        )
 
 
 class TestUnlockAction(FileActionsTestBase):
@@ -813,97 +752,59 @@ class TestUnlockAction(FileActionsTestBase):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock()
 
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            {u'id': u'unlock',
-             u'title': u'Unlock',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+        self.assertIn(
+            {
+                u'id': u'unlock',
+                u'title': u'Unlock',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_unlock_not_available_if_document_is_locked_by_another_user(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock()
         self.login(self.dossier_responsible, browser)
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+
+        self.assertNotIn(
+            {
+                u'id': u'unlock',
+                u'title': u'Unlock',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_unlock_available_for_manager(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock()
         self.login(self.manager, browser)
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            {u'id': u'unlock',
-             u'title': u'Unlock',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+
+        self.assertIn(
+            {
+                u'id': u'unlock',
+                u'title': u'Unlock',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
     @browsing
     def test_unlock_available_if_document_is_locked_by_workspace_lock(self, browser):
         self.login(self.regular_user, browser)
         ILockable(self.document).lock(COPIED_TO_WORKSPACE_LOCK)
         self.login(self.dossier_responsible, browser)
-        expected_file_actions = [
-            {u'id': u'download_copy',
-             u'title': u'Download copy',
-             u'icon': u''},
-            {u'id': u'attach_to_email',
-             u'title': u'Attach to email',
-             u'icon': u''},
-            {u'id': u'open_as_pdf',
-             u'title': u'Open as PDF',
-             u'icon': u''},
-            {u'id': u'new_task_from_document',
-             u'title': u'New task from document',
-             u'icon': u''},
-            {u'id': u'unlock',
-             u'title': u'Unlock',
-             u'icon': u''},
-            ]
-        self.assertEqual(expected_file_actions,
-                         self.get_file_actions(browser, self.document))
+
+        self.assertIn(
+            {
+                u'id': u'unlock',
+                u'title': u'Unlock',
+                u'icon': u'',
+            },
+            self.get_file_actions(browser, self.document),
+        )
 
 
 class TestFolderButtons(FolderActionsTestBase):

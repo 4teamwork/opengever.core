@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-06-23 10:57+0000\n"
+"POT-Creation-Date: 2023-10-06 14:48+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -690,6 +690,11 @@ msgstr "Titel"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
 msgstr "Version"
+
+#. Default: "View"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_view"
+msgstr "Anzeigen (schreibgeschützt)"
 
 #. Default: "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
 #: ./opengever/document/checkout/checkin.py

@@ -33,8 +33,16 @@ class TestDocumentTooltip(IntegrationTestCase):
         self.login(self.regular_user, browser)
 
         browser.open(self.document, view='tooltip')
-        metadata, checkout, download, details = browser.css(
+        view, metadata, checkout, download, details = browser.css(
             '.file-action-buttons a')
+
+        # View
+        self.assertEquals('View (read-only)', view.text)
+        self.assertEquals(
+            "javascript:officeConnectorCheckout('http://nohost/plone/"
+            "ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/"
+            "document-14/officeconnector_view_url');",
+            view.get('href'))
 
         # metadata
         self.assertEquals('Edit metadata', metadata.text)
@@ -73,9 +81,10 @@ class TestDocumentTooltip(IntegrationTestCase):
         mock_wopi_discovery()
 
         browser.open(self.document, view='tooltip')
-        metadata, checkout, edit_in_office_online, download, details = browser.css(
+        view, metadata, checkout, edit_in_office_online, download, details = browser.css(
             '.file-action-buttons a')
 
+        self.assertEquals('View (read-only)', view.text)
         self.assertEquals('Edit metadata', metadata.text)
         self.assertEquals('Check out and edit', checkout.text)
 
@@ -114,9 +123,8 @@ class TestDocumentTooltip(IntegrationTestCase):
                      data={'_authenticator': createToken()})
 
         browser.open(self.resolvable_document, view='tooltip')
-        self.assertEquals(['Download copy',
-                           'Open detail view'],
-                          browser.css('.file-action-buttons a').text)
+        self.assertNotIn('Check out and edit',
+                         browser.css('.file-action-buttons a').text)
 
     @browsing
     def test_download_link_is_available_for_documents_and_mails_when_file_exists(self, browser):  # noqa

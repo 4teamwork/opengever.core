@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-23 10:57+0000\n"
+"POT-Creation-Date: 2023-10-06 14:48+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -687,6 +687,11 @@ msgstr "Titre"
 #: ./opengever/document/browser/versions_tab.py
 msgid "label_version"
 msgstr "Version"
+
+#. Default: "View"
+#: ./opengever/document/browser/templates/macros.pt
+msgid "label_view"
+msgstr "Voir (en lecture seule)"
 
 #. Default: "This document is currently being worked on. When you check it in manually you will lose the changes. Please allow for the process to be finished first."
 #: ./opengever/document/checkout/checkin.py
