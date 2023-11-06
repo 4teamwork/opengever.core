@@ -18,7 +18,7 @@ class TestLocalRolesSerializer(IntegrationTestCase):
 
         with disabled_permission_check():
             result = serializer(search="A")
-        self.assertEqual(24, result['items_total'])
+        self.assertEqual(25, result['items_total'])
         self.assertEqual(3, len(result['items']))
         self.assertIn('batching', result)
 
