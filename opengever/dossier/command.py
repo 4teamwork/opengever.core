@@ -4,6 +4,7 @@ from opengever.base.role_assignments import RoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.document.docprops import DocPropertyWriter
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
+from opengever.document.versioner import AvoidInitialVersion
 from opengever.dossier.dossiertemplate.dossiertemplate import BEHAVIOR_INTERFACE_MAPPING
 from plone.dexterity.utils import iterSchemataForType
 from zope.globalrequest import getRequest
@@ -44,9 +45,11 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
         obj = super(CreateDocumentFromTemplateCommand, self).execute()
 
         getRequest().set(DISABLE_DOCPROPERTY_UPDATE_FLAG, False)
-        DocPropertyWriter(obj, recipient_data=self.recipient_data,
-                          sender_data=self.sender_data,
-                          participation_data=self.participation_data).initialize()
+        with AvoidInitialVersion():
+            DocPropertyWriter(
+                obj, recipient_data=self.recipient_data,
+                sender_data=self.sender_data,
+                participation_data=self.participation_data).initialize()
 
         # Set blocking of role inheritance based on the template object
         if self.block_role_inheritance is not None:
