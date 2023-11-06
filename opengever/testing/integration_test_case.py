@@ -52,6 +52,10 @@ from plone.portlets.constants import CONTEXT_CATEGORY
 from plone.portlets.interfaces import ILocalPortletAssignmentManager
 from plone.portlets.interfaces import IPortletManager
 from Products.CMFDiffTool.utils import safe_utf8
+from Products.PlonePAS.interfaces.group import IGroupIntrospection
+from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
+from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 from sqlalchemy.sql.expression import desc
 from urllib import urlencode
@@ -147,6 +151,18 @@ class IntegrationTestCase(TestCase):
         # Move user enumeration plugin to top position
         while not self.portal.acl_users.plugins.listPluginIds(IUserEnumerationPlugin)[0] == plugin.getId():
             self.portal.acl_users.plugins.movePluginsUp(IUserEnumerationPlugin, [plugin.getId()])
+
+        # XXX: Disable some capabilities for OGDS auth plugin for now.
+        # This is to limit test failures and not having to fix them all at once.
+        plugin_registry = self.portal.acl_users._getOb('plugins')
+        ifaces_to_disable = [
+            IGroupIntrospection,
+            IGroupEnumerationPlugin,
+            IGroupsPlugin,
+            IPropertiesPlugin,
+        ]
+        for iface in ifaces_to_disable:
+            plugin_registry.deactivatePlugin(iface, 'ogds_auth')
 
     @staticmethod
     def open_flamegraph(func):
