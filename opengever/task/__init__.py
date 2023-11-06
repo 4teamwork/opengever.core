@@ -44,7 +44,9 @@ FINAL_TRANSITIONS = [
     'task-transition-open-tested-and-closed',
     'task-transition-in-progress-tested-and-closed',
     'task-transition-resolved-tested-and-closed',
-    'task-transition-planned-skipped']
+    'task-transition-planned-skipped',
+    'forwarding-transition-close',
+    'forwarding-transition-assign-to-dossier']
 
 
 CLOSED_TO_IN_PROGRESS_TRANSITION = 'task-transition-tested-and-closed-in-progress'
