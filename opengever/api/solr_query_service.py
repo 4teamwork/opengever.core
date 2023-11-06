@@ -175,6 +175,9 @@ class SolrQueryBaseService(Service, RequestPayloadMixin):
 
 OPERATORS = ["and", "or", "&&", "||", "not", "!"]
 IGNORED_TOKENS = ["/"]
+TERM_SPLIT_TOKENS = [",", ";", r"\?", "!", "-", r"\+", "/", "\\\\", r"\|", "<", ">", "=", "%", "#", "@", "\\.", "_"]
+ALPHA_NUM_SPLIT = r'(\d+)'
+term_split_pattern = re.compile("|".join(TERM_SPLIT_TOKENS + [ALPHA_NUM_SPLIT]))
 part_split_pattern = re.compile(r'; |, |\. |\s')
 
 
@@ -186,12 +189,26 @@ class LiveSearchQueryPreprocessingMixin(object):
             return term
         if term in IGNORED_TOKENS:
             return None
+        prefix = ""
         term = term.rstrip(";,.")
+        if term.startswith("-"):
+            prefix = "-"
+            term = term.lstrip("-")
+        elif term.startswith("+"):
+            prefix = "+"
+            term = term.lstrip("+")
+        tokens = ["{}{}".format(prefix, token)
+                  for token in filter(None, term_split_pattern.split(term))]
 
         # Handle bracket and add wildcard to last token
-        n_brackets = len(term) - len(term.rstrip(")"))
-        term = term.rstrip(")").rstrip("*") + "*" + n_brackets * ")"
-        return term
+        last_token = tokens[-1]
+        n_brackets = len(last_token) - len(last_token.rstrip(")"))
+        last_token = last_token.rstrip(")").rstrip("*") + "*" + n_brackets * ")"
+        tokens[-1] = last_token
+
+        if len(tokens) > 1:
+            return "({})".format(" ".join(tokens))
+        return tokens[0]
 
     @staticmethod
     def _preprocess_phrase(phrase, phrase_prefix):

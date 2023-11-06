@@ -1614,65 +1614,51 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.document.reindexObject(idxs=["Title"])
         self.subdocument.title = "Taktische-Banane"
         self.subdocument.reindexObject(idxs=["Title"])
-        self.subsubdocument.title = "Taktische-Super-Banane"
+        self.subsubdocument.title = "Taktische-Fantastische-Banane"
         self.subsubdocument.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        # Term is not split
+        # First term does not get a wildcard appended
         query = {"q": "Title:takt-ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
         self.assertEqual(0, livesearch["items_total"])
 
-        # explicit wildcard is preserved
-        query = {"q": "Title:takt*-ba"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(2, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Banane', u'Taktische-Super-Banane'],
-            [item["title"] for item in livesearch["items"]])
-
-        query = {"q": "Title:taktische-ba"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Banane'],
-            [item["title"] for item in livesearch["items"]])
-
         query = {"q": "Title:taktische-banane"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(2, search["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane', u'Taktische-Super-Banane'],
+            [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
             [item["title"] for item in search["items"]])
-        self.assertEqual(1, livesearch["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Taktische-Banane'],
+            [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
             [item["title"] for item in livesearch["items"]])
 
-        query = {"q": "Title:sup"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Super-Banane'],
-            [item["title"] for item in livesearch["items"]])
+        for query in [{"q": "Title:takt*-ba"},
+                      {"q": "Title:taktische-ba"}]:
+            search = self.solr_search(browser, query)
+            livesearch = self.solr_livesearch(browser, query)
+            self.assertEqual(0, search["items_total"])
+            self.assertEqual(2, livesearch["items_total"])
+            self.assertItemsEqual(
+                [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
+                [item["title"] for item in livesearch["items"]])
 
-        query = {"q": "Title:super-ban"}
-        search = self.solr_search(browser, query)
-        livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
-        self.assertEqual(0, livesearch["items_total"])
+        for query in [{"q": "Title:fanta"},
+                      {"q": "Title:fantastische-ban"}]:
+            search = self.solr_search(browser, query)
+            livesearch = self.solr_livesearch(browser, query)
+            self.assertEqual(0, search["items_total"])
+            self.assertEqual(1, livesearch["items_total"])
+            self.assertItemsEqual(
+                [u'Taktische-Fantastische-Banane'],
+                [item["title"] for item in livesearch["items"]])
 
     @browsing
-    def test_livesearch_works_with_other_special_characters(self, browser):
+    def test_livesearch_splits_terms_at_other_special_characters(self, browser):
         self.login(self.regular_user, browser=browser)
         self.document.title = "Taktische"
         self.document.reindexObject(idxs=["Title"])
@@ -1686,19 +1672,18 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
+        self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            [u'Taktische/Banane'],
+            [u'Taktische/Banane', "Taktische?Banane"],
             [item["title"] for item in livesearch["items"]])
 
-        # No idea why livesearch would return both documents here
         query = {"q": "Title:taktische?ba"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(0, search["items_total"])
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
-            ["Taktische/Banane", "Taktische?Banane"],
+            [u'Taktische/Banane', "Taktische?Banane"],
             [item["title"] for item in livesearch["items"]])
 
     @browsing
@@ -1853,14 +1838,17 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
     def test_livesearch_handles_alphanumeric_tokens(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.document.title = "4A.BE.2301-11B/C32"
+        self.document.title = "4A.BE.2301-43B/C32"
         self.document.reindexObject(idxs=["Title"])
         self.commit_solr()
 
-        queries = [{"q": "4A.BE.2301-11B/C32"},
-                   {"q": "4A.BE.2301-11"},
+        queries = [{"q": "4A.BE.2301-43B/C32"},
+                   {"q": "4A.BE.2301-43"},
                    {"q": "4A.BE"},
-                   {"q": "2301"}]
+                   {"q": "2301"},
+                   {"q": "BE.2301"},
+                   {"q": "43B"},
+                   {"q": "B/C"}]
         for query in queries:
             search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
@@ -1869,20 +1857,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in livesearch[u'items']])
-            self.assertItemsEqual(
-                [self.document.absolute_url()],
-                [item["@id"] for item in search[u'items']])
-
-        # Because search term does not get split, parts from the center
-        # of the token cannot be found
-        queries = [{"q": "BE.2301"},
-                   {"q": "11B"},
-                   {"q": "B/C"}]
-        for query in queries:
-            search = self.solr_search(browser, query)
-            livesearch = self.solr_livesearch(browser, query)
-            self.assertEqual(1, search["items_total"])
-            self.assertEqual(0, livesearch["items_total"])
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in search[u'items']])
@@ -1928,7 +1902,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
         self.assertEqual(1, search["items_total"])
-        self.assertEqual(1, livesearch["items_total"])
+        self.assertEqual(0, livesearch["items_total"])
 
     @browsing
     def test_only_preprocess_query(self, browser):
@@ -1936,7 +1910,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "some word-with-hyhpen", "only_preprocess_query": "true"}
         self.solr_livesearch(browser, query)
         self.assertEqual(
-            {u'preprocessed_query': u'some* word-with-hyhpen*'},
+            {u'preprocessed_query': u'some* (word with hyhpen*)'},
             browser.json)
 
 
@@ -1958,7 +1932,7 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
     def test_preprocessing_handles_trailing_wildcard(self):
         preprocessor = LiveSearchQueryPreprocessingMixin()
         self.assertEqual("*", preprocessor.preprocess_query("*"))
-        self.assertEqual("my*-hyphenated-word*", preprocessor.preprocess_query("my*-hyphenated-word*"))
+        self.assertEqual("(my* hyphenated word*)", preprocessor.preprocess_query("my*-hyphenated-word*"))
         self.assertEqual("my* oh* my*", preprocessor.preprocess_query("my* oh my*"))
 
     def test_preprocessing_handles_brakets(self):
@@ -1969,5 +1943,5 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
                          preprocessor.preprocess_query("(this AND that) OR (even AND more)"))
         self.assertEqual("((this* that*) OR another*) (even* more*))",
                          preprocessor.preprocess_query("((this that) OR another) (even more))"))
-        self.assertEqual("hyphenated-word* OR another*",
+        self.assertEqual("(hyphenated word*) OR another*",
                          preprocessor.preprocess_query("hyphenated-word OR another"))
