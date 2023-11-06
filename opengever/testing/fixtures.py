@@ -2091,6 +2091,7 @@ class OpengeverContentFixture(object):
             .having(
                 groupid=group_id,
                 users=ogds_members,
+                title=group_title,
             )
         )
 

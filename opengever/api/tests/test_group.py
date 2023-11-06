@@ -8,6 +8,7 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from Products.CMFCore.utils import getToolByName
+from Products.CMFPlone.utils import safe_unicode
 from Products.PloneLDAP.factory import manage_addPloneLDAPMultiPlugin
 from Products.PlonePAS.interfaces.group import IGroupIntrospection
 from Products.PlonePAS.interfaces.group import IGroupManagement
@@ -348,7 +349,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
-                         group_data.getGroupTitleOrName())
+                         safe_unicode(group_data.getGroupTitleOrName()))
         self.assertItemsEqual(['Authenticated'], group_data.getRoles())
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id],
@@ -368,7 +369,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
-                         group_data.getGroupTitleOrName())
+                         safe_unicode(group_data.getGroupTitleOrName()))
         self.assertItemsEqual(['Authenticated'], group_data.getRoles())
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id],
@@ -383,7 +384,8 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(204, response.status_code)
-        self.assertEqual(u'new title', group_data.getGroupTitleOrName())
+        self.assertEqual(u'new title',
+                         safe_unicode(group_data.getGroupTitleOrName()))
         self.assertItemsEqual(['Authenticated', 'workspace_guest'],
                               group_data.getRoles())
         self.assertItemsEqual(
@@ -400,7 +402,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         portal_groups = getToolByName(self.portal, "portal_groups")
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
-                         group_data.getGroupTitleOrName())
+                         safe_unicode(group_data.getGroupTitleOrName()))
 
         payload = {u'title': u'new title'}
         with browser.expect_http_error(500):
@@ -417,13 +419,13 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.assertEqual(browser.json[u'type'], u'IncorrectConfigurationError')
         group_data = portal_groups.getGroupById(self.groupid)
         self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
-                         group_data.getGroupTitleOrName())
+                         safe_unicode(group_data.getGroupTitleOrName()))
 
     @browsing
     def test_updating_group_also_updates_ogds(self, browser):
         self.login(self.administrator, browser)
 
-        self.assertEqual(u'Test Group', self.ogds_group.title)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', self.ogds_group.title)
         self.assertItemsEqual(
             [self.committee_responsible.id, self.administrator.id],
             [user.userid for user in self.ogds_group.users])
@@ -474,20 +476,22 @@ class TestGeverGroupsPatch(IntegrationTestCase):
 
         portal_groups = getToolByName(self.portal, "portal_groups")
         group_data = portal_groups.getGroupById(self.groupid)
-        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', group_data.getProperty('title'))
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
+                         safe_unicode(group_data.getProperty('title')))
 
         payload = {'users': {self.workspace_guest.getId(): True}}
         browser.open("{}/@groups/{}".format(self.portal.absolute_url(), self.groupid),
                      data=json.dumps(payload), method='PATCH', headers=self.api_headers)
 
         group_data = portal_groups.getGroupById(self.groupid)
-        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', group_data.getProperty('title'))
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission',
+                         safe_unicode(group_data.getProperty('title')))
 
     @browsing
     def test_only_local_groups_can_be_updated(self, browser):
         self.login(self.administrator, browser)
         self.ogds_group.is_local = False
-        self.assertEqual(u'Test Group', self.ogds_group.title)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', self.ogds_group.title)
 
         payload = {
             u'title': u'new title',
@@ -502,7 +506,7 @@ class TestGeverGroupsPatch(IntegrationTestCase):
         self.assertEqual({u'message': u'Can only modify local groups.',
                           u'type': u'BadRequest'},
                          browser.json)
-        self.assertEqual(u'Test Group', self.ogds_group.title)
+        self.assertEqual(u'Gruppe Rechnungspr\xfcfungskommission', self.ogds_group.title)
 
     @browsing
     def test_cannot_update_group_with_disallowed_roles(self, browser):

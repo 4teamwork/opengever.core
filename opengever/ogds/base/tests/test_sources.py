@@ -1093,13 +1093,13 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         expected_groups = [
             u'fa_inbox_users',
             u'fa_users',
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1110,13 +1110,13 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1195,13 +1195,13 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         expected_groups = [
             u'fa_inbox_users',
             u'fa_users',
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 
@@ -1212,13 +1212,13 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 

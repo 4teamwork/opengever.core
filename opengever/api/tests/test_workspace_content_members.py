@@ -91,7 +91,7 @@ class TestWorkspaceContentMembersGetGet(IntegrationTestCase):
         browser.open(self.workspace, view='@workspace-content-members?include_groups=true',
                      method='GET', headers=self.api_headers)
 
-        self.assertEqual({u'token': u'committee_rpk_group', u'title': u'Test Group'},
+        self.assertEqual({u'token': u'committee_rpk_group', u'title': u'Gruppe Rechnungspr\xfcfungskommission'},
                          browser.json['items'][-1])
 
     @browsing
