@@ -55,6 +55,7 @@ from Products.CMFDiffTool.utils import safe_utf8
 from Products.PlonePAS.interfaces.group import IGroupIntrospection
 from Products.PluggableAuthService.interfaces.plugins import IGroupEnumerationPlugin
 from Products.PluggableAuthService.interfaces.plugins import IGroupsPlugin
+from Products.PluggableAuthService.interfaces.plugins import IPropertiesPlugin
 from Products.PluggableAuthService.interfaces.plugins import IUserEnumerationPlugin
 from sqlalchemy.sql.expression import desc
 from urllib import urlencode
@@ -160,6 +161,7 @@ class IntegrationTestCase(TestCase):
             IGroupIntrospection,
             IGroupEnumerationPlugin,
             IGroupsPlugin,
+            IPropertiesPlugin,
         ]
         for iface in ifaces_to_disable:
             plugin_registry.deactivatePlugin(iface, 'ogds_auth')
