@@ -43,6 +43,10 @@ class TestFileDownloadInReadOnly(IntegrationTestCase):
     def test_downloading_doc_pdf_journaling_doesnt_cause_readonly_error(self, browser):
         self.login(self.regular_user, browser)
 
+        # Get other potential writes-on-read out of the way.
+        # Those are not what we're testing here.
+        transaction.commit()
+
         with ZODBStorageInReadonlyMode():
             notify(PDFDownloadedEvent(self.document))
             transaction.commit()
@@ -54,6 +58,10 @@ class TestFileDownloadInReadOnly(IntegrationTestCase):
     @browsing
     def test_downloading_mail_pdf_journaling_doesnt_cause_readonly_error(self, browser):
         self.login(self.regular_user, browser)
+
+        # Get other potential writes-on-read out of the way.
+        # Those are not what we're testing here.
+        transaction.commit()
 
         with ZODBStorageInReadonlyMode():
             notify(PDFDownloadedEvent(self.mail_eml))
