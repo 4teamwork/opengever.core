@@ -123,6 +123,8 @@ class IntegrationTestCase(TestCase):
         'Content-Type': 'application/json',
     }
 
+    maxDiff = None
+
     def setUp(self):
         super(IntegrationTestCase, self).setUp()
         self.portal = self.layer['portal']
