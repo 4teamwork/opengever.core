@@ -30,7 +30,6 @@ class TestConfigurationAdapter(IntegrationTestCase):
                                           'WorkspaceClientUser',
                                           'Authenticated',
                                           'principal:AuthenticatedUsers',
-                                          'principal:projekt_a',
                                           'principal:fa_users',
                                           'Anonymous']),
                 ('email', u'foo@example.com'),
