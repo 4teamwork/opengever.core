@@ -2014,12 +2014,10 @@ class OpengeverContentFixture(object):
 
         plone_user = create(builder.with_email(email))
 
-        display_name = u"{} {}".format(lastname.title(), firstname.title())
         create(
             Builder('ogds_user')
             .id(plone_user.getId())
-            .having(firstname=firstname, lastname=lastname, email=email,
-                    display_name=display_name)
+            .having(firstname=firstname, lastname=lastname, email=email)
             .assign_to_org_units([self.org_unit_fa])
             .in_group(group)
             .having(**kwargs)
