@@ -228,7 +228,7 @@ class TestGroupPost(IntegrationTestCase):
 
         self.assertEqual(
             browser.json[u'message'],
-            'Group projekt_a already exists in OGDS.')
+            'The group name you entered is not valid.')
         self.assertEqual(browser.json[u'type'], u'BadRequest')
 
     @browsing
