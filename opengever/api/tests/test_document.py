@@ -256,7 +256,7 @@ class TestDocumentSerializer(IntegrationTestCase):
             1, self.task_in_protected_dossier, self.administrator.id,
             datetime(2021, 8, 2))
 
-        self.login(self.secretariat_user, browser=browser)
+        self.login(self.meeting_user, browser=browser)
 
         browser.open(
             '{}?expand=approvals'.format(self.document.absolute_url()),

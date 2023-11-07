@@ -295,7 +295,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
     @browsing
     def test_all_task_list_all_task_assigned_to_current_org_unit(self, browser):
-        self.login(self.secretariat_user, browser=browser)
+        self.login(self.regular_user, browser=browser)
         browser.open(view='tabbedview_view-alltasks')
         expected_tasks = [
             u'F\xf6rw\xe4rding',
@@ -310,6 +310,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -327,6 +328,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -348,6 +350,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -374,6 +377,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
         ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
