@@ -68,6 +68,7 @@ class DisabledGroupPlugins(DisabledPluginTypes):
     types_to_disable = [
         'IGroupEnumerationPlugin',
         'IGroupsPlugin',
+        'IGroupIntrospection',
     ]
 
 
