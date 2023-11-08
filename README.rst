@@ -645,6 +645,7 @@ Users
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
 - ``self.service_user``: ``service.user``
+- ``self.test_user``: ``test_user_1_``
 - ``self.webaction_manager``: ``webaction.manager``
 - ``self.workspace_admin``: ``fridolin.hugentobler``
 - ``self.workspace_guest``: ``hans.peter``
