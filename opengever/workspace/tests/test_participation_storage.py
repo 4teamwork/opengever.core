@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
@@ -265,18 +266,27 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                         'WorkspaceGuest')
 
     def test_raises_when_multiple_users_have_same_email(self):
-        with self.login(self.manager):
-            create(Builder('user')
-                   .named('foo', 'bar')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('twice@example.com'))
+        fa_users = ogds_service().fetch_group('fa_users')
 
-            create(Builder('user')
-                   .named('bar', 'qux')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('twice@example.com'))
+        create(Builder('ogds_user')
+                .id('foo.bar')
+                .having(
+                    firstname='foo',
+                    lastname='bar',
+                    email='twice@example.com',
+                )
+                .in_group(fa_users))
+
+        create(Builder('ogds_user')
+                .id('bar.qux')
+                .having(
+                    firstname='bar',
+                    lastname='qux',
+                    email='twice@example.com',
+                )
+                .in_group(fa_users))
+
+        ogds_service().session.flush()
 
         self.login(self.workspace_admin)
         with self.assertRaises(MultipleUsersFound):
@@ -287,18 +297,27 @@ class TestWorspaceParticipationStorage(IntegrationTestCase):
                         'WorkspaceGuest')
 
     def test_user_search_by_mail_match_exact(self):
-        with self.login(self.manager):
-            create(Builder('user')
-                   .named('foo', 'bar')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('ttwice@example.com'))
+        fa_users = ogds_service().fetch_group('fa_users')
 
-            create(Builder('user')
-                   .named('bar', 'qux')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('twice@example.com'))
+        create(Builder('ogds_user')
+                .id('foo.bar')
+                .having(
+                    firstname='foo',
+                    lastname='bar',
+                    email='ttwice@example.com',
+                )
+                .in_group(fa_users))
+
+        create(Builder('ogds_user')
+                .id('bar.qux')
+                .having(
+                    firstname='bar',
+                    lastname='qux',
+                    email='twice@example.com',
+                )
+                .in_group(fa_users))
+
+        ogds_service().session.flush()
 
         self.login(self.workspace_admin)
         getUtility(IInvitationStorage).add_invitation(

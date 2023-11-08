@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.ogds.models.service import ogds_service
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
@@ -103,18 +104,27 @@ class TestInvitationsPost(IntegrationTestCase):
 
     @browsing
     def test_raises_when_multiple_users_have_same_email(self, browser):
-        with self.login(self.manager):
-            create(Builder('user')
-                   .named('foo', 'bar')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('twice@example.com'))
+        fa_users = ogds_service().fetch_group('fa_users')
 
-            create(Builder('user')
-                   .named('bar', 'qux')
-                   .with_roles(['Member'])
-                   .in_groups('fa_users')
-                   .with_email('twice@example.com'))
+        create(Builder('ogds_user')
+                .id('foo.bar')
+                .having(
+                    firstname='foo',
+                    lastname='bar',
+                    email='twice@example.com',
+                )
+                .in_group(fa_users))
+
+        create(Builder('ogds_user')
+                .id('bar.qux')
+                .having(
+                    firstname='bar',
+                    lastname='qux',
+                    email='twice@example.com',
+                )
+                .in_group(fa_users))
+
+        ogds_service().session.flush()
 
         self.login(self.workspace_admin, browser=browser)
 

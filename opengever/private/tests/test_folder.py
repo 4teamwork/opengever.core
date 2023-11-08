@@ -65,10 +65,11 @@ class TestPrivateFolder(IntegrationTestCase):
     @browsing
     def test_handles_at_sign_in_userids(self, browser):
         peter = create(Builder('user').with_userid('peter@mustermann'))
-        create(Builder('ogds_user')
+        peter_ogds = create(Builder('ogds_user')
                .having(userid='peter@mustermann',
                        firstname='Peter',
                        lastname='Mustermann'))
+        peter_ogds.session.flush()
 
         # Create the private folder (this is not triggered by authenticating
         # the user, it must be done manually).
@@ -93,6 +94,9 @@ class TestPrivateFolder(IntegrationTestCase):
         # the @ sign in the username. It will be normalised and used for the
         # id of the private folder later on.d
         jane = create(Builder('user').with_userid("jane@bond"))
+        jane_ogds = create(Builder('ogds_user').id(jane.getId()))
+        jane_ogds.session.flush()
+
         self.assertNotIn('jane-40bond', self.portal.private.objectIds())
         self.assertEquals(
             None,

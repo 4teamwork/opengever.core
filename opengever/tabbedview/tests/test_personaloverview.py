@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
 from plone.registry.interfaces import IRegistry
@@ -26,6 +27,7 @@ class TestPersonalOverview(IntegrationTestCase):
             .id(foreign_user.getId())
             .having(firstname='Peter', lastname='Schneider'),
             )
+        create_session().flush()
 
         self.login(foreign_user, browser=browser)
         browser.open(self.portal, view='personal_overview')
