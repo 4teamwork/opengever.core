@@ -116,6 +116,7 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'ramon.flucht',
             'robert.ziegler',
             'service.user',
+            'test_user_1_',
             'webaction.manager',
         )
         self.assertEqual(expected, self.ids(results))
@@ -527,7 +528,11 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
     def test_get_properties_for_user_with_no_match_returns_empty_dict(self):
-        member_not_in_ogds = api.user.get(TEST_USER_ID)
+        self.portal.acl_users.source_users.addUser(
+                'some.user.id',
+                'some.user.name',
+                'secret')
+        member_not_in_ogds = api.user.get('some.user.id')
         results = self.plugin.getPropertiesForUser(member_not_in_ogds)
         expected = {}
         self.assertEqual(expected, results)
