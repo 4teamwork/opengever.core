@@ -2,6 +2,7 @@ from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.document.versioner import Versioner
 from plone.dexterity.primary import PrimaryFieldInfo
+from plone.namedfile.utils import stream_data
 from Products.CMFEditions.interfaces.IArchivist import ArchivistRetrieveError
 from Products.Five import BrowserView
 from Products.statusmessages.interfaces import IStatusMessage
@@ -48,4 +49,4 @@ class DownloadFileVersion(BrowserView):
         set_attachment_content_disposition(
             self.request, self.version_file.filename.encode('utf-8'))
 
-        return self.version_file.data
+        return stream_data(self.version_file)

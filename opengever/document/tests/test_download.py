@@ -1,12 +1,17 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import warning_messages
 from opengever.document.browser.download import DownloadConfirmationHelper
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
+import transaction
 
 
 class TestDocumentDownloadConfirmation(IntegrationTestCase):
@@ -22,22 +27,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         browser.find('Download copy').click()
         browser.find('Download').click()
         self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded current version (1)')
-
-    @browsing
-    def test_download_versioned_copy_creates_journal_entries_with_versions_in_title(self, browser):
-        self.login(self.regular_user, browser)
-        versioner = Versioner(self.document)
-        versioner.create_version('Initial version')
-        versioner.create_version('Some updates.')
-        browser.open(self.document, view='tabbedview_view-versions')
-        browser.css('a.function-download-copy').first.click()
-        browser.find('Download').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded version 1')
-        versioner.create_version('Oops.')
-        browser.open(self.document, view='tabbedview_view-versions')
-        browser.css('a.function-download-copy').first.click()
-        browser.find('Download').click()
-        self.assert_journal_entry(self.document, 'File copy downloaded', 'Document copy downloaded version 2')
 
     @browsing
     def test_download_copy_without_overlay_creates_journal_entry(self, browser):
@@ -129,22 +118,6 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         self.assertEqual('Version "33" does not exist.', cm.exception.message)
 
     @browsing
-    def test_download_confirmation_view_for_version_download(self, browser):
-        self.login(self.regular_user, browser)
-        versioner = Versioner(self.document)
-        versioner.create_version('Initial version')
-        versioner.create_version('Some updates.')
-        browser.open(self.document, view='file_download_confirmation', data={'version_id': 1})
-        self.assertEqual(
-            "You're downloading a copy of the document Vertraegsentwurf.docx",
-            browser.css(".details > p").first.text,
-        )
-        browser.find('Download').click()
-        expected_url = "{}/download_file_version?version_id=1&error_as_message=1".format(self.document.absolute_url())
-        self.assertEqual(expected_url, browser.url)
-        self.assertEqual(self.document.file.data, browser.contents)
-
-    @browsing
     def test_download_view_redirects_to_listing_for_missing_files(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.empty_document, view='download')
@@ -178,22 +151,72 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         with self.assertRaises(BadRequest):
             browser.open(self.document, view='download')
 
+
+class TestDocumentDownloadVersion(FunctionalTestCase):
+    """We need a functional test to be able to commit the blob."""
+
+    @browsing
+    def test_download_versioned_copy_creates_journal_entries_with_versions_in_title(self, browser):
+        browser.login()
+        document = create(Builder('document').with_dummy_content())
+        versioner = Versioner(document)
+        versioner.create_version('Initial version')
+        versioner.create_version('Some updates.')
+        transaction.commit()
+
+        browser.open(document, view='tabbedview_view-versions')
+        browser.css('a.function-download-copy').first.click()
+        browser.find('Download').click()
+        self.assert_journal_entry(document, 'File copy downloaded', 'Document copy downloaded version 1')
+
+        versioner.create_version('Oops.')
+        transaction.commit()
+        browser.open(document, view='tabbedview_view-versions')
+        browser.css('a.function-download-copy').first.click()
+        browser.find('Download').click()
+        self.assert_journal_entry(document, 'File copy downloaded', 'Document copy downloaded version 2')
+
+    @browsing
+    def test_download_confirmation_view_for_version_download(self, browser):
+        browser.login()
+        document = create(Builder('document').with_dummy_content())
+        versioner = Versioner(document)
+        versioner.create_version('Initial version')
+        versioner.create_version('Some updates.')
+        transaction.commit()
+
+        browser.open(document, view='file_download_confirmation', data={'version_id': 1})
+        self.assertEqual(
+            "You're downloading a copy of the document Testdokumaent.doc",
+            browser.css(".details > p").first.text,
+        )
+        browser.find('Download').click()
+        expected_url = "{}/download_file_version?version_id=1&error_as_message=1".format(document.absolute_url())
+        self.assertEqual(expected_url, browser.url)
+        self.assertEqual(document.file.data, browser.contents)
+
     @browsing
     def test_download_view_downloads_the_latest_version_if_the_document_is_checked_out_by_another_user(self, browser):
-        self.login(self.dossier_manager, browser)
-        initDocumentData = self.document.file.data
+        self.login()
+        document = create(Builder('document').with_dummy_content())
+        initDocumentData = document.file.data
 
+        self.grant("Manager")
         manager = getMultiAdapter(
-            (self.document, self.request), ICheckinCheckoutManager)
+            (document, self.request), ICheckinCheckoutManager)
         manager.checkout()
 
         # Updating the file will create an initial version with the initial file content
-        self.document.update_file('my working copy')
+        document.update_file('my working copy')
+        transaction.commit()
 
-        browser.open(self.document, view='download')
+        browser.login().open(document, view='download')
         self.assertEqual('my working copy', browser.contents)
         self.assertNotEqual(initDocumentData, browser.contents)
 
-        self.login(self.regular_user, browser)
-        browser.open(self.document, view='download')
+        # If document is checked out by someone else, download returns
+        # last checked-in version.
+        IAnnotations(document)['opengever.document.checked_out_by'] = "hugo"
+        transaction.commit()
+        browser.login().open(document, view='download')
         self.assertEqual(initDocumentData, browser.contents)
