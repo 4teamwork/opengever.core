@@ -466,7 +466,7 @@ class TestUsersContactsInboxesSource(SolrIntegrationTestCase):
                                        admin_unit=self.admin_unit)
                                .with_default_groups())
 
-        create(Builder('ogds_user')
+        create(Builder('ogds_user').id('test.user')
                .having(firstname=u'Test', lastname=u'User')
                .assign_to_org_units([self.org_unit]))
         create(Builder('ogds_user')
@@ -802,7 +802,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
                                        admin_unit=self.admin_unit)
                                .with_default_groups())
 
-        create(Builder('ogds_user')
+        create(Builder('ogds_user').id('test.user')
                .having(firstname=u'Test', lastname=u'User')
                .having(email='onlyone@example.com')
                .assign_to_org_units([self.org_unit]))
@@ -828,7 +828,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
         self.source = AllEmailContactsAndUsersSource(self.portal)
 
     def test_ogds_users_are_valid(self):
-        self.assertIn('onlyone@example.com:test_user_1_', self.source)
+        self.assertIn('onlyone@example.com:test.user', self.source)
 
         self.assertIn('hugos@example.com:hugo.boss', self.source)
         self.assertIn('huegeler@example.com:hugo.boss', self.source)
