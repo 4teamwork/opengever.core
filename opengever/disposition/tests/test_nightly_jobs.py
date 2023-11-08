@@ -12,7 +12,6 @@ from opengever.disposition.nightly_jobs import NightlyDossierJournalPDF
 from opengever.disposition.nightly_jobs import NightlyDossierPermissionSetter
 from opengever.disposition.nightly_jobs import NightlySIPDelivery
 from opengever.disposition.tests.test_delivery import TestFilesystemTransportBase
-from opengever.ogds.auth.testing import DisabledUserPlugins
 from opengever.testing import IntegrationTestCase
 from opengever.testing.helpers import CapturingLogHandler
 from os.path import join as pjoin
@@ -153,18 +152,6 @@ class TestNightlyDossierJournalPDF(IntegrationTestCase):
 
 
 class TestNightlyDossierPermissionSetter(IntegrationTestCase):
-
-    def setUp(self):
-        # XXX: Move this onto the layer once remaining tests are fixed.
-
-        # Disable userEnumeration for source_users to avoid MultiplePrincipalError.
-        self.disabled_source_users = DisabledUserPlugins(self.layer['portal'].acl_users)
-        self.disabled_source_users.__enter__()
-        super(TestNightlyDossierPermissionSetter, self).setUp()
-
-    def tearDown(self):
-        super(TestNightlyDossierPermissionSetter, self).tearDown()
-        self.disabled_source_users.__exit__(None, None, None)
 
     def interrupt_if_necessary(self):
         """Stub out the runner's `interrupt_if_necessary` function.

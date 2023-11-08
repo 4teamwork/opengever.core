@@ -128,6 +128,7 @@ class IntegrationTestCase(TestCase):
         self.request = self.layer['request']
         self.deactivate_extjs()
         self.install_ogds_plugin()
+
         map(self.parse_feature, self.features)
         if 'activity' in self.features:
             Mailing(self.portal).set_up()
@@ -149,6 +150,14 @@ class IntegrationTestCase(TestCase):
         # Move user enumeration plugin to top position
         while not self.portal.acl_users.plugins.listPluginIds(IUserEnumerationPlugin)[0] == plugin.getId():
             self.portal.acl_users.plugins.movePluginsUp(IUserEnumerationPlugin, [plugin.getId()])
+
+        # Disable user enumeration for source_users
+        plugin_registry = self.portal.acl_users._getOb('plugins')
+        ifaces_to_disable = [
+            IUserEnumerationPlugin,
+        ]
+        for iface in ifaces_to_disable:
+            plugin_registry.deactivatePlugin(iface, 'source_users')
 
     @staticmethod
     def open_flamegraph(func):
