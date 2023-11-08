@@ -8,5 +8,6 @@ import opengever.testing.builders.propertysheets  # noqa
 import opengever.testing.builders.qickupload  # noqa
 import opengever.testing.builders.repositorytree  # noqa
 import opengever.testing.builders.sql  # noqa
+import opengever.testing.builders.user  # noqa
 import opengever.testing.builders.webactions  # noqa
 import opengever.testing.builders.workspaceclient  # noqa
