@@ -597,6 +597,8 @@ class TestGeverGroupsDelete(IntegrationTestCase):
             headers=self.api_headers)
 
         self.assertEqual(204, response.status_code)
+
+        self.ogds_group.session.flush()
         self.assertIsNone(portal_groups.getGroupById(self.groupid))
 
     @browsing
@@ -636,6 +638,8 @@ class TestGeverGroupsDelete(IntegrationTestCase):
             headers=self.api_headers)
 
         self.assertEqual(204, browser.status_code)
+
+        self.ogds_group.session.flush()
         self.assertIsNone(portal_groups.getGroupById(self.groupid))
         self.assertFalse(self.ogds_group.active)
 
