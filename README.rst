@@ -634,7 +634,6 @@ Users
 - ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.foreign_contributor``: ``james.bond``
-- ``self.inactive_user``: ``inactive.user``
 - ``self.limited_admin``: ``maja.harzig``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``

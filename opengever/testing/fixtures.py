@@ -402,11 +402,17 @@ class OpengeverContentFixture(object):
             ['PropertySheetsManager'],
         )
 
-        self.inactive_user = self.create_user(
-            'inactive_user',
-            u'Inactive',
-            u'User',
-            active=False,
+        # This user is intended to be used in situations where you need an
+        # OGDS user that is inactive.
+        create(
+            Builder('ogds_user')
+            .id('inactive.user')
+            .having(
+                firstname='Inactive',
+                lastname='User',
+                display_name='Inactive User',
+            )
+            .having(active=False)
         )
 
         # This user is intended to be used in situations where you need a user

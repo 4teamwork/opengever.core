@@ -477,7 +477,6 @@ class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
             'gunther.frohlich',
             'hans.peter',
             'herbert.jager',
-            'inactive.user',
             'jurgen.fischer',
             'jurgen.konig',
             'kathi.barfuss',

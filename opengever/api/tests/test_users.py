@@ -14,7 +14,7 @@ class TestUsersGet(IntegrationTestCase):
         browser.open('{}/@users'.format(self.portal.absolute_url()),
                      headers=self.api_headers)
 
-        self.assertEqual(22, len(browser.json))
+        self.assertEqual(21, len(browser.json))
 
     @browsing
     def test_enumarating_users_unauthorized_raises(self, browser):
