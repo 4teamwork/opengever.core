@@ -1,4 +1,6 @@
 from collective.quickupload.interfaces import IQuickUploadFileFactory
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.mail.interfaces import IEmailAddress
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
@@ -7,6 +9,7 @@ from ftw.testbrowser.pages.statusmessages import error_messages
 from opengever.document.archival_file import ArchivalFileConverter
 from opengever.document.versioner import Versioner
 from opengever.mail.tests import MAIL_DATA
+from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from opengever.testing.assets import load
 from opengever.virusscan.interfaces import IAVScannerSettings
@@ -17,6 +20,7 @@ from plone import api
 from zope.component import getMultiAdapter
 import base64
 import json
+import transaction
 
 
 class TestVirusScanValidator(IntegrationTestCase):
@@ -545,19 +549,35 @@ class TestVirusScanDownloadValidator(IntegrationTestCase):
             u'file_infected',
             browser.json['message'])
 
+
+class TestVirusScanDownloadValidatorFunctional(FunctionalTestCase):
+    """We need a functional test to be able to commit the blob."""
+
+    def setUp(self):
+        super(TestVirusScanDownloadValidatorFunctional, self).setUp()
+        register_mock_av_scanner()
+        api.portal.set_registry_record(
+            'scan_before_download', True, interface=IAVScannerSettings)
+
+    headers = {
+        'Accept': 'application/json',
+    }
+
     @browsing
     def test_download_versioned_copy_over_api_with_virusscan_enabled(self, browser):
-        self.login(self.regular_user, browser)
-        Versioner(self.subdocument).create_version('Initial version')
+        self.login()
+        document = create(Builder('document').with_dummy_content())
+        Versioner(document).create_version('Initial version')
+        transaction.commit()
 
-        browser.open(self.subdocument,
-                     view='download_file_version',
-                     data={'version_id': 0},
-                     headers=self.headers)
+        browser.login().open(document,
+                             view='download_file_version',
+                             data={'version_id': 0},
+                             headers={'Accept': 'application/json'})
         self.assertEqual(
-            'attachment; filename="Uebersicht der Vertraege von 2016.xlsx"',
+            'attachment; filename="Testdokumaent.doc"',
             browser.headers.get('content-disposition'))
         self.assertEqual(
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'application/msword',
             browser.headers['content-type'])
-        self.assertEqual("No virus", browser.contents)
+        self.assertEqual("Test data", browser.contents)
