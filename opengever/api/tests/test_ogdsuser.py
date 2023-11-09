@@ -67,7 +67,7 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'description': u'nix',
              u'directorate': u'Staatsarchiv',
              u'directorate_abbr': u'Arch',
-             u'display_name': None,
+             u'display_name': u'B\xe4rfuss K\xe4thi',
              u'email': u'foo@example.com',
              u'email2': u'bar@example.com',
              u'external_id': u'kathi.barfuss',

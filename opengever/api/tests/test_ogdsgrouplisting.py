@@ -15,20 +15,20 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
+            {u'@id': u'http://nohost/plone/@ogds-groups/committee_ver_group',
              u'@type': u'virtual.ogds.group',
              u'active': True,
-             u'groupid': u'projekt_a',
-             u'groupurl': u'http://nohost/plone/@groups/projekt_a',
+             u'groupid': u'committee_ver_group',
+             u'groupurl': u'http://nohost/plone/@groups/committee_ver_group',
              u'is_local': False,
-             u'title': u'Projekt A'},
-            {u'@id': u'http://nohost/plone/@ogds-groups/projekt_b',
+             u'title': u'Gruppe Kommission f\xfcr Verkehr'},
+            {u'@id': u'http://nohost/plone/@ogds-groups/committee_rpk_group',
              u'@type': u'virtual.ogds.group',
              u'active': True,
-             u'groupid': u'projekt_b',
-             u'groupurl': u'http://nohost/plone/@groups/projekt_b',
+             u'groupid': u'committee_rpk_group',
+             u'groupurl': u'http://nohost/plone/@groups/committee_rpk_group',
              u'is_local': False,
-             u'title': u'Projekt B'}],
+             u'title': u'Gruppe Rechnungspr\xfcfungskommission'}],
             browser.json.get('items')[:2])
         self.assertEqual(9, browser.json['items_total'])
 
@@ -43,9 +43,9 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
 
         self.assertEqual(4, len(browser.json['items']))
         self.assertEqual(
-            [u'projekt_laeaer',
-             u'committee_rpk_group',
-             u'committee_ver_group',
+            [u'projekt_a',
+             u'projekt_b',
+             u'projekt_laeaer',
              u'fa_inbox_users'],
             [each['groupid'] for each in browser.json['items']])
         self.assertEqual(9, browser.json['items_total'])

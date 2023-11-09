@@ -68,6 +68,7 @@ class DisabledGroupPlugins(DisabledPluginTypes):
     types_to_disable = [
         'IGroupEnumerationPlugin',
         'IGroupsPlugin',
+        'IGroupIntrospection',
     ]
 
 
@@ -85,6 +86,9 @@ class OGDSAuthTestCase(IntegrationTestCase):
         self.disabled_user_plugins = DisabledUserPlugins(self.uf)
         self.disabled_group_plugins = DisabledGroupPlugins(self.uf)
         self.disabled_property_plugins = DisabledPropertyPlugins(self.uf)
+        # as the plugin is installed in the IntegrationTestCase
+        # we uninstall it here
+        self.uninstall_ogds_plugin()
 
     @property
     def uf(self):

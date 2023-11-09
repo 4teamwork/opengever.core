@@ -252,7 +252,7 @@ class TestGlobalIndexGet(IntegrationTestCase):
         browser.open(self.portal, view='@globalindex', headers=self.api_headers)
         self.assertEqual(15, browser.json['items_total'])
 
-        with self.login(self.secretariat_user, browser=browser):
+        with self.login(self.dossier_responsible, browser=browser):
             browser.open(self.portal, view='@globalindex', headers=self.api_headers)
             self.assertEqual(14, browser.json['items_total'])
 

@@ -41,6 +41,7 @@ from plone import api
 from plone.app.testing import login
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from plone.app.textfield.value import RichTextValue
 from time import time
 from zope.annotation.interfaces import IAnnotations
@@ -104,6 +105,7 @@ class OpengeverContentFixture(object):
 
     def create_fixture_content(self):
         with self.freeze_at_hour(4):
+            self.create_test_user()
             self.create_units()
 
         # Create users. Here we can use a 1minute step between creation of two
@@ -400,11 +402,17 @@ class OpengeverContentFixture(object):
             ['PropertySheetsManager'],
         )
 
-        self.inactive_user = self.create_user(
-            'inactive_user',
-            u'Inactive',
-            u'User',
-            active=False,
+        # This user is intended to be used in situations where you need an
+        # OGDS user that is inactive.
+        create(
+            Builder('ogds_user')
+            .id('inactive.user')
+            .having(
+                firstname='Inactive',
+                lastname='User',
+                display_name='Inactive User',
+            )
+            .having(active=False)
         )
 
         # This user is intended to be used in situations where you need a user
@@ -450,6 +458,17 @@ class OpengeverContentFixture(object):
         )
 
         self._lookup_table['foreign_contributor'] = ('user', plone_user.getId())
+
+    def create_test_user(self):
+        """Create an OGDS user for TEST_USER_ID created by p.a.testing.
+        """
+        ogds_test_user = create(
+            Builder('ogds_user')
+            .id(TEST_USER_ID)
+            .having(firstname='', lastname='', email='')
+        )
+        ogds_test_user.username = TEST_USER_NAME
+        self._lookup_table['test_user'] = ('user', TEST_USER_ID)
 
     def load_service_keys(self):
         for filename in ['service_user_generic.public.json']:
@@ -2014,10 +2033,12 @@ class OpengeverContentFixture(object):
 
         plone_user = create(builder.with_email(email))
 
+        display_name = u"{} {}".format(lastname.title(), firstname.title())
         create(
             Builder('ogds_user')
             .id(plone_user.getId())
-            .having(firstname=firstname, lastname=lastname, email=email)
+            .having(firstname=firstname, lastname=lastname, email=email,
+                    display_name=display_name)
             .assign_to_org_units([self.org_unit_fa])
             .in_group(group)
             .having(**kwargs)
@@ -2089,6 +2110,7 @@ class OpengeverContentFixture(object):
             .having(
                 groupid=group_id,
                 users=ogds_members,
+                title=group_title,
             )
         )
 

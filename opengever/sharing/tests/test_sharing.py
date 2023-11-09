@@ -421,6 +421,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                                u'Reviewer': False},
            u'disabled': False,
            u'id': u'projekt_a',
+           u'login': None,
            u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                              u'@type': u'virtual.ogds.group',
                              u'active': True,
@@ -435,8 +436,8 @@ class TestOpengeverSharing(IntegrationTestCase):
                       u'Publisher': False,
                       u'Reader': True,
                       u'Reviewer': False},
-           u'title': u'projekt_a',
-           u'type': u'user',
+           u'title': u'Projekt A',
+           u'type': u'group',
            u'url': u'http://nohost/plone/@@list_groupmembers?group=projekt_a'},
           [item for item in entries if item['id'] == u'projekt_a'][0])
 
@@ -518,7 +519,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
 
         result = browser.json
-        self.assertEqual(22, result['items_total'])
+        self.assertEqual(24, result['items_total'])
         self.assertEqual(3, len(result['items']))
         self.assertIn('batching', result)
 
@@ -559,8 +560,7 @@ class TestOpengeverSharing(IntegrationTestCase):
              u'rk Inbox Users Group',
              u'Fr\xfchling F\xe4ivel',
              u'Hugentobler Fridolin',
-             u'Schr\xf6dinger B\xe9atrice',
-             u'User Inactive'],
+             u'Schr\xf6dinger B\xe9atrice'],
             [each["title"] for each in browser.json["items"]])
 
 

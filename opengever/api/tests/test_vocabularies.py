@@ -1,6 +1,7 @@
 from collective.elephantvocabulary.interfaces import IElephantVocabulary
 from ftw.testbrowser import browsing
 from opengever.api.schema.sources import get_field_by_name
+from opengever.ogds.auth.testing import DisabledGroupPlugins
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
@@ -119,6 +120,18 @@ class TestNonSensitiveVocabularies(IntegrationTestCase):
     """See https://github.com/4teamwork/opengever.core/issues/5449 for
     more information about this tests.
     """
+
+    def setUp(self):
+        # XXX: Move this onto the layer once remaining tests are fixed.
+
+        # Disable groupEnumeration for source_groups to avoid MultiplePrincipalError.
+        self.disabled_source_groups = DisabledGroupPlugins(self.layer['portal'].acl_users)
+        self.disabled_source_groups.__enter__()
+        super(TestNonSensitiveVocabularies, self).setUp()
+
+    def tearDown(self):
+        super(TestNonSensitiveVocabularies, self).tearDown()
+        self.disabled_source_groups.__exit__(None, None, None)
 
     @browsing
     def test_vocabularies_endpoint_does_not_provide_sensitive_data(self, browser):

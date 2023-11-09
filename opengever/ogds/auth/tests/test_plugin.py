@@ -116,6 +116,7 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
             'ramon.flucht',
             'robert.ziegler',
             'service.user',
+            'test_user_1_',
             'webaction.manager',
         )
         self.assertEqual(expected, self.ids(results))
@@ -476,7 +477,6 @@ class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
             'gunther.frohlich',
             'hans.peter',
             'herbert.jager',
-            'inactive.user',
             'jurgen.fischer',
             'jurgen.konig',
             'kathi.barfuss',
@@ -527,7 +527,11 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         self.assertEqual(expected, results)
 
     def test_get_properties_for_user_with_no_match_returns_empty_dict(self):
-        member_not_in_ogds = api.user.get(TEST_USER_ID)
+        self.portal.acl_users.source_users.addUser(
+                'some.user.id',
+                'some.user.name',
+                'secret')
+        member_not_in_ogds = api.user.get('some.user.id')
         results = self.plugin.getPropertiesForUser(member_not_in_ogds)
         expected = {}
         self.assertEqual(expected, results)
@@ -554,6 +558,7 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
         ogds_user = ogds_service().fetch_user('kathi.barfuss')
         ogds_user.firstname = None
         ogds_user.lastname = None
+        ogds_user.display_name = None
         ogds_user.email = None
         ogds_user.object_sid = None
         ogds_service().session.flush()

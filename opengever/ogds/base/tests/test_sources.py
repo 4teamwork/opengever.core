@@ -466,7 +466,7 @@ class TestUsersContactsInboxesSource(SolrIntegrationTestCase):
                                        admin_unit=self.admin_unit)
                                .with_default_groups())
 
-        create(Builder('ogds_user')
+        create(Builder('ogds_user').id('test.user')
                .having(firstname=u'Test', lastname=u'User')
                .assign_to_org_units([self.org_unit]))
         create(Builder('ogds_user')
@@ -802,7 +802,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
                                        admin_unit=self.admin_unit)
                                .with_default_groups())
 
-        create(Builder('ogds_user')
+        create(Builder('ogds_user').id('test.user')
                .having(firstname=u'Test', lastname=u'User')
                .having(email='onlyone@example.com')
                .assign_to_org_units([self.org_unit]))
@@ -828,7 +828,7 @@ class TestAllEmailContactsAndUsersSource(SolrIntegrationTestCase):
         self.source = AllEmailContactsAndUsersSource(self.portal)
 
     def test_ogds_users_are_valid(self):
-        self.assertIn('onlyone@example.com:test_user_1_', self.source)
+        self.assertIn('onlyone@example.com:test.user', self.source)
 
         self.assertIn('hugos@example.com:hugo.boss', self.source)
         self.assertIn('huegeler@example.com:hugo.boss', self.source)
@@ -1093,13 +1093,13 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         expected_groups = [
             u'fa_inbox_users',
             u'fa_users',
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1110,13 +1110,13 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1195,13 +1195,13 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         expected_groups = [
             u'fa_inbox_users',
             u'fa_users',
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 
@@ -1212,13 +1212,13 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         api.portal.set_registry_record('black_list_prefix', u'^fa_', ISharingConfiguration)
 
         expected_groups = [
+            u'committee_ver_group',
+            u'committee_rpk_group',
             u'projekt_a',
             u'projekt_b',
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
-            u'committee_rpk_group',
-            u'committee_ver_group',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 

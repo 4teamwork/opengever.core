@@ -2,6 +2,7 @@ from datetime import date
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.model import create_session
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.testing import IntegrationTestCase
 from plone.registry.interfaces import IRegistry
@@ -26,6 +27,7 @@ class TestPersonalOverview(IntegrationTestCase):
             .id(foreign_user.getId())
             .having(firstname='Peter', lastname='Schneider'),
             )
+        create_session().flush()
 
         self.login(foreign_user, browser=browser)
         browser.open(self.portal, view='personal_overview')
@@ -295,7 +297,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
 
     @browsing
     def test_all_task_list_all_task_assigned_to_current_org_unit(self, browser):
-        self.login(self.secretariat_user, browser=browser)
+        self.login(self.regular_user, browser=browser)
         browser.open(view='tabbedview_view-alltasks')
         expected_tasks = [
             u'F\xf6rw\xe4rding',
@@ -310,6 +312,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -327,6 +330,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -348,6 +352,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
             ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)
@@ -374,6 +379,7 @@ class TestGlobalTaskListings(IntegrationTestCase):
             u'H\xf6rsaal reservieren',
             u'Diskr\xe4te Dinge',
             u're: Diskr\xe4te Dinge',
+            u'Ein notwendiges \xdcbel',
         ]
         found_tasks = [row.get('Title') for row in browser.css('.listing').first.dicts()]
         self.assertItemsEqual(expected_tasks, found_tasks)

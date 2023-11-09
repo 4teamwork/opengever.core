@@ -100,7 +100,18 @@ class TestRepositoryDeleter(IntegrationTestCase):
         valid_roles.remove('Administrator')
         valid_roles.remove('Manager')
 
-        user = create(Builder('user').with_roles(*valid_roles))
+        user = create(Builder('user')
+                      .named('Some', 'User')
+                      .with_roles(*valid_roles))
+    
+        ogds_user = create(Builder('ogds_user')
+                .id(user.getId())
+                .having(
+                    firstname='Some',
+                    lastname='User',
+                ))
+        ogds_user.session.flush()
+
         self.login(user)
         with self.assertRaises(Unauthorized):
             api.content.delete(obj=self.empty_repofolder)

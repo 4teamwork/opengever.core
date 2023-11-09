@@ -48,8 +48,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_office': None,
              u'title': u'B\xf6nd James',
              u'userid': u'james.bond'}],
-            browser.json.get('items')[:2])
-        self.assertEqual(22, browser.json['items_total'])
+            browser.json.get('items')[1:3])
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_last_login_is_visible_in_ogds_user_listing(self, browser):
@@ -71,12 +71,12 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
         self.assertEqual(4, len(browser.json['items']))
         self.assertEqual(
-            [u'maja.harzig',
+            [u'fridolin.hugentobler',
+             u'maja.harzig',
              u'herbert.jager',
-             u'nicole.kohler',
-             u'jurgen.konig'],
+             u'nicole.kohler'],
             [each['userid'] for each in browser.json['items']])
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_batch_large_offset_returns_empty_items(self, browser):
@@ -88,7 +88,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(0, len(browser.json['items']))
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_batch_disallows_negative_size(self, browser):
@@ -129,8 +129,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
                      view='@ogds-user-listing?filters.state:record:list=active',
                      headers=self.api_headers)
 
-        self.assertEqual(20, len(browser.json['items']))
-        self.assertEqual(20, browser.json['items_total'])
+        self.assertEqual(21, len(browser.json['items']))
+        self.assertEqual(21, browser.json['items_total'])
 
     @browsing
     def test_state_filter_active_and_inactive(self, browser):
@@ -144,8 +144,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
                           '&filters.state:record:list=active',
                      headers=self.api_headers)
 
-        self.assertEqual(22, len(browser.json['items']))
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(23, len(browser.json['items']))
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_last_login_filter(self, browser):
@@ -241,11 +241,11 @@ class TestOGDSUserListingGet(IntegrationTestCase):
                      view=u'@ogds-user-listing?sort_on=firstname',
                      headers=self.api_headers)
 
-        self.assertEqual(22, len(browser.json['items']))
+        self.assertEqual(23, len(browser.json['items']))
         self.assertEqual(
             [u'B\xe9atrice', u'C\xf6mmittee', u'David', u'Fridolin'],
-            [each['firstname'] for each in browser.json['items'][:4]])
-        self.assertEqual(22, browser.json['items_total'])
+            [each['firstname'] for each in browser.json['items'][1:5]])
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_listing_always_has_a_secondary_sort_by_userid(self, browser):
@@ -256,8 +256,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
         subset = [item['userid'] for item in browser.json['items']
                   if item['department'] is None]
-        self.assertEqual(21, len(subset))
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(22, len(subset))
+        self.assertEqual(23, browser.json['items_total'])
 
         expected = sorted([item.userid for item in User.query.all()
                            if item.department is None])
@@ -273,8 +273,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
 
         subset = [item['userid'] for item in browser.json['items']
                   if item['department'] is None]
-        self.assertEqual(21, len(subset))
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(22, len(subset))
+        self.assertEqual(23, browser.json['items_total'])
 
         expected = sorted(
             [item.userid for item in User.query.all() if item.department is None],
@@ -288,11 +288,11 @@ class TestOGDSUserListingGet(IntegrationTestCase):
                      view=u'@ogds-user-listing?sort_order=descending',
                      headers=self.api_headers)
 
-        self.assertEqual(22, len(browser.json['items']))
+        self.assertEqual(23, len(browser.json['items']))
         self.assertEqual(
             [u'Ziegler', u'User', 'User', u'Secretary', u'Schr\xf6dinger'],
             [each['lastname'] for each in browser.json['items'][:5]])
-        self.assertEqual(22, browser.json['items_total'])
+        self.assertEqual(23, browser.json['items_total'])
 
     @browsing
     def test_handles_non_ascii_userids(self, browser):

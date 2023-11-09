@@ -60,10 +60,17 @@ class TestMailInboundSender(IntegrationTestCase):
         self.login(self.dossier_responsible)
 
         # User with similar email adress as regular_user
-        create(Builder('user')
+        plone_user = create(Builder('user')
                .named(u'additional', u'User')
                .with_email('oo@example.com')
                .with_userid('additional'))
+
+        ogds_user = create(Builder('ogds_user')
+                .id(plone_user.getId())
+                .having(
+                    email='oo@example.com',
+                ))
+        ogds_user.session.flush()
 
         msg_txt = (
             'To: %s\n'

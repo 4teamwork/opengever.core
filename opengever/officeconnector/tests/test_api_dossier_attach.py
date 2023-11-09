@@ -577,6 +577,8 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
     @browsing
     def test_attach_multiple_documents_works_for_external_user(self, browser):
         external_user = create(Builder('user').with_userid('external.user').with_roles([]))
+        create(Builder('ogds_user').id('external.user'))
+
         with self.login(self.administrator):
             self.meeting_dossier.__ac_local_roles_block__ = True
             self.set_roles(self.leaf_repofolder, 'external.user', ['Reader'])

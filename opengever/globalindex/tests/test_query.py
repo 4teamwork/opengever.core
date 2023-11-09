@@ -149,8 +149,8 @@ class TestTaskQueries(IntegrationTestCase):
         sql_task = self.task_in_protected_dossier.get_sql_object()
         self.assertIn(sql_task, Task.query.restrict().all())
 
-        # Secretariat user is not able to see the task
-        self.login(self.secretariat_user)
+        # Meeting user is not able to see the task
+        self.login(self.meeting_user)
         self.assertNotIn(sql_task, Task.query.restrict().all())
 
     def test_restrict_checks_is_skipped_for_admins(self):
@@ -169,7 +169,7 @@ class TestTaskQueries(IntegrationTestCase):
         self.login(self.regular_user)
         sql_task = self.task_in_protected_dossier.get_sql_object()
 
-        self.login(self.secretariat_user)
+        self.login(self.meeting_user)
         self.assertNotIn(sql_task, Task.query.restrict().all())
 
         with elevated_privileges():
