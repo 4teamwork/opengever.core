@@ -10,6 +10,40 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.14.0 (2023-11-09)
+----------------------
+
+New features:
+
+
+- Add support for viewing documents with Office Connector. [buchi] [CA-5815]
+- Add feature granting Role Manager role to dossiers responsibles. [njohner] [CA-6155]
+- Archivists are granted view permissions on offered dossiers. [njohner] [CA-6167]
+- Add transferring office field to dispositions to overwrite the AktenbildnerName. [njohner] [CA-6281]
+
+
+Bug fixes:
+
+
+- Fix ech-0147 import if using consecutive whitespaces in filenames. [elioschmutz] [CA-6194]
+- Respect local dossier depth when uploading a dossier structure. [elioschmutz] [CA-6215]
+- Fix dossier details for dossier with custom property with a list as value. [njohner] [CA-6217]
+- Make sure docproperty values are written to the initial version when creating a document from template. [phgross] [CA-6253]
+- Fix attaching documents from different parents to mails. [njohner] [CA-6262]
+- Improve livesearch for terms getting split during analysis (hyphens, alphanumeric, etc.). [njohner] [CA-6339]
+
+
+Other changes:
+
+
+- Fix @@warmup view for Teamraum and PloneSites owned by anonymous. [njohner] [CA-5695]
+- all_users_and_groups global source now also returns inactive groups. [njohner] [CA-6132]
+- Use lenient dossier resolver by default for newly created policies. [njohner] [CA-6219]
+- OGDS user and group labels display name instead of ID. [njohner] [CA-6237]
+- Whitelist the location field for the @listing endpoint. [elioschmutz] [CA-6250]
+- Add method marking unconverted documents as skipped in meeting Zip. [njohner] [CA-6285]
+
+
 2023.13.0 (2023-09-21)
 ----------------------
 
