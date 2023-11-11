@@ -39,6 +39,7 @@ Ein Benutzer wird lediglich durch einen Eintrag in der SQL Datenbank repräsenti
                 "@type": "virtual.ogds.group",
                 "active": true,
                 "groupid": "afi_benutzer",
+                "groupname": "afi_benutzer",
                 "title": null
             },
             {"...": "..."}
@@ -98,10 +99,11 @@ sortiert zurückgegeben.
         "active": true,
         "groupid": "afi_benutzer",
         "group": {
-            "@id": "http://localhost:8080/fd/@ogds-groups/admin-group",
+            "@id": "http://localhost:8080/fd/@ogds-groups/afi_benutzer",
             "@type": "virtual.ogds.group",
             "active": true,
-            "groupid": "admin-group",
+            "groupid": "afi_benutzer",
+            "groupname": "afi_benutzer",
             "title": null
         },
         "items": [
@@ -158,6 +160,7 @@ Die Erstellung eines Teams erfolgt mit einem POST Request auf den ``@teams`` End
             "@type": "virtual.ogds.group",
             "active": true,
             "groupid": "projekt_a",
+            "groupname": "projekt_a",
             "title": null
         },
         "items": [
@@ -211,6 +214,7 @@ Auch die Bearbeitung eines Teams ist via API möglich. Hierfür muss ein PATCH R
             "@type": "virtual.ogds.group",
             "active": true,
             "groupid": "projekt_a",
+            "groupname": "projekt_a",
             "title": null
         },
         "items": [
@@ -264,6 +268,7 @@ Nachnamen sortiert zurückgegeben.
         "@type": "virtual.ogds.group",
         "active": true,
         "groupid": "stv_benutzer",
+        "groupname": "stv_benutzer",
         "groupurl": "http://example.org/@groups/stv_benutzer"
         "title": "stv_benutzer",
         "items": [
