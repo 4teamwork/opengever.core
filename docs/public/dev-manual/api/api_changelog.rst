@@ -13,6 +13,10 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 
+- ``@actors`` endpoint returns an additional property ``login_name`` which should be used for display of usernames and groupnames.
+
+- ``@ogds-users`` and ``@ogds-groups`` include `groupname` and `username` for groups and users.
+
 
 2023.14.0 (2023-11-09)
 ----------------------

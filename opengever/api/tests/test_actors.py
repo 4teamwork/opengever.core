@@ -61,6 +61,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
+                u'login_name': None,
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
@@ -110,6 +111,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Inbox: Finanz\xe4mt',
+                u'login_name': u'fa_inbox_users',
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/jurgen.konig',
@@ -156,6 +158,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Meier Franz',
+                u'login_name': None,
                 u'representatives': [],
                 u'represents': {
                     u'@id': u'http://nohost/plone/kontakte/meier-franz',
@@ -196,6 +199,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Rechnungspr\xfcfungskommission',
+                u'login_name': None,
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/nicole.kohler',
@@ -243,6 +247,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
+                u'login_name': u'jurgen.konig',
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/jurgen.konig',
@@ -288,6 +293,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
+                u'login_name': u'jurgen.konig',
                 u'representatives': [
                     {
                         u'@id': u'http://nohost/plone/@actors/jurgen.konig',
@@ -319,6 +325,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Projekt A',
+                u'login_name': u'projekt_a',
                 u'representatives': [
                     {
                         'identifier': u'kathi.barfuss',
@@ -354,6 +361,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Projekt A',
+                u'login_name': u'projekt_a',
                 u'representatives': [
                     {
                         'identifier': u'kathi.barfuss',
@@ -403,6 +411,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'admin',
+                u'login_name': u'admin',
                 u'representatives': [],
                 u'represents': {
                     u'@id': u'http://nohost/plone/@users/admin',
@@ -444,6 +453,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'',
+                u'login_name': actor_id,
                 u'representatives': [],
                 u'represents': None,
             },
@@ -499,6 +509,7 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Unknown ID',
+                u'login_name': u'foo',
                 u'representatives': [],
                 u'represents': None,
             },
@@ -610,6 +621,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
+                    u'login_name': None,
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
@@ -633,6 +645,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Inbox: Finanz\xe4mt',
+                    u'login_name': u'fa_inbox_users',
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/jurgen.konig',
@@ -669,6 +682,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
+                    u'login_name': None,
                     u'representatives': [
                         {
                             u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
@@ -692,6 +706,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'is_absent': False,
                     u'portrait_url': None,
                     u'label': u'Unknown ID',
+                    u'login_name': u'foo',
                     u'representatives': [],
                     u'represents': None,
                 },

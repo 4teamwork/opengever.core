@@ -191,6 +191,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'Unknown ID',
+                u'login_name': u'fridolin.hugentobler',
                 u'representatives': [],
                 u'represents': None,
             },
@@ -211,6 +212,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                 u'identifier': u'fridolin.hugentobler',
                 u'is_absent': False,
                 u'label': u'Hugentobler Fridolin',
+                u'login_name': u'fridolin.hugentobler',
                 u'portrait_url': None,
                 u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
                                       u'identifier': u'fridolin.hugentobler'}],
@@ -234,6 +236,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                 u'identifier': u'projekt_a',
                 u'is_absent': False,
                 u'label': u'Unknown ID',
+                u'login_name': u'projekt_a',
                 u'portrait_url': None,
                 u'representatives': [],
                 u'represents': None
@@ -253,6 +256,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                 u'identifier': u'projekt_a',
                 u'is_absent': False,
                 u'label': u'Unknown ID',
+                u'login_name': u'projekt_a',
                 u'portrait_url': None,
                 u'representatives': [],
                 u'represents': None
@@ -281,6 +285,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                      u'identifier': u'fridolin.hugentobler',
                      u'is_absent': False,
                      u'label': u'Unknown ID',
+                     u'login_name': u'fridolin.hugentobler',
                      u'portrait_url': None,
                      u'representatives': [],
                      u'represents': None}
@@ -309,6 +314,7 @@ class TestVisibleUsersAndGroupsFilterInTeamraum(SolrIntegrationTestCase):
                      u'identifier': u'fridolin.hugentobler',
                      u'is_absent': False,
                      u'label': u'Hugentobler Fridolin',
+                     u'login_name': u'fridolin.hugentobler',
                      u'portrait_url': None,
                      u'representatives': [{u'@id': u'http://nohost/plone/@actors/fridolin.hugentobler',
                                            u'identifier': u'fridolin.hugentobler'}],

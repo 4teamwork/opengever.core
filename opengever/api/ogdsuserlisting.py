@@ -19,6 +19,7 @@ class OGDSUserListingGet(OGDSListingBaseService):
         User.lastname,
         User.firstname,
         User.userid,
+        User.username,
         User.email,
         User.email2,
         User.phone_office,

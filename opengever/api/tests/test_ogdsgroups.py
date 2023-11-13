@@ -39,7 +39,8 @@ class TestOGDSGroupsGet(IntegrationTestCase):
                          u'phone_mobile': u'012 34 56 76',
                          u'phone_office': u'012 34 56 78',
                          u'title': u'B\xe4rfuss K\xe4thi',
-                         u'userid': u'kathi.barfuss'},
+                         u'userid': u'kathi.barfuss',
+                         u'username': u'kathi.barfuss'},
                         {u'@id': u'http://nohost/plone/@ogds-users/robert.ziegler',
                          u'@type': u'virtual.ogds.user',
                          u'active': True,
@@ -54,7 +55,8 @@ class TestOGDSGroupsGet(IntegrationTestCase):
                          u'phone_mobile': None,
                          u'phone_office': None,
                          u'title': u'Ziegler Robert',
-                         u'userid': u'robert.ziegler'}],
+                         u'userid': u'robert.ziegler',
+                         u'username': u'robert.ziegler'}],
              u'items_total': 2},
             browser.json)
 

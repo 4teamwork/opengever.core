@@ -53,6 +53,7 @@ class SerializeActorToJson(object):
             'identifier': self.context.identifier,
             'is_absent': self.context.is_absent,
             'label': self.context.get_label(with_principal=False),
+            'login_name': self.context.login_name,
             'portrait_url': self.context.get_portrait_url(),
             'representatives': [
                 serialize_actor_id_to_json_summary(r.userid)
