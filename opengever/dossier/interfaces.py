@@ -160,9 +160,6 @@ class IDossierResolver(Interface):
         """Check if the end dates of dossiers and subdossiers are valid.
         """
 
-    def is_archive_form_needed():
-        """Check if the archive form must be rendered or not."""
-
     def resolve():
         """Resolve the dossier and recursly also the subdossiers.
         """
