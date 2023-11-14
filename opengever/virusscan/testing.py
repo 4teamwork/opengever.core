@@ -4,9 +4,7 @@ from zope.component import getSiteManager
 from zope.interface import implements
 
 
-EICAR = """
-    WDVPIVAlQEFQWzRcUFpYNTQoUF4pN0NDKTd9JEVJQ0FSLVNUQU5E
-    QVJELUFOVElWSVJVUy1URVNU\nLUZJTEUhJEgrSCo=\n""".decode('base64')
+EICAR = "Test-Virus-Marker"
 
 EICAR_MAIL_TEMPLATE = """Subject: test mail
 From: {from_address}
