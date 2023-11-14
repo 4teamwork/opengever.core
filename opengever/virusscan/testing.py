@@ -19,10 +19,10 @@ Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 Content-Disposition: attachment
 
-X5O!P%@AP[4\\PZX54(P^)7CC)7}}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+%s
 
 --===============1701826978839754121==--
-"""
+""" % EICAR.replace('}', '}}')
 
 
 class MockAVScanner(object):
