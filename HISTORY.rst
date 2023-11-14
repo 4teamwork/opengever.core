@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.14.1 (2023-11-14)
+----------------------
+
+Other changes:
+
+
+- Base64 encode a literal occurence of EICAR Test-File. [lgraf] [CA-5703]
+
+
 2023.14.0 (2023-11-09)
 ----------------------
 
