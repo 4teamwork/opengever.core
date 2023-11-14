@@ -21,6 +21,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.nightly_after_resolve_job import ExecuteNightlyAfterResolveJobs
 from opengever.dossier.resolve import AfterResolveJobs
+from opengever.dossier.resolve import ResolveConditions
 from opengever.dossier.resolve_lock import ResolveLock
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.propertysheets.utils import get_custom_properties
@@ -1016,7 +1017,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
                            ['not all task are closed'])
 
     @browsing
-    def test_dossier_is_resolved_when_dossier_has_an_invalid_end_date(self, browser):
+    def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
         self.login(self.secretariat_user, browser)
 
         IDossier(self.resolvable_dossier).end = date(1995, 1, 1)
@@ -1024,9 +1025,9 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.resolve(self.resolvable_dossier, browser)
 
-        self.assert_resolved(self.resolvable_dossier)
-        self.assert_success(self.resolvable_dossier, browser,
-                            ['Dossier has been resolved succesfully.'])
+        self.assert_not_resolved(self.resolvable_dossier)
+        self.assert_errors(self.resolvable_dossier, browser,
+                           ['The dossier A resolvable main dossier has a invalid end_date'])
 
     @browsing
     def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
@@ -1060,6 +1061,37 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.assert_resolved(self.resolvable_dossier)
         self.assert_success(self.resolvable_dossier, browser,
                             ['Dossier has been resolved succesfully.'])
+
+    def test_invalid_end_date_is_disregarded_for_main_dossier_when_filing_number_behavior_is_active(self):
+        self.login(self.secretariat_user)
+
+        IDossier(self.resolvable_dossier).end = date(1995, 1, 1)
+        self.resolvable_dossier.reindexObject(idxs=['end'])
+        dossier_conditions = ResolveConditions(self.resolvable_dossier)
+
+        # Invalid end date on main dossier is not disregarded when filing number
+        # behavior is not active
+        self.assertEqual([u'A resolvable main dossier'],
+                         dossier_conditions.check_end_dates())
+
+        # Invalid end date on main dossier is disregarded when filing number
+        # behavior is active
+        applyProfile(self.portal, 'opengever.dossier:filing')
+        self.assertEqual([],
+                         dossier_conditions.check_end_dates())
+
+        # Invalid end date on subdossier is not disregarded even when filing number
+        # behavior is active
+        IDossier(self.resolvable_subdossier).end = date(1995, 1, 1)
+        self.resolvable_subdossier.reindexObject(idxs=['end'])
+        self.assertEqual([u'Resolvable Subdossier'],
+                         dossier_conditions.check_end_dates())
+
+        # This tests a regression where condition was disregarded on resolution
+        # context instead of main dossier
+        subdossier_conditions = ResolveConditions(self.resolvable_subdossier)
+        self.assertEqual([u'Resolvable Subdossier'],
+                         subdossier_conditions.check_end_dates())
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_active_proposals(self, browser):

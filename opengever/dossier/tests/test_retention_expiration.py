@@ -53,6 +53,9 @@ class TestRetentionExpirationDate(FunctionalTestCase):
     def test_index_is_updated_when_end_date_is_changed_during_resolving(self, browser):
         self.grant('Reader', 'Contributor', 'Editor', 'Reviewer')
 
+        # End date is invalid and will not be reset automatically
+        IDossier(self.dossier).end = None
+
         create(Builder('document')
                .within(self.dossier)
                .having(document_date=date(2015, 1, 1)))

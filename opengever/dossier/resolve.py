@@ -563,8 +563,10 @@ class ResolveConditions(object):
 
         return self._invalid_dates
 
-    def _recursive_date_validation(self, dossier, main=True):
-        if not main:
+    def _recursive_date_validation(self, dossier):
+        # When the archive form is needed on a dossier, we need not check the
+        # end date as it will be set in the form.
+        if not is_archive_form_needed(dossier):
             # check end_date
             # If a dossier is already resolved, but seems to have an invalid
             # end date, it's because we changed the resolution logic and rules
@@ -578,4 +580,4 @@ class ResolveConditions(object):
         subdossiers = dossier.get_subdossiers(depth=1)
         for sub in subdossiers:
             sub = sub.getObject()
-            self._recursive_date_validation(sub, main=False)
+            self._recursive_date_validation(sub)
