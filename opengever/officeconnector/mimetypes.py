@@ -42,6 +42,7 @@ EDITABLE_TYPES = [
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.template',
+    'application/vnd.oasis.opendocument.spreadsheet',
     # MS OneNote
     'application/onenote',
     'application/msonenote',
@@ -54,6 +55,7 @@ EDITABLE_TYPES = [
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
     'application/vnd.openxmlformats-officedocument.presentationml.template',
+    'application/vnd.oasis.opendocument.presentation',
     # MS Project
     'application/vnd.ms-project',
     'application/x-project',
@@ -73,6 +75,7 @@ EDITABLE_TYPES = [
     'application/vnd.ms-word.template.macroEnabled.12',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
+    'application/vnd.oasis.opendocument.text',
     # PDF editors - Adobe Acrobat or Nitro PDF
     'application/pdf',
     'application/postscript',
