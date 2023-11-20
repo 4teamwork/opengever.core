@@ -11,6 +11,7 @@ from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from tempfile import TemporaryFile
 from zipfile import ZipFile
+import csv
 
 
 class TestSIPPackageIntegration(IntegrationTestCase):
@@ -190,5 +191,78 @@ class TestSIPPackage(FunctionalTestCase):
                  'SIP_20160611_PLONE_1_10xy/content/d000001/p000001.doc',
                  'SIP_20160611_PLONE_1_10xy/content/d000002/p000002.pdf',
                  'SIP_20160611_PLONE_1_10xy/content/d000002/p000003.doc',
-                 'SIP_20160611_PLONE_1_10xy/header/metadata.xml'],
+                 'SIP_20160611_PLONE_1_10xy/header/metadata.xml',
+                 'SIP_20160611_PLONE_1_10xy/dossiers.csv'],
                 zip_file.namelist())
+
+    def test_adds_dossiers_csv(self):
+        api.portal.set_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings,
+            value=True)
+
+        with freeze(datetime(2016, 6, 11)):
+            dossier_a = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY,
+                                       description=u'Lorem ipsum'))
+            dossier_b = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+            disposition = create(Builder('disposition')
+                                 .having(dossiers=[dossier_a, dossier_b])
+                                 .within(self.folder))
+
+            tmpfile = TemporaryFile()
+            zip_file = ZipFile(tmpfile, 'w')
+
+            package = SIPPackage(disposition)
+            package.write_to_zipfile(zip_file)
+            rows = csv.DictReader(
+                zip_file.read(u'SIP_20160611_PLONE_1/dossiers.csv').splitlines(),
+                delimiter=';')
+            rows = [row for row in rows]
+
+            self.assertDictContainsSubset(
+                {'Ablage_Nr': '',
+                 'Ablage_Pr\xc3\xa4fix': '',
+                 'Beschreibung': 'Lorem ipsum',
+                 'Dossier_Titel': '',
+                 'Mandant': 'Admin Unit 1',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungsystem_Version': '',
+                 'abschlussdatum': '2000-00-11',
+                 'aktenzeichen': 'Client1 1 / 1',
+                 'datenschutz': '',
+                 'entstehungszeitraum_bis': '',
+                 'entstehungszeitraum_von': '',
+                 'eroeffnungsdatum': '2016-00-11',
+                 'klassifizierungskategorie': 'unprotected',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'schutzfrist': '30'},
+                rows[0]
+            )
+
+            self.assertDictContainsSubset(
+                {'Ablage_Nr': '',
+                 'Ablage_Pr\xc3\xa4fix': '',
+                 'Beschreibung': '',
+                 'Dossier_Titel': '',
+                 'Mandant': 'Admin Unit 1',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungsystem_Version': '',
+                 'abschlussdatum': '2000-00-11',
+                 'aktenzeichen': 'Client1 1 / 2',
+                 'datenschutz': '',
+                 'entstehungszeitraum_bis': '',
+                 'entstehungszeitraum_von': '',
+                 'eroeffnungsdatum': '2016-00-11',
+                 'klassifizierungskategorie': 'unprotected',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'schutzfrist': '30'},
+                rows[1]
+            )
+
+                rows[1]
+            )

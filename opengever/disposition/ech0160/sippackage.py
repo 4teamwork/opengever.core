@@ -6,13 +6,16 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.reports import DispositionDossierCSVReporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.repository.repositoryroot import IRepositoryRoot
 from pkg_resources import resource_filename
 from plone import api
 from pyxb.namespace import XMLSchema_instance as xsi
+from StringIO import StringIO
 from zope.component import getUtility
+import csv
 import os.path
 
 
@@ -122,6 +125,7 @@ class SIPPackage(object):
         self.add_schema_files(zipfile)
         self.content_folder.add_to_zip(zipfile)
         self.add_document_files(zipfile)
+        self.add_csv_files(zipfile)
 
     def add_schema_files(self, zipfile):
         for schema in os.listdir(schemas_path):
@@ -155,3 +159,14 @@ class SIPPackage(object):
         arcname = os.path.join(
             self.get_folder_name(), 'header', 'metadata.xml')
         zipfile.writestr(arcname, dom.toprettyxml(encoding='UTF-8'))
+
+    def add_csv_files(self, zipfile):
+        self.add_dossier_csv(zipfile)
+
+    def add_dossier_csv(self, zipfile):
+        data = DispositionDossierCSVReporter(self.dossiers)()
+        stream = StringIO()
+        csvout = csv.writer(stream, delimiter=';', doublequote=False, escapechar='\\')
+        csvout.writerows(map(utf8ize, data))
+        dossier_csv = os.path.join(self.get_folder_name(), 'dossiers.csv')
+        zipfile.writestr(dossier_csv, stream.getvalue())
