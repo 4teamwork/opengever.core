@@ -67,6 +67,12 @@ class IDispositionSettings(Interface):
         'attached in the SIP package if no conversion file exists.',
         default=False)
 
+    attach_csv_reports = schema.Bool(
+        title=u'Attach csv reports',
+        description=u'Whether some additional csv reports should be '
+        'attached in the SIP package.',
+        default=False)
+
 
 class IFilesystemTransportSettings(Interface):
 

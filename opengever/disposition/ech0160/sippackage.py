@@ -6,6 +6,7 @@ from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.interfaces import IDispositionSettings
 from opengever.disposition.reports import DispositionDossierCSVReporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
@@ -161,6 +162,12 @@ class SIPPackage(object):
         zipfile.writestr(arcname, dom.toprettyxml(encoding='UTF-8'))
 
     def add_csv_files(self, zipfile):
+        attach_csv_reports_enabled = api.portal.get_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings)
+
+        if not attach_csv_reports_enabled:
+            return
+
         self.add_dossier_csv(zipfile)
 
     def add_dossier_csv(self, zipfile):

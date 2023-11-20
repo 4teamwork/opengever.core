@@ -5,10 +5,12 @@ from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IAppraisal
+from opengever.disposition.interfaces import IDispositionSettings
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from plone import api
 from tempfile import TemporaryFile
 from zipfile import ZipFile
 import csv
@@ -191,8 +193,7 @@ class TestSIPPackage(FunctionalTestCase):
                  'SIP_20160611_PLONE_1_10xy/content/d000001/p000001.doc',
                  'SIP_20160611_PLONE_1_10xy/content/d000002/p000002.pdf',
                  'SIP_20160611_PLONE_1_10xy/content/d000002/p000003.doc',
-                 'SIP_20160611_PLONE_1_10xy/header/metadata.xml',
-                 'SIP_20160611_PLONE_1_10xy/dossiers.csv'],
+                 'SIP_20160611_PLONE_1_10xy/header/metadata.xml'],
                 zip_file.namelist())
 
     def test_adds_dossiers_csv(self):
