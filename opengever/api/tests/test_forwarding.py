@@ -21,6 +21,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
               u'added_objects': [{
                 u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/document-13',
                 u'@type': u'opengever.document.document',
+                u'UID': u'createinboxfa0000000000000000004',
                 u'checked_out': None,
                 u'description': u'',
                 u'file_extension': u'.txt',
@@ -54,6 +55,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa',
                 u'@type': u'opengever.inbox.inbox',
+                u'UID': u'createinboxfa0000000000000000001',
                 u'description': u'',
                 u'is_leafnode': None,
                 u'review_state': u'inbox-state-default',

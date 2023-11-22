@@ -222,6 +222,7 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual(
             [{u'@id': self.subsubdocument.absolute_url(),
               u'@type': u'opengever.document.document',
+              u'UID': u'createtreatydossiers000000000019',
               u'checked_out': None,
               u'description': u'',
               u'file_extension': u'.xlsx',
@@ -268,6 +269,7 @@ class TestDocumentSerializer(IntegrationTestCase):
               u'task': {
                   u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
                   u'@type': u'opengever.task.task',
+                  u'UID': u'createtasks000000000000000000002',
                   u'description': u'',
                   u'is_leafnode': None,
                   u'review_state': u'task-state-resolved',

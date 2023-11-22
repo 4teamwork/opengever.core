@@ -25,6 +25,7 @@ Breadcrumbs
               {
                   "@id": "http://localhost:8080/fd/ordnungssystem",
                   "@type": "opengever.repository.repositoryroot"
+                  "UID": "a99df05a4bbe473ead5e2356f5a4f8b4",
                   "description": "",
                   "is_leafnode": null,
                   "review_state": "repositoryroot-state-active",
@@ -33,6 +34,7 @@ Breadcrumbs
               {
                   "@id": "http://localhost:8080/fd/ordnungssystem/fuhrung",
                   "@type": "opengever.repository.repositoryfolder"
+                  "UID": "b99df05a4bbe473ead5e2356f5a4f8b4",
                   "description": "Alles zum Thema F\\u00fchrung.",
                   "is_leafnode": false,
                   "review_state": "repositoryfolder-state-active",
@@ -41,6 +43,7 @@ Breadcrumbs
               {
                   "@id": "http://localhost:8080/fd/ordnungssystem/fuhrung/vertrage-und-vereinbarungen",
                   "@type": "opengever.repository.repositoryfolder"
+                  "UID": "c99df05a4bbe473ead5e2356f5a4f8b4",
                   "description": "",
                   "is_leafnode": true,
                   "review_state": "repositoryfolder-state-active",
@@ -49,6 +52,7 @@ Breadcrumbs
               {
                   "@id": "http://localhost:8080/fd/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1",
                   "@type": "opengever.dossier.businesscasedossier"
+                  "UID": "d99df05a4bbe473ead5e2356f5a4f8b4",
                   "description": "Alle aktuellen Vertr\\u00e4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\\u00e4ge vor 2016 geh\\u00f6ren ins Archiv.",
                   "is_leafnode": null,
                   "is_subdossier": false,
@@ -58,6 +62,7 @@ Breadcrumbs
               }, {
                   "@id": "http://localhost:8080/fd/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2",
                   "@type": "opengever.dossier.businesscasedossier"
+                  "UID": "e99df05a4bbe473ead5e2356f5a4f8b4",
                   "description": "",
                   "is_leafnode": null,
                   "is_subdossier": true,

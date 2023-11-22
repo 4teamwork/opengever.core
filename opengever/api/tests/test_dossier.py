@@ -109,7 +109,8 @@ class TestDossierSerializer(IntegrationTestCase):
               u'dossier_type': None,
               u'review_state': u'dossier-state-active',
               u'@id': self.closed_meeting_dossier.absolute_url(),
-              u'@type': u'opengever.meeting.meetingdossier'}],
+              u'@type': u'opengever.meeting.meetingdossier',
+              u'UID': u'createmeetings000000000000000007'}],
             browser.json['back_references_relatedDossier'])
 
         browser.open(self.subdossier, method="GET", headers=self.api_headers)
@@ -163,6 +164,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -186,6 +188,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -209,6 +212,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -232,6 +236,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -255,6 +260,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -278,6 +284,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -301,6 +308,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
                 u'@type': u'opengever.dossier.dossiertemplate',
+                u'UID': u'createspecialtemplates0000000007',
                 u'description': u'Lorem ipsum',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
@@ -322,6 +330,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
                 u'@type': u'opengever.dossier.dossiertemplate',
+                u'UID': u'createspecialtemplates0000000007',
                 u'description': u'Lorem ipsum',
                 u'is_leafnode': None,
                 u'is_subdossier': False,
@@ -343,6 +352,7 @@ class TestMainDossierExpansion(IntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/vorlagen/dossiertemplate-1',
                 u'@type': u'opengever.dossier.dossiertemplate',
+                u'UID': u'createspecialtemplates0000000007',
                 u'description': u'Lorem ipsum',
                 u'is_leafnode': None,
                 u'is_subdossier': False,

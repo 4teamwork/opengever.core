@@ -31,6 +31,7 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem',
                     u'@type': u'opengever.repository.repositoryroot',
+                    u'UID': u'createrepositorytree000000000001',
                     u'description': u'',
                     u'is_leafnode': None,
                     u'review_state': u'repositoryroot-state-active',
@@ -156,7 +157,8 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                     u'is_leafnode': None,
                     u'review_state': u'repositoryroot-state-active',
                     u'@id': u'http://nohost/plone/ordnungssystem',
-                    u'@type': u'opengever.repository.repositoryroot'
+                    u'@type': u'opengever.repository.repositoryroot',
+                    u'UID': u'createrepositorytree000000000001',
                 },
                 {
                     u'description': u'Alles zum Thema F\xfchrung.',
@@ -164,7 +166,8 @@ class TestBreadcrumbsSerialization(IntegrationTestCase):
                     u'is_leafnode': False,
                     u'review_state': u'repositoryfolder-state-active',
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung',
-                    u'@type': u'opengever.repository.repositoryfolder'
+                    u'@type': u'opengever.repository.repositoryfolder',
+                    u'UID': u'createrepositorytree000000000002',
                 },
             ],
             browser.json['@components']['breadcrumbs']['items']

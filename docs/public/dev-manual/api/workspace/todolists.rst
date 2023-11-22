@@ -28,6 +28,7 @@ Die Reihenfolge der ``items`` bei eienm GET Request eines Teamraums, entspricht 
 
       {
         "@type": "opengever.workspace.workspace",
+        "UID": "ac295c19ee404aafa7b9331b3eb353f2",
         "title": "Projekt XY",
         "id": "workspace-1"
         "responsible": "john.doe",
@@ -35,6 +36,7 @@ Die Reihenfolge der ``items`` bei eienm GET Request eines Teamraums, entspricht 
             {
               "@id": "workspaces/workspace-1/todolist-6",
               "@type": "opengever.workspace.todolist",
+              "UID": "bc295c19ee404aafa7b9331b3eb353f2",
               "description": "",
               "review_state": "opengever_workspace_todolist--STATUS--active",
               "title": "Allgemeine Projektinformationen"
@@ -42,6 +44,7 @@ Die Reihenfolge der ``items`` bei eienm GET Request eines Teamraums, entspricht 
             {
               "@id": "workspaces/workspace-1/todolist-10",
               "@type": "opengever.workspace.todolist",
+              "UID": "cc295c19ee404aafa7b9331b3eb353f2",
               "description": "",
               "review_state": "opengever_workspace_todolist--STATUS--active",
               "title": "Konzept Phase"
@@ -49,6 +52,7 @@ Die Reihenfolge der ``items`` bei eienm GET Request eines Teamraums, entspricht 
             {
               "@id": "workspaces/workspace-1/todolist-2",
               "@type": "opengever.workspace.todolist",
+              "UID": "dc295c19ee404aafa7b9331b3eb353f2",
               "description": "",
               "review_state": "opengever_workspace_todolist--STATUS--active",
               "title": "Externe Abklärungen"

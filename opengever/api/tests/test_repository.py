@@ -41,6 +41,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung',
                     u'@type': u'opengever.repository.repositoryfolder',
+                    u'UID': u'createrepositorytree000000000002',
                     u'description': u'Alles zum Thema F\xfchrung.',
                     u'is_leafnode': False,
                     u'review_state': u'repositoryfolder-state-active',
@@ -49,6 +50,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission',
                     u'@type': u'opengever.repository.repositoryfolder',
+                    u'UID': u'createrepositorytree000000000004',
                     u'description': u'',
                     u'is_leafnode': True,
                     u'review_state': u'repositoryfolder-state-active',
@@ -57,6 +59,7 @@ class TestRepositoryAPI(IntegrationTestCase):
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/spinnannetzregistrar',
                     u'@type': u'opengever.repository.repositoryfolder',
+                    u'UID': u'createrepositorytree000000000005',
                     u'description': u'',
                     u'is_leafnode': True,
                     u'review_state': u'repositoryfolder-state-inactive',

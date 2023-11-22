@@ -88,6 +88,7 @@ Ein GET Request gibt die Journaleinträge eines Inhalts zurück.
             {
               "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-1/document-1",
               "@type": "opengever.document.document",
+              "UID": "c99df05a4bbe473ead5e2356f5a4f8b4",
               "checked_out": "robert.ziegler",
               "description": "",
               "file_extension": ".docx"

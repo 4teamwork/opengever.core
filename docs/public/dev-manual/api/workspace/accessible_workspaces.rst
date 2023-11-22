@@ -25,18 +25,21 @@ Der ``@accessible-workspaces`` Endpoint liefert alle Teamräume, für die ein Be
             {
               "@id": "http://example.org/workspace-4",
               "@type": "opengever.workspace.workspace",
+              "UID": "a3c9f8a47655463ea7a4a43bf1fdf40c",
               "review_state": "opengever_workspace--STATUS--active",
               "title": "Anlageberatung",
             },
             {
               "@id": "http://example.org/workspace-12",
               "@type": "opengever.workspace.workspace",
+              "UID": "b3c9f8a47655463ea7a4a43bf1fdf40c",
               "review_state": "opengever_workspace--STATUS--active",
               "title": "Gemeindeversammlung",
             },
             {
               "@id": "http://example.org/workspace-1",
               "@type": "opengever.workspace.workspace",
+              "UID": "c3c9f8a47655463ea7a4a43bf1fdf40c",
               "review_state": "opengever_workspace--STATUS--active",
               "title": "Neuimplementierung GUI",
             },

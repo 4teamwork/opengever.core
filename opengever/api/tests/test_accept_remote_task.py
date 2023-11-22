@@ -200,6 +200,7 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
         self.assertEqual([{
             u'@id': doc_in_successor_task.absolute_url(),
             u'@type': u'opengever.document.document',
+            u'UID': doc_in_successor_task.UID(),
             u'description': u'',
             u'checked_out': u'',
             u'file_extension': u'.docx',

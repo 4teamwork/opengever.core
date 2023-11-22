@@ -4,7 +4,7 @@ Summarische Auflistungen
 ------------------------
 
 Einträge in summarischen Auflistungen von Containern ("Foldern") enthalten
-standardmässig die Felder ``@id``, ``@type``, ``title``, ``description``
+standardmässig die Felder ``@id``, ``@type``, ``UID``, ``title``, ``description``
 und ``review_state``.
 
 Über den Parameter ``metadata_fields`` kann die gewünschte Liste der
@@ -71,6 +71,7 @@ Beispiel anhand eines ``GET`` requests
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-259",
             "@type": "opengever.document.document"
+            "UID": "ab8b9fa59b9c4a9a9ef0555a9bbb49bf",
             "review_state": "document_state_draft"
             "description": "..."
             "title": "..."
@@ -82,6 +83,7 @@ Beispiel anhand eines ``GET`` requests
           {
             "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/document-260",
             "@type": "opengever.document.document"
+            "UID": "bb8b9fa59b9c4a9a9ef0555a9bbb49bf",
             "review_state": "document_state_draft"
             "description": "..."
             "title": "..."
@@ -92,6 +94,7 @@ Beispiel anhand eines ``GET`` requests
         "parent": {
           "@id": "https://example.org/ordnungssystem/fuehrung",
           "@type": "opengever.document.document"
+          "UID": "cb8b9fa59b9c4a9a9ef0555a9bbb49bf",
           "review_state": "document_state_draft"
           "description": "..."
           "title": "..."

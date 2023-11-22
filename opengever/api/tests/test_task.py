@@ -39,6 +39,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              u'added_objects': [
                  {u'@id': self.subtask.absolute_url(),
                   u'@type': u'opengever.task.task',
+                  u'UID': u'createtasks000000000000000000002',
                   u'description': u'',
                   u'is_leafnode': None,
                   u'review_state': u'task-state-resolved',
@@ -154,6 +155,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
                 u'is_leafnode': None,
                 u'is_subdossier': False,
@@ -180,6 +182,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier '
                                 u'abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',
                 u'is_leafnode': None,
@@ -200,6 +203,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createtreatydossiers000000000001',
                 u'description': u'Alle aktuellen Vertr\xe4ge mit der kantonalen Finanzverwaltung sind hier abzulegen. Vertr\xe4ge vor 2016 geh\xf6ren ins Archiv.',  # noqa
                 u'is_leafnode': None,
                 u'is_subdossier': False,
@@ -221,6 +225,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                             u'dossier-1/task-1/task-2',
                     u'@type': u'opengever.task.task',
+                    u'UID': u'createtasks000000000000000000002',
                     u'description': u'',
                     u'is_leafnode': None,
                     u'review_state': u'task-state-resolved',
@@ -229,6 +234,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                             u'dossier-1/task-1/document-35',
                     u'@type': u'opengever.document.document',
+                    u'UID': u'createtasks000000000000000000003',
                     u'checked_out': u'',
                     u'description': u'',
                     u'file_extension': u'.docx',

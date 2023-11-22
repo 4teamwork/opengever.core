@@ -40,6 +40,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertDictEqual(
             {'@id': self.document.absolute_url(),
              '@type': u'opengever.document.document',
+             'UID': u'createtreatydossiers000000000002',
              'checked_out': None,
              'creator': u'robert.ziegler',
              'description': u'Wichtige Vertr\xe4ge',
@@ -94,6 +95,7 @@ class TestGeverSummarySerializer(IntegrationTestCase):
         self.assertDictEqual(
             {'@id': self.mail_eml.absolute_url(),
              '@type': u'ftw.mail.mail',
+             'UID': u'createemails00000000000000000001',
              'checked_out': None,
              'creator': u'robert.ziegler',
              'description': u'',

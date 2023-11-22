@@ -17,6 +17,8 @@ Other Changes
 
 - ``@ogds-users`` and ``@ogds-groups`` include `groupname` and `username` for groups and users.
 
+- The api will now always return the ``uid`` of summary serialized objects.
+
 
 2023.14.0 (2023-11-09)
 ----------------------

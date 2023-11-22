@@ -132,6 +132,7 @@ class TestProposalSerialization(IntegrationTestCase):
         self.assertDictEqual(
             {u'@id': excerpt.absolute_url(),
              u'@type': u'opengever.document.document',
+             u'UID': u'createmeetings000000000000000005',
              u'checked_out': None,
              u'description': u'',
              u'file_extension': u'.docx',
@@ -159,6 +160,7 @@ class TestProposalSerialization(IntegrationTestCase):
         self.assertDictEqual(
             {u'@id': excerpt.absolute_url(),
              u'@type': u'opengever.document.document',
+             u'UID': u'createmeetings000000000000000004',
              u'checked_out': None,
              u'description': u'',
              u'file_extension': u'.docx',
@@ -188,6 +190,7 @@ class TestProposalSerialization(IntegrationTestCase):
         self.assertDictEqual(
             {u'@id': successor_proposal.absolute_url(),
              u'@type': u'opengever.meeting.proposal',
+             u'UID': successor_proposal.UID(),
              u'description': u'',
              u'is_leafnode': None,
              u'review_state': u'proposal-state-active',
@@ -200,6 +203,7 @@ class TestProposalSerialization(IntegrationTestCase):
         self.assertDictEqual(
             {u'@id': proposal.absolute_url(),
              u'@type': u'opengever.meeting.proposal',
+             u'UID': proposal.UID(),
              u'description': u'',
              u'is_leafnode': None,
              u'review_state': u'proposal-state-decided',

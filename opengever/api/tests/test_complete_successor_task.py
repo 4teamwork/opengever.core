@@ -356,6 +356,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         self.assertEqual([{
             u'@id': produced_doc.absolute_url(),
             u'@type': u'opengever.document.document',
+            u'UID': produced_doc.UID(),
             u'checked_out': u'',
             u'description': u'',
             u'file_extension': u'.docx',
@@ -367,6 +368,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
         self.assertDictContainsSubset({
             u'added_objects': [{u'@id': produced_doc.absolute_url(),
                                 u'@type': u'opengever.document.document',
+                                u'UID': produced_doc.UID(),
                                 u'checked_out': None,
                                 u'description': u'',
                                 u'file_extension': u'.docx',

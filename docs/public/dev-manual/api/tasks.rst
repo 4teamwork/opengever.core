@@ -555,6 +555,7 @@ Dazu steht ein spezifischer Endpoint `@tasktree` zur Verfügung. Die Aufgaben we
               {
                 "@id": "http://example.org/ordnungssystem/fuehrung/dossier-1/task-1/task-2",
                 "@type": "opengever.task.task",
+                "UID": "4b8b9fa59b9c4a9a9ef0555a9bbb49bf",
                 "children": [],
                 "review_state": "task-state-resolved",
                 "is_task_addable": false

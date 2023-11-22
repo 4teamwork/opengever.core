@@ -170,6 +170,7 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual(
             {u'@id': self.workspace_document.absolute_url(),
              u'@type': self.workspace_document.portal_type,
+             u'UID': u'createworkspace00000000000000003',
              u'checked_out': None,
              u'description': u'',
              u'file_extension': u'.txt',

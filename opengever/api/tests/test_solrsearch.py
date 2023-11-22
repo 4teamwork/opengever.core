@@ -735,7 +735,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
         self.assertIn('breadcrumbs', document.keys())
         self.assertEqual(
             [u'description', u'title', u'is_leafnode', u'review_state',
-             u'@id', u'@type'],
+             u'@id', u'@type', u'UID'],
             document['breadcrumbs'][0].keys())
         self.assertEqual(
             [u'http://nohost/plone/ordnungssystem',

@@ -369,6 +369,7 @@ Dokument Genehmigungen, welche via Aufgabe erteilt wurden, lassen sich als zusä
                     "task": {
                         "@id": "http://example.org/ordnungssystem/dossier-23/document-123",
                         "@type": "opengever.task.task",
+                        "UID": "c99df05a4bbe473ead5e2356f5a4f8b4",
                         "description": "",
                         "is_leafnode": null,
                         "review_state": "task-state-in-progress",

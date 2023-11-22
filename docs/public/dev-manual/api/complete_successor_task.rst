@@ -51,6 +51,7 @@ Die Response enthält das serialisierte Objekt (die soeben abgeschlossene Nachfo
               {
                 "@id": "http://.../dossier-17/task-42/document-77",
                 "@type": "opengever.document.document",
+                "UID": "c99df05a4bbe473ead5e2356f5a4f8b4",
                 "checked_out": "",
                 "description": "",
                 "file_extension": ".docx",

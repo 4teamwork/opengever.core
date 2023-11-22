@@ -652,6 +652,7 @@ class TestApprovalViaTask(IntegrationTestCase):
         expected_approved_docs = [
             {u'@id': contained_doc.absolute_url(),
              u'@type': u'opengever.document.document',
+             u'UID': contained_doc.UID(),
              u'checked_out': None,
              u'description': u'',
              u'file_extension': u'',
@@ -660,6 +661,7 @@ class TestApprovalViaTask(IntegrationTestCase):
              u'title': u'Vertr\xe4gsentwurf'},
             {u'@id': related_doc.absolute_url(),
              u'@type': u'opengever.document.document',
+             u'UID': related_doc.UID(),
              u'checked_out': None,
              u'description': u'Wichtige Vertr\xe4ge',
              u'file_extension': u'.docx',
