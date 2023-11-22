@@ -184,16 +184,19 @@ class DossierContainer(Container):
 
         # Max depth would technically be exceeded.
         # However, if a dossier structure that exceeds the max depth already
-        # exists at the same level, we'll allow new structures with the same
-        # additional depth (or lower).
-        path = '/'.join(self.getPhysicalPath())
-        subdossiers = self.get_subdossiers(unrestricted=True)
+        # exists, we'll allow new structures with the same additional
+        # depth (or lower).
+        main_dossier = self.get_main_dossier()
+        subdossiers = main_dossier.get_subdossiers(unrestricted=True)
+        main_dossier_path = '/'.join(self.get_main_dossier().getPhysicalPath())
+
         if subdossiers:
-            max_existing_additional_depth = max((
-                sub.getPath()[len(path):].count('/') for sub in subdossiers
+            max_existing_depth = max((
+                sub.getPath()[len(main_dossier_path):].count('/') for sub in subdossiers
             ))
 
-            if additional_depth <= max_existing_additional_depth:
+            current_depth = '/'.join(self.getPhysicalPath())[len(main_dossier_path):].count('/')
+            if (current_depth + additional_depth) <= max_existing_depth:
                 return True
 
         return False
