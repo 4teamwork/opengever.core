@@ -79,10 +79,10 @@ class TestDossierContainer(IntegrationTestCase):
     def test_max_subdossier_depth_is_1_by_default(self):
         self.login(self.dossier_responsible)
         self.assertIn('opengever.dossier.businesscasedossier',
-                      [fti.id for fti in self.meeting_dossier.allowedContentTypes()])
+                      [fti.id for fti in self.resolvable_dossier.allowedContentTypes()])
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
-                         [fti.id for fti in self.subdossier2.allowedContentTypes()])
+                         [fti.id for fti in self.resolvable_subdossier.allowedContentTypes()])
 
     def test_max_subdossier_depth_is_configurable(self):
         self.login(self.dossier_responsible)
@@ -93,6 +93,21 @@ class TestDossierContainer(IntegrationTestCase):
         proxy.maximum_dossier_depth = 3
         self.assertIn('opengever.dossier.businesscasedossier',
                       [fti.id for fti in self.subsubdossier.allowedContentTypes()])
+
+    def test_max_subdossier_depth_is_allowed_if_already_violated_by_other_subdossiers(self):
+        self.login(self.dossier_responsible)
+
+        self.assertNotIn('opengever.dossier.businesscasedossier',
+                         [fti.id for fti in self.subsubdossier.allowedContentTypes()])
+
+        sub2 = create(Builder('dossier').within(self.dossier))
+        subsub2 = create(Builder('dossier').within(sub2))
+        subsubsub2 = create(Builder('dossier').within(subsub2))
+
+        self.assertIn('opengever.dossier.businesscasedossier',
+                      [fti.id for fti in self.subsubdossier.allowedContentTypes()])
+        self.assertNotIn('opengever.dossier.businesscasedossier',
+                         [fti.id for fti in subsubsub2.allowedContentTypes()])
 
     def test_get_subdossiers_is_recursive_by_default(self):
         self.login(self.dossier_responsible)

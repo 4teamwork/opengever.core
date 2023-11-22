@@ -62,12 +62,12 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         self.login(self.manager)
         empty_dossier_title = self.empty_dossier.title.encode("utf-8")
         self.assert_contains(self.leaf_repofolder, [empty_dossier_title])
-        self.assert_does_not_contain(self.subdossier2, [empty_dossier_title])
+        self.assert_does_not_contain(self.resolvable_subdossier, [empty_dossier_title])
         self.move_items([self.empty_dossier],
                         source=self.leaf_repofolder,
-                        target=self.subdossier2)
+                        target=self.resolvable_subdossier)
         self.assert_contains(self.leaf_repofolder, [empty_dossier_title])
-        self.assert_does_not_contain(self.subdossier2, [empty_dossier_title])
+        self.assert_does_not_contain(self.resolvable_subdossier, [empty_dossier_title])
 
     @browsing
     def test_moving_dossier_containing_subdossier_respects_maximum_dossier_depth(self, browser):
@@ -1825,8 +1825,8 @@ class TestDossierMovabilityChecker(IntegrationTestCase):
 
         # a dossier containing a subdossier can even be moved to a place
         # where it would exceed the max nesting depth by 2, if another
-        # subdossier with a subsubdossier already exists on that level and
-        # already violates the max nesting depth by 2.
+        # subdossier in this main dossier already violates the max nesting
+        # depth by 2.
         DossierMovabiliyChecker(self.resolvable_dossier).validate_movement(
             self.dossier)
 

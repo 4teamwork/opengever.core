@@ -117,7 +117,7 @@ class TestDossier(IntegrationTestCase):
     def test_nested_subdossiers_is_not_possible_by_default(self):
         self.login(self.dossier_responsible)
 
-        sub = create(Builder('dossier').within(self.dossier))
+        sub = create(Builder('dossier').within(self.empty_dossier))
 
         self.assertNotIn('opengever.dossier.businesscasedossier',
                          [fti.id for fti in sub.allowedContentTypes()])
