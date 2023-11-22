@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.14.2 (2023-11-22)
+----------------------
+
+Bug fixes:
+
+
+- Make max dossier depth restriction less strict. [phgross] [CA-6440]
+
+
 2023.14.1 (2023-11-14)
 ----------------------
 
