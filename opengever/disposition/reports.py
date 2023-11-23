@@ -1,7 +1,14 @@
 from datetime import date
+from opengever.base.interfaces import IReferenceNumber
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.ogds.base.utils import get_current_admin_unit
+
+
+def format_date(value):
+    if isinstance(value, date):
+        return value.strftime("%Y-%M-%d")
+    return None
 
 
 class DispositionDossierCSVReporter(object):
@@ -150,3 +157,68 @@ class DispositionDossierCSVReporter(object):
 
     def description(self, dossier):
         return dossier.obj.description
+
+
+class DispositionDocumentCSVReporter(object):
+
+    fieldnames = [
+        'dossier_id',
+        'document_id',
+        'laufnummer',
+        'sip_folder_name',
+        'sip_file_name',
+        'document_title',
+        'erscheinungsform',
+        'registrierdatum',
+        'entstehtungszeitraum_von',
+        'entstehtungszeitraum_bis',
+        'klassifizierungskategorie',
+        'datenschutz',
+        'oeffentlichkeitsstatus',
+        'oeffentlichkeitsstatusBegruendung',
+        'dateiRef',
+        'originalName',
+        'pruefalgorithmus',
+        'pruefsumme',
+        'dokumentdatum',
+        'beschreibung',
+        'autor',
+        'aktenzeichen']
+
+    def __init__(self, dossiers):
+        self.dossiers = dossiers
+
+    def __call__(self):
+        lines = []
+        for dossier in self.dossiers:
+            for key, document in dossier.documents.items():
+                for file_ in document.files:
+                    doc_binding = document.binding()
+                    lines.append({
+                        'dossier_id': dossier.binding().id,
+                        'document_id': doc_binding.id,
+                        'laufnummer': document.obj.get_sequence_number(),
+                        'sip_folder_name': dossier.folder.name,
+                        'sip_file_name': file_.binding().name,
+                        'document_title': document.obj.Title(),
+                        'erscheinungsform': doc_binding.erscheinungsform,
+                        'registrierdatum': format_date(doc_binding.registrierdatum.datum),
+                        'entstehtungszeitraum_von': format_date(
+                            doc_binding.entstehungszeitraum.von.datum),
+                        'entstehtungszeitraum_bis': format_date(
+                            doc_binding.entstehungszeitraum.bis.datum),
+                        'klassifizierungskategorie': doc_binding.klassifizierungskategorie,
+                        'datenschutz': doc_binding.datenschutz,
+                        'oeffentlichkeitsstatus': doc_binding.oeffentlichkeitsstatus,
+                        'oeffentlichkeitsstatusBegruendung': doc_binding.oeffentlichkeitsstatusBegruendung,
+                        'dateiRef': file_.binding().id,
+                        'originalName': file_.binding().originalName,
+                        'pruefalgorithmus': file_.binding().pruefalgorithmus,
+                        'pruefsumme': file_.binding().pruefsumme,
+                        'dokumentdatum': format_date(document.obj.document_date),
+                        'beschreibung': document.obj.description,
+                        'autor': document.obj.document_author,
+                        'aktenzeichen': IReferenceNumber(document.obj).get_number(),
+                    })
+
+        return lines

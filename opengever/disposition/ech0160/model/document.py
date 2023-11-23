@@ -12,6 +12,7 @@ class Document(object):
     def __init__(self, obj):
         self.obj = obj
         self.file_refs = []
+        self.files = []
 
     def binding(self):
         dokument = arelda.dokumentGeverSIP(id=u'_{}'.format(self.obj.UID()))

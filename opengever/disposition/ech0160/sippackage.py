@@ -7,6 +7,7 @@ from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.interfaces import IDispositionSettings
+from opengever.disposition.reports import DispositionDocumentCSVReporter
 from opengever.disposition.reports import DispositionDossierCSVReporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
@@ -169,6 +170,7 @@ class SIPPackage(object):
             return
 
         self.add_dossier_csv(zipfile)
+        self.add_documents_csv(zipfile)
 
     def add_dossier_csv(self, zipfile):
         data = DispositionDossierCSVReporter(self.dossiers)()
@@ -176,4 +178,14 @@ class SIPPackage(object):
         csvout = csv.writer(stream, delimiter=';', doublequote=False, escapechar='\\')
         csvout.writerows(map(utf8ize, data))
         dossier_csv = os.path.join(self.get_folder_name(), 'dossiers.csv')
+        zipfile.writestr(dossier_csv, stream.getvalue())
+
+    def add_documents_csv(self, zipfile):
+        reporter = DispositionDocumentCSVReporter(self.dossiers)
+        stream = StringIO()
+        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
+                                doublequote=False, escapechar='\\')
+        writer.writeheader()
+        writer.writerows(reporter())
+        dossier_csv = os.path.join(self.get_folder_name(), 'items.csv')
         zipfile.writestr(dossier_csv, stream.getvalue())

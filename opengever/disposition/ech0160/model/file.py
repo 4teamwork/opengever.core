@@ -11,6 +11,7 @@ class File(object):
         self.file = file
         self.id = u'_{}'.format(binascii.hexlify(self.file._p_oid))
         document.file_refs.append(self.id)
+        document.files.append(self)
         self.document = document
         self.filename = self.file.filename
         self.filepath = self.file._blob.committed()
