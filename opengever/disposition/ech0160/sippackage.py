@@ -173,10 +173,12 @@ class SIPPackage(object):
         self.add_documents_csv(zipfile)
 
     def add_dossier_csv(self, zipfile):
-        data = DispositionDossierCSVReporter(self.dossiers)()
+        reporter = DispositionDossierCSVReporter(self.dossiers)
         stream = StringIO()
-        csvout = csv.writer(stream, delimiter=';', doublequote=False, escapechar='\\')
-        csvout.writerows(map(utf8ize, data))
+        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
+                                doublequote=False, escapechar='\\')
+        writer.writeheader()
+        writer.writerows(reporter())
         dossier_csv = os.path.join(self.get_folder_name(), 'dossiers.csv')
         zipfile.writestr(dossier_csv, stream.getvalue())
 

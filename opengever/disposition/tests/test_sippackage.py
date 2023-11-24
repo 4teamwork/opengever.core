@@ -227,7 +227,7 @@ class TestSIPPackage(FunctionalTestCase):
 
             self.assertDictContainsSubset(
                 {'Ablage_Nr': '',
-                 'Ablage_Pr\xc3\xa4fix': '',
+                 'Ablage_Pr\xe4fix': '',
                  'Beschreibung': 'Lorem ipsum',
                  'Dossier_Titel': '',
                  'Mandant': 'Admin Unit 1',
@@ -235,7 +235,7 @@ class TestSIPPackage(FunctionalTestCase):
                  'Ordnungsystem_Version': '',
                  'abschlussdatum': '2000-00-11',
                  'aktenzeichen': 'Client1 1 / 1',
-                 'datenschutz': '',
+                 'datenschutz': 'false',
                  'entstehungszeitraum_bis': '',
                  'entstehungszeitraum_von': '',
                  'eroeffnungsdatum': '2016-00-11',
@@ -247,7 +247,7 @@ class TestSIPPackage(FunctionalTestCase):
 
             self.assertDictContainsSubset(
                 {'Ablage_Nr': '',
-                 'Ablage_Pr\xc3\xa4fix': '',
+                 'Ablage_Pr\xe4fix': '',
                  'Beschreibung': '',
                  'Dossier_Titel': '',
                  'Mandant': 'Admin Unit 1',
@@ -255,7 +255,7 @@ class TestSIPPackage(FunctionalTestCase):
                  'Ordnungsystem_Version': '',
                  'abschlussdatum': '2000-00-11',
                  'aktenzeichen': 'Client1 1 / 2',
-                 'datenschutz': '',
+                 'datenschutz': 'false',
                  'entstehungszeitraum_bis': '',
                  'entstehungszeitraum_von': '',
                  'eroeffnungsdatum': '2016-00-11',
