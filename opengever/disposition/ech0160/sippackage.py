@@ -1,6 +1,7 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
+from itertools import chain
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import file_checksum
@@ -9,6 +10,7 @@ from opengever.disposition.ech0160.bindings import arelda
 from opengever.disposition.interfaces import IDispositionSettings
 from opengever.disposition.reports import DispositionDocumentCSVReporter
 from opengever.disposition.reports import DispositionDossierCSVReporter
+from opengever.disposition.reports import DispositionDossierPerTypeCSVReporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.repository.repositoryroot import IRepositoryRoot
@@ -171,6 +173,7 @@ class SIPPackage(object):
 
         self.add_dossier_csv(zipfile)
         self.add_documents_csv(zipfile)
+        self.add_dossier_type_specific_csvs(zipfile)
 
     def add_dossier_csv(self, zipfile):
         reporter = DispositionDossierCSVReporter(self.dossiers)
@@ -191,3 +194,20 @@ class SIPPackage(object):
         writer.writerows(reporter())
         dossier_csv = os.path.join(self.get_folder_name(), 'items.csv')
         zipfile.writestr(dossier_csv, stream.getvalue())
+
+    def add_dossier_type_specific_csvs(self, zipfile):
+        reporter = DispositionDossierPerTypeCSVReporter(self.dossiers)
+        for dossier_type, values in reporter().items():
+            stream = StringIO()
+            fieldnames = self.extract_fieldnames(values)
+            writer = csv.DictWriter(
+                stream, fieldnames=fieldnames,
+                delimiter=';', doublequote=False, escapechar='\\')
+            writer.writeheader()
+            writer.writerows(values)
+            csv_file = os.path.join(
+                self.get_folder_name(), '{}.csv'.format(dossier_type))
+            zipfile.writestr(csv_file, stream.getvalue())
+
+    def extract_fieldnames(self, values):
+        return set(chain(*[value.keys() for value in values]))

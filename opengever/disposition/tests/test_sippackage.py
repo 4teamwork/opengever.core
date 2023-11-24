@@ -6,6 +6,7 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDispositionSettings
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
@@ -339,3 +340,49 @@ class TestSIPPackage(FunctionalTestCase):
                  'sip_folder_name': 'd000001'},
                 rows[1]
             )
+
+    def test_adds_custom_dossier_csv_per_type(self):
+        api.portal.set_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings,
+            value=True)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("businesscase_dossier_schema")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("textline", u"f1", u"Field 1", u"", False)
+            .with_field("int", u"f2", u"Field 2", u"", False)
+        )
+
+        with freeze(datetime(2016, 6, 11)):
+            dossier_a = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY,
+                                       dossier_type=u'businesscase'))
+
+            IDossierCustomProperties(dossier_a).custom_properties = {
+                "IDossier.dossier_type.businesscase": {
+                    "f1": "Additional Test", "f2": 123},
+            }
+
+            disposition = create(Builder('disposition')
+                                 .having(dossiers=[dossier_a, ])
+                                 .within(self.folder))
+
+            tmpfile = TemporaryFile()
+            zip_file = ZipFile(tmpfile, 'w')
+
+            package = SIPPackage(disposition)
+            package.write_to_zipfile(zip_file)
+            rows = csv.DictReader(
+                zip_file.read(u'SIP_20160611_PLONE_1/businesscase.csv').splitlines(),
+                delimiter=';')
+            rows = [row for row in rows]
+
+            self.assertEquals(
+                ['f1', 'f2', 'dossier_id'], rows[0].keys())
+
+            self.assertDictContainsSubset(
+                {'f1': 'Additional Test', 'f2': '123'},
+                rows[0])

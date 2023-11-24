@@ -1,5 +1,6 @@
 from datetime import date
 from opengever.base.interfaces import IReferenceNumber
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.filing import IFilingNumberMarker
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -138,3 +139,31 @@ class DispositionDocumentCSVReporter(object):
                     })
 
         return lines
+
+
+class DispositionDossierPerTypeCSVReporter(object):
+
+    def __init__(self, dossiers):
+        self.dossiers = dossiers
+
+    def __call__(self):
+        values_per_type = {}
+        for dossier in self.dossiers:
+            dossier_type = IDossier(dossier.obj).dossier_type
+            if not dossier_type:
+                continue
+
+            if not dossier.binding().zusatzDaten:
+                continue
+
+            value = {'dossier_id': dossier.binding().id}
+            value.update(
+                {item.name: item.value()
+                 for item in dossier.binding().zusatzDaten.merkmal})
+
+            if dossier_type not in values_per_type:
+                values_per_type[dossier_type] = []
+
+            values_per_type[dossier_type].append(value)
+
+        return values_per_type
