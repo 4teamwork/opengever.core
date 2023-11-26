@@ -78,18 +78,15 @@ services:
       - all
       - ogcore
   ogds:
-    image: postgres:12-alpine
+    image: postgres:13-alpine
     volumes:
-      - ./var/ogds:/var/lib/postgresql/data
+      - ogds:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=ogds
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=ogds
+      - POSTGRES_USER=${OGDS_DB_USER}
+      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD}
+      - POSTGRES_DB=${OGDS_DB_NAME}
     ports:
       - 15432:5432
-    profiles:
-      - all
-      - ogds
   solr:
     image: 4teamwork/ogsolr:latest
     build:
@@ -190,7 +187,8 @@ services:
       - testserver
 
 volumes:
-    clam_db:
+  ogds:
+  clam_db:
 
 networks:
   default:
