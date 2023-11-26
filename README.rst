@@ -394,6 +394,7 @@ for local development by default:
 - Sablon_
 - `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
 - ogds (PostgreSQL server)
+- `ogds-sync <https://github.com/4teamwork/ogds-sync>`_
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
