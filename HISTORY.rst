@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.14.3 (2023-11-27)
+----------------------
+
+Other changes:
+
+
+- Blacklist uploaded file formats based on extension instead of mimetype. [lgraf] [CA-5703-1]
+
+
 2023.14.2 (2023-11-22)
 ----------------------
 
