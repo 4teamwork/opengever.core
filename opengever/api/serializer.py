@@ -40,6 +40,7 @@ from plone.restapi.serializer.dxcontent import SerializeFolderToJson
 from plone.restapi.serializer.dxcontent import SerializeToJson
 from plone.restapi.serializer.group import SerializeGroupToJson
 from plone.restapi.serializer.relationfield import RelationListFieldSerializer
+from plone.restapi.serializer.summary import DEFAULT_METADATA_FIELDS
 from plone.restapi.serializer.summary import DefaultJSONSummarySerializer
 from Products.PlonePAS.interfaces.group import IGroupData
 from Products.ZCatalog.interfaces import ICatalogBrain
@@ -58,6 +59,8 @@ import logging
 
 
 logger = logging.getLogger('opengever.api.serializer')
+
+DEFAULT_METADATA_FIELDS.add('UID')
 
 
 def extend_with_oguid(result, context):

@@ -198,6 +198,7 @@ class TestPrivateDossierWorkflow(IntegrationTestCase):
         self.assertEqual(
             {u'@id': u'http://nohost/plone/private/kathi-barfuss',
              u'@type': u'opengever.private.folder',
+             u'UID': u'createprivatefolder0000000000001',
              u'description': u'',
              u'is_leafnode': None,
              u'review_state': u'folder-state-active',

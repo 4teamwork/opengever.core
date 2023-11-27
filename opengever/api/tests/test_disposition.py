@@ -143,6 +143,7 @@ class TestDispositionSerialization(IntegrationTestCase):
             [
                 {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
                  u'@type': u'opengever.repository.repositoryfolder',
+                 u'UID': u'createrepositorytree000000000003',
                  u'archival_value': {u'title': u'not assessed',
                                      u'token': u'unchecked'},
                  u'description': u'',
@@ -172,6 +173,7 @@ class TestDispositionSerialization(IntegrationTestCase):
             [
                 {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
                  u'@type': u'opengever.repository.repositoryfolder',
+                 u'UID': u'createrepositorytree000000000003',
                  u'archival_value': {u'title': u'not assessed',
                                      u'token': u'unchecked'},
                  u'description': u'',

@@ -151,6 +151,7 @@ abzufragen.
        "main-dossier": {
          "@id": "https://example.org/ordnungssystem/dossier",
          "@type": "opengever.dossier.businesscasedossier",
+         "UID": "c526b9caf83449eca1ac8e0b985cc92b",
          "description": "",
          "is_leafnode": null,
          "is_subdossier": false,

@@ -13,30 +13,35 @@ Content-Type: application/json
     {
       "@id": "http://example.org/plone/dossier",
       "@type": "opengever.dossier.businesscasedossier",
+      "UID": "a3c9f8a47655463ea7a4a43bf1fdf40c",
       "description": "",
       "title": "Folder"
     },
     {
       "@id": "http://example.org/dossier/doc-1",
       "@type": "opengever.document.document",
+      "UID": "b3c9f8a47655463ea7a4a43bf1fdf40c",
       "description": "",
       "title": "Document 1"
     },
     {
       "@id": "http://example.org/dossier/doc-2",
       "@type": "opengever.document.document",
+      "UID": "c3c9f8a47655463ea7a4a43bf1fdf40c",
       "description": "",
       "title": "Document 2"
     },
     {
       "@id": "http://example.org/dossier/doc-3",
       "@type": "opengever.document.document",
+      "UID": "d3c9f8a47655463ea7a4a43bf1fdf40c",
       "description": "",
       "title": "Document 3"
     },
     {
       "@id": "http://example.org/dossier/doc-4",
       "@type": "opengever.document.document",
+      "UID": "e3c9f8a47655463ea7a4a43bf1fdf40c",
       "description": "",
       "title": "Document 4"
     }

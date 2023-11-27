@@ -53,6 +53,7 @@ zwei separaten Listen:
             "last_touched": "2018-05-31T15:40:23+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-197",
             "@type": "opengever.document.document",
+            "UID": "afb7c240392e49a9a23ba8f51ce0175c",
             "title": "Datenschutzrichtlinien Muster AG",
             "review_state": "Datenschutzrichtlinien Muster AG.docx",
           },
@@ -64,6 +65,7 @@ zwei separaten Listen:
             "last_touched": "2018-05-31T15:40:01+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-25/document-191",
             "@type": "opengever.document.document",
+            "UID": "bfb7c240392e49a9a23ba8f51ce0175c",
             "title": "Bilanz Muster AG 2018",
             "review_state": "Datenschutzrichtlinien Muster AG.docx",
           }
@@ -77,6 +79,7 @@ zwei separaten Listen:
             "last_touched": "2018-05-31T15:35:38+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-229",
             "@type": "opengever.document.document",
+            "UID": "cfb7c240392e49a9a23ba8f51ce0175c",
             "title": "Pra\u0308sentation - Firmenprofil Muster AG",
             "review_state": "Datenschutzrichtlinien Muster AG.docx",
           },
@@ -91,6 +94,7 @@ zwei separaten Listen:
             "last_touched": "2018-05-31T15:34:42+02:00",
             "@id": "http://localhost:8080/fd/ordnungssystem/fuehrung/gemeinderecht/dossier-18/document-236",
             "@type": "opengever.document.document",
+            "UID": "dfb7c240392e49a9a23ba8f51ce0175c",
             "title": "Anfrage Drei"
             "review_state": "Datenschutzrichtlinien Muster AG.docx",
           }

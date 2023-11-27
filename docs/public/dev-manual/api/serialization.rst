@@ -116,6 +116,7 @@ Objekts serialisiert:
         {
           "@id": "http://example.org/dossier/doc1",
           "@type": "opengever.document.document",
+          "UID": "efb7c240392e49a9a23ba8f51ce0175c",
           "title": "Document 1",
           "description": "Description"
         }

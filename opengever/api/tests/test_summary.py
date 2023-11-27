@@ -104,6 +104,7 @@ class TestGeverJSONSummarySerializer(SolrIntegrationTestCase):
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-'
                 u'und-vereinbarungen/dossier-1/document-14',
                 u'@type': u'opengever.document.document',
+                u'UID': u'createtreatydossiers000000000002',
                 u'title': u'Vertr\xe4gsentwurf',
                 u'changed': u'2016-08-31T14:07:33+00:00',
                 u'checked_out': u'',
@@ -134,6 +135,7 @@ class TestGeverJSONSummarySerializer(SolrIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
                 u'@type': u'opengever.document.document',
+                u'UID': u'createtreatydossiers000000000002',
                 u'checked_out': u'',
                 u'description': u'Wichtige Vertr\xe4ge',
                 u'file_extension': u'.docx',
@@ -158,6 +160,7 @@ class TestGeverJSONSummarySerializer(SolrIntegrationTestCase):
             {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/'
              'vertrage-und-vereinbarungen/dossier-1/task-1',
              u'@type': u'opengever.task.task',
+             u'UID': u'createtasks000000000000000000001',
              u'description': u'',
              u'review_state': u'task-state-in-progress',
              u'title': u'Vertragsentwurf \xdcberpr\xfcfen',

@@ -233,6 +233,7 @@ class TestJournalGet(IntegrationTestCase):
             u'related_documents': [{
                 u'@id': self.document.absolute_url(),
                 u'@type': u'opengever.document.document',
+                u'UID': u'createtreatydossiers000000000002',
                 u'checked_out': None,
                 u'description': self.document.description,
                 u'file_extension': u'.docx',

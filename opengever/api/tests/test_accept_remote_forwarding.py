@@ -234,6 +234,7 @@ class TestAcceptRemoteForwardingPost(IntegrationTestCase):
         self.assertEqual([{
             u'@id': doc_in_successor_forwarding.absolute_url(),
             u'@type': u'opengever.document.document',
+            u'UID': doc_in_successor_forwarding.UID(),
             u'description': u'',
             u'checked_out': u'',
             u'file_extension': u'.txt',
@@ -329,6 +330,7 @@ class TestAcceptRemoteForwardingPost(IntegrationTestCase):
         self.assertEqual([{
             u'@id': doc_in_task.absolute_url(),
             u'@type': u'opengever.document.document',
+            u'UID': doc_in_task.UID(),
             u'description': u'',
             u'checked_out': u'',
             u'file_extension': u'.txt',

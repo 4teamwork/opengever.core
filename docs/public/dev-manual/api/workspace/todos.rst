@@ -35,6 +35,7 @@ Ein ToDo erstellen
       {
         "@id": "http://example.org/workspaces/workspace-1/todo-1",
         "@type": "opengever.workspace.todo",
+        "UID": "dc295c19ee404aafa7b9331b3eb353f2",
         "...": "..."
       }
 
