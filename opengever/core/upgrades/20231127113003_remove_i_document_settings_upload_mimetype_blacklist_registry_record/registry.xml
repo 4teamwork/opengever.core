@@ -1,0 +1,3 @@
+<registry>
+  <record interface="opengever.document.interfaces.IDocumentSettings" field="upload_mimetype_blacklist" remove="True" />
+</registry>

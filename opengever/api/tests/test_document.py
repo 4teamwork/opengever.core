@@ -358,11 +358,11 @@ class TestDocumentPost(IntegrationTestCase):
         self.assertFalse(ITemplateDocumentMarker.providedBy(doc))
 
     @browsing
-    def test_does_not_allow_blacklisted_file_mime_types(self, browser):
+    def test_does_not_allow_blacklisted_filetypes(self, browser):
         self.login(self.regular_user, browser)
 
         api.portal.set_registry_record(
-            'upload_mimetype_blacklist', ['application/zip'], IDocumentSettings)
+            'upload_filetypes_blacklist', ['.zip'], IDocumentSettings)
 
         # Do not allow to upload zip-files
         with browser.expect_http_error(code=400, reason='Bad Request'):
@@ -371,11 +371,31 @@ class TestDocumentPost(IntegrationTestCase):
             browser.open(self.dossier, data=json.dumps(data), method='POST',
                          headers=self.api_headers)
 
+        api.portal.set_registry_record(
+            'upload_filetypes_blacklist', ['zip'], IDocumentSettings)
+
+        # File extensions don't require leading dot
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': 'foo bar', 'filename': 'test.zip'}}
+            browser.open(self.dossier, data=json.dumps(data), method='POST',
+                         headers=self.api_headers)
+
+        api.portal.set_registry_record(
+            'upload_filetypes_blacklist', ['ZIP'], IDocumentSettings)
+
+        # File extensions are compared case insensitively
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            data = {'@type': 'opengever.document.document',
+                    'file': {'data': 'foo bar', 'filename': 'test.zIp'}}
+            browser.open(self.dossier, data=json.dumps(data), method='POST',
+                         headers=self.api_headers)
+
         self.assertEqual(u'BadRequest', browser.json[u'type'])
         self.assertEqual(u'It is not allowed to upload this file format',
                          browser.json[u'translated_message'])
 
-        # But allow all other mime types
+        # But allow all other file types
         with self.observe_children(self.dossier) as children:
             data = {'@type': 'opengever.document.document',
                     'file': {'data': 'foo bar', 'filename': 'test.docx'}}

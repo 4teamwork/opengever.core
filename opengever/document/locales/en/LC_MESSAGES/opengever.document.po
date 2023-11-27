@@ -246,7 +246,7 @@ msgstr "You're not allowed to add documents in the target container."
 
 #. Default: "It is not allowed to upload this file format"
 #: ./opengever/document/document.py
-msgid "error_blocked_mimetype_by_blacklist"
+msgid "error_blocked_filetype_by_blacklist"
 msgstr "It is not allowed to upload this file format"
 
 #. German translation: Es ist nicht erlaubt hier E-Mails anzufügen. Bitte senden Sie das E-Mail an die Addresse ${mailaddress} oder ziehen Sie es in das Dossier (Drag'n'Drop).

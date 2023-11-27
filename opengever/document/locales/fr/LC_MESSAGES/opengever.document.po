@@ -213,7 +213,7 @@ msgstr "Vous ne pouvez pas créer de document à cette position."
 
 #. Default: "It is not allowed to upload this file format"
 #: ./opengever/document/document.py
-msgid "error_blocked_mimetype_by_blacklist"
+msgid "error_blocked_filetype_by_blacklist"
 msgstr "L'upload de fichiers ayant ce format n'est pas autorisé."
 
 #. Default: "It's not possible to add E-mails here, please send it to ${mailaddress} or drag it to the dossier (Dragn'n'Drop)."

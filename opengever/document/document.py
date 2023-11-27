@@ -29,6 +29,7 @@ from opengever.task.task import ITask
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
 from opengever.wopi.discovery import editable_extensions
+from os.path import splitext
 from plone import api
 from plone.app.versioningbehavior.behaviors import IVersionable
 from plone.autoform import directives as form
@@ -135,16 +136,23 @@ class IDocumentSchema(model.Schema):
                 "file", data.file.filename, data.file.open(), getRequest())
 
     @invariant
-    def disallow_blacklisted_mimetypes(data):
+    def disallow_blacklisted_filetypes(data):
         if not data.file:
             return
 
-        blacklisted_mimetypes = api.portal.get_registry_record(
-            name='upload_mimetype_blacklist', interface=IDocumentSettings)
+        blacklisted_extensions = [
+            ext.decode('ascii').lower().lstrip('.') for ext in
+            api.portal.get_registry_record(
+                name='upload_filetypes_blacklist', interface=IDocumentSettings)
+            if ext
+        ]
 
-        if data.file.contentType in blacklisted_mimetypes:
+        filename = getattr(data.file, 'filename', u'').lower()
+        extension = splitext(filename)[-1].lstrip('.')
+
+        if extension in blacklisted_extensions:
             raise Invalid(
-                _('error_blocked_mimetype_by_blacklist',
+                _('error_blocked_filetype_by_blacklist',
                   default="It is not allowed to upload this file format"))
 
 
