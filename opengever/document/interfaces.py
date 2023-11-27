@@ -89,6 +89,16 @@ class IDocumentSettings(Interface):
         u'the listed MIME types',
         default=list())
 
+    upload_filetypes_blacklist = schema.List(
+        title=u'File extensions blacklisted from upload',
+        description=u'A list of blacklisted file extensions.'
+        u'An error will be raised if a user tries to upload a file with '
+        u'one of the listed file extensions.',
+        value_type=schema.ASCIILine(),
+        default=[],
+        missing_value=[],
+    )
+
 
 class ICheckinCheckoutManager(Interface):
     """Interface for the checkin / checkout manager.
