@@ -1,0 +1,3 @@
+<registry purge="False">
+  <records interface="opengever.document.interfaces.IDocumentSettings" />
+</registry>
