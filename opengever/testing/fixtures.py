@@ -2037,6 +2037,9 @@ class OpengeverContentFixture(object):
         # For now, username is exactly the same as userid
         username = userid
 
+        if attrname == 'workspace_member':
+            userid = attrname
+
         email = kwargs.pop('email', '{}@gever.local'.format(username))
 
         plone_user = create(
