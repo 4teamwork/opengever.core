@@ -2028,14 +2028,8 @@ class OpengeverContentFixture(object):
             username = '.'.join((first, last))
             return username
 
-        userid = kwargs.pop('userid', None)
-        if not userid:
-            # For now, we create a userid in the style of first.last,
-            # same as the username. This will be changed later.
-            userid = make_username(firstname, lastname)
-
-        # For now, username is exactly the same as userid
-        username = userid
+        userid = kwargs.pop('userid', attrname)
+        username = make_username(firstname, lastname)
 
         email = kwargs.pop('email', '{}@gever.local'.format(username))
 
