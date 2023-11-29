@@ -2042,6 +2042,7 @@ class OpengeverContentFixture(object):
             'propertysheets_manager',
             'limited_admin',
             'member_admin',
+            'records_manager',
         )
 
         if attrname in users_with_different_userid:
