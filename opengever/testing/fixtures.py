@@ -2040,6 +2040,7 @@ class OpengeverContentFixture(object):
         # Except for these users
         users_with_different_userid = (
             'propertysheets_manager',
+            'limited_admin',
         )
 
         if attrname in users_with_different_userid:
