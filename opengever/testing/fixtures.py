@@ -2047,6 +2047,7 @@ class OpengeverContentFixture(object):
             'archivist',
             'dossier_manager',
             'regular_user',
+            'webaction_manager',
         )
 
         if attrname in users_with_different_userid:
