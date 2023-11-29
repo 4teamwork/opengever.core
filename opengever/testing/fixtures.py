@@ -2269,10 +2269,10 @@ class OpengeverContentFixture(object):
 
         try:
             try:
-                login(getSite(), user.getId())
+                login(getSite(), user.getUserName())
             # XXX - Allow (early) lookups from the Zope acl_users as well
             except ValueError:
-                login(getSite().getPhysicalRoot(), user.getId())
+                login(getSite().getPhysicalRoot(), user.getUserName())
             yield
 
         finally:
