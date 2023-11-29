@@ -2037,20 +2037,16 @@ class OpengeverContentFixture(object):
         # For now, username is exactly the same as userid
         username = userid
 
-        builder = (
+        email = kwargs.pop('email', '{}@gever.local'.format(username))
+
+        plone_user = create(
             Builder('user')
             .with_userid(userid)
             .named(firstname, lastname)
             .with_roles(*globalroles)
             .in_groups(self.org_unit_fa.users_group_id)
+            .with_email(email)
         )
-
-        if 'email' in kwargs:
-            email = kwargs['email']
-        else:
-            email = '{}@gever.local'.format(userid)
-
-        plone_user = create(builder.with_email(email))
 
         # Update username for the Plone user.
         # Because ftw.builder uses the registration tool to create users,
