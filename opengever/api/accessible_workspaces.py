@@ -36,7 +36,8 @@ class AccessibleWorkspacesGet(SolrQueryBaseService):
 
         user = api.user.get(userid)
         if user:
-            allowed_roles_and_users.extend([u'user:{}'.format(group) for group in user.getGroups()])
+            allowed_roles_and_users.extend(
+                [u'user:{}'.format(group.decode('utf-8')) for group in user.getGroups()])
             allowed_roles_and_users.extend(user.getRoles())
 
         field = self.fields.get('allowedRolesAndUsers')
