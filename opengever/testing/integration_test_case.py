@@ -211,22 +211,22 @@ class IntegrationTestCase(TestCase):
         The method may also be used used as context manager, ensuring that
         after leaving the same user is logged in as before.
         """
-        if hasattr(user, 'getId'):
-            userid = user.getId()
+        if hasattr(user, 'getUserName'):
+            username = user.getUserName()
         else:
-            userid = user
+            username = user
 
         security_manager = getSecurityManager()
-        if userid == SITE_OWNER_NAME:
-            login(self.layer['app'], userid)
+        if username == SITE_OWNER_NAME:
+            login(self.layer['app'], username)
         else:
-            login(self.portal, userid)
+            login(self.portal, username)
 
         if browser is not None:
             browser_auth_headers = filter(
                 lambda item: item[0] == 'Authorization',
                 browser.session_headers)
-            browser.login(userid)
+            browser.login(username)
 
         @contextmanager
         def login_context_manager():

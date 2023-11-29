@@ -43,8 +43,10 @@ from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.app.textfield.value import RichTextValue
+from plone.i18n.normalizer.interfaces import IIDNormalizer
 from time import time
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 import json
@@ -2018,27 +2020,47 @@ class OpengeverContentFixture(object):
         from within tests.
         """
         globalroles = ['Member'] + list(globalroles)
-        builder = (
+
+        def make_username(firstname, lastname):
+            normalizer = getUtility(IIDNormalizer)
+            first = normalizer.normalize(firstname)
+            last = normalizer.normalize(lastname)
+            username = '.'.join((first, last))
+            return username
+
+        userid = kwargs.pop('userid', None)
+        if not userid:
+            # For now, we create a userid in the style of first.last,
+            # same as the username. This will be changed later.
+            userid = make_username(firstname, lastname)
+
+        # For now, username is exactly the same as userid
+        username = userid
+
+        email = kwargs.pop('email', '{}@gever.local'.format(username))
+
+        plone_user = create(
             Builder('user')
+            .with_userid(userid)
             .named(firstname, lastname)
             .with_roles(*globalroles)
             .in_groups(self.org_unit_fa.users_group_id)
+            .with_email(email)
         )
 
-        builder.update_properties()  # updates builder.userid
-        if 'email' in kwargs:
-            email = kwargs['email']
-        else:
-            email = '{}@gever.local'.format(builder.userid)
-
-        plone_user = create(builder.with_email(email))
+        # Update username for the Plone user.
+        # Because ftw.builder uses the registration tool to create users,
+        # it doesn't allow to set a username that is different from the userid
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.source_users.updateUser(userid, username)
+        plone_user = api.user.get(userid)
 
         display_name = u"{} {}".format(lastname.title(), firstname.title())
         create(
             Builder('ogds_user')
             .id(plone_user.getId())
             .having(firstname=firstname, lastname=lastname, email=email,
-                    display_name=display_name)
+                    username=plone_user.getUserName(), display_name=display_name)
             .assign_to_org_units([self.org_unit_fa])
             .in_group(group)
             .having(**kwargs)
@@ -2269,10 +2291,10 @@ class OpengeverContentFixture(object):
 
         try:
             try:
-                login(getSite(), user.getId())
+                login(getSite(), user.getUserName())
             # XXX - Allow (early) lookups from the Zope acl_users as well
             except ValueError:
-                login(getSite().getPhysicalRoot(), user.getId())
+                login(getSite().getPhysicalRoot(), user.getUserName())
             yield
 
         finally:
