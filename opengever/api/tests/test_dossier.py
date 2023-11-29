@@ -4,7 +4,10 @@ from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing.freezer import freeze
 from opengever.dossier.behaviors.filing import IFilingNumber
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
+from plone import api
+import json
 
 
 class TestDossierSerializer(IntegrationTestCase):
@@ -361,3 +364,56 @@ class TestMainDossierExpansion(IntegrationTestCase):
             },
             browser.json["@components"]['main-dossier'],
         )
+
+
+class TestDossierDeserialization(IntegrationTestCase):
+
+    loginname = 'dossier_responsible_loginame'
+
+    @browsing
+    def test_responsible_field_supports_loginname(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.change_loginname(self.dossier_responsible.id, self.loginname)
+
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'title': u'Dossier A',
+            u'responsible': self.loginname
+        }
+
+        response = browser.open(
+            self.leaf_repofolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(
+            {u'token': self.dossier_responsible.id,
+             u'title': u'Ziegler Robert (robert.ziegler)'},
+            response.json.get('responsible'))
+
+    @browsing
+    def test_responsible_field_supports_userid(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.change_loginname(self.dossier_responsible.id, self.loginname)
+
+        payload = {
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'title': u'Dossier A',
+            u'responsible': self.dossier_responsible.id
+        }
+
+        response = browser.open(
+            self.leaf_repofolder.absolute_url(),
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(
+            {u'token': self.dossier_responsible.id,
+             u'title': u'Ziegler Robert (robert.ziegler)'},
+            response.json.get('responsible'))
