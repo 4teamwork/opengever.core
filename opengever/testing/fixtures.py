@@ -2034,6 +2034,9 @@ class OpengeverContentFixture(object):
             # same as the username. This will be changed later.
             userid = make_username(firstname, lastname)
 
+        # For now, username is exactly the same as userid
+        username = userid
+
         builder = (
             Builder('user')
             .with_userid(userid)
@@ -2049,12 +2052,19 @@ class OpengeverContentFixture(object):
 
         plone_user = create(builder.with_email(email))
 
+        # Update username for the Plone user.
+        # Because ftw.builder uses the registration tool to create users,
+        # it doesn't allow to set a username that is different from the userid
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.source_users.updateUser(userid, username)
+        plone_user = api.user.get(userid)
+
         display_name = u"{} {}".format(lastname.title(), firstname.title())
         create(
             Builder('ogds_user')
             .id(plone_user.getId())
             .having(firstname=firstname, lastname=lastname, email=email,
-                    display_name=display_name)
+                    username=plone_user.getUserName(), display_name=display_name)
             .assign_to_org_units([self.org_unit_fa])
             .in_group(group)
             .having(**kwargs)
