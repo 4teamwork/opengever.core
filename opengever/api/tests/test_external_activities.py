@@ -326,7 +326,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         )
 
         def fail_for_david(notification):
-            if notification.userid == 'david.meier':
+            if notification.userid == self.member_admin.getId():
                 raise Exception('Boom')
 
         patched_dispatch.side_effect = fail_for_david
@@ -356,9 +356,9 @@ class TestExternalActivitiesPost(IntegrationTestCase):
 
         self.assertEqual([{
             'type': 'dispatch_failed',
-            'msg': u"Failed to dispatch notification for user u'david.meier'",
-            'userid': 'david.meier',
-            }], browser.json['errors'])
+            'msg': u"Failed to dispatch notification for user u'%s'" % self.member_admin.getId(),
+            'userid': self.member_admin.getId(),
+        }], browser.json['errors'])
 
         activity = Activity.query.all()[-1]
 
