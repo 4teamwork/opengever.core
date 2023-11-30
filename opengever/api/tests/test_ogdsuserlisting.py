@@ -72,11 +72,11 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(4, len(browser.json['items']))
-        self.assertEqual(
-            [u'fridolin.hugentobler',
-             u'maja.harzig',
-             u'herbert.jager',
-             u'nicole.kohler'],
+        self.assertItemsEqual(
+            [self.workspace_admin.getId(),
+             self.limited_admin.getId(),
+             self.meeting_user.getId(),
+             self.administrator.getId(),],
             [each['userid'] for each in browser.json['items']])
         self.assertEqual(23, browser.json['items_total'])
 
