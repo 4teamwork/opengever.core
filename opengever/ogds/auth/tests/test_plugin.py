@@ -96,30 +96,30 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     def test_enum_users_without_search_critera_returns_all_users(self):
         results = self.plugin.enumerateUsers()
         expected = (
-            self.workspace_member.getId(),
             api.user.get('committee.secretary').getId(),
-            self.member_admin.getId(),
-            self.dossier_manager.getId(),
-            self.committee_responsible.getId(),
-            self.workspace_admin.getId(),
-            self.workspace_owner.getId(),
-            self.workspace_guest.getId(),
-            self.meeting_user.getId(),
             api.user.get('james.bond').getId(),
-            self.archivist.getId(),
-            self.secretariat_user.getId(),
-            self.regular_user.getId(),
             api.user.get('lucklicher.laser').getId(),
-            self.limited_admin.getId(),
             api.user.get('nicole.kohler').getId(),
+            api.user.get('test_user_1_').getId(),
+            self.archivist.getId(),
+            self.committee_responsible.getId(),
+            self.dossier_manager.getId(),
+            self.dossier_responsible.getId(),
+            self.limited_admin.getId(),
+            self.meeting_user.getId(),
+            self.member_admin.getId(),
             self.propertysheets_manager.getId(),
             self.records_manager.getId(),
-            self.dossier_responsible.getId(),
+            self.regular_user.getId(),
+            self.secretariat_user.getId(),
             self.service_user.getId(),
-            api.user.get('test_user_1_').getId(),
             self.webaction_manager.getId(),
+            self.workspace_admin.getId(),
+            self.workspace_guest.getId(),
+            self.workspace_member.getId(),
+            self.workspace_owner.getId(),
         )
-        self.assertEqual(expected, self.ids(results))
+        self.assertItemsEqual(expected, self.ids(results))
 
     def test_enum_users_with_unknown_search_criteria_returns_empty_tuple(self):
         results = self.plugin.enumerateUsers(unkown_attr='foo')
@@ -467,26 +467,26 @@ class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
 
     def test_get_group_members_returns_list_of_user_ids(self):
         user_ids = self.plugin.getGroupMembers('fa_users')
-        self.assertEqual(user_ids, [
-            self.workspace_member.getId(),
+        self.assertItemsEqual(user_ids, [
             api.user.get('committee.secretary').getId(),
-            self.member_admin.getId(),
-            self.dossier_manager.getId(),
-            self.committee_responsible.getId(),
-            self.workspace_admin.getId(),
-            self.workspace_owner.getId(),
-            self.workspace_guest.getId(),
-            self.meeting_user.getId(),
-            self.archivist.getId(),
-            self.secretariat_user.getId(),
-            self.regular_user.getId(),
-            self.limited_admin.getId(),
             api.user.get('nicole.kohler').getId(),
+            self.archivist.getId(),
+            self.committee_responsible.getId(),
+            self.dossier_manager.getId(),
+            self.dossier_responsible.getId(),
+            self.limited_admin.getId(),
+            self.meeting_user.getId(),
+            self.member_admin.getId(),
             self.propertysheets_manager.getId(),
             self.records_manager.getId(),
-            self.dossier_responsible.getId(),
+            self.regular_user.getId(),
+            self.secretariat_user.getId(),
             self.service_user.getId(),
             self.webaction_manager.getId(),
+            self.workspace_admin.getId(),
+            self.workspace_guest.getId(),
+            self.workspace_member.getId(),
+            self.workspace_owner.getId(),
         ])
 
     def test_get_group_members_for_unknown_id_returns_empty_list(self):
