@@ -22,7 +22,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
                  u'modified': u'2016-08-31T20:01:33+00:00',
                  u'principal_type': u'user',
                  u'principal_label': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                 u'principal_id': u'kathi.barfuss',
+                 u'principal_id': self.regular_user.getId(),
                  u'report_id': u'report_1',
                  u'state': u'in progress'},
                 {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
@@ -30,7 +30,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
                  u'modified': u'2016-08-31T20:01:33+00:00',
                  u'principal_type': u'user',
                  u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
-                 u'principal_id': u'jurgen.fischer',
+                 u'principal_id': self.archivist.getId(),
                  u'report_id': u'report_0',
                  u'state': u'ready'}],
              u'items_total': 2}, browser.json)
@@ -68,7 +68,7 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
              u'modified': u'2016-08-31T20:01:33+00:00',
              u'principal_type': u'user',
              u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
-             u'principal_id': u'jurgen.fischer',
+             u'principal_id': self.archivist.getId(),
              u'report_id': u'report_0',
              u'state': u'ready'}, browser.json)
 
