@@ -629,7 +629,7 @@ Users
 .. <fixture:users>
 
 - ``self.administrator``: ``nicole.kohler``
-- ``self.archivist``: ``jurgen.fischer``
+- ``self.archivist``: ``archivist``
 - ``self.committee_responsible``: ``franzi.muller``
 - ``self.dossier_manager``: ``faivel.fruhling``
 - ``self.dossier_responsible``: ``robert.ziegler``
