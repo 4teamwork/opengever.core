@@ -637,7 +637,7 @@ Users
 - ``self.limited_admin``: ``limited_admin``
 - ``self.manager``: ``admin``
 - ``self.meeting_user``: ``herbert.jager``
-- ``self.member_admin``: ``david.meier``
+- ``self.member_admin``: ``member_admin``
 - ``self.propertysheets_manager``: ``propertysheets_manager``
 - ``self.reader_user``: ``lucklicher.laser``
 - ``self.records_manager``: ``ramon.flucht``
