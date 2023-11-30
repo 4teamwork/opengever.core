@@ -242,7 +242,7 @@ class TestDispositionSerialization(IntegrationTestCase):
 
         self.assertEqual(
             [
-                {u'creator': {u'token': u'ramon.flucht', u'title': u'Flucht Ramon'},
+                {u'creator': {u'token': self.records_manager.getId(), u'title': u'Flucht Ramon'},
                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663373000000',
                  u'created': u'2016-08-31T19:09:33',
                  u'modified': None,
@@ -259,7 +259,7 @@ class TestDispositionSerialization(IntegrationTestCase):
                       u'appraisal': True}],
                  u'text': u'',
                  u'changes': []},
-                {u'creator': {u'token': u'ramon.flucht', u'title': u'Flucht Ramon'},
+                {u'creator': {u'token': self.records_manager.getId(), u'title': u'Flucht Ramon'},
                  u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663493000000',
                  u'created': u'2016-08-31T19:11:33',
                  u'modified': None,
