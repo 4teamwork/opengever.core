@@ -2037,6 +2037,14 @@ class OpengeverContentFixture(object):
         # For now, username is exactly the same as userid
         username = userid
 
+        # Except for these users
+        users_with_different_userid = (
+            'propertysheets_manager',
+        )
+
+        if attrname in users_with_different_userid:
+            userid = attrname
+
         email = kwargs.pop('email', '{}@gever.local'.format(username))
 
         plone_user = create(
