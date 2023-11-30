@@ -640,7 +640,7 @@ Users
 - ``self.member_admin``: ``member_admin``
 - ``self.propertysheets_manager``: ``propertysheets_manager``
 - ``self.reader_user``: ``lucklicher.laser``
-- ``self.records_manager``: ``ramon.flucht``
+- ``self.records_manager``: ``records_manager``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
 - ``self.service_user``: ``service.user``
