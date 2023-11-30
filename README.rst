@@ -643,7 +643,7 @@ Users
 - ``self.records_manager``: ``records_manager``
 - ``self.regular_user``: ``kathi.barfuss``
 - ``self.secretariat_user``: ``jurgen.konig``
-- ``self.service_user``: ``service.user``
+- ``self.service_user``: ``service_user``
 - ``self.test_user``: ``test_user_1_``
 - ``self.webaction_manager``: ``webaction.manager``
 - ``self.workspace_admin``: ``fridolin.hugentobler``

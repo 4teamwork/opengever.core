@@ -376,10 +376,10 @@ class TestGroupSerializer(IntegrationTestCase):
              u'roles': [u'Authenticated'],
              u'title': u'fa Users Group',
              u'users': {u'@id': u'http://nohost/plone/@groups/fa_users',
-                        u'items': [{u'@id': u'http://nohost/plone/@users/service.user',
+                        u'items': [{u'@id': u'http://nohost/plone/@users/%s' % self.propertysheets_manager.getId(),
                                     u'@type': u'virtual.plone.user',
-                                    u'title': u'User Service (service.user)',
-                                    u'token': u'service.user'}],
+                                    u'title': u'Manager PropertySheets (propertysheets.manager)',
+                                    u'token': self.propertysheets_manager.getId()}],
                         u'items_total': 20}},
             response)
 
