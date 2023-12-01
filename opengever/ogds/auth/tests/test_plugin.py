@@ -130,8 +130,8 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
         results = self.plugin.enumerateUsers(
             firstname='J\xc3\xbcRGEN', exact_match=True)
         expected = (
-            'jurgen.fischer',
-            'jurgen.konig',
+            self.archivist.getId(),
+            self.secretariat_user.getId(),
         )
         self.assertEqual(expected, self.ids(results))
 

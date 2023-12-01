@@ -203,7 +203,7 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
             {'cause': 7,
              'roles': ['Reader'],
              'reference': Oguid.for_object(self.disposition).id,
-             'principal': 'jurgen.fischer'},
+             'principal': self.archivist.getId()},
             assignments[0])
 
         assignments = self.get_assignments_via_disposition(self.offered_dossier_to_destroy)
@@ -212,7 +212,7 @@ class TestNightlyDossierPermissionSetter(IntegrationTestCase):
             {'cause': 7,
              'roles': ['Reader'],
              'reference': Oguid.for_object(self.disposition).id,
-             'principal': 'jurgen.fischer'},
+             'principal': self.archivist.getId()},
             assignments[0])
 
         self.execute_nightly_jobs(expected=0)
