@@ -209,7 +209,7 @@ MAIL_MISSING_VALUES = {
 
 TASK_REQUIREDS = {
     'changed': FROZEN_DATETIME_NOW,
-    'issuer': 'regular_user',
+    'issuer': u'regular_user',
     'responsible': u'regular_user',
     'responsible_client': DEFAULT_CLIENT,
     'task_type': 'information',
