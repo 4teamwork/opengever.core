@@ -631,7 +631,7 @@ Users
 - ``self.administrator``: ``nicole.kohler``
 - ``self.archivist``: ``archivist``
 - ``self.committee_responsible``: ``franzi.muller``
-- ``self.dossier_manager``: ``faivel.fruhling``
+- ``self.dossier_manager``: ``dossier_manager``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.foreign_contributor``: ``james.bond``
 - ``self.limited_admin``: ``limited_admin``
