@@ -120,27 +120,27 @@ class TestActorLookup(IntegrationTestCase):
             actor.get_link())
 
     def test_user_actor_ogds_user(self):
-        actor = Actor.lookup('jurgen.konig')
+        actor = Actor.lookup(self.secretariat_user.id)
 
         self.assertIsInstance(actor, OGDSUserActor)
         self.assertEqual(
             u'K\xf6nig J\xfcrgen (jurgen.konig)', actor.get_label())
-        self.assertEqual('jurgen.konig', actor.permission_identifier)
+        self.assertEqual(self.secretariat_user.id, actor.permission_identifier)
         self.assertTrue(
-            actor.get_profile_url().endswith('@@user-details/jurgen.konig'))
+            actor.get_profile_url().endswith('@@user-details/%s' % self.secretariat_user.id))
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/@@user-details/jurgen.konig">'
-            u'K\xf6nig J\xfcrgen (jurgen.konig)</a>',
+            u'<a href="http://nohost/plone/@@user-details/%s">'
+            u'K\xf6nig J\xfcrgen (jurgen.konig)</a>' % self.secretariat_user.id,
             actor.get_link())
 
         self.assertEqual(
-            u'<a href="http://nohost/plone/@@user-details/jurgen.konig" '
+            u'<a href="http://nohost/plone/@@user-details/%s" '
             u'class="actor-label actor-user">K\xf6nig J\xfcrgen '
-            u'(jurgen.konig)</a>',
+            u'(jurgen.konig)</a>' % self.secretariat_user.id,
             actor.get_link(with_icon=True))
 
-        self.assertEqual(u'jurgen.konig', actor.login_name)
+        self.assertEqual(self.secretariat_user.getUserName(), actor.login_name)
 
     def test_group_actor_lookup(self):
         self.login(self.regular_user)
@@ -167,15 +167,15 @@ class TestActorLookup(IntegrationTestCase):
     def test_get_link_returns_safe_html(self):
         self.login(self.regular_user)
 
-        user = User.get("kathi.barfuss")
+        user = User.get(self.regular_user.id)
         user.firstname = "Foo <b onmouseover=alert('Foo!')>click me!</b>"
 
-        actor = Actor.lookup('kathi.barfuss')
+        actor = Actor.lookup(self.regular_user.id)
 
         self.assertEquals(
-            u'<a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+            u'<a href="http://nohost/plone/@@user-details/%s">'
             u'B\xe4rfuss Foo &lt;b onmouseover=alert(&apos;Foo!&apos;)&gt;click me!&lt;/b&gt; (kathi.barfuss)'
-            u'</a>',
+            u'</a>' % self.regular_user.id,
             actor.get_link())
 
     def test_interactive_actor_lookup(self):
@@ -298,7 +298,7 @@ class TestKuBContactActor(KuBIntegrationTestCase):
 class TestActorCorresponding(IntegrationTestCase):
 
     def test_user_corresponds_to_current_user(self):
-        actor = Actor.lookup('jurgen.konig')
+        actor = Actor.lookup(self.secretariat_user.id)
 
         self.assertTrue(
             actor.corresponds_to(self.get_ogds_user(self.secretariat_user)))
@@ -349,7 +349,7 @@ class TestActorCorresponding(IntegrationTestCase):
 class TestActorRepresentatives(IntegrationTestCase):
 
     def test_user_is_the_only_representatives_of_a_user(self):
-        actor = Actor.lookup('jurgen.konig')
+        actor = Actor.lookup(self.secretariat_user.id)
         self.assertEquals([self.get_ogds_user(self.secretariat_user)],
                           actor.representatives())
 

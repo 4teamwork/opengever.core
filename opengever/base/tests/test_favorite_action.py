@@ -20,7 +20,7 @@ class TestFavoriteAction(IntegrationTestCase):
         self.assertIsNotNone(viewlet)
         self.assertEquals(Oguid.for_object(self.dossier).id,
                           viewlet.get('data-oguid'))
-        self.assertEquals('http://nohost/plone/@favorites/kathi.barfuss',
+        self.assertEquals('http://nohost/plone/@favorites/%s' % self.regular_user.id,
                           viewlet.get('data-url'))
 
     @browsing

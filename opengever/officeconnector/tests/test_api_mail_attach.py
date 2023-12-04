@@ -24,7 +24,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
             u"action": u"attach",
             u"documents": [u"createemails00000000000000000001"],
             u"exp": 4121033100,
-            u"sub": u"kathi.barfuss",
+            u"sub": self.regular_user.id,
             u"url": u"http://nohost/plone/oc_attach",
         }
         raw_token = oc_url.split(":")[-1]
@@ -64,7 +64,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
             u"action": u"attach",
             u"documents": [u"createemails00000000000000000002"],
             u"exp": 4121033100,
-            u"sub": u"kathi.barfuss",
+            u"sub": self.regular_user.id,
             u"url": u"http://nohost/plone/oc_attach",
         }
         raw_token = oc_url.split(":")[-1]
@@ -112,7 +112,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
             u"bcc": u"1014013300@example.org",
             u"documents": [u"createemails00000000000000000001", u"createemails00000000000000000002"],
             u"exp": 4121033100,
-            u"sub": u"kathi.barfuss",
+            u"sub": self.regular_user.id,
             u"url": u"http://nohost/plone/oc_attach",
         }
         raw_token = oc_url.split(":")[-1]
@@ -173,7 +173,7 @@ class TestOfficeconnectorMailAPIWithAttach(OCSolrIntegrationTestCase):
             u"bcc": u"1014013300@example.org",
             u"documents": [u"createtreatydossiers000000000002", u"createtreatydossiers000000000017"],
             u"exp": 4121033100,
-            u"sub": u"kathi.barfuss",
+            u"sub": self.regular_user.id,
             u"url": u"http://nohost/plone/oc_attach",
         }
         raw_token = oc_url.split(":")[-1]

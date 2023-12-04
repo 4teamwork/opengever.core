@@ -26,7 +26,7 @@ class TestOCCheckoutRedirect(IntegrationTestCase):
             u'action': u'checkout',
             u'documents': [u'createtreatydossiers000000000002'],
             u'exp': 1668686400,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_checkout',
         }
 

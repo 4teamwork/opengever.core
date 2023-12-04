@@ -194,10 +194,10 @@ class TestSupermodelExportImport(IntegrationTestCase):
         self.assertTrue(IDefaultFactory.providedBy(field.defaultFactory))
 
         self.login(self.regular_user)
-        self.assertEqual(u'kathi.barfuss', field.defaultFactory())
+        self.assertEqual(self.regular_user.id, field.defaultFactory())
 
         self.login(self.dossier_responsible)
-        self.assertEqual(u'robert.ziegler', field.defaultFactory())
+        self.assertEqual(self.dossier_responsible.id, field.defaultFactory())
 
     def test_serializes_default_from_member(self):
         self.login(self.regular_user)

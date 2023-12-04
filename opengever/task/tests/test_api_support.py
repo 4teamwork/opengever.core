@@ -100,7 +100,7 @@ class TestAPISupport(IntegrationTestCase):
         task = children['added'].pop()
         watchers = notification_center().get_watchers(task)
 
-        self.assertEqual([u'kathi.barfuss', u'jurgen.konig'],
+        self.assertEqual([self.regular_user.id, self.secretariat_user.id],
                          [watcher.actorid for watcher in watchers])
 
 
@@ -624,14 +624,14 @@ class TestApprovalViaTask(IntegrationTestCase):
                          api.content.get_state(task))
 
         self.assertEqual([{
-            'approver': 'kathi.barfuss',
+            'approver': self.regular_user.id,
             'task_uid': IUUID(task),
             'approved': datetime(2021, 8, 18, 12, 45),
             'version_id': 0}],
             IApprovalList(contained_doc).storage.list())
 
         self.assertEqual([{
-            'approver': 'kathi.barfuss',
+            'approver': self.regular_user.id,
             'task_uid': IUUID(task),
             'approved': datetime(2021, 8, 18, 12, 45),
             'version_id': 0}],

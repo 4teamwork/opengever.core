@@ -48,7 +48,7 @@ class TestTaskSerialization(SolrIntegrationTestCase):
              u'approved_documents': [],
              u'changes': [],
              u'created': json_compatible(self.subtask.created().utcdatetime()),
-             u'creator': {u'title': u'Ziegler Robert', u'token': u'robert.ziegler'},
+             u'creator': {u'title': u'Ziegler Robert', u'token': self.dossier_responsible.id},
              u'mimetype': u'',
              u'modified': None,
              u'modifier': None,
@@ -649,7 +649,7 @@ class TestTaskTransitions(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         self.assertEqual('fa', self.task.responsible_client)
-        self.assertEqual('kathi.barfuss', self.task.responsible)
+        self.assertEqual(self.regular_user.id, self.task.responsible)
 
         data = {
             'responsible': {
@@ -663,14 +663,14 @@ class TestTaskTransitions(IntegrationTestCase):
 
         self.assertEqual('rk', self.task.responsible_client)
         self.assertEqual('james.bond', self.task.responsible)
-        self.assertEqual(['kathi.barfuss'], self.task.get_former_responsibles())
+        self.assertEqual([self.regular_user.id], self.task.get_former_responsibles())
 
     @browsing
     def test_reassign_task_without_combined_responsible_value(self, browser):
         self.login(self.regular_user, browser=browser)
 
         self.assertEqual('fa', self.task.responsible_client)
-        self.assertEqual('kathi.barfuss', self.task.responsible)
+        self.assertEqual(self.regular_user.id, self.task.responsible)
 
         data = {
             'responsible': 'james.bond',

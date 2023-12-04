@@ -397,7 +397,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
             )
 
         self.assertEquals(
-            'kathi.barfuss',
+            self.regular_user.id,
             manager.get_checked_out_by(),
             'The document should be checked out by the test user now.',
             )

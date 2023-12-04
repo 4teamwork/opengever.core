@@ -37,7 +37,7 @@ class TestRequireLoginScript(IntegrationTestCase):
             browser.url.startswith('http://nohost/plone/require_login'),
             'Unexpected URL {}'.format(browser.url))
 
-        browser.fill({'Login Name': self.regular_user.id,
+        browser.fill({'Login Name': self.regular_user.getUserName(),
                       'Password': TEST_USER_PASSWORD}).submit()
         self.assertEqual(document_url, browser.url)
 

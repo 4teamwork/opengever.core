@@ -18,7 +18,7 @@ class TestOGDSUserListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual([
-            {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
+            {u'@id': u'http://nohost/plone/@ogds-users/%s' % self.regular_user.id,
              u'@type': u'virtual.ogds.user',
              u'active': True,
              u'department': u'Staatskanzlei',
@@ -32,8 +32,8 @@ class TestOGDSUserListingGet(IntegrationTestCase):
              u'phone_mobile': u'012 34 56 76',
              u'phone_office': u'012 34 56 78',
              u'title': u'B\xe4rfuss K\xe4thi',
-             u'userid': u'kathi.barfuss',
-             u'username': u'kathi.barfuss'},
+             u'userid': self.regular_user.id,
+             u'username': self.regular_user.getUserName()},
             {u'@id': u'http://nohost/plone/@ogds-users/james.bond',
              u'@type': u'virtual.ogds.user',
              u'active': True,

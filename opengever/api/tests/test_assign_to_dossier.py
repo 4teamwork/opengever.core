@@ -128,9 +128,9 @@ class TestAssignToDossier(IntegrationTestCase):
         task = browser.json
 
         self.assertEqual(u"Manual t\xf6sk", task.get('title'))
-        self.assertEqual('fa:kathi.barfuss', task.get('responsible').get('token'))
+        self.assertEqual('fa:%s' % self.regular_user.id, task.get('responsible').get('token'))
 
-        self.assertEquals('jurgen.konig', task.get('issuer').get('token'))
+        self.assertEquals(self.secretariat_user.id, task.get('issuer').get('token'))
         self.assertEqual('2018-12-03', task.get('deadline'))
 
     @browsing
@@ -160,7 +160,7 @@ class TestAssignToDossier(IntegrationTestCase):
         self.assertEqual(201, browser.status_code)
         task = browser.json
 
-        self.assertEqual('fa:kathi.barfuss', task.get('responsible').get('token'))
+        self.assertEqual('fa:%s' % self.regular_user.id, task.get('responsible').get('token'))
 
     @browsing
     def test_assign_to_dossier_validates_add_permission(self, browser):

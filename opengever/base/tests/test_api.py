@@ -117,15 +117,15 @@ class TestDocumentStatus(IntegrationTestCase):
 
         expected = {
             u'checked_out': True,
-            u'checked_out_by': self.regular_user.getId(),
+            u'checked_out_by': self.regular_user.id,
             u'checked_out_collaboratively': True,
-            u'checkout_collaborators': [u'kathi.barfuss'],
+            u'checkout_collaborators': [self.regular_user.id],
             u'file_mtime': self.document.file._p_mtime,
             u'int_id': getUtility(IIntIds).getId(self.document),
             u'lock_time': 1630918461.0,
             u'lock_timeout': 1800,
             u'locked': True,
-            u'locked_by': self.regular_user.getId(),
+            u'locked_by': self.regular_user.id,
             u'review_state': 'document-state-draft',
             u'title': u'Vertr\xe4gsentwurf',
         }

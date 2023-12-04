@@ -889,7 +889,7 @@ class TestCheckinViews(IntegrationTestCase):
             )
 
         manager = getMultiAdapter((self.document, self.portal.REQUEST), ICheckinCheckoutManager)
-        self.assertEquals('kathi.barfuss', manager.get_checked_out_by())
+        self.assertEquals(self.regular_user.id, manager.get_checked_out_by())
 
         manager = getMultiAdapter((self.subdocument, self.portal.REQUEST), ICheckinCheckoutManager)
         self.assertEquals(None, manager.get_checked_out_by())

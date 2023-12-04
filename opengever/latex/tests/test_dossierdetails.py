@@ -143,8 +143,8 @@ class TestDossierDetails(TestDossierDetailsBase):
             ['{ ',
              '\\vspace{-\\baselineskip}\\begin{itemize} ',
              '\\item Ziegler Robert (robert.ziegler), Responsible ',
-             '\\item B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss), For your information, Participation, Final signature ',
              '\\item Ziegler Robert (robert.ziegler), For your information ',
+             '\\item B\xc3\xa4rfuss K\xc3\xa4thi (kathi.barfuss), For your information, Participation, Final signature ',
              '\\vspace{-\\baselineskip}\\end{itemize} ',
              '}'],
             dossierdetails.get_participants().split("\n")

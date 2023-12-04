@@ -125,7 +125,7 @@ class TestRepositoryFavoritesPost(IntegrationTestCase):
 
         self.assertEqual(201, browser.status_code)
 
-        self.assertEqual(u'http://nohost/plone/@favorites/kathi.barfuss/1',
+        self.assertEqual(u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
                          browser.headers.get('location'))
 
         browser.open(browser.headers.get('location'), method='GET',
@@ -248,7 +248,7 @@ class TestFavoritesDelete(IntegrationTestCase):
                          headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            {u"message": u'Resource not found: http://nohost/plone/@repository-favorites/kathi.barfuss/1',
+            {u"message": u'Resource not found: http://nohost/plone/@repository-favorites/%s/1' % self.regular_user.id,
              u"type": u"NotFound"}, browser.json)
 
     @browsing

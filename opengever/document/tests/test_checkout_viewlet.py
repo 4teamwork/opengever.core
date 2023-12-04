@@ -20,7 +20,7 @@ class TestCheckedOutViewlet(IntegrationTestCase):
 
         self.assertEqual(u'This document is currently checked out by B\xe4rfuss K\xe4thi (kathi.barfuss).',
                          message.text)
-        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
+        self.assertEqual('http://nohost/plone/@@user-details/%s' % self.regular_user.id,
                          link.get('href'))
 
     @browsing
@@ -37,7 +37,7 @@ class TestCheckedOutViewlet(IntegrationTestCase):
 
         self.assertEqual(u'This document is being edited in Office Online by B\xe4rfuss K\xe4thi (kathi.barfuss).',
                          message.text)
-        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
+        self.assertEqual('http://nohost/plone/@@user-details/%s' % self.regular_user.id,
                          link.get('href'))
 
     @browsing

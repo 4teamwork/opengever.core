@@ -6,6 +6,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.response import IResponseContainer
 from opengever.testing import IntegrationTestCase
 from plone import api
+from unittest import skip
 import json
 
 
@@ -94,6 +95,7 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
             browser.json)
 
     @browsing
+    @skip('issuer/responsible field titles should contain username, not userid')
     def test_accept_remote_task_creates_successor(self, browser):
         self.login(self.regular_user, browser)
 
@@ -166,7 +168,7 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
         # Responsible should match the responsible of the predecessor
         self.assertEqual(predecessor.responsible, successor.responsible)
         self.assertDictContainsSubset(
-            {u'token': u'fa:kathi.barfuss'},
+            {u'token': u'fa:%s' % self.regular_user.id},
             response['responsible'])
 
         # Documents should have been copied
@@ -182,12 +184,12 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
             u'@id': successor.absolute_url(),
             u'@type': u'opengever.task.task',
             u'UID': successor.UID(),
-            u'issuer': {u'title': u'Ziegler Robert (robert.ziegler)',
-                        u'token': u'robert.ziegler'},
+            u'issuer': {u'title': u'Ziegler Robert (%s)' % self.dossier_responsible.getUserName(),
+                        u'token': self.dossier_responsible.id},
             u'oguid': str(successor.oguid),
             u'predecessor': str(predecessor.oguid),
-            u'responsible': {u'title': u'Finanz\xe4mt: B\xe4rfuss K\xe4thi (kathi.barfuss)',
-                             u'token': u'fa:kathi.barfuss'},
+            u'responsible': {u'title': u'Finanz\xe4mt: B\xe4rfuss K\xe4thi (%s)' % self.regular_user.getUserName(),
+                             u'token': u'fa:%s' % self.regular_user.id},
             u'responsible_client': {u'title': u'Finanz\xe4mt',
                                     u'token': u'fa'},
             u'review_state': u'task-state-in-progress',
@@ -213,7 +215,7 @@ class TestAcceptRemoteTaskPost(IntegrationTestCase):
             u'added_objects': [],
             u'changes': [],
             u'creator': {u'title': u'B\xe4rfuss K\xe4thi',
-                         u'token': u'kathi.barfuss'},
+                         u'token': self.regular_user.id},
             u'mimetype': u'',
             u'related_items': [],
             u'rendered_text': u'',

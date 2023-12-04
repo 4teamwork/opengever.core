@@ -423,7 +423,7 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
 
         expected = [
             [{u'approved': u'2021-08-02T00:00:00',
-              u'approver': u'nicole.kohler',
+              u'approver': self.administrator.id,
               u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1',
                         u'@type': u'opengever.task.task',
                         u'UID': u'createtasks000000000000000000001',
@@ -433,7 +433,7 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
                         u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
               u'version_id': 2},
              {u'approved': u'2021-08-13T00:00:00',
-              u'approver': u'jurgen.konig',
+              u'approver': self.secretariat_user.id,
               u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
                         u'@type': u'opengever.task.task',
                         u'UID': u'createtasks000000000000000000002',
@@ -443,7 +443,7 @@ class TestVersionsGetEndpointForDocuments(IntegrationTestCase):
                         u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
               u'version_id': 2}],
             [{u'approved': u'2021-07-02T00:00:00',
-              u'approver': u'kathi.barfuss',
+              u'approver': self.regular_user.id,
               u'task': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
                         u'@type': u'opengever.task.task',
                         u'UID': u'createtasks000000000000000000002',

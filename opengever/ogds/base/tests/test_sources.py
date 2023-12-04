@@ -1066,8 +1066,8 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
         return [term.value for term in self.source.search('') if term.token.startswith('group:')]
 
     def test_find_users(self):
-        self.assertIn('kathi.barfuss', self.source)
-        self.assertIn('herbert.jager', self.source)
+        self.assertIn(self.regular_user.id, self.source)
+        self.assertIn(self.meeting_user.id, self.source)
 
     def test_find_groups_with_prefix(self):
         self.assertIn('group:fa_users', self.source)

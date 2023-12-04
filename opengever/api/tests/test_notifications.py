@@ -45,24 +45,24 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/3',
-              u'actor_id': u'nicole.kohler',
+            [{u'@id': u'http://nohost/plone/@notifications/%s/4' % self.regular_user.id,
+              u'actor_id': self.administrator.id,
               u'actor_label': u'Kohler Nicole',
               u'created': u'2018-10-16T00:00:00+00:00',
               u'label': u'Task opened',
-              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=3',
-              u'notification_id': 3,
+              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=4',
+              u'notification_id': 4,
               u'oguid': str(Oguid.for_object(self.task)),
               u'read': False,
               u'summary': u'New task opened by Ziegler Robert',
               u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
-             {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
-              u'actor_id': u'nicole.kohler',
+             {u'@id': u'http://nohost/plone/@notifications/%s/2' % self.regular_user.id,
+              u'actor_id': self.administrator.id,
               u'actor_label': u'Kohler Nicole',
               u'created': u'2017-10-16T00:00:00+00:00',
               u'label': u'Task opened',
-              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=1',
-              u'notification_id': 1,
+              u'link': u'http://nohost/plone/@@resolve_notification?notification_id=2',
+              u'notification_id': 2,
               u'oguid': str(Oguid.for_object(self.task)),
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
@@ -145,8 +145,8 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
-             u'actor_id': u'robert.ziegler',
+            {u'@id': u'http://nohost/plone/@notifications/%s/1' % self.regular_user.id,
+             u'actor_id': self.dossier_responsible.id,
              u'actor_label': u'Ziegler Robert',
              u'created': u'2017-10-16T00:00:00+00:00',
              u'label': u'Task opened',
@@ -176,8 +176,8 @@ class TestNotificationsGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@notifications/kathi.barfuss/1',
-             u'actor_id': u'robert.ziegler',
+            {u'@id': u'http://nohost/plone/@notifications/%s/1' % self.regular_user.id,
+             u'actor_id': self.dossier_responsible.id,
              u'actor_label': u'Ziegler Robert',
              u'created': u'2017-10-16T00:00:00+00:00',
              u'label': u'T\xe2che ouverte',

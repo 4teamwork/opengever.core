@@ -158,9 +158,9 @@ class TestDocumentWatcherAddedActivity(IntegrationTestCase):
         self.assertEqual('document-watcher-added', activity.kind)
         self.assertEqual('Added as watcher of document', activity.label)
         self.assertEqual(u'Vertr\xe4gsentwurf', activity.title)
-        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(self.regular_user.id, activity.actor_id)
         self.assertEqual(u'Added as watcher of document by <a href="http://nohost/plone/'
-                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         u'@@user-details/%s">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>' % self.regular_user.id,
                          activity.summary)
 
     def test_only_added_watcher_is_notified(self):

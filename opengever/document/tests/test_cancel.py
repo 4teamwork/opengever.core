@@ -61,9 +61,9 @@ class TestCancelDocuments(FunctionalTestCase):
         manager = self.get_manager(doc)
 
         manager.checkout(collaborative=True)
-        manager.add_collaborator('kathi.barfuss')
+        manager.add_collaborator('regular_user')
         self.assertEqual(
-            ['test_user_1_', 'kathi.barfuss'],
+            ['test_user_1_', 'regular_user'],
             manager.get_collaborators())
         self.assertTrue(manager.is_collaborative_checkout())
 
@@ -149,11 +149,11 @@ class TestCancelDocumentCheckoutConfirmation(SolrIntegrationTestCase):
                                   ICheckinCheckoutManager)
 
         manager.checkout()
-        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+        self.assertEqual(self.regular_user.id, manager.get_checked_out_by())
 
         browser.open(self.document, view="tabbedview_view-overview")
         browser.click_on("Cancel checkout")
-        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+        self.assertEqual(self.regular_user.id, manager.get_checked_out_by())
 
         browser.click_on("Cancel checkout")
         self.assertEqual(None, manager.get_checked_out_by())
@@ -176,6 +176,6 @@ class TestCancelDocumentCheckoutConfirmation(SolrIntegrationTestCase):
                      {'paths': paths,
                       '_authenticator': createToken()},
                      view='cancel_documents_checkout_confirmation', )
-        self.assertEqual('kathi.barfuss', manager.get_checked_out_by())
+        self.assertEqual(self.regular_user.id, manager.get_checked_out_by())
         browser.click_on("Cancel checkout")
         self.assertEqual(None, manager.get_checked_out_by())

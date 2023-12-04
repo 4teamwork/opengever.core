@@ -33,10 +33,10 @@ class TestUsersGet(IntegrationTestCase):
         browser.open(url, headers=self.api_headers)
 
         self.assertEquals(
-            {u'username': u'robert.ziegler',
+            {u'username': self.dossier_responsible.getUserName(),
              u'description': None,
              u'roles': [u'Member'],
-             u'roles_and_principals': [u'principal:robert.ziegler',
+             u'roles_and_principals': [u'principal:%s' % self.dossier_responsible.id,
                                        u'Member',
                                        u'Authenticated',
                                        u'principal:AuthenticatedUsers',
@@ -44,12 +44,12 @@ class TestUsersGet(IntegrationTestCase):
                                        u'principal:fa_users',
                                        u'Anonymous'],
              u'home_page': None,
-             u'email': u'robert.ziegler@gever.local',
+             u'email': u'%s@gever.local' % self.dossier_responsible.getUserName(),
              u'location': None,
              u'portrait': None,
              u'fullname': u'Ziegler Robert',
-             u'@id': u'http://nohost/plone/@users/robert.ziegler',
-             u'id': u'robert.ziegler'}, browser.json)
+             u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
+             u'id': self.dossier_responsible.id}, browser.json)
 
     @browsing
     def test_unuathorized_accessing_an_other_user_raises(self, browser):
@@ -71,7 +71,7 @@ class TestUsersPatch(IntegrationTestCase):
         m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)
 
         browser.open(url, headers=self.api_headers)
-        self.assertEqual(u'http://nohost/plone/portal_memberdata/portraits/kathi.barfuss', browser.json.get('portrait'))
+        self.assertEqual(u'http://nohost/plone/portal_memberdata/portraits/%s' % self.regular_user.id, browser.json.get('portrait'))
 
         browser.open(url, method='PATCH', headers=self.api_headers, data=json.dumps({ 'portrait': None }))
         browser.open(url, headers=self.api_headers)

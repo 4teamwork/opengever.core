@@ -196,7 +196,7 @@ class TestOpengeverSharing(IntegrationTestCase):
         self.assertEquals(
             ((self.secretariat_user.id, (u'Contributor', u'Editor', u'Reader')),
              (self.regular_user.id, (u'Reader',)),
-             ('robert.ziegler', ('Owner',))),
+             (self.dossier_responsible.id, ('Owner',))),
             self.empty_dossier.get_local_roles())
 
         self.assertEquals(
@@ -229,15 +229,15 @@ class TestOpengeverSharing(IntegrationTestCase):
 
         browser.open(self.empty_dossier, data, view='@sharing',
                      method='POST', headers=self.api_headers)
-        self.assertEqual(((u'kathi.barfuss', (u'Reader',)),
-                          ('robert.ziegler', ('Owner',))),
+        self.assertEqual(((self.regular_user.id, (u'Reader',)),
+                          (self.dossier_responsible.id, ('Owner',))),
                          self.empty_dossier.get_local_roles())
 
         self.login(self.manager, browser=browser)
         browser.open(self.empty_dossier, data, view='@sharing',
                      method='POST', headers=self.api_headers)
-        self.assertEqual(((u'kathi.barfuss', (u'TaskResponsible', u'Reader')),
-                          ('robert.ziegler', ('Owner',))),
+        self.assertEqual(((self.regular_user.id, (u'TaskResponsible', u'Reader')),
+                          (self.dossier_responsible.id, ('Owner',))),
                          self.empty_dossier.get_local_roles())
 
     @browsing
@@ -274,7 +274,7 @@ class TestOpengeverSharing(IntegrationTestCase):
         self.assertEquals(
             [{'cause': 3,
               'roles': ['Contributor', 'Editor', 'Reader', 'Owner'],
-              'reference': None, 'principal': 'robert.ziegler'}],
+              'reference': None, 'principal': self.dossier_responsible.id}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
 
     @browsing
@@ -323,14 +323,14 @@ class TestOpengeverSharing(IntegrationTestCase):
                   u'computed_roles': {},
                   u'automatic_roles': {},
                   u'title': u'Ziegler Robert',
-                  u'url': u'http://nohost/plone/@@user-details-plain/robert.ziegler',
-                  u'login': u'robert.ziegler',
-                  u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/robert.ziegler',
+                  u'url': u'http://nohost/plone/@@user-details-plain/%s' % self.dossier_responsible.id,
+                  u'login': self.dossier_responsible.id,
+                  u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/%s' % self.dossier_responsible.id,
                                     u'@type': u'virtual.ogds.user',
                                     u'active': True,
                                     u'department': None,
                                     u'directorate': None,
-                                    u'email': u'robert.ziegler@gever.local',
+                                    u'email': u'%s@gever.local' % self.dossier_responsible.getUserName(),
                                     u'email2': None,
                                     u'firstname': u'Robert',
                                     u'job_title': None,
@@ -339,12 +339,12 @@ class TestOpengeverSharing(IntegrationTestCase):
                                     u'phone_mobile': None,
                                     u'phone_office': None,
                                     u'title': u'Ziegler Robert',
-                                    u'userid': u'robert.ziegler',
-                                    u'username': u'robert.ziegler'},
-                  u'actor': {u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                             u'identifier': u'robert.ziegler'},
+                                    u'userid': self.dossier_responsible.id,
+                                    u'username': self.dossier_responsible.getUserName()},
+                  u'actor': {u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                             u'identifier': self.dossier_responsible.id},
                   u'type': u'user',
-                  u'id': u'robert.ziegler'}]},
+                  u'id': self.dossier_responsible.id}]},
             browser.json)
 
     @browsing
@@ -379,9 +379,9 @@ class TestOpengeverSharing(IntegrationTestCase):
                                  u'Reader': True,
                                  u'Reviewer': False},
              u'disabled': False,
-             u'id': u'kathi.barfuss',
-             u'login': u'kathi.barfuss',
-             u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
+             u'id': self.regular_user.id,
+             u'login': self.regular_user.getUserName(),
+             u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-users/%s' % self.regular_user.id,
                                u'@type': u'virtual.ogds.user',
                                u'active': True,
                                u'department': u'Staatskanzlei',
@@ -396,10 +396,10 @@ class TestOpengeverSharing(IntegrationTestCase):
                                u'phone_mobile': u'012 34 56 76',
                                u'phone_office': u'012 34 56 78',
                                u'title': u'B\xe4rfuss K\xe4thi',
-                               u'userid': u'kathi.barfuss',
-                               u'username': u'kathi.barfuss'},
-             u'actor': {u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                        u'identifier': u'kathi.barfuss'},
+                               u'userid': self.regular_user.id,
+                               u'username': self.regular_user.getUserName()},
+             u'actor': {u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                        u'identifier': self.regular_user.id},
              u'roles': {u'Contributor': True,
                         u'Editor': True,
                         u'Publisher': False,
@@ -407,7 +407,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                         u'Reviewer': False},
              u'title': u'B\xe4rfuss K\xe4thi',
              u'type': u'user',
-             u'url': u'http://nohost/plone/@@user-details-plain/kathi.barfuss'},
+             u'url': u'http://nohost/plone/@@user-details-plain/%s' % self.regular_user.id},
             [item for item in entries if item['id'] == self.regular_user.id][0])
 
         self.assertEqual(
@@ -590,13 +590,13 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
               u'reference': {
                   u'url': self.task.absolute_url(),
                   u'title': self.task.title},
-              u'principal': u'kathi.barfuss'},
+              u'principal': self.regular_user.id},
              {u'cause': {
                  u'id': ASSIGNMENT_VIA_TASK_AGENCY,
                  u'title': u'Via task agency'},
               u'roles': [u'Reader'],
               u'reference': None,
-              u'principal': u'kathi.barfuss'}],
+              u'principal': self.regular_user.id}],
             browser.json)
 
     @browsing
@@ -620,7 +620,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
               u'reference': {
                   u'url': self.task.absolute_url(),
                   u'title': self.task.title},
-              u'principal': u'kathi.barfuss'}],
+              u'principal': self.regular_user.id}],
             browser.json)
 
     @browsing
@@ -649,7 +649,7 @@ class TestRoleAssignmentsGet(IntegrationTestCase):
                               'Content-Type': 'application/json'})
 
         self.assertEquals(
-            (('robert.ziegler', ('Owner',)),),
+            ((self.dossier_responsible.id, ('Owner',)),),
             self.empty_dossier.get_local_roles())
         self.assertEquals(
             [],

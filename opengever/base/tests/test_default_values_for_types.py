@@ -120,7 +120,7 @@ DOSSIER_DEFAULTS = {
     'dossier_type': None,
 }
 DOSSIER_FORM_DEFAULTS = {
-    'responsible': u'kathi.barfuss',
+    'responsible': u'regular_user',
 }
 DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,
@@ -209,8 +209,8 @@ MAIL_MISSING_VALUES = {
 
 TASK_REQUIREDS = {
     'changed': FROZEN_DATETIME_NOW,
-    'issuer': 'kathi.barfuss',
-    'responsible': u'kathi.barfuss',
+    'issuer': 'regular_user',
+    'responsible': u'regular_user',
     'responsible_client': DEFAULT_CLIENT,
     'task_type': 'information',
     'title': DEFAULT_TITLE,
@@ -223,7 +223,7 @@ TASK_DEFAULTS = {
     'revoke_permissions': True
 }
 TASK_FORM_DEFAULTS = {
-    'issuer': u'kathi.barfuss',
+    'issuer': u'regular_user',
     'responsible_client': DEFAULT_CLIENT,
 }
 TASK_MISSING_VALUES = {
@@ -343,7 +343,7 @@ PRIVATEFOLDER_DEFAULTS = {
 }
 PRIVATEFOLDER_FORM_DEFAULTS = {}
 PRIVATEFOLDER_MISSING_VALUES = {
-    'description': '',
+    'description': u'',
     'former_reference': None,
     'location': None,
     'referenced_activity': None,

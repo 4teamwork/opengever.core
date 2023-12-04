@@ -228,14 +228,14 @@ class TestLocalRolesSetter(IntegrationTestCase):
         assignments = filter(lambda assignment: assignment[
                              'reference'] == Oguid.for_object(self.task).id, storage._storage())
         self.assertEqual(
-            [u'kathi.barfuss', u'fa_inbox_users'],
+            [self.regular_user.id, u'fa_inbox_users'],
             [assignment['principal'] for assignment in assignments])
 
         storage = RoleAssignmentManager(self.proposaldocument).storage
         assignments = filter(lambda assignment: assignment[
                              'reference'] == Oguid.for_object(self.task).id, storage._storage())
         self.assertEqual(
-            [u'kathi.barfuss', u'fa_inbox_users'],
+            [self.regular_user.id, u'fa_inbox_users'],
             [assignment['principal'] for assignment in assignments])
 
         ITask(self.task).relatedItems = []
@@ -274,7 +274,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
@@ -317,7 +317,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
@@ -325,12 +325,12 @@ class TestLocalRolesRevoking(IntegrationTestCase):
              {'cause': ASSIGNMENT_VIA_TASK,
               'reference': Oguid.for_object(self.task),
               'roles': ['Editor'],
-              'principal': 'jurgen.konig'},
+              'principal': self.secretariat_user.id},
              {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'nicole.kohler'}], storage._storage())
-        self.assertEqual(['kathi.barfuss', 'jurgen.konig'], self.task.get_former_responsibles())
+              'principal': self.administrator.id}], storage._storage())
+        self.assertEqual([self.regular_user.id, self.secretariat_user.id], self.task.get_former_responsibles())
 
         # close
         browser.open(self.task, view='tabbedview_view-overview')
@@ -353,7 +353,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
@@ -369,7 +369,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
@@ -504,7 +504,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         storage = RoleAssignmentManager(self.document).storage
         assignments = filter(lambda assignment: assignment[
                              'reference'] == Oguid.for_object(self.task).id, storage._storage())
-        self.assertEqual([u'kathi.barfuss', u'fa_inbox_users', u'nicole.kohler'], [
+        self.assertEqual([self.regular_user.id, u'fa_inbox_users', self.administrator.id], [
                          assignment['principal'] for assignment in assignments])
 
         # close
@@ -669,7 +669,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         self.assertEqual([], storage._storage())
         self.assertEqual(
-            (('franzi.muller', ('Owner',)),),
+            ((self.committee_responsible.id, ('Owner',)),),
             self.meeting_dossier.get_local_roles())
 
     @browsing
@@ -680,8 +680,8 @@ class TestLocalRolesRevoking(IntegrationTestCase):
 
         self.assertEqual(
             (('fa_inbox_users', ('TaskResponsible',)),
-             ('franzi.muller', ('Owner',)),
-             ('robert.ziegler', ('TaskResponsible',))),
+             (self.committee_responsible.id, ('Owner',)),
+             (self.dossier_responsible.id, ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 
         storage = RoleAssignmentManager(self.meeting_dossier).storage
@@ -725,8 +725,8 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             storage._storage())
         self.assertEqual(
             (('fa_inbox_users', ('TaskResponsible',)),
-             ('franzi.muller', ('Owner',)),
-             ('robert.ziegler', ('TaskResponsible',))),
+             (self.committee_responsible.id, ('Owner',)),
+             (self.dossier_responsible.id, ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 
     @browsing
@@ -815,7 +815,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
@@ -838,7 +838,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
@@ -853,7 +853,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.seq_subtask_2),
@@ -893,7 +893,7 @@ class TestLocalRolesRevoking(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),

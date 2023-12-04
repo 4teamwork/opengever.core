@@ -82,14 +82,14 @@ class TestTeamTasks(IntegrationTestCase):
         # list comprehension.
         watchers = center.get_watchers(task)
         self.assertEquals(
-            [u'kathi.barfuss', u'team:2'],
+            [self.regular_user.id, u'team:2'],
             [watcher.actorid for watcher in watchers]
         )
 
         activity = Activity.query.one()
 
         self.assertEquals(
-            [u'franzi.muller', u'herbert.jager'],
+            [self.committee_responsible.id, self.meeting_user.id],
             [note.userid for note in activity.notifications])
 
     @browsing
@@ -129,7 +129,7 @@ class TestTeamTasks(IntegrationTestCase):
         browser.click_on('Accept')
         browser.click_on('Save')
 
-        self.assertEqual(['projekt_a', u'fa_inbox_users', u'kathi.barfuss'],
+        self.assertEqual(['projekt_a', u'fa_inbox_users', self.regular_user.id],
                          [item['principal'] for item in storage._storage()])
         self.assertEqual(['team:1'], task.get_former_responsibles())
 
@@ -154,7 +154,7 @@ class TestTeamTasks(IntegrationTestCase):
 
         response = IResponseContainer(self.task).list()[-1]
         expected = [{'before': u'team:1',
-                     'after': 'kathi.barfuss',
+                     'after': self.regular_user.id,
                      'field_id': 'responsible',
                      'field_title': u'label_responsible'}]
 
@@ -182,7 +182,7 @@ class TestTeamTasks(IntegrationTestCase):
         self.assertEquals(
             self.regular_user.getId(), successor.get_sql_object().responsible)
         self.assertEquals(
-            [{'after': 'kathi.barfuss', 'field_id': 'responsible',
+            [{'after': self.regular_user.id, 'field_id': 'responsible',
               'field_title': u'label_responsible', 'before': u'team:1'}],
             IResponseContainer(self.task).list()[-1].changes)
         self.assertEquals('task-transition-open-in-progress',

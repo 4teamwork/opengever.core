@@ -100,6 +100,6 @@ class TestCMFEditionsModifiers(IntegrationTestCase):
             'title': u'msg_version_restored'},
             'id': journal_id,
             'comments': '',
-            'actor': 'kathi.barfuss',
+            'actor': self.regular_user.id,
             'time': DateTime('2015/01/28 12:00:00 GMT+1')}
         self.assertEqual(expected_entry, journal[-1])

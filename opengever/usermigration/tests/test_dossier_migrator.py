@@ -83,8 +83,8 @@ class TestDossierMigratorForResponsibleSolr(SolrIntegrationTestCase):
         searchable_text = solr_data_for(self.dossier, 'SearchableText')
         self.assertEqual(self.regular_user.id,
                          IDossier(self.dossier).responsible)
-        self.assertNotIn(self.dossier_responsible.id, searchable_text)
-        self.assertIn(self.regular_user.id, searchable_text)
+        self.assertNotIn(self.dossier_responsible.getUserName(), searchable_text)
+        self.assertIn(self.regular_user.getUserName(), searchable_text)
 
 
 class TestDossierMigratorForParticipants(FunctionalTestCase):

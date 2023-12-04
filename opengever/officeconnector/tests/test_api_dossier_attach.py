@@ -142,7 +142,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'action': u'attach',
             u'documents': [u'createtreatydossiers000000000002'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
@@ -191,7 +191,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'action': u'attach',
             u'documents': [u'createinactivedossier00000000002'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
@@ -239,7 +239,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'action': u'attach',
             u'documents': [u'createexpireddossier000000000002'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
@@ -293,7 +293,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'bcc': u'1014013300@example.org',
             u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
@@ -361,7 +361,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'action': u'attach',
             u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]
@@ -427,7 +427,7 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
             u'action': u'attach',
             u'documents': [u'createtreatydossiers000000000002', u'createtasks000000000000000000003'],
             u'exp': 4121033100,
-            u'sub': u'kathi.barfuss',
+            u'sub': self.regular_user.id,
             u'url': u'http://nohost/plone/oc_attach',
             }
         raw_token = oc_url.split(':')[-1]

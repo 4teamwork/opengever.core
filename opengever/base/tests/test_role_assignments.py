@@ -60,9 +60,9 @@ class TestRoleAssignmentManager(IntegrationTestCase):
                               ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
-            (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
-             ('kathi.barfuss', ('Publisher', 'Reviewer')),
-             ('robert.ziegler', ('Owner',))),
+            ((self.secretariat_user.id, ('Contributor', 'Editor', 'Reader')),
+             (self.regular_user.id, ('Publisher', 'Reviewer')),
+             (self.dossier_responsible.id, ('Owner',))),
             self.empty_dossier.get_local_roles())
 
     def test_does_not_clean_owner_roles_when_adding(self):
@@ -79,9 +79,9 @@ class TestRoleAssignmentManager(IntegrationTestCase):
                               ['Publisher', 'Reviewer'], ASSIGNMENT_VIA_SHARING)
 
         self.assertEquals(
-            (('jurgen.konig', ('Contributor', 'Editor', 'Reader')),
-             ('kathi.barfuss', ('Publisher', 'Reviewer')),
-             ('robert.ziegler', ('Owner',))),
+            ((self.secretariat_user.id, ('Contributor', 'Editor', 'Reader')),
+             (self.regular_user.id, ('Publisher', 'Reviewer')),
+             (self.dossier_responsible.id, ('Owner',))),
             self.empty_dossier.get_local_roles())
 
     def test_role_assignmets_on_tasks(self):
@@ -202,7 +202,7 @@ class TestRoleAssignmentManager(IntegrationTestCase):
         assignments = manager.get_assignments_by_reference(self.task)
 
         self.assertItemsEqual(
-            [('kathi.barfuss', 1, ['TaskResponsible']),
+            [(self.regular_user.id, 1, ['TaskResponsible']),
              ('fa_inbox_users', 2, ['TaskResponsible'])],
             [(assignment.principal, assignment.cause, assignment.roles)
              for assignment in assignments]
@@ -234,7 +234,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
                 u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.task.absolute_url(), u'title': u'Vertragsentwurf \xdcberpr\xfcfen'},
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -249,7 +249,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                     u'url': self.subtask.absolute_url(),
                     u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen',
                 },
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, 'title': u'Via task agency'},
@@ -264,7 +264,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
                 u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.sequential_task.absolute_url(), u'title': u'Personaleintritt'},
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -276,7 +276,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
                 u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_1.absolute_url(), u'title': u'Mitarbeiter Dossier generieren'},
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -288,7 +288,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},
                 u'roles': [u'TaskResponsible'],
                 u'reference': {u'url': self.seq_subtask_2.absolute_url(), u'title': u'Arbeitsplatz vorbereiten'},
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -303,7 +303,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                     u'url': self.seq_subtask_3.absolute_url(),
                     u'title': u'Vorstellungsrunde bei anderen Mitarbeitern',
                 },
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -321,7 +321,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                     u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-11',
                     u'title': u'Vertragsentw\xfcrfe 2018',
                 },
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK_AGENCY, u'title': u'Via task agency'},
@@ -340,7 +340,7 @@ class TestManageRoleAssignmentsView(IntegrationTestCase):
                             u'/vertrage-und-vereinbarungen/dossier-1/task-12',
                     u'title': u'Diskr\xe4te Dinge',
                 },
-                u'principal': u'kathi.barfuss',
+                u'principal': self.regular_user.id,
             },
             {
                 u'cause': {u'id': ASSIGNMENT_VIA_TASK, u'title': u'Via task'},

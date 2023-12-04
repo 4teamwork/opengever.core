@@ -47,12 +47,12 @@ class TestOGDSUserGet(IntegrationTestCase):
             )
 
         browser.open(self.portal,
-                     view='@ogds-users/kathi.barfuss',
+                     view='@ogds-users/%s' % self.regular_user.id,
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/@ogds-users/kathi.barfuss',
+            {u'@id': u'http://nohost/plone/@ogds-users/%s' % self.regular_user.id,
              u'@type': u'virtual.ogds.user',
              u'absent': False,
              u'absent_from': None,
@@ -70,7 +70,7 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'display_name': u'B\xe4rfuss K\xe4thi',
              u'email': u'foo@example.com',
              u'email2': u'bar@example.com',
-             u'external_id': u'kathi.barfuss',
+             u'external_id': self.regular_user.id,
              u'firstname': u'K\xe4thi',
              u'groups': [{u'@id': u'http://nohost/plone/@ogds-groups/projekt_a',
                           u'@type': u'virtual.ogds.group',
@@ -137,8 +137,8 @@ class TestOGDSUserGet(IntegrationTestCase):
                          u'team_id': 5,
                          u'title': u'Zentrale Dienste'}],
              u'url': u'http://www.example.com',
-             u'userid': u'kathi.barfuss',
-             u'username': u'kathi.barfuss',
+             u'userid': self.regular_user.id,
+             u'username': self.regular_user.getUserName(),
              u'zip_code': u'1234'},
             browser.json)
 

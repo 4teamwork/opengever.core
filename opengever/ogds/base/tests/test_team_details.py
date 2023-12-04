@@ -65,8 +65,8 @@ class TestTeamDetails(IntegrationTestCase):
             links.text)
 
         self.assertEquals(
-            ['http://nohost/plone/@@user-details/kathi.barfuss',
-             'http://nohost/plone/@@user-details/robert.ziegler'],
+            ['http://nohost/plone/@@user-details/%s' % self.regular_user.id,
+             'http://nohost/plone/@@user-details/%s' % self.dossier_responsible.id],
             [link.get('href') for link in links])
 
     @browsing

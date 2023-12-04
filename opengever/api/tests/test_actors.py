@@ -64,12 +64,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'login_name': None,
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                        u'identifier': u'kathi.barfuss',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                        u'identifier': self.regular_user.id,
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                        u'identifier': u'robert.ziegler',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                        u'identifier': self.dossier_responsible.id,
                     },
                 ],
                 u'represents': {
@@ -114,8 +114,8 @@ class TestActorsGet(IntegrationTestCase):
                 u'login_name': u'fa_inbox_users',
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.secretariat_user.id,
+                        u'identifier': self.secretariat_user.id,
                     },
                 ],
                 u'represents': {
@@ -202,12 +202,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'login_name': None,
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/nicole.kohler',
-                        u'identifier': u'nicole.kohler',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.administrator.id,
+                        u'identifier': self.administrator.id,
                     },
                     {
-                        u'@id': u'http://nohost/plone/@actors/franzi.muller',
-                        u'identifier': u'franzi.muller',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.committee_responsible.id,
+                        u'identifier': self.committee_responsible.id,
                     },
                 ],
                 u'represents': {
@@ -232,7 +232,7 @@ class TestActorsGet(IntegrationTestCase):
     def test_actors_response_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = self.secretariat_user.id
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -247,15 +247,15 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
-                u'login_name': u'jurgen.konig',
+                u'login_name': self.secretariat_user.getUserName(),
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.secretariat_user.id,
+                        u'identifier': self.secretariat_user.id,
                     },
                 ],
                 u'represents': {
-                    u'@id': u'http://nohost/plone/@ogds-users/jurgen.konig',
+                    u'@id': u'http://nohost/plone/@ogds-users/%s' % self.secretariat_user.id,
                 },
             },
             browser.json)
@@ -264,21 +264,21 @@ class TestActorsGet(IntegrationTestCase):
     def test_full_representation_for_ogds_user(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'jurgen.konig'
+        actor_id = self.secretariat_user.id
         url = "{}/{}?full_representation=true".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
         self.assertDictContainsSubset({
-            u'@id': u'http://nohost/plone/@ogds-users/jurgen.konig',
+            u'@id': u'http://nohost/plone/@ogds-users/%s' % self.secretariat_user.id,
             u'@type': u'virtual.ogds.user',
-            u'email': u'jurgen.konig@gever.local'}, browser.json['represents'])
+            u'email': u'%s@gever.local' % self.secretariat_user.getUserName()}, browser.json['represents'])
 
     @browsing
     def test_actors_response_for_ogds_user_with_orgunit(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        actor_id = 'fa:jurgen.konig'
+        actor_id = 'fa:%s' % self.secretariat_user.id
         url = "{}/{}".format(self.actors_url, actor_id)
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
@@ -293,15 +293,15 @@ class TestActorsGet(IntegrationTestCase):
                 u'is_absent': False,
                 u'portrait_url': None,
                 u'label': u'K\xf6nig J\xfcrgen',
-                u'login_name': u'jurgen.konig',
+                u'login_name': self.secretariat_user.id,
                 u'representatives': [
                     {
-                        u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                        u'identifier': u'jurgen.konig',
+                        u'@id': u'http://nohost/plone/@actors/%s' % self.secretariat_user.id,
+                        u'identifier': self.secretariat_user.id,
                     },
                 ],
                 u'represents': {
-                    u'@id': u'http://nohost/plone/@ogds-users/jurgen.konig',
+                    u'@id': u'http://nohost/plone/@ogds-users/%s' % self.secretariat_user.id,
                 },
             },
             browser.json)
@@ -328,12 +328,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'login_name': u'projekt_a',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        'identifier': self.regular_user.id,
+                        '@id': 'http://nohost/plone/@actors/%s' % self.regular_user.id,
                     },
                     {
-                        'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        'identifier': self.dossier_responsible.id,
+                        '@id': 'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
                     },
                 ],
                 u'represents': {
@@ -364,12 +364,12 @@ class TestActorsGet(IntegrationTestCase):
                 u'login_name': u'projekt_a',
                 u'representatives': [
                     {
-                        'identifier': u'kathi.barfuss',
-                        '@id': 'http://nohost/plone/@actors/kathi.barfuss',
+                        'identifier': self.regular_user.id,
+                        '@id': 'http://nohost/plone/@actors/%s' % self.regular_user.id,
                     },
                     {
-                        'identifier': u'robert.ziegler',
-                        '@id': 'http://nohost/plone/@actors/robert.ziegler',
+                        'identifier': self.dossier_responsible.id,
+                        '@id': 'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
                     },
                 ],
                 u'represents': {
@@ -624,12 +624,12 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'login_name': None,
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                            u'identifier': u'kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                            u'identifier': self.regular_user.id,
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                            u'identifier': u'robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                            u'identifier': self.dossier_responsible.id,
                         },
                     ],
                     u'represents': {
@@ -648,8 +648,8 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'login_name': u'fa_inbox_users',
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/jurgen.konig',
-                            u'identifier': u'jurgen.konig',
+                            u'@id': u'http://nohost/plone/@actors/%s' % self.secretariat_user.id,
+                            u'identifier': self.secretariat_user.id,
                         },
                     ],
                     u'represents': {
@@ -685,12 +685,12 @@ class TestActorsGetListPOST(IntegrationTestCase):
                     u'login_name': None,
                     u'representatives': [
                         {
-                            u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                            u'identifier': u'kathi.barfuss',
+                            u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                            u'identifier': self.regular_user.id,
                         },
                         {
-                            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                            u'identifier': u'robert.ziegler',
+                            u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                            u'identifier': self.dossier_responsible.id,
                         },
                     ],
                     u'represents': {
@@ -782,7 +782,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
         browser.open(url, headers=self.api_headers)
 
         self.assertEqual(
-            u'http://nohost/portal/media/avatars/2433f8fd7cd07d9cb6427016c009c2e3',
+            u'http://nohost/portal/media/avatars/37f58bfb74a4be0622e1822f6305144b',
             browser.json.get('portrait_url'))
 
     @browsing
@@ -798,7 +798,7 @@ class TestActorsGetListPOST(IntegrationTestCase):
         browser.open(url, headers=self.api_headers)
 
         self.assertEqual(
-            u'http://nohost/portal/media/avatars/2433f8fd7cd07d9cb6427016c009c2e3',
+            u'http://nohost/portal/media/avatars/37f58bfb74a4be0622e1822f6305144b',
             browser.json.get('portrait_url'))
 
         m_tool._setPortrait(Image(id='avatar', file=dummy.File(), title=''), userid)

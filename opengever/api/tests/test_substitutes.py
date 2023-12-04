@@ -27,19 +27,19 @@ class TestSubstitutesGet(IntegrationTestCase):
                .for_user(self.regular_user)
                .with_substitute(self.administrator))
 
-        browser.open(self.portal, view='@substitutes/nicole.kohler', method='GET',
+        browser.open(self.portal, view='@substitutes/%s' % self.administrator.id, method='GET',
                      headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/@substitutes/nicole.kohler',
-             u'items': [{u'@id': u'http://nohost/plone/@substitutes/nicole.kohler/herbert.jager',
+            {u'@id': u'http://nohost/plone/@substitutes/%s' % self.administrator.id,
+             u'items': [{u'@id': u'http://nohost/plone/@substitutes/%s/%s' % (self.administrator.id, self.meeting_user.id),
                          u'@type': u'virtual.ogds.substitute',
                          u'substitution_id': 1,
                          u'substitute_userid': self.meeting_user.getId(),
                          u'userid': self.administrator.getId()},
-                        {u'@id': u'http://nohost/plone/@substitutes/nicole.kohler/robert.ziegler',
+                        {u'@id': u'http://nohost/plone/@substitutes/%s/%s' % (self.administrator.id, self.dossier_responsible.id),
                          u'@type': u'virtual.ogds.substitute',
                          u'substitution_id': 2,
                          u'substitute_userid': self.dossier_responsible.getId(),
@@ -92,7 +92,7 @@ class TestSubstitutionsGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         with freeze(datetime(2021, 11, 30)):
-            browser.open(self.portal, view='@substitutions/kathi.barfuss',
+            browser.open(self.portal, view='@substitutions/%s' % self.regular_user.id,
                          method='GET', headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
@@ -105,24 +105,24 @@ class TestSubstitutionsGet(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         with freeze(datetime(2021, 11, 30)):
-            browser.open(self.portal, view='@substitutions/kathi.barfuss?actives_only=true',
+            browser.open(self.portal, view='@substitutions/%s?actives_only=true' % self.regular_user.id,
                          method='GET', headers=self.api_headers)
 
         self.assertEqual(200, browser.status_code)
         self.assertEqual({
-            u'@id': u'http://nohost/plone/@substitutions/kathi.barfuss?actives_only=true',
+            u'@id': u'http://nohost/plone/@substitutions/%s?actives_only=true' % self.regular_user.id,
             u'items': [
-                {u'@id': u'http://nohost/plone/@substitutes/herbert.jager/kathi.barfuss',
+                {u'@id': u'http://nohost/plone/@substitutes/%s/%s' % (self.meeting_user.id, self.regular_user.id),
                  u'@type': u'virtual.ogds.substitute',
                  u'substitute_userid': self.regular_user.getId(),
                  u'substitution_id': 2,
                  u'userid': self.meeting_user.getId()},
-                {u'@id': u'http://nohost/plone/@substitutes/beatrice.schrodinger/kathi.barfuss',
+                {u'@id': u'http://nohost/plone/@substitutes/%s/%s' % (self.workspace_member.id, self.regular_user.id),
                  u'@type': u'virtual.ogds.substitute',
                  u'substitute_userid': self.regular_user.getId(),
                  u'substitution_id': 4,
                  u'userid': self.workspace_member.getId()},
-                {u'@id': u'http://nohost/plone/@substitutes/jurgen.konig/kathi.barfuss',
+                {u'@id': u'http://nohost/plone/@substitutes/%s/%s' % (self.secretariat_user.id, self.regular_user.id),
                  u'@type': u'virtual.ogds.substitute',
                  u'substitute_userid': self.regular_user.getId(),
                  u'substitution_id': 6,
@@ -165,12 +165,12 @@ class TestMySubstitutesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual({u'@id': u'http://nohost/plone/@my-substitutes',
-                          u'items': [{u'@id': u'http://nohost/plone/@my-substitutes/herbert.jager',
+                          u'items': [{u'@id': u'http://nohost/plone/@my-substitutes/%s' % self.meeting_user.id,
                                       u'@type': u'virtual.ogds.substitute',
                                       u'substitution_id': 1,
                                       u'substitute_userid': self.meeting_user.getId(),
                                       u'userid': self.regular_user.getId()},
-                                     {u'@id': u'http://nohost/plone/@my-substitutes/nicole.kohler',
+                                     {u'@id': u'http://nohost/plone/@my-substitutes/%s' % self.administrator.id,
                                       u'@type': u'virtual.ogds.substitute',
                                       u'substitution_id': 3,
                                       u'substitute_userid': self.administrator.getId(),
@@ -193,7 +193,7 @@ class TestMySubstitutesPost(IntegrationTestCase):
         browser.open(self.portal, view='@my-substitutes', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual([{u'@id': u'http://nohost/plone/@my-substitutes/nicole.kohler',
+        self.assertEqual([{u'@id': u'http://nohost/plone/@my-substitutes/%s' % self.administrator.id,
                            u'@type': u'virtual.ogds.substitute',
                            u'substitution_id': 1,
                            u'substitute_userid': self.administrator.getId(),

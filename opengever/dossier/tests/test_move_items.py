@@ -351,7 +351,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
 
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {
-            'listCreators': ('robert.ziegler', 'kathi.barfuss'),
+            'listCreators': (self.dossier_responsible.id, self.regular_user.id),
             'modified': ZOPE_MOVE_TIME,
             'reference': 'Client1 1.1 / 4 / 22',
         }
@@ -581,7 +581,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
 
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {
-            'listCreators': ('robert.ziegler', 'kathi.barfuss'),
+            'listCreators': (self.dossier_responsible.id, self.regular_user.id),
             'modified': ZOPE_MOVE_TIME,
             'reference': 'Client1 1.1 / 4 / 29',
         }
@@ -812,7 +812,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {
             'is_subdossier': False,
-            'listCreators': ('robert.ziegler', 'kathi.barfuss'),
+            'listCreators': (self.dossier_responsible.id, self.regular_user.id),
             'modified': ZOPE_MOVE_TIME,
             'reference': 'Client1 2 / 1',
         }

@@ -31,7 +31,7 @@ class TestForwardingSerialization(SolrIntegrationTestCase):
               u'approved_documents': [],
               u'changes': [],
               u'creator': {
-                  u'token': u'nicole.kohler',
+                  u'token': self.administrator.id,
                   u'title': u'Kohler Nicole'},
               u'created': u'2016-08-31T11:09:33',
               u'related_items': [],
@@ -92,7 +92,7 @@ class TestForwardingTransitions(IntegrationTestCase):
         self.login(self.secretariat_user, browser=browser)
 
         self.assertEqual('fa', self.inbox_forwarding.responsible_client)
-        self.assertEqual('kathi.barfuss', self.inbox_forwarding.responsible)
+        self.assertEqual(self.regular_user.id, self.inbox_forwarding.responsible)
 
         data = {
             'responsible': {
@@ -112,7 +112,7 @@ class TestForwardingTransitions(IntegrationTestCase):
         self.login(self.secretariat_user, browser=browser)
 
         self.assertEqual('fa', self.inbox_forwarding.responsible_client)
-        self.assertEqual('kathi.barfuss', self.inbox_forwarding.responsible)
+        self.assertEqual(self.regular_user.id, self.inbox_forwarding.responsible)
 
         data = {
             'responsible': 'james.bond',

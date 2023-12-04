@@ -19,7 +19,7 @@ class TestTaskByline(TestBylineBase):
         browser.open(self.task)
 
         responsible = self.get_byline_value_by_label('Responsible:')
-        self.assertEqual('http://nohost/plone/@@user-details/kathi.barfuss',
+        self.assertEqual('http://nohost/plone/@@user-details/%s' % self.regular_user.id,
                          responsible.get('href'))
 
     @browsing

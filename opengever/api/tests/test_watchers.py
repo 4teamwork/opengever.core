@@ -28,25 +28,25 @@ class TestWatchersGet(SolrIntegrationTestCase):
                     u'dossier-1/task-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
+                    u'fullname': u'Ziegler Robert',
+                    u'id': self.dossier_responsible.id,
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
-                    u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
-                }
+                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
+                    u'fullname': u'B\xe4rfuss K\xe4thi',
+                    u'id': self.regular_user.id,
+                },
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                    u'identifier': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                    u'identifier': self.dossier_responsible.id,
                 },
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
-                }
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                    u'identifier': self.regular_user.id,
+                },
             ],
             u'referenced_watcher_roles': [
                 {
@@ -63,8 +63,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 }
             ],
             u'watchers_and_roles': {
-                u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                u'robert.ziegler': [u'task_issuer']
+                self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                self.dossier_responsible.id: [u'task_issuer']
             }
         }
 
@@ -92,25 +92,25 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/kathi.barfuss',
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
+                    u'fullname': u'Ziegler Robert',
+                    u'id': self.dossier_responsible.id,
                 },
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
-                    u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
-                }
+                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
+                    u'fullname': u'B\xe4rfuss K\xe4thi',
+                    u'id': self.regular_user.id,
+                },
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/kathi.barfuss',
-                    u'identifier': u'kathi.barfuss'
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                    u'identifier': self.dossier_responsible.id,
                 },
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
-                }
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.regular_user.id,
+                    u'identifier': self.regular_user.id,
+                },
             ],
             u'referenced_watcher_roles': [
                 {
@@ -124,11 +124,11 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 {
                     u'id': u'regular_watcher',
                     u'title': u'Watcher'
-                }
+                },
             ],
             u'watchers_and_roles': {
-                u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                u'robert.ziegler': [u'task_issuer']
+                self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                self.dossier_responsible.id: [u'task_issuer']
             }
         }
 
@@ -154,15 +154,15 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': self.dossier_responsible.id,
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                    u'identifier': self.dossier_responsible.id,
                 }
             ],
             u'referenced_watcher_roles': [
@@ -172,7 +172,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 }
             ],
             u'watchers_and_roles': {
-                u'robert.ziegler': [u'regular_watcher']
+                self.dossier_responsible.id: [u'regular_watcher']
             }
         }
 
@@ -197,15 +197,15 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'@id': url,
             u'referenced_users': [
                 {
-                    u'@id': u'http://nohost/plone/@users/robert.ziegler',
+                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
                     u'fullname': u'Ziegler Robert',
-                    u'id': u'robert.ziegler'
+                    u'id': self.dossier_responsible.id,
                 }
             ],
             u'referenced_actors': [
                 {
-                    u'@id': u'http://nohost/plone/@actors/robert.ziegler',
-                    u'identifier': u'robert.ziegler'
+                    u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
+                    u'identifier': self.dossier_responsible.id,
                 }
             ],
             u'referenced_watcher_roles': [
@@ -215,7 +215,7 @@ class TestWatchersGet(SolrIntegrationTestCase):
                 }
             ],
             u'watchers_and_roles': {
-                u'robert.ziegler': [u'regular_watcher']
+                self.dossier_responsible.id: [u'regular_watcher']
             }
         }
 
@@ -233,8 +233,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         center = notification_center()
         self.login(self.regular_user, browser=browser)
 
-        center.remove_task_responsible(self.task, u"kathi.barfuss")
-        center.remove_task_issuer(self.task, u"robert.ziegler")
+        center.remove_task_responsible(self.task, self.regular_user.id)
+        center.remove_task_issuer(self.task, self.dossier_responsible.id)
         center.add_task_responsible(self.task, u'team:1')
 
         browser.open(self.task.absolute_url() + '/@watchers',
@@ -279,8 +279,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         center = notification_center()
         self.login(self.regular_user, browser=browser)
 
-        center.remove_task_responsible(self.task, u"kathi.barfuss")
-        center.remove_task_issuer(self.task, u"robert.ziegler")
+        center.remove_task_responsible(self.task, self.regular_user.id)
+        center.remove_task_issuer(self.task, self.dossier_responsible.id)
 
         center.add_task_responsible(self.task, u'inbox:fa')
 
@@ -491,8 +491,8 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          browser.json['watchers_and_roles'])
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
@@ -504,8 +504,8 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          browser.json['watchers_and_roles'])
 
     @browsing
@@ -539,8 +539,8 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          browser.json['watchers_and_roles'])
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
@@ -551,8 +551,8 @@ class TestWatchersPost(IntegrationTestCase):
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers', method='GET',
                      headers=self.api_headers)
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          browser.json['watchers_and_roles'])
 
     @browsing
@@ -572,7 +572,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.document, view='@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']},
                          browser.json['watchers_and_roles'])
 
     @browsing
@@ -591,7 +591,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.mail_eml, view='@watchers', method='GET',
                      headers=self.api_headers)
 
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']},
                          browser.json['watchers_and_roles'])
 
 
@@ -612,8 +612,8 @@ class TestWatchersDelete(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
         watchers_and_roles = self.get_watchers_and_roles(self.task)
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
 
         browser.open(self.task.absolute_url() + '/@watchers',
@@ -621,8 +621,8 @@ class TestWatchersDelete(IntegrationTestCase):
 
         self.assertEqual(browser.status_code, 204)
         watchers_and_roles = self.get_watchers_and_roles(self.task)
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
 
     @browsing
@@ -630,8 +630,8 @@ class TestWatchersDelete(IntegrationTestCase):
         self.login(self.secretariat_user, browser=browser)
 
         watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
 
         notification_center().add_watcher_to_resource(
@@ -639,17 +639,17 @@ class TestWatchersDelete(IntegrationTestCase):
 
         watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({
-            u'kathi.barfuss': [u'task_responsible'],
-            u'robert.ziegler': [u'task_issuer'],
-            u'jurgen.konig': [u'regular_watcher']},
+            self.regular_user.id: [u'task_responsible'],
+            self.dossier_responsible.id: [u'task_issuer'],
+            self.secretariat_user.id: [u'regular_watcher']},
                          watchers_and_roles)
 
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
         watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
-        self.assertEqual({u'kathi.barfuss': [u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
 
     @browsing
@@ -659,7 +659,7 @@ class TestWatchersDelete(IntegrationTestCase):
             self.document, self.regular_user.getId(), WATCHER_ROLE)
 
         watchers_and_roles = self.get_watchers_and_roles(self.document)
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']}, watchers_and_roles)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.document, view='@watchers',
                      method='DELETE', headers=self.api_headers)
@@ -674,7 +674,7 @@ class TestWatchersDelete(IntegrationTestCase):
             self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
 
         watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher']}, watchers_and_roles)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.mail_eml, view='@watchers',
                      method='DELETE', headers=self.api_headers)
@@ -689,8 +689,8 @@ class TestWatchersDelete(IntegrationTestCase):
             self.task, self.regular_user.getId(), WATCHER_ROLE)
         watchers_and_roles = self.get_watchers_and_roles(self.task)
 
-        self.assertEqual({u'kathi.barfuss': [u'regular_watcher', u'task_responsible'],
-                          u'robert.ziegler': [u'task_issuer']},
+        self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
 
         with browser.expect_http_error(400):
