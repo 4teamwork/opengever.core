@@ -50,10 +50,10 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         source = PossibleWatchersSource(self.task)
 
         self.assertEqual([
-            u'gunther.frohlich',
-            u'faivel.fruhling',
-            u'fridolin.hugentobler',
-            u'franzi.muller'],
+            self.workspace_owner.getId(),
+            self.dossier_manager.getId(),
+            self.workspace_admin.getId(),
+            self.committee_responsible.getId()],
             [term.value for term in source.search('fr')])
 
     def test_search_is_case_insensitive(self):
@@ -61,10 +61,10 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         source = PossibleWatchersSource(self.task)
 
         self.assertEqual([
-            u'gunther.frohlich',
-            u'faivel.fruhling',
-            u'fridolin.hugentobler',
-            u'franzi.muller'],
+            self.workspace_owner.getId(),
+            self.dossier_manager.getId(),
+            self.workspace_admin.getId(),
+            self.committee_responsible.getId()],
             [term.value for term in source.search('FR')])
 
     def test_term_title_is_user_display_name(self):

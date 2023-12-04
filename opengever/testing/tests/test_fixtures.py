@@ -45,7 +45,7 @@ class TestTestingFixture(IntegrationTestCase):
 
     def test_dossier_manager_user(self):
         self.login(self.dossier_manager)
-        self.assertEquals('faivel.fruhling', self.dossier_manager.getId())
+        self.assertEquals('dossier_manager', self.dossier_manager.getId())
         self.assertListEqual(['Member', 'Authenticated'],
                              self.dossier_manager.getRoles())
 
