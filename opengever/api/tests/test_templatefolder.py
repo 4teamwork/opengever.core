@@ -592,6 +592,36 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
         subdossier = dossier.listFolderContents()[1]
         self.assertEqual([u'Baumsch\xfctze'],
                          [obj.title for obj in subdossier.listFolderContents()])
+        self.assertEqual(self.regular_user.getId(), IDossier(subdossier).responsible)
+
+    @browsing
+    def test_create_dossier_from_template_properly_sets_role_manager_local_roles(self, browser):
+        self.activate_feature('grant_role_manager_to_responsible')
+        self.login(self.regular_user, browser)
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        dossier = children['added'].pop()
+        self.assertEqual(self.regular_user.getId(), IDossier(dossier).responsible)
+        self.assertEqual(((u'kathi.barfuss', ('Role Manager', 'Owner')), ),
+                         dossier.get_local_roles())
+
+        subdossier = dossier.listFolderContents()[1]
+        self.assertEqual(self.regular_user.getId(), IDossier(subdossier).responsible)
+        self.assertEqual(((u'kathi.barfuss', ('Role Manager', 'Owner')), ),
+                         subdossier.get_local_roles())
 
     @browsing
     def test_raise_unauthorized_if_dossiertemplate_feature_is_not_available(self, browser):

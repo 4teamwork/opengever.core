@@ -68,9 +68,10 @@ class CreateDossierFromTemplateCommand(BaseObjectCreatorCommand):
     """
     portal_type = 'opengever.dossier.businesscasedossier'
 
-    def __init__(self, context, template):
+    def __init__(self, context, template, **kwargs):
         kw = self._get_additional_attributes(template)
-        self.fields = kw["IOpenGeverBase"]
+        self.fields = kwargs
+        self.fields.update(kw["IOpenGeverBase"])
         del kw["IOpenGeverBase"]
         self.additional_fields = kw
 
