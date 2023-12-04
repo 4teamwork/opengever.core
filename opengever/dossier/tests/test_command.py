@@ -4,6 +4,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.document.docprops import TemporaryDocFile
 from opengever.document.versioner import Versioner
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.command import CreateDocumentFromTemplateCommand
 from opengever.dossier.command import CreateDossierFromTemplateCommand
@@ -89,7 +90,10 @@ class TestCreateDossierFromTemplateCommand(IntegrationTestCase):
 
     def test_create_dossier_from_template(self):
         self.login(self.regular_user)
-        command = CreateDossierFromTemplateCommand(self.dossier, self.dossiertemplate)
+        command = CreateDossierFromTemplateCommand(self.dossier,
+                                                   self.dossiertemplate,
+                                                   responsible=self.regular_user.id)
         dossier = command.execute()
         self.assertEqual(self.dossiertemplate.title, dossier.title)
         self.assertTrue(IDossierMarker.providedBy(dossier))
+        self.assertEqual(self.regular_user.id, IDossier(dossier).responsible)
