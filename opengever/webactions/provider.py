@@ -57,8 +57,8 @@ class WebActionsProvider(object):
         return aq_base(aq_inner(self.context)).portal_type in types
 
     @memoize_contextless
-    def _get_permissions(self, userid):
-        permissions = api.user.get_permissions(username=userid, obj=self.context)
+    def _get_permissions(self, username):
+        permissions = api.user.get_permissions(username=username, obj=self.context)
         return set(name for name, value in permissions.items() if value)
 
     def _action_satisfies_permissions(self, action):
@@ -66,8 +66,8 @@ class WebActionsProvider(object):
         if not action_permissions:
             return True
         action_permissions = map(PUBLIC_PERMISSIONS_MAPPING.get, action_permissions)
-        userid = api.user.get_current().getId()
-        user_permissions = self._get_permissions(userid)
+        username = api.user.get_current().getUserName()
+        user_permissions = self._get_permissions(username)
         return any(permission in user_permissions
                    for permission in action_permissions)
 

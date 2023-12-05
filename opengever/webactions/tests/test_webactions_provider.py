@@ -175,7 +175,8 @@ class TestWebActionProvider(TestWebActionBase):
                 "All action permissions need to be mapped to real permissions")
 
     def test_webaction_provider_respects_permission(self):
-        self.login(self.regular_user)
+        self.login(self.dossier_manager)
+
         storage = get_storage()
         storage.update(0, {"permissions": ['trash']})
         storage.update(1, {"permissions": ['trash', 'edit']})
