@@ -511,13 +511,15 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
         try:
             user = self.base_query.filter(User.userid == value).one()
         except orm.exc.NoResultFound:
-            raise LookupError(
-                'No row was found with userid: {}'.format(value))
+            try:
+                user = self.base_query.filter(User.username == value).one()
+            except orm.exc.NoResultFound:
+                raise LookupError(
+                    'No row was found with userid or username: {}'.format(value))
 
-        token = value
         title = u'{} ({})'.format(user.fullname(),
                                   user.userid)
-        return SimpleTerm(value, token, title)
+        return SimpleTerm(user.userid, user.userid, title)
 
     def search(self, query_string):
         self.terms = []

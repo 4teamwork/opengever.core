@@ -120,7 +120,7 @@ DOSSIER_DEFAULTS = {
     'dossier_type': None,
 }
 DOSSIER_FORM_DEFAULTS = {
-    'responsible': 'kathi.barfuss',
+    'responsible': u'kathi.barfuss',
 }
 DOSSIER_MISSING_VALUES = {
     'archival_value_annotation': None,

@@ -30,6 +30,7 @@ from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.base.utils import get_current_org_unit
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.service import ogds_service
+from opengever.ogds.models.user import User
 from opengever.private import enable_opengever_private
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -809,6 +810,12 @@ class IntegrationTestCase(TestCase):
     def set_roles(self, obj, principal, roles):
         RoleAssignmentManager(obj).add_or_update_assignment(
             SharingRoleAssignment(principal, roles))
+
+    def change_loginname(self, userid, new_loginname):
+        acl_users = api.portal.get_tool('acl_users')
+        acl_users.source_users.updateUser(userid, new_loginname)
+        user = User.query.get(userid)
+        user.username = new_loginname
 
 
 class SolrIntegrationTestCase(IntegrationTestCase, SolrTestMixin):

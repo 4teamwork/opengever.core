@@ -19,6 +19,8 @@ Other Changes
 
 - The api will now always return the ``uid`` of summary serialized objects.
 
+- The dossiers responsible field support now also usernames not just userids.
+
 
 2023.14.0 (2023-11-09)
 ----------------------
