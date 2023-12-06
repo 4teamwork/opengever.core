@@ -125,7 +125,7 @@ class TestPropertySheetsCreationDefaultsForDocument(IntegrationTestCase):
                 'notrequired': u'Not required, still has default',
                 'languages': {u'de', u'en'},
                 'location': u'CH',
-                'userid': u'kathi.barfuss',
+                'userid': self.regular_user.id,
                 'email': u'foo@example.com',
                 'datefield': date(2022, 1, 31),
             }
@@ -205,7 +205,7 @@ class TestPropertySheetsCreationDefaultsForDossier(IntegrationTestCase):
                 'notrequired': u'Not required, still has default',
                 'languages': {u'de', u'en'},
                 'location': u'CH',
-                'userid': u'kathi.barfuss',
+                'userid': self.regular_user.id,
                 'email': u'foo@example.com',
                 'datefield': date(2022, 1, 31),
             }

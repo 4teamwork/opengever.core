@@ -529,7 +529,7 @@ class TestTaskActivityIntegration(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'team:1', TASK_RESPONSIBLE_ROLE), (u'herbert.jager', TASK_ISSUER_ROLE)],
+            [(u'team:1', TASK_RESPONSIBLE_ROLE), (self.meeting_user.id, TASK_ISSUER_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
         self.login(self.regular_user, browser)
@@ -540,7 +540,7 @@ class TestTaskActivityIntegration(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'kathi.barfuss', TASK_RESPONSIBLE_ROLE), (u'herbert.jager', TASK_ISSUER_ROLE)],
+            [(self.regular_user.id, TASK_RESPONSIBLE_ROLE), (self.meeting_user.id, TASK_ISSUER_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
         self.assertEquals([], warning_messages())
 
@@ -573,10 +573,11 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertEquals(
           u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/%s">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
-                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
-                          u'J\xe4ger Herbert (herbert.jager)</a> by admin (admin)',
+                          u'to <a href="http://nohost/plone/@@user-details/%s">'
+                          u'J\xe4ger Herbert (herbert.jager)</a> by admin (admin)' % (
+                              self.regular_user.id, self.meeting_user.id),
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
         self.assertEquals([], warning_messages())
@@ -596,10 +597,10 @@ class TestTaskReassignActivity(IntegrationTestCase):
         self.assertEquals(
           u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
-        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/kathi.barfuss">'
+        self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/%s">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
-                          u'to <a href="http://nohost/plone/@@user-details/herbert.jager">'
-                          u'J\xe4ger Herbert (herbert.jager)</a>',
+                          u'to <a href="http://nohost/plone/@@user-details/%s">'
+                          u'J\xe4ger Herbert (herbert.jager)</a>' % (self.regular_user.id, self.meeting_user.id),
                           reassign_activity.summary)
         self.assertEquals(u'Bitte Abkl\xe4rungen erledigen.', reassign_activity.description)
         self.assertEquals([], warning_messages())
@@ -630,7 +631,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'robert.ziegler', u'task_issuer'), (u'herbert.jager', TASK_RESPONSIBLE_ROLE)],
+            [(self.dossier_responsible.id, u'task_issuer'), (self.meeting_user.id, TASK_RESPONSIBLE_ROLE)],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
         self.assertEquals([], warning_messages())
 
@@ -694,12 +695,13 @@ class TestTaskChangeIssuerActivity(IntegrationTestCase):
         self.assertEqual('task-transition-change-issuer', activity.kind)
         self.assertEqual(u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
                          activity.title)
-        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(self.regular_user.id, activity.actor_id)
         self.assertEqual(u'Issuer changed from <a href="http://nohost/plone/@@user-details'
-                         u'/robert.ziegler">Ziegler Robert (robert.ziegler)</a> to '
-                         u'<a href="http://nohost/plone/@@user-details/herbert.jager">J\xe4ger '
+                         u'/%s">Ziegler Robert (robert.ziegler)</a> to '
+                         u'<a href="http://nohost/plone/@@user-details/%s">J\xe4ger '
                          u'Herbert (herbert.jager)</a> by <a href="http://nohost/plone'
-                         u'/@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         u'/@@user-details/%s">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>' % (
+                             self.dossier_responsible.id, self.meeting_user.id, self.regular_user.id),
                          activity.summary)
         self.assertEqual(u'Issuer of task changed', activity.label)
 
@@ -713,7 +715,7 @@ class TestTaskChangeIssuerActivity(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'kathi.barfuss', u'task_responsible'), (u'robert.ziegler', u'task_issuer')],
+            [(self.regular_user.id, u'task_responsible'), (self.dossier_responsible.id, u'task_issuer')],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
         issuer_changes = [(ITask['issuer'], self.meeting_user.getId())]
@@ -731,7 +733,7 @@ class TestTaskChangeIssuerActivity(IntegrationTestCase):
         subscriptions = resource.subscriptions
 
         self.assertItemsEqual(
-            [(u'kathi.barfuss', u'task_responsible'), ('herbert.jager', 'task_issuer')],
+            [(self.regular_user.id, u'task_responsible'), (self.meeting_user.id, 'task_issuer')],
             [(sub.watcher.actorid, sub.role) for sub in subscriptions])
 
 
@@ -829,9 +831,9 @@ class TestWatcherAddedActivity(IntegrationTestCase):
         self.assertEqual(
           u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
           activity.title)
-        self.assertEqual('kathi.barfuss', activity.actor_id)
+        self.assertEqual(self.regular_user.id, activity.actor_id)
         self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
-                         u'@@user-details/kathi.barfuss">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>',
+                         u'@@user-details/%s">B\xe4rfuss K\xe4thi (kathi.barfuss)</a>' % self.regular_user.id,
                          activity.summary)
 
     def test_watcher_added_activity_notifies_watcher(self):

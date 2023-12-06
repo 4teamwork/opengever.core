@@ -161,7 +161,7 @@ class TestTransferTaskPost(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"old_userid": "kathi.barfuss"}))
+                         data=json.dumps({"old_userid": self.regular_user.id}))
         self.assertEqual(
             {"message": "Property 'new_userid' is required",
              "type": "BadRequest"},
@@ -173,7 +173,7 @@ class TestTransferTaskPost(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"new_userid": "kathi.barfuss"}))
+                         data=json.dumps({"new_userid": self.regular_user.id}))
         self.assertEqual(
             {"message": "Property 'old_userid' is required",
              "type": "BadRequest"},
@@ -197,7 +197,7 @@ class TestTransferTaskPost(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
                          headers=self.api_headers, data=json.dumps(
-                            {"new_userid": "kathi.barfuss", "old_userid": "chaosqueen"})
+                            {"new_userid": self.regular_user.id, "old_userid": "chaosqueen"})
                          )
         self.assertEqual(
             {"message": "userid 'chaosqueen' does not exist",
@@ -221,7 +221,7 @@ class TestTransferTaskPost(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@transfer-task', method='POST',
                          headers=self.api_headers, data=json.dumps(
-                            {"new_userid": "kathi.barfuss", "old_userid": "kathi.barfuss"})
+                            {"new_userid": self.regular_user.id, "old_userid": self.regular_user.id})
                          )
         self.assertEqual(
             {"message": "'old_userid' and 'new_userid' should not be the same",
@@ -283,14 +283,14 @@ class TestTransferTaskInterAdminUnit(IntegrationTestCase):
                     task_type='correction')
             .in_state('task-state-open')
             .titled(u'Inquiry from a concerned citizen'))
-        
+
         successor = accept_task_with_successor(
             self.dossier,
             str(predecessor.oguid),
             u'I accept this task',
         )
 
-        # Set four reminders for both task side and both users 
+        # Set four reminders for both task side and both users
         for user_id in (issuer_id, responsible_id):
             for task in (predecessor, successor):
                 task.set_reminder(ReminderOneDayBefore(), user_id=user_id)

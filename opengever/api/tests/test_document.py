@@ -81,8 +81,8 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertFalse(browser.json['is_shadow_document'])
         self.assertFalse(0, browser.json['current_version_id'])
         self.assertDictEqual({
-            u'identifier': u'robert.ziegler',
-            u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+            u'identifier': self.dossier_responsible.id,
+            u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
         }, browser.json['creator'])
 
     @browsing
@@ -123,7 +123,7 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         browser.open(self.subdocument, headers={'Accept': 'application/json'})
         self.assertTrue(browser.json['is_collaborative_checkout'])
-        self.assertEqual(browser.json['checkout_collaborators'], ['kathi.barfuss'])
+        self.assertEqual(browser.json['checkout_collaborators'], [self.regular_user.id])
 
     @browsing
     def test_contains_file_modification_time(self, browser):
@@ -265,7 +265,7 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         self.assertEqual(
             [{u'approved': u'2021-07-02T00:00:00',
-              u'approver': u'kathi.barfuss',
+              u'approver': self.regular_user.id,
               u'task': {
                   u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/task-1/task-2',
                   u'@type': u'opengever.task.task',
@@ -276,7 +276,7 @@ class TestDocumentSerializer(IntegrationTestCase):
                   u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'},
               u'version_id': 0},
              {u'approved': u'2021-08-02T00:00:00',
-              u'approver': u'nicole.kohler',
+              u'approver': self.administrator.id,
               u'task': None,
               u'version_id': 1}],
             browser.json['@components']['approvals'])

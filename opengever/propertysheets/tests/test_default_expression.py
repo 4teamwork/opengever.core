@@ -13,7 +13,7 @@ class TestTalesExpressionDefaultFactory(IntegrationTestCase):
             tales_expr_default_factory('member'))
 
         self.assertEqual(
-            u'kathi.barfuss',
+            self.regular_user.id,
             tales_expr_default_factory('member/getId'))
 
     def test_factory_expr_context_contains_none_member_if_anonymous(self):

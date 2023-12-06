@@ -13,12 +13,12 @@ class TestEmailAttributesService(IntegrationTestCase):
         self.login(self.regular_user, browser)
         self.assertTrue(api.user.has_permission(
             'Modify portal content',
-            self.regular_user.getId(),
+            self.regular_user.getUserName(),
             obj=self.dossier))
         browser.open(self.dossier,
                      view='attributes',
                      headers={'Accept': 'application/json'})
-        email = IEmailAddress(getRequest()).get_email_for_object(self.dossier) 
+        email = IEmailAddress(getRequest()).get_email_for_object(self.dossier)
 
         self.assertEquals({u'email': email}, browser.json)
 
@@ -29,7 +29,7 @@ class TestEmailAttributesService(IntegrationTestCase):
         self.set_workflow_state('dossier-state-resolved', self.dossier)
         self.assertFalse(api.user.has_permission(
             'Modify portal content',
-            self.regular_user.getId(),
+            self.regular_user.getUserName(),
             obj=self.dossier))
         browser.open(self.dossier,
                      view='attributes',

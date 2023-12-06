@@ -75,7 +75,7 @@ class TestserverSelftest(object):
 
             data = {'@type': 'opengever.dossier.businesscasedossier',
                     'title': u'Gesch\xe4ftsdossier',
-                    'responsible': 'kathi.barfuss'}
+                    'responsible': 'regular_user'}
             browser.open(self.plone_url + 'ordnungssystem/rechnungspruefungskommission',
                          method='POST',
                          data=json.dumps(data))

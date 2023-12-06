@@ -40,7 +40,7 @@ class TestFavoritesGet(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            [{u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
               u'uid': IUUID(self.dossier),
               u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
@@ -56,7 +56,7 @@ class TestFavoritesGet(IntegrationTestCase):
               u'review_state': u'dossier-state-active',
               u'icon_class': u'contenttype-opengever-dossier-businesscasedossier',
               u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'},
-             {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/2',
+             {u'@id': u'http://nohost/plone/@favorites/%s/2' % self.regular_user.id,
               u'uid': IUUID(self.document),
               u'portal_type': u'opengever.document.document',
               u'favorite_id': 2,
@@ -89,7 +89,7 @@ class TestFavoritesGet(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
@@ -172,7 +172,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            [{u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
               u'uid': IUUID(self.dossier),
               u'portal_type': u'opengever.dossier.businesscasedossier',
               u'favorite_id': 1,
@@ -211,7 +211,7 @@ class TestFavoritesGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEquals(
-            [{u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            [{u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
               u'admin_unit': None,
               u'favorite_id': 1,
               u'filename': None,
@@ -245,7 +245,7 @@ class TestFavoritesGet(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
@@ -282,7 +282,7 @@ class TestFavoritesGet(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,
@@ -321,7 +321,7 @@ class TestFavoritesPost(IntegrationTestCase):
 
         self.assertEqual(201, browser.status_code)
 
-        self.assertEqual(u'http://nohost/plone/@favorites/kathi.barfuss/1',
+        self.assertEqual(u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
                          browser.headers.get('location'))
 
         browser.open(browser.headers.get('location'), method='GET',
@@ -329,7 +329,7 @@ class TestFavoritesPost(IntegrationTestCase):
                               'Content-Type': 'application/json'})
 
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
@@ -363,14 +363,14 @@ class TestFavoritesPost(IntegrationTestCase):
                               'Content-Type': 'application/json'})
 
         self.assertEqual(201, browser.status_code)
-        self.assertEqual(u'http://nohost/plone/@favorites/kathi.barfuss/1',
+        self.assertEqual(u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
                          browser.headers.get('location'))
 
         browser.open(browser.headers.get('location'), method='GET',
                      headers={'Accept': 'application/json',
                               'Content-Type': 'application/json'})
         self.assertEquals(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'favorite_id': 1,
@@ -446,7 +446,7 @@ class TestFavoritesPost(IntegrationTestCase):
                                   'Content-Type': 'application/json'})
 
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/@favorites/nicole.kohler/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.administrator.id,
              u'uid': IUUID(self.document),
              u'portal_type': u'opengever.document.document',
              u'admin_unit': u'Hauptmandant',
@@ -509,7 +509,7 @@ class TestFavoritesDelete(IntegrationTestCase):
                          headers={'Accept': 'application/json'})
 
         self.assertEqual(
-            {u"message": u'Resource not found: http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u"message": u'Resource not found: http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u"type": u"NotFound"}, browser.json)
 
     @browsing
@@ -628,7 +628,7 @@ class TestFavoritesPatch(IntegrationTestCase):
                                   'Content-Type': 'application/json'})
 
         self.assertEqual(
-            {u"message": u'Resource not found: http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u"message": u'Resource not found: http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u"type": u"NotFound"}, browser.json)
 
     @browsing
@@ -703,7 +703,7 @@ class TestFavoritesPatch(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/@favorites/kathi.barfuss/1',
+            {u'@id': u'http://nohost/plone/@favorites/%s/1' % self.regular_user.id,
              u'uid': IUUID(self.dossier),
              u'portal_type': u'opengever.dossier.businesscasedossier',
              u'favorite_id': 1,

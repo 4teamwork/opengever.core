@@ -18,7 +18,7 @@ import requests_mock
 class TestPloneParticipationHanlder(IntegrationTestCase):
 
     handler_class = PloneParticipationHandler
-    valid_id = 'kathi.barfuss'
+    valid_id = 'regular_user'
 
     def test_handler_delegates_to_correct_handler_class(self):
         self.login(self.regular_user)
@@ -179,7 +179,7 @@ class TestPloneParticipationHanlder(IntegrationTestCase):
 class TestKuBParticipationHanlderWithOgdsUser(KuBIntegrationTestCase, TestPloneParticipationHanlder):
 
     handler_class = KuBParticipationHandler
-    valid_id = 'kathi.barfuss'
+    valid_id = 'regular_user'
 
 
 @requests_mock.Mocker()

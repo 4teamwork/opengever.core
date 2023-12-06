@@ -315,7 +315,7 @@ class TestCustomPropertiesDeserializer(IntegrationTestCase):
         dossier = children["added"].pop()
 
         self.assertEqual(
-            u'kathi.barfuss',
+            self.regular_user.id,
             get_custom_properties(dossier)['member'])
 
     @browsing

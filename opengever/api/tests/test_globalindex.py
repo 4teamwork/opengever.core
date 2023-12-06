@@ -306,11 +306,11 @@ class TestGlobalIndexGet(IntegrationTestCase):
                         u'count': 1,
                         u'label': u'Eingangskorb: Finanz\xe4mt',
                     },
-                    u'kathi.barfuss': {
+                    self.regular_user.id: {
                         u'count': 12,
                         u'label': u'B\xe4rfuss K\xe4thi',
                     },
-                    u'robert.ziegler': {
+                    self.dossier_responsible.id: {
                         u'count': 2,
                         u'label': u'Ziegler Robert',
                     },

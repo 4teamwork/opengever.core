@@ -33,7 +33,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         url = "%s/@external-activities" % self.portal.absolute_url()
 
         activity_data = {
-            "notification_recipients": ["kathi.barfuss"],
+            "notification_recipients": [self.regular_user.id],
             "resource_url": "https://igdev.onegovgever.ch/intergever/outbox",
             "title": {
                 "de": "Technische Quittung f\xc3\xbcr eCH-0147 Export",
@@ -87,7 +87,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         self.assertEqual(1, len(notifications))
         self.assertEqual(
             {
-                "@id": "http://nohost/plone/@notifications/kathi.barfuss/1",
+                "@id": "http://nohost/plone/@notifications/%s/1" % self.regular_user.id,
                 "actor_id": "__system__",
                 "actor_label": u"",
                 "created": u"2019-12-31T17:45:00+00:00",
@@ -244,7 +244,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         url = "%s/@external-activities" % self.portal.absolute_url()
 
         activity_data = {
-            "notification_recipients": ["kathi.barfuss"],
+            "notification_recipients": [self.regular_user.id],
         }
 
         with browser.expect_http_error(code=400, reason="Bad Request"):
@@ -271,7 +271,7 @@ class TestExternalActivitiesPost(IntegrationTestCase):
         url = "%s/@external-activities" % self.portal.absolute_url()
 
         activity_data = {
-            "notification_recipients": ["kathi.barfuss"],
+            "notification_recipients": [self.regular_user.id],
             "resource_url": 42,
             "title": {
                 "not-a-lang": "Foo",

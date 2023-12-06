@@ -3,9 +3,9 @@ from plone.app.testing import TEST_USER_ID
 
 
 EXPECTED_USER_DOC_PROPERTIES = {
-    'User.ID': 'kathi.barfuss',
+    'User.ID': 'regular_user',
     'User.FullName': u'B\xe4rfuss K\xe4thi',
-    'ogg.user.userid': 'kathi.barfuss',
+    'ogg.user.userid': 'regular_user',
     'ogg.user.title': u'B\xe4rfuss K\xe4thi',
     'ogg.user.firstname': u'K\xe4thi',
     'ogg.user.lastname': u'B\xe4rfuss',

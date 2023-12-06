@@ -227,7 +227,7 @@ class TestJournalGet(IntegrationTestCase):
             u'id': '123-456-789',
             u'is_editable': True,
             u'actor_fullname': u'B\xe4rfuss K\xe4thi',
-            u'actor_id': u'kathi.barfuss',
+            u'actor_id': self.regular_user.id,
             u'comment': u'is an agent',
             u'category': {'token': 'information', 'title': 'Information' },
             u'related_documents': [{

@@ -26,12 +26,11 @@ class TestLastLogin(IntegrationTestCase):
 
     @browsing
     def test_updates_last_login_if_user_logs_in(self, browser):
-        userid = self.regular_user.getId()
-        ogds_user = User.query.get_by_userid(userid)
+        ogds_user = User.query.get_by_userid(self.regular_user.id)
         self.assertIsNone(ogds_user.last_login)
 
         with freeze(datetime(2020, 2, 2, 16, 40)):
             browser.visit(view='login_form')
-            browser.fill({'Login Name': userid, 'Password': 'secret'}).submit()
-            ogds_user = User.query.get_by_userid(userid)
+            browser.fill({'Login Name': self.regular_user.getUserName(), 'Password': 'secret'}).submit()
+            ogds_user = User.query.get_by_userid(self.regular_user.id)
             self.assertEqual(date(2020, 2, 2), ogds_user.last_login)

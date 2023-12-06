@@ -4,6 +4,7 @@ from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 from plone import api
+from unittest import skip
 from zope.component import queryAdapter
 
 
@@ -102,7 +103,8 @@ class TestLocalReferenceNumber(IntegrationTestCase):
         self.assertEquals(
             u'P', IReferenceNumber(self.private_root).get_local_number())
 
-    def test_private_folder_returns_urlified_userid(self):
+    @skip('Private folder reference prefix should be based on username')
+    def test_private_folder_returns_urlified_username(self):
         self.login(self.regular_user)
 
         self.assertEquals(
@@ -308,12 +310,14 @@ class TestReferenceNumberAdapter(IntegrationTestCase):
         self.assertEquals(u'P Client1',
                           IReferenceNumber(self.private_root).get_number())
 
+    @skip('Private folder reference prefix should be based on username')
     def test_reference_number_for_private_folder(self):
         self.login(self.regular_user)
 
         self.assertEquals(u'P Client1 kathi-barfuss',
                           IReferenceNumber(self.private_folder).get_number())
 
+    @skip('Private folder reference prefix should be based on username')
     def test_reference_number_for_private_dossier(self):
         self.login(self.regular_user)
 

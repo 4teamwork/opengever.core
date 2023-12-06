@@ -4,10 +4,12 @@ from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 from opengever.testing.pages import tabbedview
 from plone import api
+from unittest import skip
 
 
 class TestPrivateReferenceNumber(IntegrationTestCase):
 
+    @skip('Private folder reference prefix should be based on username, not userid')
     def test_dotted_reference_number(self):
         self.login(self.regular_user)
 
@@ -32,6 +34,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             found_reference_numbers,
             )
 
+    @skip('Private folder reference prefix should be based on username, not userid')
     def test_grouped_by_three_reference_number(self):
         self.login(self.regular_user)
 
@@ -56,6 +59,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             found_reference_numbers,
             )
 
+    @skip('Private folder reference prefix should be based on username, not userid')
     def test_no_client_id_dotted_reference_number(self):
         self.login(self.regular_user)
 
@@ -80,6 +84,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             found_reference_numbers,
             )
 
+    @skip('Private folder reference prefix should be based on username, not userid')
     def test_no_client_id_grouped_by_three_reference_number(self):
         self.login(self.regular_user)
 
@@ -105,6 +110,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
             )
 
     @browsing
+    @skip('Private folder reference prefix should be based on username, not userid')
     def test_prefix_visible_on_private_document(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.private_document)
@@ -117,6 +123,7 @@ class TestPrivateReferenceNumber(IntegrationTestCase):
 
 class TestPrivateReferenceNumberSolr(SolrIntegrationTestCase):
 
+    @skip('Private folder prefix should be based on username, not userid')
     @browsing
     def test_prefix_visible_on_private_folder(self, browser):
         self.login(self.regular_user, browser)

@@ -201,7 +201,7 @@ class TestAssignTask(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
@@ -209,7 +209,7 @@ class TestAssignTask(IntegrationTestCase):
              {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'}],
+              'principal': self.secretariat_user.id}],
             manager.storage._storage())
 
 
@@ -288,7 +288,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
@@ -296,7 +296,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
              {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task).id,
-              'principal': 'jurgen.konig'}],
+              'principal': self.secretariat_user.id}],
             manager.storage._storage())
 
     @browsing
@@ -315,7 +315,7 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
             [{'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
-              'principal': 'kathi.barfuss'},
+              'principal': self.regular_user.id},
              {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
@@ -323,5 +323,5 @@ class TestAssignTaskWithSuccessors(IntegrationTestCase):
              {'cause': ASSIGNMENT_VIA_TASK,
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.successor).id,
-              'principal': 'jurgen.konig'}],
+              'principal': self.secretariat_user.id}],
             manager.storage._storage())

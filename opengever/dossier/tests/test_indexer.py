@@ -446,11 +446,11 @@ class TestDossierParticipationsIndexer(SolrIntegrationTestCase):
 
         indexed_value = solr_data_for(self.dossier, 'participations')
         expected = [
-            u'kathi.barfuss|participation',
-            u'kathi.barfuss|final-drawing',
+            u'%s|participation' % self.regular_user.id,
+            u'%s|final-drawing' % self.regular_user.id,
             u'any-participant|participation',
             u'any-participant|final-drawing',
-            u'kathi.barfuss|any-role']
+            u'%s|any-role' % self.regular_user.id]
         self.assertItemsEqual(expected, indexed_value)
 
 

@@ -647,7 +647,7 @@ class TestDossierTemplateAddWizard(IntegrationTestCase):
             'cause': 3,
             'reference': None,
             'roles': ['Reader', 'Contributor', 'Editor'],
-            'principal': 'kathi.barfuss',
+            'principal': self.regular_user.id,
         }]
         role_assignments = RoleAssignmentManager(subdossier).storage._storage()
         self.assertEqual(expected_role_assignments, role_assignments)

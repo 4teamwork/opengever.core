@@ -11,7 +11,7 @@ class TestUserDetails(IntegrationTestCase):
     def test_user_details(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                           browser.css('h1.documentFirstHeading').text)
@@ -37,11 +37,11 @@ class TestUserDetails(IntegrationTestCase):
     def test_parentheses_do_not_appear_without_abbreviation(self, browser):
         self.login(self.regular_user, browser)
 
-        kathi = ogds_service().fetch_user('kathi.barfuss')
+        kathi = ogds_service().fetch_user(self.regular_user.id)
         kathi.department_abbr = None
         kathi.directorate_abbr = None
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         self.assertEquals([u'B\xe4rfuss K\xe4thi (kathi.barfuss)'],
                           browser.css('h1.documentFirstHeading').text)
@@ -61,7 +61,7 @@ class TestUserDetails(IntegrationTestCase):
     def test_list_all_team_memberships(self, browser):
         create_contacts(self)
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
@@ -71,7 +71,7 @@ class TestUserDetails(IntegrationTestCase):
     @browsing
     def test_hides_team_links_when_contact_folder_is_missing(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
@@ -81,7 +81,7 @@ class TestUserDetails(IntegrationTestCase):
     def test_lists_group_memberships(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         self.assertEqual(
             ['fa Users Group', 'Projekt A'], browser.css('.groups li').text)
@@ -101,7 +101,7 @@ class TestUserDetails(IntegrationTestCase):
                                   external_id='with spaces')
         user.groups.append(group_with_spaces)
 
-        browser.open(self.portal, view='@@user-details/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details/%s' % self.regular_user.id)
 
         group_links = [a.get('href') for a in browser.css('.groups li a')]
         self.assertEqual(
@@ -117,7 +117,7 @@ class TestUserDetailsPlain(IntegrationTestCase):
     def test_contains_only_metadata_table(self, browser):
         self.login(self.regular_user, browser)
 
-        browser.open(self.portal, view='@@user-details-plain/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details-plain/%s' % self.regular_user.id)
 
         metadata = dict(browser.css('.vertical').first.lists())
         self.assertDictContainsSubset({
@@ -141,7 +141,7 @@ class TestUserDetailsPlain(IntegrationTestCase):
     @browsing
     def test_hides_team_links_when_contact_folder_is_missing(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@user-details-plain/kathi.barfuss')
+        browser.open(self.portal, view='@@user-details-plain/%s' % self.regular_user.id)
         self.assertEquals(
             [u'Projekt \xdcberbaung Dorfmatte'], browser.css('.teams li').text)
         self.assertIsNone(browser.css('.teams a').first_or_none)

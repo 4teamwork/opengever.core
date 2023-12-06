@@ -88,7 +88,7 @@ class TestTransferDossierPost(SolrIntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
                          headers=self.api_headers, data=json.dumps(
-                             {"new_userid": "kathi.barfuss", "old_userid": "kathi.barfuss"})
+                             {"new_userid": self.regular_user.id, "old_userid": self.regular_user.id})
                          )
         self.assertEqual(
             {"message": "'old_userid' and 'new_userid' should not be the same",

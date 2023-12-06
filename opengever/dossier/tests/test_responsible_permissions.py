@@ -36,16 +36,16 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
             {'cause': 8,
              'roles': ['Role Manager'],
              'reference': Oguid.for_object(dossier).id,
-             'principal': 'kathi.barfuss'},
+             'principal': self.regular_user.id},
             assignments[0])
 
     @browsing
     def test_responsible_is_granted_role_manager_when_responsible_modified(self, browser):
         self.login(self.manager, browser)
-        data = {"responsible": {'token': "nicole.kohler"}}
+        data = {"responsible": {'token': self.administrator.id}}
         browser.open(self.dossier, json.dumps(data), method="PATCH", headers=self.api_headers)
 
-        self.assertEqual('nicole.kohler', IDossier(self.dossier).responsible)
+        self.assertEqual(self.administrator.id, IDossier(self.dossier).responsible)
 
         assignments = self.get_assignments_via_responsible(self.dossier)
         self.assertEqual(1, len(assignments))
@@ -53,13 +53,13 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
             {'cause': 8,
              'roles': ['Role Manager'],
              'reference': Oguid.for_object(self.dossier).id,
-             'principal': 'nicole.kohler'},
+             'principal': self.administrator.id},
             assignments[0])
 
-        data = {"responsible": {'token': "kathi.barfuss"}}
+        data = {"responsible": {'token': self.regular_user.id}}
         browser.open(self.dossier, json.dumps(data), method="PATCH", headers=self.api_headers)
 
-        self.assertEqual('kathi.barfuss', IDossier(self.dossier).responsible)
+        self.assertEqual(self.regular_user.id, IDossier(self.dossier).responsible)
 
         assignments = self.get_assignments_via_responsible(self.dossier)
         self.assertEqual(1, len(assignments))
@@ -67,7 +67,7 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
             {'cause': 8,
              'roles': ['Role Manager'],
              'reference': Oguid.for_object(self.dossier).id,
-             'principal': 'kathi.barfuss'},
+             'principal': self.regular_user.id},
             assignments[0])
 
     @browsing
@@ -75,7 +75,7 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
         self.login(self.dossier_responsible, browser)
         self.assertEqual('robert.ziegler', IDossier(self.dossier).responsible)
 
-        data = {"responsible": {'token': "nicole.kohler"}}
+        data = {"responsible": {'token': self.administrator.id}}
         with browser.expect_http_error(code=403):
             browser.open(self.dossier, json.dumps(data),
                          method="PATCH", headers=self.api_headers)
@@ -93,4 +93,4 @@ class TestGrantRoleManagerToResponsibleFeature(IntegrationTestCase):
         browser.open(self.dossier, json.dumps(data),
                      method="PATCH", headers=self.api_headers)
         self.assertEqual(204, browser.status_code)
-        self.assertEqual('nicole.kohler', IDossier(self.dossier).responsible)
+        self.assertEqual(self.administrator.id, IDossier(self.dossier).responsible)

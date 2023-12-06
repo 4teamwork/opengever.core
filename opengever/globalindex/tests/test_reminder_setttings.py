@@ -17,7 +17,8 @@ class TestReminderSettings(IntegrationTestCase):
                .remind_on(today))
 
         self.assertEquals(
-            '<ReminderSetting 1 for kathi.barfuss for {} on {} >'.format(
+            '<ReminderSetting 1 for {} for {} on {} >'.format(
+                self.regular_user.id,
                 self.task.get_sql_object(), today),
             repr(ReminderSetting.query.first()))
 
