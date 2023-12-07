@@ -58,7 +58,7 @@ class TestWebActionsPost(IntegrationTestCase):
             'unique_name': 'open-in-external-app-title-action',
             'created': '2019-12-31T17:45:00',
             'modified': '2019-12-31T17:45:00',
-            'owner': 'webaction.manager',
+            'owner': 'webaction_manager',
         }, browser.json)
 
     @browsing
@@ -237,7 +237,7 @@ class TestWebActionsGet(IntegrationTestCase):
                 'scope': 'global',
                 'created': '2019-12-31T17:45:00',
                 'modified': '2019-12-31T17:45:00',
-                'owner': 'webaction.manager',
+                'owner': 'webaction_manager',
             }],
         }, browser.json)
 
@@ -304,7 +304,7 @@ class TestWebActionsGet(IntegrationTestCase):
             'scope': 'global',
             'created': '2019-12-31T17:45:00',
             'modified': '2019-12-31T17:45:00',
-            'owner': 'webaction.manager',
+            'owner': 'webaction_manager',
         }, browser.json)
 
     @browsing
@@ -403,7 +403,7 @@ class TestWebActionsPatch(IntegrationTestCase):
             'scope': 'global',
             'created': datetime(2019, 12, 31, 17, 45),
             'modified': datetime(2020, 7, 31, 19, 15),
-            'owner': 'webaction.manager',
+            'owner': 'webaction_manager',
         }, storage.get(action['action_id']))
 
     @browsing
