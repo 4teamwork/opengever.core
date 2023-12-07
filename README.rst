@@ -645,7 +645,7 @@ Users
 - ``self.secretariat_user``: ``jurgen.konig``
 - ``self.service_user``: ``service_user``
 - ``self.test_user``: ``test_user_1_``
-- ``self.webaction_manager``: ``webaction.manager``
+- ``self.webaction_manager``: ``webaction_manager``
 - ``self.workspace_admin``: ``fridolin.hugentobler``
 - ``self.workspace_guest``: ``hans.peter``
 - ``self.workspace_member``: ``beatrice.schrodinger``
