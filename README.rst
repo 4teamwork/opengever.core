@@ -636,7 +636,7 @@ Users
 - ``self.foreign_contributor``: ``james.bond``
 - ``self.limited_admin``: ``limited_admin``
 - ``self.manager``: ``admin``
-- ``self.meeting_user``: ``herbert.jager``
+- ``self.meeting_user``: ``meeting_user``
 - ``self.member_admin``: ``member_admin``
 - ``self.propertysheets_manager``: ``propertysheets_manager``
 - ``self.reader_user``: ``lucklicher.laser``
