@@ -2050,6 +2050,7 @@ class OpengeverContentFixture(object):
             'webaction_manager',
             'committee_responsible',
             'meeting_user',
+            'workspace_owner',
         )
 
         if attrname in users_with_different_userid:
