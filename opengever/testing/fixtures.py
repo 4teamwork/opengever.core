@@ -2048,6 +2048,7 @@ class OpengeverContentFixture(object):
             'dossier_manager',
             'regular_user',
             'webaction_manager',
+            'committee_responsible',
         )
 
         if attrname in users_with_different_userid:

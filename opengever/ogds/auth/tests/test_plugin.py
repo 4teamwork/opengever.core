@@ -138,10 +138,10 @@ class TestOGDSAuthPluginIUserEnumeration(TestOGDSAuthPluginBase):
     def test_enum_users_attribute_search_with_exact_match_false(self):
         results = self.plugin.enumerateUsers(lastname='LER')
         expected = (
-            api.user.get(username='franzi.muller').id,
-            api.user.get(username='fridolin.hugentobler').id,
-            api.user.get(username='nicole.kohler').id,
-            api.user.get(username='robert.ziegler').id,
+            self.committee_responsible.id,
+            self.workspace_admin.id,
+            self.administrator.id,
+            self.dossier_responsible.id,
         )
         self.assertEqual(expected, self.ids(results))
 

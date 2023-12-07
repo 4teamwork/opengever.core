@@ -679,8 +679,8 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.meeting_task.revoke_permissions = False
 
         self.assertEqual(
-            (('fa_inbox_users', ('TaskResponsible',)),
-             (self.committee_responsible.id, ('Owner',)),
+            ((self.committee_responsible.id, ('Owner',)),
+             ('fa_inbox_users', ('TaskResponsible',)),
              (self.dossier_responsible.id, ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 
@@ -724,8 +724,8 @@ class TestLocalRolesRevoking(IntegrationTestCase):
               'principal': 'fa_inbox_users'}],
             storage._storage())
         self.assertEqual(
-            (('fa_inbox_users', ('TaskResponsible',)),
-             (self.committee_responsible.id, ('Owner',)),
+            ((self.committee_responsible.id, ('Owner',)),
+             ('fa_inbox_users', ('TaskResponsible',)),
              (self.dossier_responsible.id, ('TaskResponsible',))),
             self.meeting_dossier.get_local_roles())
 

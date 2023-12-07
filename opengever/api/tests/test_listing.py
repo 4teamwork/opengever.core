@@ -584,8 +584,8 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         facets = browser.json['facets']
         self.assertItemsEqual([u'creator', 'document_type'], facets.keys())
         self.assertItemsEqual(
-            {u'franzi.muller': {u'count': 4, u'label': u'M\xfcller Fr\xe4nzi'},
-             u'robert.ziegler': {u'count': 15, u'label': u'Ziegler Robert'}},
+            {self.committee_responsible.id: {u'count': 4, u'label': u'M\xfcller Fr\xe4nzi'},
+             self.dossier_responsible.id: {u'count': 15, u'label': u'Ziegler Robert'}},
             facets[u'creator'])
         self.assertItemsEqual(
             {u'contract': {u'count': 1, u'label': u'Contract'}},

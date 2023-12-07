@@ -630,7 +630,7 @@ Users
 
 - ``self.administrator``: ``nicole.kohler``
 - ``self.archivist``: ``archivist``
-- ``self.committee_responsible``: ``franzi.muller``
+- ``self.committee_responsible``: ``committee_responsible``
 - ``self.dossier_manager``: ``dossier_manager``
 - ``self.dossier_responsible``: ``robert.ziegler``
 - ``self.foreign_contributor``: ``james.bond``

@@ -65,7 +65,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -76,7 +76,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -87,7 +87,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -98,7 +98,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.2",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -109,7 +109,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -120,7 +120,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.1.1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -131,7 +131,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.1.1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -142,7 +142,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1.1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -153,7 +153,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -164,7 +164,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -175,7 +175,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -186,7 +186,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "franzi.muller",
+                "actor": self.committee_responsible.id,
                 "comments": "",
             },
             {
@@ -197,7 +197,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -208,7 +208,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -219,7 +219,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -230,7 +230,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -241,7 +241,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -252,7 +252,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -263,7 +263,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -274,7 +274,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -285,7 +285,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -296,7 +296,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
             {
@@ -307,7 +307,7 @@ class TestJournalListingLaTeXView(IntegrationTestCase):
                     "documents": [],
                 },
                 "reference_number": "Client1 1.1 / 1",
-                "actor": "robert.ziegler",
+                "actor": self.dossier_responsible.id,
                 "comments": "",
             },
         ]
