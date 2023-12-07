@@ -17,6 +17,9 @@ class TestTaskTemplateIssuerSource(base.TestUsersContactsInboxesSource):
     def test_search_interactive_users(self):
         result = self.source.search('Resp')
 
+        # Filter out user IDs that match but we're not interested in
+        result = [r for r in result if r.value != 'committee_responsible']
+
         self.assertEquals(1, len(result), 'Expect 1 contact in result')
         self.assertEquals('interactive_actor:responsible', result[0].token)
         self.assertEquals('interactive_actor:responsible', result[0].value)

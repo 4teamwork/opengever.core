@@ -13,8 +13,8 @@ class TestListGroupMembers(IntegrationTestCase):
         browser.open(view='list_groupmembers', data={'group': 'projekt_b'})
 
         self.assertSequenceEqual(
-            ['http://nohost/plone/@@user-details/herbert.jager',
-             'http://nohost/plone/@@user-details/franzi.muller'],
+            ['http://nohost/plone/@@user-details/%s' % self.meeting_user,
+             'http://nohost/plone/@@user-details/%s' % self.committee_responsible],
             [link.get('href') for link in browser.css('.member_listing li a')])
 
     @browsing
