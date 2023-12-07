@@ -38,7 +38,7 @@ class TestReturnedWebactions(IntegrationTestCase):
                              'order': 5,
                              'created': datetime(2018, 4, 20),
                              'modified': datetime(2018, 4, 20),
-                             'owner': 'webaction.manager',
+                             'owner': 'webaction_manager',
                              'scope': 'global'}
 
         self.action2_data = {'target_url': 'http://example.org/endpoint',
@@ -49,7 +49,7 @@ class TestReturnedWebactions(IntegrationTestCase):
                              'order': 10,
                              'created': datetime(2018, 4, 21),
                              'modified': datetime(2018, 4, 21),
-                             'owner': 'webaction.manager',
+                             'owner': 'webaction_manager',
                              'scope': 'global'}
 
         self.action3_data = {'target_url': 'http://example.org/endpoint',
@@ -60,7 +60,7 @@ class TestReturnedWebactions(IntegrationTestCase):
                              'order': 20,
                              'created': datetime(2018, 4, 22),
                              'modified': datetime(2018, 4, 22),
-                             'owner': 'webaction.manager',
+                             'owner': 'webaction_manager',
                              'scope': 'global'}
 
     def get_webactions(self):
