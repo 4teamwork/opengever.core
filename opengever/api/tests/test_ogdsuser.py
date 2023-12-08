@@ -188,6 +188,22 @@ class TestOGDSUserGet(IntegrationTestCase):
             u'l\xfccklicher.laser',
             browser.json['userid'])
 
+    @browsing
+    def test_also_handles_username_instead_of_userid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.portal,
+                     view='@ogds-users/%s' % self.dossier_manager.getUserName(),
+                     headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertDictContainsSubset(
+            {'@id': u'http://nohost/plone/@ogds-users/%s' % self.dossier_manager.getUserName(),
+             u'userid': self.dossier_manager.id,
+             u'firstname': u'F\xe4ivel',
+             u'lastname': u'Fr\xfchling'},
+            browser.json)
+
 
 class TestAssignedGroupsMethod(OGDSTestCase):
 
