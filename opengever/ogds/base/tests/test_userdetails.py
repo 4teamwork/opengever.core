@@ -58,6 +58,16 @@ class TestUserDetails(IntegrationTestCase):
             browser.login().open(self.portal, view='@@user-details/not.found')
 
     @browsing
+    def test_supports_username_instead_of_the_userid(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.portal,
+                     view='@@user-details/%s' % self.dossier_manager.getUserName())
+
+        self.assertEquals([u'Fr\xfchling F\xe4ivel (faivel.fruhling)'],
+                          browser.css('h1.documentFirstHeading').text)
+
+    @browsing
     def test_list_all_team_memberships(self, browser):
         create_contacts(self)
         self.login(self.regular_user, browser)
