@@ -404,8 +404,9 @@ A `Docker Compose <https://docs.docker.com/compose/>`_ file is provided in this
 repo to easily run the services.
 
 Before running the services with Docker a few configuration settings are required
-to be provided in a ``.env`` file. Copy the ``.env.sample`` file to ``.env`` and fill
-in the required settings.
+to be provided in a ``.env`` file. To create one with default settings for development,
+just run ``bin/setup``. You will be prompted for a decryption password, which
+can be found in 1Password.
 
 To start the services simply run:
 
