@@ -1,0 +1,6 @@
+<registry>
+
+  <record interface="opengever.disposition.interfaces.IDispositionSettings"
+          field="attach_csv_reports" />
+
+</registry>

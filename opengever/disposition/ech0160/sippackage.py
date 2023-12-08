@@ -1,18 +1,25 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from DateTime import DateTime
+from itertools import chain
 from opengever.base.behaviors.translated_title import ITranslatedTitle
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.utils import file_checksum
 from opengever.disposition.ech0160 import model as ech0160
 from opengever.disposition.ech0160.bindings import arelda
+from opengever.disposition.interfaces import IDispositionSettings
+from opengever.disposition.reports import DispositionDocumentCSVReporter
+from opengever.disposition.reports import DispositionDossierCSVReporter
+from opengever.disposition.reports import DispositionDossierPerTypeCSVReporter
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.repository.repositoryroot import IRepositoryRoot
 from pkg_resources import resource_filename
 from plone import api
 from pyxb.namespace import XMLSchema_instance as xsi
+from StringIO import StringIO
 from zope.component import getUtility
+import csv
 import os.path
 
 
@@ -122,6 +129,7 @@ class SIPPackage(object):
         self.add_schema_files(zipfile)
         self.content_folder.add_to_zip(zipfile)
         self.add_document_files(zipfile)
+        self.add_csv_files(zipfile)
 
     def add_schema_files(self, zipfile):
         for schema in os.listdir(schemas_path):
@@ -155,3 +163,51 @@ class SIPPackage(object):
         arcname = os.path.join(
             self.get_folder_name(), 'header', 'metadata.xml')
         zipfile.writestr(arcname, dom.toprettyxml(encoding='UTF-8'))
+
+    def add_csv_files(self, zipfile):
+        attach_csv_reports_enabled = api.portal.get_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings)
+
+        if not attach_csv_reports_enabled:
+            return
+
+        self.add_dossier_csv(zipfile)
+        self.add_documents_csv(zipfile)
+        self.add_dossier_type_specific_csvs(zipfile)
+
+    def add_dossier_csv(self, zipfile):
+        reporter = DispositionDossierCSVReporter(self.dossiers)
+        stream = StringIO()
+        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
+                                doublequote=False, escapechar='\\')
+        writer.writeheader()
+        writer.writerows(reporter())
+        dossier_csv = os.path.join(self.get_folder_name(), 'dossiers.csv')
+        zipfile.writestr(dossier_csv, stream.getvalue())
+
+    def add_documents_csv(self, zipfile):
+        reporter = DispositionDocumentCSVReporter(self.dossiers)
+        stream = StringIO()
+        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
+                                doublequote=False, escapechar='\\')
+        writer.writeheader()
+        writer.writerows(reporter())
+        dossier_csv = os.path.join(self.get_folder_name(), 'items.csv')
+        zipfile.writestr(dossier_csv, stream.getvalue())
+
+    def add_dossier_type_specific_csvs(self, zipfile):
+        reporter = DispositionDossierPerTypeCSVReporter(self.dossiers)
+        for dossier_type, values in reporter().items():
+            stream = StringIO()
+            fieldnames = self.extract_fieldnames(values)
+            writer = csv.DictWriter(
+                stream, fieldnames=fieldnames,
+                delimiter=';', doublequote=False, escapechar='\\')
+            writer.writeheader()
+            writer.writerows(values)
+            csv_file = os.path.join(
+                self.get_folder_name(), '{}.csv'.format(dossier_type))
+            zipfile.writestr(csv_file, stream.getvalue())
+
+    def extract_fieldnames(self, values):
+        return set(chain(*[value.keys() for value in values]))

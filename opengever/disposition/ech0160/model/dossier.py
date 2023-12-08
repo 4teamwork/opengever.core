@@ -24,6 +24,7 @@ class Dossier(object):
         self.obj = obj
         self.dossiers = {}
         self.documents = {}
+        self.folder = None
 
         self._add_descendants()
 

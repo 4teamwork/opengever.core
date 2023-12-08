@@ -5,12 +5,16 @@ from ftw.testing import freeze
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.disposition.ech0160.sippackage import SIPPackage
 from opengever.disposition.interfaces import IAppraisal
+from opengever.disposition.interfaces import IDispositionSettings
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
+from plone import api
 from tempfile import TemporaryFile
 from zipfile import ZipFile
+import csv
 
 
 class TestSIPPackageIntegration(IntegrationTestCase):
@@ -192,3 +196,193 @@ class TestSIPPackage(FunctionalTestCase):
                  'SIP_20160611_PLONE_1_10xy/content/d000002/p000003.doc',
                  'SIP_20160611_PLONE_1_10xy/header/metadata.xml'],
                 zip_file.namelist())
+
+    def test_adds_dossiers_csv(self):
+        api.portal.set_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings,
+            value=True)
+
+        with freeze(datetime(2016, 6, 11)):
+            dossier_a = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY,
+                                       description=u'Lorem ipsum'))
+            dossier_b = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY))
+            disposition = create(Builder('disposition')
+                                 .having(dossiers=[dossier_a, dossier_b])
+                                 .within(self.folder))
+
+            tmpfile = TemporaryFile()
+            zip_file = ZipFile(tmpfile, 'w')
+
+            package = SIPPackage(disposition)
+            package.write_to_zipfile(zip_file)
+            rows = csv.DictReader(
+                zip_file.read(u'SIP_20160611_PLONE_1/dossiers.csv').splitlines(),
+                delimiter=';')
+            rows = [row for row in rows]
+
+            self.assertDictContainsSubset(
+                {'Ablage_Nr': '',
+                 'Ablage_Pr\xe4fix': '',
+                 'Beschreibung': 'Lorem ipsum',
+                 'Dossier_Titel': '',
+                 'Mandant': 'Admin Unit 1',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungsystem_Version': '',
+                 'abschlussdatum': '2000-00-11',
+                 'aktenzeichen': 'Client1 1 / 1',
+                 'datenschutz': 'false',
+                 'entstehungszeitraum_bis': '',
+                 'entstehungszeitraum_von': '',
+                 'eroeffnungsdatum': '2016-00-11',
+                 'klassifizierungskategorie': 'unprotected',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'schutzfrist': '30'},
+                rows[0]
+            )
+
+            self.assertDictContainsSubset(
+                {'Ablage_Nr': '',
+                 'Ablage_Pr\xe4fix': '',
+                 'Beschreibung': '',
+                 'Dossier_Titel': '',
+                 'Mandant': 'Admin Unit 1',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungsystem_Version': '',
+                 'abschlussdatum': '2000-00-11',
+                 'aktenzeichen': 'Client1 1 / 2',
+                 'datenschutz': 'false',
+                 'entstehungszeitraum_bis': '',
+                 'entstehungszeitraum_von': '',
+                 'eroeffnungsdatum': '2016-00-11',
+                 'klassifizierungskategorie': 'unprotected',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'schutzfrist': '30'},
+                rows[1]
+            )
+
+    def test_adds_items_csv(self):
+        api.portal.set_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings,
+            value=True)
+
+        with freeze(datetime(2016, 6, 11)):
+            dossier_a = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY,
+                                       description=u'Lorem ipsum'))
+            create(Builder('document')
+                   .with_dummy_content()
+                   .attach_archival_file_containing('ARCHIV')
+                   .within(dossier_a))
+            disposition = create(Builder('disposition')
+                                 .having(dossiers=[dossier_a, ])
+                                 .within(self.folder))
+
+            tmpfile = TemporaryFile()
+            zip_file = ZipFile(tmpfile, 'w')
+
+            package = SIPPackage(disposition)
+            package.write_to_zipfile(zip_file)
+            rows = csv.DictReader(
+                zip_file.read(u'SIP_20160611_PLONE_1/items.csv').splitlines(),
+                delimiter=';')
+            rows = [row for row in rows]
+
+            self.assertDictContainsSubset(
+                {'aktenzeichen': 'Client1 1 / 1 / 1',
+                 'autor': '',
+                 'beschreibung': '',
+                 'datenschutz': 'false',
+                 'document_title': 'Testdokum\xc3\xa4nt',
+                 'dokumentdatum': '2016-00-11',
+                 'entstehtungszeitraum_bis': '2016-00-11',
+                 'entstehtungszeitraum_von': '2016-00-11',
+                 'erscheinungsform': 'digital',
+                 'klassifizierungskategorie': 'unprotected',
+                 'laufnummer': '1',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'oeffentlichkeitsstatusBegruendung': '',
+                 'originalName': 'test.pdf',
+                 'pruefalgorithmus': 'MD5',
+                 'pruefsumme': 'c37c17466ea0547efb1744bb061737a1',
+                 'registrierdatum': '2016-00-11',
+                 'sip_file_name': 'p000001.pdf',
+                 'sip_folder_name': 'd000001'},
+                rows[0]
+            )
+
+            self.assertDictContainsSubset(
+                {'aktenzeichen': 'Client1 1 / 1 / 1',
+                 'autor': '',
+                 'beschreibung': '',
+                 'datenschutz': 'false',
+                 'document_title': 'Testdokum\xc3\xa4nt',
+                 'dokumentdatum': '2016-00-11',
+                 'entstehtungszeitraum_bis': '2016-00-11',
+                 'entstehtungszeitraum_von': '2016-00-11',
+                 'erscheinungsform': 'digital',
+                 'klassifizierungskategorie': 'unprotected',
+                 'laufnummer': '1',
+                 'oeffentlichkeitsstatus': 'unchecked',
+                 'oeffentlichkeitsstatusBegruendung': '',
+                 'originalName': 'Testdokumaent.doc',
+                 'pruefalgorithmus': 'MD5',
+                 'pruefsumme': 'ca1ea02c10b7c37f425b9b7dd86d5e11',
+                 'registrierdatum': '2016-00-11',
+                 'sip_file_name': 'p000002.doc',
+                 'sip_folder_name': 'd000001'},
+                rows[1]
+            )
+
+    def test_adds_custom_dossier_csv_per_type(self):
+        api.portal.set_registry_record(
+            name='attach_csv_reports', interface=IDispositionSettings,
+            value=True)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("businesscase_dossier_schema")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("textline", u"f1", u"Field 1", u"", False)
+            .with_field("int", u"f2", u"Field 2", u"", False)
+        )
+
+        with freeze(datetime(2016, 6, 11)):
+            dossier_a = create(Builder('dossier')
+                               .within(self.folder)
+                               .as_expired()
+                               .having(archival_value=ARCHIVAL_VALUE_WORTHY,
+                                       dossier_type=u'businesscase'))
+
+            IDossierCustomProperties(dossier_a).custom_properties = {
+                "IDossier.dossier_type.businesscase": {
+                    "f1": "Additional Test", "f2": 123},
+            }
+
+            disposition = create(Builder('disposition')
+                                 .having(dossiers=[dossier_a, ])
+                                 .within(self.folder))
+
+            tmpfile = TemporaryFile()
+            zip_file = ZipFile(tmpfile, 'w')
+
+            package = SIPPackage(disposition)
+            package.write_to_zipfile(zip_file)
+            rows = csv.DictReader(
+                zip_file.read(u'SIP_20160611_PLONE_1/businesscase.csv').splitlines(),
+                delimiter=';')
+            rows = [row for row in rows]
+
+            self.assertEquals(
+                ['f1', 'f2', 'dossier_id'], rows[0].keys())
+
+            self.assertDictContainsSubset(
+                {'f1': 'Additional Test', 'f2': '123'},
+                rows[0])
