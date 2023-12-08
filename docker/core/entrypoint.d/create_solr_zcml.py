@@ -23,7 +23,7 @@ SOLR_ZCML_TEMPLATE = """\
     <include package="ftw.solr" file="meta.zcml" />
     <solr:connection host="{host}"
                      port="{port}"
-                     base="/solr/ogsite"
+                     base="{base}"
                      upload_blobs="{upload_blobs}"/>
 </configure>
 
