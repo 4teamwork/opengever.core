@@ -536,7 +536,6 @@ class TestDocumentMimetype(FunctionalTestCase):
 
 class TestDocumentAuthorResolving(IntegrationTestCase):
 
-    @skip('Should also resolve username to fullname, not just userid')
     def test_adding_document_with_a_userid_as_author_resolves_to_fullname(self):
         document = create(Builder('document')
                           .having(document_author='kathi.barfuss')
@@ -554,7 +553,6 @@ class TestDocumentAuthorResolving(IntegrationTestCase):
         self.assertEquals('Muster Peter', document.document_author)
 
     @browsing
-    @skip('Should also resolve username to fullname, not just userid')
     def test_editing_document_with_a_userid_as_author_resolves_to_fullname(self, browser):
         self.login(self.regular_user, browser)
         browser.open(self.document, view='edit')
