@@ -1,6 +1,5 @@
 from opengever.contact.utils import get_contactfolder_url
 from opengever.ogds.base.utils import groupmembers_url
-from opengever.ogds.models.exceptions import RecordNotFound
 from opengever.ogds.models.service import ogds_service
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
@@ -28,9 +27,10 @@ class UserDetails(BrowserView):
     def get_userdata(self):
         """Returns a dict of information about a specific user
         """
-        try:
-            user = ogds_service().find_user(self.userid)
-        except RecordNotFound:
+        user = ogds_service().fetch_user(
+            self.userid, username_as_fallback=True)
+
+        if not user:
             raise NotFound
 
         teams = []

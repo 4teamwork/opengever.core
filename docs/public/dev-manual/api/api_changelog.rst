@@ -21,6 +21,8 @@ Other Changes
 
 - The dossiers responsible field support now also usernames not just userids.
 
+- The ``@ogds-users`` endpoint supports now also username as parameter not just the userid.
+
 
 2023.14.0 (2023-11-09)
 ----------------------

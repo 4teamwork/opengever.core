@@ -101,7 +101,7 @@
             <a class="group link-overlay"
                tal:define="groupmembers_url python:view.groupmembers_url(group.groupid)"
                tal:attributes="href groupmembers_url"
-               tal:content="python: group.title or group.groupid"></a>
+               tal:content="python: group.label() or group.groupid"></a>
           </li>
         </ul>
       </td>

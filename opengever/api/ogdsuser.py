@@ -32,7 +32,7 @@ class OGDSUserGet(Service):
             return
 
         service = ogds_service()
-        user = service.fetch_user(userid)
+        user = service.fetch_user(userid, username_as_fallback=True)
         serializer = queryMultiAdapter((user, self.request), ISerializeToJson)
         return serializer()
 

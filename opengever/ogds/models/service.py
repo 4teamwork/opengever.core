@@ -34,12 +34,22 @@ class OGDSService(object):
             raise RecordNotFound(User, userid)
         return user
 
-    def fetch_user(self, userid):
+    def fetch_user_by_username(self, username):
+        """Returns a User by it's username. When no user or multiple are found,
+        this method raises.
+        """
+        return self._query_user().filter_by(username=username).first()
+
+    def fetch_user(self, userid, username_as_fallback=False):
         """Returns a User by it's userid. None is returned when no user is found.
 
         See #find_user for similar behavior.
         """
-        return self._query_user().get(userid)
+        user = self._query_user().get(userid)
+        if not user and username_as_fallback:
+            user = self.fetch_user_by_username(userid)
+
+        return user
 
     def filter_users(self, query_string):
         return self._query_user().by_searchable_text(query_string)
