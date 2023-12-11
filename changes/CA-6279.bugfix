@@ -1,0 +1,1 @@
+Only skip enddate validation when it will be set over archive form. [njohner]

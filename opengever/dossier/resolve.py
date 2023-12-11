@@ -72,6 +72,17 @@ def get_resolver(dossier):
     return getAdapter(dossier, IDossierResolver, name=resolver_name)
 
 
+def is_archive_form_needed(dossier):
+
+    if not IFilingNumberMarker.providedBy(dossier):
+        return False
+
+    if dossier.is_subdossier():
+        return False
+    else:
+        return True
+
+
 class ValidResolverNamesVocabularyFactory(object):
     """Return a vocabulary that contains the names of all named-adapters
     registered as IDossierResolver for IDossierMarker.
@@ -178,14 +189,11 @@ class LockingResolveManager(object):
 
     def execute_recursive_resolve(self, **transition_params):
         self.resolver.raise_on_failed_preconditions()
-        if self.is_archive_form_needed():
+        if is_archive_form_needed(self.context):
             IDossierArchiver(self.context).run(**transition_params)
 
         self.resolver.resolve(
             end_date=transition_params.get('dossier_enddate'), **transition_params)
-
-    def is_archive_form_needed(self):
-        return self.resolver.is_archive_form_needed()
 
 
 class DossierResolveView(BrowserView, DossierResolutionStatusmessageMixin):
@@ -200,7 +208,7 @@ class DossierResolveView(BrowserView, DossierResolutionStatusmessageMixin):
         # If filing number feature is enabled, we redirect to an additional
         # archive form that needs to be filled out first. The actual resolving
         # will then be triggered from that form.
-        if resolve_manager.is_archive_form_needed():
+        if is_archive_form_needed(self.context):
             # Validate preconditions early. This is so we don't redirect to the
             # archive form (if filing number feature enabled) in a case where
             # it will fail anyway because of violated preconditions.
@@ -293,21 +301,11 @@ class StrictDossierResolver(object):
             self.enddates_valid = True
         return errors
 
-    def is_archive_form_needed(self):
-
-        if not IFilingNumberMarker.providedBy(self.context):
-            return False
-
-        if self.context.is_subdossier():
-            return False
-        else:
-            return True
-
     def resolve(self, end_date=None, **kwargs):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 
-        elif self.is_archive_form_needed() and not end_date:
+        elif is_archive_form_needed(self.context) and not end_date:
             raise TypeError
 
         end_date = end_date or self.context.earliest_possible_end_date()
@@ -565,8 +563,10 @@ class ResolveConditions(object):
 
         return self._invalid_dates
 
-    def _recursive_date_validation(self, dossier, main=True):
-        if not main:
+    def _recursive_date_validation(self, dossier):
+        # When the archive form is needed on a dossier, we need not check the
+        # end date as it will be set in the form.
+        if not is_archive_form_needed(dossier):
             # check end_date
             # If a dossier is already resolved, but seems to have an invalid
             # end date, it's because we changed the resolution logic and rules
@@ -580,4 +580,4 @@ class ResolveConditions(object):
         subdossiers = dossier.get_subdossiers(depth=1)
         for sub in subdossiers:
             sub = sub.getObject()
-            self._recursive_date_validation(sub, main=False)
+            self._recursive_date_validation(sub)
