@@ -2,7 +2,10 @@
 set -e
 
 # Generate httpd.conf based on environment variables
-esh -o /usr/local/apache2/conf/httpd.conf /usr/local/apache2/conf/httpd.conf.esh
+if [ ! -n "${SKIP_HTTPD_CONF+1}" ]; then
+  esh -o /usr/local/apache2/conf/httpd.conf /usr/local/apache2/conf/httpd.conf.esh
+  echo "Created httpd.conf"
+fi
 
 # Apache gets grumpy about PID files pre-existing
 rm -f /usr/local/apache2/logs/httpd.pid
