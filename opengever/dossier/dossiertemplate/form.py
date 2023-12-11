@@ -212,9 +212,8 @@ class CreateDossierContentFromTemplateMixin(object):
         for child_obj in template_obj.listFolderContents():
             if IDossierTemplateSchema.providedBy(child_obj):
                 dossier = CreateDossierFromTemplateCommand(
-                    target_container, child_obj).execute()
-
-                IDossier(dossier).responsible = responsible
+                    target_container, child_obj,
+                    responsible=responsible).execute()
 
                 self.recursive_content_creation(child_obj, dossier)
             else:
