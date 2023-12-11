@@ -570,6 +570,42 @@ class TestTaskCreation(SolrIntegrationTestCase):
         self.assertEqual('fa', task.responsible_client)
         self.assertEqual(self.secretariat_user.id, task.issuer)
 
+    @browsing
+    def test_supports_loginname_instead_of_userid(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.change_loginname(self.secretariat_user.id, 'secretariat_username')
+        self.change_loginname(self.dossier_responsible.id, 'dossier_responsible_username')
+        self.data.update({
+            "responsible": {
+                'token': "fa:{}".format('dossier_responsible_username'),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "issuer": {
+                'token': 'secretariat_username',
+                'title': u'Finanzamt: J\xfcrgen K\xf6nig'
+            }
+        })
+
+        with self.observe_children(self.dossier) as children:
+            response = browser.open(self.dossier, json.dumps(self.data),
+                                    method="POST", headers=self.api_headers)
+
+        self.assertEqual(1, len(children['added']))
+        task, = children['added']
+        self.assertEqual(self.dossier_responsible.id, task.responsible)
+        self.assertEqual('fa', task.responsible_client)
+        self.assertEqual(self.secretariat_user.id, task.issuer)
+
+        self.assertEqual(
+            {u'token': u'fa:robert.ziegler',
+             u'title': u'Finanz\xe4mt: Ziegler Robert (robert.ziegler)'},
+            response.json.get('responsible'))
+        self.assertEqual(
+            {u'token': self.secretariat_user.id,
+             u'title': u'K\xf6nig J\xfcrgen (jurgen.konig)'},
+            response.json.get('issuer'))
+
 
 class TestTaskPatch(IntegrationTestCase):
 

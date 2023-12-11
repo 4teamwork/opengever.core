@@ -234,10 +234,15 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
             team = Team.query.get_by_actor_id(value)
             return SimpleTerm(team.actor_id(), team.actor_id(), team.label())
 
-        user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
-                                       .filter(User.userid == userid).one()
+        try:
+            user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
+                                           .filter(User.userid == userid).one()
+        except orm.exc.NoResultFound:
+            user, orgunit = self.base_query.filter(OrgUnit.unit_id == orgunit_id) \
+                                           .filter(User.username == userid).one()
+            value = value.replace(userid, user.userid)
 
-        token = u'{}:{}'.format(orgunit_id, userid)
+        token = u'{}:{}'.format(orgunit_id, user.userid)
         title = u'{}: {} ({})'.format(orgunit.title,
                                       user.fullname(),
                                       user.userid)
@@ -409,12 +414,14 @@ class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
 
             return SimpleTerm(value, token, title)
 
-        user = self.base_query.filter(User.userid == value).one()
+        try:
+            user = self.base_query.filter(User.userid == value).one()
+        except orm.exc.NoResultFound:
+            user = self.base_query.filter(User.username == value).one()
 
-        token = value
         title = u'{} ({})'.format(user.fullname(),
                                   user.userid)
-        return SimpleTerm(value, token, title)
+        return SimpleTerm(user.userid, user.userid, title)
 
     def getTermByToken(self, token):
         """ Should raise LookupError if term could not be found.

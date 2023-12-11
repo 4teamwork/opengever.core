@@ -23,6 +23,8 @@ Other Changes
 
 - The ``@ogds-users`` endpoint supports now also username as parameter not just the userid.
 
+- The task issuer and responsible field support now also usernames not just userids.
+
 
 2023.14.0 (2023-11-09)
 ----------------------
