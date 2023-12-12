@@ -69,3 +69,8 @@ Default: http
 The name and port of the portal server.
 
 Default: portal-frontend:80
+
+### `SKIP_HTTPD_CONF`
+
+If defined, generating httpd.conf is skipped at all. Instead a custom httpd.conf
+can be bind mounted into the container.
