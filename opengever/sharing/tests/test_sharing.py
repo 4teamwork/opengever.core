@@ -9,6 +9,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.role_assignments import TaskRoleAssignment
 from opengever.ogds.base.interfaces import IOGDSSyncConfiguration
+from opengever.ogds.models.group import Group
 from opengever.testing import IntegrationTestCase
 from plone import api
 from urllib import urlencode
@@ -208,6 +209,73 @@ class TestOpengeverSharing(IntegrationTestCase):
               'roles': [u'Contributor', u'Editor', u'Reader'],
               'reference': None,
               'principal': self.secretariat_user.id}],
+            RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+    @browsing
+    def test_sets_role_assignments_by_username(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        data = json.dumps({
+            "entries": [
+                {"id": self.dossier_manager.getUserName(),
+                 "roles": {"Contributor": True,
+                           "Editor": True,
+                           "Reader": True,
+                           "Reviewer": False,
+                           "Publisher": False},
+                 "type": "user"},
+            ],
+            "inherit": True})
+
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+
+        self.assertEquals(
+            ((self.dossier_manager.id, (u'Contributor', u'Editor', u'Reader')),
+             (self.dossier_responsible.id, ('Owner',))),
+            self.empty_dossier.get_local_roles())
+
+        self.assertEquals(
+            [{'cause': ASSIGNMENT_VIA_SHARING,
+              'roles': [u'Contributor', u'Editor', u'Reader'],
+              'reference': None,
+              'principal': self.dossier_manager.id}],
+            RoleAssignmentManager(self.empty_dossier).storage._storage())
+
+    @browsing
+    def test_sets_role_assignments_by_groupname(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        groupname = u'FA Users'
+        Group.get('fa_users').groupname = groupname
+
+        data = json.dumps({
+            "entries": [
+                {"id": groupname,
+                 "roles": {"Contributor": True,
+                           "Editor": True,
+                           "Reader": True,
+                           "Reviewer": False,
+                           "Publisher": False},
+                 "type": "group"},
+            ],
+            "inherit": True})
+
+        browser.open(self.empty_dossier, data, view='@sharing', method='POST',
+                     headers={'Accept': 'application/json',
+                              'Content-Type': 'application/json'})
+
+        self.assertEquals(
+            (('fa_users', (u'Contributor', u'Editor', u'Reader')),
+             (self.dossier_responsible.id, ('Owner',))),
+            self.empty_dossier.get_local_roles())
+
+        self.assertEquals(
+            [{'cause': ASSIGNMENT_VIA_SHARING,
+              'roles': [u'Contributor', u'Editor', u'Reader'],
+              'reference': None,
+              'principal': 'fa_users'}],
             RoleAssignmentManager(self.empty_dossier).storage._storage())
 
     @browsing

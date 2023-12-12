@@ -403,6 +403,8 @@ class OpengeverSharingView(SharingView):
         LocalRolesModified event. Needed for adding a Journalentry after a
         role_settings change
         """
+        new_settings = self.convert_loginnames_to_userid(new_settings)
+
         old_local_roles = dict(self.context.get_local_roles())
         self._update_role_settings(new_settings, reindex)
 
@@ -413,6 +415,22 @@ class OpengeverSharingView(SharingView):
             return True
 
         return False
+
+    def convert_loginnames_to_userid(self, settings):
+        for setting in settings:
+            if setting.get('type') == 'group':
+                group = ogds_service().fetch_group(
+                    setting[u'id'], groupname_as_fallback=True)
+                if group and group.groupid != setting[u'id']:
+                    setting[u'id'] = group.groupid
+
+            elif setting.get('type') == 'user':
+                user = ogds_service().fetch_user(
+                    setting[u'id'], username_as_fallback=True)
+                if user and user.userid != setting[u'id']:
+                    setting[u'id'] = user.userid
+
+        return settings
 
     def group_search_results(self):
         """Customization of the original method to also search on the
