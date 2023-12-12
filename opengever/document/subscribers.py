@@ -9,7 +9,8 @@ from zope.i18n import translate
 
 def resolve_document_author(document, event):
     if getattr(document, 'document_author', None):
-        user = ogds_service().fetch_user(document.document_author)
+        user = ogds_service().fetch_user(
+            document.document_author, username_as_fallback=True)
         if user:
             document.document_author = user.fullname()
             document.reindexObject(idxs=['UID', 'document_author'])
