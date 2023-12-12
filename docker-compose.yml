@@ -57,8 +57,8 @@ services:
       - "8080:8080"
       - "8160:8160"
     environment:
-      - PLONE_LDAP_BIND_UID=${PLONE_LDAP_BIND_UID}
-      - PLONE_LDAP_BIND_PWD=${PLONE_LDAP_BIND_PWD}
+      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN}
+      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD}
       - MSGCONVERT_URL=http://msgconvert:8080/
       - SABLON_URL=http://sablon:8080/
       - PDFLATEX_URL=http://pdflatex:8080/
@@ -78,17 +78,28 @@ services:
       - all
       - ogcore
   ogds:
-    image: postgres:12-alpine
+    image: postgres:13-alpine
     volumes:
-      - ./var/ogds:/var/lib/postgresql/data
+      - ogds:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=ogds
-      - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=ogds
+      - POSTGRES_USER=${OGDS_DB_USER}
+      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD}
+      - POSTGRES_DB=${OGDS_DB_NAME}
     ports:
       - 15432:5432
-    profiles:
-      - all
+  ogds-sync:
+    image: 4teamwork/ogds-sync:latest
+    ports:
+      - 8099:8080
+    environment:
+      - OGDS_DSN=postgresql://${OGDS_DB_USER}:${OGDS_DB_PASSWORD}@${OGDS_DB_HOST}/${OGDS_DB_NAME}
+      - LDAP_PROFILE=DS389
+      - LDAP_URL=${LDAP_SERVER_URI}
+      - LDAP_BIND_DN=${LDAP_BIND_DN}
+      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
+      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
+      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN}
+    depends_on:
       - ogds
   solr:
     image: 4teamwork/ogsolr:latest
@@ -133,10 +144,10 @@ services:
       - DJANGO_DATABASE_PORT=5432
       - DJANGO_TWO_FACTOR_REQUIRED=False
       - DJANGO_OIDC_RP_SIGN_ALGO=HS256
-      - DJANGO_AUTH_LDAP_BIND_DN=${DJANGO_AUTH_LDAP_BIND_DN}
-      - DJANGO_AUTH_LDAP_BIND_PASSWORD=${DJANGO_AUTH_LDAP_BIND_PASSWORD}
-      - DJANGO_AUTH_LDAP_SERVER_URI=ldaps://ldap1.4teamwork.ch,ldaps://ldap2.4teamwork.ch
-      - DJANGO_AUTH_LDAP_USER_BASE_DN=ou=Users,ou=TeamraumDEV,ou=OneGovGEVER,dc=4teamwork,dc=ch
+      - DJANGO_AUTH_LDAP_BIND_DN=${LDAP_BIND_DN}
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
+      - DJANGO_AUTH_LDAP_SERVER_URI=${LDAP_SERVER_URI}
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
       - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
     profiles:
       - all
@@ -190,7 +201,8 @@ services:
       - testserver
 
 volumes:
-    clam_db:
+  ogds:
+  clam_db:
 
 networks:
   default:

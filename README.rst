@@ -29,31 +29,19 @@ Python is highly recommended.
 SQL Database
 ^^^^^^^^^^^^
 
-``opengever.core`` requires a SQL database to store some configuration.
-Before you can configure your first client you need to set up a database.
+``opengever.core`` requires a SQL database to store various application data.
+A PostgreSQL database server is included in the Docker Compose file and will be
+automatically started when running ``docker-compose up``.
 
-Currently there are three SQL databases supported:
+Building ``psycopg2``, the PostgreSQL database adapter for Python, requires
+the PostgreSQL client library and development files.
 
-- **PostgreSQL**
-
-.. code::
-
-    $ brew install postgresql --with-python
-    $ brew services start postgresql
-    $ brew services run postgresql
-    $ createdb opengever
-
-- **MySQL**
+On macOS this can be installed with Brew:
 
 .. code::
 
-    $ brew install mysql
-    $ mysql -u root
-    > CREATE DATABASE opengever CHARACTER SET utf8;
-    > GRANT ALL ON opengever.* TO opengever@localhost IDENTIFIED BY 'opengever';
-    > FLUSH PRIVILEGES;
+    $ brew install postgresql
 
-- **Oracle**
 
 OpenLDAP 2.x
 ^^^^^^^^^^^^
@@ -405,6 +393,8 @@ for local development by default:
 - `pdflatex <https://github.com/4teamwork/pdflatex>`_
 - Sablon_
 - `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
+- ogds (PostgreSQL server)
+- `ogds-sync <https://github.com/4teamwork/ogds-sync>`_
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
@@ -412,6 +402,11 @@ Docker on your local machine.
 
 A `Docker Compose <https://docs.docker.com/compose/>`_ file is provided in this
 repo to easily run the services.
+
+Before running the services with Docker a few configuration settings are required
+to be provided in a ``.env`` file. To create one with default settings for development,
+just run ``bin/setup``. You will be prompted for a decryption password, which
+can be found in 1Password.
 
 To start the services simply run:
 

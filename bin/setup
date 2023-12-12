@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+import os
+import subprocess
+
+ENV_FILE = """
+U2FsdGVkX19EjALJEb4SY70IqNd/IHVn6g6OL1fsDxEK4aVzjfHJz53gGsVpGWDy
+FqFUTRM5no1d8FLlcI/3LQ4MODDXzDbyPHD9V8srpWG3LjPl1E2Ed/m34n1Mb1GI
+U1BPo+fETty+cAkXEt242lNic5uRAkJMPmbmQpFkzGTZ88n0N2anZAhxjZSE6vbO
+ObTgk6iy9pPbjMLFRmfDz55e5OlsvwEAdsWZQcEZYCyNjQvVQ+i/FCpvthKl5cYr
+wnTpZ1ne1x9sQniE6hu3FLPkzBOLgLZzjMBItLWB29VLG0uzNQrqGn2BPvl8ymIX
+fZ/NyinMVLUkM6uwOhxc+ZqQLHu75uMsdsZYtUOAVr1vEoQL0F31XsMl1ewt1aBe
+t9FoxjSxRMKZh5TYxtellLkx98w3or8bYSKswU0sEPdbh0heKtAPH5pMa3jk7xQa
+AIWuiT+XMwzxf8XEsc5yrkTjJjVnzhCrj5s1IVoH2C4=
+"""
+
+
+def main():
+    base_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+
+    create_env_file(base_dir)
+
+
+def create_env_file(base_dir):
+    filepath = os.path.join(base_dir, '.env')
+    enc_filepath = filepath + '.enc'
+    if not os.path.exists(filepath):
+        with open(enc_filepath, 'w') as env_file:
+            env_file.write(ENV_FILE)
+        print('Decrypting .env file... Password is stored in 1Password item with name "opengever.core setup"')
+        try:
+            subprocess.check_call([
+                "openssl", "enc", "-d", "-aes-256-cbc", "-a", "-pbkdf2",
+                "-in", enc_filepath, "-out", filepath,
+            ])
+        except subprocess.CalledProcessError:
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            print("Decryption of .env file failed.")
+        else:
+            print("Created .env file.")
+        os.remove(enc_filepath)
+    else:
+        print(".env file already exists")
+
+
+if __name__ == '__main__':
+    main()
