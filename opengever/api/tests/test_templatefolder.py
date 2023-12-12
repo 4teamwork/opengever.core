@@ -615,12 +615,12 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
 
         dossier = children['added'].pop()
         self.assertEqual(self.regular_user.getId(), IDossier(dossier).responsible)
-        self.assertEqual(((u'kathi.barfuss', ('Role Manager', 'Owner')), ),
+        self.assertEqual(((self.regular_user.getId(), ('Role Manager', 'Owner')), ),
                          dossier.get_local_roles())
 
         subdossier = dossier.listFolderContents()[1]
-        self.assertEqual(self.regular_user.getId(), IDossier(subdossier).responsible)
-        self.assertEqual(((u'kathi.barfuss', ('Role Manager', 'Owner')), ),
+        self.assertEqual(self.regular_user.id, IDossier(subdossier).responsible)
+        self.assertEqual(((self.regular_user.id, ('Role Manager', 'Owner')), ),
                          subdossier.get_local_roles())
 
     @browsing
