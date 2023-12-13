@@ -3,6 +3,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.request import dispatch_request
 from opengever.base.request import tracebackify
 from opengever.base.response import IResponseContainer
+from opengever.base.transition import TransitionExtender
 from opengever.base.transport import Transporter
 from opengever.base.utils import ok_response
 from opengever.globalindex.model.task import Task
@@ -239,6 +240,51 @@ def accept_task_with_successor(dossier, predecessor_oguid, response_text):
     successor_tc.set_predecessor(predecessor_oguid)
 
     return successor
+
+
+def create_successor_task(context, request, dossier, task_data=None):
+    # we need all task field values from the forwarding
+    fielddata = {}
+    if task_data:
+        fielddata, errors = TransitionExtender(
+            context, request)._deserialize_schema(ITask, task_data)
+    else:
+        # Uses default values for the new task if no task-data is provided.
+        # This is uses for the old UI.
+        for fieldname in ITask.names():
+            value = ITask.get(fieldname).get(context)
+            fielddata[fieldname] = value
+
+        # Reset issuer to the current inbox
+        fielddata['issuer'] = get_current_org_unit().inbox().id()
+
+        # Predefine the task_type to avoid tasks with an invalid task_type
+        fielddata['task_type'] = FORWARDING_SUCCESSOR_TYPE
+
+    # lets create a new task - the successor task
+    task = createContentInContainer(
+        dossier, 'opengever.task.task', **fielddata)
+
+    # Add issuer and responsible to the watchers of the newly created task
+    center = notification_center()
+    center.add_task_responsible(task, task.responsible)
+    center.add_task_issuer(task, task.issuer)
+
+    # copy documents and map the intids
+    intids_mapping = _copy_documents_from_forwarding(context, task)
+
+    # copy the responses
+    response_transporter = IResponseTransporter(task)
+    response_transporter.get_responses(
+        get_current_admin_unit().id(),
+        '/'.join(context.getPhysicalPath()),
+        intids_mapping=intids_mapping)
+
+    # set predecessor on successor task
+    successor_tc_task = ISuccessorTaskController(task)
+    successor_tc_task.set_predecessor(Oguid.for_object(context).id)
+
+    return task
 
 
 @tracebackify

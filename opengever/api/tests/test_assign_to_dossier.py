@@ -217,6 +217,36 @@ class TestAssignToDossier(IntegrationTestCase):
         self.assertEqual(predecessor, forwarding)
 
     @browsing
+    def test_can_assign_to_dossier_with_user_having_temporary_permission(self, browser):
+        self.login(self.manager, browser=browser)
+
+        self.assertEqual(
+            set(['TaskResponsible']),
+            RoleAssignmentManager(self.inbox).get_roles_by_principal_id(self.regular_user.getId()))
+        url = self.inbox_forwarding.absolute_url()
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(
+            url,
+            view='@assign-to-dossier',
+            method='POST',
+            data=json.dumps({'target_uid': self.dossier.UID()}),
+            headers=self.api_headers)
+
+        self.login(self.manager, browser=browser)
+        self.assertEqual(
+            set([]),
+            RoleAssignmentManager(self.inbox).get_roles_by_principal_id(self.regular_user.getId()))
+
+        task = browser.json
+        predecessor = Oguid.parse(task.get('predecessor')).resolve_object()
+
+        yearfolder = get_current_yearfolder(context=self.inbox)
+        forwarding = yearfolder.objectValues()[0]
+
+        self.assertEqual(predecessor, forwarding)
+
+    @browsing
     def test_raises_bad_request_when_target_uid_parameter_is_missing(self, browser):
         self.login(self.secretariat_user, browser=browser)
 

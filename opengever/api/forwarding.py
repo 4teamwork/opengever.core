@@ -1,11 +1,12 @@
 from opengever.api.task import deserialize_responsible
+from opengever.base.oguid import Oguid
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.task.browser.accept.utils import create_successor_task
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
-from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
 from zope.component import queryMultiAdapter
 from zope.interface import alsoProvides
@@ -23,30 +24,34 @@ class AssignToDossier(Service):
         # Extract and validate parameters
         task_payload, target, comment = self.extract_params()
 
-        transition_params = {'text': comment, 'dossier': IUUID(target)}
-
         if task_payload:
             responsible = deserialize_responsible(task_payload.get('responsible'))
             if responsible:
                 task_payload.update(responsible)
 
-            transition_params['task'] = task_payload
-
         try:
-            task = api.portal.get_tool('portal_workflow').doActionFor(
-                self.context,
-                'forwarding-transition-assign-to-dossier',
-                text=comment,
-                transition_params=transition_params)
+            successor_task = create_successor_task(
+                self.context, self.request, target, task_payload)
         except ValidationError as exc:
             raise BadRequest(
                 "The task schema is invalid. Field: {}, Message: {}".format(
                     str(exc), exc.doc()))
 
-        self.request.response.setStatus(201)
-        self.request.response.setHeader("Location", task.absolute_url())
+        transition_params = {
+            'text': comment,
+            'successor_oguid': Oguid.for_object(successor_task).id
+        }
 
-        return self.serialize(task)
+        api.portal.get_tool('portal_workflow').doActionFor(
+            self.context,
+            'forwarding-transition-assign-to-dossier',
+            text=comment,
+            transition_params=transition_params)
+
+        self.request.response.setStatus(201)
+        self.request.response.setHeader("Location", successor_task.absolute_url())
+
+        return self.serialize(successor_task)
 
     def extract_params(self):
         json_data = json_body(self.request)

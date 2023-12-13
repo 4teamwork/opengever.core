@@ -11,9 +11,9 @@ from opengever.task import _
 from opengever.task.browser.accept.main import AcceptWizardFormMixin
 from opengever.task.browser.accept.utils import accept_forwarding_with_successor
 from opengever.task.browser.accept.utils import accept_task_with_successor
+from opengever.task.browser.accept.utils import create_successor_task
 from plone import api
 from plone.supermodel.model import Schema
-from plone.uuid.interfaces import IUUID
 from plone.z3cform.layout import FormWrapper
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -105,13 +105,18 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
             # forwarding
             if dm.get(key, 'is_forwarding'):
                 if dm.get(key, 'is_only_assign'):
+                    forwarding = Oguid.parse(oguid).resolve_object()
+                    successor_task = create_successor_task(
+                        forwarding, self.request, data['dossier'])
+
                     transition_data = {
                         'text': text,
-                        'dossier': IUUID(data['dossier'])}
+                        'successor_oguid': Oguid.for_object(successor_task).id
+                    }
 
                     wftool = api.portal.get_tool('portal_workflow')
-                    task = wftool.doActionFor(
-                        Oguid.parse(oguid).resolve_object(),
+                    wftool.doActionFor(
+                        forwarding,
                         'forwarding-transition-assign-to-dossier',
                         comment=transition_data['text'],
                         transition_params=transition_data)
@@ -120,7 +125,7 @@ class ChooseDossierStepForm(AcceptWizardFormMixin, Form):
                         _(u'The forwarding is now assigned to the dossier'),
                         'info')
                     self.request.RESPONSE.redirect(
-                        '%s/edit' % task.absolute_url())
+                        '%s/edit' % successor_task.absolute_url())
 
                 else:
                     task = accept_forwarding_with_successor(
