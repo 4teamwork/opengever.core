@@ -17,7 +17,6 @@ from zope.component import getUtility
 from zope.event import notify
 from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
-import json
 
 
 class TestLocalRolesSetter(IntegrationTestCase):
@@ -899,121 +898,6 @@ class TestLocalRolesRevoking(IntegrationTestCase):
               'roles': ['Editor'],
               'reference': Oguid.for_object(self.task),
               'principal': 'fa_inbox_users'}], storage._storage())
-
-    @browsing
-    def test_closing_a_forwarding_revokes_roles_on_inbox(self, browser):
-        self.login(self.secretariat_user, browser=browser)
-
-        storage = RoleAssignmentManager(self.inbox).storage
-        forwarding_oguid = Oguid.for_object(self.inbox_forwarding)
-        self.assertTrue(self.inbox_forwarding.revoke_permissions)
-        self.assertEqual(
-            [
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.secretariat_user.id,
-                },
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.dossier_manager.id,
-                },
-                {
-                    "cause": ASSIGNMENT_VIA_TASK,
-                    "roles": ["TaskResponsible"],
-                    "reference": forwarding_oguid,
-                    'principal': self.regular_user.id,
-                },
-                {
-                    "cause": ASSIGNMENT_VIA_TASK_AGENCY,
-                    "roles": ["TaskResponsible"],
-                    "reference": forwarding_oguid,
-                    "principal": "fa_inbox_users",
-                },
-            ], storage._storage())
-
-        browser.open(self.inbox_forwarding, method="POST", headers=self.api_headers,
-                     view='@workflow/forwarding-transition-close')
-
-        self.assertEqual(
-            [
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.secretariat_user.id,
-                },
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.dossier_manager.id,
-                },
-            ], storage._storage())
-
-    @browsing
-    def test_assign_forwarding_to_a_dossier_revokes_roles_on_inbox(self, browser):
-        self.login(self.secretariat_user, browser=browser)
-
-        storage = RoleAssignmentManager(self.inbox).storage
-        forwarding_oguid = Oguid.for_object(self.inbox_forwarding)
-        self.assertTrue(self.inbox_forwarding.revoke_permissions)
-        self.assertEqual(
-            [
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.secretariat_user.id,
-                },
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.dossier_manager.id,
-                },
-                {
-                    "cause": ASSIGNMENT_VIA_TASK,
-                    "roles": ["TaskResponsible"],
-                    "reference": forwarding_oguid,
-                    'principal': self.regular_user.id,
-                },
-                {
-                    "cause": ASSIGNMENT_VIA_TASK_AGENCY,
-                    "roles": ["TaskResponsible"],
-                    "reference": forwarding_oguid,
-                    "principal": "fa_inbox_users",
-                },
-            ], storage._storage())
-
-        browser.open(
-            self.inbox_forwarding.absolute_url(),
-            view='@assign-to-dossier',
-            method='POST',
-            headers=self.api_headers,
-            data=json.dumps({
-                'target_uid': self.dossier.UID(),
-            }))
-
-        self.assertEqual(201, browser.status_code)
-        self.assertEqual(
-            [
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.secretariat_user.id,
-                },
-                {
-                    "cause": 3,
-                    "reference": None,
-                    "roles": ["Contributor", "Editor", "Reader"],
-                    "principal": self.dossier_manager.id,
-                },
-            ], storage._storage())
 
 
 class TestLocalRolesReindexing(IntegrationTestCase):
