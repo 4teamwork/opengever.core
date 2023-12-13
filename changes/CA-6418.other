@@ -1,1 +1,0 @@
-Add option to skip generation of httpd.conf on startup of httpd container. [buchi]

@@ -10,6 +10,43 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.15.0 (2023-12-13)
+----------------------
+
+New features:
+
+
+- Extend dispositon SIP package with csv exports. [phgross] [CA-6302]
+
+
+Bug fixes:
+
+
+- Fix webactions provider for setups where the userid and user name are different. [phgross] [CA-6237]
+- Add username fallback for @ogds-users endpoint and user-details view. [phgross] [CA-6237-4]
+- Only skip enddate validation when it will be set over archive form. [njohner] [CA-6279]
+- Properly set state of deeply nested task template folders. [elioschmutz] [CA-6355]
+- Properly open deeply nested tasks. [elioschmutz] [CA-6355-2]
+- Fix configuring Solr base URL in Docker container. [buchi] [CA-6418]
+- Make max dossier depth restriction less strict. [phgross] [CA-6440]
+- Fix Unicode error in `@accessible-workspaces` endpoint. [lgraf] [CA-6464]
+- Fixes the sharing tab for subdossiers created by a dossier from template. [elioschmutz] [CA-6499]
+
+
+Other changes:
+
+
+- Base64 encode a literal occurence of EICAR Test-File. [lgraf] [CA-5703]
+- Blacklist uploaded file formats based on extension instead of mimetype. [lgraf] [CA-5703-1]
+- GeverSerializeToJsonSummary will always return the UID [elioschmutz] [CA-6151]
+- The dossiers responsible field supports now also usernames not just userids. [phgross] [CA-6237]
+- The ``@actors`` endpoint now returns an additional property ``login_name`` which should be used for display of usernames and groupnames. [buchi] [CA-6237-1]
+- Task responsible and issuer field supports now also usernames not just userids. [phgross] [CA-6237-2]
+- The ``@ogds-users`` and ``@ogds-groups`` endpoints now include `groupname` and `username` for groups and users. [buchi] [CA-6237-3]
+- Massively speed up download of file version. [njohner] [CA-6272]
+- Add option to skip generation of httpd.conf on startup of httpd container. [buchi] [CA-6418]
+
+
 2023.14.0 (2023-11-09)
 ----------------------
 

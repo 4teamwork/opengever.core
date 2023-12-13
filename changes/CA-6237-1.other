@@ -1,1 +1,0 @@
-The ``@actors`` endpoint now returns an additional property ``login_name`` which should be used for display of usernames and groupnames. [buchi]
