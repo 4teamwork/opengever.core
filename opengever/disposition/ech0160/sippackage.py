@@ -178,8 +178,10 @@ class SIPPackage(object):
     def add_dossier_csv(self, zipfile):
         reporter = DispositionDossierCSVReporter(self.dossiers)
         stream = StringIO()
-        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
-                                doublequote=False, escapechar='\\')
+        writer = csv.DictWriter(
+            stream, fieldnames=reporter.fieldnames,
+            delimiter=';', doublequote=True,
+            quoting=csv.QUOTE_ALL, escapechar='\\')
         writer.writeheader()
         writer.writerows(reporter())
         dossier_csv = os.path.join(self.get_folder_name(), 'dossiers.csv')
@@ -188,8 +190,9 @@ class SIPPackage(object):
     def add_documents_csv(self, zipfile):
         reporter = DispositionDocumentCSVReporter(self.dossiers)
         stream = StringIO()
-        writer = csv.DictWriter(stream, fieldnames=reporter.fieldnames, delimiter=';',
-                                doublequote=False, escapechar='\\')
+        writer = csv.DictWriter(
+            stream, fieldnames=reporter.fieldnames, delimiter=';',
+            doublequote=True, quoting=csv.QUOTE_ALL, escapechar='\\')
         writer.writeheader()
         writer.writerows(reporter())
         dossier_csv = os.path.join(self.get_folder_name(), 'items.csv')
