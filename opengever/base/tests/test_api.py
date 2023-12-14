@@ -18,6 +18,7 @@ class TestDocumentStatus(IntegrationTestCase):
 
         browser.open(self.mail_eml, view='status', headers=self.api_headers)
         expected = {
+            u'bumblebee_checksum': u'65da667b7c265f5aff1068c5216a3cba271fe57d3130ef152221661a45490d66',
             u'checked_out': False,
             u'checked_out_by': None,
             u'checked_out_collaboratively': False,
@@ -39,6 +40,7 @@ class TestDocumentStatus(IntegrationTestCase):
 
         browser.open(self.document, view='status', headers=self.api_headers)
         expected = {
+            u'bumblebee_checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
             u'checked_out': False,
             u'checked_out_by': None,
             u'checked_out_collaboratively': False,
@@ -64,6 +66,7 @@ class TestDocumentStatus(IntegrationTestCase):
         browser.open(self.document, view='status', headers=self.api_headers)
 
         expected = {
+            u'bumblebee_checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
             u'checked_out': True,
             u'checked_out_by': self.regular_user.getId(),
             u'checked_out_collaboratively': False,
@@ -90,6 +93,7 @@ class TestDocumentStatus(IntegrationTestCase):
             browser.open(self.document, view='status', headers=self.api_headers)
 
         expected = {
+            u'bumblebee_checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
             u'checked_out': True,
             u'checked_out_by': self.regular_user.getId(),
             u'checked_out_collaboratively': False,
@@ -116,6 +120,7 @@ class TestDocumentStatus(IntegrationTestCase):
             browser.open(self.document, view='status', headers=self.api_headers)
 
         expected = {
+            u'bumblebee_checksum': '51d6317494eccc4a73154625a6820cb6b50dc1455eb4cf26399299d4f9ce77b2',
             u'checked_out': True,
             u'checked_out_by': self.regular_user.id,
             u'checked_out_collaboratively': True,

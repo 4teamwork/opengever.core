@@ -1,3 +1,4 @@
+from ftw.bumblebee.interfaces import IBumblebeeDocument
 from plone import api
 from plone.rest import Service
 from plone.restapi.services.locking.locking import lock_info
@@ -17,6 +18,7 @@ class DocumentStatus(Service):
         payload['checked_out'] = self.context.is_checked_out()
         payload['checked_out_collaboratively'] = self.context.is_collaborative_checkout()
         payload['checked_out_by'] = self.context.checked_out_by()
+        payload['bumblebee_checksum'] = IBumblebeeDocument(self.context).get_checksum()
 
         info = lock_info(self.context)
         payload['locked'] = info['locked']
