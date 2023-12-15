@@ -41,28 +41,33 @@ class DispositionDossierCSVReporter(object):
         lines = []
         for dossier in self.dossiers:
             binding = dossier.binding()
-            lines.append(
-                {
-                    'dossier_id': binding.id,
-                    'Mandant': get_current_admin_unit().label(),
-                    'Ordnungsystem_Version': dossier.parents()[0].version,
-                    'Ordnungssystem_Pfad': self.repository_path(dossier),
-                    'Dossier_Titel': dossier.obj.title,
-                    'entstehungszeitraum_von': format_date(
-                        binding.entstehungszeitraum.von.datum),
-                    'entstehungszeitraum_bis': format_date(
-                        binding.entstehungszeitraum.bis.datum),
-                    'klassifizierungskategorie': binding.klassifizierungskategorie,
-                    'datenschutz': binding.datenschutz,
-                    'oeffentlichkeitsstatus': binding.oeffentlichkeitsstatus,
-                    'aktenzeichen': binding.aktenzeichen,
-                    'eroeffnungsdatum': format_date(dossier.binding().eroeffnungsdatum.datum),
-                    'abschlussdatum': format_date(dossier.binding().abschlussdatum.datum),
-                    'schutzfrist': binding.schutzfrist,
-                    'Ablage_Pr\xe4fix': dossier.obj.filing_prefix,
-                    'Ablage_Nr': self.filing_number(dossier),
-                    'Beschreibung': dossier.obj.description,
-                })
+            data = {
+                'dossier_id': binding.id,
+                'Mandant': get_current_admin_unit().label(),
+                'Ordnungsystem_Version': dossier.parents()[0].version,
+                'Ordnungssystem_Pfad': self.repository_path(dossier),
+                'Dossier_Titel': dossier.obj.title,
+                'entstehungszeitraum_von': format_date(
+                    binding.entstehungszeitraum.von.datum),
+                'entstehungszeitraum_bis': format_date(
+                    binding.entstehungszeitraum.bis.datum),
+                'klassifizierungskategorie': binding.klassifizierungskategorie,
+                'datenschutz': binding.datenschutz,
+                'oeffentlichkeitsstatus': binding.oeffentlichkeitsstatus,
+                'aktenzeichen': binding.aktenzeichen,
+                'eroeffnungsdatum': format_date(dossier.binding().eroeffnungsdatum.datum),
+                'abschlussdatum': format_date(dossier.binding().abschlussdatum.datum),
+                'schutzfrist': binding.schutzfrist,
+                'Ablage_Pr\xe4fix': dossier.obj.filing_prefix,
+                'Ablage_Nr': self.filing_number(dossier),
+                'Beschreibung': dossier.obj.description,
+            }
+
+            for key, value in data.items():
+                if isinstance(value, unicode):
+                    data[key] = value.encode('utf-8')
+
+            lines.append(data)
 
         return lines
 
@@ -111,7 +116,7 @@ class DispositionDocumentCSVReporter(object):
             for key, document in dossier.documents.items():
                 for file_ in document.files:
                     doc_binding = document.binding()
-                    lines.append({
+                    data = {
                         'dossier_id': dossier.binding().id,
                         'document_id': doc_binding.id,
                         'laufnummer': document.obj.get_sequence_number(),
@@ -136,7 +141,13 @@ class DispositionDocumentCSVReporter(object):
                         'beschreibung': document.obj.description,
                         'autor': document.obj.document_author,
                         'aktenzeichen': IReferenceNumber(document.obj).get_number(),
-                    })
+                    }
+
+                    for key, value in data.items():
+                        if isinstance(value, unicode):
+                            data[key] = value.encode('utf-8')
+
+                    lines.append(data)
 
         return lines
 

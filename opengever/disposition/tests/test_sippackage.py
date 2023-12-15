@@ -69,7 +69,9 @@ class TestSIPPackage(FunctionalTestCase):
         super(TestSIPPackage, self).setUp()
         self.root = create(Builder('repository_root')
                            .having(title_de=u'Ordnungssystem 2000'))
-        self.folder = create(Builder('repository').within(self.root))
+        self.folder = create(Builder('repository')
+                             .titled(u'\xc3\x9cbergreifendes')
+                             .within(self.root))
         self.grant('Contributor', 'Editor', 'Reader', 'Records Manager')
 
     def test_adds_all_dossiers_documents_and_mails(self):
@@ -232,7 +234,7 @@ class TestSIPPackage(FunctionalTestCase):
                  'Beschreibung': 'Lorem ipsum',
                  'Dossier_Titel': '',
                  'Mandant': 'Admin Unit 1',
-                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. \xc3\x83\xc2\x9cbergreifendes',
                  'Ordnungsystem_Version': '',
                  'abschlussdatum': '2000-00-11',
                  'aktenzeichen': 'Client1 1 / 1',
@@ -252,7 +254,7 @@ class TestSIPPackage(FunctionalTestCase):
                  'Beschreibung': '',
                  'Dossier_Titel': '',
                  'Mandant': 'Admin Unit 1',
-                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. None',
+                 'Ordnungssystem_Pfad': 'Ordnungssystem 2000/1. \xc3\x83\xc2\x9cbergreifendes',
                  'Ordnungsystem_Version': '',
                  'abschlussdatum': '2000-00-11',
                  'aktenzeichen': 'Client1 1 / 2',
