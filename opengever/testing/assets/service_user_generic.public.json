@@ -1,6 +1,6 @@
 {
     "public_key": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApieWI4lJ60htd6/HRGBP\nKYGRX4jcmgILMMnBlTXn65caA5GFdkKTZddwAwNKSvAr+2Q6vR3q/Gq9FOMCfZNW\n18qJ+dTs1xe2IuL7SgwaZSLtEFGUeSzQS29LyT375j6gfva5LZctum45ANPns/W1\nT++5FIcziLe9NBouXlwfCiBz/cSI9CxkjZW1XfhX0k7Ycl2wCCDtAtZaK/Qk7IO0\nUZEc8AThJDw/NJyEK62n4xxHwzyBDpxN08zl57wKjzsQ9rRbsCdcifkARECHPFm/\n2CtramCF1N2t2E6igA+VaLzAziE87d1uF+xWgkaoZGaaezmNmdXP65sZVTixOaCs\nVwIDAQAB\n-----END PUBLIC KEY-----\n",
-    "user_id": "service.user",
+    "user_id": "service_user",
     "title": "Generic Service Key",
     "issued": "2019-01-23T14:56:15.298146",
     "ip_range": null,
