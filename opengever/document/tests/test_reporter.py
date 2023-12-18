@@ -44,10 +44,12 @@ class TestDocumentReporter(SolrIntegrationTestCase):
     def test_document_report(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(
-            view='document_report',
-            # /plone/ordnungssystem/...
-            data=self.make_path_param(self.document, self.mail_eml))
+        # /plone/ordnungssystem/...
+        data = self.make_path_param(self.document, self.mail_eml)
+        data['sort_on'] = 'sequence_number'
+        data['sort_order'] = 'desc'
+
+        browser.open(view='document_report', data=data)
 
         workbook = self.load_workbook(browser.contents)
 
@@ -312,10 +314,11 @@ class TestDocumentReporter(SolrIntegrationTestCase):
     def test_document_report_with_pseudorelative_path(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(
-            view='document_report',
-            # /ordnungssystem/...
-            data=self.make_pseudorelative_path_param(self.document, self.mail_eml))
+        # /ordnungssystem/...
+        data = self.make_pseudorelative_path_param(self.document, self.mail_eml)
+        data['sort_on'] = 'reference'
+        data['sort_order'] = 'desc'
+        browser.open(view='document_report', data=data)
 
         workbook = self.load_workbook(browser.contents)
 
