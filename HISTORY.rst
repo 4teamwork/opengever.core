@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2023.15.1 (2023-12-19)
+----------------------
+
+Bug fixes:
+
+
+- Fix unicode error in disposition csv export. [phgross] [CA-6401]
+- Fix service user id in keys for GEVER fixture. [deiferni] [HG-4272]
+
+
 2023.15.0 (2023-12-13)
 ----------------------
 
