@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@globalsources``: Add new source ``all_contacts`` which returns active and inactive contacts.
 
 
 2023.15.0 (2023-12-13)

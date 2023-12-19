@@ -84,6 +84,52 @@ KUB_RESPONSES = {
         ]
     },
 
+    "http://localhost:8000/api/v2/search?q=kohler&is_active=True": {
+        "results": [
+            {
+                "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "url": "http://localhost:8000/api/v2/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "created": "2021-11-13T00:00:00+01:00",
+                "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "organization": None,
+                "modified": "2021-11-13T00:00:00+01:00",
+                "text": "Kohler KUB Active",
+                "thirdPartyId": None,
+                "type": "organization",
+                "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
+            },
+        ]
+    },
+
+    "http://localhost:8000/api/v2/search?q=kohler": {
+        "results": [
+            {
+                "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "url": "http://localhost:8000/api/v2/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "created": "2021-11-13T00:00:00+01:00",
+                "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "organization": None,
+                "modified": "2021-11-13T00:00:00+01:00",
+                "text": "Kohler KUB Active",
+                "thirdPartyId": None,
+                "type": "organization",
+                "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
+            },
+            {
+                "htmlUrl": None,
+                "url": "http://localhost:8000/api/v2/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "created": "2021-11-18T00:00:00+01:00",
+                "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "organization": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "modified": "2021-11-18T00:00:00+01:00",
+                "text": "Kohler KUB Inactive",
+                "thirdPartyId": None,
+                "type": "membership",
+                "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448"
+            }
+        ]
+    },
+
     "http://localhost:8000/api/v2/resolve/person:9af7d7cc-b948-423f-979f-587158c6bc65": {
         "id": "9af7d7cc-b948-423f-979f-587158c6bc65",
         "personType": None,
