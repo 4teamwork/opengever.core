@@ -46,8 +46,8 @@ class KuBContactsSource(object):
         return self._ogds_user_term(user)
 
     def search(self, query_string):
-        items = self.client.query(query_string)
-        self.terms = [self._kub_term(item) for item in items]
+        response = self.client.query(query_string)
+        self.terms = [self._kub_term(item) for item in response.get('results', [])]
 
         text_filters = query_string.split()
         for ogds_user in ogds_service().filter_users(text_filters):

@@ -38,49 +38,53 @@ class KuBIntegrationTestCase(IntegrationTestCase):
 # These responses are taken from performing these exact requests against
 # the database defined in "fixtures/gever-testing.json" in the KUB repository.
 KUB_RESPONSES = {
-    "http://localhost:8000/api/v1/search?q=Julie": [
-        {
-            "htmlUrl": "http://localhost:8000/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
-            "url": "http://localhost:8000/api/v1/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
-            "created": "2021-11-14T00:00:00+01:00",
-            "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
-            "organization": None,
-            "modified": "2021-11-14T00:00:00+01:00",
-            "text": "Dupont Julie",
-            "thirdPartyId": None,
-            "type": "person",
-            "typedId": "person:0e623708-2d0d-436a-82c6-c1a9c27b65dc"
-        }
-    ],
+    "http://localhost:8000/api/v2/search?q=Julie": {
+        "results": [
+            {
+                "htmlUrl": "http://localhost:8000/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+                "url": "http://localhost:8000/api/v2/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+                "created": "2021-11-14T00:00:00+01:00",
+                "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+                "organization": None,
+                "modified": "2021-11-14T00:00:00+01:00",
+                "text": "Dupont Julie",
+                "thirdPartyId": None,
+                "type": "person",
+                "typedId": "person:0e623708-2d0d-436a-82c6-c1a9c27b65dc"
+            }
+        ]
+    },
 
-    "http://localhost:8000/api/v1/search?q=4Teamwork": [
-        {
-            "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
-            "url": "http://localhost:8000/api/v1/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
-            "created": "2021-11-13T00:00:00+01:00",
-            "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
-            "organization": None,
-            "modified": "2021-11-13T00:00:00+01:00",
-            "text": "4Teamwork",
-            "thirdPartyId": None,
-            "type": "organization",
-            "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
-        },
-        {
-            "htmlUrl": None,
-            "url": "http://localhost:8000/api/v1/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
-            "created": "2021-11-18T00:00:00+01:00",
-            "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
-            "organization": "30bab83d-300a-4886-97d4-ff592e88a56a",
-            "modified": "2021-11-18T00:00:00+01:00",
-            "text": "Dupont Jean - 4Teamwork (CEO)",
-            "thirdPartyId": None,
-            "type": "membership",
-            "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448"
-        }
-    ],
+    "http://localhost:8000/api/v2/search?q=4Teamwork": {
+        "results": [
+            {
+                "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "url": "http://localhost:8000/api/v2/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+                "created": "2021-11-13T00:00:00+01:00",
+                "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "organization": None,
+                "modified": "2021-11-13T00:00:00+01:00",
+                "text": "4Teamwork",
+                "thirdPartyId": None,
+                "type": "organization",
+                "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
+            },
+            {
+                "htmlUrl": None,
+                "url": "http://localhost:8000/api/v2/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "created": "2021-11-18T00:00:00+01:00",
+                "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
+                "organization": "30bab83d-300a-4886-97d4-ff592e88a56a",
+                "modified": "2021-11-18T00:00:00+01:00",
+                "text": "Dupont Jean - 4Teamwork (CEO)",
+                "thirdPartyId": None,
+                "type": "membership",
+                "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448"
+            }
+        ]
+    },
 
-    "http://localhost:8000/api/v1/resolve/person:9af7d7cc-b948-423f-979f-587158c6bc65": {
+    "http://localhost:8000/api/v2/resolve/person:9af7d7cc-b948-423f-979f-587158c6bc65": {
         "id": "9af7d7cc-b948-423f-979f-587158c6bc65",
         "personType": None,
         "personTypeTitle": None,
@@ -269,7 +273,7 @@ KUB_RESPONSES = {
         "modified": "2021-11-17T00:00:00+01:00",
         "created": "2021-11-17T00:00:00+01:00",
         "htmlUrl": "http://localhost:8000/people/9af7d7cc-b948-423f-979f-587158c6bc65",
-        "url": "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65",
+        "url": "http://localhost:8000/api/v2/people/9af7d7cc-b948-423f-979f-587158c6bc65",
         "typedId": "person:9af7d7cc-b948-423f-979f-587158c6bc65",
         "type": "person",
         "primaryAddress": {
@@ -302,7 +306,7 @@ KUB_RESPONSES = {
         "customValues": {}
     },
 
-    "http://localhost:8000/api/v1/resolve/membership:8345fcfe-2d67-4b75-af46-c25b2f387448": {
+    "http://localhost:8000/api/v2/resolve/membership:8345fcfe-2d67-4b75-af46-c25b2f387448": {
         "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
         "person": {
             "created": "2021-11-17T00:00:00+01:00",
@@ -327,7 +331,7 @@ KUB_RESPONSES = {
             "tags": [],
             "thirdPartyId": None,
             "title": "",
-            "url": "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65",
+            "url": "http://localhost:8000/api/v2/people/9af7d7cc-b948-423f-979f-587158c6bc65",
             "username": None,
             "countryDisplay": "-------",
             "dateOfBirth": "1992-05-15",
@@ -392,7 +396,7 @@ KUB_RESPONSES = {
             "spvCommittee": False,
             "status": 1,
             "thirdPartyId": None,
-            "url": "http://localhost:8000/api/v1/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+            "url": "http://localhost:8000/api/v2/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
             "organizationType": None,
             "primaryAddress": {
                 "id": "ad0de780-3f62-400c-921a-0feb9e79c062",
@@ -446,7 +450,7 @@ KUB_RESPONSES = {
         "end": None,
         "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448",
         "type": "membership",
-        "url": "http://localhost:8000/api/v1/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
+        "url": "http://localhost:8000/api/v2/memberships/8345fcfe-2d67-4b75-af46-c25b2f387448",
         "text": "Dupont Jean - 4Teamwork (CEO)",
         "primaryEmail": {
             "id": "3bc940de-ee8a-43b0-b373-3f1640122021",
@@ -497,7 +501,7 @@ KUB_RESPONSES = {
         "primaryUrl": None
     },
 
-    "http://localhost:8000/api/v1/resolve/organization:30bab83d-300a-4886-97d4-ff592e88a56a": {
+    "http://localhost:8000/api/v2/resolve/organization:30bab83d-300a-4886-97d4-ff592e88a56a": {
         "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
         "organizationType": None,
         "organizationTypeTitle": None,
@@ -597,7 +601,7 @@ KUB_RESPONSES = {
                     },
                     "status": 1,
                     "thirdPartyId": None,
-                    "url": "http://localhost:8000/api/v1/people/9af7d7cc-b948-423f-979f-587158c6bc65",
+                    "url": "http://localhost:8000/api/v2/people/9af7d7cc-b948-423f-979f-587158c6bc65",
                     "username": None
                 },
                 "role": "CEO",
@@ -629,7 +633,7 @@ KUB_RESPONSES = {
         "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
         "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a",
         "type": "organization",
-        "url": "http://localhost:8000/api/v1/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
+        "url": "http://localhost:8000/api/v2/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
         "primaryAddress": {
             "id": "ad0de780-3f62-400c-921a-0feb9e79c062",
             "label": "Standort Bern",
@@ -661,9 +665,9 @@ KUB_RESPONSES = {
         "customValues": {}
     },
 
-    "http://localhost:8000/api/v1/resolve/invalid-id": ["Invalid uuid"],
+    "http://localhost:8000/api/v2/resolve/invalid-id": ["Invalid uuid"],
 
-    "http://localhost:8000/api/v1/resolve/person:0e623708-2d0d-436a-82c6-c1a9c27b65dc": {
+    "http://localhost:8000/api/v2/resolve/person:0e623708-2d0d-436a-82c6-c1a9c27b65dc": {
         "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",
         "personType": None,
         "personTypeTitle": None,
@@ -695,7 +699,7 @@ KUB_RESPONSES = {
         "modified": "2021-11-14T00:00:00+01:00",
         "created": "2021-11-14T00:00:00+01:00",
         "htmlUrl": "http://localhost:8000/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
-        "url": "http://localhost:8000/api/v1/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
+        "url": "http://localhost:8000/api/v2/people/0e623708-2d0d-436a-82c6-c1a9c27b65dc",
         "typedId": "person:0e623708-2d0d-436a-82c6-c1a9c27b65dc",
         "type": "person",
         "primaryAddress": None,
@@ -703,7 +707,7 @@ KUB_RESPONSES = {
         "text": "Dupont Julie",
         "customValues": {}
     },
-    "http://localhost:8000/api/v1/labels": {
+    "http://localhost:8000/api/v2/labels": {
         "results": [
             {
                 "id": "0e623708-2d0d-436a-82c6-c1a9c27b65dc",

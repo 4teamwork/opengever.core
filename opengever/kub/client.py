@@ -11,7 +11,7 @@ from zope.annotation import IAnnotations
 import requests
 
 
-KUB_API_VERSION = 'v1'
+KUB_API_VERSION = 'v2'
 
 
 class KuBClient(object):
