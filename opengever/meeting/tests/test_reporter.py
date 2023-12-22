@@ -22,9 +22,9 @@ class TestProposalReporter(SolrIntegrationTestCase):
     def test_proposal_report(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        browser.open(
-            view='proposal_report',
-            data=self.make_path_param(self.proposal, self.draft_proposal))
+        data = self.make_path_param(self.proposal, self.draft_proposal)
+        data.update({'sort_on': 'sequence_number', 'sort_order': 'asc'})
+        browser.open(view='proposal_report', data=data)
 
         workbook = self.load_workbook(browser.contents)
 

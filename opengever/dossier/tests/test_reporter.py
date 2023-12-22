@@ -68,10 +68,11 @@ class TestDossierReporter(SolrIntegrationTestCase):
             [cell.value for cell in rows[2]])
 
     @browsing
-    def test_sorts_rows_according_to_paths_from_request(self, browser):
+    def test_sorts_rows_according_to_the_sort_params_in_request(self, browser):
         self.login(self.regular_user, browser=browser)
 
         paths1 = self.make_path_param(self.dossier, self.inactive_dossier)
+        paths1.update({'sort_on': 'reference', 'sort_order': 'asc'})
         browser.open(view='dossier_report', data=paths1)
 
         workbook = self.load_workbook(browser.contents)
@@ -81,6 +82,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
         self.assertEqual(self.inactive_dossier.title, rows[2][0].value)
 
         paths2 = self.make_path_param(self.inactive_dossier, self.dossier)
+        paths2.update({'sort_on': 'reference', 'sort_order': 'descending'})
         browser.open(view='dossier_report', data=paths2)
 
         workbook = self.load_workbook(browser.contents)

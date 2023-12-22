@@ -136,14 +136,17 @@ class SolrReporterView(BaseReporterView):
                 doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
                 yield IContentListingObject(doc)
 
-    def _extend_selected_items_query_by_paths(self, query, paths):
-        # Sort results according to paths passed in request. Those should be
-        # sorted exactly as the user saw them in the UI (classic and geverui).
-        query['sort'] = 'score asc'
-        query['query'] = 'path:({})'.format(
-            'OR '.join(['{}^{}'.format(escape(path), score_value)
-                       for score_value, path in enumerate(paths)])
-        )
+    def _extend_selected_items_query_by_paths(self, solr_query, paths):
+        # Try to fetch the current sort
+        try:
+            listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")
+            listing.listing_name = self.corresponding_listing_name
+            query, filters, start, rows, sort, field_list, params = listing.prepare_solr_query(self.request.form)
+        except KeyError:
+            sort = 'modified desc'
+
+        solr_query['sort'] = sort
+        solr_query['query'] = 'path:({})'.format(' OR '.join([escape(path) for path in paths]))
 
     def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
         listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")

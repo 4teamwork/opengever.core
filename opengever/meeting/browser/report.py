@@ -27,6 +27,8 @@ class ProposalReporter(SolrReporterView):
 
     field_mapper = ProposalReporterFieldMapper
 
+    corresponding_listing_name = 'proposals'
+
     column_settings = [
         {
             'id': 'title',

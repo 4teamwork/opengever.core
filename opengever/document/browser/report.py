@@ -32,6 +32,8 @@ class DocumentReporter(SolrReporterView):
 
     field_mapper = DocumentReporterFieldMapper
 
+    corresponding_listing_name = 'dossiers'
+
     column_settings = [
         {
             'id': 'reference',
