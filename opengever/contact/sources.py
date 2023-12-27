@@ -14,8 +14,11 @@ class PloneSqlOrKubContactSourceBinder(object):
 
     implements(IVocabularyFactory)
 
+    def __init__(self, only_active=False):
+        self.only_active = only_active
+
     def __call__(self, context):
         if is_kub_feature_enabled():
-            return KuBContactsSourceBinder()(context)
+            return KuBContactsSourceBinder(only_active=self.only_active)(context)
 
         return UsersContactsInboxesSourceBinder()(context)

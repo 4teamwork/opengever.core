@@ -86,3 +86,12 @@ class TestKubContactSource(KuBIntegrationTestCase):
         self.mock_get_by_id(mocker, contact_id)
         with self.assertRaises(LookupError):
             self.source.getTermByToken(contact_id)
+
+    def test_set_active_filter_when_using_only_active(self, mocker):
+        source = KuBContactsSource(None)
+        self.assertEqual({}, source.kub_filters)
+        self.assertEqual({}, source.ogds_filters)
+
+        source = KuBContactsSource(None, only_active=True)
+        self.assertEqual({'is_active': True}, source.kub_filters)
+        self.assertEqual({'active': True}, source.ogds_filters)

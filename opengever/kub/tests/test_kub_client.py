@@ -19,24 +19,26 @@ class TestKubClient(KuBIntegrationTestCase):
         self.assertEqual(u'en', self.client.session.headers['Accept-Language'])
 
     def test_kub_api_url(self, mocker):
-        self.assertEqual(u'http://localhost:8000/api/v1/',
+        self.assertEqual(u'http://localhost:8000/api/v2/',
                          self.client.kub_api_url)
 
     def test_query_returns_persons(self, mocker):
         query_str = "Julie"
         url = self.mock_search(mocker, query_str)
         resp = self.client.query(query_str)
-        self.assertEqual(1, len(resp))
-        self.assertEqual("person", resp[0]["type"])
+        results = resp.get('results')
+        self.assertEqual(1, len(results))
+        self.assertEqual("person", results[0]["type"])
         self.assertEqual(KUB_RESPONSES[url], resp)
 
     def test_query_returns_memberships_and_organizations(self, mocker):
         query_str = "4Teamwork"
         url = self.mock_search(mocker, query_str)
         resp = self.client.query(query_str)
-        self.assertEqual(2, len(resp))
-        self.assertEqual("organization", resp[0]["type"])
-        self.assertEqual("membership", resp[1]["type"])
+        results = resp.get('results')
+        self.assertEqual(2, len(results))
+        self.assertEqual("organization", results[0]["type"])
+        self.assertEqual("membership", results[1]["type"])
         self.assertEqual(KUB_RESPONSES[url], resp)
 
     def test_get_by_id_handles_persons(self, mocker):

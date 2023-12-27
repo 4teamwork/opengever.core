@@ -8,10 +8,11 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Update KUB api from ``v1`` to ``v2``. KUB ``v2023.18.0`` is required.
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@globalsources``: Add new source ``all_contacts`` which returns active and inactive contacts.
 
 
 2023.15.0 (2023-12-13)

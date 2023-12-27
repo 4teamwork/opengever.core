@@ -6,12 +6,13 @@ from plone import api
 from plone.memoize import ram
 from time import mktime
 from time import time
+from urllib import urlencode
 from wsgiref.handlers import format_date_time
 from zope.annotation import IAnnotations
 import requests
 
 
-KUB_API_VERSION = 'v1'
+KUB_API_VERSION = 'v2'
 
 
 class KuBClient(object):
@@ -53,8 +54,12 @@ class KuBClient(object):
              'Authorization': 'Token {}'.format(self.kub_service_token)})
         return session
 
-    def query(self, query_str):
-        url = u'{}search?q={}'.format(self.kub_api_url, query_str)
+    def query(self, query_str, filters=dict()):
+        search_filters = {
+            'q': query_str,
+        }
+        search_filters.update(filters)
+        url = u'{}search?{}'.format(self.kub_api_url, urlencode(search_filters))
         res = self.session.get(url)
         return res.json()
 

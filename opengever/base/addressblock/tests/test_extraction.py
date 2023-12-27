@@ -49,7 +49,7 @@ class TestKuBEntityAddressExtraction(KuBIntegrationTestCase):
 
     def mock_entity(self, mocker, data, **kwargs):
         type_id = ':'.join((data['type'], data['id']))
-        url = 'http://localhost:8000/api/v1/resolve/{}'.format(type_id)
+        url = 'http://localhost:8000/api/v2/resolve/{}'.format(type_id)
         mocker.get(url, json=data, **kwargs)
         return type_id
 

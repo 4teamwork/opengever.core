@@ -26,6 +26,10 @@ class IGlobalSourceSchema(model.Schema):
     )
 
     contacts = schema.Choice(
+        source=PloneSqlOrKubContactSourceBinder(only_active=True)
+    )
+
+    all_contacts = schema.Choice(
         source=PloneSqlOrKubContactSourceBinder()
     )
 
