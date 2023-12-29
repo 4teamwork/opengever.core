@@ -94,6 +94,18 @@ class IFieldDefinition(model.Schema):
         required=False,
         default=False,
     )
+    read_group = schema.TextLine(
+        title=_(u'label_read_group', default=u'Read Group'),
+        description=_(u'help_read_group',
+                      default=u'If specified, only members of this group can read the field value.'),
+        required=False,
+    )
+    write_group = schema.TextLine(
+        title=_(u'label_write_group', default=u'Write Group'),
+        description=_(u'help_write_group',
+                      default=u'If specified, only members of this group can write the field value.'),
+        required=False,
+    )
 
     @invariant
     def valid_default_value(obj):
