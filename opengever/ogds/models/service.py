@@ -105,8 +105,15 @@ class OGDSService(object):
         query = self._query_org_units(enabled_only=False, visible_only=False)
         return query.count() > 1
 
-    def fetch_group(self, groupid):
-        return self._query_group().get(groupid)
+    def fetch_group(self, groupid, groupname_as_fallback=False):
+        group = self._query_group().get(groupid)
+        if not group and groupname_as_fallback:
+            group = self.fetch_group_by_groupname(groupid)
+
+        return group
+
+    def fetch_group_by_groupname(self, groupname):
+        return self._query_group().filter_by(groupname=groupname).first()
 
     def _query_admin_units(self, enabled_only=True, visible_only=True):
         query = AdminUnit.query
