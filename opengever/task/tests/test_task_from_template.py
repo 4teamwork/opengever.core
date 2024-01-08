@@ -376,16 +376,31 @@ class TestSequentialTaskProcess(IntegrationTestCase):
                                                 issuer=self.dossier_responsible.getId(),
                                                 task_type='correction')
                                         .in_state('task-state-planned'))
-        api.content.transition(
-            obj=self.seq_subtask_1,
-            transition='task-transition-open-tested-and-closed')
+
+        # Add a document to verify that all started subtasks also have
+        # relations to the doc if 'pass_documents_to_next_task' is set.
+        doc = create(Builder('document').within(self.seq_subtask_1))
+
+        wf_tool = api.portal.get_tool('portal_workflow')
+        wf_tool.doActionFor(
+            self.seq_subtask_1,
+            'task-transition-open-tested-and-closed',
+            transition_params={
+                'pass_documents_to_next_task': True,
+            }
+        )
 
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(doc, subprocess_task1.relatedItems[0].to_object)
+
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task2))
+        self.assertEquals(doc, subprocess_task2.relatedItems[0].to_object)
+
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task2_task1))
+        self.assertEquals(doc, subprocess_task2_task1.relatedItems[0].to_object)
 
     def test_starts_sequential_subprocess(self):
         self.login(self.secretariat_user)
@@ -419,16 +434,30 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
         self.seq_subtask_2.set_tasktemplate_order([subprocess_task1, subprocess_task2])
 
-        api.content.transition(
-            obj=self.seq_subtask_1,
-            transition='task-transition-open-tested-and-closed')
+        # Add a document to verify that all started subtasks also have
+        # relations to the doc if 'pass_documents_to_next_task' is set.
+        doc = create(Builder('document').within(self.seq_subtask_1))
+
+        wf_tool = api.portal.get_tool('portal_workflow')
+        wf_tool.doActionFor(
+            self.seq_subtask_1,
+            'task-transition-open-tested-and-closed',
+            transition_params={
+                'pass_documents_to_next_task': True,
+            }
+        )
 
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task1))
+        self.assertEquals(doc, subprocess_task1.relatedItems[0].to_object)
+
         self.assertEquals(
             'task-state-open', api.content.get_state(subprocess_task1_task1))
+        self.assertEquals(doc, subprocess_task1_task1.relatedItems[0].to_object)
+
         self.assertEquals(
             'task-state-planned', api.content.get_state(subprocess_task2))
+        self.assertEquals(0, len(subprocess_task2.relatedItems))
 
 
 class TestInitialStateForSubtasks(IntegrationTestCase):
