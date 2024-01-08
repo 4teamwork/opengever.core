@@ -403,6 +403,10 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         self.maxDiff = None
         self.login(self.regular_user, browser=browser)
 
+        # ensure pos in parent changes by creating content in target dossier
+        create(Builder('document').within(self.empty_dossier))
+        self.commit_solr()
+
         initial_solrdata = solr_data_for(self.subdocument)
         self.remove_ignored_solrdata(initial_solrdata)
 
@@ -424,6 +428,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             '_version_': moved_solrdata['_version_'],
             'containing_dossier': self.empty_dossier.Title(),
             'containing_subdossier': '',
+            'getObjPositionInParent': 1,
             'metadata': 'Client1 1.1 / 4 / 22 Wichtig Subkeyword',
             'modified': paste_time_index,
             'path': moved.absolute_url_path(),

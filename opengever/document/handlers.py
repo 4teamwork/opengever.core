@@ -57,7 +57,9 @@ def document_or_mail_moved_or_added(context, event):
         return
 
     if IObjectMovedEvent.providedBy(event):
-        context.reindexObject(idxs=["reference", "sortable_reference", "metadata"])
+        context.reindexObject(
+            idxs=["getObjPositionInParent", "reference", "sortable_reference", "metadata"]
+        )
 
     if IDocumentSchema.providedBy(context):
         document_moved_or_added(context, event)

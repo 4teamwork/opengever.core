@@ -296,11 +296,13 @@ class TestGetObjPositionInParentIndexer(SolrIntegrationTestCase):
     def test_index_only_for_whitelisted_types(self, browser):
         self.login(self.administrator, browser=browser)
 
-        for obj in [self.document, self.dossier, self.proposal,
+        for obj in [self.dossier, self.proposal,
                     self.leaf_repofolder, self.task, self.workspace,
                     self.tasktemplatefolder]:
             self.assertIsNone(solr_data_for(obj, 'getObjPositionInParent'))
 
+        self.assertEqual(0, solr_data_for(self.document,
+                                          'getObjPositionInParent'))
         self.assertEqual(1, solr_data_for(self.seq_subtask_2,
                                           'getObjPositionInParent'))
         self.assertEqual(0, solr_data_for(self.tasktemplate,

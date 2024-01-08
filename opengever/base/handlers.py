@@ -13,6 +13,7 @@ from opengever.base.oguid import Oguid
 from opengever.base.security import reindex_object_security_without_children
 from opengever.base.touched import ObjectTouchedEvent
 from opengever.base.touched import should_track_touches
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.dossier.utils import supports_is_subdossier
 from opengever.globalindex.handlers.task import sync_task
@@ -38,7 +39,8 @@ from zope.sqlalchemy.datamanager import mark_changed
 
 reindex_after_copy = ['created', 'is_locked_by_copy_to_workspace']
 
-CONTAINERS_SUPPORTING_OBJ_POSITION_IN_PARENT = (IWorkspace,
+CONTAINERS_SUPPORTING_OBJ_POSITION_IN_PARENT = (IDossierMarker,
+                                                IWorkspace,
                                                 IToDoList,
                                                 ITaskTemplateFolderSchema,
                                                 IWorkspaceMeeting)

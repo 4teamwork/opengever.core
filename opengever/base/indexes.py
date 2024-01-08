@@ -10,6 +10,7 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.base.model import SORTABLE_TITLE_LENGTH
 from opengever.base.oguid import Oguid
 from opengever.bundle.sections.constructor import BUNDLE_GUID_KEY
+from opengever.document.document import IDocumentSchema
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
@@ -31,6 +32,7 @@ from zope.annotation import IAnnotations
 # 'getObjPositionInParent' index is only calculated for objects providing
 # one of thoes interfaces.
 CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
+    IDocumentSchema,
     ITaskTemplate,
     ITaskTemplateFolderSchema,
     IToDo,
