@@ -742,6 +742,79 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
         self.assertEqual([u'T\xc3\xb6mpl\xc3\xb6te Normal', u'Baumsch\xfctze'],
                          [obj.title for obj in subdossier.listFolderContents()])
 
+    @browsing
+    def test_set_dossier_local_roles_from_template(self, browser):
+        self.login(self.regular_user, browser)
+
+        self.dossiertemplate.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.dossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
+        RoleAssignmentManager(self.dossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.dossier_manager.getId(),
+                                  ['Reader']))
+
+        self.subdossiertemplate.__ac_local_roles_block__ = True
+        RoleAssignmentManager(self.subdossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.regular_user.getId(),
+                                  ['Reader', 'Contributor', 'Editor']))
+        RoleAssignmentManager(self.subdossiertemplate).add_or_update_assignment(
+            SharingRoleAssignment(self.dossier_manager.getId(),
+                                  ['Reader', 'Editor']))
+
+        browser.open(self.leaf_repofolder,
+                     view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
+                     headers=self.api_headers)
+        template = browser.json['items'][0]
+
+        data = {'template': template,
+                'title': u'New d\xf6ssier',
+                'responsible': self.regular_user.getId()}
+
+        with self.observe_children(self.leaf_repofolder) as children:
+            browser.open('{}/@dossier-from-template'.format(
+                         self.leaf_repofolder.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        dossier = children['added'].pop()
+        self.assertTrue(dossier.__ac_local_roles_block__)
+        self.assertEqual(
+            [
+                {
+                    'cause': 3,
+                    'roles': ['Reader', 'Contributor', 'Editor'],
+                    'reference': None,
+                    'principal': 'kathi.barfuss',
+                },
+                {
+                    'cause': 3,
+                    'roles': ['Reader'],
+                    'reference': None,
+                    'principal': 'dossier_manager',
+                }
+            ], RoleAssignmentManager(dossier).storage._storage()
+        )
+
+        subdossier = dossier.listFolderContents()[1]
+        self.assertTrue(subdossier.__ac_local_roles_block__)
+        self.assertEqual(
+            [
+                {
+                    'cause': 3,
+                    'roles': ['Reader', 'Contributor', 'Editor'],
+                    'reference': None,
+                    'principal': 'kathi.barfuss',
+                },
+                {
+                    'cause': 3,
+                    'roles': ['Reader', 'Editor'],
+                    'reference': None,
+                    'principal': 'dossier_manager',
+                }
+            ], RoleAssignmentManager(subdossier).storage._storage()
+        )
+
 
 class TestTriggerTaskTemplatePost(IntegrationTestCase):
 

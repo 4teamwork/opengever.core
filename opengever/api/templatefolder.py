@@ -1,6 +1,7 @@
 from opengever.api.add import FolderPost
 from opengever.api.task import deserialize_responsible
 from opengever.api.validation import get_validation_errors
+from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.source import DossierPathSourceBinder
 from opengever.base.source import SolrObjPathSourceBinder
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
@@ -137,6 +138,9 @@ class DossierFromTemplatePost(FolderPost, CreateDossierContentFromTemplateMixin)
 
         serialized_dossier = super(DossierFromTemplatePost, self).reply()
         self.validate_keywords(self.dossier_template, self.request_data.get('keywords'))
+        self.obj.__ac_local_roles_block__ = getattr(
+            self.dossier_template, '__ac_local_roles_block__', None)
+        RoleAssignmentManager(self.dossier_template).copy_assigments_to(self.obj)
         self.create_dossier_content_from_template(self.obj, self.dossier_template)
         return serialized_dossier
 
