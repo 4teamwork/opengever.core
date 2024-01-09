@@ -658,6 +658,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         modified_solrdata = {
             '_version_': moved_solrdata['_version_'],
             'containing_subdossier': u'2015',
+            'getObjPositionInParent': 0,
             'metadata': 'Client1 1.1 / 1.2 / 29',
             'modified': paste_time_index,
             'path': moved.absolute_url_path(),

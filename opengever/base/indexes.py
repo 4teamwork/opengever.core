@@ -1,6 +1,7 @@
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
+from ftw.mail.mail import IMail
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.touched import ITouched
@@ -33,6 +34,7 @@ from zope.annotation import IAnnotations
 # one of thoes interfaces.
 CONTENTS_SUPPORTING_OBJ_POSITION_IN_PARENT = (
     IDocumentSchema,
+    IMail,
     ITaskTemplate,
     ITaskTemplateFolderSchema,
     IToDo,
