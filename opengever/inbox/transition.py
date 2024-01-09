@@ -13,6 +13,7 @@ from opengever.task.browser.accept.utils import _copy_documents_from_forwarding
 from opengever.task.browser.accept.utils import FORWARDING_SUCCESSOR_TYPE
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.interfaces import IYearfolderStorer
+from opengever.task.localroles import LocalRolesSetter
 from opengever.task.task import ITask
 from opengever.task.transition import DefaultTransitionExtender
 from opengever.task.transition import IResponse
@@ -113,6 +114,16 @@ class ForwardingAssignToDossierTransitionExtender(ForwardingDefaultTransitionExt
         successor_tc_task.set_predecessor(Oguid.for_object(self.context).id)
 
         IYearfolderStorer(self.context).store_in_yearfolder()
+
+        # Usually the localroles will be revoked by the revoke_permissions event
+        # handler after a workflow transition. This will not work for the case
+        # where we need to have access to the context in an after transition
+        # hook.
+        #
+        # So instead of using the event handler to revoke the roles from the
+        # forwaring, we'll do it here after we have successfully created the
+        # successor_task.
+        LocalRolesSetter(self.context).revoke_roles()
         return successor_task
 
     def create_successor_task(self, dossier, task_data=None):
