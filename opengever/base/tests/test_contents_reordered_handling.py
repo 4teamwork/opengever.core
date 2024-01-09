@@ -8,7 +8,6 @@ import json
 
 
 class TestContentsReorderedHandler(SolrIntegrationTestCase):
-    features = ('workspace', )
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_contents_through_folder_contents(self, browser):
@@ -122,6 +121,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_todos_through_the_restapi(self, browser):
+        self.activate_feature('workspace')
         self.login(self.administrator, browser=browser)
 
         view = u'/@solrsearch?fl=getObjPositionInParent&depth=1'
@@ -157,6 +157,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_todolists_through_the_restapi(self, browser):
+        self.activate_feature('workspace')
         self.login(self.administrator, browser=browser)
 
         view = u'/@solrsearch?fl=getObjPositionInParent&depth=1&fq=object_provides:{}'.format(
