@@ -785,7 +785,7 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
                     'cause': 3,
                     'roles': ['Reader', 'Contributor', 'Editor'],
                     'reference': None,
-                    'principal': 'kathi.barfuss',
+                    'principal': 'regular_user',
                 },
                 {
                     'cause': 3,
@@ -804,7 +804,7 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
                     'cause': 3,
                     'roles': ['Reader', 'Contributor', 'Editor'],
                     'reference': None,
-                    'principal': 'kathi.barfuss',
+                    'principal': 'regular_user',
                 },
                 {
                     'cause': 3,
