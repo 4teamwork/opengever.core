@@ -1377,11 +1377,13 @@ You can use the following as a base for an `.env` file for local development (su
 After a policyless GEVER Plone site has been set up, and the SQL tables created, you can perform the initial sync:
 
 .. code:: bash
+
     docker compose run --rm ogds-sync ogds-sync
 
 And then start the ogds-sync service:
 
 .. code:: bash
+
     docker compose up
 
 
