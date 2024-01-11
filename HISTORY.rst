@@ -10,6 +10,32 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.1.0 (2024-01-11)
+---------------------
+
+New features:
+
+
+- Add new @globalsource ``all_contacts`` which returns active and inactive contacts. [elioschmutz] [CA-6490]
+
+
+Bug fixes:
+
+
+- Properly revoke temporary inbox permissions when working with forwardings. [elioschmutz] [CA-6354]
+- Properly set predefined dossier template local roles on dossiers creating by templates. [elioschmutz] [CA-6493]
+- Improve reporting view performance for path based queries. [phgross] [CA-6542]
+
+
+Other changes:
+
+
+- Include bumblebee_checksum in document status. [elioschmutz] [CA-5913]
+- Support usernames and groupnames in the sharing API. [phgross] [CA-6237-6]
+- Update KUB api from v1 to v2. [elioschmutz] [CA-6490]
+- Bump ftw.mail to version 2.8.0. [buchi] [GH-7867]
+
+
 2023.15.1 (2023-12-19)
 ----------------------
 
