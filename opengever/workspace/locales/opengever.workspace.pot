@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-27 10:13+0000\n"
+"POT-Creation-Date: 2024-01-15 11:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -275,6 +275,11 @@ msgstr ""
 #: ./opengever/workspace/todo.py
 #: ./opengever/workspace/workspace_meeting_agenda_item.py
 msgid "label_related_items"
+msgstr ""
+
+#. Default: "Related todo list"
+#: ./opengever/workspace/workspace_meeting_agenda_item.py
+msgid "label_related_todo_list"
 msgstr ""
 
 #. Default: "Responsible"

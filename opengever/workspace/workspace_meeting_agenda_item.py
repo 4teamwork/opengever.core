@@ -53,6 +53,15 @@ class IWorkspaceMeetingAgendaItemSchema(model.Schema):
         required=False,
     )
 
+    related_todo_list = RelationChoice(
+        title=_(u'label_related_todo_list', default=u'Related todo list'),
+        source=WorkspacePathSourceBinder(
+            portal_type=("opengever.workspace.todolist"),
+        ),
+        default=None,
+        required=False,
+    )
+
 
 class WorkspaceMeetingAgendaItem(Item):
     implements(IWorkspaceMeetingAgendaItem)
