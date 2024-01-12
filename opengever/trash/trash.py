@@ -239,32 +239,19 @@ class WorkspaceFolderTrasher(DefaultContentTrasher):
     """An object which handles trashing/untrashing workspace folders.
     """
 
-    def _verify_may_trash(self, raise_on_violations=True):
-        if not super(WorkspaceFolderTrasher, self)._verify_may_trash(raise_on_violations):
-            return False
-        for obj in self.context.objectValues():
-            if not ITrasher(obj)._verify_may_trash(raise_on_violations):
-                return False
-        return True
-
-    def _verify_may_untrash(self, raise_on_violations=True):
-        if not super(WorkspaceFolderTrasher, self)._verify_may_untrash(raise_on_violations):
-            return False
-
-        for obj in self.context.objectValues():
-            if not ITrasher(obj)._verify_may_untrash(raise_on_violations):
-                return False
-        return True
-
     def _trash(self):
         super(WorkspaceFolderTrasher, self)._trash()
         for obj in self.context.objectValues():
-            ITrasher(obj)._trash()
+            trasher = ITrasher(obj)
+            trasher._verify_may_trash()
+            trasher._trash()
 
     def _untrash(self):
         super(WorkspaceFolderTrasher, self)._untrash()
         for obj in self.context.objectValues():
-            ITrasher(obj)._untrash()
+            trasher = ITrasher(obj)
+            trasher._verify_may_untrash()
+            trasher._untrash()
 
     def is_trashable(self):
         return True
