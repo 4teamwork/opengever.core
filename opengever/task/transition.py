@@ -210,15 +210,19 @@ class DefaultTransitionExtender(TransitionExtender):
             return
 
         next_task = self.context.get_sql_object().get_next_task().oguid.resolve_object()
-        intids = getUtility(IIntIds)
 
+        intids = getUtility(IIntIds)
         current_document_ids = [intids.getId(document) for document
                                 in self.context.task_documents()]
-        next_task_related_items = [item.to_id for item
-                                   in ITask(next_task).relatedItems]
-        ITask(next_task).relatedItems = [
-            RelationValue(document_int_id) for document_int_id
-            in set(current_document_ids + next_task_related_items)]
+
+        # Pass documents to all (sub)tasks that get started. So at least to
+        # the next task, but also to any nested subtasks that will be started
+        # if the next task happens to be a task template.
+        for task in [next_task] + list(next_task._get_subtasks_to_start(next_task)):
+            existing_related_items = [item.to_id for item in ITask(task).relatedItems]
+            ITask(task).relatedItems = [
+                RelationValue(document_int_id) for document_int_id
+                in set(current_document_ids + existing_related_items)]
 
         return transition_params['pass_documents_to_next_task']
 

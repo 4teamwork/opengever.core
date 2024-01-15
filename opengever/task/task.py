@@ -732,18 +732,28 @@ class Task(Container, TaskReminderSupport):
         self._start_subprocess(self)
 
     def _start_subprocess(self, obj):
+        for subtask in self._get_subtasks_to_start(obj):
+            subtask._open_planned_task()
+
+    def _get_subtasks_to_start(self, obj):
         if IContainParallelProcess.providedBy(obj):
             for child in obj.objectValues():
                 if ITask.providedBy(child):
-                    child._open_planned_task()
-                    self._start_subprocess(child)
+                    yield child
+
+                    for subchild in self._get_subtasks_to_start(child):
+                        yield subchild
+
         elif IContainSequentialProcess.providedBy(obj):
             for child in obj.objectValues():
                 if ITask.providedBy(child):
-                    child._open_planned_task()
-                    self._start_subprocess(child)
+                    yield child
+
+                    for subchild in self._get_subtasks_to_start(child):
+                        yield subchild
+
                     # start only the first task if sequential
-                    return
+                    break
 
     def close_main_task(self):
         parent = aq_parent(aq_inner(self))
