@@ -1,6 +1,8 @@
 from ftw.builder import Builder
 from ftw.builder import create
+from ftw.mail.mail import IMail
 from ftw.testbrowser import browsing
+from opengever.document.document import IDocumentSchema
 from opengever.tasktemplates.content.tasktemplate import ITaskTemplate
 from opengever.testing import SolrIntegrationTestCase
 from opengever.workspace.interfaces import IToDoList
@@ -8,7 +10,6 @@ import json
 
 
 class TestContentsReorderedHandler(SolrIntegrationTestCase):
-    features = ('workspace', )
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_contents_through_folder_contents(self, browser):
@@ -84,6 +85,69 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
             ], browser.json["items"])
 
     @browsing
+    def test_reindex_getObjPositionInParent_if_reordering_documents_through_the_restapi(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        view = u'/@solrsearch?fl=getObjPositionInParent&depth=1&fq=object_provides:{}'\
+               u'&sort=getObjPositionInParent asc'.format(IDocumentSchema.__identifier__)
+
+        doc_1 = self.document
+        doc_2 = self.decided_proposal.load_model().excerpt_document.resolve_document()
+        doc_3 = self.shadow_document
+
+        browser.open(self.dossier.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                {u'UID': doc_1.UID(), u'getObjPositionInParent': 0},
+                {u'UID': doc_2.UID(), u'getObjPositionInParent': 9},
+                {u'UID': doc_3.UID(), u'getObjPositionInParent': 15},
+            ], browser.json["items"])
+
+        new_order = {'ordering': {'obj_id': doc_2.id, 'delta': -9}}
+        browser.open(self.dossier, data=json.dumps(new_order), method='PATCH', headers=self.api_headers)
+        self.commit_solr()
+
+        browser.open(self.dossier.absolute_url(), view=view, method='GET', headers=self.api_headers)
+        self.assertItemsEqual(
+            [
+                {u'UID': doc_2.UID(), u'getObjPositionInParent': 0},
+                {u'UID': doc_1.UID(), u'getObjPositionInParent': 1},
+                {u'UID': doc_3.UID(), u'getObjPositionInParent': 15},
+            ], browser.json["items"])
+
+    @browsing
+    def test_reindex_getObjPositionInParent_if_reordering_mails_through_the_restapi(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        view = u'/@solrsearch?fl=getObjPositionInParent&depth=1&fq=object_provides:{}'\
+               u'&sort=getObjPositionInParent asc'.format(IMail.__identifier__)
+
+        mail_1 = self.mail_eml
+        mail_2 = self.mail_msg
+
+        browser.open(self.dossier.absolute_url(), view=view,
+                     method='GET', headers=self.api_headers)
+
+        self.assertItemsEqual(
+            [
+                {u'UID': mail_1.UID(), u'getObjPositionInParent': 7},
+                {u'UID': mail_2.UID(), u'getObjPositionInParent': 8},
+            ], browser.json["items"])
+
+        new_order = {'ordering': {'obj_id': mail_1.id, 'delta': 1}}
+        browser.open(self.dossier, data=json.dumps(new_order), method='PATCH', headers=self.api_headers)
+        self.commit_solr()
+
+        browser.open(self.dossier.absolute_url(), view=view, method='GET', headers=self.api_headers)
+        self.assertItemsEqual(
+            [
+                {u'UID': mail_2.UID(), u'getObjPositionInParent': 7},
+                {u'UID': mail_1.UID(), u'getObjPositionInParent': 8},
+            ], browser.json["items"])
+
+    @browsing
     def test_reindex_getObjPositionInParent_if_reordering_tasktemplates_through_the_restapi(self, browser):
         self.login(self.administrator, browser=browser)
 
@@ -122,6 +186,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_todos_through_the_restapi(self, browser):
+        self.activate_feature('workspace')
         self.login(self.administrator, browser=browser)
 
         view = u'/@solrsearch?fl=getObjPositionInParent&depth=1'
@@ -157,6 +222,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
 
     @browsing
     def test_reindex_getObjPositionInParent_if_reordering_todolists_through_the_restapi(self, browser):
+        self.activate_feature('workspace')
         self.login(self.administrator, browser=browser)
 
         view = u'/@solrsearch?fl=getObjPositionInParent&depth=1&fq=object_provides:{}'.format(
