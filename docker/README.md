@@ -125,6 +125,14 @@ defined at port 8088 (e.g. http://teamraum:8088 or http://gever:8088).
 Before building the images, you need the source checkouts that are currently
 managed with buildout (mr.developer). Thus you first need to run buildout.
 
+A Gitlab deploy token needs to be provided in the environment variable
+`GITLAB_DEPLOY_TOKEN` to be able to download private Python packages from
+git.4teamwork.ch.
+
+```
+export GITLAB_DEPLOY_TOKEN=<gldt-xxx>
+```
+
 To build all images simply run:
 
 ```

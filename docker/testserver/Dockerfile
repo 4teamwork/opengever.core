@@ -5,8 +5,10 @@ WORKDIR /app
 
 COPY ./docker/testserver/requirements-testserver.txt /app/
 RUN --mount=type=cache,target=/root/.cache \
+    --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
     pip install \
-    --extra-index-url https://buildout:buildout@psc.4teamwork.ch/simple \
+    --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -r requirements-testserver.txt \
     -c requirements-core.txt \
     -c requirements-deployment.txt

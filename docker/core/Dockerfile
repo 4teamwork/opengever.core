@@ -24,8 +24,10 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 COPY ./docker/core/requirements-core.txt ./docker/core/requirements-deployment.txt /app/
 RUN --mount=type=cache,target=/root/.cache \
+    --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
     pip install \
-    --extra-index-url https://buildout:buildout@psc.4teamwork.ch/simple \
+    --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -r requirements-core.txt \
     -r requirements-deployment.txt
 
@@ -35,8 +37,10 @@ COPY ./plonetheme ./plonetheme
 COPY ./src ./src
 
 RUN --mount=type=cache,target=/root/.cache \
+    --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
     pip install \
-    --extra-index-url https://buildout:buildout@psc.4teamwork.ch/simple \
+    --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -e /app/src/collective.js.timeago \
     -e . \
     -e /app/src/opengever.maintenance \
