@@ -59,6 +59,8 @@ jobs:
           labels: ${{ steps.meta_ogcore.outputs.labels }}
           cache-from: type=gha,scope=ogcore
           cache-to: type=gha,mode=max,scope=ogcore
+          secrets: |
+            "gldt=${{ secrets.GITLAB_DEPLOY_TOKEN }}"
 
       - name: Extract metadata from Git reference for ogtestserver
         id: meta_ogtestserver
@@ -80,3 +82,5 @@ jobs:
           labels: ${{ steps.meta_ogtestserver.outputs.labels }}
           cache-from: type=gha,scope=ogtestserver
           cache-to: type=gha,mode=max,scope=ogtestserver
+          secrets: |
+            "gldt=${{ secrets.GITLAB_DEPLOY_TOKEN }}"

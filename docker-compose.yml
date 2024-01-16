@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   httpd:
     image: 4teamwork/oghttpd:latest
@@ -50,6 +48,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/core/Dockerfile
+      secrets:
+        - gldt
     image: 4teamwork/ogcore:latest
     volumes:
       - ./var/ogcore:/data
@@ -179,6 +179,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/testserver/Dockerfile
+      secrets:
+        - gldt
     image: 4teamwork/ogtestserver:latest
     ports:
       - 55001:55001
@@ -210,3 +212,7 @@ networks:
       driver: default
       config:
         - subnet: 172.16.4.0/24
+
+secrets:
+  gldt:
+    environment: GITLAB_DEPLOY_TOKEN
