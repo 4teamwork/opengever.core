@@ -156,6 +156,9 @@
   <!-- REPOSITORY -->
   <records interface="opengever.repository.interfaces.IRepositoryFolderRecords" />
 
+  <!-- RIS -->
+  <records interface="opengever.ris.interfaces.IRisSettings" />
+
   <!-- SHARING -->
   <records interface="opengever.sharing.interfaces.ISharingConfiguration" />
 
