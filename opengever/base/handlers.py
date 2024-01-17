@@ -251,7 +251,8 @@ def maybe_update_changed_date(context, event):
 
 def update_changed_date(context, event):
     IChanged(context).changed = utcnow_tz_aware()
-    context.reindexObject(idxs=["changed"])
+    context.setModificationDate()
+    context.reindexObject(idxs=["changed", "modified"])
 
 
 def update_touched_date(obj, event):
