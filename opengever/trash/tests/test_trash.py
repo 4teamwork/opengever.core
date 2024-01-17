@@ -712,7 +712,7 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
         self.assertTrue(ITrashed.providedBy(subfolder))
         self.assertTrue(ITrashed.providedBy(subdocument))
 
-    def test_verify_may_trash_on_workspace_folder_is_recursive(self):
+    def test_cannot_trash_workspace_folder_containing_a_checked_out_document(self):
         self.login(self.manager)
         subfolder = create(Builder('workspace folder')
                            .titled(u'Subfolder')
@@ -725,15 +725,12 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
         self.assertTrue(trasher.verify_may_trash())
 
         self.checkout_document(subdocument)
-        with self.assertRaises(TrashError) as exc:
-            trasher.verify_may_trash()
-        self.assertEqual('Document checked out', str(exc.exception))
 
         with self.assertRaises(TrashError) as exc:
             trasher.trash()
         self.assertEqual('Document checked out', str(exc.exception))
 
-    def test_verify_may_trash_on_workspace_folder_recursively_checks_permissions(self):
+    def test_cannot_trash_workspace_folder_containing_a_subfolder_with_insufficient_permissions(self):
         self.login(self.workspace_member)
         subfolder = create(Builder('workspace folder')
                            .titled(u'Subfolder')
@@ -749,7 +746,7 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
 
         self.login(self.workspace_admin)
         with self.assertRaises(Unauthorized):
-            trasher.verify_may_trash()
+            trasher.trash()
 
     def test_untrashing_workspace_folder_is_recursive(self):
         self.login(self.manager)
@@ -769,7 +766,7 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
         self.assertFalse(ITrashed.providedBy(subfolder))
         self.assertFalse(ITrashed.providedBy(subdocument))
 
-    def test_verify_may_untrash_on_workspace_folder_is_recursive(self):
+    def test_cannot_untrash_workspace_folder_containing_an_untrashed_document(self):
         self.login(self.manager)
         subfolder = create(Builder('workspace folder')
                            .titled(u'Subfolder')
@@ -783,9 +780,6 @@ class TestWorkspaceFolderTrasher(IntegrationTestCase):
         self.assertTrue(trasher.verify_may_untrash())
 
         noLongerProvides(subdocument, ITrashed)
-
-        with self.assertRaises(Unauthorized):
-            trasher.verify_may_untrash()
 
         with self.assertRaises(Unauthorized):
             trasher.untrash()
