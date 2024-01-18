@@ -1,0 +1,333 @@
+<?xml version="1.0"?>
+<dc-workflow workflow_id="opengever_ris_proposal_workflow" title="RIS Proposal Workflow" description="" state_variable="review_state"         initial_state="proposal-state-active" manager_bypass="False" >
+ 
+ <permission>Access contents information</permission>
+ <permission>Modify portal content</permission>
+ <permission>View</permission>
+ <state state_id="proposal-state-active" title="proposal-state-active" >
+  <exit-transition transition_id="proposal-transition-cancel" />
+  <exit-transition transition_id="proposal-transition-submit" />
+  <exit-transition transition_id="proposal-transition-submit-to-meeting" />
+  <exit-transition transition_id="proposal-transition-cancel-manage" />
+  <exit-transition transition_id="proposal-transition-submit-manage" />
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="True">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  
+  
+ </state>
+ <state state_id="proposal-state-cancelled" title="proposal-state-cancelled" >
+  <exit-transition transition_id="proposal-transition-reopen" />
+  <exit-transition transition_id="proposal-transition-reopen-manage" />
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  
+  
+ </state>
+ <state state_id="proposal-state-decided" title="proposal-state-decided" >
+  <exit-transition transition_id="proposal-transition-undecide-manage" />
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  
+  
+ </state>
+ <state state_id="proposal-state-scheduled" title="proposal-state-scheduled" >
+  <exit-transition transition_id="proposal-transition-decide" />
+  <exit-transition transition_id="proposal-transition-unschedule" />
+  <exit-transition transition_id="proposal-transition-unschedule-to-dossier" />
+  <exit-transition transition_id="proposal-transition-decide-manage" />
+  <exit-transition transition_id="proposal-transition-unschedule-manage" />
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  
+  
+ </state>
+ <state state_id="proposal-state-submitted" title="proposal-state-submitted" >
+  <exit-transition transition_id="proposal-transition-reject" />
+  <exit-transition transition_id="proposal-transition-schedule" />
+  <exit-transition transition_id="proposal-transition-reject-manage" />
+  <exit-transition transition_id="proposal-transition-schedule-manage" />
+  <permission-map name="Access contents information" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  <permission-map name="Modify portal content" acquired="False">
+   <permission-role>Manager</permission-role>
+  </permission-map>
+  <permission-map name="View" acquired="False">
+   <permission-role>Administrator</permission-role>
+   <permission-role>Editor</permission-role>
+   <permission-role>LimitedAdmin</permission-role>
+   <permission-role>Manager</permission-role>
+   <permission-role>Reader</permission-role>
+  </permission-map>
+  
+  
+ </state>
+ <transition transition_id="proposal-transition-cancel" title="proposal-transition-cancel" new_state="proposal-state-cancelled" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-cancel" category="workflow" icon="">proposal-transition-cancel</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-cancel')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-cancel-manage" title="proposal-transition-cancel-manage" new_state="proposal-state-cancelled" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-cancel-manage" category="workflow" icon="">proposal-transition-cancel-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-decide" title="proposal-transition-decide" new_state="proposal-state-decided" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-decide" category="workflow" icon="">proposal-transition-decide</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-decide')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-decide-manage" title="proposal-transition-decide-manage" new_state="proposal-state-decided" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-decide-manage" category="workflow" icon="">proposal-transition-decide-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reactivate" title="proposal-transition-reactivate" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-reactivate" category="workflow" icon="">proposal-transition-reactivate</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reactivate')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reactivate-manage" title="proposal-transition-reactivate-manage" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-reactivate-manage" category="workflow" icon="">proposal-transition-reactivate-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reject" title="proposal-transition-reject" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-reject" category="workflow" icon="">proposal-transition-reject</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reject')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reject-manage" title="proposal-transition-reject-manage" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-reject-manage" category="workflow" icon="">proposal-transition-reject-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reopen" title="proposal-transition-reopen" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-reopen" category="workflow" icon="">proposal-transition-reopen</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-reopen')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-reopen-manage" title="proposal-transition-reopen-manage" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-reopen-manage" category="workflow" icon="">proposal-transition-reopen-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-schedule" title="proposal-transition-schedule" new_state="proposal-state-scheduled" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-schedule" category="workflow" icon="">proposal-transition-schedule</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-schedule')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-schedule-manage" title="proposal-transition-schedule-manage" new_state="proposal-state-scheduled" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-schedule-manage" category="workflow" icon="">proposal-transition-schedule-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-submit" title="proposal-transition-submit" new_state="proposal-state-submitted" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-submit" category="workflow" icon="">proposal-transition-submit</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-submit')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-submit-manage" title="proposal-transition-submit-manage" new_state="proposal-state-submitted" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-submit-manage" category="workflow" icon="">proposal-transition-submit-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-submit-to-meeting" title="proposal-transition-submit-to-meeting" new_state="proposal-state-scheduled" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-submit-to-meeting" category="workflow" icon="">proposal-transition-submit-to-meeting</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-submit-to-meeting')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-undecide-manage" title="proposal-transition-undecide-manage" new_state="proposal-state-scheduled" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-undecide-manage" category="workflow" icon="">proposal-transition-undecide-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-unschedule" title="proposal-transition-unschedule" new_state="proposal-state-submitted" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-unschedule" category="workflow" icon="">proposal-transition-unschedule</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-unschedule')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-unschedule-manage" title="proposal-transition-unschedule-manage" new_state="proposal-state-submitted" trigger="USER" before_script="" after_script="" >
+  <description>Transition only visible for Manager for debug purpose</description>
+  <action url="%(content_url)s/content_status_modify?workflow_action=proposal-transition-unschedule-manage" category="workflow" icon="">proposal-transition-unschedule-manage</action>
+  <guard >
+   <guard-permission>Manage portal content</guard-permission>
+  </guard>
+  
+ </transition>
+ <transition transition_id="proposal-transition-unschedule-to-dossier" title="proposal-transition-unschedule-to-dossier" new_state="proposal-state-active" trigger="USER" before_script="" after_script="" >
+  <action url="%(content_url)s/@@proposal_transition_controller?transition=proposal-transition-unschedule-to-dossier" category="workflow" icon="">proposal-transition-unschedule-to-dossier</action>
+  <guard >
+   <guard-expression>python: here.restrictedTraverse('@@proposal_transition_controller').is_transition_possible('proposal-transition-unschedule-to-dossier')</guard-expression
+   >
+  </guard>
+  
+ </transition>
+ 
+ <variable variable_id="action" for_catalog="False" for_status="True" update_always="True" >
+  <description>Previous transition</description>
+  <default>
+   
+   <expression>transition/getId|nothing</expression>
+  </default>
+  <guard >
+  </guard>
+ </variable>
+ <variable variable_id="actor" for_catalog="False" for_status="True" update_always="True" >
+  <description>The ID of the user who performed the previous transition</description>
+  <default>
+   
+   <expression>user/getUserName</expression>
+  </default>
+  <guard >
+  </guard>
+ </variable>
+ <variable variable_id="comments" for_catalog="False" for_status="True" update_always="True" >
+  <description>Comment about the last transition</description>
+  <default>
+   
+   <expression>python:state_change.kwargs.get('comment', '')</expression>
+  </default>
+  <guard >
+  </guard>
+ </variable>
+ <variable variable_id="review_history" for_catalog="False" for_status="False" update_always="False" >
+  <description>Provides access to workflow history</description>
+  <default>
+   
+   <expression>state_change/getHistory</expression>
+  </default>
+  <guard >
+   <guard-permission>Request review</guard-permission>
+   <guard-permission>Review portal content</guard-permission>
+  </guard>
+ </variable>
+ <variable variable_id="time" for_catalog="False" for_status="True" update_always="True" >
+  <description>When the previous transition was performed</description>
+  <default>
+   
+   <expression>state_change/getDateTime</expression>
+  </default>
+  <guard >
+  </guard>
+ </variable>
+ 
+</dc-workflow>

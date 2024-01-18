@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.ris">
+
+  <browser:page
+      name="proposal_transition_controller"
+      for="opengever.ris.proposal.IProposal"
+      class=".proposaltransitioncontroller.ProposalTransitionController"
+      permission="zope2.View"
+      allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
+      />
+
+</configure>

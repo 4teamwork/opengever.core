@@ -7,6 +7,8 @@
 
   <include file="permissions.zcml" />
   <include package=".behaviors" />
+  <include package=".browser" />
+
   <i18n:registerTranslations directory="locales" />
 
   <adapter factory=".sequence.ProposalSequenceNumberGenerator" />

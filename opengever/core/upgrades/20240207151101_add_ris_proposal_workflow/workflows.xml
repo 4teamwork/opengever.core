@@ -1,0 +1,9 @@
+<object name="portal_workflow" meta_type="Plone Workflow Tool">
+
+ <object name="opengever_ris_proposal_workflow" meta_type="Workflow"/>
+ <bindings>
+  <type type_id="opengever.ris.proposal">
+   <bound-workflow workflow_id="opengever_ris_proposal_workflow"/>
+  </type>
+ </bindings>
+</object>
