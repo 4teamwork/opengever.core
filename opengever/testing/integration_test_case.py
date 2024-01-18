@@ -105,6 +105,10 @@ FEATURE_FLAGS = {
     'optional-task-permissions-revoking': 'opengever.task.interfaces.ITaskSettings.optional_task_permissions_revoking_enabled',  # noqa
 }
 
+FEATURE_VALUES = {
+    'ris': ('opengever.ris.interfaces.IRisSettings.base_url', u"http://ris.example.com/"),
+}
+
 FEATURE_PROFILES = {
     'filing_number': 'opengever.dossier:filing',
 }
@@ -298,6 +302,9 @@ class IntegrationTestCase(TestCase):
         """
         if feature in FEATURE_FLAGS:
             api.portal.set_registry_record(FEATURE_FLAGS[feature], True)
+        elif feature in FEATURE_VALUES:
+            key, value = FEATURE_VALUES[feature]
+            api.portal.set_registry_record(key, value)
         elif feature in FEATURE_PROFILES:
             applyProfile(self.portal, FEATURE_PROFILES[feature])
         elif feature in FEATURE_METHODS:
@@ -310,6 +317,9 @@ class IntegrationTestCase(TestCase):
         """
         if feature in FEATURE_FLAGS:
             api.portal.set_registry_record(FEATURE_FLAGS[feature], False)
+        elif feature in FEATURE_VALUES:
+            key = FEATURE_VALUES[feature][0]
+            api.portal.set_registry_record(key, u'')
         elif feature in FEATURE_PROFILES:
             raise NotImplementedError('Feel free to implement.')
         elif feature in FEATURE_METHODS:
