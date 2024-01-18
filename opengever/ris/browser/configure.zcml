@@ -11,4 +11,24 @@
       allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
       />
 
+  <adapter
+      name="opengever.ris.proposal"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".proposalforms.ProposalAddView"
+      />
+
+  <class class=".proposalforms.ProposalAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.ris.proposal.IProposal"
+      class=".proposalforms.ProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>
