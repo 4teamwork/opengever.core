@@ -127,6 +127,7 @@ COPY --from=go-crond-builder /go/src/github.com/webdevops/go-crond /usr/local/bi
 
 VOLUME /data
 WORKDIR /app
-ENV PATH="/app/bin:$PATH"
+ENV PATH="/app/bin:$PATH" \
+    OG_AUTOSETUP=1
 USER plone
 EXPOSE 8160
