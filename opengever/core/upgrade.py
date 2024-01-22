@@ -428,15 +428,19 @@ class UIDMaintenanceJobContextManagerMixin(MaintenanceJobContextManagerMixin):
 
 class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
 
-    def __init__(self, idxs, index_in_solr_only=False):
+    def __init__(self, idxs, index_in_solr_only=False, index_in_catalog_only=False):
         self.idxs = idxs
         self.index_in_solr_only = index_in_solr_only
-        super(NightlyIndexer, self).__init__(index_in_solr_only)
+        self.index_in_catalog_only = index_in_catalog_only
+
+        super(NightlyIndexer, self).__init__(commit_to_solr=index_in_solr_only)
 
     @property
     def job_type(self):
         if self.index_in_solr_only:
             function_name = self.index_in_solr.__name__
+        elif self.index_in_catalog_only:
+            function_name = self.index_in_catalog_exclusively.__name__
         else:
             function_name = self.index_in_catalog.__name__
 
@@ -450,11 +454,23 @@ class NightlyIndexer(UIDMaintenanceJobContextManagerMixin):
             raise ValueError(
                 "Reindexing SearchableText in solr only is not supported")
 
+        if self.index_in_solr_only and self.index_in_catalog_only:
+            raise ValueError(
+                "'index_in_solr_only' and 'index_in_catalog_only' are "
+                "mutually exclusive")
+
     @classmethod
     def index_in_catalog(cls, key, idxs):
         obj = cls.key_to_obj(key)
         if obj:
             obj.reindexObject(idxs=idxs)
+
+    @classmethod
+    def index_in_catalog_exclusively(cls, key, idxs):
+        obj = cls.key_to_obj(key)
+        if obj:
+            catalog = api.portal.get_tool('portal_catalog')
+            catalog.reindexObject(obj, idxs=idxs)
 
     @classmethod
     def index_in_solr(cls, key, idxs):

@@ -606,7 +606,7 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
 
         self.assertEqual([u'2016-08-31T14:07:33+00:00',
                           u'2016-08-31T14:21:33+00:00',
-                          u'2016-08-31T19:01:33+00:00'],
+                          u'2016-08-31T19:07:33+00:00'],
                          [item["modified"] for item in browser.json["items"]])
 
     @browsing

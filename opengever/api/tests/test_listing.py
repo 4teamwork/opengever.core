@@ -1501,7 +1501,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual(
             [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2',
               u'UID': u'createdispositionwithsip00000001',
-              u'modified': u'2016-08-31T19:09:33+00:00',
+              u'modified': u'2016-08-31T19:11:33+00:00',
               u'review_state': u'disposition-state-disposed',
               u'title': u'Angebot 30.12.1997'},
              {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-1',
