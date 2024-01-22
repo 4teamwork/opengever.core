@@ -25,7 +25,6 @@
       component="AccessControl.security.SecurityPolicy" />
 
   <include package="opengever.setup" file="meta.zcml" />
-  <include package="ftw.tika" file="meta.zcml" />
   <include package="five.pt" file="meta.zcml" />
   <include package="plone.resource" file="meta.zcml" />
   <include package="plone.app.dexterity" file="meta.zcml" />
