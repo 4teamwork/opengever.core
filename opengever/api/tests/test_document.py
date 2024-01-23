@@ -60,6 +60,16 @@ class TestDocumentSerializer(IntegrationTestCase):
         self.assertEqual('.msg', browser.json.get(u'file_extension'))
 
     @browsing
+    def test_document_serialization_contains_position_in_parent(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.subdocument, headers={'Accept': 'application/json'})
+        self.assertEqual(0, browser.json['getObjPositionInParent'])
+
+        browser.open(self.empty_document, headers={'Accept': 'application/json'})
+        self.assertEqual(2, browser.json['getObjPositionInParent'])
+
+    @browsing
     def test_contains_additional_metadata(self, browser):
         self.login(self.regular_user, browser)
 

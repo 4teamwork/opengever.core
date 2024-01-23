@@ -20,6 +20,7 @@ from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import IJsonCompatible
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services.content.update import ContentPatch
+from Products.CMFPlone.CatalogTool import getObjPositionInParent
 from zExceptions import Forbidden
 from zope.component import adapter
 from zope.component import getMultiAdapter
@@ -71,6 +72,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
             'checked_out_fullname': checked_out_by_fullname,
             'checkout_collaborators': list(obj.get_collaborators()),
             'file_mtime': obj.get_file_mtime(),
+            'getObjPositionInParent': getObjPositionInParent(obj)(),
             'is_collaborative_checkout': obj.is_collaborative_checkout(),
             'is_locked': obj.is_locked(),
             'containing_dossier': obj.containing_dossier_title(),

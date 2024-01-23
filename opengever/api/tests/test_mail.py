@@ -51,6 +51,16 @@ class TestGetMail(IntegrationTestCase):
         self.assertEqual(expected_message, browser.json.get('original_message'))
 
     @browsing
+    def test_mail_serialization_contains_position_in_parent(self, browser):
+        self.login(self.regular_user, browser)
+
+        browser.open(self.subdocument, headers={'Accept': 'application/json'})
+        self.assertEqual(0, browser.json['getObjPositionInParent'])
+
+        browser.open(self.mail_msg, headers={'Accept': 'application/json'})
+        self.assertEqual(8, browser.json['getObjPositionInParent'])
+
+    @browsing
     def test_mail_serialization_contains_attachments(self, browser):
         self.login(self.regular_user, browser)
         mail = create(Builder('mail')

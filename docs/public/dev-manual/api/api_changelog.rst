@@ -13,6 +13,8 @@ Other Changes
 ^^^^^^^^^^^^^
 - Add `related_todo_list` field to workspace agenda items.
 
+- Add `getObjPositionInParent` metadata to documents and mails.
+
 
 2024.1.0 (2024-01-11)
 ---------------------
