@@ -23,7 +23,7 @@ class TestRisProposalViewsDisabled(IntegrationTestCase):
 
     @browsing
     def test_add_form_is_disabled(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.manager, browser)
         # This causes an infinite redirection loop between ++add++ and
         # require_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
@@ -35,7 +35,7 @@ class TestRisProposalViewsDisabled(IntegrationTestCase):
 
     @browsing
     def test_edit_form_is_disabled(self, browser):
-        self.login(self.regular_user, browser)
+        self.login(self.manager, browser)
         # This causes an infinite redirection loop between edit and
         # require_login. By enabling exception_bubbling we can catch the
         # Unauthorized exception and end the infinite loop.
@@ -47,6 +47,29 @@ class TestRisProposalViewsDisabled(IntegrationTestCase):
 class TestRisProposalViews(IntegrationTestCase):
 
     features = ('ris',)
+
+    @browsing
+    def test_proposal_edit_redirects_to_ris(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        ris_proposal = create(
+            Builder('ris_proposal')
+            .within(self.dossier)
+            .having(document=self.document)
+        )
+
+        browser.visit(ris_proposal)
+
+        browser.allow_redirects = False
+        editbar.contentview('Edit').click()
+
+        self.assertEqual(302, browser.status_code)
+        self.assertEqual(
+            'http://ris.example.com/spv/antrag-bearbeiten?context={}'.format(
+                ris_proposal.absolute_url()
+            ),
+            browser.headers['location']
+        )
 
     @browsing
     def test_proposal_can_be_created_in_browser_by_manager(self, browser):
@@ -68,8 +91,8 @@ class TestRisProposalViews(IntegrationTestCase):
         self.assert_workflow_state('proposal-state-active', browser.context)
 
     @browsing
-    def test_proposal_can_be_edited_in_browser(self, browser):
-        self.login(self.dossier_responsible, browser)
+    def test_proposal_can_be_edited_in_browser_by_manager(self, browser):
+        self.login(self.manager, browser)
 
         ris_proposal = create(
             Builder('ris_proposal')
@@ -78,7 +101,7 @@ class TestRisProposalViews(IntegrationTestCase):
         )
 
         browser.visit(ris_proposal)
-        editbar.contentview('Edit').click()
+        editbar.contentview('Edit (Manager: Debug)').click()
         self.assertEqual(u'Neue Klarinette', browser.find('Title').value)
 
         browser.fill({

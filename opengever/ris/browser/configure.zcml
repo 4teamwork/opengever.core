@@ -31,4 +31,11 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <browser:page
+      for="opengever.ris.proposal.IProposal"
+      class=".edit.EditInRisView"
+      name="edit-in-ris"
+      permission="cmf.ModifyPortalContent"
+      />
+
 </configure>

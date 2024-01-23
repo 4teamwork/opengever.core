@@ -8,6 +8,7 @@ _ = MessageFactory("opengever.ris")
 LEGACY_PROPOSAL_TYPE = "opengever.meeting.proposal"
 
 RIS_VIEW_ADD_PROPOSAL = 'spv/antrag-erstellen'
+RIS_VIEW_EDIT = 'spv/antrag-bearbeiten'
 RIS_VIEW_STATE_CHANGE = 'spv/antrag-status-modifizieren'
 
 
