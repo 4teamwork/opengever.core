@@ -49,10 +49,10 @@ class TestRisProposalViews(IntegrationTestCase):
     features = ('ris',)
 
     @browsing
-    def test_proposal_can_be_created_in_browser(self, browser):
-        self.login(self.dossier_responsible, browser)
+    def test_proposal_can_be_created_in_browser_by_manager(self, browser):
+        self.login(self.manager, browser)
         browser.open(self.dossier)
-        factoriesmenu.add('Proposal')
+        factoriesmenu.add('Proposal (Manager: Debug)')
         browser.fill({
             'Title': u'A pr\xf6posal',
             'Committee title ': u'Rechnungspr\xfcfungskommission',
