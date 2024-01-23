@@ -29,6 +29,13 @@
             "_zope_schema_type": "RelationList",
             "default": []
         },
+        "related_todo_list": {
+            "type": "string",
+            "title": "Verkn\u00fcpfte To-do-Liste",
+            "description": "",
+            "_zope_schema_type": "RelationChoice",
+            "_vocabulary": "<UID einer verkn\u00fcpften To-do-Liste"
+        },
         "changed": {
             "type": "string",
             "title": "Zuletzt ver\u00e4ndert",
@@ -45,6 +52,7 @@
         "text",
         "decision",
         "relatedItems",
+        "related_todo_list",
         "changed"
     ]
 }

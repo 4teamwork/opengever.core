@@ -94,6 +94,41 @@ class TestWorkspaceMeetingAgendaItem(IntegrationTestCase):
                          str(cm.exception))
 
     @browsing
+    def test_can_add_todo_list_reference(self, browser):
+        self.login(self.workspace_member, browser)
+        headers = self.api_headers.copy()
+        headers.update({'Prefer': 'return=representation'})
+
+        browser.open(self.workspace_meeting_agenda_item, method='PATCH',
+                     headers=headers,
+                     data=json.dumps({'related_todo_list': self.todolist_general.UID()}))
+
+        self.assertEqual(
+            self.todolist_general.absolute_url(),
+            browser.json.get('related_todo_list')['@id']
+        )
+
+    @browsing
+    def test_only_todo_lists_from_the_current_workspace_are_allowed_to_reference(self, browser):
+        self.login(self.workspace_member, browser)
+        headers = self.api_headers.copy()
+        headers.update({'Prefer': 'return=representation'})
+
+        workspace2 = create(Builder('workspace').within(self.workspace_root))
+        todolist = create(Builder('todolist')
+                          .titled(u'Foreign workspace')
+                          .within(workspace2))
+
+        browser.exception_bubbling = True
+        with self.assertRaises(BadRequest) as cm:
+            browser.open(self.workspace_meeting_agenda_item, method='PATCH',
+                         headers=headers,
+                         data=json.dumps({'related_todo_list': todolist.UID()}))
+
+        self.assertEqual("[{'field': 'related_todo_list', 'message': u'Constraint not satisfied', 'error': 'ValidationError'}]",
+                         str(cm.exception))
+
+    @browsing
     def test_members_can_delete_workspace_meeting_agenda_item(self, browser):
         self.login(self.workspace_member, browser)
         workspace_meeting_agenda_item_id = self.workspace_meeting_agenda_item.id
