@@ -3,11 +3,8 @@
 API Changelog
 =============
 
-2024.2.0 (unreleased)
+2024.2.0 (2024-01-24)
 ---------------------
-
-Breaking Changes
-^^^^^^^^^^^^^^^^
 
 Other Changes
 ^^^^^^^^^^^^^
