@@ -25,7 +25,7 @@ class KuBIntegrationTestCase(IntegrationTestCase):
         return url
 
     def mock_search(self, mocker, query_str, **kwargs):
-        url = u'{}search?q={}'.format(self.client.kub_api_url, query_str)
+        url = '{}search?q={}'.format(self.client.kub_api_url, query_str)
         mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
@@ -84,7 +84,7 @@ KUB_RESPONSES = {
         ]
     },
 
-    "http://localhost:8000/api/v2/search?q=kohler&is_active=True": {
+    "http://localhost:8000/api/v2/search?q=K%C3%B6nig&is_active=True": {
         "results": [
             {
                 "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
@@ -93,7 +93,7 @@ KUB_RESPONSES = {
                 "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
                 "organization": None,
                 "modified": "2021-11-13T00:00:00+01:00",
-                "text": "Kohler KUB Active",
+                "text": "K\xc3\xb6nig KUB Active",
                 "thirdPartyId": None,
                 "type": "organization",
                 "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
@@ -101,7 +101,7 @@ KUB_RESPONSES = {
         ]
     },
 
-    "http://localhost:8000/api/v2/search?q=kohler": {
+    "http://localhost:8000/api/v2/search?q=K%C3%B6nig": {
         "results": [
             {
                 "htmlUrl": "http://localhost:8000/organizations/30bab83d-300a-4886-97d4-ff592e88a56a",
@@ -110,7 +110,7 @@ KUB_RESPONSES = {
                 "id": "30bab83d-300a-4886-97d4-ff592e88a56a",
                 "organization": None,
                 "modified": "2021-11-13T00:00:00+01:00",
-                "text": "Kohler KUB Active",
+                "text": "K\xc3\xb6nig KUB Active",
                 "thirdPartyId": None,
                 "type": "organization",
                 "typedId": "organization:30bab83d-300a-4886-97d4-ff592e88a56a"
@@ -122,7 +122,7 @@ KUB_RESPONSES = {
                 "id": "8345fcfe-2d67-4b75-af46-c25b2f387448",
                 "organization": "30bab83d-300a-4886-97d4-ff592e88a56a",
                 "modified": "2021-11-18T00:00:00+01:00",
-                "text": "Kohler KUB Inactive",
+                "text": "K\xc3\xb6nig KUB Inactive",
                 "thirdPartyId": None,
                 "type": "membership",
                 "typedId": "membership:8345fcfe-2d67-4b75-af46-c25b2f387448"
