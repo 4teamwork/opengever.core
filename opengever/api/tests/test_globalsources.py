@@ -134,50 +134,50 @@ class TestGlobalSourcesGetWithKubContacts(KuBIntegrationTestCase):
 
     @browsing
     def test_query_contacts_shows_only_active_contacts(self, mocker, browser):
-        create(Builder('ogds_user').id('kohler.inactive')
-               .having(firstname='Kohler', lastname='Inactive', active=False))
+        create(Builder('ogds_user').id('jurgen.inactive')
+               .having(firstname=u'K\xf6nig', lastname='Inactive', active=False))
 
-        create(Builder('ogds_user').id('kohler.active')
-               .having(firstname='Kohler', lastname='Active', active=True))
+        create(Builder('ogds_user').id('jurgen.active')
+               .having(firstname=u'K\xf6nig', lastname='Active', active=True))
 
         self.login(self.regular_user, browser=browser)
-        query_str = "kohler&is_active=True"
-        self.mock_search(mocker, query_str)
+        query_str = "K%C3%B6nig&is_active=True"
+        url = self.mock_search(mocker, query_str)
 
-        url = '{}/@globalsources/contacts?query=kohler'.format(
+        url = '{}/@globalsources/contacts?query=K%C3%B6nig'.format(
             self.portal.absolute_url())
         browser.open(url, headers=self.api_headers)
 
         self.assertEqual(
             [
-                u'Kohler KUB Active',
-                u'Kohler Nicole (nicole.kohler)',
-                u'Active Kohler (kohler.active)'
+                u'K\xf6nig KUB Active',
+                u'K\xf6nig J\xfcrgen (jurgen.konig)',
+                u'Active K\xf6nig (jurgen.active)'
             ],
             [item.get('title') for item in browser.json["items"]])
 
     @browsing
     def test_query_contacts_shows_all_contacts(self, mocker, browser):
-        create(Builder('ogds_user').id('kohler.inactive')
-               .having(firstname='Kohler', lastname='Inactive', active=False))
+        create(Builder('ogds_user').id('jurgen.inactive')
+               .having(firstname=u'K\xf6nig', lastname='Inactive', active=False))
 
-        create(Builder('ogds_user').id('kohler.active')
-               .having(firstname='Kohler', lastname='Active', active=True))
+        create(Builder('ogds_user').id('jurgen.active')
+               .having(firstname=u'K\xf6nig', lastname='Active', active=True))
 
         self.login(self.regular_user, browser=browser)
-        query_str = "kohler"
+        query_str = "K%C3%B6nig"
         self.mock_search(mocker, query_str)
 
-        url = '{}/@globalsources/all_contacts?query=kohler'.format(
+        url = '{}/@globalsources/all_contacts?query=K%C3%B6nig'.format(
             self.portal.absolute_url())
         browser.open(url, headers=self.api_headers)
 
         self.assertEqual(
             [
-                u'Kohler KUB Active',
-                u'Kohler KUB Inactive',
-                u'Kohler Nicole (nicole.kohler)',
-                u'Inactive Kohler (kohler.inactive)',
-                u'Active Kohler (kohler.active)',
+                u'K\xf6nig KUB Active',
+                u'K\xf6nig KUB Inactive',
+                u'K\xf6nig J\xfcrgen (jurgen.konig)',
+                u'Inactive K\xf6nig (jurgen.inactive)',
+                u'Active K\xf6nig (jurgen.active)'
             ],
             [item.get('title') for item in browser.json["items"]])

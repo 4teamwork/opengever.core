@@ -3,6 +3,7 @@ from opengever.base.sentry import log_msg_to_sentry
 from opengever.kub.interfaces import IKuBSettings
 from persistent.mapping import PersistentMapping
 from plone import api
+from plone.dexterity.utils import safe_utf8
 from plone.memoize import ram
 from time import mktime
 from time import time
@@ -56,10 +57,10 @@ class KuBClient(object):
 
     def query(self, query_str, filters=dict()):
         search_filters = {
-            'q': query_str,
+            'q': safe_utf8(query_str),
         }
         search_filters.update(filters)
-        url = u'{}search?{}'.format(self.kub_api_url, urlencode(search_filters))
+        url = '{}search?{}'.format(self.kub_api_url, urlencode(search_filters))
         res = self.session.get(url)
         return res.json()
 
