@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.2.0 (2024-01-24)
+---------------------
+
+New features:
+
+
+- Add related_todo_list field to workspace agenda items. [elioschmutz] [CA-6152]
+- Make documents/mails in dossiers orderable by API clients. [deiferni] [HG-4035]
+
+
+Bug fixes:
+
+
+- Nested task templates: Also pass docs to subtasks that get started. [lgraf] [CA-6450]
+- Also update modification date when updating changed timestamp. [lgraf] [CA-6552]
+- Fix performance when checking if a workspace folder can be trashed. [buchi] [CA-6605]
+- Fix search for participations with umlauts. [elioschmutz] [CA-6649]
+- Fix Docker image: remove ZCML include of ftw.tika in Docker image. [buchi] [GH-7875]
+
+
 2024.1.0 (2024-01-11)
 ---------------------
 
