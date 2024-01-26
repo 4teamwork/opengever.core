@@ -146,7 +146,7 @@ class SolrReporterView(BaseReporterView):
             sort = 'modified desc'
 
         solr_query['sort'] = sort
-        solr_query['query'] = 'path:({})'.format(' OR '.join([escape(path) for path in paths]))
+        solr_query['fq'] = 'path:({})'.format(' OR '.join([escape(path) for path in paths]))
 
     def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
         listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")
