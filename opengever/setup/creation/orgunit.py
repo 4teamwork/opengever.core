@@ -19,12 +19,8 @@ class OrgUnitCreator(UnitCreator):
                            'inbox_group_id')
 
     def apply_development_config(self, item):
-        if self.is_policyless:
-            item['users_group_name'] = DEVELOPMENT_USERS_GROUP
-            item['inbox_group_name'] = DEVELOPMENT_USERS_GROUP
-        else:
-            item['users_group_id'] = DEVELOPMENT_USERS_GROUP
-            item['inbox_group_id'] = DEVELOPMENT_USERS_GROUP
+        item['users_group_name'] = DEVELOPMENT_USERS_GROUP
+        item['inbox_group_name'] = DEVELOPMENT_USERS_GROUP
 
     def preprocess(self, item):
         users_group_name = item.get('users_group_name')
