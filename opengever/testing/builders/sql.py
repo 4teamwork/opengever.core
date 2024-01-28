@@ -3,9 +3,12 @@ from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
+from opengever.dossiertransfer.model import DossierTransfer
+from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
@@ -605,3 +608,53 @@ class ReminderSettingsBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('reminder_setting_model', ReminderSettingsBuilder)
+
+
+class DossierTransferBuilder(SqlObjectBuilder):
+
+    mapped_class = DossierTransfer
+    id_argument_name = 'dossier_transfer_id'
+
+    def __init__(self, session):
+        super(DossierTransferBuilder, self).__init__(session)
+        self.arguments['title'] = 'Transfer Title'
+        self.arguments['message'] = 'Transfer Message'
+        self.arguments['source_id'] = 'plone'
+        self.arguments['target_id'] = 'recipient'
+        self.arguments['source_user_id'] = 'regular_user'
+        self.arguments['state'] = TRANSFER_STATE_PENDING
+        self.arguments['expires'] = utcnow_tz_aware() + timedelta(days=30)
+        self.arguments['root'] = 'createtreatydossiers000000000001'  # self.dossier
+        self.arguments['documents'] = ['createtreatydossiers000000000002']  # self.document
+        self.arguments['participations'] = ['p1']
+        self.arguments['all_documents'] = False
+        self.arguments['all_participations'] = False
+
+        self._with_default_target = True
+
+    def before_create(self):
+        if self._with_default_target:
+            self._create_target_admin_unit()
+
+    def with_source(self, admin_unit):
+        self.arguments['source_id'] = admin_unit.unit_id
+        return self
+
+    def with_target(self, admin_unit):
+        self._with_default_target = False
+        self.arguments['target_id'] = admin_unit.unit_id
+        return self
+
+    def with_source_user(self, ogds_user):
+        self.arguments['source_user_id'] = ogds_user.userid
+        return self
+
+    def _create_target_admin_unit(self, ):
+        target_au = create(Builder('admin_unit')
+                           .id('recipient')
+                           .having(title='Remote Recipient'))
+
+        self.arguments['target_id'] = target_au.unit_id
+
+
+builder_registry.register('dossier_transfer', DossierTransferBuilder)

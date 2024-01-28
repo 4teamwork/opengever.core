@@ -1,4 +1,5 @@
 from sqlalchemy import types
+import json
 
 
 def safe_unicode(value):
@@ -24,4 +25,27 @@ class UnicodeCoercingText(types.TypeDecorator):
     def process_result_value(self, value, dialect):
         if value is not None:
             value = safe_unicode(value)
+        return value
+
+
+class JSONList(types.TypeDecorator):
+    """TypeDecorator to emulate JSON columns for lists.
+
+    Because native JSON columns have only been added in Oracle 21, and
+    SQLAlchemy doesn't support them yet (see GH #10375), we emulate them by
+    storing data in a Text column, and doing JSON serialization on the way
+    in/out in Python.
+    """
+
+    impl = types.Text
+
+    def process_bind_param(self, value, dialect):
+        assert isinstance(value, (tuple, list, type(None)))
+        if value is not None:
+            value = json.dumps(value)
+        return value
+
+    def process_result_value(self, value, dialect):
+        if value is not None:
+            value = tuple(json.loads(value))
         return value
