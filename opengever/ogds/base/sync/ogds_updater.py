@@ -28,6 +28,7 @@ from zope.globalrequest import getRequest
 from zope.interface import implementer
 import logging
 import os
+import requests
 import time
 
 
@@ -178,6 +179,7 @@ class OGDSUpdater(object):
 
     def __init__(self, context):
         self.context = context
+        self.ogds_sync_url = os.environ.get('OGDS_SYNC_URL', '').rstrip('/')
 
     def get_sql_user(self, userid):
         """Returns the OGDS user object identified by `userid`.
@@ -241,6 +243,16 @@ class OGDSUpdater(object):
     def import_users(self):
         """Imports users from all the configured LDAP plugins into OGDS.
         """
+        if self.ogds_sync_url:
+            try:
+                resp = requests.post(self.ogds_sync_url + '/sync-users')
+                resp.raise_for_status()
+            except requests.exceptions.RequestException:
+                logger.exception('Syncing users failed.')
+            else:
+                logger.info(resp.text)
+            return
+
         session = create_session()
 
         ldap_users = self.ldap_users()
@@ -271,6 +283,16 @@ class OGDSUpdater(object):
     def import_groups(self):
         """Imports groups from all the configured LDAP plugins into OGDS.
         """
+        if self.ogds_sync_url:
+            try:
+                resp = requests.post(self.ogds_sync_url + '/sync-groups')
+                resp.raise_for_status()
+            except requests.exceptions.RequestException:
+                logger.exception('Syncing groups failed.')
+            else:
+                logger.info(resp.text)
+            return
+
         session = create_session()
 
         ldap_groups, ldap_group_members = self.ldap_groups_and_members()
