@@ -1,0 +1,558 @@
+version: 1
+
+dn: dc=dev,dc=onegovgever,dc=ch
+objectClass: dcObject
+objectClass: organization
+dc: dev
+o: OneGov GEVER development
+
+dn: ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: organizationalUnit
+ou: Users
+
+dn: ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: organizationalUnit
+ou: Groups
+
+dn: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Boss Hugo
+displayName: Hugo Boss
+givenName: Hugo
+mail: hugo.boss@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+sn: Boss
+uid: hugo.boss
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Muster Stefanie,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Muster Stefanie
+displayName: Stefanie Muster
+givenName: Stefanie
+mail: stefanie.muster@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+sn: Muster
+uid: stefanie.muster
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Bonn Lisa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Bonn Lisa
+sn: Bonn
+uid: lisa.bonn
+givenName: Lisa
+mail: demo+lisa.bonn@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Lisa Bonn
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+
+dn: cn=Bär Roy,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Bär Roy
+sn: Bär
+uid: roy.baer
+givenName: Roy
+mail: demo+roy.baer@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Roy Bär
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Case Justin
+sn: Case
+uid: justin.case
+givenName: Justin
+mail: demo+justin.case@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Justin Case
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Vista Bella,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Vista Bella
+sn: Vista
+uid: bella.vista
+givenName: Bella
+mail: demo+bella.vista@4teamwork.ch
+o: Staatskanzlei
+ou: Sekretariat
+displayName: Bella Vista
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Furt Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Furt Frank
+sn: Furt
+uid: frank.furt
+givenName: Frank
+mail: demo+frank.furt@4teamwork.ch
+o: Staatskanzlei
+ou: Sekretariat
+displayName: Frank Furt
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Nist Pia,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Nist Pia
+sn: Nist
+uid: pia.nist
+givenName: Pia
+mail: demo+pia.nist@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Pia Nist
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Zufall Rainer,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Zufall Rainer
+sn: Zufall
+uid: rainer.zufall
+givenName: Rainer
+mail: demo+rainer.zufall@4teamwork.ch
+o: Staatskanzlei
+ou: Sekretariat
+displayName: Rainer Zufall
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Nass Anna
+sn: Nass
+uid: anna.nass
+givenName: Anna
+mail: demo+anna.nass@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Anna Nass
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Thon Mara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Thon Mara
+sn: Thon
+uid: mara.thon
+givenName: Mara
+mail: demo+mara.thon@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Mara Thon
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Utzer Ben,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Utzer Ben
+sn: Utzer
+uid: ben.utzer
+givenName: Ben
+mail: demo+ben.utzer@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Ben Utzer
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Fall Clara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Fall Clara
+sn: Fall
+uid: clara.fall
+givenName: Clara
+mail: demo+clara.fall@4teamwork.ch
+o: Staatskanzlei
+ou: Sekretariat
+displayName: Clara Fall
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Reich Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Reich Frank
+sn: Reich
+uid: frank.reich
+givenName: Frank
+mail: demo+frank.reich@4teamwork.ch
+o: Finanzdepartement
+ou: Steuerverwaltung
+displayName: Frank Reich
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Pott Jack,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Pott Jack
+sn: Pott
+uid: jack.pott
+givenName: Jack
+mail: demo+jack.pott@4teamwork.ch
+o: Finanzdepartement
+ou: Steuerverwaltung
+displayName: Jack Pott
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Held Roman,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Held Roman
+sn: Held
+uid: roman.held
+givenName: Roman
+mail: demo+roman.held@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Roman Held
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Rahm Wolf,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Rahm Wolf
+sn: Rahm
+uid: wolf.rahm
+givenName: Wolf
+mail: demo+wolf.rahm@4teamwork.ch
+o: Staatskanzlei
+ou: Sekretariat
+displayName: Wolf Rahm
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Lage Claire-Ann,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Lage Claire-Ann
+sn: Lage
+uid: claire-ann.lage
+givenName: Claire-Ann
+mail: demo+claire-ann.lage@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Claire-Ann Lage
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Roth Rosa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Roth Rosa
+sn: Roth
+uid: rosa.roth
+givenName: Rosa
+mail: demo+rosa.roth@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Rosa Roth
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Ono Kim,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Ono Kim
+sn: Ono
+uid: kim.ono
+givenName: Kim
+mail: demo+kim.ono@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Kim Ono
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Diener Bernhard,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Diener Bernhard
+sn: Diener
+uid: bernhard.diener
+givenName: Bernhard
+mail: demo+bernhard.diener@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Bernhard Diener
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Eitz Jens,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Eitz Jens
+sn: Eitz
+uid: jens.eitz
+givenName: Jens
+mail: demo+jens.eitz@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Jens Eitz
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Thor Moni,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Thor Moni
+sn: Thor
+uid: moni.thor
+givenName: Moni
+mail: demo+moni.thor@4teamwork.ch
+o: Finanzdepartement
+ou: Steuerverwaltung
+displayName: Moni Thor
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Beau Harry,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Beau Harry
+sn: Beau
+uid: harry.beau
+givenName: Harry
+mail: demo+harry.beau@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Harry Beau
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Mumm Maxi,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Mumm Maxi
+sn: Mumm
+uid: Maxi.Mumm
+givenName: Maxi
+mail: demo+maxi.mumm@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Maxi Mumm
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+objectClass: inetOrgPerson
+cn: Nette Marion
+sn: Nette
+uid: marion.nette
+givenName: Marion
+mail: demo+marion.nette@4teamwork.ch
+o: Finanzdepartement
+ou: Amt für Informatik
+displayName: Marion Nette
+userPassword:: e1NTSEE1MTJ9eEV2ZTMwMkNxekJMYVRpbk5XZTR0OTZPTFM2Mkp4YzZXMnFuQ
+ 2dUUlRkMVhwcmk2czZUMDRDSGZMOEl3NVpQL1FjRmx5SVhkclRPcG5iM1hvZVU5eC96VzRKdnlI
+ dTVp
+
+dn: cn=FD-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-Alle
+description: Finanzdepartement - Alle
+uniqueMember: cn=FD-AFI-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=FD-STV-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-Admin,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-Admin
+description: Finanzdepartement - Alle
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-Record-Manager,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-Record-Manager
+description: Finanzdepartement - Alle
+uniqueMember: cn=Lage Claire-Ann,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-Archivaren,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-Archivaren
+description: Finanzdepartement - Alle
+uniqueMember: cn=Utzer Ben,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-AFI-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-AFI-Alle
+description: Amt für Informatik - Alle
+uniqueMember: cn=Beau Harry,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Bonn Lisa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Bär Roy,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Diener Bernhard,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Eitz Jens,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Held Roman,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Lage Claire-Ann,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Mumm Maxi,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Muster Stefanie,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nist Pia,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Ono Kim,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Roth Rosa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Thon Mara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Utzer Ben,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-AFI-Sekretariat,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-AFI-Sekretariat
+description: Amt für Informatik - Sekretariat
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-AFI-Leitung,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-AFI-Leitung
+description: Amt für Informatik - Leitung
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Bär Roy,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-AFI-Admin,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-AFI-Admin
+description: Amt für Informatik - Administratoren
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-STV-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-STV-Alle
+description: Steuerverwaltung - Alle
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Muster Stefanie,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Pott Jack,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Reich Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Thor Moni,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-STV-Sekretariat,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-STV-Sekretariat
+description: Steuerverwaltung - Sekretariat
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Pott Jack,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=FD-STV-Leitung,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: FD-STV-Leitung
+description: Steuerverwaltung - Leitung
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=SKA-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: SKA-Alle
+description: Staatskanzlei - Alle
+uniqueMember: cn=SKA-SK-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=SKA-SK-Alle,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: SKA-SK-Alle
+description: Sekretariat Staatskanzlei - Alle
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Fall Clara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Furt Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Muster Stefanie,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Rahm Wolf,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Vista Bella,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Zufall Rainer,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: organizationalUnit
+ou: Dev
+
+dn: cn=og_demo-ftw_users,ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: og_demo-ftw_users
+description: Demo FTW Users
+uniqueMember: cn=Beau Harry,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Bonn Lisa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Bär Roy,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Diener Bernhard,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Eitz Jens,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Fall Clara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Furt Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Held Roman,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Lage Claire-Ann,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Mumm Maxi,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Muster Stefanie,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nist Pia,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Ono Kim,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Pott Jack,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Rahm Wolf,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Reich Frank,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Roth Rosa,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Thon Mara,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Thor Moni,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Utzer Ben,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Vista Bella,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Zufall Rainer,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=archiv,ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: archiv
+description: Archivaren
+uniqueMember: cn=Utzer Ben,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nette Marion,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=gever_admins,ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: gever_admins
+description: GEVER Administratoren
+uniqueMember: cn=Boss Hugo,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Case Justin,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=gever_reader,ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: gever_reader
+description: GEVER Lesezugriff
+uniqueMember: cn=Beau Harry,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Held Roman,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Ono Kim,ou=Users,dc=dev,dc=onegovgever,dc=ch
+
+dn: cn=record_managers,ou=Dev,ou=Groups,dc=dev,dc=onegovgever,dc=ch
+objectClass: groupOfUniqueNames
+cn: record_managers
+description: Records Manager
+uniqueMember: cn=Lage Claire-Ann,ou=Users,dc=dev,dc=onegovgever,dc=ch
+uniqueMember: cn=Nass Anna,ou=Users,dc=dev,dc=onegovgever,dc=ch

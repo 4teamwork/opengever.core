@@ -94,12 +94,14 @@ services:
       - 8099:8080
     environment:
       - OGDS_DSN=postgresql://${OGDS_DB_USER}:${OGDS_DB_PASSWORD}@${OGDS_DB_HOST}/${OGDS_DB_NAME}
-      - LDAP_PROFILE=DS389Legacy
+      - LDAP_PROFILE=OpenLDAP
       - LDAP_URL=${LDAP_SERVER_URI}
       - LDAP_BIND_DN=${LDAP_BIND_DN}
       - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
       - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
       - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN}
+      - 'USER_ATTRIBUTE_MAPPING={"external_id":"entryUUID","username":"uid","firstname":"givenName","lastname":"sn","email":"mail","display_name":"displayName","organization":"o","department":"ou"}'
+      - 'GROUP_ATTRIBUTE_MAPPING={"external_id":"entryUUID","groupname":"cn","title":"description"}'
     depends_on:
       - ogds
   solr:
@@ -114,6 +116,18 @@ services:
       - SOLR_CORES=development testing functionaltesting testserver
     ports:
       - 8983:8983
+  ldap:
+    image: bitnami/openldap:2.6
+    ports:
+      - 1389:1389
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=secret
+      - LDAP_ROOT=dc=dev,dc=onegovgever,dc=ch
+      - LDAP_ADMIN_DN=cn=admin,dc=dev,dc=onegovgever,dc=ch
+    volumes:
+      - ./docker/ldap.ldif:/ldifs/ldap.ldif
+      - ./var/openldap:/bitnami/openldap
   ianus-frontend:
     image: ghcr.io/4teamwork/ianus-frontend:2021.4.4
     ports:
