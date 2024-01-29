@@ -18,4 +18,12 @@
       permission="cmf.ManagePortal"
       />
 
+  <plone:service
+      method="GET"
+      name="@dossier-transfers"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.get.DossierTransfersGet"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
