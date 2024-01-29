@@ -1,3 +1,4 @@
+from inspect import isclass
 from opengever.api.exceptions import InvalidBase64DataURI
 from opengever.api.exceptions import UnknownField
 from urlparse import urlparse
@@ -12,6 +13,7 @@ from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.interfaces import RequiredMissing
 import binascii
+import dateutil
 
 
 class SchemaValidationData(dict):
@@ -82,8 +84,11 @@ def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False
             errors.append((name, RequiredMissing(name)))
         else:
             try:
-                field.bind(action_data).validate(value)
+                bound = field.bind(action_data)
+                bound.validate(value)
             except ValidationError as e:
+                # For datetime strings can't be parsed by dateutil because of
+                # an invalid format, just a generic WrongType will be raised.
                 errors.append((name, e))
 
     if not allow_unknown_fields:
@@ -140,7 +145,8 @@ def validate_no_unknown_fields(action_data, schema):
 
 
 def scrub_json_payload(jsondata, schema):
-    """Casts some of the unicode strings in JSON payloads to bytestrings.
+    """Casts some of the unicode strings in JSON payloads to bytestrings
+    or datetimes.
 
     Strings in dicts deserialized from JSON are always unicode. But because
     some of the fields as defined in the zope schema are actually ASCII
@@ -152,15 +158,40 @@ def scrub_json_payload(jsondata, schema):
     vocabs that contain ASCII values) this would go unnoticed, and we could
     end up with a mix of bytestrings vs. unicode for the same field in our
     storage, depending on how exactly they were set.
+
+    For datetimes, JSON has no native datetime type, and those strings
+    therefore need to be parsed to Python datetimes first.
     """
     def safe_utf8(s):
         if isinstance(s, unicode):
             s = s.encode('utf8')
         return s
 
+    def is_datetime_like(pytype):
+        if not isclass(pytype):
+            return False
+        return pytype.__name__ in ('datetime', 'FrozenDatetime')
+
     for key, value in jsondata.items():
         if key in schema:
             field = schema[key]
+
+            # If field is a Choice field, also accept {"token": "..."}
+            # style object's to make API consumers' life easier.
+            if isinstance(field, Choice) and isinstance(value, dict):
+                if 'token' in value:
+                    value = jsondata[key] = value['token']
+
+            # Field may be a datetime
+            pytype = getattr(field, '_type', None)
+            if is_datetime_like(pytype) and isinstance(value, unicode):
+                try:
+                    jsondata[key] = dateutil.parser.parse(value)
+                except ValueError:
+                    # Don't raise validation errors yet, that's the
+                    # responsibility of get_schema_validation_errors()
+                    pass
+                continue
 
             # Field itself may be of a bytestring type
             pytype = getattr(field, '_type', None)
@@ -177,11 +208,12 @@ def scrub_json_payload(jsondata, schema):
                 else:
                     vocabulary = field.vocabulary
 
-                terms = [t.value for t in vocabulary]
+                if vocabulary:
+                    terms = [t.value for t in vocabulary]
 
-                if isinstance(terms[0], str) and isinstance(value, unicode):
-                    jsondata[key] = value.encode('utf-8')
-                    continue
+                    if terms and isinstance(terms[0], str) and isinstance(value, unicode):
+                        jsondata[key] = value.encode('utf-8')
+                        continue
 
             # Field's value_type may indicate bytestring type
             if isinstance(field, List):

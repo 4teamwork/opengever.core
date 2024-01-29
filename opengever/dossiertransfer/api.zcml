@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="opengever.dossiertransfer">
+
+  <include package="plone.rest" file="meta.zcml" />
+  <include package="plone.restapi" file="permissions.zcml" />
+
+  <adapter factory=".api.serializers.SerializeDossierTransferToJson" />
+
+  <plone:service
+      method="POST"
+      name="@dossier-transfers"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.post.DossierTransfersPost"
+      permission="cmf.ManagePortal"
+      />
+
+</configure>
