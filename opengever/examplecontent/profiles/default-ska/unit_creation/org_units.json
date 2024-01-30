@@ -3,7 +3,7 @@
     "unit_id": "ska-sk",
     "title": "Sekretariat Staatskanzlei",
     "admin_unit_id": "ska",
-    "users_group_id": "og_demo-ftw_users",
-    "inbox_group_id": "og_demo-ftw_users"
+    "users_group_name": "og_demo-ftw_users",
+    "inbox_group_name": "og_demo-ftw_users"
   }
 ]

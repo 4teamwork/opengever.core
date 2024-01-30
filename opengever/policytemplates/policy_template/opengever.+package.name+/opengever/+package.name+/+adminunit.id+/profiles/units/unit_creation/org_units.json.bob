@@ -1,7 +1,7 @@
 [
   {
-    "inbox_group_id": "{{{orgunit.inbox_group}}}",
-    "users_group_id": "{{{orgunit.users_group}}}",
+    "inbox_group_name": "{{{orgunit.inbox_group}}}",
+    "users_group_name": "{{{orgunit.users_group}}}",
     "admin_unit_id": "{{{adminunit.id}}}",
     "unit_id": "{{{orgunit.id}}}",
     "title": "{{{orgunit.title}}}"}

@@ -63,6 +63,7 @@ services:
       - SABLON_URL=http://sablon:8080/
       - PDFLATEX_URL=http://pdflatex:8080/
       - WEASYPRINT_URL=http://weasyprint:8080/
+      - OGDS_SYNC_URL=http://ogds-sync:8099/
     depends_on:
       - zeoserver
       - ogds
@@ -93,7 +94,7 @@ services:
       - 8099:8080
     environment:
       - OGDS_DSN=postgresql://${OGDS_DB_USER}:${OGDS_DB_PASSWORD}@${OGDS_DB_HOST}/${OGDS_DB_NAME}
-      - LDAP_PROFILE=DS389
+      - LDAP_PROFILE=DS389Legacy
       - LDAP_URL=${LDAP_SERVER_URI}
       - LDAP_BIND_DN=${LDAP_BIND_DN}
       - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
