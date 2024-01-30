@@ -40,7 +40,14 @@ class TouchModifiedTimestampForObjectsWhereChangedIsNewer(UpgradeStep):
                 if not changed:
                     continue
 
-                if changed > (modified + TOLERANCE):
+                needs_touching = False
+                try:
+                    needs_touching = changed > (modified + TOLERANCE)
+                except TypeError:
+                    # Probably a TZ aware vs. naive mismatch
+                    needs_touching = True
+
+                if needs_touching:
                     found_total += 1
                     found_by_type[brain.portal_type] += 1
                     obj = brain.getObject()
