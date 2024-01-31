@@ -2,13 +2,13 @@
   {
     "_path": "/ordnungssystem/fuehrung/kommunikation/allgemeines/dossier-1",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Jahresdossier 2014",
     "_children": [
       {
         "_id": "dossier-2",
         "_type": "opengever.dossier.businesscasedossier",
-        "responsible": "philippe.gross",
+        "responsible": "hugo.boss",
         "title": "Unterteilung in ein Subdossier"
       },
       {
@@ -22,19 +22,19 @@
   {
     "_path": "/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-2",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Sitzungen 2014"
   },
   {
     "_path": "/ordnungssystem/fuehrung/interne-organisation/planung-und-organisatorisches/dossier-3",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "pascal.habegger",
+    "responsible": "stefanie.muster",
     "title": "Sitzungen 2015"
   },
   {
     "_path": "/ordnungssystem/ressourcen-und-support/personal/personalrekrutierung/dossier-4",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "pascal.habegger",
+    "responsible": "stefanie.muster",
     "title": "Hans Baumann",
     "_children": [
       {
@@ -54,7 +54,7 @@
   {
     "_path": "/ordnungssystem/ressourcen-und-support/personal/personalrekrutierung/dossier-5",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Hannah Baufrau",
     "_children": [
       {
@@ -81,7 +81,7 @@
   {
     "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-5",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "david.erni",
+    "responsible": "lisa.bonn",
     "title": "Finanzplanung 2015-1019",
     "_children": [
       {
@@ -102,7 +102,7 @@
   {
     "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/finanzplanung/dossier-6",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Voranschlag 2015",
     "description": "Festsetzung der Steueranlage",
     "_children": [
@@ -118,7 +118,7 @@
   {
     "_path": "/ordnungssystem/ressourcen-und-support/finanzen/planung/investitionsplanung/dossier-7",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "pascal.habegger",
+    "responsible": "stefanie.muster",
     "title": "Revision Einrichtung, Liebefeld",
     "_children": [
       {
@@ -139,7 +139,7 @@
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-1",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Dossier Rechtskommission 2016-iaio",
     "_children": [
       {
@@ -160,7 +160,7 @@
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einwohnerkontrolle/dossier-2",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Gesetzesentwürfe",
     "_children": [
       {
@@ -175,14 +175,14 @@
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/dossier-8",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "OGGBundle Import"
   },
 
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/evil-dossier-1",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Evil dossier <script>alert('evil');</script>",
     "description": "<script>alert('evil');</script>",
     "_children": [
@@ -199,7 +199,7 @@
   {
     "_path": "/ordnungssystem/bevoelkerung-und-sicherheit/einbuergerungen/dossier-9",
     "_type": "opengever.dossier.businesscasedossier",
-    "responsible": "philippe.gross",
+    "responsible": "hugo.boss",
     "title": "Dossier zum Aussondern",
     "start": "2000-1-1",
     "end": "2001-1-1",

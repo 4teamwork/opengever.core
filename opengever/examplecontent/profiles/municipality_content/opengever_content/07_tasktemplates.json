@@ -14,7 +14,7 @@
             "deadline": 10,
             "preselected": true,
             "responsible_client": "afi",
-            "responsible": "philippe.gross"
+            "responsible": "hugo.boss"
         },
         {
             "_id": "tasktemplate-2",
@@ -26,7 +26,7 @@
             "deadline": 7,
             "preselected": true,
             "responsible_client": "afi",
-            "responsible": "philippe.gross"
+            "responsible": "hugo.boss"
         },
         {
             "_id": "tasktemplate-3",
@@ -49,7 +49,7 @@
             "deadline": 7,
             "preselected": true,
             "responsible_client": "afi",
-            "responsible": "philippe.gross"
+            "responsible": "hugo.boss"
         }
     ]
 }]
