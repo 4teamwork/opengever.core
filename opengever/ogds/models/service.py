@@ -91,9 +91,10 @@ class OGDSService(object):
         return self._query_admin_units(
             enabled_only=False, visible_only=False).get(unit_id)
 
-    def all_admin_units(self, enabled_only=True, visible_only=True):
+    def all_admin_units(self, enabled_only=True, visible_only=True, omit_current=False):
         query = self._query_admin_units(enabled_only=enabled_only,
-                                        visible_only=visible_only)
+                                        visible_only=visible_only,
+                                        omit_current=omit_current)
         return query.all()
 
     def has_multiple_admin_units(self, enabled_only=True, visible_only=True):
@@ -115,12 +116,17 @@ class OGDSService(object):
     def fetch_group_by_groupname(self, groupname):
         return self._query_group().filter_by(groupname=groupname).first()
 
-    def _query_admin_units(self, enabled_only=True, visible_only=True):
+    def _query_admin_units(self, enabled_only=True, visible_only=True, omit_current=False):
         query = AdminUnit.query
         if enabled_only:
             query = query.filter_by(enabled=True)
         if visible_only:
             query = query.filter_by(hidden=False)
+        if omit_current:
+            # Avoid circular imports
+            from opengever.ogds.base.utils import get_current_admin_unit
+            current_admin_unit = get_current_admin_unit()
+            query = query.filter(AdminUnit.unit_id != current_admin_unit.unit_id)
         return query
 
     def all_groups(self, active_only=True):

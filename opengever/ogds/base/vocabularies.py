@@ -55,6 +55,24 @@ class OtherAssignedClientsVocabularyFactory(object):
             yield (org_unit.id(), org_unit.label())
 
 
+@implementer(IVocabularyFactory)
+class AllOtherAdminUnitsVocabularyFactory(object):
+    """Vocabulary of all enabled admin unids excluding the current.
+    """
+
+    def __call__(self, context):
+        self.context = context
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        for unit in ogds_service().all_admin_units(enabled_only=True,
+                                                   visible_only=True,
+                                                   omit_current=True):
+            yield (unit.id(), unit.label())
+
+
 @implementer(IQuerySource)
 class ContactsVocabulary(SimpleVocabulary):
     """Base vocabulary for other, more specific vocabularies.

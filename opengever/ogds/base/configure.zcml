@@ -49,6 +49,11 @@
       name="opengever.ogds.base.OtherAssignedClientsVocabulary"
       />
 
+  <utility
+      factory=".vocabularies.AllOtherAdminUnitsVocabularyFactory"
+      name="opengever.ogds.base.all_other_admin_units"
+      />
+
   <adapter factory=".docprops.OGDSUserDocPropertyProvider" />
 
   <genericsetup:registerProfile
