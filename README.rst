@@ -21,11 +21,10 @@ development buildout config file, create a virtualenv, install and run buildout:
     $ bin/pip install zc.buildout==2.13.3
     $ bin/buildout
 
-Create a ``.env`` file from the sample file and run the services with Docker Compose:
+Run the required services with Docker Compose:
 
 .. code::
 
-    $ cp .env.sample .env
     $ docker compose up -d
 
 
@@ -291,6 +290,7 @@ for local development by default:
 - `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
 - ogds (PostgreSQL server)
 - `ogds-sync <https://github.com/4teamwork/ogds-sync>`_
+- ldap (OpenLDAP server)
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
@@ -299,14 +299,8 @@ Docker on your local machine.
 A `Docker Compose <https://docs.docker.com/compose/>`_ file is provided in this
 repo to easily run the services.
 
-Before running the services with Docker a few configuration settings are required
-to be provided in a ``.env`` file. A sample is provided in ``.env.sample`` and
-can be copied: 
-
-.. code::
-
-  cp .env.sample .env
-
+To customize configuration settings of the Docker services, create a ``.env`` file
+and set the environment variables accordingly. A sample is provided in ``.env.sample``.
 
 To start the services simply run:
 

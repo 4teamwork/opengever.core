@@ -83,9 +83,9 @@ services:
     volumes:
       - ogds:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${OGDS_DB_USER}
-      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD}
-      - POSTGRES_DB=${OGDS_DB_NAME}
+      - POSTGRES_USER=${OGDS_DB_USER:-ogds}
+      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD:-secret}
+      - POSTGRES_DB=${OGDS_DB_NAME:-ogds}
     ports:
       - 15432:5432
   ogds-sync:
@@ -93,15 +93,13 @@ services:
     ports:
       - 8099:8080
     environment:
-      - OGDS_DSN=postgresql://${OGDS_DB_USER}:${OGDS_DB_PASSWORD}@${OGDS_DB_HOST}/${OGDS_DB_NAME}
-      - LDAP_PROFILE=OpenLDAP
-      - LDAP_URL=${LDAP_SERVER_URI}
-      - LDAP_BIND_DN=${LDAP_BIND_DN}
-      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
-      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
-      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN}
-      - 'USER_ATTRIBUTE_MAPPING={"external_id":"entryUUID","username":"uid","firstname":"givenName","lastname":"sn","email":"mail","display_name":"displayName","organization":"o","department":"ou"}'
-      - 'GROUP_ATTRIBUTE_MAPPING={"external_id":"entryUUID","groupname":"cn","title":"description"}'
+      - OGDS_DSN=postgresql://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}/${OGDS_DB_NAME:-ogds}
+      - LDAP_PROFILE=${LDAP_PROFILE:-OpenLDAP}
+      - LDAP_URL=${LDAP_SERVER_URI:-ldap://ldap:1389}
+      - LDAP_BIND_DN=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-secret}
+      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN:-ou=Users,dc=dev,dc=onegovgever,dc=ch}
+      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN:-ou=Groups,dc=dev,dc=onegovgever,dc=ch}
     depends_on:
       - ogds
   solr:
@@ -159,10 +157,10 @@ services:
       - DJANGO_DATABASE_PORT=5432
       - DJANGO_TWO_FACTOR_REQUIRED=False
       - DJANGO_OIDC_RP_SIGN_ALGO=HS256
-      - DJANGO_AUTH_LDAP_BIND_DN=${LDAP_BIND_DN}
-      - DJANGO_AUTH_LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
-      - DJANGO_AUTH_LDAP_SERVER_URI=${LDAP_SERVER_URI}
-      - DJANGO_AUTH_LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
+      - DJANGO_AUTH_LDAP_BIND_DN=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+      - DJANGO_AUTH_LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-secret}
+      - DJANGO_AUTH_LDAP_SERVER_URI=${LDAP_SERVER_URI:-ldap://ldap:1389}
+      - DJANGO_AUTH_LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN:-ou=Users,dc=dev,dc=onegovgever,dc=ch}
       - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
     profiles:
       - all
