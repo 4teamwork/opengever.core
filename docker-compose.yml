@@ -207,13 +207,6 @@ volumes:
   ogds:
   clam_db:
 
-networks:
-  default:
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.16.4.0/24
-
 secrets:
   gldt:
     environment: GITLAB_DEPLOY_TOKEN
