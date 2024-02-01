@@ -55,6 +55,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.meeting.MemberVocabulary',
     'opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
     'opengever.meeting.ProposalTemplatesVocabulary',
+    'opengever.ogds.base.all_admin_units',
     'opengever.ogds.base.all_other_admin_units',
     'opengever.ogds.base.AssignedClientsVocabulary',
     'opengever.ogds.base.OrgUnitsVocabularyFactory',
@@ -603,5 +604,27 @@ class TestAllOtherAdminUnitsVocabulary(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
         self.assertEqual(
             [u'plone', u'unit-2'],
+            [admin_unit.get('token') for admin_unit in browser.json.get('items')]
+        )
+
+
+class TestAllAdminUnitsVocabulary(IntegrationTestCase):
+
+    @browsing
+    def test_all_admin_units_excludes_current_unit(self, browser):
+        create(Builder('admin_unit').id('unit-2'))
+        create(Builder('admin_unit').id('unit-3'))
+        create(Builder('admin_unit').id('unit-4').having(enabled=False))
+        create(Builder('admin_unit').id('unit-5').having(hidden=True))
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = u'unit-3'
+
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@vocabularies/opengever.ogds.base.all_admin_units'
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            [u'plone', u'unit-2', 'unit-3'],
             [admin_unit.get('token') for admin_unit in browser.json.get('items')]
         )

@@ -73,6 +73,23 @@ class AllOtherAdminUnitsVocabularyFactory(object):
             yield (unit.id(), unit.label())
 
 
+@implementer(IVocabularyFactory)
+class AllAdminUnitsVocabularyFactory(object):
+    """Vocabulary of all enabled admin units.
+    """
+
+    def __call__(self, context):
+        self.context = context
+        vocab = ContactsVocabulary.create_with_provider(
+            self.key_value_provider)
+        return vocab
+
+    def key_value_provider(self):
+        for unit in ogds_service().all_admin_units(enabled_only=True,
+                                                   visible_only=True):
+            yield (unit.id(), unit.label())
+
+
 @implementer(IQuerySource)
 class ContactsVocabulary(SimpleVocabulary):
     """Base vocabulary for other, more specific vocabularies.

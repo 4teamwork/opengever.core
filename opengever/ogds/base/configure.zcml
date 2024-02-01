@@ -54,6 +54,11 @@
       name="opengever.ogds.base.all_other_admin_units"
       />
 
+  <utility
+      factory=".vocabularies.AllAdminUnitsVocabularyFactory"
+      name="opengever.ogds.base.all_admin_units"
+      />
+
   <adapter factory=".docprops.OGDSUserDocPropertyProvider" />
 
   <genericsetup:registerProfile
