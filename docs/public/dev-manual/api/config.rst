@@ -67,6 +67,7 @@ GEVER-Mandanten abgefragt werden.
               "doc_properties": true,
               "dossier_checklist": true,
               "dossier_templates": true,
+              "dossier_transfers": false,
               "ech0147_export": true,
               "ech0147_import": true,
               "favorites": true,
@@ -186,6 +187,9 @@ features
 
     dossier_templates
         Dossier Vorlagen
+
+    dossier_transfers
+        Übertragen von Dossiers
 
     ech0147_export
         eCH-0039/eCH-0147 Export von Dossiers und Dokumenten

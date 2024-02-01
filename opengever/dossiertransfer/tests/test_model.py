@@ -14,6 +14,8 @@ import pytz
 
 class TestDossierTransferModel(IntegrationTestCase):
 
+    features = ('dossier-transfers', )
+
     def test_dossier_transfer_creation(self):
         self.login(self.regular_user)
 

@@ -68,6 +68,7 @@ class TestConfig(IntegrationTestCase):
                 u'doc_properties': False,
                 u'dossier_checklist': False,
                 u'dossier_templates': False,
+                u'dossier_transfers': False,
                 u'ech0147_export': False,
                 u'ech0147_import': False,
                 u'favorites': True,

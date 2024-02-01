@@ -75,6 +75,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('doc_properties', False),
                 ('dossier_checklist', False),
                 ('dossier_templates', False),
+                ('dossier_transfers', False),
                 ('ech0147_export', False),
                 ('ech0147_import', False),
                 ('favorites', True),
