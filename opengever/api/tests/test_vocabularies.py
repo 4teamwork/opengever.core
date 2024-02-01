@@ -1,7 +1,10 @@
 from collective.elephantvocabulary.interfaces import IElephantVocabulary
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.api.schema.sources import get_field_by_name
 from opengever.ogds.auth.testing import DisabledGroupPlugins
+from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.ou_selector import CURRENT_ORG_UNIT_KEY
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
@@ -10,6 +13,8 @@ from opengever.workspace import WHITELISTED_TEAMRAUM_PORTAL_TYPES
 from opengever.workspace import WHITELISTED_TEAMRAUM_VOCABULARIES
 from plone import api
 from plone.dexterity.utils import iterSchemata
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 
 
 NON_SENSITIVE_VOCABUALRIES = [
@@ -50,6 +55,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.meeting.MemberVocabulary',
     'opengever.meeting.ProposalTemplatesForCommitteeVocabulary',
     'opengever.meeting.ProposalTemplatesVocabulary',
+    'opengever.ogds.base.all_other_admin_units',
     'opengever.ogds.base.AssignedClientsVocabulary',
     'opengever.ogds.base.OrgUnitsVocabularyFactory',
     'opengever.ogds.base.OtherAssignedClientsVocabulary',
@@ -577,3 +583,25 @@ class TestGetVocabulariesInTeamraum(IntegrationTestCase):
         self.activate_feature('workspace')
         with browser.expect_http_error(404):
             browser.open(url, headers=self.api_headers)
+
+
+class TestAllOtherAdminUnitsVocabulary(IntegrationTestCase):
+
+    @browsing
+    def test_all_other_admin_units_excludes_current_unit(self, browser):
+        create(Builder('admin_unit').id('unit-2'))
+        create(Builder('admin_unit').id('unit-3'))
+        create(Builder('admin_unit').id('unit-4').having(enabled=False))
+        create(Builder('admin_unit').id('unit-5').having(hidden=True))
+
+        registry = getUtility(IRegistry)
+        proxy = registry.forInterface(IAdminUnitConfiguration)
+        proxy.current_unit_id = u'unit-3'
+
+        self.login(self.regular_user, browser)
+        url = self.portal.absolute_url() + '/@vocabularies/opengever.ogds.base.all_other_admin_units'
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(
+            [u'plone', u'unit-2'],
+            [admin_unit.get('token') for admin_unit in browser.json.get('items')]
+        )
