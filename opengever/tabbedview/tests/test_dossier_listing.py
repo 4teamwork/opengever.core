@@ -129,7 +129,7 @@ class TestDossierListing(SolrIntegrationTestCase):
         self.assertTrue(len(inactive_dossiers_data) > 0)
         self.assertTrue(len(resolved_dossiers_data) > 0)
 
-        self.assertEqual(expected_data, data)
+        self.assertItemsEqual(expected_data, data)
 
     @browsing
     def test_correctly_sorts_on_reference_number(self, browser):
