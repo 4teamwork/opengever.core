@@ -63,6 +63,34 @@ class TestDossierTransfersPost(IntegrationTestCase):
         }
         self.assertEqual(expected, browser.json)
 
+    @browsing
+    def test_allow_same_unit_flag(self, browser):
+        self.login(self.manager, browser=browser)
+
+        now = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
+        with freeze(now):
+            data = {
+                'title': 'Transfer on same unit',
+                'expires': (now + timedelta(days=5)).isoformat(),
+                'target': get_current_admin_unit().unit_id,
+                'root': self.dossier.UID(),
+                'documents': [self.document.UID()],
+                'participations': ['p1'],
+                'all_documents': False,
+                'all_participations': False,
+            }
+
+            with self.env(GEVER_DOSSIER_TRANSFERS_ALLOW_SAME_AU='1'):
+                browser.open(self.portal, view='@dossier-transfers',
+                             method='POST',
+                             data=json.dumps(data),
+                             headers=self.api_headers)
+
+        self.assertEqual(201, browser.status_code)
+        self.assertEqual('Transfer on same unit', browser.json['title'])
+        self.assertEqual('plone', browser.json['source'])
+        self.assertEqual('plone', browser.json['target'])
+
 
 class TestDossierTransfersGet(IntegrationTestCase):
 
