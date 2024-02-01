@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
+from opengever.dossier.resolve import LockingResolveManager
 from opengever.testing import IntegrationTestCase
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
@@ -126,6 +127,26 @@ class TestDossierContextActions(IntegrationTestCase):
                          self.get_actions(self.dossier))
         self.activate_feature('oneoffixx')
         self.assertIn(u'document_with_oneoffixx_template', self.get_actions(self.dossier))
+
+    def test_add_dossier_transfer_action(self):
+        self.login(self.secretariat_user)
+        LockingResolveManager(self.resolvable_dossier).resolve()
+
+        self.login(self.regular_user)
+
+        # Only available when feature is activated
+        self.assertNotIn(u'add_dossier_transfer', self.get_actions(self.dossier))
+        self.assertNotIn(u'add_dossier_transfer', self.get_actions(self.resolvable_dossier))
+
+        self.activate_feature('dossier-transfers')
+
+        # Only available for resolved dossiers
+        self.assertNotIn(u'add_dossier_transfer', self.get_actions(self.dossier))
+        self.assertIn(u'add_dossier_transfer', self.get_actions(self.resolvable_dossier))
+
+        # Only available if user has view permission
+        # Can't really test this here, because traversal and several other
+        # things already don't work if the user doesn't have 'View' on the obj.
 
 
 class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase):

@@ -13,6 +13,7 @@ class BaseContextActions(object):
 
     def get_actions(self):
         self.actions = []
+        self.maybe_add_add_dossier_transfer()
         self.maybe_add_add_invitation()
         self.maybe_add_attach_to_email()
         self.maybe_add_cancel_checkout()
@@ -74,6 +75,9 @@ class BaseContextActions(object):
         self.actions.append(action)
 
     def is_add_invitation_available(self):
+        return False
+
+    def is_add_dossier_transfer_available(self):
         return False
 
     def is_attach_to_email_available(self):
@@ -320,6 +324,10 @@ class BaseContextActions(object):
     def maybe_add_docugate_retry(self):
         if self.is_docugate_retry_available():
             self.add_action(u'docugate_retry')
+
+    def maybe_add_add_dossier_transfer(self):
+        if self.is_add_dossier_transfer_available():
+            self.add_action(u'add_dossier_transfer')
 
     def maybe_add_dossier_with_template(self):
         if self.is_dossier_with_template_available():
