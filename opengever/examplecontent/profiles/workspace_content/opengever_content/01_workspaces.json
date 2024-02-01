@@ -4,28 +4,28 @@
     "_type": "opengever.workspace.workspace",
     "title": "Projekt: GEVER",
     "_ac_local_roles": {
-      "philippe.gross": [
+      "hugo.boss": [
         "WorkspaceAdmin"
       ],
-      "david.erni": [
+      "stefanie.muster": [
         "WorkspaceMember"
       ],
-      "lukas.graf": [
+      "lisa.bonn": [
         "WorkspaceMember"
       ],
-      "pascal.habegger": [
+      "roy.baer": [
         "WorkspaceMember"
       ],
-      "niklaus.johner": [
+      "justin.case": [
         "WorkspaceMember"
       ],
-      "elio.schmutz": [
+      "bella.vista": [
         "WorkspaceMember"
       ],
-      "jonas.baumann": [
+      "frank.furt": [
         "WorkspaceGuest"
       ],
-      "mathias.leimgruber": [
+      "pia.nist": [
         "WorkspaceGuest"
       ]
     },
@@ -73,10 +73,10 @@
     "_type": "opengever.workspace.workspace",
     "title": "Projekt: GEVER UI",
     "_ac_local_roles": {
-      "thomas.buchberger": [
+      "rainer.zufall": [
         "WorkspaceAdmin"
       ],
-      "philippe.gross": [
+      "hugo.boss": [
         "WorkspaceMember"
       ]
     }
@@ -86,10 +86,10 @@
     "_type": "opengever.workspace.workspace",
     "title": "Projekt: OneGovBox",
     "_ac_local_roles": {
-      "mathias.leimgruber": [
+      "pia.nist": [
         "WorkspaceAdmin"
       ],
-      "philippe.gross": [
+      "hugo.boss": [
         "WorkspaceGuest"
       ]
     }
@@ -99,7 +99,7 @@
     "_type": "opengever.workspace.workspace",
     "title": "Projekt: Redesign",
     "_ac_local_roles": {
-      "manuel.cassina": [
+      "anna.nass": [
         "WorkspaceAdmin"
       ]
     }

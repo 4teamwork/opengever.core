@@ -38,32 +38,32 @@ class WorkspaceResponseExampleContentCreator(object):
             u"Jeder einzelne Punkt ist sehr wichtig und muss genaustens angeschaut werden. " \
             u"Das Anw\xe4hlen muss \xfcber den Mauszeiger geschehen und darf nicht umgangen werden.\n\n" \
             u"Ich freue mich!"
-        response.creator = u'david.erni'
+        response.creator = u'hugo.boss'
         responses.add(response)
 
         response = Response(COMMENT_RESPONSE_TYPE)
         response.text = u"Danke f\xfcr deine schnelle Antwort."
-        response.creator = u'philippe.gross'
+        response.creator = u'stefanie.muster'
         responses.add(response)
 
         response = Response(MOVE_RESPONSE_TYPE)
-        response.creator = u'philippe.gross'
+        response.creator = u'stefanie.muster'
         response.add_change(u'', u'', u'Wichtig')
         responses.add(response)
 
         new_title = u'Wichtig!: {}'.format(todo.title)
         response = Response(SCHEMA_FIELD_CHANGE_RESPONSE_TYPE)
-        response.creator = u'philippe.gross'
+        response.creator = u'stefanie.muster'
         response.add_change(u'title', todo.title, new_title)
         responses.add(response)
         todo.title = new_title
 
         response = Response(MOVE_RESPONSE_TYPE)
-        response.creator = u'lukas.graf'
+        response.creator = u'roy.baer'
         response.add_change(u'', u'Wichtig', u'Projektleitung')
         responses.add(response)
 
         response = Response(MOVE_RESPONSE_TYPE)
-        response.creator = u'lukas.graf'
+        response.creator = u'roy.baer'
         response.add_change(u'', u'Projektleitung', u'')
         responses.add(response)

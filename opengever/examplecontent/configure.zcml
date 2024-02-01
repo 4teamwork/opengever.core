@@ -44,6 +44,12 @@
       ldap_profile="opengever.examplecontent:4teamwork-ldap"
       />
 
+  <opengever:registerLDAP
+      title="Local LDAP"
+      ldap_profile="opengever.examplecontent:local-ldap"
+      is_default="True"
+      />
+
   <genericsetup:registerProfile
       name="default"
       title="opengever.examplecontent: default"
@@ -72,6 +78,14 @@
       title="opengever.examplecontent: 4teamwork LDAP"
       directory="profiles/4teamwork-ldap"
       description="4teamwork LDAP configuration"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:registerProfile
+      name="local-ldap"
+      title="opengever.examplecontent: local LDAP"
+      directory="profiles/local-ldap"
+      description="Local LDAP configuration"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 

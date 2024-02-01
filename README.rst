@@ -3,169 +3,61 @@ opengever.core
 
 .. contents:: Table of Contents
 
-Development installation
-------------------------
+Development
+-----------
 
-To get a basic development installation, make sure the dependencies listed
-below are satisfied and run the following steps:
+Quick start
+~~~~~~~~~~~
+
+To get a basic development installation, clone the repository, symlink the
+development buildout config file, create a virtualenv, install and run buildout:
 
 .. code::
 
     $ git clone git@github.com:4teamwork/opengever.core.git
     $ cd opengever.core
     $ ln -s development.cfg buildout.cfg
-    $ python bootstrap.py --setuptools-version 44.1.1 --buildout-version 2.13.3
+    $ virtualenv-2.7 .
+    $ bin/pip install zc.buildout==2.13.3
     $ bin/buildout
 
-Dependencies
-~~~~~~~~~~~~
-
-Python 2.7
-^^^^^^^^^^
-
-``opengever.core`` requires at least Python 2.7, and using a 64-bit build of
-Python is highly recommended.
-
-SQL Database
-^^^^^^^^^^^^
-
-``opengever.core`` requires a SQL database to store various application data.
-A PostgreSQL database server is included in the Docker Compose file and will be
-automatically started when running ``docker-compose up``.
-
-Building ``psycopg2``, the PostgreSQL database adapter for Python, requires
-the PostgreSQL client library and development files.
-
-On macOS this can be installed with Brew:
+Run the required services with Docker Compose:
 
 .. code::
 
-    $ brew install postgresql
+    $ docker compose up -d
 
+
+Now you can run opengever.core in the foreground:
+
+.. code::
+
+    $ bin/instance fg
+
+
+Requirements
+~~~~~~~~~~~~
+
+Python 2.7 and Docker are required for local development.
+
+PostgreSQL
+^^^^^^^^^^
+
+Building ``psycopg2``, the PostgreSQL database adapter for Python, requires
+the PostgreSQL client library and development files.
 
 OpenLDAP 2.x
 ^^^^^^^^^^^^
 
 The Python `ldap <http://www.python-ldap.org/>`_ module requires the
-`OpenLDAP 2.x <http://www.openldap.org/>`_ client libraries.
+`OpenLDAP 2.x <http://www.openldap.org/>`_ client libraries and development
+files.
 
-Java
-^^^^
-
-If fulltext indexing using `ftw.tika <https://github.com/4teamwork/ftw.tika>`_
-is enabled, Java is required in order to run `tika-server` (at least JRE 1.6
-is required for Tika).
-
-LaTeX
-^^^^^
-
-Note: Use the pdflatex Docker image instead of installing LaTeX locally. See
-`Services`_ for more details.
-
-A LaTeX distribution and the ``pdflatex`` binary are required for generating
-dossier covers, dossier details and dossier listing PDFs as well as open task
-reports and task listing PDFs.
-
-For CentOS, the ``tetex-latex`` package contains the ``pdflatex`` binary. For
-local development on OS X we recommend the `MacTeX distribution <http://www.tug.org/mactex/>`_.
-
-There is a 4teamwork internal `devdocs LaTeX section <https://devdocs.4teamwork.ch/latex/>`_
-on how to install ``pdflatex`` with our own fonts.
-
-HAProxy
-^^^^^^^
-
-For a production installation you need to configure *at least* two Zope
-instances per AdminUnit (in order to avoid deadlocks when remote-requests are
-executed during tasks across AdminUnits).
-
-To balance load between Zope instances we use `HAProxy <http://www.haproxy.org/>`_.
-The configuration is pretty standard:
-
-.. code::
-
-    frontend admin-unit-1
-        bind *:10001
-        default_backend admin-unit-1
-
-    backend admin-unit-1
-      appsession __ac len 32 timeout 1d
-      cookie serverid insert nocache indirect
-      balance roundrobin
-      option httpchk
-
-      server admin-unit-1-01 10.0.0.1:10101 cookie admin-unit-1-01 check inter 10s maxconn 5 rise 1
-      server admin-unit-1-02 10.0.0.1:10102 cookie admin-unit-1-02 check inter 10s maxconn 5 rise 1
-
-Apache
+Pillow
 ^^^^^^
 
-In order to set up a reverse proxy that proxies requests to several HAProxy
-frontends we use `Apache <http://httpd.apache.org/>`_.
-
-Postfix
-^^^^^^^
-
-Mail-In as well as Mail-Out functionality requires an MTA - we recommend
-`Postfix <http://www.postfix.org/>`_. See `ftw.mail <https://github.com/4teamwork/ftw.mail/>`_'s
-README for details on how to configure Mail-In.
-
-Perl and ``Email::Outlook::Message`` module
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Note: Use the msgconvert Docker image instead of installing msgconvert locally.
-See `Services`_ for more details.
-
-In order to convert Outlook ``*.msg`` messages to RFC822 ``*.eml`` when using
-Drag&Drop upload, we use the `msgconvert.pl <http://www.matijs.net/software/msgconv/>`_
-script. This script requires Perl and the ``Email::Outlook::Message`` module.
-
-For production deployments, this module will be installed by Ops via Puppet
-(it's now packaged as an RPM).
-
-If you need this module for local development on macOS, you can also install
-it using Perl ``local::lib`` and CPAN. You then need to install Perl,
-``perl-YAML`` and the following Perl modules:
-
-.. code::
-
-    Email::Outlook::Message
-    Email::LocalDelivery
-    Getopt::Long
-    Pod::Usage
-
-In the end, GEVER will look for the ``msgconvert`` executable in ``$PATH``.
-
-
-Sablon
-^^^^^^
-
-Note: Use the sablon Docker image instead of installing sablon locally. See
-`Services`_ for more details.
-
-If ``opengever.meeting`` is activated (which it is for the default development
-installation), the Ruby gem Sablon_ is
-required to generate documents from ``*.docx`` templates. Sablon is executed
-as subprocess so the ``sablon`` script provided by the sablon gem must be
-accessible as the user that is running gever instances.
-
-In order for buildout to be able to install the `Sablon` gem, you need to
-have `bundler` installed. For local development on Mac OS X it is recommended
-to set up your Ruby using `rbenv <https://github.com/sstephenson/rbenv>`_
-and the `ruby-build <https://github.com/sstephenson/ruby-build>`_ plugin:
-
-.. code::
-
-    git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-    git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bash_profile
-    echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-    source ~/.bash_profile
-    rbenv install 2.4.5
-    gem install bundler
-
-The installation of the ``Sablon`` gem can then be performed by buildout (by
-extending from `ruby-gems.cfg <https://raw.githubusercontent.com/4teamwork/gever-buildouts/master/ruby-gems.cfg>`_).
+Building ``Pillow`` requires at least ``libjpeg`` and ``zlib`` libraries and
+development files.
 
 
 LDAP credentials
@@ -174,8 +66,8 @@ LDAP credentials
 LDAP and AD plugins get configured as usual, using an ``ldap_plugin.xml`` file
 in the profile of the respective policy package - with one exception:
 
-Credentials for the LDAP service (bind DN and bind password) will **NEVER** be
-checked in in the ``ldap_plugin.xml``, but instead will be stored machine-wide
+Credentials for the LDAP service (bind DN and bind password) **should not** be
+checked in in the ``ldap_plugin.xml`` file. Instead they can be stored machine-wide
 in a file ``~/.opengever/ldap/{hostname}.json`` where ``{hostname}`` refers to
 the hostname of the LDAP server.
 
@@ -183,7 +75,7 @@ When an OpenGever client then is created using ``opengever.setup``, the
 credentials are read from that file and configured for the LDAPUserFolder as
 well as the active LDAP connection.
 
-So, for a local development installation, create the following file:
+E.g. to store the credentials for the 4teamwork LDAP server create the following file:
 
 .. code::
 
@@ -203,6 +95,9 @@ with these contents:
 
 ``<bind_dn>`` and ``<bind_pw>`` refer to the username and password for the
 respective user in our development LDAP tree.
+
+For development a local LDAP server is used by default, that doesn't require a
+credentials file. 
 
 
 Solr
@@ -395,6 +290,7 @@ for local development by default:
 - `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
 - ogds (PostgreSQL server)
 - `ogds-sync <https://github.com/4teamwork/ogds-sync>`_
+- ldap (OpenLDAP server)
 
 To run these services, Docker is required.
 See `Get Docker <https://docs.docker.com/get-docker/>`_ for how to install
@@ -403,10 +299,8 @@ Docker on your local machine.
 A `Docker Compose <https://docs.docker.com/compose/>`_ file is provided in this
 repo to easily run the services.
 
-Before running the services with Docker a few configuration settings are required
-to be provided in a ``.env`` file. To create one with default settings for development,
-just run ``bin/setup``. You will be prompted for a decryption password, which
-can be found in 1Password.
+To customize configuration settings of the Docker services, create a ``.env`` file
+and set the environment variables accordingly. A sample is provided in ``.env.sample``.
 
 To start the services simply run:
 

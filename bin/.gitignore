@@ -18,7 +18,6 @@
 !profile-tests
 !remove-test-cache
 !sass-watcher
-!setup
 !shellcheck
 !test-cached
 !enable-lfs

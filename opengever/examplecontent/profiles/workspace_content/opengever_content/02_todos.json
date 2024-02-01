@@ -2,7 +2,7 @@
     {
         "_path": "/workspaces/workspace-1/todo-1",
         "_type": "opengever.workspace.todo",
-        "responsible": "philippe.gross",
+        "responsible": "hugo.boss",
         "title": "Bei Weiterleitung Dossiervorlagen anwählbar machen",
         "text": "Uns ist folgendes aufgefallen: Bei Weiterleitungen besteht die Möglichkeit Dokumente einem bestehenden Dossier zuzuweisen oder zum konkreten Thema ein neues Dossier zu generieren.\nDieses Dossier muss einer Ordnungsposition zugewiesen werden.\n\nLeider fehlt bei diesem Ablauf die Möglichkeit auf Dossiervorlagen zuzugreifen.\n\nGerade für Mitberichte und Stellungnahmen könnte das Zugreifen auf Dossiervorlagen sehr komfortabel sein.\n\nIst es möglich diese Auswahlmöglichkeit zu ergänzen?"
     },
@@ -10,7 +10,7 @@
         "_path": "/workspaces/workspace-1/todo-2",
         "_type": "opengever.workspace.todo",
         "title": "Examplecontent um Teamraum erweitern.",
-        "responsible": "elio.schmutz",
+        "responsible": "lisa.bonn",
         "deadline": "2019-09-10"
     },
     {
@@ -22,7 +22,7 @@
         "_path": "/workspaces/workspace-1/todo-4",
         "_type": "opengever.workspace.todo",
         "title": "Neuer Mandant ZBJ",
-        "responsible": "lukas.graf"
+        "responsible": "roy.baer"
     },
     {
         "_path": "/workspaces/workspace-1/todo-5",
