@@ -1,3 +1,5 @@
+from datetime import timedelta
+from opengever.base.date_time import utcnow_tz_aware
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -39,6 +41,16 @@ def valid_root_dossier(root_uid):
     raise InvalidRootDossier()
 
 
+def valid_expires(expires):
+    if expires < utcnow_tz_aware():
+        raise ExpiresInPast()
+
+    if expires > (utcnow_tz_aware() + timedelta(days=31)):
+        raise ExpiresTooFarInFuture()
+
+    return True
+
+
 class IDossierTransferAPISchema(Interface):
     """Schema to describe DossierTransfer API.
     """
@@ -59,6 +71,7 @@ class IDossierTransferAPISchema(Interface):
     expires = Datetime(
         title=u'Expires',
         required=True,
+        constraint=valid_expires,
     )
     target = Choice(
         title=u'Target admin unit',
@@ -147,6 +160,16 @@ class ParticipationsListRequired(Invalid):
 
 class InvalidRootDossier(ConstraintNotSatisfied):
     """Root dossier with that UID does not exist or is not resolved.
+    """
+
+
+class ExpiresInPast(ConstraintNotSatisfied):
+    """'expires' must not be in the past.
+    """
+
+
+class ExpiresTooFarInFuture(ConstraintNotSatisfied):
+    """'expires' must not be more than 30 days in the future.
     """
 
 

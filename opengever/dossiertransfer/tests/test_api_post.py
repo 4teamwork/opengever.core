@@ -234,3 +234,55 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'additional_metadata': {},
         }
         self.assertDictContainsSubset(expected, browser.json)
+
+    @browsing
+    def test_expires_constraints(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        now = utcnow_tz_aware()
+        payload = self.create_test_payload(now)
+
+        # Expires must not be in the past
+        payload['expires'] = (now - timedelta(days=5)).isoformat()
+
+        with freeze(now):
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(self.portal, view='@dossier-transfers', method='POST',
+                             data=json.dumps(payload),
+                             headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u'Inputs not valid',
+            u'additional_metadata': {
+                u'fields': [{
+                    u'field': u'expires',
+                    u'translated_message': u"'expires' must not be in the past.",
+                    u'type': u'ExpiresInPast'},
+                ],
+            },
+        }
+        self.assertDictContainsSubset(expected, browser.json)
+
+        # Expires must not be more than 30d in the future
+        payload['expires'] = (now + timedelta(days=35)).isoformat()
+
+        with freeze(now):
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(self.portal, view='@dossier-transfers', method='POST',
+                             data=json.dumps(payload),
+                             headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u'Inputs not valid',
+            u'additional_metadata': {
+                u'fields': [{
+                    u'field': u'expires',
+                    u'translated_message': u"'expires' must not be more than "
+                                           u"30 days in the future.",
+                    u'type': u'ExpiresTooFarInFuture'},
+                ],
+            },
+        }
+        self.assertDictContainsSubset(expected, browser.json)
