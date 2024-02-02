@@ -150,3 +150,45 @@ class TestDossierTransfersPost(IntegrationTestCase):
             },
         }
         self.assertDictContainsSubset(expected, browser.json)
+
+    @browsing
+    def test_all_docs_and_docs_list_constraints(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        now = utcnow_tz_aware()
+        payload = self.create_test_payload(now)
+
+        # 'all_documents' and 'documents' are mutually exclusive
+        payload['all_documents'] = True
+        payload['documents'] = [self.document.UID()]
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal, view='@dossier-transfers', method='POST',
+                         data=json.dumps(payload),
+                         headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u"'all_documents == true' and "
+                                   u"'documents' list are mutually exclusive.",
+            u'additional_metadata': {},
+        }
+        self.assertDictContainsSubset(expected, browser.json)
+
+        # 'documents' is required if 'all_documents' is False
+        payload = self.create_test_payload(now)
+        payload['all_documents'] = False
+        payload.pop('documents')
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal, view='@dossier-transfers', method='POST',
+                         data=json.dumps(payload),
+                         headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u"'documents' list is required "
+                                   u"if 'all_documents' is false.",
+            u'additional_metadata': {},
+        }
+        self.assertDictContainsSubset(expected, browser.json)

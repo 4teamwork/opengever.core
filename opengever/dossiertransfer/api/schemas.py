@@ -101,9 +101,28 @@ class IDossierTransferAPISchema(Interface):
         if source == self.target:
             raise SourceSameAsTarget()
 
+    @invariant
+    def all_docs_and_docs_list(self):
+        if self.all_documents:
+            if getattr(self, 'documents', None) is not None:
+                raise AllDocsAndDocsListMutuallyExclusive()
+        else:
+            if getattr(self, 'documents', None) is None:
+                raise DocsListRequired()
+
 
 class SourceSameAsTarget(Invalid):
     """Source admin unit must not be the same as target.
+    """
+
+
+class AllDocsAndDocsListMutuallyExclusive(Invalid):
+    """'all_documents == true' and 'documents' list are mutually exclusive.
+    """
+
+
+class DocsListRequired(Invalid):
+    """'documents' list is required if 'all_documents' is false.
     """
 
 
