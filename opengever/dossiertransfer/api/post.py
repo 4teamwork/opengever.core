@@ -11,6 +11,7 @@ from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from zExceptions import BadRequest
+from zExceptions import Unauthorized
 from zope.interface import alsoProvides
 
 
@@ -19,6 +20,15 @@ class DossierTransfersPost(DossierTransfersBase):
 
     POST /@dossier-transfers HTTP/1.1
     """
+
+    def check_permission(self):
+        super(DossierTransfersPost, self).check_permission()
+        root_uid = json_body(self.request).get('root')
+        root_obj = api.content.uuidToObject(root_uid)
+        if root_obj and api.user.has_permission('View', obj=root_obj):
+            return
+
+        raise Unauthorized()
 
     def reply(self):
         # Disable CSRF protection
