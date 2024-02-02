@@ -26,26 +26,30 @@ class TestDossierTransfersPost(IntegrationTestCase):
                                     .id('recipient')
                                     .having(title='Remote Recipient'))
 
+    def create_test_payload(self, now):
+        payload = {
+            'title': 'Transfer Title',
+            'message': 'Transfer Message',
+            'expires': (now + timedelta(days=5)).isoformat(),
+            'target': self.recipient.unit_id,
+            'root': self.resolved_dossier.UID(),
+            'documents': [self.document.UID()],
+            'participations': ['p1'],
+            'all_documents': False,
+            'all_participations': False,
+        }
+        return payload.copy()
+
     @browsing
     def test_post_dossier_transfer(self, browser):
         self.login(self.regular_user, browser=browser)
 
         now = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
-        with freeze(now):
-            data = {
-                'title': 'Transfer Title',
-                'message': 'Transfer Message',
-                'expires': (now + timedelta(days=5)).isoformat(),
-                'target': self.recipient.unit_id,
-                'root': self.resolved_dossier.UID(),
-                'documents': [self.document.UID()],
-                'participations': ['p1'],
-                'all_documents': False,
-                'all_participations': False,
-            }
+        payload = self.create_test_payload(now)
 
+        with freeze(now):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
-                         data=json.dumps(data),
+                         data=json.dumps(payload),
                          headers=self.api_headers)
 
         self.assertEqual(201, browser.status_code)
@@ -75,22 +79,10 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         now = utcnow_tz_aware()
-        expires = now + timedelta(days=5)
-
-        data = {
-            'title': 'Transfer Title',
-            'message': 'Transfer Message',
-            'expires': expires.isoformat(),
-            'target': self.recipient.unit_id,
-            'root': self.resolved_dossier.UID(),
-            'documents': [self.document.UID()],
-            'participations': ['p1'],
-            'all_documents': False,
-            'all_participations': False,
-        }
+        payload = self.create_test_payload(now)
 
         browser.open(self.portal, view='@dossier-transfers', method='POST',
-                     data=json.dumps(data),
+                     data=json.dumps(payload),
                      headers=self.api_headers)
 
         # Guard assertion
@@ -100,7 +92,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.login(self.foreign_contributor, browser=browser)
         with browser.expect_http_error(code=401, reason='Unauthorized'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
-                         data=json.dumps(data),
+                         data=json.dumps(payload),
                          headers=self.api_headers)
         self.assertEqual('Unauthorized', browser.json['type'])
 
@@ -109,22 +101,16 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         now = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
-        with freeze(now):
-            data = {
-                'title': 'Transfer on same unit',
-                'expires': (now + timedelta(days=5)).isoformat(),
-                'target': get_current_admin_unit().unit_id,
-                'root': self.resolved_dossier.UID(),
-                'documents': [self.document.UID()],
-                'participations': ['p1'],
-                'all_documents': False,
-                'all_participations': False,
-            }
+        payload = self.create_test_payload(now)
 
+        payload['title'] = 'Transfer on same unit'
+        payload['target'] = get_current_admin_unit().unit_id
+
+        with freeze(now):
             with self.env(GEVER_DOSSIER_TRANSFERS_ALLOW_SAME_AU='1'):
                 browser.open(self.portal, view='@dossier-transfers',
                              method='POST',
-                             data=json.dumps(data),
+                             data=json.dumps(payload),
                              headers=self.api_headers)
 
         self.assertEqual(201, browser.status_code)
@@ -137,30 +123,18 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         now = utcnow_tz_aware()
-        expires = now + timedelta(days=5)
-
-        metadata = {
-            'title': 'Transfer Title',
-            'message': 'Transfer Message',
-            'expires': expires.isoformat(),
-            'target': self.recipient.unit_id,
-            'documents': [self.document.UID()],
-            'participations': ['p1'],
-            'all_documents': False,
-            'all_participations': False,
-        }
+        payload = self.create_test_payload(now)
 
         # Dossier must exist
         # (can't reasonably test this, because a nonexistent dossier will
         # already fail the permission check and result in a 401)
 
         # Dossier is not resolved
-        data = metadata.copy()
-        data['root'] = self.dossier.UID()
+        payload['root'] = self.dossier.UID()
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
-                         data=json.dumps(data),
+                         data=json.dumps(payload),
                          headers=self.api_headers)
 
         expected = {
