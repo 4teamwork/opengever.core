@@ -110,6 +110,15 @@ class IDossierTransferAPISchema(Interface):
             if getattr(self, 'documents', None) is None:
                 raise DocsListRequired()
 
+    @invariant
+    def all_participations_and_participations_list(self):
+        if self.all_participations:
+            if getattr(self, 'participations', None) is not None:
+                raise AllParticipationsAndParticipationsListMutuallyExclusive()
+        else:
+            if getattr(self, 'participations', None) is None:
+                raise ParticipationsListRequired()
+
 
 class SourceSameAsTarget(Invalid):
     """Source admin unit must not be the same as target.
@@ -123,6 +132,16 @@ class AllDocsAndDocsListMutuallyExclusive(Invalid):
 
 class DocsListRequired(Invalid):
     """'documents' list is required if 'all_documents' is false.
+    """
+
+
+class AllParticipationsAndParticipationsListMutuallyExclusive(Invalid):
+    """'all_participations == true' and 'participations' list are mutually exclusive.
+    """
+
+
+class ParticipationsListRequired(Invalid):
+    """'participations' list is required if 'all_participations' is false.
     """
 
 

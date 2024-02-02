@@ -192,3 +192,45 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'additional_metadata': {},
         }
         self.assertDictContainsSubset(expected, browser.json)
+
+    @browsing
+    def test_all_participations_and_participations_list_constraints(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        now = utcnow_tz_aware()
+        payload = self.create_test_payload(now)
+
+        # 'all_participations' and 'participations' are mutually exclusive
+        payload['all_participations'] = True
+        payload['participations'] = ['p1']
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal, view='@dossier-transfers', method='POST',
+                         data=json.dumps(payload),
+                         headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u"'all_participations == true' and "
+                                   u"'participations' list are mutually exclusive.",
+            u'additional_metadata': {},
+        }
+        self.assertDictContainsSubset(expected, browser.json)
+
+        # 'participations' is required if 'all_participations' is False
+        payload = self.create_test_payload(now)
+        payload['all_participations'] = False
+        payload.pop('participations')
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal, view='@dossier-transfers', method='POST',
+                         data=json.dumps(payload),
+                         headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u"'participations' list is required "
+                                   u"if 'all_participations' is false.",
+            u'additional_metadata': {},
+        }
+        self.assertDictContainsSubset(expected, browser.json)
