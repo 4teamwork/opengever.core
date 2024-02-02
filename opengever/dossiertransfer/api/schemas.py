@@ -1,4 +1,7 @@
+from opengever.dossier.base import DOSSIER_STATE_RESOLVED
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_admin_unit
+from plone import api
 from zope.component import getUtility
 from zope.interface import Interface
 from zope.interface import invariant
@@ -11,6 +14,7 @@ from zope.schema import Datetime
 from zope.schema import List
 from zope.schema import Text
 from zope.schema import TextLine
+from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
 import os
@@ -25,6 +29,17 @@ def valid_target_admin_units(context):
 
     vf = getUtility(IVocabularyFactory, name=vocab)
     return vf(context)
+
+
+def valid_root_dossier(root_uid):
+    catalog = api.portal.get_tool('portal_catalog')
+    brains = catalog(UID=root_uid)
+    if brains and len(brains) == 1:
+        obj = brains[0].getObject()
+        if IDossierMarker.providedBy(obj):
+            if api.content.get_state(obj) == DOSSIER_STATE_RESOLVED:
+                return True
+    raise InvalidRootDossier()
 
 
 class IDossierTransferAPISchema(Interface):
@@ -55,7 +70,8 @@ class IDossierTransferAPISchema(Interface):
 
     root = ASCIILine(
         title=u'Root dossier UID',
-        required=True)
+        required=True,
+        constraint=valid_root_dossier)
 
     documents = List(
         title=u'List of document UIDs',
@@ -90,6 +106,11 @@ class IDossierTransferAPISchema(Interface):
 
 class SourceSameAsTarget(Invalid):
     """Source admin unit must not be the same as target.
+    """
+
+
+class InvalidRootDossier(ConstraintNotSatisfied):
+    """Root dossier with that UID does not exist or is not resolved.
     """
 
 

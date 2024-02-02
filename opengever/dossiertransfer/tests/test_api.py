@@ -140,6 +140,55 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.assertEqual('plone', browser.json['source'])
         self.assertEqual('plone', browser.json['target'])
 
+    @browsing
+    def test_root_dossier_must_exist_and_be_resolved(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        recipient = create(Builder('admin_unit')
+                           .id('recipient')
+                           .having(title='Remote Recipient'))
+
+        now = utcnow_tz_aware()
+        expires = now + timedelta(days=5)
+
+        metadata = {
+            'title': 'Transfer Title',
+            'message': 'Transfer Message',
+            'expires': expires.isoformat(),
+            'target': recipient.unit_id,
+            'documents': [self.document.UID()],
+            'participations': ['p1'],
+            'all_documents': False,
+            'all_participations': False,
+        }
+
+        # Dossier must exist
+        # (can't reasonably test this, because a nonexistent dossier will
+        # already fail the permission check and result in a 401)
+
+        # Dossier is not resolved
+        data = metadata.copy()
+        data['root'] = self.dossier.UID()
+
+        with browser.expect_http_error(code=400, reason='Bad Request'):
+            browser.open(self.portal, view='@dossier-transfers', method='POST',
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'message': u"[{'field': 'root', 'message': 'Root dossier with that "
+                        u"UID does not exist or is not resolved.', "
+                        u"'error': 'InvalidRootDossier'}]",
+            u'translated_message': u'Inputs not valid',
+            u'additional_metadata': {
+                u'fields': [{
+                    u'field': u'root',
+                    u'translated_message': u'Root dossier with that UID does not exist or is not resolved.',
+                    u'type': u'InvalidRootDossier'}]},
+        }
+        self.assertEqual(expected, browser.json)
+
 
 class TestDossierTransfersGet(IntegrationTestCase):
 
