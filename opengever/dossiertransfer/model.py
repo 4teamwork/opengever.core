@@ -6,6 +6,7 @@ from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import JSONList
 from opengever.base.types import UnicodeCoercingText
+from opengever.dossiertransfer.token import TokenManager
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
@@ -13,6 +14,8 @@ from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import Sequence
+import hashlib
+import json
 
 
 tables = [
@@ -59,3 +62,31 @@ class DossierTransfer(Base):
     def __repr__(self):
         return '<DossierTransfer {} ({} -> {})>'.format(
             self.id, self.source_id, self.target_id)
+
+    def issue_token(self):
+        return TokenManager().issue_token(self)
+
+    def validate_token(self, token):
+        TokenManager().validate_token(self, token)
+
+    def attributes_hash(self):
+        """Create a hash over all attributes that are relevant for security.
+
+        We could put those in the JWT and have the JWT's signature cover them,
+        but the 'documents' and 'participations' lists may grow large, and
+        would make the size of the JWT be dynamic.
+        """
+        documents = self.documents if self.documents else []
+        participations = self.participations if self.participations else []
+
+        data = json.dumps({
+            'state': self.state,
+            'target_id': self.target_id,
+            'source_user_id': self.source_user_id,
+            'root': self.root,
+            'documents': sorted(documents),
+            'participations': sorted(participations),
+            'all_documents': self.all_documents,
+            'all_participations': self.all_participations,
+        }, sort_keys=True)
+        return hashlib.sha256(data).hexdigest()

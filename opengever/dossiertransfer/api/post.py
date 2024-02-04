@@ -68,6 +68,10 @@ class DossierTransfersPost(DossierTransfersBase):
         session.add(transfer)
         session.flush()
 
+        token = transfer.issue_token()
+        transfer.validate_token(token)
+        transfer.token = token
+
         serialized_transfer = self.serialize(transfer)
 
         self.request.response.setStatus(201)

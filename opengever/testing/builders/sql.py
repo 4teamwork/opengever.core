@@ -28,6 +28,7 @@ from opengever.ogds.base.utils import get_ou_selector
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
+from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.substitute import Substitute
 from opengever.ogds.models.team import Team
 from opengever.ogds.models.user import User
@@ -648,12 +649,14 @@ class DossierTransferBuilder(SqlObjectBuilder):
         self.arguments['source_user_id'] = ogds_user.userid
         return self
 
-    def _create_target_admin_unit(self, ):
-        target_au = create(Builder('admin_unit')
-                           .id('recipient')
-                           .having(title='Remote Recipient'))
+    def _create_target_admin_unit(self):
+        au_ids = [au.unit_id for au in ogds_service().all_admin_units()]
+        if 'recipient' not in au_ids:
+            create(Builder('admin_unit')
+                   .id('recipient')
+                   .having(title='Remote Recipient'))
 
-        self.arguments['target_id'] = target_au.unit_id
+        self.arguments['target_id'] = 'recipient'
 
 
 builder_registry.register('dossier_transfer', DossierTransferBuilder)
