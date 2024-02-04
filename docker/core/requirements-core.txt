@@ -257,7 +257,7 @@ Products.ZSQLMethods==2.13.6
 psutil==5.8.0
 psycopg2==2.8.6
 pycparser==2.18
-PyJWT==1.6.1
+PyJWT==1.7.1
 pyldap==2.4.45
 python-dateutil==1.5
 python-docx==0.8.10
