@@ -95,7 +95,7 @@ lxml==4.2.6
 Mako==1.1.6
 Markdown==2.0.3
 MarkupSafe==1.1.1
-mechanize==0.2.5
+mechanize==0.4.8
 Missing==2.13.1
 mr.bob==0.1.2
 msgpack==0.6.2
