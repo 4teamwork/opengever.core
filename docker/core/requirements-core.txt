@@ -289,7 +289,7 @@ transmogrify.dexterity==1.6.3
 tzlocal==1.5.1
 ua-parser==0.8.0
 Unidecode==0.04.1
-urllib3==1.22
+urllib3==1.26.18
 vs.genericsetup.ldap==1.2
 wicked==1.1.12
 xlrd==1.1.0
