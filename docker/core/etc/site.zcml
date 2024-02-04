@@ -84,7 +84,6 @@
   <include package="plonetheme.teamraum" file="configure.zcml" />
   <include package="opengever.maintenance" file="configure.zcml" />
   <include package="ftw.bumblebee" file="configure.zcml" />
-  <include package="ftw.tika" file="configure.zcml" />
   <include package="five.pt" file="configure.zcml" />
   <include package="plone.resource" file="configure.zcml" />
   <include package="plone.formwidget.namedfile" file="configure.zcml" />
