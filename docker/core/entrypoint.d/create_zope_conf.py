@@ -25,6 +25,13 @@ def main():
         'zeo_address': env.get('ZEO_ADDRESS', 'zeoserver:8100'),
         'storage': env.get('STORAGE', 'zeoclient')
     }
+
+    if options['debug_mode'] == 'on':
+        # Avoid duplicate log entries on console
+        options['logfile_loglevel'] = 'CRITICAL'
+    else:
+        options['logfile_loglevel'] = 'INFO'
+
     if options['verbose_security'] == 'on':
         options['security_implementation'] = 'python'
 
@@ -95,7 +102,7 @@ trusted-proxy 127.0.0.1
   level INFO
   <logfile>
     path /app/var/log/instance.log
-    level INFO
+    level {logfile_loglevel}
   </logfile>
 </eventlog>
 
