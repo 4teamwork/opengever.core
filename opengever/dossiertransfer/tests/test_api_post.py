@@ -33,7 +33,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
             'expires': (now + timedelta(days=5)).isoformat(),
             'target': self.recipient.unit_id,
             'root': self.resolved_dossier.UID(),
-            'documents': [self.document.UID()],
+            'documents': [self.resolvable_document.UID()],
             'participations': ['p1'],
             'all_documents': False,
             'all_participations': False,
@@ -67,7 +67,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'target': u'recipient',
             u'source_user': 'regular_user',
             u'root': u'createresolvabledossier000000001',
-            u'documents': [u'createtreatydossiers000000000002'],
+            u'documents': [u'createresolvabledossier000000003'],
             u'participations': [u'p1'],
             u'all_documents': False,
             u'all_participations': False,
@@ -131,6 +131,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
 
         # Dossier is not resolved
         payload['root'] = self.dossier.UID()
+        payload['documents'] = [self.document.UID()]
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
@@ -160,7 +161,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
 
         # 'all_documents' and 'documents' are mutually exclusive
         payload['all_documents'] = True
-        payload['documents'] = [self.document.UID()]
+        payload['documents'] = [self.resolvable_document.UID()]
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
@@ -282,6 +283,35 @@ class TestDossierTransfersPost(IntegrationTestCase):
                     u'translated_message': u"'expires' must not be more than "
                                            u"30 days in the future.",
                     u'type': u'ExpiresTooFarInFuture'},
+                ],
+            },
+        }
+        self.assertDictContainsSubset(expected, browser.json)
+
+    @browsing
+    def test_documents_list_constraints(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        now = utcnow_tz_aware()
+        payload = self.create_test_payload(now)
+
+        # Documents must be inside root dossier
+        payload['documents'] = [self.meeting_document.UID()]
+
+        with freeze(now):
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(self.portal, view='@dossier-transfers', method='POST',
+                             data=json.dumps(payload),
+                             headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u'Inputs not valid',
+            u'additional_metadata': {
+                u'fields': [{
+                    u'field': u'documents',
+                    u'translated_message': u'Wrong contained type',
+                    u'type': u'WrongContainedType'},
                 ],
             },
         }

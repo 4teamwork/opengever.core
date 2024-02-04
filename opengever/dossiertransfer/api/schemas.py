@@ -1,5 +1,6 @@
 from datetime import timedelta
 from opengever.base.date_time import utcnow_tz_aware
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -19,6 +20,8 @@ from zope.schema import TextLine
 from zope.schema.interfaces import ConstraintNotSatisfied
 from zope.schema.interfaces import IContextSourceBinder
 from zope.schema.interfaces import IVocabularyFactory
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 import os
 
 
@@ -39,6 +42,21 @@ def valid_root_dossier(root_uid):
         if api.content.get_state(obj) == DOSSIER_STATE_RESOLVED:
             return True
     raise InvalidRootDossier()
+
+
+@provider(IContextSourceBinder)
+def valid_document_uids(context):
+    valid_uids = []
+    root_uid = context.get('root')
+    if root_uid:
+        root_dossier = api.content.uuidToObject(root_uid)
+        valid_docs = api.content.find(
+            context=root_dossier,
+            object_provides=IBaseDocument,
+        )
+        valid_uids = [doc.UID for doc in valid_docs]
+
+    return SimpleVocabulary([SimpleTerm(uid, uid) for uid in valid_uids])
 
 
 def valid_expires(expires):
@@ -86,7 +104,10 @@ class IDossierTransferAPISchema(Interface):
     documents = List(
         title=u'List of document UIDs',
         required=False,
-        value_type=ASCIILine(),
+        value_type=Choice(
+            title=u'Document UID',
+            source=valid_document_uids,
+        ),
     )
     participations = List(
         title=u'List of participation IDs',
