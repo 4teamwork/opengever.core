@@ -28,6 +28,9 @@ class TestDossierTransferSerializer(IntegrationTestCase):
             session.add(transfer)
             session.flush()
 
+        transfer.all_participations = False
+        transfer.participations = ['meeting_user']
+
         expected = {
             '@id': 'http://nohost/plone/@dossier-transfers/1',
             '@type': 'virtual.ogds.dossiertransfer',
@@ -40,9 +43,9 @@ class TestDossierTransferSerializer(IntegrationTestCase):
             'source': 'plone',
             'target': 'recipient',
             'source_user': src_user.userid,
-            'root': self.dossier.UID(),
-            'documents': [self.document.UID()],
-            'participations': ['p1'],
+            'root': self.resolvable_dossier.UID(),
+            'documents': [self.resolvable_document.UID()],
+            'participations': ['meeting_user'],
             'all_documents': False,
             'all_participations': False,
         }

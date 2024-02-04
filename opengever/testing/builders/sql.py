@@ -624,11 +624,10 @@ class DossierTransferBuilder(SqlObjectBuilder):
         self.arguments['source_user_id'] = 'regular_user'
         self.arguments['state'] = TRANSFER_STATE_PENDING
         self.arguments['expires'] = utcnow_tz_aware() + timedelta(days=30)
-        self.arguments['root'] = 'createtreatydossiers000000000001'  # self.dossier
-        self.arguments['documents'] = ['createtreatydossiers000000000002']  # self.document
-        self.arguments['participations'] = ['p1']
+        self.arguments['root'] = 'createresolvabledossier000000001'  # self.resolvable_dossier
+        self.arguments['documents'] = ['createresolvabledossier000000003']  # self.resolvable_document
         self.arguments['all_documents'] = False
-        self.arguments['all_participations'] = False
+        self.arguments['all_participations'] = True
 
         self._with_default_target = True
 
