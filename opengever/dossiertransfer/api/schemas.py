@@ -3,6 +3,8 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.behaviors.dossier import IDossierMarker
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossier.participations import IParticipationData
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from zope.component import getUtility
@@ -59,6 +61,23 @@ def valid_document_uids(context):
     return SimpleVocabulary([SimpleTerm(uid, uid) for uid in valid_uids])
 
 
+@provider(IContextSourceBinder)
+def valid_participation_ids(context):
+    valid_ids = []
+    root_uid = context.get('root')
+
+    # We only consider participations on the main dossier for now.
+    # The frontend doesn't allow selecting participations on subdossiers.
+    root_dossier = api.content.uuidToObject(root_uid)
+
+    if root_dossier:
+        participations = IParticipationAware(root_dossier).get_participations()
+        participation_data = [IParticipationData(pcp) for pcp in participations]
+        valid_ids = [data.participant_id for data in participation_data]
+
+    return SimpleVocabulary([SimpleTerm(id_, id_) for id_ in valid_ids])
+
+
 def valid_expires(expires):
     if expires < utcnow_tz_aware():
         raise ExpiresInPast()
@@ -112,7 +131,10 @@ class IDossierTransferAPISchema(Interface):
     participations = List(
         title=u'List of participation IDs',
         required=False,
-        value_type=ASCIILine(),
+        value_type=Choice(
+            title=u'Participation ID',
+            source=valid_participation_ids,
+        ),
     )
     all_documents = Bool(
         title=u'Whether all documents should be transferred',

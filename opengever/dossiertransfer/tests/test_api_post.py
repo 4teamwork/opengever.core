@@ -6,6 +6,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
+from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
@@ -20,11 +21,17 @@ class TestDossierTransfersPost(IntegrationTestCase):
     def setUp(self):
         super(TestDossierTransfersPost, self).setUp()
         with elevated_privileges():
+            self.add_participation(
+                self.resolvable_dossier, u'meeting_user', ['final-drawing'])
             LockingResolveManager(self.resolvable_dossier).resolve()
             self.resolved_dossier = self.resolvable_dossier
             self.recipient = create(Builder('admin_unit')
                                     .id('recipient')
                                     .having(title='Remote Recipient'))
+
+    def add_participation(self, dossier, participant_id, roles):
+        handler = IParticipationAware(dossier)
+        handler.add_participation(participant_id, roles)
 
     def create_test_payload(self, now):
         payload = {
@@ -34,7 +41,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
             'target': self.recipient.unit_id,
             'root': self.resolved_dossier.UID(),
             'documents': [self.resolvable_document.UID()],
-            'participations': ['p1'],
+            'participations': ['meeting_user'],
             'all_documents': False,
             'all_participations': False,
         }
@@ -68,7 +75,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'source_user': 'regular_user',
             u'root': u'createresolvabledossier000000001',
             u'documents': [u'createresolvabledossier000000003'],
-            u'participations': [u'p1'],
+            u'participations': [u'meeting_user'],
             u'all_documents': False,
             u'all_participations': False,
         }
@@ -132,6 +139,8 @@ class TestDossierTransfersPost(IntegrationTestCase):
         # Dossier is not resolved
         payload['root'] = self.dossier.UID()
         payload['documents'] = [self.document.UID()]
+        payload['all_participations'] = True
+        payload.pop('participations')
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
@@ -203,7 +212,7 @@ class TestDossierTransfersPost(IntegrationTestCase):
 
         # 'all_participations' and 'participations' are mutually exclusive
         payload['all_participations'] = True
-        payload['participations'] = ['p1']
+        payload['participations'] = ['meeting_user']
 
         with browser.expect_http_error(code=400, reason='Bad Request'):
             browser.open(self.portal, view='@dossier-transfers', method='POST',
@@ -310,6 +319,35 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'additional_metadata': {
                 u'fields': [{
                     u'field': u'documents',
+                    u'translated_message': u'Wrong contained type',
+                    u'type': u'WrongContainedType'},
+                ],
+            },
+        }
+        self.assertDictContainsSubset(expected, browser.json)
+
+    @browsing
+    def test_participation_list_constraints(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        now = utcnow_tz_aware()
+        payload = self.create_test_payload(now)
+
+        # Participations must exist on root dossier
+        payload['participations'] = ['doesnt-exist']
+
+        with freeze(now):
+            with browser.expect_http_error(code=400, reason='Bad Request'):
+                browser.open(self.portal, view='@dossier-transfers', method='POST',
+                             data=json.dumps(payload),
+                             headers=self.api_headers)
+
+        expected = {
+            u'type': u'BadRequest',
+            u'translated_message': u'Inputs not valid',
+            u'additional_metadata': {
+                u'fields': [{
+                    u'field': u'participations',
                     u'translated_message': u'Wrong contained type',
                     u'type': u'WrongContainedType'},
                 ],
