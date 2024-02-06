@@ -7,7 +7,7 @@ archetypes.schemaextender==2.1.8
 argcomplete==1.9.4
 BeautifulSoup==3.2.1
 borg.localrole==3.0.3
-certifi==2018.11.29
+certifi==2020.04.05.1
 cffi==1.11.5
 Chameleon==3.3
 chardet==3.0.4
@@ -79,7 +79,7 @@ ftw.upgrade==3.3.1
 ftw.usermigration==1.3.0
 ftw.zipexport==1.6.5
 functools32==3.2.3.post2
-future==0.13.1
+future==0.18.3
 i18ndude==4.4.0
 idna==2.6
 imsvdex==1.1
@@ -88,14 +88,14 @@ initgroups==2.13.0
 ipaddress==1.0.22
 itsdangerous==1.1.0
 jdcal==1.4
-Jinja2==2.7.3
+Jinja2==2.11.3
 jsonschema==2.6.0
 LEPL==5.1.3
-lxml==4.2.6
-Mako==1.0.7
+lxml==4.9.4
+Mako==1.1.6
 Markdown==2.0.3
 MarkupSafe==1.1.1
-mechanize==0.2.5
+mechanize==0.4.8
 Missing==2.13.1
 mr.bob==0.1.2
 msgpack==0.6.2
@@ -107,7 +107,7 @@ openpyxl==2.5.2
 ordereddict==1.1
 path.py==11.0.1
 Persistence==2.13.2
-Pillow==3.3.3
+Pillow==6.2.2
 Plone==4.3.20
 plone.alterego==1.1.5
 plone.api==1.10.2
@@ -257,7 +257,7 @@ Products.ZSQLMethods==2.13.6
 psutil==5.8.0
 psycopg2==2.8.6
 pycparser==2.18
-PyJWT==1.6.1
+PyJWT==1.7.1
 pyldap==2.4.45
 python-dateutil==1.5
 python-docx==0.8.10
@@ -270,7 +270,7 @@ PyXB==1.2.5
 Record==2.13.0
 repoze.catalog==0.8.3
 repoze.xmliter==0.6
-requests==2.18.4
+requests==2.27.1
 RestrictedPython==3.6.0
 rfc6266==0.0.4
 roman==1.4.0
@@ -289,7 +289,7 @@ transmogrify.dexterity==1.6.3
 tzlocal==1.5.1
 ua-parser==0.8.0
 Unidecode==0.04.1
-urllib3==1.22
+urllib3==1.26.18
 vs.genericsetup.ldap==1.2
 wicked==1.1.12
 xlrd==1.1.0
