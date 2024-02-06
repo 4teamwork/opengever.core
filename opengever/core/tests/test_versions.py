@@ -4,6 +4,11 @@ import glob
 import os.path
 
 
+EXCLUDED_PACKAGES = set([
+    'cryptography',  # On CentOS 7 we need an older version because of an old OpenSSL version
+])
+
+
 class TestVersionPinnings(TestCase):
 
     def test_buildout_and_docker_versions_are_equal(self):
@@ -11,6 +16,7 @@ class TestVersionPinnings(TestCase):
         docker_versions = self.get_docker_versions()
 
         common_packages = set(buildout_versions.keys()) & set(docker_versions.keys())
+        common_packages -= EXCLUDED_PACKAGES
         for package in common_packages:
             self.assertEqual(
                 buildout_versions[package],

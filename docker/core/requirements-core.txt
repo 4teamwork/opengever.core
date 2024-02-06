@@ -30,7 +30,7 @@ collective.transmogrifier==1.5.2
 collective.usernamelogger==1.4
 collective.vdexvocabulary==0.2.2
 collective.z3cform.datetimewidget==1.2.9
-cryptography==2.8
+cryptography==3.3.2
 cssselect==1.0.3
 cssutils==1.0.2
 dataflake.fakeldap==2.1

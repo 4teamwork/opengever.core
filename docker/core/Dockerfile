@@ -1,8 +1,7 @@
-FROM 4teamwork/plone:4.3.20 AS build-stage
-
+FROM 4teamwork/plone:4.3.20-alpine3.18 AS builder
 USER root
 
-RUN apk add --virtual .build-deps \
+RUN apk add \
     gcc \
     musl-dev \
     libc-dev \
@@ -11,22 +10,39 @@ RUN apk add --virtual .build-deps \
     libpng-dev \
     libxml2-dev \
     libxslt-dev \
-    python2-dev \
     openldap-dev \
+    openssl1.1-compat-dev \
     libffi-dev \
-    postgresql-dev \
+    libpq \
     gettext
+
+# Fix support for python-ldap<3.4.2 with OpenLDAP 2.6
+RUN echo "INPUT ( libldap.so )" > /usr/lib/libldap_r.so
 
 WORKDIR /app
 
-ENV VIRTUAL_ENV=/app
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PATH="/app/bin:$PATH"
+
+# libpq-dev requires OpenSSL 3 headers. Currently it's not possible to install
+# versions 1.1 and 3 at the same time. For building psycopg2 we temporarily
+# uninstall the 1.1 headers and reinstall them after having built psycopg2.
+RUN --mount=type=cache,target=/root/.cache \
+    apk del \
+    openssl1.1-compat-dev \
+ && apk add --virtual .postgresql-dev \
+    libpq-dev \
+ && pip install \
+    --prefix /app \
+    psycopg2==2.8.6 \
+ && apk del .postgresql-dev \
+ && apk add openssl1.1-compat-dev
 
 COPY ./docker/core/requirements-core.txt ./docker/core/requirements-deployment.txt /app/
 RUN --mount=type=cache,target=/root/.cache \
     --mount=type=secret,id=gldt \
     export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
     pip install \
+    --prefix /app \
     --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -r requirements-core.txt \
     -r requirements-deployment.txt
@@ -40,6 +56,7 @@ RUN --mount=type=cache,target=/root/.cache \
     --mount=type=secret,id=gldt \
     export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
     pip install \
+    --prefix /app \
     --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
     -e /app/src/collective.js.timeago \
     -e . \
@@ -68,10 +85,8 @@ RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
-COPY ./docker/core/patches/z3c_autoinclude_utils.py /app/lib/python2.7/site-packages/z3c/autoinclude/utils.py
-RUN python2.7 -m compileall /app/lib/python2.7/site-packages/z3c/autoinclude/utils.py
 
-FROM 4teamwork/plone:4.3.20
+FROM 4teamwork/plone:4.3.20-alpine3.18 AS prod
 
 USER root
 RUN apk add \
@@ -79,7 +94,7 @@ RUN apk add \
     libffi \
     libpq
 
-COPY --from=build-stage /app /app
+COPY --from=builder /app /app
 
 VOLUME /data
 WORKDIR /app
