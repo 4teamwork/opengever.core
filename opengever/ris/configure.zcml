@@ -8,6 +8,7 @@
   <include file="permissions.zcml" />
   <include package=".behaviors" />
   <include package=".browser" />
+  <include package=".viewlets" />
 
   <i18n:registerTranslations directory="locales" />
 
