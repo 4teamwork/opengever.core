@@ -294,11 +294,38 @@ msgstr "Soumis"
 msgid "proposal-transition-cancel"
 msgstr "Annuler"
 
+msgid "proposal-transition-cancel-manage"
+msgstr "Annuler (Manager: Debug)"
+
+msgid "proposal-transition-decide-manage"
+msgstr "Décider (Manager: Debug)"
+
 msgid "proposal-transition-reactivate"
 msgstr "Réactiver"
 
+msgid "proposal-transition-reject-manage"
+msgstr "Rejeter (Manager: Debug)"
+
+msgid "proposal-transition-reopen"
+msgstr "Réviser"
+
+msgid "proposal-transition-reopen-manage"
+msgstr "Réviser (Manager: Debug)"
+
+msgid "proposal-transition-schedule-manage"
+msgstr "Calendrier (Manager: Debug)"
+
 msgid "proposal-transition-submit"
 msgstr "Soumettre"
+
+msgid "proposal-transition-submit-manage"
+msgstr "Soumettre (Manager: Debug)"
+
+msgid "proposal-transition-undecide-manage"
+msgstr "Annuler décision (Manager: Debug)"
+
+msgid "proposal-transition-unschedule-manage"
+msgstr "Supprimer (Manager: Debug)"
 
 msgid "repositoryfolder-state-active"
 msgstr "Actif"

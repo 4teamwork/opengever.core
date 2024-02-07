@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-09-28 15:30+0000\n"
+"POT-Creation-Date: 2024-02-07 13:02+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -139,6 +139,10 @@ msgstr "Nicht alle benötigten Felder wurden ausgefüllt."
 #: ./opengever/dossier/browser/overview.py
 msgid "Participants"
 msgstr "Beteiligungen"
+
+#: ./opengever/dossier/menu.py
+msgid "Proposal (Manager: Debug)"
+msgstr "Antrag (Manager: Debug)"
 
 #: ./opengever/dossier/dossiertemplate/form.py
 msgid "Select dossiertemplate"

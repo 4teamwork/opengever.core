@@ -294,11 +294,38 @@ msgstr "Eingereicht"
 msgid "proposal-transition-cancel"
 msgstr "Stornieren"
 
+msgid "proposal-transition-cancel-manage"
+msgstr "Stornieren (Manager: Debug)"
+
+msgid "proposal-transition-decide-manage"
+msgstr "Beschliessen (Manager: Debug)"
+
 msgid "proposal-transition-reactivate"
 msgstr "Wieder eröffnen"
 
+msgid "proposal-transition-reject-manage"
+msgstr "Ablehnen (Manager: Debug)"
+
+msgid "proposal-transition-reopen"
+msgstr "Wieder eröffnen"
+
+msgid "proposal-transition-reopen-manage"
+msgstr "Wieder eröffnen (Manager: Debug)"
+
+msgid "proposal-transition-schedule-manage"
+msgstr "Traktandieren (Manager: Debug)"
+
 msgid "proposal-transition-submit"
 msgstr "Einreichen"
+
+msgid "proposal-transition-submit-manage"
+msgstr "Einreichen (Manager: Debug)"
+
+msgid "proposal-transition-undecide-manage"
+msgstr "Beschluss entfernen (Manager: Debug)"
+
+msgid "proposal-transition-unschedule-manage"
+msgstr "Traktandum streichen (Manager: Debug)"
 
 msgid "repositoryfolder-state-active"
 msgstr "aktiv"

@@ -383,14 +383,41 @@ msgstr "Submitted"
 msgid "proposal-transition-cancel"
 msgstr "Cancel"
 
+msgid "proposal-transition-cancel-manage"
+msgstr "Cancel (Manager: Debug)"
+
+msgid "proposal-transition-decide-manage"
+msgstr "Decide (Manager: Debug)"
+
 #. German translation: Wieder eröffnen
 #. MARKER: double check
 msgid "proposal-transition-reactivate"
 msgstr "Reopen"
 
+msgid "proposal-transition-reject-manage"
+msgstr "Reject (Manager: Debug)"
+
+msgid "proposal-transition-reopen"
+msgstr "Reopen"
+
+msgid "proposal-transition-reopen-manage"
+msgstr "Reopen (Manager: Debug)"
+
+msgid "proposal-transition-schedule-manage"
+msgstr "Schedule (Manager: Debug)"
+
 #. German translation: Einreichen
 msgid "proposal-transition-submit"
 msgstr "Submit"
+
+msgid "proposal-transition-submit-manage"
+msgstr "Submit (Manager: Debug)"
+
+msgid "proposal-transition-undecide-manage"
+msgstr "Undecide (Manager: Debug)"
+
+msgid "proposal-transition-unschedule-manage"
+msgstr "Unschedule (Manager: Debug)"
 
 #. German translation: aktiv
 msgid "repositoryfolder-state-active"
