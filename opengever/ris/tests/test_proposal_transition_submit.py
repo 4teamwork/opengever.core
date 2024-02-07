@@ -31,8 +31,7 @@ class TestRisProposalTransitionSubmit(IntegrationTestCase):
 
         self.assertEqual(302, browser.status_code)
         self.assertEqual(
-            'http://ris.example.com/spv/antrag-status-modifizieren?context={}'
-            '&transition=proposal-transition-submit'.format(
+            'http://ris.example.com/spv/antrag-einreichen?context={}'.format(
                 self.ris_proposal.absolute_url()
             ),
             browser.headers['location']

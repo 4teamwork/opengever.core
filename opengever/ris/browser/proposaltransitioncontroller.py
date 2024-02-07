@@ -1,5 +1,7 @@
 from opengever.ris import is_ris_feature_enabled
-from opengever.ris import RIS_VIEW_STATE_CHANGE
+from opengever.ris import RIS_VIEW_TRANSITION_CANCEL
+from opengever.ris import RIS_VIEW_TRANSITION_REACTIVATE
+from opengever.ris import RIS_VIEW_TRANSITION_SUBMIT
 from opengever.ris.interfaces import IRisSettings
 from plone import api
 from plone.protect.utils import addTokenToUrl
@@ -80,17 +82,16 @@ class ProposalTransitionController(BrowserView):
 
         return guard(self)
 
-    def _modify_workflow_state_url(self, transition):
+    def _modify_workflow_state_url(self, view, transition):
         """Returns the url to the addtransitioncomment view for transition.
         """
         ris_url = api.portal.get_registry_record(
             name='base_url', interface=IRisSettings
         ).rstrip("/")
-        return '{}/{}?context={}&transition={}'.format(
+        return '{}/{}?context={}'.format(
             ris_url,
-            RIS_VIEW_STATE_CHANGE,
-            self.context.absolute_url(),
-            transition)
+            view,
+            self.context.absolute_url())
 
     @guard('proposal-transition-cancel')
     def cancel_guard(self):
@@ -101,18 +102,22 @@ class ProposalTransitionController(BrowserView):
 
     @action('proposal-transition-cancel')
     def cancel_action(self, transition):
-        return self._modify_workflow_state_url(transition)
+        return self._modify_workflow_state_url(
+            RIS_VIEW_TRANSITION_CANCEL, transition,
+        )
 
-    @guard('proposal-transition-reactivate')
-    def reactivate_guard(self):
+    @guard('proposal-transition-reopen')
+    def reopen_guard(self):
         return api.user.has_permission(
             'Modify portal content',
             obj=self.context.get_containing_dossier(),
         )
 
-    @action('proposal-transition-reactivate')
-    def reactivate_action(self, transition):
-        return self._modify_workflow_state_url(transition)
+    @action('proposal-transition-reopen')
+    def reopen_action(self, transition):
+        return self._modify_workflow_state_url(
+            RIS_VIEW_TRANSITION_REACTIVATE, transition,
+        )
 
     @guard('proposal-transition-submit')
     def submit_guard(self):
@@ -120,32 +125,51 @@ class ProposalTransitionController(BrowserView):
             api.user.has_permission('Modify portal content', obj=self.context)
         )
 
+    @guard('proposal-transition-submit-to-meeting')
+    def submit_to_meeting_guard(self):
+        return (
+            api.user.has_permission('Modify portal content', obj=self.context)
+        )
+
     @action('proposal-transition-submit')
     def submit_action(self, transition):
-        return self._modify_workflow_state_url(transition)
+        return self._modify_workflow_state_url(
+            RIS_VIEW_TRANSITION_SUBMIT, transition,
+        )
 
     @guard('proposal-transition-decide')
     def decide_guard(self):
         return (
-            api.user.has_permission('Modify portal content', obj=self.context)
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
         )
 
     @guard('proposal-transition-reject')
     def reject_guard(self):
         return (
-            api.user.has_permission('Modify portal content', obj=self.context)
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
         )
 
     @guard('proposal-transition-schedule')
     def schedule_guard(self):
         return (
-            api.user.has_permission('Modify portal content', obj=self.context)
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
         )
 
     @guard('proposal-transition-unschedule')
     def unschedule_guard(self):
         return (
-            api.user.has_permission('Modify portal content', obj=self.context)
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
+        )
+
+    @guard('proposal-transition-unschedule-to-dossier')
+    def unschedule_to_dossier_guard(self):
+        return (
+            api.user.has_permission('Modify portal content',
+                                    obj=self.context.get_containing_dossier())
         )
 
     def _get_function_for_transition(self, type_, transition):

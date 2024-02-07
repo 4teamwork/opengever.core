@@ -31,8 +31,7 @@ class TestRisProposalTransitionCancel(IntegrationTestCase):
 
         self.assertEqual(302, browser.status_code)
         self.assertEqual(
-            'http://ris.example.com/spv/antrag-status-modifizieren?context={}'
-            '&transition=proposal-transition-cancel'.format(
+            'http://ris.example.com/spv/antrag-stornieren?context={}'.format(
                 self.ris_proposal.absolute_url()
             ),
             browser.headers['location']
