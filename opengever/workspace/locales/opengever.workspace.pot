@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-01-15 11:57+0000\n"
+"POT-Creation-Date: 2024-02-08 15:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -227,6 +227,11 @@ msgstr ""
 #. Default: "End"
 #: ./opengever/workspace/workspace_meeting.py
 msgid "label_end"
+msgstr ""
+
+#. Default: "External reference"
+#: ./opengever/workspace/todo.py
+msgid "label_external_reference"
 msgstr ""
 
 #. Default: "Folders"
