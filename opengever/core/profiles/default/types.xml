@@ -47,6 +47,9 @@
   <object name="opengever.meeting.proposaltemplate" meta_type="Dexterity FTI" />
   <object name="opengever.meeting.period" meta_type="Dexterity FTI" />
 
+  <!-- RIS -->
+  <object name="opengever.ris.proposal" meta_type="Dexterity FTI" />
+
   <!-- PRIVATE -->
   <object name="opengever.private.root" meta_type="Dexterity FTI" />
   <object name="opengever.private.folder" meta_type="Dexterity FTI" />

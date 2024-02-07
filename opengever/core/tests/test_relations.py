@@ -91,6 +91,7 @@ EXPECTED_INTERFACES = [
     'opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefixMarker',
     'opengever.repository.interfaces.IRepositoryFolder',
     'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+    'opengever.ris.proposal.IProposal',
     'opengever.sharing.behaviors.IDossier',
     'opengever.task.reminder.interfaces.IReminderSupport',
     'opengever.task.task.ITask',
@@ -150,6 +151,7 @@ EXPECTED_TYPES_WITH_RELATIONS = [
     'opengever.meeting.submittedproposal',
     'opengever.private.dossier',
     'opengever.repository.repositoryfolder',
+    'opengever.ris.proposal',
     'opengever.task.task',
     'opengever.workspace.meetingagendaitem',
     'opengever.workspace.todo',
@@ -221,6 +223,12 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
             .within(dossier_a)
             .relate_to(document_a)
             .with_submitted())
+
+        create(
+            Builder('ris_proposal')
+            .within(dossier_a)
+            .having(document=document_a)
+        )
 
         dossier_expired = create(Builder('dossier').as_expired())
         self.grant('Records Manager')

@@ -5,6 +5,8 @@ from zope.i18nmessageid import MessageFactory
 
 _ = MessageFactory("opengever.ris")
 
+LEGACY_PROPOSAL_TYPE = "opengever.meeting.proposal"
+
 
 def is_ris_feature_enabled():
     return bool(

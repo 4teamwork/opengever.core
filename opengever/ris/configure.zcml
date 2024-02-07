@@ -5,6 +5,10 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="opengever.ris">
 
+  <include file="permissions.zcml" />
+  <include package=".behaviors" />
   <i18n:registerTranslations directory="locales" />
+
+  <adapter factory=".sequence.ProposalSequenceNumberGenerator" />
 
 </configure>
