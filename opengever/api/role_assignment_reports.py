@@ -1,6 +1,10 @@
+from opengever.base.behaviors.translated_title import ITranslatedTitle
+from opengever.base.behaviors.translated_title import ITranslatedTitleSupport
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.ogds.base.actor import Actor
 from opengever.sharing.browser.sharing import ROLE_MAPPING
+from plone import api
 from plone.app.uuid.utils import uuidToObject
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -41,6 +45,7 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
 
     def __init__(self, context, request):
         super(RoleAssignmentReportsGet, self).__init__(context, request)
+        self.types_tool = api.portal.get_tool('portal_types')
         self.params = []
 
     def publishTraverse(self, request, name):
@@ -57,9 +62,17 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
                 result = storage.get(report_id)
             except KeyError:
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
+
+            types_tool = api.portal.get_tool('portal_types')
+
             for item in result['items']:
                 obj = uuidToObject(item['UID'])
-                item['title'] = obj.Title()
+                fti = types_tool[obj.portal_type]
+                type_title = translate(fti.title, domain=fti.i18n_domain, context=self.request)
+
+                item['reference'] = self.get_reference_number(obj)
+                item['type'] = type_title
+                item['title'] = self.get_title(obj)
                 item['url'] = obj.absolute_url()
 
             result['referenced_roles'] = self.get_referenced_roles()
@@ -81,6 +94,29 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
             result['batching'] = batch.links
 
         return result
+
+    def get_title(self, obj):
+        title = obj.title
+        if ITranslatedTitleSupport.providedBy(obj):
+            title = ITranslatedTitle(obj).translated_title()
+        return title
+
+    def get_type_title(self, obj):
+        type_title = obj.portal_type
+        fti = self.types_tool.get(obj.portal_type)
+        if fti:
+            type_title = translate(
+                fti.title,
+                domain=fti.i18n_domain,
+                context=self.request
+            )
+        return type_title
+
+    def get_reference_number(self, obj):
+        refnum = IReferenceNumber(obj)
+        if not refnum:
+            return u''
+        return refnum.get_number()
 
     def get_referenced_roles(self):
         roles = []
