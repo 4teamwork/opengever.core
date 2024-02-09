@@ -209,13 +209,16 @@ class OGGBundleRepoRoot(OGGBundleItemBase):
         self._data['title_en'] = getattr(node, 'title_en', None)
         self._data['valid_from'] = getattr(node, 'valid_from', None)
         self._data['valid_until'] = getattr(node, 'valid_until', None)
-        self._data['_permissions'] = {
-            'read': [users_group],
-            'add': [users_group],
-            'edit': [users_group],
-            'close': [],
-            'reactivate': [],
-        }
+        if users_group is None:
+            self._data['_permissions'] = node._permissions
+        else:
+            self._data['_permissions'] = {
+                'read': [users_group],
+                'add': [users_group],
+                'edit': [users_group],
+                'close': [],
+                'reactivate': [],
+            }
 
 
 class OGGBundleRepoFolder(OGGBundleItemBase):
@@ -236,6 +239,7 @@ class OGGBundleRepoFolder(OGGBundleItemBase):
         'title_en',
         'valid_from',
         'valid_until',
+        '_permissions',
     )
 
     def __init__(self, node):

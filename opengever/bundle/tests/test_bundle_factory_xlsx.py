@@ -212,3 +212,61 @@ class TestOggBundleFactoryXLSX(BaseTestOggBundleFactory):
         self.assertNotIn('title_fr', subbranch)
         self.assertNotIn('title_en', subbranch)
         self.assertEqual(25, subbranch['retention_period'])
+
+    def test_xlsx_bundle_factory_supports_permissions(self):
+        input_path = assets.get_path('basic_repository_permissions.xlsx')
+
+        args = parse_args([input_path, self.tempdir])
+
+        factory = BundleFactory(args)
+        factory.dump_bundle()
+
+        # Check that factory created a directory containing the json files
+        generated_dirs = os.listdir(self.tempdir)
+        self.assertEqual(1, len(generated_dirs), msg='Should generate one bundle')
+
+        bundle_path = os.path.join(self.tempdir, generated_dirs[0])
+
+        with open(os.path.join(bundle_path, 'reporoots.json'), 'r') as infile:
+            reporoot_json = json.load(infile)
+
+        with open(os.path.join(bundle_path, 'repofolders.json'), 'r') as infile:
+            repofolders_json = json.load(infile)
+
+        self.assertEqual(
+            {
+                u'add': [u'og_demo-ftw_users'],
+                u'block_inheritance': False,
+                u'close': [u'og_demo-ftw_users'],
+                u'edit': [u'og_demo-ftw_users'],
+                u'manage_dossiers': [u'og_demo-ftw_users'],
+                u'reactivate': [u'og_demo-ftw_users'],
+                u'read': [u'og_demo-ftw_users'],
+            },
+            reporoot_json[0]['_permissions']
+        )
+
+        self.assertEqual(
+            {
+                u'add': [],
+                u'block_inheritance': False,
+                u'close': [],
+                u'edit': [],
+                u'manage_dossiers': [],
+                u'reactivate': [],
+                u'read': [],
+            },
+            repofolders_json[0]['_permissions']
+        )
+        self.assertEqual(
+            {
+                u'add': [u'og_contributors'],
+                u'block_inheritance': True,
+                u'close': [u'og_resolvers'],
+                u'edit': [u'og_editors'],
+                u'manage_dossiers': [u'og_managers'],
+                u'reactivate': [u'og_reactivators'],
+                u'read': [u'og_readers'],
+            },
+            repofolders_json[1]['_permissions']
+        )
