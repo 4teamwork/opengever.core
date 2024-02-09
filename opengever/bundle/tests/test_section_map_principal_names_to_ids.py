@@ -73,12 +73,12 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-users',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['user1'],
-                    'add': ['user2'],
-                    'edit': ['user3'],
-                    'close': ['user4'],
-                    'reactivate': ['user5'],
+                '_ac_local_roles': {
+                    'user1': ['Reader'],
+                    'user2': ['Contributor', 'Editor'],
+                    'user3': ['Reviewer'],
+                    'user4': ['Publisher'],
+                    'user5': ['Reader', 'Contributor', 'Editor'],
                 },
             },
 
@@ -90,12 +90,12 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-users',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': [user1.userid],
-                    'add': [user2.userid],
-                    'edit': [user3.userid],
-                    'close': [user4.userid],
-                    'reactivate': [user5.userid],
+                '_ac_local_roles': {
+                    user1.userid: ['Reader'],
+                    user2.userid: ['Contributor', 'Editor'],
+                    user3.userid: ['Reviewer'],
+                    user4.userid: ['Publisher'],
+                    user5.userid: ['Reader', 'Contributor', 'Editor'],
                 },
             },
 
@@ -138,12 +138,12 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['group1'],
-                    'add': ['group2'],
-                    'edit': ['group3'],
-                    'close': ['group4'],
-                    'reactivate': ['group5'],
+                '_ac_local_roles': {
+                    'group1': ['Reader'],
+                    'group2': ['Contributor', 'Editor'],
+                    'group3': ['Reviewer'],
+                    'group4': ['Publisher'],
+                    'group5': ['Reader', 'Contributor', 'Editor'],
                 },
             },
 
@@ -155,12 +155,12 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': [group1.groupid],
-                    'add': [group2.groupid],
-                    'edit': [group3.groupid],
-                    'close': [group4.groupid],
-                    'reactivate': [group5.groupid],
+                '_ac_local_roles': {
+                    group1.groupid: ['Reader'],
+                    group2.groupid: ['Contributor', 'Editor'],
+                    group3.groupid: ['Reviewer'],
+                    group4.groupid: ['Publisher'],
+                    group5.groupid: ['Reader', 'Contributor', 'Editor'],
                 },
             },
 
@@ -173,12 +173,10 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'unmapped-principals',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['john.doe'],
-                    'add': ['admin_users'],
-                    'edit': ['admin_users', 'afi_users'],
-                    'close': ['admin_users'],
-                    'reactivate': ['admin_users'],
+                '_ac_local_roles': {
+                    'john.doe': ['Reader'],
+                    'admin_users': ['Publisher', 'Publisher'],
+                    'afi_users': ['Contributor', 'Editor'],
                 },
             },
 
@@ -208,8 +206,8 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['one'],
+                '_ac_local_roles': {
+                    'one': ['Reader'],
                 },
             },
 
@@ -221,8 +219,8 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': [group1.groupid],
+                '_ac_local_roles': {
+                    group1.groupid: ['Reader'],
                 },
             },
 
@@ -250,11 +248,9 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['group1'],
-                    'add': ['GROUP1'],
-                    'edit': ['group2'],
-                    'close': ['GROUP2'],
+                '_ac_local_roles': {
+                    'Group1': ['Reader'],
+                    'GROUP2': ['Contributor'],
                 },
             },
 
@@ -266,11 +262,9 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': [group1.groupid],
-                    'add': [group1.groupid],
-                    'edit': [group2.groupid],
-                    'close': [group2.groupid],
+                '_ac_local_roles': {
+                    group1.groupid: ['Reader'],
+                    group2.groupid: ['Contributor'],
                 },
             },
 
@@ -300,9 +294,9 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['group1'],
-                    'add': ['user1'],
+                '_ac_local_roles': {
+                    'group1': ['Reader'],
+                    'user1': ['Contributor'],
                 },
             },
 
@@ -314,9 +308,9 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['group1'],
-                    'add': ['user1'],
+                '_ac_local_roles': {
+                    'group1': ['Reader'],
+                    'user1': ['Contributor'],
                 },
             },
 
@@ -355,9 +349,9 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
             {
                 'guid': 'mapped-groups',
                 '_type': 'opengever.dossier.businesscasedossier',
-                '_permissions': {
-                    'read': ['group1'],
-                    'add': ['user1'],
+                '_ac_local_roles': {
+                    'group1': ['Reader'],
+                    'user1': ['Contributor'],
                 },
             },
 

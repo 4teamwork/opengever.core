@@ -3,7 +3,7 @@ from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from opengever.base.model import create_session
 from opengever.bundle.sections.bundlesource import BUNDLE_KEY
-from opengever.bundle.sections.map_local_roles import ROLEMAP_KEY
+from opengever.bundle.sections.map_principals import AC_LOCAL_ROLES_KEY
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from sqlalchemy.sql import select
@@ -119,19 +119,16 @@ class MapPrincipalNamesToIDsSection(object):
                 continue
 
             # What we operate on is a mapping of
-            # <list of principal names> by <short role name>:
+            # <principal name> to <list of roles>:
             # {
-            #     'add': ['john.doe'],
-            #     'edit': ['james.bond', 'administrators'],
+            #     'user1': ['Reader'],
+            #     'group1': ['Contributor', 'Editor'],
             #     ...
             # }
-            principals_by_role = item.get(ROLEMAP_KEY, {})
-
-            for role_name, principal_names in principals_by_role.items():
-                principal_ids = [
-                    self.principal_ids_by_name.get(pn.lower(), pn)
-                    for pn in principal_names
-                ]
-                principals_by_role[role_name] = principal_ids
+            local_roles = item.get(AC_LOCAL_ROLES_KEY, {})
+            for pn, roles in local_roles.items():
+                new_pn = self.principal_ids_by_name.get(pn.lower(), pn)
+                del local_roles[pn]
+                local_roles[new_pn] = roles
 
             yield item
