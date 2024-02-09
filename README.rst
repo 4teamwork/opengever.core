@@ -1015,7 +1015,7 @@ isolated and rolled back properly for each test.
 Usage
 ~~~~~
 
-In order to run the testserver, a local `Development installation`_ needs to be installed.
+In order to run the testserver, a local `Development`_ installation needs to be installed.
 Once installed properly, the server can be started with ``bin/testserver``:
 
 .. code::
