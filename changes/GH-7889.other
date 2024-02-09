@@ -1,1 +1,0 @@
-Update Docker image to Alpine 3.18 and include backports of security fixes for various dependencies. [buchi]

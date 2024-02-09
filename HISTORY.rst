@@ -10,6 +10,33 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.3.0 (2024-02-09)
+---------------------
+
+New features:
+
+
+- Add new vocabulary: opengever.ogds.base.all_other_admin_units. [elioschmutz] [CA-6592]
+- Add new vocabulary: opengever.ogds.base.all_admin_units. [elioschmutz] [CA-6592-2]
+- Include getObjPositionInParent in serialization for documents/mails. [deiferni] [HG-4035-1]
+
+
+Bug fixes:
+
+
+- Fix mapping of names to principal ids in bundle import. [buchi] [CA-6435]
+- Fix upgrade step that touches modified timestamp. [lgraf] [CA-6552]
+
+
+Other changes:
+
+
+- Use ogds-sync service for syncing users and groups. [buchi] [CA-6237a]
+- Reporting view: Use filter query to filter by paths. [lgraf] [CA-6577]
+- Update Docker image to Alpine 3.18 and include backports of security fixes for various dependencies. [buchi] [GH-7889]
+- Bump versions of various dependencies to include latest security fixes. [buchi] [GH-7890]
+
+
 2024.2.0 (2024-01-24)
 ---------------------
 
