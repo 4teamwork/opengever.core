@@ -10,12 +10,12 @@ class PathFinder(object):
 
     def __init__(self):
         self._assert_proper_configuration()
-        self._instance_home = os.environ['INSTANCE_HOME']
-        self._client_home = os.environ['CLIENT_HOME']
+        self._instance_home = self.cfg.instancehome
+        self._client_home = self.cfg.clienthome
 
     def _assert_proper_configuration(self):
-        cfg = App.config._config
-        if cfg is None or isinstance(cfg, DefaultConfiguration):
+        self.cfg = App.config._config
+        if self.cfg is None or isinstance(self.cfg, DefaultConfiguration):
             raise RuntimeError(
                 "Zope is not configured properly yet, refusing "
                 "operate on paths that might be wrong!")
