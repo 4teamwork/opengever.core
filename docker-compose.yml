@@ -63,7 +63,7 @@ services:
       - SABLON_URL=http://sablon:8080/
       - PDFLATEX_URL=http://pdflatex:8080/
       - WEASYPRINT_URL=http://weasyprint:8080/
-      - OGDS_SYNC_URL=http://ogds-sync:8099/
+      - OGDS_SYNC_URL=http://ogds-sync:8080/
     depends_on:
       - zeoserver
       - ogds
