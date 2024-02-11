@@ -44,7 +44,7 @@ services:
     image: 4teamwork/ogui:latest
     profiles:
       - all
-  ogcore:
+  ogcore: &ogcore
     build:
       context: .
       dockerfile: ./docker/core/Dockerfile
@@ -71,6 +71,14 @@ services:
     profiles:
       - all
       - ogcore
+  ogcore-cron:
+    <<: *ogcore
+    command: cron
+    ports:
+      - "8082:8080"
+    profiles:
+      - all
+      - ogcore-cron
   zeoserver:
     image: 4teamwork/zeoserver:4.3.20
     volumes:
