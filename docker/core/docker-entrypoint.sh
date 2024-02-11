@@ -5,6 +5,8 @@ ZOPE_RUN="/app/bin/runzope"
 ZOPE_CTL="/app/bin/zopectl"
 export INSTANCE_HOME
 
+mkdir -p /data/log
+
 python /app/entrypoint.d/create_zope_conf.py "$CONFIG_FILE"
 python /app/entrypoint.d/create_ogds_zcml.py
 python /app/entrypoint.d/create_solr_zcml.py

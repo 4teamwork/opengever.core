@@ -79,7 +79,8 @@ COPY ./docker/core/cron /app/cron
 RUN mkdir -p /app/var/log /app/var/instance \
  && ln -sf /dev/stderr /app/var/log/instance.log \
  && ln -sf /dev/stdout /app/var/log/instance-json.log \
- && ln -sf /dev/stdout /app/var/log/solr-maintenance.log
+ && ln -sf /dev/stdout /app/var/log/solr-maintenance.log \
+ && ln -sf /data/log/nightly-jobs.log /app/var/log/nightly-jobs.log
 
 RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 
