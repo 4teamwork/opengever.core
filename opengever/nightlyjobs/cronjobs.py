@@ -67,7 +67,10 @@ def run_nightly_jobs_handler(app, args):
     # Discard the first three arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
     # scripts work.
-    args = parse_args(sys.argv[3:])
+    if sys.argv[0] != 'run_nightly_jobs':
+        args = parse_args(sys.argv[3:])
+    else:
+        args = parse_args(args)
     force = args.force
 
     for plone_site in all_plone_sites(app):
