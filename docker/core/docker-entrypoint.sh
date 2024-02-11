@@ -12,6 +12,9 @@ python /app/entrypoint.d/create_solr_zcml.py
 if [ $# -eq 0 ]
 then
   exec "$ZOPE_RUN" -C "$CONFIG_FILE"
+elif [ "$*" = "cron" ]
+then
+  exec go-crond -v --allow-unprivileged --server.bind=':8080' --server.metrics plone:/app/cron/crontab
 else
   exec "$ZOPE_CTL" -C "$CONFIG_FILE" "$@"
 fi

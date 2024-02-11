@@ -73,6 +73,7 @@ COPY ./docker/core/etc /app/etc
 RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
+COPY ./docker/core/cron /app/cron
 
 RUN mkdir -p /app/var/log \
  && ln -sf /dev/stderr /app/var/log/instance.log \
