@@ -1,3 +1,5 @@
+# ogcore builder
+# -----------------------------------------------------------------------------
 FROM 4teamwork/plone:4.3.20-alpine3.18 AS builder
 USER root
 
@@ -86,6 +88,28 @@ COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumbl
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
 
+# go-crond builder
+# -----------------------------------------------------------------------------
+FROM golang:1.21-alpine3.18 AS go-crond-builder
+
+RUN apk upgrade --no-cache --force
+RUN apk add --update build-base make git
+
+RUN mkdir -p /go/src/github.com/webdevops \
+ && cd /go/src/github.com/webdevops \
+ && git clone https://github.com/webdevops/go-crond.git
+
+WORKDIR /go/src/github.com/webdevops/go-crond
+
+ARG GOCROND_VERSION=23.12.0
+
+RUN git checkout $GOCROND_VERSION
+RUN go mod download
+RUN make test
+RUN make build
+
+# ogcore production image
+# -----------------------------------------------------------------------------
 FROM 4teamwork/plone:4.3.20-alpine3.18 AS prod
 
 USER root
@@ -95,6 +119,7 @@ RUN apk add \
     libpq
 
 COPY --from=builder /app /app
+COPY --from=go-crond-builder /go/src/github.com/webdevops/go-crond /usr/local/bin
 
 VOLUME /data
 WORKDIR /app
