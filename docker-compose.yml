@@ -57,8 +57,8 @@ services:
       - "8080:8080"
       - "8160:8160"
     environment:
-      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN}
-      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD}
+      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD:-secret}
       - MSGCONVERT_URL=http://msgconvert:8080/
       - SABLON_URL=http://sablon:8080/
       - PDFLATEX_URL=http://pdflatex:8080/
