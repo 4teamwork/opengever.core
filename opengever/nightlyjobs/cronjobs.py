@@ -41,7 +41,7 @@ def setup_logger():
     # Add handler that writes to self-rotating file
     log_dir = PathFinder().var_log
     file_handler = TimedRotatingFileHandler(
-        os.path.join(log_dir, 'nightly-jobs.log'),
+        os.path.realpath(os.path.join(log_dir, 'nightly-jobs.log')),
         when='midnight', backupCount=7)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
