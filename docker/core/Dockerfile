@@ -119,7 +119,8 @@ USER root
 RUN apk add \
     libldap \
     libffi \
-    libpq
+    libpq \
+    procps-ng
 
 COPY --from=builder /app /app
 COPY --from=go-crond-builder /go/src/github.com/webdevops/go-crond /usr/local/bin
