@@ -25,6 +25,7 @@ from opengever.dossier.interfaces import IDossierResolveProperties
 from opengever.dossier.interfaces import IDossierSettings
 from opengever.dossier.interfaces import ITemplateFolderProperties
 from opengever.dossier.vocabularies import count_available_dossier_types
+from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.ech0147.interfaces import IECH0147Settings
 from opengever.kub import is_kub_feature_enabled
 from opengever.mail.interfaces import IMailDownloadSettings
@@ -148,6 +149,7 @@ class GeverSettingsAdpaterV1(object):
         features['doc_properties'] = api.portal.get_registry_record('create_doc_properties', interface=ITemplateFolderProperties)  # noqa
         features['dossier_checklist'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierChecklistSettings)  # noqa
         features['dossier_templates'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTemplateSettings)  # noqa
+        features['dossier_transfers'] = api.portal.get_registry_record('is_feature_enabled', interface=IDossierTransferSettings)  # noqa
         features['ech0147_export'] = api.portal.get_registry_record('ech0147_export_enabled', interface=IECH0147Settings)
         features['ech0147_import'] = api.portal.get_registry_record('ech0147_import_enabled', interface=IECH0147Settings)
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)

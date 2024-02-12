@@ -2,8 +2,10 @@ from opengever.base.context_actions import BaseContextActions
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
 from opengever.docugate import is_docugate_feature_enabled
+from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
+from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.workspaceclient import is_linking_enabled
 from opengever.workspaceclient import is_workspace_client_feature_available
@@ -82,6 +84,13 @@ class DossierContextActions(BaseContextActions):
         return (
             is_workspace_client_feature_available()
             and api.user.has_permission('opengever.workspaceclient: Use Workspace Client')
+        )
+
+    def is_add_dossier_transfer_available(self):
+        return (
+            is_dossier_transfer_feature_enabled()
+            and api.user.has_permission('View', obj=self.context)
+            and api.content.get_state(self.context) == DOSSIER_STATE_RESOLVED
         )
 
     def is_copy_documents_from_workspace_available(self):

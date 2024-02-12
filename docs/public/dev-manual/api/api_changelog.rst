@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``POST @dossier-transfers``: New endpoint to create dossier transfers.
 
 
 2024.3.0 (2024-02-09)
