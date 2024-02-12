@@ -1,5 +1,4 @@
 from opengever.dossiertransfer.api.base import DossierTransferLocator
-from opengever.dossiertransfer.model import DossierTransfer
 from plone import api
 
 
@@ -20,7 +19,7 @@ class DossierTransfersGet(DossierTransferLocator):
         return self.list()
 
     def list(self):
-        transfers = DossierTransfer.query.all()
+        transfers = self.list_transfers()
         result = {
             '@id': '/'.join((api.portal.get().absolute_url(), '@dossier-transfers')),
             'items': [self.serialize(t) for t in transfers],

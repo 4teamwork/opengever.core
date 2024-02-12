@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.testing import IntegrationTestCase
+from plone import api
 import pytz
 
 
@@ -14,7 +15,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
 
     @browsing
     def test_get_dossier_transfer(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.secretariat_user, browser=browser)
 
         with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
             transfer = create(Builder('dossier_transfer'))
@@ -47,7 +48,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
                 u'token': u'recipient',
                 u'title': u'Remote Recipient',
             },
-            u'source_user': u'regular_user',
+            u'source_user': u'jurgen.konig',
             u'root': u'createresolvabledossier000000001',
             u'documents': [u'createresolvabledossier000000003'],
             u'participations': [u'meeting_user'],
@@ -58,7 +59,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
 
     @browsing
     def test_get_dossier_transfer_listing(self, browser):
-        self.login(self.manager, browser=browser)
+        self.login(self.secretariat_user, browser=browser)
 
         with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
             transfer1 = create(Builder('dossier_transfer'))
@@ -98,7 +99,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
                         u'token': u'recipient',
                         u'title': u'Remote Recipient',
                     },
-                    u'source_user': u'regular_user',
+                    u'source_user': u'jurgen.konig',
                     u'root': u'createresolvabledossier000000001',
                     u'documents': [u'createresolvabledossier000000003'],
                     u'participations': None,
@@ -122,7 +123,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
                         u'token': u'recipient',
                         u'title': u'Remote Recipient',
                     },
-                    u'source_user': u'regular_user',
+                    u'source_user': u'jurgen.konig',
                     u'root': u'createresolvabledossier000000001',
                     u'documents': [u'createresolvabledossier000000003'],
                     u'participations': [u'meeting_user'],
@@ -132,3 +133,124 @@ class TestDossierTransfersGet(IntegrationTestCase):
             ]
         }
         self.assertEqual(expected, browser.json)
+
+
+class TestDossierTransfersGetPermissions(IntegrationTestCase):
+
+    features = ('dossier-transfers', )
+
+    def create_transfers(self):
+        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+            session = create_session()
+
+            self.login(self.secretariat_user)
+
+            transfer = create(Builder('dossier_transfer')
+                              .having(
+                                  title='Transfer owned by secretariat_user'))
+            session.add(transfer)
+            session.flush()
+            self.transfer_owned_by_secretariat = transfer
+
+            self.login(self.dossier_responsible)
+
+            transfer = create(Builder('dossier_transfer')
+                              .having(
+                                  title='Transfer owned by dossier_responsible'))
+            session.add(transfer)
+            session.flush()
+            self.transfer_owned_by_responsible = transfer
+
+            self.login(self.manager)
+
+            create(Builder('admin_unit')
+                   .id('other1')
+                   .having(title='Other AU 1'))
+
+            create(Builder('admin_unit')
+                   .id('other2')
+                   .having(title='Other AU 2'))
+
+            transfer = create(Builder('dossier_transfer')
+                              .having(
+                                  title='Transfer between other admin units',
+                                  source_id='other1',
+                                  target_id='other2'))
+            session.add(transfer)
+            session.flush()
+            self.transfer_between_other_units = transfer
+
+    def fetch_transfer(self, transfer, browser):
+        browser.open(self.portal, view='@dossier-transfers/%s' % transfer.id,
+                     method='GET', headers=self.api_headers)
+
+    @browsing
+    def test_fetch_permissions(self, browser):
+        self.create_transfers()
+
+        expected = {
+            # User in inbox group
+            self.secretariat_user.id: [
+                (self.transfer_owned_by_secretariat, 200),
+                (self.transfer_owned_by_responsible, 200),
+                (self.transfer_between_other_units, 401),
+            ],
+            # User owning one of the transfers
+            self.dossier_responsible.id: [
+                (self.transfer_owned_by_secretariat, 401),
+                (self.transfer_owned_by_responsible, 200),
+                (self.transfer_between_other_units, 401),
+            ],
+            # User not in inbox group and not owning any transfers
+            self.regular_user.id: [
+                (self.transfer_owned_by_secretariat, 401),
+                (self.transfer_owned_by_responsible, 401),
+                (self.transfer_between_other_units, 401),
+            ],
+        }
+
+        browser.raise_http_errors = False
+        for user_id, expectations in expected.items():
+            user = api.user.get(userid=user_id)
+            self.login(user, browser=browser)
+
+            for transfer, expected_status in expectations:
+                self.fetch_transfer(transfer, browser)
+                self.assertEqual(
+                    expected_status,
+                    browser.status_code,
+                    'Expected HTTP status %s for request by user %s on '
+                    'transfer %r (%s)' % (
+                        expected_status, user, transfer, transfer.title))
+
+    @browsing
+    def test_listing_permissions(self, browser):
+        self.create_transfers()
+
+        expected = {
+            # User in inbox group
+            self.secretariat_user.id: [
+                (1, u'Transfer owned by secretariat_user'),
+                (2, u'Transfer owned by dossier_responsible'),
+            ],
+            # User owning one of the transfers
+            self.dossier_responsible.id: [
+                (2, u'Transfer owned by dossier_responsible'),
+            ],
+            # User not in inbox group and not owning any transfers
+            self.regular_user.id: [],
+        }
+
+        results = {}
+
+        for user_id, expectations in expected.items():
+            user = api.user.get(userid=user_id)
+            self.login(user, browser=browser)
+
+            browser.open(self.portal, view='@dossier-transfers/',
+                         method='GET', headers=self.api_headers)
+
+            items = [(tf['id'], tf['title']) for tf in browser.json['items']]
+            results[user_id] = items
+
+        self.assertEqual(expected, results)

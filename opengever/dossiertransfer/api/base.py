@@ -1,9 +1,14 @@
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
 from opengever.dossiertransfer.model import DossierTransfer
+from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.service import ogds_service
+from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
+from sqlalchemy import or_
 from zExceptions import BadRequest
 from zExceptions import NotFound
+from zExceptions import Unauthorized
 from zope.component import getMultiAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -74,11 +79,44 @@ class DossierTransferLocator(DossierTransfersBase):
                 raise BadRequest('{transfer_id} path parameter must be an integer')
             return transfer_id
 
+    def security_filters(self):
+        user_id = api.user.get_current().getId()
+        local_unit_id = get_current_admin_unit().unit_id
+
+        # Nobody may see transfers where the current admin unit is not involved
+        filters = [or_(
+            DossierTransfer.source_id == local_unit_id,
+            DossierTransfer.target_id == local_unit_id,
+        )]
+
+        if not self._is_inbox_user(user_id):
+            # Only inbox users may see transfers other than their own
+            filters.append(DossierTransfer.source_user_id == user_id)
+
+        return filters
+
+    def _is_inbox_user(self, user_id):
+        ogds_user = ogds_service().fetch_user(user_id)
+        local_unit = get_current_admin_unit()
+        for org_unit in local_unit.org_units:
+            if ogds_user in org_unit.inbox_group.users:
+                return True
+        return False
+
     def locate_transfer(self):
         transfer_id = self.transfer_id
-        if transfer_id is not None:
-            transfer = DossierTransfer.get(transfer_id)
-            if not transfer:
-                raise NotFound
+        if not DossierTransfer.get(transfer_id):
+            # Distinguish 404 from 401
+            raise NotFound
 
-            return transfer
+        filters = [DossierTransfer.id == transfer_id]
+        filters.extend(self.security_filters())
+        transfer = DossierTransfer.query.filter(*filters).first()
+        if not transfer:
+            raise Unauthorized
+
+        return transfer
+
+    def list_transfers(self):
+        transfers = DossierTransfer.query.filter(*self.security_filters()).all()
+        return transfers

@@ -23,7 +23,7 @@
       name="@dossier-transfers"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".api.get.DossierTransfersGet"
-      permission="cmf.ManagePortal"
+      permission="zope2.View"
       />
 
 </configure>
