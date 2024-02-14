@@ -70,6 +70,11 @@ class IToDoSchema(model.Schema):
         required=False,
     )
 
+    dexteritytextindexer.searchable('external_reference')
+    external_reference = schema.TextLine(
+        title=_(u'label_external_reference', default='External Reference'),
+        required=False)
+
 
 class ToDo(Container):
     implements(IToDo, IResponseSupported)

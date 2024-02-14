@@ -20,8 +20,9 @@ Ein ToDo erstellen
         "@type": "opengever.workspace.todo",
         "title": "Bitte Dokument reviewen",
         "text": "Das wichtige Dokument muss angeschaut werden.",
-        "deadline": "2018-10-16"
+        "deadline": "2018-10-16",
         "responsible": "john.doe",
+        "external_reference": "www.example.com"
       }
 
 
