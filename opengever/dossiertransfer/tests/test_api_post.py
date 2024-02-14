@@ -70,8 +70,14 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'created': u'2024-02-18T15:45:00+00:00',
             u'expires': u'2024-02-23T15:45:00+00:00',
             u'state': u'pending',
-            u'source': get_current_admin_unit().unit_id,
-            u'target': u'recipient',
+            'source': {
+                'token': get_current_admin_unit().unit_id,
+                'title': get_current_admin_unit().title,
+            },
+            'target': {
+                'token': 'recipient',
+                'title': 'Remote Recipient',
+            },
             u'source_user': 'regular_user',
             u'root': u'createresolvabledossier000000001',
             u'documents': [u'createresolvabledossier000000003'],
@@ -122,8 +128,8 @@ class TestDossierTransfersPost(IntegrationTestCase):
 
         self.assertEqual(201, browser.status_code)
         self.assertEqual('Transfer on same unit', browser.json['title'])
-        self.assertEqual('plone', browser.json['source'])
-        self.assertEqual('plone', browser.json['target'])
+        self.assertEqual('plone', browser.json['source']['token'])
+        self.assertEqual('plone', browser.json['target']['token'])
 
     @browsing
     def test_root_dossier_must_exist_and_be_resolved(self, browser):

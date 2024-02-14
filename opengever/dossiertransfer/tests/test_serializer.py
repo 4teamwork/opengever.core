@@ -40,8 +40,14 @@ class TestDossierTransferSerializer(IntegrationTestCase):
             'created': now.isoformat(),
             'expires': (now + timedelta(days=30)).isoformat(),
             'state': 'pending',
-            'source': 'plone',
-            'target': 'recipient',
+            'source': {
+                'token': 'plone',
+                'title': 'Hauptmandant',
+            },
+            'target': {
+                'token': 'recipient',
+                'title': 'Remote Recipient',
+            },
             'source_user': src_user.userid,
             'root': self.resolvable_dossier.UID(),
             'documents': [self.resolvable_document.UID()],

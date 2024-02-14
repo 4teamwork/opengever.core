@@ -26,8 +26,14 @@ class SerializeDossierTransferToJson(object):
             'created': transfer.created,
             'expires': transfer.expires,
             'state': transfer.state,
-            'source': transfer.source_id,
-            'target': transfer.target_id,
+            'source': {
+                'token': transfer.source.unit_id,
+                'title': transfer.source.title,
+            },
+            'target': {
+                'token': transfer.target.unit_id,
+                'title': transfer.target.title,
+            },
             'source_user': transfer.source_user_id,
             'root': transfer.root,
             'documents': transfer.documents,
