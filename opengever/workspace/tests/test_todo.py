@@ -136,6 +136,35 @@ class TestAPISupportForTodo(IntegrationTestCase):
         self.assertEqual('todo-4', browser.json['id'])
 
     @browsing
+    def test_create_with_all(self, browser):
+        self.login(self.workspace_member, browser)
+        browser.open(
+            self.workspace, method='POST', headers=self.api_headers,
+            data=json.dumps({
+                'title': 'Ein komplett ausgefuelltes ToDo',
+                '@type': 'opengever.workspace.todo',
+                'text': 'Eine ToDo-Beschreibung',
+                'is_completed': False,
+                'responsible': self.workspace_member.id,
+                'deadline': '2024-02-13',
+                'external_reference': 'www.4teamwork.ch',
+            }))
+
+        self.assertEqual(201, browser.status_code)
+        self.assertDictContainsSubset({
+            'title': 'Ein komplett ausgefuelltes ToDo',
+            '@type': 'opengever.workspace.todo',
+            'text': 'Eine ToDo-Beschreibung',
+            'is_completed': False,
+            'responsible': {
+                u'token': self.workspace_member.id, 
+                u'title': u'Schr\xf6dinger B\xe9atrice (beatrice.schrodinger)',
+            },
+            'deadline': '2024-02-13',
+            'external_reference': 'www.4teamwork.ch',
+        }, browser.json)
+
+    @browsing
     def test_create_with_todo_feature_disabled(self, browser):
         self.deactivate_feature('workspace-todo')
         self.login(self.workspace_member, browser)
