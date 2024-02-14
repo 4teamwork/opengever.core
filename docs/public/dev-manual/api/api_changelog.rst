@@ -13,8 +13,6 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 - ``POST @dossier-transfers``: New endpoint to create dossier transfers.
-- Add 'external_reference' field to workspace todo 
-
 
 2024.3.0 (2024-02-09)
 ---------------------

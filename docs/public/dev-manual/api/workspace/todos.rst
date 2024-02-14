@@ -22,7 +22,7 @@ Ein ToDo erstellen
         "text": "Das wichtige Dokument muss angeschaut werden.",
         "deadline": "2018-10-16",
         "responsible": "john.doe",
-        "external_reference": "www.einexternerinhalt.ch"
+        "external_reference": "www.example.com"
       }
 
 
