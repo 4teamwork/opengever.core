@@ -50,7 +50,7 @@ OpenLDAP 2.x
 ^^^^^^^^^^^^
 
 The Python `ldap <http://www.python-ldap.org/>`_ module requires the
-`OpenLDAP 2.x <http://www.openldap.org/>`_ client libraries and development
+`OpenLDAP <http://www.openldap.org/>`_ 2.x client libraries and development
 files.
 
 Pillow
@@ -97,7 +97,7 @@ with these contents:
 respective user in our development LDAP tree.
 
 For development a local LDAP server is used by default, that doesn't require a
-credentials file. 
+credentials file.
 
 
 Solr
@@ -174,10 +174,10 @@ Because automated testing is hard, the tests have to be done manually. This sect
 1. Install the RIS Solr from https://github.com/4teamwork/ris-solr#lokale-entwicklung
 2. Change the RIS Solr port to ``8984`` in the buildout.cfg:
 
-.. code::
+    .. code::
 
-    [solr]
-    port = 8984
+        [solr]
+        port = 8984
 
 
 3. Configure the GEVER Solr as documented under `Activating Solr update chain`_
@@ -287,7 +287,7 @@ for local development by default:
 - `msgconvert <https://github.com/4teamwork/msgconvert>`_
 - `pdflatex <https://github.com/4teamwork/pdflatex>`_
 - Sablon_
-- `Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
+- `Apache Solr <https://github.com/4teamwork/opengever.core/blob/master/docker/solr/Dockerfile>`_
 - ogds (PostgreSQL server)
 - `ogds-sync <https://github.com/4teamwork/ogds-sync>`_
 - ldap (OpenLDAP server)
@@ -1259,7 +1259,7 @@ You can use the following as a base for an `.env` file for local development (su
 
 .. code:: bash
 
-    OGDS_DSN=postgresql://<your-macos-username>@host.docker.internal/<ogds-db-name>
+    OGDS_DSN="postgresql://<your-macos-username>@host.docker.internal/<ogds-db-name>"
 
     LDAP_PROFILE=DS389
     LDAP_URL=ldaps://ldap.4teamwork.ch
