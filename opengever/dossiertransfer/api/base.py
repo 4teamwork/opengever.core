@@ -1,10 +1,13 @@
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
 from opengever.dossiertransfer.model import DossierTransfer
+from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
+from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
+from sqlalchemy import case
 from sqlalchemy import or_
 from zExceptions import BadRequest
 from zExceptions import NotFound
@@ -118,5 +121,15 @@ class DossierTransferLocator(DossierTransfersBase):
         return transfer
 
     def list_transfers(self):
-        transfers = DossierTransfer.query.filter(*self.security_filters()).all()
-        return transfers
+        query = (
+            DossierTransfer.query
+            .filter(*self.security_filters())
+            .order_by(
+                case([
+                    (DossierTransfer.state == TRANSFER_STATE_PENDING, 0),
+                    (DossierTransfer.state == TRANSFER_STATE_COMPLETED, 1),
+                ], else_=99),
+                DossierTransfer.created.desc(),
+            )
+        )
+        return query.all()

@@ -134,6 +134,44 @@ class TestDossierTransfersGet(IntegrationTestCase):
         }
         self.assertEqual(expected, browser.json)
 
+    @browsing
+    def test_transfer_listing_ordering(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        session = create_session()
+        params = [
+            ((1995, 1, 1, 12, 30), 'completed', 'Completed old transfer'),
+            ((1996, 1, 1, 12, 30), 'pending', 'Pending old transfer'),
+            ((1970, 1, 1, 12, 30), 'completed', 'Completed ancient transfer'),
+            ((1971, 1, 1, 12, 30), 'pending', 'Pending ancient transfer'),
+            ((2023, 1, 1, 12, 30), 'completed', 'Completed recent transfer'),
+            ((2024, 1, 1, 12, 30), 'pending', 'Pending recent transfer'),
+        ]
+        for (created, state, title) in params:
+            with freeze(datetime(*created, tzinfo=pytz.utc)):
+                transfer = create(Builder('dossier_transfer')
+                                  .having(
+                                      state=state,
+                                      title=title))
+                session.add(transfer)
+                session.flush()
+
+        browser.open(self.portal, view='@dossier-transfers/',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        items = [(tf['id'], tf['title']) for tf in browser.json['items']]
+        expected = [
+            (6, u'Pending recent transfer'),
+            (2, u'Pending old transfer'),
+            (4, u'Pending ancient transfer'),
+            (5, u'Completed recent transfer'),
+            (1, u'Completed old transfer'),
+            (3, u'Completed ancient transfer'),
+        ]
+        self.assertEqual(expected, items)
+
 
 class TestDossierTransfersGetPermissions(IntegrationTestCase):
 
