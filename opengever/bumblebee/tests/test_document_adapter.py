@@ -12,6 +12,12 @@ class TestDocumentAdapter(FunctionalTestCase):
         self.assertTrue(
             IBumblebeeDocument(document_with_file).is_convertable())
 
+    def test_document_with_file_whitout_extension_is_not_digitally_available(self):
+        document_without_extension = create(Builder("document")
+                                            .attach_file_containing(u'lorem ipsum', u'filename_without_extension'))
+        self.assertFalse(
+            IBumblebeeDocument(document_without_extension).is_convertable())
+
     def test_document_without_file_is_not_digitally_available(self):
         document_without_file = create(Builder("document"))
         self.assertFalse(

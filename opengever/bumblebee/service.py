@@ -12,7 +12,8 @@ class GeverBumblebeeService(BumblebeeServiceV3):
     def is_convertable(self, document):
         if not is_bumblebee_feature_enabled():
             return False
-
+        if not document.get_file_extension():
+            return False
         return super(GeverBumblebeeService, self).is_convertable(document)
 
     def get_not_digitally_available_placeholder_image_url(self, format_name=None):
