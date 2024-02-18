@@ -84,7 +84,7 @@ def relstorage_config(options):
 
 ZOPE_CONF_TEMPLATE = """\
 instancehome /app
-clienthome /app/var
+clienthome /app/var/instance
 debug-mode {debug_mode}
 security-policy-implementation {security_implementation}
 verbose-security {verbose_security}

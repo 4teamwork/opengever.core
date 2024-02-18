@@ -41,7 +41,7 @@ def setup_logger():
     # Add handler that writes to self-rotating file
     log_dir = PathFinder().var_log
     file_handler = TimedRotatingFileHandler(
-        os.path.join(log_dir, 'nightly-jobs.log'),
+        os.path.realpath(os.path.join(log_dir, 'nightly-jobs.log')),
         when='midnight', backupCount=7)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
@@ -67,7 +67,10 @@ def run_nightly_jobs_handler(app, args):
     # Discard the first three arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
     # scripts work.
-    args = parse_args(sys.argv[3:])
+    if sys.argv[0] != 'run_nightly_jobs':
+        args = parse_args(sys.argv[3:])
+    else:
+        args = parse_args(args)
     force = args.force
 
     for plone_site in all_plone_sites(app):

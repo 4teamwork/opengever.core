@@ -1,3 +1,5 @@
+# ogcore builder
+# -----------------------------------------------------------------------------
 FROM 4teamwork/plone:4.3.20-alpine3.18 AS builder
 USER root
 
@@ -71,11 +73,14 @@ COPY ./docker/core/etc /app/etc
 RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
+COPY ./docker/core/zopectl /app/bin/
+COPY ./docker/core/cron /app/cron
 
-RUN mkdir -p /app/var/log \
+RUN mkdir -p /app/var/log /app/var/instance \
  && ln -sf /dev/stderr /app/var/log/instance.log \
  && ln -sf /dev/stdout /app/var/log/instance-json.log \
- && ln -sf /dev/stdout /app/var/log/solr-maintenance.log
+ && ln -sf /dev/stdout /app/var/log/solr-maintenance.log \
+ && ln -sf /data/log/nightly-jobs.log /app/var/log/nightly-jobs.log
 
 RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 
@@ -86,15 +91,39 @@ COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumbl
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
 
+# go-crond builder
+# -----------------------------------------------------------------------------
+FROM golang:1.21-alpine3.18 AS go-crond-builder
+
+RUN apk upgrade --no-cache --force
+RUN apk add --update build-base make git
+
+RUN mkdir -p /go/src/github.com/webdevops \
+ && cd /go/src/github.com/webdevops \
+ && git clone https://github.com/webdevops/go-crond.git
+
+WORKDIR /go/src/github.com/webdevops/go-crond
+
+ARG GOCROND_VERSION=23.12.0
+
+RUN git checkout $GOCROND_VERSION
+RUN go mod download
+RUN make test
+RUN make build
+
+# ogcore production image
+# -----------------------------------------------------------------------------
 FROM 4teamwork/plone:4.3.20-alpine3.18 AS prod
 
 USER root
 RUN apk add \
     libldap \
     libffi \
-    libpq
+    libpq \
+    procps-ng
 
 COPY --from=builder /app /app
+COPY --from=go-crond-builder /go/src/github.com/webdevops/go-crond /usr/local/bin
 
 VOLUME /data
 WORKDIR /app

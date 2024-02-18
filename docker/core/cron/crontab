@@ -1,0 +1,4 @@
+0 6 * * * /app/bin/zopectl -C /app/etc/zope.conf send_digest
+0 4 * * * /app/bin/zopectl -C /app/etc/zope.conf generate_remind_notifications
+30 4 * * * /app/bin/zopectl -C /app/etc/zope.conf generate_overdue_notifications
+0 1 * * * /app/bin/zopectl -C /app/etc/zope.conf run_nightly_jobs
