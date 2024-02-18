@@ -219,6 +219,65 @@ class TestDossierTransfersGet(IntegrationTestCase):
         ]
         self.assertEqual(expected, self.get_items(browser))
 
+    @browsing
+    def test_transfer_listing_state_filter(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+
+        session = create_session()
+        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+            pending_transfer = create(Builder('dossier_transfer')
+                                      .having(
+                                          state='pending',
+                                          title='Pending'))
+            completed_transfer = create(Builder('dossier_transfer')
+                                        .having(
+                                            state='completed',
+                                            title='Completed'))
+            unknown_transfer = create(Builder('dossier_transfer')
+                                      .having(
+                                          state='unknown',
+                                          title='Unknown State'))
+            session.add(pending_transfer)
+            session.add(completed_transfer)
+            session.add(unknown_transfer)
+            session.flush()
+
+        # No state filter
+        browser.open(self.portal, view='@dossier-transfers/',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (1, u'Pending'),
+            (2, u'Completed'),
+            (3, u'Unknown State'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
+        # Pending only
+        browser.open(self.portal, view='@dossier-transfers?states:list=pending',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (1, u'Pending'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
+        # Completed only
+        browser.open(self.portal, view='@dossier-transfers?states:list=completed',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (2, u'Completed'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
+        # Pending and completed
+        qs = 'states:list=pending&states:list=completed'
+        browser.open(self.portal, view='@dossier-transfers?%s' % qs,
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (1, u'Pending'),
+            (2, u'Completed'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
 
 class TestDossierTransfersGetPermissions(IntegrationTestCase):
 

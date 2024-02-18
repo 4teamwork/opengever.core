@@ -134,6 +134,7 @@ class DossierTransferLocator(DossierTransfersBase):
         params = self.request.form.copy()
         filters = []
 
+        # Direction
         direction = params.get('direction')
 
         if direction == 'incoming':
@@ -141,6 +142,12 @@ class DossierTransferLocator(DossierTransfersBase):
 
         elif direction == 'outgoing':
             filters.append(DossierTransfer.source_id == local_unit_id)
+
+        # States
+        states = params.get('states', [])
+        if states:
+            filters.append(
+                or_(*[DossierTransfer.state == state for state in states]))
 
         return query.filter(*filters)
 
