@@ -158,4 +158,5 @@ class DossierTransferLocator(DossierTransfersBase):
                 (DossierTransfer.state == TRANSFER_STATE_COMPLETED, 1),
             ], else_=99),
             DossierTransfer.created.desc(),
+            DossierTransfer.id,
         )
