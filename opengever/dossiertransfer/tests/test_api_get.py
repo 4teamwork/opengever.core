@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from plone import api
 import pytz
@@ -12,6 +13,9 @@ import pytz
 class TestDossierTransfersGet(IntegrationTestCase):
 
     features = ('dossier-transfers', )
+
+    def get_items(self, browser):
+        return [(tf['id'], tf['title']) for tf in browser.json['items']]
 
     @browsing
     def test_get_dossier_transfer(self, browser):
@@ -161,7 +165,6 @@ class TestDossierTransfersGet(IntegrationTestCase):
 
         self.assertEqual(200, browser.status_code)
 
-        items = [(tf['id'], tf['title']) for tf in browser.json['items']]
         expected = [
             (6, u'Pending recent transfer'),
             (2, u'Pending old transfer'),
@@ -170,7 +173,51 @@ class TestDossierTransfersGet(IntegrationTestCase):
             (1, u'Completed old transfer'),
             (3, u'Completed ancient transfer'),
         ]
-        self.assertEqual(expected, items)
+        self.assertEqual(expected, self.get_items(browser))
+
+    @browsing
+    def test_transfer_listing_direction_filter(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        other_au = create(Builder('admin_unit')
+                          .id('other')
+                          .having(title='Other AU'))
+
+        session = create_session()
+        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+            outgoing_transfer = create(Builder('dossier_transfer')
+                                       .having(title='Outgoing'))
+            incoming_transfer = create(Builder('dossier_transfer')
+                                       .with_source(other_au)
+                                       .with_target(get_current_admin_unit())
+                                       .having(title='Incoming'))
+            session.add(outgoing_transfer)
+            session.add(incoming_transfer)
+            session.flush()
+
+        # No direction filter
+        browser.open(self.portal, view='@dossier-transfers/',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (1, u'Outgoing'),
+            (2, u'Incoming'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
+        # Incoming
+        browser.open(self.portal, view='@dossier-transfers?direction=incoming',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (2, u'Incoming'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
+
+        # Outgoing
+        browser.open(self.portal, view='@dossier-transfers?direction=outgoing',
+                     method='GET', headers=self.api_headers)
+        expected = [
+            (1, u'Outgoing'),
+        ]
+        self.assertEqual(expected, self.get_items(browser))
 
 
 class TestDossierTransfersGetPermissions(IntegrationTestCase):

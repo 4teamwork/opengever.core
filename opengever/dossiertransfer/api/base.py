@@ -109,6 +109,7 @@ class DossierTransferLocator(DossierTransfersBase):
     def list_transfers(self):
         query = DossierTransfer.query
         query = self.extend_with_security_filters(query)
+        query = self.extend_with_content_filters(query)
         query = self.extend_with_ordering(query)
         return query.all()
 
@@ -125,6 +126,21 @@ class DossierTransferLocator(DossierTransfersBase):
         if not self._is_inbox_user(user_id):
             # Only inbox users may see transfers other than their own
             filters.append(DossierTransfer.source_user_id == user_id)
+
+        return query.filter(*filters)
+
+    def extend_with_content_filters(self, query):
+        local_unit_id = get_current_admin_unit().unit_id
+        params = self.request.form.copy()
+        filters = []
+
+        direction = params.get('direction')
+
+        if direction == 'incoming':
+            filters.append(DossierTransfer.target_id == local_unit_id)
+
+        elif direction == 'outgoing':
+            filters.append(DossierTransfer.source_id == local_unit_id)
 
         return query.filter(*filters)
 
