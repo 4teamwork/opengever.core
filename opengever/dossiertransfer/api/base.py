@@ -82,22 +82,6 @@ class DossierTransferLocator(DossierTransfersBase):
                 raise BadRequest('{transfer_id} path parameter must be an integer')
             return transfer_id
 
-    def security_filters(self):
-        user_id = api.user.get_current().getId()
-        local_unit_id = get_current_admin_unit().unit_id
-
-        # Nobody may see transfers where the current admin unit is not involved
-        filters = [or_(
-            DossierTransfer.source_id == local_unit_id,
-            DossierTransfer.target_id == local_unit_id,
-        )]
-
-        if not self._is_inbox_user(user_id):
-            # Only inbox users may see transfers other than their own
-            filters.append(DossierTransfer.source_user_id == user_id)
-
-        return filters
-
     def _is_inbox_user(self, user_id):
         ogds_user = ogds_service().fetch_user(user_id)
         local_unit = get_current_admin_unit()
@@ -112,24 +96,43 @@ class DossierTransferLocator(DossierTransfersBase):
             # Distinguish 404 from 401
             raise NotFound
 
-        filters = [DossierTransfer.id == transfer_id]
-        filters.extend(self.security_filters())
-        transfer = DossierTransfer.query.filter(*filters).first()
+        query = DossierTransfer.query
+        query = query.filter(DossierTransfer.id == transfer_id)
+        query = self.extend_with_security_filters(query)
+        transfer = query.first()
+
         if not transfer:
             raise Unauthorized
 
         return transfer
 
     def list_transfers(self):
-        query = (
-            DossierTransfer.query
-            .filter(*self.security_filters())
-            .order_by(
-                case([
-                    (DossierTransfer.state == TRANSFER_STATE_PENDING, 0),
-                    (DossierTransfer.state == TRANSFER_STATE_COMPLETED, 1),
-                ], else_=99),
-                DossierTransfer.created.desc(),
-            )
-        )
+        query = DossierTransfer.query
+        query = self.extend_with_security_filters(query)
+        query = self.extend_with_ordering(query)
         return query.all()
+
+    def extend_with_security_filters(self, query):
+        user_id = api.user.get_current().getId()
+        local_unit_id = get_current_admin_unit().unit_id
+
+        # Nobody may see transfers where the current admin unit is not involved
+        filters = [or_(
+            DossierTransfer.source_id == local_unit_id,
+            DossierTransfer.target_id == local_unit_id,
+        )]
+
+        if not self._is_inbox_user(user_id):
+            # Only inbox users may see transfers other than their own
+            filters.append(DossierTransfer.source_user_id == user_id)
+
+        return query.filter(*filters)
+
+    def extend_with_ordering(self, query):
+        return query.order_by(
+            case([
+                (DossierTransfer.state == TRANSFER_STATE_PENDING, 0),
+                (DossierTransfer.state == TRANSFER_STATE_COMPLETED, 1),
+            ], else_=99),
+            DossierTransfer.created.desc(),
+        )
