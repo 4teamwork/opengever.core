@@ -1,3 +1,4 @@
+from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -5,6 +6,7 @@ from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateSchema
 from opengever.dossier.interfaces import IDossierContainerTypes
 from opengever.inbox.inbox import IInbox
+from opengever.repository.interfaces import IRepositoryFolder
 from opengever.workspace.interfaces import IWorkspace
 from plone import api
 from Products.CMFPlone.interfaces.siteroot import IPloneSiteRoot
@@ -53,6 +55,12 @@ def get_main_dossier(obj):
         obj = aq_parent(aq_inner(obj))
 
     return dossier
+
+
+def get_containing_repository_folder(obj):
+    for obj in aq_chain(obj):
+        if IRepositoryFolder.providedBy(obj):
+            return obj
 
 
 def is_dossierish_portal_type(portal_type_name):
