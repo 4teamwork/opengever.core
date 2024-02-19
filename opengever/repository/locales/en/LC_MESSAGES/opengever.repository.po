@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2022-12-06 14:01+0000\n"
+"POT-Creation-Date: 2024-02-16 15:21+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -53,6 +53,11 @@ msgstr "Choose whether the user is allowed to add regular business case dossiers
 #: ./opengever/repository/repositoryroot.py
 msgid "description_reference_number_addendum"
 msgstr "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+
+#. Default: "Select if this repostory tree should respect the max subdossier depth restriction."
+#: ./opengever/repository/repositoryfolder.py
+msgid "description_max_subdossier_depth_restriction"
+msgstr ""
 
 #. German translation: Keine untergeordnete Ordnungspositionen verfügbar.
 #. Default: "No nested repositorys available."
@@ -293,6 +298,11 @@ msgstr "Repositoryfolder title"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_fr"
 msgstr "Repositoryfolder title (French)"
+
+#. Default: "Limit maximum dossier depth in this repository folder"
+#: ./opengever/repository/repositoryfolder.py
+msgid "label_respect_max_subdossier_depth_restriction"
+msgstr ""
 
 #. German translation: Die Ordnungsposition wurde erfolgreich gelöscht.
 #. Default: "The repository have been successfully deleted."

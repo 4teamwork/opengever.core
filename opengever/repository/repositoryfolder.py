@@ -31,6 +31,7 @@ class IRepositoryFolderSchema(model.Schema):
             u'referenced_activity',
             u'former_reference',
             u'allow_add_businesscase_dossier',
+            u'respect_max_subdossier_depth_restriction',
         ],
     )
 
@@ -78,6 +79,17 @@ class IRepositoryFolderSchema(model.Schema):
                       default=u'Choose if the user is allowed to add '
                               u'businesscase dossiers or only dossiers from a '
                               u' dossiertemplate.'),
+        required=False,
+        missing_value=True,
+        default=True,
+    )
+
+    respect_max_subdossier_depth_restriction = schema.Bool(
+        title=_(u'label_respect_max_subdossier_depth_restriction',
+                default=u'Limit maximum dossier depth in this repository folder'),
+        description=_(u'description_max_subdossier_depth_restriction',
+                      default=u'Select if this repostory tree should respect '
+                              u'the max subdossier depth restriction.'),
         required=False,
         missing_value=True,
         default=True,
@@ -151,6 +163,8 @@ class RepositoryFolder(content.Container):
         return True
 
     def is_dossier_structure_addable(self, depth=1):
+        if not self.respect_max_subdossier_depth_restriction:
+            return True
         return check_subdossier_depth_allowed(depth - 1)
 
 

@@ -48,6 +48,12 @@
             "description": "W\u00e4hlen Sie, ob es in dieser Ordnungsposition erlaubt ist, Gesch\u00e4ftsdossiers hinzuzuf\u00fcgen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen.",
             "_zope_schema_type": "Bool"
         },
+        "respect_max_subdossier_depth_restriction": {
+            "type": "boolean",
+            "title": "Maximale Dossier-Tiefe in dieser Ordnungsposition begrenzen",
+            "description": "W\u00e4hlen Sie, ob die Dossier-Tiefe in dieser Ordnungsposition begrenzt werden soll",
+            "_zope_schema_type": "Bool"
+        },
         "changed": {
             "type": "string",
             "title": "Zuletzt ver\u00e4ndert",
@@ -234,6 +240,7 @@
         "referenced_activity",
         "former_reference",
         "allow_add_businesscase_dossier",
+        "respect_max_subdossier_depth_restriction",
         "changed",
         "classification",
         "privacy_layer",
