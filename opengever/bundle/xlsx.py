@@ -161,3 +161,18 @@ class XLSXNode(object):
     @property
     def custody_period(self):
         return self.item.get('custody_period') or None
+
+    @property
+    def _permissions(self):
+        def groups_as_list(csv):
+            return [group.strip() for group in csv.split(',') if group.strip()]
+
+        return {
+            "block_inheritance": self.item.get(u'block_inheritance', False),
+            "read": groups_as_list(self.item.get(u'read_dossiers_access', '')),
+            "add": groups_as_list(self.item.get(u'add_dossiers_access', '')),
+            "edit": groups_as_list(self.item.get(u'edit_dossiers_access', '')),
+            "close": groups_as_list(self.item.get(u'close_dossiers_access', '')),
+            "reactivate": groups_as_list(self.item.get(u'reactivate_dossiers_access', '')),
+            "manage_dossiers": groups_as_list(self.item.get(u'manage_dossiers_access', '')),
+        }
