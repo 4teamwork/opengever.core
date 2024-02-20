@@ -1,0 +1,1 @@
+ Extension of the is_convertabe method for suppressing the conversion to PDF in case of missing file extension
