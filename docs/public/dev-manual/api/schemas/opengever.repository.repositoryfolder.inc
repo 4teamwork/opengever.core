@@ -74,6 +74,16 @@
        
 
 
+   .. py:attribute:: respect_max_subdossier_depth_restriction
+
+       :Feldname: :field-title:`Maximale Dossier-Tiefe in dieser Ordnungsposition begrenzen`
+       :Datentyp: ``Bool``
+       
+       
+       :Beschreibung: Wählen Sie, ob die Dossier-Tiefe in dieser Ordnungsposition begrenzt werden soll
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`

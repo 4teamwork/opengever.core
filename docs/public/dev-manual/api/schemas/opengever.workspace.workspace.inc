@@ -54,6 +54,36 @@
        
 
 
+   .. py:attribute:: meeting_template_header
+
+       :Feldname: :field-title:`Kopfzeile von Meeting-Protokollen`
+       :Datentyp: ``JSONField``
+       
+       
+       :Beschreibung: Dynamische Textinhalte sind {page_number}, {number_of_pages} und {print_date}, sowie die Bild-Platzhalter {customer_logo} und {workspace_logo}
+       
+
+
+   .. py:attribute:: meeting_template_footer
+
+       :Feldname: :field-title:`Fusszeile von Meeting-Protokollen`
+       :Datentyp: ``JSONField``
+       
+       :Default: {"right": "{page_number}/{number_of_pages}", "center": "", "left": "{print_date}"}
+       :Beschreibung: Dynamische Textinhalte sind {page_number}, {number_of_pages} und {print_date}, sowie die Bild-Platzhalter {customer_logo} und {workspace_logo}
+       
+
+
+   .. py:attribute:: workspace_logo
+
+       :Feldname: :field-title:`Teamraum logo`
+       :Datentyp: ``NamedImage``
+       
+       
+       :Beschreibung: Kann in Kopf- und Fusszeilen von Protokollen verwendet werden.
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`
