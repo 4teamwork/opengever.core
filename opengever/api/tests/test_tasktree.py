@@ -26,10 +26,12 @@ class TestTaskTree(SolrIntegrationTestCase):
                                        u'children': [],
                                        u'is_task_addable': False,
                                        u'is_task_addable_before': False,
+                                       u'responsible_actor': {u'@id': u'http://nohost/plone/@actors/regular_user', u'identifier': u'regular_user'},
                                        u'review_state': u'task-state-resolved',
                                        u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'}],
                         u'is_task_addable': False,
                         u'is_task_addable_before': False,
+                        u'responsible_actor': {u'@id': u'http://nohost/plone/@actors/regular_user', u'identifier': u'regular_user'},
                         u'review_state': u'task-state-in-progress',
                         u'title': u'Vertragsentwurf \xdcberpr\xfcfen'}]},
             browser.json
@@ -302,10 +304,12 @@ class TestTaskTree(SolrIntegrationTestCase):
                                    u'children': [],
                                    u'is_task_addable': False,
                                    u'is_task_addable_before': False,
+                                   u'responsible_actor': {u'@id': u'http://nohost/plone/@actors/regular_user', u'identifier': u'regular_user'},
                                    u'review_state': u'task-state-resolved',
                                    u'title': u'Rechtliche Grundlagen in Vertragsentwurf \xdcberpr\xfcfen'}],
                     u'is_task_addable': False,
                     u'is_task_addable_before': False,
+                    u'responsible_actor': {u'@id': u'http://nohost/plone/@actors/regular_user', u'identifier': u'regular_user'},
                     u'review_state': u'task-state-in-progress',
                     u'title': u'Vertragsentwurf \xdcberpr\xfcfen'
                 }
@@ -338,6 +342,7 @@ class TestTaskTree(SolrIntegrationTestCase):
                             u'children': [],
                             u'is_task_addable': False,
                             u'is_task_addable_before': False,
+                            u'responsible_actor': {u'@id': u'http://nohost/plone/@actors/regular_user', u'identifier': u'regular_user'},
                             u'review_state': u'task-state-in-progress',
                             u'title': u'Ein notwendiges \xdcbel'}]},
             browser.json
