@@ -18,4 +18,20 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="GET"
+      name="@dossier-transfers"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.get.DossierTransfersGet"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="DELETE"
+      name="@dossier-transfers"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.delete.DossierTransfersDelete"
+      permission="zope2.View"
+      />
+
 </configure>

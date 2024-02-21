@@ -622,7 +622,7 @@ class DossierTransferBuilder(SqlObjectBuilder):
         self.arguments['message'] = 'Transfer Message'
         self.arguments['source_id'] = 'plone'
         self.arguments['target_id'] = 'recipient'
-        self.arguments['source_user_id'] = 'regular_user'
+        self.arguments['source_user_id'] = api.user.get_current().id
         self.arguments['state'] = TRANSFER_STATE_PENDING
         self.arguments['expires'] = utcnow_tz_aware() + timedelta(days=30)
         self.arguments['root'] = 'createresolvabledossier000000001'  # self.resolvable_dossier

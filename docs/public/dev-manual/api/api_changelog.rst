@@ -12,6 +12,9 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``DELETE @dossier-transfers/<id>``: New endpoint to delete a dossier transfer.
+- ``GET @dossier-transfers/<id>``: New endpoint to fetch a dossier transfer.
+- ``GET @dossier-transfers``: New endpoint to list dossier transfers.
 - ``POST @dossier-transfers``: New endpoint to create dossier transfers.
 
 2024.3.0 (2024-02-09)
