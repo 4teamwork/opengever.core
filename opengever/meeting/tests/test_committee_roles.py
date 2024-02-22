@@ -68,7 +68,8 @@ class TestCommitteeGroupsVocabulary(IntegrationTestCase):
              u'projekt_b',
              u'projekt_laeaer',
              u'committee_rpk_group',
-             u'committee_ver_group'],
+             u'committee_ver_group',
+             u'B\xe4renstark'],
             [term.value for term in
              get_group_vocabulary(self.committee_container)])
 
@@ -77,7 +78,7 @@ class TestCommitteeGroupsVocabulary(IntegrationTestCase):
         long_id = 255 * 'x'
 
         create(Builder('ogds_group')
-              .having(groupid=long_id, title=u'I have a very long ... ID!'))
+               .having(groupid=long_id, title=u'I have a very long ... ID!'))
 
         vocabulary = get_group_vocabulary(self.committee_container)
         self.assertEqual(long_id, vocabulary._terms[-1].token)

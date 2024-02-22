@@ -32,25 +32,26 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
              u'is_local': False,
              u'title': u'Gruppe Rechnungspr\xfcfungskommission'}],
             browser.json.get('items')[:2])
-        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(10, browser.json['items_total'])
 
     @browsing
     def test_batch_grouplisting_offset(self, browser):
         self.login(self.regular_user, browser=browser)
 
         browser.open(self.portal,
-                     view='@ogds-group-listing?b_size=4&b_start=2',
+                     view='@ogds-group-listing?b_size=5&b_start=2',
                      headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
 
-        self.assertEqual(4, len(browser.json['items']))
+        self.assertEqual(5, len(browser.json['items']))
         self.assertEqual(
             [u'projekt_a',
              u'projekt_b',
              u'projekt_laeaer',
+             u'B\xe4renstark',
              u'fa_inbox_users'],
             [each['groupid'] for each in browser.json['items']])
-        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(10, browser.json['items_total'])
 
     @browsing
     def test_batch_large_offset_returns_empty_items(self, browser):
@@ -62,7 +63,7 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         self.assertEqual(0, len(browser.json['items']))
-        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(10, browser.json['items_total'])
 
     @browsing
     def test_batch_disallows_negative_size(self, browser):
@@ -122,8 +123,8 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
                           '&filters.state:record:list=active',
                      headers=self.api_headers)
 
-        self.assertEqual(9, len(browser.json['items']))
-        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(10, len(browser.json['items']))
+        self.assertEqual(10, browser.json['items_total'])
 
     @browsing
     def test_filter_by_local_only(self, browser):
@@ -187,9 +188,8 @@ class TestOGDSGroupListingGet(IntegrationTestCase):
         browser.open(self.portal,
                      view=u'@ogds-group-listing?sort_order=descending',
                      headers=self.api_headers)
-
-        self.assertEqual(9, len(browser.json['items']))
+        self.assertEqual(10, len(browser.json['items']))
         self.assertEqual(
             [u'rk Users Group', u'rk Inbox Users Group', u'fa Users Group', u'fa Inbox Users Group'],
             [each['title'] for each in browser.json['items'][:4]])
-        self.assertEqual(9, browser.json['items_total'])
+        self.assertEqual(10, browser.json['items_total'])

@@ -377,7 +377,27 @@ class TestOpengeverSharing(IntegrationTestCase):
         browser.open(self.empty_dossier, view='@sharing?search=Test',
                      method='Get', headers={'Accept': 'application/json'})
         self.assertEquals(
-            {u'available_roles': [], u'items_total': 0, u'inherit': True, u'items': []},
+            {u'available_roles': [],
+                u'inherit': True,
+                u'items': [{u'actor': {u'@id': u'http://nohost/plone/@actors/ASCII_group',
+                                       u'identifier': u'ASCII_group'},
+                            u'automatic_roles': {},
+                            u'computed_roles': {},
+                            u'id': u'ASCII_group',
+                            u'login': None,
+                            u'ogds_summary': {u'@id': u'http://nohost/plone/@ogds-groups/ASCII_group',
+                                              u'@type': u'virtual.ogds.group',
+                                              u'active': True,
+                                              u'groupid': u'ASCII_group',
+                                              u'groupname': u'ASCII_group',
+                                              u'groupurl': u'http://nohost/plone/@groups/ASCII_group',
+                                              u'is_local': False,
+                                              u'title': u'Test Group'},
+                            u'roles': {},
+                            u'title': u'Test Group',
+                            u'type': u'group',
+                            u'url': u'http://nohost/plone/@@list_groupmembers?group=ASCII_group'}],
+                u'items_total': 1},
             browser.json)
 
         browser.open(self.empty_dossier, view='@sharing?search=Robert',
@@ -590,7 +610,7 @@ class TestOpengeverSharing(IntegrationTestCase):
                      method='Get', headers={'Accept': 'application/json'})
 
         result = browser.json
-        self.assertEqual(24, result['items_total'])
+        self.assertEqual(25, result['items_total'])
         self.assertEqual(3, len(result['items']))
         self.assertIn('batching', result)
 

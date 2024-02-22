@@ -349,7 +349,7 @@ class TestAllUsersInboxesAndTeamsSource(FunctionalTestCase):
         term = self.source.getTermByToken('inbox:org-unit-1')
 
         self.assertTrue(
-          term, 'Inbox for the hidden OrgUnit org-unit-1 should be a valid term')
+            term, 'Inbox for the hidden OrgUnit org-unit-1 should be a valid term')
         self.assertEqual('inbox:org-unit-1', term.token)
 
     def test_search_for_term_inbox_or_partial_term_that_matches_inbox(self):
@@ -1100,6 +1100,7 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
+            u'ASCII_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1117,6 +1118,7 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
+            u'ASCII_group',
         ]
         self.assertListEqual(expected_groups, self.get_groups())
 
@@ -1202,6 +1204,7 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
+            u'B\xe4renstark',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 
@@ -1219,6 +1222,7 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
             u'projekt_laeaer',
             u'rk_inbox_users',
             u'rk_users',
+            u'B\xe4renstark',
         ]
         self.assertEqual(expected_groups, [term.value for term in self.source.search('')])
 

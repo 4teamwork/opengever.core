@@ -116,7 +116,7 @@ def extend_with_groupurl(result, context, request):
     which is a URL to the group-resource stored in plone, not in the ogds.
     """
     result['groupurl'] = '{}/@groups/{}'.format(
-        api.portal.get().absolute_url(), context.groupid)
+        api.portal.get().absolute_url(), context.groupid.encode("utf-8"))
 
 
 def extend_with_backreferences(result, context, request, reference_attribute_name,

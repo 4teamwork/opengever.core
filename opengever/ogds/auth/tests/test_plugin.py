@@ -256,6 +256,7 @@ class TestOGDSAuthPluginIGroupEnumeration(TestOGDSAuthPluginBase):
     def test_enum_groups_without_search_critera_returns_all_groups(self):
         results = self.plugin.enumerateGroups()
         expected = (
+            'B\xc3\xa4renstark',
             'committee_rpk_group',
             'committee_ver_group',
             'fa_inbox_users',
@@ -454,6 +455,7 @@ class TestOGDSAuthPluginIGroupIntrospection(TestOGDSAuthPluginBase):
     def test_get_group_ids_returns_list_of_group_ids(self):
         group_ids = self.plugin.getGroupIds()
         self.assertEqual(group_ids, [
+            'B\xc3\xa4renstark',
             'committee_rpk_group',
             'committee_ver_group',
             'fa_inbox_users',
@@ -528,9 +530,9 @@ class TestOGDSAuthPluginIPropertiesPlugin(TestOGDSAuthPluginBase):
 
     def test_get_properties_for_user_with_no_match_returns_empty_dict(self):
         self.portal.acl_users.source_users.addUser(
-                'some.user.id',
-                'some.user.name',
-                'secret')
+            'some.user.id',
+            'some.user.name',
+            'secret')
         member_not_in_ogds = api.user.get('some.user.id')
         results = self.plugin.getPropertiesForUser(member_not_in_ogds)
         expected = {}

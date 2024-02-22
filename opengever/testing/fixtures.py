@@ -108,6 +108,7 @@ class OpengeverContentFixture(object):
     def create_fixture_content(self):
         with self.freeze_at_hour(4):
             self.create_test_user()
+            self.create_user_groups()
             self.create_units()
 
         # Create users. Here we can use a 1minute step between creation of two
@@ -538,6 +539,13 @@ class OpengeverContentFixture(object):
                 group=group_empty,
                 org_unit=self.org_unit_fa,
             )
+        )
+
+    def create_user_groups(self):
+
+        self.group_ASCII = self.create_group(
+            u'B\xe4renstark',
+            u'B\xe4renstark'
         )
 
     def create_property_sheets(self):
@@ -2127,6 +2135,21 @@ class OpengeverContentFixture(object):
         )
 
         return member
+
+    def create_group(self, group_id, group_name):
+        """Create an OGDS group and a equivalent plone group"""
+        create(
+            Builder('ogds_group')
+            .having(
+                groupid=group_id,
+                groupname=group_name)
+        )
+
+        create(
+            Builder('group')
+            .titled(group_name)
+            .with_groupid(group_id)
+        )
 
     def create_committee(
         self,
