@@ -1,1 +1,0 @@
-- Add 'external_reference' field to workspace todo [KunzS85]

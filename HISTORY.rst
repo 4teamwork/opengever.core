@@ -10,6 +10,26 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.4.0 (2024-02-23)
+---------------------
+
+New features:
+
+
+- - Add 'external_reference' field to workspace todo [KunzS85] [CA-6482]
+- Add `POST /@dossier-transfers` endpoint. [lgraf] [CA-6589]
+- Add `GET /@dossier-transfers` endpoint. [lgraf] [CA-6590-1]
+- Add `DELETE /@dossier-transfers/<id>` endpoint. [lgraf] [CA-6590-2]
+
+
+Other changes:
+
+
+- Add support for running cron jobs inside Docker container. [buchi] [CA-6435]
+- Add support for permissions when creating bundle from Excel. [buchi] [CA-6436]
+- Extension of the is_convertabe method for suppressing the conversion to PDF in case of missing file extension [CA-6496]
+
+
 2024.3.0 (2024-02-09)
 ---------------------
 
