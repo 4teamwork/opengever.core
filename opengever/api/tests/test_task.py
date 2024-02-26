@@ -599,11 +599,11 @@ class TestTaskCreation(SolrIntegrationTestCase):
 
         self.assertEqual(
             {u'token': u'fa:robert.ziegler',
-             u'title': u'Finanz\xe4mt: Ziegler Robert (robert.ziegler)'},
+             u'title': u'Finanz\xe4mt: Ziegler Robert (dossier_responsible_username)'},
             response.json.get('responsible'))
         self.assertEqual(
             {u'token': self.secretariat_user.id,
-             u'title': u'K\xf6nig J\xfcrgen (jurgen.konig)'},
+             u'title': u'K\xf6nig J\xfcrgen (secretariat_username)'},
             response.json.get('issuer'))
 
 

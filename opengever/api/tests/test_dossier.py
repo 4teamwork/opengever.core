@@ -391,7 +391,7 @@ class TestDossierDeserialization(IntegrationTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             {u'token': self.dossier_responsible.id,
-             u'title': u'Ziegler Robert (robert.ziegler)'},
+             u'title': u'Ziegler Robert (dossier_responsible_loginame)'},
             response.json.get('responsible'))
 
     @browsing
@@ -415,5 +415,5 @@ class TestDossierDeserialization(IntegrationTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             {u'token': self.dossier_responsible.id,
-             u'title': u'Ziegler Robert (robert.ziegler)'},
+             u'title': u'Ziegler Robert (dossier_responsible_loginame)'},
             response.json.get('responsible'))
