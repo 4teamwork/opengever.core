@@ -241,10 +241,10 @@ class TestDossierChecks(IntegrationTestCase):
         self.set_workflow_state('task-state-open', *self.dossier_tasks)
         self.assertTrue(self.dossier.has_active_tasks())
 
-    def test_has_active_tasks_true_when_states_rejected(self):
+    def test_has_active_tasks_false_when_states_rejected(self):
         self.login(self.dossier_responsible)
         self.set_workflow_state('task-state-rejected', *self.dossier_tasks)
-        self.assertTrue(self.dossier.has_active_tasks())
+        self.assertFalse(self.dossier.has_active_tasks())
 
     def test_has_active_tasks_true_when_states_resolved(self):
         self.login(self.dossier_responsible)

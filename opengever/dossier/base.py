@@ -321,6 +321,11 @@ class DossierContainer(Container):
             review_state=OPEN_TASK_STATES,
         )
 
+        # Rejected (sub)tasks should not prevent dossier from being closed.
+        active_tasks = [
+            t for t in active_tasks if t.review_state != 'task-state-rejected'
+        ]
+
         return bool(active_tasks)
 
     def has_active_proposals(self):
