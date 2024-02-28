@@ -44,6 +44,16 @@
        
 
 
+   .. py:attribute:: related_todo_list
+
+       :Feldname: :field-title:`Verknüpfte To-do-Liste`
+       :Datentyp: ``RelationChoice``
+       
+       
+       
+       :Wertebereich: <UID einer verknüpften To-do-Liste
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`

@@ -93,6 +93,26 @@ class TestMoveItems(IntegrationTestCase, MoveItemsHelper):
         self.assert_does_not_contain(self.leaf_repofolder, [resolvable_dossier_title])
         self.assert_contains(self.empty_dossier, [resolvable_dossier_title])
 
+    @browsing
+    def test_moving_dossier_respects_containing_repository_subdossier_restriction_property(self, browser):
+        self.login(self.manager, browser)
+        resolvable_dossier_title = self.resolvable_dossier.title.encode("utf-8")
+        self.assert_contains(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_does_not_contain(self.empty_dossier, [resolvable_dossier_title])
+        self.move_items([self.resolvable_dossier],
+                        source=self.leaf_repofolder,
+                        target=self.empty_dossier)
+        self.assert_contains(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_does_not_contain(self.empty_dossier, [resolvable_dossier_title])
+
+        self.leaf_repofolder.respect_max_subdossier_depth_restriction = False
+
+        self.move_items([self.resolvable_dossier],
+                        source=self.leaf_repofolder,
+                        target=self.empty_dossier)
+        self.assert_does_not_contain(self.leaf_repofolder, [resolvable_dossier_title])
+        self.assert_contains(self.empty_dossier, [resolvable_dossier_title])
+
     def test_render_documents_tab_when_no_items_are_selected(self):
         self.login(self.regular_user)
         view = self.dossier.restrictedTraverse('move_items')

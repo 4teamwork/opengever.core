@@ -81,6 +81,7 @@ REPOFOLDER_FORM_DEFAULTS = {}
 REPOFOLDER_MISSING_VALUES = {
     'addable_dossier_templates': [],
     'allow_add_businesscase_dossier': True,
+    'respect_max_subdossier_depth_restriction': True,
     'archival_value_annotation': None,
     'date_of_cassation': None,
     'date_of_submission': None,
@@ -340,6 +341,7 @@ PRIVATEFOLDER_REQUIREDS = {
 }
 PRIVATEFOLDER_DEFAULTS = {
     'allow_add_businesscase_dossier': True,
+    'respect_max_subdossier_depth_restriction': True
 }
 PRIVATEFOLDER_FORM_DEFAULTS = {}
 PRIVATEFOLDER_MISSING_VALUES = {

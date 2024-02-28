@@ -109,6 +109,19 @@ class TestDossierContainer(IntegrationTestCase):
         self.assertNotIn('opengever.dossier.businesscasedossier',
                          [fti.id for fti in subsubsub2.allowedContentTypes()])
 
+    def test_always_allow_subdossiers_if_repository_folder_ignores_subdossier_depth_restriction(self):
+        self.login(self.administrator)
+
+        self.leaf_repofolder.respect_max_subdossier_depth_restriction = True
+
+        self.assertNotIn('opengever.dossier.businesscasedossier',
+                         [fti.id for fti in self.subsubdossier.allowedContentTypes()])
+
+        self.leaf_repofolder.respect_max_subdossier_depth_restriction = False
+
+        self.assertIn('opengever.dossier.businesscasedossier',
+                      [fti.id for fti in self.subsubdossier.allowedContentTypes()])
+
     def test_get_subdossiers_is_recursive_by_default(self):
         self.login(self.dossier_responsible)
         self.assertSequenceEqual(
