@@ -7,6 +7,7 @@ from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossierMarker
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.utils import get_main_dossier
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import ISerializeToJson
@@ -37,7 +38,7 @@ class SerializeDossierToJson(GeverSerializeFolderToJson):
             getattr(self.context.aq_inner, '__ac_local_roles_block__', False))
         result[u'is_protected'] = IProtectDossier(self.context).is_dossier_protected() \
             if IProtectDossierMarker.providedBy(self.context) else False
-
+        result[u'has_pending_jobs'] = AfterResolveJobs(self.context).after_resolve_jobs_pending
         extend_with_backreferences(
             result, self.context, self.request, 'relatedDossier')
 
