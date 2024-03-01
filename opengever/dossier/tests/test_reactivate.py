@@ -6,6 +6,7 @@ from ftw.testbrowser.pages import statusmessages
 from ftw.testbrowser.pages.statusmessages import error_messages
 from ftw.testbrowser.pages.statusmessages import info_messages
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.protect import createToken
@@ -128,6 +129,16 @@ class TestReactivating(IntegrationTestCase):
         self.assertIsNone(IDossier(self.resolvable_dossier).end)
         self.assertIsNone(IDossier(self.resolvable_subdossier).end)
         self.assertIsNone(IDossier(subsub).end)
+
+    @browsing
+    def test_reset_after_resolve_jobs_pending(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.set_workflow_state('dossier-state-resolved',
+                                self.resolvable_subdossier)
+        AfterResolveJobs(self.resolvable_subdossier).after_resolve_jobs_pending = True
+        self.reactivate(self.resolvable_subdossier, browser)
+
+        self.assertFalse(AfterResolveJobs(self.resolvable_subdossier).after_resolve_jobs_pending)
 
 
 class TestReactivatingRESTAPI(TestReactivating):
