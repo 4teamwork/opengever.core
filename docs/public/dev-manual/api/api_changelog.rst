@@ -20,6 +20,7 @@ Other Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Include responsible_actor in tasktree response.
 - ``DELETE @dossier-transfers/<id>``: New endpoint to delete a dossier transfer.
 - ``GET @dossier-transfers/<id>``: New endpoint to fetch a dossier transfer.
 - ``GET @dossier-transfers``: New endpoint to list dossier transfers.

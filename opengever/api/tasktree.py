@@ -2,6 +2,7 @@ from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
+from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.base.browser.navigation import make_tree_by_url
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.solr import OGSolrContentListing
@@ -27,7 +28,7 @@ class TaskTree(object):
         self.solr = getUtility(ISolrSearch)
         self.fieldlist = [
             'Title', 'portal_type', 'path', 'review_state', 'object_provides',
-            'has_sametype_children']
+            'has_sametype_children', 'responsible']
 
     def __call__(self, expand=False):
         result = {
@@ -130,6 +131,8 @@ class TaskTree(object):
                 '@type': obj.PortalType(),
                 'review_state': obj.review_state(),
                 'title': obj.Title(),
+                'responsible_actor': serialize_actor_id_to_json_summary(
+                    obj.get('responsible'))
             }
             solr_items_per_url[obj.getURL()] = obj
             nodes.append(child)
