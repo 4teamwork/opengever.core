@@ -150,7 +150,7 @@ def setup_ogds_sync_logfile(logger):
             return
     log_dir = PathFinder().var_log
     file_handler = TimedRotatingFileHandler(
-        os.path.join(log_dir, 'ogds-update.log'),
+        os.path.realpath(os.path.join(log_dir, 'ogds-update.log')),
         when='midnight', backupCount=7)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(logging.Formatter(LOG_FORMAT))
