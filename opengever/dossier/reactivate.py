@@ -1,5 +1,6 @@
 from opengever.dossier import _
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.resolve import AfterResolveJobs
 from opengever.dossier.resolve import PreconditionsViolated
 from plone import api
 from Products.CMFCore.utils import getToolByName
@@ -41,10 +42,14 @@ class Reactivator(object):
 
             self.reset_end_date(dossier)
             self.wft.doActionFor(dossier, 'dossier-transition-reactivate')
+            self.reset_after_resolve_jobs_pending(dossier)
 
     def reset_end_date(self, dossier):
         IDossier(dossier).end = None
         dossier.reindexObject(idxs=['end'])
+
+    def reset_after_resolve_jobs_pending(self, dossier):
+        AfterResolveJobs(dossier).after_resolve_jobs_pending = False
 
 
 class DossierReactivateView(BrowserView):
