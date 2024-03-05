@@ -11,6 +11,7 @@
     <element value="opengever.meeting.proposal" />
     <element value="opengever.dossier.businesscasedossier" />
     <element value="opengever.document.document" />
+    <element value="opengever.ris.proposal" />
     <element value="opengever.task.task" />
     <element value="ftw.mail.mail" />
   </property>

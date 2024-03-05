@@ -1,0 +1,116 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-02-12 12:40+0000\n"
+"PO-Revision-Date: 2018-05-22 10:15+0000\n"
+"Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
+"Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Language: fr\n"
+"X-Generator: Weblate 2.13.1\n"
+
+#. Default: "Assignee"
+#: ./opengever/ris/proposal.py
+msgid "label_assignee"
+msgstr "Responsable"
+
+#. Default: "Attachments"
+#: ./opengever/ris/proposal.py
+msgid "label_attachments"
+msgstr "Pièces jointes"
+
+#. Default: "Business title"
+#: ./opengever/ris/proposal.py
+msgid "label_business_title"
+msgstr "Titre de l'affaire"
+
+#. Default: "Business type"
+#: ./opengever/ris/proposal.py
+msgid "label_business_type"
+msgstr "Type d'affaire"
+
+#. Default: "Business URL"
+#: ./opengever/ris/proposal.py
+msgid "label_business_url"
+msgstr "URL de l'affaire"
+
+#. Default: "Committee title"
+#: ./opengever/ris/proposal.py
+msgid "label_committee_title"
+msgstr "Titre de la commission"
+
+#. Default: "Committee URL"
+#: ./opengever/ris/proposal.py
+msgid "label_committee_url"
+msgstr "URL de la commission"
+
+#. Default: "Decision number"
+#: ./opengever/ris/proposal.py
+msgid "label_decision_number"
+msgstr "Numéro de décision"
+
+#. Default: "Formatted decision number"
+#: ./opengever/ris/proposal.py
+msgid "label_decision_number_formatted"
+msgstr "Numéro de décision formaté"
+
+#. Default: "Description"
+#: ./opengever/ris/proposal.py
+msgid "label_description"
+msgstr "Description"
+
+#. Default: "Excerpts"
+#: ./opengever/ris/proposal.py
+msgid "label_excerpts"
+msgstr "Extraits du protocole"
+
+#. Default: "Issuer"
+#: ./opengever/ris/proposal.py
+#: ./opengever/ris/viewlets/byline.py
+msgid "label_issuer"
+msgstr "Mandant"
+
+#. Default: "Meeting title"
+#: ./opengever/ris/proposal.py
+msgid "label_meeting_title"
+msgstr "Titre de la séance"
+
+#. Default: "Meeting URL"
+#: ./opengever/ris/proposal.py
+msgid "label_meeting_url"
+msgstr "URL de la séance"
+
+#. Default: "Proposal document"
+#: ./opengever/ris/proposal.py
+msgid "label_proposal_document"
+msgstr "Document de requête"
+
+#. Default: "Responsible"
+#: ./opengever/ris/proposal.py
+msgid "label_responsible"
+msgstr "Responsables"
+
+#. Default: "Title"
+#: ./opengever/ris/proposal.py
+msgid "label_title"
+msgstr "Titre"
+
+#. Default: "Topic"
+#: ./opengever/ris/proposal.py
+msgid "label_topic"
+msgstr "Sujet"
+
+#. Default: "State"
+#: ./opengever/ris/viewlets/byline.py
+msgid "label_workflow_state"
+msgstr "Etat"

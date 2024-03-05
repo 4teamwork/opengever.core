@@ -241,6 +241,7 @@ WRITE_PERMISSIONS = [
     'opengever.dossier: Destroy dossier',
     'opengever.dossier: Protect dossier',
     'opengever.repository: Unlock Reference Prefix',
+    'opengever.ris: Add Proposal',
     'opengever.task: Edit task',
     'opengever.trash: Trash content',
     'opengever.trash: Untrash content',

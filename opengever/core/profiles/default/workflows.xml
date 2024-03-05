@@ -23,6 +23,7 @@
   <object name="opengever_proposal_workflow" meta_type="Workflow" />
   <object name="opengever_repository_workflow" meta_type="Workflow" />
   <object name="opengever_repositoryroot_workflow" meta_type="Workflow" />
+  <object name="opengever_ris_proposal_workflow" meta_type="Workflow" />
   <object name="opengever_submitted_proposal_workflow" meta_type="Workflow" />
   <object name="opengever_task_workflow" meta_type="Workflow" />
   <object name="opengever_tasktemplate_workflow" meta_type="Workflow" />
@@ -144,6 +145,10 @@
 
     <type type_id="opengever.repository.repositoryroot">
       <bound-workflow workflow_id="opengever_repositoryroot_workflow" />
+    </type>
+
+    <type type_id="opengever.ris.proposal">
+      <bound-workflow workflow_id="opengever_ris_proposal_workflow" />
     </type>
 
     <type type_id="opengever.task.task">

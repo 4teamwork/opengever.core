@@ -91,6 +91,7 @@ EXPECTED_INTERFACES = [
     'opengever.repository.behaviors.referenceprefix.IReferenceNumberPrefixMarker',
     'opengever.repository.interfaces.IRepositoryFolder',
     'opengever.repository.repositoryfolder.IRepositoryFolderSchema',
+    'opengever.ris.proposal.IProposal',
     'opengever.sharing.behaviors.IDossier',
     'opengever.task.reminder.interfaces.IReminderSupport',
     'opengever.task.task.ITask',
@@ -137,20 +138,21 @@ EXPECTED_INTERFACES = [
 # Please update the content creation in the test below, when a new type needs
 # to be added here!
 EXPECTED_TYPES_WITH_RELATIONS = [
+    'opengever.disposition.disposition',
     'opengever.document.document',
     'opengever.dossier.businesscasedossier',
     'opengever.dossier.dossiertemplate',
-    'opengever.repository.repositoryfolder',
-    'opengever.task.task',
     'opengever.inbox.forwarding',
-    'opengever.meeting.proposal',
-    'opengever.meeting.submittedproposal',
     'opengever.meeting.committee',
-    'opengever.meeting.sablontemplate',
     'opengever.meeting.meetingdossier',
+    'opengever.meeting.proposal',
     'opengever.meeting.proposaltemplate',
+    'opengever.meeting.sablontemplate',
+    'opengever.meeting.submittedproposal',
     'opengever.private.dossier',
-    'opengever.disposition.disposition',
+    'opengever.repository.repositoryfolder',
+    'opengever.ris.proposal',
+    'opengever.task.task',
     'opengever.workspace.meetingagendaitem',
     'opengever.workspace.todo',
 ]
@@ -170,6 +172,8 @@ def has_relation_fields(fti):
 
 
 class TestRelationCatalogInterfaces(FunctionalTestCase):
+
+    maxDiff = None
 
     def test_persisted_interfaces_in_zc_relation_catalog(self):
         root = create(Builder('repository_root').titled(u'Repository'))
@@ -220,6 +224,12 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
             .relate_to(document_a)
             .with_submitted())
 
+        create(
+            Builder('ris_proposal')
+            .within(dossier_a)
+            .having(document=document_a)
+        )
+
         dossier_expired = create(Builder('dossier').as_expired())
         self.grant('Records Manager')
         create(Builder('disposition').having(dossiers=[dossier_expired]))
@@ -235,7 +245,7 @@ class TestRelationCatalogInterfaces(FunctionalTestCase):
         types_with_relations = filter(
             has_relation_fields, list(api.portal.get_tool('portal_types')))
 
-        self.assertEquals(
+        self.assertItemsEqual(
             EXPECTED_TYPES_WITH_RELATIONS, types_with_relations,
             'A new type with a relation field has been introduced, please'
             ' extend the content setup with this type and adjust the expected'

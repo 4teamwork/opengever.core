@@ -543,6 +543,22 @@ class PeriodBuilder(GeverDexterityBuilder):
 builder_registry.register('period', PeriodBuilder)
 
 
+class RisProposalBuilder(GeverDexterityBuilder):
+    portal_type = 'opengever.ris.proposal'
+
+    def __init__(self, session):
+        super(RisProposalBuilder, self).__init__(session)
+        self.arguments = {
+            'title': 'Neue Klarinette',
+            'committee_title': "Finanzkommission",
+            'committee_url': "https://example.com/fin/",
+            'issuer': TEST_USER_ID,
+        }
+
+
+builder_registry.register('ris_proposal', RisProposalBuilder)
+
+
 class TaskTemplateFolderBuilder(GeverDexterityBuilder):
     portal_type = 'opengever.tasktemplates.tasktemplatefolder'
 

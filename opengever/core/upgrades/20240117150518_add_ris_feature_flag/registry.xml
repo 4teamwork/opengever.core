@@ -1,0 +1,6 @@
+<registry>
+
+  <!-- RIS -->
+  <records interface="opengever.ris.interfaces.IRisSettings" />
+
+</registry>

@@ -1,0 +1,114 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2024-02-12 12:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: opengever.ris\n"
+
+#. Default: "Assignee"
+#: ./opengever/ris/proposal.py
+msgid "label_assignee"
+msgstr ""
+
+#. Default: "Attachments"
+#: ./opengever/ris/proposal.py
+msgid "label_attachments"
+msgstr ""
+
+#. Default: "Business title"
+#: ./opengever/ris/proposal.py
+msgid "label_business_title"
+msgstr ""
+
+#. Default: "Business type"
+#: ./opengever/ris/proposal.py
+msgid "label_business_type"
+msgstr ""
+
+#. Default: "Business URL"
+#: ./opengever/ris/proposal.py
+msgid "label_business_url"
+msgstr ""
+
+#. Default: "Committee title"
+#: ./opengever/ris/proposal.py
+msgid "label_committee_title"
+msgstr ""
+
+#. Default: "Committee URL"
+#: ./opengever/ris/proposal.py
+msgid "label_committee_url"
+msgstr ""
+
+#. Default: "Decision number"
+#: ./opengever/ris/proposal.py
+msgid "label_decision_number"
+msgstr ""
+
+#. Default: "Formatted decision number"
+#: ./opengever/ris/proposal.py
+msgid "label_decision_number_formatted"
+msgstr ""
+
+#. Default: "Description"
+#: ./opengever/ris/proposal.py
+msgid "label_description"
+msgstr ""
+
+#. Default: "Excerpts"
+#: ./opengever/ris/proposal.py
+msgid "label_excerpts"
+msgstr ""
+
+#. Default: "Issuer"
+#: ./opengever/ris/proposal.py
+#: ./opengever/ris/viewlets/byline.py
+msgid "label_issuer"
+msgstr ""
+
+#. Default: "Meeting title"
+#: ./opengever/ris/proposal.py
+msgid "label_meeting_title"
+msgstr ""
+
+#. Default: "Meeting URL"
+#: ./opengever/ris/proposal.py
+msgid "label_meeting_url"
+msgstr ""
+
+#. Default: "Proposal document"
+#: ./opengever/ris/proposal.py
+msgid "label_proposal_document"
+msgstr ""
+
+#. Default: "Responsible"
+#: ./opengever/ris/proposal.py
+msgid "label_responsible"
+msgstr ""
+
+#. Default: "Title"
+#: ./opengever/ris/proposal.py
+msgid "label_title"
+msgstr ""
+
+#. Default: "Topic"
+#: ./opengever/ris/proposal.py
+msgid "label_topic"
+msgstr ""
+
+#. Default: "State"
+#: ./opengever/ris/viewlets/byline.py
+msgid "label_workflow_state"
+msgstr ""

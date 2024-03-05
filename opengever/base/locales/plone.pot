@@ -423,6 +423,12 @@ msgstr ""
 msgid "proposal-transition-reactivate"
 msgstr ""
 
+msgid "proposal-transition-reopen-manage"
+msgstr ""
+
+msgid "proposal-transition-reopen"
+msgstr ""
+
 msgid "proposal-transition-submit"
 msgstr ""
 
@@ -434,3 +440,25 @@ msgstr ""
 
 msgid "label_name"
 msgstr ""
+
+msgid "proposal-transition-cancel-manage"
+msgstr ""
+
+msgid "proposal-transition-decide-manage"
+msgstr ""
+
+msgid "proposal-transition-reject-manage"
+msgstr ""
+
+msgid "proposal-transition-schedule-manage"
+msgstr ""
+
+msgid "proposal-transition-submit-manage"
+msgstr ""
+
+msgid "proposal-transition-undecide-manage"
+msgstr ""
+
+msgid "proposal-transition-unschedule-manage"
+msgstr ""
+

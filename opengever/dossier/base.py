@@ -29,6 +29,7 @@ from opengever.meeting import OPEN_PROPOSAL_STATES
 from opengever.ogds.base.actor import Actor
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.propertysheets.utils import set_custom_property
+from opengever.ris import is_ris_feature_enabled
 from opengever.task import OPEN_TASK_STATES
 from opengever.task.task import ITask
 from opengever.workspaceclient import is_workspace_client_feature_enabled
@@ -661,6 +662,9 @@ class DefaultConstrainTypeDecider(object):
         for const_ctype, const_depth, const_ftype in mapping:
             if const_ctype == container_type and const_ftype == factory_type:
                 return depth < const_depth or const_depth == 0
+
+        if factory_type == u'opengever.ris.proposal':
+            return is_ris_feature_enabled()
 
         if factory_type in [u'opengever.meeting.proposal']:
             return is_meeting_feature_enabled()

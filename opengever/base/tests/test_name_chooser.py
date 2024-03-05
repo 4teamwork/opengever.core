@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.contact.tests import create_contacts
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -30,6 +32,7 @@ EXPECTED_TYPES_WITH_NAME_FROM_TITLE = [
     'opengever.meeting.sablontemplate',
     'opengever.private.dossier',
     'opengever.private.root',
+    'opengever.ris.proposal',
     'opengever.task.task',
     'opengever.tasktemplates.tasktemplatefolder',
     'opengever.workspace.folder',
@@ -64,6 +67,7 @@ type_to_obj = {
     'opengever.meeting.sablontemplate': 'sablon_template',
     'opengever.private.dossier': 'private_dossier',
     'opengever.private.root': 'private_root',
+    'opengever.ris.proposal': 'ris_proposal',
     'opengever.task.task': 'task',
     'opengever.tasktemplates.tasktemplatefolder': 'tasktemplatefolder',
     'opengever.workspace.folder': 'workspace_folder',
@@ -86,6 +90,15 @@ def has_name_from_title_behavior(fti):
 class TestNameFromTitleBehavior(IntegrationTestCase):
 
     maxDiff = None
+
+    def setUp(self):
+        super(TestNameFromTitleBehavior, self).setUp()
+        with self.login(self.manager):
+            self.ris_proposal = create(
+                Builder('ris_proposal')
+                .within(self.dossier)
+                .having(document=self.document)
+            )
 
     def test_portal_types_with_name_from_title_behavior(self):
         types_with_name_from_title = filter(

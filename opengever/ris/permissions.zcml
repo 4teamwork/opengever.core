@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.ris">
+
+  <permission id="opengever.ris.AddProposal" title="opengever.ris: Add Proposal" />
+
+</configure>

@@ -231,6 +231,7 @@
                    opengever.ogds.base: Sync the OGDS,
                    opengever.propertysheets: Manage PropertySheets,
                    opengever.repository: Export repository,
+                   opengever.ris: Add Proposal,
                    opengever.sharing: List Protected Objects,
                    opengever.webactions: Manage own WebActions,
                    opengever.workspace: Add WorkspaceFolder,
@@ -249,7 +250,7 @@
                    opengever.workspaceclient: Use Workspace Client,
                    plone.app.collection: Add Collection,
                    plone.restapi: Access Plone user information,
-                   Remove GEVER content,
+                   Remove GEVER content, 
                    "
       />
 

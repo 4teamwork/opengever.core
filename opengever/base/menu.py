@@ -12,6 +12,17 @@ from zope.interface import implements
 from zope.interface import Interface
 
 
+HIDDEN_WORKFLOW_MENU_ITEMS = (
+    "advanced",
+    "workflow-transition-proposal-transition-decide",
+    "workflow-transition-proposal-transition-reject",
+    "workflow-transition-proposal-transition-schedule",
+    "workflow-transition-proposal-transition-submit-to-meeting",
+    "workflow-transition-proposal-transition-unschedule",
+    "workflow-transition-proposal-transition-unschedule-to-dossier",
+)
+
+
 def order_factories(context, factories):
     """Orders the entries in the factory menu based on a hardcoded order.
     """
@@ -121,12 +132,20 @@ class OGCombinedActionsWorkflowMenu(CombinedActionsWorkflowMenu):
         """ftw.contentmenu >= 2.2.2 does no longer protect the workflows
         "Advanced..." action with "Manage portal".
         We therefore just filter it.
+
+        We also filter ris proposal actions that should not be visible in the
+        UI but just available via API.
         """
 
         result = (super(OGCombinedActionsWorkflowMenu, self)
                   .getWorkflowMenuItems(context, request))
-        result = filter(lambda item: (item.get('extra', {})
-                                      .get('id', None) != 'advanced'), result)
+        result = filter(
+            lambda item: (
+                item.get("extra", {}).get("id", None)
+                not in HIDDEN_WORKFLOW_MENU_ITEMS
+            ),
+            result,
+        )
         result = result + self.getSQLWorkflowMenuItems(context)
         result = result + self.getWebActionsMenuItems(context, request)
         return result

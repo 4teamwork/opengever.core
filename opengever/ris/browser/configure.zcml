@@ -1,0 +1,41 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="opengever.ris">
+
+  <browser:page
+      name="proposal_transition_controller"
+      for="opengever.ris.proposal.IProposal"
+      class=".proposaltransitioncontroller.ProposalTransitionController"
+      permission="zope2.View"
+      allowed_interface=".proposaltransitioncontroller.IProposalTransitionController"
+      />
+
+  <adapter
+      name="opengever.ris.proposal"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".proposalforms.ProposalAddView"
+      />
+
+  <class class=".proposalforms.ProposalAddView">
+    <require
+        permission="cmf.AddPortalContent"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"
+        />
+  </class>
+
+  <browser:page
+      for="opengever.ris.proposal.IProposal"
+      class=".proposalforms.ProposalEditForm"
+      name="edit"
+      permission="cmf.ModifyPortalContent"
+      />
+
+  <browser:page
+      for="opengever.ris.proposal.IProposal"
+      class=".edit.EditInRisView"
+      name="edit-in-ris"
+      permission="cmf.ModifyPortalContent"
+      />
+
+</configure>
