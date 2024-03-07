@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.5.0 (2024-03-07)
+---------------------
+
+New features:
+
+
+- Add flag to the dossier serialization to know whether the dossier will be processed in the nightly jobs or not [KunzS85] [CA-5855]
+- Add checkbox on repository folders to disable max subdossier depth restriction [elioschmutz] [CA-6447]
+- Add new content-type opengever.ris.proposal. [deiferni] [HG-4265]
+
+
+Bug fixes:
+
+
+- Handle the setting of the pending jobs flag when a dossier is reopened [KunzS85] [CA-5855]
+- Fix OGDS sync log in Docker container. [buchi] [CA-6435]
+- Don't let rejected tasks prevent the dossier from being closed. [lgraf] [CA-6451]
+
+
+Other changes:
+
+
+- Use username in title of Users sources. [njohner] [CA-6237]
+- Include responsible_actor in tasktree response. [amo] [CA-6280]
+- Add Open Document types (.odt, .ods, .odp) to document types editable with OfficeConnector. [njohner] [CA-6292]
+- Add support for ZCML package includes in Docker container. [buchi] [CA-6435]
+
+
 2024.4.0 (2024-02-23)
 ---------------------
 
