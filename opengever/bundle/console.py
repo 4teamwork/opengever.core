@@ -45,7 +45,10 @@ def import_oggbundle(app, args):
     # Discard the first three arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
     # scripts work.
-    args = parse_args(sys.argv[3:])
+    if sys.argv[0] != 'import':
+        args = parse_args(sys.argv[3:])
+    else:
+        args = parse_args(args)
 
     log.info("Importing OGGBundle %s" % args.bundle_path)
 
