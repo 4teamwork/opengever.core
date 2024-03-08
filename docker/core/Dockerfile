@@ -77,6 +77,8 @@ COPY ./docker/core/zopectl /app/bin/
 COPY ./docker/core/cron /app/cron
 
 RUN mkdir -p /app/var/log /app/var/instance \
+ && chown plone:plone /app/var/log \
+ && chown plone:plone /app/var/instance \
  && ln -sf /dev/stderr /app/var/log/instance.log \
  && ln -sf /dev/stdout /app/var/log/instance-json.log \
  && ln -sf /dev/stdout /app/var/log/solr-maintenance.log \
