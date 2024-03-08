@@ -1,6 +1,7 @@
 # Avoid import error for Products.Archetypes.BaseBTreeFolder
 from Products.Archetypes import atapi  # noqa # isort:skip
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.pathfinder import PathFinder
 from opengever.bundle.config.importer import ConfigImporter
 from opengever.bundle.importer import BundleImporter
 from opengever.core.debughelpers import get_first_plone_site
@@ -105,8 +106,9 @@ def setup_logging():
     stream_handler = logging.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
 
-    # Also write logs to a dedicated migration log in the working directory.
-    file_handler = logging.FileHandler('migration.log')
+    # Also write logs to a dedicated migration log.
+    log_dir = PathFinder().var_log
+    file_handler = logging.FileHandler(log_dir, 'migration.log')
     file_handler.setFormatter(stream_handler.formatter)
     file_handler.setLevel(logging.INFO)
     logging.root.addHandler(file_handler)
