@@ -38,7 +38,8 @@ def parse_args(argv):
     # Discard the first two arguments, because they're not "actual" arguments
     # but cruft that we get because of the way bin/instance [zopectl_cmd]
     # scripts work.
-    argv = argv[2:]
+    if sys.argv[0] != 'create_service_user':
+        argv = argv[2:]
 
     acl_users = api.portal.get_tool("acl_users")
     allowed_roles = list(acl_users.portal_role_manager.listRoleIds())
