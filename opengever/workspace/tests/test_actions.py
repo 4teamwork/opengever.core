@@ -95,6 +95,16 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
         self.assertEqual([u'zipexport'], self.get_actions(self.workspace))
 
+    def test_workspace_with_guest_restriction_context_actions_for_guests(self):
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content', 'zipexport'],
+                         self.get_actions(self.workspace))
+
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.assertEqual([u'share_content'], self.get_actions(self.workspace))
+
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
         expected_actions = [u'add_invitation', u'edit', u'local_roles', u'share_content', 'zipexport']

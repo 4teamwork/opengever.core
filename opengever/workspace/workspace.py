@@ -117,7 +117,6 @@ class IWorkspaceSchema(model.Schema):
                       u'minutes'),
         required=False,
     )
-
     restrict_downloading_documents = schema.Bool(
         title=_(u'label_restrict_downloading_documents',
                 default=u'Restrict guests from downloading or opening content on the end device'),

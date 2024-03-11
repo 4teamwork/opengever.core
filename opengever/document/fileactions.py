@@ -14,6 +14,7 @@ from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.interfaces import IWorkspaceFolder
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.locking.interfaces import ILockable
 from zExceptions import Forbidden
@@ -187,6 +188,7 @@ class DocumentFileActions(BaseDocumentFileActions):
         return (
             self.context.has_file()
             and not manager.is_checked_out_by_current_user()
+            and not is_restricted_workspace_and_guest(self.context)
         )
 
     def is_oc_direct_checkout_action_available(self):
@@ -247,7 +249,8 @@ class DocumentFileActions(BaseDocumentFileActions):
 
         return (
             super(DocumentFileActions, self).is_download_copy_action_available()
-            and not (manager.is_checked_out_by_another_user() and not has_version))
+            and not (manager.is_checked_out_by_another_user() and not has_version)
+            and not is_restricted_workspace_and_guest(self.context))
 
     def is_attach_to_email_action_available(self):
         """Disable attaching documents to email when the document is checked out by
@@ -261,13 +264,19 @@ class DocumentFileActions(BaseDocumentFileActions):
         return (
             super(DocumentFileActions, self).is_attach_to_email_action_available()
             and not (manager.is_checked_out_by_another_user() and not has_version)
-            and not self.context.is_inside_a_template_folder())
+            and not self.context.is_inside_a_template_folder()
+            and not is_restricted_workspace_and_guest(self.context))
 
     def is_oneoffixx_retry_action_available(self):
         return self.context.is_oneoffixx_creatable()
 
     def is_docugate_retry_action_available(self):
         return self.context.is_docugate_creatable()
+
+    def is_open_as_pdf_action_available(self):
+        return (
+            super(DocumentFileActions, self).is_open_as_pdf_action_available()
+            and not is_restricted_workspace_and_guest(self.context))
 
     def is_revert_to_version_action_available(self):
         manager = getMultiAdapter(

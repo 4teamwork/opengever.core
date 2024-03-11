@@ -8,6 +8,7 @@ from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from opengever.workspace.utils import get_containing_workspace
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.dexterity.interfaces import IDexterityContainer
 from zExceptions import Forbidden
@@ -70,7 +71,7 @@ class WorkspaceContextActions(BaseContextActions):
         return get_containing_workspace(self.context).access_members_allowed()
 
     def is_zipexport_available(self):
-        return True
+        return not is_restricted_workspace_and_guest(self.context)
 
 
 @adapter(IWorkspaceFolder, IOpengeverBaseLayer)
@@ -101,4 +102,4 @@ class WorkspaceFolderContextActions(BaseContextActions):
         return ITrasher(self.context).verify_may_untrash(raise_on_violations=False)
 
     def is_zipexport_available(self):
-        return True
+        return not is_restricted_workspace_and_guest(self.context)
