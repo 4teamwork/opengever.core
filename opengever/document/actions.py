@@ -16,6 +16,7 @@ from opengever.private.dossier import IPrivateDossier
 from opengever.private.folder import IPrivateFolder
 from opengever.trash.trash import ITrasher
 from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from opengever.workspace.utils import is_within_workspace
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
@@ -143,6 +144,18 @@ class WorkspaceDocumentListingActions(BaseDocumentListingActions):
 
     def is_delete_available(self):
         return False
+
+    def is_attach_documents_available(self):
+        return (super(WorkspaceDocumentListingActions, self).is_attach_documents_available()
+                and not is_restricted_workspace_and_guest(self.context))
+
+    def is_zip_selected_available(self):
+        return (super(WorkspaceDocumentListingActions, self).is_zip_selected_available()
+                and not is_restricted_workspace_and_guest(self.context))
+
+    def is_export_documents_available(self):
+        return (super(WorkspaceDocumentListingActions, self).is_export_documents_available()
+                and not is_restricted_workspace_and_guest(self.context))
 
 
 @adapter(IBaseDocument, IOpengeverBaseLayer)

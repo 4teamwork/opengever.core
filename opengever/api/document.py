@@ -13,6 +13,8 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
+from opengever.workspace.utils import is_restricted_workspace_and_guest
+from opengever.workspace.utils import is_within_workspace
 from opengever.workspaceclient import is_workspace_client_feature_enabled
 from opengever.workspaceclient.interfaces import ILinkedDocuments
 from plone.restapi.deserializer import json_body
@@ -66,6 +68,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         if is_workspace_client_feature_enabled():
             result['is_locked_by_copy_to_workspace'] = obj.is_locked_by_copy_to_workspace()
+
+        if is_within_workspace(self.context):
+            result[u'restrict_downloading_document'] = is_restricted_workspace_and_guest(self.context)
 
         additional_metadata = {
             'checked_out': checked_out_by,

@@ -84,3 +84,18 @@ def get_context_members_ids(context, actor_type, disregard_block=False):
             break
 
     return list(actor_ids)
+
+
+def is_restricted_workspace_and_guest(context):
+    if not is_within_workspace(context):
+        return False
+
+    workspace = get_containing_workspace(context)
+    restricted = aq_base(workspace).restrict_downloading_documents
+    if not restricted:
+        return False
+
+    non_guest_roles = ['WorkspaceMember', 'WorkspaceAdmin']
+    roles = api.user.get_roles(obj=context)
+    is_guest = not any([r in roles for r in non_guest_roles])
+    return is_guest

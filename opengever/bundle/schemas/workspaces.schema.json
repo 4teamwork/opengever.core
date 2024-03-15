@@ -89,6 +89,15 @@
                     "description": "Kann in Kopf- und Fusszeilen von Protokollen verwendet werden.",
                     "_zope_schema_type": "NamedImage"
                 },
+                "restrict_downloading_documents": {
+                    "type": [
+                        "null",
+                        "boolean"
+                    ],
+                    "title": "Herunterladen bzw. \u00d6ffnen von Inhalten am Endger\u00e4t f\u00fcr G\u00e4ste einschr\u00e4nken",
+                    "description": "",
+                    "_zope_schema_type": "Bool"
+                },
                 "changed": {
                     "type": [
                         "null",
@@ -188,6 +197,7 @@
                 "meeting_template_header",
                 "meeting_template_footer",
                 "workspace_logo",
+                "restrict_downloading_documents",
                 "changed",
                 "title",
                 "description",

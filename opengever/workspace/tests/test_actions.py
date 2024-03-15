@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.base.interfaces import IContextActions
 from opengever.base.interfaces import IListingActions
 from opengever.testing import IntegrationTestCase
@@ -94,6 +96,28 @@ class TestWorkspaceContextActions(IntegrationTestCase):
             self.workspace.hide_members_for_guests = True
 
         self.assertEqual([u'zipexport'], self.get_actions(self.workspace))
+
+    def test_workspace_with_guest_restriction_context_actions_for_guests(self):
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content', 'zipexport'],
+                         self.get_actions(self.workspace))
+
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.assertEqual([u'share_content'], self.get_actions(self.workspace))
+
+    def test_workspace_with_guest_restriction_mail_actions_for_guests(self):
+        self.login(self.workspace_guest)
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        mail = create(Builder('mail')
+                      .within(self.workspace))
+
+        expected_actions = [u'copy_item', u'move_item', u'share_content']
+
+        self.assertEqual(expected_actions, self.get_actions(mail))
 
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)

@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Add `restrict_downloading_documents` field to workspace for restricting guests in downlading and printing documents
 
 2024.5.0 (2024-03-07)
 ---------------------

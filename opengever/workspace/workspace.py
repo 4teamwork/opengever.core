@@ -117,6 +117,11 @@ class IWorkspaceSchema(model.Schema):
                       u'minutes'),
         required=False,
     )
+    restrict_downloading_documents = schema.Bool(
+        title=_(u'label_restrict_downloading_documents',
+                default=u'Restrict guests from downloading or opening content on the end device'),
+        required=False,
+    )
 
     @invariant
     def validate_meeting_minutes_header_and_footer(data):

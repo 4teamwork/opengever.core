@@ -14,6 +14,7 @@ from opengever.trash.trash import ITrasher
 from opengever.wopi import is_wopi_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.interfaces import IWorkspaceFolder
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.locking.interfaces import ILockable
 from zExceptions import Forbidden
@@ -52,7 +53,8 @@ class BaseDocumentFileActions(object):
         return False
 
     def is_oc_view_action_available(self):
-        return self.context.has_file()
+        return (self.context.has_file()
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_oc_direct_checkout_action_available(self):
         return False
@@ -79,12 +81,14 @@ class BaseDocumentFileActions(object):
         return False
 
     def is_download_copy_action_available(self):
-        return self.context.has_file()
+        return (self.context.has_file()
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_attach_to_email_action_available(self):
         return (
             is_officeconnector_attach_feature_enabled()
-            and self.context.has_file())
+            and self.context.has_file()
+            and not is_restricted_workspace_and_guest(self.context))
 
     def is_oneoffixx_retry_action_available(self):
         return False
@@ -103,7 +107,8 @@ class BaseDocumentFileActions(object):
         if not mime_type_item:
             return False
 
-        return is_mimetype_supported(mime_type_item[0])
+        return (is_mimetype_supported(mime_type_item[0])
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_revert_to_version_action_available(self):
         return False
@@ -185,7 +190,8 @@ class DocumentFileActions(BaseDocumentFileActions):
             (self.context, self.request), ICheckinCheckoutManager)
 
         return (
-            self.context.has_file()
+            super(DocumentFileActions, self).is_oc_view_action_available()
+            and self.context.has_file()
             and not manager.is_checked_out_by_current_user()
         )
 
@@ -268,6 +274,9 @@ class DocumentFileActions(BaseDocumentFileActions):
 
     def is_docugate_retry_action_available(self):
         return self.context.is_docugate_creatable()
+
+    def is_open_as_pdf_action_available(self):
+        return super(DocumentFileActions, self).is_open_as_pdf_action_available()
 
     def is_revert_to_version_action_available(self):
         manager = getMultiAdapter(

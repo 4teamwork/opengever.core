@@ -307,6 +307,17 @@ class TestDocumentSerializer(IntegrationTestCase):
                  u'https://example.com/teamraum/redirect-to-uuid/createworkspace00000000000000005'],
                 browser.json["workspace_document_urls"])
 
+    @browsing
+    def test_document_serialization_contains_workspace_restricted_downloading_document(self, browser):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+        self.login(self.workspace_guest, browser)
+
+        browser.open(self.workspace_document, headers={'Accept': 'application/json'})
+        self.assertEqual(browser.status_code, 200)
+
+        self.assertEqual(True, browser.json['restrict_downloading_document'])
+
 
 class TestDocumentPost(IntegrationTestCase):
 

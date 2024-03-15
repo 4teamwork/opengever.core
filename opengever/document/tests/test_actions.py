@@ -92,6 +92,14 @@ class TestDocumentListingActions(IntegrationTestCase):
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
+    def test_document_actions_in_workspace_and_workspace_folder_with_guest_restriction(self):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+        self.login(self.workspace_guest)
+        expected_actions = []
+        self.assertEqual(expected_actions, self.get_actions(self.workspace))
+        self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
 
 class TestWorkspaceClientDocumentListingActions(FunctionalWorkspaceClientTestCase):
 
@@ -254,3 +262,11 @@ class TestDocumentContextActions(IntegrationTestCase):
             u'save_document_as_pdf',
         ]
         self.assertEqual(expected_actions, self.get_actions(template))
+
+    def test_document_actions_in_workspace_with_guest_restriction(self):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+        self.login(self.workspace_guest)
+
+        expected_actions = [u'share_content']
+        self.assertEqual(expected_actions, self.get_actions(self.workspace))
