@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.5.1 (2024-03-18)
+---------------------
+
+Other changes:
+
+
+- Improve performance of Solr reindexing using data import handler for large indexes. [buchi] [CA-6790]
+
+
 2024.5.0 (2024-03-07)
 ---------------------
 
