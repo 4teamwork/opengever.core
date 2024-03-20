@@ -11,4 +11,9 @@
   <include package=".policyless" />
   <include file="transmogrifier.zcml" />
 
+  <subscriber
+      for="zope.processlifetime.IDatabaseOpenedWithRoot"
+      handler=".autosetup.autosetup"
+      />
+
 </configure>
