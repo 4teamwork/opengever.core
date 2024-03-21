@@ -1,6 +1,7 @@
 from opengever.activity.model import tables as activity_tables
 from opengever.base.model import Base
 from opengever.base.model import tables as base_tables
+from opengever.base.systemmessages.models import tables as system_messages_tables
 from opengever.dossiertransfer.model import tables as dossier_transfer_tables
 from opengever.globalindex.model import tables as globalindex_tables
 from opengever.locking.model import tables as lock_tables
@@ -27,5 +28,6 @@ class TestDatabaseTableDeclarations(TestCase):
             + lock_tables
             + dossier_transfer_tables
             + base_tables
+            + system_messages_tables
         )
         self.assertItemsEqual(expected_tables, Base.metadata.tables.keys())
