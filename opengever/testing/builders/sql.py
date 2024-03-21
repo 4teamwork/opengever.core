@@ -10,6 +10,7 @@ from opengever.base.systemmessages.models import SystemMessage
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
+from opengever.dossiertransfer.token import TokenManager
 from opengever.globalindex.model.reminder_settings import ReminderSetting
 from opengever.globalindex.model.task import Task
 from opengever.locking.model import Lock
@@ -636,6 +637,10 @@ class DossierTransferBuilder(SqlObjectBuilder):
     def before_create(self):
         if self._with_default_target:
             self._create_target_admin_unit()
+
+    def after_create(self, obj):
+        TokenManager().issue_token(obj)
+        return obj
 
     def with_source(self, admin_unit):
         self.arguments['source_id'] = admin_unit.unit_id

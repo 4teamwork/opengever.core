@@ -9,6 +9,15 @@ class DossierTransfersGet(DossierTransferLocator):
     GET /@dossier-transfers HTTP/1.1
     """
 
+    def check_permission(self):
+        if self.has_valid_token():
+            # Server-to-server requests to fetch the full transfer contents are
+            # performed anonymously, but with a valid token that matches a
+            # particular transfer. We must not restrict these.
+            return
+
+        return super(DossierTransfersGet, self).check_permission()
+
     def reply(self):
         if self.transfer_id:
             # Get transfer by id

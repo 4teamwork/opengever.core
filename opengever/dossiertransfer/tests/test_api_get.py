@@ -10,6 +10,9 @@ from plone import api
 import pytz
 
 
+FROZEN_NOW = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
+
+
 class TestDossierTransfersGet(IntegrationTestCase):
 
     features = ('dossier-transfers', )
@@ -279,12 +282,12 @@ class TestDossierTransfersGet(IntegrationTestCase):
         self.assertEqual(expected, self.get_items(browser))
 
 
-class TestDossierTransfersGetPermissions(IntegrationTestCase):
+class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
 
     features = ('dossier-transfers', )
 
     def create_transfers(self):
-        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+        with freeze(FROZEN_NOW):
             session = create_session()
 
             self.login(self.secretariat_user)
@@ -324,9 +327,16 @@ class TestDossierTransfersGetPermissions(IntegrationTestCase):
             session.flush()
             self.transfer_between_other_units = transfer
 
-    def fetch_transfer(self, transfer, browser):
+    def fetch_transfer(self, transfer, browser, headers=None):
+        request_headers = self.api_headers.copy()
+        if headers:
+            request_headers.update(headers)
+
         browser.open(self.portal, view='@dossier-transfers/%s' % transfer.id,
-                     method='GET', headers=self.api_headers)
+                     method='GET', headers=request_headers)
+
+
+class TestDossierTransfersGetPermissions(TestDossierTransfersGetPermissionsBase):
 
     @browsing
     def test_fetch_permissions(self, browser):
@@ -415,3 +425,36 @@ class TestDossierTransfersGetPermissions(IntegrationTestCase):
 
         items = [(tf['id'], tf['title']) for tf in browser.json['items']]
         self.assertEqual(expected, items)
+
+
+class TestDossierTransfersGetFullContentsPermissions(TestDossierTransfersGetPermissionsBase):
+
+    @browsing
+    def test_authorizes_anonymous_requests_with_valid_token(self, browser):
+        self.create_transfers()
+
+        expected = [
+            (self.transfer_owned_by_secretariat, 200),
+            (self.transfer_owned_by_responsible, 200),
+            (self.transfer_between_other_units, 401),
+        ]
+
+        browser.raise_http_errors = False
+
+        # Guard assertion - anonymous request without token authoring the request
+        # would normally be rejected with 401 Unauthorized.
+        self.fetch_transfer(self.transfer_owned_by_secretariat, browser)
+        self.assertEqual(401, browser.status_code)
+
+        for transfer, expected_status in expected:
+            headers = {'X-GEVER-Dossier-Transfer-Token': transfer.token}
+
+            with freeze(FROZEN_NOW):
+                self.fetch_transfer(transfer, browser, headers=headers)
+
+            self.assertEqual(
+                expected_status,
+                browser.status_code,
+                'Expected HTTP status %s for request by Anonymous user '
+                'authorized via token on transfer %r (%s)' % (
+                    expected_status, transfer, transfer.title))
