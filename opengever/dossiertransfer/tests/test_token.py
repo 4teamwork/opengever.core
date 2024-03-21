@@ -16,6 +16,9 @@ import os
 import pytz
 
 
+FROZEN_NOW = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
+
+
 class TestTokenManager(IntegrationTestCase):
 
     features = ('dossier-transfers', )
@@ -25,8 +28,7 @@ class TestTokenManager(IntegrationTestCase):
         self.token_manager = TokenManager()
 
     def new_transfer(self):
-        now = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
-        with freeze(now):
+        with freeze(FROZEN_NOW):
             transfer = create(Builder('dossier_transfer'))
             session = create_session()
             session.add(transfer)
@@ -53,8 +55,10 @@ class TestTokenManager(IntegrationTestCase):
         self.login(self.regular_user)
 
         transfer = self.new_transfer()
-        token = self.token_manager.issue_token(transfer)
-        claims = self.token_manager._decode_token(token)
+
+        with freeze(FROZEN_NOW):
+            token = self.token_manager.issue_token(transfer)
+            claims = self.token_manager._decode_token(token)
 
         expected = {
             u'iat': 1708271100,
@@ -72,14 +76,16 @@ class TestTokenManager(IntegrationTestCase):
         transfer = self.new_transfer()
         token = self.token_manager.issue_token(transfer)
 
-        self.assertIsNone(self.token_manager.validate_token(transfer, token))
+        with freeze(FROZEN_NOW):
+            self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
     def test_invalid_token_fails_validation(self):
         self.login(self.regular_user)
 
         transfer = self.new_transfer()
-        with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, 'invalid-token')
+        with freeze(FROZEN_NOW):
+            with self.assertRaises(InvalidToken):
+                self.token_manager.validate_token(transfer, 'invalid-token')
 
     def test_token_with_wrong_issuer_fails_validation(self):
         self.login(self.regular_user)
@@ -87,9 +93,10 @@ class TestTokenManager(IntegrationTestCase):
         transfer = self.new_transfer()
 
         # Guard assertion
-        claims = self.create_claims(transfer)
-        token = self.create_token(claims)
-        self.assertIsNone(self.token_manager.validate_token(transfer, token))
+        with freeze(FROZEN_NOW):
+            claims = self.create_claims(transfer)
+            token = self.create_token(claims)
+            self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
         # Wrong issuer (doesn't match current admin unit)
         claims = self.create_claims(transfer)
@@ -106,16 +113,18 @@ class TestTokenManager(IntegrationTestCase):
 
         # Guard assertion
         claims = self.create_claims(transfer)
-        token = self.create_token(claims)
-        self.assertIsNone(self.token_manager.validate_token(transfer, token))
+        with freeze(FROZEN_NOW):
+            token = self.create_token(claims)
+            self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
         # Wrong issuer (doesn't match current admin unit)
         claims = self.create_claims(transfer)
         claims['transfer_id'] = 77
-        token = self.create_token(claims)
 
-        with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+        with freeze(FROZEN_NOW):
+            token = self.create_token(claims)
+            with self.assertRaises(InvalidToken):
+                self.token_manager.validate_token(transfer, token)
 
     def test_decode_token_after_key_rotation(self):
         self.login(self.regular_user)
@@ -126,7 +135,8 @@ class TestTokenManager(IntegrationTestCase):
         key_manager = getUtility(IKeyManager)
         key_manager.rotate()
 
-        claims = self.token_manager._decode_token(token)
+        with freeze(FROZEN_NOW):
+            claims = self.token_manager._decode_token(token)
         self.assertEqual(transfer.id, claims['transfer_id'])
 
     def test_tampered_attributes_fail_validation(self):
@@ -136,7 +146,8 @@ class TestTokenManager(IntegrationTestCase):
         token = self.token_manager.issue_token(transfer)
 
         # Guard assertion
-        self.assertIsNone(self.token_manager.validate_token(transfer, token))
+        with freeze(FROZEN_NOW):
+            self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
         # Tampering with 'state'
         transfer = self.new_transfer()
@@ -145,7 +156,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.state = TRANSFER_STATE_PENDING
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'target_id'
         transfer = self.new_transfer()
@@ -153,7 +165,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.target_id = u'plone'
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'source_user_id'
         transfer = self.new_transfer()
@@ -161,7 +174,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.source_user_id = u'meeting_user'
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'root'
         transfer = self.new_transfer()
@@ -169,7 +183,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.root = self.meeting_dossier.UID()
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'documents'
         transfer = self.new_transfer()
@@ -177,7 +192,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.documents = [self.meeting_document.UID()]
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'participations'
         transfer = self.new_transfer()
@@ -185,7 +201,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.participations = ['hugo.boss']
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'all_documents'
         transfer = self.new_transfer()
@@ -193,7 +210,8 @@ class TestTokenManager(IntegrationTestCase):
         transfer.all_documents = True
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
 
         # Tampering with 'all_participations'
         transfer = self.new_transfer()
@@ -201,4 +219,5 @@ class TestTokenManager(IntegrationTestCase):
         transfer.all_participations = False
 
         with self.assertRaises(InvalidToken):
-            self.token_manager.validate_token(transfer, token)
+            with freeze(FROZEN_NOW):
+                self.token_manager.validate_token(transfer, token)
