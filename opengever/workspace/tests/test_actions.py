@@ -99,25 +99,14 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
     def test_workspace_with_guest_restriction_context_actions_for_guests(self):
         self.login(self.workspace_guest)
+
         self.assertEqual([u'share_content', 'zipexport'],
                          self.get_actions(self.workspace))
 
         with self.login(self.workspace_admin):
             self.workspace.restrict_downloading_documents = True
 
-        self.assertEqual([u'share_content'], self.get_actions(self.workspace))
-
-    def test_workspace_with_guest_restriction_mail_actions_for_guests(self):
-        self.login(self.workspace_guest)
-        with self.login(self.workspace_admin):
-            self.workspace.restrict_downloading_documents = True
-
-        mail = create(Builder('mail')
-                      .within(self.workspace))
-
-        expected_actions = [u'copy_item', u'move_item', u'share_content']
-
-        self.assertEqual(expected_actions, self.get_actions(mail))
+        self.assertEqual([], self.get_actions(self.workspace))
 
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
@@ -159,6 +148,16 @@ class TestWorkspaceFolderContextActions(IntegrationTestCase):
             self.workspace.hide_members_for_guests = True
 
         self.assertEqual([u'zipexport'], self.get_actions(self.workspace_folder))
+
+    def test_workspace_folder_context_actions_for_guests_in_workspace_with_guest_restriction(self):
+        self.login(self.workspace_guest)
+        self.assertEqual([u'share_content', 'zipexport'],
+                         self.get_actions(self.workspace_folder))
+
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.assertEqual([], self.get_actions(self.workspace_folder))
 
     def test_workspace_folder_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
