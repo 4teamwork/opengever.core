@@ -96,6 +96,7 @@ class TestTokenManager(IntegrationTestCase):
         with freeze(FROZEN_NOW):
             claims = self.create_claims(transfer)
             token = self.create_token(claims)
+            transfer.token = token
             self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
         # Wrong issuer (doesn't match current admin unit)
@@ -112,9 +113,10 @@ class TestTokenManager(IntegrationTestCase):
         transfer = self.new_transfer()
 
         # Guard assertion
-        claims = self.create_claims(transfer)
         with freeze(FROZEN_NOW):
+            claims = self.create_claims(transfer)
             token = self.create_token(claims)
+            transfer.token = token
             self.assertIsNone(self.token_manager.validate_token(transfer, token))
 
         # Wrong issuer (doesn't match current admin unit)
@@ -221,3 +223,23 @@ class TestTokenManager(IntegrationTestCase):
         with self.assertRaises(InvalidToken):
             with freeze(FROZEN_NOW):
                 self.token_manager.validate_token(transfer, token)
+
+    def test_token_must_match_token_on_transfer(self):
+        self.login(self.regular_user)
+
+        transfer_a = self.new_transfer()
+        transfer_b = self.new_transfer()
+
+        with freeze(FROZEN_NOW):
+            token_a = self.token_manager.issue_token(transfer_a)
+            token_b = self.token_manager.issue_token(transfer_b)
+
+            # Guard assertions
+            self.assertIsNone(self.token_manager.validate_token(transfer_a, token_a))
+            self.assertIsNone(self.token_manager.validate_token(transfer_b, token_b))
+
+            with self.assertRaises(InvalidToken):
+                self.assertIsNone(self.token_manager.validate_token(transfer_a, token_b))
+
+            with self.assertRaises(InvalidToken):
+                self.assertIsNone(self.token_manager.validate_token(transfer_b, token_a))
