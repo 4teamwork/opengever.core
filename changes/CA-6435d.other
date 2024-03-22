@@ -1,1 +1,0 @@
-Make '/app/var/log' and '/app/var/instance' writeable inside Docker container. [buchi]

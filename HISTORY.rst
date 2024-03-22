@@ -10,6 +10,30 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.6.0 (2024-03-22)
+---------------------
+
+New features:
+
+
+- Adds the option in the workspace to restrict the possibility of printing and downloading content for guests. [KunzS85] [CA-6417]
+
+
+Bug fixes:
+
+
+- Fix argument parsing of create_service_user command. [buchi] [CA-6435a]
+- Fix argument parsing of import command. [buchi] [CA-6435b]
+
+
+Other changes:
+
+
+- Change location of migration.log to log directory. [buchi] [CA-6435c]
+- Make '/app/var/log' and '/app/var/instance' writeable inside Docker container. [buchi] [CA-6435d]
+- Improve performance of Solr reindexing using data import handler for large indexes. [buchi] [CA-6790]
+
+
 2024.5.0 (2024-03-07)
 ---------------------
 
