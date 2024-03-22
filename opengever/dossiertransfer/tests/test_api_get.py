@@ -282,6 +282,180 @@ class TestDossierTransfersGet(IntegrationTestCase):
         self.assertEqual(expected, self.get_items(browser))
 
 
+class TestDossierTransfersGetFullContent(IntegrationTestCase):
+
+    features = ('dossier-transfers', )
+
+    def create_transfer(self):
+        with freeze(FROZEN_NOW):
+            transfer = create(
+                Builder('dossier_transfer')
+                .having(
+                    all_documents=True,
+                    all_participations=True,
+                )
+            )
+            session = create_session()
+            session.add(transfer)
+            session.flush()
+        return transfer
+
+    def summarize_items(self, items):
+        def summarize_item(item):
+            keep = ('title', 'relative_path')
+            return {key: value for key, value in item.items() if key in keep}
+
+        return [summarize_item(item) for item in items]
+
+    def summarize_content(self, content):
+        summary = {}
+        for key, value in content.items():
+            summary[key] = self.summarize_items(value)
+
+        return summary
+
+    @browsing
+    def test_content_structure(self, browser):
+        transfer = self.create_transfer()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_structure = {
+            u'contacts': [],
+            u'documents': [],
+            u'dossiers': [{
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                'title': u'A resolvable main dossier',
+            }, {
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                'title': u'Resolvable Subdossier',
+            }],
+        }
+
+        self.assertEqual(
+            expected_structure, self.summarize_content(browser.json['content']))
+
+    @browsing
+    def test_dossier_serialization(self, browser):
+        transfer = self.create_transfer()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_dossier = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+            u'@type': u'opengever.dossier.businesscasedossier',
+            u'UID': u'createresolvabledossier000000001',
+            u'allow_discussion': False,
+            u'archival_value': {
+                u'title': u'not assessed',
+                u'token': u'unchecked',
+            },
+            u'archival_value_annotation': None,
+            u'back_references_relatedDossier': [],
+            u'blocked_local_roles': False,
+            u'changed': u'2016-08-31T14:41:33+00:00',
+            u'checklist': None,
+            u'classification': {
+                u'title': u'unprotected',
+                u'token': u'unprotected',
+            },
+            u'container_location': None,
+            u'container_type': None,
+            u'created': u'2016-08-31T14:41:33+00:00',
+            u'custody_period': {
+                u'title': u'30',
+                u'token': u'30',
+            },
+            u'custom_properties': None,
+            u'date_of_cassation': None,
+            u'date_of_submission': None,
+            u'description': u'',
+            u'dossier_manager': None,
+            u'dossier_type': None,
+            u'email': u'1014413300@example.org',
+            u'end': None,
+            u'external_reference': None,
+            u'filing_prefix': None,
+            u'former_reference_number': None,
+            u'has_pending_jobs': False,
+            u'id': u'dossier-8',
+            u'is_folderish': True,
+            u'is_protected': False,
+            u'is_subdossier': False,
+            u'keywords': [],
+            u'layout': u'tabbed_view',
+            u'modified': u'2016-08-31T14:43:33+00:00',
+            u'number_of_containers': None,
+            u'oguid': u'plone:1014413300',
+            u'parent': {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen',
+                u'@type': u'opengever.repository.repositoryfolder',
+                u'UID': u'createrepositorytree000000000003',
+                u'description': u'',
+                u'is_leafnode': True,
+                u'review_state': u'repositoryfolder-state-active',
+                u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
+            },
+            u'privacy_layer': {
+                u'title': u'no',
+                u'token': u'privacy_layer_no',
+            },
+            u'public_trial': {
+                u'title': u'not assessed',
+                u'token': u'unchecked',
+            },
+            u'public_trial_statement': None,
+            u'reading': [],
+            u'reading_and_writing': [],
+            u'reference_number': u'Client1 1.1 / 5',
+            u'relatedDossier': [],
+            u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+            u'responses': [],
+            u'responsible': {
+                u'title': u'Ziegler Robert (robert.ziegler)',
+                u'token': u'robert.ziegler',
+            },
+            u'responsible_actor': {
+                u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                u'identifier': u'robert.ziegler',
+            },
+            u'responsible_fullname': u'Ziegler Robert',
+            u'retention_period': {
+                u'title': u'15',
+                u'token': u'15',
+            },
+            u'retention_period_annotation': None,
+            u'review_state': u'dossier-state-active',
+            u'sequence_number': 8,
+            u'start': u'2016-01-01',
+            u'temporary_former_reference_number': None,
+            u'title': u'A resolvable main dossier',
+            u'touched': u'2016-08-31',
+            u'version': u'current'
+        }
+
+        dossiers = browser.json['content']['dossiers']
+        self.assertEqual(expected_dossier, dossiers[0])
+
+
 class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
 
     features = ('dossier-transfers', )
