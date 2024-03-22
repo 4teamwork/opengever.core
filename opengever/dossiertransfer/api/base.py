@@ -1,4 +1,6 @@
+from opengever.base.security import elevated_privileges
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
+from opengever.dossiertransfer.api.serializers import FullTransferContentSerializer
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
@@ -27,8 +29,16 @@ class DossierTransfersBase(Service):
             raise BadRequest("Feature 'dossier_transfers' is not enabled.")
         return super(DossierTransfersBase, self).render()
 
-    def serialize(self, transfer):
-        return getMultiAdapter((transfer, getRequest()), ISerializeToJson)()
+    def serialize(self, transfer, full_content=False):
+        serialized = getMultiAdapter(
+            (transfer, getRequest()), ISerializeToJson)()
+
+        if full_content:
+            assert self.has_valid_token()
+            with elevated_privileges():
+                serialized['content'] = FullTransferContentSerializer(transfer)()
+
+        return serialized
 
 
 @implementer(IPublishTraverse)

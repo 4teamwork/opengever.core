@@ -49,3 +49,18 @@ class SerializeDossierTransferToJson(object):
         result.update({'@id': url})
         result.update({'@type': self.content_type})
         return result
+
+
+class FullTransferContentSerializer(object):
+
+    def __init__(self, transfer):
+        self.transfer = transfer
+
+    def __call__(self):
+        # TODO
+        content = {
+            'dossiers': [],
+            'documents': [],
+            'contacts': [],
+        }
+        return content

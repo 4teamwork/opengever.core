@@ -1,5 +1,6 @@
 from opengever.dossiertransfer.api.base import DossierTransferLocator
 from plone import api
+from zExceptions.unauthorized import Unauthorized
 
 
 class DossierTransfersGet(DossierTransferLocator):
@@ -22,6 +23,12 @@ class DossierTransfersGet(DossierTransferLocator):
         if self.transfer_id:
             # Get transfer by id
             transfer = self.locate_transfer()
+            if self.full_content_requested():
+                # Get full content required to perform a transfer
+                if not self.has_valid_token():
+                    raise Unauthorized(
+                        "full_content requires a valid transfer token")
+                return self.serialize(transfer, full_content=True)
             return self.serialize(transfer)
 
         # List all transfers
@@ -34,3 +41,6 @@ class DossierTransfersGet(DossierTransferLocator):
             'items': [self.serialize(t) for t in transfers],
         }
         return result
+
+    def full_content_requested(self):
+        return bool(self.request.form.get('full_content', False))
