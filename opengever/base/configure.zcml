@@ -24,6 +24,7 @@
   <include package=".behaviors" />
   <include package=".browser" />
   <include package=".config_checks" />
+  <include package=".systemmessages" />
   <include package=".viewlets" />
   <include file="skins.zcml" />
   <include file="permissions.zcml" />
