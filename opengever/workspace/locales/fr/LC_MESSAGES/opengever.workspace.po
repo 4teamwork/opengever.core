@@ -293,7 +293,7 @@ msgstr "Responsable"
 #. Default: "Restrict guests from downloading or opening content on the end device"
 #: ./opengever/workspace/workspace.py
 msgid "label_restrict_downloading_documents"
-msgstr " Limiter le téléchargement ou l'ouverture de contenus sur le poste de travail des invités"
+msgstr "Limiter le téléchargement ou l'ouverture de contenus sur le poste de travail des invités"
 
 #. Default: "Secretary"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
