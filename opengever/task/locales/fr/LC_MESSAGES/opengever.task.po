@@ -958,7 +958,7 @@ msgstr "Sous-tâche ${task} clôturée par ${user}"
 #. Default: "Task accepted"
 #: ./opengever/task/response_description.py
 msgid "transition_label_accept"
-msgstr "Tâche accéptée"
+msgstr "Tâche acceptée"
 
 #. Default: "Document added to Task"
 #: ./opengever/task/response_description.py
