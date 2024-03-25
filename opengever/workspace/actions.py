@@ -25,7 +25,7 @@ class WorkspaceFolderListingActions(BaseListingActions):
         return True
 
     def is_zip_selected_available(self):
-        return True
+        return not is_restricted_workspace_and_guest(self.context)
 
     def is_trash_content_available(self):
         return api.user.has_permission('opengever.trash: Trash content', obj=self.context)
@@ -68,7 +68,8 @@ class WorkspaceContextActions(BaseContextActions):
         return self.context.is_deletion_allowed()
 
     def is_share_content_available(self):
-        return get_containing_workspace(self.context).access_members_allowed()
+        return (get_containing_workspace(self.context).access_members_allowed()
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_zipexport_available(self):
         return not is_restricted_workspace_and_guest(self.context)
@@ -93,7 +94,8 @@ class WorkspaceFolderContextActions(BaseContextActions):
         return super(WorkspaceFolderContextActions, self).is_edit_available()
 
     def is_share_content_available(self):
-        return get_containing_workspace(self.context).access_members_allowed()
+        return (get_containing_workspace(self.context).access_members_allowed()
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_trash_context_available(self):
         return ITrasher(self.context).verify_may_trash(raise_on_violations=False)
