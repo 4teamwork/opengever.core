@@ -18,12 +18,14 @@ class TokenManager(object):
             'attributes_hash': transfer.attributes_hash(),
         }
         token = jwt.encode(claims, self._signing_secret(), algorithm='HS256')
+        transfer.token = token
         return token
 
     def validate_token(self, transfer, token):
         claims = self._decode_token(token)
         if claims:
             if all([
+                token == transfer.token,
                 claims['iss'] == get_current_admin_unit().unit_id,
                 claims['transfer_id'] == transfer.id,
                 claims['attributes_hash'] == transfer.attributes_hash(),

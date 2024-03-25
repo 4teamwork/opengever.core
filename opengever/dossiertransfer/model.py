@@ -6,6 +6,7 @@ from opengever.base.model import USER_ID_LENGTH
 from opengever.base.model import UTCDateTime
 from opengever.base.types import JSONList
 from opengever.base.types import UnicodeCoercingText
+from opengever.dossiertransfer.token import InvalidToken
 from opengever.dossiertransfer.token import TokenManager
 from sqlalchemy import Boolean
 from sqlalchemy import Column
@@ -66,8 +67,12 @@ class DossierTransfer(Base):
     def issue_token(self):
         return TokenManager().issue_token(self)
 
-    def validate_token(self, token):
-        TokenManager().validate_token(self, token)
+    def is_valid_token(self, token):
+        try:
+            TokenManager().validate_token(self, token)
+            return True
+        except InvalidToken:
+            return False
 
     def attributes_hash(self):
         """Create a hash over all attributes that are relevant for security.

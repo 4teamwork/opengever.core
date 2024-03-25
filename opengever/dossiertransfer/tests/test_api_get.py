@@ -10,6 +10,9 @@ from plone import api
 import pytz
 
 
+FROZEN_NOW = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
+
+
 class TestDossierTransfersGet(IntegrationTestCase):
 
     features = ('dossier-transfers', )
@@ -279,12 +282,12 @@ class TestDossierTransfersGet(IntegrationTestCase):
         self.assertEqual(expected, self.get_items(browser))
 
 
-class TestDossierTransfersGetPermissions(IntegrationTestCase):
+class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
 
     features = ('dossier-transfers', )
 
     def create_transfers(self):
-        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+        with freeze(FROZEN_NOW):
             session = create_session()
 
             self.login(self.secretariat_user)
@@ -324,9 +327,20 @@ class TestDossierTransfersGetPermissions(IntegrationTestCase):
             session.flush()
             self.transfer_between_other_units = transfer
 
-    def fetch_transfer(self, transfer, browser):
-        browser.open(self.portal, view='@dossier-transfers/%s' % transfer.id,
-                     method='GET', headers=self.api_headers)
+    def fetch_transfer(self, transfer, browser, headers=None, qs=None):
+        request_headers = self.api_headers.copy()
+        if headers:
+            request_headers.update(headers)
+
+        view = '@dossier-transfers/%s' % transfer.id
+        if qs:
+            view = '?'.join((view, qs))
+
+        browser.open(self.portal, view=view,
+                     method='GET', headers=request_headers)
+
+
+class TestDossierTransfersGetPermissions(TestDossierTransfersGetPermissionsBase):
 
     @browsing
     def test_fetch_permissions(self, browser):
@@ -398,3 +412,64 @@ class TestDossierTransfersGetPermissions(IntegrationTestCase):
             results[user_id] = items
 
         self.assertEqual(expected, results)
+
+
+class TestDossierTransfersGetFullContentsPermissions(TestDossierTransfersGetPermissionsBase):
+
+    @browsing
+    def test_authorizes_anonymous_requests_with_valid_token(self, browser):
+        self.create_transfers()
+
+        expected = [
+            (self.transfer_owned_by_secretariat, 200),
+            (self.transfer_owned_by_responsible, 200),
+            (self.transfer_between_other_units, 401),
+        ]
+
+        browser.raise_http_errors = False
+
+        # Guard assertion - anonymous request without token authoring the request
+        # would normally be rejected with 401 Unauthorized.
+        self.fetch_transfer(self.transfer_owned_by_secretariat, browser)
+        self.assertEqual(401, browser.status_code)
+
+        for transfer, expected_status in expected:
+            headers = {'X-GEVER-Dossier-Transfer-Token': transfer.token}
+
+            with freeze(FROZEN_NOW):
+                self.fetch_transfer(transfer, browser, headers=headers)
+
+            self.assertEqual(
+                expected_status,
+                browser.status_code,
+                'Expected HTTP status %s for request by Anonymous user '
+                'authorized via token on transfer %r (%s)' % (
+                    expected_status, transfer, transfer.title))
+
+    @browsing
+    def test_fetching_full_content_requires_valid_token(self, browser):
+        self.create_transfers()
+
+        browser.raise_http_errors = False
+        transfer = self.transfer_owned_by_responsible
+
+        # Guard assertion - owner of transfer may fetch a regular GET
+        # representation of the transfer *without* full_content
+        self.login(self.dossier_responsible, browser=browser)
+        self.fetch_transfer(transfer, browser)
+        self.assertEqual(200, browser.status_code)
+
+        with freeze(FROZEN_NOW):
+            self.fetch_transfer(
+                transfer, browser, qs='full_content=1')
+            self.assertEqual(401, browser.status_code)
+
+            headers = {'X-GEVER-Dossier-Transfer-Token': transfer.token}
+            self.fetch_transfer(
+                transfer, browser, headers=headers, qs='full_content=1')
+            self.assertEqual(200, browser.status_code)
+
+            self.assertIn('content', browser.json)
+            self.assertIn('dossiers', browser.json['content'])
+            self.assertIn('documents', browser.json['content'])
+            self.assertIn('contacts', browser.json['content'])

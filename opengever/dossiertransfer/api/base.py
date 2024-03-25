@@ -1,4 +1,6 @@
+from opengever.base.security import elevated_privileges
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
+from opengever.dossiertransfer.api.serializers import FullTransferContentSerializer
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
@@ -27,8 +29,16 @@ class DossierTransfersBase(Service):
             raise BadRequest("Feature 'dossier_transfers' is not enabled.")
         return super(DossierTransfersBase, self).render()
 
-    def serialize(self, transfer):
-        return getMultiAdapter((transfer, getRequest()), ISerializeToJson)()
+    def serialize(self, transfer, full_content=False):
+        serialized = getMultiAdapter(
+            (transfer, getRequest()), ISerializeToJson)()
+
+        if full_content:
+            assert self.has_valid_token()
+            with elevated_privileges():
+                serialized['content'] = FullTransferContentSerializer(transfer)()
+
+        return serialized
 
 
 @implementer(IPublishTraverse)
@@ -65,6 +75,14 @@ class DossierTransferLocator(DossierTransfersBase):
         # Consume any path segments after /@dossier-transfers as parameters
         self.params.append(name)
         return self
+
+    def has_valid_token(self):
+        transfer_id = self._extract_transfer_id()
+        transfer = DossierTransfer.get(transfer_id)
+        if transfer:
+            token = self.request.getHeader('X-GEVER-Dossier-Transfer-Token')
+            return transfer.is_valid_token(token)
+        return False
 
     def _extract_transfer_id(self):
         # We'll accept zero (listing) or one (get by id) params, but not more
@@ -122,6 +140,12 @@ class DossierTransferLocator(DossierTransfersBase):
             DossierTransfer.source_id == local_unit_id,
             DossierTransfer.target_id == local_unit_id,
         )]
+
+        if self.has_valid_token():
+            # Server-to-server requests to fetch the full transfer contents are
+            # performed anonymously, but with a valid token that matches a
+            # particular transfer. We must not restrict these.
+            return query.filter(*filters)
 
         if not self._is_inbox_user(user_id):
             # Only inbox users may see transfers other than their own
