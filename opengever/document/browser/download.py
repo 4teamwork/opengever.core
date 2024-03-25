@@ -8,6 +8,7 @@ from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.mail import IOGMailMarker
 from opengever.virusscan.validator import validateDownloadIfNecessary
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
@@ -50,6 +51,9 @@ class DocumentishDownload(Download):
 
             self.request['version_id'] = current_version_id
             return DocumentDownloadFileVersion(self.context, self.request)()
+
+        if is_restricted_workspace_and_guest(self.context):
+            raise BadRequest('Guests has restricted capabilities in this workspace')
 
         DownloadConfirmationHelper(self.context).process_request_form()
 
@@ -201,6 +205,9 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
     """
 
     def __call__(self):
+        if is_restricted_workspace_and_guest(self.context):
+            raise BadRequest('Guests has restricted capabilities in this workspace')
+
         DownloadConfirmationHelper(self.context).process_request_form()
 
         self._init_version_file()
