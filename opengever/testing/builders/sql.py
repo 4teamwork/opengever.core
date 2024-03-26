@@ -6,6 +6,7 @@ from ftw.builder import create
 from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model.favorite import Favorite
 from opengever.base.oguid import Oguid
+from opengever.base.systemmessages.models import SystemMessage
 from opengever.contact.ogdsuser import OgdsUserToContactAdapter
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
@@ -660,3 +661,26 @@ class DossierTransferBuilder(SqlObjectBuilder):
 
 
 builder_registry.register('dossier_transfer', DossierTransferBuilder)
+
+
+class SystemMessagesBuilder(SqlObjectBuilder):
+
+    mapped_class = SystemMessage
+    id_argument_name = 'system_messages_id'
+
+    def __init__(self, session):
+        super(SystemMessagesBuilder, self).__init__(session)
+        self.arguments['admin_unit'] = None
+        self.arguments['text_en'] = 'English message'
+        self.arguments['text_fr'] = 'French message'
+        self.arguments['text_de'] = 'Deutsch message '
+        self.arguments['start_ts'] = utcnow_tz_aware()
+        self.arguments['end_ts'] = utcnow_tz_aware() + timedelta(days=3)
+        self.arguments['type'] = "info"
+
+    def with_admin_unit_id(self, admin_unit_id):
+        self.arguments['admin_unit'] = admin_unit_id
+        return self
+
+
+builder_registry.register('system-messages', SystemMessagesBuilder)

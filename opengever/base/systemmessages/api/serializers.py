@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.base.model import get_locale
 from opengever.base.systemmessages.models import SystemMessage
 from plone import api
 from plone.restapi.interfaces import ISerializeToJson
@@ -40,3 +41,31 @@ class SerializeSystemMessagesToJson(object):
         result.update(({'active': sys_msg.is_active()}))
 
         return result
+
+    def get_current_lang(self):
+        return get_locale()
+
+    def get_text_field(self, sys_msg):
+        """Get the appropriate text field based on the preferred language."""
+        preferred_language = self.get_current_lang()
+        text_field = None
+
+        # Try preferred language first
+        if preferred_language == 'de' and sys_msg.text_de:
+            text_field = sys_msg.text_de
+        elif preferred_language == 'en' and sys_msg.text_en:
+            text_field = sys_msg.text_en
+        elif preferred_language == 'fr' and sys_msg.text_fr:
+            text_field = sys_msg.text_fr
+
+        # If no translation found in preferred language, try fallback languages
+        if not text_field:
+            if sys_msg.text_de:
+                text_field = sys_msg.text_de
+                return text_field
+            elif sys_msg.text_fr:
+                text_field = sys_msg.text_fr
+                return text_field
+            else:
+                return sys_msg.text_en
+        return text_field
