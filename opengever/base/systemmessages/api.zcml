@@ -25,4 +25,13 @@
       factory=".api.get.SystemMessagesGet"
       permission="cmf.ManagePortal"
       />
+
+  <plone:service
+      method="DELETE"
+      name="@system-messages"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.delete.SystemMessagesDelete"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
