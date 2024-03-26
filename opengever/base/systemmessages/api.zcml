@@ -34,4 +34,12 @@
       permission="cmf.ManagePortal"
       />
 
+
+  <plone:service
+      method="PATCH"
+      name="@system-messages"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".api.patch.SystemMessagesPatch"
+      permission="cmf.ManagePortal"
+      />
 </configure>
