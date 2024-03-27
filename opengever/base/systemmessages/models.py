@@ -9,6 +9,7 @@ from sqlalchemy import and_
 from sqlalchemy import Column
 from sqlalchemy import ForeignKey
 from sqlalchemy import Integer
+from sqlalchemy import or_
 from sqlalchemy import Sequence
 from sqlalchemy import String
 from sqlalchemy.orm import relationship
@@ -37,7 +38,9 @@ class SystemMessage(Base):
 
     @classmethod
     def query_active_msgs(cls):
-        """Retrieves active system messages for the current admin unit or
+        """
+        Retrieves information about active system messages for the current admin unit or
+        messages with no admin unit assigned admin_unit_id = None.
 
         messages with no admin unit assigned admin_unit_id = None.
         Returns:list: A list containing  active system messages.
@@ -45,8 +48,15 @@ class SystemMessage(Base):
         local_unit_id = get_current_admin_unit().unit_id
 
         query = cls.query
-        query = query.filter(cls.admin_unit_id == local_unit_id)
-        query = query.filter(and_(cls.start_ts <= utcnow_tz_aware(), utcnow_tz_aware() <= cls.end_ts))
+        query = query.filter(or_(
+            cls.admin_unit_id == local_unit_id,
+            cls.admin_unit_id == None)  # noqa
+        )
+
+        query = query.filter(and_(
+            cls.start_ts <= utcnow_tz_aware(),
+            utcnow_tz_aware() <= cls.end_ts)
+        )
         system_msgs = []
         for sys_msg in query:
             sys_msg_json = getMultiAdapter((sys_msg, getRequest()), ISerializeToJson)()

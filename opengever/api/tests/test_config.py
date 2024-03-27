@@ -1,8 +1,13 @@
+from datetime import timedelta
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.casauth.plugin import CASAuthenticationPlugin
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from mock import patch
+from opengever.base.date_time import utcnow_tz_aware
+from opengever.base.model import create_session
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.private import enable_opengever_private
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
@@ -431,3 +436,63 @@ class TestConfig(IntegrationTestCase):
                              u'title': u'Ratskanzl\xc3\xa4i',
                              u'unit_id': u'rk'}]},
             browser.json['current_admin_unit'])
+
+    @browsing
+    def test_contains_active_system_message(self, browser):
+
+        now = utcnow_tz_aware()
+        with freeze(now):
+            # Check that active messages will be returned if unit id present or None
+            # sys_msg_1 has unit_id and sys_msg_2 has unit_id = None
+            sys_msg_1 = create(Builder('system-messages').having(
+                admin_unit=get_current_admin_unit())
+            )
+            sys_msg_2 = create(Builder('system-messages'))
+
+            # inactive message should not be returned
+            sys_msg_3 = create(Builder('system-messages').having(
+                start_ts=now - timedelta(days=6),
+                end_ts=now - timedelta(days=3),
+                type="warning"
+            ))
+            session = create_session()
+            session.add(sys_msg_1)
+            session.add(sys_msg_2)
+            session.add(sys_msg_3)
+
+            session.flush()
+
+            browser.open(self.config_url, headers=self.api_headers)
+            self.assertEqual(200, browser.status_code)
+
+        expected = [
+            {
+                u'@id': u'http://nohost/plone/@system-messages/1',
+                u'@type': u'virtual.ogds.systemmessage',
+                u'admin_unit': u'plone',
+                u'end_ts': (now + timedelta(days=3)).replace(microsecond=0).isoformat(),
+                u'id': 1,
+                u'start_ts': now.replace(microsecond=0).isoformat(),
+                u'text': u'English message',
+                u'text_de': u'Deutsch message ',
+                u'text_en': u'English message',
+                u'text_fr': u'French message',
+                u'type': u'info',
+                u'active': True
+            },
+            {
+                u'@id': u'http://nohost/plone/@system-messages/2',
+                u'@type': u'virtual.ogds.systemmessage',
+                u'admin_unit': None,
+                u'end_ts': (now + timedelta(days=3)).replace(microsecond=0).isoformat(),
+                u'id': 2,
+                u'start_ts': now.replace(microsecond=0).isoformat(),
+                u'text': u'English message',
+                u'text_de': u'Deutsch message ',
+                u'text_en': u'English message',
+                u'text_fr': u'French message',
+                u'type': u'info',
+                u'active': True
+            }
+        ]
+        self.assertEqual(browser.json['system_messages'], expected)
