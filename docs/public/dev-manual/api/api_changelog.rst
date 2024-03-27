@@ -30,6 +30,12 @@ Nothing changed in this version.
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``DELETE @system-messages/<id>``: New endpoint to delete a system message.
+- ``GET @system-messages/<id>``: New endpoint to fetch a system Message.
+- ``GET @system-messages``: New endpoint to list system messages.
+- ``POST @system-messages``: New endpoint to create system message.
+- ``GET @config`` : Include additional information about active system message
+- ``PATCH @system-messages/<id>``: New endpoint to update existing system message.
 - Include responsible_actor in tasktree response.
 - ``DELETE @dossier-transfers/<id>``: New endpoint to delete a dossier transfer.
 - ``GET @dossier-transfers/<id>``: New endpoint to fetch a dossier transfer.
