@@ -60,7 +60,7 @@ def get_unknown_fields(action_data, schema):
     return errors
 
 
-def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False):
+def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False, validate_required=True):
     """Validate a dict against a schema.
 
     Return a list of basic schema validation errors (required fields,
@@ -78,14 +78,16 @@ def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False
         try:
             value = action_data[name]
         except KeyError:
+
             # property for the given name is not implemented
-            if not field.required:
+            if not field.required or not validate_required:
                 continue
             errors.append((name, RequiredMissing(name)))
         else:
             try:
-                bound = field.bind(action_data)
-                bound.validate(value)
+                if not validate_required:
+                    bound = field.bind(action_data)
+                    bound.validate(value)
             except ValidationError as e:
                 # For datetime strings can't be parsed by dateutil because of
                 # an invalid format, just a generic WrongType will be raised.
@@ -98,14 +100,14 @@ def get_schema_validation_errors(action_data, schema, allow_unknown_fields=False
     return errors
 
 
-def get_validation_errors(action_data, schema, allow_unknown_fields=False):
+def get_validation_errors(action_data, schema, allow_unknown_fields=False, validate_required=True):
     """Validate a dict against a schema and invariants.
 
     Return a list of all validation errors, including invariants.
     Based on zope.schema.getValidationErrors.
     """
     errors = get_schema_validation_errors(action_data, schema,
-                                          allow_unknown_fields)
+                                          allow_unknown_fields, validate_required)
     if errors:
         return errors
 
@@ -122,10 +124,10 @@ def get_validation_errors(action_data, schema, allow_unknown_fields=False):
     return errors
 
 
-def validate_schema(action_data, schema):
+def validate_schema(action_data, schema, validate_required=True):
     """Validate a dict against a schema, raise on error.
     """
-    errors = get_validation_errors(action_data, schema)
+    errors = get_validation_errors(action_data, schema, validate_required)
     if errors:
         raise ValidationError(
             "WebAction doesn't conform to schema (First error: %s)." % str(errors[0]))
