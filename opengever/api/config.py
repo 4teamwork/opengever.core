@@ -1,7 +1,10 @@
+from datetime import datetime
+from datetime import timedelta
 from ftw.bumblebee.config import bumblebee_config
 from opengever.base import utils
 from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
+from opengever.base.systemmessages.models import SystemMessages
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
@@ -11,10 +14,13 @@ from opengever.ogds.models.service import ogds_service
 from opengever.private import get_private_folder_url
 from opengever.repository.browser.primary_repository_root import PrimaryRepositoryRoot
 from plone import api
+from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
+from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.publisher.interfaces import NotFound
+import pytz
 
 
 class ConfigGet(Service):
@@ -67,7 +73,36 @@ class ConfigGet(Service):
             # GEVER deployments without a repository-root raises NotFound
             config['primary_repository'] = None
 
+        config["system_messages"] = self.get_active_system_messages_info()
+
     def add_current_unit_infos(self, config):
         admin_unit = get_current_admin_unit()
         config['current_admin_unit'] = queryMultiAdapter(
             (admin_unit, self.request), ISerializeToJsonSummary)()
+
+    def get_active_system_messages_info(self):
+        """
+        Retrieves information about active system messages for the current admin unit.
+
+        Returns:
+            dict: A dictionary containing information about active system messages.
+                The keys and structure of the dictionary depend on the serializer used.
+                See SerializeSystemMessagesToJson for more details.
+
+        Raises:
+            Any exceptions raised by the queryMultiAdapter or get_current_admin_unit functions.
+        """
+        local_unit_id = get_current_admin_unit().unit_id
+
+        yesterday = datetime.now(pytz.utc) - timedelta(days=1)
+
+        # Construct a query to fetch active system messages
+        query = SystemMessages.query
+        query = query.filter(SystemMessages.admin_unit_id == local_unit_id)
+        query = query.filter(SystemMessages.end > yesterday)
+
+        system_msgs = []
+        for sys_msg in query:
+            sys_msg_json = getMultiAdapter((sys_msg, self.request), ISerializeToJson)()
+            system_msgs.append(sys_msg_json)
+        return system_msgs
