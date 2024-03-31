@@ -206,6 +206,7 @@ setup(name='opengever.core',
       nightly_jobs_stats = opengever.nightlyjobs.cronjobs:log_nightly_jobs_stats
       send_digest = opengever.activity:send_digest_zopectl_handler
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
+      setup = opengever.setup.zopectl:setup
 
       [console_scripts]
       create-bundle = opengever.bundle.factory:main
