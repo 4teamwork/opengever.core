@@ -207,6 +207,7 @@ setup(name='opengever.core',
       send_digest = opengever.activity:send_digest_zopectl_handler
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       setup = opengever.setup.zopectl:setup
+      upgrade = opengever.setup.zopectl:upgrade
 
       [console_scripts]
       create-bundle = opengever.bundle.factory:main

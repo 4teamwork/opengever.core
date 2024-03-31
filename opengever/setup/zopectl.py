@@ -1,4 +1,6 @@
 from AccessControl.SecurityManagement import newSecurityManager
+from ftw.upgrade.interfaces import IExecutioner
+from ftw.upgrade.interfaces import IUpgradeInformationGatherer
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import create_session
 from opengever.bundle.config.importer import ConfigImporter
@@ -8,7 +10,10 @@ from opengever.setup.deploy import GeverDeployment
 from opengever.setup.interfaces import IDeploymentConfigurationRegistry
 from opengever.setup.interfaces import IDuringSetup
 from plone.protect.interfaces import IDisableCSRFProtection
+from Products.CMFCore.utils import getToolByName
+from zope.component import getAdapter
 from zope.component import getUtility
+from zope.component.hooks import setSite
 from zope.globalrequest import setRequest
 from zope.interface import alsoProvides
 import argparse
@@ -113,6 +118,54 @@ def setup(app, args):
     logger.info('Setup finished.')
 
 
+def upgrade(app, args):
+    parser = argparse.ArgumentParser(description="Run upgrades")
+    parser.add_argument(
+        '--site-path', '-s',
+        help='Path to the Plone site.',
+        default=None,
+    )
+    parser.add_argument(
+        '--skip-deferrable', '-D',
+        help="Skip deferrable upgrades",
+        action='store_true',
+    )
+    parser.add_argument(
+        '--intermediate-commit',
+        help="Commit after installing an upgrade step",
+        action='store_true',
+    )
+
+    # If run with plone.recipe.zope2instance we need to strip the first 2 args
+    if sys.argv[0] != 'upgrade':
+        args = args[2:]
+    options = parser.parse_args(args)
+
+    setup_logging()
+
+    app = setup_request(app)
+    site = get_site(app, options.site_path)
+    setSite(site)
+
+    gstool = getToolByName(site, 'portal_setup')
+    gatherer = IUpgradeInformationGatherer(gstool)
+    profiles = gatherer.get_profiles(
+        proposed_only=True, propose_deferrable=not options.skip_deferrable)
+
+    if profiles:
+        logger.info('Installing upgrades...')
+        executioner = getAdapter(gstool, IExecutioner)
+        executioner.install(
+            [(p['id'], [u['id'] for u in p['upgrades']]) for p in profiles],
+            intermediate_commit=options.intermediate_commit,
+        )
+        transaction.get().note('Installed upgrades.')
+        transaction.commit()
+        logger.info('Finished installing upgrades.')
+    else:
+        logger.info('No pending upgrades detected.')
+
+
 def import_bundle(site, bundle_path):
     logger.info('Importing OGG bundle...')
     alsoProvides(site.REQUEST, IOpengeverBaseLayer)
@@ -160,6 +213,24 @@ def become_user(app, user):
     user = app.acl_users.getUser(user)
     user = user.__of__(app.acl_users)
     newSecurityManager(app, user)
+
+
+def get_site(app, site_path):
+    if site_path is not None:
+        return app.unrestrictedTraverse(site_path)
+    else:
+        sites = []
+        for item in app.values():
+            if item.meta_type == 'Plone Site':
+                sites.append(item)
+        if len(sites) == 1:
+            return sites[0]
+        elif len(sites) > 1:
+            logger.info('Multiple Plone site found.')
+            sys.exit(1)
+        else:
+            logger.info('No Plone site found.')
+            sys.exit(1)
 
 
 def setup_logging():
