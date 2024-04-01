@@ -1,0 +1,4 @@
+{% for domain in virtual_domains %}
+{{ domain.name }} anything
+@{{ domain.name }} {{ domain.name }}-inbox
+{% endfor %}
