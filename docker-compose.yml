@@ -102,7 +102,7 @@ services:
       - 8099:8080
     environment:
       - OGDS_DSN=postgresql://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}/${OGDS_DB_NAME:-ogds}
-      - LDAP_PROFILE=${LDAP_PROFILE:-OpenLDAP}
+      - LDAP_PROFILE=${LDAP_PROFILE:-OpenLDAPLegacy}
       - LDAP_URL=${LDAP_SERVER_URI:-ldap://ldap:1389}
       - LDAP_BIND_DN=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
       - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-secret}
