@@ -235,7 +235,8 @@ class BaseDocumentContextActions(BaseContextActions):
         return IBumblebeeable.providedBy(self.context)
 
     def is_share_content_available(self):
-        return is_within_workspace(self.context)
+        return (is_within_workspace(self.context)
+                and not is_restricted_workspace_and_guest(self.context))
 
     def is_trash_context_available(self):
         return self.file_actions.is_trash_context_action_available()

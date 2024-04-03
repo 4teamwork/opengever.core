@@ -263,10 +263,30 @@ class TestDocumentContextActions(IntegrationTestCase):
         ]
         self.assertEqual(expected_actions, self.get_actions(template))
 
+    def test_document_actions_in_workspace_with_guest(self):
+        self.login(self.workspace_guest)
+
+        expected_actions = [
+            u'attach_to_email',
+            u'copy_item',
+            u'download_copy',
+            u'move_item',
+            u'oc_view',
+            u'open_as_pdf',
+            u'revive_bumblebee_preview',
+            u'save_document_as_pdf',
+            u'share_content']
+
+        self.assertEqual(expected_actions,
+                         self.get_actions(self.workspace_document))
+
     def test_document_actions_in_workspace_with_guest_restriction(self):
         with self.login(self.workspace_admin):
             self.workspace.restrict_downloading_documents = True
-        self.login(self.workspace_guest)
 
-        expected_actions = [u'share_content']
-        self.assertEqual(expected_actions, self.get_actions(self.workspace))
+        self.login(self.workspace_guest)
+        document = create(Builder('document')
+                          .within(self.workspace))
+
+        expected_actions_restricted_guest = [u'copy_item', u'move_item', u'revive_bumblebee_preview']
+        self.assertEqual(expected_actions_restricted_guest, self.get_actions(document))
