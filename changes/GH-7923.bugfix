@@ -1,0 +1,1 @@
+Bump ftw.solr to version 2.13.2 which fixes argument parsing of the zopectl command when run with Docker. [buchi]
