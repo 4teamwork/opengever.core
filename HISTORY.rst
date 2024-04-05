@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.5.2 (2024-04-05)
+---------------------
+
+Bug fixes:
+
+
+- Bump ftw.recipe.solr to version 1.3.9 which fixes remote streaming with Solr 8.11.3 [buchi] [GH-7922]
+
+
 2024.5.1 (2024-03-18)
 ---------------------
 
