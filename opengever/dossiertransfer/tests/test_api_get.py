@@ -4,13 +4,20 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
+from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 from plone import api
 import pytz
+import requests_mock
 
 
 FROZEN_NOW = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
+
+JEAN_PERSON_ID = 'person:9af7d7cc-b948-423f-979f-587158c6bc65'
+JEAN_MEMBERSHIP_ID = 'membership:8345fcfe-2d67-4b75-af46-c25b2f387448'
+JULIE_PERSON_ID = "person:0e623708-2d0d-436a-82c6-c1a9c27b65dc"
 
 
 class TestDossierTransfersGet(IntegrationTestCase):
@@ -282,7 +289,7 @@ class TestDossierTransfersGet(IntegrationTestCase):
         self.assertEqual(expected, self.get_items(browser))
 
 
-class TestDossierTransfersGetFullContent(IntegrationTestCase):
+class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
 
     features = ('dossier-transfers', )
 
@@ -305,10 +312,15 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
     def summarize_items(self, items):
         def summarize_item(item):
-            keep = ('title', 'relative_path')
+            keep = ('title', 'relative_path', 'text', 'type')
             return {key: value for key, value in item.items() if key in keep}
 
-        return [summarize_item(item) for item in items]
+        if isinstance(items, list):
+            summarized = [summarize_item(item) for item in items]
+        elif isinstance(items, dict):
+            summarized = {key: summarize_item(value) for key, value in items.items()}
+
+        return summarized
 
     def summarize_content(self, content):
         summary = {}
@@ -317,9 +329,25 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
         return summary
 
+    def add_participation(self, mocker, dossier, kub_id, roles):
+        self.mock_get_by_id(mocker, kub_id)
+        self.mock_labels(mocker)
+        handler = IParticipationAware(dossier)
+        handler.add_participation(kub_id, roles)
+
+    @requests_mock.Mocker()
     @browsing
-    def test_content_structure(self, browser):
+    def test_content_structure(self, mocker, browser):
         transfer = self.create_transfer()
+
+        self.login(self.manager)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_PERSON_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.logout()
 
         headers = self.api_headers.copy()
         headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
@@ -333,7 +361,13 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         expected_structure = {
-            u'contacts': [],
+            u'contacts': {
+                u'person:9af7d7cc-b948-423f-979f-587158c6bc65': {
+                    u'type': u'person',
+                    u'text': u'Dupont Jean',
+                    u'title': u'',
+                },
+            },
             u'documents': [{
                 u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
                 u'title': u'Umbau B\xe4rengraben',
@@ -371,7 +405,7 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
         self.assertEqual(200, browser.status_code)
 
         expected_structure = {
-            u'contacts': [],
+            u'contacts': {},
             u'documents': [{
                 u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-44',
                 u'title': u'Testdokum\xe4nt',
@@ -388,9 +422,78 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
         self.assertEqual(
             expected_structure, self.summarize_content(browser.json['content']))
 
+    @requests_mock.Mocker()
     @browsing
-    def test_dossier_serialization(self, browser):
+    def test_content_structure_respects_all_participations_flag(self, mocker, browser):
+        transfer = self.create_transfer(
+            all_participations=False,
+            participations=[JULIE_PERSON_ID],
+        )
+
+        self.login(self.manager)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_PERSON_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JULIE_PERSON_ID,
+            ['final-drawing'],
+        )
+        self.logout()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_structure = {
+            u'contacts': {
+                u'person:0e623708-2d0d-436a-82c6-c1a9c27b65dc': {
+                    u'type': u'person',
+                    u'text': u'Dupont Julie',
+                    u'title': u'',
+                },
+                # Jean's contact is omitted, because his participation is not selected
+            },
+            u'documents': [{
+                u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
+                u'title': u'Umbau B\xe4rengraben',
+            }],
+            u'dossiers': [{
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                'title': u'A resolvable main dossier',
+            }, {
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                'title': u'Resolvable Subdossier',
+            }],
+        }
+
+        self.assertEqual(
+            expected_structure, self.summarize_content(browser.json['content']))
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_dossier_serialization(self, mocker, browser):
         transfer = self.create_transfer()
+
+        self.login(self.manager)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_PERSON_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.logout()
 
         headers = self.api_headers.copy()
         headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
@@ -458,6 +561,12 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
                 u'review_state': u'repositoryfolder-state-active',
                 u'title': u'1.1. Vertr\xe4ge und Vereinbarungen',
             },
+            u'participations': [
+                [
+                    u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
+                    [u'regard', u'participation', u'final-drawing'],
+                ],
+            ],
             u'privacy_layer': {
                 u'title': u'no',
                 u'token': u'privacy_layer_no',
@@ -498,6 +607,88 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
         dossiers = browser.json['content']['dossiers']
         self.assertEqual(expected_dossier, dossiers[0])
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_dossier_serialization_pcp_membership(self, mocker, browser):
+        transfer = self.create_transfer()
+
+        self.login(self.manager)
+        self.mock_get_by_id(mocker, JEAN_PERSON_ID)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_MEMBERSHIP_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.logout()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_participations = [
+            # We're expecting the ID of the referenced person, not the membership
+            [
+                JEAN_PERSON_ID,
+                [u'regard', u'participation', u'final-drawing'],
+            ],
+        ]
+
+        root_dossier = browser.json['content']['dossiers'][0]
+        self.assertEqual(expected_participations, root_dossier['participations'])
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_dossier_serialization_respects_all_participations_flag(self, mocker, browser):
+        transfer = self.create_transfer(
+            all_participations=False,
+            participations=[JULIE_PERSON_ID],
+        )
+
+        self.login(self.manager)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_PERSON_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JULIE_PERSON_ID,
+            ['final-drawing'],
+        )
+        self.logout()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_participations = [
+            [
+                u'person:0e623708-2d0d-436a-82c6-c1a9c27b65dc',
+                [u'final-drawing'],
+            ],
+            # Jean's participation is omitted, because it wasn't selected
+        ]
+
+        root_dossier = browser.json['content']['dossiers'][0]
+        self.assertEqual(expected_participations, root_dossier['participations'])
 
     @browsing
     def test_document_serialization(self, browser):
@@ -554,7 +745,6 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
                 u'size': 27413,
             },
             u'file_extension': u'.docx',
-            u'file_mtime': 1712310872.7787237,
             u'foreign_reference': None,
             u'getObjPositionInParent': 0,
             u'gever_url': u'',
@@ -609,7 +799,291 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
         }
 
         documents = browser.json['content']['documents']
-        self.assertEqual(expected_document, documents[0])
+        document = documents[0]
+
+        # file_mtime is flaky because it doesn't get frozen with enough precision
+        document.pop('file_mtime')
+
+        self.assertEqual(expected_document, document)
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_contact_person_serialization(self, mocker, browser):
+        transfer = self.create_transfer()
+
+        self.login(self.manager)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_PERSON_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.logout()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_contact = {
+            u'additional_ui_attributes': [],
+            u'addresses': [{
+                u'addressLine1': u'',
+                u'addressLine2': u'',
+                u'countryIdISO2': u'CH',
+                u'countryName': u'Schweiz',
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'dwellingNumber': u'',
+                u'foreignZipCode': u'',
+                u'houseNumber': u'43',
+                u'id': u'72b3120e-429f-423b-8bb7-31233d89026c',
+                u'isDefault': True,
+                u'label': u'Home',
+                u'locality': u'',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'organisationName': u'',
+                u'organisationNameAddOn1': u'',
+                u'organisationNameAddOn2': u'',
+                u'postOfficeBox': u'',
+                u'street': u'Teststrasse',
+                u'swissZipCode': u'9999',
+                u'swissZipCodeAddOn': u'',
+                u'swissZipCodeId': u'',
+                u'thirdPartyId': None,
+                u'town': u'Bern',
+            }],
+            u'country': u'',
+            u'countryIdISO2': u'',
+            u'created': u'2021-11-17T00:00:00+01:00',
+            u'customValues': {},
+            u'dateOfBirth': u'1992-05-15',
+            u'dateOfDeath': None,
+            u'description': u'',
+            u'emailAddresses': [{
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'email': u'Jean.dupon@example.com',
+                u'id': u'3bc940de-ee8a-43b0-b373-3f1640122021',
+                u'isDefault': True,
+                u'label': u'Private',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'thirdPartyId': None,
+            }],
+            u'firstName': u'Jean',
+            u'fullName': u'Dupont Jean',
+            u'htmlUrl': u'http://localhost:8000/people/9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'id': u'9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'languageOfCorrespondance': u'fr',
+            u'memberships': [{
+                u'department': u'',
+                u'description': u'',
+                u'end': None,
+                u'id': u'8345fcfe-2d67-4b75-af46-c25b2f387448',
+                u'organization': {
+                    u'created': u'2021-11-13T00:00:00+01:00',
+                    u'description': u'Web application specialist',
+                    u'id': u'30bab83d-300a-4886-97d4-ff592e88a56a',
+                    u'memberCount': 1,
+                    u'modified': u'2021-11-13T00:00:00+01:00',
+                    u'name': u'4Teamwork',
+                    u'status': 1,
+                    u'thirdPartyId': None,
+                },
+                u'primaryAddress': {
+                    u'addressLine1': u'c/o John Doe',
+                    u'addressLine2': u'',
+                    u'countryIdISO2': u'CH',
+                    u'countryName': u'Schweiz',
+                    u'created': u'2021-11-18T00:00:00+01:00',
+                    u'dwellingNumber': u'',
+                    u'foreignZipCode': u'',
+                    u'houseNumber': u'9',
+                    u'id': u'ad0de780-3f62-400c-921a-0feb9e79c062',
+                    u'isDefault': True,
+                    u'label': u'Standort Bern',
+                    u'locality': u'',
+                    u'modified': u'2021-11-18T00:00:00+01:00',
+                    u'organisationName': u'',
+                    u'organisationNameAddOn1': u'',
+                    u'organisationNameAddOn2': u'',
+                    u'postOfficeBox': u'',
+                    u'street': u'Dammweg',
+                    u'swissZipCode': u'3013',
+                    u'swissZipCodeAddOn': u'',
+                    u'swissZipCodeId': u'',
+                    u'thirdPartyId': None,
+                    u'town': u'Bern',
+                },
+                u'primaryEmail': {
+                    u'created': u'2021-11-18T00:00:00+01:00',
+                    u'email': u'Jean.dupon@example.com',
+                    u'id': u'3bc940de-ee8a-43b0-b373-3f1640122021',
+                    u'isDefault': True,
+                    u'label': u'Private',
+                    u'modified': u'2021-11-18T00:00:00+01:00',
+                    u'thirdPartyId': None,
+                },
+                u'primaryPhoneNumber': {
+                    u'created': u'2021-11-18T00:00:00+01:00',
+                    u'id': u'e1046ad8-c4d7-4cac-93ac-d7c8298795e5',
+                    u'isDefault': True,
+                    u'label': u'Mobile',
+                    u'modified': u'2021-11-18T00:00:00+01:00',
+                    u'otherPhoneCategory': None,
+                    u'phoneCategory': 2,
+                    u'phoneCategoryText': u'Private Mobilnummer',
+                    u'phoneNumber': u'666 666 66 66',
+                    u'thirdPartyId': None,
+                },
+                u'role': u'CEO',
+                u'start': u'1990-02-24',
+                u'thirdPartyId': None,
+            }],
+            u'modified': u'2021-11-17T00:00:00+01:00',
+            u'officialName': u'Dupont',
+            u'organizations': [{
+                u'created': u'2021-11-13T00:00:00+01:00',
+                u'description': u'Web application specialist',
+                u'id': u'30bab83d-300a-4886-97d4-ff592e88a56a',
+                u'memberCount': 1,
+                u'modified': u'2021-11-13T00:00:00+01:00',
+                u'name': u'4Teamwork',
+                u'status': 1,
+                u'thirdPartyId': None,
+            }],
+            u'personType': None,
+            u'personTypeTitle': None,
+            u'phoneNumbers': [{
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'id': u'e1046ad8-c4d7-4cac-93ac-d7c8298795e5',
+                u'isDefault': True,
+                u'label': u'Mobile',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'otherPhoneCategory': None,
+                u'phoneCategory': 2,
+                u'phoneCategoryText': u'Private Mobilnummer',
+                u'phoneNumber': u'666 666 66 66',
+                u'thirdPartyId': None,
+            }, {
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'id': u'c62732e1-114e-4de7-a0b7-842c325bb068',
+                u'isDefault': False,
+                u'label': u'Work',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'otherPhoneCategory': None,
+                u'phoneCategory': 7,
+                u'phoneCategoryText': u'Gesch\xe4ftliche Mobilnummer',
+                u'phoneNumber': u'999 999 99 99',
+                u'thirdPartyId': None,
+            }],
+            u'primaryAddress': {
+                u'addressLine1': u'',
+                u'addressLine2': u'',
+                u'countryIdISO2': u'CH',
+                u'countryName': u'Schweiz',
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'dwellingNumber': u'',
+                u'foreignZipCode': u'',
+                u'houseNumber': u'43',
+                u'id': u'72b3120e-429f-423b-8bb7-31233d89026c',
+                u'isDefault': True,
+                u'label': u'Home',
+                u'locality': u'',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'organisationName': u'',
+                u'organisationNameAddOn1': u'',
+                u'organisationNameAddOn2': u'',
+                u'postOfficeBox': u'',
+                u'street': u'Teststrasse',
+                u'swissZipCode': u'9999',
+                u'swissZipCodeAddOn': u'',
+                u'swissZipCodeId': u'',
+                u'thirdPartyId': None,
+                u'town': u'Bern',
+            },
+            u'primaryEmail': {
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'email': u'Jean.dupon@example.com',
+                u'id': u'3bc940de-ee8a-43b0-b373-3f1640122021',
+                u'isDefault': True,
+                u'label': u'Private',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'thirdPartyId': None,
+            },
+            u'primaryPhoneNumber': {
+                u'created': u'2021-11-18T00:00:00+01:00',
+                u'id': u'e1046ad8-c4d7-4cac-93ac-d7c8298795e5',
+                u'isDefault': True,
+                u'label': u'Mobile',
+                u'modified': u'2021-11-18T00:00:00+01:00',
+                u'otherPhoneCategory': None,
+                u'phoneCategory': 2,
+                u'phoneCategoryText': u'Private Mobilnummer',
+                u'phoneNumber': u'666 666 66 66',
+                u'thirdPartyId': None,
+            },
+            u'primaryUrl': None,
+            u'readableAge': u'30 Jahre und 6 Monate',
+            u'salutation': u'Herr',
+            u'sex': None,
+            u'status': 1,
+            u'tags': [],
+            u'text': u'Dupont Jean',
+            u'thirdPartyId': None,
+            u'title': u'',
+            u'type': u'person',
+            u'typedId': u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'url': u'http://localhost:8000/api/v2/people/9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'urls': [],
+            u'username': None,
+        }
+
+        contacts = browser.json['content']['contacts']
+        self.assertEqual(expected_contact, contacts[JEAN_PERSON_ID])
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_contact_membership_serialization(self, mocker, browser):
+        transfer = self.create_transfer()
+
+        self.login(self.manager)
+        self.mock_get_by_id(mocker, JEAN_PERSON_ID)
+        self.add_participation(
+            mocker,
+            self.resolvable_dossier,
+            JEAN_MEMBERSHIP_ID,
+            ['regard', 'participation', 'final-drawing'],
+        )
+        self.logout()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        contacts = browser.json['content']['contacts']
+        contact = contacts[JEAN_PERSON_ID]
+
+        expected_contact = {
+            u'type': u'person',
+            u'typedId': u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            u'text': u'Dupont Jean',
+            # ...
+            # (same as a serialized person, even though it's a membership)
+        }
+
+        self.assertDictContainsSubset(expected_contact, contact)
 
 
 class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
