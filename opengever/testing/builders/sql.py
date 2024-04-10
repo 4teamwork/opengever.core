@@ -638,9 +638,21 @@ class DossierTransferBuilder(SqlObjectBuilder):
         if self._with_default_target:
             self._create_target_admin_unit()
 
+        if self.arguments['all_documents']:
+            self.arguments['documents'] = None
+
     def after_create(self, obj):
         TokenManager().issue_token(obj)
         return obj
+
+    def having(self, **kwargs):
+        if self.arguments['all_documents'] and self.arguments['documents']:
+            raise TypeError(
+                "A transfer with `all_documents=True` and a list of "
+                "`documents` would be ambiguous, and therefore isn't allowed"
+            )
+        super(DossierTransferBuilder, self).having(**kwargs)
+        return self
 
     def with_source(self, admin_unit):
         self.arguments['source_id'] = admin_unit.unit_id

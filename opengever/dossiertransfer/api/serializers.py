@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossiertransfer.model import DossierTransfer
 from plone import api
@@ -63,7 +64,7 @@ class FullTransferContentSerializer(object):
         # TODO
         content = {
             'dossiers': DossiersSerializer(self.transfer)(),
-            'documents': [],
+            'documents': DocumentsSerializer(self.transfer)(),
             'contacts': [],
         }
         return content
@@ -113,3 +114,47 @@ class DossiersSerializer(object):
             serialized_dossiers.append(serialized)
 
         return serialized_dossiers
+
+
+class DocumentsSerializer(object):
+    """Returns the list of documents included in the transfer.
+    """
+
+    ignored_keys = (
+        '@components',
+    )
+
+    def __init__(self, transfer):
+        self.transfer = transfer
+
+    def __call__(self):
+        serialized_documents = []
+
+        catalog = api.portal.get_tool('portal_catalog')
+
+        root_dossier = api.content.uuidToObject(self.transfer.root)
+
+        # Query for all documents by default...
+        query = {
+            'path': '/'.join(root_dossier.getPhysicalPath()),
+            'object_provides': IBaseDocument.__identifier__,
+            'sort_on': 'path',
+        }
+
+        if not self.transfer.all_documents:
+            query['UID'] = self.transfer.documents
+
+        matching_documents = catalog.unrestrictedSearchResults(**query)
+
+        for brain in matching_documents:
+            document = brain.getObject()
+            serialized = getMultiAdapter(
+                (document, getRequest()), ISerializeToJson)()
+
+            for key in self.ignored_keys:
+                serialized.pop(key, None)
+
+            serialized['@id'] = document.absolute_url()
+            serialized_documents.append(serialized)
+
+        return serialized_documents

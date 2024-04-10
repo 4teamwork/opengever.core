@@ -286,14 +286,17 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
     features = ('dossier-transfers', )
 
-    def create_transfer(self):
+    def create_transfer(self, **kwargs):
+        default_args = {
+            'all_documents': True,
+            'all_participations': True,
+        }
+        default_args.update(kwargs)
+
         with freeze(FROZEN_NOW):
             transfer = create(
                 Builder('dossier_transfer')
-                .having(
-                    all_documents=True,
-                    all_participations=True,
-                )
+                .having(**default_args)
             )
             session = create_session()
             session.add(transfer)
@@ -331,7 +334,48 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
         expected_structure = {
             u'contacts': [],
-            u'documents': [],
+            u'documents': [{
+                u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
+                u'title': u'Umbau B\xe4rengraben',
+            }],
+            u'dossiers': [{
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                'title': u'A resolvable main dossier',
+            }, {
+                'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                'title': u'Resolvable Subdossier',
+            }],
+        }
+
+        self.assertEqual(
+            expected_structure, self.summarize_content(browser.json['content']))
+
+    @browsing
+    def test_content_structure_respects_all_documents_flag(self, browser):
+        self.login(self.manager)
+        selected_document = create(
+            Builder('document')
+            .within(self.resolvable_subdossier)
+        )
+        transfer = self.create_transfer(all_documents=False, documents=[selected_document.UID()])
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_structure = {
+            u'contacts': [],
+            u'documents': [{
+                u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-44',
+                u'title': u'Testdokum\xe4nt',
+            }],
             u'dossiers': [{
                 'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
                 'title': u'A resolvable main dossier',
@@ -454,6 +498,118 @@ class TestDossierTransfersGetFullContent(IntegrationTestCase):
 
         dossiers = browser.json['content']['dossiers']
         self.assertEqual(expected_dossier, dossiers[0])
+
+    @browsing
+    def test_document_serialization(self, browser):
+        transfer = self.create_transfer()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_document = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
+            u'@type': u'opengever.document.document',
+            u'UID': u'createresolvabledossier000000003',
+            u'allow_discussion': False,
+            u'archival_file': None,
+            u'archival_file_state': None,
+            u'back_references_relatedItems': [],
+            u'changeNote': u'',
+            u'changed': u'2016-08-31T14:45:33+00:00',
+            u'checked_out': None,
+            u'checked_out_fullname': None,
+            u'checkout_collaborators': [],
+            u'classification': {
+                u'title': u'unprotected',
+                u'token': u'unprotected',
+            },
+            u'containing_dossier': u'A resolvable main dossier',
+            u'containing_subdossier': u'Resolvable Subdossier',
+            u'containing_subdossier_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+            u'created': u'2016-08-31T14:45:33+00:00',
+            u'creator': {
+                u'@id': u'http://nohost/plone/@actors/robert.ziegler',
+                u'identifier': u'robert.ziegler',
+            },
+            u'current_version_id': 0,
+            u'custom_properties': None,
+            u'delivery_date': None,
+            u'description': u'',
+            u'digitally_available': True,
+            u'document_author': None,
+            u'document_date': u'2010-01-03T00:00:00',
+            u'document_type': None,
+            u'file': {
+                u'content-type': u'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                u'download': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28/@@download/file',
+                u'filename': u'Umbau Baerengraben.docx',
+                u'size': 27413,
+            },
+            u'file_extension': u'.docx',
+            u'file_mtime': 1712310872.7787237,
+            u'foreign_reference': None,
+            u'getObjPositionInParent': 0,
+            u'gever_url': u'',
+            u'id': u'document-28',
+            u'is_collaborative_checkout': False,
+            u'is_folderish': False,
+            u'is_locked': False,
+            u'is_shadow_document': False,
+            u'keywords': [],
+            u'layout': u'tabbed_view',
+            u'modified': u'2016-08-31T14:45:33+00:00',
+            u'next_item': {},
+            u'oguid': u'plone:1014453300',
+            u'parent': {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                u'@type': u'opengever.dossier.businesscasedossier',
+                u'UID': u'createresolvabledossier000000002',
+                u'description': u'',
+                u'dossier_type': None,
+                u'is_leafnode': None,
+                u'is_subdossier': True,
+                u'review_state': u'dossier-state-active',
+                u'title': u'Resolvable Subdossier',
+            },
+            u'preserved_as_paper': True,
+            u'preview': None,
+            u'previous_item': {},
+            u'privacy_layer': {
+                u'title': u'no',
+                u'token': u'privacy_layer_no',
+            },
+            u'public_trial': {
+                u'title': u'not assessed',
+                u'token': u'unchecked',
+            },
+            u'public_trial_statement': None,
+            u'receipt_date': None,
+            u'reference_number': u'Client1 1.1 / 5.1 / 28',
+            u'relatedItems': [],
+            u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
+            u'review_state': u'document-state-draft',
+            u'sequence_number': 28,
+            u'teamraum_connect_links': {
+                u'gever_document': None,
+                u'workspace_documents': [],
+            },
+            u'thumbnail': None,
+            u'title': u'Umbau B\xe4rengraben',
+            u'trashed': False,
+            u'version': u'current',
+            u'workspace_document_urls': [],
+        }
+
+        documents = browser.json['content']['documents']
+        self.assertEqual(expected_document, documents[0])
 
 
 class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
