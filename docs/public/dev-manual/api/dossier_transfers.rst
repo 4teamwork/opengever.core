@@ -192,3 +192,82 @@ Mittels eines DELETE Requests können Dossier-Transfers gelöscht werden:
 
       HTTP/1.1 204 No Content
       Content-Type: application/json
+
+
+Dossier-Transfer-Inhalt abrufen
+-------------------------------
+
+Mit einem GET Request auf ``/@dossier-transfers/<id>?full_content=1`` kann
+zusätzlich zu den Metadaten eines Dossier-Transfers eine Serialisierung des
+Inhalts des Transfers abgerufen werden.
+
+Dieser serialisierte Inhalt wird in einem zusätzlichen key ``content``
+zurückgegeben:
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET /@dossier-transfers/42?full_content=1 HTTP/1.1
+       Accept: application/json
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+          "@id": "http://localhost:8080/fd/@dossier-transfers/4",
+          "...": "...",
+          "content": {
+              "contacts": {
+                  "person:39c2789d-a123-44ba-a3b1-4323d6e941c6": {
+                      "id": "39c2789d-a123-44ba-a3b1-4323d6e941c6",
+                      "firstName": "John",
+                      "fullName": "John Doe",
+                      "...": "..."
+                  }
+              },
+              "documents": [
+                  {
+                      "@id": "http://localhost:8080/fd/dossier-20/dossier-21/document-44",
+                      "@type": "opengever.document.document",
+                      "UID": "a663689540a34538b6f408d4b41baee8",
+                      "...": "..."
+                  }
+              ],
+              "dossiers": [
+                  {
+                      "@id": "http://localhost:8080/fd/dossier-20",
+                      "@type": "opengever.dossier.businesscasedossier",
+                      "UID": "1b6d8dbf1f954bbb9510a1b65d51ede5",
+                      "...": "...",
+                      "participations": [
+                          [
+                              "person:39c2789d-a123-44ba-a3b1-4323d6e941c6",
+                              ["final-drawing", "regard"]
+                          ]
+                      ]
+                  },
+                  {
+                      "@id": "http://localhost:8080/fd/dossier-20/dossier-21",
+                      "@type": "opengever.dossier.businesscasedossier",
+                      "UID": "f510a6bb410f40258b53090bf2f0c545",
+                      "...": "..."
+                  }
+              ]
+          },
+          "...": "..."
+      }
+
+
+Blobs von Dossier-Transfers herunterladen
+-----------------------------------------
+
+Mit einem GET Request auf ``/@dossier-transfers/<transfer-id>/blob/<document-uid>``
+kann das Blob eines Dokuments heruntergeladen werden. Der Request muss dazu einem
+gültigen Token für diesen Transfer authentisiert werden, und das Dokument muss
+in diesem Transfer enthalten sein.
