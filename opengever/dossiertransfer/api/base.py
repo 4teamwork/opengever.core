@@ -85,15 +85,19 @@ class DossierTransferLocator(DossierTransfersBase):
         return False
 
     def _extract_transfer_id(self):
-        # We'll accept zero (listing) or one (get by id) params, but not more
-        if len(self.params) > 1:
+        # We'll accept
+        # - zero (listing)
+        # - one (get by id) or
+        # - three (blob download)
+        # params, but not more
+        if len(self.params) not in (0, 1, 3):
             raise BadRequest(
                 'Must supply either exactly one {transfer_id} path parameter '
-                'to fetch a specific transfer, or no parameter for a '
-                'listing of all transfers.')
+                'to fetch a specific transfer, no parameter for a '
+                'listing of all transfers, or three to fetch a blob.')
 
         # We have a valid number of parameters for the given endpoint
-        if len(self.params) == 1:
+        if len(self.params) in (1, 3):
             try:
                 transfer_id = int(self.params[0])
             except ValueError:
@@ -107,6 +111,9 @@ class DossierTransferLocator(DossierTransfersBase):
             if ogds_user in org_unit.inbox_group.users:
                 return True
         return False
+
+    def is_blob_request(self):
+        return len(self.params) == 3 and self.params[1] == 'blob'
 
     def locate_transfer(self):
         transfer_id = self.transfer_id

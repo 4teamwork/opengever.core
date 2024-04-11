@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
+from opengever.base.security import elevated_privileges
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -1084,6 +1085,83 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
         }
 
         self.assertDictContainsSubset(expected_contact, contact)
+
+    @browsing
+    def test_document_blob_download(self, browser):
+        transfer = self.create_transfer()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with elevated_privileges():
+            doc = self.resolvable_document
+            doc_uid = doc.UID()
+            filename = doc.file.filename
+            filesize = doc.file.getSize()
+            filedata = doc.file.data
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/blob/%s' % (transfer.id, doc_uid),
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_headers = {
+            'content-disposition': 'attachment; filename="%s"' % filename,
+            'content-length': str(filesize),
+            'content-type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        }
+        self.assertDictContainsSubset(expected_headers, browser.headers)
+        self.assertEqual(filesize, len(browser.contents))
+        self.assertEqual(filedata, browser.contents)
+
+    @browsing
+    def test_document_blob_download_requires_token(self, browser):
+        transfer = self.create_transfer()
+
+        with elevated_privileges():
+            doc_uid = self.resolvable_document.UID()
+
+        with freeze(FROZEN_NOW):
+            with browser.expect_http_error(code=401):
+                browser.open(
+                    self.portal,
+                    view='@dossier-transfers/%s/blob/%s' % (transfer.id, doc_uid),
+                    method='GET', headers=self.api_headers)
+
+    @browsing
+    def test_document_blob_download_returns_404_for_nonexistent_doc(self, browser):
+        transfer = self.create_transfer()
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        doc_uid = '404-doesnt-exist'
+        with freeze(FROZEN_NOW):
+            with browser.expect_http_error(code=404):
+                browser.open(
+                    self.portal,
+                    view='@dossier-transfers/%s/blob/%s' % (transfer.id, doc_uid),
+                    method='GET', headers=headers)
+
+    @browsing
+    def test_document_blob_download_returns_unauthorized_for_unselected_doc(self, browser):
+        transfer = self.create_transfer(all_documents=False, documents=[])
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with elevated_privileges():
+            doc_uid = self.resolvable_document.UID()
+
+        with freeze(FROZEN_NOW):
+            with browser.expect_http_error(code=401):
+                browser.open(
+                    self.portal,
+                    view='@dossier-transfers/%s/blob/%s' % (transfer.id, doc_uid),
+                    method='GET', headers=headers)
 
 
 class TestDossierTransfersGetPermissionsBase(IntegrationTestCase):
