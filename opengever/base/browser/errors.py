@@ -5,6 +5,8 @@ from opengever.debug import write_on_read_tracing
 from opengever.debug.write_on_read_tracing import format_instruction
 from Products.Five.browser import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from ZODB import POSException
 from zope.component import adapts
@@ -22,6 +24,13 @@ class ErrorHandlingView(BrowserView):
     template = ViewPageTemplateFile('templates/error.pt')
 
     def __call__(self):
+
+        if isinstance(self.context, Forbidden):
+            return self.context.message or 'Forbidden'
+
+        if isinstance(self.context, BadRequest):
+            return self.context.message or 'Bad Request'
+
         self.plone = getSite()
 
         if self.plone:
