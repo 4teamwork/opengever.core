@@ -8,6 +8,7 @@ from opengever.document.events import FileCopyDownloadedEvent
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.mail.mail import IOGMailMarker
 from opengever.virusscan.validator import validateDownloadIfNecessary
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
@@ -18,6 +19,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
 from zope.component.hooks import getSite
@@ -42,6 +44,9 @@ class DocumentishDownload(Download):
     """
 
     def __call__(self):
+        if is_restricted_workspace_and_guest(self.context):
+            raise Forbidden()
+
         if self.is_checked_out_by_another_user():
             current_version_id = self.context.get_current_version_id()
             if current_version_id is None:
@@ -201,6 +206,9 @@ class DocumentDownloadFileVersion(DownloadFileVersion):
     """
 
     def __call__(self):
+        if is_restricted_workspace_and_guest(self.context):
+            raise Forbidden()
+
         DownloadConfirmationHelper(self.context).process_request_form()
 
         self._init_version_file()
