@@ -21,7 +21,7 @@ class TestSystemMessageBuilder(IntegrationTestCase):
 
         now = datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)
         with freeze(now):
-            sys_msg = create(Builder('system-messages'))
+            sys_msg = create(Builder('system_message'))
             session = create_session()
             session.add(sys_msg)
             session.flush()

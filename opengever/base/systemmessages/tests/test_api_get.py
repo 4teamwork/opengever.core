@@ -48,7 +48,7 @@ class TestSystemMessagesGet(IntegrationTestCase):
         self.login(self.manager, browser=browser)
 
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now)
             )
@@ -83,8 +83,8 @@ class TestSystemMessagesGet(IntegrationTestCase):
     def test_system_messages_listing(self, browser):
         self.login(self.manager, browser=browser)
         with freeze(self.now):
-            sys_msg_1 = create(Builder('system-messages'))
-            sys_msg_2 = create(Builder('system-messages').having(
+            sys_msg_1 = create(Builder('system_message'))
+            sys_msg_2 = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now,
                 type="warning")
@@ -143,10 +143,10 @@ class TestSystemMessagesGet(IntegrationTestCase):
     def test_system_messages_active_filter(self, browser):
         self.login(self.manager, browser=browser)
         with freeze(self.now):
-            sys_msg_1 = create(Builder('system-messages'))
-            sys_msg_2 = create(Builder('system-messages'))
+            sys_msg_1 = create(Builder('system_message'))
+            sys_msg_2 = create(Builder('system_message'))
 
-            sys_msg_3 = create(Builder('system-messages').having(
+            sys_msg_3 = create(Builder('system_message').having(
                 start_ts=self.now - timedelta(days=6),
                 end_ts=self.now - timedelta(days=3),
                 type="warning"
@@ -205,9 +205,9 @@ class TestSystemMessagesGet(IntegrationTestCase):
     def test_system_messages_current_admin_unit_only_filter(self, browser):
         self.login(self.manager, browser=browser)
         with freeze(self.now):
-            sys_msg_1 = create(Builder('system-messages'))
+            sys_msg_1 = create(Builder('system_message'))
             # sys_msg_2 has an admin and should be only returned
-            sys_msg_2 = create(Builder('system-messages').having(
+            sys_msg_2 = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now,
                 type="warning",
@@ -254,7 +254,7 @@ class TestSystemMessagesGet(IntegrationTestCase):
 
         with freeze(self.now):
             self.lang_tool.setDefaultLanguage('en')
-            sys_msg = create(Builder('system-messages'))
+            sys_msg = create(Builder('system_message'))
 
         session = create_session()
         session.add(sys_msg)
@@ -294,7 +294,7 @@ class TestSystemMessagesGet(IntegrationTestCase):
 
         with freeze(self.now):
             self.lang_tool.setDefaultLanguage('fr')
-            sys_msg = create(Builder('system-messages'))
+            sys_msg = create(Builder('system_message'))
 
         session = create_session()
         session.add(sys_msg)
@@ -334,7 +334,7 @@ class TestSystemMessagesGet(IntegrationTestCase):
 
         with freeze(self.now):
             self.lang_tool.setDefaultLanguage('de')
-            sys_msg = create(Builder('system-messages'))
+            sys_msg = create(Builder('system_message'))
 
         session = create_session()
         session.add(sys_msg)
@@ -376,13 +376,13 @@ class TestSystemMessagesGet(IntegrationTestCase):
             self.lang_tool.setDefaultLanguage('de')
 
             # no German and no English text so French text will be displayed
-            sys_msg_1 = create(Builder('system-messages').having(
+            sys_msg_1 = create(Builder('system_message').having(
                 text_de="",
                 text_en="")
             )
 
             # no German but French as fallback text will be displayed
-            sys_msg_2 = create(Builder('system-messages').having(
+            sys_msg_2 = create(Builder('system_message').having(
                 text_de="",)
             )
 
@@ -443,11 +443,11 @@ class TestSystemMessagesGet(IntegrationTestCase):
             self.lang_tool.setDefaultLanguage('fr')
 
             # no French but German text so German will be will be displayed
-            sys_msg_1 = create(Builder('system-messages').having(
+            sys_msg_1 = create(Builder('system_message').having(
                 text_fr="")
             )
             # no French and no German text so English will be will be displayed
-            sys_msg_2 = create(Builder('system-messages').having(
+            sys_msg_2 = create(Builder('system_message').having(
                 text_de="",
                 text_fr="")
             )

@@ -22,7 +22,7 @@ class TestSystemMessagesDelete(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now)
             )
@@ -42,7 +42,7 @@ class TestSystemMessagesDelete(IntegrationTestCase):
     def test_delete_system_message(self, browser):
         self.login(self.manager, browser=browser)
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now)
             )

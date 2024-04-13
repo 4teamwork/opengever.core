@@ -21,7 +21,7 @@ class TestSystemMessagesPatch(IntegrationTestCase):
         self.login(self.manager, browser=browser)
         payload = {"type": "error"}
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 start_ts=self.now)
             )
             session = create_session()
@@ -41,7 +41,7 @@ class TestSystemMessagesPatch(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
 
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(start_ts=self.now))
+            sys_msg = create(Builder('system_message').having(start_ts=self.now))
             session = create_session()
             session.add(sys_msg)
             session.flush()
@@ -61,7 +61,7 @@ class TestSystemMessagesPatch(IntegrationTestCase):
         self.login(self.manager, browser=browser)
         payload = {'type': 'error', 'text_en': 'The Error Msg in english'}
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(start_ts=self.now))
+            sys_msg = create(Builder('system_message').having(start_ts=self.now))
             session = create_session()
             session.add(sys_msg)
             session.flush()
@@ -95,7 +95,7 @@ class TestSystemMessagesPatch(IntegrationTestCase):
         self.login(self.manager, browser=browser)
         payload = {'type': 'error', 'text_en': 'The Error Msg in english', 'admin_unit': get_current_admin_unit().unit_id}
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 start_ts=self.now)
             )
             session = create_session()
@@ -133,7 +133,7 @@ class TestSystemMessagesPatch(IntegrationTestCase):
             "end_ts": "2024-04-27T12:00:00Z"
         }
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 start_ts=self.now)
             )
             session = create_session()

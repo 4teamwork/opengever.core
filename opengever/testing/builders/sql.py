@@ -683,4 +683,4 @@ class SystemMessagesBuilder(SqlObjectBuilder):
         return self
 
 
-builder_registry.register('system-messages', SystemMessagesBuilder)
+builder_registry.register('system_message', SystemMessagesBuilder)

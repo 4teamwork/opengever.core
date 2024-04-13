@@ -21,7 +21,7 @@ class TestSystemMessageSerializer(IntegrationTestCase):
         self.login(self.manager)
 
         with freeze(self.now):
-            sys_msg = create(Builder('system-messages').having(
+            sys_msg = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit(),
                 start_ts=self.now,
                 type="warning")

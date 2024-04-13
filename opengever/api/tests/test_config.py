@@ -444,13 +444,13 @@ class TestConfig(IntegrationTestCase):
         with freeze(now):
             # Check that active messages will be returned if unit id present or None
             # sys_msg_1 has unit_id and sys_msg_2 has unit_id = None
-            sys_msg_1 = create(Builder('system-messages').having(
+            sys_msg_1 = create(Builder('system_message').having(
                 admin_unit=get_current_admin_unit())
             )
-            sys_msg_2 = create(Builder('system-messages'))
+            sys_msg_2 = create(Builder('system_message'))
 
             # inactive message should not be returned
-            sys_msg_3 = create(Builder('system-messages').having(
+            sys_msg_3 = create(Builder('system_message').having(
                 start_ts=now - timedelta(days=6),
                 end_ts=now - timedelta(days=3),
                 type="warning"
