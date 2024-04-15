@@ -9,6 +9,7 @@ from opengever.document.versioner import Versioner
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getMultiAdapter
 import transaction
@@ -220,3 +221,50 @@ class TestDocumentDownloadVersion(FunctionalTestCase):
         transaction.commit()
         browser.login().open(document, view='download')
         self.assertEqual(initDocumentData, browser.contents)
+
+
+class TestRestrictedWorkspaceDownload(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    @browsing
+    def test_guest_cannot_download_document_from_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(self.workspace_document, view='download')
+
+    @browsing
+    def test_guest_can_download_document_from_unrestricted_workspace(self, browser):
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        browser.open(self.workspace_document, view='download')
+        self.assertEqual(browser.contents, 'foo\n')
+
+    @browsing
+    def test_guest_cannot_download_file_version_from_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(
+                self.workspace_document,
+                view='download_file_version',
+                data={'version_id': 0},
+            )
+
+    @browsing
+    def test_guest_can_download_file_version_from_unrestricted_workspace(self, browser):
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        browser.open(
+            self.workspace_document,
+            view='download_file_version',
+            data={'version_id': 0},
+        )
+        self.assertEqual(browser.contents, 'foo\n')
