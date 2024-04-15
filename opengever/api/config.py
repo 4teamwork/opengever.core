@@ -2,6 +2,7 @@ from ftw.bumblebee.config import bumblebee_config
 from opengever.base import utils
 from opengever.base.colorization import get_color
 from opengever.base.interfaces import IGeverSettings
+from opengever.base.systemmessages.models import SystemMessage
 from opengever.dossier.templatefolder import get_template_folder
 from opengever.inbox.utils import get_current_inbox
 from opengever.officeconnector.helpers import is_client_ip_in_office_connector_disallowed_ip_ranges
@@ -66,6 +67,8 @@ class ConfigGet(Service):
         except NotFound:
             # GEVER deployments without a repository-root raises NotFound
             config['primary_repository'] = None
+
+        config["system_messages"] = SystemMessage.query_active_msgs()
 
     def add_current_unit_infos(self, config):
         admin_unit = get_current_admin_unit()
