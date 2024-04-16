@@ -139,13 +139,13 @@ class TestSystemMessagesPatch(IntegrationTestCase):
             session = create_session()
             session.add(sys_msg)
             session.flush()
-        browser.open(
-            self.portal,
-            view='@system-messages/%s' % sys_msg.id,
-            data=json.dumps(payload),
-            method='PATCH',
-            headers=self.api_headers
-        )
+            browser.open(
+                self.portal,
+                view='@system-messages/%s' % sys_msg.id,
+                data=json.dumps(payload),
+                method='PATCH',
+                headers=self.api_headers
+            )
         self.assertEqual(200, browser.status_code)
 
         expected = {
