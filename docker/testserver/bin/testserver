@@ -1,4 +1,4 @@
-#!/app/bin/python
+#!/usr/local/bin/python
 
 import sys
 sys.argv.insert(1, 'opengever.core.testserver.OPENGEVER_TESTSERVER')

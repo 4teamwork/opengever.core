@@ -9,4 +9,4 @@ export ZSERVER_PORT="55001"
 export LISTENER_HOST="0.0.0.0"
 export LISTENER_PORT="55002"
 
-exec "/app/bin/python" "/app/bin/testserver" "-vv"
+exec "/app/bin/testserver" "-vv"
