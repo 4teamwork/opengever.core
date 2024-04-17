@@ -1,3 +1,4 @@
+from dateutil.parser import parse as parse_date
 from opengever.api.ogdslistingbase import OGDSListingBaseService
 from opengever.api.solr_query_service import DEFAULT_SORT_INDEX
 from opengever.base.helpers import display_name
@@ -66,13 +67,28 @@ class GlobalIndexGet(OGDSListingBaseService):
                 ])
 
             if isinstance(column.type, Date):
+                # Turn a Solr date range query (as sent by the frontend) into
+                # an SQL filter condition.
                 lower, upper = value[0].split(' TO ')
-                if lower == '*':
+
+                def date_or_none(val):
+                    if val == '*':
+                        return None
+                    try:
+                        return parse_date(val).date()
+                    except ValueError:
+                        return None
+
+                lower = date_or_none(lower)
+                upper = date_or_none(upper)
+
+                if lower is None:
                     query = query.filter(column <= upper)
-                elif upper == '*':
+                elif upper is None:
                     query = query.filter(column >= lower)
                 else:
                     query = query.filter(column.between(lower, upper))
+
             elif exclude:
                 query = query.filter(column.notin_(value))
             else:
