@@ -1,3 +1,5 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.related_docs import IRelatedDocuments
 from opengever.document.browser.save_pdf_document_under import PDF_SAVE_OWNER_ID_KEY
@@ -9,6 +11,7 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.testing import IntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zExceptions import Forbidden
 from zope.annotation import IAnnotations
 from zope.component import getMultiAdapter
 import json
@@ -205,3 +208,31 @@ class TestSaveDocumentAsPdfPost(IntegrationTestCase):
         self.assertEqual(len(children["added"]), 1)
         created_document = children["added"].pop()
         self.assertFalse(created_document.is_shadow_document())
+
+    @browsing
+    def test_guest_cannot_save_document_as_pdf_from_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.set_roles(workspace2, self.workspace_guest.getId(), ['WorkspaceMember'])
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(workspace2, view='@save-document-as-pdf', method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"document_uid": self.workspace_document.UID()}))
+
+    @browsing
+    def test_guest_can_save_document_as_pdf_from_unrestricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.set_roles(workspace2, self.workspace_guest.getId(), ['WorkspaceMember'])
+
+        self.login(self.workspace_guest, browser)
+        with self.observe_children(workspace2) as children:
+            browser.open(workspace2, view='@save-document-as-pdf', method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"document_uid": self.workspace_document.UID()}))
+
+        self.assertEqual(len(children["added"]), 1)
