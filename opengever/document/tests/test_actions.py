@@ -288,5 +288,5 @@ class TestDocumentContextActions(IntegrationTestCase):
         document = create(Builder('document')
                           .within(self.workspace))
 
-        expected_actions_restricted_guest = [u'copy_item', u'move_item', u'revive_bumblebee_preview']
+        expected_actions_restricted_guest = [u'revive_bumblebee_preview']
         self.assertEqual(expected_actions_restricted_guest, self.get_actions(document))
