@@ -62,7 +62,7 @@ class TestWOPIValidation(FunctionalTestCase):
 
         uuid = IUUID(document)
         access_token = urlsafe_b64encode(
-            create_access_token(TEST_USER_NAME, uuid))
+            create_access_token(TEST_USER_ID, uuid))
 
         url = '%s/wopi/files/%s' % (
             portal.absolute_url().replace('0.0.0.0', 'host.docker.internal'),
