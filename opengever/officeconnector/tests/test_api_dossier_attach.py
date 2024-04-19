@@ -6,6 +6,7 @@ from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCSolrIntegrationTestCase
 from plone.uuid.interfaces import IUUID
+from zExceptions import Forbidden
 import json
 import jwt
 
@@ -689,3 +690,30 @@ class TestOfficeconnectorDossierAPIWithAttach(OCSolrIntegrationTestCase):
                 )
 
             self.assertIsNone(oc_url)
+
+    @browsing
+    def test_guest_cannot_attach_document_in_a_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+
+        with self.assertRaises(Forbidden):
+            browser.open(
+                self.workspace_document,
+                headers=self.api_headers,
+                view='officeconnector_attach_url',
+            )
+
+    @browsing
+    def test_guest_can_attach_document_in_a_restricted_workspace(self, browser):
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+
+        browser.open(
+            self.workspace_document,
+            headers=self.api_headers,
+            view='officeconnector_attach_url',
+        )
+        self.assertEqual(200, browser.status_code)
