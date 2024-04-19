@@ -135,7 +135,7 @@ services:
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
       - ./var/openldap:/bitnami/openldap
   ianus-frontend:
-    image: ghcr.io/4teamwork/ianus-frontend:2021.4.4
+    image: ghcr.io/4teamwork/ianus-frontend:2024.2.0
     ports:
       - "3000:80"
     depends_on:
@@ -147,14 +147,14 @@ services:
       - all
       - ianus
   ianus-backend:
-    image: ghcr.io/4teamwork/ianus-backend:2021.4.4
+    image: ghcr.io/4teamwork/ianus-backend:2024.2.0
     ports:
       - "8000:8000"
     depends_on:
       - ianus-db
     environment:
       - DJANGO_SECRET_KEY=secret
-      - DJANGO_ALLOWED_HOSTS=localhost,teamraum,gever
+      - DJANGO_ALLOWED_HOSTS=localhost,teamraum,gever,ianus-frontend
       - DJANGO_PATH_PREFIX=/portal
       - DJANGO_SESSION_COOKIE_SECURE=False
       - DJANGO_CSRF_COOKIE_SECURE=False
@@ -174,7 +174,7 @@ services:
       - all
       - ianus
   ianus-db:
-    image: postgres:12-alpine
+    image: postgres:13-alpine
     volumes:
       - ./var/ianus-db:/var/lib/postgresql/data
     environment:
