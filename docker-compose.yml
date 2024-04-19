@@ -223,9 +223,42 @@ services:
     profiles:
       - testserver
 
+  kub:
+    image: 4teamwork/kub:latest
+    ports:
+      - "3100:8000"
+    depends_on:
+      - kub-db
+    environment:
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_SECRET_KEY: secret
+      DJANGO_DATABASE_HOST: kub-db
+      DJANGO_DATABASE_NAME: kub
+      DJANGO_DATABASE_USER: kub
+      DJANGO_DATABASE_PASSWORD: secret
+      CAS_SERVER_URL: http://ianus-frontend/portal/cas
+      CAS_ROOT_PROXIED_AS: http://localhost:3100
+      ALLOWED_PORTAL_GROUPS: all
+    volumes:
+      - kub_media:/app/media
+    profiles:
+      - kub
+  kub-db:
+    image: postgres:13-alpine
+    volumes:
+      - kub_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kub
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: kub
+    profiles:
+      - kub
+
 volumes:
   ogds:
   clam_db:
+  kub_db:
+  kub_media:
 
 secrets:
   gldt:
