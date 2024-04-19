@@ -2,7 +2,9 @@ from ftw import bumblebee
 from ftw.bumblebee.mimetypes import is_mimetype_supported
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.bumblebee.events import PDFDownloadedEvent
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from Products.Five import BrowserView
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.event import notify
 
@@ -13,6 +15,9 @@ class OpenMailPDFView(BrowserView):
     def __call__(self):
         if not is_bumblebee_feature_enabled():
             raise NotFound
+
+        if is_restricted_workspace_and_guest(self.context):
+            raise Forbidden()
 
         filename = self.request.get('filename')
         if not filename:
