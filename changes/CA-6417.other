@@ -1,1 +1,1 @@
-Hide "share content" and "zipexport" actions for guest access on restricted workspaces [KunzS85]
+Disallow all download and share related actions for guests in restricted workspaces. [elioschmutz]
