@@ -10,10 +10,13 @@ from time import time
 from urllib import urlencode
 from wsgiref.handlers import format_date_time
 from zope.annotation import IAnnotations
+import logging
 import requests
 
 
 KUB_API_VERSION = 'v2'
+
+logger = logging.getLogger('kub')
 
 
 class KuBClient(object):
@@ -99,3 +102,31 @@ class KuBClient(object):
                 {item['typedId']: item['label'] for item in resp.json()['results']})
             stamp = mktime(now.timetuple())
             self._storage[self.STORAGE_MODIFIED_KEY] = format_date_time(stamp)
+
+    def create_person(self, data):
+        url = '{}people'.format(self.kub_api_url)
+        try:
+            resp = self.session.post(url, json=data)
+            resp.raise_for_status()
+        except requests.RequestException:
+            logger.exception('Creating person failed')
+            return None
+        try:
+            return resp.json()
+        except requests.JSONDecodeError:
+            logger.exception('Creating person failed')
+            return None
+
+    def list_people(self, filters=None):
+        url = '{}people'.format(self.kub_api_url)
+        try:
+            resp = self.session.get(url, params=filters)
+            resp.raise_for_status()
+        except requests.RequestException:
+            logger.exception('Fetching list of people failed')
+            return None
+        try:
+            return resp.json()
+        except requests.JSONDecodeError:
+            logger.exception('Fetching list of people failed')
+            return None
