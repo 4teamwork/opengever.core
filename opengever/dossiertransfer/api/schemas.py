@@ -16,6 +16,7 @@ from zope.schema import ASCIILine
 from zope.schema import Bool
 from zope.schema import Choice
 from zope.schema import Datetime
+from zope.schema import Int
 from zope.schema import List
 from zope.schema import Text
 from zope.schema import TextLine
@@ -174,6 +175,16 @@ class IDossierTransferAPISchema(Interface):
         else:
             if getattr(self, 'participations', None) is None:
                 raise ParticipationsListRequired()
+
+
+class IPerformDossierTransferAPISchema(Interface):
+    """Schema to describe PerformDossierTransfer API.
+    """
+
+    transfer_id = Int(
+        title=u'Transfer ID',
+        required=True,
+    )
 
 
 class SourceSameAsTarget(Invalid):

@@ -34,4 +34,13 @@
       permission="zope2.View"
       />
 
+  <plone:service
+      method="POST"
+      name="@perform-dossier-transfer"
+      for="opengever.repository.interfaces.IRepositoryFolder"
+      factory=".api.perform.PerformDossierTransfer"
+      permission="cmf.AddPortalContent"
+      />
+
+
 </configure>
