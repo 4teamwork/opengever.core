@@ -8,10 +8,12 @@ from opengever.document.behaviors import IBaseDocument
 from opengever.document.handlers import _update_docproperties
 from opengever.document.handlers import DISABLE_DOCPROPERTY_UPDATE_FLAG
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.locking.interfaces import ILockable
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Copy
+from zExceptions import Forbidden
 from zope.container.interfaces import INameChooser
 from zope.i18n import translate
 import six
@@ -54,6 +56,9 @@ class Copy(Copy):
                 raise NotReportedForbidden(
                     _('copy_object_disallowed',
                       default=u'You are not allowed to copy this object'))
+
+            if is_restricted_workspace_and_guest(obj):
+                raise Forbidden()
 
     def get_object(self, key):
         """Copied from the baseclass but uses utils get_obj_by_path
