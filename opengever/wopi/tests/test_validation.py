@@ -64,9 +64,12 @@ class TestWOPIValidation(FunctionalTestCase):
         access_token = urlsafe_b64encode(
             create_access_token(TEST_USER_ID, uuid))
 
-        url = '%s/wopi/files/%s' % (
-            portal.absolute_url().replace('0.0.0.0', 'host.docker.internal'),
-            uuid)
+        portal_url = portal.absolute_url()
+        if ZSERVER_HOST == '0.0.0.0':
+            portal_url = portal_url.replace('0.0.0.0', 'host.docker.internal').replace(
+                'localhost', 'host.docker.internal')
+
+        url = '%s/wopi/files/%s' % (portal_url, uuid)
         cmd = [
             'docker',
             'run',
