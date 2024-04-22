@@ -18,6 +18,7 @@ from plone.namedfile.file import NamedBlobFile
 from plone.namedfile.utils import set_headers
 from plone.namedfile.utils import stream_data
 from plone.protect.interfaces import IDisableCSRFProtection
+from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from zExceptions import BadRequest
 from zExceptions import NotFound as zNotFound
@@ -119,7 +120,9 @@ class WOPIView(BrowserView):
             return
 
         method = getattr(self, operation)
-        with api.env.adopt_user(username=userid):
+        acl_users = getToolByName(self.context, 'acl_users')
+        user = acl_users.getUserById(userid)
+        with api.env.adopt_user(user=user):
             return method()
 
     def render_json(self, data):

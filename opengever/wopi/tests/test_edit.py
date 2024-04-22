@@ -15,7 +15,6 @@ from zope.component import getMultiAdapter
 class TestEditView(IntegrationTestCase):
 
     @browsing
-    @skip('WOPI token is using userid, but adopt_user in wopi.py requires username')
     def test_edit_view_returns_form_with_action_and_valid_token(self, browser):
         self.login(self.regular_user, browser=browser)
         browser.open(self.document, view="office_online_edit")
@@ -33,7 +32,7 @@ class TestEditView(IntegrationTestCase):
             validate_access_token(
                 urlsafe_b64decode(access_token),
                 'createtreatydossiers000000000002'),
-            'kathi.barfuss')
+            'regular_user')
 
     @browsing
     def test_UI_language_is_prefered_language(self, browser):
