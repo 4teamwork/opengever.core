@@ -291,5 +291,9 @@ class DocumentSchemaContextActions(BaseDocumentContextActions):
     def is_save_document_as_pdf_available(self):
         if self.is_trashed:
             return False
+
+        if is_restricted_workspace_and_guest(self.context):
+            return False
+
         is_convertable = IBumblebeeServiceV3(self.request).is_convertable(self.context)
         return not self.context.is_checked_out() and is_convertable

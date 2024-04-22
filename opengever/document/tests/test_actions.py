@@ -289,5 +289,5 @@ class TestDocumentContextActions(IntegrationTestCase):
                           .within(self.workspace)
                           .with_dummy_content())
 
-        expected_actions_restricted_guest = [u'revive_bumblebee_preview', 'save_document_as_pdf']
+        expected_actions_restricted_guest = [u'revive_bumblebee_preview']
         self.assertEqual(expected_actions_restricted_guest, self.get_actions(document))
