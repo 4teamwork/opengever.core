@@ -6,7 +6,9 @@ API Changelog
 2024.7.0 (2024-04-23)
 ---------------------
 
-Nothing changed in this version.
+Other Changes
+^^^^^^^^^^^^^
+- Add additional information on `UserSerializer` for admin view.
 
 
 2024.6.0 (2024-03-22)
