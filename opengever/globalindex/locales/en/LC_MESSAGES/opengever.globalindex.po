@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-26 06:53+0000\n"
+"POT-Creation-Date: 2024-04-23 09:41+0000\n"
 "PO-Revision-Date: 2016-07-22 15:25+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/de/>\n"
@@ -27,30 +27,82 @@ msgstr "Export selection"
 msgid "error_no_items"
 msgstr "You have not selected any items."
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_active"
+msgstr "Active"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_address1"
+msgstr "Address 1"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_address2"
+msgstr "Address 2"
+
 #. German translation: Verwaltungseinheit
 #: ./opengever/globalindex/browser/report.py
 msgid "label_admin_unit_id"
 msgstr "Tenant"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_city"
+msgstr "City"
 
 #. German translation: Erledigt am
 #: ./opengever/globalindex/browser/report.py
 msgid "label_completed"
 msgstr "Completed on"
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_country"
+msgstr "Country"
+
 #. German translation: Zu erledigen bis
 #: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
 msgstr "Deadline"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_department"
+msgstr "Department"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_department_abbr"
+msgstr "Department (abbreviation)"
 
 #. Default: "Description"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_description"
 msgstr "Description"
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_directorate"
+msgstr "Directorate"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_directorate_abbr"
+msgstr "Directorate (abbreviation)"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_display_name"
+msgstr "Name"
+
 #. German translation: Dossier
 #: ./opengever/globalindex/browser/report.py
 msgid "label_dossier"
 msgstr "Dossier"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_email"
+msgstr "E-Mail"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_email2"
+msgstr "Secondary E-Mail"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_firstname"
+msgstr "First name"
 
 #. German translation: Auftraggeber
 #: ./opengever/globalindex/browser/report.py
@@ -63,15 +115,43 @@ msgstr "Issuer"
 msgid "label_issuing_org_unit"
 msgstr "Issuing organization"
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_last_login"
+msgstr "Last login"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_lastname"
+msgstr "Last name"
+
 #. Default: "Main task"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_main_task"
 msgstr "Main task"
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_organization"
+msgstr "Organization"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_fax"
+msgstr "Fax"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_mobile"
+msgstr "Mobile"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_office"
+msgstr "Office"
+
 #. German translation: Auftragnehmer
 #: ./opengever/globalindex/browser/report.py
 msgid "label_responsible"
 msgstr "Responsible"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_salutation"
+msgstr "Salutation"
 
 #. German translation: Laufnummer
 #: ./opengever/globalindex/browser/report.py
@@ -93,6 +173,23 @@ msgstr "Tasks"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_title"
 msgstr "Title"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_url"
+msgstr "URL"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_username"
+msgstr "Username"
+
+#. Default: "Users"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_users"
+msgstr "Users"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_zip_code"
+msgstr "Zip code"
 
 #. German translation: Status
 #: ./opengever/globalindex/browser/report.py

@@ -4,11 +4,14 @@ from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
+from opengever.base.utils import is_administrator
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
+from zExceptions import Unauthorized
 from zope.i18n import translate
 
 
@@ -77,3 +80,68 @@ class TaskReporter(BaseReporterView):
         )
 
         return self.return_excel(reporter)
+
+
+class UserReport(BaseReporterView):
+    """View that generate an excel spreadsheet which list all selected users
+    """
+    filename = "user_report.xlsx"
+
+    def __call__(self):
+        if not is_administrator():
+            raise Unauthorized
+        user_ids = self.request.form.get("user_ids")
+        if not user_ids:
+            msg = _(
+                u'error_no_items', default=u'You have not selected any items.')
+            IStatusMessage(self.request).addStatusMessage(msg, type='error')
+            if self.request.get('orig_template'):
+                return self.request.RESPONSE.redirect(
+                    self.request.form['orig_template'])
+            else:
+                return self.request.RESPONSE.redirect(
+                    self.context.absolute_url())
+
+        users = [ogds_service().fetch_user(user_id) for user_id in user_ids]
+
+        reporter = XLSReporter(
+            self.context.REQUEST,
+            self.columns(),
+            users,
+            sheet_title=translate(
+                _('label_users', default=u'Users'), context=self.request)
+        )
+
+        return self.return_excel(reporter)
+
+    @property
+    def _columns(self):
+        columns = [
+            {'id': 'username', 'title': _('label_username')},
+            {'id': 'active', 'title': _('label_active')},
+            {'id': 'firstname', 'title': _('label_firstname')},
+            {'id': 'lastname', 'title': _('label_lastname')},
+            {'id': 'display_name', 'title': _('label_display_name')},
+            {'id': 'directorate', 'title': _('label_directorate')},
+            {'id': 'directorate_abbr', 'title': _('label_directorate_abbr')},
+            {'id': 'department', 'title': _('label_department')},
+            {'id': 'department_abbr', 'title': _('label_department_abbr')},
+            {'id': 'organization', 'title': _('label_organization')},
+            {'id': 'email', 'title': _('label_email')},
+            {'id': 'email2', 'title': _('label_email2')},
+            {'id': 'url', 'title': _('label_url')},
+            {'id': 'phone_office', 'title': _('label_phone_office')},
+            {'id': 'phone_fax', 'title': _('label_phone_fax')},
+            {'id': 'phone_mobile', 'title': _('label_phone_mobile')},
+            {'id': 'salutation', 'title': _('label_salutation')},
+            {'id': 'title', 'title': _('label_title')},
+            {'id': 'description', 'title': _('label_description', default=u'Description')},
+            {'id': 'address1', 'title': _('label_address1')},
+            {'id': 'address2', 'title': _('label_address2')},
+            {'id': 'zip_code', 'title': _('label_zip_code')},
+            {'id': 'city', 'title': _('label_city')},
+            {'id': 'country', 'title': _('label_country')},
+            {'id': 'last_login', 'title': _('label_last_login'), 'number_format': DATE_NUMBER_FORMAT},
+
+        ]
+        return columns

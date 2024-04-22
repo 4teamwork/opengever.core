@@ -24,6 +24,14 @@
       for="ftw.dictstorage.interfaces.ISQLAlchemy"
       />
 
+
+  <adapter
+      factory=".actions.UserListingActions"
+      name="users"
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot
+           opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
   <subscriber
       for="z3c.saconfig.interfaces.IEngineCreatedEvent"
       handler=".events.setup_engine_options"
