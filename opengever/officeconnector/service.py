@@ -9,6 +9,7 @@ from opengever.officeconnector.helpers import is_officeconnector_checkout_featur
 from opengever.officeconnector.helpers import parse_document_uids
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from opengever.workspace import is_workspace_feature_enabled
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.protect import createToken
 from plone.rest import Service
@@ -64,12 +65,14 @@ class OfficeConnectorAttachURL(OfficeConnectorURL):
     """
 
     def render(self):
-        if is_officeconnector_attach_feature_enabled():
-            payload = {'action': 'attach'}
-            return self.create_officeconnector_url_json(payload)
+        if not is_officeconnector_attach_feature_enabled():
+            raise NotFound
 
-        # Fail per default
-        raise NotFound
+        if is_restricted_workspace_and_guest(self.context):
+            raise Forbidden()
+
+        payload = {'action': 'attach'}
+        return self.create_officeconnector_url_json(payload)
 
 
 class OfficeConnectorCheckoutURL(OfficeConnectorURL):

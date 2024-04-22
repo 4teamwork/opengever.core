@@ -176,6 +176,8 @@ class BaseDocumentContextActions(BaseContextActions):
             return False
         if self.context.is_checked_out():
             return False
+        if is_restricted_workspace_and_guest(self.context):
+            return False
         return api.user.has_permission('Copy or Move', obj=self.context)
 
     def is_create_forwarding_available(self):
@@ -214,6 +216,8 @@ class BaseDocumentContextActions(BaseContextActions):
         if self.context.is_checked_out():
             return False
         if not api.user.has_permission('Copy or Move', obj=self.context):
+            return False
+        if is_restricted_workspace_and_guest(self.context):
             return False
         return self.context.is_movable()
 

@@ -9,6 +9,7 @@ from opengever.testing import assets
 from opengever.testing import IntegrationTestCase
 from plone.locking.interfaces import ILockable
 from plone.namedfile.file import NamedBlobFile
+from zExceptions import Forbidden
 from zope.component import getUtility
 import json
 
@@ -237,3 +238,45 @@ class TestCopyPasteAPI(IntegrationTestCase):
         queue = getUtility(ITaskQueue, 'test-queue')
         self.assertIn(doc.absolute_url_path() + "/bumblebee_trigger_storing",
                       (job['url'] for job in queue.queue))
+
+    @browsing
+    def test_guest_cannot_copy_from_a_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.set_roles(workspace2, self.workspace_guest.getId(), ['WorkspaceMember'])
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        payload = {
+            u'source': self.workspace_document.absolute_url(),
+        }
+
+        with self.assertRaises(Forbidden):
+            browser.open(
+                workspace2.absolute_url() + '/@copy',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers,
+            )
+
+    @browsing
+    def test_guest_can_copy_from_a_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            workspace2 = create(Builder('workspace').within(self.workspace_root))
+            self.set_roles(workspace2, self.workspace_guest.getId(), ['WorkspaceMember'])
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        payload = {
+            u'source': self.workspace_document.absolute_url(),
+        }
+
+        with self.observe_children(workspace2) as children:
+            browser.open(
+                workspace2.absolute_url() + '/@copy',
+                data=json.dumps(payload),
+                method='POST',
+                headers=self.api_headers,
+            )
+        self.assertEqual(1, len(children["added"]))

@@ -7,6 +7,7 @@ from opengever.testing.assets import load
 from plone.app.uuid.utils import uuidToObject
 from plone.namedfile.file import NamedBlobFile
 from plone.uuid.interfaces import IUUID
+from zExceptions import Forbidden
 import base64
 import json
 
@@ -392,3 +393,30 @@ class TestExtractAttachments(IntegrationTestCase):
             {u'message': u'Attachment at position 4 has already been extracted to None.',
              u'type': u'BadRequest'},
             browser.json['error'])
+
+    @browsing
+    def test_guest_cannot_download_mail_attachments_within_a_restricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            mail = create(Builder('mail')
+                          .within(self.workspace)
+                          .with_asset_message(
+                              'mail_with_multiple_attachments.eml'))
+
+            self.workspace.restrict_downloading_documents = True
+
+        self.login(self.workspace_guest, browser)
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(mail, view='get_attachment')
+
+    @browsing
+    def test_guest_can_download_mail_attachments_within_an_unrestricted_workspace(self, browser):
+        with self.login(self.workspace_admin):
+            mail = create(Builder('mail')
+                          .within(self.workspace)
+                          .with_asset_message(
+                              'mail_with_one_docx_attachment.eml'))
+
+        self.login(self.workspace_guest, browser)
+        browser.open(mail, view='get_attachment?position=2')
+        self.assertEqual(200, browser.status_code)

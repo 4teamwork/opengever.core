@@ -3,11 +3,13 @@ from opengever.document.browser.save_pdf_document_under import trigger_conversio
 from opengever.document.forms import create_destination_document
 from opengever.document.forms import is_version_convertable
 from opengever.document.versioner import Versioner
+from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zope.interface import alsoProvides
 
 
@@ -31,6 +33,9 @@ class SaveDocumentAsPdfPost(Service):
         if not document:
             raise BadRequest(
                 "Property 'document_uid' is required and should be a UID of a document")
+
+        if is_restricted_workspace_and_guest(document):
+            raise Forbidden()
 
         version_id = data.get('version_id', None)
         if version_id and not isinstance(version_id, int):
