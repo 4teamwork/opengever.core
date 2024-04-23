@@ -1,1 +1,0 @@
-Fix lookup of user in WOPI operations if username and userid are not equal. [buchi]

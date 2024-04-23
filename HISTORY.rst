@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.7.0 (2024-04-23)
+---------------------
+
+New features:
+
+
+- Add System Message SQL Model and Provide CRUD operation. [amo] [CA-1852]
+
+
+Bug fixes:
+
+
+- Fix OGDS listing date filters to also work on Oracle. [lgraf] [CA-6163]
+- Fix lookup of user in WOPI operations if username and userid are not equal. [buchi] [CA-6237]
+- Bump ftw.recipe.solr to version 1.3.9 which fixes remote streaming with Solr 8.11.3 [buchi] [GH-7922]
+- Bump ftw.solr to version 2.13.2 which fixes argument parsing of the zopectl command when run with Docker. [buchi] [GH-7923]
+
+
+Other changes:
+
+
+- Disallow all download and share related actions for guests in restricted workspaces. [elioschmutz] [CA-6417]
+- Do not render error page for BadRequest and Forbidden errors. [buchi] [CA-6417b]
+- Add zopectl command for setting up a new deployment. [buchi] [CA-6863]
+- Add zopectl command to run upgrade steps. [buchi] [CA-6863a]
+- Bump ftw.contentstats to version 1.4.0 which adds support for Docker. [buchi] [GH-7024]
+
+
 2024.6.0 (2024-03-22)
 ---------------------
 
