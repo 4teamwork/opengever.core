@@ -114,7 +114,12 @@ class DossierTransferLocator(DossierTransfersBase):
         return query.all()
 
     def extend_with_security_filters(self, query):
-        user_id = api.user.get_current().getId()
+        current_user = api.user.get_current()
+        if current_user.has_role('Manager'):
+            # Managers may always list or fetch any transfer
+            return query
+
+        user_id = current_user.getId()
         local_unit_id = get_current_admin_unit().unit_id
 
         # Nobody may see transfers where the current admin unit is not involved
