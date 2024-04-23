@@ -398,3 +398,20 @@ class TestDossierTransfersGetPermissions(IntegrationTestCase):
             results[user_id] = items
 
         self.assertEqual(expected, results)
+
+    @browsing
+    def test_listing_permissions_for_manager(self, browser):
+        self.create_transfers()
+
+        expected = [
+            (1, u'Transfer owned by secretariat_user'),
+            (2, u'Transfer owned by dossier_responsible'),
+            (3, u'Transfer between other admin units'),
+        ]
+
+        self.login(self.manager, browser=browser)
+        browser.open(self.portal, view='@dossier-transfers/',
+                     method='GET', headers=self.api_headers)
+
+        items = [(tf['id'], tf['title']) for tf in browser.json['items']]
+        self.assertEqual(expected, items)
