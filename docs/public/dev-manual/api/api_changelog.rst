@@ -3,14 +3,11 @@
 API Changelog
 =============
 
-2024.7.0 (unreleased)
+2024.7.0 (2024-04-23)
 ---------------------
 
-Breaking Changes
-^^^^^^^^^^^^^^^^
+Nothing changed in this version.
 
-Other Changes
-^^^^^^^^^^^^^
 
 2024.6.0 (2024-03-22)
 ---------------------
@@ -18,6 +15,7 @@ Other Changes
 Other Changes
 ^^^^^^^^^^^^^
 - Add `restrict_downloading_documents` field to workspace for restricting guests in downlading and printing documents
+
 
 2024.5.0 (2024-03-07)
 ---------------------
@@ -41,6 +39,7 @@ Other Changes
 - ``GET @dossier-transfers/<id>``: New endpoint to fetch a dossier transfer.
 - ``GET @dossier-transfers``: New endpoint to list dossier transfers.
 - ``POST @dossier-transfers``: New endpoint to create dossier transfers.
+
 
 2024.3.0 (2024-02-09)
 ---------------------
