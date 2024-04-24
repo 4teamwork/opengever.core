@@ -597,7 +597,22 @@ class SerializeUserModelToJsonSummary(SerializeSQLModelToJsonSummaryBase):
         data['job_title'] = self.context.title
 
         if is_administrator():
-            data['last_login'] = json_compatible(getattr(self.context, 'last_login'))
+            attrs = [
+                'address1',
+                'address2',
+                'city',
+                'country',
+                'department_abbr',
+                'description',
+                'directorate_abbr',
+                'last_login',
+                'organization',
+                'salutation',
+                'zip_code',
+            ]
+            for attr in attrs:
+                value = json_compatible(getattr(self.context, attr, None))
+                data[attr] = value
 
     @property
     def base_url(self):
