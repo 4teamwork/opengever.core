@@ -8,6 +8,7 @@ API Changelog
 
 Other Changes
 ^^^^^^^^^^^^^
+- Disposition Serializer: Add dossier stats (``docs_count`` and ``docs_size``)
 - ``GET @dossier-transfers/<id>/blob/<document-UID>``: New endpoint to download document blobs of a dossier transfer.
 - ``GET @dossier-transfers/<id>?full_content=1``: New mode to fetch full content representation for dossier transfers.
 - Add ris_base_url to config endpoint.
