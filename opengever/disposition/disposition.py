@@ -3,6 +3,8 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from datetime import date
 from DateTime import DateTime
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.activity import notification_center
 from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
@@ -37,6 +39,7 @@ from plone.restapi.serializer.converters import json_compatible
 from plone.supermodel import model
 from Products.CMFPlone.CatalogTool import num_sort_regex
 from Products.CMFPlone.CatalogTool import zero_fill
+from Products.CMFPlone.utils import safe_hasattr
 from pyxb.utils.domutils import BindingDOMSupport
 from tempfile import TemporaryFile
 from z3c.relationfield.schema import RelationChoice
@@ -73,6 +76,7 @@ class DossierDispositionInformation(object):
 
     def __init__(self, dossier, disposition):
         self.dossier = dossier
+        self.disposition = disposition
         self.title = dossier.title
         self.intid = getUtility(IIntIds).getId(dossier)
         self.url = dossier.absolute_url()
@@ -90,6 +94,11 @@ class DossierDispositionInformation(object):
     @property
     def additional_metadata_available(self):
         return True
+
+    @property
+    def stats(self):
+        stats_by_dossier = getattr(self.disposition, 'stats_by_dossier', {})
+        return stats_by_dossier.get(self.dossier.UID(), {})
 
     def get_grouping_key(self):
         return self.parent
@@ -124,7 +133,10 @@ class DossierDispositionInformation(object):
             'public_trial': self.serialize_public_trial(),
             'archival_value': self.serialize_archival_value(),
             'archival_value_annotation': self.archival_value_annotation,
-            'former_state': self.former_state})
+            'former_state': self.former_state,
+            'docs_count': self.stats.get('docs_count'),
+            'docs_size': self.stats.get('docs_size'),
+        })
 
     def serialize_public_trial(self):
         if not self.public_trial:
@@ -161,6 +173,10 @@ class RemovedDossierDispositionInformation(DossierDispositionInformation):
         self.archival_value = None
         self.archival_value_annotation = None
         self.former_state = dossier_mapping.get('former_state')
+
+    @property
+    def stats(self):
+        return {}
 
     @property
     def additional_metadata_available(self):
@@ -247,6 +263,8 @@ class Disposition(Container):
     def __init__(self, *args, **kwargs):
         super(Disposition, self).__init__(*args, **kwargs)
         self.appraisal = {}
+        self.stats_by_dossier = PersistentDict()
+
         self._dossiers = PersistentList()
         self._dossiers_with_missing_permissions = PersistentList()
         self._dossiers_with_extra_permissions = PersistentList()
@@ -346,6 +364,8 @@ class Disposition(Container):
         mapping.setdefault(key, []).append(dossier)
 
     def update_added_dossiers(self, dossiers):
+        self.update_stats_by_dossier(dossiers)
+
         for dossier in dossiers:
             dossier.offer()
             IAppraisal(self).initialize(dossier)
@@ -362,14 +382,44 @@ class Disposition(Container):
         for dossier in dossiers:
             dossier.retract()
             IAppraisal(self).drop(dossier)
-            # Remember which dossiers need their permissions updated
+
             uid = dossier.UID()
+            if safe_hasattr(self, 'stats_by_dossier'):
+                self.stats_by_dossier.pop(uid, None)
+
+            # Remember which dossiers need their permissions updated
             if uid in self.dossiers_with_missing_permissions:
                 # if that dossier was added before but its permissions
                 # not updated yet, then its permissions are already correct
                 self.dossiers_with_missing_permissions.remove(uid)
             else:
                 self.dossiers_with_extra_permissions.append(uid)
+
+    def update_stats_by_dossier(self, dossiers):
+        if not safe_hasattr(self, 'stats_by_dossier'):
+            self.stats_by_dossier = PersistentDict()
+
+        for dossier in dossiers:
+            stats = self.query_stats(dossier)
+            self.stats_by_dossier[dossier.UID()] = PersistentDict(stats)
+
+    def query_stats(self, dossier):
+        solr = getUtility(ISolrSearch)
+
+        filters = make_filters(
+            path_parent='/'.join(dossier.getPhysicalPath()),
+            portal_type=['ftw.mail.mail', 'opengever.document.document'],
+        )
+        params = {
+            'stats': 'true',
+            'stats.field': ['{!sum=true}filesize'],
+        }
+
+        resp = solr.search(query='*', filters=filters, fl=['path'], **params)
+        return {
+            'docs_count': resp.body['response']['numFound'],
+            'docs_size': int(resp.body['stats']['stats_fields']['filesize']['sum']),
+        }
 
     def finalize_appraisal(self):
         """Write back the appraisal value to the dossiers.
