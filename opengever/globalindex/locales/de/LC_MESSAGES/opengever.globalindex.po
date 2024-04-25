@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-10-26 06:53+0000\n"
+"POT-Creation-Date: 2024-04-23 09:41+0000\n"
 "PO-Revision-Date: 2016-07-22 15:25+0000\n"
 "Last-Translator: Philippe Gross <gross.philippe@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/de/>\n"
@@ -26,16 +26,44 @@ msgid "error_no_items"
 msgstr "Sie haben keine Objekte ausgewählt."
 
 #: ./opengever/globalindex/browser/report.py
+msgid "label_active"
+msgstr "Aktiv"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_address1"
+msgstr "Addresse 1"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_address2"
+msgstr "Addresse 2"
+
+#: ./opengever/globalindex/browser/report.py
 msgid "label_admin_unit_id"
 msgstr "Verwaltungseinheit"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_city"
+msgstr "Stadt"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_completed"
 msgstr "Erledigt am"
 
 #: ./opengever/globalindex/browser/report.py
+msgid "label_country"
+msgstr "Land"
+
+#: ./opengever/globalindex/browser/report.py
 msgid "label_deadline"
 msgstr "Zu erledigen bis"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_department"
+msgstr "Abteilung"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_department_abbr"
+msgstr "Abteilung (Abkürzung)"
 
 #. Default: "Description"
 #: ./opengever/globalindex/browser/report.py
@@ -43,8 +71,32 @@ msgid "label_description"
 msgstr "Beschreibung"
 
 #: ./opengever/globalindex/browser/report.py
+msgid "label_directorate"
+msgstr "Direktion"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_directorate_abbr"
+msgstr "Direktion (Abkürzung)"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_display_name"
+msgstr "Anzeigename"
+
+#: ./opengever/globalindex/browser/report.py
 msgid "label_dossier"
 msgstr "Dossier"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_email"
+msgstr "E-Mail"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_email2"
+msgstr "E-Mail 2"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_firstname"
+msgstr "Vorname"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_issuer"
@@ -54,14 +106,42 @@ msgstr "Auftraggeber"
 msgid "label_issuing_org_unit"
 msgstr "Auftraggeber Mandant"
 
+#: ./opengever/globalindex/browser/report.py
+msgid "label_last_login"
+msgstr "Letzte Anmeldung"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_lastname"
+msgstr "Nachname"
+
 #. Default: "Main task"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_main_task"
 msgstr "Hauptaufgabe"
 
 #: ./opengever/globalindex/browser/report.py
+msgid "label_organization"
+msgstr "Organisation"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_fax"
+msgstr "Fax"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_mobile"
+msgstr "Mobil"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_phone_office"
+msgstr "Arbeit"
+
+#: ./opengever/globalindex/browser/report.py
 msgid "label_responsible"
 msgstr "Auftragnehmer"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_salutation"
+msgstr "Anrede"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_sequence_number"
@@ -79,6 +159,23 @@ msgstr "Tasks"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_title"
 msgstr "Titel"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_url"
+msgstr "URL"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_username"
+msgstr "Benutzername"
+
+#. Default: "Users"
+#: ./opengever/globalindex/browser/report.py
+msgid "label_users"
+msgstr "Benutzende"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_zip_code"
+msgstr "Postleitzahl"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "review_state"

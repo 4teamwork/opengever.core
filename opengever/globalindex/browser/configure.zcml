@@ -10,4 +10,13 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      name="user_report"
+      for="*"
+      class=".report.UserReport"
+      permission="zope2.View"
+      />
+
+
+
 </configure>
