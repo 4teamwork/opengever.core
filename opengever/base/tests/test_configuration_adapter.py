@@ -2,6 +2,7 @@ from collections import OrderedDict
 from contextlib import contextmanager
 from opengever.base.interfaces import IGeverSettings
 from opengever.kub.interfaces import IKuBSettings
+from opengever.ris.interfaces import IRisSettings
 from opengever.testing import IntegrationTestCase
 from pkg_resources import get_distribution
 from plone import api
@@ -13,6 +14,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
     def setUp(self):
         super(TestConfigurationAdapter, self).setUp()
         os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee.local/'
+        api.portal.set_registry_record('base_url', u'http://localhost:3000', IRisSettings)
 
     def test_configuration(self):
         expected_configuration = OrderedDict([
@@ -116,6 +118,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('apps_url', None),
             ('application_type', 'gever'),
             ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
+            ('ris_base_url', 'http://localhost:3000'),
             ('is_readonly', False),
             ])
 
@@ -135,6 +138,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('apps_url', None),
             ('application_type', 'gever'),
             ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
+            ('ris_base_url', 'http://localhost:3000'),
             ('is_readonly', False),
             ])
         configuration = IGeverSettings(self.portal).get_config()
@@ -172,6 +176,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
             ('apps_url', 'http://example.com/api/apps'),
             ('application_type', 'gever'),
             ('bumblebee_notifications_url', 'http://bumblebee.local/YnVtYmxlYmVl/api/notifications'),
+            ('ris_base_url', 'http://localhost:3000'),
             ('is_readonly', False),
             ])
 
