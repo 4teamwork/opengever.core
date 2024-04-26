@@ -3,6 +3,13 @@
 API Changelog
 =============
 
+2024.8.0 (unreleased)
+---------------------
+
+Other Changes
+^^^^^^^^^^^^^
+- Add ris_base_url to config endpoint.
+
 2024.7.0 (2024-04-23)
 ---------------------
 

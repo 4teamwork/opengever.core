@@ -123,6 +123,7 @@ GEVER-Mandanten abgefragt werden.
           "portal_url": "https://dev.onegovgever.ch/portal",
           "private_folder_url": "http://localhost:8080/fd/private/john.doe",
           "recently_touched_limit": 10,
+          "ris_base_url": "http://localhost:3000",
           "root_url": "http://localhost:8080/fd",
           "sharing_configuration": {
               "black_list_prefix": "^$",
@@ -157,6 +158,10 @@ cas_url
 bumblebee_notifications_url
 
     Websocket URL, um Änderungen über Vorschaubilder zu erhalten
+
+ris_base_url
+
+    RIS Base URL, für die Navigation ins RIS um Anträge zu erstellen
 
 features
     Optional aktivierbare Features:
