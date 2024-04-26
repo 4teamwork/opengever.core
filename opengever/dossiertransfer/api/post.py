@@ -69,8 +69,8 @@ class DossierTransfersPost(DossierTransfersBase):
         session.flush()
 
         token = transfer.issue_token()
-        assert transfer.token == token
-        assert transfer.is_valid_token(token)
+        if not (transfer.token == token and transfer.is_valid_token(token)):
+            raise Unauthorized
 
         serialized_transfer = self.serialize(transfer)
 

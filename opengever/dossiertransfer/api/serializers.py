@@ -116,7 +116,10 @@ class DossiersSerializer(object):
             serialized_dossiers.append(serialized)
 
         # We only add participations for the root dossier
-        assert serialized_dossiers[0]['UID'] == self.transfer.root
+        if serialized_dossiers[0]['UID'] != self.transfer.root:
+            raise RuntimeError(
+                'Unexpected first dossier, expected it to match root dossier')
+
         serialized_dossiers[0]['participations'] = ParticipationsSerializer(self.transfer)()
 
         return serialized_dossiers

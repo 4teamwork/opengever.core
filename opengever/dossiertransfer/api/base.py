@@ -34,7 +34,9 @@ class DossierTransfersBase(Service):
             (transfer, getRequest()), ISerializeToJson)()
 
         if full_content:
-            assert self.has_valid_token()
+            if not self.has_valid_token():
+                raise Unauthorized
+
             with elevated_privileges():
                 serialized['content'] = FullTransferContentSerializer(transfer)()
 

@@ -97,7 +97,6 @@ class DossierTransfersGet(DossierTransferLocator):
                 if document_uid not in transfer.documents:
                     raise Unauthorized
 
-            assert len(brains) == 1
             document = brains[0].getObject()
             namedfile = document.file
 
