@@ -1,13 +1,17 @@
 from collective.vdexvocabulary.vocabulary import VdexVocabulary
 from contextlib import contextmanager
 from datetime import datetime
+from ftw.solr.connection import SolrResponse
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.interfaces import ISolrSettings
+from ftw.solr.schema import SolrSchema
 from lxml.cssselect import LxmlTranslator
+from mock import MagicMock
 from opengever.base.date_time import as_utc
 from opengever.base.solr import OGSolrDocument
 from opengever.core.solr_testing import SolrServer
 from opengever.document.versioner import Versioner
+from opengever.testing import assets
 from opengever.testing.assets import path_to_asset
 from operator import attrgetter
 from plone import api
@@ -23,6 +27,7 @@ from zope.intid.interfaces import IIntIds
 from zope.schema.interfaces import IVocabularyFactory
 from zope.security.management import endInteraction
 from zope.security.management import newInteraction
+import json
 import logging
 import pytz
 import transaction
@@ -277,3 +282,50 @@ class MockDossierTypes(VdexVocabulary):
     def install(cls):
         sm = getSiteManager()
         sm.registerUtility(cls(), name='opengever.dossier.dossier_types')
+
+
+class MockedSolr(object):
+
+    def __init__(self):
+        self.solr = getUtility(ISolrSearch)
+        self._orig_solr_manager = self.solr._manager
+        self._orig_solr_search = self.solr._search
+        self.next_response = {}
+
+    def __enter__(self):
+        conn = MagicMock(name='SolrConnection')
+        conn.get = MagicMock(
+            name='get',
+            return_value=SolrResponse(
+                body=assets.load('solr_schema.json'),
+                status=200,
+            )
+        )
+
+        manager = MagicMock(name='SolrConnectionManager')
+        manager.connection = conn
+        manager.schema = SolrSchema(manager)
+        self.solr._manager = manager
+
+        def search(*args, **kwargs):
+            self.ensure_response_headers()
+            return SolrResponse(
+                body=json.dumps(self.next_response),
+                status=200,
+            )
+
+        self.solr.search = MagicMock(
+            name='search',
+            side_effect=search
+        )
+        return self
+
+    def ensure_response_headers(self):
+        if 'responseHeader' not in self.next_response:
+            self.next_response['responseHeader'] = {}
+        if 'status' not in self.next_response['responseHeader']:
+            self.next_response[u'responseHeader']['status'] = 0
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.solr._manager = self._orig_solr_manager
+        self.solr._search = self._orig_solr_search
