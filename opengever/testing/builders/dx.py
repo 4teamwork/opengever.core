@@ -7,6 +7,7 @@ from ftw.builder import Builder
 from ftw.builder import builder_registry
 from ftw.builder import create
 from ftw.builder.dexterity import DexterityBuilder
+from ftw.solr.interfaces import ISolrSearch
 from opengever.base.behaviors.changed import IChanged
 from opengever.base.behaviors.changed import IChangedMarker
 from opengever.base.behaviors.translated_title import TranslatedTitle
@@ -26,11 +27,13 @@ from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from opengever.testing import assets
 from opengever.testing.builders.base import TEST_USER_ID
 from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
+from opengever.testing.helpers import MockedSolr
 from opengever.trash.trash import ITrasher
 from plone import api
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
+from zope.component import getUtility
 from zope.event import notify
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
@@ -612,6 +615,38 @@ class DispositionBuilder(GeverDexterityBuilder):
         # module scope.
         from opengever.disposition.disposition import title_default
         self.arguments['title'] = title_default()
+
+    def real_solr_available(self):
+        solr = getUtility(ISolrSearch)
+        return bool(solr.manager.connection)
+
+    def create(self):
+        """Create disposition using a mocked Solr (if necessary).
+
+        We may not have Solr available yet at ContentFixture creation time.
+        Unlike the ContentFixtureWithSolrLayer, the regular ContentFixtureLayer
+        doesn't start Solr, and therefore the creation of dispositions would
+        fail during fixture creation time if we don't provide a mocked Solr,
+        because they require a Solr query during their creation.
+        """
+        if self.real_solr_available():
+            # Don't mock if there's a real Solr available.
+            return super(DispositionBuilder, self).create()
+
+        with MockedSolr() as mocked_solr:
+            mocked_solr.next_response = {
+                u'response': {
+                    u'numFound': 9,
+                },
+                u'stats': {
+                    u'stats_fields': {
+                        u'filesize': {
+                            u'sum': 999.0}
+                    }
+                }
+            }
+            obj = super(DispositionBuilder, self).create()
+        return obj
 
 
 builder_registry.register('disposition', DispositionBuilder)
