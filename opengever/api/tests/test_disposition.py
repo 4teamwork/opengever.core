@@ -4,12 +4,12 @@ from ftw.testing import freeze
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
-from opengever.testing import IntegrationTestCase
+from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone import api
 import json
 
 
-class TestDispositionPost(IntegrationTestCase):
+class TestDispositionPost(SolrIntegrationTestCase):
 
     @browsing
     def test_check_for_already_offered_dossiers(self, browser):
@@ -93,7 +93,7 @@ class TestDispositionPost(IntegrationTestCase):
                          api.content.get_state(self.expired_dossier))
 
 
-class TestDispositionSerialization(IntegrationTestCase):
+class TestDispositionSerialization(SolrIntegrationTestCase):
 
     @browsing
     def test_includes_sip_filename(self, browser):
@@ -155,6 +155,8 @@ class TestDispositionSerialization(IntegrationTestCase):
                                     u'title': u'archival worthy',
                                     u'token': u'archival worthy'},
                                 u'archival_value_annotation': None,
+                                u'docs_count': 0,
+                                u'docs_size': 0,
                                 u'end': u'2000-01-31',
                                 u'former_state': u'dossier-state-resolved',
                                 u'intid': 1019013300,
@@ -184,6 +186,8 @@ class TestDispositionSerialization(IntegrationTestCase):
                                 u'archival_value': {u'title': u'not archival worthy',
                                                     u'token': u'not archival worthy'},
                                 u'archival_value_annotation': None,
+                                u'docs_count': 0,
+                                u'docs_size': 0,
                                 u'end': u'2000-01-15',
                                 u'former_state': u'dossier-state-inactive',
                                 u'intid': 1019053300,
@@ -219,6 +223,8 @@ class TestDispositionSerialization(IntegrationTestCase):
                             {u'appraisal': True,
                              u'archival_value': None,
                              u'archival_value_annotation': None,
+                             u'docs_count': None,
+                             u'docs_size': None,
                              u'end': None,
                              u'former_state': u'dossier-state-resolved',
                              u'intid': 1019033300,
@@ -279,7 +285,7 @@ class TestDispositionSerialization(IntegrationTestCase):
             browser.json['responses'])
 
 
-class TestAppraisalUpdate(IntegrationTestCase):
+class TestAppraisalUpdate(SolrIntegrationTestCase):
 
     @browsing
     def test_update_appraisal_for_one_dossier(self, browser):
@@ -334,6 +340,8 @@ class TestAppraisalUpdate(IntegrationTestCase):
                 u'archival_value': {u'title': u'archival worthy',
                                     u'token': u'archival worthy'},
                 u'archival_value_annotation': None,
+                u'docs_count': 0,
+                u'docs_size': 0,
                 u'end': u'2000-01-31',
                 u'former_state': u'dossier-state-resolved',
                 u'intid': 1019013300,
@@ -365,7 +373,7 @@ class TestAppraisalUpdate(IntegrationTestCase):
             browser.json)
 
 
-class TestDispositionPatch(IntegrationTestCase):
+class TestDispositionPatch(SolrIntegrationTestCase):
 
     @browsing
     def test_only_archivist_can_patch_transfer_number(self, browser):
@@ -398,7 +406,7 @@ class TestDispositionPatch(IntegrationTestCase):
         self.assertEqual('Angebot neu 2', self.disposition.title)
 
 
-class TestTransferNumberPatch(IntegrationTestCase):
+class TestTransferNumberPatch(SolrIntegrationTestCase):
 
     @browsing
     def test_transfer_number_parameter_is_required(self, browser):
