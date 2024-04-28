@@ -10,7 +10,7 @@ class TestDispositionByline(IntegrationTestCase):
         browser.open(self.disposition)
 
         self.assertEquals(
-            ['Created: Aug 31, 2016 09:07 PM',
+            ['Created: Aug 31, 2016 09:11 PM',
              'State: In progress',
-             'Last modified: Aug 31, 2016 09:07 PM'],
+             'Last modified: Aug 31, 2016 09:11 PM'],
             browser.css('#plone-document-byline li').text)

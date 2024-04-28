@@ -1556,6 +1556,20 @@ class OpengeverContentFixture(object):
             .in_state('dossier-state-resolved')
         ))
 
+        self.offered_document_1 = self.register('offered_document_1', create(
+            Builder('document')
+            .within(self.offered_dossier_to_archive)
+            .titled(u'Offered Document 1')
+            .attach_file_containing('X' * 100, u'document_1.txt')
+        ))
+
+        self.offered_document_2 = self.register('offered_document_2', create(
+            Builder('document')
+            .within(self.offered_dossier_to_archive)
+            .titled(u'Offered Document 2')
+            .attach_file_containing('Y' * 33, u'document_2.txt')
+        ))
+
         self.offered_dossier_for_sip = self.register('offered_dossier_for_sip', create(
             Builder('dossier')
             .within(self.repofolder00)

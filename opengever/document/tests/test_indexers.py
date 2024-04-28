@@ -304,7 +304,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.commit_solr()
 
         indexed_value = solr_data_for(document, 'SearchableText')
-        self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 44 44 foo bar',
+        self.assertIn(u'Doc One Hugo Boss Client1 1.1 / 1 / 46 46 foo bar',
                       indexed_value)
 
     def test_containing_subdossier_is_indexed_for_document_in_subdossiertemplate(self):

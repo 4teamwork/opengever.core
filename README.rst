@@ -619,6 +619,8 @@ Objects
             - self.meeting_subtask
         - self.offered_dossier_for_sip
         - self.offered_dossier_to_archive
+          - self.offered_document_1
+          - self.offered_document_2
         - self.offered_dossier_to_destroy
         - self.protected_dossier
           - self.protected_document

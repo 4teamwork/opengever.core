@@ -78,10 +78,10 @@ class TestCopyDocuments(IntegrationTestCase):
         # We expect some of the metadata to get modified during pasting
         modified_metadata = {'UID': copy.UID(),
                              # sequence numbers and such
-                             'sequence_number': 44,
-                             'id': 'document-44',
-                             'getId': 'document-44',
-                             'reference': 'Client1 1.1 / 4 / 44',
+                             'sequence_number': 46,
+                             'id': 'document-46',
+                             'getId': 'document-46',
+                             'reference': 'Client1 1.1 / 4 / 46',
                              # creator
                              'listCreators': (self.regular_user.id,),
                              'Creator': self.regular_user.id,
@@ -191,10 +191,10 @@ class TestCopyDocuments(IntegrationTestCase):
             'path': copy.absolute_url_path(),
 
             # sequence numbers and such
-            'id': 'document-44',
-            'getId': 'document-44',
-            'reference': 'Client1 1.1 / 4 / 44',
-            'sequence_number': 44,
+            'id': 'document-46',
+            'getId': 'document-46',
+            'reference': 'Client1 1.1 / 4 / 46',
+            'sequence_number': 46,
 
             # creator
             'Creator': self.regular_user.id,

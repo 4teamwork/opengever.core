@@ -412,7 +412,7 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         report_titles = [row[2].value for row in rows[1:]]
         listing_titles = [item.get('title') for item in browser.json.get('items')]
 
-        self.assertEqual(33, len(report_titles))
+        self.assertEqual(35, len(report_titles))
         self.assertEqual(listing_titles, report_titles)
 
     @browsing
