@@ -13,8 +13,8 @@ from opengever.disposition.delivery import STATUS_SCHEDULED
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2paths
+from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone import api
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
@@ -27,7 +27,7 @@ RESOLVED_STATE = 'dossier-state-resolved'
 INACTIVE_STATE = 'dossier-state-inactive'
 
 
-class TestDisposition(IntegrationTestCase):
+class TestDisposition(SolrIntegrationTestCase):
 
     def test_id_is_sequence_number_prefixed_with_disposition(self):
         self.login(self.records_manager)
@@ -256,8 +256,33 @@ class TestDisposition(IntegrationTestCase):
             [self.offered_dossier_to_destroy.UID()],
             self.disposition.dossiers_with_extra_permissions)
 
+    @browsing
+    def test_dossier_stats_are_updated_on_creation(self, browser):
+        self.login(self.records_manager, browser)
 
-class TestDispositionEditForm(IntegrationTestCase):
+        with freeze(datetime(2037, 1, 1)), self.observe_children(self.repository_root) as children:
+            data = {'paths:list': obj2paths([self.expired_dossier, self.inactive_dossier]),
+                    '_authenticator': createToken()}
+            browser.open(self.repository_root,
+                         view='++add++opengever.disposition.disposition',
+                         data=data)
+            browser.find('Save').click()
+
+        self.assertEqual(len(children["added"]), 1)
+        disposition = children["added"].pop()
+        expected = {
+            'createinactivedossier00000000001': {
+                'docs_size': 19,
+                'docs_count': 1,
+            },
+            'createexpireddossier000000000001': {
+                'docs_size': 9,
+                'docs_count': 1,
+            }}
+        self.assertEqual(expected, disposition.stats_by_dossier)
+
+
+class TestDispositionEditForm(SolrIntegrationTestCase):
 
     def test_initial_states(self):
         self.login(self.regular_user)
@@ -360,7 +385,7 @@ class TestDispositionEditForm(IntegrationTestCase):
         self.assertEqual(u'Foo', self.disposition.transferring_office)
 
 
-class TestDispositionDelivery(IntegrationTestCase):
+class TestDispositionDelivery(SolrIntegrationTestCase):
 
     def enable_filesystem_transport(self):
         # Enable FilesystemTransport
