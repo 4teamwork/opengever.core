@@ -17,6 +17,7 @@ from opengever.workspace.utils import is_restricted_workspace_and_guest
 from opengever.workspace.utils import is_within_workspace
 from opengever.workspaceclient import is_workspace_client_feature_enabled
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IExpandableElement
 from plone.restapi.interfaces import IJsonCompatible
@@ -46,14 +47,18 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         version = "current" if kwargs.get('version') is None else kwargs.get('version')
         obj = self.getVersion(version)
-        bumblebee_service = bumblebee.get_service_v3()
-        result['bumblebee_checksum'] = IBumblebeeDocument(obj).get_checksum()
-        result[u'thumbnail_url'] = bumblebee_service.get_representation_url(
-            obj, 'thumbnail')
-        result[u'preview_url'] = bumblebee_service.get_representation_url(
-            obj, 'preview')
-        result[u'pdf_url'] = bumblebee_service.get_representation_url(
-            obj, 'pdf')
+
+        user_id = api.user.get_current().getId()
+        if user_id:
+            # Include Bumblebee URLs for non-anonymous users
+            bumblebee_service = bumblebee.get_service_v3()
+            result['bumblebee_checksum'] = IBumblebeeDocument(obj).get_checksum()
+            result[u'thumbnail_url'] = bumblebee_service.get_representation_url(
+                obj, 'thumbnail')
+            result[u'preview_url'] = bumblebee_service.get_representation_url(
+                obj, 'preview')
+            result[u'pdf_url'] = bumblebee_service.get_representation_url(
+                obj, 'pdf')
         result[u'file_extension'] = obj.get_file_extension()
 
         extend_with_backreferences(

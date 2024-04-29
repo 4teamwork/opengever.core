@@ -1,4 +1,6 @@
+from opengever.base.security import elevated_privileges
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
+from opengever.dossiertransfer.api.serializers import FullTransferContentSerializer
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
@@ -27,8 +29,18 @@ class DossierTransfersBase(Service):
             raise BadRequest("Feature 'dossier_transfers' is not enabled.")
         return super(DossierTransfersBase, self).render()
 
-    def serialize(self, transfer):
-        return getMultiAdapter((transfer, getRequest()), ISerializeToJson)()
+    def serialize(self, transfer, full_content=False):
+        serialized = getMultiAdapter(
+            (transfer, getRequest()), ISerializeToJson)()
+
+        if full_content:
+            if not self.has_valid_token():
+                raise Unauthorized
+
+            with elevated_privileges():
+                serialized['content'] = FullTransferContentSerializer(transfer)()
+
+        return serialized
 
 
 @implementer(IPublishTraverse)
@@ -66,16 +78,28 @@ class DossierTransferLocator(DossierTransfersBase):
         self.params.append(name)
         return self
 
+    def has_valid_token(self):
+        transfer_id = self._extract_transfer_id()
+        transfer = DossierTransfer.get(transfer_id)
+        if transfer:
+            token = self.request.getHeader('X-GEVER-Dossier-Transfer-Token')
+            return transfer.is_valid_token(token)
+        return False
+
     def _extract_transfer_id(self):
-        # We'll accept zero (listing) or one (get by id) params, but not more
-        if len(self.params) > 1:
+        # We'll accept
+        # - zero (listing)
+        # - one (get by id) or
+        # - three (blob download)
+        # params, but not more
+        if len(self.params) not in (0, 1, 3):
             raise BadRequest(
                 'Must supply either exactly one {transfer_id} path parameter '
-                'to fetch a specific transfer, or no parameter for a '
-                'listing of all transfers.')
+                'to fetch a specific transfer, no parameter for a '
+                'listing of all transfers, or three to fetch a blob.')
 
         # We have a valid number of parameters for the given endpoint
-        if len(self.params) == 1:
+        if len(self.params) in (1, 3):
             try:
                 transfer_id = int(self.params[0])
             except ValueError:
@@ -89,6 +113,9 @@ class DossierTransferLocator(DossierTransfersBase):
             if ogds_user in org_unit.inbox_group.users:
                 return True
         return False
+
+    def is_blob_request(self):
+        return len(self.params) == 3 and self.params[1] == 'blob'
 
     def locate_transfer(self):
         transfer_id = self.transfer_id
@@ -127,6 +154,12 @@ class DossierTransferLocator(DossierTransfersBase):
             DossierTransfer.source_id == local_unit_id,
             DossierTransfer.target_id == local_unit_id,
         )]
+
+        if self.has_valid_token():
+            # Server-to-server requests to fetch the full transfer contents are
+            # performed anonymously, but with a valid token that matches a
+            # particular transfer. We must not restrict these.
+            return query.filter(*filters)
 
         if not self._is_inbox_user(user_id):
             # Only inbox users may see transfers other than their own
