@@ -105,3 +105,11 @@ class WorkspaceFolderContextActions(BaseContextActions):
 
     def is_zipexport_available(self):
         return not is_restricted_workspace_and_guest(self.context)
+
+
+class WorkSpaceUserListingActions(BaseListingActions):
+    def is_export_workspace_users_available(self):
+        return api.user.has_permission('opengever.workspace.AccessAllUsersAndGroups', obj=self.context)
+
+    def is_delete_available(self):
+        return False
