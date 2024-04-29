@@ -39,6 +39,7 @@ from opengever.ogds.models.user_settings import UserSettings
 from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.ris.interfaces import IRisSettings
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.interfaces import ITaskTemplateSettings
@@ -78,6 +79,7 @@ class GeverSettingsAdpaterV1(object):
         config['apps_url'] = os.environ.get('APPS_ENDPOINT_URL')
         config['application_type'] = self.get_application_type()
         config['bumblebee_notifications_url'] = bumblebee.get_service_v3().get_notifications_url()
+        config['ris_base_url'] = self.get_ris_base_url()
         config['is_readonly'] = is_in_readonly_mode()
         return config
 
@@ -98,6 +100,12 @@ class GeverSettingsAdpaterV1(object):
         if api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings):
             return 'teamraum'
         return 'gever'
+
+    def get_ris_base_url(self):
+        ris_base_url = api.portal.get_registry_record(name='base_url', interface=IRisSettings)
+        if ris_base_url:
+            return ris_base_url.rstrip("/")
+        return ''
 
     def get_user_settings(self):
         setting = UserSettings.query.filter_by(userid=api.user.get_current().id).one_or_none()

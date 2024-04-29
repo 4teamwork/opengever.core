@@ -9,6 +9,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.model import create_session
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.private import enable_opengever_private
+from opengever.ris.interfaces import IRisSettings
 from opengever.testing import IntegrationTestCase
 from opengever.testing.readonly import ZODBStorageInReadonlyMode
 from pkg_resources import get_distribution
@@ -129,6 +130,16 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'recently_touched_limit'), 10)
+
+    @browsing
+    def test_config_contains_ris_base_url(self, browser):
+        api.portal.set_registry_record('base_url', u'http://localhost:3000', IRisSettings)
+
+        self.login(self.regular_user, browser)
+
+        browser.open(self.config_url, headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(browser.json.get(u'ris_base_url'), u'http://localhost:3000')
 
     @browsing
     def test_config_contains_cas_url(self, browser):
