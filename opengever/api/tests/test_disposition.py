@@ -1,4 +1,6 @@
 from datetime import datetime
+from ftw.builder.builder import Builder
+from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.disposition.delivery import DeliveryScheduler
@@ -92,6 +94,26 @@ class TestDispositionPost(SolrIntegrationTestCase):
         self.assertEqual('dossier-state-offered',
                          api.content.get_state(self.expired_dossier))
 
+    @browsing
+    def test_creation_initializes_dossier_stats(self, browser):
+        self.login(self.records_manager, browser)
+        data = {
+            "@type": "opengever.disposition.disposition",
+            "title": "Angebot XY",
+            "dossiers": [self.expired_dossier.absolute_url()]}
+
+        with self.observe_children(self.repository_root) as children:
+            browser.open(self.repository_root, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        disposition, = children['added']
+
+        self.assertEqual({
+            'createexpireddossier000000000001': {
+                'docs_size': 9,
+                'docs_count': 1}},
+            disposition.stats_by_dossier)
+
 
 class TestDispositionSerialization(SolrIntegrationTestCase):
 
@@ -134,6 +156,12 @@ class TestDispositionSerialization(SolrIntegrationTestCase):
     @browsing
     def test_provides_dossier_details(self, browser):
         self.login(self.records_manager, browser)
+
+        # Workaround: In tests, we need to manually update stats first.
+        for dossier in self.disposition.get_dossiers():
+            stats = self.disposition.query_stats(dossier)
+            self.disposition.stats_by_dossier[dossier.UID()] = stats
+
         browser.open(self.disposition, method='GET', headers=self.api_headers)
 
         self.assertItemsEqual(['active_dossiers', 'inactive_dossiers'],
@@ -155,8 +183,8 @@ class TestDispositionSerialization(SolrIntegrationTestCase):
                                     u'title': u'archival worthy',
                                     u'token': u'archival worthy'},
                                 u'archival_value_annotation': None,
-                                u'docs_count': 0,
-                                u'docs_size': 0,
+                                u'docs_count': 2,
+                                u'docs_size': 133,
                                 u'end': u'2000-01-31',
                                 u'former_state': u'dossier-state-resolved',
                                 u'intid': 1019013300,
@@ -404,6 +432,71 @@ class TestDispositionPatch(SolrIntegrationTestCase):
         self.assertEqual(204, browser.status_code)
         self.assertEqual('213', IDisposition(self.disposition).transfer_number)
         self.assertEqual('Angebot neu 2', self.disposition.title)
+
+    @browsing
+    def test_patch_disposition_dossiers_updates_stats(self, browser):
+        self.login(self.records_manager, browser)
+
+        # Guard assertion
+        existing_dossiers = [
+            self.offered_dossier_to_archive,
+            self.offered_dossier_to_destroy,
+        ]
+        self.assertEqual(existing_dossiers, self.disposition.get_dossiers())
+
+        # Workaround: We need to manually update stats first:
+        # Because the documents that are added to the disposition during fixture
+        # creation have been added in the very same transaction that the
+        # disposition is created, the transaction that they get added has not
+        # been committed to Solr yet. Therefore the disposition from the fixture
+        # ends up with wrong stats that we first update here.
+        for dossier in self.disposition.get_dossiers():
+            stats = self.disposition.query_stats(dossier)
+            self.disposition.stats_by_dossier[dossier.UID()] = stats
+
+        expected_stats_before = {
+            'createoffereddossiers00000000005': {
+                'docs_size': 0,
+                'docs_count': 0,
+            },
+            'createoffereddossiers00000000001': {
+                'docs_size': 133,
+                'docs_count': 2,
+            },
+        }
+        self.assertEqual(expected_stats_before, self.disposition.stats_by_dossier)
+
+        # Remove one existing dossier, add another
+        data = {
+            'dossiers': [
+                {'@id': self.offered_dossier_to_archive.absolute_url()},
+                {'@id': self.expired_dossier.absolute_url()},
+            ]
+        }
+
+        browser.open(self.disposition.absolute_url(),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        expected_dossiers = [
+            self.offered_dossier_to_archive,
+            self.expired_dossier,
+        ]
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(expected_dossiers, self.disposition.get_dossiers())
+
+        expected_stats = {
+            'createoffereddossiers00000000001': {
+                'docs_size': 133,
+                'docs_count': 2,
+            },
+            'createexpireddossier000000000001': {
+                'docs_size': 9,
+                'docs_count': 1,
+            },
+        }
+        self.assertEqual(expected_stats, self.disposition.stats_by_dossier)
 
 
 class TestTransferNumberPatch(SolrIntegrationTestCase):
