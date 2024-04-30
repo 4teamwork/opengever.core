@@ -100,6 +100,14 @@ class DossierDispositionInformation(object):
         stats_by_dossier = getattr(self.disposition, 'stats_by_dossier', {})
         return stats_by_dossier.get(self.dossier.UID(), {})
 
+    @property
+    def docs_count(self):
+        return self.stats['docs_count']
+
+    @property
+    def docs_size(self):
+        return self.stats['docs_size']
+
     def get_grouping_key(self):
         return self.parent
 

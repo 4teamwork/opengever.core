@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-10-31 14:16+0000\n"
+"POT-Creation-Date: 2024-04-30 06:43+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -143,6 +143,16 @@ msgstr "Offre éditée"
 #: ./opengever/disposition/browser/overview.py
 msgid "label_dispositon_package_download"
 msgstr "Télécharger le colis de livraison"
+
+#. Default: "Documents"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "label_docs_count"
+msgstr "Documents"
+
+#. Default: "Size"
+#: ./opengever/disposition/browser/excel_export.py
+msgid "label_docs_size"
+msgstr "Taille"
 
 #. Default: "Don't archive"
 #: ./opengever/disposition/browser/templates/overview.pt
