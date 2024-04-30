@@ -20,5 +20,6 @@ class InitializeDossierStatsOnDispositions(UpgradeStep):
     def initialize_stats(self, disposition):
         disposition.stats_by_dossier = PersistentDict()
         for dossier in disposition.get_dossiers():
-            stats = disposition.query_stats(dossier)
-            disposition.stats_by_dossier[dossier.UID()] = PersistentDict(stats)
+            if dossier:
+                stats = disposition.query_stats(dossier)
+                disposition.stats_by_dossier[dossier.UID()] = PersistentDict(stats)
