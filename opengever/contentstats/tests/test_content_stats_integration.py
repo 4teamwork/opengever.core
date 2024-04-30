@@ -171,10 +171,10 @@ class TestContentStatsIntegration(IntegrationTestCase):
     def test_checked_out_docs_stats_provider(self):
         self.login(self.regular_user)
         stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='checked_out_docs')
-        self.assertEqual({'checked_out': 0, 'checked_in': 43}, stats_provider.get_raw_stats())
+        self.assertEqual({'checked_out': 0, 'checked_in': 45}, stats_provider.get_raw_stats())
 
         self.checkout_document(self.document)
-        self.assertEqual({'checked_out': 1, 'checked_in': 42}, stats_provider.get_raw_stats())
+        self.assertEqual({'checked_out': 1, 'checked_in': 44}, stats_provider.get_raw_stats())
 
     def test_file_mimetypes_provider(self):
         stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='file_mimetypes')
@@ -183,7 +183,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 3,
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 18,
             'message/rfc822': 4,
-            'text/plain': 3,
+            'text/plain': 5,
         }
         self.assertEqual(expected_stats, stats_provider.get_raw_stats())
 
@@ -203,7 +203,7 @@ class TestContentStatsIntegration(IntegrationTestCase):
             ['', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', '3'],
             ['', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', '18'],
             ['', 'message/rfc822', '4'],
-            ['', 'text/plain', '3'],
+            ['', 'text/plain', '5'],
         ]
         self.assertEqual(expected_stats, table.lists())
 
@@ -212,12 +212,12 @@ class TestContentStatsIntegration(IntegrationTestCase):
         self.login(self.manager, browser)
         browser.open(view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
-        self.assertEqual([['', 'checked_in', '43'], ['', 'checked_out', '0']], table.lists())
+        self.assertEqual([['', 'checked_in', '45'], ['', 'checked_out', '0']], table.lists())
 
         self.checkout_document(self.document)
         browser.open(self.portal, view='@@content-stats')
         table = browser.css('#content-stats-checked_out_docs').first
-        self.assertEqual([['', 'checked_in', '42'], ['', 'checked_out', '1']], table.lists())
+        self.assertEqual([['', 'checked_in', '44'], ['', 'checked_out', '1']], table.lists())
 
     def test_gever_portal_types_contains_base_documents(self):
         stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='portal_types')

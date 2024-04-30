@@ -13,8 +13,8 @@ from opengever.disposition.delivery import STATUS_SCHEDULED
 from opengever.disposition.interfaces import IFilesystemTransportSettings
 from opengever.disposition.testing import EnabledTransport
 from opengever.dossier.behaviors.dossier import IDossier
-from opengever.testing import IntegrationTestCase
 from opengever.testing import obj2paths
+from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone import api
 from plone.protect import createToken
 from plone.registry.interfaces import IRegistry
@@ -27,7 +27,7 @@ RESOLVED_STATE = 'dossier-state-resolved'
 INACTIVE_STATE = 'dossier-state-inactive'
 
 
-class TestDisposition(IntegrationTestCase):
+class TestDisposition(SolrIntegrationTestCase):
 
     def test_id_is_sequence_number_prefixed_with_disposition(self):
         self.login(self.records_manager)
@@ -257,7 +257,7 @@ class TestDisposition(IntegrationTestCase):
             self.disposition.dossiers_with_extra_permissions)
 
 
-class TestDispositionEditForm(IntegrationTestCase):
+class TestDispositionEditForm(SolrIntegrationTestCase):
 
     def test_initial_states(self):
         self.login(self.regular_user)
@@ -360,7 +360,7 @@ class TestDispositionEditForm(IntegrationTestCase):
         self.assertEqual(u'Foo', self.disposition.transferring_office)
 
 
-class TestDispositionDelivery(IntegrationTestCase):
+class TestDispositionDelivery(SolrIntegrationTestCase):
 
     def enable_filesystem_transport(self):
         # Enable FilesystemTransport

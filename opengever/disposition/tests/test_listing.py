@@ -190,7 +190,7 @@ class TestDispositionHistoryListing(BaseLatexListingTest):
             ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'Submit disposition'],
             ['Nov 06, 2016 12:33 PM', 'Flucht Ramon (ramon.flucht)', 'Appraise disposition'],
             ['Nov 01, 2016 11:00 AM', 'Flucht Ramon (ramon.flucht)', 'Offer edited'],
-            ['Aug 31, 2016 07:07 PM', 'Flucht Ramon (ramon.flucht)', 'Offer added']]
+            ['Aug 31, 2016 07:11 PM', 'Flucht Ramon (ramon.flucht)', 'Offer added']]
 
         for row, expected_row in zip(rows, expected_rows):
             self.assert_row_values(expected_row, row)

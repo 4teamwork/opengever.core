@@ -14,6 +14,7 @@ from Products.Five.browser import BrowserView
 from zope.component import getUtility
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.size import byteDisplay
 import re
 
 
@@ -62,6 +63,11 @@ class DispositionExcelExport(BrowserView):
                               default=u'archivalValueAnnotation'),
              'transform': StringTranslater(
                  self.request, 'opengever.base').translate},
+            {'id': 'docs_count',
+             'title': _(u'label_docs_count', default=u'Documents')},
+            {'id': 'docs_size',
+             'title': _(u'label_docs_size', default=u'Size'),
+             'transform': self.human_readable_size},
             {'id': 'appraisal',
              'title': _(u'label_appraisal', default=u'Appraisal'),
              'transform': readable_appraisal},
@@ -104,3 +110,6 @@ class DispositionExcelExport(BrowserView):
         because openpyxl only accepts sheet titles with max 30 characters.
         """
         return re.sub(INVALID_TITLE_REGEX, '', self.context.title[:30])
+
+    def human_readable_size(self, size_bytes):
+        return translate(byteDisplay(size_bytes), size_bytes, context=self.request)

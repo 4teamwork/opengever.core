@@ -1,15 +1,17 @@
 from datetime import datetime
+from ftw.builder.builder import Builder
+from ftw.builder.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.disposition.delivery import DeliveryScheduler
 from opengever.disposition.interfaces import IAppraisal
 from opengever.disposition.interfaces import IDisposition
-from opengever.testing import IntegrationTestCase
+from opengever.testing.integration_test_case import SolrIntegrationTestCase
 from plone import api
 import json
 
 
-class TestDispositionPost(IntegrationTestCase):
+class TestDispositionPost(SolrIntegrationTestCase):
 
     @browsing
     def test_check_for_already_offered_dossiers(self, browser):
@@ -92,8 +94,28 @@ class TestDispositionPost(IntegrationTestCase):
         self.assertEqual('dossier-state-offered',
                          api.content.get_state(self.expired_dossier))
 
+    @browsing
+    def test_creation_initializes_dossier_stats(self, browser):
+        self.login(self.records_manager, browser)
+        data = {
+            "@type": "opengever.disposition.disposition",
+            "title": "Angebot XY",
+            "dossiers": [self.expired_dossier.absolute_url()]}
 
-class TestDispositionSerialization(IntegrationTestCase):
+        with self.observe_children(self.repository_root) as children:
+            browser.open(self.repository_root, data=json.dumps(data),
+                         method='POST', headers=self.api_headers)
+
+        disposition, = children['added']
+
+        self.assertEqual({
+            'createexpireddossier000000000001': {
+                'docs_size': 9,
+                'docs_count': 1}},
+            disposition.stats_by_dossier)
+
+
+class TestDispositionSerialization(SolrIntegrationTestCase):
 
     @browsing
     def test_includes_sip_filename(self, browser):
@@ -134,6 +156,12 @@ class TestDispositionSerialization(IntegrationTestCase):
     @browsing
     def test_provides_dossier_details(self, browser):
         self.login(self.records_manager, browser)
+
+        # Workaround: In tests, we need to manually update stats first.
+        for dossier in self.disposition.get_dossiers():
+            stats = self.disposition.query_stats(dossier)
+            self.disposition.stats_by_dossier[dossier.UID()] = stats
+
         browser.open(self.disposition, method='GET', headers=self.api_headers)
 
         self.assertItemsEqual(['active_dossiers', 'inactive_dossiers'],
@@ -155,6 +183,8 @@ class TestDispositionSerialization(IntegrationTestCase):
                                     u'title': u'archival worthy',
                                     u'token': u'archival worthy'},
                                 u'archival_value_annotation': None,
+                                u'docs_count': 2,
+                                u'docs_size': 133,
                                 u'end': u'2000-01-31',
                                 u'former_state': u'dossier-state-resolved',
                                 u'intid': 1019013300,
@@ -184,15 +214,17 @@ class TestDispositionSerialization(IntegrationTestCase):
                                 u'archival_value': {u'title': u'not archival worthy',
                                                     u'token': u'not archival worthy'},
                                 u'archival_value_annotation': None,
+                                u'docs_count': 0,
+                                u'docs_size': 0,
                                 u'end': u'2000-01-15',
                                 u'former_state': u'dossier-state-inactive',
-                                u'intid': 1019053300,
+                                u'intid': 1019093300,
                                 u'public_trial': {u'title': u'not assessed',
                                                   u'token': u'unchecked'},
                                 u'reference_number': u'Client1 1.1 / 14',
                                 u'start': u'2000-01-01',
                                 u'title': u'Hans Baumann',
-                                u'uid': u'createoffereddossiers00000000003',
+                                u'uid': u'createoffereddossiers00000000005',
                                 u'url': self.offered_dossier_to_destroy.absolute_url()}],
                 }],
             browser.json['dossier_details']['inactive_dossiers'])
@@ -219,9 +251,11 @@ class TestDispositionSerialization(IntegrationTestCase):
                             {u'appraisal': True,
                              u'archival_value': None,
                              u'archival_value_annotation': None,
+                             u'docs_count': None,
+                             u'docs_size': None,
                              u'end': None,
                              u'former_state': u'dossier-state-resolved',
-                             u'intid': 1019033300,
+                             u'intid': 1019073300,
                              u'public_trial': None,
                              u'reference_number': u'Client1 1.1 / 13',
                              u'start': None,
@@ -243,43 +277,43 @@ class TestDispositionSerialization(IntegrationTestCase):
         self.assertEqual(
             [
                 {u'creator': {u'token': self.records_manager.getId(), u'title': u'Flucht Ramon'},
-                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663373000000',
-                 u'created': u'2016-08-31T19:09:33',
+                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663613000000',
+                 u'created': u'2016-08-31T19:13:33',
                  u'modified': None,
                  u'modifier': None,
                  u'additional_data':{},
-                 u'response_id': 1472663373000000,
+                 u'response_id': 1472663613000000,
                  u'response_type': u'added',
                  u'dossiers': [
                      {u'reference_number': u'Client1 1.1 / 13',
                       u'title': u'Dossier for SIP',
                       u'former_state': u'dossier-state-resolved',
                       u'repository_title': u'1.1. Vertr\xe4ge und Vereinbarungen',
-                      u'intid': 1019033300,
+                      u'intid': 1019073300,
                       u'appraisal': True}],
                  u'text': u'',
                  u'changes': []},
                 {u'creator': {u'token': self.records_manager.getId(), u'title': u'Flucht Ramon'},
-                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663493000000',
-                 u'created': u'2016-08-31T19:11:33',
+                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2/@responses/1472663733000000',
+                 u'created': u'2016-08-31T19:15:33',
                  u'modified': None,
                  u'modifier': None,
                  u'additional_data':{},
-                 u'response_id': 1472663493000000,
+                 u'response_id': 1472663733000000,
                  u'response_type': u'disposition-transition-dispose',
                  u'dossiers': [
                      {u'reference_number': u'Client1 1.1 / 13',
                       u'title': u'Dossier for SIP',
                       u'former_state': u'dossier-state-resolved',
                       u'repository_title': u'1.1. Vertr\xe4ge und Vereinbarungen',
-                      u'intid': 1019033300,
+                      u'intid': 1019073300,
                       u'appraisal': True}],
                  u'text': u'',
                  u'changes': []}],
             browser.json['responses'])
 
 
-class TestAppraisalUpdate(IntegrationTestCase):
+class TestAppraisalUpdate(SolrIntegrationTestCase):
 
     @browsing
     def test_update_appraisal_for_one_dossier(self, browser):
@@ -334,6 +368,8 @@ class TestAppraisalUpdate(IntegrationTestCase):
                 u'archival_value': {u'title': u'archival worthy',
                                     u'token': u'archival worthy'},
                 u'archival_value_annotation': None,
+                u'docs_count': 0,
+                u'docs_size': 0,
                 u'end': u'2000-01-31',
                 u'former_state': u'dossier-state-resolved',
                 u'intid': 1019013300,
@@ -365,7 +401,7 @@ class TestAppraisalUpdate(IntegrationTestCase):
             browser.json)
 
 
-class TestDispositionPatch(IntegrationTestCase):
+class TestDispositionPatch(SolrIntegrationTestCase):
 
     @browsing
     def test_only_archivist_can_patch_transfer_number(self, browser):
@@ -397,8 +433,73 @@ class TestDispositionPatch(IntegrationTestCase):
         self.assertEqual('213', IDisposition(self.disposition).transfer_number)
         self.assertEqual('Angebot neu 2', self.disposition.title)
 
+    @browsing
+    def test_patch_disposition_dossiers_updates_stats(self, browser):
+        self.login(self.records_manager, browser)
 
-class TestTransferNumberPatch(IntegrationTestCase):
+        # Guard assertion
+        existing_dossiers = [
+            self.offered_dossier_to_archive,
+            self.offered_dossier_to_destroy,
+        ]
+        self.assertEqual(existing_dossiers, self.disposition.get_dossiers())
+
+        # Workaround: We need to manually update stats first:
+        # Because the documents that are added to the disposition during fixture
+        # creation have been added in the very same transaction that the
+        # disposition is created, the transaction that they get added has not
+        # been committed to Solr yet. Therefore the disposition from the fixture
+        # ends up with wrong stats that we first update here.
+        for dossier in self.disposition.get_dossiers():
+            stats = self.disposition.query_stats(dossier)
+            self.disposition.stats_by_dossier[dossier.UID()] = stats
+
+        expected_stats_before = {
+            'createoffereddossiers00000000005': {
+                'docs_size': 0,
+                'docs_count': 0,
+            },
+            'createoffereddossiers00000000001': {
+                'docs_size': 133,
+                'docs_count': 2,
+            },
+        }
+        self.assertEqual(expected_stats_before, self.disposition.stats_by_dossier)
+
+        # Remove one existing dossier, add another
+        data = {
+            'dossiers': [
+                {'@id': self.offered_dossier_to_archive.absolute_url()},
+                {'@id': self.expired_dossier.absolute_url()},
+            ]
+        }
+
+        browser.open(self.disposition.absolute_url(),
+                     method='PATCH', headers=self.api_headers,
+                     data=json.dumps(data))
+
+        expected_dossiers = [
+            self.offered_dossier_to_archive,
+            self.expired_dossier,
+        ]
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual(expected_dossiers, self.disposition.get_dossiers())
+
+        expected_stats = {
+            'createoffereddossiers00000000001': {
+                'docs_size': 133,
+                'docs_count': 2,
+            },
+            'createexpireddossier000000000001': {
+                'docs_size': 9,
+                'docs_count': 1,
+            },
+        }
+        self.assertEqual(expected_stats, self.disposition.stats_by_dossier)
+
+
+class TestTransferNumberPatch(SolrIntegrationTestCase):
 
     @browsing
     def test_transfer_number_parameter_is_required(self, browser):

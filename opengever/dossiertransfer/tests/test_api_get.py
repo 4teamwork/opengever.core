@@ -408,7 +408,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
         expected_structure = {
             u'contacts': {},
             u'documents': [{
-                u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-44',
+                u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-46',
                 u'title': u'Testdokum\xe4nt',
             }],
             u'dossiers': [{

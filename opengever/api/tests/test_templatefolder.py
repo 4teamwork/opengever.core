@@ -245,8 +245,8 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
     document_date = datetime(2015, 9, 28, 0, 0)
 
     expected_doc_properties = [
-        ('Document.ReferenceNumber', 'Client1 1.1 / 1 / 44'),
-        ('Document.SequenceNumber', '44'),
+        ('Document.ReferenceNumber', 'Client1 1.1 / 1 / 46'),
+        ('Document.SequenceNumber', '46'),
         ('Dossier.ReferenceNumber', 'Client1 1.1 / 1'),
         ('Dossier.Title', u'Vertr\xe4ge mit der kantonalen Finanzverwaltung'),
         ('Test', 'Peter'),
@@ -258,8 +258,8 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         ('ogg.document.creator.user.title', u'K\xf6nig J\xfcrgen'),
         ('ogg.document.creator.user.userid', 'jurgen.konig'),
         ('ogg.document.document_date', document_date),
-        ('ogg.document.reference_number', 'Client1 1.1 / 1 / 44'),
-        ('ogg.document.sequence_number', '44'),
+        ('ogg.document.reference_number', 'Client1 1.1 / 1 / 46'),
+        ('ogg.document.sequence_number', '46'),
         ('ogg.document.title', u'New d\xf6cument'),
         ('ogg.document.version_number', 0),
         ('ogg.dossier.external_reference', u'qpr-900-9001-\xf7'),

@@ -678,14 +678,14 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.commit_solr()
         view = ('@listing?name=documents&facets:list=checked_out')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
-        self.assertEqual(19, browser.json['items_total'])
-        self.assertEqual(18, browser.json['facets']['checked_out']['']['count'])
+        self.assertEqual(21, browser.json['items_total'])
+        self.assertEqual(20, browser.json['facets']['checked_out']['']['count'])
 
         view = ('@listing?name=documents&facets:list=checked_out'
                 '&filters.checked_out:record=')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
-        self.assertEqual(18, browser.json['items_total'])
-        self.assertEqual(18, browser.json['facets']['checked_out']['']['count'])
+        self.assertEqual(20, browser.json['items_total'])
+        self.assertEqual(20, browser.json['facets']['checked_out']['']['count'])
 
     @browsing
     def test_negate_filter_query(self, browser):
@@ -709,7 +709,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         view = ('@listing?name=documents')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
-        self.assertEqual(19, browser.json['items_total'])
+        self.assertEqual(21, browser.json['items_total'])
 
         view = ('@listing?name=documents&filters.keywords:record:list=Wichtig')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
@@ -717,7 +717,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
 
         view = ('@listing?name=documents&filters.-keywords:record:list=Wichtig')
         browser.open(self.repository_root, view=view, headers=self.api_headers)
-        self.assertEqual(17, browser.json['items_total'])
+        self.assertEqual(19, browser.json['items_total'])
 
     @browsing
     def test_filter_by_keywords_with_whitespace(self, browser):
@@ -1501,12 +1501,12 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual(
             [{u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-2',
               u'UID': u'createdispositionwithsip00000001',
-              u'modified': u'2016-08-31T19:11:33+00:00',
+              u'modified': u'2016-08-31T19:15:33+00:00',
               u'review_state': u'disposition-state-disposed',
               u'title': u'Angebot 30.12.1997'},
              {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/disposition-1',
               u'UID': u'createdisposition000000000000001',
-              u'modified': u'2016-08-31T19:07:33+00:00',
+              u'modified': u'2016-08-31T19:11:33+00:00',
               u'review_state': u'disposition-state-in-progress',
               u'title': u'Angebot 31.8.2016'}],
             browser.json['items'])
