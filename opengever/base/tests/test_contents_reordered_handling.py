@@ -102,7 +102,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
             [
                 {u'UID': doc_1.UID(), u'getObjPositionInParent': 0},
                 {u'UID': doc_2.UID(), u'getObjPositionInParent': 9},
-                {u'UID': doc_3.UID(), u'getObjPositionInParent': 15},
+                {u'UID': doc_3.UID(), u'getObjPositionInParent': 16},
             ], browser.json["items"])
 
         new_order = {'ordering': {'obj_id': doc_2.id, 'delta': -9}}
@@ -114,7 +114,7 @@ class TestContentsReorderedHandler(SolrIntegrationTestCase):
             [
                 {u'UID': doc_2.UID(), u'getObjPositionInParent': 0},
                 {u'UID': doc_1.UID(), u'getObjPositionInParent': 1},
-                {u'UID': doc_3.UID(), u'getObjPositionInParent': 15},
+                {u'UID': doc_3.UID(), u'getObjPositionInParent': 16},
             ], browser.json["items"])
 
     @browsing

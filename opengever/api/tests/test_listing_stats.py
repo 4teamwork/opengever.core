@@ -75,7 +75,8 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_meetings'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
-                    {u'count': 27, u'field': u'listing_name', u'value': u'folder_contents'}]
+                    {u'count': 28, u'field': u'listing_name', u'value': u'folder_contents'},
+                    {u'count': 1, u'field': u'listing_name', u'value': u'ris_proposals'}]
 
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
@@ -211,10 +212,14 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                      u'field': u'listing_name',
                      u'queries': {responsible_regular_user: 0},
                      u'value': u'workspaces'},
-                    {u'count': 27,
+                    {u'count': 28,
                      u'field': u'listing_name',
                      u'queries': {responsible_regular_user: 8},
-                     u'value': u'folder_contents'}]
+                     u'value': u'folder_contents'},
+                    {u'count': 1,
+                     u'field': u'listing_name',
+                     u'queries': {responsible_regular_user: 0},
+                     u'value': u'ris_proposals'}]
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
     @browsing

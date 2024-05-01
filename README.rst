@@ -592,6 +592,7 @@ Objects
           - self.proposal
             - self.proposaldocument
           - self.removed_document
+          - self.ris_proposal
           - self.sequential_task
             - self.seq_subtask_1
             - self.seq_subtask_2
