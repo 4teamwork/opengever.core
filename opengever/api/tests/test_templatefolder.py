@@ -73,6 +73,34 @@ class TestDocumentFromTemplatePost(IntegrationTestCase):
         self.assertEqual(date.today(), document.document_date)
 
     @browsing
+    def test_creates_document_from_template_within_dossier_with_keywords(self, browser):
+        self.login(self.regular_user, browser)
+        expected_keywords = ("keyword-1", "keyword-2")
+        self.docprops_template.keywords = expected_keywords
+
+        browser.open(
+            '{}/@vocabularies/opengever.dossier.DocumentTemplatesVocabulary'.format(
+                self.portal.absolute_url()),
+            headers=self.api_headers)
+
+        template = browser.json['items'][0]
+
+        data = {'template': template, 'title': u'New document'}
+
+        with self.observe_children(self.dossier) as children:
+            browser.open('{}/@document-from-template'.format(
+                self.dossier.absolute_url()),
+                data=json.dumps(data),
+                method='POST',  # Ensure it's a POST request
+                headers=self.api_headers)
+
+        # Check if the document is created successfully
+        self.assertEqual(1, len(children['added']))
+        document = children['added'].pop()
+
+        self.assertEqual(expected_keywords, document.keywords)
+
+    @browsing
     def test_creates_document_from_template_within_task(self, browser):
         self.login(self.regular_user, browser)
 

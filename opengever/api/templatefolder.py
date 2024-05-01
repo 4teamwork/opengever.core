@@ -83,7 +83,7 @@ class DocumentFromTemplatePost(Service):
                                        'role': participation['role']})
 
         command = CreateDocumentFromTemplateCommand(
-            self.context, template, title, recipient, sender, participation_data)
+            self.context, template, title, recipient, sender, participation_data, keywords=template.keywords)
         document = command.execute()
 
         serializer = queryMultiAdapter((document, self.request), ISerializeToJson)
