@@ -7,6 +7,11 @@
   </Settings>
   <Entries>
     <OneOffixxConnect>
+      <Arguments>
+        <TemplateFilter>
+          <Tag>Gever</Tag>
+        </TemplateFilter>
+      </Arguments>
       <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">
         <Arguments>
           <Interface Name="OneGovGEVER">
