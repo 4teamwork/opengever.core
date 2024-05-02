@@ -168,10 +168,14 @@ class PerformDossierTransfer(Service):
             self.documents[doc['UID']] = filepath
 
     def create_dossiers(self):
+        user_id = api.user.get_current().getId()
+
         for dossier in self.metadata.get('content', {}).get('dossiers', []):
             path = dossier[u'relative_path']
             parent_path = os.path.dirname(path)
             parent = self.objects_by_path.setdefault(parent_path, self.context)
+
+            dossier['responsible'] = user_id
 
             obj = self.create_content(parent, dossier)
             self.objects_by_path[path] = obj

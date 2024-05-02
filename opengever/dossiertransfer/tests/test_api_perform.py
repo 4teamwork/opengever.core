@@ -69,7 +69,7 @@ METADATA_RESP = {
             "@type": "opengever.dossier.businesscasedossier",
             'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20',
             'title': u'A resolvable main dossier',
-            'responsible': u'jurgen.konig',
+            'responsible': u'kathi.barfuss',
             u'participations': [
                 [
                     u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
@@ -81,7 +81,7 @@ METADATA_RESP = {
             "@type": "opengever.dossier.businesscasedossier",
             'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21',
             'title': u'Resolvable Subdossier',
-            'responsible': u'jurgen.konig',
+            'responsible': u'nicole.kohler',
         }],
     },
 }
