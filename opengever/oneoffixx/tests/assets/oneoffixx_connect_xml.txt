@@ -7,10 +7,6 @@
   </Settings>
   <Entries>
     <OneOffixxConnect>
-      <Arguments>
-        <TemplateId>2574d08d-95ea-4639-beab-3103fe4c3bc7</TemplateId>
-        <LanguageLcid>2055</LanguageLcid>
-      </Arguments>
       <Function name="CustomInterfaceConnector" id="70E94788-CE84-4460-9698-5663878A295B">
         <Arguments>
           <Interface Name="OneGovGEVER">

@@ -6,7 +6,6 @@ from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView
 from zExceptions import NotFound
-from zope.annotation.interfaces import IAnnotations
 
 
 class OneoffixxConnectXml(BrowserView):
@@ -76,17 +75,6 @@ class OneoffixxConnectXml(BrowserView):
 
     def generate_one_offixx_connect_tag(self):
         connect = etree.Element("OneOffixxConnect")
-        arguments = etree.SubElement(connect, "Arguments")
-
-        annotations = IAnnotations(self.context)
-        if annotations.get('template-id'):
-            template_id = etree.SubElement(arguments, "TemplateId")
-            template_id.text = annotations['template-id']
-        if annotations.get('languages'):
-            language_id = etree.SubElement(arguments, "LanguageLcid")
-            language = self.choose_language(annotations['languages'])
-            language_id.text = language
-
         custom_interface = self.generate_custom_interface_connector_tag()
         connect.append(custom_interface)
         metadata = self.generate_metadata_tag()

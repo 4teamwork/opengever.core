@@ -18,9 +18,6 @@ class TestConnectXML(IntegrationTestCase):
         namespace = "http://schema.oneoffixx.com/OneOffixxConnectBatch/1"
         self.assertEqual("{%s}OneOffixxConnectBatch" % namespace, xml.tag)
 
-        templateid_tag = xml.find(".//{%s}TemplateId" % namespace)
-        self.assertEqual('2574d08d-95ea-4639-beab-3103fe4c3bc7', templateid_tag.text)
-
     @browsing
     def test_connect_xml_content(self, browser):
         self.login(self.dossier_responsible, browser)
