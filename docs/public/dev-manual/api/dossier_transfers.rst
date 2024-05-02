@@ -271,3 +271,41 @@ Mit einem GET Request auf ``/@dossier-transfers/<transfer-id>/blob/<document-uid
 kann das Blob eines Dokuments heruntergeladen werden. Der Request muss dazu einem
 gültigen Token für diesen Transfer authentisiert werden, und das Dokument muss
 in diesem Transfer enthalten sein.
+
+
+Dossier-Transfer durchführen
+----------------------------
+
+Mit dem ``/@perform-dossier-transfer`` Endpoint kann ein vorher erstellter
+Dossier-Transfer durchgeführt werden. Dabei wird das entsprechende Dossier mit
+seinen Subdossiers, Dokumenten und Beteiligungen auf dem Zielmandant
+in der aufgerufenen Ordnungsposition erstellt.
+
+Im Body muss die Id des Transfers mitgegeben werden.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       POST /ordnungssystem/fuehrung/@perform-dossier-transfer HTTP/1.1
+       Accept: application/json
+       Content-Type: application/json
+
+       {
+         "transfer_id": 42
+       }
+
+Als Antwort wird die Serialisierung des erstellten Dossiers zurückgegeben.
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Content-Type: application/json
+
+      {
+        "@id": "http://localhost:8080/fd/fuehrung/dossier-31",
+        "@type": "opengever.dossier.businesscasedossier",
+        "...": "..."
+      }

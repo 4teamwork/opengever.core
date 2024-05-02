@@ -13,6 +13,7 @@ Other Changes
 - ``GET @dossier-transfers/<id>?full_content=1``: New mode to fetch full content representation for dossier transfers.
 - Add ris_base_url to config endpoint.
 - ``@listing``: Add ``ris_proposals`` listing.
+- ``POST @perform-dossier-transfer``: New endpoint to perform a dossier transfer.
 
 
 2024.7.0 (2024-04-23)
