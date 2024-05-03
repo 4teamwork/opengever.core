@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-02-16 15:21+0000\n"
+"POT-Creation-Date: 2024-05-03 12:03+0000\n"
 "PO-Revision-Date: 2014-11-25 11:31+0100\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: Jonas Baumann <j.baumann@4teamwork.ch>\n"
@@ -43,15 +43,15 @@ msgstr "Hinzufügen von Geschäftsdossiers erlauben"
 msgid "description_allow_add_businesscase_dossier"
 msgstr "Wählen Sie, ob es in dieser Ordnungsposition erlaubt ist, Geschäftsdossiers hinzuzufügen. Ist diese Option deaktiviert, kann der Benutzer nur Dossiers aus einer Vorlage oder Spezialdossiers erstellen."
 
-#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
-#: ./opengever/repository/repositoryroot.py
-msgid "description_reference_number_addendum"
-msgstr "Achtung: Änderung erfordert Neuindexierung von \"reference\" und \"sortable_reference\"."
-
 #. Default: "Select if this repostory tree should respect the max subdossier depth restriction."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_max_subdossier_depth_restriction"
 msgstr "Wählen Sie, ob die Dossier-Tiefe in dieser Ordnungsposition begrenzt werden soll"
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
+msgstr "Achtung: Änderung erfordert Neuindexierung von \"reference\" und \"sortable_reference\"."
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
@@ -245,6 +245,11 @@ msgstr "Ordnungspositionsnummer"
 msgid "label_repositoryfolder_description"
 msgstr "Beschreibung (optional)"
 
+#. Default: "Path"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_path"
+msgstr "Pfad"
+
 #. Default: "Repositoryfolder title (German)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_de"
@@ -259,6 +264,11 @@ msgstr "Titel der Ordnungsposition (englisch)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_fr"
 msgstr "Titel der Ordnungsposition (französisch)"
+
+#. Default: "UID"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_uid"
+msgstr "UID"
 
 #. Default: "Limit maximum dossier depth in this repository folder"
 #: ./opengever/repository/repositoryfolder.py

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-16 15:21+0000\n"
+"POT-Creation-Date: 2024-05-03 12:03+0000\n"
 "PO-Revision-Date: 2017-12-03 11:31+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-repository/fr/>\n"
@@ -42,15 +42,15 @@ msgstr "Permettre l'ajout de dossiers d'affaire"
 msgid "description_allow_add_businesscase_dossier"
 msgstr "Déterminez s'il est permis d'ajouter des dossiers d'affaire à ce niveau. Si cette option est désactivée, l'utilisateur ne peut créer que des dossiers spéciaux ou bien des dossiers à partir d'un modèle."
 
-#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
-#: ./opengever/repository/repositoryroot.py
-msgid "description_reference_number_addendum"
-msgstr "Attention: La modification de ce champ requiert une réindexation de \"reference\" et \"sortable_reference\"."
-
 #. Default: "Select if this repostory tree should respect the max subdossier depth restriction."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_max_subdossier_depth_restriction"
 msgstr ""
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
+msgstr "Attention: La modification de ce champ requiert une réindexation de \"reference\" et \"sortable_reference\"."
 
 #. Default: "No nested repositorys available."
 #: ./opengever/repository/browser/templates/referenceprefixmanager.pt
@@ -244,6 +244,11 @@ msgstr "Numéro de classement"
 msgid "label_repositoryfolder_description"
 msgstr "Description (optionnel)"
 
+#. Default: "Path"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_path"
+msgstr "Chemin"
+
 #. Default: "Repositoryfolder title (German)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_de"
@@ -258,6 +263,11 @@ msgstr "Titre du numéro de classement (anglais)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_fr"
 msgstr "Titre du numéro de classement"
+
+#. Default: "UID"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_uid"
+msgstr "UID"
 
 #. Default: "Limit maximum dossier depth in this repository folder"
 #: ./opengever/repository/repositoryfolder.py

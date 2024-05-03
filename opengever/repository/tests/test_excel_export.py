@@ -53,7 +53,10 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Task responsible local or inherited roles': u'',
             u'Task responsible local roles': u'',
             u'Valid from': u'',
-            u'Valid until': u''
+            u'Valid until': u'',
+            u'UID': u'createrepositorytree000000000001',
+            u'Path': u'ordnungssystem',
+
         }
         self.assertEqual(imported_data[0], expected_reporoot)
         expected_repofolder = {
@@ -88,6 +91,10 @@ class TestRepositoryRootExcelExport(IntegrationTestCase):
             u'Task responsible local or inherited roles': u'',
             u'Task responsible local roles': u'',
             u'Valid from': u'',
-            u'Valid until': u''
+            u'Valid until': u'',
+            u'UID': u'createrepositorytree000000000002',
+            u'Path': u'ordnungssystem/fuhrung',
+
+
         }
         self.assertEqual(imported_data[1], expected_repofolder)

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-16 15:21+0000\n"
+"POT-Creation-Date: 2024-05-03 12:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,14 +43,14 @@ msgstr ""
 msgid "description_allow_add_businesscase_dossier"
 msgstr ""
 
-#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
-#: ./opengever/repository/repositoryroot.py
-msgid "description_reference_number_addendum"
-msgstr ""
-
 #. Default: "Select if this repostory tree should respect the max subdossier depth restriction."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_max_subdossier_depth_restriction"
+msgstr ""
+
+#. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
+#: ./opengever/repository/repositoryroot.py
+msgid "description_reference_number_addendum"
 msgstr ""
 
 #. Default: "No nested repositorys available."
@@ -245,6 +245,11 @@ msgstr ""
 msgid "label_repositoryfolder_description"
 msgstr ""
 
+#. Default: "Path"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_path"
+msgstr ""
+
 #. Default: "Repositoryfolder title (German)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_de"
@@ -258,6 +263,11 @@ msgstr ""
 #. Default: "Repositoryfolder title (French)"
 #: ./opengever/repository/browser/excel_export.py
 msgid "label_repositoryfolder_title_fr"
+msgstr ""
+
+#. Default: "UID"
+#: ./opengever/repository/browser/excel_export.py
+msgid "label_repositoryfolder_uid"
 msgstr ""
 
 #. Default: "Limit maximum dossier depth in this repository folder"
