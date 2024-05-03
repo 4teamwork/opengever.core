@@ -36,6 +36,7 @@ TYPES_WITHOUT_REFERENCE_NUMBER = (
     'opengever.meeting.proposal',
     'opengever.meeting.submittedproposal',
     'opengever.disposition.disposition',
+    'opengever.ris.proposal',
 )
 
 

@@ -163,6 +163,7 @@ class OpengeverContentFixture(object):
         with self.freeze_at_hour(16):
             with self.login(self.dossier_responsible):
                 self.create_tasks()
+                self.create_ris_proposals()
 
         with self.freeze_at_hour(17):
             self.create_private_root()
@@ -1491,6 +1492,14 @@ class OpengeverContentFixture(object):
             .in_state('task-state-in-progress')
         ))
         self.create_task_subscriptions(inbox_task)
+
+    @staticuid()
+    def create_ris_proposals(self):
+        self.ris_proposal = self.register('ris_proposal', create(
+            Builder('ris_proposal')
+            .within(self.dossier)
+            .having(document=self.document, title='RIS-Proposal')
+        ))
 
     @staticuid()
     def create_expired_dossier(self):

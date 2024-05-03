@@ -999,6 +999,24 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             item)
 
     @browsing
+    def test_ris_proposals_listing(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = '&'.join((
+            'name=ris_proposals',
+            'columns=UID',
+            'columns=title',
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(
+            {u'@id': self.ris_proposal.absolute_url(),
+             u'UID': IUUID(self.ris_proposal),
+             u'title': 'RIS-Proposal'},
+            browser.json['items'][0])
+
+    @browsing
     def test_task_type_facets_are_translated(self, browser):
         self.enable_languages()
 
