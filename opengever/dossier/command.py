@@ -15,11 +15,11 @@ class CreateDocumentFromTemplateCommand(CreateDocumentCommand):
     """
 
     def __init__(self, context, template_doc, title, recipient_data=tuple(),
-                 sender_data=tuple(), participation_data=[]):
+                 sender_data=tuple(), participation_data=[], **kwargs):
         data = getattr(template_doc.get_file(), "data", None)
         super(CreateDocumentFromTemplateCommand, self).__init__(
             context, template_doc.get_filename(), data,
-            title=title)
+            title=title, **kwargs)
         self.recipient_data = recipient_data
         self.sender_data = sender_data
         self.participation_data = participation_data

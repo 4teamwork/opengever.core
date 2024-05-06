@@ -34,6 +34,15 @@ class TestCreateDocumentFromTemplateCommand(IntegrationTestCase):
         self.assertEqual(expected_title, document.title)
         self.assertIsNone(document.file)
 
+    def test_create_document_from_template_with_keywords(self):
+        expected_title = 'My title'
+        expected_keywords = ('My keyword1', 'My keyword2')
+        self.login(self.regular_user)
+        template = create(Builder('document'))
+        command = CreateDocumentFromTemplateCommand(self.dossier, template, expected_title, keywords=expected_keywords)
+        document = command.execute()
+        self.assertEqual(expected_keywords, document.keywords)
+
     def test_create_document_from_template_updates_docproperties(self):
         expected_title = 'My title'
         self.login(self.regular_user)
