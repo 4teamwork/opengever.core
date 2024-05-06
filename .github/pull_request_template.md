@@ -10,7 +10,7 @@ _Screenshot: whenever useful, but only as a visual aid._
 
 Definition of Done: https://4teamwork.atlassian.net/wiki/spaces/CHX4TW/pages/917562/
 
-For [CA-XXXX]
+For [TI-XXXX]
 
 ## Checklist
 
