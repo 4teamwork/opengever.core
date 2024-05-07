@@ -8,6 +8,7 @@ from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
 from opengever.base.tests.test_config_checks import DummyCheckMissconfigured1
 from opengever.core import sqlite_testing
+from opengever.core.docker_testing import SablonServiceLayer
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
 from opengever.core.testing import activate_bumblebee_feature
@@ -28,6 +29,7 @@ from zope.globalrequest import setRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+import atexit
 import imp
 import os
 import pytz
@@ -118,6 +120,12 @@ class TestserverLayer(OpengeverFixture):
 
         # Clear solr from potential artefacts of the previous run.
         SolrReplicationAPIClient.get_instance().clear()
+
+        # Start our own Sablon service if we didn't get a Sablon URL.
+        if not os.environ.get('SABLON_URL'):
+            sablon = SablonServiceLayer()
+            sablon.setUp()
+            atexit.register(sablon.tearDown)
 
         # Install a Virtual Host Monster
         if "virtual_hosting" not in app.objectIds():
