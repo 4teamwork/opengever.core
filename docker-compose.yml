@@ -135,7 +135,7 @@ services:
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
       - ./var/openldap:/bitnami/openldap
   ianus-frontend:
-    image: ghcr.io/4teamwork/ianus-frontend:2021.4.4
+    image: ghcr.io/4teamwork/ianus-frontend:2024.2.0
     ports:
       - "3000:80"
     depends_on:
@@ -147,14 +147,14 @@ services:
       - all
       - ianus
   ianus-backend:
-    image: ghcr.io/4teamwork/ianus-backend:2021.4.4
+    image: ghcr.io/4teamwork/ianus-backend:2024.2.0
     ports:
       - "8000:8000"
     depends_on:
       - ianus-db
     environment:
       - DJANGO_SECRET_KEY=secret
-      - DJANGO_ALLOWED_HOSTS=localhost,teamraum,gever
+      - DJANGO_ALLOWED_HOSTS=localhost,teamraum,gever,ianus-frontend
       - DJANGO_PATH_PREFIX=/portal
       - DJANGO_SESSION_COOKIE_SECURE=False
       - DJANGO_CSRF_COOKIE_SECURE=False
@@ -174,7 +174,7 @@ services:
       - all
       - ianus
   ianus-db:
-    image: postgres:12-alpine
+    image: postgres:13-alpine
     volumes:
       - ./var/ianus-db:/var/lib/postgresql/data
     environment:
@@ -223,9 +223,42 @@ services:
     profiles:
       - testserver
 
+  kub:
+    image: 4teamwork/kub:latest
+    ports:
+      - "3100:8000"
+    depends_on:
+      - kub-db
+    environment:
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_SECRET_KEY: secret
+      DJANGO_DATABASE_HOST: kub-db
+      DJANGO_DATABASE_NAME: kub
+      DJANGO_DATABASE_USER: kub
+      DJANGO_DATABASE_PASSWORD: secret
+      CAS_SERVER_URL: http://ianus-frontend/portal/cas
+      CAS_ROOT_PROXIED_AS: http://localhost:3100
+      ALLOWED_PORTAL_GROUPS: all
+    volumes:
+      - kub_media:/app/media
+    profiles:
+      - kub
+  kub-db:
+    image: postgres:13-alpine
+    volumes:
+      - kub_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: kub
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: kub
+    profiles:
+      - kub
+
 volumes:
   ogds:
   clam_db:
+  kub_db:
+  kub_media:
 
 secrets:
   gldt:
