@@ -10,6 +10,9 @@ from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.kub.client import KuBClient
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
+from opengever.propertysheets.assignment import get_document_assignment_slots
+from opengever.propertysheets.assignment import get_dossier_assignment_slots
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -169,6 +172,7 @@ class PerformDossierTransfer(Service):
 
     def create_dossiers(self):
         user_id = api.user.get_current().getId()
+        slots = get_dossier_assignment_slots()
 
         for dossier in self.metadata.get('content', {}).get('dossiers', []):
             path = dossier[u'relative_path']
@@ -176,6 +180,7 @@ class PerformDossierTransfer(Service):
             parent = self.objects_by_path.setdefault(parent_path, self.context)
 
             dossier['responsible'] = user_id
+            self.strip_unknown_custom_properties(dossier, slots)
 
             obj = self.create_content(parent, dossier)
             self.objects_by_path[path] = obj
@@ -186,10 +191,14 @@ class PerformDossierTransfer(Service):
                 self.add_participation(obj, participation)
 
     def create_documents(self):
+        slots = get_document_assignment_slots()
+
         for doc in self.metadata.get('content', {}).get('documents', []):
             path = doc[u'relative_path']
             parent_path = os.path.dirname(path)
             parent = self.objects_by_path.setdefault(parent_path, self.context)
+
+            self.strip_unknown_custom_properties(doc, slots)
 
             doc_file = open(self.documents[doc['UID']], 'rb')
             doc['file']['data'] = doc_file
@@ -248,3 +257,15 @@ class PerformDossierTransfer(Service):
     def cleanup(self):
         if os.path.exists(self.tempdir):
             shutil.rmtree(self.tempdir)
+
+    def strip_unknown_custom_properties(self, data, slots):
+        for slot, fields in data.get('custom_properties', {}).items():
+            if slot not in slots:
+                del data['custom_properties'][slot]
+
+            definition = PropertySheetSchemaStorage().query(slot)
+            fieldnames = definition.get_fieldnames()
+
+            for field in fields.keys():
+                if field not in fieldnames:
+                    del data['custom_properties'][slot][field]
