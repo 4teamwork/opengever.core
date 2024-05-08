@@ -87,12 +87,9 @@ class UserReport(BaseReporterView):
     """
     filename = "user_report.xlsx"
 
-    def check_permissions(self):
+    def __call__(self):
         if not is_administrator():
             raise Unauthorized
-
-    def __call__(self):
-        self.check_permissions()
         user_ids = self.request.form.get("user_ids")
         if not user_ids:
             msg = _(
