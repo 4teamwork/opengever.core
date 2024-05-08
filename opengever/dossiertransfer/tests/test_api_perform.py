@@ -67,6 +67,16 @@ METADATA_RESP = {
         u'dossiers': [{
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20",
             "@type": "opengever.dossier.businesscasedossier",
+            "custom_properties": {
+                "IDossier.default": {
+                    "fallart": {
+                        "title": "Zufall",
+                        "token": "Zufall",
+                    },
+                    "fallnummer": 38493,
+                    "location": "Bern",
+                },
+            },
             'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20',
             'title': u'A resolvable main dossier',
             'responsible': u'kathi.barfuss',
@@ -242,6 +252,11 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
             {
                 u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-21',
                 u'@type': u'opengever.dossier.businesscasedossier',
+                u'custom_properties': {
+                    u'IDossier.default': {
+                        u'location': 'Bern',
+                    },
+                },
                 u'responsible': {
                     u'title': u'K\xf6nig J\xfcrgen (jurgen.konig)',
                     u'token': u'jurgen.konig',
