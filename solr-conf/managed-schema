@@ -182,6 +182,7 @@
     <field name="trashed" type="boolean" indexed="true" stored="false" />
     <field name="watchers" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="participations" type="string" indexed="true" stored="true" multiValued="true"/>
+    <field name="progress" type="pfloat" indexed="true" stored="false" multiValued="false"/>
 
     <!-- PHVS specific fields -->
     <field name="language" type="string" indexed="true" stored="true" />
@@ -263,7 +264,8 @@
       Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
     -->
     <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
-    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true" sortMissingLast="true" />
+
     <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
     <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
 

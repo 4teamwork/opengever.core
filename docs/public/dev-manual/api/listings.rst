@@ -111,6 +111,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``participants``: Beteiligte
 - ``participation_roles``: Beteiligungsrollen
 - ``participations``: Beteiligungen
+- ``progress``: Fortschritt für Dossiers, welche das Checklist-Feature verwenden
 - ``pdf_url``: URL für Vorschau-PDF
 - ``phone_office``: Telefonnummer
 - ``preview_url``: URL für Vorschau
@@ -218,6 +219,8 @@ siehe Tabelle:
     |``pdf_url``               |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
     |``preview_url``           |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |     nein    |      nein      |   nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
+    |``progress``              |    nein  |   ja    |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
     |``public_trial``          |    ja    |   ja    |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |        ja        |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+

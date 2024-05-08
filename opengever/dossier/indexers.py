@@ -8,6 +8,7 @@ from opengever.base.utils import ensure_str
 from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
 from opengever.dossier import _
+from opengever.dossier import is_dossier_checklist_feature_enabled
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.dossier import IDossierMarker
@@ -113,6 +114,22 @@ def has_sametype_children(obj):
 @indexer(IDossierMarker)
 def dossier_type(obj):
     return IDossier(obj).dossier_type
+
+
+@indexer(IDossierMarker)
+def progress(obj):
+    """Returns the current progress of the dossier.
+
+    We need to differ between a checklist without any closed items or
+    a dossier without a checklist at all. We do this by returning "None"
+    if there are no items and 0 if there are items but none of them are closed.
+
+    The frontend is able to render different ui-elements for dossiers with or
+    without checklists.
+    """
+    if not is_dossier_checklist_feature_enabled() or not obj.has_checklist_items():
+        return None
+    return obj.progress()
 
 
 TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',

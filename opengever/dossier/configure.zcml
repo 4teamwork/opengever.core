@@ -243,6 +243,11 @@
       name="dossier_type"
       />
 
+  <adapter
+      factory=".indexers.progress"
+      name="progress"
+      />
+
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"

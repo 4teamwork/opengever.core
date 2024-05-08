@@ -19,6 +19,8 @@ from opengever.document.behaviors.customproperties import IDocumentCustomPropert
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.dossier.behaviors.dossier import CHECKLIST_CLOSED_STATE
+from opengever.dossier.behaviors.dossier import CHECKLIST_OPEN_STATE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.kub.testing import KuBIntegrationTestCase
@@ -1528,6 +1530,55 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
               u'review_state': u'disposition-state-in-progress',
               u'title': u'Angebot 31.8.2016'}],
             browser.json['items'])
+
+    @browsing
+    def test_dossier_checklist_progress_ordering(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        self.activate_feature('dossier-checklist')
+        create(Builder('dossier')
+               .within(self.leaf_repofolder)
+               .titled(u'Testdossier A')
+               .having(
+                   checklist={
+                       u'items': [
+                           {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+                           {u'title': u'Step 1', u'state': CHECKLIST_OPEN_STATE},
+                       ]
+                   }
+               )
+        )
+        create(Builder('dossier')
+               .within(self.leaf_repofolder)
+               .titled(u'Testdossier B')
+               .having(
+                   checklist={
+                       u'items': [
+                           {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+                       ]
+                   }
+               )
+        )
+        create(Builder('dossier')
+               .within(self.leaf_repofolder)
+               .titled(u'Testdossier C'))
+
+        self.commit_solr()
+
+        query_string = '&'.join((
+            'name=dossiers',
+            'sort_on=progress',
+            'search=Testdossier',
+            'columns:list=title',
+            'columns:list=progress',
+        ))
+        view = '@listing?{}'.format(query_string)
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+
+        self.assertEqual(3, browser.json['items_total'])
+        self.assertItemsEqual(
+            [('Testdossier B', 1.0), ('Testdossier A', 0.5), ('Testdossier C', None)],
+            [(item['title'], item['progress']) for item in browser.json['items']])
 
 
 class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
