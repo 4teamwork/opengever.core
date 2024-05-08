@@ -283,7 +283,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         mocker.get(url, json=KUB_LIST_EMPTY_RESP)
 
         url = '{}people'.format(self.client.kub_api_url)
-        mocker.post(url, json={'typeId': 'person:9af7d7cc-b948-423f-979f-587158c6bc65'})
+        mocker.post(url, json={'typedId': 'person:9af7d7cc-b948-423f-979f-587158c6bc65'})
 
         self.mock_labels(mocker)
 
