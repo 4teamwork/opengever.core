@@ -243,7 +243,7 @@ class PerformDossierTransfer(Service):
             if created_data is None:
                 raise InternalError('Creating contact failed')
 
-            self.contact_id_mapping[contact_id] = created_data['typeId']
+            self.contact_id_mapping[contact_id] = created_data['typedId']
 
     def cleanup(self):
         if os.path.exists(self.tempdir):
