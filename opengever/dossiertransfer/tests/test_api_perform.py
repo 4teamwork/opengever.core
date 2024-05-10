@@ -54,6 +54,15 @@ METADATA_RESP = {
         u'documents': [{
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
             "@type": "opengever.document.document",
+            "custom_properties": {
+                'IDocumentMetadata.document_type.contract': {
+                    "contract_number": 10033,
+                },
+                'IDocumentMetadata.document_type.directive': {
+                    "unknown_number": 42,
+                    "textline": "Foo bar",
+                },
+            },
             "UID": "a663689540a34538b6f408d4b41baee8",
             u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
             u'title': u'Umbau B\xe4rengraben',
@@ -76,6 +85,9 @@ METADATA_RESP = {
                     "fallnummer": 38493,
                     "location": "Bern",
                 },
+                "IDossier.unknown_slot": {
+                    "key": "value",
+                },
             },
             'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20',
             'title': u'A resolvable main dossier',
@@ -89,6 +101,7 @@ METADATA_RESP = {
         }, {
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21",
             "@type": "opengever.dossier.businesscasedossier",
+            "custom_properties": None,
             'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21',
             'title': u'Resolvable Subdossier',
             'responsible': u'nicole.kohler',
