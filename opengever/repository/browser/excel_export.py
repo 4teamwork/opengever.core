@@ -3,6 +3,7 @@ from opengever.base.interfaces import IReferenceNumberFormatter
 from opengever.base.interfaces import IReferenceNumberSettings
 from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
+from opengever.base.solr.fields import to_relative_path
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolder
 from opengever.sharing.security import disabled_permission_check
@@ -141,8 +142,20 @@ def generate_report(request, context):
         u'label_groupnames_with_local_or_inherited_taskresponsible_role',
         default=u'Task responsible',
     ))
+
+    label_repositoryfolder_uid = repository_translater(_(
+        u'label_repositoryfolder_uid',
+        default=u'UID',
+    ))
+    label_repositoryfolder_path = repository_translater(_(
+        u'label_repositoryfolder_path',
+        default=u'Path',
+    ))
+
     column_map = (
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
+        {'id': 'get_folder_uid', 'title': label_repositoryfolder_uid, 'callable': True},
+        {'id': 'get_folder_path', 'title': label_repositoryfolder_path, 'callable': True},
         {'id': 'title_de', 'title': label_repositoryfolder_title_de},
         {'id': 'title_fr', 'title': label_repositoryfolder_title_fr},
         {'id': 'title_en', 'title': label_repositoryfolder_title_en},
@@ -227,6 +240,17 @@ class RepositoryFolderWrapper(object):
             if role['roles'].get(rolename):
                 groups.append(role.get('id'))
         return groups
+
+    def get_folder_path(self):
+        """"Returns the relative path of the repository folder
+        Example:
+            If the physical path components are ('', 'fd', 'ordnungssystem')
+            this method returns 'ordnungssystem'.
+        """
+        return to_relative_path('/'.join(self._repofolder.getPhysicalPath()))
+
+    def get_folder_uid(self):
+        return self._repofolder.UID()
 
     def get_groupnames_with_local_reader_role(self):
         return self.get_groupnames_with_local_role('Reader')
