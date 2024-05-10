@@ -259,13 +259,21 @@ class PerformDossierTransfer(Service):
             shutil.rmtree(self.tempdir)
 
     def strip_unknown_custom_properties(self, data, slots):
-        for slot, fields in data.get('custom_properties', {}).items():
+        custom_properties = data.get('custom_properties', None)
+        if not custom_properties:
+            return
+
+        for slot, fields in custom_properties.items():
             if slot not in slots:
                 del data['custom_properties'][slot]
+                continue
 
             definition = PropertySheetSchemaStorage().query(slot)
-            fieldnames = definition.get_fieldnames()
+            if definition is None:
+                del data['custom_properties'][slot]
+                continue
 
+            fieldnames = definition.get_fieldnames()
             for field in fields.keys():
                 if field not in fieldnames:
                     del data['custom_properties'][slot][field]
