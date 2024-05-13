@@ -107,6 +107,7 @@ class UserReport(BaseReporterView):
                     self.context.absolute_url())
 
         users = [ogds_service().fetch_user(user_id) for user_id in user_ids]
+        users = [user for user in users if user]
 
         reporter = XLSReporter(
             self.context.REQUEST,
