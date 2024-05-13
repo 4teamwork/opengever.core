@@ -31,7 +31,6 @@ BLACKLISTED_USER_COLUMNS = {
     'absent_from',
     'absent_to',
     'last_login',
-    'object_sid',
 }
 BLACKLISTED_GROUP_COLUMNS = {'is_local'}
 
@@ -57,23 +56,6 @@ class TestOGDSUpdater(FunctionalTestCase):
         updater.import_users()
         self.assertIsNotNone(ogds_service().fetch_user('sk1m1'))
         self.assertIsNotNone(ogds_service().fetch_user('john'))
-
-    def test_imports_object_sid(self):
-        SAMPLE_SID = ('\x01\x05\x00\x00\x00\x00\x00\x05\x15\x00\x00\x00'
-                      '\\\xc6\xb6}\xa8\x02\xb59\x0f/\xf59\x125\x00\x00')
-        FAKE_LDAP_USERFOLDER.users = [
-            create(Builder('ldapuser')
-                   .named('user.with.sid')
-                   .having(objectSid=SAMPLE_SID))
-        ]
-
-        updater = IOGDSUpdater(self.portal)
-
-        updater.import_users()
-        user = ogds_service().fetch_user('user.with.sid')
-        self.assertEqual(
-            u'S-1-5-21-2109130332-968164008-972369679-13586',
-            user.object_sid)
 
     def test_skips_duplicates_users_with_capitalization(self):
         create(Builder('ogds_user')

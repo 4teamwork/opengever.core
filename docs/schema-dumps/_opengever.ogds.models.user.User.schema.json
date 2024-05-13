@@ -212,13 +212,6 @@
             "format": "date",
             "description": "",
             "_zope_schema_type": "Date"
-        },
-        "object_sid": {
-            "type": "string",
-            "title": "object_sid",
-            "maxLength": 255,
-            "description": "",
-            "_zope_schema_type": "Text"
         }
     },
     "required": [
@@ -256,7 +249,6 @@
         "last_login",
         "absent",
         "absent_from",
-        "absent_to",
-        "object_sid"
+        "absent_to"
     ]
 }
