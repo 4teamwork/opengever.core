@@ -118,7 +118,6 @@ class GeverSettingsAdpaterV1(object):
         settings['recently_touched_limit'] = api.portal.get_registry_record('limit', interface=IRecentlyTouchedSettings)  # noqa
         settings['document_preserved_as_paper_default'] = api.portal.get_registry_record('preserved_as_paper_default', interface=IDocumentSettings)  # noqa
         settings['nightly_jobs'] = self.get_nightly_jobs_settings()
-        settings['oneoffixx_settings'] = self.get_oneoffixx_settings()
         settings['user_settings'] = self.get_user_settings()
         settings['sharing_configuration'] = self.get_sharing_configuration()
         settings['p7m_extension_replacement'] = api.portal.get_registry_record('p7m_extension_replacement', interface=IMailDownloadSettings)  # noqa
@@ -135,14 +134,6 @@ class GeverSettingsAdpaterV1(object):
         sharing_configuration['white_list_prefix'] = api.portal.get_registry_record('white_list_prefix', interface=ISharingConfiguration)  # noqa
         sharing_configuration['black_list_prefix'] = api.portal.get_registry_record('black_list_prefix', interface=ISharingConfiguration)  # noqa
         return sharing_configuration
-
-    def get_oneoffixx_settings(self):
-        oneoffixx_settings = OrderedDict()
-        oneoffixx_settings['fake_sid'] = api.portal.get_registry_record('fake_sid', interface=IOneoffixxSettings)
-        oneoffixx_settings['double_encode_bug'] = api.portal.get_registry_record('double_encode_bug', interface=IOneoffixxSettings)  # noqa
-        oneoffixx_settings['cache_timeout'] = api.portal.get_registry_record('cache_timeout', interface=IOneoffixxSettings)
-        oneoffixx_settings['scope'] = api.portal.get_registry_record('scope', interface=IOneoffixxSettings)
-        return oneoffixx_settings
 
     def get_features(self):
         features = OrderedDict()

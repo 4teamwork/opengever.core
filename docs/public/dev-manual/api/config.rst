@@ -112,12 +112,6 @@ GEVER-Mandanten abgefragt werden.
               "end_time": "5:00:00",
               "start_time": "1:00:00"
           },
-          "oneoffixx_settings": {
-              "cache_timeout": 2592000,
-              "double_encode_bug": true,
-              "fake_sid": "",
-              "scope": "oo_V1WebApi"
-          },
           "org_unit": "afi",
           "p7m_extension_replacement": "eml",
           "portal_url": "https://dev.onegovgever.ch/portal",

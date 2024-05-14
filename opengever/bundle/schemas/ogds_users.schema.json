@@ -300,16 +300,6 @@
                     "description": "",
                     "_zope_schema_type": "Date"
                 },
-                "object_sid": {
-                    "type": [
-                        "null",
-                        "string"
-                    ],
-                    "title": "object_sid",
-                    "maxLength": 255,
-                    "description": "",
-                    "_zope_schema_type": "Text"
-                },
                 "guid": {
                     "type": "string"
                 },
@@ -356,8 +346,7 @@
                 "last_login",
                 "absent",
                 "absent_from",
-                "absent_to",
-                "object_sid"
+                "absent_to"
             ]
         }
     }

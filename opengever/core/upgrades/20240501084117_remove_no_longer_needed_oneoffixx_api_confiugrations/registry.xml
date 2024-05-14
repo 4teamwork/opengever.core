@@ -1,0 +1,13 @@
+<registry>
+
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.protocol" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.hostname" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.path_prefix" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.auth_path" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.webservice_path" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.fake_sid" remove="True" />  
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.double_encode_bug" remove="True" />
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.cache_timeout" remove="True" />  
+  <record name="opengever.oneoffixx.interfaces.IOneoffixxSettings.scope" remove="True" />
+
+</registry>

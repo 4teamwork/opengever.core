@@ -109,7 +109,6 @@ class TestOGDSUserGet(IntegrationTestCase):
              u'phone_fax': u'012 34 56 77',
              u'phone_mobile': u'012 34 56 76',
              u'phone_office': u'012 34 56 78',
-             u'object_sid': None,
              u'organization': None,
              u'salutation': u'Frau',
              u'teams': [{u'@id': u'http://nohost/plone/@teams/4',

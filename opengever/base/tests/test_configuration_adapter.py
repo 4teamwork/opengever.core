@@ -49,12 +49,6 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('start_time', u'1:00:00'),
                 ('end_time', u'5:00:00'),
                 ])),
-            ('oneoffixx_settings', OrderedDict([
-                ('fake_sid', u''),
-                ('double_encode_bug', True),
-                ('cache_timeout', 2592000),
-                ('scope', u'oo_V1WebApi'),
-            ])),
             ('user_settings', OrderedDict([
                 ('notify_inbox_actions', True),
                 ('notify_own_actions', False),

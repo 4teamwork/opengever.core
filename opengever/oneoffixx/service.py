@@ -1,14 +1,7 @@
 from opengever.api.add import GeverFolderPost
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
-from opengever.oneoffixx.api_client import OneoffixxAPIClient
-from opengever.oneoffixx.templates import get_oneoffixx_favorites
-from opengever.oneoffixx.templates import get_oneoffixx_template_groups
-from opengever.oneoffixx.templates import get_whitelisted_oneoffixx_templates
-from plone.restapi.services import Service
-from zExceptions import BadRequest
 from zExceptions import NotFound
-from zope.annotation.interfaces import IAnnotations
 
 
 class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
@@ -28,31 +21,6 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
         self.data = self.request_data.get('document', {})
         self.title_ = self.data.get('title', None)
 
-        template_id = self.request_data.get('template_id')
-
-        if not template_id:
-            raise BadRequest("Property 'template_id' is required.")
-
-        self.template = self.lookup_template(template_id)
-
-        if not self.template:
-            raise BadRequest('The requested template_id does not exist.')
-
-    def lookup_template(self, template_id):
-        api_client = OneoffixxAPIClient()
-        templates_by_id = {
-            template.template_id: template for template
-            in get_whitelisted_oneoffixx_templates(api_client)
-        }
-        return templates_by_id.get(template_id, None)
-
-    def before_deserialization(self, obj):
-        annotations = IAnnotations(obj)
-        annotations["template-id"] = self.template.template_id
-        annotations["languages"] = self.template.languages
-        annotations["filename"] = self.template.filename
-        annotations["content-type"] = self.template.content_type
-
     def add_object_to_context(self):
         super(CreateDocumentFromOneOffixxTemplate, self).add_object_to_context()
 
@@ -67,27 +35,4 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
             '@id': self.obj.absolute_url(),
             'url': create_oc_url(
                 self.request, self.obj, dict(action='oneoffixx'),),
-        }
-
-
-class OneOffixxTemplatesGet(Service):
-    """API Endpoint that returns the data for oneoffix templates.
-
-    GET /@oneoffix-templates HTTP/1.1
-    """
-
-    def reply(self):
-        if not is_oneoffixx_feature_enabled():
-            raise NotFound
-
-        api_client = OneoffixxAPIClient()
-
-        templates = get_whitelisted_oneoffixx_templates(api_client)
-        favorites = get_oneoffixx_favorites(api_client)
-        groups = get_oneoffixx_template_groups(api_client)
-
-        return {
-            "templates": [template.json() for template in templates],
-            "favorites": [template.json() for template in favorites],
-            "groups": [template.json() for template in groups],
         }

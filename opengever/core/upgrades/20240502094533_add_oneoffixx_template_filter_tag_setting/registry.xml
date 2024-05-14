@@ -1,0 +1,5 @@
+<registry>
+
+  <records interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" />
+
+</registry>
