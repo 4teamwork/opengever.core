@@ -20,8 +20,6 @@ from Products.CMFPlone.utils import safe_unicode
 
 class BaseTaskActivity(BaseActivity):
 
-    CONTAINER_TITLE_MAX_LENGHT = 30
-
     @property
     def dossier_title(self):
         """If the task is in a subdossier, return its title, otherwise
@@ -43,14 +41,9 @@ class BaseTaskActivity(BaseActivity):
             # where tasks are created directly on the site root.
             return task_title
 
-        if len(self.dossier_title) > self.CONTAINER_TITLE_MAX_LENGHT:
-            cropped_dossier_title = self.dossier_title[:self.CONTAINER_TITLE_MAX_LENGHT - 3] + u"..."
-        else:
-            cropped_dossier_title = self.dossier_title
-
         return {
             code: u"{dossier_title} - {task_title}".format(
-                dossier_title=cropped_dossier_title, task_title=task_title[code]
+                dossier_title=self.dossier_title, task_title=task_title[code]
             )
             for code in self._get_supported_languages()
         }

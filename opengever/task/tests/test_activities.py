@@ -571,7 +571,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
         self.assertEquals(
-          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/%s">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
@@ -595,7 +595,7 @@ class TestTaskReassignActivity(IntegrationTestCase):
 
         self.assertEquals(u'task-transition-reassign', reassign_activity.kind)
         self.assertEquals(
-          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen',
           reassign_activity.title)
         self.assertEquals(u'Reassigned from <a href="http://nohost/plone/@@user-details/%s">'
                           u'B\xe4rfuss K\xe4thi (kathi.barfuss)</a> '
@@ -693,7 +693,7 @@ class TestTaskChangeIssuerActivity(IntegrationTestCase):
         TaskChangeIssuerActivity(self.task, self.task.REQUEST, response).record()
         activity = Activity.query.one()
         self.assertEqual('task-transition-change-issuer', activity.kind)
-        self.assertEqual(u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+        self.assertEqual(u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen',
                          activity.title)
         self.assertEqual(self.regular_user.id, activity.actor_id)
         self.assertEqual(u'Issuer changed from <a href="http://nohost/plone/@@user-details'
@@ -808,8 +808,8 @@ class TestTaskReminderActivity(IntegrationTestCase):
         self.assertEquals('task-reminder', activity.kind)
         self.assertEquals('Task reminder', activity.label)
         self.assertEquals(
-          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
-          activity.title)
+            u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen',
+            activity.title)
         self.assertEqual(SYSTEM_ACTOR_ID, activity.actor_id)
         self.assertEquals(u'Deadline is on Nov 01, 2016', activity.summary)
 
@@ -829,7 +829,7 @@ class TestWatcherAddedActivity(IntegrationTestCase):
         self.assertEqual('task-watcher-added', activity.kind)
         self.assertEqual('Added as watcher of task', activity.label)
         self.assertEqual(
-          u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen',
+          u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen',
           activity.title)
         self.assertEqual(self.regular_user.id, activity.actor_id)
         self.assertEqual(u'Added as watcher of task by <a href="http://nohost/plone/'
