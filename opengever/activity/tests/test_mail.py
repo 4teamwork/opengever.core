@@ -188,7 +188,7 @@ class TestEmailNotification(IntegrationTestCase):
 
         raw_mail = Mailing(self.portal).pop()
         link = ('<p><a href=3D"http://nohost/plone/@@resolve_notification?notificati=\non_id=3D1">'
-                'Vertr=C3=A4ge mit der kantonalen... - Test Task</a></p>')
+                'Vertr=C3=A4ge mit der kantonalen Finanzverwaltung - Test Task</a=\n></p>')
         self.assertIn(link, raw_mail.strip())
 
     @browsing

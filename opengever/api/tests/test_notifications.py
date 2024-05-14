@@ -55,7 +55,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'oguid': str(Oguid.for_object(self.task)),
               u'read': False,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
+              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen'},
              {u'@id': u'http://nohost/plone/@notifications/%s/2' % self.regular_user.id,
               u'actor_id': self.administrator.id,
               u'actor_label': u'Kohler Nicole',
@@ -66,7 +66,7 @@ class TestNotificationsGet(IntegrationTestCase):
               u'oguid': str(Oguid.for_object(self.task)),
               u'read': True,
               u'summary': u'New task opened by Ziegler Robert',
-              u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'}],
+              u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen'}],
             browser.json.get('items'))
 
     @browsing
@@ -155,7 +155,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'oguid': str(Oguid.for_object(self.task)),
              u'read': False,
              u'summary': u'New task opened by Ziegler Robert',
-             u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
+             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 
     @browsing
@@ -186,7 +186,7 @@ class TestNotificationsGet(IntegrationTestCase):
              u'oguid': str(Oguid.for_object(self.task)),
              u'read': False,
              u'summary': u'Nouvelle t\xe2che ouverte par Ziegler Robert',
-             u'title': u'Vertr\xe4ge mit der kantonalen... - Vertragsentwurf \xdcberpr\xfcfen'},
+             u'title': u'Vertr\xe4ge mit der kantonalen Finanzverwaltung - Vertragsentwurf \xdcberpr\xfcfen'},
             browser.json)
 
     @browsing
