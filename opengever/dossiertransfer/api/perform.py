@@ -1,5 +1,6 @@
 from Acquisition import aq_base
 from Acquisition.interfaces import IAcquirer
+from copy import deepcopy
 from opengever.api.validation import get_validation_errors
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -271,6 +272,21 @@ class PersonContactSyncer(object):
     def __init__(self, kub_client):
         self.kub_client = kub_client
 
+    def get_create_payload(self):
+        payload = deepcopy(self.contact_data)
+
+        # The username is not required but unique. We can't guarantee
+        # a unique username between two kub installations. We have to
+        # remove it before creating a new person
+        if 'username' in payload:
+            del payload['username']
+
+        # We do not provide membership creation.
+        if 'memberships' in payload:
+            del payload['memberships']
+
+        return payload
+
     def find_by_third_party_id(self):
         response = self.kub_client.list_people(filters={'third_party_id': self.third_party_id})
         if response['count'] == 1:
@@ -278,7 +294,7 @@ class PersonContactSyncer(object):
         return None
 
     def create(self):
-        created_data = self.kub_client.create_person(self.contact_data)
+        created_data = self.kub_client.create_person(self.get_create_payload())
         if created_data is None:
             raise InternalError('Creating person failed')
         return created_data
