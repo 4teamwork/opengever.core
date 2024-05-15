@@ -26,9 +26,36 @@ class TestSystemInformation(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@system-information', headers=self.api_headers)
 
         self.assertEqual([
-            {u'active': True, u'token': u'final-drawing', u'primary': False, u'title': u'Final signature'},
-            {u'active': True, u'token': u'regard', u'primary': True, u'title': u'For your information'},
-            {u'active': True, u'token': u'participation', u'primary': False, u'title': u'Participation'}
+            {
+                u'active': True,
+                u'token': u'final-drawing',
+                u'primary': False,
+                u'docproperty_key': {
+                    u'organization': u'ogg.final-drawing.organization.*',
+                    u'person': u'ogg.final-drawing.person.*'
+                },
+                u'title': u'Final signature'
+            },
+            {
+                u'active': True,
+                u'token': u'regard',
+                u'primary': True,
+                u'docproperty_key': {
+                    u'organization': u'ogg.regard.organization.*',
+                    u'person': u'ogg.regard.person.*'
+                },
+                u'title': u'For your information'
+            },
+            {
+                u'active': True,
+                u'token': u'participation',
+                u'primary': False,
+                u'docproperty_key': {
+                    u'organization': u'ogg.participation.organization.*',
+                    u'person': u'ogg.participation.person.*'
+                },
+                u'title': u'Participation'
+            }
         ], browser.json.get('dossier_participation_roles'))
 
     @browsing
@@ -38,26 +65,23 @@ class TestSystemInformation(IntegrationTestCase):
 
         self.assertEqual(
             [u'dossier_default', u'schema1', u'schema2'],
-            sorted(browser.json.get('property_sheets').keys()))
+            sorted(browser.json.get('property_sheets').keys())
+        )
 
-        self.assertEqual(
-            {
-                u'assignments': [
-                    {
-                        u'id': u'IDocumentMetadata.document_type.directive',
-                        u'title': u'Document (Type: Directive)'
-                    }
-                ],
-                u'fields': [
-                    {
-                        u'available_as_docproperty': False,
-                        u'description': u'',
-                        u'field_type': u'textline',
-                        u'name': u'textline',
-                        u'required': False,
-                        u'title': u'A line of text'
-                    }
-                ],
-                u'id': u'schema2'
-            },
-            browser.json.get('property_sheets').get('schema2'))
+        self.assertEqual({
+
+            u'assignments': [{
+                u'id': u'IDocumentMetadata.document_type.directive',
+                u'title': u'Document (Type: Directive)'
+            }],
+            u'id': u'schema2',
+            u'docproperty_key': u'ogg.dossier.cp.schema2',
+            u'fields': [{
+                u'field_type': u'textline',
+                u'description': u'',
+                u'title': u'A line of text',
+                u'required': False,
+                u'available_as_docproperty': False,
+                u'name': u'textline'
+            }]
+        }, browser.json.get('property_sheets').get('schema2'))

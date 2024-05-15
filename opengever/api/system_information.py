@@ -24,6 +24,11 @@ class SystemInformationGet(Service):
             in primary_participation_roles(self.context)}
         for role in available_participation_roles:
             role['primary'] = role.get('token') in primary_participation_role_ids
+            role_id = role.get("token")
+            role['docproperty_key'] = {
+                "person": u"ogg.{}.person.*".format(role_id),
+                "organization": u"ogg.{}.organization.*".format(role_id)
+            }
         infos['dossier_participation_roles'] = available_participation_roles
 
     def add_property_sheet_information(self, infos):
@@ -49,5 +54,7 @@ class SystemInformationGet(Service):
                         assignment_id, assignment_id)
                 } for assignment_id in serialized_sheet.get('assignments')
             ]
+            field_id = serialized_sheet.get("id")
+            serialized_sheet["docproperty_key"] = u"ogg.dossier.cp.{field_id}".format(field_id=field_id)
             propertysheets[sheet.name] = serialized_sheet
         infos['property_sheets'] = propertysheets
