@@ -440,6 +440,11 @@ class TestPersonContactSyncer(KuBIntegrationTestCase):
             self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
         mocker.get(url, json=KUB_LIST_EMPTY_RESP)
 
+        url = '{}people?{}'.format(
+            self.client.kub_api_url,
+            'first_name=Jean&date_of_birth_max=1980-01-01&date_of_birth_min=1980-01-01&official_name=Dupont')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
         url = '{}people'.format(self.client.kub_api_url)
         mocker.post(url, json={'id': '9af7d7cc-b948-423f-979f-587158c6bc65'})
 
@@ -450,6 +455,9 @@ class TestPersonContactSyncer(KuBIntegrationTestCase):
                 {
                     'type': 'person',
                     'text': 'Dupont Jean',
+                    'firstName': 'Jean',
+                    'officialName': 'Dupont',
+                    'dateOfBirth': '1980-01-01',
                     'title': '',
                 }
             )
@@ -473,6 +481,35 @@ class TestPersonContactSyncer(KuBIntegrationTestCase):
                     'text': 'Dupont Jean',
                     'title': '',
                     'thirdPartyId': 'foo:bar',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_a_guessed_kub_person(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}people?{}'.format(
+            self.client.kub_api_url,
+            'first_name=Jean&date_of_birth_max=1980-01-01&date_of_birth_min=1980-01-01&official_name=Dupont')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'firstName': 'Jean',
+                    'officialName': 'Dupont',
+                    'dateOfBirth': '1980-01-01',
+                    'title': '',
                 }
             )
         )

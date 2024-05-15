@@ -293,6 +293,30 @@ class PersonContactSyncer(object):
             return response["results"][0]
         return None
 
+    def find_by_guessing(self):
+        first_name = self.contact_data.get('firstName')
+        official_name = self.contact_data.get('officialName')
+        date_of_birth = self.contact_data.get('dateOfBirth')
+
+        if not all((first_name, official_name, date_of_birth)):
+            # Only guess if we have enough information
+            return None
+
+        response = self.kub_client.list_people(
+            filters={
+                'first_name': first_name,
+                'official_name': official_name,
+                'date_of_birth_max': date_of_birth,
+                'date_of_birth_min': date_of_birth,
+            }
+        )
+        if response['count'] == 1:
+            return response["results"][0]
+        return None
+
+    def find_existing(self):
+        return self.find_by_third_party_id() or self.find_by_guessing()
+
     def create(self):
         created_data = self.kub_client.create_person(self.get_create_payload())
         if created_data is None:
@@ -300,7 +324,7 @@ class PersonContactSyncer(object):
         return created_data
 
     def get_or_create_kub_obj(self):
-        kub_obj = self.find_by_third_party_id()
+        kub_obj = self.find_existing()
         if not kub_obj:
             kub_obj = self.create()
         return kub_obj
