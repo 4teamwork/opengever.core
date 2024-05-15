@@ -1,6 +1,8 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.exceptions import FormFieldNotFound
 from ftw.testbrowser.pages.statusmessages import error_messages
+from opengever.dossier.behaviors.dossier import CHECKLIST_CLOSED_STATE
+from opengever.dossier.behaviors.dossier import CHECKLIST_OPEN_STATE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplate
 from opengever.testing import IntegrationTestCase
@@ -156,3 +158,67 @@ class TestPatchDossierTemplateChecklistTTW(TestPatchDossierChecklistTTW):
         self.checklist_interface = IDossierTemplate
         with self.login(self.dossier_responsible):
             self.obj = self.dossiertemplate
+
+
+class TestChecklistProgress(IntegrationTestCase):
+    @browsing
+    def test_progress(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        self.assertEqual(0, self.dossier.progress())
+
+        checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_OPEN_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_OPEN_STATE},
+                {u'title': u'Step 3', u'state': CHECKLIST_OPEN_STATE},
+            ]
+        }
+
+        browser.open(self.dossier,
+                     data=json.dumps({'checklist': checklist}),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(0, self.dossier.progress())
+
+        checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_OPEN_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_CLOSED_STATE},
+                {u'title': u'Step 3', u'state': CHECKLIST_OPEN_STATE},
+            ]
+        }
+
+        browser.open(self.dossier,
+                     data=json.dumps({'checklist': checklist}),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(0.33, self.dossier.progress())
+
+        checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_OPEN_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_CLOSED_STATE},
+                {u'title': u'Step 3', u'state': CHECKLIST_CLOSED_STATE},
+            ]
+        }
+
+        browser.open(self.dossier,
+                     data=json.dumps({'checklist': checklist}),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(0.67, self.dossier.progress())
+
+        checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_CLOSED_STATE},
+                {u'title': u'Step 3', u'state': CHECKLIST_CLOSED_STATE},
+            ]
+        }
+
+        browser.open(self.dossier,
+                     data=json.dumps({'checklist': checklist}),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertEqual(1, self.dossier.progress())

@@ -7,6 +7,8 @@ from opengever.base.response import COMMENT_RESPONSE_TYPE
 from opengever.base.response import IResponseContainer
 from opengever.base.response import Response
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.dossier.behaviors.dossier import CHECKLIST_CLOSED_STATE
+from opengever.dossier.behaviors.dossier import CHECKLIST_OPEN_STATE
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.filing import IFilingNumber
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -483,3 +485,80 @@ class TestParticipationIndexHelper(IntegrationTestCase):
     def test_participant_id_to_label_handles_invalid_ids(self):
         helper = ParticipationIndexHelper()
         self.assertEqual("Unknown ID", helper.participant_id_to_label("invalid-id"))
+
+
+class TestProgressIndexer(SolrIntegrationTestCase):
+
+    features = ('dossier-checklist', )
+
+    def test_properly_indexes_the_proress(self):
+        self.login(self.manager)
+        IDossier(self.dossier).checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_OPEN_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_OPEN_STATE},
+            ]
+        }
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertEqual(0, solr_data_for(self.dossier, 'progress'))
+
+        IDossier(self.dossier).checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+                {u'title': u'Step 2', u'state': CHECKLIST_CLOSED_STATE},
+            ]
+        }
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertEqual(1.0, solr_data_for(self.dossier, 'progress'))
+
+    def test_returns_none_if_feature_is_disabled(self):
+        self.login(self.manager)
+
+        checklist = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+            ]
+        }
+
+        IDossier(self.dossier).checklist = checklist
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertEqual(1.0, solr_data_for(self.dossier, 'progress'))
+
+        self.deactivate_feature('dossier-checklist')
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.dossier, 'progress'))
+
+
+    def test_returns_none_if_there_are_no_checklist_items(self):
+        self.login(self.manager)
+
+        checklist_without_items = {
+            u'items': []
+        }
+
+        checklist_with_items = {
+            u'items': [
+                {u'title': u'Step 1', u'state': CHECKLIST_CLOSED_STATE},
+            ]
+        }
+
+        IDossier(self.dossier).checklist = checklist_with_items
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertEqual(1.0, solr_data_for(self.dossier, 'progress'))
+
+        IDossier(self.dossier).checklist = checklist_without_items
+        self.deactivate_feature('dossier-checklist')
+        self.dossier.reindexObject(["progress"])
+        self.commit_solr()
+
+        self.assertIsNone(solr_data_for(self.dossier, 'progress'))

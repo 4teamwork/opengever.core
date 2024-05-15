@@ -27,6 +27,11 @@ import logging
 
 LOG = logging.getLogger('opengever.dossier')
 
+CHECKLIST_OPEN_STATE = 'open'
+CHECKLIST_CLOSED_STATE = 'closed'
+
+CHECKLIST_CLOSED_STATES = {CHECKLIST_CLOSED_STATE}
+
 CHECKLIST_SCHEMA = json.dumps(
     {
         'type': 'object',
@@ -40,7 +45,7 @@ CHECKLIST_SCHEMA = json.dumps(
                             'type': 'string'
                         },
                         'state': {
-                            'enum': ['open', 'closed']
+                            'enum': [CHECKLIST_OPEN_STATE, CHECKLIST_CLOSED_STATE]
                         }
                     },
                     'additionalProperties': False,
@@ -245,3 +250,30 @@ alsoProvides(IDossier, IFormFieldProvider)
 
 class StartBeforeEnd(Invalid):
     __doc__ = _(u"The start or end date is invalid")
+
+
+class ChecklistManager(object):
+    """Can manage a checklist. It asumes the format as defined in CHECKLIST_SCHEMA.
+    """
+    def __init__(self, checklist):
+        self.checklist = checklist or {}
+
+    def all_items(self):
+        return self.checklist.get('items', [])
+
+    def closed_items(self):
+        return [item for item in self.all_items() if item.get('state') in CHECKLIST_CLOSED_STATES]
+
+    def total_items(self):
+        return len(self.all_items())
+
+    def total_closed_items(self):
+        return len(self.closed_items())
+
+    def has_items(self):
+        return self.total_items() > 0
+
+    def progress(self):
+        total_items = self.total_items()
+        total_closed_items = self.total_closed_items()
+        return round(total_closed_items / float(total_items), 2) if total_items else 0
