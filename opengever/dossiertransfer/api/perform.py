@@ -236,12 +236,20 @@ class PerformDossierTransfer(Service):
 
     def create_contacts(self):
         kub = KuBClient()
+        syncers = {
+            'person': PersonContactSyncer(kub),
+            'organization': OrganizationContactSyncer(kub),
+        }
 
         for contact_id, contact_data in (
             self.metadata.get("content", {}).get("contacts", {}).items()
         ):
-            self.contact_id_mapping[contact_id] = PersonContactSyncer(kub).sync(contact_id,
-                                                                                contact_data)
+            syncer = syncers.get(contact_data.get('type'))
+            if not syncer:
+                logger.exception('Unknown kub contact type. Skipping')
+                continue
+
+            self.contact_id_mapping[contact_id] = syncer.sync(contact_id, contact_data)
 
     def cleanup(self):
         if os.path.exists(self.tempdir):
@@ -337,3 +345,56 @@ class PersonContactSyncer(object):
         self.third_party_id = contact_data.get('thirdPartyId') or contact_id
         kub_obj = self.get_or_create_kub_obj()
         return 'person:{}'.format(kub_obj['id'])
+
+
+class OrganizationContactSyncer(object):
+    def __init__(self, kub_client):
+        self.kub_client = kub_client
+
+    def get_create_payload(self):
+        payload = deepcopy(self.contact_data)
+
+        # We do not provide membership creation.
+        if 'memberships' in payload:
+            del payload['memberships']
+
+        return payload
+
+    def find_by_third_pary_id(self):
+        response = self.kub_client.list_organizations(filters={'third_party_id': self.third_party_id})
+        if response['count'] == 1:
+            return response["results"][0]
+        return None
+
+    def find_by_guessing(self):
+        name = self.contact_data.get('name')
+
+        if not name:
+            # Only guess if we have enough information
+            return None
+
+        response = self.kub_client.list_organizations(filters={'name': name})
+        if response['count'] == 1:
+            return response["results"][0]
+        return None
+
+    def find_existing(self):
+        return self.find_by_third_pary_id() or self.find_by_guessing()
+
+    def create(self):
+        created_data = self.kub_client.create_organization(self.get_create_payload())
+        if created_data is None:
+            raise InternalError('Creating organization failed')
+        return created_data
+
+    def get_or_create_kub_obj(self):
+        kub_obj = self.find_existing()
+        if not kub_obj:
+            kub_obj = self.create()
+        return kub_obj
+
+    def sync(self, contact_id, contact_data):
+        self.contact_data = contact_data
+        self.third_party_id = contact_data.get('thirdPartyId') or contact_id
+        kub_obj = self.get_or_create_kub_obj()
+        return 'organization:{}'.format(kub_obj['id'])

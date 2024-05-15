@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossiertransfer.api.perform import OrganizationContactSyncer
 from opengever.dossiertransfer.api.perform import PersonContactSyncer
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
@@ -176,6 +177,24 @@ KUB_LIST_EMPTY_RESP = {
     "next": None,
     "previous": None,
     "results": []
+}
+
+KUB_LIST_ORGANIZATIONS_RESP = {
+    "count": 1,
+    "next": None,
+    "previous": None,
+    "results": [
+        {
+            "created": "2022-10-03T11:44:56.321140+02:00",
+            "id": "51142ca2-8876-4bae-a216-d70c162d34a2",
+            "isActive": True,
+            "memberCount": 13,
+            "modified": "2024-02-05T10:32:44.347381+01:00",
+            "name": "4teamwork AG",
+            "thirdPartyId": None,
+            "url": "https://kub-dev.onegovgever.ch/api/v2/organizations/51142ca2-8876-4bae-a216-d70c162d34a2"
+        },
+    ]
 }
 
 
@@ -511,5 +530,86 @@ class TestPersonContactSyncer(KuBIntegrationTestCase):
                     'dateOfBirth': '1980-01-01',
                     'title': '',
                 }
+            )
+        )
+
+
+class TestOrganizationContactSyncer(KuBIntegrationTestCase):
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_an_existing_kub_organization(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                },
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_a_new_kub_organization_if_there_is_no_matching_organization_in_kub(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations?name=4teamwork+AG'.format(self.client.kub_api_url)
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations'.format(self.client.kub_api_url)
+        mocker.post(url, json={'id': '51142ca2-8876-4bae-a216-d70c162d34a2'})
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_uses_contact_data_thrid_party_id_for_lookup_if_available(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'foo:bar')
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                    'thirdPartyId': 'foo:bar',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_a_guessed_kub_organization(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations?name=4teamwork+AG'.format(self.client.kub_api_url)
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                },
             )
         )

@@ -117,6 +117,20 @@ class KuBClient(object):
             logger.exception('Creating person failed')
             return None
 
+    def create_organization(self, data):
+        url = '{}organizations'.format(self.kub_api_url)
+        try:
+            resp = self.session.post(url, json=data)
+            resp.raise_for_status()
+        except requests.RequestException:
+            logger.exception('Creating organization failed')
+            return None
+        try:
+            return resp.json()
+        except requests.JSONDecodeError:
+            logger.exception('Creating organization failed')
+            return None
+
     def list_people(self, filters=None):
         url = '{}people'.format(self.kub_api_url)
         try:
@@ -129,4 +143,18 @@ class KuBClient(object):
             return resp.json()
         except requests.JSONDecodeError:
             logger.exception('Fetching list of people failed')
+            return None
+
+    def list_organizations(self, filters=None):
+        url = '{}organizations'.format(self.kub_api_url)
+        try:
+            resp = self.session.get(url, params=filters)
+            resp.raise_for_status()
+        except requests.RequestException:
+            logger.exception('Fetching list of organizations failed')
+            return None
+        try:
+            return resp.json()
+        except requests.JSONDecodeError:
+            logger.exception('Fetching list of organizations failed')
             return None
