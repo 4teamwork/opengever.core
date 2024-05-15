@@ -5,6 +5,7 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossiertransfer.api.perform import PersonContactSyncer
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.kub.testing import KuBIntegrationTestCase
@@ -348,7 +349,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         mocker.get(url, json=KUB_LIST_EMPTY_RESP)
 
         url = '{}people'.format(self.client.kub_api_url)
-        mocker.post(url, json={'typedId': 'person:9af7d7cc-b948-423f-979f-587158c6bc65'})
+        mocker.post(url, json={'id': '9af7d7cc-b948-423f-979f-587158c6bc65'})
 
         self.mock_labels(mocker)
 
@@ -405,3 +406,73 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
+
+
+class TestPersonContactSyncer(KuBIntegrationTestCase):
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_an_existing_kub_person(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'title': '',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_a_new_kub_person_if_there_is_no_matching_person_in_kub(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}people'.format(self.client.kub_api_url)
+        mocker.post(url, json={'id': '9af7d7cc-b948-423f-979f-587158c6bc65'})
+
+        self.assertEqual(
+            'person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'title': '',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_uses_contact_data_thrid_party_it_for_lookup_if_available(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'foo:bar')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'title': '',
+                    'thirdPartyId': 'foo:bar',
+                }
+            )
+        )

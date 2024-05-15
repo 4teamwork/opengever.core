@@ -239,25 +239,8 @@ class PerformDossierTransfer(Service):
         for contact_id, contact_data in (
             self.metadata.get("content", {}).get("contacts", {}).items()
         ):
-            third_party_id = contact_data.get('thirdPartyId') or contact_id
-            existing = kub.list_people(filters={'third_party_id': third_party_id})
-            if existing is None:
-                raise InternalError('Checking for existing contact failed')
-
-            if existing['count'] == 1:
-                self.contact_id_mapping[contact_id] = "person:{}".format(
-                    existing["results"][0]["id"]
-                )
-                continue
-
-            if not contact_data.get('thirdPartyId'):
-                contact_data['thirdPartyId'] = contact_id
-
-            created_data = kub.create_person(contact_data)
-            if created_data is None:
-                raise InternalError('Creating contact failed')
-
-            self.contact_id_mapping[contact_id] = created_data['typedId']
+            self.contact_id_mapping[contact_id] = PersonContactSyncer(kub).sync(contact_id,
+                                                                                contact_data)
 
     def cleanup(self):
         if os.path.exists(self.tempdir):
@@ -282,3 +265,35 @@ class PerformDossierTransfer(Service):
             for field in fields.keys():
                 if field not in fieldnames:
                     del data['custom_properties'][slot][field]
+
+
+class PersonContactSyncer(object):
+    def __init__(self, kub_client):
+        self.kub_client = kub_client
+
+    def find_by_third_party_id(self):
+        response = self.kub_client.list_people(filters={'third_party_id': self.third_party_id})
+        if response['count'] == 1:
+            return response["results"][0]
+        return None
+
+    def create(self):
+        created_data = self.kub_client.create_person(self.contact_data)
+        if created_data is None:
+            raise InternalError('Creating person failed')
+        return created_data
+
+    def get_or_create_kub_obj(self):
+        kub_obj = self.find_by_third_party_id()
+        if not kub_obj:
+            kub_obj = self.create()
+        return kub_obj
+
+    def sync(self, contact_id, contact_data):
+        """Tries to find a contact in the local KUB installation and returns
+        its type-id. If no contact could be found, it will create a new one.
+        """
+        self.contact_data = contact_data
+        self.third_party_id = contact_data.get('thirdPartyId') or contact_id
+        kub_obj = self.get_or_create_kub_obj()
+        return 'person:{}'.format(kub_obj['id'])
