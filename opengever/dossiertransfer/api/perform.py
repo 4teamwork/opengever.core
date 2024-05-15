@@ -225,7 +225,7 @@ class PerformDossierTransfer(Service):
 
     def add_participation(self, dossier, participation):
         participant_id, roles = participation
-        participant_id = self.contact_id_mapping[participant_id]
+        participant_id = self.contact_id_mapping.get(participant_id, participant_id)
         IParticipationAware(dossier).add_participation(participant_id, roles)
 
     def create_contacts(self):

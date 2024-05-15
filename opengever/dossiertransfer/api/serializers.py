@@ -5,6 +5,7 @@ from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.participations import IParticipationData
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.kub.entity import KuBEntity
+from opengever.ogds.base.actor import ActorLookup
 from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
@@ -180,7 +181,7 @@ class ContactsSerializer(object):
         serialized_contacts = {}
         pcp_serializer = ParticipationsSerializer(self.transfer)
 
-        for kub_entity_id, roles in pcp_serializer():
+        for kub_entity_id, roles in pcp_serializer(kub_contacts_only=True):
             serialized = pcp_serializer.serialize_kub_entity_by_id(kub_entity_id)
             serialized_contacts[kub_entity_id] = serialized
 
@@ -188,7 +189,7 @@ class ContactsSerializer(object):
 
 
 class ParticipationsSerializer(object):
-    """Returns a list of (kub_entity_id, roles) tuples for matching participations.
+    """Returns a list of (kub_entity_id/plone_id, roles) tuples for matching participations.
 
     Matching participations are filtered according to the
     transfer.all_participations flag, and if it is False, the contents of the
@@ -207,19 +208,27 @@ class ParticipationsSerializer(object):
         if self.transfer.participations:
             self.selection = self.transfer.participations
 
-    def __call__(self):
+    def __call__(self, kub_contacts_only=False):
         root_dossier = api.content.uuidToObject(self.transfer.root)
         handler = IParticipationAware(root_dossier)
 
-        participations = [
-            IParticipationData(pcp) for pcp in handler.get_participations()
-        ]
-
         matching = []
-        for participation in participations:
-            if self.include(participation.participant_id):
-                key, roles = self.resolve(participation)
-                matching.append((key, roles))
+        for participant in handler.get_participations():
+            participation = IParticipationData(participant)
+
+            if not self.include(participation.participant_id):
+                continue
+
+            is_kub_contact = ActorLookup(participation.participant_id).is_kub_contact()
+            if kub_contacts_only and not is_kub_contact:
+                continue
+
+            if is_kub_contact:
+                key, roles = self.resolve_kub_contact(participation)
+            else:
+                key = participation.participant_id
+                roles = participation.roles
+            matching.append((key, roles))
 
         return matching
 
@@ -228,7 +237,7 @@ class ParticipationsSerializer(object):
             return True
         return participant_id in self.selection
 
-    def resolve(self, participation):
+    def resolve_kub_contact(self, participation):
         kub_entity_id = participation.participant_id
         key = kub_entity_id
 

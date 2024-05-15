@@ -494,6 +494,11 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             JEAN_PERSON_ID,
             ['regard', 'participation', 'final-drawing'],
         )
+
+        # add a ogds user as a participant
+        handler = IParticipationAware(self.resolvable_dossier)
+        handler.add_participation('robert.ziegler', ['final-drawing'])
+
         self.logout()
 
         headers = self.api_headers.copy()
@@ -566,6 +571,10 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
                 [
                     u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
                     [u'regard', u'participation', u'final-drawing'],
+                ],
+                [
+                    u'robert.ziegler',
+                    [u'final-drawing'],
                 ],
             ],
             u'privacy_layer': {

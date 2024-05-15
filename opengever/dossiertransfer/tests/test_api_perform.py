@@ -97,6 +97,10 @@ METADATA_RESP = {
                     u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
                     [u'participation'],
                 ],
+                [
+                    u'robert.ziegler',
+                    [u'regard'],
+                ],
             ],
         }, {
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21",
@@ -282,7 +286,10 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         dossier = self.leaf_repofolder[resp.json['id']]
         self.assertEqual(
             [(p.contact, p.roles) for p in IParticipationAware(dossier).get_participations()],
-            [('person:20e024c9-db20-4ea1-999a-9deaa80413f4', [u'participation'])])
+            [
+                ('robert.ziegler', [u'regard']),
+                ('person:20e024c9-db20-4ea1-999a-9deaa80413f4', [u'participation']),
+            ])
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
@@ -360,7 +367,10 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         dossier = self.leaf_repofolder[resp.json['id']]
         self.assertEqual(
             [(p.contact, p.roles) for p in IParticipationAware(dossier).get_participations()],
-            [('person:9af7d7cc-b948-423f-979f-587158c6bc65', [u'participation'])])
+            [
+                ('person:9af7d7cc-b948-423f-979f-587158c6bc65', [u'participation']),
+                ('robert.ziegler', [u'regard']),
+            ])
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
