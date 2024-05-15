@@ -201,7 +201,12 @@ class PerformDossierTransfer(Service):
             self.strip_unknown_custom_properties(doc, slots)
 
             doc_file = open(self.documents[doc['UID']], 'rb')
-            doc['file']['data'] = doc_file
+
+            if doc['@type'] == 'ftw.mail.mail':
+                doc['message']['data'] = doc_file
+            else:
+                doc['file']['data'] = doc_file
+
             self.objects_by_path[path] = self.create_content(parent, doc)
             doc_file.close()
 

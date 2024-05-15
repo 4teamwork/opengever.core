@@ -51,28 +51,51 @@ METADATA_RESP = {
                 u'title': u'',
             },
         },
-        u'documents': [{
-            "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
-            "@type": "opengever.document.document",
-            "custom_properties": {
-                'IDocumentMetadata.document_type.contract': {
-                    "contract_number": 10033,
+        u'documents': [
+            {
+                "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
+                "@type": "opengever.document.document",
+                "custom_properties": {
+                    'IDocumentMetadata.document_type.contract': {
+                        "contract_number": 10033,
+                    },
+                    'IDocumentMetadata.document_type.directive': {
+                        "unknown_number": 42,
+                        "textline": "Foo bar",
+                    },
                 },
-                'IDocumentMetadata.document_type.directive': {
-                    "unknown_number": 42,
-                    "textline": "Foo bar",
+                "UID": "a663689540a34538b6f408d4b41baee8",
+                u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
+                u'title': u'Umbau B\xe4rengraben',
+                'file': {
+                    u'content-type': u'plain/text',
+                    u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
+                    u'filename': u'Foobar.txt',
+                    u'size': 6,
                 },
             },
-            "UID": "a663689540a34538b6f408d4b41baee8",
-            u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
-            u'title': u'Umbau B\xe4rengraben',
-            'file': {
-                u'content-type': u'plain/text',
-                u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
-                u'filename': u'Foobar.txt',
-                u'size': 6,
+            {
+                "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-45",
+                "@type": "ftw.mail.mail",
+                "UID": "f1ff0f7f40fd42a280b7c9094324e58e",
+                u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-45',
+                "attachments": [
+                    {
+                        "content-type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        "filename": "Enim cum at impedit eos.docx",
+                        "position": 2,
+                        "size": 102554
+                    },
+                ],
+                "message": {
+                    "content-type": "message/rfc822",
+                    "download": "http://localhost:8080/fd/ordnungssystem/bildung/dossier-32/document-45/@@download/message",
+                    "filename": "Mail mit Anhang.eml",
+                    "size": 341476
+                },
+                "title": "Mail mit Anhang",
             },
-        }],
+        ],
         u'dossiers': [{
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20",
             "@type": "opengever.dossier.businesscasedossier",
@@ -231,6 +254,9 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
         mocker.get(url, content='foobar')
 
+        url = 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'
+        mocker.get(url, content='foobar_mail')
+
         url = '{}people?third_party_id={}'.format(
             self.client.kub_api_url, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
         mocker.get(url, json=KUB_LIST_RESP)
@@ -258,6 +284,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         expected_calls = [
             ('GET', 'http://example.com/@dossier-transfers/1?full_content=1'),
             ('GET', 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'),
+            ('GET', 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'),
             ('GET', 'http://localhost:8000/api/v2/people?third_party_id=person%3A9af7d7cc-b948-423f-979f-587158c6bc65'),
             ('GET', 'http://localhost:8000/api/v2/labels'),
         ]
@@ -313,6 +340,9 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
         mocker.get(url, content='foobar')
 
+        url = 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'
+        mocker.get(url, content='foobar')
+
         url = '{}people?third_party_id={}'.format(
             self.client.kub_api_url, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
         mocker.get(url, json=KUB_LIST_EMPTY_RESP)
@@ -343,6 +373,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         expected_calls = [
             ('GET', 'http://example.com/@dossier-transfers/1?full_content=1'),
             ('GET', 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'),
+            ('GET', 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'),
             ('GET', 'http://localhost:8000/api/v2/people?third_party_id=person%3A9af7d7cc-b948-423f-979f-587158c6bc65'),
             ('POST', 'http://localhost:8000/api/v2/people'),
             ('GET', 'http://localhost:8000/api/v2/labels'),
