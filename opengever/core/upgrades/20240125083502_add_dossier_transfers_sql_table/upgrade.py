@@ -37,3 +37,5 @@ class AddDossierTransfersSQLTable(SchemaMigration):
             Column('all_participations', Boolean(), nullable=False),
             Column('token', String(), nullable=True),
         )
+
+        self.ensure_sequence_exists('dossier_transfer_id_seq')

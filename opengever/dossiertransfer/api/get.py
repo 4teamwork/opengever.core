@@ -1,3 +1,4 @@
+from ftw.mail.mail import IMail
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
@@ -98,7 +99,11 @@ class DossierTransfersGet(DossierTransferLocator):
                     raise Unauthorized
 
             document = brains[0].getObject()
-            namedfile = document.file
+
+            if IMail.providedBy(document):
+                namedfile = document.message
+            else:
+                namedfile = document.file
 
         filename = getattr(namedfile, 'filename', u'document.bin').encode('utf-8')
         set_attachment_content_disposition(self.request, filename, namedfile)

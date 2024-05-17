@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from ftw.testing import staticuid
 from opengever.base.model import create_session
 from opengever.base.security import elevated_privileges
 from opengever.dossier.behaviors.participation import IParticipationAware
@@ -494,6 +495,11 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             JEAN_PERSON_ID,
             ['regard', 'participation', 'final-drawing'],
         )
+
+        # add a ogds user as a participant
+        handler = IParticipationAware(self.resolvable_dossier)
+        handler.add_participation('robert.ziegler', ['final-drawing'])
+
         self.logout()
 
         headers = self.api_headers.copy()
@@ -566,6 +572,10 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
                 [
                     u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
                     [u'regard', u'participation', u'final-drawing'],
+                ],
+                [
+                    u'robert.ziegler',
+                    [u'final-drawing'],
                 ],
             ],
             u'privacy_layer': {
@@ -806,6 +816,121 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
         document.pop('file_mtime')
 
         self.assertEqual(expected_document, document)
+
+    @browsing
+    @staticuid()
+    def test_mail_serialization(self, browser):
+        self.login(self.manager)
+
+        with freeze(FROZEN_NOW):
+            selected_mail = create(Builder('mail')
+                                .within(self.resolvable_subdossier)
+                                .with_asset_message('mail_with_one_mail_attachment.eml'))
+
+        transfer = self.create_transfer(all_documents=False, documents=[selected_mail.UID()])
+
+        headers = self.api_headers.copy()
+        headers.update({'X-GEVER-Dossier-Transfer-Token': transfer.token})
+
+        with freeze(FROZEN_NOW):
+            browser.open(
+                self.portal,
+                view='@dossier-transfers/%s/?full_content=1' % transfer.id,
+                method='GET', headers=headers)
+
+        self.assertEqual(200, browser.status_code)
+
+        expected_mail = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-46',
+            u'@type': u'ftw.mail.mail',
+            u'UID': u'testmailserialization00000000001',
+            u'allow_discussion': False,
+            u'archival_file': None,
+            u'archival_file_state': None,
+            u'attachments': [{u'content-type': u'message/rfc822',
+                            u'filename': u'Inneres Testma\u0308il ohne Attachments.eml',
+                            u'position': 2,
+                            u'size': 930}],
+            u'back_references_relatedItems': [],
+            u'changeNote': u'',
+            u'changed': u'2024-02-18T15:45:00+00:00',
+            u'checked_out': None,
+            u'checked_out_fullname': None,
+            u'checkout_collaborators': [],
+            u'classification': {u'title': u'unprotected', u'token': u'unprotected'},
+            u'containing_dossier': u'A resolvable main dossier',
+            u'containing_subdossier': u'Resolvable Subdossier',
+            u'containing_subdossier_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+            u'created': u'2024-02-18T15:45:00+00:00',
+            u'creator': {u'@id': u'http://nohost/plone/@actors/admin',
+                        u'identifier': u'admin'},
+            u'current_version_id': 0,
+            u'custom_properties': None,
+            u'delivery_date': None,
+            u'description': u'',
+            u'digitally_available': True,
+            u'document_author': u'B\xe4rfuss K\xe4thi',
+            u'document_date': u'2015-06-30',
+            u'document_type': None,
+            u'file_extension': u'.eml',
+            u'foreign_reference': None,
+            u'getObjPositionInParent': 1,
+            u'gever_url': u'',
+            u'id': u'document-46',
+            u'is_collaborative_checkout': False,
+            u'is_folderish': False,
+            u'is_locked': False,
+            u'is_shadow_document': False,
+            u'keywords': [],
+            u'layout': u'tabbed_view',
+            u'message': {u'content-type': u'message/rfc822',
+                        u'download': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-46/@@download/message',
+                        u'filename': u'Aeusseres Testmaeil.eml',
+                        u'size': 1951},
+            u'message_source': None,
+            u'modified': u'2024-02-18T15:45:00+00:00',
+            u'next_item': {},
+            u'original_message': None,
+            u'parent': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                        u'@type': u'opengever.dossier.businesscasedossier',
+                        u'UID': u'createresolvabledossier000000002',
+                        u'description': u'',
+                        u'dossier_type': None,
+                        u'is_leafnode': None,
+                        u'is_subdossier': True,
+                        u'review_state': u'dossier-state-active',
+                        u'title': u'Resolvable Subdossier'},
+            u'preserved_as_paper': True,
+            u'preview': None,
+            u'previous_item': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-28',
+                                u'@type': u'opengever.document.document',
+                                u'description': u'',
+                                u'title': u'Umbau B\xe4rengraben'},
+            u'privacy_layer': {u'title': u'no', u'token': u'privacy_layer_no'},
+            u'public_trial': {u'title': u'not assessed', u'token': u'unchecked'},
+            u'public_trial_statement': None,
+            u'receipt_date': u'2024-02-18',
+            u'reference_number': u'Client1 1.1 / 5.1 / 46',
+            u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9/document-46',
+            u'review_state': u'mail-state-active',
+            u'sequence_number': 46,
+            u'teamraum_connect_links': {u'gever_document': None,
+                                        u'workspace_documents': []},
+            u'thumbnail': None,
+            u'title': u'\xc4usseres Testm\xe4il',
+            u'trashed': False,
+            u'version': u'current',
+            u'workspace_document_urls': []
+        }
+
+        documents = browser.json['content']['documents']
+        document = documents[0]
+
+        # file_mtime is flaky because it doesn't get frozen with enough precision
+        document.pop('file_mtime')
+        document.pop('oguid')
+
+        self.assertEqual(expected_mail, document)
 
     @requests_mock.Mocker()
     @browsing

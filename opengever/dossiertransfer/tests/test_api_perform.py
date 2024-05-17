@@ -5,6 +5,8 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
+from opengever.dossiertransfer.api.perform import OrganizationContactSyncer
+from opengever.dossiertransfer.api.perform import PersonContactSyncer
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.kub.testing import KuBIntegrationTestCase
@@ -51,28 +53,51 @@ METADATA_RESP = {
                 u'title': u'',
             },
         },
-        u'documents': [{
-            "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
-            "@type": "opengever.document.document",
-            "custom_properties": {
-                'IDocumentMetadata.document_type.contract': {
-                    "contract_number": 10033,
+        u'documents': [
+            {
+                "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
+                "@type": "opengever.document.document",
+                "custom_properties": {
+                    'IDocumentMetadata.document_type.contract': {
+                        "contract_number": 10033,
+                    },
+                    'IDocumentMetadata.document_type.directive': {
+                        "unknown_number": 42,
+                        "textline": "Foo bar",
+                    },
                 },
-                'IDocumentMetadata.document_type.directive': {
-                    "unknown_number": 42,
-                    "textline": "Foo bar",
+                "UID": "a663689540a34538b6f408d4b41baee8",
+                u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
+                u'title': u'Umbau B\xe4rengraben',
+                'file': {
+                    u'content-type': u'plain/text',
+                    u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
+                    u'filename': u'Foobar.txt',
+                    u'size': 6,
                 },
             },
-            "UID": "a663689540a34538b6f408d4b41baee8",
-            u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
-            u'title': u'Umbau B\xe4rengraben',
-            'file': {
-                u'content-type': u'plain/text',
-                u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
-                u'filename': u'Foobar.txt',
-                u'size': 6,
+            {
+                "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-45",
+                "@type": "ftw.mail.mail",
+                "UID": "f1ff0f7f40fd42a280b7c9094324e58e",
+                u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-45',
+                "attachments": [
+                    {
+                        "content-type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        "filename": "Enim cum at impedit eos.docx",
+                        "position": 2,
+                        "size": 102554
+                    },
+                ],
+                "message": {
+                    "content-type": "message/rfc822",
+                    "download": "http://localhost:8080/fd/ordnungssystem/bildung/dossier-32/document-45/@@download/message",
+                    "filename": "Mail mit Anhang.eml",
+                    "size": 341476
+                },
+                "title": "Mail mit Anhang",
             },
-        }],
+        ],
         u'dossiers': [{
             "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20",
             "@type": "opengever.dossier.businesscasedossier",
@@ -96,6 +121,10 @@ METADATA_RESP = {
                 [
                     u'person:9af7d7cc-b948-423f-979f-587158c6bc65',
                     [u'participation'],
+                ],
+                [
+                    u'robert.ziegler',
+                    [u'regard'],
                 ],
             ],
         }, {
@@ -148,6 +177,24 @@ KUB_LIST_EMPTY_RESP = {
     "next": None,
     "previous": None,
     "results": []
+}
+
+KUB_LIST_ORGANIZATIONS_RESP = {
+    "count": 1,
+    "next": None,
+    "previous": None,
+    "results": [
+        {
+            "created": "2022-10-03T11:44:56.321140+02:00",
+            "id": "51142ca2-8876-4bae-a216-d70c162d34a2",
+            "isActive": True,
+            "memberCount": 13,
+            "modified": "2024-02-05T10:32:44.347381+01:00",
+            "name": "4teamwork AG",
+            "thirdPartyId": None,
+            "url": "https://kub-dev.onegovgever.ch/api/v2/organizations/51142ca2-8876-4bae-a216-d70c162d34a2"
+        },
+    ]
 }
 
 
@@ -227,6 +274,9 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
         mocker.get(url, content='foobar')
 
+        url = 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'
+        mocker.get(url, content='foobar_mail')
+
         url = '{}people?third_party_id={}'.format(
             self.client.kub_api_url, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
         mocker.get(url, json=KUB_LIST_RESP)
@@ -254,6 +304,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         expected_calls = [
             ('GET', 'http://example.com/@dossier-transfers/1?full_content=1'),
             ('GET', 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'),
+            ('GET', 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'),
             ('GET', 'http://localhost:8000/api/v2/people?third_party_id=person%3A9af7d7cc-b948-423f-979f-587158c6bc65'),
             ('GET', 'http://localhost:8000/api/v2/labels'),
         ]
@@ -282,7 +333,10 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         dossier = self.leaf_repofolder[resp.json['id']]
         self.assertEqual(
             [(p.contact, p.roles) for p in IParticipationAware(dossier).get_participations()],
-            [('person:20e024c9-db20-4ea1-999a-9deaa80413f4', [u'participation'])])
+            [
+                ('robert.ziegler', [u'regard']),
+                ('person:20e024c9-db20-4ea1-999a-9deaa80413f4', [u'participation']),
+            ])
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
@@ -306,12 +360,15 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
         mocker.get(url, content='foobar')
 
+        url = 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'
+        mocker.get(url, content='foobar')
+
         url = '{}people?third_party_id={}'.format(
             self.client.kub_api_url, 'person:9af7d7cc-b948-423f-979f-587158c6bc65')
         mocker.get(url, json=KUB_LIST_EMPTY_RESP)
 
         url = '{}people'.format(self.client.kub_api_url)
-        mocker.post(url, json={'typedId': 'person:9af7d7cc-b948-423f-979f-587158c6bc65'})
+        mocker.post(url, json={'id': '9af7d7cc-b948-423f-979f-587158c6bc65'})
 
         self.mock_labels(mocker)
 
@@ -336,6 +393,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         expected_calls = [
             ('GET', 'http://example.com/@dossier-transfers/1?full_content=1'),
             ('GET', 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'),
+            ('GET', 'http://example.com/@dossier-transfers/1/blob/f1ff0f7f40fd42a280b7c9094324e58e'),
             ('GET', 'http://localhost:8000/api/v2/people?third_party_id=person%3A9af7d7cc-b948-423f-979f-587158c6bc65'),
             ('POST', 'http://localhost:8000/api/v2/people'),
             ('GET', 'http://localhost:8000/api/v2/labels'),
@@ -360,7 +418,198 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         dossier = self.leaf_repofolder[resp.json['id']]
         self.assertEqual(
             [(p.contact, p.roles) for p in IParticipationAware(dossier).get_participations()],
-            [('person:9af7d7cc-b948-423f-979f-587158c6bc65', [u'participation'])])
+            [
+                ('person:9af7d7cc-b948-423f-979f-587158c6bc65', [u'participation']),
+                ('robert.ziegler', [u'regard']),
+            ])
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
+
+
+class TestPersonContactSyncer(KuBIntegrationTestCase):
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_an_existing_kub_person(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'title': '',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_a_new_kub_person_if_there_is_no_matching_person_in_kub(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}people?{}'.format(
+            self.client.kub_api_url,
+            'first_name=Jean&date_of_birth_max=1980-01-01&date_of_birth_min=1980-01-01&official_name=Dupont')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}people'.format(self.client.kub_api_url)
+        mocker.post(url, json={'id': '9af7d7cc-b948-423f-979f-587158c6bc65'})
+
+        self.assertEqual(
+            'person:9af7d7cc-b948-423f-979f-587158c6bc65',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'firstName': 'Jean',
+                    'officialName': 'Dupont',
+                    'dateOfBirth': '1980-01-01',
+                    'title': '',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_uses_contact_data_thrid_party_it_for_lookup_if_available(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'foo:bar')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'title': '',
+                    'thirdPartyId': 'foo:bar',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_sync_returns_the_type_id_of_a_guessed_kub_person(self, mocker, browser):
+        self.login(self.secretariat_user, browser)
+
+        url = '{}people?third_party_id={}'.format(
+            self.client.kub_api_url, 'person:ea18df93-0fe7-4615-a859-cde16cc4dd23')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}people?{}'.format(
+            self.client.kub_api_url,
+            'first_name=Jean&date_of_birth_max=1980-01-01&date_of_birth_min=1980-01-01&official_name=Dupont')
+        mocker.get(url, json=KUB_LIST_RESP)
+
+        self.assertEqual(
+            'person:20e024c9-db20-4ea1-999a-9deaa80413f4',
+            PersonContactSyncer(self.client).sync(
+                'person:ea18df93-0fe7-4615-a859-cde16cc4dd23',
+                {
+                    'type': 'person',
+                    'text': 'Dupont Jean',
+                    'firstName': 'Jean',
+                    'officialName': 'Dupont',
+                    'dateOfBirth': '1980-01-01',
+                    'title': '',
+                }
+            )
+        )
+
+
+class TestOrganizationContactSyncer(KuBIntegrationTestCase):
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_an_existing_kub_organization(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                },
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_a_new_kub_organization_if_there_is_no_matching_organization_in_kub(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations?name=4teamwork+AG'.format(self.client.kub_api_url)
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations'.format(self.client.kub_api_url)
+        mocker.post(url, json={'id': '51142ca2-8876-4bae-a216-d70c162d34a2'})
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_uses_contact_data_thrid_party_id_for_lookup_if_available(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'foo:bar')
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                    'thirdPartyId': 'foo:bar',
+                }
+            )
+        )
+
+    @requests_mock.Mocker()
+    def test_sync_returns_the_type_id_of_a_guessed_kub_organization(self, mocker):
+        url = '{}organizations?third_party_id={}'.format(
+            self.client.kub_api_url, 'organization:51142ca2-8876-4bae-a216-d70c162d34a3')
+        mocker.get(url, json=KUB_LIST_EMPTY_RESP)
+
+        url = '{}organizations?name=4teamwork+AG'.format(self.client.kub_api_url)
+        mocker.get(url, json=KUB_LIST_ORGANIZATIONS_RESP)
+
+        self.assertEqual(
+            'organization:51142ca2-8876-4bae-a216-d70c162d34a2',
+            OrganizationContactSyncer(self.client).sync(
+                'organization:51142ca2-8876-4bae-a216-d70c162d34a3',
+                {
+                    'type': 'organization',
+                    'name': '4teamwork AG',
+                },
+            )
+        )
