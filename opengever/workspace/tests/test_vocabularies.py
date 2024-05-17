@@ -1,6 +1,7 @@
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
@@ -90,3 +91,47 @@ class TestWorkspaceContentMembersVocabulary(IntegrationTestCase):
         self.assertItemsEqual(
             [self.workspace_member.id],
             [term.token for term in factory(context=self.workspace_folder)])
+
+    def test_meeting_attendees_persist_after_user_role_removal(self):
+        self.login(self.workspace_admin)
+
+        workspace = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+        self.set_roles(workspace, self.workspace_admin.getId(), ['WorkspaceMember'])
+        self.set_roles(workspace, self.workspace_guest.getId(), ['WorkspaceGuest'])
+        self.set_roles(workspace, self.workspace_member.getId(), ['WorkspaceMember'])
+
+        factory = getUtility(IVocabularyFactory,
+                             name='opengever.workspace.WorkspaceContentMembersVocabulary')
+
+        create(
+            Builder('workspace meeting')
+            .within(workspace)
+            .titled(u'Besprechung Kl\xe4ranlage')
+            .having(responsible=self.workspace_member.getId())
+            .having(attendees=[
+                self.workspace_admin.getId(), self.workspace_guest.getId(), self.workspace_member.getId()])
+        )
+
+        # Verify initial attendees
+        self.assertSequenceEqual(
+            [self.workspace_admin.getId(), self.workspace_guest.getId(), self.workspace_member.getId()],
+            [term.token for term in factory(context=workspace)]
+        )
+
+        # Remove users Roles
+        role_assignment_manager = RoleAssignmentManager(workspace)
+        role_assignment_manager.clear_by_cause_and_principal(ASSIGNMENT_VIA_SHARING, self.workspace_member.getId())
+        role_assignment_manager.clear_by_cause_and_principal(ASSIGNMENT_VIA_SHARING, self.workspace_guest.getId())
+
+        # Verify that the users' roles are removed in the workspace
+        self.assertEqual(
+            [self.workspace_admin.getId()], [term.token for term in factory(context=workspace)])
+
+        # Verify that the participants are still displayed in the meeting
+        self.assertEquals(
+            self.workspace_member.getId(),
+            factory(context=workspace).getTerm(self.workspace_member.getId()).token)
+
+        self.assertEquals(
+            self.workspace_guest.getId(),
+            factory(context=workspace).getTerm(self.workspace_guest.getId()).token)

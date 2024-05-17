@@ -1,8 +1,10 @@
+from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.ogds.models.user import User
 from opengever.workspace.interfaces import IWorkspaceFolder
 from opengever.workspace.participation import PARTICIPATION_ROLES
 from opengever.workspace.participation.browser.manage_participants import ManageParticipants
+from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from sqlalchemy import func
 from sqlalchemy.sql.expression import asc
@@ -62,6 +64,19 @@ class PossibleWorkspaceFolderParticipantsVocabulary(object):
         return SimpleVocabulary(terms)
 
 
+class WorkspaceUserVocabulary(SimpleVocabulary):
+    """provide additional functionality for retrieving terms related to workspace users.
+    If a term is not found in the current vocabulary, it attempts to retrieve the term from
+    AllUsersSource
+    """
+    def getTerm(self, value):
+        """See zope.schema.interfaces.IBaseVocabulary"""
+        try:
+            return super(WorkspaceUserVocabulary, self).getTerm(value)
+        except LookupError:
+            return AllUsersSource(api.portal.get()).getTermByToken(value)
+
+
 @implementer(IVocabularyFactory)
 class WorkspaceContentMembersVocabulary(object):
     """ Vocabulary of all users assigned to the current workspace.
@@ -78,4 +93,4 @@ class WorkspaceContentMembersVocabulary(object):
                                     token=member.userid,
                                     title=member.fullname()))
 
-        return SimpleVocabulary(terms)
+        return WorkspaceUserVocabulary(terms)
