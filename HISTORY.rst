@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.8.0 (2024-05-21)
+---------------------
+
+New features:
+
+
+- Add full_content mode for GET /@dossier-transfers. [lgraf] [CA-6591]
+- Provide User excel export for admin user [amo] [TI-13]
+- Provide user Excel export for workspace participants [amo] [TI-156]
+- Implement /@perform-dossier-transfer endpoint. [buchi] [TI-161]
+- Disposition: Include stats about document count and cumulative file size. [lgraf] [TI-2]
+- Add progress-index for dossiers with checklists. [elioschmutz] [TI-3]
+- Remove oneoffixx template selection. [phgross] [TI-7]
+
+
+Other changes:
+
+
+- Provide additional information on user listing for admin users [amo] [TI-13]
+- Enhance Repository Root Excel Export by adding folder UID and relative path [amo] [TI-131]
+- Remove cropped title from task activities [amo] [TI-144]
+- Add ris_proposals listing entry. [blu] [TI-152]
+- Provide Docproperty information in system information template  [amo] [TI-317]
+- Allow Manager to list or fetch any dossier transfer. [lgraf] [TI-5a]
+- Add ris_base_url to config endpoint. [jch] [TI-71]
+- Provide keywords on the new created Document from template [amo] [TI-89]
+
+
 2024.7.0 (2024-04-23)
 ---------------------
 
