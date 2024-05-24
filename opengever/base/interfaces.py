@@ -432,6 +432,10 @@ class IGeverUI(Interface):
         description=u'Whether new GEVER UI is enabled',
         default=True)
 
+    is_classic_ui_enabled = schema.Bool(
+        title=u'Enable the classic UI',
+        default=True)
+
     custom_dashboard_cards = schema.Text(
         title=u'custom dashboard cards',
         description=u'In json format, eg. [{"id": "dossiers", "componentName": "DossiersCard", "'
