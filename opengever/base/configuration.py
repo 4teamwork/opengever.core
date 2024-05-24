@@ -141,6 +141,7 @@ class GeverSettingsAdpaterV1(object):
         features['archival_file_conversion'] = api.portal.get_registry_record('archival_file_conversion_enabled', interface=IDossierResolveProperties)  # noqa
         features['archival_file_conversion_blacklist'] = api.portal.get_registry_record('archival_file_conversion_blacklist', interface=IDossierResolveProperties)  # noqa
         features['changed_for_end_date'] = api.portal.get_registry_record('use_changed_for_end_date', interface=IDossierResolveProperties)  # noqa
+        features['classic_ui_enabled'] = api.portal.get_registry_record('is_classic_ui_enabled', interface=IGeverUI)
         features['contacts'] = self._get_contact_type()
         features['disposition_disregard_retention_period'] = api.portal.get_registry_record('disregard_retention_period', interface=IDispositionSettings)  # noqa
         features['disposition_transport_filesystem'] = api.portal.get_registry_record('enabled', interface=IFilesystemTransportSettings)  # noqa
