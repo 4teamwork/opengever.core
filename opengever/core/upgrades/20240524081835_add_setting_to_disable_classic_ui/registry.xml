@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.base.interfaces.IGeverUI">
+    <value key="is_classic_ui_enabled">True</value>
+  </records>
+</registry>

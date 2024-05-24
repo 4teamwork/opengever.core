@@ -64,6 +64,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('archival_file_conversion', False),
                 ('archival_file_conversion_blacklist', []),
                 ('changed_for_end_date', True),
+                ('classic_ui_enabled', True),
                 ('contacts', 'plone'),
                 ('disposition_disregard_retention_period', False),
                 ('disposition_transport_filesystem', False),
