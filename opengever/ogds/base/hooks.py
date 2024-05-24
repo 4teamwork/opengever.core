@@ -7,14 +7,11 @@ from opengever.ogds.models.group import Group
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.user import User
-from Products.PluggableAuthService.interfaces import plugins
-from zope.interface import alsoProvides
 import transaction
 
 
 def default_installed(site):
     create_sql_tables()
-    _setup_pas_plugins(site)
 
 
 def example_installed(site):
@@ -26,29 +23,6 @@ def get_opengever_session(object):
 
 
 MODELS = [User, Group, groups_users, OrgUnit, DictStorageModel]
-
-
-def _setup_pas_plugins(site):
-    """Install the PAS authentication plugins for verifying requests between
-    clients.
-    """
-    acl_users = site.acl_users
-    external_methods = {
-        'extractCredentials': {
-            'attrs': {
-                'title': 'extractCredentials',
-                'module': 'opengever.ogds.base.plugins',
-                'function': 'extract_user'},
-            'interface': plugins.IExtractionPlugin},
-        'authenticateCredentials': {
-            'attrs': {
-                'title': 'authenticateCredentials',
-                'module': 'opengever.ogds.base.plugins',
-                'function': 'authenticate_credentials'},
-            'interface': plugins.IAuthenticationPlugin}
-    }
-    _setup_scriptable_plugin(acl_users, 'octopus_tentacle_plugin',
-                             external_methods)
 
 
 def _create_example(site):
@@ -126,33 +100,3 @@ def _create_example_user(session, site, userid, properties, groups):
     transaction.commit()
 
     return session.query(User).filter_by(userid=userid).first()
-
-
-def _setup_scriptable_plugin(acl_users, plugin_id, external_methods):
-    """Registers a scriptable plugin to the pas.
-    """
-    # --- register a PAS plugin
-    if not acl_users.get(plugin_id, None):
-        pas = acl_users.manage_addProduct['PluggableAuthService']
-        pas.addScriptablePlugin(plugin_id)
-    # --- register external methods
-    plug = acl_users.get(plugin_id)
-    em_factory = plug.manage_addProduct['ExternalMethod']
-    activate_interfaces = []
-    for em_id, em in external_methods.items():
-        if not plug.get(em_id):
-            # add the external method
-            em_factory.manage_addExternalMethod(em_id, **em['attrs'])
-        # provide the interface
-        alsoProvides(plug, em['interface'])
-        # activate the interface
-        activate_interfaces.append(em['interface'].__name__)
-    # activateInterfaces is destructive, so be careful, we dont wanna
-    # disactivate interfaces which are currently active
-    active_interfaces = []
-    for info in plug.plugins.listPluginTypeInfo():
-        if info['interface'].providedBy(plug):
-            enabled = plug.plugins.listPlugins(info['interface'])
-            if plug.getId() in [k for k, v in enabled]:
-                active_interfaces.append(info['interface'].__name__)
-    plug.manage_activateInterfaces(active_interfaces + activate_interfaces)

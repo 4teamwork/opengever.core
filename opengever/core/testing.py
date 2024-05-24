@@ -132,10 +132,6 @@ class OpengeverFixture(PloneSandboxLayer):
         super(OpengeverFixture, self).__init__(bases=bases, name=name)
 
     def setUpZope(self, app, configurationContext):
-        # do not install pas plugins (doesnt work in tests)
-        from opengever.ogds.base import hooks
-        hooks._setup_scriptable_plugin = lambda *a, **kw: None
-
         xmlconfig.string(
             '<configure xmlns="http://namespaces.zope.org/zope">'
 
