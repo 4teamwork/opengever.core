@@ -1,4 +1,5 @@
 from opengever.base.sentry import maybe_report_exception
+from opengever.ogds.auth.admin_unit import create_auth_token
 from opengever.ogds.base.exceptions import ClientNotFound
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.ogds.base.utils import get_current_admin_unit
@@ -138,11 +139,9 @@ def _remote_request(target_admin_unit_id, viewname, path, data, headers):
     mtool = getToolByName(site, 'portal_membership')
     member = mtool.getAuthenticatedMember()
 
-    key = 'X-OGDS-AC'
-    if key not in headers.keys() and member:
-        headers[key] = member.getId()
+    headers['X-OGDS-AC'] = create_auth_token(
+        get_current_admin_unit().id(), member.getId())
 
-    headers['X-OGDS-AUID'] = get_current_admin_unit().id()
     handler = urllib2.ProxyHandler({})
     opener = urllib2.build_opener(handler)
 

@@ -1,3 +1,4 @@
+from opengever.ogds.auth.admin_unit import create_auth_token
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from plone.restapi.services import Service
@@ -25,11 +26,13 @@ class ProxyingEndpointBase(Service):
             raise InternalError(err_msg)
 
     def prepare_proxying_headers(self):
-        headers = {'Accept': 'application/json',
-                   'Content-Type': 'application/json',
-                   'X-OGDS-AC': api.user.get_current().getId(),
-                   'X-OGDS-AUID': get_current_admin_unit().id(),
-                   'X-GEVER-RemoteRequestFrom': self.request.URL}
+        headers = {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-OGDS-AC': create_auth_token(
+                get_current_admin_unit().id(), api.user.get_current().getId()),
+            'X-GEVER-RemoteRequestFrom': self.request.URL,
+        }
         return headers
 
     def remote_request(self, method, remote_url, **kwargs):
