@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.8.1 (2024-05-24)
+---------------------
+
+Other changes:
+
+
+- Add feature-flag to disable the classic ui [elioschmutz] [TI-88]
+
+
 2024.8.0 (2024-05-21)
 ---------------------
 
