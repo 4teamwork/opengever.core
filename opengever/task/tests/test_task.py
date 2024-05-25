@@ -235,7 +235,7 @@ class TestTaskSolrIntegration(SolrIntegrationTestCase):
 
         # all different remote requests should not
         # generate an response
-        self.request.environ['X_OGDS_AC'] = 'hugo.boss'
+        self.request.environ['HTTP_X_OGDS_AC'] = 'token'
         create(
             Builder("task")
             .within(self.task)
@@ -247,20 +247,7 @@ class TestTaskSolrIntegration(SolrIntegrationTestCase):
         )
         self.assertEqual(responses, len(IResponseContainer(self.task)))
 
-        self.request.environ['X_OGDS_AC'] = None
-        self.request.environ['X_OGDS_AUID'] = 'org-unit-1'
-        create(
-            Builder("task")
-            .within(self.task)
-            .titled("Subtask")
-            .having(
-                responsible=self.dossier_responsible.getId(),
-                responsible_client=u'fa',
-            )
-        )
-        self.assertEqual(responses, len(IResponseContainer(self.task)))
-
-        self.request.environ['X_OGDS_AUID'] = None
+        del self.request.environ['HTTP_X_OGDS_AC']
         self.request.set('X-CREATING-SUCCESSOR', True)
         create(
             Builder("task")
