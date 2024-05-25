@@ -30,6 +30,7 @@ from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.storage import RoleAssignmentReportsStorage
 from opengever.mail.tests import MAIL_DATA
 from opengever.officeconnector.helpers import get_auth_plugin
+from opengever.ogds.auth.admin_unit import addAdminUnitAuthenticationPlugin
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.service import ogds_service
 from opengever.testing import assets
@@ -69,6 +70,7 @@ class OpengeverContentFixture(object):
         self._registered_paths = set()
         self.configure_jwt_plugin()
         self.create_fixture_content()
+        self.install_admin_unit_auth_plugin()
         logger.info('(fixture setup in %ds) ', round(time() - start, 3))
 
     def configure_jwt_plugin(self):
@@ -83,6 +85,10 @@ class OpengeverContentFixture(object):
         jwt_plugin = get_auth_plugin(api.portal.get())
         jwt_plugin.use_keyring = False
         jwt_plugin._secret = JWT_SECRET
+
+    def install_admin_unit_auth_plugin(self):
+        addAdminUnitAuthenticationPlugin(
+            None, 'admin_unit_auth', 'Admin Unit Authentication Plugin')
 
     def get_or_create_watcher(self, actorid):
         watcher = Watcher.query.get_by_actorid(actorid)

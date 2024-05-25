@@ -24,6 +24,7 @@ class AdminUnit(Base):
     public_url = Column(String(100), nullable=False)
     abbreviation = Column(String(50), nullable=False)
     hidden = Column(Boolean(), default=False, nullable=False)
+    public_key = Column(String(44))
 
     org_units = relationship("OrgUnit", backref="admin_unit")
 
