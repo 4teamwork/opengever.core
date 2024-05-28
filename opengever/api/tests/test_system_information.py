@@ -1,5 +1,8 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.dossier.interfaces import IDossierParticipants
+from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -75,7 +78,6 @@ class TestSystemInformation(IntegrationTestCase):
                 u'title': u'Document (Type: Directive)'
             }],
             u'id': u'schema2',
-            u'docproperty_key': u'ogg.dossier.cp.schema2',
             u'fields': [{
                 u'field_type': u'textline',
                 u'description': u'',
@@ -85,3 +87,60 @@ class TestSystemInformation(IntegrationTestCase):
                 u'name': u'textline'
             }]
         }, browser.json.get('property_sheets').get('schema2'))
+
+    @browsing
+    def test_property_sheet_fields_doc_property_key(self, browser):
+        self.login(self.regular_user, browser)
+        PropertySheetSchemaStorage().clear()
+        create(
+            Builder("property_sheet_schema")
+            .named("schema")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("bool", u"digital", u"Digital", u"", False, available_as_docproperty=True)
+            .with_field("int", u"age", u"Age", u"", False, available_as_docproperty=True)
+            .with_field("bool", u"checked", u"Checked", u"", False, available_as_docproperty=False)
+        )
+        browser.open(self.portal.absolute_url() + '/@system-information', headers=self.api_headers)
+
+        self.assertEqual(
+            sorted(['schema']),
+            sorted(browser.json.get('property_sheets').keys())
+        )
+
+        self.assertEqual(
+            {
+                u'assignments': [
+                    {
+                        u'id': u'IDossier.dossier_type.businesscase',
+                        u'title': u'Dossier (Type: Business case)'
+                    }
+                ],
+                u'id': u'schema',
+                u'fields': [
+                    {
+                        u'field_type': u'bool',
+                        u'description': u'',
+                        u'docproperty_key': u'ogg.dossier.cp.digital',
+                        u'title': u'Digital',
+                        u'required': False,
+                        u'available_as_docproperty': True,
+                        u'name': u'digital'
+                    }, {
+                        u'field_type': u'int',
+                        u'description': u'',
+                        u'docproperty_key': u'ogg.dossier.cp.age',
+                        u'title': u'Age',
+                        u'required': False,
+                        u'available_as_docproperty': True,
+                        u'name': u'age'
+                    }, {
+                        u'field_type': u'bool',
+                        u'description': u'',
+                        u'title': u'Checked',
+                        u'required': False,
+                        u'available_as_docproperty': False,
+                        u'name': u'checked'
+                    }
+                ]
+            }, browser.json.get('property_sheets').get('schema')
+        )

@@ -54,7 +54,12 @@ class SystemInformationGet(Service):
                         assignment_id, assignment_id)
                 } for assignment_id in serialized_sheet.get('assignments')
             ]
-            field_id = serialized_sheet.get("id")
-            serialized_sheet["docproperty_key"] = u"ogg.dossier.cp.{field_id}".format(field_id=field_id)
+
+            for field in serialized_sheet.get('fields', []):
+                field_id = field.get("name")
+                available_as_docproperty = field.get("available_as_docproperty")
+                if field_id and available_as_docproperty:
+                    field["docproperty_key"] = u"ogg.dossier.cp.{field_id}".format(field_id=field_id)
+
             propertysheets[sheet.name] = serialized_sheet
         infos['property_sheets'] = propertysheets
