@@ -1,0 +1,5 @@
+<registry>
+    <record name="opengever.sharing.interfaces.ISharingConfiguration.white_list_prefix">
+        <value>^ACL-SVC-GEVER</value>
+    </record>
+</registry>
