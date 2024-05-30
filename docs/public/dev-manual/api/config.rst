@@ -121,7 +121,7 @@ GEVER-Mandanten abgefragt werden.
           "root_url": "http://localhost:8080/fd",
           "sharing_configuration": {
               "black_list_prefix": "^$",
-              "white_list_prefix": "^ACL-SVC-GEVER"
+              "white_list_prefix": "^.+"
           },
           "template_folder_url": "http://localhost:8080/fd/vorlagen",
           "user_settings": {

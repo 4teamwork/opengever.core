@@ -32,7 +32,7 @@ class ISharingConfiguration(Interface):
         title=u'white list prefix',
         description=u'The prefix pattern for groups which should be displayed'
         'in the sharing view, even if the black list prefix also matches.',
-        default=u"^ACL-SVC-GEVER")
+        default=u"^.+")
 
     black_list_prefix = schema.TextLine(
         title=u'black list prefix',

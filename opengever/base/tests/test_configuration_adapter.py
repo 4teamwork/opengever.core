@@ -55,7 +55,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('seen_tours', ['*']),
             ])),
             ('sharing_configuration', OrderedDict([
-                ('white_list_prefix', u'^ACL-SVC-GEVER'),
+                ('white_list_prefix', u'^.+'),
                 ('black_list_prefix', u'^$'),
                 ])),
             ('p7m_extension_replacement', 'eml'),

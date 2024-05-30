@@ -197,7 +197,7 @@ class TestConfig(IntegrationTestCase):
         browser.open(self.config_url, headers=self.api_headers)
         self.assertEqual(browser.status_code, 200)
         self.assertEqual(browser.json.get(u'sharing_configuration'),
-                         {u'white_list_prefix': '^ACL-SVC-GEVER', u'black_list_prefix': '^$'})
+                         {u'white_list_prefix': '^.+', u'black_list_prefix': '^$'})
 
     @browsing
     def test_config_contains_user_settings(self, browser):
