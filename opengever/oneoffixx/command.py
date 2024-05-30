@@ -1,4 +1,5 @@
 from opengever.base.command import BaseObjectCreatorCommand
+from zope.annotation.interfaces import IAnnotations
 
 
 class CreateDocumentFromOneOffixxTemplateCommand(BaseObjectCreatorCommand):
@@ -10,4 +11,11 @@ class CreateDocumentFromOneOffixxTemplateCommand(BaseObjectCreatorCommand):
 
     def execute(self):
         obj = super(CreateDocumentFromOneOffixxTemplateCommand, self).execute()
+
+        # XXX Temporarily pass a *.docx filename to oneoffixx to support at
+        # least word templates. Before Office Connector no longer needs a
+        # filename and we support all kind of templates.
+        annotations = IAnnotations(obj)
+        annotations["filename"] = 'oneoffixx_from_template.docx'
+
         return obj.as_shadow_document()
