@@ -56,7 +56,7 @@ On peut interroger diverses options de configuration du client GEVER avec l'endp
           "root_url": "http://localhost:8080/fd",
           "sharing_configuration": {
               "black_list_prefix": "^$",
-              "white_list_prefix": "^.+"
+              "white_list_prefix": "^ACL-SVC-GEVER"
           },
           "user_settings": {
               "notify_inbox_actions": true,
