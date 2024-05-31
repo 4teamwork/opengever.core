@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.systemmessages">
+
+  <permission id="opengever.systemmessages.ManageSystemMessages" title="opengever.systemmessages: Manage System Messages" />
+
+</configure>

@@ -426,6 +426,13 @@
       <role name="Administrator" />
     </permission>
 
+    <permission name="opengever.systemmessages: Manage System Messages" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
+
   </permissions>
 
 </rolemap>
