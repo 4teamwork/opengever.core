@@ -15,7 +15,7 @@
       name="@system-messages"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".api.post.SystemMessagesPost"
-      permission="cmf.ManagePortal"
+      permission="opengever.systemmessages.ManageSystemMessages"
       />
 
   <plone:service
@@ -23,7 +23,7 @@
       name="@system-messages"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".api.get.SystemMessagesGet"
-      permission="cmf.ManagePortal"
+      permission="opengever.systemmessages.ManageSystemMessages"
       />
 
   <plone:service
@@ -31,7 +31,7 @@
       name="@system-messages"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".api.delete.SystemMessagesDelete"
-      permission="cmf.ManagePortal"
+      permission="opengever.systemmessages.ManageSystemMessages"
       />
 
 
@@ -40,6 +40,6 @@
       name="@system-messages"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".api.patch.SystemMessagesPatch"
-      permission="cmf.ManagePortal"
+      permission="opengever.systemmessages.ManageSystemMessages"
       />
 </configure>

@@ -265,6 +265,7 @@ NON_WRITE_PERMISSIONS = [
     'WebDAV access',
     'WebDAV Lock items',
     'WebDAV Unlock items',
+    'opengever.systemmessages: Manage System Messages',
 ]
 
 
