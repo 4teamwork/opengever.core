@@ -769,6 +769,17 @@ class Task(Container, TaskReminderSupport):
             api.content.transition(
                 obj=parent, transition='task-transition-in-progress-tested-and-closed')
 
+    def maybe_start_parent_task(self):
+        with elevated_privileges():
+            parent = aq_parent(aq_inner(self))
+            if not parent:
+                return
+
+            if api.content.get_state(parent) != 'task-state-open':
+                return
+
+            parent._set_in_progress()
+
     def get_next_planned_task(self):
         next_task = self.get_sql_object().get_next_task()
         if not next_task:
