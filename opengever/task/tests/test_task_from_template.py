@@ -732,6 +732,47 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
         self.assertEquals(
             'task-state-tested-and-closed', api.content.get_state(parallel_task))
 
+    def test_closes_sequential_main_task(self):
+        self.login(self.dossier_responsible)
+        sequential_task = create(Builder('task')
+                                 .within(self.dossier)
+                                 .having(responsible_client='fa',
+                                         responsible=self.regular_user.getId(),
+                                         issuer=self.dossier_responsible.getId(),
+                                         task_type='direct-execution')
+                                 .in_state('task-state-in-progress')
+                                 .as_sequential_task())
+
+        sequential_subtask_1 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        sequential_subtask_2 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        api.content.transition(
+            obj=sequential_subtask_2, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(sequential_task))
+
+        api.content.transition(
+            obj=sequential_subtask_1, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(sequential_task))
+
     def test_records_activity_and_adds_journal_entry_when_main_task_is_closed(self):
         self.activate_feature('activity')
         self.login(self.administrator)
