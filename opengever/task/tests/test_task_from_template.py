@@ -174,6 +174,43 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
+    def test_handles_skipped_tasks_when_open_subtasks(self):
+        self.login(self.secretariat_user)
+
+        alsoProvides(self.seq_subtask_2, IContainParallelProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-skipped'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-open-in-progress')
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-in-progress-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(self.seq_subtask_1))
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.seq_subtask_2))
+
+        self.assertEquals(
+            'task-state-skipped', api.content.get_state(subprocess_task1))
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task2))
+
     def test_does_not_allow_to_manually_start_sequential_task_if_parent_not_in_progress(self):
         self.login(self.regular_user)
 

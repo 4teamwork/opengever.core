@@ -715,6 +715,9 @@ class Task(Container, TaskReminderSupport):
                 next_task.start_subprocess()
 
     def _open_planned_task(self):
+        if api.content.get_state(self) != 'task-state-planned':
+            return
+
         with as_internal_workflow_transition():
             api.content.transition(
                 obj=self, transition='task-transition-planned-open')
