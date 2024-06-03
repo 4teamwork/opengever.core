@@ -10,6 +10,23 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.8.2 (2024-06-03)
+---------------------
+
+Bug fixes:
+
+
+- Temporarily pass a dummy filename to oneoffixx, to support at least word templates. [phgross] [TI-456]
+- Fix opening subtask in nested tasktemplates contiaining skipped tasks [elioschmutz] [TI-485]
+- Properly start and close parent tasks within a nested task template structure. [elioschmutz] [TI-485-2]
+
+
+Other changes:
+
+
+- Add System messages permissions [amo] [TI-482]
+
+
 2024.8.1 (2024-05-24)
 ---------------------
 
