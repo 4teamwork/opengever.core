@@ -2,6 +2,7 @@ from opengever.api.add import GeverFolderPost
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from zExceptions import NotFound
+from zope.annotation.interfaces import IAnnotations
 
 
 class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
@@ -36,3 +37,11 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
             'url': create_oc_url(
                 self.request, self.obj, dict(action='oneoffixx'),),
         }
+
+    def before_deserialization(self, obj):
+
+        # XXX Temporarily pass a *.docx filename to oneoffixx to support at
+        # least word templates. Before Office Connector no longer needs a
+        # filename and we support all kind of templates.
+        annotations = IAnnotations(obj)
+        annotations["filename"] = 'oneoffixx_from_template.docx'
