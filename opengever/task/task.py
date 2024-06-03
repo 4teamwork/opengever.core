@@ -715,6 +715,9 @@ class Task(Container, TaskReminderSupport):
                 next_task.start_subprocess()
 
     def _open_planned_task(self):
+        if api.content.get_state(self) != 'task-state-planned':
+            return
+
         with as_internal_workflow_transition():
             api.content.transition(
                 obj=self, transition='task-transition-planned-open')
@@ -765,6 +768,17 @@ class Task(Container, TaskReminderSupport):
 
             api.content.transition(
                 obj=parent, transition='task-transition-in-progress-tested-and-closed')
+
+    def maybe_start_parent_task(self):
+        with elevated_privileges():
+            parent = aq_parent(aq_inner(self))
+            if not parent:
+                return
+
+            if api.content.get_state(parent) != 'task-state-open':
+                return
+
+            parent._set_in_progress()
 
     def get_next_planned_task(self):
         next_task = self.get_sql_object().get_next_task()

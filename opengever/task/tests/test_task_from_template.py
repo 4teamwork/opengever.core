@@ -174,6 +174,43 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-open', api.content.get_state(subtask2))
 
+    def test_handles_skipped_tasks_when_open_subtasks(self):
+        self.login(self.secretariat_user)
+
+        alsoProvides(self.seq_subtask_2, IContainParallelProcess)
+        subprocess_task1 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-skipped'))
+        subprocess_task2 = create(Builder('task')
+                                  .within(self.seq_subtask_2)
+                                  .having(responsible_client='fa',
+                                          responsible=self.regular_user.getId(),
+                                          issuer=self.dossier_responsible.getId(),
+                                          task_type='correction')
+                                  .in_state('task-state-planned'))
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-open-in-progress')
+
+        api.content.transition(
+            obj=self.seq_subtask_1, transition='task-transition-in-progress-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(self.seq_subtask_1))
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(self.seq_subtask_2))
+
+        self.assertEquals(
+            'task-state-skipped', api.content.get_state(subprocess_task1))
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(subprocess_task2))
+
     def test_does_not_allow_to_manually_start_sequential_task_if_parent_not_in_progress(self):
         self.login(self.regular_user)
 
@@ -691,6 +728,225 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
 
         api.content.transition(
             obj=parallel_subtask_1, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(parallel_task))
+
+    def test_closes_sequential_main_task(self):
+        self.login(self.dossier_responsible)
+        sequential_task = create(Builder('task')
+                                 .within(self.dossier)
+                                 .having(responsible_client='fa',
+                                         responsible=self.regular_user.getId(),
+                                         issuer=self.dossier_responsible.getId(),
+                                         task_type='direct-execution')
+                                 .in_state('task-state-in-progress')
+                                 .as_sequential_task())
+
+        sequential_subtask_1 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        sequential_subtask_2 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        api.content.transition(
+            obj=sequential_subtask_2, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(sequential_task))
+
+        api.content.transition(
+            obj=sequential_subtask_1, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(sequential_task))
+
+    def test_start_nested_sequential_main_task(self):
+        self.login(self.dossier_responsible)
+
+        alsoProvides(self.seq_subtask_2, IContainParallelProcess)
+        sequential_task = create(Builder('task')
+                                 .within(self.dossier)
+                                 .having(responsible_client='fa',
+                                         responsible=self.regular_user.getId(),
+                                         issuer=self.dossier_responsible.getId(),
+                                         task_type='direct-execution')
+                                 .in_state('task-state-open')
+                                 .as_sequential_task())
+
+        sequential_subtask_1 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        sequential_subtask_1_1 = create(Builder('task')
+                                        .within(sequential_subtask_1)
+                                        .having(responsible_client='fa',
+                                                responsible=self.dossier_responsible.getId(),
+                                                issuer=self.dossier_responsible.getId(),
+                                                task_type='direct-execution')
+                                        .in_state('task-state-open')
+                                        .as_sequential_task())
+
+        sequential_subtask_2 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        api.content.transition(
+            obj=sequential_subtask_1_1, transition='task-transition-open-in-progress')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(sequential_subtask_1))
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(sequential_task))
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(sequential_subtask_2))
+
+    def test_start_nested_parallel_main_task(self):
+        self.login(self.dossier_responsible)
+        parallel_task = create(Builder('task')
+                               .within(self.dossier)
+                               .having(responsible_client='fa',
+                                       responsible=self.regular_user.getId(),
+                                       issuer=self.dossier_responsible.getId(),
+                                       task_type='direct-execution')
+                               .in_state('task-state-open')
+                               .as_parallel_task())
+
+        parallel_subtask_1 = create(Builder('task')
+                                    .within(parallel_task)
+                                    .having(responsible_client='fa',
+                                            responsible=self.regular_user.getId(),
+                                            issuer=self.dossier_responsible.getId(),
+                                            task_type='direct-execution')
+                                    .in_state('task-state-open')
+                                    .as_parallel_task())
+
+        parallel_subtask_1_1 = create(Builder('task')
+                                       .within(parallel_subtask_1)
+                                       .having(responsible_client='fa',
+                                               responsible=self.dossier_responsible.getId(),
+                                               issuer=self.dossier_responsible.getId(),
+                                               task_type='direct-execution')
+                                       .in_state('task-state-open')
+                                       .as_parallel_task())
+
+        parallel_subtask_2 = create(Builder('task')
+                                    .within(parallel_task)
+                                    .having(responsible_client='fa',
+                                            responsible=self.regular_user.getId(),
+                                            issuer=self.dossier_responsible.getId(),
+                                            task_type='direct-execution')
+                                    .in_state('task-state-open')
+                                    .as_parallel_task())
+
+        api.content.transition(
+            obj=parallel_subtask_1_1, transition='task-transition-open-in-progress')
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(parallel_subtask_1))
+
+        self.assertEquals(
+            'task-state-in-progress', api.content.get_state(parallel_task))
+
+        self.assertEquals(
+            'task-state-open', api.content.get_state(parallel_subtask_2))
+
+    def test_closes_nested_sequential_main_task(self):
+        self.login(self.dossier_responsible)
+        sequential_task = create(Builder('task')
+                                 .within(self.dossier)
+                                 .having(responsible_client='fa',
+                                         responsible=self.regular_user.getId(),
+                                         issuer=self.dossier_responsible.getId(),
+                                         task_type='direct-execution')
+                                 .in_state('task-state-open')
+                                 .as_sequential_task())
+
+        sequential_subtask_1 = create(Builder('task')
+                                      .within(sequential_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_sequential_task())
+
+        sequential_subsubtask_2 = create(Builder('task')
+                                         .within(sequential_subtask_1)
+                                         .having(responsible_client='fa',
+                                                 responsible=self.dossier_responsible.getId(),
+                                                 issuer=self.dossier_responsible.getId(),
+                                                 task_type='direct-execution')
+                                         .in_state('task-state-open')
+                                         .as_sequential_task())
+
+        api.content.transition(
+            obj=sequential_subsubtask_2, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(sequential_subtask_1))
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(sequential_task))
+
+    def test_closes_nested_parallel_main_task(self):
+        self.login(self.dossier_responsible)
+        parallel_task = create(Builder('task')
+                                 .within(self.dossier)
+                                 .having(responsible_client='fa',
+                                         responsible=self.regular_user.getId(),
+                                         issuer=self.dossier_responsible.getId(),
+                                         task_type='direct-execution')
+                                 .in_state('task-state-in-progress')
+                                 .as_parallel_task())
+
+        parallel_subtask_1 = create(Builder('task')
+                                      .within(parallel_task)
+                                      .having(responsible_client='fa',
+                                              responsible=self.regular_user.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_parallel_task())
+
+        parallel_subsubtask_2 = create(Builder('task')
+                                      .within(parallel_subtask_1)
+                                      .having(responsible_client='fa',
+                                              responsible=self.dossier_responsible.getId(),
+                                              issuer=self.dossier_responsible.getId(),
+                                              task_type='direct-execution')
+                                      .in_state('task-state-open')
+                                      .as_parallel_task())
+
+        api.content.transition(
+            obj=parallel_subsubtask_2, transition='task-transition-open-tested-and-closed')
+
+        self.assertEquals(
+            'task-state-tested-and-closed', api.content.get_state(parallel_subtask_1))
 
         self.assertEquals(
             'task-state-tested-and-closed', api.content.get_state(parallel_task))
