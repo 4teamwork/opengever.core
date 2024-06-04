@@ -4,6 +4,7 @@ from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.ogds.models.service import ogds_service
+from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
@@ -243,3 +244,46 @@ class TestInvitationsDelete(IntegrationTestCase):
         self.assertIsNone(
             get_entry_by_token(browser.json.get('items'), iid),
             'Expect no invitation anymore.')
+
+
+class TestDisplayInActiveInviter(IntegrationTestCase):
+
+    @browsing
+    def test_inactive_inviter_displays_invitation(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        workspace_inviter = User.query.get_by_userid(self.reader_user.id)
+
+        # Add an invitation to the storage
+        storage = getUtility(IInvitationStorage)
+        iid = storage.add_invitation(
+            self.workspace,
+            u'foo@example.com',
+            self.reader_user.id,
+            WORKSPCAE_GUEST.id
+        )
+
+        # Make a GET request to verify the invitation
+        url = '{}/@invitations/'.format(self.workspace.absolute_url())
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_invitation = [
+            {
+                u'@id': u'{}/@invitations/{}'.format(self.workspace.absolute_url(), iid),
+                u'@type': u'virtual.participations.invitation',
+                u'inviter_fullname': u'L\xe4ser L\xfccklicher (lucklicher.laser)',
+                u'recipient_email': u'foo@example.com',
+                u'role': {u'title': u'Guest', u'token': u'WorkspaceGuest'},
+                u'token': iid
+            }
+        ]
+        self.assertEqual(expected_invitation, browser.json['items'])
+
+        # Deactivate the inviter
+        workspace_inviter.active = False
+        ogds_service().session.flush()
+
+        # Make another GET request to ensure the inviter is still displayed
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+        self.assertEqual(expected_invitation, browser.json['items'])
