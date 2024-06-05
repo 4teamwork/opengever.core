@@ -30,4 +30,5 @@
 
   <permission id="opengever.workspace.AccessHiddenMembers" title="opengever.workspace: Access hidden members" />
 
+  <permission id="opengever.workspace.ExportWorkspaceParticipants" title="opengever.workspace: Export Workspace Participants" />
 </configure>

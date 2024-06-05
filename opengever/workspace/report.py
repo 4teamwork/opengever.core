@@ -1,6 +1,4 @@
 from opengever.globalindex.browser.report import UserReport
-from plone import api
-from zExceptions import Unauthorized
 
 
 class WorkspaceParticipantsReport(UserReport):
@@ -9,7 +7,4 @@ class WorkspaceParticipantsReport(UserReport):
     filename = "workspace_participants_report.xlsx"
 
     def check_permissions(self):
-        if not api.user.has_permission(
-            'opengever.workspace.AccessAllUsersAndGroups', obj=self.context
-        ):
-            raise Unauthorized
+        pass

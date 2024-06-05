@@ -160,7 +160,7 @@
       name="workspace_participants_report"
       for="*"
       class=".report.WorkspaceParticipantsReport"
-      permission="opengever.workspace.AccessAllUsersAndGroups"
+      permission="opengever.workspace.ExportWorkspaceParticipants"
       />
 
 </configure>
