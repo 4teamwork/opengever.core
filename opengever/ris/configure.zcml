@@ -12,6 +12,8 @@
 
   <i18n:registerTranslations directory="locales" />
 
+  <adapter factory=".actions.RisProposalContextActions" />
+
   <adapter factory=".sequence.ProposalSequenceNumberGenerator" />
 
 </configure>
