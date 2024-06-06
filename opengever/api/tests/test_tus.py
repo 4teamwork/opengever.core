@@ -318,9 +318,9 @@ class TestTUSUpload(IntegrationTestCase):
     @browsing
     def test_tus_upload_can_set_document_date(self, browser):
         self.login(self.regular_user, browser)
-        upload_metadata = UPLOAD_METADATA + ',document_date MjAxNS0wOC0yMQ=='
+        upload_metadata = UPLOAD_METADATA
         doc = self.assert_tus_upload_succeeds(self.dossier, browser, upload_metadata=upload_metadata)
-        self.assertEqual(date(2015, 8, 21), doc.document_date)
+        self.assertEqual(date.today(), doc.document_date)
 
     @browsing
     def test_tus_replace_does_not_update_document_date(self, browser):

@@ -72,10 +72,9 @@ class GeverUploadPatch(UploadPatch):
             return
 
         data = {}
-        document_date = metadata.get('document_date')
+        document_date = hasattr(obj, 'document_date')
         if document_date:
-            data['document_date'] = document_date
-
+            data['document_date'] = obj.document_date
         if data:
             deserializer = queryMultiAdapter((obj, self.request), IDeserializeFromJson)
             deserializer(data=data)
