@@ -177,7 +177,7 @@ msgstr "Ce dossier ne peut pas être annulé, parce qu'il contient des documents
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all contained tasks are in a closed state."
-msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches non accomplies."
+msgstr "Ce dossier ne peut pas être annulé, il contient encore des tâches non clôturées."
 
 #: ./opengever/dossier/deactivate.py
 msgid "The Dossier can't be deactivated, not all linked workspaces are deactivated."
