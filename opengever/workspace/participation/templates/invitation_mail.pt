@@ -31,7 +31,7 @@
       <tal:default-content tal:condition="not: options/custom_mail_content">
         <p i18n:translate="invitation_salutation">Hello</p>
         <p i18n:translate="invitation_text">
-          You were invited by <span i18n:name="user" tal:content="options/user">User</span> to the workspace "<span i18n:name="workspace_title" tal:content="options/workspace_title"></span>" at <a i18n:name="platform" tal:attributes="href options/public_url" tal:content="options/admin_unit_title">platform</a>.
+          You were invited by <span i18n:name="user" tal:content="options/user">User</span> to the workspace "<span i18n:name="workspace_title" tal:content="options/workspace_title"></span>" at <span i18n:name="platform" tal:content="options/admin_unit_title">platform</span>.
         </p>
         <p i18n:translate="invitation_accept">
           Please click the following link if you want to accept the invitation: <a i18n:name="accept_url" tal:attributes="href options/accept_url" i18n:translate="invitation_accept_link">accept invitation</a>
