@@ -771,7 +771,7 @@ class RequestChecker(object):
 
     @property
     def is_remote(self):
-        return bool(self.request.get_header('X-OGDS-AUID', False))
+        return bool(self.request.get_header('X-OGDS-AC', False))
 
     @property
     def is_successor_process(self):

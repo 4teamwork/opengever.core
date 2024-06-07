@@ -1,4 +1,5 @@
 from opengever.base.casauth import build_cas_server_url
+from opengever.ogds.auth.admin_unit import addAdminUnitAuthenticationPlugin
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.setup.creation.adminunit import AdminUnitCreator
@@ -31,6 +32,7 @@ class ConfigImporter(object):
         self.development_mode = development_mode
         self.import_units()
         self.update_casauth_settings()
+        self.install_admin_unit_auth_plugin()
         self.import_registry_settings()
         return True
 
@@ -88,6 +90,10 @@ class ConfigImporter(object):
         plugin.manage_changeProperties({
             'cookie_name': '__ac_' + au.id().replace('-', '_'),
         })
+
+    def install_admin_unit_auth_plugin(self):
+        addAdminUnitAuthenticationPlugin(
+            None, 'admin_unit_auth', 'Admin Unit Authentication Plugin')
 
     def import_registry_settings(self):
         registry = getUtility(IRegistry)

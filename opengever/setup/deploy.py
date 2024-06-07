@@ -8,6 +8,7 @@ from opengever.dossier.templatefolder.interfaces import ITemplateFolder
 from opengever.inbox.container import IInboxContainer
 from opengever.inbox.inbox import IInbox
 from opengever.meeting.committeecontainer import ICommitteeContainer
+from opengever.ogds.auth.admin_unit import addAdminUnitAuthenticationPlugin
 from opengever.ogds.auth.plugin import install_ogds_auth_plugin
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
@@ -73,6 +74,7 @@ class GeverDeployment(object):
         self.install_policy_profile()
         self.configure_plone_site()
         self.install_additional_profiles()
+        self.install_admin_unit_auth_plugin()
 
         if self.is_development_setup:
             self.configure_development_options()
@@ -168,6 +170,13 @@ class GeverDeployment(object):
     def setup_ogds_auth_plugin(self):
         if self.is_policyless:
             install_ogds_auth_plugin()
+
+    def install_admin_unit_auth_plugin(self):
+        # This plugin can only be installed if the admin unit already exists
+        # in OGDS which is not the case for policyless installations.
+        if not self.is_policyless:
+            addAdminUnitAuthenticationPlugin(
+                None, 'admin_unit_auth', 'Admin Unit Authentication Plugin')
 
     def sync_ogds(self):
         if not self.has_ogds_sync or self.is_policyless:

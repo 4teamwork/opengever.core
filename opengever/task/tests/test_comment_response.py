@@ -3,7 +3,7 @@ from ftw.builder import create
 from opengever.activity.model import Activity
 from opengever.base.response import IResponseContainer
 from opengever.core.testing import OPENGEVER_FUNCTIONAL_ACTIVITY_LAYER
-from opengever.ogds.base.Extensions.plugins import activate_request_layer
+from opengever.ogds.auth.admin_unit import activate_request_layer
 from opengever.ogds.base.interfaces import IInternalOpengeverRequestLayer
 from opengever.task.comment_response import CommentResponseHandler
 from opengever.task.interfaces import ICommentResponseHandler

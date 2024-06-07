@@ -148,7 +148,7 @@ class TestTaskControllerChecker(IntegrationTestCase):
     def test_is_remote_request_checks_ogds_plugin_flag(self):
         self.login(self.regular_user)
         self.assertFalse(get_checker(self.task).request.is_remote)
-        self.task.REQUEST.environ['X_OGDS_AUID'] = 'rr'
+        self.task.REQUEST.environ['HTTP_X_OGDS_AC'] = 'token'
         self.assertTrue(get_checker(self.task).request.is_remote)
 
     def test_is_successor_process_checks_request_for_succesor_flag(self):
