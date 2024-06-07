@@ -1,5 +1,5 @@
 from itsdangerous import URLSafeTimedSerializer
-from opengever.ogds.base.actor import PloneUserActor
+from opengever.ogds.base.actor import Actor
 from opengever.workspace import _
 from opengever.workspace.config import workspace_config
 from plone import api
@@ -62,7 +62,7 @@ def get_full_user_info(userid=None, member=None):
     if userid is None:
         userid = member.getId()
 
-    return PloneUserActor(identifier=userid, user=member).get_label()
+    return Actor.lookup(userid).get_label()
 
 
 def can_manage_member(context, actor=None, roles=None):
