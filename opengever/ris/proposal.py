@@ -16,7 +16,7 @@ from z3c.relationfield.schema import RelationChoice
 from z3c.relationfield.schema import RelationList
 from zope import schema
 from zope.interface import implements
-
+from opengever.meeting.interfaces import IProposalLikeContent
 
 class IProposal(model.Schema):
 
@@ -169,7 +169,7 @@ class IProposal(model.Schema):
 
 class Proposal(Container):
 
-    implements(IProposal, IResponseSupported)
+    implements(IProposal, IResponseSupported, IProposalLikeContent)
 
     def Title(self):
         return self.title.encode("utf-8")

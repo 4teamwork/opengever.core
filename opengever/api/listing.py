@@ -70,7 +70,7 @@ FILTERS = {
         u'object_provides:opengever.workspace.interfaces.IToDoList',
     ],
     u'proposals': [
-        u'object_provides:opengever.meeting.proposal.IProposal',
+        u'object_provides:opengever.meeting.interfaces.IProposalLikeContent',
     ],
     u'ris_proposals': [
         u'object_provides:opengever.ris.proposal.IProposal',

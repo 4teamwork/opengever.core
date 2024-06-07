@@ -48,3 +48,11 @@ class IDuringMeetingMigration(Interface):
     to prepare deletion of the meeting feature. It is used to skip certain
     checks that would prevent the migration.
     """
+
+
+class IProposalLikeContent(Interface):
+    """Marker interface for the old style proposals and the new ris
+    proposals.
+
+    We use this marker interface to provide a listing with both types.
+    """

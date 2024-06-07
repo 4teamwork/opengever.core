@@ -30,6 +30,7 @@ from opengever.meeting.command import CreateSubmittedProposalCommand
 from opengever.meeting.command import NullUpdateSubmittedDocumentCommand
 from opengever.meeting.command import UpdateSubmittedDocumentCommand
 from opengever.meeting.container import ModelContainer
+from opengever.meeting.interfaces import IProposalLikeContent
 from opengever.meeting.model import SubmittedDocument
 from opengever.meeting.model.proposal import Proposal as ProposalModel
 from opengever.meeting.proposalhistory import ProposalResponse
@@ -505,7 +506,7 @@ class Proposal(Container, ProposalBase):
     """Act as proxy for the proposal stored in the database.
 
     """
-    implements(IProposal)
+    implements(IProposal, IProposalLikeContent)
 
     def load_model(self):
         oguid = Oguid.for_object(self)
