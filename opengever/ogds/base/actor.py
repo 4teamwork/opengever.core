@@ -81,8 +81,8 @@ class Actor(object):
         self.identifier = identifier
 
     @classmethod
-    def lookup(cls, identifier):
-        return ActorLookup(identifier).lookup()
+    def lookup(cls, identifier, name_as_fallback=False):
+        return ActorLookup(identifier, name_as_fallback=name_as_fallback).lookup()
 
     @classmethod
     def user(cls, identifier, user=None):
@@ -678,8 +678,9 @@ class InteractiveActor(Actor):
 
 class ActorLookup(object):
 
-    def __init__(self, identifier):
+    def __init__(self, identifier, name_as_fallback=False):
         self.identifier = identifier
+        self.name_as_fallback = name_as_fallback
 
     def is_inbox(self):
         return self.identifier.startswith('inbox:')
@@ -758,7 +759,8 @@ class ActorLookup(object):
         if not visible_users_and_groups_filter.can_access_principal(userid):
             return None
 
-        user = ogds_service().fetch_user(userid)
+        user = ogds_service().fetch_user(
+            userid, username_as_fallback=self.name_as_fallback)
         if not user:
             portal = getSite()
             portal_membership = getToolByName(portal, 'portal_membership')
@@ -783,7 +785,8 @@ class ActorLookup(object):
         if not visible_users_and_groups_filter.can_access_principal(groupid):
             return None
 
-        return ogds_service().fetch_group(groupid)
+        return ogds_service().fetch_group(
+            groupid, groupname_as_fallback=self.name_as_fallback)
 
     def create_group_actor(self, group=None):
         if not group:
@@ -802,7 +805,7 @@ class ActorLookup(object):
     def create_interactive_actor(self):
         return InteractiveActor(self.identifier)
 
-    def lookup(self):
+    def lookup(self, name_as_fallback=False):
         if not self.identifier:
             return self.create_null_actor()
 
