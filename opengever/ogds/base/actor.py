@@ -776,7 +776,7 @@ class ActorLookup(object):
             if self.is_plone_user(user):
                 return PloneUserActor(self.identifier, user=user)
             else:
-                return OGDSUserActor(self.identifier, user=user)
+                return OGDSUserActor(user.userid, user=user)
         else:
             return self.create_null_actor()
 
@@ -792,7 +792,7 @@ class ActorLookup(object):
         if not group:
             group = self.load_group()
         if group:
-            return OGDSGroupActor(self.identifier, group=group)
+            return OGDSGroupActor(group.groupid, group=group)
         else:
             return self.create_null_actor()
 
