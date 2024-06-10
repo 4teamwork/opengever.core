@@ -59,7 +59,6 @@ Aktuell werden folgende Auflistungen unterstützt:
 - ``proposals``: Anträge
 - ``contacts``: Lokale Kontakte
 - ``repository_folders``: Ordnungspositionen
-- ``ris_proposals``: RIS-Anträge
 - ``tasktemplates``: Standardabläufe
 - ``tasktemplate_folders``: Aufgabenvorlagen
 - ``template_folders``: Vorlagenordner
