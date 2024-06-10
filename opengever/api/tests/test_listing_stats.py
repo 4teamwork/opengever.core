@@ -64,7 +64,7 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                     {u'count': 12, u'field': u'listing_name', u'value': u'documents'},
                     {u'count': 3, u'field': u'listing_name', u'value': u'dossiers'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'dossiertemplates'},
-                    {u'count': 3, u'field': u'listing_name', u'value': u'proposals'},
+                    {u'count': 4, u'field': u'listing_name', u'value': u'proposals'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'repository_folders'},
                     {u'count': 9, u'field': u'listing_name', u'value': u'tasks'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'tasktemplate_folders'},
@@ -75,8 +75,7 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_folders'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspace_meetings'},
                     {u'count': 0, u'field': u'listing_name', u'value': u'workspaces'},
-                    {u'count': 28, u'field': u'listing_name', u'value': u'folder_contents'},
-                    {u'count': 1, u'field': u'listing_name', u'value': u'ris_proposals'}]
+                    {u'count': 28, u'field': u'listing_name', u'value': u'folder_contents'}]
 
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
@@ -168,7 +167,7 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                      u'field': u'listing_name',
                      u'queries': {responsible_regular_user: 0},
                      u'value': u'dossiertemplates'},
-                    {u'count': 3,
+                    {u'count': 4,
                      u'field': u'listing_name',
                      u'queries': {responsible_regular_user: 0},
                      u'value': u'proposals'},
@@ -215,11 +214,7 @@ class TestListingStatsGet(SolrIntegrationTestCase):
                     {u'count': 28,
                      u'field': u'listing_name',
                      u'queries': {responsible_regular_user: 8},
-                     u'value': u'folder_contents'},
-                    {u'count': 1,
-                     u'field': u'listing_name',
-                     u'queries': {responsible_regular_user: 0},
-                     u'value': u'ris_proposals'}]
+                     u'value': u'folder_contents'}]
         self.assertItemsEqual(expected, browser.json['facet_pivot']['listing_name'])
 
     @browsing
