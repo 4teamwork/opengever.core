@@ -432,6 +432,13 @@
       <role name="LimitedAdmin" />
     </permission>
 
+    <permission name="opengever.workspace: Export Workspace Participants" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="WorkspaceAdmin" />
+    </permission>
+
 
   </permissions>
 

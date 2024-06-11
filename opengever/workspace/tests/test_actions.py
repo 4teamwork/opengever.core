@@ -110,7 +110,14 @@ class TestWorkspaceContextActions(IntegrationTestCase):
 
     def test_workspace_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
-        expected_actions = [u'add_invitation', u'edit', u'local_roles', u'share_content', 'zipexport']
+        expected_actions = [
+            u'add_invitation',
+            u'edit',
+            u'local_roles',
+            u'share_content',
+            u'zipexport',
+            u'export_workspace_participators'
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.workspace))
 
     def test_delete_action_only_available_for_deactivated_workspaces(self):
@@ -169,3 +176,27 @@ class TestWorkspaceFolderContextActions(IntegrationTestCase):
         ITrasher(self.workspace_folder).trash()
         expected_actions = [u'delete_workspace_context', u'share_content', u'untrash_context', 'zipexport']
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
+
+
+class TestWorkspaceExportParticipantsContextActions(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    def get_actions(self, context):
+        adapter = queryMultiAdapter((context, self.request), interface=IContextActions)
+        return adapter.get_actions() if adapter else []
+
+    def test_export_workspace_users_action_available_for_workspace_admin(self):
+        self.login(self.workspace_admin)
+        actions = self.get_actions(self.workspace)
+        self.assertIn('export_workspace_participators', actions)
+
+    def test_export_workspace_users_action_available_for_admin(self):
+        self.login(self.administrator)
+        actions = self.get_actions(self.workspace)
+        self.assertIn('export_workspace_participators', actions)
+
+    def test_export_workspace_users_action_not_available_for_other_users(self):
+        self.login(self.workspace_guest)
+        actions = self.get_actions(self.workspace)
+        self.assertNotIn('export_workspace_participators', actions)

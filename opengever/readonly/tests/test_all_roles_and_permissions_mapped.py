@@ -266,6 +266,7 @@ NON_WRITE_PERMISSIONS = [
     'WebDAV Lock items',
     'WebDAV Unlock items',
     'opengever.systemmessages: Manage System Messages',
+    'opengever.workspace: Export Workspace Participants'
 ]
 
 

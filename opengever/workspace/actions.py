@@ -74,6 +74,12 @@ class WorkspaceContextActions(BaseContextActions):
     def is_zipexport_available(self):
         return not is_restricted_workspace_and_guest(self.context)
 
+    def is_export_workspace_users_available(self):
+        return api.user.has_permission(
+            'opengever.workspace: Export Workspace Participants',
+            obj=self.context
+        )
+
 
 @adapter(IWorkspaceFolder, IOpengeverBaseLayer)
 class WorkspaceFolderContextActions(BaseContextActions):
