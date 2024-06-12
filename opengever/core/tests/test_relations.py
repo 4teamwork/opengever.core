@@ -80,6 +80,7 @@ EXPECTED_INTERFACES = [
     'opengever.mail.behaviors.ISendableDocsContainer',
     'opengever.meeting.committee.ICommittee',
     'opengever.meeting.interfaces.IMeetingDossier',
+    'opengever.meeting.interfaces.IProposalLikeContent',
     'opengever.meeting.proposal.IBaseProposal',
     'opengever.meeting.proposal.IProposal',
     'opengever.meeting.proposaltemplate.IProposalTemplate',

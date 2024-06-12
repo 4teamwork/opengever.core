@@ -8,6 +8,7 @@ from opengever.base.source import DossierPathSourceBinder
 from opengever.base.utils import to_html_xweb_intelligent
 from opengever.dossier.utils import get_containing_dossier
 from opengever.meeting import _
+from opengever.meeting.interfaces import IProposalLikeContent
 from opengever.ogds.base.sources import AssignedUsersSourceBinder
 from plone.autoform.directives import widget
 from plone.dexterity.content import Container
@@ -169,7 +170,7 @@ class IProposal(model.Schema):
 
 class Proposal(Container):
 
-    implements(IProposal, IResponseSupported)
+    implements(IProposal, IResponseSupported, IProposalLikeContent)
 
     def Title(self):
         return self.title.encode("utf-8")

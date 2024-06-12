@@ -791,13 +791,13 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
              u'opengever.meeting.proposal',
              u'opengever.meeting.proposal',
              u'opengever.meeting.proposal',
+             u'opengever.ris.proposal',
              u'opengever.dossier.businesscasedossier',
              u'opengever.dossier.businesscasedossier',
              u'opengever.dossier.businesscasedossier',
              u'opengever.meeting.meetingdossier',
              u'opengever.meeting.meetingdossier',
              u'opengever.meeting.meetingdossier',
-             u'opengever.dossier.businesscasedossier',
              u'opengever.dossier.businesscasedossier'],
             [item['@type'] for item in browser.json['items']])
 
@@ -824,10 +824,10 @@ class TestSolrSearchGet(SolrIntegrationTestCase):
              (u'3. Spinn\xe4nnetzregistrar', u'opengever.repository.repositoryfolder'),
              (u'Antrag f\xfcr Kreiselbau', u'opengever.meeting.proposal'),
              (u'Initialvertrag f\xfcr Bearbeitung', u'opengever.meeting.proposal'),
+             (u'RIS-Proposal', u'opengever.ris.proposal'),
              (u'Vertr\xe4ge', u'opengever.meeting.proposal'),
              (u'2015', u'opengever.dossier.businesscasedossier'),
-             (u'2016', u'opengever.dossier.businesscasedossier'),
-             (u'A resolvable main dossier', u'opengever.dossier.businesscasedossier')],
+             (u'2016', u'opengever.dossier.businesscasedossier')],
             [(item['title'], item['@type']) for item in browser.json['items']])
 
     @browsing

@@ -1001,22 +1001,41 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             item)
 
     @browsing
-    def test_ris_proposals_listing(self, browser):
+    def test_proposals_listing(self, browser):
         self.login(self.regular_user, browser=browser)
         query_string = '&'.join((
-            'name=ris_proposals',
+            'name=proposals',
             'columns=UID',
             'columns=title',
         ))
         view = '?'.join(('@listing', query_string))
         browser.open(self.dossier, view=view, headers=self.api_headers)
 
-        self.assertEqual(1, browser.json['items_total'])
+        self.assertEqual(4, browser.json['items_total'])
         self.assertEqual(
-            {u'@id': self.ris_proposal.absolute_url(),
-             u'UID': IUUID(self.ris_proposal),
-             u'title': 'RIS-Proposal'},
-            browser.json['items'][0])
+            [
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/proposal-4',
+                    u'UID': u'createrisproposals00000000000001',
+                    u'title': u'RIS-Proposal'
+                },
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/proposal-3',
+                    u'UID': u'createtreatydossiers000000000011',
+                    u'title': u'Initialvertrag f\xfcr Bearbeitung'
+                },
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/proposal-2',
+                    u'UID': u'createtreatydossiers000000000009',
+                    u'title': u'Antrag f\xfcr Kreiselbau'
+                },
+                {
+                    u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/proposal-1',
+                    u'UID': u'createtreatydossiers000000000003',
+                    u'title': u'Vertr\xe4ge'
+                }
+            ],
+            browser.json['items'])
 
     @browsing
     def test_task_type_facets_are_translated(self, browser):

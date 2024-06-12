@@ -12,6 +12,8 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@listing``: The ``proposals`` listing returns all old and new proposals.
+- ``@listing``: Remove ``ris_proposals`` listing.
 
 
 2024.8.0 (2024-05-21)
