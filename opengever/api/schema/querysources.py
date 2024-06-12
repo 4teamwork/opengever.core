@@ -110,15 +110,20 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
             )
 
         if query:
-            result = source.search(safe_unicode(query))
+            if getattr(source, 'provides_raw_queries', False):
+                result = RawQuerySourceSearchResults(
+                    source, source.raw_search(safe_unicode(query)))
+            else:
+                result = ResolvedQuerySourceSearchResults(source.search(safe_unicode(query)))
         else:
             try:
-                result = [source.getTermByToken(safe_unicode(token))]
+                result = ResolvedQuerySourceSearchResults(
+                    [source.getTermByToken(safe_unicode(token))])
             except LookupError:
-                result = []
+                result = ResolvedQuerySourceSearchResults([])
 
         terms = []
-        for term in result:
+        for term in result.results:
             terms.append(term)
 
         batch = HypermediaBatch(self.request, terms)
@@ -126,7 +131,7 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
         serialized_terms = []
         for term in batch:
             serializer = getMultiAdapter(
-                (term, self.request), interface=ISerializeToJson
+                (result.get_resolved_term(term), self.request), interface=ISerializeToJson
             )
             serialized_terms.append(serializer())
 
@@ -139,3 +144,20 @@ class GEVERQuerySourcesGet(GEVERSourcesGet):
         if links:
             result["batching"] = links
         return result
+
+
+class RawQuerySourceSearchResults():
+    def __init__(self, source, results):
+        self.results = results
+        self.source = source
+
+    def get_resolved_term(self, term):
+        return self.source.getTerm(term.token)
+
+
+class ResolvedQuerySourceSearchResults():
+    def __init__(self, results):
+        self.results = results
+
+    def get_resolved_term(self, term):
+        return term
