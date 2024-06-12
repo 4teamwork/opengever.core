@@ -1980,6 +1980,71 @@ class TestAddParticipationsOnWorkspacePost(FunctionalWorkspaceClientTestCase):
              'test_user_1_': ['WorkspaceAdmin']},
             self.workspace.__ac_local_roles__)
 
+    @browsing
+    def test_participations_are_added_by_username(self, browser):
+        user = create(Builder('ogds_user').having(
+            userid='69d09e3a-c1e1-4878-aa3b-6e85a20e1cc7',
+            username='hugo.boss',
+        ))
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": user.userid,
+                              "role": "WorkspaceGuest"}]
+        }
+
+        with patch('opengever.workspaceclient.client.WorkspaceClient.post') as mocked_post:
+            mocked_post.return_value = {}
+            with self.workspace_client_env():
+                browser.login()
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-participations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+                self.assertEqual(
+                    mocked_post.call_args[1]['json'],
+                    {
+                        'participants': [{
+                            u'role': u'WorkspaceGuest',
+                            u'participant': user.username,
+                        }],
+                    }
+                )
+
+    @browsing
+    def test_participations_are_added_by_groupname(self, browser):
+        group = create(Builder('ogds_group').having(
+            groupid='87175c43-f9cc-44f3-9f6c-105d3d8382bf',
+            groupname='staff',
+        ))
+        payload = {
+            'workspace_uid': self.workspace.UID(),
+            'participants': [{"participant": group.groupid,
+                              "role": "WorkspaceGuest"}]
+        }
+        with patch('opengever.workspaceclient.client.WorkspaceClient.post') as mocked_post:
+            mocked_post.return_value = {}
+            with self.workspace_client_env():
+                browser.login()
+                browser.open(
+                    self.dossier.absolute_url() + '/@linked-workspace-participations',
+                    data=json.dumps(payload),
+                    method='POST',
+                    headers={'Accept': 'application/json',
+                             'Content-Type': 'application/json'},
+                )
+                self.assertEqual(
+                    mocked_post.call_args[1]['json'],
+                    {
+                        'participants': [{
+                            u'role': u'WorkspaceGuest',
+                            u'participant': group.groupname,
+                        }],
+                    }
+                )
+
 
 class TestAddInvitationOnWorkspacePost(FunctionalWorkspaceClientTestCase):
 

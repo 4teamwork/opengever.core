@@ -10,6 +10,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import get_main_dossier
 from opengever.journal.handlers import journal_entry_factory
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
+from opengever.ogds.base.actor import Actor
 from opengever.workspaceclient import _
 from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
@@ -575,9 +576,16 @@ class LinkedWorkspaces(object):
         """ Adds participations on the workspace
         """
         workspace_url = self._get_linked_workspace_url(workspace_uid)
+        participations_by_name = []
+        for participation in participations:
+            actor = Actor.lookup(participation['participant'], name_as_fallback=True)
+            participations_by_name.append({
+                u'participant': actor.login_name,
+                u'role': participation[u'role'],
+            })
         return self.client.post(
             '{}/@participations'.format(workspace_url),
-            json={'participants': participations})
+            json={'participants': participations_by_name})
 
     def add_invitation(self, workspace_uid, invitation_data):
         """ Adds an invitation on the workspace

@@ -83,20 +83,22 @@ class ParticipationTraverseService(Service):
             if item.get('token') == token:
                 return item
 
-    def is_actor_allowed_to_participate(self, token):
+    def is_actor_allowed_to_participate(self, actor):
         """Validates the actor token if it' a avalid actor.
         """
-        if Actor.lookup(token).actor_type not in ['user', 'group']:
+        if actor.actor_type not in ['user', 'group']:
             raise BadRequest(
                 _(u'disallowed_participant',
                   default=u'The actor ${actorid} is not allowed',
-                  mapping={'actorid': token}))
+                  mapping={'actorid': actor.identifier}))
 
-        if self.find_participant(token, self.context.get_context_with_local_roles()):
+        if self.find_participant(
+            actor.identifier, self.context.get_context_with_local_roles()
+        ):
             raise BadRequest(
                 _(u'duplicate_participant',
                   default='The participant ${actorid} already exists',
-                  mapping={'actorid': token}))
+                  mapping={'actorid': actor.identifier}))
 
         if IWorkspaceFolder.providedBy(self.context):
             if not self.context.has_blocked_local_role_inheritance():
@@ -105,7 +107,9 @@ class ParticipationTraverseService(Service):
                     "Please block the role inheritance before adding "
                     "new participants.")
 
-            if not self.find_participant(token, self.context.get_parent_with_local_roles()):
+            if not self.find_participant(
+                actor.identifier, self.context.get_parent_with_local_roles()
+            ):
                 raise BadRequest('The participant is not allowed')
 
 
@@ -220,16 +224,17 @@ class ParticipationsPost(ParticipationTraverseService):
         results = []
         container = self.context.get_context_with_local_roles()
         for token, role in participations:
-            self.validate_participation(token, role)
+            actor = Actor.lookup(token, name_as_fallback=True)
+            self.validate_participation(actor, role)
 
-            assignment = SharingRoleAssignment(token, [role], self.context)
+            assignment = SharingRoleAssignment(actor.identifier, [role], self.context)
             RoleAssignmentManager(self.context).add_or_update_assignment(assignment)
 
             activity_manager = WorkspaceWatcherManager(self.context)
-            activity_manager.new_participant_added(token, notify_user)
+            activity_manager.new_participant_added(actor.identifier, notify_user)
 
             results.append(self.prepare_response_item(self.find_participant(
-                token, container)))
+                actor.identifier, container)))
 
         self.request.response.setStatus(201)
         if getattr(self, "return_list", False):
@@ -275,8 +280,8 @@ class ParticipationsPost(ParticipationTraverseService):
 
         return participant, role
 
-    def validate_participation(self, token, role):
-        self.is_actor_allowed_to_participate(token)
+    def validate_participation(self, actor, role):
+        self.is_actor_allowed_to_participate(actor)
 
         if role not in PARTICIPATION_ROLES:
             raise BadRequest(

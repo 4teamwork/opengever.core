@@ -1,4 +1,6 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.activity.model import Activity
@@ -1082,6 +1084,40 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
             self.workspace.__ac_local_roles__)
 
     @browsing
+    def test_adding_participation_by_username(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        data = {
+            "participant": {"token": self.regular_user.getUserName()},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+        )
+        self.assertEqual(
+            self.regular_user.id,
+            browser.json.get('participant').get('id'))
+        self.assertEqual(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            browser.json.get('role'))
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+        entry = get_entry_by_id(browser.json.get('items'), self.regular_user.id)
+        self.assertEqual(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
     def test_let_a_group_participate(self, browser):
         self.login(self.workspace_admin, browser=browser)
 
@@ -1116,6 +1152,48 @@ class TestParticipationPostWorkspace(IntegrationTestCase):
         )
 
         entry = get_entry_by_id(browser.json.get('items'), 'projekt_a')
+        self.assertEqual(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            entry.get('role'))
+
+    @browsing
+    def test_adding_participation_by_groupname(self, browser):
+        self.login(self.workspace_admin, browser=browser)
+
+        group = create(
+            Builder('ogds_group')
+            .having(
+                groupid='0056a735-1262-4b81-bede-430752a68a16',
+                groupname='staff',
+                title=u'Staff',
+            )
+        )
+        data = {
+            "participant": {"token": group.groupname},
+            "role": {"token": 'WorkspaceGuest'},
+        }
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='POST',
+            data=json.dumps(data),
+            headers=http_headers(),
+        )
+        self.assertEqual(
+            group.groupid,
+            browser.json.get('participant').get('id'))
+        self.assertEqual(
+            {u'token': u'WorkspaceGuest', u'title': u'Guest'},
+            browser.json.get('role'))
+
+        browser.open(
+            self.workspace,
+            view='@participations',
+            method='GET',
+            headers=http_headers(),
+        )
+        entry = get_entry_by_id(browser.json.get('items'), group.groupid)
         self.assertEqual(
             {u'token': u'WorkspaceGuest', u'title': u'Guest'},
             entry.get('role'))

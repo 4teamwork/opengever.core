@@ -28,7 +28,7 @@ class WorkspaceClient(object):
         if not api.user.has_permission('opengever.workspaceclient: Use Workspace Client'):
             raise Unauthorized("User does not have permission to use the WorkspaceClient")
         return WorkspaceSession(self.workspace_url,
-                                api.user.get_current().getId())
+                                api.user.get_current().getUserName())
 
     @property
     def request(self):
