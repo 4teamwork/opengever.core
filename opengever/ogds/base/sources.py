@@ -144,6 +144,19 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
     """This example of a IQuerySource is taken from the
     plone.formwidget.autocomplete
     """
+    # Marker for query sources which provides unresolved query sources.
+    # A query source returns vocabulary-terms. Each term contains a title which sometimes
+    # needs to be resolved first. Since query sources are not batched, the title
+    # will be resolved for every term found with the given query. This behavior
+    # can lead to performance issues.
+    #
+    # A raw query source can return unresolved vocabulary terms when searching
+    # the source. We can later resolve these valus to the final term if required.
+    #
+    # Using interfaces or implementing batching in query sources would end in
+    # a lot of deep changes of query sources which we want to avoid.
+    provides_raw_queries = True
+    resolve_terms = True
 
     def __init__(self, context, **kwargs):
         super(AllUsersInboxesAndTeamsSource, self).__init__(context, **kwargs)
@@ -199,6 +212,9 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
         return query
 
     def getTerm(self, value):
+        if not self.resolve_terms:
+            return SimpleTerm(value, value, value)
+
         data = value.split(':', 1)
         if len(data) == 2:
             orgunit_id, userid = data
@@ -259,6 +275,14 @@ class AllUsersInboxesAndTeamsSource(BaseQuerySoure):
             return self.getTerm(value)
         except orm.exc.NoResultFound:
             raise LookupError
+
+    def raw_search(self, query_string):
+        self.resolve_terms = False
+        try:
+            terms = self.search(query_string)
+        finally:
+            self.resolve_terms = True
+        return terms
 
     def search(self, query_string):
         self.terms = []
@@ -372,6 +396,8 @@ class AllUsersInboxesAndTeamsSourceBinder(object):
 
 
 class UsersContactsInboxesSource(AllUsersInboxesAndTeamsSource):
+
+    provides_raw_queries = False
 
     @property
     def only_users(self):
@@ -493,6 +519,7 @@ class UsersContactsInboxesSourceBinder(object):
 class AllUsersSource(AllUsersInboxesAndTeamsSource):
     """Vocabulary of all users.
     """
+    provides_raw_queries = False
 
     @property
     def search_only_active_users(self):
