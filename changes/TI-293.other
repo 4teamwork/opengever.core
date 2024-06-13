@@ -1,1 +1,0 @@
-Improve solr performance, no longer using WordDelimiterGraphFilter on querying. [phgross]

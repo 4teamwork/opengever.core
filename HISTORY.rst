@@ -10,6 +10,35 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.9.0 (2024-06-13)
+---------------------
+
+Bug fixes:
+
+
+- Temporarily pass a dummy filename to oneoffixx, to support at least word templates. [phgross] [TI-456]
+- Fix opening subtask in nested tasktemplates contiaining skipped tasks [elioschmutz] [TI-485]
+- Properly start and close parent tasks within a nested task template structure. [elioschmutz] [TI-485-2]
+- Provide ui-action to export workspace users by adding a new permission.[amo] [TI-506]
+
+
+Other changes:
+
+
+- Enhance Workspace member Vocabulary so we can get meeting users even if they removed from workspace. [amo] [TI-116]
+- Improve solr performance, no longer using WordDelimiterGraphFilter on querying. [phgross] [TI-293]
+- Handel invitation from inactive user [amo] [TI-328]
+- Add support for linking workspaces by username/groupname. [buchi] [TI-399]
+- Improve performance when searching for a responsible in tasks and forwardings. [elioschmutz] [TI-402]
+- Add the IProposalLikeContent interface to list all old and new proposals. [jch] [TI-426]
+- Add ris proposal context action to create tasks [jch] [TI-472]
+- Add System messages permissions [amo] [TI-482]
+- Superfluous link in invitation mail was removed [lorenzrychener] [TI-56]
+- Replace the IP-based PAS plugin for authenticating requests from other admin units with a token-based one. [buchi] [TI-61]
+- Changed French translation for canceling a dossier with open tasks[amo] [TI-85]
+- Add feature-flag to disable the classic ui [elioschmutz] [TI-88]
+
+
 2024.8.0 (2024-05-21)
 ---------------------
 
