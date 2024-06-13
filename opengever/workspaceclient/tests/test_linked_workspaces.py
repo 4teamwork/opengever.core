@@ -548,12 +548,14 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
 
         initial_content = gever_doc.file.data
         initial_filename = gever_doc.file.filename
+        initial_content_type = gever_doc.file.contentType
 
         self.assertEqual('Test data', initial_content)
         self.assertEqual(u'Testdokumaent.doc', initial_filename)
+        self.assertEqual(u'application/msword', initial_content_type)
 
         new_content = 'Content produced in Workspace'
-        new_filename = u'workspace.doc'
+        new_filename = u'workspace.pdf'
 
         workspace_doc = create(Builder('document')
                                .within(self.workspace)
@@ -583,7 +585,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(1, Versioner(gever_doc).get_current_version_id())
 
             self.assertEqual(new_content, gever_doc.file.data)
-            self.assertEqual(initial_filename, gever_doc.file.filename)
+            self.assertEqual(u'Testdokumaent.pdf', gever_doc.file.filename)
+            self.assertEqual(u'application/pdf', gever_doc.file.contentType)
 
             initial_version = Versioner(gever_doc).retrieve(0)
             initial_version_md = Versioner(gever_doc).retrieve_version(0)
@@ -595,7 +598,8 @@ class TestLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
             self.assertEqual(u'Initial version', initial_version_md.comment)
 
             self.assertEqual(new_content, new_version.file.data)
-            self.assertEqual(initial_filename, new_version.file.filename)
+            self.assertEqual(u'Testdokumaent.pdf', new_version.file.filename)
+            self.assertEqual(u'application/pdf', new_version.file.contentType)
             self.assertEqual(u'Document copied back from teamraum', new_version_md.comment)
 
             document_journal = self.get_journal_entries(gever_doc)
