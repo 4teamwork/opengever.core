@@ -218,7 +218,7 @@ class IDispositionSchema(model.Schema):
     model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
-        fields=[u'title', u'dossiers', u'transfer_number', u'transferring_office'],
+        fields=[u'title', u'dossiers', u'transfer_number', u'transferring_office', u'responsible'],
     )
 
     dexteritytextindexer.searchable('title')
@@ -259,6 +259,11 @@ class IDispositionSchema(model.Schema):
         title=_(u"label_transferring_office", default=u"Transferring office"),
         required=False,
         defaultFactory=transferring_office_default
+    )
+    responsible = schema.Choice(
+        title=_(u'responsible', default=u'Responsible'),
+        vocabulary='opengever.disposition.archivist',
+        required=False,
     )
 
 

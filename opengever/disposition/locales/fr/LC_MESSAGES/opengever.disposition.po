@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-30 06:43+0000\n"
+"POT-Creation-Date: 2024-06-14 06:58+0000\n"
 "PO-Revision-Date: 2018-05-22 10:09+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-disposition/fr/>\n"
@@ -342,6 +342,11 @@ msgstr "Période"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "progress"
 msgstr "Progrès"
+
+#. Default: "Responsible"
+#: ./opengever/disposition/disposition.py
+msgid "responsible"
+msgstr "Responsable"
 
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
 #: ./opengever/disposition/activities.py

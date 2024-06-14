@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-04-30 06:43+0000\n"
+"POT-Creation-Date: 2024-06-14 06:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -401,6 +401,11 @@ msgstr "Period"
 #: ./opengever/disposition/browser/templates/overview.pt
 msgid "progress"
 msgstr "Progress"
+
+#. Default: "Responsible"
+#: ./opengever/disposition/disposition.py
+msgid "responsible"
+msgstr "Responsible"
 
 #. German translation: Neues Angebot hinzugefügt durch ${user} im Mandanten ${admin_unit}
 #. Default: "New disposition added by ${user} on admin unit ${admin_unit}"
