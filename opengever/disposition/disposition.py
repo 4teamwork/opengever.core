@@ -463,7 +463,7 @@ class Disposition(Container):
         center.add_watcher_to_resource(
             self, self.Creator(), DISPOSITION_RECORDS_MANAGER_ROLE)
 
-        for archivist in self.get_all_archivists():
+        for archivist in Disposition.get_all_archivists():
             center.add_watcher_to_resource(
                 self, archivist, DISPOSITION_ARCHIVIST_ROLE)
 
@@ -483,8 +483,9 @@ class Disposition(Container):
 
         return archivists
 
-    def get_all_archivists(self):
-        archivists_infos = self.get_archivists_infos()
+    @staticmethod
+    def get_all_archivists():
+        archivists_infos = Disposition.get_archivists_infos()
         archivists = []
         for principal, info in archivists_infos:
             if info[0].get('principal_type') == 'group':

@@ -91,4 +91,9 @@
       name="disposition-transition-appraise"
       />
 
+  <!-- Vocabularies -->
+  <utility
+      factory=".vocabularies.ArchivistVocabulary"
+      name="opengever.disposition.archivist"
+      />
 </configure>
