@@ -4,10 +4,8 @@ from ftw.testing import freeze
 from opengever.officeconnector.testing import FREEZE_DATE
 from opengever.officeconnector.testing import JWT_SIGNING_SECRET_PLONE
 from opengever.officeconnector.testing import OCSolrIntegrationTestCase
-from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.testing.assets import path_to_asset
 from pkg_resources import resource_string
-from plone import api
 import jwt
 import re
 import xml.etree.ElementTree as ET
@@ -22,8 +20,6 @@ class TestOfficeconnectorDossierAPIWithOneOffixx(OCSolrIntegrationTestCase):
     @browsing
     def test_create_with_oneoffixx(self, browser):
         self.login(self.dossier_responsible, browser)
-
-        api.portal.set_registry_record(interface=IOneoffixxSettings, name='template_filter_tag', value=u'Gever')
 
         with freeze(FREEZE_DATE):
             oc_url = self.fetch_document_oneoffixx_oc_url(browser, self.shadow_document)

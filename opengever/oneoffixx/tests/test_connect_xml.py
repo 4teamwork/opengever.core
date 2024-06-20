@@ -2,10 +2,9 @@ from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from lxml import etree
 from opengever.officeconnector.testing import FREEZE_DATE
-from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_string
-from plone import api
+
 
 
 class TestConnectXML(IntegrationTestCase):
@@ -23,8 +22,6 @@ class TestConnectXML(IntegrationTestCase):
     @browsing
     def test_connect_xml_content(self, browser):
         self.login(self.dossier_responsible, browser)
-
-        api.portal.set_registry_record(interface=IOneoffixxSettings, name='template_filter_tag', value=u'Gever')
 
         # Freezing the JWT embedded in the XML file to the OC testing standard
         with freeze(FREEZE_DATE):

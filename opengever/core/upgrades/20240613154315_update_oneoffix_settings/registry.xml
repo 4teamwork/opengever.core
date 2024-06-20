@@ -2,4 +2,6 @@
 
  <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="filetype_tag_mapping" />
 
+ <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="template_filter_tag" remove="True" />
+
 </registry>
