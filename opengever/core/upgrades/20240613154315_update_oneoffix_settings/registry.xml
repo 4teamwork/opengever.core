@@ -1,0 +1,5 @@
+<registry>
+
+ <record interface="opengever.oneoffixx.interfaces.IOneoffixxSettings" field="filetype_tag_mapping" />
+
+</registry>
