@@ -2,7 +2,6 @@ from collections import OrderedDict
 from lxml import etree
 from opengever.document.docprops import DocPropertyCollector
 from opengever.officeconnector.helpers import create_oc_url
-from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from plone import api
 from Products.CMFPlone.utils import safe_unicode
 from Products.Five import BrowserView

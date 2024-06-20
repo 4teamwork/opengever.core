@@ -6,7 +6,6 @@ from opengever.testing import IntegrationTestCase
 from pkg_resources import resource_string
 
 
-
 class TestConnectXML(IntegrationTestCase):
     features = ("officeconnector-checkout", "oneoffixx")
 

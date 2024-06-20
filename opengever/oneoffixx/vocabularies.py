@@ -1,9 +1,9 @@
+from opengever.oneoffixx.interfaces import IOneoffixxSettings
 from plone import api
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
-from opengever.oneoffixx.interfaces import IOneoffixxSettings
 import json
 
 

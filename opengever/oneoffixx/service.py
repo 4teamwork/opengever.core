@@ -1,10 +1,10 @@
 from opengever.api.add import GeverFolderPost
 from opengever.officeconnector.helpers import create_oc_url
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.oneoffixx.interfaces import IOneoffixxSettings
+from plone import api
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
-from plone import api
-from opengever.oneoffixx.interfaces import IOneoffixxSettings
 import json
 
 
@@ -47,7 +47,7 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
 
     def before_deserialization(self, obj):
         filetype_tag_mapping = json.loads(
-                api.portal.get_registry_record(
+            api.portal.get_registry_record(
                 interface=IOneoffixxSettings, name="filetype_tag_mapping"))
         filetype = [item for item in filetype_tag_mapping if item['tag'] == self.filetype][0]
 
