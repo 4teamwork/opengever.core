@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.8.3 (2024-06-20)
+---------------------
+
+Other changes:
+
+
+- Introduce oneoffixx filetype selection. [phgross] [TI-569]
+
+
 2024.8.2 (2024-06-03)
 ---------------------
 
