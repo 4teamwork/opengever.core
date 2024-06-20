@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 
 
 2024.9.0 (2024-06-13)
