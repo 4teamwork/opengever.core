@@ -26,4 +26,9 @@
       permission="opengever.document.AddDocument"
       />
 
+  <utility
+      factory=".vocabularies.OneOffixxFileTypesVocabulary"
+      name="opengever.oneoffixx.filetypes"
+      />
+
 </configure>
