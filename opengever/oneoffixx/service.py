@@ -3,6 +3,9 @@ from opengever.officeconnector.helpers import create_oc_url
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
 from zExceptions import NotFound
 from zope.annotation.interfaces import IAnnotations
+from plone import api
+from opengever.oneoffixx.interfaces import IOneoffixxSettings
+import json
 
 
 class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
@@ -21,6 +24,9 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
         self.id_ = None
         self.data = self.request_data.get('document', {})
         self.title_ = self.data.get('title', None)
+        self.filetype = self.request_data.get('filetype')
+        if isinstance(self.filetype, dict):
+            self.filetype = self.filetype['token']
 
     def add_object_to_context(self):
         super(CreateDocumentFromOneOffixxTemplate, self).add_object_to_context()
@@ -39,9 +45,11 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
         }
 
     def before_deserialization(self, obj):
+        filetype_tag_mapping = json.loads(
+                api.portal.get_registry_record(
+                interface=IOneoffixxSettings, name="filetype_tag_mapping"))
+        filetype = [item for item in filetype_tag_mapping if item['tag'] == self.filetype][0]
 
-        # XXX Temporarily pass a *.docx filename to oneoffixx to support at
-        # least word templates. Before Office Connector no longer needs a
-        # filename and we support all kind of templates.
         annotations = IAnnotations(obj)
-        annotations["filename"] = 'oneoffixx_from_template.docx'
+        annotations["tag"] = filetype['tag']
+        annotations["filename"] = u'oneoffixx_from_template.{}'.format(filetype['extension'])
