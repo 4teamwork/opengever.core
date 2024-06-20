@@ -1639,6 +1639,8 @@ class OpengeverContentFixture(object):
             shadow_document_annotations = IAnnotations(shadow_document)
             shadow_document_annotations['template-id'] = '2574d08d-95ea-4639-beab-3103fe4c3bc7'
             shadow_document_annotations['languages'] = [2055]
+            shadow_document_annotations['filename'] = u'oneoffixx_from_template.docx'
+            shadow_document_annotations['tag'] = u'GeverWord'
             shadow_document_annotations['content-type'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'  # noqa
 
     @staticuid()

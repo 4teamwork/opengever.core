@@ -14,6 +14,7 @@ class TestCreateDocumentFromOneOffixxTemplate(BaseOneOffixxTestCase):
 
         payload = {
             'document': {'title': 'My Oneoffixx document'},
+            'filetype': {'token': 'GeverWord', 'title': 'Word'}
         }
 
         browser.open(
@@ -33,13 +34,16 @@ class TestCreateDocumentFromOneOffixxTemplate(BaseOneOffixxTestCase):
 
         annotations = IAnnotations(doc)
         self.assertEqual('My Oneoffixx document', doc.title)
-        
+        self.assertEqual(u'oneoffixx_from_template.docx', annotations['filename'])
+        self.assertEqual(u'GeverWord', annotations['tag'])
+
     @browsing
     def test_can_create_document_in_private_dossier(self, browser):
         self.login(self.regular_user, browser)
 
         payload = {
-            'document': {'title': 'My Oneoffixx document'}
+            'document': {'title': 'My Oneoffixx document'},
+            'filetype': {'token': 'GeverWord', 'title': 'Word'}
         }
 
         browser.open(
@@ -61,7 +65,8 @@ class TestCreateDocumentFromOneOffixxTemplate(BaseOneOffixxTestCase):
             'document': {
                 'title': 'My Oneoffixx document',
                 'description': 'This is a description',
-            }
+            },
+            'filetype': {'token': 'GeverWord', 'title': 'Word'}
         }
 
         browser.open(
@@ -74,3 +79,27 @@ class TestCreateDocumentFromOneOffixxTemplate(BaseOneOffixxTestCase):
         self.assertEqual(201, browser.status_code)
         doc = self.dossier[browser.json['@id'].split('/')[-1]]
         self.assertEqual('This is a description', doc.description)
+
+    @browsing
+    def test_fallbacks_to_word_filetype(self, browser):
+        self.login(self.regular_user, browser)
+
+        payload = {
+            'document': {'title': 'My Oneoffixx document'}
+        }
+
+        browser.open(
+            self.dossier,
+            method='POST',
+            data=json.dumps(payload),
+            headers=self.api_headers,
+            view='@document_from_oneoffixx',
+        )
+        self.assertEqual(201, browser.status_code)
+        self.assertIn('url', browser.json)
+        self.assertTrue(browser.json['url'].startswith('oc:'))
+
+        doc = self.dossier[browser.json['@id'].split('/')[-1]]
+        annotations = IAnnotations(doc)
+        self.assertEqual(u'oneoffixx_from_template.docx', annotations['filename'])
+        self.assertEqual(u'GeverWord', annotations['tag'])

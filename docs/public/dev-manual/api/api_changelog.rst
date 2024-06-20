@@ -3,7 +3,19 @@
 API Changelog
 =============
 
-2024.8.0 (2024-05.21)
+2024.8.1 (2024-05.21)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+- The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
+
+
+2024.8.0 (2024-05-21)
 ---------------------
 
 Breaking Changes
