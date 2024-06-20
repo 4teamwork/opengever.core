@@ -24,7 +24,8 @@ class CreateDocumentFromOneOffixxTemplate(GeverFolderPost):
         self.id_ = None
         self.data = self.request_data.get('document', {})
         self.title_ = self.data.get('title', None)
-        self.filetype = self.request_data.get('filetype')
+        # We add a fallback to word templates here so that the API endpoint is not breaking.
+        self.filetype = self.request_data.get('filetype', 'GeverWord')
         if isinstance(self.filetype, dict):
             self.filetype = self.filetype['token']
 
