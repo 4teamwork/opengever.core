@@ -12,5 +12,5 @@ class TestRisProposalContextActions(IntegrationTestCase):
     def test_ris_proposal_context_actions(self):
         self.activate_feature('ris')
         self.login(self.regular_user)
-        expected_actions = [u'create_task_from_proposal', u'edit']
+        expected_actions = [u'create_task_from_proposal']
         self.assertEqual(expected_actions, self.get_actions(self.ris_proposal))

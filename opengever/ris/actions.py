@@ -9,3 +9,6 @@ from zope.component import adapter
 class RisProposalContextActions(BaseContextActions):
     def is_create_task_from_proposal_available(self):
         return api.user.has_permission('opengever.task: Add task', obj=self.context)
+
+    def is_edit_available(self):
+        return False
