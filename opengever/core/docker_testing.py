@@ -1,5 +1,7 @@
+from opengever.redis.client import redis_client_manager
 from plone.testing import Layer
 import os
+import redis
 import requests
 import shlex
 import socket
@@ -21,28 +23,36 @@ class DockerServiceLayer(Layer):
         self.port = os.environ.get(self.port_env, self.find_free_port())
         base_name = self.image_name.split(':')[0].replace('/', '_')
         self.container_name = '{}_{}'.format(base_name, self.port)
-        self.run(
-            'docker run --pull always -d -p {}:8080 --name {} {}'.format(
-                self.port, self.container_name, self.image_name))
-        self.wait_until_ready('http://localhost:{}/healthcheck'.format(self.port))
-        os.environ[self.service_url_env] = 'http://localhost:{}/'.format(self.port)
+        self.start_container()
+        self.wait_until_ready()
 
     def tearDown(self):
         self.run('docker stop {}'.format(self.container_name))
         self.run('docker rm {}'.format(self.container_name))
         del os.environ[self.service_url_env]
 
-    def wait_until_ready(self, url, timeout=10):
+    def start_container(self):
+        self.run(
+            'docker run --pull always -d -p {}:8080 --name {} {}'.format(
+                self.port, self.container_name, self.image_name))
+        os.environ[self.service_url_env] = 'http://localhost:{}/'.format(self.port)
+
+    def healthcheck(self):
+        try:
+            requests.get('http://localhost:{}/healthcheck'.format(self.port))
+        except requests.ConnectionError:
+            return False
+        else:
+            return True
+
+    def wait_until_ready(self, timeout=10):
         start = now = time.time()
         while now - start < timeout:
-            try:
-                requests.get(url)
-            except requests.ConnectionError:
-                pass
-            else:
+            if self.healthcheck():
                 return True
             time.sleep(0.1)
             now = time.time()
+
         return False
 
     def run(self, cmd):
@@ -88,7 +98,32 @@ class WeasyPrintServiceLayer(DockerServiceLayer):
     service_url_env = 'WEASYPRINT_URL'
 
 
+class RedisServiceLayer(DockerServiceLayer):
+    port_env = 'PORT9'
+    image_name = 'redis:6.2-alpine'
+    service_url_env = 'REDIS_URL'
+
+    def testSetUp(self):
+        super(RedisServiceLayer, self).testSetUp()
+        redis_client_manager.get_client().flushdb()
+
+    def start_container(self):
+        self.run(
+            'docker run --pull always -d -p {}:6379 --name {} {}'.format(
+                self.port, self.container_name, self.image_name))
+        os.environ[self.service_url_env] = 'redis://localhost:{}/'.format(self.port)
+
+    def healthcheck(self):
+        try:
+            redis_client_manager.get_client().ping()
+        except redis.ConnectionError:
+            return False
+        else:
+            return True
+
+
 MSGCONVERT_SERVICE_FIXTURE = MSGConvertServiceLayer()
 PDFLATEX_SERVICE_FIXTURE = PDFLatexServiceLayer()
 SABLON_SERVICE_FIXTURE = SablonServiceLayer()
 WEASYPRINT_SERVICE_FIXTURE = WeasyPrintServiceLayer()
+REDIS_SERVICE_FIXTURE = RedisServiceLayer()

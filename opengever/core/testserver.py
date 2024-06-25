@@ -8,6 +8,7 @@ from opengever.base.interfaces import ISearchSettings
 from opengever.base.model import create_session
 from opengever.base.tests.test_config_checks import DummyCheckMissconfigured1
 from opengever.core import sqlite_testing
+from opengever.core.docker_testing import RedisServiceLayer
 from opengever.core.docker_testing import SablonServiceLayer
 from opengever.core.solr_testing import SolrReplicationAPIClient
 from opengever.core.solr_testing import SolrServer
@@ -70,6 +71,7 @@ class SQLiteBackup(object):
 
 
 sqlite_backup = SQLiteBackup()
+redis_service_layer = RedisServiceLayer()
 
 
 class TestserverLayer(OpengeverFixture):
@@ -126,6 +128,9 @@ class TestserverLayer(OpengeverFixture):
             sablon = SablonServiceLayer()
             sablon.setUp()
             atexit.register(sablon.tearDown)
+
+        redis_service_layer.setUp()
+        atexit.register(redis_service_layer.tearDown)
 
         # Install a Virtual Host Monster
         if "virtual_hosting" not in app.objectIds():
@@ -251,6 +256,7 @@ class TestServerFunctionalTesting(FunctionalTesting):
         self.context_manager.__enter__()
 
         sqlite_backup.isolate()
+        redis_service_layer.testSetUp()
         transaction.commit()
 
     def testTearDown(self):
