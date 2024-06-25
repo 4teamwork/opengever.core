@@ -93,6 +93,7 @@ GEVER-Mandanten abgefragt werden.
               "sablon_date_format": "%d.%m.%Y",
               "solr": true,
               "tasks_pdf": false,
+              "user_visible_error_logs": false,
               "workspace": false,
               "workspace_client": false,
               "workspace_creation_restricted": false,
@@ -261,6 +262,9 @@ features
 
     tasks_pdf
         Aufgaben PDF erstellen beim Abschliessen eines Dossier
+
+    user_visible_error_logs
+        Fehler im Backend werden für den End-User zur Verfügung gestellt.
 
     workspace
         Arbeitsräume

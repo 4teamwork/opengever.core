@@ -1,4 +1,6 @@
+from opengever.base.error_log import DisabledErrorLogRedis
 from opengever.base.error_log import ErrorLogItem
+from opengever.base.error_log import ErrorLogRedis
 from opengever.base.error_log import get_error_log_redis
 from opengever.core.testing import REDIS_INTEGRATION_TESTING
 from opengever.testing import IntegrationTestCase
@@ -58,3 +60,8 @@ class TestErrorLogRedis(IntegrationTestCase):
 
         self.assertEqual([error_item2],
                          list(logger.list_all_by_userid('user-b')))
+
+    def test_error_log_redis_is_feature_flagged(self):
+        self.assertIsInstance(get_error_log_redis(), ErrorLogRedis)
+        self.deactivate_feature('user_visible_error_logs')
+        self.assertIsInstance(get_error_log_redis(), DisabledErrorLogRedis)
