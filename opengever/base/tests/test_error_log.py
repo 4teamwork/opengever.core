@@ -1,5 +1,7 @@
 from opengever.base.error_log import ErrorLogItem
 from opengever.base.error_log import get_error_log
+from opengever.base.error_log import NullErrorLog
+from opengever.base.error_log import RedisErrorLog
 from opengever.core.testing import REDIS_INTEGRATION_TESTING
 from opengever.testing import IntegrationTestCase
 
@@ -7,6 +9,8 @@ from opengever.testing import IntegrationTestCase
 class TestRedisErrorLog(IntegrationTestCase):
 
     layer = REDIS_INTEGRATION_TESTING
+
+    features = ('error_log', )
 
     def test_can_push_error_log_items(self):
         error_item1 = ErrorLogItem(**{'id': 1})
@@ -43,3 +47,8 @@ class TestRedisErrorLog(IntegrationTestCase):
         logger.push(error_item)
         self.assertEqual(u'<p></p>', list(logger.list_all())[0].entry.get('tb_html'))
         self.assertEqual(u'<p></p>', list(logger.list_all())[0].entry.get('req_html'))
+
+    def test_error_log_redis_is_feature_flagged(self):
+        self.assertIsInstance(get_error_log(), RedisErrorLog)
+        self.deactivate_feature('error_log')
+        self.assertIsInstance(get_error_log(), NullErrorLog)

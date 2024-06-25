@@ -6,6 +6,7 @@ from opengever.activity.interfaces import IActivitySettings
 from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_gever_portal_url
+from opengever.base.error_log import is_redis_error_log_feature_enabled
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IGeverUI
@@ -175,6 +176,7 @@ class GeverSettingsAdpaterV1(object):
         features['sablon_date_format'] = api.portal.get_registry_record('sablon_date_format_string', interface=IMeetingSettings)  # noqa
         features['solr'] = api.portal.get_registry_record('use_solr', interface=ISearchSettings)
         features['tasktemplatefolder_nesting'] = api.portal.get_registry_record('is_tasktemplatefolder_nesting_enabled', interface=ITaskTemplateSettings)  # noqa
+        features['error_log'] = is_redis_error_log_feature_enabled()
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
         features['workspace_client'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceClientSettings)  # noqa
         features['workspace_creation_restricted'] = api.portal.get_registry_record(

@@ -4,6 +4,7 @@
   <records interface="opengever.activity.interfaces.IActivitySettings" />
 
   <!-- BASE -->
+  <records interface="opengever.base.interfaces.IBaseSettings" />
   <records interface="opengever.base.interfaces.IBaseCustodyPeriods" />
   <records interface="opengever.base.interfaces.IRetentionPeriodRegister" />
   <records interface="opengever.base.interfaces.IReferenceNumberSettings" />
