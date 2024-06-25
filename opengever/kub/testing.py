@@ -29,6 +29,18 @@ class KuBIntegrationTestCase(IntegrationTestCase):
         mocker.get(url, json=KUB_RESPONSES[url], **kwargs)
         return url
 
+    def mock_search_by_third_party_id(self, mocker, third_party_id, mocked_response, **kwargs):
+        url = '{}people?third_party_id={}'.format(self.client.kub_api_url, third_party_id)
+        mocker.get(url, json=mocked_response)
+        return url
+
+    def mock_search_by_name_and_date_of_birth(
+            self, mocker, firstname, official_name, date_of_birth, mocked_response, **kwargs):
+        url = '{}people?first_name={}&date_of_birth_max={}&date_of_birth_min={}&official_name={}'.format(
+            self.client.kub_api_url, firstname, date_of_birth, date_of_birth, official_name)
+        mocker.get(url, json=mocked_response)
+        return url
+
     def mock_labels(self, mocker):
         url = u'{}labels'.format(self.client.kub_api_url)
         mocker.get(url, json=KUB_RESPONSES[url])

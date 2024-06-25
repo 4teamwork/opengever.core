@@ -50,6 +50,7 @@
   <adapter factory=".repositoryfolder.SerializeRepositoryFolderToJson" />
   <adapter factory=".inbox.SerializeInboxToJson" />
   <adapter factory=".dossier.SerializeDossierToJson" />
+  <adapter factory=".dossier.DeserializeDossierFromJson" />
   <adapter factory=".workspace_folder.SerializeWorkspaceFolderToJson" />
   <adapter factory=".document.SerializeDocumentToJson" />
   <adapter factory=".kub.SerializeKuBEntityToJson" />
