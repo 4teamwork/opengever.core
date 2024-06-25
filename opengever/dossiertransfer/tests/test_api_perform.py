@@ -3,10 +3,10 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
+from opengever.api.kub import OrganizationContactSyncer
+from opengever.api.kub import PersonContactSyncer
 from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
-from opengever.dossiertransfer.api.perform import OrganizationContactSyncer
-from opengever.dossiertransfer.api.perform import PersonContactSyncer
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.kub.testing import KuBIntegrationTestCase
