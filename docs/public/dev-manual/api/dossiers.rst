@@ -63,3 +63,70 @@ Standardmässig ist diese Option aktiviert.
    .. sourcecode:: http
 
       HTTP/1.1 204 No content
+
+Dossier erstellen samt Beteiligungen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Über den ``participations`` Parameter lassen sich Beteiligungen direkt bei der Dossiererstellung miterstellen.
+Unterstützt werden dabei die Referenz von bestehenden Kontakten/Benutzern anhand der Kontakt ID im Key
+``participant_id``, wie auch die Angabe von Kontaktinformationen. Dabei findet eine Prüfung statt ob dieserr bereits
+existiert oder neu erstellt werden muss.
+
+
+**Beispiel-Request mit participant_id**:
+
+   .. sourcecode:: http
+
+      POST /position-1 HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+         "@type": "opengever.dossier.businesscasedossier",
+         "title": "Test 123",
+         "responsible": "hugo.boss",
+         "participations": [
+            {
+               "participant_id": "person:6fbef39e-4ad7-50d9-a96c-c0a68a2cf6e6",
+               "roles": ["regard", "participation"]
+            }
+         ]
+      }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
+
+
+**Beispiel-Request mit Kontaktangaben**:
+
+   .. sourcecode:: http
+
+      POST /position-1 HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+      {
+         "@type": "opengever.dossier.businesscasedossier",
+         "title": "Test 123",
+         "responsible": "hugo.boss",
+         "participations": [
+            {
+               "type": "person",
+               "firstName": "Hans",
+               "officialName": "Muster",
+               "thirdPartyId": "756. XXXX. XXXX. XX",
+               "roles": ["regard"]
+            }
+         ]
+      }
+
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
