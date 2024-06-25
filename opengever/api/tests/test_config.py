@@ -104,6 +104,7 @@ class TestConfig(IntegrationTestCase):
                 u'solr': True,
                 u'tasks_pdf': False,
                 u'tasktemplatefolder_nesting': False,
+                u'error_log': False,
                 u'workspace': False,
                 u'workspace_client': False,
                 u'workspace_creation_restricted': False,

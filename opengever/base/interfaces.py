@@ -335,6 +335,14 @@ class IOGSolrDocument(ISolrDocument):
     """OpenGever Solr Document"""
 
 
+class IBaseSettings(Interface):
+
+    is_redis_error_log_feature_enabled = schema.Bool(
+        title=u'Enable Redis error logging feature',
+        description=u'Makes backend errors accessible for users',
+        default=False)
+
+
 class ISearchSettings(Interface):
 
     use_solr = schema.Bool(
