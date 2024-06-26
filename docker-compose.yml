@@ -122,6 +122,15 @@ services:
       - SOLR_CORES=development testing functionaltesting testserver
     ports:
       - 8983:8983
+  redis:
+    image: redis:6.2-alpine
+    command:
+      - redis-server
+      - --save 60 1
+    ports:
+      - 6379:6379
+    volumes:
+      - ./var/redis:/data
   ldap:
     image: bitnami/openldap:2.6
     ports:
