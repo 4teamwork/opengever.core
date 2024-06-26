@@ -35,6 +35,7 @@ from .restapi_utils import PatchRestAPICreateForm
 from .rolemanager import PatchOFSRoleManager
 from .scrub_bobo_exceptions import ScrubBoboExceptions
 from .session import PatchSessionCookie
+from .site_error_log import PatchSiteErrorLog
 from .tus_upload import PatchTUSUploadCleanup
 from .tz_for_log import PatchZ2LogTimezone
 from .verify_object_paste import PatchCopyContainerVerifyObjectPaste
@@ -45,6 +46,7 @@ from opengever.debug.patches.modified_out_of_sync import PatchConnectionRegister
 from opengever.readonly import readonly_env_var_is_set
 
 
+PatchSiteErrorLog()()
 PatchActionInfo()()
 PatchBaseOrderedViewletManagerExceptions()()
 PatchBuilderCreate()()
