@@ -411,6 +411,8 @@ class LinkedWorkspaces(object):
                             default=u'Document retrieved from teamraum')
         gever_doc.update_file(
             document_repr['file']['data'],
+            content_type=document_repr['file']['content-type'],
+            filename=document_repr['file']['filename'],
             create_version=True,
             comment=translate(version_comment, context=getRequest()))
 
