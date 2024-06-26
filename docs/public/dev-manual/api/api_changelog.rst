@@ -14,6 +14,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 - Deactivate the edit ui-action for ris proposals.
+- Dossier POST supports now the creation of participations.
 
 
 2024.9.0 (2024-06-13)
