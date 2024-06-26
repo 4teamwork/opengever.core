@@ -1,0 +1,12 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="opengever.api: Access error log" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+    </permission>
+
+  </permissions>
+
+</rolemap>

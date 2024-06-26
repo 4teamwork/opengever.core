@@ -1840,4 +1840,12 @@
       permission="cmf.ManagePortal"
       />
 
+  <plone:service
+      method="GET"
+      name="@error-log"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      factory=".error_log.ErrorLogGet"
+      permission="opengever.api.AccessErrorLog"
+      />
+
 </configure>

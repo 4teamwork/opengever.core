@@ -15,6 +15,7 @@ Other Changes
 - The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 - Deactivate the edit ui-action for ris proposals.
 - Dossier POST supports now the creation of participations.
+- ``GET @error-log``: New endpoint to get the system error log if the ``error_log`` feature is activated.
 
 
 2024.9.0 (2024-06-13)
