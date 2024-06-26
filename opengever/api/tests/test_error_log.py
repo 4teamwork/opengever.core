@@ -1,9 +1,13 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
+from ftw.testing import freeze
 from opengever.base.error_log import ErrorLogItem
 from opengever.base.error_log import get_error_log
 from opengever.core.testing import REDIS_INTEGRATION_TESTING
 from opengever.testing import IntegrationTestCase
 from zExceptions import Unauthorized
+import pytz
+import sys
 
 
 class TestErrorLog(IntegrationTestCase):
@@ -86,4 +90,37 @@ class TestErrorLog(IntegrationTestCase):
             u'@id': u'http://nohost/plone/@error-log',
             u'items': [],
             u'items_total': 0},
+            browser.json)
+
+    @browsing
+    def test_site_error_log_properly_logs_errors(self, browser):
+        self.login(self.administrator, browser)
+
+        # Raise an error and log it to the SiteErrorLog
+        try:
+            raise AttributeError("My Dummy Error")
+        except AttributeError:
+            info = sys.exc_info()
+
+        with freeze(datetime(2018, 11, 22, 14, 29, 33, tzinfo=pytz.UTC)):
+            self.portal.error_log.raising(info)
+
+        browser.open(self.portal.absolute_url() + '/@error-log', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 200)
+
+        item = browser.json.get('items')[0]
+        self.assertEqual({
+            u'@id': u'http://nohost/plone/@error-log',
+            u'items': [
+                {
+                    u'id': item.get('id'),
+                    u'tb_html': item.get('tb_html'),
+                    u'req_html': item.get('req_html'),
+                    u'time': u'2018-11-22T15:29:33',
+                    u'type': u'AttributeError',
+                    u'userid': u'nicole.kohler',
+                    u'error': u'My Dummy Error'
+                }
+            ],
+            u'items_total': 1},
             browser.json)
