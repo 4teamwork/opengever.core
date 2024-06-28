@@ -7,7 +7,6 @@ from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
-from unittest import skip
 import json
 
 
@@ -361,7 +360,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -376,7 +375,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -391,7 +390,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.document, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -406,7 +405,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.mail_eml, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -497,7 +496,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -515,20 +514,20 @@ class TestWatchersPost(IntegrationTestCase):
             browser.open(self.task.absolute_url() + '/@watchers', method='POST',
                          headers=self.api_headers)
         self.assertEqual(
-            {"message": "Property 'userid' is required",
+            {"message": "Property 'actor_id' is required",
              "type": "BadRequest"},
             browser.json)
 
     @browsing
-    def test_post_watchers_with_invalid_userid_raises_bad_request(self, browser):
+    def test_post_watchers_with_invalid_actor_id_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"userid": "chaosqueen"}))
+                         data=json.dumps({"actor_id": "chaosqueen"}))
         self.assertEqual(
-            {"message": "userid 'chaosqueen' does not exist",
+            {"message": "Actor 'chaosqueen' does not exist",
              "type": "BadRequest"},
             browser.json)
 
@@ -545,7 +544,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -565,7 +564,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.document, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -584,7 +583,7 @@ class TestWatchersPost(IntegrationTestCase):
         self.assertEqual({}, browser.json['watchers_and_roles'])
         browser.open(self.mail_eml, view='@watchers', method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -696,7 +695,7 @@ class TestWatchersDelete(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',
                          method='DELETE', headers=self.api_headers,
-                         data=json.dumps({"userid": self.meeting_user.getId()}))
+                         data=json.dumps({"actor_id": self.meeting_user.getId()}))
         self.assertEqual(
             {"message": "DELETE does not take any data",
              "type": "BadRequest"},
@@ -707,7 +706,6 @@ class TestPossibleWatchers(IntegrationTestCase):
 
     features = ('activity', )
 
-    @skip('Title should contain username instead of userid')
     @browsing
     def test_get_possible_watchers_for_and_object(self, browser):
         center = notification_center()
@@ -751,7 +749,6 @@ class TestPossibleWatchers(IntegrationTestCase):
         self.assertEqual([],
                          [item['token'] for item in browser.json['items']])
 
-    @skip('Title should contain username instead of userid')
     @browsing
     def test_get_possible_watchers_for_document(self, browser):
         center = notification_center()
@@ -779,7 +776,6 @@ class TestPossibleWatchers(IntegrationTestCase):
 
         self.assertEqual(expected_json, browser.json)
 
-    @skip('Title should contain username instead of userid')
     @browsing
     def test_get_possible_watchers_for_mail(self, browser):
         center = notification_center()

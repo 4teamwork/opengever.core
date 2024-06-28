@@ -125,7 +125,7 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
        Accept: application/json
 
        {
-         "userid": "peter.mueller"
+         "actor_id": "peter.mueller"
        }
 
 **Beispiel-Response**:

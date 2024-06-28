@@ -87,17 +87,17 @@ class WatchersPost(Service):
 
         self.extract_data()
         self.center = notification_center()
-        self.center.add_watcher_to_resource(self.context, self.userid, WATCHER_ROLE)
+        self.center.add_watcher_to_resource(self.context, self.actor_id, WATCHER_ROLE)
         self.request.response.setStatus(204)
         return super(WatchersPost, self).reply()
 
     def extract_data(self):
         data = json_body(self.request)
-        self.userid = data.get("userid", None)
-        if not self.userid:
-            raise BadRequest("Property 'userid' is required")
-        if not api.user.get(self.userid):
-            raise BadRequest("userid '{}' does not exist".format(self.userid))
+        self.actor_id = data.get("actor_id", None)
+        if not self.actor_id:
+            raise BadRequest("Property 'actor_id' is required")
+        if not api.user.get(self.actor_id):
+            raise BadRequest("Actor '{}' does not exist".format(self.userid))
 
 
 class WatchersDelete(Service):
