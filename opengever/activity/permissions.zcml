@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.activiy">
+
+  <permission id="opengever.activity.ManageGroupsAsWatchers" title="opengever.activity: Manage Groups as Watchers" />
+
+</configure>

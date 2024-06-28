@@ -1,0 +1,14 @@
+<rolemap>
+
+  <permissions>
+
+    <permission name="opengever.activity: Manage Groups as Watchers" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="DossierManager" />
+    </permission>
+
+  </permissions>
+
+</rolemap>
