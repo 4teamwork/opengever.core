@@ -96,8 +96,10 @@ class WatchersPost(Service):
         self.actor_id = data.get("actor_id", None)
         if not self.actor_id:
             raise BadRequest("Property 'actor_id' is required")
-        if not api.user.get(self.actor_id):
-            raise BadRequest("Actor '{}' does not exist".format(self.userid))
+        try:
+            PossibleWatchersSource(self.context).getTermByToken(self.actor_id)
+        except LookupError:
+            raise BadRequest(u"Actor '{}' does not exist".format(self.actor_id))
 
 
 class WatchersDelete(Service):
