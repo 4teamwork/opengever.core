@@ -1061,3 +1061,36 @@ class AllUsersAndGroupsSourceBinder(object):
             context,
             only_active_orgunits=self.only_active_orgunits,
             include_inactive_groups=self.include_inactive_groups)
+
+
+class AllTeamsSource(AllUsersInboxesAndTeamsSource):
+    """Vocabulary of all teams.
+    """
+    provides_raw_queries = True
+
+    @property
+    def search_query(self):
+        query = Team.query.filter(Team.active == True)  # noqa
+        query = query.order_by(desc(func.lower(Team.title)))
+        return query
+
+    def getTerm(self, value):
+        if not self.resolve_terms:
+            return SimpleTerm(value, value, value)
+
+        if not ActorLookup(value).is_team():
+            raise LookupError
+
+        team = Team.query.get_by_actor_id(value)
+        return SimpleTerm(team.actor_id(), team.actor_id(), team.label())
+
+    def search(self, query_string):
+        self.terms = []
+
+        text_filters = query_string.split(' ')
+        query = extend_query_with_textfilter(self.search_query, [Team.title], text_filters)
+
+        for team in query:
+            self.terms.append(SimpleTerm(team.actor_id(), team.actor_id(), team.label()))
+
+        return self.terms
