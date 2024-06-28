@@ -8,7 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- The ``POST @watcher`` endpoint requires an ``actor_id`` an no longer a ``userid``
 
 Other Changes
 ^^^^^^^^^^^^^
