@@ -132,6 +132,13 @@ class BaseMultipleSourcesQuerySource(BaseQuerySoure):
 
         return term
 
+    def raw_search(self, query_string):
+        self.terms = []
+        for source in self.source_instances:
+            self.terms.extend(source.raw_search(query_string))
+
+        return self.terms
+
     def search(self, query_string):
         self.terms = []
         for source in self.source_instances:
@@ -970,6 +977,9 @@ class AllGroupsSource(BaseSQLModelSource):
             asc(func.lower(Group.title)),
             asc(func.lower(Group.groupid))
         )
+
+    def raw_search(self, query_string):
+        return self.search(query_string)
 
 
 class WorkspaceContentMemberGroupsSource(AllGroupsSource):

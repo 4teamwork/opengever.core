@@ -1056,6 +1056,10 @@ class TestAllGroupsSource(IntegrationTestCase):
         with self.assertRaises(LookupError):
             self.source.getTermByToken('invalid-id')
 
+    def test_provides_raw_search(self):
+        result = self.source.raw_search('projek')
+        self.assertEqual(3, len(result))
+
 
 class TestAllUsersAndGroupsSource(IntegrationTestCase):
 
@@ -1184,6 +1188,10 @@ class TestAllUsersAndGroupsSource(IntegrationTestCase):
                 u'ZZZZ YYYY-foobar (user3)'
             ],
             [term.title for term in self.source.search('foobar')])
+
+    def test_provides_raw_search(self):
+        result = self.source.raw_search('')
+        self.assertEqual(29, len(result))
 
 
 class TestAllFilteredGroupsSource(TestAllGroupsSource):
