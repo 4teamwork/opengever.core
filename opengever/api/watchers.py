@@ -4,6 +4,7 @@ from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.sources import PossibleWatchersSource
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.api.schema.querysources import RawQuerySourceSearchResults
 from opengever.ogds.base.actor import ActorLookup
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -122,14 +123,14 @@ class PossibleWatchers(Service):
     def reply(self):
         source = PossibleWatchersSource(self.context)
         query = safe_unicode(self.request.form.get('query', ''))
-        results = source.search(query)
+        result = RawQuerySourceSearchResults(source, source.raw_search(query))
 
-        batch = HypermediaBatch(self.request, results)
+        batch = HypermediaBatch(self.request, result.results)
 
         serialized_terms = []
         for term in batch:
             serializer = getMultiAdapter(
-                (term, self.request), interface=ISerializeToJson
+                (result.get_resolved_term(term), self.request), interface=ISerializeToJson
             )
             serialized_terms.append(serializer())
 
