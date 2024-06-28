@@ -8,6 +8,7 @@ from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
 from opengever.ogds.base.sources import AllGroupsSource
+from opengever.ogds.base.sources import AllTeamsSource
 from opengever.ogds.base.sources import AllUsersAndGroupsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
 from opengever.ogds.base.sources import AllUsersSource
@@ -1240,3 +1241,34 @@ class TestAllFilteredGroupsSource(TestAllGroupsSource):
         self.assertEqual(
             [u'fa_inbox_users', u'fa_users'],
             [term.value for term in self.source.search('')])
+
+
+class TestAllTeamsSource(IntegrationTestCase):
+
+    def test_returns_all_teams(self):
+        source = AllTeamsSource(self.portal)
+
+        self.assertItemsEqual([u'team:1', u'team:3', u'team:2'],
+                      [term.value for term in source.search('')])
+
+    def test_can_lookup_terms(self):
+        source = AllTeamsSource(self.portal)
+
+        self.assertIn(u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
+                      source.getTerm('team:1').title)
+
+    def test_raises_lookup_error_when_no_term_exists(self):
+        source = AllTeamsSource(self.portal)
+
+        with self.assertRaises(LookupError):
+            source.getTermByToken('team:missing')
+
+        with self.assertRaises(LookupError):
+            source.getTermByToken('group:no-team')
+
+    def test_search_teams(self):
+        source = AllTeamsSource(self.portal)
+        self.assertItemsEqual(
+            [u'Sekretariat Abteilung XY (Finanz\xe4mt)',
+             u'Sekretariat Abteilung Null (Finanz\xe4mt)'],
+            [term.title for term in source.search('Sek')])
