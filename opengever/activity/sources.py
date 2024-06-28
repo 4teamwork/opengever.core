@@ -1,4 +1,5 @@
 from opengever.activity import notification_center
+from opengever.activity.roles import WATCHER_ROLE
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.models.user import User
 from plone import api
@@ -47,8 +48,8 @@ class PossibleWatchersSource(AssignedUsersSource):
         watcher-role on the current context.
         """
         center = notification_center()
-        regular_watchers = center.get_subscriptions(self.context)
-        userids = set([subscription.watcher.actorid for subscription in regular_watchers])
+        userids = set([watcher.actorid for watcher in
+                       center.get_watchers(self.context, role=WATCHER_ROLE)])
 
         if userids:
             query = query.filter(User.userid.notin_(userids))
