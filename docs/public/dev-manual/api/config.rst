@@ -73,6 +73,7 @@ GEVER-Mandanten abgefragt werden.
               "favorites": true,
               "gever_ui_enabled": false,
               "grant_role_manager_to_responsible": false,
+              "group_watchers": false,
               "hubspot": false,
               "journal_pdf": false,
               "meetings": true,
@@ -205,6 +206,9 @@ features
 
     grant_role_manager_to_responsible
         Dossier Verantwortliche dürfen im Dossier Berechtigungen vergeben.
+
+    group_watchers
+        Zusätzlich zu einem Benutzer können Gruppen und Teams als Watcher hinzugefügt werden.
 
     hubspot
         Einbindung von HubSpot Chat in der neuen Benutzeroberfläche
