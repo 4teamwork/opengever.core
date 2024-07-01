@@ -138,13 +138,13 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
 Beobachter entfernen
 --------------------
 
-Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einem Inhalt wieder entfernt werden.
+Mittels DELETE-Requests kann die Rolle ``regular_watcher`` vom eigenen Beobachter oder einer Gruppe oder Team entfernt werden.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
-       DELETE /task-1/@watchers HTTP/1.1
+       DELETE /task-1/@watchers/group:1 HTTP/1.1
        Accept: application/json
 
 **Beispiel-Response**:

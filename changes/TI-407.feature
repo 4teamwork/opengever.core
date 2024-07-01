@@ -1,1 +1,1 @@
-Groups and teams can be added as watchers [elioschmutz]
+Groups and teams can be added and removed as watchers [elioschmutz]

@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- The ``DELETE @watcher`` endpoint requires a path parameter with the actor-id
 - The ``POST @watcher`` endpoint requires an ``actor_id`` an no longer a ``userid``
 
 Other Changes
