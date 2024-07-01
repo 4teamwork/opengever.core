@@ -18,20 +18,28 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         session = create_session()
         map(session.delete, notification_center().get_subscriptions(self.task))
 
-    def test_list_users_not_having_a_watcher_role_on_an_object(self):
+    def test_list_users_groups_and_teams_not_having_a_watcher_role_on_an_object(self):
         self.login(self.regular_user)
         center = notification_center()
         source = PossibleWatchersSource(self.task)
 
         subscriptions = center.get_subscriptions(self.task)
         self.assertEqual([], [s.watcher.actorid for s in subscriptions])
-        self.assertIn(self.regular_user.id, [term.value for term in source.search('')])
+        self.assertIn('regular_user', [term.token for term in source.search('')])
+        self.assertIn('group:fa_users', [term.token for term in source.search('')])
+        self.assertIn('team:1', [term.token for term in source.search('')])
 
-        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+        center.add_watcher_to_resource(self.task, 'regular_user', WATCHER_ROLE)
+        center.add_watcher_to_resource(self.task, 'group:fa_users', WATCHER_ROLE)
+        center.add_watcher_to_resource(self.task, 'team:1', WATCHER_ROLE)
 
         subscriptions = center.get_subscriptions(self.task)
-        self.assertEqual([self.regular_user.id], [s.watcher.actorid for s in subscriptions])
-        self.assertNotIn(self.regular_user.id, [term.value for term in source.search('')])
+        self.assertEqual([u'regular_user', u'group:fa_users', u'team:1'],
+                         [s.watcher.actorid for s in subscriptions])
+
+        self.assertNotIn('regular_user', [term.token for term in source.search('')])
+        self.assertNotIn('group:fa_users', [term.token for term in source.search('')])
+        self.assertNotIn('team:1', [term.token for term in source.search('')])
 
     def test_current_user_is_always_on_first_position_if_available(self):
         self.login(self.regular_user)
@@ -46,16 +54,24 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.login(self.administrator)
         self.assertEqual(self.administrator.getId(), source.search('')[0].value)
 
-    def test_filter_by_title_returns_the_filtered_users(self):
+    def test_filter_by_title_returns_the_filtered_results(self):
         self.login(self.regular_user)
         source = PossibleWatchersSource(self.task)
 
-        self.assertEqual([
-            self.workspace_owner.getId(),
-            self.dossier_manager.getId(),
-            self.workspace_admin.getId(),
-            self.committee_responsible.getId()],
-            [term.value for term in source.search('fr')])
+        self.assertEqual(
+            [
+                'regular_user',
+                'meeting_user',
+                'committee.secretary',
+                'service_user',
+                'group:fa_inbox_users',
+                'group:fa_users',
+                'group:rk_inbox_users',
+                'group:rk_users',
+                'team:2',
+                'team:3'
+            ],
+            [term.token for term in source.search('Se')])
 
     def test_search_is_case_insensitive(self):
         self.login(self.regular_user)

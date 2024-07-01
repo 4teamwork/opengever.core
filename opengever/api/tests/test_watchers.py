@@ -593,6 +593,36 @@ class TestWatchersPost(IntegrationTestCase):
         self.assertEqual({self.regular_user.id: [u'regular_watcher']},
                          browser.json['watchers_and_roles'])
 
+    @browsing
+    def test_can_add_groups_and_teams_as_watcher(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"actor_id": 'group:fa_inbox_users'}))
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"actor_id": 'team:1'}))
+
+        self.assertEqual(browser.status_code, 204)
+
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({u'team:1': [u'regular_watcher'],
+                          self.dossier_responsible.id: [u'task_issuer'],
+                          self.regular_user.id: [u'task_responsible'],
+                          u'group:fa_inbox_users': [u'regular_watcher']},
+                         browser.json['watchers_and_roles'])
+
 
 class TestWatchersDelete(IntegrationTestCase):
     features = ('activity', )
@@ -811,5 +841,36 @@ class TestPossibleWatchers(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(20, browser.json.get('items_total'))
+        self.assertEqual(32, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
+
+    @browsing
+    def test_possible_watchers_includes_users_groups_and_teams(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?query=Se'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [
+                {u'title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                 u'token': u'regular_user'},
+                {u'title': u'J\xe4ger Herbert (herbert.jager)',
+                 u'token': u'meeting_user'},
+                {u'title': u'Secretary C\xf6mmittee (committee.secretary)',
+                 u'token': u'committee.secretary'},
+                {u'title': u'User Service (service.user)',
+                 u'token': u'service_user'},
+                {u'title': u'fa Inbox Users Group',
+                 u'token': u'group:fa_inbox_users'},
+                {u'title': u'fa Users Group', u'token': u'group:fa_users'},
+                {u'title': u'rk Inbox Users Group',
+                 u'token': u'group:rk_inbox_users'},
+                {u'title': u'rk Users Group', u'token': u'group:rk_users'},
+                {u'title': u'Sekretariat Abteilung XY (Finanz\xe4mt)',
+                 u'token': u'team:2'},
+                {u'title': u'Sekretariat Abteilung Null (Finanz\xe4mt)',
+                 u'token': u'team:3'}],
+            u'items_total': 10}
+
+        self.assertEqual(expected_json, browser.json)

@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``@possible-watchers`` endpoint returns groups and teams
 - The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 - Deactivate the edit ui-action for ris proposals.
 - Dossier POST supports now the creation of participations.
