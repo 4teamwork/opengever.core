@@ -19,6 +19,12 @@ import csv
 
 class TestSIPPackageIntegration(IntegrationTestCase):
 
+    def test_sip_package_name_contains_sequence_number(self):
+        self.login(self.records_manager)
+
+        with freeze(datetime(2016, 11, 6)):
+            self.assertEqual('SIP_20161106_PLONE_1', self.disposition.get_sip_name())
+
     def test_sip_folder_name_correspond_to_ech0160_definition(self):
         """See chapter 5.4 Aufbau eines SIP in eCH-0160 definition.
 
