@@ -25,18 +25,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
         expected_json = {
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                     u'dossier-1/task-1/@watchers',
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                },
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': self.regular_user.id,
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -89,18 +77,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                },
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': self.regular_user.id,
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -151,13 +127,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': url,
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                }
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -194,13 +163,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': url,
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                }
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -239,17 +201,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        # @id for the referenced_users is not correct for teams,
-        # this will have to be fixed.
         expected_json = {
             u'@id': u"{}/@watchers".format(self.task.absolute_url()),
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/team:1',
-                    u'fullname': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
-                    u'id': u'team:1'
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/team:1',
@@ -286,17 +239,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        # @id for the referenced_users is not correct for inboxes,
-        # this will have to be fixed.
         expected_json = {
             u'@id': u"{}/@watchers".format(self.task.absolute_url()),
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/inbox:fa',
-                    u'fullname': u'Inbox: Finanz\xe4mt',
-                    u'id': u'inbox:fa'
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/inbox:fa',
@@ -341,7 +285,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': self.document.absolute_url() + '/@watchers',
-                         u'referenced_users': [],
                          u'referenced_actors': [],
                          u'referenced_watcher_roles': [],
                          u'watchers_and_roles': {}}

@@ -48,17 +48,9 @@ class Watchers(object):
                 watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
                 roles.add(subscription.role)
 
-        portal_url = api.portal.get().absolute_url()
-        referenced_users = []
         referenced_actors = []
         for actor_id in watchers_and_roles:
             actor = ActorLookup(actor_id).lookup()
-            referenced_users.append(
-                {
-                    '@id': "{}/@users/{}".format(portal_url, actor_id),
-                    'id': actor_id,
-                    'fullname': actor.get_label(with_principal=False)
-                })
             referenced_actors.append(serialize_actor_id_to_json_summary(actor_id))
 
         referenced_watcher_roles = [
@@ -70,8 +62,6 @@ class Watchers(object):
 
         result['watchers']['watchers_and_roles'] = watchers_and_roles
         result['watchers']['referenced_watcher_roles'] = referenced_watcher_roles
-        # XXX deprecated
-        result['watchers']['referenced_users'] = referenced_users
         result['watchers']['referenced_actors'] = referenced_actors
         return result
 
