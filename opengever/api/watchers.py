@@ -50,7 +50,6 @@ class Watchers(object):
 
         referenced_actors = []
         for actor_id in watchers_and_roles:
-            actor = ActorLookup(actor_id).lookup()
             referenced_actors.append(serialize_actor_id_to_json_summary(actor_id))
 
         referenced_watcher_roles = [
