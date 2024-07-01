@@ -127,7 +127,7 @@ class TestDispositionSerialization(SolrIntegrationTestCase):
 
         self.assertEqual(u'Angebot 31.8.2016', browser.json['title'])
         self.assertEqual(None, browser.json['transfer_number'])
-        self.assertEqual(u'SIP_20010101_PLONE.zip', browser.json['sip_filename'])
+        self.assertEqual(u'SIP_20010101_PLONE_1.zip', browser.json['sip_filename'])
 
     @browsing
     def test_includes_translated_sip_delivery_status(self, browser):
