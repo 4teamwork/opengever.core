@@ -138,13 +138,32 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
 Beobachter entfernen
 --------------------
 
-Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einem Inhalt wieder entfernt werden.
+Mittels DELETE-Requests kann die Rolle ``regular_watcher`` vom eingeloggten Benutzer vom aktuellen Inhalt entfernt werden.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
        DELETE /task-1/@watchers HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
+
+
+Gruppen und Teams als Beobachter entfernen
+------------------------------------------
+
+Wenn das Feature für "Gruppen und Teams als Beobachter" aktiviert ist, können Benutzer mit der Rolle Dossier-Verwalter eine Gruppe oder ein Team als Watcher löschen, indem ein DELETE-Request auf die entsprechende Ressource abgesetzt wird.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       DELETE /task-1/@watchers/group:1 HTTP/1.1
        Accept: application/json
 
 **Beispiel-Response**:

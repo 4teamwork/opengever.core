@@ -2,10 +2,12 @@ from collections import defaultdict
 from opengever.activity import notification_center
 from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.activity.sources import can_manage_groups
 from opengever.activity.sources import get_possible_watchers_source
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.schema.querysources import RawQuerySourceSearchResults
 from opengever.ogds.base.actor import ActorLookup
+from opengever.ogds.base.actor import OGDSUserActor
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
@@ -15,10 +17,12 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.services import Service
 from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.publisher.interfaces import IPublishTraverse
 
 
 @implementer(IExpandableElement)
@@ -102,15 +106,27 @@ class WatchersPost(Service):
             raise BadRequest("Actor '{}' does not exist".format(self.actor_id))
 
 
+@implementer(IPublishTraverse)
 class WatchersDelete(Service):
+    def __init__(self, context, request):
+        super(WatchersDelete, self).__init__(context, request)
+        self.params = []
+
+    def publishTraverse(self, request, name):
+        # Consume any path segments after /@watchers as parameters
+        self.params.append(name)
+        return self
 
     def reply(self):
         alsoProvides(self.request, IDisableCSRFProtection)
 
         self.extract_data()
-        self.userid = api.user.get_current().getId()
+        actor_id = self.params[0] if len(self.params) > 0 else api.user.get_current().getId()
+        if not self.can_delete_actor(actor_id):
+            raise Forbidden()
+
         self.center = notification_center()
-        self.center.remove_watcher_from_resource(self.context, self.userid, WATCHER_ROLE)
+        self.center.remove_watcher_from_resource(self.context, actor_id, WATCHER_ROLE)
 
         self.request.response.setStatus(204)
         return None
@@ -119,6 +135,21 @@ class WatchersDelete(Service):
         data = json_body(self.request)
         if data:
             raise BadRequest("DELETE does not take any data")
+
+    def can_delete_actor(self, actor_id):
+        # The user can always remove itslef
+        if actor_id == api.user.get_current().getId():
+            return True
+
+        # The user can never remove another user
+        if isinstance(ActorLookup(actor_id).lookup(), OGDSUserActor):
+            return False
+
+        # The user can remove a non user acotor if the feature is enabled
+        # and the user has enough permission.
+        if can_manage_groups(self.context):
+            return True
+        return False
 
 
 class PossibleWatchers(Service):

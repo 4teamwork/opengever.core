@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``DELETE @watcher`` endpoint provides deleting actors by path parameters.
 - The ``@possible-watchers`` endpoint returns groups and teams if the corresponding feature is enabled.
 - The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 - Deactivate the edit ui-action for ris proposals.

@@ -663,23 +663,24 @@ class TestWatchersPostWithGroupWatchersFeature(IntegrationTestCase):
             browser.json)
 
 
+def get_watchers_and_roles(context):
+    center = notification_center()
+    watchers_and_roles = defaultdict(list)
+    resource = center.fetch_resource(context)
+    create_session().refresh(resource)
+    for subscription in resource.subscriptions:
+        watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
+    return watchers_and_roles
+
+
 class TestWatchersDelete(IntegrationTestCase):
     features = ('activity', )
-
-    def get_watchers_and_roles(self, context):
-        center = notification_center()
-        watchers_and_roles = defaultdict(list)
-        resource = center.fetch_resource(context)
-        create_session().refresh(resource)
-        for subscription in resource.subscriptions:
-            watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
-        return watchers_and_roles
 
     @browsing
     def test_delete_watchers_for_task(self, browser):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
         self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -688,7 +689,7 @@ class TestWatchersDelete(IntegrationTestCase):
                      method='DELETE', headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -697,7 +698,7 @@ class TestWatchersDelete(IntegrationTestCase):
     def test_delete_watchers_for_inbox_forwarding(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -705,7 +706,7 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.inbox_forwarding, self.secretariat_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({
             self.regular_user.id: [u'task_responsible'],
             self.dossier_responsible.id: [u'task_issuer'],
@@ -715,7 +716,7 @@ class TestWatchersDelete(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -726,13 +727,13 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.document, self.regular_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        watchers_and_roles = get_watchers_and_roles(self.document)
         self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.document, view='@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        watchers_and_roles = get_watchers_and_roles(self.document)
         self.assertEqual({}, watchers_and_roles)
 
     @browsing
@@ -741,13 +742,13 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        watchers_and_roles = get_watchers_and_roles(self.mail_eml)
         self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.mail_eml, view='@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        watchers_and_roles = get_watchers_and_roles(self.mail_eml)
         self.assertEqual({}, watchers_and_roles)
 
     @browsing
@@ -755,7 +756,7 @@ class TestWatchersDelete(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(
             self.task, self.regular_user.getId(), WATCHER_ROLE)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
 
         self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
@@ -769,6 +770,105 @@ class TestWatchersDelete(IntegrationTestCase):
             {"message": "DELETE does not take any data",
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_delete_watchers_by_url_param(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
+    def test_cant_delete_another_user_as_watcher(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+
+class TestWatchersDeleteWithGroupWatchersFeature(IntegrationTestCase):
+
+    features = ('activity', 'group_watchers', )
+
+    @browsing
+    def test_delete_watchers_by_url_param(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
+    def test_cant_delete_another_user_as_watcher(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+    @browsing
+    def test_regular_user_cant_delete_groups_as_watchers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, 'group:rk_inbox_users', WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/group:rk_inbox_users',
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+    @browsing
+    def test_dossier_manager_can_delete_groups_as_watchers(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, 'group:rk_inbox_users', WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/group:rk_inbox_users',
+                     method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
 
 
 class TestPossibleWatchers(IntegrationTestCase):
