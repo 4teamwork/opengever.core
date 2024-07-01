@@ -192,6 +192,8 @@ Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wi
         "items_total": 17
       }
 
+Wenn das Feature für "Gruppen und Teams als Watcher" aktiviert ist, wird für Benutzer mit der Rolle Dossier-Verwalter auch Gruppen und Teams zurückgegeben.
+
 Resultate filtern
 ~~~~~~~~~~~~~~~~~
 Mit dem ``query``-Parameter können die Resultate gefiltert werden. Es werden die Felder:

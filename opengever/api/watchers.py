@@ -2,7 +2,7 @@ from collections import defaultdict
 from opengever.activity import notification_center
 from opengever.activity.roles import ROLE_TRANSLATIONS
 from opengever.activity.roles import WATCHER_ROLE
-from opengever.activity.sources import PossibleWatchersSource
+from opengever.activity.sources import get_possible_watchers_source
 from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.schema.querysources import RawQuerySourceSearchResults
 from opengever.ogds.base.actor import ActorLookup
@@ -97,7 +97,7 @@ class WatchersPost(Service):
         if not self.actor_id:
             raise BadRequest("Property 'actor_id' is required")
         try:
-            PossibleWatchersSource(self.context).getTermByToken(self.actor_id)
+            get_possible_watchers_source(self.context).getTermByToken(self.actor_id)
         except LookupError:
             raise BadRequest("Actor '{}' does not exist".format(self.actor_id))
 
@@ -123,7 +123,7 @@ class WatchersDelete(Service):
 
 class PossibleWatchers(Service):
     def reply(self):
-        source = PossibleWatchersSource(self.context)
+        source = get_possible_watchers_source(self.context)
         query = safe_unicode(self.request.form.get('query', ''))
         result = RawQuerySourceSearchResults(source, source.raw_search(query))
 
