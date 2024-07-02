@@ -8,10 +8,13 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Remove deprecated ``referenced_users`` property from ``GET @watcher`` endpoint.
+- The ``POST @watcher`` endpoint requires an ``actor_id`` an no longer a ``userid``
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``DELETE @watcher`` endpoint provides deleting actors by path parameters.
+- The ``@possible-watchers`` endpoint returns groups and teams if the corresponding feature is enabled.
 - The ``@document_from_oneoffixx`` endpoint expects now a file_type attribute.
 - Deactivate the edit ui-action for ris proposals.
 - Dossier POST supports now the creation of participations.

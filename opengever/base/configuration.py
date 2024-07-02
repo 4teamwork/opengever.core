@@ -7,6 +7,7 @@ from opengever.api.user_settings import serialize_setting
 from opengever.base.casauth import get_cas_server_url
 from opengever.base.casauth import get_gever_portal_url
 from opengever.base.error_log import is_user_visible_error_logs_feature_enabled
+from opengever.base.interfaces import IBaseSettings
 from opengever.base.interfaces import IFavoritesSettings
 from opengever.base.interfaces import IGeverSettings
 from opengever.base.interfaces import IGeverUI
@@ -157,6 +158,7 @@ class GeverSettingsAdpaterV1(object):
         features['filing_number'] = self.is_filing_number_feature_installed()
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
         features['grant_role_manager_to_responsible'] = api.portal.get_registry_record('grant_role_manager_to_responsible', interface=IDossierSettings)  # noqa
+        features['group_watchers'] = api.portal.get_registry_record('is_group_watchers_feature_enabled', interface=IBaseSettings)  # noqa
         features['hubspot'] = api.portal.get_registry_record('is_feature_enabled', interface=IHubSpotSettings)  # noqa
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['tasks_pdf'] = api.portal.get_registry_record('tasks_pdf_enabled', interface=IDossierResolveProperties)

@@ -79,6 +79,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('filing_number', False),
                 ('gever_ui_enabled', True),
                 ('grant_role_manager_to_responsible', False),
+                ('group_watchers', False),
                 ('hubspot', False),
                 ('journal_pdf', False),
                 ('tasks_pdf', False),

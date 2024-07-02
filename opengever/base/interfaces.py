@@ -342,6 +342,11 @@ class IBaseSettings(Interface):
         description=u'Makes backend errors accessible for users',
         default=False)
 
+    is_group_watchers_feature_enabled = schema.Bool(
+        title=u'Enable groups and teams as watchers',
+        description=u'Allows groups and teams as watchers for ressources',
+        default=False)
+
 
 class ISearchSettings(Interface):
 

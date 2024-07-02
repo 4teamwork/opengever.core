@@ -26,18 +26,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
         expected_json = {
             u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/'
                     u'dossier-1/task-1/@watchers',
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                },
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': self.regular_user.id,
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -90,18 +78,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': u'http://nohost/plone/eingangskorb/eingangskorb_fa/forwarding-1/@watchers',
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                },
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.regular_user.id,
-                    u'fullname': u'B\xe4rfuss K\xe4thi',
-                    u'id': self.regular_user.id,
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -152,13 +128,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': url,
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                }
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -195,13 +164,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
 
         expected_json = {
             u'@id': url,
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/%s' % self.dossier_responsible.id,
-                    u'fullname': u'Ziegler Robert',
-                    u'id': self.dossier_responsible.id,
-                }
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/%s' % self.dossier_responsible.id,
@@ -240,17 +202,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        # @id for the referenced_users is not correct for teams,
-        # this will have to be fixed.
         expected_json = {
             u'@id': u"{}/@watchers".format(self.task.absolute_url()),
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/team:1',
-                    u'fullname': u'Projekt \xdcberbaung Dorfmatte (Finanz\xe4mt)',
-                    u'id': u'team:1'
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/team:1',
@@ -287,17 +240,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='GET', headers=self.api_headers)
 
-        # @id for the referenced_users is not correct for inboxes,
-        # this will have to be fixed.
         expected_json = {
             u'@id': u"{}/@watchers".format(self.task.absolute_url()),
-            u'referenced_users': [
-                {
-                    u'@id': u'http://nohost/plone/@users/inbox:fa',
-                    u'fullname': u'Inbox: Finanz\xe4mt',
-                    u'id': u'inbox:fa'
-                },
-            ],
             u'referenced_actors': [
                 {
                     u'@id': u'http://nohost/plone/@actors/inbox:fa',
@@ -342,7 +286,6 @@ class TestWatchersGet(SolrIntegrationTestCase):
                      method='GET', headers=self.api_headers)
 
         expected_json = {u'@id': self.document.absolute_url() + '/@watchers',
-                         u'referenced_users': [],
                          u'referenced_actors': [],
                          u'referenced_watcher_roles': [],
                          u'watchers_and_roles': {}}
@@ -361,7 +304,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -376,7 +319,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -391,7 +334,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.document, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -406,7 +349,7 @@ class TestWatchersSolr(SolrIntegrationTestCase):
         browser.open(self.mail_eml, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
         self.assertEqual(browser.status_code, 204)
         self.commit_solr()
 
@@ -497,7 +440,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.task.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -515,20 +458,20 @@ class TestWatchersPost(IntegrationTestCase):
             browser.open(self.task.absolute_url() + '/@watchers', method='POST',
                          headers=self.api_headers)
         self.assertEqual(
-            {"message": "Property 'userid' is required",
+            {"message": "Property 'actor_id' is required",
              "type": "BadRequest"},
             browser.json)
 
     @browsing
-    def test_post_watchers_with_invalid_userid_raises_bad_request(self, browser):
+    def test_post_watchers_with_invalid_actor_id_raises_bad_request(self, browser):
         self.login(self.regular_user, browser=browser)
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',
                          method='POST',
                          headers=self.api_headers,
-                         data=json.dumps({"userid": "chaosqueen"}))
+                         data=json.dumps({"actor_id": "chaosqueen"}))
         self.assertEqual(
-            {"message": "userid 'chaosqueen' does not exist",
+            {"message": "Actor 'chaosqueen' does not exist",
              "type": "BadRequest"},
             browser.json)
 
@@ -545,7 +488,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -565,7 +508,7 @@ class TestWatchersPost(IntegrationTestCase):
         browser.open(self.document, view='@watchers',
                      method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -584,7 +527,7 @@ class TestWatchersPost(IntegrationTestCase):
         self.assertEqual({}, browser.json['watchers_and_roles'])
         browser.open(self.mail_eml, view='@watchers', method='POST',
                      headers=self.api_headers,
-                     data=json.dumps({"userid": self.regular_user.getId()}))
+                     data=json.dumps({"actor_id": self.regular_user.getId()}))
 
         self.assertEqual(browser.status_code, 204)
 
@@ -594,24 +537,93 @@ class TestWatchersPost(IntegrationTestCase):
         self.assertEqual({self.regular_user.id: [u'regular_watcher']},
                          browser.json['watchers_and_roles'])
 
+    @browsing
+    def test_cant_add_groups_and_teams_as_watcher_as_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        with browser.expect_http_error(400):
+            browser.open(self.task.absolute_url() + '/@watchers',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"actor_id": 'group:fa_inbox_users'}))
+
+        self.assertEqual(
+            {"message": "Actor 'group:fa_inbox_users' does not exist",
+             "type": "BadRequest"},
+            browser.json)
+
+
+class TestWatchersPostWithGroupWatchersFeature(IntegrationTestCase):
+
+    features = ('activity', 'group_watchers', )
+
+    @browsing
+    def test_can_add_groups_and_teams_as_watcher_as_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({self.regular_user.id: [u'task_responsible'],
+                          self.dossier_responsible.id: [u'task_issuer']},
+                         browser.json['watchers_and_roles'])
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"actor_id": 'group:fa_inbox_users'}))
+
+        browser.open(self.task.absolute_url() + '/@watchers',
+                     method='POST',
+                     headers=self.api_headers,
+                     data=json.dumps({"actor_id": 'team:1'}))
+
+        self.assertEqual(browser.status_code, 204)
+
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        self.assertEqual({u'team:1': [u'regular_watcher'],
+                          self.dossier_responsible.id: [u'task_issuer'],
+                          self.regular_user.id: [u'task_responsible'],
+                          u'group:fa_inbox_users': [u'regular_watcher']},
+                         browser.json['watchers_and_roles'])
+
+    @browsing
+    def test_cant_add_groups_and_teams_as_watcher_as_regular_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.task.absolute_url() + '/@watchers', method='GET',
+                     headers=self.api_headers)
+
+        with browser.expect_http_error(400):
+            browser.open(self.task.absolute_url() + '/@watchers',
+                         method='POST',
+                         headers=self.api_headers,
+                         data=json.dumps({"actor_id": 'group:fa_inbox_users'}))
+        self.assertEqual(
+            {"message": "Actor 'group:fa_inbox_users' does not exist",
+             "type": "BadRequest"},
+            browser.json)
+
+
+def get_watchers_and_roles(context):
+    center = notification_center()
+    watchers_and_roles = defaultdict(list)
+    resource = center.fetch_resource(context)
+    create_session().refresh(resource)
+    for subscription in resource.subscriptions:
+        watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
+    return watchers_and_roles
+
 
 class TestWatchersDelete(IntegrationTestCase):
     features = ('activity', )
-
-    def get_watchers_and_roles(self, context):
-        center = notification_center()
-        watchers_and_roles = defaultdict(list)
-        resource = center.fetch_resource(context)
-        create_session().refresh(resource)
-        for subscription in resource.subscriptions:
-            watchers_and_roles[subscription.watcher.actorid].append(subscription.role)
-        return watchers_and_roles
 
     @browsing
     def test_delete_watchers_for_task(self, browser):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
         self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -620,7 +632,7 @@ class TestWatchersDelete(IntegrationTestCase):
                      method='DELETE', headers=self.api_headers)
 
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -629,7 +641,7 @@ class TestWatchersDelete(IntegrationTestCase):
     def test_delete_watchers_for_inbox_forwarding(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -637,7 +649,7 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.inbox_forwarding, self.secretariat_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({
             self.regular_user.id: [u'task_responsible'],
             self.dossier_responsible.id: [u'task_issuer'],
@@ -647,7 +659,7 @@ class TestWatchersDelete(IntegrationTestCase):
         browser.open(self.inbox_forwarding.absolute_url() + '/@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.inbox_forwarding)
+        watchers_and_roles = get_watchers_and_roles(self.inbox_forwarding)
         self.assertEqual({self.regular_user.id: [u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
                          watchers_and_roles)
@@ -658,13 +670,13 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.document, self.regular_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        watchers_and_roles = get_watchers_and_roles(self.document)
         self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.document, view='@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.document)
+        watchers_and_roles = get_watchers_and_roles(self.document)
         self.assertEqual({}, watchers_and_roles)
 
     @browsing
@@ -673,13 +685,13 @@ class TestWatchersDelete(IntegrationTestCase):
         notification_center().add_watcher_to_resource(
             self.mail_eml, self.regular_user.getId(), WATCHER_ROLE)
 
-        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        watchers_and_roles = get_watchers_and_roles(self.mail_eml)
         self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
 
         browser.open(self.mail_eml, view='@watchers',
                      method='DELETE', headers=self.api_headers)
         self.assertEqual(browser.status_code, 204)
-        watchers_and_roles = self.get_watchers_and_roles(self.mail_eml)
+        watchers_and_roles = get_watchers_and_roles(self.mail_eml)
         self.assertEqual({}, watchers_and_roles)
 
     @browsing
@@ -687,7 +699,7 @@ class TestWatchersDelete(IntegrationTestCase):
         self.login(self.regular_user, browser=browser)
         notification_center().add_watcher_to_resource(
             self.task, self.regular_user.getId(), WATCHER_ROLE)
-        watchers_and_roles = self.get_watchers_and_roles(self.task)
+        watchers_and_roles = get_watchers_and_roles(self.task)
 
         self.assertEqual({self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                           self.dossier_responsible.id: [u'task_issuer']},
@@ -696,18 +708,117 @@ class TestWatchersDelete(IntegrationTestCase):
         with browser.expect_http_error(400):
             browser.open(self.task.absolute_url() + '/@watchers',
                          method='DELETE', headers=self.api_headers,
-                         data=json.dumps({"userid": self.meeting_user.getId()}))
+                         data=json.dumps({"actor_id": self.meeting_user.getId()}))
         self.assertEqual(
             {"message": "DELETE does not take any data",
              "type": "BadRequest"},
             browser.json)
+
+    @browsing
+    def test_delete_watchers_by_url_param(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
+    def test_cant_delete_another_user_as_watcher(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+
+class TestWatchersDeleteWithGroupWatchersFeature(IntegrationTestCase):
+
+    features = ('activity', 'group_watchers', )
+
+    @browsing
+    def test_delete_watchers_by_url_param(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                     method='DELETE', headers=self.api_headers)
+        self.assertEqual(browser.status_code, 204)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
+
+    @browsing
+    def test_cant_delete_another_user_as_watcher(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, self.regular_user.getId(), WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/{}'.format(self.regular_user.getId()),
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({self.regular_user.id: [u'regular_watcher']}, watchers_and_roles)
+
+    @browsing
+    def test_regular_user_cant_delete_groups_as_watchers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, 'group:rk_inbox_users', WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+        with browser.expect_http_error(403):
+            browser.open(self.document, view='@watchers/group:rk_inbox_users',
+                         method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+    @browsing
+    def test_dossier_manager_can_delete_groups_as_watchers(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        notification_center().add_watcher_to_resource(
+            self.document, 'group:rk_inbox_users', WATCHER_ROLE)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({'group:rk_inbox_users': [u'regular_watcher']}, watchers_and_roles)
+
+        browser.open(self.document, view='@watchers/group:rk_inbox_users',
+                     method='DELETE', headers=self.api_headers)
+
+        watchers_and_roles = get_watchers_and_roles(self.document)
+        self.assertEqual({}, watchers_and_roles)
 
 
 class TestPossibleWatchers(IntegrationTestCase):
 
     features = ('activity', )
 
-    @skip('Title should contain username instead of userid')
+    @skip('Title should contain username instead of actor_id')
     @browsing
     def test_get_possible_watchers_for_and_object(self, browser):
         center = notification_center()
@@ -751,7 +862,7 @@ class TestPossibleWatchers(IntegrationTestCase):
         self.assertEqual([],
                          [item['token'] for item in browser.json['items']])
 
-    @skip('Title should contain username instead of userid')
+    @skip('Title should contain username instead of actor_id')
     @browsing
     def test_get_possible_watchers_for_document(self, browser):
         center = notification_center()
@@ -779,7 +890,7 @@ class TestPossibleWatchers(IntegrationTestCase):
 
         self.assertEqual(expected_json, browser.json)
 
-    @skip('Title should contain username instead of userid')
+    @skip('Title should contain username instead of actor_id')
     @browsing
     def test_get_possible_watchers_for_mail(self, browser):
         center = notification_center()
@@ -815,5 +926,62 @@ class TestPossibleWatchers(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(5, len(browser.json.get('items')))
-        self.assertEqual(18, browser.json.get('items_total'))
+        self.assertEqual(20, browser.json.get('items_total'))
         self.assertIn('batching', browser.json)
+
+
+class TestPossibleWatchersWithGroupWatchersFeature(IntegrationTestCase):
+
+    features = ('activity', 'group_watchers', )
+
+    @browsing
+    def test_possible_watchers_includes_users_for_regular_users(self, browser):
+        self.login(self.regular_user, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?query=Se'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [
+                {u'title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                 u'token': u'regular_user'},
+                {u'title': u'J\xe4ger Herbert (herbert.jager)',
+                 u'token': u'meeting_user'},
+                {u'title': u'Secretary C\xf6mmittee (committee.secretary)',
+                 u'token': u'committee.secretary'},
+                {u'title': u'User Service (service.user)',
+                 u'token': u'service_user'}],
+            u'items_total': 4}
+
+        self.assertEqual(expected_json, browser.json)
+
+    @browsing
+    def test_possible_watchers_includes_users_groups_and_teams_for_dossier_manager(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        url = self.task.absolute_url() + '/@possible-watchers?query=Se'
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        expected_json = {
+            u'@id': url,
+            u'items': [
+                {u'title': u'B\xe4rfuss K\xe4thi (kathi.barfuss)',
+                 u'token': u'regular_user'},
+                {u'title': u'J\xe4ger Herbert (herbert.jager)',
+                 u'token': u'meeting_user'},
+                {u'title': u'Secretary C\xf6mmittee (committee.secretary)',
+                 u'token': u'committee.secretary'},
+                {u'title': u'User Service (service.user)',
+                 u'token': u'service_user'},
+                {u'title': u'fa Inbox Users Group',
+                 u'token': u'group:fa_inbox_users'},
+                {u'title': u'fa Users Group', u'token': u'group:fa_users'},
+                {u'title': u'rk Inbox Users Group',
+                 u'token': u'group:rk_inbox_users'},
+                {u'title': u'rk Users Group', u'token': u'group:rk_users'},
+                {u'title': u'Sekretariat Abteilung XY (Finanz\xe4mt)',
+                 u'token': u'team:2'},
+                {u'title': u'Sekretariat Abteilung Null (Finanz\xe4mt)',
+                 u'token': u'team:3'}],
+            u'items_total': 10}
+
+        self.assertEqual(expected_json, browser.json)

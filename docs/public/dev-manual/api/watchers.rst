@@ -5,8 +5,6 @@ Beobachter
 
 Der ``@watchers`` Endpoint dient dazu, für Dokumente, Aufgaben und Weiterleitungen Beobachter zu registrieren.
 
-Diese Endpoints liefern zur Zeit sowohl ``referenced_users`` als auch ``referenced_actors`` zurück. ``referenced_users`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``referenced_actors`` abgelöst.
-
 Auflistung
 ----------
 
@@ -29,18 +27,6 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
 
       {
         "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@watchers",
-        "referenced_users": [
-          {
-            "@id": "https://example.org/@users/peter.mueller",
-            "id": "peter.mueller",
-            "fullname": "Mueller Peter"
-          },
-          {
-            "@id": "https://example.org/@users/rolf.ziegler",
-            "id": "rolf.ziegler",
-            "fullname": "Ziegler Rolf"
-          }
-        ],
         "referenced_actors": [
           {
             "@id": "https://example.org/@actors/peter.mueller",
@@ -101,7 +87,6 @@ Die Beobachter können als Komponente eines Inhalts direkt über den ``expand``-
       "@components": {
         "watchers": {
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
-          "referenced_users": ["..."],
           "referenced_actors": ["..."],
           "referenced_watcher_roles": ["..."],
           "watchers_and_roles": { "...": "..." }
@@ -125,7 +110,7 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
        Accept: application/json
 
        {
-         "userid": "peter.mueller"
+         "actor_id": "peter.mueller"
        }
 
 **Beispiel-Response**:
@@ -138,13 +123,32 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
 Beobachter entfernen
 --------------------
 
-Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einem Inhalt wieder entfernt werden.
+Mittels DELETE-Requests kann die Rolle ``regular_watcher`` vom eingeloggten Benutzer vom aktuellen Inhalt entfernt werden.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
        DELETE /task-1/@watchers HTTP/1.1
+       Accept: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
+
+
+Gruppen und Teams als Beobachter entfernen
+------------------------------------------
+
+Wenn das Feature für "Gruppen und Teams als Beobachter" aktiviert ist, können Benutzer mit der Rolle Dossier-Verwalter eine Gruppe oder ein Team als Watcher löschen, indem ein DELETE-Request auf die entsprechende Ressource abgesetzt wird.
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       DELETE /task-1/@watchers/group:1 HTTP/1.1
        Accept: application/json
 
 **Beispiel-Response**:
@@ -191,6 +195,8 @@ Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wi
         ],
         "items_total": 17
       }
+
+Wenn das Feature für "Gruppen und Teams als Watcher" aktiviert ist, wird für Benutzer mit der Rolle Dossier-Verwalter auch Gruppen und Teams zurückgegeben.
 
 Resultate filtern
 ~~~~~~~~~~~~~~~~~

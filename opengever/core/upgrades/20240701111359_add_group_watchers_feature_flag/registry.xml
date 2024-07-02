@@ -1,0 +1,7 @@
+<registry>
+
+  <records interface="opengever.base.interfaces.IBaseSettings">
+    <value key="is_group_watchers_feature_enabled">False</value>
+  </records>
+
+</registry>
