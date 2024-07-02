@@ -143,6 +143,20 @@ services:
     volumes:
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
       - ./var/openldap:/bitnami/openldap
+  mta:
+    image: 4teamwork/ogmta:latest
+    build:
+      context: .
+      dockerfile: ./docker/mta/Dockerfile
+    ports:
+      - '8025:25'
+    environment:
+      POSTFIX_MYHOSTNAME: ogmta.onegovgever.ch
+      POSTFIX_MYORIGIN: dev.onegovgever.ch
+      POSTFIX_SMTPD_TLS_SECURITY_LEVEL: none
+      VIRTUAL_DOMAINS_0: name=dev.onegovgever.ch,url=http://ogcore:8080/ogsite
+    profiles:
+      - mta
   ianus-frontend:
     image: ghcr.io/4teamwork/ianus-frontend:2024.2.0
     ports:
