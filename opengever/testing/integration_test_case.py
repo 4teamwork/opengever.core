@@ -98,6 +98,7 @@ FEATURE_FLAGS = {
     'workspace-todo': 'opengever.workspace.interfaces.IToDoSettings.is_feature_enabled',
     'favorites': 'opengever.base.interfaces.IFavoritesSettings.is_feature_enabled',
     'solr': 'opengever.base.interfaces.ISearchSettings.use_solr',
+    'error_log': 'opengever.base.interfaces.IBaseSettings.is_redis_error_log_feature_enabled',
     'purge-trash': 'opengever.dossier.interfaces.IDossierResolveProperties.purge_trash_enabled',
     'journal-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.journal_pdf_enabled',
     'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
