@@ -5,4 +5,4 @@ services:
     image: ghcr.io/4teamwork/gever-ui:20XX.Y.Z
     restart: always
     ports:
-      - '1{{{base.deployment_number}}}34:80'
+      - '1{{{base.deployment_number}}}80:80'
