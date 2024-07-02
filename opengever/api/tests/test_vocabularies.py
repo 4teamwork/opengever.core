@@ -46,6 +46,7 @@ NON_SENSITIVE_VOCABUALRIES = [
     'opengever.dossier.participation_roles',
     'opengever.dossier.type_prefixes',
     'opengever.dossier.ValidResolverNamesVocabulary',
+    'opengever.disposition.archivist',
     'opengever.journal.manual_entry_categories',
     'opengever.meeting.ActiveCommitteeVocabulary',
     'opengever.meeting.AdHocAgendaItemTemplatesForCommitteeVocabulary',

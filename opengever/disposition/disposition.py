@@ -218,7 +218,7 @@ class IDispositionSchema(model.Schema):
     model.fieldset(
         u'common',
         label=_(u'fieldset_common', default=u'Common'),
-        fields=[u'title', u'dossiers', u'transfer_number', u'transferring_office'],
+        fields=[u'title', u'dossiers', u'transfer_number', u'transferring_office', u'responsible'],
     )
 
     dexteritytextindexer.searchable('title')
@@ -259,6 +259,11 @@ class IDispositionSchema(model.Schema):
         title=_(u"label_transferring_office", default=u"Transferring office"),
         required=False,
         defaultFactory=transferring_office_default
+    )
+    responsible = schema.Choice(
+        title=_(u'responsible', default=u'Responsible'),
+        vocabulary='opengever.disposition.archivist',
+        required=False,
     )
 
 
@@ -463,7 +468,7 @@ class Disposition(Container):
         center.add_watcher_to_resource(
             self, self.Creator(), DISPOSITION_RECORDS_MANAGER_ROLE)
 
-        for archivist in self.get_all_archivists():
+        for archivist in Disposition.get_all_archivists():
             center.add_watcher_to_resource(
                 self, archivist, DISPOSITION_ARCHIVIST_ROLE)
 
@@ -483,8 +488,9 @@ class Disposition(Container):
 
         return archivists
 
-    def get_all_archivists(self):
-        archivists_infos = self.get_archivists_infos()
+    @staticmethod
+    def get_all_archivists():
+        archivists_infos = Disposition.get_archivists_infos()
         archivists = []
         for principal, info in archivists_infos:
             if info[0].get('principal_type') == 'group':
