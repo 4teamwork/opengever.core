@@ -85,10 +85,21 @@
       handler=".handlers.dossier_state_changed"
       />
 
+  <subscriber
+      for="opengever.disposition.interfaces.IDisposition
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".events.handle_evaluation_finalize"
+      />
+
   <!-- transitions -->
   <adapter
       factory=".transition.AppraiseTransitionExtender"
       name="disposition-transition-appraise"
       />
 
+  <!-- Vocabularies -->
+  <utility
+      factory=".vocabularies.ArchivistVocabulary"
+      name="opengever.disposition.archivist"
+      />
 </configure>
