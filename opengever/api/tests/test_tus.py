@@ -5,6 +5,8 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.mail.mail import OGMail
+from opengever.mail.tests import MAIL_DATA
 from opengever.private.interfaces import IPrivateFolderQuotaSettings
 from opengever.propertysheets.storage import PropertySheetSchemaStorage
 from opengever.testing import IntegrationTestCase
@@ -331,3 +333,14 @@ class TestTUSUpload(IntegrationTestCase):
         upload_metadata = UPLOAD_METADATA + ',document_date MjAxNS0wOC0yMQ=='
         self.assert_tus_replace_succeeds(self.document, browser, headers={"Upload-Metadata": upload_metadata})
         self.assertEqual(current_date, self.document.document_date)
+
+    @browsing
+    def test_add_additional_metadata_for_ogmail(self, browser):
+        self.login(self.regular_user, browser)
+        mail = create(Builder('mail').with_message(MAIL_DATA))
+        mail_document_date_b64 = b64encode(mail.document_date.isoformat().encode()).decode()
+        upload_metadata = UPLOAD_METADATA + ',document_date {}'.format(mail_document_date_b64)
+        doc = self.assert_tus_upload_succeeds(
+            self.dossier, browser, upload_metadata=upload_metadata
+        )
+        self.assertEqual(mail.document_date, doc.document_date)
