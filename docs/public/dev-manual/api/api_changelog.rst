@@ -8,6 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
+- The ``@possible-watchers`` endpoint always includes all possible watchers without removing already watching actors.
 - Remove deprecated ``referenced_users`` property from ``GET @watcher`` endpoint.
 - The ``DELETE @watcher`` endpoint requires a path parameter with the actor-id
 - The ``POST @watcher`` endpoint requires an ``actor_id`` an no longer a ``userid``

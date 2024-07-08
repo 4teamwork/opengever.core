@@ -712,7 +712,6 @@ class TestPossibleWatchers(IntegrationTestCase):
 
     @browsing
     def test_get_possible_watchers_for_and_object(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
         url = self.task.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
 
@@ -728,18 +727,8 @@ class TestPossibleWatchers(IntegrationTestCase):
 
         self.assertEqual(expected_json, browser.json)
 
-        center.add_watcher_to_resource(self.task, self.dossier_manager.getId(), WATCHER_ROLE)
-        browser.open(url, method='GET', headers=self.api_headers)
-        expected_json = {
-            u'@id': url,
-            u'items': [],
-            u'items_total': 0}
-
-        self.assertEqual(expected_json, browser.json)
-
     @browsing
     def test_possible_watchers_only_returns_active_users(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
         url = self.task.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
 
@@ -755,7 +744,6 @@ class TestPossibleWatchers(IntegrationTestCase):
 
     @browsing
     def test_get_possible_watchers_for_document(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
         url = self.document.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
 
@@ -771,18 +759,8 @@ class TestPossibleWatchers(IntegrationTestCase):
 
         self.assertEqual(expected_json, browser.json)
 
-        center.add_watcher_to_resource(self.document, self.dossier_manager.getId(), WATCHER_ROLE)
-        browser.open(url, method='GET', headers=self.api_headers)
-        expected_json = {
-            u'@id': url,
-            u'items': [],
-            u'items_total': 0}
-
-        self.assertEqual(expected_json, browser.json)
-
     @browsing
     def test_get_possible_watchers_for_mail(self, browser):
-        center = notification_center()
         self.login(self.regular_user, browser=browser)
         url = self.mail_eml.absolute_url() + '/@possible-watchers?query=F%C3%A4ivel'
 
@@ -795,15 +773,6 @@ class TestPossibleWatchers(IntegrationTestCase):
                 u'token': self.dossier_manager.getId(),
                 }],
             u'items_total': 1}
-
-        self.assertEqual(expected_json, browser.json)
-
-        center.add_watcher_to_resource(self.mail_eml, self.dossier_manager.getId(), WATCHER_ROLE)
-        browser.open(url, method='GET', headers=self.api_headers)
-        expected_json = {
-            u'@id': url,
-            u'items': [],
-            u'items_total': 0}
 
         self.assertEqual(expected_json, browser.json)
 
