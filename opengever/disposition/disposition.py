@@ -10,6 +10,7 @@ from opengever.activity.roles import DISPOSITION_ARCHIVIST_ROLE
 from opengever.activity.roles import DISPOSITION_RECORDS_MANAGER_ROLE
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.lifecycle import ILifeCycle
+from opengever.base.interfaces import ISequenceNumber
 from opengever.base.response import IResponseContainer
 from opengever.base.response import IResponseSupported
 from opengever.base.role_assignments import ArchivistRoleAssignment
@@ -534,9 +535,10 @@ class Disposition(Container):
         return getattr(self, '_sip_package', None)
 
     def get_sip_name(self):
-        name = u'SIP_{}_{}'.format(
+        name = u'SIP_{}_{}_{}'.format(
             DateTime().strftime('%Y%m%d'),
-            api.portal.get().getId().upper())
+            api.portal.get().getId().upper(),
+            getUtility(ISequenceNumber).get_number(self))
         if self.transfer_number:
             name = u'{}_{}'.format(name, self.transfer_number)
 
