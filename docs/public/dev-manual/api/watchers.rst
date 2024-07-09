@@ -5,8 +5,6 @@ Beobachter
 
 Der ``@watchers`` Endpoint dient dazu, für Dokumente, Aufgaben und Weiterleitungen Beobachter zu registrieren.
 
-Diese Endpoints liefern zur Zeit sowohl ``referenced_users`` als auch ``referenced_actors`` zurück. ``referenced_users`` wird in einer späteren Version jedoch nicht mehr unterstützt werden, und wird durch ``referenced_actors`` abgelöst.
-
 Auflistung
 ----------
 
@@ -29,18 +27,6 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
 
       {
         "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@watchers",
-        "referenced_users": [
-          {
-            "@id": "https://example.org/@users/peter.mueller",
-            "id": "peter.mueller",
-            "fullname": "Mueller Peter"
-          },
-          {
-            "@id": "https://example.org/@users/rolf.ziegler",
-            "id": "rolf.ziegler",
-            "fullname": "Ziegler Rolf"
-          }
-        ],
         "referenced_actors": [
           {
             "@id": "https://example.org/@actors/peter.mueller",
@@ -101,7 +87,6 @@ Die Beobachter können als Komponente eines Inhalts direkt über den ``expand``-
       "@components": {
         "watchers": {
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
-          "referenced_users": ["..."],
           "referenced_actors": ["..."],
           "referenced_watcher_roles": ["..."],
           "watchers_and_roles": { "...": "..." }
@@ -125,7 +110,7 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
        Accept: application/json
 
        {
-         "userid": "peter.mueller"
+         "actor_id": "peter.mueller"
        }
 
 **Beispiel-Response**:
@@ -138,13 +123,13 @@ Ein Benutzer kann mittels POST-Requests als Beobachter mit der Rolle ``regular_w
 Beobachter entfernen
 --------------------
 
-Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von einem Inhalt wieder entfernt werden.
+Mittels DELETE-Requests kann die Rolle ``regular_watcher`` vom eigenen Beobachter oder einer Gruppe oder Team entfernt werden.
 
 **Beispiel-Request**:
 
    .. sourcecode:: http
 
-       DELETE /task-1/@watchers HTTP/1.1
+       DELETE /task-1/@watchers/group:1 HTTP/1.1
        Accept: application/json
 
 **Beispiel-Response**:
@@ -156,9 +141,9 @@ Mittels DELETE-Requests kann die Rolle ``regular_watcher`` eines Beobachters von
 
 Liste von möglichen Beobachtern
 -------------------------------
-Der ``@possible-watchers``-Endpoint liefert eine Liste von Benutzern welche als Beobachter für den aktuellen Kontext hinzugefügt werden können.
+Der ``@possible-watchers``-Endpoint liefert eine Liste von Actors welche als Beobachter für den aktuellen Kontext hinzugefügt werden können.
 
-Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Benutzer werden nach Name und Vorname sortiert. Der eigene Benutzer sowie alle anderen Benutzer werden nur dann angezeigt, wenn diese noch keine Beobachter-Rolle besitzen.
+Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Actors werden Typ (Benutzer, Gruppen, Teams) und nach Name und Vorname oder Titel sortiert. Der eigene Benutzer sowie alle anderen Actors werden nur dann angezeigt, wenn diese noch keine Beobachter-Rolle besitzen.
 
 **Beispiel-Request:**
 
@@ -187,6 +172,10 @@ Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wi
             "title": "Ziegler Rolf (rolf.ziegler)",
             "token": "rolf.ziegler"
           },
+          {
+            "title": "Team Blue",
+            "token": "team:1"
+          },
           { "...": "..." },
         ],
         "items_total": 17
@@ -200,6 +189,7 @@ Mit dem ``query``-Parameter können die Resultate gefiltert werden. Es werden di
 - Nachname
 - E-Mail
 - Userid
+- Gruppen oder Team Titel
 
 beim filtern berücksichtigt.
 
