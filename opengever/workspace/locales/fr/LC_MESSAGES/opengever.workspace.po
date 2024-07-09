@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-07 13:42+0000\n"
+"POT-Creation-Date: 2024-07-09 09:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,10 @@ msgstr "Participant supprimé"
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "Participant invited"
 msgstr "Participant invité"
+
+#: ./opengever/workspace/report.py
+msgid "Participants"
+msgstr "Participants"
 
 #: ./opengever/workspace/activities.py
 msgid "Reopened by ${user}"
