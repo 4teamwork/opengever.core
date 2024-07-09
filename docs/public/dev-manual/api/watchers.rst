@@ -143,7 +143,7 @@ Liste von möglichen Beobachtern
 -------------------------------
 Der ``@possible-watchers``-Endpoint liefert eine Liste von Actors welche als Beobachter für den aktuellen Kontext hinzugefügt werden können.
 
-Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Actors werden Typ (Benutzer, Gruppen, Teams) und nach Name und Vorname oder Titel sortiert. Der eigene Benutzer sowie alle anderen Actors werden nur dann angezeigt, wenn diese noch keine Beobachter-Rolle besitzen.
+Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Actors werden Typ (Benutzer, Gruppen, Teams) und nach Name und Vorname oder Titel sortiert.
 
 **Beispiel-Request:**
 
