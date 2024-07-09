@@ -216,6 +216,7 @@
                    ATContentTypes: Add News Item,
                    Edit lifecycle and classification,
                    ftw.usermigration: Migrate users,
+                   opengever.api: Access error log,
                    opengever.api: Manage Groups,
                    opengever.api: Manage Role Assignment Reports,
                    opengever.api: Notify Arbitrary Users,

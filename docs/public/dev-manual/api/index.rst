@@ -77,6 +77,7 @@ Inhalt:
    out_of_office.rst
    substitutes.rst
    dossier_transfers.rst
+   error_log.rst
    config_checks.rst
    validate_repository.rst
    examples/index.rst

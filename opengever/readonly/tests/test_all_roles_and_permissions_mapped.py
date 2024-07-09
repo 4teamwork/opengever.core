@@ -176,6 +176,7 @@ NON_WRITE_PERMISSIONS = [
     'Modify constrain types',
     'Modify Cookie Crumblers',
     'Modify view template',
+    'opengever.api: Access error log',
     'opengever.api: View AllowedRolesAndPrincipals',
     'opengever.bumblebee: Revive Preview',
     'opengever.disposition: Download SIP Package',
