@@ -91,8 +91,7 @@ class UserReport(BaseReporterView):
         if not is_administrator():
             raise Unauthorized
 
-    def __call__(self):
-        self.check_permissions()
+    def extract_user_ids_from_request(self):
         user_ids = self.request.form.get("user_ids")
 
         if not user_ids:
@@ -105,10 +104,17 @@ class UserReport(BaseReporterView):
             else:
                 return self.request.RESPONSE.redirect(
                     self.context.absolute_url())
+        return user_ids
 
+    def fetch_users(self):
+        user_ids = self.extract_user_ids_from_request()
         users = [ogds_service().fetch_user(user_id) for user_id in user_ids]
         users = [user for user in users if user]
+        return users
 
+    def __call__(self):
+        self.check_permissions()
+        users = self.fetch_users()
         reporter = XLSReporter(
             self.context.REQUEST,
             self.columns(),
