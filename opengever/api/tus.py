@@ -3,6 +3,7 @@ from opengever.api.not_reported_exceptions import BadRequest as NotReportedBadRe
 from opengever.base.interfaces import IDuringContentCreation
 from opengever.document import _
 from opengever.document.interfaces import ICheckinCheckoutManager
+from opengever.mail.mail import OGMail
 from opengever.meeting.proposaltemplate import IProposalTemplate
 from opengever.propertysheets.creation_defaults import initialize_customproperties_defaults
 from opengever.quota.exceptions import ForbiddenByQuota
@@ -70,9 +71,13 @@ class GeverUploadPatch(UploadPatch):
     def add_additional_metadata(self, metadata, obj):
         if not metadata.get("mode", "create") == 'create':
             return
-
         data = {}
-        document_date = metadata.get('document_date')
+        document_date = None
+        if isinstance(obj, OGMail):
+            document_date = obj.document_date
+        else:
+            document_date = metadata.get('document_date')
+
         if document_date:
             data['document_date'] = document_date
 
