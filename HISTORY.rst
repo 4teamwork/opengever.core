@@ -10,6 +10,40 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.10.0 (2024-07-15)
+----------------------
+
+New features:
+
+
+- Add @error-log endpoint to get the most recent backend errors (feature-flagged). [elioschmutz] [TI-330]
+- Groups and teams can be added and removed as watchers [elioschmutz] [TI-407]
+- The @possible-watchers endpoint always includes all possible watchers without removing already watching actors [elioschmutz] [TI-407-2]
+- Add support for participations in dossier creation api requests. [phgross] [TI-438]
+
+
+Bug fixes:
+
+
+- Respect new file mimetype when retrieve a file from teamraum as a new version. [elioschmutz] [TI-366]
+- A user can now add itself as a regular watcher even if he is already watching by anoter watcher role [elioschmutz] [TI-407]
+- Fix document_date when uploading mails with DnD, use mail header date. [amo] [TI-458]
+- Deactivate the edit ui-action for ris proposals. [jch] [TI-472]
+- Introduce sequence number in the SIP name. [phgross] [TI-528]
+
+
+Other changes:
+
+
+- Introduce redis. [elioschmutz] [TI-330]
+- Add new Field responsible to Disposition.[amo] [TI-362]
+- The "POST @watcher" endpoint requires an "actor_id" an no longer a "userid" [elioschmutz] [TI-407]
+- Remove deprecated 'referenced_users' property from 'GET @watcher' endpoint [elioschmutz] [TI-407-2]
+- Introduce oneoffixx filetype selection. [phgross] [TI-569]
+- Include group users in workspace participant Excel export and ensure unique user listing. [amo] [TI-669]
+- Include workspace title in participant export file name. [amo] [TI-670]
+
+
 2024.9.0 (2024-06-13)
 ---------------------
 
