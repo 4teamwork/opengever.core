@@ -3,7 +3,7 @@
 API Changelog
 =============
 
-2024.10.0 (unreleased)
+2024.10.0 (2024-07-15)
 ----------------------
 
 Breaking Changes
