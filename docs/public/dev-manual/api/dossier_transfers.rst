@@ -62,6 +62,7 @@ Mittels eines POST Requests kann ein Dossier-Transfer erstellt werden:
         "target": "recipient",
         "source_user": "regular_user",
         "root": "createresolvabledossier000000001",
+        "root_item": {"...": "..."},
         "documents": [
            "document1_uid",
            "document2_uid"
@@ -116,6 +117,7 @@ Mittels eines GET Requests können Dossier-Transfers aufgelistet werden:
             },
             "source_user": "jurgen.konig",
             "root": "createresolvabledossier000000001",
+            "root_item": {"...": "..."},
             "documents": [
               "createresolvabledossier000000003"
             ],
@@ -142,6 +144,7 @@ Mittels eines GET Requests können Dossier-Transfers aufgelistet werden:
             },
             "source_user": "jurgen.konig",
             "root": "createresolvabledossier000000001",
+            "root_item": {"...": "..."},
             "documents": [
               "createresolvabledossier000000003"
             ],

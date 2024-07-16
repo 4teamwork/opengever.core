@@ -3,11 +3,14 @@ from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.security import elevated_privileges
 from opengever.document.behaviors import IBaseDocument
 from opengever.dossiertransfer.api.base import DossierTransferLocator
+from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
 from plone.namedfile.utils import stream_data
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import _no_content_marker
 from zExceptions import NotFound
 from zExceptions.unauthorized import Unauthorized
+from zope.component import getMultiAdapter
 import json
 
 
@@ -54,7 +57,8 @@ class DossierTransfersGet(DossierTransferLocator):
                     raise Unauthorized(
                         "full_content requires a valid transfer token")
                 return self.serialize(transfer, full_content=True)
-            return self.serialize(transfer)
+            return self.extend_serialized_transfers_with_root_item(
+                [self.serialize(transfer)])[0]
 
         elif self.is_blob_request():
             return self.stream_document_blob()
@@ -69,9 +73,39 @@ class DossierTransfersGet(DossierTransferLocator):
         transfers = self.list_transfers()
         result = {
             '@id': '/'.join((api.portal.get().absolute_url(), '@dossier-transfers')),
-            'items': [self.serialize(t) for t in transfers],
+            'items': self.extend_serialized_transfers_with_root_item(
+                [self.serialize(t) for t in transfers])
         }
         return result
+
+    def extend_serialized_transfers_with_root_item(self, items):
+        """Extends serialized transfer items with root item details.
+
+        This method enhances each serialized transfer item in the items list by
+        adding a 'root_item' key, which contains the serialized dossier brain.
+        The root item details are fetched only if the source token of the
+        transfer item matches the local unit ID.
+
+        It is intended to not include the root_item directly into the
+        dossier-transfer serializer because we would need to do a catalog request
+        for each dossier transfer item. Doing it here, we can fetch all dossier
+        with one request.
+        """
+        local_unit_id = get_current_admin_unit().unit_id
+        uids = [item['root'] for item in items if item['source']['token'] == local_unit_id]
+        brains = api.portal.get_tool('portal_catalog').searchResults(UID=uids)
+        brains_by_uid = {brain.UID: brain for brain in brains}
+
+        for item in items:
+            brain = brains_by_uid.get(item['root'])
+            brain_item = None
+
+            if brain and item['source']['token'] == local_unit_id:
+                brain_item = getMultiAdapter((brain, self.request), ISerializeToJsonSummary)()
+
+            item['root_item'] = brain_item
+
+        return items
 
     def full_content_requested(self):
         return bool(self.request.form.get('full_content', False))
