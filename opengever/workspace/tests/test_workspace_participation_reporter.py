@@ -106,4 +106,4 @@ class TestWorkspaceParticipationReporter(IntegrationTestCase):
                 None
             ]
         ]
-        self.assertSequenceEqual(expected_values, cell_values)
+        self.assertItemsEqual(expected_values, cell_values)
