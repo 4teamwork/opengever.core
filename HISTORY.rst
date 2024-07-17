@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.10.1 (2024-07-17)
+----------------------
+
+Bug fixes:
+
+
+- Fix Redis requirement for Docker image. [buchi] [GH-7995]
+
+
 2024.10.0 (2024-07-15)
 ----------------------
 
