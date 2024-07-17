@@ -7,6 +7,7 @@ from opengever.testing import IntegrationTestCase
 from opengever.trash.trash import ITrasher
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
+from plone import api
 from zope.component import queryMultiAdapter
 import transaction
 
@@ -291,3 +292,16 @@ class TestDocumentContextActions(IntegrationTestCase):
 
         expected_actions_restricted_guest = [u'revive_bumblebee_preview']
         self.assertEqual(expected_actions_restricted_guest, self.get_actions(document))
+
+    def test_include_sign_actions_with_activated_feature(self):
+        self.activate_feature('sign')
+        self.login(self.regular_user)
+
+        self.assertIn('finalize_and_sign', self.get_actions(self.document))
+        self.assertNotIn('sign', self.get_actions(self.document))
+
+        api.content.transition(obj=self.document,
+                               transition=self.document.finalize_transition)
+
+        self.assertNotIn('finalize_and_sign', self.get_actions(self.document))
+        self.assertIn('sign', self.get_actions(self.document))
