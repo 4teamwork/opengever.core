@@ -9,6 +9,7 @@ from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
 from opengever.dossiertransfer.api.schemas import IPerformDossierTransferAPISchema
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
+from opengever.journal.handlers import journal_entry_factory
 from opengever.kub.client import KuBClient
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
@@ -24,12 +25,14 @@ from plone.restapi.services import Service
 from plone.restapi.services.content.utils import add
 from plone.restapi.services.content.utils import create
 from Products.CMFPlone.utils import safe_hasattr
+from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zExceptions import Forbidden
 from zExceptions import InternalError
 from zope.component import getMultiAdapter
 from zope.component import queryMultiAdapter
 from zope.event import notify
+from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
 from zope.lifecycleevent import ObjectCreatedEvent
 import json
@@ -42,6 +45,7 @@ import transaction
 
 
 logger = logging.getLogger('opengever.dossiertransfer')
+_ = MessageFactory('opengever.dossiertransfer')
 
 
 class PerformDossierTransfer(Service):
@@ -124,6 +128,7 @@ class PerformDossierTransfer(Service):
             transaction.begin()
             self.create_dossiers()
             self.create_documents()
+            self.add_journal_entry()
         finally:
             self.cleanup()
 
@@ -275,3 +280,24 @@ class PerformDossierTransfer(Service):
             for field in fields.keys():
                 if field not in fieldnames:
                     del data['custom_properties'][slot][field]
+
+    def add_journal_entry(self):
+        if self.root_obj is None:
+            return
+
+        source_title = safe_unicode(self.transfer.source.title)
+        transfer_id = safe_unicode(self.transfer_id)
+
+        title = _(
+            u'label_journal_entry_dossier_transferred',
+            default=u'Dossier from ${source_title} transferred (Transfer-ID: ${transfer_id})',
+            mapping=dict(
+                transfer_id=transfer_id,
+                source_title=source_title
+            )
+        )
+
+        journal_entry_factory(
+            self.root_obj,
+            "Dossier transferred",
+            title=title)
