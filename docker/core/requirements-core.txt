@@ -269,7 +269,7 @@ python-openid==2.2.5
 pytz==2022.1
 PyXB==1.2.5
 Record==2.13.0
-redis=3.5.3
+redis==3.5.3
 repoze.catalog==0.8.3
 repoze.xmliter==0.6
 requests==2.27.1
