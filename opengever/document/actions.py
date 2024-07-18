@@ -4,6 +4,7 @@ from opengever.base.browser.edit_public_trial import is_edit_public_trial_status
 from opengever.base.context_actions import BaseContextActions
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
+from opengever.base.utils import is_transition_allowed
 from opengever.bumblebee import is_bumblebee_feature_enabled
 from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
@@ -14,6 +15,7 @@ from opengever.inbox.inbox import IInbox
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.private.dossier import IPrivateDossier
 from opengever.private.folder import IPrivateFolder
+from opengever.sign.utils import is_sign_feature_enabled
 from opengever.trash.trash import ITrasher
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.utils import is_restricted_workspace_and_guest
@@ -250,6 +252,30 @@ class BaseDocumentContextActions(BaseContextActions):
 
     def is_unlock_available(self):
         return self.file_actions.is_unlock_available()
+
+    def is_sign_document_available(self):
+        if not is_sign_feature_enabled():
+            return False
+
+        if not api.user.has_permission('opengever.sign: Sign Document', obj=self.context):
+            return False
+
+        if not self.context.is_final_document():
+            return False
+
+        return True
+
+    def is_finalize_and_sign_document_available(self):
+        if not is_sign_feature_enabled():
+            return False
+
+        if not api.user.has_permission('opengever.sign: Sign Document', obj=self.context):
+            return False
+
+        if not is_transition_allowed(self.context, self.context.finalize_transition):
+            return False
+
+        return True
 
 
 @adapter(IDocumentSchema, IOpengeverBaseLayer)

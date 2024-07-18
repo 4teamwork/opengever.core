@@ -67,6 +67,7 @@
   <include package="opengever.readonly" file="configure.zcml" />
   <include package="opengever.repository" file="configure.zcml" />
   <include package="opengever.setup" file="configure.zcml" />
+  <include package="opengever.sign" file="configure.zcml" />
   <include package="opengever.sharing" file="configure.zcml" />
   <include package="opengever.tabbedview" file="configure.zcml" />
   <include package="opengever.task" file="configure.zcml" />
@@ -178,4 +179,3 @@
   <includeOverrides package="ftw.lawgiver" file="overrides.zcml" />
 
 </configure>
-

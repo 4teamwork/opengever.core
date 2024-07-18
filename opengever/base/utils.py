@@ -355,3 +355,15 @@ def get_date_with_delta_excluding_weekends(start_date, days_delta):
         if end_date.weekday() not in [5, 6]:
             calculated_delta += 1
     return end_date
+
+
+def is_transition_allowed(obj, transition_id):
+    """Checks if a specific transition is allowed for a specific object.
+
+    This will also check the workflow defined transition-guard functions.
+    """
+    actions = api.portal.get_tool('portal_workflow').listActionInfos(object=obj)
+    for action in actions:
+        if action['category'] == 'workflow' and action['id'] == transition_id:
+            return True
+    return False
