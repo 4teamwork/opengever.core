@@ -92,6 +92,7 @@ GEVER-Mandanten abgefragt werden.
               "repositoryfolder_tasks_tab": true,
               "resolver_name": "strict",
               "sablon_date_format": "%d.%m.%Y",
+              "sign": false,
               "solr": true,
               "tasks_pdf": false,
               "error_log": false,
@@ -260,6 +261,9 @@ features
 
     sablon_date_format
         Datum Formatierung Spezifikation für Sablon Vorlagen
+
+    sign
+        Dokumente können signiert werden
 
     solr
         Suche über Apache Solr

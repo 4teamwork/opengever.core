@@ -42,6 +42,7 @@ from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.ris.interfaces import IRisSettings
 from opengever.sharing.interfaces import ISharingConfiguration
+from opengever.sign.utils import is_sign_feature_enabled
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.interfaces import ITaskTemplateSettings
 from opengever.workspace.interfaces import IToDoSettings
@@ -190,6 +191,7 @@ class GeverSettingsAdpaterV1(object):
             'oc_plugin_check_enabled',
             interface=IOfficeConnectorSettings
         )
+        features['sign'] = is_sign_feature_enabled()
 
         return features
 
