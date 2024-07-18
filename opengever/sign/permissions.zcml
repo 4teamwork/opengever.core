@@ -1,0 +1,7 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="opengever.sign">
+
+  <permission id="opengever.sign.SignDocument" title="opengever.sign: Sign Document" />
+
+</configure>
