@@ -8,6 +8,7 @@ from opengever.base.date_time import utcnow_tz_aware
 from opengever.base.security import elevated_privileges
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossier.resolve import LockingResolveManager
+from opengever.journal.manager import JournalManager
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.testing import IntegrationTestCase
 import json
@@ -46,6 +47,15 @@ class TestDossierTransfersPost(IntegrationTestCase):
             'all_participations': False,
         }
         return payload.copy()
+
+    def check_journal_entry(self):
+        journal_entries = JournalManager(self.resolved_dossier).list()
+        journal_entry_exists = any(
+            entry['action']['type'] == 'Dossier transferred for source' and # noqa
+            entry['action']['title'] == 'label_journal_entry_dossier_transferred_for_source_dossier'
+            for entry in journal_entries
+        )
+        self.assertTrue(journal_entry_exists)
 
     @browsing
     def test_post_dossier_transfer(self, browser):
@@ -86,6 +96,9 @@ class TestDossierTransfersPost(IntegrationTestCase):
             u'all_participations': False,
         }
         self.assertEqual(expected, browser.json)
+
+        # Verify that a journal entry was created
+        self.check_journal_entry()
 
     @browsing
     def test_post_permissions(self, browser):
@@ -130,6 +143,9 @@ class TestDossierTransfersPost(IntegrationTestCase):
         self.assertEqual('Transfer on same unit', browser.json['title'])
         self.assertEqual('plone', browser.json['source']['token'])
         self.assertEqual('plone', browser.json['target']['token'])
+
+        # Verify that a journal entry was created
+        self.check_journal_entry()
 
     @browsing
     def test_root_dossier_must_exist_and_be_resolved(self, browser):
