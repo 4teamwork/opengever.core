@@ -42,6 +42,7 @@ from opengever.readonly import is_in_readonly_mode
 from opengever.repository.interfaces import IRepositoryFolderRecords
 from opengever.ris.interfaces import IRisSettings
 from opengever.sharing.interfaces import ISharingConfiguration
+from opengever.sign.utils import is_sign_feature_enabled
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.interfaces import ITaskTemplateSettings
 from opengever.workspace.interfaces import IToDoSettings
@@ -186,6 +187,7 @@ class GeverSettingsAdpaterV1(object):
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         features['multiple_dossier_types'] = count_available_dossier_types() > 1
+        features['sign'] = is_sign_feature_enabled()
 
         return features
 

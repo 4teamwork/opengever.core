@@ -1,0 +1,3 @@
+<registry>
+  <records interface="opengever.sign.interfaces.ISignSettings" />
+</registry>

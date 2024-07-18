@@ -222,4 +222,7 @@
   <!-- Virus scanning -->
   <records interface="opengever.virusscan.interfaces.IAVScannerSettings" />
 
+  <!-- Sign -->
+  <records interface="opengever.sign.interfaces.ISignSettings" />
+
 </registry>
