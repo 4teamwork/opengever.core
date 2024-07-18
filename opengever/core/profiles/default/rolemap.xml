@@ -444,6 +444,16 @@
       <role name="Administrator" />
     </permission>
 
+    <permission name="opengever.sign: Sign Document" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+      <role name="Contributor" />
+      <role name="TaskResponsible" />
+      <role name="Editor" />
+      <role name="Reviewer" />
+    </permission>
+
   </permissions>
 
 </rolemap>

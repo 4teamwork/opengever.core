@@ -253,7 +253,8 @@
                    plone.restapi: Access Plone user information,
                    Remove GEVER content,
                    opengever.systemmessages: Manage System Messages,
-                   opengever.workspace: Export Workspace Participants
+                   opengever.workspace: Export Workspace Participants,
+                   opengever.sign: Sign Document,
                    "
       />
 
