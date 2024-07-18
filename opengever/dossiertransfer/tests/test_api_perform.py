@@ -9,6 +9,7 @@ from opengever.base.model import create_session
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
+from opengever.journal.manager import JournalManager
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.utils import get_current_admin_unit
 from plone import api
@@ -263,6 +264,7 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         with freeze(FROZEN_NOW):
             transfer = create(Builder('dossier_transfer')
                               .with_target(get_current_admin_unit()))
+
             session = create_session()
             session.add(transfer)
             session.flush()
@@ -340,6 +342,16 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
+
+        # Verify that a journal entry was created
+        journal_entries = JournalManager(dossier).list()
+
+        journal_entry_exists = any(
+            entry['action']['type'] == 'Dossier transferred' and # noqa
+            entry['action']['title'] == 'label_journal_entry_dossier_transferred'
+            for entry in journal_entries
+        )
+        self.assertTrue(journal_entry_exists)
 
     @requests_mock.Mocker()
     @browsing
@@ -425,6 +437,16 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
 
         # Verify that transfer state is set to completed
         self.assertEqual(transfer.state, TRANSFER_STATE_COMPLETED)
+
+        # Verify that a journal entry was created
+        journal_entries = JournalManager(dossier).list()
+
+        journal_entry_exists = any(
+            entry['action']['type'] == 'Dossier transferred' and # noqa
+            entry['action']['title'] == 'label_journal_entry_dossier_transferred'
+            for entry in journal_entries
+        )
+        self.assertTrue(journal_entry_exists)
 
 
 class TestPersonContactSyncer(KuBIntegrationTestCase):
