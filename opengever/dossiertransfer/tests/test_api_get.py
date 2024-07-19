@@ -66,6 +66,14 @@ class TestDossierTransfersGet(IntegrationTestCase):
             },
             u'source_user': u'jurgen.konig',
             u'root': u'createresolvabledossier000000001',
+            u'root_item': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                           u'@type': u'opengever.dossier.businesscasedossier',
+                           u'UID': u'createresolvabledossier000000001',
+                           u'description': u'',
+                           u'is_leafnode': None,
+                           u'is_subdossier': False,
+                           u'review_state': u'dossier-state-active',
+                           u'title': u'A resolvable main dossier'},
             u'documents': [u'createresolvabledossier000000003'],
             u'participations': [u'meeting_user'],
             u'all_documents': False,
@@ -117,6 +125,14 @@ class TestDossierTransfersGet(IntegrationTestCase):
                     },
                     u'source_user': u'jurgen.konig',
                     u'root': u'createresolvabledossier000000001',
+                    u'root_item': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                                   u'@type': u'opengever.dossier.businesscasedossier',
+                                   u'UID': u'createresolvabledossier000000001',
+                                   u'description': u'',
+                                   u'is_leafnode': None,
+                                   u'is_subdossier': False,
+                                   u'review_state': u'dossier-state-active',
+                                   u'title': u'A resolvable main dossier'},
                     u'documents': [u'createresolvabledossier000000003'],
                     u'participations': None,
                     u'all_documents': False,
@@ -141,6 +157,14 @@ class TestDossierTransfersGet(IntegrationTestCase):
                     },
                     u'source_user': u'jurgen.konig',
                     u'root': u'createresolvabledossier000000001',
+                    u'root_item': {u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                                   u'@type': u'opengever.dossier.businesscasedossier',
+                                   u'UID': u'createresolvabledossier000000001',
+                                   u'description': u'',
+                                   u'is_leafnode': None,
+                                   u'is_subdossier': False,
+                                   u'review_state': u'dossier-state-active',
+                                   u'title': u'A resolvable main dossier'},
                     u'documents': [u'createresolvabledossier000000003'],
                     u'participations': [u'meeting_user'],
                     u'all_documents': False,
@@ -149,6 +173,72 @@ class TestDossierTransfersGet(IntegrationTestCase):
             ]
         }
         self.assertEqual(expected, browser.json)
+
+    @browsing
+    def test_get_dossier_transfer_listing_resolves_root_item_if_possible(self, browser):
+        self.login(self.secretariat_user, browser=browser)
+        other_au = create(Builder('admin_unit')
+                          .id('other')
+                          .having(title='Other AU'))
+
+        with freeze(datetime(2024, 2, 18, 15, 45, tzinfo=pytz.utc)):
+            transfer1 = create(Builder('dossier_transfer').having(title='Default transfer'))
+            transfer2 = create(Builder('dossier_transfer')
+                               .with_source(other_au)
+                               .with_target(get_current_admin_unit())
+                               .having(title='Foreign AU'))
+            transfer3 = create(Builder('dossier_transfer')
+                               .having(
+                                   title='Protected dossier',
+                                   root="createprotecteddossiers000000001"))
+
+            session = create_session()
+            session.add(transfer1)
+            session.add(transfer2)
+            session.add(transfer3)
+            session.flush()
+
+        browser.open(self.portal, view='@dossier-transfers/',
+                     method='GET', headers=self.api_headers)
+
+        self.assertEqual(200, browser.status_code)
+        self.assertEqual(3, len(browser.json.get('items')))
+
+        transfers = [
+            {
+                'title': item.get('title'),
+                'root': item.get('root'),
+                'root_item': item.get('root_item'),
+            } for item in browser.json.get('items')
+        ]
+
+        self.assertEqual(
+            [
+                {
+                    'root': u'createresolvabledossier000000001',
+                    'root_item': {
+                        u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                        u'@type': u'opengever.dossier.businesscasedossier',
+                        u'UID': u'createresolvabledossier000000001',
+                        u'description': u'',
+                        u'is_leafnode': None,
+                        u'is_subdossier': False,
+                        u'review_state': u'dossier-state-active',
+                        u'title': u'A resolvable main dossier'
+                    },
+                    'title': u'Default transfer'
+                },
+                {
+                    'root': u'createresolvabledossier000000001',
+                    'root_item': None,
+                    'title': u'Foreign AU'
+                },
+                {
+                    'root': u'createprotecteddossiers000000001',
+                    'root_item': None,
+                    'title': u'Protected dossier'
+                }
+            ], transfers)
 
     @browsing
     def test_transfer_listing_ordering(self, browser):

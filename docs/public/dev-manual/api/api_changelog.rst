@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@dossier-transfer``: Returns the serialized root_item if it is located on the same admin unit and the current user has view permission.
 
 2024.10.0 (2024-07-15)
 ----------------------
