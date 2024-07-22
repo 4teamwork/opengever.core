@@ -1,4 +1,5 @@
 from opengever.api.actors import serialize_actor_id_to_json_summary
+from opengever.base import utils
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.ogds.models.service import ogds_service
@@ -22,10 +23,11 @@ class SharingGet(APISharingGet):
     Add additional request parameter `ignore_permissions`, which is used for
     readonly listings of the current local roles, as it's done in the sharing
     tab.
-    """
 
+    """
     def reply(self):
         """Disable `plone.DelegateRoles` permission check.
+        and filter inactive groups and users
         """
         searchTerm = self.request.form.get('search')
         serializer = queryMultiAdapter((self.context, self.request),
@@ -47,14 +49,21 @@ class SharingGet(APISharingGet):
         else:
             items = data.get('items', [])
 
+        filtered_items = []
         for item in items:
-            self.extend_item_with_ogds_summary(item)
-            self.extend_item_with_actor(item)
+            if self.extend_item_with_ogds_summary(item):
+                self.extend_item_with_actor(item)
+                filtered_items.append(item)
 
         # sort available roles
         data['available_roles'].sort(
             lambda a, b: cmp(ROLES_ORDER.index(a['id']),
                              ROLES_ORDER.index(b['id'])))
+
+        if searchTerm:
+            data['items'] = filtered_items
+        else:
+            data['entries'] = filtered_items
 
         return data
 
@@ -63,18 +72,33 @@ class SharingGet(APISharingGet):
 
     def extend_item_with_ogds_summary(self, item):
         ogds_summary = None
+        include_item = False
 
         service = ogds_service()
         group = service.fetch_group(item['id'])
         user = service.fetch_user(item['id'])
-        if group:
-            serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
-            ogds_summary = serializer()
-        elif user:
-            serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
-            ogds_summary = serializer()
+        is_manager = utils.is_manager()
+        if not self.request.form.get('ignore_permissions'):
+            if group:
+                serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
+                ogds_summary = serializer()
+                include_item = True
+            elif user:
+                serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
+                ogds_summary = serializer()
+                include_item = True
+        else:
+            if group and (group.active or is_manager):
+                serializer = queryMultiAdapter((group, self.request), ISerializeToJsonSummary)
+                ogds_summary = serializer()
+                include_item = True
+            elif user and (user.active or is_manager):
+                serializer = queryMultiAdapter((user, self.request), ISerializeToJsonSummary)
+                ogds_summary = serializer()
+                include_item = True
 
         item['ogds_summary'] = ogds_summary
+        return include_item
 
 
 class RoleAssignmentsGet(APISharingGet):
