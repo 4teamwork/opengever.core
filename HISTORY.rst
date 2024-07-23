@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.5.3 (2024-07-23)
+---------------------
+
+Bug fixes:
+
+
+- Fix document_date when uploading mails with DnD, use mail header date. [amo] [TI-458]
+
+
 2024.5.2 (2024-04-05)
 ---------------------
 
