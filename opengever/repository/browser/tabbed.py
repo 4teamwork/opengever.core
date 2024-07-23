@@ -1,6 +1,7 @@
-from opengever.meeting.interfaces import IMeetingSettings
+from opengever.meeting import is_meeting_feature_enabled
 from opengever.repository import _
 from opengever.repository.interfaces import IRepositoryFolderRecords
+from opengever.ris import is_ris_feature_enabled
 from opengever.tabbedview import GeverTabbedView
 from plone import api
 from plone.registry.interfaces import IRegistry
@@ -107,11 +108,10 @@ class RepositoryFolderTabbedView(GeverTabbedView):
 
     @property
     def proposals_tab(self):
-        meeting_settings = getUtility(IRegistry).forInterface(IMeetingSettings)
-        meeting_enabled = getattr(meeting_settings, 'is_feature_enabled', False)
+        any_spv_enabled = any([is_ris_feature_enabled(), is_meeting_feature_enabled()])
         repository_settings = getUtility(IRegistry).forInterface(IRepositoryFolderRecords)
         proposals_tab_enabled = getattr(repository_settings, 'show_proposals_tab', False)
-        if meeting_enabled and proposals_tab_enabled:
+        if proposals_tab_enabled and any_spv_enabled:
             return {
                 'id': 'proposals',
                 'title': _(u'label_proposals', default=u'Proposals'),
