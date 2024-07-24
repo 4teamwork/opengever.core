@@ -636,14 +636,42 @@ class TestOpengeverSharing(IntegrationTestCase):
             [u'fa Users Group',
              u'Fischer J\xfcrgen',
              u'K\xf6nig J\xfcrgen',
-             u'Administrators',
-             u'Site Administrators',
+
              u'fa Inbox Users Group',
              u'rk Inbox Users Group',
              u'Fr\xfchling F\xe4ivel',
              u'Hugentobler Fridolin',
              u'Schr\xf6dinger B\xe9atrice'],
             [each["title"] for each in browser.json["items"]])
+
+    @browsing
+    def test_inactive_users_and_groups_are_available_in_edit_mode(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        group_id = 'inactive group'
+        user_id = 'inactive user'
+        create(Builder('ogds_group')
+               .having(groupid=group_id, active=False, title='Inactive group'))
+        create(Builder('ogds_user')
+               .having(userid=user_id, active=False,))
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(TaskRoleAssignment(group_id, ['Reader'], self.task))
+        manager.add_or_update(user_id, ['Reader'], ASSIGNMENT_VIA_SHARING)
+
+        browser.open(self.empty_dossier, view='@sharing',
+                     method='Get', headers={'Accept': 'application/json'})
+        self.assertItemsEqual(
+            [
+                u'inactive group',
+                u'fa_users',
+                u'archivist',
+                u'jurgen.konig',
+                u'inactive user'
+            ],
+            [
+                entry['id'] for entry in browser.json.get('entries')
+            ]
+        )
 
 
 class TestRoleAssignmentsGet(IntegrationTestCase):
@@ -899,3 +927,51 @@ class TestSharingViewPermissions(IntegrationTestCase):
         with self.assertRaises(InsufficientPrivileges):
             self.login(self.limited_admin, browser=browser)
             browser.open(self.leaf_repofolder, view='@@sharing')
+
+    @browsing
+    def test_only_manager_can_view_inactive_users_and_group_in_listing(self, browser):
+        self.login(self.manager, browser=browser)
+        group_id = 'inactive group'
+        user_id = "inactive user"
+
+        create(Builder('ogds_group')
+               .having(groupid=group_id, active=False, title='Inactive group'))
+
+        create(Builder('ogds_user')
+               .having(userid=user_id, active=False,))
+
+        manager = RoleAssignmentManager(self.empty_dossier)
+        manager.add_or_update_assignment(
+            TaskRoleAssignment(group_id, ['Reader'], self.task))
+        manager.add_or_update(user_id, ['Reader'], ASSIGNMENT_VIA_SHARING)
+        browser.open(self.empty_dossier, view='@sharing?ignore_permissions=true',
+                     method='Get', headers={'Accept': 'application/json'})
+
+        self.assertItemsEqual(
+            [
+                u'fa_users',
+                u'archivist',
+                u'jurgen.konig',
+                u'inactive group',
+                u'inactive user',
+                u'dossier_manager'
+
+            ],
+            [
+                entry['id'] for entry in browser.json.get('entries')
+            ]
+        )
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.empty_dossier, view='@sharing?ignore_permissions=true',
+                     method='Get', headers={'Accept': 'application/json'})
+        self.assertItemsEqual(
+            [
+                u'dossier_manager',
+                u'fa_users',
+                u'archivist',
+                u'jurgen.konig',
+            ],
+            [
+                entry['id'] for entry in browser.json.get('entries')
+            ]
+        )
