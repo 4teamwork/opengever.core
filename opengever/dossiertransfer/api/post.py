@@ -5,14 +5,20 @@ from opengever.dossiertransfer.api.base import DossierTransfersBase
 from opengever.dossiertransfer.api.schemas import IDossierTransferAPISchema
 from opengever.dossiertransfer.model import DossierTransfer
 from opengever.dossiertransfer.model import TRANSFER_STATE_PENDING
+from opengever.journal.handlers import journal_entry_factory
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.service import ogds_service
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
+from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
 from zExceptions import Unauthorized
+from zope.i18nmessageid import MessageFactory
 from zope.interface import alsoProvides
+
+
+_ = MessageFactory('opengever.dossiertransfer')
 
 
 class DossierTransfersPost(DossierTransfersBase):
@@ -74,6 +80,31 @@ class DossierTransfersPost(DossierTransfersBase):
 
         serialized_transfer = self.serialize(transfer)
 
+        self.add_journal_entry(transfer)
         self.request.response.setStatus(201)
         self.request.response.setHeader('Location', serialized_transfer['@id'])
+
         return serialized_transfer
+
+    def add_journal_entry(self, transferred_dossier):
+        root_uid = json_body(self.request).get('root')
+        root_obj = api.content.uuidToObject(root_uid)
+
+        if not root_obj:
+            return
+
+        target_unit_title = safe_unicode(transferred_dossier.target.title)
+        transfer_id = safe_unicode(transferred_dossier.id)
+        title = _(
+            u'label_journal_entry_dossier_transferred_for_source_dossier',
+            default='Dossier was handed over to ${target_unit_title}. (Transfer-ID: ${transfer_id})',
+            mapping=dict(
+                transfer_id=transfer_id,
+                target_unit_title=target_unit_title
+            )
+        )
+
+        journal_entry_factory(
+            root_obj,
+            "Dossier transferred for source",
+            title=title)

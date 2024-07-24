@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-07-17 08:07+0000\n"
+"POT-Creation-Date: 2024-07-19 06:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,3 +18,8 @@ msgstr ""
 #: ./opengever/dossiertransfer/api/perform.py
 msgid "label_journal_entry_dossier_transferred"
 msgstr "Dossier vom ${source_title} transferiert (Transfer-ID: ${transfer_id})"
+
+#. Default: "Dossier was handed over to ${target_unit_title}. (Transfer-ID: ${transfer_id})"
+#: ./opengever/dossiertransfer/api/post.py
+msgid "label_journal_entry_dossier_transferred_for_source_dossier"
+msgstr "Dossier wurde an ${target_unit_title} übergeben. (Transfer-ID: ${transfer_id})"
