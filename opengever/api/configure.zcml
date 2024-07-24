@@ -21,6 +21,7 @@
   <include package="opengever.workspace" file="permissions.zcml" />
   <include package="opengever.workspaceclient" file="permissions.zcml" />
   <include package="opengever.ogds.base" file="permissions.zcml" />
+  <include package="opengever.sign" file="permissions.zcml" />
 
   <include package=".schema" />
 
@@ -162,6 +163,14 @@
       for="opengever.document.document.IDocumentSchema"
       factory=".cancelcheckout.CancelCheckout"
       permission="opengever.document.Cancel"
+      />
+
+   <plone:service
+      method="POST"
+      name="@sign"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.SignDocumentPost"
+      permission="opengever.sign.SignDocument"
       />
 
   <plone:service
