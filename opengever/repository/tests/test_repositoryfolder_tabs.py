@@ -248,3 +248,41 @@ class TestRepositoryFolderProposalsTabWithMeeting(IntegrationTestCase):
             ['', u'Antrag f\xfcr Kreiselbau', '', 'Pending', 'Pending', u'Kommission f\xfcr Verkehr', '', '', 'Ziegler Robert (robert.ziegler)'],  # noqa
         ]
         self.assertEqual(expected_rows, [row.css('td,span').text for row in browser.css('.listing tr')])
+
+
+class TestRepositoryFolderProposalsTab(IntegrationTestCase):
+
+    @browsing
+    def test_not_visible(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+    @browsing
+    def test_not_visible_no_feature_enabled(self, browser):
+        api.portal.set_registry_record('show_proposals_tab', False, IRepositoryFolderRecords)
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+    @browsing
+    def test_not_visible_when_deactivating_ris_and_deactivating_meeting(self, browser):
+        self.deactivate_feature('ris')
+        self.deactivate_feature('meeting')
+        api.portal.set_registry_record('show_proposals_tab', True, IRepositoryFolderRecords)
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info', ]
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
+
+    @browsing
+    def test_visible_when_activating_ris_and_deactivating_meeting(self, browser):
+        self.activate_feature('ris')
+        self.deactivate_feature('meeting')
+
+        self.login(self.regular_user, browser)
+        browser.open(self.branch_repofolder)
+        expected_tabs = ['Dossiers', 'Documents', 'Tasks', 'Info', 'Proposals']
+        self.assertEqual(tabbedview.tabs().text, expected_tabs)
