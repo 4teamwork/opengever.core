@@ -1945,3 +1945,28 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
                          preprocessor.preprocess_query("((this that) OR another) (even more))"))
         self.assertEqual("(hyphenated word*) OR another*",
                          preprocessor.preprocess_query("hyphenated-word OR another"))
+
+    def test_preprocessing_keeps_single_special_chars(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("this* - that*", preprocessor.preprocess_query("this - that"))
+        self.assertEqual("this* _ that*", preprocessor.preprocess_query("this _ that"))
+        self.assertEqual("this* + that*", preprocessor.preprocess_query("this + that"))
+        self.assertEqual("this* @ that*", preprocessor.preprocess_query("this @ that"))
+        self.assertEqual("this* % that*", preprocessor.preprocess_query("this % that"))
+        self.assertEqual("this* \\ that*", preprocessor.preprocess_query("this \\ that"))
+        self.assertEqual("this* < that*", preprocessor.preprocess_query("this < that"))
+        self.assertEqual("this* > that*", preprocessor.preprocess_query("this > that"))
+        self.assertEqual("this* | that*", preprocessor.preprocess_query("this | that"))
+        self.assertEqual("this* = that*", preprocessor.preprocess_query("this = that"))
+        self.assertEqual("this* ? that*", preprocessor.preprocess_query("this ? that"))
+        self.assertEqual("this* * that*", preprocessor.preprocess_query("this * that"))
+        self.assertEqual("this* & that*", preprocessor.preprocess_query("this & that"))
+        self.assertEqual("this* ( that*", preprocessor.preprocess_query("this ( that"))
+        self.assertEqual("this* ) that*", preprocessor.preprocess_query("this ) that"))
+        self.assertEqual("this* ! that*", preprocessor.preprocess_query("this ! that"))
+        self.assertEqual("this* ' that*", preprocessor.preprocess_query("this ' that"))
+
+    def test_preprocessing_appends_wildcard_to_single_alphanumerical_chars(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("this* a* that*", preprocessor.preprocess_query("this a that"))
+        self.assertEqual("this* 4* that*", preprocessor.preprocess_query("this 4 that"))
