@@ -108,7 +108,7 @@ def setup_logging():
 
     # Also write logs to a dedicated migration log.
     log_dir = PathFinder().var_log
-    file_handler = logging.FileHandler(log_dir, 'migration.log')
+    file_handler = logging.FileHandler(os.path.join(log_dir, 'migration.log'))
     file_handler.setFormatter(stream_handler.formatter)
     file_handler.setLevel(logging.INFO)
     logging.root.addHandler(file_handler)
