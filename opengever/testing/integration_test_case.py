@@ -104,6 +104,7 @@ FEATURE_FLAGS = {
     'tasks-pdf': 'opengever.dossier.interfaces.IDossierResolveProperties.tasks_pdf_enabled',
     'private-tasks': 'opengever.task.interfaces.ITaskSettings.private_task_feature_enabled',
     'optional-task-permissions-revoking': 'opengever.task.interfaces.ITaskSettings.optional_task_permissions_revoking_enabled',  # noqa
+    'sign': 'opengever.sign.interfaces.ISignSettings.is_feature_enabled',  # noqa
 }
 
 FEATURE_VALUES = {
