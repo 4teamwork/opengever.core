@@ -35,6 +35,13 @@ def is_officeconnector_checkout_feature_enabled():
     )
 
 
+def is_office_connector_plugin_check_enabled():
+    return api.portal.get_registry_record(
+        'oc_plugin_check_enabled',
+        interface=IOfficeConnectorSettings
+    )
+
+
 def is_client_ip_in_office_connector_disallowed_ip_ranges():
     request = getRequest()
     client_ip = request.getClientAddr()
