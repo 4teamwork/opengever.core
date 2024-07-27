@@ -37,6 +37,8 @@ class SerializePropertySheetSchemaDefinitionToJson(object):
                 'description': field.description,
                 'required': field.required,
                 'available_as_docproperty': name in docprops,
+                'read_group': self.context.read_group_mapping.get(name),
+                'write_group': self.context.write_group_mapping.get(name),
             }
 
             ps_field.update(self.get_values(field))
