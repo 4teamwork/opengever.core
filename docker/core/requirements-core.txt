@@ -54,7 +54,7 @@ five.pt==2.2.5
 fluent-logger==0.9.6
 ftw.builder==2.0.0
 ftw.bumblebee==4.0.0
-ftw.casauth==1.6.1
+ftw.casauth==1.7.0
 ftw.catalogdoctor==1.2.0
 ftw.contentmenu==2.4.0
 ftw.contentstats==1.4.0
