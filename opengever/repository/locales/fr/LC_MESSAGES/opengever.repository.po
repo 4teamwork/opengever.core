@@ -45,7 +45,7 @@ msgstr "Déterminez s'il est permis d'ajouter des dossiers d'affaire à ce nivea
 #. Default: "Select if this repostory tree should respect the max subdossier depth restriction."
 #: ./opengever/repository/repositoryfolder.py
 msgid "description_max_subdossier_depth_restriction"
-msgstr ""
+msgstr "Indiquer si le plan de classement doit respecter une profondeur maximale pour ses sous-dossiers."
 
 #. Default: "Attention: Change requires reindexing of \"reference\" and \"sortable_reference\"."
 #: ./opengever/repository/repositoryroot.py
@@ -272,7 +272,7 @@ msgstr "UID"
 #. Default: "Limit maximum dossier depth in this repository folder"
 #: ./opengever/repository/repositoryfolder.py
 msgid "label_respect_max_subdossier_depth_restriction"
-msgstr ""
+msgstr "Limiter le niveau de profondeur maximal de ce dossier dans le plan de classement"
 
 #. Default: "The repository have been successfully deleted."
 #: ./opengever/repository/browser/deletion.py
