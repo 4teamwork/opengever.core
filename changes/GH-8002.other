@@ -1,1 +1,0 @@
-Bump ftw.casauth to version 1.7.1 which allows using an internal CAS server url for ticket validation and configuration through env variables. [buchi]

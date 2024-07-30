@@ -10,6 +10,29 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.11.0 (2024-07-30)
+----------------------
+
+Bug fixes:
+
+
+- Fix Redis requirement for Docker image. [buchi] [GH-7995]
+- Fix migration.log handler which was broken in releae 2024.6.0. [buchi] [GH-8003]
+- Modify Tabbed (proposals_tab) logic to show / hide based on alt and new SPV.[amo] [TI-777]
+
+
+Other changes:
+
+
+- Bump ftw.casauth to version 1.7.1 which allows using an internal CAS server url for ticket validation and configuration through env variables. [buchi] [GH-8002]
+- Exclude inactive users and groups for non-managers in Sharing tab. [amo] [TI-296]
+- Fix french translation for limiting dossier depth. [ran]
+  (https://4teamwork.atlassian.net/browse/TI-596) [TI-596]
+- Expose the serialized source dossier if possible when using the "@dossier-transfer" endpoint. [elioschmutz] [TI-706]
+- Create journal entry in the target dossier after dossier transfer. [amo] [TI-709]
+- Create journal entry in the source dossier after dossier transfer. [amo] [TI-710]
+
+
 2024.10.0 (2024-07-15)
 ----------------------
 

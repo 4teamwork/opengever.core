@@ -1,1 +1,0 @@
-Fix migration.log handler which was broken in releae 2024.6.0. [buchi]
