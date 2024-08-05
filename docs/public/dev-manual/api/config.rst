@@ -79,6 +79,7 @@ GEVER-Mandanten abgefragt werden.
               "officeatwork": true,
               "officeconnector_attach": true,
               "officeconnector_checkout": true,
+              "oc_plugin_check_enabled":false,
               "oneoffixx": false,
               "optional_task_permissions_revoking": false,
               "preview": true,
@@ -223,6 +224,9 @@ features
 
     officeconnector_checkout
         Checkout und Checkin von Dokumenten über Office Connector
+
+    oc_plugin_check_enabled
+        Checks if the Office Connector plugin is installed
 
     oneoffixx
         Unterstützung für Oneoffixx Vorlagen

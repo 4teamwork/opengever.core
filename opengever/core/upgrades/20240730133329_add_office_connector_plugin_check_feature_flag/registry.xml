@@ -1,0 +1,5 @@
+<registry>
+    <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
+        <value key="oc_plugin_check_enabled">False</value>
+    </records>
+</registry>

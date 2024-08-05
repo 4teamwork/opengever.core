@@ -41,6 +41,12 @@ class IOfficeConnectorSettings(Interface):
             u'Multiple comma-separated addresses / networks may be supplied.'),
     )
 
+    oc_plugin_check_enabled = schema.Bool(
+        title=u'Enable office connector plugin check feature',
+        description=u'Whether office connector plugin check feature is enabled',
+        default=False
+    )
+
 
 class IOfficeConnectorSettingsView(Interface):
 
