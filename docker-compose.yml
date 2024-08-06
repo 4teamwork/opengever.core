@@ -179,6 +179,13 @@ services:
       - DJANGO_AUTH_LDAP_SERVER_URI=${LDAP_SERVER_URI:-ldap://ldap:1389}
       - DJANGO_AUTH_LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN:-ou=Users,dc=dev,dc=onegovgever,dc=ch}
       - DJANGO_AUTH_LDAP_USER_ATTR_MAP={'first_name':'givenName','last_name':'sn','email':'mail','username':'uid'}
+      - DJANGO_AUTH_LDAP_GROUP_BASE_DN=ou=Groups,dc=dev,dc=onegovgever,dc=ch
+      - DJANGO_AUTH_LDAP_GROUP_TYPE_CLASS=django_auth_ldap.config.GroupOfUniqueNamesType
+      - DJANGO_AUTH_LDAP_GROUP_MEMBER_ATTR=uniqueMember
+      - DJANGO_AUTH_LDAP_GROUP_SEARCH_FILTER=(objectClass=groupOfUniqueNames)
+      - DJANGO_AUTH_LDAP_USER_ADDITIONAL_ATTRS=memberOf
+      - DJANGO_CAS_USER_ATTR_MAP={'email':'mail','firstname':'givenName','lastname':'sn','groups':'memberOf'}
+
     profiles:
       - all
       - ianus
