@@ -323,6 +323,63 @@ To disable the use of a service, simply remove the according environment
 variable or set it to an empty value.
 
 
+Development with local Ianus portal
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In addition to the services described above, a local Ianus service is also
+provided, but not started by default. In order to start it, run the
+``ianus`` profile from the compose file:
+
+.. code::
+
+  docker-compose --profile ianus up
+
+*(Make sure you're also signed in to ghcr.io, otherwise docker won't be able to
+pull the Ianus image)*
+
+Next, create an admin user for the Ianus portal:
+
+.. code::
+
+  docker-compose exec -ti ianus-backend python manage.py createsuperuser
+
+Your local portal's frontend should now be accessible at
+http://localhost:3000/portal
+
+In order for GEVER to use the portal with CAS authentication, you also need
+to install and configure the CAS auth plugin.
+
+Go to http://localhost:8080/fd/portal_setup/manage_main, switch to the `Import`
+tab, and import the profile with the title
+``opengever.setup: casauth ianus portal``
+
+Then go to http://localhost:8080/fd/acl_users/cas_auth/manage_config to
+configure the plugin. Make sure that the *CAS Server URL* points to the local
+Ianus portal's CAS endpoint. That should be http://localhost:3000/portal/cas
+if you started the portal using the compose file.
+
+In order for the portal to authenticate users for GEVER via CAS, we also need
+to register a Service in the portal. For local development, it's easiest to
+create a simple catch-all service:
+
+- Go to http://localhost:3000/portal/admin/ and log in with the admin account.
+- Create a new CAS ``Service``
+- Name: ``all``
+- Pattern: ``.*``.
+
+Now sign out of both the portal and GEVER.
+
+When you now visit GEVER at http://localhost:8080/fd it should allow you to
+sign in via CAS using the portal.
+
+Finally, you may want to create an App in Ianus (e.g. for development on the
+app switcher or InterGEVER):
+
+- In the Ianus admin interface, add a new ``Application``
+- URL: ``http://localhost:8080/fd``
+- Type: ``GEVER``
+- Group: ``cn=og_demo-ftw_users,ou=dev,ou=groups,dc=dev,dc=onegovgever,dc=ch``
+
 OGDS synchronization
 --------------------
 
