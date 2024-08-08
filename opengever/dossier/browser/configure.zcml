@@ -149,4 +149,12 @@
       template="templates/archival_file_management_view.pt"
       />
 
+  <browser:page
+      name="dossier_participations_report"
+      for="*"
+      class=".report.DossierParticipationsReport"
+      permission="zope2.View"
+      />
+
+
 </configure>

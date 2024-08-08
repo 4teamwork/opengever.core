@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-08-08 06:17+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -249,6 +249,10 @@ msgstr "Dieses Subdossier kann nicht wieder aktiviert werden, da das Hauptdossie
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Mit einer neuen Version des Dossiers ${title} aktualisiert."
+
+#: ./opengever/dossier/browser/report.py
+msgid "Users"
+msgstr "Benutzende"
 
 #: ./opengever/dossier/filing/form.py
 msgid "When the Action give filing number is selected,                         all fields are required."
@@ -836,11 +840,6 @@ msgstr "Standardabläufe"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Vorlage"
-
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
-msgstr "Vorlagengruppe"
 
 #. Default: "Title"
 #: ./opengever/dossier/dossiertemplate/form.py

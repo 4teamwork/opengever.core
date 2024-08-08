@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-08-08 06:17+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -247,6 +247,10 @@ msgstr "Ce sous-dossier ne peut pas être réactivé, parce que le dossier princ
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Actualisé par une nouvelle version du dossier ${title}."
+
+#: ./opengever/dossier/browser/report.py
+msgid "Users"
+msgstr "Utilisateurs"
 
 #: ./opengever/dossier/filing/form.py
 msgid "When the Action give filing number is selected,                         all fields are required."
@@ -834,11 +838,6 @@ msgstr "Déroulements standard"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Modèle"
-
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
-msgstr "Groupe de modèles"
 
 #. Default: "Title"
 #: ./opengever/dossier/dossiertemplate/form.py

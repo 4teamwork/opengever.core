@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-08-08 06:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -247,6 +247,10 @@ msgstr ""
 #: ./opengever/dossier/base.py
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
+msgstr ""
+
+#: ./opengever/dossier/browser/report.py
+msgid "Users"
 msgstr ""
 
 #: ./opengever/dossier/filing/form.py
@@ -832,11 +836,6 @@ msgstr ""
 #: ./opengever/dossier/dossiertemplate/form.py
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
-msgstr ""
-
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
 msgstr ""
 
 #. Default: "Title"

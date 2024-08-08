@@ -172,6 +172,9 @@ class DossierContextActions(BaseContextActions):
     def is_zipexport_available(self):
         return True
 
+    def is_export_dossier_participations_available(self):
+        return True
+
 
 @adapter(IDossierTemplateMarker, IOpengeverBaseLayer)
 class DossierTemplateContextActions(BaseContextActions):
