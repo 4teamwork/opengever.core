@@ -1,4 +1,5 @@
 import os
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 from plone import api
 from persistent.dict import PersistentDict
 from plone.namedfile.file import NamedBlobFile
@@ -48,24 +49,33 @@ class Signer(object):
         self.context = context
         self.storage = SignStorage(context)
 
+    def validate_access_token(self, token):
+        scope = IUUID(self.context)
+        try:
+            token = urlsafe_b64decode(token.encode('utf-8'))
+        except TypeError:
+            token = None
+
+        return validate_access_token(token, scope, ttl=432000000)
+
     def start_signing(self):
         if api.content.get_state(self.context) != Document.final_state:
             api.content.transition(
                 obj=self.context, transition=Document.finalize_transition)
 
         token = self.register_signing()
-        SignServiceClient().queue_signing(self.context, token)
+        # SignServiceClient().queue_signing(self.context, token)
 
         return token
 
     def register_signing(self):
         userid = api.user.get_current().id
-        token = create_access_token(userid, IUUID(self.context))
+        token = urlsafe_b64encode(create_access_token(userid, IUUID(self.context)))
         self.storage.add(userid, token)
         return token
 
     def update_signing_state(self, token, state):
-        if not validate_access_token(token,  IUUID(self.context)):
+        if not self.validate_access_token(token):
             raise Unauthorized
 
         item = self.storage.get(token)
@@ -75,9 +85,7 @@ class Signer(object):
         item['state'] = state
 
     def add_signed_version(self, token, filedata):
-        if not validate_access_token(token,  IUUID(self.context)):
-            raise Unauthorized
-
+        self.validate_access_token(token)
         item = self.storage.get(token)
         if not item:
             raise NotFound

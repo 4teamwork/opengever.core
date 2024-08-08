@@ -32,6 +32,7 @@ from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from opengever.private import enable_opengever_private
+from opengever.sign.sign import Signer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.testing import assets
@@ -829,6 +830,9 @@ class IntegrationTestCase(TestCase):
         acl_users.source_users.updateUser(userid, new_loginname)
         user = User.query.get(userid)
         user.username = new_loginname
+
+    def register_signing_process(self, document, userid):
+        return Signer(document).register_signing()
 
 
 class SolrIntegrationTestCase(IntegrationTestCase, SolrTestMixin):

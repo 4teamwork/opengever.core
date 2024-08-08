@@ -173,6 +173,22 @@
       permission="opengever.sign.SignDocument"
       />
 
+   <plone:service
+      method="PATCH"
+      name="@update-sign-state"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.SignStatusPatch"
+      permission="zope.Public"
+      />
+
+   <plone:service
+      method="POST"
+      name="@add-signed-version"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.AddSignedVersionPost"
+      permission="zope.Public"
+      />
+
   <plone:service
       method="POST"
       name="@trash"
