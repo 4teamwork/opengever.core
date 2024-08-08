@@ -7,7 +7,10 @@ from opengever.base.reporter import XLSReporter
 from opengever.base.utils import rewrite_path_list_to_absolute_paths
 from opengever.dossier import _
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
+from opengever.globalindex.browser.report import UserReport
+from opengever.ogds.models.service import ogds_service
 from Products.statusmessages.interfaces import IStatusMessage
+from zope.i18n import translate
 
 
 class DossierReporterFieldMapper(SolrFieldMapper):
@@ -86,3 +89,32 @@ class DossierReporter(SolrReporterView):
 
         reporter = XLSReporter(self.request, self.columns(), dossiers, field_mapper=self.fields)
         return self.return_excel(reporter)
+
+
+class DossierParticipationsReport(UserReport):
+
+    @property
+    def filename(self):
+        users = translate(_("Users"), context=self.request)
+        return "{dossier_title}_{users}.xlsx".format(
+            users=users,
+            dossier_title=self.context.title
+        )
+
+    def check_permissions(self):
+        pass
+
+    def fetch_users(self):
+        user_ids = self.extract_user_ids_from_request()
+        users = set()
+
+        for user_id in user_ids:
+            group_members = ogds_service().fetch_group(user_id)
+            if group_members:
+                users.update(group_members.users)
+            else:
+                user = ogds_service().fetch_user(user_id)
+                if user:
+                    users.add(user)
+
+        return list(users)

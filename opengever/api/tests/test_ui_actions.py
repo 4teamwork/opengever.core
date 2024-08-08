@@ -29,13 +29,17 @@ class TestUIActionsGET(IntegrationTestCase):
         browser.open(url, method='GET', headers=self.api_headers)
 
         self.assertEqual(
-            {u'@id': url,
-             u'context_actions': [
-                {u'id': u'document_with_template'},
-                {u'id': u'edit'},
-                {u'id': u'export_pdf'},
-                {u'id': u'pdf_dossierdetails'},
-                {u'id': u'zipexport'}]}, browser.json)
+            {
+                u'@id': url,
+                u'context_actions': [
+                    {u'id': u'document_with_template'},
+                    {u'id': u'edit'},
+                    {u'id': u'export_pdf'},
+                    {u'id': u'pdf_dossierdetails'},
+                    {u'id': u'zipexport'},
+                    {u'id': 'export_dossier_participations'}
+                ]
+            }, browser.json)
 
     @browsing
     def test_ui_actions_includes_listing_actions(self, browser):

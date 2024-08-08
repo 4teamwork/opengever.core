@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-08-08 06:17+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -311,6 +311,10 @@ msgstr "This subdossier can't be activated, because the main dossiers is not act
 #: ./opengever/dossier/resolve.py
 msgid "Updated with a newer generated version from dossier ${title}."
 msgstr "Updated with a fresh version generated from dossier ${title}."
+
+#: ./opengever/dossier/browser/report.py
+msgid "Users"
+msgstr "Users"
 
 #. German translation: Für die Vergabe der Ablagenummer, werden alle Felder benötigt.
 #: ./opengever/dossier/filing/form.py
@@ -1010,12 +1014,6 @@ msgstr "Task template folders"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Template"
-
-#. German translation: Vorlagengruppe
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
-msgstr "Template group"
 
 #. German translation: Titel
 #. Default: "Title"
