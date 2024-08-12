@@ -168,7 +168,14 @@ class TestWorkspaceFolderContextActions(IntegrationTestCase):
 
     def test_workspace_folder_context_actions_for_workspace_admins(self):
         self.login(self.workspace_admin)
-        expected_actions = [u'edit', u'local_roles', u'share_content', u'trash_context', 'zipexport']
+        expected_actions = [
+            u'edit',
+            u'local_roles',
+            u'share_content',
+            u'trash_context',
+            'zipexport',
+            u'export_workspace_participators'
+        ]
         self.assertEqual(expected_actions, self.get_actions(self.workspace_folder))
 
     def test_context_action_for_trashed_workspace_folder(self):
