@@ -1,4 +1,5 @@
 from datetime import datetime
+from mock import patch
 from opengever.kub.docprops import KuBEntityDocPropertyProvider
 from opengever.kub.entity import KuBEntity
 from opengever.kub.testing import KUB_RESPONSES
@@ -57,6 +58,25 @@ class TestKuBEntityDocPropertyProvider(KuBIntegrationTestCase):
              'ogg.phone.number': None,
              'ogg.url.url': None},
             properties)
+
+    @patch('opengever.kub.docprops.get_additional_doc_properties', return_value=['sorgerecht',])
+    def test_docproperties_for_kub_person_with_custom_fields(self, mocker, mock_get_additional_doc_properties):
+        self.mock_get_by_id(mocker, self.person_jean)
+        entity = KuBEntity(self.person_jean)
+        properties = KuBEntityDocPropertyProvider(entity).get_properties()
+
+        self.assertIn('ogg.person.sorgerecht', properties)
+        self.assertEqual(properties['ogg.person.sorgerecht'], "Geteilt")
+
+    @patch('opengever.kub.docprops.get_additional_doc_properties', return_value=['ort'])
+    def test_docproperties_for_kub_organization_with_custom_fields(self, mocker, mock_get_additional_doc_properties):
+        self.mock_get_by_id(mocker, self.org_ftw)
+        entity = KuBEntity(self.org_ftw)
+
+        properties = KuBEntityDocPropertyProvider(entity).get_properties()
+
+        self.assertIn('ogg.organization.ort', properties)
+        self.assertEqual(properties['ogg.organization.ort'], "Bern")
 
     def test_zip_code_docproperty_is_swiss_or_foreign_zip_code(self, mocker):
         url = self.mock_get_by_id(mocker, self.person_jean)
