@@ -219,6 +219,11 @@
       />
 
   <adapter
+      factory=".indexers.dossier_review_state"
+      name="dossier_review_state"
+      />
+
+  <adapter
       factory=".indexers.is_subdossier"
       name="is_subdossier"
       />

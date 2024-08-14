@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@solrsearch`` and ``@listing``: ``dossier_review_state`` is added as a new solr index.
 
 2024.11.0 (2024-07-30)
 ----------------------

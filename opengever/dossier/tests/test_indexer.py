@@ -562,3 +562,74 @@ class TestProgressIndexer(SolrIntegrationTestCase):
         self.commit_solr()
 
         self.assertIsNone(solr_data_for(self.dossier, 'progress'))
+
+
+class TestDossierReviewStateIndexer(SolrIntegrationTestCase):
+    def test_dossier_review_state_index(self):
+        self.login(self.regular_user)
+
+        api.content.transition(obj=self.subdossier,
+                               transition='dossier-transition-deactivate')
+        self.commit_solr()
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.dossier, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.document, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.subtask, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-inactive',
+            solr_data_for(self.subdossier, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-inactive',
+            solr_data_for(self.subdocument, 'dossier_review_state'),
+        )
+
+    def test_recursive_update_child_indexes_when_change_dossier_review_state(self):
+        self.login(self.regular_user)
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.dossier, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.document, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.subdossier, 'dossier_review_state'),
+        )
+
+        api.content.transition(obj=self.dossier,
+                               transition='dossier-transition-deactivate')
+        self.commit_solr()
+
+        self.assertEquals(
+            u'dossier-state-inactive',
+            solr_data_for(self.dossier, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-inactive',
+            solr_data_for(self.document, 'dossier_review_state'),
+        )
+
+        self.assertEquals(
+            u'dossier-state-active',
+            solr_data_for(self.subdossier, 'dossier_review_state'),
+        )

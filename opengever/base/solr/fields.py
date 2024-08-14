@@ -457,6 +457,11 @@ FIELDS_WITH_MAPPING = [
         index='containing_subdossier',
         title=tabbedview_mf(u'label_subdossier'),
     ),
+    ListingField(
+        'dossier_review_state',
+        transform=lambda state: translate(state, domain='plone', context=getRequest()),
+        index='dossier_review_state',
+    ),
     DateListingField(
         'created',
         title=document_mf('label_created', default='Created'),

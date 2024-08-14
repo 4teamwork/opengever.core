@@ -25,6 +25,7 @@ from opengever.workspace.interfaces import IToDoList
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.interfaces import IWorkspaceMeeting
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
+from Products.CMFCore.interfaces import IFolderish
 from Products.CMFPlone.interfaces import IPloneSiteRoot
 from sqlalchemy import and_
 from zope.component import getUtility
@@ -273,3 +274,18 @@ def update_touched_date_for_move_event(obj, event):
     """
     if obj == event.object:
         update_touched_date(obj, event)
+
+
+def recursive_update_dossier_review_state(context):
+    context.reindexObject(idxs=["dossier_review_state"])
+    if not IFolderish.providedBy(context):
+        return
+
+    for obj in context.listFolderContents():
+        if IDossierMarker.providedBy(obj):
+            continue
+        recursive_update_dossier_review_state(obj)
+
+
+def update_dossier_review_state(obj, event):
+    recursive_update_dossier_review_state(obj)
