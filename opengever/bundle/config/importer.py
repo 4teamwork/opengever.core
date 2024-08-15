@@ -79,7 +79,7 @@ class ConfigImporter(object):
             # Update placeholder URL with real one based on admin unit
             cas_server_url = build_cas_server_url('portal/cas')
 
-        self.portal.acl_users.cas_auth.cas_server_url = cas_server_url
+        self.portal.acl_users.cas_auth._cas_server_url = cas_server_url
 
         # Rename session cookie
         # During Plone site creation, this will have been suffixed with the
