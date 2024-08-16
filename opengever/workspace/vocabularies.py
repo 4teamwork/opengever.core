@@ -1,3 +1,4 @@
+from opengever.base.visible_users_and_groups_filter import visible_users_and_groups_filter
 from opengever.ogds.base.sources import AllUsersSource
 from opengever.ogds.base.sources import WorkspaceContentMemberUsersSource
 from opengever.ogds.models.user import User
@@ -74,6 +75,8 @@ class WorkspaceUserVocabulary(SimpleVocabulary):
         try:
             return super(WorkspaceUserVocabulary, self).getTerm(value)
         except LookupError:
+            if not visible_users_and_groups_filter.can_access_principal(value):
+                return SimpleTerm('<not-found>', '<not-found>', '<not-found>')
             return AllUsersSource(api.portal.get()).getTermByToken(value)
 
 

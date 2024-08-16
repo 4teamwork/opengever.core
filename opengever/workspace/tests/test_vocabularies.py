@@ -57,6 +57,7 @@ class TestPossibleWorkspaceFolderParticipantsVocabulary(IntegrationTestCase):
 
 
 class TestWorkspaceContentMembersVocabulary(IntegrationTestCase):
+    features = ('workspace', )
 
     def test_vocabulary_list_all_members_of_the_current_workspace(self):
         self.login(self.workspace_member)
@@ -135,3 +136,31 @@ class TestWorkspaceContentMembersVocabulary(IntegrationTestCase):
         self.assertEquals(
             self.workspace_guest.getId(),
             factory(context=workspace).getTerm(self.workspace_guest.getId()).token)
+
+    def test_returns_notfound_user_without_access_all_participants_permissions(self):
+        self.login(self.workspace_admin)
+        ogds_user = create(Builder('ogds_user').id(u'peter'))
+
+        ogds_user.session.flush()
+
+        factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.workspace.WorkspaceContentMembersVocabulary'
+        )
+
+        term = factory(context=self.workspace).getTerm(ogds_user.userid)
+        self.assertEqual(ogds_user.userid, term.token)
+
+        self.login(self.workspace_guest)
+        term = factory(context=self.workspace).getTerm(ogds_user.userid)
+        self.assertEqual('<not-found>', term.token)
+
+    def test_vocabulary_for_non_existent_user(self):
+        self.login(self.workspace_member)
+        factory = getUtility(
+            IVocabularyFactory,
+            name='opengever.workspace.WorkspaceContentMembersVocabulary'
+        )
+        non_existent_user_id = 'nonexistent_user'
+        term = factory(context=self.workspace).getTerm(non_existent_user_id)
+        self.assertEqual(term.token, '<not-found>')
