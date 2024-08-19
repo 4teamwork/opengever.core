@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.9.1 (2024-08-19)
+---------------------
+
+Other changes:
+
+
+- Refactored vocabulary handling to return '<not found>' for invalid / inactive users. [amo] [TI-922]
+
+
 2024.9.0 (2024-06-13)
 ---------------------
 

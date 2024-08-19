@@ -1,1 +1,0 @@
-Refactored vocabulary handling to return '<not found>' for invalid / inactive users. [amo]
