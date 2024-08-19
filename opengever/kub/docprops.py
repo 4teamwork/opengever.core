@@ -1,6 +1,21 @@
 from datetime import datetime
 from opengever.base.addressblock.docprops import get_addressblock_docprops
 from opengever.base.docprops import BaseDocPropertyProvider
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
+
+def get_additional_doc_properties():
+    registry = getUtility(IRegistry)
+    return registry['opengever.kub.interfaces.IKuBSettings.additional_docproperty_fields'] or []
+
+
+def update_default_fields_with_additional_doc_props(context, default_fields):
+    custom_values = context.get('customValues')
+    if custom_values:
+        for field in get_additional_doc_properties():
+            if field in custom_values:
+                default_fields.update({field: custom_values[field]})
 
 
 class KuBEntityDocPropertyProvider(object):
@@ -86,10 +101,12 @@ class KuBContactDocPropertyProvider(BaseDocPropertyProvider):
     DEFAULT_PREFIX = ('contact',)
 
     def _collect_properties(self):
-        return {
+        default_fields = {
             'title': self.context.get("text"),
             'description': self.context.get("description"),
         }
+        update_default_fields_with_additional_doc_props(self.context, default_fields)
+        return default_fields
 
 
 class KuBPersonDocPropertyProvider(BaseDocPropertyProvider):
@@ -100,7 +117,7 @@ class KuBPersonDocPropertyProvider(BaseDocPropertyProvider):
         date_of_birth = self.context.get('dateOfBirth')
         if date_of_birth:
             date_of_birth = datetime.strptime(date_of_birth, '%Y-%m-%d')
-        return {
+        default_fields = {
             'salutation': self.context.get("salutation"),
             'academic_title': self.context.get("title"),
             'firstname': self.context.get("firstName"),
@@ -108,6 +125,8 @@ class KuBPersonDocPropertyProvider(BaseDocPropertyProvider):
             'date_of_birth': date_of_birth,
             'sex': self.context.get('sex'),
         }
+        update_default_fields_with_additional_doc_props(self.context, default_fields)
+        return default_fields
 
 
 class KuBOrganizationDocPropertyProvider(BaseDocPropertyProvider):
@@ -120,6 +139,7 @@ class KuBOrganizationDocPropertyProvider(BaseDocPropertyProvider):
         }
         phone_provider = KuBPhoneNumberDocPropertyProvider(self.context)
         properties.update(phone_provider.get_properties(with_app_prefix=False))
+        update_default_fields_with_additional_doc_props(self.context, properties)
         return properties
 
 
@@ -129,11 +149,14 @@ class KuBMembershipDocPropertyProvider(BaseDocPropertyProvider):
     DEFAULT_PREFIX = ('orgrole',)
 
     def _collect_properties(self):
-        return {
+        default_fields = {
             'function': self.context.get("role"),
             'description': self.context.get("description"),
             'department': self.context.get("department"),
         }
+        update_default_fields_with_additional_doc_props(self.context, default_fields)
+
+        return default_fields
 
 
 class KuBAddressDocPropertyProvider(BaseDocPropertyProvider):

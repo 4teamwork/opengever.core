@@ -361,7 +361,7 @@ KUB_RESPONSES = {
         },
         "primaryUrl": None,
         "text": "Dupont Jean",
-        "customValues": {}
+        "customValues": {"sorgerecht": "Geteilt"}
     },
 
     "http://localhost:8000/api/v2/resolve/membership:8345fcfe-2d67-4b75-af46-c25b2f387448": {
@@ -720,7 +720,7 @@ KUB_RESPONSES = {
         "primaryUrl": None,
         "text": "4Teamwork",
         "spvCommittee": False,
-        "customValues": {}
+        "customValues": {"ort": "Bern"}
     },
 
     "http://localhost:8000/api/v2/resolve/invalid-id": ["Invalid uuid"],

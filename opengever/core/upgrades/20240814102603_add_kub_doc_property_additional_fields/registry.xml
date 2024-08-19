@@ -1,0 +1,7 @@
+
+<registry>
+    <records interface="opengever.kub.interfaces.IKuBSettings">
+        <value key="additional_docproperty_fields">
+        </value>
+    </records>
+</registry>

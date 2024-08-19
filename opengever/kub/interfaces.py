@@ -16,3 +16,12 @@ class IKuBSettings(Interface):
                                            default=list(),
                                            missing_value=list(),
                                            value_type=schema.TextLine())
+
+    additional_docproperty_fields = schema.List(
+        title=u"Additional DocProperties",
+        description=u"List of additional field ids available as DocProperties.",
+        required=False,
+        default=list(),
+        missing_value=list(),
+        value_type=schema.ASCIILine(),
+    )

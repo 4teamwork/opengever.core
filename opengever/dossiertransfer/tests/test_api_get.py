@@ -1077,7 +1077,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             u'country': u'',
             u'countryIdISO2': u'',
             u'created': u'2021-11-17T00:00:00+01:00',
-            u'customValues': {},
+            u'customValues': {u'sorgerecht': u'Geteilt'},
             u'dateOfBirth': u'1992-05-15',
             u'dateOfDeath': None,
             u'description': u'',
