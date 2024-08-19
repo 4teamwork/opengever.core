@@ -19,13 +19,15 @@ class TestWorkspaceMeeting(IntegrationTestCase):
             factoriesmenu.add('Workspace Meeting')
             browser.fill({'Title': u'Ein Meeting',
                           'Start': '10.10.2020 23:56',
-                          'Organizer': self.workspace_member.getId()})
+                          'Organizer': self.workspace_member.getId(),
+                          'Guests': 'hans muster\ndemo@4teamwork.ch'})
             browser.click_on('Save')
 
         assert_no_error_messages(browser)
         self.assertEqual(1, len(children['added']))
         meeting = children['added'].pop()
         self.assertEqual(meeting.Title(), u'Ein Meeting')
+        self.assertEqual(meeting.guests, ['hans muster', 'demo@4teamwork.ch'])
 
 
 class TestWorkspaceMeetingWorkflow(IntegrationTestCase):
@@ -252,3 +254,19 @@ class TestAPISupportForWorkspaceMeeting(IntegrationTestCase):
             "'message': u'Constraint not satisfied', "
             "'error': 'ValidationError'}]",
             browser.json['message'])
+
+    @browsing
+    def test_create_workspace_meeting_with_guests(self, browser):
+        self.login(self.workspace_member, browser)
+        with self.observe_children(self.workspace):
+            browser.open(
+                self.workspace, method='POST', headers=self.api_headers,
+                data=json.dumps({'title': 'Ein Meeting',
+                                 'responsible': self.workspace_member.getId(),
+                                 'attendees': [self.workspace_guest.getId(),
+                                               self.workspace_admin.getId()],
+                                 'start': '2020-10-10T23:56:00',
+                                 'guests': ['hans muster', 'demo@4teamwork.ch'],
+                                 '@type': 'opengever.workspace.meeting'}))
+
+        self.assertEqual([u'hans muster', u'demo@4teamwork.ch'], browser.json.get('guests'))

@@ -58,6 +58,13 @@
             "_zope_schema_type": "List",
             "default": []
         },
+        "guests": {
+            "type": "array",
+            "title": "G\u00e4ste",
+            "description": "",
+            "_zope_schema_type": "List",
+            "default": []
+        },
         "title": {
             "type": "string",
             "title": "Titel",
@@ -92,6 +99,7 @@
         "location",
         "videoconferencing_url",
         "attendees",
+        "guests",
         "title",
         "description",
         "changed"

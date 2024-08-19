@@ -69,6 +69,10 @@ a {
   padding-left: 0;
   list-style-type: none;
 }
+.guests ul {
+  padding-left: 0;
+  list-style-type: none;
+}
 @page {
   size: A4;
   margin-left: 2.5cm;
@@ -129,6 +133,16 @@ a {
         <ul>
           <tal:repeat tal:repeat="attendee options/attendees">
             <li tal:content="attendee"></li>
+          </tal:repeat>
+        </ul>
+      </td>
+    </tr>
+    <tr tal:condition="options/guests" class="guests">
+      <th><span i18n:translate="label_guests">Guests</span>:</th>
+      <td>
+        <ul>
+          <tal:repeat tal:repeat="guest options/guests">
+            <li tal:content="guest"></li>
           </tal:repeat>
         </ul>
       </td>
