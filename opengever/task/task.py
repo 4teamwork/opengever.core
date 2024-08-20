@@ -652,6 +652,7 @@ class Task(Container, TaskReminderSupport):
             workflow.updateRoleMappingsFor(subtask)
             subtask.reindexObject()
             subtask.get_sql_object().sync_with(subtask)
+            subtask.cancel_subtasks()
 
     def set_tasktemplate_order(self, subtasks):
         """Stores the order from the given list subtasks, as process order
