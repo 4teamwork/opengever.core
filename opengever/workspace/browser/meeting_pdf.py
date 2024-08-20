@@ -119,6 +119,7 @@ class MeetingMinutesPDFView(BrowserView):
         data['chair'] = display_name(self.context.chair)
         data['secretary'] = display_name(self.context.secretary)
         data['attendees'] = []
+        data['guests'] = self.context.guests
         presence_states = IWorkspaceMeetingAttendeesPresenceStateStorage(self.context).get_all()
         for attendee in self.context.attendees:
             state = translate(ALLOWED_ATTENDEES_PRESENCE_STATES[presence_states[attendee]],

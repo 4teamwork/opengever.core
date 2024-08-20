@@ -88,6 +88,15 @@ class IWorkspaceMeetingSchema(model.Schema):
         default=list()
     )
 
+    form.order_after(guests='attendees')
+    guests = schema.List(
+        title=_(u"label_guests", default=u"Guests"),
+        required=False,
+        value_type=schema.TextLine(),
+        default=list(),
+        missing_value=list(),
+    )
+
 
 class WorkspaceMeeting(Container):
     implements(IWorkspaceMeeting)

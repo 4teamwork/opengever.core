@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-07-09 09:15+0000\n"
+"POT-Creation-Date: 2024-08-19 12:52+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -244,6 +244,12 @@ msgstr "Répertoires"
 #: ./opengever/workspace/workspace.py
 msgid "label_gever_url"
 msgstr "GEVER URL"
+
+#. Default: "Guests"
+#: ./opengever/workspace/browser/templates/meeting_minutes.pt
+#: ./opengever/workspace/workspace_meeting.py
+msgid "label_guests"
+msgstr "Invitées"
 
 #. Default: "Hide workspace members for workspace guests"
 #: ./opengever/workspace/workspace.py
