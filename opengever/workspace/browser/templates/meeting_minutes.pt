@@ -65,13 +65,32 @@ a {
   text-decoration: none;
   color: black;
 }
-.attendees ul {
+.hidden-list-style ul {
   padding-left: 0;
   list-style-type: none;
 }
 .guests ul {
   padding-left: 0;
   list-style-type: none;
+}
+tr.todo {
+  padding-bottom: 15px;
+}
+td.todo {
+  padding-left: 0px;
+  padding-bottom: 15px;
+}
+td.todo.todo_title {
+  width: 430px;
+}
+td.todo.todo_responsible {
+  width: 90px;
+}
+td.todo.todo_deadline {
+  width: 90px;
+}
+table.todo {
+  margin-top: 5px;
 }
 @page {
   size: A4;
@@ -106,7 +125,7 @@ a {
 
   <h1 i18n:translate="heading_meeting_minutes">Meeting Minutes: <span i18n:name="title" tal:replace="context/title">Title</span></h1>
 
-  <table class="borderless" >
+  <table class="borderless">
     <tr tal:condition="context/location">
       <th><span i18n:translate="label_location">Location</span>:</th>
       <td tal:content="context/location"></td>
@@ -127,7 +146,7 @@ a {
       <th><span i18n:translate="label_secretary">Secretary</span>:</th>
       <td tal:content="options/secretary"></td>
     </tr>
-    <tr tal:condition="options/attendees" class="attendees">
+    <tr tal:condition="options/attendees" class="hidden-list-style">
       <th><span i18n:translate="label_attendees">Attendees</span>:</th>
       <td>
         <ul>
@@ -171,7 +190,24 @@ a {
         </tal:repeat>
       </ul>
     </div>
+    <div tal:condition="nocall: agenda_item/related_todo_items">
+      <b><span i18n:translate="label_todos">Todos:</span></b>
+      <table class="borderless todo">
+          <tal:repeat tal:repeat="todo agenda_item/related_todo_items">
+            <tr class="todo">
+              <td class="todo todo_title">
+                <span tal:content="todo/title"/>
+              </td>
+              <td class="todo todo_responsible">
+                <span tal:content="todo/responsible"/>
+              </td>
+              <td class="todo todo_deadline">
+                <span tal:content="todo/deadline"/>
+              </td>
+            </tr>
+          </tal:repeat>
+      </table>
+    </div>
   </tal:repeat>
-
 </body>
 </html>
