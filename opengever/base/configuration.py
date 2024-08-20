@@ -186,6 +186,10 @@ class GeverSettingsAdpaterV1(object):
         features['private_tasks'] = api.portal.get_registry_record('private_task_feature_enabled', interface=ITaskSettings)
         features['optional_task_permissions_revoking'] = api.portal.get_registry_record('optional_task_permissions_revoking_enabled', interface=ITaskSettings)  # noqa
         features['multiple_dossier_types'] = count_available_dossier_types() > 1
+        features['oc_plugin_check_enabled'] = api.portal.get_registry_record(
+            'oc_plugin_check_enabled',
+            interface=IOfficeConnectorSettings
+        )
 
         return features
 

@@ -89,6 +89,7 @@ class TestConfig(IntegrationTestCase):
                 u'officeatwork': False,
                 u'officeconnector_attach': True,
                 u'officeconnector_checkout': True,
+                u'oc_plugin_check_enabled': False,
                 u'oneoffixx': False,
                 u'optional_task_permissions_revoking': False,
                 u'preview': False,

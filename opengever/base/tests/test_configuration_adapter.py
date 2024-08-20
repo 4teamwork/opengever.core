@@ -107,6 +107,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('private_tasks', True),
                 ('optional_task_permissions_revoking', False),
                 ('multiple_dossier_types', False),
+                ('oc_plugin_check_enabled', False),
                 ])),
             ('root_url', 'http://nohost/plone'),
             ('portal_url', 'http://nohost/portal'),
