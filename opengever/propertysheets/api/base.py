@@ -283,6 +283,8 @@ class PropertySheetWriter(PropertySheetLocator):
                 'default_factory': field_data.get('default_factory'),
                 'default_expression': field_data.get('default_expression'),
                 'default_from_member': field_data.get('default_from_member'),
+                'read_group': field_data.get('read_group', None),
+                'write_group': field_data.get('write_group', None),
             }
 
             schema_definition.add_field(
