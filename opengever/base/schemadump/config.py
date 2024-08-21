@@ -195,7 +195,7 @@ VOCAB_OVERRIDES = {
         'responsible': u'<G\xfcltige ID eines Teamraum Teilnehmers>',
     },
     'opengever.workspace.workspace_meeting_agenda_item.IWorkspaceMeetingAgendaItemSchema': {
-        'related_todo_list': u'<UID einer verkn\xfcpften To-do-Liste'
+        'related_todo_list': u'<UID einer verkn\xfcpften To-do-Liste>'
     }
 }
 

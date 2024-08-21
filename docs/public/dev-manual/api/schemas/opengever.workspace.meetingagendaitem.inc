@@ -51,7 +51,7 @@
        
        
        
-       :Wertebereich: <UID einer verknüpften To-do-Liste
+       :Wertebereich: <UID einer verknüpften To-do-Liste>
 
 
    .. py:attribute:: changed
