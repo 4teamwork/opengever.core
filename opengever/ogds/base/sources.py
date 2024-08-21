@@ -527,6 +527,7 @@ class AllUsersSource(AllUsersInboxesAndTeamsSource):
     """Vocabulary of all users.
     """
     provides_raw_queries = False
+    gever_only = False
 
     @property
     def search_only_active_users(self):

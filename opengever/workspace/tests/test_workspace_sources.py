@@ -36,7 +36,6 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         AllGroupsSource,
         AllUsersAndGroupsSource,
         AllUsersInboxesAndTeamsSource,
-        AllUsersSource,
         ContactsSource,
         CurrentAdminUnitOrgUnitsSource,
         UsersContactsInboxesSource,
@@ -47,6 +46,7 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         WorkspaceContentMemberUsersSource,
         AssignedUsersSource,
         PotentialWorkspaceMembersSource,
+        AllUsersSource,
     ]
 
     def test_whitelisted_teamraum_sources(self):
