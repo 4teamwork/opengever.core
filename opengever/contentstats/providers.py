@@ -2,6 +2,7 @@ from collections import Counter
 from ftw.contentstats.interfaces import IStatsProvider
 from ftw.contentstats.providers.portal_types import PortalTypesProvider
 from opengever.base.interfaces import IOpengeverBaseLayer
+from opengever.contentstats.active_user_stats import UserStatsCalculator
 from opengever.document.document import Document
 from opengever.mail.mail import OGMail
 from plone import api
@@ -124,3 +125,26 @@ class FileMimetypesProvider(object):
         counts.pop('', None)
 
         return counts
+
+
+@implementer(IStatsProvider)
+@adapter(IPloneSiteRoot, Interface)
+class UserStatsProvider(object):
+
+    def __init__(self, context, request):
+        self.context = context
+        self.request = request
+
+    def title(self):
+        """Human readable title
+        """
+        return u'User statistics'
+
+    def get_display_names(self):
+        return None
+
+    def get_raw_stats(self):
+        """Return a dictionary with counts of active unique users of the
+        current admin unit.
+        """
+        return UserStatsCalculator().get_stats()
