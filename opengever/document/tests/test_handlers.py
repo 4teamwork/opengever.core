@@ -99,6 +99,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.creator.user.title', 'Test User'),
             ('ogg.document.creator.user.firstname', 'User'),
             ('ogg.document.creator.user.lastname', 'Test'),
+            ('ogg.document.classification', 'unprotected'),
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -140,6 +141,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.creator.user.title', 'Test User'),
             ('ogg.document.creator.user.firstname', 'User'),
             ('ogg.document.creator.user.lastname', 'Test'),
+            ('ogg.document.classification', 'unprotected')
         ]
 
         with TemporaryDocFile(self.doc_with_gever_properties.file) as tmpfile:
@@ -183,6 +185,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.creator.user.title', 'Test User'),
             ('ogg.document.creator.user.firstname', 'User'),
             ('ogg.document.creator.user.lastname', 'Test'),
+            ('ogg.document.classification', 'unprotected')
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
@@ -225,6 +228,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.creator.user.title', 'Test User'),
             ('ogg.document.creator.user.firstname', 'User'),
             ('ogg.document.creator.user.lastname', 'Test'),
+            ('ogg.document.classification', 'unprotected')
         ]
 
         with TemporaryDocFile(copied_doc.file) as tmpfile:
@@ -265,6 +269,7 @@ class TestHandlers(FunctionalTestCase):
             ('ogg.document.creator.user.title', 'Test User'),
             ('ogg.document.creator.user.firstname', 'User'),
             ('ogg.document.creator.user.lastname', 'Test'),
+            ('ogg.document.classification', 'unprotected')
         ]
         with TemporaryDocFile(moved_doc.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()

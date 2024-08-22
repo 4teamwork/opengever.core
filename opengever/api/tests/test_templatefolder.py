@@ -280,6 +280,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
         ('Test', 'Peter'),
         ('User.FullName', u'K\xf6nig J\xfcrgen'),
         ('User.ID', 'jurgen.konig'),
+        ('ogg.document.classification', 'unprotected'),
         ('ogg.document.creator.user.email', 'jurgen.konig@gever.local'),
         ('ogg.document.creator.user.firstname', u'J\xfcrgen'),
         ('ogg.document.creator.user.lastname', u'K\xf6nig'),

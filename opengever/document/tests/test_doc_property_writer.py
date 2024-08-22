@@ -184,6 +184,7 @@ class TestDocPropertyWriter(IntegrationTestCase):
             'ogg.document.creator.user.lastname': 'Ziegler',
             'ogg.document.creator.user.title': 'Ziegler Robert',
             'ogg.document.creator.user.userid': 'robert.ziegler',
+            'ogg.document.classification': 'unprotected'
         }
 
         with TemporaryDocFile(self.document.file) as tmpfile:
