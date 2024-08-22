@@ -156,7 +156,7 @@ KUB_RESPONSES = {
         "dateOfDeath": None,
         "readableAge": "30 Jahre und 6 Monate",
         "sex": None,
-        "country": "",
+        "country": "schweiz",
         "countryIdISO2": "",
         "languageOfCorrespondance": "fr",
         "status": 1,

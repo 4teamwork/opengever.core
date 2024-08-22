@@ -1074,7 +1074,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
                 u'thirdPartyId': None,
                 u'town': u'Bern',
             }],
-            u'country': u'',
+            u'country': u'schweiz',
             u'countryIdISO2': u'',
             u'created': u'2021-11-17T00:00:00+01:00',
             u'customValues': {u'sorgerecht': u'Geteilt'},

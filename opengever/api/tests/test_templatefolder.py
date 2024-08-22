@@ -345,6 +345,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.contact.description', u''),
             ('ogg.recipient.email.address', 'Jean.dupon@example.com'),
             ('ogg.recipient.person.academic_title', u''),
+            ('ogg.recipient.person.country', 'schweiz'),
             ('ogg.recipient.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.recipient.address.extra_line_1', u''),
             ('ogg.recipient.address.extra_line_2', u''),
@@ -357,7 +358,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.recipient.person.firstname', 'Jean'),
             ('ogg.recipient.person.lastname', 'Dupont'),
             ('ogg.recipient.person.salutation', 'Herr'),
-            ('ogg.recipient.phone.number', '666 666 66 66')]
+            ('ogg.recipient.phone.number', '666 666 66 66'),]
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -425,6 +426,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.contact.description', u''),
             ('ogg.sender.email.address', 'Jean.dupon@example.com'),
             ('ogg.sender.person.academic_title', u''),
+            ('ogg.sender.person.country', 'schweiz'),
             ('ogg.sender.address.block', 'Herr\nJean Dupont\nTeststrasse 43\n9999 Bern'),
             ('ogg.sender.address.extra_line_1', u''),
             ('ogg.sender.address.extra_line_2', u''),
@@ -437,7 +439,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.person.firstname', 'Jean'),
             ('ogg.sender.person.lastname', 'Dupont'),
             ('ogg.sender.person.salutation', 'Herr'),
-            ('ogg.sender.phone.number', '666 666 66 66')]
+            ('ogg.sender.phone.number', '666 666 66 66'),]
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -484,7 +486,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.sender.person.firstname', 'Jean'),
             ('ogg.sender.person.lastname', 'Dupont'),
             ('ogg.sender.person.salutation', 'Herr'),
-            ('ogg.sender.phone.number', '666 666 66 66')]
+            ('ogg.sender.phone.number', '666 666 66 66'),]
 
         with TemporaryDocFile(document.file) as tmpfile:
             properties = CustomProperties(Document(tmpfile.path)).items()
@@ -567,6 +569,7 @@ class TestDocumentFromTemplatePostWithKubFeatureEnabled(KuBIntegrationTestCase):
             ('ogg.final-drawing.person.firstname', 'Jean'),
             ('ogg.final-drawing.person.lastname', 'Dupont'),
             ('ogg.final-drawing.person.salutation', 'Herr'),
+            ('ogg.final-drawing.person.country', 'schweiz'),
             ('ogg.final-drawing.phone.number', '666 666 66 66'),
             ('ogg.participation.address.block',
              u'Frau\nK\xe4thi B\xe4rfuss\nKappelenweg 13\n1234 Vorkappelen'),
@@ -749,7 +752,7 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
             IDossierTemplate(self.subdossiertemplate), [self.normal_template, ],
             fieldname='related_documents')
 
-        data = {'template': { 'token': self.dossiertemplate.UID()},
+        data = {'template': {'token': self.dossiertemplate.UID()},
                 'title': u'New d\xf6ssier',
                 'responsible': self.regular_user.getId()}
 

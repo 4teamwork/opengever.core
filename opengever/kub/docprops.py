@@ -124,6 +124,7 @@ class KuBPersonDocPropertyProvider(BaseDocPropertyProvider):
             'lastname': self.context.get("officialName"),
             'date_of_birth': date_of_birth,
             'sex': self.context.get('sex'),
+            'country': self.context.get('country'),
         }
         update_default_fields_with_additional_doc_props(self.context, default_fields)
         return default_fields
