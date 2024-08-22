@@ -68,6 +68,9 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
     def get_document_author(self):
         return IDocumentMetadata(self.context).document_author
 
+    def get_document_classification(self):
+        return IDocumentMetadata(self.context).classification
+
     def get_document_date(self):
         return self._as_datetime(
             IDocumentMetadata(self.context).document_date)
@@ -99,6 +102,7 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
             'reception_date': self.get_reception_date(),
             'delivery_date': self.get_delivery_date(),
             'version_number': self.get_document_version(),
+            'classification': self.get_document_classification()
         }
         properties.update(self.get_custom_properties())
         return properties
