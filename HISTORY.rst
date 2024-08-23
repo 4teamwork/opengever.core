@@ -10,6 +10,27 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.12.0 (2024-08-23)
+----------------------
+
+Bug fixes:
+
+
+- Fix setting CAS server URL on setup. [lgraf] [OPS-97]
+- Fix handling of single special chars in search queries. [buchi] [TI-336]
+
+
+Other changes:
+
+
+- Fix cancellation of nested tasks by making them recursive. [ran] [TI-546]
+- Add office connector check feature flag. [amo] [TI-571]
+- Provide workspace participation export action on workspace folders. [amo] [TI-672]
+- Enhance the IKUBSettings interface by adding new fields that allow the integration of customFields into the Docprops. [amo] [TI-691]
+- Provide new field `guests` on IWorkspaceMeetingSchema. [amo] [TI-918]
+- Improve workspace users vocabulary to properly handle no longer available users for restricted workspaces [amo] [TI-922]
+
+
 2024.11.0 (2024-07-30)
 ----------------------
 

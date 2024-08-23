@@ -1,1 +1,0 @@
-Fix cancellation of nested tasks by making them recursive. [ran]
