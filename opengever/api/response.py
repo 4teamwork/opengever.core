@@ -189,6 +189,8 @@ class ResponseDelete(Service):
     """Delete a response.
     """
 
+    response_class = Response
+
     def __init__(self, context, request):
         super(ResponseDelete, self).__init__(context, request)
         self.params = []
@@ -223,7 +225,7 @@ class ResponseDelete(Service):
         return self.reply_no_content()
 
     def create_response(self, deleted_response):
-        response = Response(COMMENT_REMOVED_RESPONSE_TYPE)
+        response = self.response_class(COMMENT_REMOVED_RESPONSE_TYPE)
 
         response.additional_data = PersistentDict({
             'deleted_response_creation_date': deleted_response.created
