@@ -84,6 +84,16 @@
        
 
 
+   .. py:attribute:: restrict_downloading_documents
+
+       :Feldname: :field-title:`Herunterladen bzw. Öffnen von Inhalten am Endgerät für Gäste einschränken`
+       :Datentyp: ``Bool``
+       
+       
+       
+       
+
+
    .. py:attribute:: changed
 
        :Feldname: :field-title:`Zuletzt verändert`

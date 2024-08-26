@@ -84,6 +84,16 @@
        
 
 
+   .. py:attribute:: guests
+
+       :Feldname: :field-title:`Gäste`
+       :Datentyp: ``List``
+       
+       :Default: []
+       
+       
+
+
    .. py:attribute:: title
 
        :Feldname: :field-title:`Titel`
