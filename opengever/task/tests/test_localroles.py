@@ -261,6 +261,34 @@ class TestLocalRolesSetter(IntegrationTestCase):
         self.dossier.reindexObjectSecurity()
         notify(ObjectModifiedEvent(self.task))
 
+    def test_informed_principals_roles(self):
+
+        self.login(self.regular_user)
+
+        self.task.responsible = self.regular_user.id
+        self.task.informed_principals = [self.test_user.id, ]
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+        self.assertEqual(
+            ('Reader', ),
+            self.task.get_local_roles_for_userid(self.test_user.id))
+
+        self.assertEqual(
+            ('Reader',),
+            self.document.get_local_roles_for_userid(self.test_user.id))
+
+        self.assertEqual(
+            ('Reader',),
+            self.proposaldocument.get_local_roles_for_userid(self.test_user.id))
+
+        self.assertEqual(
+            ('TaskResponsible',),
+            self.dossier.get_local_roles_for_userid(self.test_user.id))
+
 
 class TestLocalRolesRevoking(IntegrationTestCase):
 
@@ -1014,6 +1042,107 @@ class TestLocalRolesRevoking(IntegrationTestCase):
                     "principal": self.dossier_manager.id,
                 },
             ], storage._storage())
+
+    @browsing
+    def test_closing_a_task_revokes_informed_principals_roles_on_task(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        self.task.responsible = self.regular_user.id
+        self.task.informed_principals = [self.test_user.id, ]
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+
+        self.assertEqual(
+            ('Reader', ),
+            self.task.get_local_roles_for_userid(self.test_user.id))
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(tuple(), self.task.get_local_roles_for_userid(self.test_user.id))
+
+    @browsing
+    def test_closing_a_task_revokes_informed_principals_roles_on_dossier(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        self.task.responsible = self.test_user.id
+        self.task.informed_principals = [self.test_user.id, ]
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+
+        self.assertEqual(('TaskResponsible',), self.dossier.get_local_roles_for_userid(self.test_user.id))
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(tuple(), self.dossier.get_local_roles_for_userid(self.test_user.id))
+
+    @browsing
+    def test_closing_a_task_revokes_informed_principals_roles_on_related_documents(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        self.task.responsible = self.test_user.id
+        self.task.informed_principals = [self.regular_user.id, ]
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+
+        self.assertEqual(('Reader',), self.proposaldocument.get_local_roles_for_userid(self.regular_user.id))
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(tuple(), self.proposaldocument.get_local_roles_for_userid(self.regular_user.id))
+
+    @browsing
+    def test_closing_a_task_revokes_informed_principals_roles_on_proposals(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+
+        self.task.responsible = self.test_user.id
+        self.task.informed_principals = [self.regular_user.id, ]
+
+        intids = getUtility(IIntIds)
+        relation = RelationValue(intids.getId(self.proposaldocument))
+        ITask(self.task).relatedItems.append(relation)
+
+        notify(ObjectModifiedEvent(self.task))
+
+        self.assertEqual(('Reader',), self.proposal.get_local_roles_for_userid(self.regular_user.id))
+
+        self.set_workflow_state('task-state-tested-and-closed', self.subtask)
+        self.set_workflow_state('task-state-resolved', self.task)
+
+        browser.open(self.task, view='tabbedview_view-overview')
+        browser.click_on('Close')
+        browser.fill({'Response': 'Done!'})
+        browser.click_on('Save')
+
+        self.assertEqual(tuple(), self.proposal.get_local_roles_for_userid(self.regular_user.id))
 
 
 class TestLocalRolesReindexing(IntegrationTestCase):
