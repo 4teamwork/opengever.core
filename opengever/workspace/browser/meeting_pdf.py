@@ -132,6 +132,12 @@ class MeetingMinutesPDFView(BrowserView):
             obj = item.getObject()
             text = obj.text.output if obj.text else ''
             decision = obj.decision.output if obj.decision else ''
+
+            related_todo_items = []
+            if obj.related_todo_list:
+                related_todo_items = obj.related_todo_list.to_object.values()
+                related_todo_items = related_todo_items.slice(0, related_todo_items.actual_result_count)
+
             related_items = [item.to_object for item in obj.relatedItems if item.to_object]
             data['agenda_items'].append({
                 'number': '{}. '.format(i + 1),
@@ -140,7 +146,19 @@ class MeetingMinutesPDFView(BrowserView):
                 'decision': decision,
                 'related_items': [
                     {'title': item.Title(), 'url': item.absolute_url()}
-                    for item in related_items]
+                    for item in related_items
+                ],
+                'related_todo_items': [
+                    {
+                        'responsible': display_name(todo.responsible),
+                        'title': todo.title,
+                        'deadline': self.context.toLocalizedTime(
+                            datetime.combine(todo.deadline, datetime.min.time())
+                        )
+                        if todo.deadline else ''
+                    }
+                    for todo in related_todo_items
+                ]
             })
 
         data['header'], data['footer'] = self.prepare_header_and_footer()
