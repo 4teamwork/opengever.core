@@ -182,6 +182,7 @@ NON_WRITE_PERMISSIONS = [
     'opengever.disposition: Download SIP Package',
     'opengever.meeting: Add Member',
     'opengever.repository: Export repository',
+    'opengever.sign: Sign Document',
     'opengever.sharing: List Protected Objects',
     'opengever.workspace: Access all users and groups',
     'opengever.workspace: Manage Workspaces',
