@@ -204,6 +204,31 @@ def containing_subdossier(obj):
     return ''
 
 
+TYPES_WITH_DOSSIER_REVIEW_STATE_INDEX = set(('opengever.dossier.businesscasedossier',
+                                             'opengever.meeting.proposal',
+                                             'opengever.ris.proposal',
+                                             'opengever.document.document',
+                                             'opengever.task.task',
+                                             'opengever.private.dossier',
+                                             'ftw.mail.mail',
+                                             'opengever.meeting.meetingdossier'))
+
+
+@indexer(IDexterityContent)
+def dossier_review_state(obj):
+    """Returns the review state of the current dossier or of the dossier of
+    which the current content is contained in.
+    """
+    if obj.portal_type not in TYPES_WITH_DOSSIER_REVIEW_STATE_INDEX:
+        return ''
+
+    while obj and not ISiteRoot.providedBy(obj):
+        if IDossierMarker.providedBy(obj):
+            return api.content.get_state(obj)
+        obj = aq_parent(aq_inner(obj))
+    return ''
+
+
 @indexer(IDossierMarker)
 def is_subdossier(obj):
     return obj.is_subdossier()

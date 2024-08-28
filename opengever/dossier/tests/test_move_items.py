@@ -319,6 +319,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         u'portal_type',
         u'public_trial',
         u'review_state',
+        u'dossier_review_state',  # items can only be moved from active to active dossiers.
         u'sequence_number',
         u'sequence_number_string',
         u'sortable_title',

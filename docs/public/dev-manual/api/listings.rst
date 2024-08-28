@@ -90,6 +90,7 @@ werden. Folgende Felder stehen zur Verfügung:
 - ``document_type_label``: Dokumenttyp (Anzeigewert)
 - ``dossier_type``: Dossiertyp
 - ``dossier_type_label``: Dossiertyp (Anzeigewert)
+- ``dossier_review_state``: Der Status des Dossiers selbst oder des Dossiers, in dem sich der aktuelle Inhalt befindet.
 - ``email``: E-Mail Adresse
 - ``end``: Enddatum des Dossiers
 - ``external_reference``: Externe Referenz für Dossiers oder Fremdzeichen für Dokumente
@@ -184,6 +185,8 @@ siehe Tabelle:
     |``document_type``         |    ja    |   nein  |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |       nein       |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
     |``dossier_type``          |    nein  |   ja    |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       ja        |   nein   |       nein       |     nein    |      nein      |   nein   |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
+    |``dossier_review_state``  |    ja    |   ja    |     nein     |        nein        |  ja     |  nein   |  ja     |   ja     |       ja        |       ja         |       ja        |   ja     |       nein       |     ja      |      ja        |   ja     |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
     |``end``                   |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |    ja    |       nein       |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+

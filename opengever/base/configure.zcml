@@ -445,6 +445,12 @@
       handler=".handlers.update_touched_date"
       />
 
+  <subscriber
+      for="opengever.dossier.behaviors.dossier.IDossierMarker
+           Products.CMFCore.interfaces.IActionSucceededEvent"
+      handler=".handlers.update_dossier_review_state"
+      />
+
   <adapter
       factory=".indexes.referenceIndexer"
       name="reference"

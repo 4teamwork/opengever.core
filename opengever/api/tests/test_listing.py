@@ -657,6 +657,20 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual('dossier-state-active', review_states[0])
 
     @browsing
+    def test_filter_by_dossier_review_state(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=documents&columns:list=title'
+                '&filters.dossier_review_state:record=dossier-state-inactive')
+
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+
+        items = browser.json['items']
+        self.assertItemsEqual([self.inactive_document.UID()],
+                              [item.get('UID') for item in items])
+
+    @browsing
     def test_filter_by_is_subdossier(self, browser):
         self.login(self.regular_user, browser=browser)
 
