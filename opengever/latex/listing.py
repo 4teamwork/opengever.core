@@ -213,7 +213,9 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
 
         # widen title and responsible columns
         columns[1].width = '40%'
-        columns[2].width = '35%'
+        columns[2].width = '33%'
+        columns[4].width = '6%'
+        columns[5].width = '6%'
         return columns
 
 

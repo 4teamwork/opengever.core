@@ -196,7 +196,7 @@ class TestSubDossierListing(BaseLatexListingTest):
 
         cols = table.xpath(CSSSelector('colgroup col').path)
         self.assertEquals(
-            ['5%', '40%', '35%', '10%', '5%', '5%'],
+            ['5%', '40%', '33%', '10%', '6%', '6%'],
             [col.get('width') for col in cols])
 
     def test_drop_reference_from_default_dossier_listings(self):
