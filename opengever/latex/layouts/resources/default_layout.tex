@@ -9,6 +9,24 @@
 <%block name="beneath_packages">
 </%block>
 
+%% Forced Hyphenation inside table
+%%%% This allows Latex to split very long words inside tables
+%%%% THe function below forces a hyphen during splits
+\makeatletter
+\renewcommand{\seqsplit}[1]{%
+  \begingroup
+  \seq@split#1\seq@nil
+  \endgroup
+}
+
+\def\seq@split#1{%
+  \ifx#1\seq@nil
+  \else
+    #1\discretionary{-}{}{}%
+    \expandafter\seq@split
+  \fi
+}
+
 %% TYPESETTING
 %%%% This allows latex to distribute 3em more of white space on a line
 %%%% when it cannot split it in a satisfying way, this is notably

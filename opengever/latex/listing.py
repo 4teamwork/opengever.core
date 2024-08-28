@@ -212,8 +212,10 @@ class SubDossiersLaTeXListing(DossiersLaTeXListing):
             if col.id not in ['reference', 'repository_title']]
 
         # widen title and responsible columns
-        columns[1].width = '40%'
+        columns[1].width = '38%'
         columns[2].width = '35%'
+        columns[4].width = '6%'
+        columns[5].width = '6%'
         return columns
 
 

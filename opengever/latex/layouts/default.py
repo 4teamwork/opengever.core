@@ -45,6 +45,8 @@ class DefaultLayout(CustomizableLayout):
         self.use_package('wrapfig')
         self.use_package('array,supertabular')
         self.use_package('setspace')
+        self.use_package('seqsplit')
+        self.use_package('hyphenat')
 
         if self.show_logo:
             self.add_raw_template_file('gever_logo.jpeg')
