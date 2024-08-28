@@ -106,6 +106,7 @@ FEATURE_FLAGS = {
     'optional-task-permissions-revoking': 'opengever.task.interfaces.ITaskSettings.optional_task_permissions_revoking_enabled',  # noqa
     'oc-plugin-check-enabled': 'opengever.officeconnector.interfaces.'
                               'IOfficeConnectorSettings.oc_plugin_check_enabled',  # noqa
+    'sign': 'opengever.sign.interfaces.ISignSettings.is_feature_enabled',  # noqa
 }
 
 FEATURE_VALUES = {
