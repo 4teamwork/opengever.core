@@ -4,7 +4,7 @@ from opengever.base.model import create_session
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
-from opengever.ogds.base.actor import PloneUserActor
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
@@ -59,8 +59,7 @@ class MyWorkspaceInvitations(BrowserView):
                     target_title = target.Title()
 
             if target:
-                inviter = PloneUserActor(entry['inviter'],
-                                         user=api.user.get(entry['inviter']))
+                inviter = Actor.lookup(entry['inviter'])
                 yield {'inviter': inviter.get_label(),
                        'target_title': target_title,
                        'iid': entry['iid'],
