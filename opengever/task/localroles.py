@@ -92,6 +92,14 @@ class LocalRolesSetter(object):
 
         RoleAssignmentManager(context).add_or_update_assignments(assignments, reindex=reindex)
 
+    def _add_informed_roles(self, context, roles, reindex=True):
+        """Adds 'Reader' role to informed principals."""
+        informed_principals = self.task.informed_principals
+        for principal in informed_principals:
+            principal = self.get_permission_identifier(principal)
+            RoleAssignmentManager(context).add_or_update_assignments(
+                [TaskRoleAssignment(principal, roles, context)], reindex=reindex)
+
     def _should_add_agency_localroles(self):
         if self.task.is_private:
             return False
@@ -108,6 +116,9 @@ class LocalRolesSetter(object):
             agency_principal = self.inbox_group_id
 
         self._add_local_roles(self.task, principal, agency_principal, ('Editor', ))
+
+        # Grant "Reader" role to informed principals
+        self._add_informed_roles(self.task, ('Reader',))
 
     def globalindex_reindex_task(self):
         """We need to reindex the task in globalindex. This was done
@@ -135,6 +146,7 @@ class LocalRolesSetter(object):
 
         self._add_local_roles(distinct_parent, principal, agency_principal,
                               ('TaskResponsible', ), reindex=False)
+        self._add_informed_roles(distinct_parent, ('TaskResponsible',))
 
         # We disabled reindexObjectSecurity and reindex the security manually
         # instead, to avoid reindexing all objects including all documents.
@@ -190,16 +202,29 @@ class LocalRolesSetter(object):
             self._add_local_roles(
                 document, principal, agency_principal, roles)
 
+            # Grant "Reader" role to informed principals on related items
+            self._add_informed_roles(document, ('Reader',))
+
             if self._is_inside_a_proposal(document):
                 proposal = document.get_proposal()
                 self._add_local_roles(
                     proposal, principal, agency_principal, roles)
+
+                # Grant "Reader" role to informed principals on related proposal
+                self._add_informed_roles(proposal, ('Reader',))
 
     def _is_inside_a_proposal(self, maybe_document):
         if not IBaseDocument.providedBy(maybe_document):
             return False
 
         return maybe_document.is_inside_a_proposal()
+
+    def _revoke_informed_principals_roles(self, context, reindex=True):
+        manager = RoleAssignmentManager(context)
+        informed_principals = self.task.informed_principals
+        for principal in informed_principals:
+            principal = self.get_permission_identifier(principal)
+            manager.clear(ASSIGNMENT_VIA_TASK, principal, context, reindex)
 
     def _revoke_roles(self, obj, reindex=True):
         manager = RoleAssignmentManager(obj)
@@ -215,16 +240,19 @@ class LocalRolesSetter(object):
 
     def revoke_roles_on_task(self):
         self._revoke_roles(self.task)
+        self._revoke_informed_principals_roles(self.task)
 
     def revoke_on_related_items(self):
         for item in getattr(aq_base(self.task), 'relatedItems', []):
             document = item.to_object
 
             self._revoke_roles(document)
+            self._revoke_informed_principals_roles(document)
 
             if self._is_inside_a_proposal(document):
                 proposal = document.get_proposal()
                 self._revoke_roles(proposal)
+                self._revoke_informed_principals_roles(proposal)
 
     def revoke_on_distinct_parent(self):
         distinct_parent = self.get_distinct_parent()
@@ -240,6 +268,7 @@ class LocalRolesSetter(object):
             path='/'.join(distinct_parent.getPhysicalPath()))]
 
         self._revoke_roles(distinct_parent, reindex=False)
+        self._revoke_informed_principals_roles(distinct_parent, reindex=False)
 
         for dossier in subdossiers:
             reindex_object_security_without_children(dossier)
