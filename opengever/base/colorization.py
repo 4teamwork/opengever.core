@@ -10,4 +10,4 @@ COLORS = {
 
 def get_color():
     color = os.environ.get('GEVER_COLORIZATION', None)
-    return COLORS.get(color, color)
+    return COLORS.get(color, color or None)

@@ -1,0 +1,1 @@
+Disable colorization if env variable has an empty value. [buchi]
