@@ -24,6 +24,7 @@ class TestDocugateXMLView(IntegrationTestCase):
     <Dossier.Title>Verträge mit der kantonalen Finanzverwaltung</Dossier.Title>
     <User.FullName>Ziegler Robert</User.FullName>
     <User.ID>robert.ziegler</User.ID>
+    <ogg.document.classification>unprotected</ogg.document.classification>
     <ogg.document.creator.user.email>robert.ziegler@gever.local</ogg.document.creator.user.email>
     <ogg.document.creator.user.firstname>Robert</ogg.document.creator.user.firstname>
     <ogg.document.creator.user.lastname>Ziegler</ogg.document.creator.user.lastname>

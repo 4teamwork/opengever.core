@@ -21,6 +21,7 @@
             <Node Id="Dossier.Title">Verträge mit der kantonalen Finanzverwaltung</Node>
             <Node Id="User.FullName">Ziegler Robert</Node>
             <Node Id="User.ID">robert.ziegler</Node>
+            <Node Id="ogg.document.classification">unprotected</Node>
             <Node Id="ogg.document.creator.user.email">robert.ziegler@gever.local</Node>
             <Node Id="ogg.document.creator.user.firstname">Robert</Node>
             <Node Id="ogg.document.creator.user.lastname">Ziegler</Node>
@@ -50,6 +51,7 @@
         <Value key="Dossier.Title" type="string">Verträge mit der kantonalen Finanzverwaltung</Value>
         <Value key="User.FullName" type="string">Ziegler Robert</Value>
         <Value key="User.ID" type="string">robert.ziegler</Value>
+        <Value key="ogg.document.classification" type="string">unprotected</Value>
         <Value key="ogg.document.creator.user.email" type="string">robert.ziegler@gever.local</Value>
         <Value key="ogg.document.creator.user.firstname" type="string">Robert</Value>
         <Value key="ogg.document.creator.user.lastname" type="string">Ziegler</Value>
