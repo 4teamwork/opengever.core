@@ -41,6 +41,7 @@ WHITELISTED_TEAMRAUM_VOCABULARIES = {
     'opengever.base.ReferenceFormatterVocabulary',
     'opengever.document.document_types',
     'opengever.journal.manual_entry_categories',
+    'opengever.ogds.base.all_admin_units',
     'opengever.propertysheets.PropertySheetAssignmentsVocabulary',
     'opengever.workspace.PossibleWorkspaceFolderParticipantsVocabulary',
     'opengever.workspace.RolesVocabulary',
