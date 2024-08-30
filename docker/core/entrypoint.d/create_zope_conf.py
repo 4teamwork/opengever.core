@@ -106,14 +106,6 @@ trusted-proxy 127.0.0.1
   </logfile>
 </eventlog>
 
-<logger access>
-  level WARN
-  <logfile>
-    path STDOUT
-    format %(message)s
-  </logfile>
-</logger>
-
 <http-server>
   address 8080
 </http-server>
