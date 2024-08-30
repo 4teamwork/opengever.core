@@ -5,6 +5,7 @@ from Acquisition import aq_parent
 from collective import dexteritytextindexer
 from ftw.mail.interfaces import IEmailAddress
 from ftw.tabbedview.interfaces import ITabbedviewUploadable
+from opengever.base.interfaces import IInternalWorkflowTransition
 from opengever.base.interfaces import IRedirector
 from opengever.base.model.favorite import Favorite
 from opengever.base.utils import is_administrator
@@ -25,6 +26,7 @@ from opengever.officeconnector.helpers import is_client_ip_in_office_connector_d
 from opengever.officeconnector.helpers import is_officeconnector_checkout_feature_enabled
 from opengever.officeconnector.mimetypes import get_editable_types
 from opengever.oneoffixx import is_oneoffixx_feature_enabled
+from opengever.sign.utils import is_sign_feature_enabled
 from opengever.task.task import ITask
 from opengever.virusscan.validator import validateUploadForFieldIfNecessary
 from opengever.virusscan.validator import Z3CFormClamavValidator
@@ -241,12 +243,19 @@ class Document(Item, BaseDocumentMixin):
     active_state = 'document-state-draft'
     shadow_state = 'document-state-shadow'
     final_state = 'document-state-final'
+    signing_state = 'document-state-signing'
+    signed_state = 'document-state-signed'
 
     remove_transition = 'document-transition-remove'
     restore_transition = 'document-transition-restore'
     initialize_transition = 'document-transition-initialize'
     finalize_transition = 'document-transition-finalize'
     reopen_transition = 'document-transition-reopen'
+    final_signing_transition = 'document-transition-final-signing'
+    draft_signing_transition = 'document-transition-draft-signing'
+    signing_final_transition = 'document-transition-signing-final'
+    signing_signed_transition = 'document-transition-signing-signed'
+    signed_draft_transition = 'document-transition-signed-draft'
 
     workspace_workflow_id = 'opengever_workspace_document'
 
@@ -396,6 +405,12 @@ class Document(Item, BaseDocumentMixin):
     def is_finalize_allowed(self):
         return not self.is_checked_out() and \
             not self.is_referenced_by_pending_approval_task()
+
+    def is_sign_feature_enabled(self):
+        return is_sign_feature_enabled()
+
+    def is_internal_transition(self):
+        return IInternalWorkflowTransition.providedBy(getRequest())
 
     def is_referenced_by_pending_approval_task(self):
         tasks = self.related_items(include_forwardrefs=False, include_backrefs=True, tasks_only=True)

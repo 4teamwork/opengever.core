@@ -44,6 +44,12 @@ msgstr "Dokumentstatus verändert: Entwurf"
 msgid "Document state changed to document-state-final"
 msgstr "Dokumentstatus verändert: Final"
 
+msgid "Document state changed to document-state-signing"
+msgstr "Dokumentstatus verändert: Wird signiert"
+
+msgid "Document state changed to document-state-signed"
+msgstr "Dokumentstatus verändert: Signiert"
+
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Status des Dossiers geändert zu In Bearbeitung"
 
@@ -171,6 +177,12 @@ msgstr "Hängig"
 msgid "document-state-removed"
 msgstr "Gelöscht"
 
+msgid "document-state-signing"
+msgstr "Wird signiert"
+
+msgid "document-state-signed"
+msgstr "Signiert"
+
 msgid "document-state-working_copy"
 msgstr "Arbeitskopie"
 
@@ -185,6 +197,21 @@ msgstr "Überarbeiten"
 
 msgid "document-transition-restore"
 msgstr "Wiederherstellen"
+
+msgid "document-transition-draft-signing"
+msgstr "Finalisieren und signieren"
+
+msgid "document-transition-final-signing"
+msgstr "Signieren"
+
+msgid "document-transition-signing-signed"
+msgstr "Signieren abschliessen"
+
+msgid "document-transition-signing-final"
+msgstr "Signieren abbrechen"
+
+msgid "document-transition-signed-draft"
+msgstr "Überarbeiten"
 
 msgid "document_from_docugate"
 msgstr "Dokument aus Docugate Vorlage"

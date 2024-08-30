@@ -76,6 +76,8 @@ class TestContentStatsIntegration(IntegrationTestCase):
             'document-state-final',
             'document-state-removed',
             'document-state-shadow',
+            'document-state-signing',
+            'document-state-signed',
             'dossier-state-active',
             'dossier-state-archived',
             'dossier-state-inactive',
