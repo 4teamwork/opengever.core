@@ -70,7 +70,6 @@ class BaseContextActions(object):
         self.maybe_add_zipexport()
         self.maybe_add_save_minutes_as_pdf()
         self.maybe_export_workspace_users()
-        self.maybe_add_sign_document()
         return self.actions
 
     def add_action(self, action):
@@ -248,12 +247,6 @@ class BaseContextActions(object):
         return False
 
     def is_export_workspace_users_available(self):
-        return False
-
-    def is_sign_document_available(self):
-        return False
-
-    def is_finalize_and_sign_document_available(self):
         return False
 
     def maybe_add_add_invitation(self):
@@ -483,10 +476,3 @@ class BaseContextActions(object):
     def maybe_export_workspace_users(self):
         if self.is_export_workspace_users_available():
             self.add_action(u'export_workspace_participators')
-
-    def maybe_add_sign_document(self):
-        if self.is_sign_document_available():
-            self.add_action(u'sign')
-
-        if self.is_finalize_and_sign_document_available():
-            self.add_action(u'finalize_and_sign')

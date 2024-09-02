@@ -11,7 +11,6 @@ from opengever.base.utils import file_checksum
 from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.base.utils import is_administrator
 from opengever.base.utils import is_manager
-from opengever.base.utils import is_transition_allowed
 from opengever.base.utils import safe_int
 from opengever.dossier.utils import find_parent_dossier
 from opengever.testing import IntegrationTestCase
@@ -245,15 +244,3 @@ class TestGetDateWithDeltaExcludingWeekends(TestCase):
             self.assertEqual(
                 date(2023, 4, 3),  # Monday in one month
                 get_date_with_delta_excluding_weekends(datetime.today(), delta).date())
-
-
-class TestIsTransitionAllowed(IntegrationTestCase):
-
-    def test_is_transition_allowed_checks_transition_guards(self):
-        self.login(self.regular_user)
-
-        self.assertTrue(is_transition_allowed(self.document, self.document.finalize_transition))
-
-        self.checkout_document(self.document)
-
-        self.assertFalse(is_transition_allowed(self.document, self.document.finalize_transition))
