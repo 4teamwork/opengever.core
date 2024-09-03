@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.9.2 (2024-09-03)
+---------------------
+
+Bug fixes:
+
+
+- Persist content stats log file in Docker deployments. [buchi] [GH-8029]
+- Fix copying documents when deployed with Docker. [buchi] [TI-1009]
+- Fix document_date when uploading mails with DnD, use mail header date. [amo] [TI-458]
+
+
+Other changes:
+
+
+- Disable colorization if env variable has an empty value. [buchi] [GH-8025]
+- Disable Z2 access log in Docker deployments. [buchi] [GH-8030]
+
+
 2024.9.1 (2024-08-19)
 ---------------------
 
