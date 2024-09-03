@@ -463,4 +463,29 @@
       name="document-transition-finalize"
       />
 
+  <adapter
+      factory=".transition.DocumentFinalSigningTransitionExtender"
+      name="document-transition-final-signing"
+      />
+
+  <adapter
+      factory=".transition.DocumentDraftSigningTransitionExtender"
+      name="document-transition-draft-signing"
+      />
+
+  <adapter
+      factory=".transition.DocumentSigningFinalTransitionExtender"
+      name="document-transition-signing-final"
+      />
+
+  <adapter
+      factory=".transition.DocumentSigningSignedTransitionExtender"
+      name="document-transition-signing-signed"
+      />
+
+  <adapter
+      factory=".transition.DocumentSignedDraftTransitionExtender"
+      name="document-transition-signed-draft"
+      />
+
 </configure>

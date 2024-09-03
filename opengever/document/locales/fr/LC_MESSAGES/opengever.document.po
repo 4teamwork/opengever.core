@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-10-06 14:48+0000\n"
+"POT-Creation-Date: 2024-09-12 08:50+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -488,6 +488,11 @@ msgstr "Numéro de référence"
 msgid "label_document_sequence_number"
 msgstr "Numéro courant"
 
+#. Default: "Document signed"
+#: ./opengever/document/transition.py
+msgid "label_document_signed"
+msgstr "Document signé"
+
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
@@ -662,6 +667,11 @@ msgstr "Enregistrer PDF sous"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Numéro courant"
+
+#. Default: "Base64 encoded signed pdf file data"
+#: ./opengever/document/transition.py
+msgid "label_signed_pdf_filedata"
+msgstr "Données du fichier pdf signé"
 
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py

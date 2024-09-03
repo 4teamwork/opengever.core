@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-10-06 14:48+0000\n"
+"POT-Creation-Date: 2024-09-12 08:50+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -491,6 +491,11 @@ msgstr "Aktenzeichen"
 msgid "label_document_sequence_number"
 msgstr "Laufnummer"
 
+#. Default: "Document signed"
+#: ./opengever/document/transition.py
+msgid "label_document_signed"
+msgstr "Dokument signiert"
+
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
@@ -665,6 +670,11 @@ msgstr "PDF speichern unter"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Laufnummer"
+
+#. Default: "Base64 encoded signed pdf file data"
+#: ./opengever/document/transition.py
+msgid "label_signed_pdf_filedata"
+msgstr "Signierte PDF-File Daten"
 
 #. Default: "from"
 #: ./opengever/document/viewlets/byline.py

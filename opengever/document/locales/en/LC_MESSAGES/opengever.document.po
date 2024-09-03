@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2023-10-06 14:48+0000\n"
+"POT-Creation-Date: 2024-09-12 08:50+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -584,6 +584,11 @@ msgstr "Reference number"
 msgid "label_document_sequence_number"
 msgstr "Sequence number"
 
+#. Default: "Document signed"
+#: ./opengever/document/transition.py
+msgid "label_document_signed"
+msgstr "Document signed"
+
 #. German translation: Dokumenttyp
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
@@ -787,6 +792,11 @@ msgstr "Save PDF as"
 #: ./opengever/document/viewlets/byline.py
 msgid "label_sequence_number"
 msgstr "Sequence number"
+
+#. Default: "Base64 encoded signed pdf file data"
+#: ./opengever/document/transition.py
+msgid "label_signed_pdf_filedata"
+msgstr "Signed pdf file data"
 
 #. German translation: Dokumentdatum
 #. Default: "from"
