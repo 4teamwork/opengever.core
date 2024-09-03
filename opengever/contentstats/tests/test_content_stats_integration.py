@@ -241,3 +241,18 @@ class TestContentStatsIntegration(IntegrationTestCase):
             object_provides=['opengever.dossier.behaviors.dossier.IDossierMarker'],
             is_subdossier=True))
         self.assertEqual(expected, stats['_opengever.dossier.maindossier'])
+
+    def test_user_stats_provider(self):
+        stats_provider = getMultiAdapter((self.portal, self.portal.REQUEST), IStatsProvider, name='user_stats')
+        expected_stats = {
+            'active_users': 22,
+            'active_users_of_all_admin_units': 20,
+            'active_users_of_current_admin_unit': 20,
+            'active_users_logged_in_last_30_days': 0,
+            'active_users_logged_in_last_365_days': 0,
+            'active_users_logged_in_at_least_once': 0,
+            'active_users_never_logged_in': 22,
+            'active_spv_users': 2,
+        }
+
+        self.assertDictEqual(expected_stats, stats_provider.get_raw_stats())

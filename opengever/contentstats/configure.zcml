@@ -27,4 +27,9 @@
       name="file_mimetypes"
       />
 
+  <adapter
+      factory=".providers.UserStatsProvider"
+      name="user_stats"
+      />
+
 </configure>
