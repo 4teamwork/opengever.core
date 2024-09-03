@@ -3,6 +3,7 @@ from opengever.api.actors import serialize_actor_id_to_json_summary
 from opengever.api.add import FolderPost
 from opengever.api.deserializer import GeverDeserializeFromJson
 from opengever.api.globalindex import translate_review_state
+from opengever.api.response import ResponseDelete
 from opengever.api.response import ResponsePost
 from opengever.api.response import SerializeResponseToJson
 from opengever.api.serializer import extend_with_responses
@@ -18,6 +19,7 @@ from opengever.task.helper import task_type_value_helper
 from opengever.task.interfaces import ICommentResponseHandler
 from opengever.task.task import ITask
 from opengever.task.task_response import ITaskResponse
+from opengever.task.task_response import TaskResponse
 from opengever.task.util import TaskAutoResponseChangesTracker
 from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
@@ -223,6 +225,13 @@ class TaskResponsePost(ResponsePost):
                 "The current user is not allowed to add comments")
 
         return response_handler.add_response(text)
+
+
+class TaskResponseDelete(ResponseDelete):
+    """Delete a response.
+    """
+
+    response_class = TaskResponse
 
 
 @implementer(IExpandableElement)

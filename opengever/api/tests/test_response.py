@@ -9,6 +9,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.response import OBJECT_CREATED_RESPONSE_TYPE
 from opengever.base.response import Response
 from opengever.base.response import TRANSITION_RESPONSE_TYPE
+from opengever.task.task_response import TaskResponse
 from opengever.testing import IntegrationTestCase
 import json
 
@@ -324,6 +325,27 @@ class TestResponseDelete(IntegrationTestCase):
         responses = IResponseContainer(self.todo).list()
         self.assertEqual(2, len(responses))
         self.assertEqual(COMMENT_REMOVED_RESPONSE_TYPE, responses[-1].response_type)
+
+    @browsing
+    def test_delete_task_response_adds_task_response_object(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        with freeze(datetime(2016, 12, 9, 9, 40)):
+            url = '{}/@responses'.format(self.task.absolute_url())
+            browser.open(url, method="POST", headers=self.api_headers,
+                         data=json.dumps({'text': u'Foo'}))
+
+        responses = IResponseContainer(self.task).list()
+        self.assertEqual(3, len(responses))
+        self.assertEqual(COMMENT_RESPONSE_TYPE, responses[-1].response_type)
+
+        url = '{}/@responses/{}'.format(self.task.absolute_url(), responses[-1].response_id)
+        browser.open(url, method="DELETE", headers=self.api_headers)
+
+        responses = IResponseContainer(self.task).list()
+        self.assertEqual(3, len(responses))
+        self.assertEqual(COMMENT_REMOVED_RESPONSE_TYPE, responses[-1].response_type)
+        self.assertIsInstance(responses[-1], TaskResponse)
 
     @browsing
     def test_cannot_delete_response_that_is_not_of_type_comment(self, browser):
