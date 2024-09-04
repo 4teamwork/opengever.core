@@ -22,7 +22,7 @@
                 <span class="dropdown-list-item notification-list-item {{#unless read}}notification-list-item-unread{{/unless}}">
                   <div class="notification-item-header discreet">
                     <span>{{label}}</span>
-                    <span class="timeago relativetime" title="{{created}}">{{created}}</span>
+                    <span title="{{created}}">{{created}}</span>
                   </div>
                   <a class="notification-list-item-title" target="{{target}}" href="{{link}}">{{title}}</a>
                   <div class="notification-list-item-summary">{{{summary}}}</div>

@@ -131,7 +131,6 @@
   <include package="collective.usernamelogger" file="configure.zcml" />
   <include package="collective.quickupload" file="configure.zcml" />
   <include package="collective.mtrsetup" file="configure.zcml" />
-  <include package="collective.js.timeago" file="configure.zcml" />
   <include package="collective.jqcookie" file="configure.zcml" />
   <include package="collective.indexing" file="configure.zcml" />
   <include package="collective.dexteritytextindexer" file="configure.zcml" />

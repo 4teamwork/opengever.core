@@ -105,7 +105,7 @@ class NotificationView(BrowserView):
                 'label': notification.activity.label,
                 'summary': notification.activity.summary,
                 'created': notification.activity.created.astimezone(
-                    pytz.UTC).isoformat(),
+                    pytz.UTC).strftime('%Y-%m-%d %H:%M'),
                 'link': resolve_notification_url(notification),
                 'target': self.get_link_target(notification),
                 'read': notification.is_read,
