@@ -1561,6 +1561,40 @@ class TestMyInvitationsGet(IntegrationTestCase):
                 }
             ], response.get('items'))
 
+    @browsing
+    def test_inviter_resolution_with_non_existing_user(self, browser):
+        self.login(self.workspace_owner, browser)
+
+        with freeze(datetime(2018, 4, 30, 10, 30)):
+            iid = getUtility(IInvitationStorage).add_invitation(
+                self.workspace,
+                self.regular_user.getProperty('email'),
+                "Does not exist",
+                'WorkspaceGuest')
+
+        self.login(self.regular_user, browser)
+
+        response = browser.open(
+            self.portal,
+            view='@my-workspace-invitations',
+            method='GET',
+            headers=http_headers(),
+        ).json
+
+        self.assertItemsEqual(
+            [
+                {
+                    u'@id': u'http://nohost/plone/@workspace-invitations/{}'.format(iid),
+                    u'@type': u'virtual.participations.invitation',
+                    u'accept': u'http://nohost/plone/@workspace-invitations/{}/accept'.format(iid),
+                    u'created': u'2018-04-30T10:30:00+00:00',
+                    u'decline': u'http://nohost/plone/@workspace-invitations/{}/decline'.format(iid),
+                    u'inviter_fullname': u'Unknown ID (Does not exist)',
+                    u'title': u'A Workspace',
+                    u'comment': u''
+                }
+            ], response.get('items'))
+
 
 class TestInvitationsPOST(IntegrationTestCase):
 
