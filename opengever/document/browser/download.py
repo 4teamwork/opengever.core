@@ -87,7 +87,7 @@ class DocumentishDownload(Download):
         if not self.filename:
             self.filename = getattr(named_file, 'filename', self.fieldname)
 
-        if self.filename:
+        if self.filename and isinstance(self.filename, unicode):
             self.filename = self.filename.encode('utf-8')
 
     def stream_data(self, named_file):
