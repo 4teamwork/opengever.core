@@ -10,6 +10,7 @@ from opengever.mail.mail import IOGMailMarker
 from opengever.virusscan.validator import validateDownloadIfNecessary
 from opengever.workspace.utils import is_restricted_workspace_and_guest
 from plone import api
+from plone.dexterity.utils import safe_utf8
 from plone.memoize import ram
 from plone.memoize.interfaces import ICacheChooser
 from plone.namedfile.browser import Download
@@ -88,7 +89,7 @@ class DocumentishDownload(Download):
             self.filename = getattr(named_file, 'filename', self.fieldname)
 
         if self.filename:
-            self.filename = self.filename.encode('utf-8')
+            self.filename = safe_utf8(self.filename)
 
     def stream_data(self, named_file):
         return stream_data(named_file)
