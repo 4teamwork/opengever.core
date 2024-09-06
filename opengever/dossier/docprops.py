@@ -1,6 +1,7 @@
 from datetime import date
 from datetime import datetime
 from datetime import time
+from opengever.base.behaviors.classification import IClassification
 from opengever.base.docprops import BaseDocPropertyProvider
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
@@ -15,6 +16,8 @@ from Products.CMFCore.interfaces import IMemberData
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
+from zope.globalrequest import getRequest
+from zope.i18n import translate
 
 
 class DocPropertyProvider(BaseDocPropertyProvider):
@@ -69,7 +72,8 @@ class DefaultDocumentDocPropertyProvider(DocPropertyProvider):
         return IDocumentMetadata(self.context).document_author
 
     def get_document_classification(self):
-        return IDocumentMetadata(self.context).classification
+        value = IClassification(self.context).classification
+        return translate(value, context=getRequest(), domain="opengever.base")
 
     def get_document_date(self):
         return self._as_datetime(
