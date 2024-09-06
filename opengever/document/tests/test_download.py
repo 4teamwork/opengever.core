@@ -70,6 +70,12 @@ class TestDocumentDownloadConfirmation(IntegrationTestCase):
         self.assertEqual(self.document.file.data, browser.contents)
 
     @browsing
+    def test_umlaut_download_confirmation_view_for_download(self, browser):
+        self.login(self.regular_user, browser)
+        browser.open(self.document, view='@@download/file/T\xc3\xa4st.docx')
+        self.assertEqual(200, browser.status_code)
+
+    @browsing
     def test_download_lazy_initial_version(self, browser):
         self.login(self.regular_user, browser)
         versioner = Versioner(self.document)
