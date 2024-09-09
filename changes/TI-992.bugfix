@@ -1,1 +1,0 @@
-Fix an issue where changing remote task state was not possible if the remote task have had a deleted comment. [elioschmutz]

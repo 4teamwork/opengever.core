@@ -10,6 +10,41 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.13.0 (2024-09-09)
+----------------------
+
+New features:
+
+
+- Add 'dossier_review_state' solr index which provides the review state of the current dossier or the closest parent dossier. [elioschmutz] [TI-479]
+
+
+Bug fixes:
+
+
+- Persist content stats log file in Docker deployments. [buchi] [GH-8029]
+- Bump ftw.contentstats to version 1.4.1 which fixes arg parsing in console command. [buchi] [GH-8033]
+- Fix copying documents when deployed with Docker. [buchi] [TI-1009]
+- Make System Messages available in Teamraum. [ran] [TI-1046]
+- Fixes bug that throws error when documents with special characters in their name are downloaded. [pre] [TI-953]
+- Fix an issue where changing remote task state was not possible if the remote task have had a deleted comment. [elioschmutz] [TI-992]
+
+
+Other changes:
+
+
+- Disable colorization if env variable has an empty value. [buchi] [GH-8025]
+- Disable Z2 access log in Docker deployments. [buchi] [GH-8030]
+- Resolve invitation error when user dose not exists any more. [amo] [TI-1036]
+- Grant view permissions to users informed_principals on task, dossier and related documents. [amo] [TI-114]
+- Adjust table columns widths to allow enough space for dates. Slightly decrease "Asigned person" column to increase date columns. [ran] [TI-309]
+- Add sign feature flag. [elioschmutz] [TI-658]
+- Enhance person docprops with nationality field. [amo] [TI-691-1]
+- Add new document property 'ogg.document.classification' to store the information in office documents. [pre] [TI-892]
+- Include user stats as a new content stats provider. [elioschmutz] [TI-911]
+- Add the todos related to the agenda items to the pdf export [pre] [TI-917]
+
+
 2024.12.0 (2024-08-23)
 ----------------------
 

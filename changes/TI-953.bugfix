@@ -1,1 +1,0 @@
-Fixes bug that throws error when documents with special characters in their name are downloaded. [pre]
