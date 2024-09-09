@@ -2,6 +2,7 @@
 from Products.Archetypes import atapi  # noqa # isort:skip
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.pathfinder import PathFinder
+from opengever.base.schemadump.schema import OGGBundleJSONSchemaDumpWriter
 from opengever.bundle.config.importer import ConfigImporter
 from opengever.bundle.importer import BundleImporter
 from opengever.core.debughelpers import get_first_plone_site
@@ -33,6 +34,8 @@ def parse_args(argv):
                         help="Don't to intermediate commits")
     parser.add_argument('--no-check-unique-principals', action='store_true',
                         help="Don't to check for OGDS principal name uniqueness")
+    parser.add_argument('--rebuild-schemas', action='store_true',
+                        help="Rebuild schemas with current schemas")
 
     args = parser.parse_args(argv)
     return args
@@ -59,6 +62,11 @@ def import_oggbundle(app, args):
     alsoProvides(plone.REQUEST, IOpengeverBaseLayer)
 
     import_config_from_bundle(app, args)
+
+    if args.rebuild_schemas:
+        log.info('Generating and dumping latest OGGBundle JSON Schemas')
+        writer = OGGBundleJSONSchemaDumpWriter()
+        writer.dump()
 
     importer = BundleImporter(
         plone,

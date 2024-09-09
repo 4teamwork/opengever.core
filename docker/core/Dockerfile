@@ -68,6 +68,9 @@ RUN --mount=type=cache,target=/root/.cache \
 RUN find /app/opengever -name "*.po" | xargs -I@ sh -c 'msgfmt @ -o "$(dirname @)/$(basename @ .po)".mo' && \
     find /app/plonetheme -name "*.po" | xargs -I@ sh -c 'msgfmt @ -o "$(dirname @)/$(basename @ .po)".mo'
 
+# Plone needs permissions to update bundle schemas on import
+RUN chown -R plone:plone /app/opengever/bundle/schemas
+
 COPY ./docker/core/etc /app/etc
 RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
