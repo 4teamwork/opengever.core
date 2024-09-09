@@ -107,3 +107,104 @@ class TestWorkspaceParticipationReporter(IntegrationTestCase):
             ]
         ]
         self.assertItemsEqual(expected_values, cell_values)
+
+    @browsing
+    def test_exclude_inactive_user_from_users_xlsx_download(self, browser):
+        """Only active users and active group_users will be included in the Excel file
+        """
+        self.login(self.administrator, browser=browser)
+
+        group_user = ogds_service().find_user(self.regular_user.id)
+
+        # group inactive user should not be included in the excel
+        group_inactive_user = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_group_user")
+
+        )
+        # inactive user should not be included in the excel
+        inactive_user = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_user")
+        )
+
+        group = create(Builder('ogds_group')
+                       .having(groupid='group1',
+                               title='Group 1', users=[group_user, group_inactive_user]))
+        user_ids = {
+            'user_ids': [
+                self.regular_user.id,
+                self.administrator.id,
+                inactive_user.userid,
+                group.groupid
+            ]
+        }
+
+        browser.open(view='workspace_participants_report', data=user_ids)
+        self.assertEqual(browser.status_code, 200)
+        with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
+            tmpfile.write(browser.contents)
+            tmpfile.flush()
+            workbook = load_workbook(tmpfile.name)
+
+        task_cells = list(workbook.active.rows)
+
+        # if row_num != 0 will remove the table header
+        cell_values = [[cell.value for cell in row] for row_num, row in enumerate(task_cells) if row_num != 0]
+        expected_values = [
+            [
+                u'kathi.barfuss',
+                True,
+                u'K\xe4thi',
+                u'B\xe4rfuss',
+                u'B\xe4rfuss K\xe4thi',
+                u'Staatsarchiv',
+                u'Arch',
+                u'Staatskanzlei',
+                u'SK',
+                None,
+                u'foo@example.com',
+                u'bar@example.com',
+                u'http://www.example.com',
+                u'012 34 56 78',
+                u'012 34 56 77',
+                u'012 34 56 76',
+                u'Frau',
+                u'Gesch\xe4ftsf\xfchrerin',
+                u'nix',
+                u'Kappelenweg 13',
+                u'Postfach 1234',
+                u'1234',
+                u'Vorkappelen',
+                u'Schweiz',
+                None
+            ],
+            [
+                u'nicole.kohler',
+                True,
+                u'Nicole',
+                u'Kohler',
+                u'Kohler Nicole',
+                None,
+                None,
+                None,
+                None,
+                None,
+                u'nicole.kohler@gever.local',
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None
+            ]
+        ]
+        self.assertItemsEqual(expected_values, cell_values)
