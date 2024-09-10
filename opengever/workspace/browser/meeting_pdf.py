@@ -150,6 +150,7 @@ class MeetingMinutesPDFView(BrowserView):
                 ],
                 'related_todo_items': [
                     {
+                        'completed': todo.is_completed,
                         'responsible': display_name(todo.responsible),
                         'title': todo.title,
                         'deadline': self.context.toLocalizedTime(
