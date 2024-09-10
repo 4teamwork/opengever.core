@@ -29,10 +29,10 @@ class WorkspaceParticipantsReport(UserReport):
         for user_id in user_ids:
             group_members = ogds_service().fetch_group(user_id)
             if group_members:
-                users.update(group_members.users)
+                users.update([user for user in group_members.users if user.active])
             else:
                 user = ogds_service().fetch_user(user_id)
-                if user:
+                if user and user.active:
                     users.add(user)
 
         return list(users)
