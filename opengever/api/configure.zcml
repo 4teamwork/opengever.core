@@ -1856,4 +1856,12 @@
       permission="opengever.api.AccessErrorLog"
       />
 
+  <plone:service
+      method="POST"
+      name="@upload-signed-pdf"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.UploadSignedPdfPost"
+      permission="zope.Public"
+      />
+
 </configure>
