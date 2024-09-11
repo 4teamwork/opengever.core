@@ -2,7 +2,7 @@ from opengever.base import _
 from opengever.base.browser.reporting_view import BaseReporterView
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.base.reporter import XLSReporter
-from opengever.sharing.browser.sharing import ROLE_MAPPING
+from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
 from plone.app.uuid.utils import uuidToObject
 from zExceptions import BadRequest
 from zExceptions import NotFound
@@ -54,7 +54,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
             yield data
 
     def available_roles(self):
-        return ROLE_MAPPING.keys()
+        return GEVER_ROLE_MAPPING.keys()
 
     @property
     def _columns(self):
@@ -62,7 +62,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
                     'title': _('label_title', default=u'Title'),
                     'hyperlink': lambda value, obj: obj.get('url')}]
 
-        for role_id, role_title in ROLE_MAPPING.items():
+        for role_id, role_title in GEVER_ROLE_MAPPING.items():
             columns.append({'id': role_id, 'title': role_title,
                             'transform': lambda value: 'x' if value else ''})
 
