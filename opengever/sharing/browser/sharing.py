@@ -67,6 +67,12 @@ GEVER_ROLE_MAPPING = OrderedDict([
     (u'Role Manager', _('sharing_role_manager')),
 ])
 
+WORKSPACE_ROLE_MAPPING = OrderedDict([
+    (u'WorkspaceAdmin', _('sharing_workspace_admin')),
+    (u'WorkspaceMember', _('sharing_workspace_member')),
+    (u'WorkspaceGuest', _('sharing_workspace_guest'))
+])
+
 
 class OpengeverSharingView(SharingView):
 

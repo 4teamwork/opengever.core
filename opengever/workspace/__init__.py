@@ -19,6 +19,7 @@ WHITELISTED_TEAMRAUM_PORTAL_TYPES = {
     'opengever.workspace.todo',
     'opengever.workspace.todolist',
     'opengever.workspace.workspace',
+    'all_users_and_groups'
 }
 
 WHITELISTED_TEAMRAUM_VOCABULARIES = {

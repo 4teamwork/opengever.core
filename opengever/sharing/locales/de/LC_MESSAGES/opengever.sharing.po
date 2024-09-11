@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-10-03 11:32+0000\n"
+"POT-Creation-Date: 2024-09-12 08:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,3 +95,15 @@ msgstr "Rollenmanager"
 #: ./opengever/sharing/browser/sharing.py
 msgid "sharing_task_responsible"
 msgstr "Auftragnehmer"
+
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_workspace_admin"
+msgstr "Admin"
+
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_workspace_guest"
+msgstr "Gast"
+
+#: ./opengever/sharing/browser/sharing.py
+msgid "sharing_workspace_member"
+msgstr "Teammitglied"

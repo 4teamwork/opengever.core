@@ -1,6 +1,8 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.ogds.base.actor import Actor
 from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
+from opengever.sharing.browser.sharing import WORKSPACE_ROLE_MAPPING
+from opengever.workspace import is_workspace_feature_enabled
 from plone.app.uuid.utils import uuidToObject
 from plone.app.workflow.interfaces import ISharingPageRole
 from plone.protect.interfaces import IDisableCSRFProtection
@@ -84,7 +86,8 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
 
     def get_referenced_roles(self):
         roles = []
-        for role in GEVER_ROLE_MAPPING.keys():
+        role_mapping = WORKSPACE_ROLE_MAPPING if is_workspace_feature_enabled() else GEVER_ROLE_MAPPING
+        for role in role_mapping.keys():
             util = queryUtility(ISharingPageRole, name=role)
             title = util.title
             roles.append(
