@@ -44,6 +44,12 @@ msgstr "Etat du document modifié: brouillon"
 msgid "Document state changed to document-state-final"
 msgstr "Etat du document modifié: final"
 
+msgid "Document state changed to document-state-signing"
+msgstr "Etat du document modifié: en cours de signature"
+
+msgid "Document state changed to document-state-signed"
+msgstr "Etat du document modifié: Signé"
+
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Etat du dossier modifié: En cours de traitement"
 
@@ -171,6 +177,12 @@ msgstr "En suspend"
 msgid "document-state-removed"
 msgstr "Effacé"
 
+msgid "document-state-signing"
+msgstr "En cours de signature"
+
+msgid "document-state-signed"
+msgstr "Signé"
+
 msgid "document-state-working_copy"
 msgstr "Copie de travail"
 
@@ -185,6 +197,21 @@ msgstr "Réviser"
 
 msgid "document-transition-restore"
 msgstr "Récupérer"
+
+msgid "document-transition-draft-signing"
+msgstr "Finaliser et signer"
+
+msgid "document-transition-final-signing"
+msgstr "Signer"
+
+msgid "document-transition-signing-signed"
+msgstr "Compléter la signature"
+
+msgid "document-transition-signing-final"
+msgstr "Annuler la signature"
+
+msgid "document-transition-signed-draft"
+msgstr "Réviser"
 
 msgid "document_from_docugate"
 msgstr "Document à partir d'un modèle Docugate"

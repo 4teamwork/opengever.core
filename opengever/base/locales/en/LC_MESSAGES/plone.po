@@ -53,6 +53,12 @@ msgstr "Document state changed: draft"
 msgid "Document state changed to document-state-final"
 msgstr "Document state changed: final"
 
+msgid "Document state changed to document-state-signing"
+msgstr "Document state changed: being signed"
+
+msgid "Document state changed to document-state-signed"
+msgstr "Document state changed: signed"
+
 #. German translation: Status des Dossiers geändert zu In Bearbeitung
 msgid "Dossier state changed to dossier-state-active"
 msgstr "Dossier state changed to dossier-state-active"
@@ -233,12 +239,33 @@ msgstr "Finalize"
 msgid "document-transition-remove"
 msgstr "Remove"
 
+msgid "document-state-signing"
+msgstr "Being signed"
+
+msgid "document-state-signed"
+msgstr "Signed"
+
 msgid "document-transition-reopen"
 msgstr "Revise"
 
 #. German translation: Wiederherstellen
 msgid "document-transition-restore"
 msgstr "Restore"
+
+msgid "document-transition-draft-signing"
+msgstr "Finalize and sign"
+
+msgid "document-transition-final-signing"
+msgstr "Sign"
+
+msgid "document-transition-signing-signed"
+msgstr "Complete signing"
+
+msgid "document-transition-signing-final"
+msgstr "Abort signing"
+
+msgid "document-transition-signed-draft"
+msgstr "Revise"
 
 msgid "document_from_docugate"
 msgstr "Document from Docugate template"

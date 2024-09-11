@@ -60,6 +60,12 @@ msgstr ""
 msgid "document-state-removed"
 msgstr ""
 
+msgid "document-state-signing"
+msgstr ""
+
+msgid "document-state-signed"
+msgstr ""
+
 msgid "document-transition-finalize"
 msgstr ""
 
@@ -72,6 +78,21 @@ msgstr ""
 msgid "document-transition-restore"
 msgstr ""
 
+msgid "document-transition-draft-signing"
+msgstr ""
+
+msgid "document-transition-final-signing"
+msgstr ""
+
+msgid "document-transition-signing-signed"
+msgstr ""
+
+msgid "document-transition-signing-final"
+msgstr ""
+
+msgid "document-transition-signed-draft"
+msgstr ""
+
 msgid "button_download"
 msgstr ""
 
@@ -82,6 +103,12 @@ msgid "Document state changed to document-state-draft"
 msgstr ""
 
 msgid "Document state changed to document-state-final"
+msgstr ""
+
+msgid "Document state changed to document-state-signing"
+msgstr ""
+
+msgid "Document state changed to document-state-signed"
 msgstr ""
 
 msgid "Edit metadata"
@@ -461,4 +488,3 @@ msgstr ""
 
 msgid "proposal-transition-unschedule-manage"
 msgstr ""
-
