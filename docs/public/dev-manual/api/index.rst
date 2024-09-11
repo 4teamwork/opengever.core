@@ -24,6 +24,7 @@ Inhalt:
    dossier_participations.rst
    documents.rst
    documents_from_template.rst
+   documents_sign.rst
    extract_attachments.rst
    trash.rst
    versions.rst
