@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-08-21 07:37+0000\n"
+"POT-Creation-Date: 2024-09-10 07:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -397,7 +397,7 @@ msgstr "To-do commented"
 msgid "label_todo_reopened_activity"
 msgstr "To-do reopened"
 
-#. Default: "Todos:"
+#. Default: "Todos"
 #: ./opengever/workspace/browser/templates/meeting_minutes.pt
 msgid "label_todos"
 msgstr "To-dos"

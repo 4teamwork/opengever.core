@@ -79,6 +79,10 @@ tr.todo {
 td.todo {
   padding-left: 0px;
   padding-bottom: 15px;
+  vertical-align:top;
+}
+td.todo.todo_symbol{
+  width: 10px,
 }
 td.todo.todo_title {
   width: 430px;
@@ -117,6 +121,31 @@ table.todo {
   @bottom-right {
     ${python:options['footer']['right']}
   }
+}
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
+}
+
+.custom-checkbox {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    position: relative;
+}
+
+.checkbox-container .custom-checkbox.checked::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 1px;
+    width: 2px;
+    height: 5px;
+    border: solid #000000;
+    border-width: 0 1px 1px 0;
+    transform: rotate(45deg);
 }
 </style>
 </head>
@@ -191,21 +220,27 @@ table.todo {
       </ul>
     </div>
     <div tal:condition="nocall: agenda_item/related_todo_items">
-      <b><span i18n:translate="label_todos">Todos:</span></b>
+      <b><span i18n:translate="label_todos">Todos</span>:</b>
       <table class="borderless todo">
-          <tal:repeat tal:repeat="todo agenda_item/related_todo_items">
-            <tr class="todo">
-              <td class="todo todo_title">
-                <span tal:content="todo/title"/>
-              </td>
-              <td class="todo todo_responsible">
-                <span tal:content="todo/responsible"/>
-              </td>
-              <td class="todo todo_deadline">
-                <span tal:content="todo/deadline"/>
-              </td>
-            </tr>
-          </tal:repeat>
+        <tal:repeat tal:repeat="todo agenda_item/related_todo_items">
+          <tr class="todo">
+            <td class="todo todo_symbol">
+              <div class="checkbox-container">
+                <div tal:condition="todo/completed" class="custom-checkbox checked"></div>
+                <div tal:condition="not: todo/completed" class="custom-checkbox"></div>
+              </div>
+            </td>
+            <td class="todo todo_title">
+              <span tal:content="todo/title"/>
+            </td>
+            <td class="todo todo_responsible">
+              <span tal:content="todo/responsible"/>
+            </td>
+            <td class="todo todo_deadline">
+              <span tal:content="todo/deadline"/>
+            </td>
+          </tr>
+        </tal:repeat>
       </table>
     </div>
   </tal:repeat>
