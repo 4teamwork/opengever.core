@@ -4,13 +4,11 @@ from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
 from opengever.sharing.browser.sharing import WORKSPACE_ROLE_MAPPING
 from opengever.workspace import is_workspace_feature_enabled
 from plone.app.uuid.utils import uuidToObject
-from plone.app.workflow.interfaces import ISharingPageRole
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
 from zExceptions import BadRequest
-from zope.component import queryUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -87,9 +85,7 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
     def get_referenced_roles(self):
         roles = []
         role_mapping = WORKSPACE_ROLE_MAPPING if is_workspace_feature_enabled() else GEVER_ROLE_MAPPING
-        for role in role_mapping.keys():
-            util = queryUtility(ISharingPageRole, name=role)
-            title = util.title
+        for role, title in role_mapping.items():
             roles.append(
                 {'id': role,
                  'title': translate(title, context=self.request)})
