@@ -105,6 +105,12 @@ msgstr ""
 msgid "Document state changed to document-state-final"
 msgstr ""
 
+msgid "Document state changed to opengever_workspace_document--STATUS--final"
+msgstr ""
+
+msgid "Document state changed to opengever_workspace_document--STATUS--active"
+msgstr ""
+
 msgid "Document state changed to document-state-signing"
 msgstr ""
 

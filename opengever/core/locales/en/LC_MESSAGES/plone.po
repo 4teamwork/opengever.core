@@ -336,6 +336,21 @@ msgstr "Workspace members can read and modify all contents of the workspace."
 msgid "opengever_workspace_document--STATUS--active"
 msgstr "Active"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--STATUS--final"
+msgstr "Final"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--finalize--active_final"
+msgstr "Finalize"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--reopen--final_active"
+msgstr "Revise"
+
 #. German translation: Administrator
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
