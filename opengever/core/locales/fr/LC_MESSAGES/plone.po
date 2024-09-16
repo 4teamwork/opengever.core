@@ -287,6 +287,21 @@ msgstr "Les membres d'équipe ont accès en lécture et écriture à tous les co
 msgid "opengever_workspace_document--STATUS--active"
 msgstr "Actif"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--STATUS--final"
+msgstr "Final"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--finalize--active_final"
+msgstr "Finaliser"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--reopen--final_active"
+msgstr "Réviser"
+
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
 msgid "opengever_workspace_folder--ROLE--Administrator"
