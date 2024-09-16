@@ -824,6 +824,15 @@
       />
 
   <plone:service
+      method="POST"
+      name="@workflow"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".transition.GEVERDocumentWorkflowTransition"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       name="@invitations"
       for="opengever.workspace.interfaces.IWorkspace"

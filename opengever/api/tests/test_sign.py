@@ -154,3 +154,39 @@ class TestUploadSignedPdfPost(SolrIntegrationTestCase):
         self.login(self.regular_user)
         with self.assertRaises(InvalidToken):
             Signer(self.document).validate_token(token)
+
+
+class TestSignTransitions(SolrIntegrationTestCase):
+
+    features = ['sign']
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_return_sign_redirect_url_when_signing_a_document_from_draft_state(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        self.login(self.regular_user, browser=browser)
+        browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                     method='POST',
+                     headers=self.api_headers)
+
+        self.assertEqual('http://external.example.org/signing-requests/123',
+                         browser.json.get('redirect_url'))
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_return_sign_redirect_url_when_signing_a_document_from_final_state(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.document.absolute_url() + '/@workflow/' + Document.finalize_transition,
+                     method='POST',
+                     headers=self.api_headers)
+
+        browser.open(self.document.absolute_url() + '/@workflow/' + Document.final_signing_transition,
+                     method='POST',
+                     headers=self.api_headers)
+
+        self.assertEqual('http://external.example.org/signing-requests/123',
+                         browser.json.get('redirect_url'))
