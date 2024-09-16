@@ -243,6 +243,7 @@ class Document(Item, BaseDocumentMixin):
     active_state = 'document-state-draft'
     shadow_state = 'document-state-shadow'
     final_state = 'document-state-final'
+    final_state_workspace = 'opengever_workspace_document--STATUS--final'
     signing_state = 'document-state-signing'
     signed_state = 'document-state-signed'
 
@@ -397,6 +398,29 @@ class Document(Item, BaseDocumentMixin):
         self.reindexObjectSecurity()
         return self
 
+    def as_final_document(self):
+        """Force a workspace document into the final state.
+
+        """
+        wftool = api.portal.get_tool('portal_workflow')
+        chain = wftool.getChainFor(self)
+        workflow_id = chain[0]
+        if workflow_id == self.workspace_workflow_id:
+            wftool.setStatusOf(workflow_id, self, {
+                'review_state': self.final_state_workspace,
+                'action': '',
+                'actor': ''})
+        else:
+            wftool.setStatusOf(workflow_id, self, {
+                'review_state': self.final_state,
+                'action': '',
+                'actor': ''})
+        workflow = wftool.getWorkflowById(workflow_id)
+        workflow.updateRoleMappingsFor(self)
+        self.reindexObject(idxs=['review_state'])
+        self.reindexObjectSecurity()
+        return self
+
     def leave_shadow_state(self):
         if self.is_shadow_document():
             api.content.transition(
@@ -502,7 +526,7 @@ class Document(Item, BaseDocumentMixin):
         return api.content.get_state(self) == self.shadow_state
 
     def is_final_document(self):
-        return api.content.get_state(self) == self.final_state
+        return api.content.get_state(self) in [self.final_state, self.final_state_workspace]
 
     def is_oneoffixx_creatable(self):
         return (is_oneoffixx_feature_enabled()

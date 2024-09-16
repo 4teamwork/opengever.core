@@ -92,6 +92,7 @@ class ReviewStatesFilter(object):
                 states_to_keep.extend(wf.states.objectIds())
         # Placeful workflows are not covered by the above code.
         states_to_keep.append('opengever_workspace_document--STATUS--active')
+        states_to_keep.append('opengever_workspace_document--STATUS--final')
         return states_to_keep
 
     def keep(self, key):

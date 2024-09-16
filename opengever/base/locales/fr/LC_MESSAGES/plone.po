@@ -44,6 +44,12 @@ msgstr "Etat du document modifié: brouillon"
 msgid "Document state changed to document-state-final"
 msgstr "Etat du document modifié: final"
 
+msgid "Document state changed to opengever_workspace_document--STATUS--final"
+msgstr "Etat du document modifié: final"
+
+msgid "Document state changed to opengever_workspace_document--STATUS--active"
+msgstr "Etat du document modifié: brouillon"
+
 msgid "Document state changed to document-state-signing"
 msgstr "Etat du document modifié: en cours de signature"
 

@@ -288,6 +288,7 @@ class LinkedWorkspaces(object):
             return self.client.post(target_url, json=document_repr)
 
         document_metadata['gever_url'] = self.client.get_gever_url(Oguid.for_object(document).id)
+        document_metadata['final'] = document.is_final_document()
 
         filename = document.get_filename()
         gever_document_uid = document.UID()
@@ -366,6 +367,7 @@ class LinkedWorkspaces(object):
         # for example because the GEVER document was trashed, always create
         # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
+
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
             document_repr.get('file')))

@@ -53,6 +53,12 @@ msgstr "Document state changed: draft"
 msgid "Document state changed to document-state-final"
 msgstr "Document state changed: final"
 
+msgid "Document state changed to opengever_workspace_document--STATUS--final"
+msgstr "Document state changed: final"
+
+msgid "Document state changed to opengever_workspace_document--STATUS--active"
+msgstr "Document state changed: draft"
+
 msgid "Document state changed to document-state-signing"
 msgstr "Document state changed: being signed"
 
