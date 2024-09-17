@@ -669,7 +669,7 @@ class OGDSUpdater(object):
             if userid not in ogds_objects_ci])
 
         for skipped in added - added_ci:
-            logger.info('Not adding duplicate user with deviating case {}'.format(skipped))
+            logger.info(u'Not adding duplicate user with deviating case {}'.format(skipped))
 
         deleted = [k for k in ogds_active_keys if k not in ldap_objects_ci]
         existing = [k for k in ogds_keys if k in ldap_objects_ci]
