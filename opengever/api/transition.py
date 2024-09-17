@@ -10,6 +10,7 @@ from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.dossier.resolve import MSG_ALREADY_BEING_RESOLVED
 from opengever.dossier.resolve import PreconditionsViolated
+from opengever.sign.sign import Signer
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
@@ -372,6 +373,20 @@ class WorkspaceWorkflowTransition(GEVERWorkflowTransition):
                     message='Workspace contains checked out documents.'))
 
         return super(WorkspaceWorkflowTransition, self).reply()
+
+
+class GEVERDocumentWorkflowTransition(GEVERWorkflowTransition):
+    """This endpoint handles workflow transitions for documents
+    """
+
+    SIGNING_TRANSITIONS = ['document-transition-draft-signing',
+                           'document-transition-final-signing']
+
+    def reply(self):
+        response = super(GEVERDocumentWorkflowTransition, self).reply()
+        if self.transition in self.SIGNING_TRANSITIONS:
+            response['redirect_url'] = Signer(self.context).serialize().get('redirect_url')
+        return response
 
 
 @implementer(IPublishTraverse)

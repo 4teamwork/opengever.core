@@ -824,6 +824,15 @@
       />
 
   <plone:service
+      method="POST"
+      name="@workflow"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".transition.GEVERDocumentWorkflowTransition"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       name="@invitations"
       for="opengever.workspace.interfaces.IWorkspace"
@@ -1854,6 +1863,14 @@
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".error_log.ErrorLogGet"
       permission="opengever.api.AccessErrorLog"
+      />
+
+  <plone:service
+      method="POST"
+      name="@upload-signed-pdf"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.UploadSignedPdfPost"
+      permission="zope.Public"
       />
 
 </configure>

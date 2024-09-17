@@ -481,6 +481,7 @@ class ContentFixtureLayer(NoSolrTestingBase, OpengeverFixture):
         os.environ['BUMBLEBEE_SECRET'] = 'secret'
         os.environ['BUMBLEBEE_INTERNAL_PLONE_URL'] = 'http://nohost/plone'
         os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee'
+        os.environ['SIGN_SERVICE_URL'] = 'http://example.com/'
 
         # Set up ftw.contentstats logging for testing
         self.setup_eventlog()

@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@upload-signed-pdf``: New endpoint to upload a signed pdf and complete a pending sign process.
 
 2024.13.0 (2024-09-09)
 ----------------------
