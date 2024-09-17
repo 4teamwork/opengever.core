@@ -12,6 +12,7 @@ from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
 import json
+from plone import api
 
 
 @implementer(ISerializeToJson)
@@ -80,3 +81,21 @@ class UploadDocumentCopy(GeverFolderPost):
 
     def before_serialization(self, obj):
         ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
+
+    def add_object_to_context(self):
+        super(UploadDocumentCopy, self).add_object_to_context()
+
+        data = json.loads(self.request.form['document_metadata'])
+
+        if self.obj.portal_type == 'opengever.document.document' and data.get("final", None):
+            wftool = api.portal.get_tool('portal_workflow')
+            chain = wftool.getChainFor(self.obj)
+            workflow_id = chain[0]
+            wftool.setStatusOf(workflow_id, self.obj, {
+                'review_state': self.obj.final_state_workspace,
+                'action': '',
+                'actor': ''})
+            workflow = wftool.getWorkflowById(workflow_id)
+            workflow.updateRoleMappingsFor(self.obj)
+            self.obj.reindexObject(idxs=['review_state'])
+            self.obj.reindexObjectSecurity()

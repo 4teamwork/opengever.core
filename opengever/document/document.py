@@ -243,6 +243,7 @@ class Document(Item, BaseDocumentMixin):
     active_state = 'document-state-draft'
     shadow_state = 'document-state-shadow'
     final_state = 'document-state-final'
+    final_state_workspace = 'opengever_workspace_document--STATUS--final'
     signing_state = 'document-state-signing'
     signed_state = 'document-state-signed'
 

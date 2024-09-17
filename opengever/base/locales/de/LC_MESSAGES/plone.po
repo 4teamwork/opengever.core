@@ -177,9 +177,6 @@ msgstr "nicht definiert"
 msgid "document-state-final"
 msgstr "Final"
 
-msgid "opengever_workspace_document--STATUS--final"
-msgstr "Final"
-
 msgid "document-state-pending"
 msgstr "Hängig"
 
