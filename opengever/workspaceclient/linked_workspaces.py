@@ -288,6 +288,7 @@ class LinkedWorkspaces(object):
             return self.client.post(target_url, json=document_repr)
 
         document_metadata['gever_url'] = self.client.get_gever_url(Oguid.for_object(document).id)
+        document_metadata['final'] = document.is_final_document()
 
         filename = document.get_filename()
         gever_document_uid = document.UID()
