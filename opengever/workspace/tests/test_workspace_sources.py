@@ -32,7 +32,6 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
 
     BLACKLIST = [
         AllEmailContactsAndUsersSource,
-        AllFilteredGroupsSource,
         AllUsersAndGroupsSource,
         AllUsersInboxesAndTeamsSource,
         ContactsSource,
@@ -47,6 +46,7 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         PotentialWorkspaceMembersSource,
         AllUsersSource,
         AllGroupsSource,
+        AllFilteredGroupsSource,
     ]
 
     def test_whitelisted_teamraum_sources(self):

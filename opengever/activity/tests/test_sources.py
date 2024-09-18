@@ -29,6 +29,15 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.assertIn('group:fa_users', [term.token for term in source.search('')])
         self.assertIn('team:1', [term.token for term in source.search('')])
 
+    def test_list_users_and_groups_for_teamraum(self):
+        self.activate_feature('workspace')
+        self.login(self.administrator)
+        source = PossibleWatchersSource(self.task)
+
+        self.assertIn('regular_user', [term.token for term in source.search('')])
+        self.assertIn('group:fa_users', [term.token for term in source.search('')])
+        self.assertNotIn('team:1', [term.token for term in source.search('')])
+
     def test_current_user_is_always_on_first_position_if_available(self):
         self.login(self.regular_user)
         source = PossibleWatchersSource(self.task)
