@@ -1752,9 +1752,9 @@ class TestCopyDocumentFromWorkspacePost(FunctionalWorkspaceClientTestCase):
                 {u'type': u'BadRequest',
                  u'additional_metadata': {},
                  u'message': u"Document can't be copied from workspace "
-                             u"because it's currently checked out",
+                             u"because it's currently checked out or Gever Document is finalized",
                  u'translated_message': u"Document can't be copied from workspace "
-                                        u"because it's currently checked out."},
+                                        u"because it's currently checked out or Gever Document is finalized."},
                 browser.json)
 
 

@@ -503,7 +503,7 @@ class Document(Item, BaseDocumentMixin):
         return api.content.get_state(self) == self.shadow_state
 
     def is_final_document(self):
-        return api.content.get_state(self) == self.final_state
+        return api.content.get_state(self) == self.final_state or api.content.get_state(self) == self.final_state_workspace
 
     def is_oneoffixx_creatable(self):
         return (is_oneoffixx_feature_enabled()

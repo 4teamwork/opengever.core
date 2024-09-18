@@ -6,13 +6,13 @@ from opengever.document.document import IDocumentSchema
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
 from opengever.workspaceclient.interfaces import ILinkedDocuments
+from plone import api
 from plone.restapi.interfaces import ISerializeToJson
 from zExceptions import BadRequest
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
 import json
-from plone import api
 
 
 @implementer(ISerializeToJson)
@@ -83,7 +83,6 @@ class UploadDocumentCopy(GeverFolderPost):
         ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
 
     def add_object_to_context(self):
-        super(UploadDocumentCopy, self).add_object_to_context()
 
         data = json.loads(self.request.form['document_metadata'])
 
@@ -99,3 +98,5 @@ class UploadDocumentCopy(GeverFolderPost):
             workflow.updateRoleMappingsFor(self.obj)
             self.obj.reindexObject(idxs=['review_state'])
             self.obj.reindexObjectSecurity()
+
+        super(UploadDocumentCopy, self).add_object_to_context()

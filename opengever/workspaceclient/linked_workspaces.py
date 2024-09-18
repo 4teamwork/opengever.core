@@ -368,7 +368,7 @@ class LinkedWorkspaces(object):
         # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
 
-        if gever_doc.is_final_document():
+        if gever_doc and gever_doc.is_final_document():
             raise CopyFromWorkspaceForbidden(
                 "Document %r can't be copied from workspace because "
                 "Gever Document is finalized" % gever_doc)
