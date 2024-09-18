@@ -15,8 +15,8 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/api/linked_workspaces.py
-msgid "Document can't be copied from workspace because it's currently checked out"
-msgstr "Document can't be copied from workspace because it's currently checked out."
+msgid "Document can't be copied from workspace because it's currently checked out or Gever Document is finalized"
+msgstr "Document can't be copied from workspace because it's currently checked out or Gever Document is finalized."
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"

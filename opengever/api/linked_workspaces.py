@@ -455,7 +455,7 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         except CopyFromWorkspaceForbidden:
             raise BadRequest(
                 _("Document can't be copied from workspace because it's "
-                  "currently checked out"))
+                  "currently checked out or Gever Document is finalized"))
         except LookupError:
             raise BadRequest(
                 _("Document not in linked workspace"))

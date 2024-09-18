@@ -367,6 +367,12 @@ class LinkedWorkspaces(object):
         # for example because the GEVER document was trashed, always create
         # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
+
+        if gever_doc.is_final_document():
+            raise CopyFromWorkspaceForbidden(
+                "Document %r can't be copied from workspace because "
+                "Gever Document is finalized" % gever_doc)
+
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
             document_repr.get('file')))

@@ -15,8 +15,8 @@ msgstr ""
 "Domain: DOMAIN\n"
 
 #: ./opengever/api/linked_workspaces.py
-msgid "Document can't be copied from workspace because it's currently checked out"
-msgstr "Dokument kann nicht zurückgeführt werden, weil das Dokument im Teamraum ausgecheckt ist."
+msgid "Document can't be copied from workspace because it's currently checked out or Gever Document is finalized"
+msgstr "Dokument kann nicht zurückgeführt werden, weil das Dokument im Teamraum ausgecheckt oder im Gever finalisiert ist."
 
 #: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"
