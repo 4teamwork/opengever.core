@@ -960,6 +960,7 @@ class FilterMixin(object):
 class AllGroupsSource(BaseSQLModelSource):
 
     model_class = Group
+    gever_only = False
 
     def __init__(self, context, include_inactive_groups=False, **kwargs):
         super(AllGroupsSource, self).__init__(context, **kwargs)
@@ -968,13 +969,24 @@ class AllGroupsSource(BaseSQLModelSource):
         else:
             self._base_query = Group.query.filter(Group.active == True)  # noqa
 
+    def getTerm(self, value):
+        if not visible_users_and_groups_filter.can_access_principal(value):
+            raise LookupError(
+                'No row was found with groupid: {}'.format(value))
+        return super(AllGroupsSource, self).getTerm(value)
+
     @property
     def base_query(self):
         return self._base_query
 
     @property
     def search_query(self):
-        return self.base_query.order_by(
+        query = self.base_query
+        if not visible_users_and_groups_filter.can_access_all_principals():
+            query = query.filter(Group.groupid.in_(
+                visible_users_and_groups_filter.get_whitelisted_principals()))
+
+        return query.order_by(
             asc(func.lower(Group.title)),
             asc(func.lower(Group.groupid))
         )
