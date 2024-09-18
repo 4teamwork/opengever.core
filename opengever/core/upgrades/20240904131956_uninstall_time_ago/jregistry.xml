@@ -1,0 +1,6 @@
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+    <javascript id="++resource++collective.js.timeago/jquery.timeago.js"
+                remove="True"/>
+
+</object>

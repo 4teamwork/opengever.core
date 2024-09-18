@@ -25,11 +25,6 @@ function init() {
       this.requester = requester;
     },
 
-    updated: function () {
-      // Update relative times after DOM has been updated by Vue
-      $(".recently-touched-menu .timeago").timeago();
-    },
-
     methods: {
       isSameElement: function(target) {
         return target !== this.$el && !this.$el.contains(target);

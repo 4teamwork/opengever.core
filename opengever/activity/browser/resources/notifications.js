@@ -17,7 +17,6 @@
 
     this.appendItems = function(items) {
       options.outlet.append(items);
-      $(".timeago", options.outlet).timeago();
     };
 
     this.listItems = function(data) {

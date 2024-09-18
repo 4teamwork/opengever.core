@@ -141,7 +141,7 @@ class TestListNotifications(IntegrationTestCase):
         browser.open(view="notifications/list")
         expected_notifications = [
             {
-                u'created': u'2014-05-07T12:30:00+00:00',
+                u'created': u'2014-05-07 12:30',
                 u'id': 1,
                 u'label': None,
                 u'link': u'http://nohost/plone/@@resolve_notification'
@@ -152,7 +152,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'title': u'Kennzahlen 2014 erfassen',
             },
             {
-                u'created': u'2014-05-07T12:30:00+00:00',
+                u'created': u'2014-05-07 12:30',
                 u'id': 2,
                 u'label': None,
                 u'link': u'http://nohost/plone/@@resolve_notification'
@@ -358,7 +358,7 @@ class TestListNotifications(IntegrationTestCase):
         browser.open(view="notifications/list")
         expected_notifications = [
             {
-                u'created': u'2014-05-07T12:30:00+00:00',
+                u'created': u'2014-05-07 12:30',
                 u'id': 1,
                 u'label': None,
                 u'link': u'http://nohost/plone/@@resolve_notification'
@@ -369,7 +369,7 @@ class TestListNotifications(IntegrationTestCase):
                 u'title': u'Kennzahlen 2014 erfassen',
             },
             {
-                u'created': u'2014-05-07T12:30:00+00:00',
+                u'created': u'2014-05-07 12:30',
                 u'id': 2,
                 u'label': u'Task added',
                 u'link': u'http://nohost/plone/@@resolve_notification'
@@ -422,7 +422,7 @@ class TestListNotifications(IntegrationTestCase):
         browser.open(view="notifications/list")
         self.assertEqual(1, len(browser.json.get('notifications')))
         expected_notifications = [{
-            u'created': u'2014-05-07T12:30:00+00:00',
+            u'created': u'2014-05-07 12:30',
             u'id': 2,
             u'label': u'Task added',
             u'link': u'http://nohost/plone/@@resolve_notification'

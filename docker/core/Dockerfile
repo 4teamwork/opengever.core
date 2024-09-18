@@ -60,7 +60,6 @@ RUN --mount=type=cache,target=/root/.cache \
     pip install \
     --prefix /app \
     --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
-    -e /app/src/collective.js.timeago \
     -e . \
     -e /app/src/opengever.maintenance \
     -c requirements-core.txt \
@@ -88,7 +87,7 @@ RUN mkdir -p /app/var/log /app/var/instance \
 
 RUN ln -sf /dev/null /app/var/log/upgrade_stats.csv
 
-# Patch cacert.pem with a recent version to address CVE-2023-37920 
+# Patch cacert.pem with a recent version to address CVE-2023-37920
 RUN wget -O /app/lib/python2.7/site-packages/certifi/cacert.pem https://raw.githubusercontent.com/certifi/python-certifi/2024.02.02/certifi/cacert.pem
 
 # Patch ftw.bumblebee to use time.time() for timestamp generation

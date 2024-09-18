@@ -190,7 +190,7 @@ class RecentlyTouchedGet(Service):
         """
         tz = timezone('Europe/Zurich')
         dt = dateutil.parser.parse(datetimestr)
-        return dt.astimezone(tz).isoformat()
+        return dt.astimezone(tz).strftime('%Y-%m-%d %H:%M')
 
     def read_params(self):
         if len(self.params) != 1:

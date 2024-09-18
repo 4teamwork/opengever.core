@@ -424,7 +424,7 @@
       enabled="True"
       id="++resource++opengever.document/startredirect.js"
       inline="False"
-      insert-after="++resource++collective.js.timeago/jquery.timeago.js"
+      insert-after="++resource++opengever.base/base.js"
       />
 
   <javascript

@@ -59,7 +59,7 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
                  'file_extension': u'.docx',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
-                 'last_touched': '2018-04-30T02:00:00+02:00',
+                 'last_touched': '2018-04-30 02:00',
                  'title': u'Vertr\xe4gsentwurf',
                  'review_state': 'document-state-draft',
                  'UID': u'createtreatydossiers000000000002',
@@ -92,7 +92,7 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
                 'checked_out': self.regular_user.getId(),
                 'description': u'Wichtige Vertr\xe4ge',
                 'file_extension': u'.docx',
-                'last_touched': '2018-04-30T00:00:00+02:00',
+                'last_touched': '2018-04-30 00:00',
                 'title': u'Vertr\xe4gsentwurf',
                 'review_state': 'document-state-draft',
                 'UID': u'createtreatydossiers000000000002',
@@ -129,7 +129,7 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
                 'filename': 'Vertraegsentwurf.docx',
                 # Because of an incorrect timezone handling in the freezer
                 # last_touched should be `2018-04-30T00:00:00+02:00`
-                'last_touched': '2018-04-30T00:00:00+02:00',
+                'last_touched': '2018-04-30 00:00',
                 'title': u'Vertr\xe4gsentwurf',
                 'review_state': 'document-state-draft',
                 'UID': u'createtreatydossiers000000000002',
@@ -172,7 +172,7 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
                  'file_extension': u'.docx',
                  # Because of an incorrect timezone handling in the freezer
                  # last_touched should be `2018-04-30T00:00:00+02:00`
-                 'last_touched': '2018-04-30T02:00:00+02:00',
+                 'last_touched': '2018-04-30 02:00',
                  'title': u'Vertr\xe4gsentwurf',
                  'review_state': 'document-state-draft',
                  'UID': u'createtreatydossiers000000000002',
@@ -210,7 +210,7 @@ class TestRecentlyModifiedGet(SolrIntegrationTestCase, ResolveTestHelper):
                 'checked_out': self.regular_user.getId(),
                 'description': u'Wichtige Vertr\xe4ge',
                 'file_extension': u'.docx',
-                'last_touched': '2018-04-30T00:00:00+02:00',
+                'last_touched': '2018-04-30 00:00',
                 'title': u'Vertr\xe4gsentwurf',
                 'review_state': 'document-state-draft',
                 'UID': u'createtreatydossiers000000000002',
