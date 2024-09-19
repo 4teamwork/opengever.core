@@ -232,8 +232,8 @@ class IDispositionSchema(model.Schema):
 
     dossiers = RelationList(
         title=_(u'label_dossiers', default=u'Dossiers'),
-        default=[],
-        missing_value=[],
+        default=list(),
+        missing_value=list(),
         value_type=RelationChoice(
             title=u"Dossier",
             source=SolrObjPathSourceBinder(
