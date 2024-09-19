@@ -3,6 +3,7 @@ from opengever.ogds.base.sources import AllTeamsSource
 from opengever.ogds.base.sources import AssignedUsersSource
 from opengever.ogds.base.sources import BaseMultipleSourcesQuerySource
 from opengever.ogds.models.user import User
+from opengever.workspace import is_workspace_feature_enabled
 from plone import api
 from sqlalchemy import case
 
@@ -48,10 +49,14 @@ class PossibleWatchersSource(BaseMultipleSourcesQuerySource):
     """A vocabulary source of all users, groups and teams not watching a
     ressource assigned to the current admin unit.
     """
+    gever_only = False
 
     def __init__(self, context):
         self.context = context
         self.terms = []
+
         self.source_instances = [PossibleWatchersSourceUsers(context),
-                                 AllFilteredGroupsSourcePrefixed(context),
-                                 AllTeamsSource(context)]
+                                 AllFilteredGroupsSourcePrefixed(context)]
+
+        if not is_workspace_feature_enabled():
+            self.source_instances.append(AllTeamsSource(context))

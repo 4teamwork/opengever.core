@@ -32,8 +32,6 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
 
     BLACKLIST = [
         AllEmailContactsAndUsersSource,
-        AllFilteredGroupsSource,
-        AllGroupsSource,
         AllUsersAndGroupsSource,
         AllUsersInboxesAndTeamsSource,
         ContactsSource,
@@ -47,6 +45,8 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         AssignedUsersSource,
         PotentialWorkspaceMembersSource,
         AllUsersSource,
+        AllGroupsSource,
+        AllFilteredGroupsSource,
     ]
 
     def test_whitelisted_teamraum_sources(self):
@@ -309,3 +309,39 @@ class TestAssignedUsersSource(IntegrationTestCase):
 
         self.assertEqual(1, len(source.search('hans')))
         self.assertEqual(self.workspace_guest.getId(), source.search('hans')[0].token)
+
+
+class TestWorkspaceAllGoupsSource(IntegrationTestCase):
+
+    features = ('workspace', )
+
+    def test_contains_only_whitelisted_groups(self):
+        self.login(self.regular_user)
+        source = AllGroupsSource(self.portal)
+
+        self.assertNotIn('fa_users', source)
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, 'fa_users', ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertIn('fa_users', source)
+
+    def test_can_search_only_whitelisted_groups(self):
+        self.login(self.regular_user)
+        source = AllGroupsSource(self.portal)
+
+        self.assertEqual([], source.search('Users'))
+
+        with self.login(self.workspace_admin):
+            workspace_project_a = create(Builder('workspace').titled(u'Project A').within(self.workspace_root))
+            self.set_roles(workspace_project_a, self.regular_user.getId(), ['WorkspaceMember'])
+            self.set_roles(workspace_project_a, 'fa_users', ['WorkspaceGuest'])
+
+        clear_cache_visible_users_and_groups_filter_cache(self.request)
+
+        self.assertEqual(1, len(source.search('Users')))
+        self.assertEqual('fa_users', source.search('Users')[0].token)
