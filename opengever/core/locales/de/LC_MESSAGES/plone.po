@@ -44,6 +44,11 @@ msgstr "Als Excel exportieren"
 msgid "Fill meeting template"
 msgstr "Beispiels-Sitzungsdaten einfüllen"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "Final"
+msgstr "Final"
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -71,6 +76,11 @@ msgstr "Erledigen"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
 msgstr "Deaktivieren"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "finalize"
+msgstr "Finalisieren"
 
 #. Default: "open"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
@@ -182,6 +192,21 @@ msgstr "Manager"
 msgid "opengever_period_workflow--STATUS--active"
 msgstr "Aktiv"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--STATUS--final"
+msgstr "Final"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--finalize--active_final"
+msgstr "Finalisieren"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--reopen--final_active"
+msgstr "Überarbeiten"
+
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "opengever_workspace--ROLE--Administrator"
@@ -286,21 +311,6 @@ msgstr "Teammitglieder haben lesenden und schreibenden Zugriff auf alle Inhalte.
 #: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "opengever_workspace_document--STATUS--active"
 msgstr "Aktiv"
-
-#. Default: "Final"
-#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
-msgid "opengever_workspace_document--STATUS--final"
-msgstr "Final"
-
-#. Default: "finalize"
-#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
-msgid "opengever_workspace_document--TRANSITION--finalize--active_final"
-msgstr "Finalisieren"
-
-#. Default: "reopen"
-#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
-msgid "opengever_workspace_document--TRANSITION--reopen--final_active"
-msgstr "Überarbeiten"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace_folder/specification.txt
@@ -510,6 +520,7 @@ msgstr "reaktivieren"
 
 #. Default: "reopen"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "reopen"
 msgstr "Wieder eröffnen"
 

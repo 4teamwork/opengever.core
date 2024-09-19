@@ -49,10 +49,10 @@
   <permission>opengever.disposition: Download SIP Package</permission>
   <permission>opengever.disposition: Edit transfer number</permission>
   <permission>opengever.document: Add document</permission>
-  <permission>opengever.document: Modify archival file</permission>
   <permission>opengever.document: Cancel</permission>
   <permission>opengever.document: Checkin</permission>
   <permission>opengever.document: Checkout</permission>
+  <permission>opengever.document: Modify archival file</permission>
   <permission>opengever.dossier: Add businesscasedossier</permission>
   <permission>opengever.dossier: Add dossiertemplate</permission>
   <permission>opengever.dossier: Add templatefolder</permission>
@@ -90,6 +90,7 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
+    <permission-map name="Add portal content" acquired="False"/>
     <permission-map name="CMFEditions: Apply version control" acquired="False">
       <permission-role>Administrator</permission-role>
       <permission-role>Manager</permission-role>
@@ -114,7 +115,6 @@
       <permission-role>WorkspaceAdmin</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="Add portal content" acquired="False"/>
     <permission-map name="Delete objects" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -247,19 +247,11 @@
       <permission-role>WorkspaceGuest</permission-role>
       <permission-role>WorkspaceMember</permission-role>
     </permission-map>
-    <permission-map name="CMFEditions: Apply version control" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="CMFEditions: Checkout to location" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="CMFEditions: Revert to previous versions" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="CMFEditions: Save new version" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
     <permission-map name="Add portal content" acquired="False"/>
+    <permission-map name="CMFEditions: Apply version control" acquired="False"/>
+    <permission-map name="CMFEditions: Checkout to location" acquired="False"/>
+    <permission-map name="CMFEditions: Revert to previous versions" acquired="False"/>
+    <permission-map name="CMFEditions: Save new version" acquired="False"/>
     <permission-map name="Delete objects" acquired="False">
       <permission-role>Manager</permission-role>
     </permission-map>
@@ -321,15 +313,9 @@
     <permission-map name="opengever.disposition: Download SIP Package" acquired="False"/>
     <permission-map name="opengever.disposition: Edit transfer number" acquired="False"/>
     <permission-map name="opengever.document: Add document" acquired="False"/>
-    <permission-map name="opengever.document: Cancel" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="opengever.document: Checkin" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
-    <permission-map name="opengever.document: Checkout" acquired="False">
-      <permission-role>Manager</permission-role>
-    </permission-map>
+    <permission-map name="opengever.document: Cancel" acquired="False"/>
+    <permission-map name="opengever.document: Checkin" acquired="False"/>
+    <permission-map name="opengever.document: Checkout" acquired="False"/>
     <permission-map name="opengever.document: Modify archival file" acquired="False"/>
     <permission-map name="opengever.dossier: Add businesscasedossier" acquired="False"/>
     <permission-map name="opengever.dossier: Add dossiertemplate" acquired="False"/>
@@ -375,7 +361,7 @@
     </permission-map>
   </state>
   <transition new_state="opengever_workspace_document--STATUS--final" title="finalize" transition_id="opengever_workspace_document--TRANSITION--finalize--active_final" after_script="" before_script="" trigger="USER">
-    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_document--TRANSITION--finalize--active_final">opengever_workspace_document--TRANSITION--finalize--active_final</action>
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_document--TRANSITION--finalize--active_final">finalize</action>
     <guard>
       <guard-role>Administrator</guard-role>
       <guard-role>Manager</guard-role>
@@ -384,12 +370,11 @@
     </guard>
   </transition>
   <transition new_state="opengever_workspace_document--STATUS--active" title="reopen" transition_id="opengever_workspace_document--TRANSITION--reopen--final_active" after_script="" before_script="" trigger="USER">
-    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_document--TRANSITION--reopen--final_active">opengever_workspace_document--TRANSITION--reopen--final_active</action>
+    <action category="workflow" icon="" url="%(content_url)s/content_status_modify?workflow_action=opengever_workspace_document--TRANSITION--reopen--final_active">reopen</action>
     <guard>
       <guard-role>Administrator</guard-role>
       <guard-role>Manager</guard-role>
       <guard-role>WorkspaceAdmin</guard-role>
-      <guard-expression>here/is_reopen_allowed</guard-expression>
     </guard>
   </transition>
   <variable variable_id="action" for_catalog="False" for_status="True" update_always="True">

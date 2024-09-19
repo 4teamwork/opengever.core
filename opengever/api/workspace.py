@@ -84,6 +84,7 @@ class UploadDocumentCopy(GeverFolderPost):
 
     def add_object_to_context(self):
 
+        super(UploadDocumentCopy, self).add_object_to_context()
         data = json.loads(self.request.form['document_metadata'])
 
         if self.obj.portal_type == 'opengever.document.document' and data.get("final", None):
@@ -98,5 +99,3 @@ class UploadDocumentCopy(GeverFolderPost):
             workflow.updateRoleMappingsFor(self.obj)
             self.obj.reindexObject(idxs=['review_state'])
             self.obj.reindexObjectSecurity()
-
-        super(UploadDocumentCopy, self).add_object_to_context()

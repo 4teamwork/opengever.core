@@ -48,6 +48,11 @@ msgstr "Export as Excel file"
 msgid "Fill meeting template"
 msgstr "Fill with example meeting data"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "Final"
+msgstr "Final"
+
 #. German translation: Inaktiv
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
@@ -78,6 +83,11 @@ msgstr "complete"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
 msgstr "deactivate"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "finalize"
+msgstr "Finalize"
 
 #. Default: "open"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
@@ -592,9 +602,10 @@ msgid "reactivate"
 msgstr "reactivate"
 
 #. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "reopen"
-msgstr "reopen"
+msgstr "Reopen"
 
 #. German translation: Hinzufügen
 msgid "title_can_add"

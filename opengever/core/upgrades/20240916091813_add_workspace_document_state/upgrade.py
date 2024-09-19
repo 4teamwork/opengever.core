@@ -1,8 +1,8 @@
 from ftw.upgrade import UpgradeStep
 
 
-class ResetCheckout(UpgradeStep):
-    """Reset Checkout.
+class AddWorkspaceDocumentState(UpgradeStep):
+    """Add new Workspace Document Final State.
     """
 
     def __call__(self):

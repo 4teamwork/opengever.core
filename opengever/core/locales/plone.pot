@@ -31,9 +31,6 @@ msgstr ""
 msgid "DossierManager"
 msgstr ""
 
-msgid "TaskResponsible"
-msgstr ""
-
 #. Default: "Download Excel"
 #: opengever/core/profiles/default/types/opengever.repository.repositoryroot.xml
 msgid "Download Excel"
@@ -44,6 +41,11 @@ msgstr ""
 msgid "Fill meeting template"
 msgstr ""
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "Final"
+msgstr ""
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -51,6 +53,9 @@ msgid "Inactive"
 msgstr ""
 
 msgid "Publisher"
+msgstr ""
+
+msgid "TaskResponsible"
 msgstr ""
 
 #. Default: "close"
@@ -67,6 +72,11 @@ msgstr ""
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
+msgstr ""
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "finalize"
 msgstr ""
 
 #. Default: "open"
@@ -506,6 +516,7 @@ msgid "reactivate"
 msgstr ""
 
 #. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "reopen"
 msgstr ""
