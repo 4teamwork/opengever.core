@@ -1,0 +1,6 @@
+
+<registry>
+    <records interface="opengever.base.interfaces.IBaseSettings">
+        <value key="possible_watcher_groups_white_list_regex">^.+</value>
+    </records>
+</registry>
