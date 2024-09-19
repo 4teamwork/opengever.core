@@ -342,6 +342,12 @@ class IBaseSettings(Interface):
         description=u'Makes backend errors accessible for users',
         default=False)
 
+    possible_watcher_groups_white_list_regex = schema.TextLine(
+        title=u'white list regex for possible watcher groups',
+        description=u'Regex pattern for groups which should be allowed as'
+        'possible watchers',
+        default=u"^.+")
+
 
 class ISearchSettings(Interface):
 

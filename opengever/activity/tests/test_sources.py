@@ -1,8 +1,11 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from opengever.activity import notification_center
-from opengever.activity.roles import WATCHER_ROLE
 from opengever.activity.sources import PossibleWatchersSource
+from opengever.base.interfaces import IBaseSettings
 from opengever.base.model import create_session
 from opengever.testing import IntegrationTestCase
+from plone import api
 from unittest import skip
 
 
@@ -28,6 +31,26 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.assertIn('regular_user', [term.token for term in source.search('')])
         self.assertIn('group:fa_users', [term.token for term in source.search('')])
         self.assertIn('team:1', [term.token for term in source.search('')])
+
+    def test_respect_whitelist_groups_filter_for_possible_watchers(self):
+        self.login(self.regular_user)
+        source = PossibleWatchersSource(self.task)
+
+        create(Builder('ogds_group').having(groupid='regular_group_1', title="Regular Group 1"))
+        create(Builder('ogds_group').having(groupid='regular_group_2', title="Regular Group 2"))
+        create(Builder('ogds_group').having(groupid='regular_group_3', title="Regular Group 3"))
+
+        self.assertItemsEqual([
+            'group:regular_group_1',
+            'group:regular_group_2',
+            'group:regular_group_3'
+        ], [term.token for term in source.search('Regular Group')])
+
+        api.portal.set_registry_record('possible_watcher_groups_white_list_regex', u'^.+2$', IBaseSettings)
+
+        self.assertItemsEqual([
+            'group:regular_group_2',
+        ], [term.token for term in source.search('Regular Group')])
 
     def test_list_users_and_groups_for_teamraum(self):
         self.activate_feature('workspace')
