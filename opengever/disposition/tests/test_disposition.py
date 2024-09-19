@@ -95,9 +95,7 @@ class TestDisposition(SolrIntegrationTestCase):
                      data=data)
         browser.find('Save').click()
 
-        self.assertEquals(['There were some errors.'], error_messages())
-        self.assertEquals(['Required input is missing.'],
-                          browser.css('.fieldErrorBox .error').text)
+        self.assertEqual([], [rel.to_object for rel in browser.context.dossiers])
 
     @browsing
     def test_already_offered_dossiers_cant_be_selected(self, browser):

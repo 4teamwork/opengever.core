@@ -246,7 +246,7 @@ class IDispositionSchema(model.Schema):
                      'opengever.dossier.behaviors.dossier.IDossierMarker'],
                 }),
         ),
-        required=True,
+        required=False,
     )
 
     write_permission(transfer_number='opengever.disposition.EditTransferNumber')
