@@ -3,6 +3,7 @@ from DateTime import DateTime
 from DateTime.interfaces import DateTimeError
 from ftw.solr.converters import to_iso8601
 from ftw.solr.query import escape
+from logging import getLogger
 from opengever.base import _ as base_mf
 from opengever.base.behaviors.translated_title import TRANSLATED_TITLE_PORTAL_TYPES
 from opengever.base.helpers import display_name
@@ -28,6 +29,9 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 import Missing
+
+
+logger = getLogger('opengever.base.solr')
 
 
 def filter_escape(term):
@@ -245,6 +249,23 @@ class SimpleListingField(object):
     def index_value_to_label(self, value):
         return value
 
+    def safe_index_value_to_label(self, value):
+        """Get label for an index value, but fall back to returning value if
+        an exception happens during the transform.
+
+        This is needed for rendering the labels for Solr facets, because Solr
+        may still return facet values that are not in the index any more, and
+        may refer to non-existing objects like renamed OrgUnits.
+        """
+        try:
+            label = self.index_value_to_label(value)
+        except Exception as exc:
+            logger.error('Failed to determine label for value %r in field %r:' % (
+                value, self.field_name))
+            logger.exception(exc)
+            return value
+        return label
+
     def hide_facet(self, facet):
         return False
 
@@ -283,7 +304,14 @@ class ListingField(SimpleListingField):
     def index_value_to_label(self, value):
         if self.transform is None:
             return value
-        return self.transform(value)
+        try:
+            transformed = self.transform(value)
+        except Exception as exc:
+            logger.error('Failed to transform value %r for field %r:' % (
+                value, self.field_name))
+            logger.exception(exc)
+            return value
+        return transformed
 
 
 class MultiLanguageListingField(ListingField):
