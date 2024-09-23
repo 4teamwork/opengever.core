@@ -5,7 +5,7 @@ class PendingSigningJobStorage(object):
     """Responsible for storing metadata for a currently running sign process.
     """
 
-    ANNOTATIONS_KEY = 'sign_data'
+    ANNOTATIONS_KEY = 'opengever.sign.pending_signing_job'
 
     def __init__(self, context):
         self.context = context
