@@ -51,6 +51,9 @@ class Signer(object):
                 transition=Document.signing_signed_transition,
                 transition_params={'filedata': signed_pdf_data})
 
+    def finish_signing(self):
+        self.pending_signing_job_storage.clear()
+
     @property
     def pending_signing_job(self):
         return self.pending_signing_job_storage.load()
