@@ -70,7 +70,7 @@ class TestSigning(IntegrationTestCase):
         # signing-job should be removed
         self.assertEqual(1, delete_mocker.call_count)
 
-        # pending sign metadata-content should be cleared
+        # pending signing job should be cleared
         self.assertEqual({}, signer.serialize_pending_signing_job())
 
     def test_can_complete_signing_process(self, mocker):
@@ -88,3 +88,6 @@ class TestSigning(IntegrationTestCase):
 
         signed_version = Versioner(self.document).retrieve(1)
         self.assertEqual(u'<DATA>', signed_version.file.data)
+
+        # pending signing job should be cleared
+        self.assertEqual({}, signer.serialize_pending_signing_job())
