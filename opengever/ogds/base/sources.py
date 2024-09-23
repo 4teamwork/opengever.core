@@ -1058,6 +1058,7 @@ class AllGroupsSourceBinder(object):
 
 class AllUsersAndGroupsSource(BaseMultipleSourcesQuerySource):
 
+    gever_only = False
     source_classes = [AllFilteredGroupsSourcePrefixed, AllUsersSource]
 
     def __init__(self, context, only_active_orgunits=True, include_inactive_groups=False):

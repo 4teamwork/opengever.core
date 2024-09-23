@@ -56,7 +56,7 @@ ROLES_ORDER = ['Reader', 'Contributor', 'Editor', 'Reviewer',
                'WorkspaceMember', 'WorkspaceGuest', 'WorkspacesUser']
 
 
-ROLE_MAPPING = OrderedDict([
+GEVER_ROLE_MAPPING = OrderedDict([
     (u'Reader', _('sharing_dossier_reader')),
     (u'Contributor', _('sharing_dossier_contributor')),
     (u'Editor', _('sharing_dossier_editor')),
@@ -65,6 +65,12 @@ ROLE_MAPPING = OrderedDict([
     (u'DossierManager', _('sharing_dossier_manager')),
     (u'TaskResponsible', _('sharing_task_responsible')),
     (u'Role Manager', _('sharing_role_manager')),
+])
+
+WORKSPACE_ROLE_MAPPING = OrderedDict([
+    (u'WorkspaceAdmin', _('sharing_workspace_admin')),
+    (u'WorkspaceMember', _('sharing_workspace_member')),
+    (u'WorkspaceGuest', _('sharing_workspace_guest'))
 ])
 
 
@@ -188,7 +194,7 @@ class OpengeverSharingView(SharingView):
         result = []
         for role in [r.get('id') for r in super_roles]:
             if role in available_roles:
-                result.append({'id': role, 'title': ROLE_MAPPING[role]})
+                result.append({'id': role, 'title': GEVER_ROLE_MAPPING[role]})
 
         return result
 

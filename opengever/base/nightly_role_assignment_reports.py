@@ -1,4 +1,5 @@
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
+from opengever.base.role_assignments import ASSIGNMENT_VIA_INVITATION
 from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
 from opengever.base.role_assignments import RoleAssignmentManager
@@ -56,7 +57,10 @@ class NightlyRoleAssignmentReports(NightlyJobProviderBase):
             sort_on='path',
             portal_type=['opengever.dossier.businesscasedossier',
                          'opengever.repository.repositoryfolder',
-                         'opengever.repository.repositoryroot'],
+                         'opengever.repository.repositoryroot',
+                         'opengever.workspace.folder',
+                         'opengever.workspace.workspace',
+                         ],
             allowedRolesAndUsers=[u'user:{}'.format(principalid), 'Authenticated', 'Anonymous'])
 
         self.logger.info("Complete report %r" % reportid)
@@ -69,7 +73,8 @@ class NightlyRoleAssignmentReports(NightlyJobProviderBase):
             manual_assignments = [
                 assignment for assignment in assignments
                 if assignment.cause in [ASSIGNMENT_VIA_SHARING,
-                                        ASSIGNMENT_VIA_PROTECT_DOSSIER]]
+                                        ASSIGNMENT_VIA_PROTECT_DOSSIER,
+                                        ASSIGNMENT_VIA_INVITATION]]
             if manual_assignments:
                 roles = filter(lambda r: r != 'Owner', manual_assignments[0].roles)
                 if roles:

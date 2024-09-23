@@ -13,7 +13,7 @@ from opengever.journal.interfaces import IManualJournalActor
 from opengever.journal.manager import JournalManager
 from opengever.readonly import is_in_readonly_mode
 from opengever.repository.repositoryroot import IRepositoryRoot
-from opengever.sharing.browser.sharing import ROLE_MAPPING
+from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
 from opengever.tabbedview.helper import readable_ogds_author
 from plone import api
 from plone.app.versioningbehavior.utils import get_change_note
@@ -66,7 +66,7 @@ def journal_entry_factory(context, action, title,
 
 def role_mapping_to_str(context, mapping):
     """Parse the given local_roles mapping to a str,
-    with the help of the ROLE_MAPPING from opengever.sharing.
+    with the help of the GEVER_ROLE_MAPPING from opengever.sharing.
     """
     skip_roles = [u'Owner', ]
     user_roles = []
@@ -76,7 +76,7 @@ def role_mapping_to_str(context, mapping):
         for role in roles:
             if role not in skip_roles:
                 translated_roles.append(
-                    translate(ROLE_MAPPING.get(role), context=context.REQUEST))
+                    translate(GEVER_ROLE_MAPPING.get(role), context=context.REQUEST))
 
         if len(translated_roles):
             user_roles.append(

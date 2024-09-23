@@ -111,13 +111,16 @@ class TestGlobalSourcesGetInTeamraum(IntegrationTestCase):
         url = '{}/@globalsources'.format(self.portal.absolute_url())
         browser.open(url, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
-        self.assertEqual([], browser.json)
+        self.assertEqual(
+            [{u'@id': u'http://nohost/plone/@globalsources/all_users_and_groups', u'title': u'all_users_and_groups'}],
+            browser.json
+        )
 
     @browsing
     def test_raises_not_found_for_not_visible_sources(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        url = '{}/@globalsources/all_users_and_groups?query=Rober'.format(
+        url = '{}/@globalsources/all_contacts?query=K%C3%B6nig'.format(
             self.portal.absolute_url())
 
         self.deactivate_feature('workspace')

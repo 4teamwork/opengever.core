@@ -6,6 +6,7 @@ from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.visible_users_and_groups_filter import VisibleUsersAndGroupsFilter
 from opengever.ogds.base.sources import AllEmailContactsAndUsersSource
 from opengever.ogds.base.sources import AllFilteredGroupsSource
+from opengever.ogds.base.sources import AllFilteredGroupsSourcePrefixed
 from opengever.ogds.base.sources import AllGroupsSource
 from opengever.ogds.base.sources import AllUsersAndGroupsSource
 from opengever.ogds.base.sources import AllUsersInboxesAndTeamsSource
@@ -32,7 +33,6 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
 
     BLACKLIST = [
         AllEmailContactsAndUsersSource,
-        AllUsersAndGroupsSource,
         AllUsersInboxesAndTeamsSource,
         ContactsSource,
         CurrentAdminUnitOrgUnitsSource,
@@ -47,6 +47,8 @@ class TestWorkspaceSourcesProtection(IntegrationTestCase):
         AllUsersSource,
         AllGroupsSource,
         AllFilteredGroupsSource,
+        AllUsersAndGroupsSource,
+        AllFilteredGroupsSourcePrefixed
     ]
 
     def test_whitelisted_teamraum_sources(self):
