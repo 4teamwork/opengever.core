@@ -33,7 +33,6 @@ class Signer(object):
     def start_signing(self, signers):
         token = self.issue_token()
         response = SignServiceClient().queue_signing(self.context, token, signers)
-        response = response.json()
 
         self.pending_signing_job = PendingSigningJob(
             userid=api.user.get_current().id,

@@ -23,7 +23,7 @@ class SignServiceClient(object):
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'signers': signers,
-                  })
+                  }).json()
 
     def abort_signing(self, job_id):
         if job_id is None:
