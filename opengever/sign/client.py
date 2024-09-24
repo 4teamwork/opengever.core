@@ -34,4 +34,17 @@ class SignServiceClient(object):
             headers={"Accept": "application/json"})
 
 
+class NullSignServiceClient(object):
+
+    @property
+    def sign_service_url(self):
+        return environ.get('SIGN_SERVICE_URL', '').strip('/')
+
+    def queue_signing(self, document, token, signers):
+        return {}
+
+    def abort_signing(self, job_id):
+        pass
+
+
 sign_service_client = SignServiceClient()
