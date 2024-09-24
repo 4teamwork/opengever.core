@@ -114,7 +114,7 @@ class RemovalProtocolLaTeXView(MakoLaTeXView):
             'label_dossiers': translate(
                 _('label_dossiers', default="Dossiers"), context=self.request),
             'dossier_listing': dossier_listener.get_listing(
-                self.context.get_dossier_representations()),
+                self.context.get_dossier_representations()) or '-',
             'label_history': translate(
                 _('label_history', default="History"), context=self.request),
             'history': history_listener.get_listing(

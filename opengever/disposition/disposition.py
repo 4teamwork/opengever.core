@@ -232,8 +232,8 @@ class IDispositionSchema(model.Schema):
 
     dossiers = RelationList(
         title=_(u'label_dossiers', default=u'Dossiers'),
-        default=[],
-        missing_value=[],
+        default=list(),
+        missing_value=list(),
         value_type=RelationChoice(
             title=u"Dossier",
             source=SolrObjPathSourceBinder(
@@ -246,7 +246,7 @@ class IDispositionSchema(model.Schema):
                      'opengever.dossier.behaviors.dossier.IDossierMarker'],
                 }),
         ),
-        required=True,
+        required=False,
     )
 
     write_permission(transfer_number='opengever.disposition.EditTransferNumber')
