@@ -10,6 +10,33 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.14.0 (2024-09-24)
+----------------------
+
+New features:
+
+
+- Add configuration option to filter possible group watchers. [elioschmutz] [TI-1222]
+- Implements the document sign process. [elioschmutz] [TI-659]
+
+
+Bug fixes:
+
+
+- Fix unicode error when syncing users. [elioschmutz] [TI-1024]
+- Make determining Solr facet labels more robust. [lgraf] [TI-1210]
+- Fixes a bug where it was no longer possible to add watchers in teamraum. [elioschmutz] [TI-1221]
+
+
+Other changes:
+
+
+- Exclude inactive (users / group users) from teamraum participation excel export. [amo] [TI-1086]
+- Make assignment reports available for teamraum [TI-115](https://4teamwork.atlassian.net/browse/TI-115) [TI-115]
+- Extends document workflow with basic sign states and transitions. [elioschmutz] [TI-659]
+- Add option to regenerate bundle schemas on bundle import [TI-948](https://4teamwork.atlassian.net/browse/TI-948) [TI-948]
+
+
 2024.13.0 (2024-09-09)
 ----------------------
 
