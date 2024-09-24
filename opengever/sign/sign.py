@@ -2,7 +2,7 @@ from base64 import urlsafe_b64decode
 from base64 import urlsafe_b64encode
 from opengever.base.security import as_internal_workflow_transition
 from opengever.document.document import Document
-from opengever.sign.client import SignServiceClient
+from opengever.sign.client import sign_service_client
 from opengever.sign.pending_signing_job import PendingSigningJob
 from opengever.sign.storage import PendingSigningJobStorage
 from opengever.sign.token import TokenManager
@@ -32,7 +32,7 @@ class Signer(object):
 
     def start_signing(self, signers):
         token = self.issue_token()
-        response = SignServiceClient().queue_signing(self.context, token, signers)
+        response = sign_service_client.queue_signing(self.context, token, signers)
 
         self.pending_signing_job = PendingSigningJob(
             userid=api.user.get_current().id,
@@ -71,7 +71,7 @@ class Signer(object):
             return
 
         try:
-            SignServiceClient().abort_signing(pending_signing_job.job_id)
+            sign_service_client.abort_signing(pending_signing_job.job_id)
         except ConnectionError:
             # The user should always be able to abort the job
             pass
