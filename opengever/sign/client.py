@@ -32,3 +32,6 @@ class SignServiceClient(object):
         return requests.delete(
             '{}/signing-jobs/{}'.format(self.sign_service_url, job_id),
             headers={"Accept": "application/json"})
+
+
+sign_service_client = SignServiceClient()
