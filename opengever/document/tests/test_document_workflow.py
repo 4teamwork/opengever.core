@@ -222,15 +222,21 @@ class TestDocumentWorkflow(IntegrationTestCase):
                           api.content.get_state(obj=self.document))
 
         self.assertEqual(self.regular_user.getId(), self.document.finalizer)
+
         self.assertDictEqual(
             {
-                'created': FROZEN_NOW,
+                'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
-                'signers': ['foo@example.com'],
+                'signers': [
+                    {
+                        'email': 'foo@example.com',
+                        'userid': 'regular_user',
+                    }
+                ],
                 'userid': 'regular_user',
                 'version': 0
-            }, Signer(self.document).metadata_storage.read())
+            }, Signer(self.document).serialize_pending_signing_job())
 
     @requests_mock.Mocker()
     def test_can_start_signing_a_document_in_final_state(self, mocker):
@@ -251,13 +257,18 @@ class TestDocumentWorkflow(IntegrationTestCase):
 
         self.assertDictEqual(
             {
-                'created': FROZEN_NOW,
+                'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
-                'signers': ['foo@example.com'],
+                'signers': [
+                    {
+                        'email': 'foo@example.com',
+                        'userid': 'regular_user',
+                    }
+                ],
                 'userid': 'regular_user',
                 'version': 0
-            }, Signer(self.document).metadata_storage.read())
+            }, Signer(self.document).serialize_pending_signing_job())
 
     @requests_mock.Mocker()
     def test_sign_transition_is_only_for_internal_use(self, mocker):

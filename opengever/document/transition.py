@@ -80,7 +80,6 @@ class DocumentSignedDraftTransitionExtender(TransitionExtender):
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
         manager.revert_to_version(finalized_version_number)
-        Signer(self.context).clear_metadata()
 
 
 class ISignSchema(Schema):
