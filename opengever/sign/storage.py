@@ -1,9 +1,7 @@
-from datetime import datetime
-from opengever.base.utils import make_persistent
 from zope.annotation import IAnnotations
 
 
-class MetadataStorage(object):
+class PendingSigningJobStorage(object):
     """Responsible for storing metadata for a currently running sign process.
     """
 
@@ -13,24 +11,12 @@ class MetadataStorage(object):
         self.context = context
         self.annotations = IAnnotations(self.context)
 
-    def store(self, userid, version, signers, job_id, redirect_url):
-        self._set_data({
-            'created': datetime.now(),
-            'userid': userid,
-            'job_id': job_id,
-            'redirect_url': redirect_url,
-            'signers': signers,
-            'version': version,
-        })
+    def store(self, pending_signing_job):
+        self.annotations[self.ANNOTATIONS_KEY] = pending_signing_job
 
-    def read(self):
-        return self._get_data()
+    def load(self):
+        return self.annotations.get(self.ANNOTATIONS_KEY)
 
     def clear(self):
-        self._set_data({})
-
-    def _set_data(self, data):
-        self.annotations[self.ANNOTATIONS_KEY] = make_persistent(data)
-
-    def _get_data(self):
-        return dict(self.annotations.get(self.ANNOTATIONS_KEY, {}))
+        if self.ANNOTATIONS_KEY in self.annotations:
+            del self.annotations[self.ANNOTATIONS_KEY]
