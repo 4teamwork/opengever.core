@@ -3,7 +3,8 @@ from base64 import urlsafe_b64encode
 from opengever.base.security import as_internal_workflow_transition
 from opengever.document.document import Document
 from opengever.sign.client import SignServiceClient
-from opengever.sign.storage import MetadataStorage
+from opengever.sign.pending_signing_job import PendingSigningJob
+from opengever.sign.storage import PendingSigningJobStorage
 from opengever.sign.token import TokenManager
 from plone import api
 from plone.dexterity.utils import safe_utf8
@@ -18,7 +19,7 @@ class Signer(object):
     def __init__(self, context):
         self.context = context
         self.token_manager = TokenManager(context)
-        self.metadata_storage = MetadataStorage(context)
+        self.pending_signing_job_storage = PendingSigningJobStorage(context)
 
     def issue_token(self):
         return urlsafe_b64encode(self.token_manager.issue_token())
@@ -33,7 +34,8 @@ class Signer(object):
         token = self.issue_token()
         response = SignServiceClient().queue_signing(self.context, token, signers)
         response = response.json()
-        self.metadata_storage.store(
+
+        self.pending_signing_job = PendingSigningJob(
             userid=api.user.get_current().id,
             version=self.context.get_current_version_id(missing_as_zero=True),
             signers=signers,
@@ -49,31 +51,39 @@ class Signer(object):
                 transition=Document.signing_signed_transition,
                 transition_params={'filedata': signed_pdf_data})
 
+    @property
+    def pending_signing_job(self):
+        return self.pending_signing_job_storage.load()
+
+    @pending_signing_job.setter
+    def pending_signing_job(self, pending_signing_job):
+        self.pending_signing_job_storage.store(pending_signing_job)
+
     def abort_signing(self):
         self.invalidate_token()
-        signing_data = self.metadata_storage.read()
+        self.abort_pending_signing_job(self.pending_signing_job)
+        self.pending_signing_job_storage.clear()
+
+    def abort_pending_signing_job(self, pending_signing_job):
+        if not pending_signing_job:
+            return
+
         try:
-            SignServiceClient().abort_signing(signing_data.get('job_id'))
+            SignServiceClient().abort_signing(pending_signing_job.job_id)
         except ConnectionError:
             # The user should always be able to abort the job
             pass
 
-        self.clear_metadata()
-
-    def clear_metadata(self):
-        self.metadata_storage.clear()
-
     def adopt_issuer(self):
-        userid = self.metadata_storage.read().get('userid')
-        user = api.user.get(userid=userid)
+        user = api.user.get(userid=self.pending_signing_job.userid)
         if not user:
             raise IssuerNotFound()
         return api.env.adopt_user(user=user)
 
-    def serialize(self):
-        return self.metadata_storage.read()
+    def serialize_pending_signing_job(self):
+        return self.pending_signing_job.serialize() if self.pending_signing_job else {}
 
 
 class IssuerNotFound(Exception):
-    """Sign issuer not found.
+    """Signing issuer not found.
     """
