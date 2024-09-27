@@ -51,3 +51,58 @@ Der Endpoint löst eine interne Workflow-Transition auf dem Dokument aus, die au
 - ``signed_pdf_data``: Die signierten PDF-Daten im Base64-Format, die der externe Service nach der Signatur erzeugt hat.
 
 Sobald das Dokument erfolgreich durch den externen Signaturservice signiert wurde, wird das Dokument in den Status **Signiert** versetzt.
+
+Informationen über die Signaturen abrufen
+-----------------------------------------
+Ein GET-Request auf ein Dokument stellt verschiedene Informationen zu einem aktuellen Signierungs-Auftrag oder zu bereits signierten Versionen zur Verfügung:
+
+  .. sourcecode:: http
+
+    GET /ordnungssystem/dossier-23/document-21 HTTP/1.1
+    Accept: application/json
+
+  .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Content-Type: application/json
+
+    {
+        "@id": "/ordnungssystem/dossier-23/document-21",
+        "...": "...",
+        "pending_signing_job": {
+            "created": "2024-02-18T15:45:00",
+            "userid": "foo.bar",
+            "version": 4,
+            "signers": [
+                {
+                    "email": "foo.bar@example.com",
+                    "userid": ""
+                }
+            ],
+            "job_id": "1",
+            "redirect_url": "redirect@example.com"
+        },
+        "signatures_by_version": {
+            "1": {
+                "id": "abc-123",
+                "version": 1,
+                "created": "2024-02-18T15:45:00",
+                "signatories": [
+                    {
+                        "email": "bar@example.com",
+                        "userid": "bar.example"
+                    },
+                    {
+                        "email": "foor@example.com",
+                        "userid": ""
+                    }
+                ]
+            }
+        }
+    }
+
+**Wichtige:**
+
+Die Version eines aktuellen Signierungs-Auftrages (``pending_signing_job``) zeigt an, welche Version von den Benutzern signiert wird.
+Wenn alle Benutzer das Dokument signiert haben, wird eine neue Version vom Dokument mit dem signierten Dokument erstellt.
+Die Versionen unter den ``signatures_by_version`` zeigt an, welche Versionen effektiv die signierten Daten enthalten.
