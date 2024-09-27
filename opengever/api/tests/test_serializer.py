@@ -7,6 +7,7 @@ from opengever.document.document import Document
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
+from opengever.sign.sign import Signer
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.locking.interfaces import ILockable
@@ -278,6 +279,24 @@ class TestDocumentSerializer(IntegrationTestCase):
 
         browser.open(self.document, headers=self.api_headers)
         self.assertEqual('job-1', browser.json.get('pending_signing_job').get('job_id'))
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_document_serialization_contains_signature_items(self, browser, mocker):
+        self.activate_feature('sign')
+        self.login(self.regular_user, browser)
+
+        mocker.post(re.compile('/signing-jobs'), json={'id': 'job-1'})
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
+
+        Signer(self.document).complete_signing('<data>')
+        browser.open(self.document, headers=self.api_headers)
+        self.assertIn('signatures_by_version', browser.json)
+        newest_signature = browser.json.get('signatures_by_version').get('1')
+        self.assertEqual(1, newest_signature.get('version'))
+        self.assertItemsEqual([{u'email': u'foo@example.com', u'userid': u'regular_user'}],
+                              newest_signature.get('signatories'))
 
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):

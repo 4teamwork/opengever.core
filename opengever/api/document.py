@@ -81,6 +81,7 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
         if is_sign_feature_enabled():
             self.extend_with_pending_signing_job(result)
+            self.extend_with_signatures(result)
 
         additional_metadata = {
             'checked_out': checked_out_by,
@@ -137,6 +138,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
 
     def extend_with_pending_signing_job(self, result):
         result[u'pending_signing_job'] = Signer(self.context).serialize_pending_signing_job()
+
+    def extend_with_signatures(self, result):
+        result[u'signatures_by_version'] = Signer(self.context).serialize_signed_versions()
 
 
 class DocumentPatch(ContentPatch):

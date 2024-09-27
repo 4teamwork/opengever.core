@@ -4,6 +4,7 @@ from ftw.testing import freeze
 from opengever.document.document import Document
 from opengever.document.versioner import Versioner
 from opengever.sign.sign import Signer
+from opengever.sign.signed_version import SignedVersion
 from opengever.sign.token import InvalidToken
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -97,3 +98,13 @@ class TestSigning(IntegrationTestCase):
         # a new signature item should have been created
         self.assertEqual(1, len(signer.signed_versions_storage.load().values()))
         self.assertEqual(1, signer.signed_versions_storage.load().values()[0].version)
+
+    def test_can_serialize_signed_versions(self, mocker):
+        self.login(self.regular_user)
+
+        signer = Signer(self.document)
+        storage = signer.signed_versions_storage.load()
+        storage.add_signed_version(SignedVersion(version=1))
+        storage.add_signed_version(SignedVersion(version=2))
+
+        self.assertEqual([1, 2], signer.serialize_signed_versions().keys())
