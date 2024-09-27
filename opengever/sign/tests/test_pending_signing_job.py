@@ -13,7 +13,7 @@ class TestPendingSigningJob(IntegrationTestCase):
             self.assertEqual(
                 FROZEN_NOW,
                 PendingSigningJob(userid='foo.bar',
-                                  version='0',
+                                  version=0,
                                   signers=[],
                                   job_id='0',
                                   redirect_url='').created
@@ -25,7 +25,7 @@ class TestPendingSigningJob(IntegrationTestCase):
         metadata = PendingSigningJob(
             created=FROZEN_NOW,
             userid='foo.bar',
-            version='1',
+            version=1,
             signers=['foo.bar@example.com'],
             job_id='1',
             redirect_url='redirect@example.com')
@@ -34,7 +34,7 @@ class TestPendingSigningJob(IntegrationTestCase):
             {
                 'created': u'2024-02-18T15:45:00',
                 'userid': 'foo.bar',
-                'version': '1',
+                'version': 1,
                 'signers': [
                     {
                         'email': 'foo.bar@example.com',

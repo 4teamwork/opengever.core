@@ -9,7 +9,7 @@ class PendingSigningJob(Persistent):
     def __init__(self,
                  created=None,
                  userid='',
-                 version='',
+                 version=0,
                  signers=list(),
                  job_id='',
                  redirect_url='',
