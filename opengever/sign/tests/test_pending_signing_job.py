@@ -44,3 +44,37 @@ class TestPendingSigningJob(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'redirect@example.com'
             }, metadata.serialize())
+
+    def test_can_be_converted_to_a_signed_version(self):
+        self.login(self.regular_user)
+
+        PENDING_JOB_CREATION = datetime(2024, 2, 18, 15, 45)
+        SIGNED_VERSION_CREATION = datetime(2024, 3, 18, 15, 45)
+
+        pending_signing_job = PendingSigningJob(
+            created=PENDING_JOB_CREATION,
+            userid='foo.bar',
+            version=1,
+            signers=['bar@example.com', 'nicole.kohler@gever.local'],
+            job_id='1',
+            redirect_url='redirect@example.com')
+
+        with freeze(SIGNED_VERSION_CREATION):
+            data = pending_signing_job.to_signed_version().serialize()
+
+        self.assertDictEqual(
+            {
+                'id': data.get('id'),
+                'created': '2024-03-18T15:45:00',
+                'signatories': [
+                    {
+                        'email': 'bar@example.com',
+                        'userid': ''
+                    },
+                    {
+                        'email': 'nicole.kohler@gever.local',
+                        'userid': 'nicole.kohler'
+                    }
+                ],
+                'version': 2
+            }, data)

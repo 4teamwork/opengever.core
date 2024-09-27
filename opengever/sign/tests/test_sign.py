@@ -79,9 +79,11 @@ class TestSigning(IntegrationTestCase):
         api.content.transition(obj=self.document,
                                transition=Document.draft_signing_transition)
 
-        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
-
         signer = Signer(self.document)
+
+        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
+        self.assertEqual(0, len(signer.signed_versions_storage.load().values()))
+
         signer.complete_signing(b64encode('<DATA>'))
 
         self.assertEqual(1, self.document.get_current_version_id(missing_as_zero=True))
@@ -91,3 +93,7 @@ class TestSigning(IntegrationTestCase):
 
         # pending signing job should be cleared
         self.assertEqual({}, signer.serialize_pending_signing_job())
+
+        # a new signature item should have been created
+        self.assertEqual(1, len(signer.signed_versions_storage.load().values()))
+        self.assertEqual(1, signer.signed_versions_storage.load().values()[0].version)
