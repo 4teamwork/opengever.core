@@ -5,6 +5,9 @@ from ftw.testing import freeze
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.models.team import Team
+from opengever.task import TASK_STATE_IN_PROGRESS
+from opengever.task import TASK_STATE_OPEN
+from opengever.task import TASK_STATE_PLANNED
 from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IPartOfParallelProcess
@@ -692,3 +695,582 @@ class TestProcessPost(IntegrationTestCase):
         self.assertEqual(subtask1.responsible_client, 'fa')
         self.assertEqual(subtask2.responsible, inbox_id)
         self.assertEqual(subtask2.responsible_client, 'fa')
+
+
+def create_task(title="Task"):
+    return {
+        "title": title,
+        "responsible": "fa:kathi.barfuss",
+        "issuer": "kathi.barfuss",
+        "deadline": "2022-03-04",
+        "task_type": "direct-execution",
+        "is_private": False
+    }
+
+
+def create_parallel_task_container(items, title="Parallel task"):
+    return {
+        "title": title,
+        "sequence_type": "parallel",
+        "items": items
+    }
+
+
+def create_sequential_task_container(items, title="Sequential task"):
+    return {
+        "title": title,
+        "sequence_type": "sequential",
+        "items": items
+    }
+
+
+def create_process(process):
+    return {
+        "related_documents": [],
+        "start_immediately": False,
+        "process": process
+    }
+
+
+def create_immediate_process(process):
+    return {
+        "related_documents": [],
+        "start_immediately": True,
+        "process": process
+    }
+
+
+class TestProcessInitialTaskStates(IntegrationTestCase):
+    """This test class can be used to test all the different constellations
+    of tasks and subtasks and its expected initial review states.
+    """
+
+    def run_process(self, data, browser):
+        with self.observe_children(self.dossier) as children, freeze(datetime(2022, 2, 1)):
+            browser.open('{}/@process'.format(
+                         self.dossier.absolute_url()),
+                         data=json.dumps(data),
+                         headers=self.api_headers)
+
+        return children['added'].pop()
+
+    def create_states_dict(self, task):
+        data = {
+            'review_state': api.content.get_state(task),
+        }
+        items = [self.create_states_dict(content) for content in task.listFolderContents()]
+        if items:
+            data['items'] = items
+
+        return data
+
+    @browsing
+    def test_flat_parallel_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_parallel_task_container([
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_OPEN},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_flat_parallel_process_run_immediate(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_parallel_task_container([
+                create_task(),
+                create_task(),
+            ]))
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_OPEN},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_flat_sequential_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_sequential_task_container([
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {'review_state': TASK_STATE_PLANNED},
+                {'review_state': TASK_STATE_PLANNED},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_flat_sequential_process_run_immediate(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_sequential_task_container([
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_PLANNED},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_parallel_nested_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_parallel_task_container([
+                create_parallel_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {'review_state': TASK_STATE_OPEN},
+                        {'review_state': TASK_STATE_OPEN}
+                    ]
+                },
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_OPEN},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_parallel_nested_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_parallel_task_container([
+                create_parallel_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {'review_state': TASK_STATE_OPEN},
+                        {'review_state': TASK_STATE_OPEN}
+                    ]
+                },
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_OPEN},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_parallel_deep_nested_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_parallel_task_container([
+                create_parallel_task_container([
+                    create_parallel_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_IN_PROGRESS,
+                            'items': [
+                                {'review_state': TASK_STATE_OPEN},
+                                {'review_state': TASK_STATE_OPEN}
+                            ]
+                        },
+                        {'review_state': TASK_STATE_OPEN}
+                    ]
+                },
+                {'review_state': TASK_STATE_OPEN},
+                {'review_state': TASK_STATE_OPEN},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_sequential_nested_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_sequential_task_container([
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}
+                    ]
+                },
+                {'review_state': TASK_STATE_PLANNED},
+                {'review_state': TASK_STATE_PLANNED},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_sequential_nested_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_sequential_task_container([
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {'review_state': TASK_STATE_OPEN},
+                        {'review_state': TASK_STATE_PLANNED}
+                    ]
+                },
+                {'review_state': TASK_STATE_PLANNED},
+                {'review_state': TASK_STATE_PLANNED},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_sequential_deep_nested_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_sequential_task_container([
+                create_sequential_task_container([
+                    create_sequential_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+                create_task(),
+                create_task(),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_OPEN,
+                            'items': [
+                                {'review_state': TASK_STATE_OPEN},
+                                {'review_state': TASK_STATE_PLANNED}
+                            ]
+                        },
+                        {'review_state': TASK_STATE_PLANNED}
+                    ]
+                },
+                {'review_state': TASK_STATE_PLANNED},
+                {'review_state': TASK_STATE_PLANNED},
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_deep_nested_parallel_sequential_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_parallel_task_container([
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_parallel_task_container([
+                    create_parallel_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}],
+                },
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_IN_PROGRESS,
+                            'items': [
+                                {'review_state': TASK_STATE_OPEN},
+                                {'review_state': TASK_STATE_OPEN}
+                            ],
+                        },
+                        {
+                            'review_state': TASK_STATE_OPEN,
+                        }
+                    ],
+                },
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}
+                    ],
+                }
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_deep_nested_parallel_sequential_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_parallel_task_container([
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_parallel_task_container([
+                    create_parallel_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+                create_sequential_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}],
+                },
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_IN_PROGRESS,
+                            'items': [
+                                {'review_state': TASK_STATE_OPEN},
+                                {'review_state': TASK_STATE_OPEN}
+                            ],
+                        },
+                        {
+                            'review_state': TASK_STATE_OPEN,
+                        }
+                    ],
+                },
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}
+                    ],
+                }
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_deep_nested_sequential_parallel_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_process(
+            create_sequential_task_container([
+                create_parallel_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_sequential_task_container([
+                    create_parallel_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_PLANNED}],
+                },
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_PLANNED,
+                            'items': [
+                                {'review_state': TASK_STATE_PLANNED},
+                                {'review_state': TASK_STATE_PLANNED}
+                            ],
+                        },
+                        {
+                            'review_state': TASK_STATE_PLANNED,
+                        }
+                    ],
+                },
+            ],
+        }, self.create_states_dict(main_task))
+
+    @browsing
+    def test_deep_nested_sequential_parallel_immediate_process(self, browser):
+        self.login(self.regular_user, browser)
+
+        data = create_immediate_process(
+            create_sequential_task_container([
+                create_parallel_task_container([
+                    create_task(),
+                    create_task(),
+                ]),
+                create_sequential_task_container([
+                    create_parallel_task_container([
+                        create_task(),
+                        create_task(),
+                    ]),
+                    create_task(),
+                ]),
+            ])
+        )
+
+        main_task = self.run_process(data, browser)
+
+        self.assertDictEqual({
+            'review_state': TASK_STATE_IN_PROGRESS,
+            'items': [
+                {
+                    'review_state': TASK_STATE_IN_PROGRESS,
+                    'items': [
+                        {'review_state': TASK_STATE_OPEN},
+                        {'review_state': TASK_STATE_OPEN}],
+                },
+                {
+                    'review_state': TASK_STATE_PLANNED,
+                    'items': [
+                        {
+                            'review_state': TASK_STATE_PLANNED,
+                            'items': [
+                                {'review_state': TASK_STATE_PLANNED},
+                                {'review_state': TASK_STATE_PLANNED}
+                            ],
+                        },
+                        {
+                            'review_state': TASK_STATE_PLANNED,
+                        }
+                    ],
+                },
+            ],
+        }, self.create_states_dict(main_task))
