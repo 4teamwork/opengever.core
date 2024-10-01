@@ -238,4 +238,4 @@ def setup_logging():
     # to make sure output gets logged on console
     stream_handler = logging.root.handlers[0]
     stream_handler.setLevel(logging.INFO)
-    logger.setLevel(logging.INFO)
+    logging.root.setLevel(logging.INFO)
