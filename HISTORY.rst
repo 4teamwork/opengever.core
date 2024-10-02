@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.14.1 (2024-10-02)
+----------------------
+
+Bug fixes:
+
+
+- Fix creating nested parallel task template containing a sequential template. [elioschmutz] [TI-1300]
+
+
 2024.14.0 (2024-09-24)
 ----------------------
 

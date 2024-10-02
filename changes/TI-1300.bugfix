@@ -1,1 +1,0 @@
-Fix creating nested parallel task template containing a sequential template. [elioschmutz]
