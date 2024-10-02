@@ -1,0 +1,1 @@
+Bump ftw.pdfgenerator to version 1.6.11 which fixes 'no line to end' errors with table environments. [buchi]
