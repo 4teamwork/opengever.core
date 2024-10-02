@@ -1,23 +1,20 @@
-from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from datetime import date
 from datetime import timedelta
+from opengever.base.security import elevated_privileges
 from opengever.base.utils import get_date_with_delta_excluding_weekends
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.actor import ActorLookup
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_RESPONSIBLE_ID
 from opengever.ogds.base.utils import get_current_org_unit
-from opengever.task import TASK_STATE_PLANNED
-from opengever.task.activities import TaskAddedActivity
 from opengever.task.interfaces import ITaskSettings
 from opengever.task.task import ITask
 from opengever.tasktemplates import is_tasktemplatefolder_nesting_allowed
 from opengever.tasktemplates.content.templatefoldersschema import ITaskTemplateFolderSchema
 from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from opengever.tasktemplates.interfaces import IContainParallelProcess
-from opengever.tasktemplates.interfaces import IContainProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderTriggering
 from opengever.tasktemplates.interfaces import IDuringTaskTemplateFolderWorkflowTransition
@@ -235,10 +232,11 @@ class ProcessCreator(object):
         main_task_data = self.process_data["process"]
         main_task = self.create_main_task(main_task_data)
         alsoProvides(self.request, IDuringTaskTemplateFolderTriggering)
-        self.create_subtasks(main_task, self.process_data["process"], main_task)
+        with elevated_privileges():
+            self.create_subtasks(main_task, self.process_data["process"], main_task)
 
-        if self.start_immediately:
-            self.start_first_task(main_task)
+        if self.start_immediately or IContainParallelProcess.providedBy(main_task):
+            main_task.start_subprocess()
 
         noLongerProvides(self.request, IDuringTaskTemplateFolderTriggering)
         return main_task
@@ -256,74 +254,23 @@ class ProcessCreator(object):
 
         return main_task
 
-    @staticmethod
-    def set_state(task, state):
-        initial_state = api.content.get_state(task)
-        wftool = api.portal.get_tool('portal_workflow')
-        wf_id = wftool.getWorkflowsFor(task)[0].id
-        wftool.setStatusOf(wf_id, task, {'review_state': state})
-        wftool.getWorkflowsFor(task)[0].updateRoleMappingsFor(task)
-        return initial_state
-
     def create_subtasks(self, container, data, main_task):
-        # Subtasks can only be added to a task that is in progress.
-        initial_state = self.set_state(container, "task-state-in-progress")
-
         subtasks = []
         for i, subtask_data in enumerate(data["items"]):
             subtask = self.create_subtask(container, subtask_data, main_task)
             if self.has_children(subtask_data):
                 self.create_subtasks(subtask, subtask_data, main_task)
             subtasks.append(subtask)
-
-        self.set_state(container, initial_state)
-        container.reindexObject()
-        container.sync()
-
         container.set_tasktemplate_order(subtasks)
 
     def create_subtask(self, container, data, main_task):
         task = self.add_task(
             container, data, related_documents=self.related_documents)
-
-        self.set_initial_state(task, main_task)
+        task.set_to_planned_state()
         task.reindexObject()
-        task.get_sql_object().sync_with(task)
-
-        # add activity record for subtask
-        if api.content.get_state(task) != TASK_STATE_PLANNED:
-            activity = TaskAddedActivity(task, getRequest())
-            activity.record()
+        task.sync()
 
         return task
-
-    def set_initial_state(self, task, main_task):
-        # Always set tasks to state "planned" if any of the parent tasks
-        # is a sequential process.
-        for obj in aq_chain(aq_inner(task)):
-            if not ITask.providedBy(obj):
-                break
-
-            if IContainSequentialProcess.providedBy(obj):
-                task.set_to_planned_state()
-                return
-
-        # Set a parallalel process container to "in progress". All subtasks
-        # will be in state "open" which is the default state.
-        if IContainParallelProcess.providedBy(task):
-            task._set_in_progress()
-
-    def start_first_task(self, main_task):
-        if not IContainSequentialProcess.providedBy(main_task):
-            return
-
-        oguid = main_task.get_tasktemplate_order()[0]
-        first_task = oguid.resolve_object()
-        first_task._open_planned_task()
-
-        if IContainProcess.providedBy(first_task):
-            first_task._set_in_progress()
-            first_task.start_subprocess()
 
     @staticmethod
     def is_sequential(sequence_type):
