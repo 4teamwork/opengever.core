@@ -1043,7 +1043,7 @@ class TestProcessInitialTaskStates(IntegrationTestCase):
                     'review_state': TASK_STATE_IN_PROGRESS,
                     'items': [
                         {
-                            'review_state': TASK_STATE_OPEN,
+                            'review_state': TASK_STATE_IN_PROGRESS,
                             'items': [
                                 {'review_state': TASK_STATE_OPEN},
                                 {'review_state': TASK_STATE_PLANNED}
@@ -1087,9 +1087,9 @@ class TestProcessInitialTaskStates(IntegrationTestCase):
             'review_state': TASK_STATE_IN_PROGRESS,
             'items': [
                 {
-                    'review_state': TASK_STATE_PLANNED,
+                    'review_state': TASK_STATE_IN_PROGRESS,
                     'items': [
-                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_OPEN},
                         {'review_state': TASK_STATE_PLANNED}],
                 },
                 {
@@ -1108,9 +1108,9 @@ class TestProcessInitialTaskStates(IntegrationTestCase):
                     ],
                 },
                 {
-                    'review_state': TASK_STATE_PLANNED,
+                    'review_state': TASK_STATE_IN_PROGRESS,
                     'items': [
-                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_OPEN},
                         {'review_state': TASK_STATE_PLANNED}
                     ],
                 }
@@ -1147,9 +1147,9 @@ class TestProcessInitialTaskStates(IntegrationTestCase):
             'review_state': TASK_STATE_IN_PROGRESS,
             'items': [
                 {
-                    'review_state': TASK_STATE_PLANNED,
+                    'review_state': TASK_STATE_IN_PROGRESS,
                     'items': [
-                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_OPEN},
                         {'review_state': TASK_STATE_PLANNED}],
                 },
                 {
@@ -1168,9 +1168,9 @@ class TestProcessInitialTaskStates(IntegrationTestCase):
                     ],
                 },
                 {
-                    'review_state': TASK_STATE_PLANNED,
+                    'review_state': TASK_STATE_IN_PROGRESS,
                     'items': [
-                        {'review_state': TASK_STATE_PLANNED},
+                        {'review_state': TASK_STATE_OPEN},
                         {'review_state': TASK_STATE_PLANNED}
                     ],
                 }

@@ -99,7 +99,8 @@ def review_state_changed(task, event):
 
     # If we start working on a subtask always means that we're also working
     # on the parent task. We need to ensure, that every parent task is in progress.
-    if event.action not in ['task-transition-planned-open',
+    if event.action not in ['task-transition-open-planned',
+                            'task-transition-planned-open',
                             'task-transition-rejected-skipped',
                             'task-transition-reassign']:
         task.maybe_start_parent_task()

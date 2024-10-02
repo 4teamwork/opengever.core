@@ -432,7 +432,7 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(doc, subprocess_task1.relatedItems[0].to_object)
 
         self.assertEquals(
-            'task-state-open', api.content.get_state(subprocess_task2))
+            'task-state-in-progress', api.content.get_state(subprocess_task2))
         self.assertEquals(doc, subprocess_task2.relatedItems[0].to_object)
 
         self.assertEquals(
@@ -485,7 +485,7 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         )
 
         self.assertEquals(
-            'task-state-open', api.content.get_state(subprocess_task1))
+            'task-state-in-progress', api.content.get_state(subprocess_task1))
         self.assertEquals(doc, subprocess_task1.relatedItems[0].to_object)
 
         self.assertEquals(
