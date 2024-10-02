@@ -29,6 +29,8 @@ FINISHED_TASK_STATES = [
 
 TASK_STATE_PLANNED = 'task-state-planned'
 
+TASK_STATE_OPEN = 'task-state-open'
+
 TASK_STATE_SKIPPED = 'task-state-skipped'
 
 TASK_STATE_IN_PROGRESS = 'task-state-in-progress'

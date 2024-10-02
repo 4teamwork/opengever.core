@@ -711,9 +711,7 @@ class Task(Container, TaskReminderSupport):
         # on next task, we therefore need to use elevated_privileges here.
         with elevated_privileges():
             next_task._open_planned_task()
-            if IContainProcess.providedBy(next_task):
-                next_task._set_in_progress()
-                next_task.start_subprocess()
+            next_task.start_subprocess()
 
     def _open_planned_task(self):
         if api.content.get_state(self) != 'task-state-planned':
@@ -726,6 +724,9 @@ class Task(Container, TaskReminderSupport):
         self.sync()
 
     def _set_in_progress(self):
+        if api.content.get_state(self) != 'task-state-open':
+            return
+
         with as_internal_workflow_transition():
             api.content.transition(
                 obj=self, transition='task-transition-open-in-progress')
@@ -736,8 +737,14 @@ class Task(Container, TaskReminderSupport):
         self._start_subprocess(self)
 
     def _start_subprocess(self, obj):
+        if not IContainProcess.providedBy(obj):
+            return
+
+        obj._open_planned_task()
+        obj._set_in_progress()
         for subtask in self._get_subtasks_to_start(obj):
             subtask._open_planned_task()
+            subtask.start_subprocess()
 
     def _get_subtasks_to_start(self, obj):
         if IContainParallelProcess.providedBy(obj):
