@@ -11,6 +11,7 @@ python /app/entrypoint.d/create_zope_conf.py "$CONFIG_FILE"
 python /app/entrypoint.d/create_ogds_zcml.py
 python /app/entrypoint.d/create_solr_zcml.py
 python /app/entrypoint.d/create_package_includes.py
+python /app/entrypoint.d/create_crontab.py
 
 if [ $# -eq 0 ]
 then
