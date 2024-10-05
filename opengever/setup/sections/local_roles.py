@@ -3,8 +3,12 @@ from collective.blueprint.jsonmigrator.blueprint import LocalRoles
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
 from collective.transmogrifier.utils import Expression
+from opengever.base.model import create_session
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.ogds.models.group import Group
+from sqlalchemy.sql import select
+from sqlalchemy.sql.expression import true
 from zope.interface import classProvides
 from zope.interface import implements
 import logging
@@ -73,6 +77,7 @@ class InsertLocalRolesSection(object):
         self.logger = logging.getLogger(options['blueprint'])
         self.fields = Expression(options['fields'], transmogrifier, name,
                                  options)
+        self.group_ids_by_name = self.get_group_mapping_from_ogds()
 
     def __iter__(self):
 
@@ -102,7 +107,23 @@ class InsertLocalRolesSection(object):
         """Look for groups in the given row (field), split by comma and strip
         leading and trailing spaces.
         """
-        return [group.strip() for group in item.get(field, '').split(',')]
+        groupnames = [group.strip() for group in item.get(field, '').split(',')]
+        return [self.group_ids_by_name.get(gn.lower(), gn) for gn in groupnames]
+
+    def get_group_mapping_from_ogds(self):
+        session = create_session()
+
+        group_ids_by_name = {}
+
+        query = select((Group.groupname, Group.groupid)).where(Group.active == true())
+        res = session.execute(query)
+        ids_by_name = dict(res.fetchall())
+
+        # Make sure lookups by name are case-insensitive
+        for name, id_ in ids_by_name.items():
+            group_ids_by_name[name.lower()] = id_
+
+        return group_ids_by_name
 
 
 class LocalRolesSetter(LocalRoles):
