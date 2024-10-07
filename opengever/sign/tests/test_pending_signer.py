@@ -13,6 +13,15 @@ class TestPendingSigner(IntegrationTestCase):
                 'userid': 'regular_user'
             }, signer.serialize())
 
+    def test_can_be_converted_to_a_signatory(self):
+        signer = PendingSigner(email='foo@example.com')
+
+        self.assertDictEqual(
+            {
+                'email': 'foo@example.com',
+                'userid': 'regular_user',
+            }, signer.to_signatory().serialize())
+
 
 class TestPendingSigners(IntegrationTestCase):
     def test_can_be_serialized(self):
@@ -26,3 +35,11 @@ class TestPendingSigners(IntegrationTestCase):
         self.assertEqual(2, len(container.serialize()))
         self.assertItemsEqual([signer2.email, signer1.email],
                               [item.get('email') for item in container.serialize()])
+
+    def test_can_be_converted_to_signatories(self):
+        container = PendingSigners()
+
+        container.append(PendingSigner())
+        container.append(PendingSigner())
+
+        self.assertEqual(2, len(container.to_signatories()))
