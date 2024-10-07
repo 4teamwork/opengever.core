@@ -8,6 +8,7 @@ from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.utils import find_parent_dossier
 from opengever.workspaceclient import is_workspace_client_feature_available
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
+from opengever.workspaceclient.exceptions import GeverDocumentCantBeChanged
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.uuid.utils import uuidToObject
@@ -459,6 +460,10 @@ class CopyDocumentFromWorkspacePost(LinkedWorkspacesService):
         except LookupError:
             raise BadRequest(
                 _("Document not in linked workspace"))
+        except GeverDocumentCantBeChanged:
+            raise BadRequest(
+                _("Document can't be copied from workspace because GEVER "
+                  "Document is finalized"))
 
         serialized = self.serialize_object(destination_document)
         serialized['teamraum_connect_retrieval_mode'] = retrieval_mode

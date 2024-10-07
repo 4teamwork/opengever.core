@@ -56,3 +56,9 @@ class CopyFromWorkspaceForbidden(Exception):
     """Raised if copying a document from a workspace is not permitted for
     business logic reasons.
     """
+
+
+class GeverDocumentCantBeChanged(Exception):
+    """Raised if copying a document from a workspace is not permitted due
+    to Gever document being in final state.
+    """

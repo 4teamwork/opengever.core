@@ -44,6 +44,11 @@ msgstr "Exporter en Excel"
 msgid "Fill meeting template"
 msgstr "Insérer un exemple de données de réunion"
 
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "Final"
+msgstr "Final"
+
 #. Default: "Inactive"
 #: opengever/core/profiles/default/workflows/opengever_committee_workflow/specification.txt
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -71,6 +76,11 @@ msgstr "Compléter"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
 msgid "deactivate"
 msgstr "Déactiver"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "finalize"
+msgstr "Finaliser"
 
 #. Default: "open"
 #: opengever/core/profiles/default/workflows/opengever_workspace_todo/specification.txt
@@ -181,6 +191,21 @@ msgstr "Manager"
 #: opengever/core/profiles/default/workflows/opengever_period_workflow/specification.txt
 msgid "opengever_period_workflow--STATUS--active"
 msgstr "Active"
+
+#. Default: "Final"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--STATUS--final"
+msgstr "Final"
+
+#. Default: "finalize"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--finalize--active_final"
+msgstr "Finaliser"
+
+#. Default: "reopen"
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
+msgid "opengever_workspace_document--TRANSITION--reopen--final_active"
+msgstr "Réviser"
 
 #. Default: "admin"
 #: opengever/core/profiles/default/workflows/opengever_workspace/specification.txt
@@ -495,6 +520,7 @@ msgstr "réactiver"
 
 #. Default: "reopen"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
+#: opengever/core/profiles/default/workflows/opengever_workspace_document/specification.txt
 msgid "reopen"
 msgstr "Rouvrir"
 

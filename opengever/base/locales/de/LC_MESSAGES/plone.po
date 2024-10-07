@@ -44,6 +44,12 @@ msgstr "Dokumentstatus verändert: Entwurf"
 msgid "Document state changed to document-state-final"
 msgstr "Dokumentstatus verändert: Final"
 
+msgid "Document state changed to opengever_workspace_document--STATUS--final"
+msgstr "Dokumentstatus verändert: Final"
+
+msgid "Document state changed to opengever_workspace_document--STATUS--active"
+msgstr "Dokumentstatus verändert: Entwurf"
+
 msgid "Document state changed to document-state-signing"
 msgstr "Dokumentstatus verändert: Wird signiert"
 

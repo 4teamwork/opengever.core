@@ -2,6 +2,7 @@ from ftw.mail.interfaces import IEmailAddress
 from ftw.mail.mail import IMail
 from opengever.api.add import GeverFolderPost
 from opengever.api.serializer import GeverSerializeFolderToJson
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.document import IDocumentSchema
 from opengever.workspace.interfaces import IWorkspace
 from opengever.workspace.participation import can_manage_member
@@ -80,3 +81,10 @@ class UploadDocumentCopy(GeverFolderPost):
 
     def before_serialization(self, obj):
         ILinkedDocuments(obj).link_gever_document(self.gever_document_uid)
+
+    def add_object_to_context(self):
+        super(UploadDocumentCopy, self).add_object_to_context()
+        data = json.loads(self.request.form['document_metadata'])
+
+        if IBaseDocument.providedBy(self.obj) and data.get("final", None):
+            self.obj.as_final_document()

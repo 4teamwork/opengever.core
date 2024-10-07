@@ -104,6 +104,19 @@
                    opengever.task: Edit task,
                    "
       />
+  <lawgiver:map_permissions
+      action_group="edit workspace document"
+      permissions="
+                   opengever.document: Cancel,
+                   opengever.document: Checkin,
+                   opengever.document: Checkout,
+                   CMFEditions: Apply version control,
+                   CMFEditions: Checkout to location,
+                   CMFEditions: Revert to previous versions,
+                   CMFEditions: Save new version,
+                   "
+      workflow="opengever_workspace_document"
+      />
 
   <lawgiver:map_permissions
       action_group="trash"
@@ -418,9 +431,6 @@
   <lawgiver:workflow name="opengever_workspace_document">
     <lawgiver:ignore
         permissions="
-                     opengever.document: Cancel,
-                     opengever.document: Checkin,
-                     opengever.document: Checkout,
                      opengever.document: Force Checkin,
                      opengever.trash: Trash content,
                      opengever.trash: Untrash content,
@@ -433,10 +443,6 @@
                      Sharing page: Delegate roles,
                      Take ownership,
                      CMFEditions: Access previous versions,
-                     CMFEditions: Apply version control,
-                     CMFEditions: Checkout to location,
-                     CMFEditions: Revert to previous versions,
-                     CMFEditions: Save new version,
                      "
         />
     <lawgiver:map_permissions

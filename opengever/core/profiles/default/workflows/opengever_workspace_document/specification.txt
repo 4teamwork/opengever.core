@@ -26,6 +26,7 @@ General:
   A workspace member can perform the same actions as a workspace guest.
   A workspace admin can perform the same actions as a workspace member.
   An admin can perform the same actions as a workspace admin.
+  A systems administrator can always perform the same actions as an admin.
 
   A systems administrator can always view.
   A systems administrator can always manage security.
@@ -35,3 +36,12 @@ General:
 Initial Status: Active
 Status Active:
   A workspace guest can view.
+  A workspace member can edit workspace document.
+  A workspace admin can finalize.
+Status Final:
+  A workspace guest can view.
+  A workspace admin can reopen.
+
+Transitions:
+  finalize (Active => Final) [guard-expression => here/is_finalize_allowed]
+  reopen (Final => Active)
