@@ -19,6 +19,10 @@ msgid "Document can't be copied from workspace because it's currently checked ou
 msgstr "Document can't be copied from workspace because it's currently checked out."
 
 #: ./opengever/api/linked_workspaces.py
+msgid "Document can't be copied from workspace because GEVER Document is finalized"
+msgstr "Document can't be copied from workspace because GEVER Document is finalized."
+
+#: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"
 msgstr "Document is not in a linked workspace."
 

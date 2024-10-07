@@ -16,6 +16,7 @@ from opengever.workspaceclient.client import WorkspaceClient
 from opengever.workspaceclient.exceptions import CopyFromWorkspaceForbidden
 from opengever.workspaceclient.exceptions import CopyToWorkspaceForbidden
 from opengever.workspaceclient.exceptions import FolderNotFound
+from opengever.workspaceclient.exceptions import GeverDocumentCantBeChanged
 from opengever.workspaceclient.exceptions import WorkspaceNotFound
 from opengever.workspaceclient.exceptions import WorkspaceNotLinked
 from opengever.workspaceclient.interfaces import ILinkedDocuments
@@ -367,6 +368,11 @@ class LinkedWorkspaces(object):
         # for example because the GEVER document was trashed, always create
         # a copy instead of attempting to create a version.
         gever_doc = self._get_corresponding_gever_doc(document_repr)
+
+        if gever_doc and gever_doc.is_final_document():
+            raise GeverDocumentCantBeChanged(
+                "Document %r can't be copied from workspace because "
+                "Gever Document is finalized" % gever_doc)
 
         is_document_with_file = all((
             document_repr['@type'] == u'opengever.document.document',
