@@ -2,16 +2,22 @@ from collective.taskqueue.interfaces import ITaskQueue
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
+from opengever.api.utils import get_obj_by_path
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.locking.lock import MEETING_EXCERPT_LOCK
 from opengever.testing import assets
 from opengever.testing import IntegrationTestCase
+from opengever.workspaceclient.interfaces import ILinkedWorkspaces
+from opengever.workspaceclient.tests import FunctionalWorkspaceClientTestCase
+from plone import api
 from plone.locking.interfaces import ILockable
 from plone.namedfile.file import NamedBlobFile
 from zExceptions import Forbidden
+from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 import json
+import transaction
 
 
 class TestCopyPasteAPI(IntegrationTestCase):
@@ -280,3 +286,39 @@ class TestCopyPasteAPI(IntegrationTestCase):
                 headers=self.api_headers,
             )
         self.assertEqual(1, len(children["added"]))
+
+
+class TestDossierCopyDoesNotIncludeLinkedWorkspaces(FunctionalWorkspaceClientTestCase):
+    @browsing
+    def test_copy_dossier_removes_workspace_links(self, browser):
+
+        dossier_2 = create(
+            Builder('dossier')
+            .titled(u'Dossier 2')
+            .within(self.leaf_repofolder)
+        )
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(self.dossier)
+            self.assertEqual([], manager.list().get('items'))
+            manager.storage.add(self.workspace.UID())
+            transaction.commit()
+
+        browser.login()
+        payload = {u'source': self.dossier.absolute_url()}
+        browser.open(
+            dossier_2.absolute_url() + '/@copy',
+            data=json.dumps(payload),
+            method='POST',
+            headers=self.api_headers,
+        )
+        target = browser.json[0][u'target']
+
+        browser.open(
+            target,
+            method='GET',
+            headers=self.api_headers
+        )
+        copied_dossier = api.content.get(UID=browser.json["UID"])
+        with self.workspace_client_env():
+            manager = ILinkedWorkspaces(copied_dossier)
+            self.assertEqual([], manager.list().get('items'))
