@@ -76,7 +76,7 @@ RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
 COPY ./docker/core/zopectl /app/bin/
-COPY ./docker/core/cron /app/cron
+COPY --chown=plone ./docker/core/cron /app/cron
 
 RUN mkdir -p /app/var/log /app/var/instance \
  && chown plone:plone /app/var/log \

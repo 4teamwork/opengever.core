@@ -3,3 +3,4 @@
 30 4 * * * /app/bin/zopectl -C /app/etc/zope.conf generate_overdue_notifications
 0 1 * * * /app/bin/zopectl -C /app/etc/zope.conf run_nightly_jobs
 0 22 * * * /app/bin/zopectl -C /app/etc/zope.conf dump_content_stats --python-du -d /data --filestorage-path filestorage/Data.fs --blobstorage-path blobstorage
+0 23 * * * /app/bin/zeopack -d 7 zeoserver:8100
