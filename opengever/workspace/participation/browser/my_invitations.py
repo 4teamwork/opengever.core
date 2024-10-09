@@ -1,14 +1,11 @@
 from logging import getLogger
 from opengever.base.casauth import get_gever_portal_url
-from opengever.base.model import create_session
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.base.security import elevated_privileges
 from opengever.ogds.base.actor import Actor
+from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.ogds.base.utils import get_current_admin_unit
-from opengever.ogds.models.group import Group
-from opengever.ogds.models.service import ogds_service
-from opengever.ogds.models.user import User
 from opengever.workspace import _
 from opengever.workspace import is_workspace_feature_enabled
 from opengever.workspace.activities import WorkspaceWatcherManager
@@ -148,6 +145,13 @@ class MyWorkspaceInvitations(BrowserView):
             if payload.get("no_redirect", None):
                 # User just registered or logged in on the portal
                 # but does not have a GEVER session yet.
+                if payload.get("new_user", None):
+                    # Make sure new users exist in OGDS which is required when
+                    # using OGDS authentication.
+                    sync_ogds(
+                        api.portal.getSite(),
+                        update_remote_timestamps=False,
+                    )
                 logger.info("Triggering CAS redirect for Anonymous user.")
                 raise Unauthorized
 
@@ -190,36 +194,6 @@ class MyWorkspaceInvitations(BrowserView):
         target = self._accept(invitation)
         return self.request.RESPONSE.redirect(target.absolute_url())
 
-    def _maybe_create_ogds_entry(self):
-        member = api.user.get_current()
-        userid = member.getId()
-
-        if ogds_service().fetch_user(userid):
-            # OGDS entry for user already exists, no need to create one
-            return
-
-        logger.info("Creating OGDS entry for user %r" % userid)
-        session = create_session()
-        firstname = member.getProperty('firstname', '')
-        lastname = member.getProperty('lastname', '')
-        email = member.getProperty('email')
-        ogds_user = User(
-            userid=userid,
-            username=userid,
-            external_id=userid,
-            firstname=firstname,
-            lastname=lastname,
-            email=email)
-
-        # Assign the intersection of existing OGDS groups and the newly created
-        # user's groups as groups for the new OGDS user entry. This will most
-        # likely be just the OrgUnit's users_group. If there's more, they
-        # will be created and assigned during next sync.
-        groups_of_new_user = member.getUser().getGroupIds()
-        groups = Group.query.filter(Group.groupid.in_(groups_of_new_user)).all()
-        ogds_user.groups = groups
-        session.add(ogds_user)
-
     def _accept(self, invitation):
         with elevated_privileges():
             target = uuidToObject(invitation['target_uuid'])
@@ -236,7 +210,6 @@ class MyWorkspaceInvitations(BrowserView):
             manager = WorkspaceWatcherManager(target)
             manager.new_participant_added(invitation['recipient'])
 
-        self._maybe_create_ogds_entry()
         return target
 
     def decline(self):
