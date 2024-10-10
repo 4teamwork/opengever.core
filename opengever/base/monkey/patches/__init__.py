@@ -17,6 +17,7 @@ from .filter_trashed_from_catalog import PatchCatalogToFilterTrashedDocs
 from .history_handler_tool import PatchCMFEditonsHistoryHandlerTool
 from .jsonschema_for_portal_type import PatchGetJsonschemaForPortalType
 from .language_tool import PatchLanguageToolCall
+from .mailhost import PatchMakeMailer
 from .maybe_report_exception import PatchMaybeReportException
 from .namedfile_data_converter import PatchNamedfileNamedDataConverter
 from .paste_permission import PatchDXContainerPastePermission
@@ -67,6 +68,7 @@ PatchFullHistory()()
 PatchGetJsonschemaForPortalType()()
 PatchInvokeFactory()()
 PatchLanguageToolCall()()
+PatchMakeMailer()()
 PatchMaybeReportException()()
 PatchMembershipToolCreateMemberarea()()
 PatchMembershipToolSetLoginTimes()()
