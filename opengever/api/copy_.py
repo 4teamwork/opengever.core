@@ -14,6 +14,7 @@ from plone.locking.interfaces import ILockable
 from plone.restapi.deserializer import json_body
 from plone.restapi.services.copymove.copymove import Copy
 from zExceptions import Forbidden
+from zope.annotation.interfaces import IAnnotations
 from zope.container.interfaces import INameChooser
 from zope.i18n import translate
 import six
@@ -35,6 +36,11 @@ class Copy(Copy):
         for result in results:
             target_id = result["target"].split("/")[-1]
             obj = self.context[target_id]
+            annotations = IAnnotations(obj)
+
+            if 'opengever.workspaceclient.linked_workspaces' in annotations:
+                del annotations["opengever.workspaceclient.linked_workspaces"]
+
             self.recursive_rename_and_fix_creator(obj, docs_to_update)
             result["target"] = obj.absolute_url()
 
