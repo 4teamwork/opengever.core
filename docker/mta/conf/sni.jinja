@@ -1,0 +1,3 @@
+{% for domain in virtual_domains %}
+{{ domain.name }} /etc/postfix/sni-chains/{{ domain.name }}.pem
+{% endfor %}
