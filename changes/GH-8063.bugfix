@@ -1,0 +1,1 @@
+Bump ftw.solr to version 2.13.3 which fixes issues running the solr zopectl command in Docker deployments. [buchi]
