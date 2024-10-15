@@ -98,7 +98,7 @@ class BaseReporterView(BrowserView):
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         set_attachment_content_disposition(self.request, self.filename)
 
-        return data
+        return response
 
 
 class SolrReporterView(BaseReporterView):

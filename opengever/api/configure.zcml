@@ -694,6 +694,22 @@
   <plone:service
       method="GET"
       for="zope.interface.Interface"
+      factory=".solrsearch.SolrLiveSearchGetDossier"
+      name="@solrlivesearchDossierExporter"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="POST"
+      for="zope.interface.Interface"
+      factory=".solrsearch.SolrLiveSearchGetDossier"
+      name="@solrlivesearchDossierExporter"
+      permission="zope2.View"
+      />
+
+  <plone:service
+      method="GET"
+      for="zope.interface.Interface"
       factory=".solrsearch.TeamraumSolrSearchGet"
       name="@teamraum-solrsearch"
       permission="zope2.View"

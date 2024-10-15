@@ -1,3 +1,4 @@
+from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import ensure_text
 from ftw.solr.query import escape
 from ftw.solr.query import make_filters
@@ -6,13 +7,27 @@ from opengever.api.breadcrumbs import Breadcrumbs
 from opengever.api.linked_workspaces import teamraum_request_error_handler
 from opengever.api.listing import FILTERS
 from opengever.api.solr_query_service import LiveSearchQueryPreprocessingMixin
+from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
+from opengever.api.utils import recursive_encode
+from opengever.base.behaviors.utils import set_attachment_content_disposition
+from opengever.base.browser.reporting_view import SolrReporterView
 from opengever.base.interfaces import ISearchSettings
+from opengever.base.reporter import DATE_NUMBER_FORMAT
+from opengever.base.reporter import readable_actor
+from opengever.base.reporter import StringTranslater
+from opengever.base.reporter import XLSReporter
+from opengever.base.solr import OGSolrContentListing
+from opengever.base.solr.fields import DEFAULT_SORT_INDEX
 from opengever.base.solr.fields import relative_to_physical_path
 from opengever.base.solr.fields import SolrFieldMapper
 from opengever.base.solr.fields import url_to_physical_path
+from opengever.base.utils import rewrite_path_list_to_absolute_paths
+from opengever.base.utils import safe_int
+from opengever.dossier import _
 from opengever.workspaceclient.client import WorkspaceClient
 from plone import api
+from plone.app.contentlisting.interfaces import IContentListingObject
 from plone.restapi.services import Service
 from Products.CMFCore.utils import getToolByName
 from zExceptions import BadRequest
@@ -323,6 +338,58 @@ class SolrLiveSearchGet(LiveSearchQueryPreprocessingMixin, SolrSearchGet):
             return {"preprocessed_query": self.preprocess_query(
                 self.extract_query(self.request_payload))}
         return super(SolrLiveSearchGet, self).reply()
+
+
+class SolrLiveSearchGetDossier(SolrLiveSearchGet):
+    """REST API endpoint for querying Solr Dossier
+    """
+    filename = 'dossier_report.xlsx'
+    column_settings = (
+        {
+            'id': 'title',
+            'is_default': True,
+        },
+    )
+
+    def reply(self):
+        if not api.portal.get_registry_record(
+                'use_solr', interface=ISearchSettings):
+            raise BadRequest('Solr is not enabled on this GEVER installation.')
+
+
+        query, filters, start, rows, sort, field_list, params = \
+            self.prepare_solr_query(self.request_payload)
+
+        resp = self.solr.search(
+            query=query, filters=filters, start=start, rows=rows, sort=sort,
+            fl=field_list, **params)
+
+        if not resp.is_ok():
+            raise InternalError(resp.error_msg())
+
+        res = {
+            "items": self.prepare_response_items(resp),
+            "start": start,
+            "rows": rows,
+            "facet_counts": self.extract_facets_from_response(resp)
+        }
+        # flatten stats and only return field stats if they were requested
+        stats = resp.get('stats', {}).get('stats_fields')
+        if stats:
+            res['stats'] = stats
+        self.extend_with_batching(res, resp)
+        reporter = XLSReporter(self.request, self.column_settings, res['items'])
+        import pdb
+        pdb.set_trace()
+        data = reporter()
+        response = self.request.RESPONSE
+        response.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+        set_attachment_content_disposition(self.request, self.filename)
+
+        return response
 
 
 class TeamraumSolrSearchGet(Service):

@@ -83,6 +83,8 @@ class DossierReporter(SolrReporterView):
         rewrite_path_list_to_absolute_paths(self.request)
 
         dossiers = self.get_selected_items()
+        import pdb
+        pdb.set_trace()
 
         reporter = XLSReporter(self.request, self.columns(), dossiers, field_mapper=self.fields)
         return self.return_excel(reporter)
