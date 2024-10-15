@@ -55,7 +55,7 @@ fluent-logger==0.9.6
 ftw.builder==2.0.0
 ftw.bumblebee==4.0.0
 ftw.casauth==1.7.1
-ftw.catalogdoctor==1.2.0
+ftw.catalogdoctor==1.2.1
 ftw.contentmenu==2.4.0
 ftw.contentstats==1.4.1
 ftw.copymovepatches==1.1.1
