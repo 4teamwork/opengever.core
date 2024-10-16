@@ -1,9 +1,13 @@
 from collections import defaultdict
+from logging import getLogger
 from opengever.wopi.interfaces import IWOPISettings
 from plone import api
 from xml.etree import cElementTree as ET
 import requests
 import time
+
+
+logger = getLogger('opengever.wopi')
 
 
 WOPI_DISCOVERY_REFRESH_INTERVAL = 60 * 60 * 24
@@ -49,9 +53,13 @@ def run_discovery(net_zone='external-https', url=None):
     ):
         return
 
-    resp = requests.get(url)
-    tree = ET.XML(resp.text)
-    wopi_discovery = etree_to_dict(tree)['wopi-discovery']
+    try:
+        resp = requests.get(url)
+        tree = ET.XML(resp.text)
+        wopi_discovery = etree_to_dict(tree)['wopi-discovery']
+    except Exception:
+        logger.exception('WOPI discovery from %r failed:', url)
+        return
 
     actions = {}
     net_zones = wopi_discovery['net-zone']
