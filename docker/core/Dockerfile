@@ -1,9 +1,37 @@
+# pkg builder
+# -----------------------------------------------------------------------------
+FROM alpine:3.20 AS pkg-builder
+
+RUN apk -U add \
+    sudo \
+    alpine-sdk \
+    apkbuild-pypi
+
+RUN mkdir -p /var/cache/distfiles && \
+    adduser -D packager && \
+    addgroup packager abuild && \
+    chgrp abuild /var/cache/distfiles && \
+    chmod g+w /var/cache/distfiles && \
+    echo "packager ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+WORKDIR /work
+USER packager
+
+RUN abuild-keygen -a -i -n
+
+COPY --chown=packager:packager ./docker/core/packages/ ./
+
+RUN cd openssl1.1-compat && \
+    abuild -r
+
 # ogcore builder
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.18 AS builder
+FROM 4teamwork/plone:4.3.20-alpine3.20 AS builder
 USER root
 
-RUN apk add \
+RUN --mount=from=pkg-builder,source=/home/packager/packages/work,target=/packages \
+    --mount=from=pkg-builder,source=/etc/apk/keys,target=/etc/apk/keys \
+    apk --repository /packages add \
     gcc \
     musl-dev \
     libc-dev \
@@ -16,6 +44,7 @@ RUN apk add \
     openssl1.1-compat-dev \
     libffi-dev \
     libpq \
+    libpq-dev \
     gettext
 
 # Fix support for python-ldap<3.4.2 with OpenLDAP 2.6
@@ -24,20 +53,6 @@ RUN echo "INPUT ( libldap.so )" > /usr/lib/libldap_r.so
 WORKDIR /app
 
 ENV PATH="/app/bin:$PATH"
-
-# libpq-dev requires OpenSSL 3 headers. Currently it's not possible to install
-# versions 1.1 and 3 at the same time. For building psycopg2 we temporarily
-# uninstall the 1.1 headers and reinstall them after having built psycopg2.
-RUN --mount=type=cache,target=/root/.cache \
-    apk del \
-    openssl1.1-compat-dev \
- && apk add --virtual .postgresql-dev \
-    libpq-dev \
- && pip install \
-    --prefix /app \
-    psycopg2==2.8.6 \
- && apk del .postgresql-dev \
- && apk add openssl1.1-compat-dev
 
 COPY ./docker/core/requirements-core.txt ./docker/core/requirements-deployment.txt /app/
 RUN --mount=type=cache,target=/root/.cache \
@@ -102,7 +117,7 @@ RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashi
 
 # go-crond builder
 # -----------------------------------------------------------------------------
-FROM golang:1.21-alpine3.18 AS go-crond-builder
+FROM golang:1.23-alpine3.20 AS go-crond-builder
 
 RUN apk upgrade --no-cache --force
 RUN apk add --update build-base make git
@@ -122,7 +137,7 @@ RUN make build
 
 # ogcore production image
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.18 AS prod
+FROM 4teamwork/plone:4.3.20-alpine3.20 AS prod
 
 USER root
 RUN apk add \
