@@ -5,7 +5,6 @@ from opengever.document import _
 from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.ogds.models.service import ogds_service
-from opengever.sign.sign import Signer
 from plone import api
 from plone.supermodel.model import Schema
 from zope import schema
@@ -38,7 +37,7 @@ class DocumentFinalSigningTransitionExtender(TransitionExtender):
         if not actor or not actor.email:
             raise NoEmailError()
 
-        Signer(self.context).start_signing(signers=[actor.email])
+        # Signer(self.context).start_signing(signers=[actor.email])
 
 
 @implementer(ITransitionExtender)
@@ -66,7 +65,8 @@ class DocumentDraftSigningTransitionExtender(TransitionExtender):
 class DocumentSigningFinalTransitionExtender(TransitionExtender):
 
     def after_transition_hook(self, *args, **kwargs):
-        Signer(self.context).abort_signing()
+        pass
+        # Signer(self.context).abort_signing()
 
 
 @implementer(ITransitionExtender)
