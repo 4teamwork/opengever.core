@@ -1,0 +1,43 @@
+from sqlalchemy import create_engine
+from sqlalchemy import MetaData
+from sqlalchemy import Table
+from sqlalchemy import Column
+from sqlalchemy import String
+from sqlalchemy import Text
+from sqlalchemy import Integer
+from sqlalchemy import Date
+from sqlalchemy import DateTime
+from sqlalchemy import Boolean
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy.sql import func
+
+
+COLUMN_TYPES = {
+    'varchar': String,
+    'text': Text,
+    'jsonb': JSONB,
+    'integer': Integer,
+    'date': Date,
+    'datetime': DateTime,
+    'boolean': Boolean,
+}
+
+engine = create_engine('postgresql:///exportng')
+metadata = MetaData(bind=engine)
+
+
+def create_table(table, mapping):
+    if table in metadata.tables:
+        return
+    cols = []
+    for attr in mapping:
+        cols.append(Column(
+            attr.col_name,
+            COLUMN_TYPES[attr.col_type],
+            nullable=True,
+        ))
+    cols.append(Column('_created_at', DateTime, index=True, server_default=func.now()))
+    cols.append(Column('_modified_at', DateTime, index=True, onupdate=func.now()))
+    cols.append(Column('_synced_at', DateTime, index=True, onupdate=func.now()))
+    cols.append(Column('_deleted', Boolean, index=True, default=False))
+    Table(table, metadata, *cols)

@@ -208,6 +208,7 @@ setup(name='opengever.core',
       sync_ogds = opengever.ogds.base:sync_ogds_zopectl_handler
       setup = opengever.setup.zopectl:setup
       upgrade = opengever.setup.zopectl:upgrade
+      exportng = opengever.exportng.zopectl:exportng
 
       [console_scripts]
       create-bundle = opengever.bundle.factory:main
