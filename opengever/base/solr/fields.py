@@ -595,6 +595,11 @@ FIELDS_WITH_MAPPING = [
         title=dossier_mf(u'filing_no_filing'),
     ),
     ListingField(
+        'id',
+        index='id',
+        title=dossier_mf(u'id', default=u'ID'),
+    ),
+    ListingField(
         'issuer',
         index='issuer',
         transform=display_name,
