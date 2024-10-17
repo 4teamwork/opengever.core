@@ -18,23 +18,22 @@ class UploadSignedPdfPost(Service):
             raise Forbidden()
 
         self.extract_payload()
-        # self.signer = Signer(self.context)
+        self.signer = Signer(self.context)
 
         return super(UploadSignedPdfPost, self).__call__()
 
     def reply(self):
-        # with self.signer.adopt_issuer():
-        #     self.signer.complete_signing(self.signed_pdf_data)
-        # self.signer.invalidate_token()
+        with self.signer.adopt_issuer():
+            self.signer.complete_signing(self.signed_pdf_data)
+        self.signer.invalidate_token()
         self.request.response.setStatus(201)
         return super(UploadSignedPdfPost, self).reply()
 
     def check_permission(self):
-        # try:
-        #     self.signer.validate_token(self.access_token)
-        # except InvalidToken:
-        #     raise Unauthorized()
-        pass
+        try:
+            self.signer.validate_token(self.access_token)
+        except InvalidToken:
+            raise Unauthorized()
 
     def extract_payload(self):
         data = json_body(self.request)
