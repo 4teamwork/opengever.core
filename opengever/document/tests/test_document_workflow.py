@@ -238,37 +238,37 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())
 
-    # @requests_mock.Mocker()
-    # def test_can_start_signing_a_document_in_final_state(self, mocker):
-    #     self.activate_feature('sign')
-    #     mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+    @requests_mock.Mocker()
+    def test_can_start_signing_a_document_in_final_state(self, mocker):
+        self.activate_feature('sign')
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
 
-    #     self.login(self.regular_user)
+        self.login(self.regular_user)
 
-    #     api.content.transition(obj=self.document,
-    #                            transition=Document.finalize_transition)
+        api.content.transition(obj=self.document,
+                               transition=Document.finalize_transition)
 
-    #     with freeze(FROZEN_NOW):
-    #         api.content.transition(obj=self.document,
-    #                                transition=Document.final_signing_transition)
+        with freeze(FROZEN_NOW):
+            api.content.transition(obj=self.document,
+                                   transition=Document.final_signing_transition)
 
-    #     self.assertEquals(Document.signing_state,
-    #                       api.content.get_state(obj=self.document))
+        self.assertEquals(Document.signing_state,
+                          api.content.get_state(obj=self.document))
 
-    #     self.assertDictEqual(
-    #         {
-    #             'created': u'2024-02-18T15:45:00',
-    #             'job_id': '1',
-    #             'redirect_url': 'http://external.example.org/signing-requests/123',
-    #             'signers': [
-    #                 {
-    #                     'email': 'foo@example.com',
-    #                     'userid': 'regular_user',
-    #                 }
-    #             ],
-    #             'userid': 'regular_user',
-    #             'version': 0
-    #         }, Signer(self.document).serialize_pending_signing_job())
+        self.assertDictEqual(
+            {
+                'created': u'2024-02-18T15:45:00',
+                'job_id': '1',
+                'redirect_url': 'http://external.example.org/signing-requests/123',
+                'signers': [
+                    {
+                        'email': 'foo@example.com',
+                        'userid': 'regular_user',
+                    }
+                ],
+                'userid': 'regular_user',
+                'version': 0
+            }, Signer(self.document).serialize_pending_signing_job())
 
     # @requests_mock.Mocker()
     # def test_sign_transition_is_only_for_internal_use(self, mocker):
@@ -295,25 +295,25 @@ class TestDocumentWorkflow(IntegrationTestCase):
     #     self.assertEquals(Document.signed_state,
     #                       api.content.get_state(obj=self.document))
 
-    # @requests_mock.Mocker()
-    # def test_sign_transition_creates_a_new_version_with_the_given_data(self, mocker):
-    #     self.activate_feature('sign')
-    #     mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
-    #     self.login(self.regular_user)
+    @requests_mock.Mocker()
+    def test_sign_transition_creates_a_new_version_with_the_given_data(self, mocker):
+        self.activate_feature('sign')
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+        self.login(self.regular_user)
 
-    #     api.content.transition(obj=self.document,
-    #                            transition=Document.draft_signing_transition)
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
 
-    #     self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
+        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
 
-    #     with as_internal_workflow_transition():
-    #         api.content.transition(obj=self.document,
-    #                                transition=Document.signing_signed_transition,
-    #                                transition_params={'filedata': b64encode('<DATA>')})
+        with as_internal_workflow_transition():
+            api.content.transition(obj=self.document,
+                                   transition=Document.signing_signed_transition,
+                                   transition_params={'filedata': b64encode('<DATA>')})
 
-    #     self.assertEqual(1, self.document.get_current_version_id(missing_as_zero=True))
-    #     signed_version = Versioner(self.document).retrieve(1)
-    #     self.assertEqual(u'<DATA>', signed_version.file.data)
+        self.assertEqual(1, self.document.get_current_version_id(missing_as_zero=True))
+        signed_version = Versioner(self.document).retrieve(1)
+        self.assertEqual(u'<DATA>', signed_version.file.data)
 
     # @requests_mock.Mocker()
     # def test_can_abort_signing_document(self, mocker):
