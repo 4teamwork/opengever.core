@@ -4,6 +4,7 @@ from opengever.api.kub import OrganizationContactSyncer
 from opengever.api.kub import PersonContactSyncer
 from opengever.api.validation import get_validation_errors
 from opengever.base.model import create_session
+from opengever.base.vocabulary import wrap_vocabulary
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossiertransfer import is_dossier_transfer_feature_enabled
 from opengever.dossiertransfer.api.schemas import IPerformDossierTransferAPISchema
@@ -188,6 +189,7 @@ class PerformDossierTransfer(Service):
 
             dossier['responsible'] = user_id
             self.strip_unknown_custom_properties(dossier, slots)
+            self.strip_unknown_dossier_type(dossier)
 
             obj = self.create_content(parent, dossier)
             self.objects_by_path[path] = obj
@@ -206,6 +208,7 @@ class PerformDossierTransfer(Service):
             parent = self.objects_by_path.setdefault(parent_path, self.context)
 
             self.strip_unknown_custom_properties(doc, slots)
+            self.strip_unknown_document_type(doc)
 
             doc_file = open(self.documents[doc['UID']], 'rb')
 
@@ -280,6 +283,28 @@ class PerformDossierTransfer(Service):
             for field in fields.keys():
                 if field not in fieldnames:
                     del data['custom_properties'][slot][field]
+
+    def strip_unknown_dossier_type(self, dossier):
+        if 'dossier_type' not in dossier:
+            return
+
+        factory = wrap_vocabulary(
+            'opengever.dossier.dossier_types',
+            hidden_terms_from_registry='opengever.dossier.interfaces.IDossierType.hidden_dossier_types')
+
+        if dossier.get('dossier_type') not in factory(dossier):
+            del dossier['dossier_type']
+
+    def strip_unknown_document_type(self, doc):
+        if 'document_type' not in doc:
+            return
+
+        factory = wrap_vocabulary(
+            'opengever.document.document_types',
+            visible_terms_from_registry='opengever.document.interfaces.IDocumentType.document_types')
+
+        if doc.get('document_type') not in factory(doc):
+            del doc['document_type']
 
     def add_journal_entry(self):
         if self.root_obj is None:

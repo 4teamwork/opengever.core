@@ -6,12 +6,15 @@ from ftw.testing import freeze
 from opengever.api.kub import OrganizationContactSyncer
 from opengever.api.kub import PersonContactSyncer
 from opengever.base.model import create_session
+from opengever.document.behaviors.metadata import IDocumentMetadata
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.participation import IParticipationAware
 from opengever.dossiertransfer.interfaces import IDossierTransferSettings
 from opengever.dossiertransfer.model import TRANSFER_STATE_COMPLETED
 from opengever.journal.manager import JournalManager
 from opengever.kub.testing import KuBIntegrationTestCase
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.testing.helpers import MockDossierTypes
 from plone import api
 from zExceptions import BadRequest
 from zExceptions import Forbidden
@@ -448,6 +451,214 @@ class TestPerformDossierTransfer(KuBIntegrationTestCase):
         )
         self.assertTrue(journal_entry_exists)
 
+    @requests_mock.Mocker()
+    @browsing
+    def test_apply_dossier_type_if_it_exists_on_the_target(self, mocker, browser):
+        MockDossierTypes.install()
+        METADATA_RESP = {
+            u'@id': u'http://nohost/plone/@dossier-transfers/1',
+            u'@type': u'virtual.ogds.dossiertransfer',
+            u'id': 1,
+            u'title': u'Transfer Title',
+            u'message': u'Transfer Message',
+            u'created': u'2024-02-18T15:45:00+00:00',
+            u'expires': u'2024-03-19T15:45:00+00:00',
+            u'state': u'pending',
+            u'source': {
+                u'token': u'plone',
+                u'title': u'Hauptmandant',
+            },
+            u'target': {
+                u'token': u'recipient',
+                u'title': u'Remote Recipient',
+            },
+            u'source_user': u'jurgen.konig',
+            u'root': u'createresolvabledossier000000001',
+            u'documents': [u'createresolvabledossier000000003'],
+            u'all_documents': False,
+            u'all_participations': False,
+            u'content': {
+                u'contacts': {},
+                u'documents': [
+                    {
+                        "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
+                        "@type": "opengever.document.document",
+                        "custom_properties": {},
+                        "document_type": "question",
+                        "UID": "a663689540a34538b6f408d4b41baee8",
+                        u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
+                        u'title': u'Umbau B\xe4rengraben',
+                        'file': {
+                            u'content-type': u'plain/text',
+                            u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
+                            u'filename': u'Foobar.txt',
+                            u'size': 6,
+                        },
+                    },
+                ],
+                u'dossiers': [{
+                    "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20",
+                    "@type": "opengever.dossier.businesscasedossier",
+                    "custom_properties": {},
+                    "dossier_type": "project",
+                    'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20',
+                    'title': u'A resolvable main dossier',
+                    'responsible': u'kathi.barfuss',
+                    u'participations': [],
+                }, {
+                    "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21",
+                    "@type": "opengever.dossier.businesscasedossier",
+                    "custom_properties": None,
+                    'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21',
+                    'title': u'Resolvable Subdossier',
+                    'responsible': u'nicole.kohler',
+                }],
+            },
+        }
+
+        self.login(self.secretariat_user, browser)
+
+        with freeze(FROZEN_NOW):
+            transfer = create(Builder('dossier_transfer')
+                              .with_target(get_current_admin_unit()))
+            session = create_session()
+            session.add(transfer)
+            session.flush()
+
+        url = '{}/@dossier-transfers/{}?full_content=1'.format(
+            transfer.source.site_url, transfer.id)
+        mocker.get(url, json=METADATA_RESP)
+
+        url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
+        mocker.get(url, content='foobar')
+
+        # Disable ftw.testing.TransactionInterceptor for transaction.begin()
+        # as this is used in perform-dossier-transfer for syncing the database
+        # before writing to it. With ftw.testing.TransactionInterceptor this
+        # would rollback the transaction.
+        tx_begin = transaction.begin
+        transaction.begin = lambda: True
+
+        resp = browser.open(
+            self.leaf_repofolder, view='@perform-dossier-transfer',
+            method='POST',
+            headers=self.api_headers,
+            data=json.dumps({"transfer_id": transfer.id}),
+        )
+
+        # Reenable begin() of ftw.testing.TransactionInterceptor
+        transaction.begin = tx_begin
+
+        dossier = self.leaf_repofolder[resp.json['id']]
+        subdossier = dossier.listFolderContents()[0]
+        document = subdossier.listFolderContents()[0]
+
+        self.assertEqual('project', IDossier(dossier).dossier_type)
+        self.assertEqual('question', IDocumentMetadata(document).document_type)
+
+    @requests_mock.Mocker()
+    @browsing
+    def test_remove_dossier_type_if_it_does_not_exist_on_the_target(self, mocker, browser):
+        METADATA_RESP = {
+            u'@id': u'http://nohost/plone/@dossier-transfers/1',
+            u'@type': u'virtual.ogds.dossiertransfer',
+            u'id': 1,
+            u'title': u'Transfer Title',
+            u'message': u'Transfer Message',
+            u'created': u'2024-02-18T15:45:00+00:00',
+            u'expires': u'2024-03-19T15:45:00+00:00',
+            u'state': u'pending',
+            u'source': {
+                u'token': u'plone',
+                u'title': u'Hauptmandant',
+            },
+            u'target': {
+                u'token': u'recipient',
+                u'title': u'Remote Recipient',
+            },
+            u'source_user': u'jurgen.konig',
+            u'root': u'createresolvabledossier000000001',
+            u'documents': [u'createresolvabledossier000000003'],
+            u'all_documents': False,
+            u'all_participations': False,
+            u'content': {
+                u'contacts': {},
+                u'documents': [
+                    {
+                        "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44",
+                        "@type": "opengever.document.document",
+                        "custom_properties": {},
+                        "document_type": "unkwnown_document_type",
+                        "UID": "a663689540a34538b6f408d4b41baee8",
+                        u'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44',
+                        u'title': u'Umbau B\xe4rengraben',
+                        'file': {
+                            u'content-type': u'plain/text',
+                            u'download': u'http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21/document-44/@@download/file',  # noqa
+                            u'filename': u'Foobar.txt',
+                            u'size': 6,
+                        },
+                    },
+                ],
+                u'dossiers': [{
+                    "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20",
+                    "@type": "opengever.dossier.businesscasedossier",
+                    "custom_properties": {},
+                    "dossier_type": "unkwnown_dossier_type",
+                    'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20',
+                    'title': u'A resolvable main dossier',
+                    'responsible': u'kathi.barfuss',
+                    u'participations': [],
+                }, {
+                    "@id": "http://nohost/plone/ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21",
+                    "@type": "opengever.dossier.businesscasedossier",
+                    "custom_properties": None,
+                    'relative_path': u'ordnungssystem/fuehrung/gemeinderecht/dossier-20/dossier-21',
+                    'title': u'Resolvable Subdossier',
+                    'responsible': u'nicole.kohler',
+                }],
+            },
+        }
+
+        self.login(self.secretariat_user, browser)
+
+        with freeze(FROZEN_NOW):
+            transfer = create(Builder('dossier_transfer')
+                              .with_target(get_current_admin_unit()))
+            session = create_session()
+            session.add(transfer)
+            session.flush()
+
+        url = '{}/@dossier-transfers/{}?full_content=1'.format(
+            transfer.source.site_url, transfer.id)
+        mocker.get(url, json=METADATA_RESP)
+
+        url = 'http://example.com/@dossier-transfers/1/blob/a663689540a34538b6f408d4b41baee8'
+        mocker.get(url, content='foobar')
+
+        # Disable ftw.testing.TransactionInterceptor for transaction.begin()
+        # as this is used in perform-dossier-transfer for syncing the database
+        # before writing to it. With ftw.testing.TransactionInterceptor this
+        # would rollback the transaction.
+        tx_begin = transaction.begin
+        transaction.begin = lambda: True
+
+        resp = browser.open(
+            self.leaf_repofolder, view='@perform-dossier-transfer',
+            method='POST',
+            headers=self.api_headers,
+            data=json.dumps({"transfer_id": transfer.id}),
+        )
+
+        # Reenable begin() of ftw.testing.TransactionInterceptor
+        transaction.begin = tx_begin
+
+        dossier = self.leaf_repofolder[resp.json['id']]
+        subdossier = dossier.listFolderContents()[0]
+        document = subdossier.listFolderContents()[0]
+
+        self.assertIsNone(IDossier(dossier).dossier_type)
+        self.assertIsNone(IDocumentMetadata(document).document_type)
 
 class TestPersonContactSyncer(KuBIntegrationTestCase):
 
