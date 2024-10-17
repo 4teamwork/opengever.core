@@ -1,4 +1,7 @@
+from AccessControl import Unauthorized
 from opengever.document.document import Document
+from opengever.sign.sign import Signer
+from opengever.sign.token import InvalidToken
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.services import Service
