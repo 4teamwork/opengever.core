@@ -1,7 +1,13 @@
-from opengever.sign.utils import email_to_userid
 from persistent import Persistent
 from persistent.list import PersistentList
 from plone.restapi.serializer.converters import json_compatible
+
+
+def email_to_userid(email):
+    if not email:
+        return ''
+    # user = User.query.filter(func.lower(User.email) == email.lower()).first()
+    return ''
 
 
 class PendingSigners(PersistentList):

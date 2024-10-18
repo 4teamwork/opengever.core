@@ -1,6 +1,6 @@
 from ftw.builder import Builder
 from ftw.builder import create
-from opengever.sign.utils import email_to_userid
+from opengever.sign.pending_signer import email_to_userid
 from opengever.testing import IntegrationTestCase
 
 
