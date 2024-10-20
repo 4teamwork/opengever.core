@@ -23,7 +23,7 @@ class SignServiceClient(object):
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'signers': signers,
-                  })
+                  }).json()
 
     def abort_signing(self, job_id):
         if job_id is None:
@@ -32,3 +32,19 @@ class SignServiceClient(object):
         return requests.delete(
             '{}/signing-jobs/{}'.format(self.sign_service_url, job_id),
             headers={"Accept": "application/json"})
+
+
+class NullSignServiceClient(object):
+
+    @property
+    def sign_service_url(self):
+        return environ.get('SIGN_SERVICE_URL', '').strip('/')
+
+    def queue_signing(self, document, token, signers):
+        return {}
+
+    def abort_signing(self, job_id):
+        pass
+
+
+sign_service_client = SignServiceClient()
