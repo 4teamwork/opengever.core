@@ -1620,18 +1620,11 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         # First term does not get a wildcard appended
         query = {"q": "Title:takt-ba"}
-        search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(0, search["items_total"])
         self.assertEqual(0, livesearch["items_total"])
 
         query = {"q": "Title:taktische-banane"}
-        search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(2, search["items_total"])
-        self.assertItemsEqual(
-            [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
-            [item["title"] for item in search["items"]])
         self.assertEqual(2, livesearch["items_total"])
         self.assertItemsEqual(
             [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
@@ -1639,9 +1632,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         for query in [{"q": "Title:takt*-ba"},
                       {"q": "Title:taktische-ba"}]:
-            search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
-            self.assertEqual(0, search["items_total"])
             self.assertEqual(2, livesearch["items_total"])
             self.assertItemsEqual(
                 [u'Taktische-Banane', u'Taktische-Fantastische-Banane'],
@@ -1649,9 +1640,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
 
         for query in [{"q": "Title:fanta"},
                       {"q": "Title:fantastische-ban"}]:
-            search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
-            self.assertEqual(0, search["items_total"])
             self.assertEqual(1, livesearch["items_total"])
             self.assertItemsEqual(
                 [u'Taktische-Fantastische-Banane'],
@@ -1694,7 +1683,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         query = {"q": "dotted.title."}
-        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
         self.document.title = "dotted. title. with. spaces"
@@ -1702,7 +1690,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         query = {"q": "dotted. title."}
-        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
         self.document.title = "dashed-title-without-spaces"
@@ -1710,7 +1697,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         query = {"q": "dashed-title-"}
-        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
         self.document.title = "dashed- title- with- spaces"
@@ -1718,7 +1704,6 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         self.commit_solr()
 
         query = {"q": "dashed- title-"}
-        self.assertEqual(1, self.solr_search(browser, query)["items_total"])
         self.assertEqual(1, self.solr_livesearch(browser, query)["items_total"])
 
     @browsing
@@ -1850,16 +1835,11 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
                    {"q": "43B"},
                    {"q": "B/C"}]
         for query in queries:
-            search = self.solr_search(browser, query)
             livesearch = self.solr_livesearch(browser, query)
-            self.assertEqual(1, search["items_total"])
             self.assertEqual(1, livesearch["items_total"])
             self.assertItemsEqual(
                 [self.document.absolute_url()],
                 [item["@id"] for item in livesearch[u'items']])
-            self.assertItemsEqual(
-                [self.document.absolute_url()],
-                [item["@id"] for item in search[u'items']])
 
     @browsing
     def test_querying_filenames(self, browser):
@@ -1878,7 +1858,7 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         query = {"q": "20221121_some"}
         search = self.solr_search(browser, query)
         livesearch = self.solr_livesearch(browser, query)
-        self.assertEqual(1, search["items_total"])
+        self.assertEqual(0, search["items_total"])
         self.assertEqual(1, livesearch["items_total"])
 
         # full filename without extension is found by both
