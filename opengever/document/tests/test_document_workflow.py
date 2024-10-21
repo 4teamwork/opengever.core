@@ -1,4 +1,5 @@
 from base64 import b64encode
+from datetime import datetime
 from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
@@ -7,14 +8,20 @@ from opengever.base.security import as_internal_workflow_transition
 from opengever.document.document import Document
 from opengever.document.versioner import Versioner
 from opengever.sign.sign import Signer
-from opengever.sign.tests.test_sign import DEFAULT_MOCK_RESPONSE
-from opengever.sign.tests.test_sign import FROZEN_NOW
 from opengever.testing import IntegrationTestCase
 from plone import api
 from plone.api.exc import InvalidParameterError
 from zExceptions import Unauthorized
 import re
 import requests_mock
+
+
+FROZEN_NOW = datetime(2024, 2, 18, 15, 45)
+
+DEFAULT_MOCK_RESPONSE = {
+    'id': '1',
+    'redirect_url': 'http://external.example.org/signing-requests/123',
+}
 
 
 class TestDocumentWorkflow(IntegrationTestCase):
