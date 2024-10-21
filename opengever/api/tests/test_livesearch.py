@@ -142,7 +142,7 @@ class TestLivesearchGet(SolrIntegrationTestCase):
     @browsing
     def test_leaf_repositoryfolder_is_leafnode(self, browser):
         self.login(self.regular_user, browser=browser)
-        url = u'{}/@livesearch?q="{}"&path={}'.format(
+        url = u'{}/@livesearch?q={}&path={}'.format(
             self.portal.absolute_url(),
             safe_unicode(self.leaf_repofolder.Title()),
             u'/'.join(self.leaf_repofolder.getPhysicalPath()).replace(u'/plone', u''),
