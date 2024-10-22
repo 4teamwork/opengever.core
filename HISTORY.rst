@@ -10,6 +10,39 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.15.1 (2024-10-22)
+----------------------
+
+New features:
+
+
+- Implement new teamraum document state: opengever_workspace_document--STATUS--final. [ran] [TI-21]
+
+
+Bug fixes:
+
+
+- Fix logging when installing upgrades with upgrade command. [buchi] [GH-8056]
+- Bump ftw.solr to version 2.13.3 which fixes issues running the solr zopectl command in Docker deployments. [buchi] [GH-8063]
+- Bump ftw.catalogdoctor to version 1.2.1 which fixes issues running the zopectl command in Docker deployments. [buchi] [GH-8064]
+- Allow downloading checked-out documents with no modifications and only an initial version. [buchi] [TI-675]
+- Fix login for newly registered teamraum users when using OGDS authentication. [buchi] [TI-932]
+- Bump ftw.pdfgenerator to version 1.6.11 which fixes 'no line to end' errors with table environments. [buchi] [TI-1119]
+- Fix creating nested parallel task template containing a sequential template. [elioschmutz] [TI-1300]
+
+
+Other changes:
+
+
+- Allow configuring the mail host through environment variables. [buchi] [GH-7921]
+- Run cron jobs in Docker deployments within a time window to avoid high load peaks on servers with multiple deployments. [buchi] [GH-8058]
+- Bump Solr to version 8.11.4. [buchi] [GH-8065]
+- Allow to submit no dossiers within a disposition. [elioschmutz] [TI-942]
+- Add "Dossier ID" to solr fields. [ran] [TI-1103]
+- Add support for setting local roles by groupname in additon to group ids when importing repositories from Excel. [buchi] [TI-1116]
+- Remove the linked workspace from the target dossier when copying. [amo] [TI-1263]
+
+
 2024.15.0 (2024-10-22)
 ----------------------
 

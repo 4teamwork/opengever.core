@@ -1,1 +1,0 @@
-Run cron jobs in Docker deployments within a time window to avoid high load peaks on servers with multiple deployments. [buchi]
