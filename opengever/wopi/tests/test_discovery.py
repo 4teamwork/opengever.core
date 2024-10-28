@@ -6,7 +6,9 @@ from opengever.wopi import discovery
 from opengever.wopi.discovery import actions_by_extension
 from opengever.wopi.discovery import editable_extensions
 from opengever.wopi.discovery import etree_to_dict
+from opengever.wopi.discovery import run_discovery
 from plone.registry.interfaces import IRegistry
+from requests.exceptions import ConnectTimeout
 import os.path
 import requests_mock
 import time
@@ -56,6 +58,14 @@ class TestWOPIDiscovery(MockTestCase):
             mock.get(
                 'https://officeonline/hosting/discovery',
                 text=resp)
+            yield mock
+
+    @contextmanager
+    def mock_failing_discovery_request(self):
+        with requests_mock.mock() as mock:
+            mock.get(
+                'https://officeonline/hosting/discovery',
+                exc=ConnectTimeout)
             yield mock
 
     def test_actions_by_extension(self):
@@ -159,3 +169,9 @@ class TestWOPIDiscovery(MockTestCase):
             discovery.proof_key()
 
         self.assertEqual(mock.call_count, 2)
+
+    def test_run_discovery_is_robust_regarding_network_failures(self):
+        with self.mock_failing_discovery_request():
+            result = run_discovery()
+
+        self.assertIsNone(result)
