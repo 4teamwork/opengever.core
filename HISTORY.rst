@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.9.3 (2024-10-28)
+---------------------
+
+Bug fixes:
+
+
+- - Fix OGDS sync for multi-tenant setups. [lgraf] [TI-1456]
+
+
 2024.9.2 (2024-09-03)
 ---------------------
 
