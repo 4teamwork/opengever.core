@@ -424,7 +424,7 @@
       enabled="True"
       id="++resource++opengever.document/startredirect.js"
       inline="False"
-      insert-after="++resource++opengever.base/base.js"
+      insert-after="++resource++ftw.lawgiver-resources/sharing.js"
       />
 
   <javascript
