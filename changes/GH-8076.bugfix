@@ -1,0 +1,1 @@
+Fix broken build of cryptography in Docker image introduced in 2024.15.0. [buchi]
