@@ -50,11 +50,13 @@ class Sablon(object):
             )
             resp.raise_for_status()
         except requests.exceptions.RequestException:
+            template.close()
             details = resp.content[:200] if resp is not None else ''
             logger.exception(
                 'Document creation with sablon failed. %s', details)
             raise SablonProcessingFailed(details)
         else:
+            template.close()
             self.file_data = resp.content
             self.returncode = 0
             return self
