@@ -1,7 +1,7 @@
 from base64 import urlsafe_b64decode
 from base64 import urlsafe_b64encode
-from opengever.base.security import as_internal_workflow_transition
-from opengever.document.document import Document
+# from opengever.base.security import as_internal_workflow_transition
+# from opengever.document.document import Document
 from opengever.sign.client import SignServiceClient
 from opengever.sign.storage import MetadataStorage
 from opengever.sign.token import TokenManager
@@ -43,11 +43,12 @@ class Signer(object):
         return token
 
     def complete_signing(self, signed_pdf_data):
-        with as_internal_workflow_transition():
-            api.content.transition(
-                obj=self.context,
-                transition=Document.signing_signed_transition,
-                transition_params={'filedata': signed_pdf_data})
+        pass
+        # with as_internal_workflow_transition():
+        #     api.content.transition(
+        #         obj=self.context,
+        #         transition=Document.signing_signed_transition,
+        #         transition_params={'filedata': signed_pdf_data})
 
     def abort_signing(self):
         self.invalidate_token()
