@@ -60,14 +60,14 @@ class TestSolrLivesearchReply(IntegrationTestCase):
     @browsing
     def test_testing_solr_livesearch(self, browser):
         """Make sure we are testing the solr livesearch reply"""
-        self.solr = self.mock_solr(response_json=self.solr_search_response)
-        browser.open_html(self.livesearch())
+        with self.mock_solr(response_json=self.solr_search_response):
+            browser.open_html(self.livesearch())
         self.assertIn("solr", browser.css(".livesearchContainer").first.classes)
 
     @browsing
     def test_livesearch_reply_listing(self, browser):
-        self.solr = self.mock_solr(response_json=self.solr_search_response)
-        browser.open_html(self.livesearch())
+        with self.mock_solr(response_json=self.solr_search_response):
+            browser.open_html(self.livesearch())
 
         link_nodes = browser.css('.dropdown-list-item')
         self.assertEqual(4, len(link_nodes))
@@ -79,8 +79,8 @@ class TestSolrLivesearchReply(IntegrationTestCase):
     @browsing
     def test_livesearch_reply_escapes_title(self, browser):
         self.solr_search_response["response"]["docs"][0]["Title"] = u"<script>alert('evil');</script>"
-        self.solr = self.mock_solr(response_json=self.solr_search_response)
-        browser.open_html(self.livesearch())
+        with self.mock_solr(response_json=self.solr_search_response):
+            browser.open_html(self.livesearch())
 
         link_node = browser.css('.dropdown-list-item').first
         # lxml unescapes attributes for us. we want to test that the title
@@ -95,8 +95,8 @@ class TestSolrLivesearchReply(IntegrationTestCase):
     def test_livesearch_reply_show_more(self, browser):
         self.solr_search_response["response"]["numFound"] = 4
         self.request.form.update({'limit': '3'})
-        self.solr = self.mock_solr(response_json=self.solr_search_response)
-        browser.open_html(self.livesearch())
+        with self.mock_solr(response_json=self.solr_search_response):
+            browser.open_html(self.livesearch())
 
         link_nodes = browser.css('.dropdown-list-item')
         self.assertEqual(5, len(link_nodes))
@@ -112,8 +112,8 @@ class TestSolrLivesearchReply(IntegrationTestCase):
     def test_livesearch_reply_empty_result(self, browser):
         self.solr_search_response["response"]["docs"] = []
         self.solr_search_response["response"]["numFound"] = 0
-        self.solr = self.mock_solr(response_json=self.solr_search_response)
-        browser.open_html(self.livesearch())
+        with self.mock_solr(response_json=self.solr_search_response):
+            browser.open_html(self.livesearch())
 
         link_nodes = browser.css('.dropdown-list-item')
         self.assertEqual(2, len(link_nodes))

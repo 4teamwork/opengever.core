@@ -738,18 +738,20 @@ class IntegrationTestCase(TestCase):
         return {
             'paths:list': [pseudo_relpath(obj) for obj in objects]}
 
+    @contextmanager
     @mutually_exclusive_parameters('response_file', 'response_json')
     @at_least_one_of('response_file', 'response_json')
     def mock_solr(self, response_file=None, response_json=None):
+        solr = getUtility(ISolrSearch)
+        manager = solr.manager
         conn = MagicMock(name='SolrConnection')
         schema_resp = assets.load('solr_schema.json')
         conn.get = MagicMock(name='get', return_value=SolrResponse(
             body=schema_resp, status=200))
-        manager = MagicMock(name='SolrConnectionManager')
-        manager.connection = conn
-        manager.schema = SolrSchema(manager)
-        solr = getUtility(ISolrSearch)
-        solr._manager = manager
+        mocked_manager = MagicMock(name='SolrConnectionManager')
+        mocked_manager.connection = conn
+        mocked_manager.schema = SolrSchema(mocked_manager)
+        solr._manager = mocked_manager
         if response_file:
             search_resp = assets.load(response_file)
         else:
@@ -762,7 +764,11 @@ class IntegrationTestCase(TestCase):
 
         solr.search = MagicMock(name='search', return_value=SolrResponse(
             body=search_resp, status=200))
-        return solr
+
+        try:
+            yield solr
+        finally:
+            solr._manager = manager
 
     def add_additional_org_unit(self, id_=u'gdgs'):
         return create(Builder('org_unit')
