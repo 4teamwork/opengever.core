@@ -59,11 +59,6 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
 
     features = ('bumblebee', 'solr')
 
-    def setUp(self):
-        super(TestListingEndpointWithSolr, self).setUp()
-
-        self.solr = self.mock_solr(response_json={})
-
     def test_filesize_accessor_avoids_obj_lookup(self):
         obj = OGSolrContentListingObject(OGSolrDocument(
             {"UID": "9398dad21bcd49f8a197cd50d10ea778", "filesize": 12345}))
@@ -98,11 +93,13 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     def test_facet_counts(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = ('@listing?name=documents&columns:list=title'
-                '&facets:list=start')
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        params = self.solr.search.call_args[1]
+        with self.mock_solr('solr_search.json') as solr:
+            view = ('@listing?name=documents&columns:list=title'
+                    '&facets:list=start')
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            params = solr.search.call_args[1]
+
         self.assertTrue(params['facet'],
                         msg="facet=true is needed to get facet counts back")
         self.assertEqual(1, params['facet.mincount'])
@@ -112,11 +109,13 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     def test_does_not_limit_facets(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = ('@listing?name=documents&columns:list=title'
-                '&facets:list=creator')
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        params = self.solr.search.call_args[1]
+        with self.mock_solr('solr_search.json') as solr:
+            view = ('@listing?name=documents&columns:list=title'
+                    '&facets:list=creator')
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            params = solr.search.call_args[1]
+
         self.assertEqual(-1, params['facet.limit'],
                         msg="Facets must not be limited")
 
@@ -124,65 +123,77 @@ class TestListingEndpointWithSolr(IntegrationTestCase):
     def test_excludes_searchroot(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=dossiers'
-        browser.open(self.dossier, view=view,
-                     headers=self.api_headers)
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=dossiers'
+            browser.open(self.dossier, view=view,
+                         headers=self.api_headers)
 
-        context_uid = IUUID(self.dossier)
-        filters = self.solr.search.call_args[1]['filters']
+            context_uid = IUUID(self.dossier)
+            filters = solr.search.call_args[1]['filters']
+
         self.assertIn(u'-UID:%s' % context_uid, filters)
 
     @browsing
     def test_excluding_searchroot_doesnt_trip_on_objs_without_uuid(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=dossiers'
-        browser.open(self.portal, view=view,
-                     headers=self.api_headers)
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=dossiers'
+            browser.open(self.portal, view=view,
+                         headers=self.api_headers)
 
-        portal_uid = IUUID(self.portal, None)
-        self.assertIsNone(portal_uid)
-        filters = self.solr.search.call_args[1]['filters']
+            portal_uid = IUUID(self.portal, None)
+            self.assertIsNone(portal_uid)
+            filters = solr.search.call_args[1]['filters']
+
         self.assertNotIn(u'-UID:%s' % portal_uid, filters)
 
     @browsing
     def test_search_filter_handles_special_characters(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        query = self.solr.search.call_args[1]["query"]
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=documents&search=feedb\xc3\xa4ck&columns=title'
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            query = solr.search.call_args[1]["query"]
+
         self.assertEqual('feedb\xc3\xa4ck*', query)
 
     @browsing
     def test_sort_on_existing_field(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&columns=title&sort_on=responsible'
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        sort = self.solr.search.call_args[1]["sort"]
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=documents&columns=title&sort_on=responsible'
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            sort = solr.search.call_args[1]["sort"]
+
         self.assertEqual('responsible desc', sort)
 
     @browsing
     def test_sort_on_inexistant_field(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&columns=title&sort_on=inexistant'
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        sort = self.solr.search.call_args[1]["sort"]
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=documents&columns=title&sort_on=inexistant'
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            sort = solr.search.call_args[1]["sort"]
+
         self.assertEqual('modified desc', sort)
 
     @browsing
     def test_sort_on_reference_number_uses_sortable_reference_index(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        view = '@listing?name=documents&columns=title&sort_on=reference_number'
-        browser.open(self.repository_root, view=view,
-                     headers=self.api_headers)
-        sort = self.solr.search.call_args[1]["sort"]
+        with self.mock_solr('solr_search.json') as solr:
+            view = '@listing?name=documents&columns=title&sort_on=reference_number'
+            browser.open(self.repository_root, view=view,
+                         headers=self.api_headers)
+            sort = solr.search.call_args[1]["sort"]
+
         self.assertEqual('sortable_reference desc', sort)
 
 

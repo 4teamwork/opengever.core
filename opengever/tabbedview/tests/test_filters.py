@@ -97,72 +97,71 @@ class TestSubjectFilter(IntegrationTestCase):
 
     def test_update_query_uses_subject_values_within_request(self):
         self.login(self.administrator)
-        self.mock_solr(response_json=self.solr_response(u'Vertr\xe4ge'))
-        subject_filter = SubjectFilter(self.portal, self.request)
+        with self.mock_solr(response_json=self.solr_response(u'Vertr\xe4ge')):
+            subject_filter = SubjectFilter(self.portal, self.request)
 
-        self.request.form['subjects'] = subject_filter._make_token('Vertr\xc3\xa4ge')
-        query = subject_filter.update_query({})
+            self.request.form['subjects'] = subject_filter._make_token('Vertr\xc3\xa4ge')
+            query = subject_filter.update_query({})
 
-        self.assertEqual((u'Vertr\xe4ge',), query.get('Subject').get('query'))
+            self.assertEqual((u'Vertr\xe4ge',), query.get('Subject').get('query'))
 
     def test_update_query_respects_multiple_values(self):
         self.login(self.administrator)
-        self.mock_solr(response_json=self.solr_response('Alpha', 'Beta', 'Gamma'))
-        subject_filter = SubjectFilter(self.portal, self.request)
+        with self.mock_solr(response_json=self.solr_response('Alpha', 'Beta', 'Gamma')):
+            subject_filter = SubjectFilter(self.portal, self.request)
 
-        IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
-        self.dossier.reindexObject(idxs=['keywords'])
+            IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
+            self.dossier.reindexObject(idxs=['keywords'])
 
-        subjects = subject_filter.separator.join(['Alpha', 'Beta'])
-        self.request.form['subjects'] = subjects
+            subjects = subject_filter.separator.join(['Alpha', 'Beta'])
+            self.request.form['subjects'] = subjects
 
-        query = SubjectFilter(self.portal, self.request).update_query({})
-        self.assertEqual(
-            ('Alpha', 'Beta'),
-            query.get('Subject').get('query'))
+            query = SubjectFilter(self.portal, self.request).update_query({})
+            self.assertEqual(
+                ('Alpha', 'Beta'),
+                query.get('Subject').get('query'))
 
     def test_multiple_subjects_are_queried_with_AND(self):
         self.login(self.administrator)
-        self.mock_solr(response_json=self.solr_response('Alpha', 'Beta', 'Gamma'))
-        subject_filter = SubjectFilter(self.portal, self.request)
+        with self.mock_solr(response_json=self.solr_response('Alpha', 'Beta', 'Gamma')):
+            subject_filter = SubjectFilter(self.portal, self.request)
 
-        IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
-        self.dossier.reindexObject(idxs=['keywords'])
+            IDossier(self.dossier).keywords = ('Alpha', 'Beta', 'Gamma')
+            self.dossier.reindexObject(idxs=['keywords'])
 
-        IDossier(self.meeting_dossier).keywords = ('Alpha', )
-        self.meeting_dossier.reindexObject(idxs=['keywords'])
+            IDossier(self.meeting_dossier).keywords = ('Alpha', )
+            self.meeting_dossier.reindexObject(idxs=['keywords'])
 
-        subjects = subject_filter.separator.join(['Alpha', 'Gamma'])
-        self.request.form['subjects'] = subjects
+            subjects = subject_filter.separator.join(['Alpha', 'Gamma'])
+            self.request.form['subjects'] = subjects
 
-        brains = api.portal.get_tool('portal_catalog')(
-            SubjectFilter(self.portal, self.request).update_query({}))
+            brains = api.portal.get_tool('portal_catalog')(
+                SubjectFilter(self.portal, self.request).update_query({}))
 
-        self.assertEqual(
-            [self.dossier],
-            [brain.getObject() for brain in brains])
+            self.assertEqual(
+                [self.dossier],
+                [brain.getObject() for brain in brains])
 
     @browsing
     def test_widget_returns_the_keywordwidget_html(self, browser):
-        self.mock_solr(response_json=self.solr_response())
-        browser.open_html(SubjectFilter(self.portal, self.request).render_widget())
+        with self.mock_solr(response_json=self.solr_response()):
+            browser.open_html(SubjectFilter(self.portal, self.request).render_widget())
 
-        self.assertEqual(1, len(browser.css('.keyword-widget')))
+            self.assertEqual(1, len(browser.css('.keyword-widget')))
 
     @browsing
     def test_subjects_within_request_are_preselected(self, browser):
         self.login(self.administrator)
-        self.mock_solr(response_json=self.solr_response('Alpha'))
+        with self.mock_solr(response_json=self.solr_response('Alpha')):
+            IDossier(self.dossier).keywords = ('Alpha', )
+            self.dossier.reindexObject(idxs=['keywords'])
 
-        IDossier(self.dossier).keywords = ('Alpha', )
-        self.dossier.reindexObject(idxs=['keywords'])
+            self.request.form['subjects'] = 'Alpha'
 
-        self.request.form['subjects'] = 'Alpha'
-
-        browser.open_html(SubjectFilter(self.portal, self.request).render_widget())
-        self.assertEqual(
-            ['Alpha'],
-            browser.css('option[selected="selected"]').text)
+            browser.open_html(SubjectFilter(self.portal, self.request).render_widget())
+            self.assertEqual(
+                ['Alpha'],
+                browser.css('option[selected="selected"]').text)
 
     @browsing
     def test_restrict_subjects_to_context_children(self, browser):

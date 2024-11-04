@@ -29,48 +29,45 @@ class TestMockSolrSearchGet(IntegrationTestCase):
     def test_default_sort(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.solr = self.mock_solr(response_json={})
+        with self.mock_solr(response_json={}) as solr:
+            url = u'{}/@solrsearch?q=Foo&fl=UID,Title'.format(
+                self.portal.absolute_url())
+            browser.open(url, method='GET', headers=self.api_headers)
 
-        url = u'{}/@solrsearch?q=Foo&fl=UID,Title'.format(
-            self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
+            self.assertEqual(solr.search.call_args[1]['sort'], 'score desc')
 
-        self.assertEqual(self.solr.search.call_args[1]['sort'], 'score desc')
+            url = u'{}/@solrsearch?fl=UID,Title'.format(
+                self.portal.absolute_url())
+            browser.open(url, method='GET', headers=self.api_headers)
 
-        url = u'{}/@solrsearch?fl=UID,Title'.format(
-            self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-
-        self.assertEqual(self.solr.search.call_args[1]['sort'], None)
+            self.assertEqual(solr.search.call_args[1]['sort'], None)
 
     @browsing
     def test_default_portal_type_filter(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.solr = self.mock_solr(response_json={})
+        with self.mock_solr(response_json={}) as solr:
+            url = u'{}/@solrsearch?q=Foo&fl=UID,Title'.format(
+                self.portal.absolute_url())
+            browser.open(url, method='GET', headers=self.api_headers)
 
-        url = u'{}/@solrsearch?q=Foo&fl=UID,Title'.format(
-            self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-
-        plone_utils = getToolByName(self.portal, 'plone_utils')
-        types = plone_utils.getUserFriendlyTypes()
-        self.assertIn('portal_type:({})'.format(' OR '.join(types)),
-                      self.solr.search.call_args[1]['filters'])
+            plone_utils = getToolByName(self.portal, 'plone_utils')
+            types = plone_utils.getUserFriendlyTypes()
+            self.assertIn('portal_type:({})'.format(' OR '.join(types)),
+                          solr.search.call_args[1]['filters'])
 
     @browsing
     def test_respects_portal_type_filter_if_provided(self, browser):
         self.login(self.regular_user, browser=browser)
 
-        self.solr = self.mock_solr(response_json={})
+        with self.mock_solr(response_json={}) as solr:
+            url = u'{}/@solrsearch?fq=portal_type:opengever.workspace.meetingagendaitem'.format(
+                self.portal.absolute_url())
+            browser.open(url, method='GET', headers=self.api_headers)
 
-        url = u'{}/@solrsearch?fq=portal_type:opengever.workspace.meetingagendaitem'.format(
-            self.portal.absolute_url())
-        browser.open(url, method='GET', headers=self.api_headers)
-
-        self.assertEqual(['portal_type:opengever.workspace.meetingagendaitem',
-                          u'path_parent:\\/plone'],
-                         self.solr.search.call_args[1]['filters'])
+            self.assertEqual(['portal_type:opengever.workspace.meetingagendaitem',
+                              u'path_parent:\\/plone'],
+                             solr.search.call_args[1]['filters'])
 
 
 class TestSolrSearchGet(SolrIntegrationTestCase):
