@@ -3,9 +3,9 @@ from base64 import urlsafe_b64encode
 # from opengever.base.security import as_internal_workflow_transition
 # from opengever.document.document import Document
 from opengever.sign.client import SignServiceClient
-from opengever.sign.storage import MetadataStorage
+# from opengever.sign.storage import MetadataStorage
 # from opengever.sign.token import TokenManager
-from plone import api
+# from plone import api
 # from plone.dexterity.utils import safe_utf8
 from requests.exceptions import ConnectionError
 
@@ -18,7 +18,7 @@ class Signer(object):
     def __init__(self, context):
         self.context = context
         # self.token_manager = TokenManager(context)
-        self.metadata_storage = MetadataStorage(context)
+        # self.metadata_storage = MetadataStorage(context)
 
     def issue_token(self):
         return urlsafe_b64encode(self.token_manager.issue_token())
@@ -35,13 +35,13 @@ class Signer(object):
         token = self.issue_token()
         response = SignServiceClient().queue_signing(self.context, token, signers)
         response = response.json()
-        self.metadata_storage.store(
-            userid=api.user.get_current().id,
-            version=self.context.get_current_version_id(missing_as_zero=True),
-            signers=signers,
-            job_id=response.get('id'),
-            redirect_url=response.get('redirect_url'),
-        )
+        # self.metadata_storage.store(
+        #     userid=api.user.get_current().id,
+        #     version=self.context.get_current_version_id(missing_as_zero=True),
+        #     signers=signers,
+        #     job_id=response.get('id'),
+        #     redirect_url=response.get('redirect_url'),
+        # )
         return token
 
     def complete_signing(self, signed_pdf_data):
@@ -54,9 +54,9 @@ class Signer(object):
 
     def abort_signing(self):
         self.invalidate_token()
-        signing_data = self.metadata_storage.read()
+        # signing_data = self.metadata_storage.read()
         try:
-            SignServiceClient().abort_signing(signing_data.get('job_id'))
+            SignServiceClient().abort_signing('123')
         except ConnectionError:
             # The user should always be able to abort the job
             pass
@@ -64,17 +64,20 @@ class Signer(object):
         self.clear_metadata()
 
     def clear_metadata(self):
-        self.metadata_storage.clear()
+        pass
+        # self.metadata_storage.clear()
 
     def adopt_issuer(self):
-        userid = self.metadata_storage.read().get('userid')
-        user = api.user.get(userid=userid)
-        if not user:
-            raise IssuerNotFound()
-        return api.env.adopt_user(user=user)
+        pass
+        # userid = self.metadata_storage.read().get('userid')
+        # user = api.user.get(userid=userid)
+        # if not user:
+        #     raise IssuerNotFound()
+        # return api.env.adopt_user(user=user)
 
     def serialize(self):
-        return self.metadata_storage.read()
+        pass
+        # return self.metadata_storage.read()
 
 
 class IssuerNotFound(Exception):
