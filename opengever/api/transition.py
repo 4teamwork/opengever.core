@@ -10,7 +10,6 @@ from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.dossier.resolve import MSG_ALREADY_BEING_RESOLVED
 from opengever.dossier.resolve import PreconditionsViolated
-from opengever.sign.sign import Signer
 from plone import api
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
@@ -385,7 +384,9 @@ class GEVERDocumentWorkflowTransition(GEVERWorkflowTransition):
     def reply(self):
         response = super(GEVERDocumentWorkflowTransition, self).reply()
         if self.transition in self.SIGNING_TRANSITIONS:
-            response['redirect_url'] = Signer(self.context).serialize().get('redirect_url')
+            # response['redirect_url'] = Signer(
+            #     self.context).serialize_pending_signing_job().get('redirect_url')
+            response['redirect_url'] = 'http://example.com'
         return response
 
 

@@ -10,10 +10,10 @@
 # from requests.exceptions import ConnectionError
 
 
-class Signer(object):
-    """Provides all necessary methods to sign an objects through an external
-    service.
-    """
+# class Signer(object):
+#     """Provides all necessary methods to sign an objects through an external
+#     service.
+#     """
 
-    def __init__(self, context):
-        self.context = context
+#     def __init__(self, context):
+#         self.context = context
