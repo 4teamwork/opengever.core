@@ -2,7 +2,7 @@
 from base64 import urlsafe_b64encode
 # from opengever.base.security import as_internal_workflow_transition
 # from opengever.document.document import Document
-from opengever.sign.client import SignServiceClient
+# from opengever.sign.client import SignServiceClient
 # from opengever.sign.storage import MetadataStorage
 # from opengever.sign.token import TokenManager
 # from plone import api
@@ -33,8 +33,8 @@ class Signer(object):
 
     def start_signing(self, signers):
         token = self.issue_token()
-        response = SignServiceClient().queue_signing(self.context, token, signers)
-        response = response.json()
+        # response = SignServiceClient().queue_signing(self.context, token, signers)
+        # response = response.json()
         # self.metadata_storage.store(
         #     userid=api.user.get_current().id,
         #     version=self.context.get_current_version_id(missing_as_zero=True),
@@ -56,7 +56,8 @@ class Signer(object):
         self.invalidate_token()
         # signing_data = self.metadata_storage.read()
         try:
-            SignServiceClient().abort_signing('123')
+            # SignServiceClient().abort_signing('123')
+            pass
         except ConnectionError:
             # The user should always be able to abort the job
             pass
