@@ -58,6 +58,8 @@ COPY ./docker/core/requirements-core.txt ./docker/core/requirements-deployment.t
 RUN --mount=type=cache,target=/root/.cache \
     --mount=type=secret,id=gldt \
     export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
+    CFLAGS="-I/usr/include/openssl1.1" \
+    LDFLAGS="-L/usr/lib/openssl1.1" \
     pip install \
     --prefix /app \
     --extra-index-url https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/486/packages/pypi/simple \
