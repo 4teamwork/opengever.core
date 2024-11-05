@@ -162,9 +162,7 @@ class TestSolrSearch(IntegrationTestCase):
 
     def setUp(self):
         super(TestSolrSearch, self).setUp()
-
         self.search = self.portal.unrestrictedTraverse('@@search')
-        self.solr = self.mock_solr('solr_search.json')
 
     def default_portal_types_filter(self):
         plone_utils = getToolByName(self.portal, 'plone_utils')
@@ -181,31 +179,35 @@ class TestSolrSearch(IntegrationTestCase):
 
     def test_solr_filters_ignores_searchabletext(self):
         self.request.form.update({'SearchableText': 'foo'})
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()), [])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()), [])
 
     def test_solr_filters_ignores_fields_not_in_schema(self):
         self.request.form.update({'myfield': 'foo'})
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()), [])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()), [])
 
     def test_solr_filters_handles_date_min_records(self):
         self.request.environ['QUERY_STRING'] = (
             'created.query:record:list:date=2018-01-20&'
             'created.range:record=min')
         self.request.processInputs()
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()),
-            [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO *]'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()),
+                [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO *]'])
 
     def test_solr_filters_handles_date_max_records(self):
         self.request.environ['QUERY_STRING'] = (
             'created.query:record:list:date=2018-01-20&'
             'created.range:record=max')
         self.request.processInputs()
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()),
-            [u'created:[* TO 2018\\-01\\-20T00\\:00\\:00Z]'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()),
+                [u'created:[* TO 2018\\-01\\-20T00\\:00\\:00Z]'])
 
     def test_solr_filters_handles_date_range_records(self):
         self.request.environ['QUERY_STRING'] = (
@@ -213,144 +215,162 @@ class TestSolrSearch(IntegrationTestCase):
             'created.query:record:list:date=2018-01-25&'
             'created.range:record=minmax')
         self.request.processInputs()
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()),
-            [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO 2018\\-01\\-25T00\\:00\\:00Z]'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()),
+                [u'created:[2018\\-01\\-20T00\\:00\\:00Z TO 2018\\-01\\-25T00\\:00\\:00Z]'])
 
     def test_solr_filters_handles_lists(self):
         self.request.environ['QUERY_STRING'] = (
             'portal_type:list=opengever.document.document&'
             'portal_type:list=opengever.dossier.businesscasedossier')
         self.request.processInputs()
-        self.assertEqual(
-            self.search.solr_filters(),
-            [u'portal_type:(opengever.dossier.businesscasedossier OR '
-             u'opengever.document.document)'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.search.solr_filters(),
+                [u'portal_type:(opengever.dossier.businesscasedossier OR '
+                u'opengever.document.document)'])
 
     def test_solr_filters_handles_simple_values(self):
         self.request.environ['QUERY_STRING'] = (
             'sequence_number:int=123&responsible=hans.muster')
         self.request.processInputs()
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()),
-            [u'responsible:hans.muster', u'sequence_number:123'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()),
+                [u'responsible:hans.muster', u'sequence_number:123'])
 
     def test_solr_filters_switch_path_to_parent_path(self):
         self.request.environ['QUERY_STRING'] = (
             'sequence_number:int=123&path=/fd/ordnungssystem')
         self.request.processInputs()
-        self.assertEqual(
-            self.remove_portal_types_filter(self.search.solr_filters()),
-            [u'path_parent:\\/fd\\/ordnungssystem', u'sequence_number:123'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.remove_portal_types_filter(self.search.solr_filters()),
+                [u'path_parent:\\/fd\\/ordnungssystem', u'sequence_number:123'])
 
     def test_solr_sort_on_date(self):
         self.request.environ['QUERY_STRING'] = (
             'sort_on=Date&sort_order=reverse')
         self.request.processInputs()
-        self.assertEqual(self.search.solr_sort(), u'modified desc')
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(self.search.solr_sort(), u'modified desc')
 
     def test_solr_sort_on_title(self):
         self.request.environ['QUERY_STRING'] = (
             'sort_on=sortable_title')
         self.request.processInputs()
-        self.assertEqual(self.search.solr_sort(), u'sortable_title asc')
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(self.search.solr_sort(), u'sortable_title asc')
 
     def test_solr_sort_on_relevance(self):
         self.request.environ['QUERY_STRING'] = (
             'sort_on=relevance')
         self.request.processInputs()
-        self.assertEqual(self.search.solr_sort(), None)
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(self.search.solr_sort(), None)
 
     def test_solr_results_with_searchable_text(self):
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')
         self.request.processInputs()
-        self.search.solr_results()
-        self.solr.search.assert_called_with(
-            query=(u'foo'),
-            filters=[self.default_portal_types_filter(), u'trashed:false'],
-            start=0,
-            rows=10,
-            sort=None,
-            **{
-                'fl': [
-                    'UID', 'Title', 'getIcon', 'portal_type', 'path',
-                    'containing_dossier', 'id', 'created', 'modified',
-                    'review_state', 'bumblebee_checksum',
-                ],
-                'hl': 'on',
-                'hl.fl': 'SearchableText',
-                'hl.encoder': 'html',
-                'hl.snippets': 3,
-            })
+        with self.mock_solr('solr_search.json') as solr:
+            self.search.solr_results()
+            solr.search.assert_called_with(
+                query=(u'foo'),
+                filters=[self.default_portal_types_filter(), u'trashed:false'],
+                start=0,
+                rows=10,
+                sort=None,
+                **{
+                    'fl': [
+                        'UID', 'Title', 'getIcon', 'portal_type', 'path',
+                        'containing_dossier', 'id', 'created', 'modified',
+                        'review_state', 'bumblebee_checksum',
+                    ],
+                    'hl': 'on',
+                    'hl.fl': 'SearchableText',
+                    'hl.encoder': 'html',
+                    'hl.snippets': 3,
+                })
 
     def test_solr_results_with_filter(self):
         self.request.environ['QUERY_STRING'] = 'responsible=hans.muster'
         self.request.processInputs()
-        self.search.solr_results()
-        self.solr.search.assert_called_with(
-            query=u'*',
-            filters=[self.default_portal_types_filter(),
-                     u'responsible:hans.muster',
-                     u'trashed:false'],
-            start=0,
-            rows=10,
-            sort=None,
-            **{
-                'fl': [
-                    'UID', 'Title', 'getIcon', 'portal_type', 'path',
-                    'containing_dossier', 'id', 'created', 'modified',
-                    'review_state', 'bumblebee_checksum',
-                ],
-                'hl': 'on',
-                'hl.fl': 'SearchableText',
-                'hl.encoder': 'html',
-                'hl.snippets': 3,
-            })
+        with self.mock_solr('solr_search.json') as solr:
+            self.search.solr_results()
+            solr.search.assert_called_with(
+                query=u'*',
+                filters=[self.default_portal_types_filter(),
+                        u'responsible:hans.muster',
+                        u'trashed:false'],
+                start=0,
+                rows=10,
+                sort=None,
+                **{
+                    'fl': [
+                        'UID', 'Title', 'getIcon', 'portal_type', 'path',
+                        'containing_dossier', 'id', 'created', 'modified',
+                        'review_state', 'bumblebee_checksum',
+                    ],
+                    'hl': 'on',
+                    'hl.fl': 'SearchableText',
+                    'hl.encoder': 'html',
+                    'hl.snippets': 3,
+                })
 
     def test_search_filters_portal_types_by_default(self):
-        self.assertEqual(
-            self.search.solr_filters(), [self.default_portal_types_filter()])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.search.solr_filters(), [self.default_portal_types_filter()])
 
     def test_search_respects_portal_types_filters_if_provided(self):
         self.request.form.update({'portal_type': ['opengever.document.document']})
-        self.assertEqual(
-            self.search.solr_filters(),
-            [u'portal_type:opengever.document.document'])
+        with self.mock_solr('solr_search.json'):
+            self.assertEqual(
+                self.search.solr_filters(),
+                [u'portal_type:opengever.document.document'])
 
     def test_search_uses_solr_if_enabled(self):
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')
         self.request.processInputs()
-        self.search.results()
-        self.assertTrue(self.solr.search.called)
+        with self.mock_solr('solr_search.json') as solr:
+            self.search.results()
+            self.assertTrue(solr.search.called)
 
     def test_search_doesnt_use_solr_if_disabled(self):
         self.deactivate_feature('solr')
         self.request.environ['QUERY_STRING'] = ('SearchableText=foo')
         self.request.processInputs()
-        self.search.results()
-        self.assertFalse(self.solr.search.called)
+        with self.mock_solr('solr_search.json') as solr:
+            self.search.results()
+            self.assertFalse(solr.search.called)
 
     def test_solr_does_not_modify_request_form(self):
         self.request.environ['QUERY_STRING'] = 'SearchableText=foo&review_state:list=dossier-state-active&review_state:list=dossier-state-inactive'
 
         self.request.processInputs()
-        self.search.solr_results()
+        with self.mock_solr('solr_search.json'):
+            self.search.solr_results()
 
-        self.assertEquals(
-            {'SearchableText': 'foo',
-             'review_state': ['dossier-state-active', 'dossier-state-inactive']},
-            self.request.form)
+            self.assertEquals(
+                {'SearchableText': 'foo',
+                'review_state': ['dossier-state-active', 'dossier-state-inactive']},
+                self.request.form)
 
     @browsing
     def test_show_more_is_not_rendered_per_default(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@livesearch_reply?q=test')
+        with self.mock_solr('solr_search.json'):
+            browser.open(self.portal, view='@@livesearch_reply?q=test')
+
         self.assertIsNone(browser.find('Show all items'))
 
     @browsing
     def test_path_for_show_more_is_not_none(self, browser):
         self.login(self.regular_user, browser)
-        browser.open(self.portal, view='@@livesearch_reply?q=test&limit=2')
+        with self.mock_solr('solr_search.json'):
+            browser.open(self.portal, view='@@livesearch_reply?q=test&limit=2')
+
         all_items_link = browser.find('Show all items')
         self.assertIsNotNone(all_items_link)
         self.assertEqual(
@@ -361,7 +381,8 @@ class TestSolrSearch(IntegrationTestCase):
     @browsing
     def test_advanced_search_link_is_url_encoded(self, browser):
         self.login(self.regular_user, browser=browser)
-        browser.open(self.portal, view='@@search?SearchableText=M\xc3\xbcller and {co)')
+        with self.mock_solr('solr_search.json'):
+            browser.open(self.portal, view='@@search?SearchableText=M\xc3\xbcller and {co)')
 
         advanced_search = browser.find("Advanced Search")
         expected_url = (self.portal.absolute_url() +
