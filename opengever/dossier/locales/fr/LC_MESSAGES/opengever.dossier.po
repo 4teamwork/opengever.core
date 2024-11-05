@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-11-05 13:46+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -356,6 +356,11 @@ msgstr "Documents"
 #: ./opengever/dossier/browser/protect_dossier.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr "Les autorisations actuelles ne correspondent pas aux paramètres de protection du dossier. En enregistrant ce formulaire, les autorisations locales actuelles seront écrasées par les paramètres de protection du dossier."
+
+#. Default: "Creator"
+#: ./opengever/dossier/browser/report.py
+msgid "dossier_report_creator"
+msgstr "Créateur"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/browser/report.py
@@ -834,11 +839,6 @@ msgstr "Déroulements standard"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Modèle"
-
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
-msgstr "Groupe de modèles"
 
 #. Default: "Title"
 #: ./opengever/dossier/dossiertemplate/form.py

@@ -107,6 +107,7 @@ class TestDossierReporter(SolrIntegrationTestCase):
             'touched',
             'keywords',
             'description',
+            'creator'
         ]})
         browser.open(view='dossier_report', data=params)
 
@@ -123,7 +124,8 @@ class TestDossierReporter(SolrIntegrationTestCase):
             u'Reference number',
             u'Last modified',
             u'Keywords',
-            u'Description'
+            u'Description',
+            u'Creator'
         ]
         self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
 
@@ -137,7 +139,8 @@ class TestDossierReporter(SolrIntegrationTestCase):
             u'Client1 1.1 / 1',
             datetime(2016, 8, 31, 0, 0),
             u'Finanzverwaltung, Vertr\xe4ge',
-            self.dossier.description
+            self.dossier.description,
+            u'Ziegler Robert (robert.ziegler)'
         ]
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 

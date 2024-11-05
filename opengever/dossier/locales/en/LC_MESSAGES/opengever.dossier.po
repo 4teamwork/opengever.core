@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-02-07 13:02+0000\n"
+"POT-Creation-Date: 2024-11-05 13:46+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -443,6 +443,11 @@ msgstr "Documents"
 #: ./opengever/dossier/browser/protect_dossier.py
 msgid "dossier_protection_inconsistency_warning"
 msgstr "Local roles do not match with current dossier protection settings. If you save this form, local roles will be overridden with the roles specified in protection settings."
+
+#. Default: "Creator"
+#: ./opengever/dossier/browser/report.py
+msgid "dossier_report_creator"
+msgstr "Creator"
 
 #. Default: "Responsible"
 #: ./opengever/dossier/browser/report.py
@@ -1010,12 +1015,6 @@ msgstr "Task template folders"
 #: ./opengever/dossier/templatefolder/form.py
 msgid "label_template"
 msgstr "Template"
-
-#. German translation: Vorlagengruppe
-#. Default: "Template group"
-#: ./opengever/dossier/templatefolder/tabs.py
-msgid "label_template_group"
-msgstr "Template group"
 
 #. German translation: Titel
 #. Default: "Title"
