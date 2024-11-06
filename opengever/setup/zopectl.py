@@ -5,7 +5,6 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.model import create_session
 from opengever.bundle.config.importer import ConfigImporter
 from opengever.bundle.importer import BundleImporter
-from opengever.ogds.base.sync.ogds_updater import sync_ogds
 from opengever.setup.deploy import GeverDeployment
 from opengever.setup.interfaces import IDeploymentConfigurationRegistry
 from opengever.setup.interfaces import IDuringSetup
@@ -98,19 +97,12 @@ def setup(app, args):
         app, config, ogds_session,
         has_purge_sql=options.purge_ogds,
         has_purge_solr=options.purge_solr,
+        has_ogds_sync=not options.skip_ogds_sync,
     )
     deployment.create()
     transaction.get().note('Created new deployment.')
     transaction.commit()
     logger.info('Created new deployment with site id: %s.', deployment.site)
-
-    if not options.skip_ogds_sync:
-        logger.info('Syncing OGDS...')
-        sync_ogds(
-            deployment.site,
-            update_remote_timestamps=False,
-            disable_logfile=True,
-        )
 
     if os.path.exists(options.bundle_path):
         import_bundle(deployment.site, options.bundle_path)

@@ -179,14 +179,12 @@ class GeverDeployment(object):
                 None, 'admin_unit_auth', 'Admin Unit Authentication Plugin')
 
     def sync_ogds(self):
-        if not self.has_ogds_sync or self.is_policyless:
-            # TODO: Disable "Sync OGDS" checkbox in setup form for policyless
-            # deployments, since it won't have an effect.
+        if not self.has_ogds_sync:
             return
 
         print '===== SYNC LDAP ===='
         # Import LDAP users and groups
-        sync_ogds(self.site)
+        sync_ogds(self.site, update_remote_timestamps=False)
         print '===== Done SYNCING LDAP ===='
 
     def configure_admin_unit(self):
