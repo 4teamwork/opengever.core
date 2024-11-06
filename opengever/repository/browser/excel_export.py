@@ -227,7 +227,7 @@ class RepositoryFolderWrapper(object):
         return self._local_roles_cache
 
     def get_groupnames_with_local_role(self, rolename):
-        return ','.join(set([
+        return "\n".join(set([
             group
             for group, roles in self._repofolder.get_local_roles()
             for role in roles
@@ -239,7 +239,7 @@ class RepositoryFolderWrapper(object):
         for role in self._fetch_role_settings():
             if role['roles'].get(rolename):
                 groups.append(role.get('id'))
-        return groups
+        return "\n".join(groups)
 
     def get_folder_path(self):
         """"Returns the relative path of the repository folder
