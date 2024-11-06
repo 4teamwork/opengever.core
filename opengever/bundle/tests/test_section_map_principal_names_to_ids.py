@@ -21,13 +21,17 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
         super(TestMapPrincipalNamesToIDs, self).setUp()
         self.session = create_session()
 
-    def setup_section(self, previous=None):
+    def setup_section(self, previous=None, options=None):
         previous = previous or []
         transmogrifier = MockTransmogrifier()
         self.bundle = MockBundle()
         IAnnotations(transmogrifier)[BUNDLE_KEY] = self.bundle
 
-        options = {'blueprint': 'opengever.bundle.map_principal_names_to_ids'}
+        if not options:
+            options = {'blueprint': 'opengever.bundle.map_principal_names_to_ids'}
+        else:
+            options.update(
+                {'blueprint': 'opengever.bundle.map_principal_names_to_ids'})
 
         return MapPrincipalNamesToIDsSection(transmogrifier, '', options, previous)
 
@@ -360,3 +364,34 @@ class TestMapPrincipalNamesToIDs(IntegrationTestCase):
         with self.assertRaises(AmbiguousPrincipalNames):
             section = self.setup_section(previous=items)
             list(section)
+
+    def test_map_responsible_name_to_id(self):
+        user = User(
+            userid='11111',
+            username='user1',
+            external_id=uuid4().hex,
+        )
+
+        self.session.add(user)
+        self.session.flush()
+
+        items = [
+            {
+                'guid': 'mapped-responsible',
+                '_type': 'opengever.dossier.businesscasedossier',
+                'responsible': 'user1',
+            },
+        ]
+        section = self.setup_section(
+            previous=items, options={'key': 'string:responsible'})
+        transformed_items = list(section)
+
+        expected = [
+            {
+                'guid': 'mapped-responsible',
+                '_type': 'opengever.dossier.businesscasedossier',
+                'responsible': '11111',
+            },
+        ]
+
+        self.assertEquals(expected, transformed_items)

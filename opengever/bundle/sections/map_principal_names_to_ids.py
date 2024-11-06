@@ -1,8 +1,9 @@
 from collections import defaultdict
 from collective.transmogrifier.interfaces import ISection
 from collective.transmogrifier.interfaces import ISectionBlueprint
+from collective.transmogrifier.utils import Condition
+from collective.transmogrifier.utils import Expression
 from opengever.base.model import create_session
-from opengever.bundle.sections.bundlesource import BUNDLE_KEY
 from opengever.bundle.sections.map_principals import AC_LOCAL_ROLES_KEY
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
@@ -33,10 +34,17 @@ class MapPrincipalNamesToIDsSection(object):
     def __init__(self, transmogrifier, name, options, previous):
         self.previous = previous
         self.logger = logging.getLogger(options['blueprint'])
-        self.bundle = IAnnotations(transmogrifier)[BUNDLE_KEY]
         self.check_unique_principals = IAnnotations(transmogrifier).get(
             CHECK_UNIQUE_PRINCIPALS_KEY, True)
         self.principal_ids_by_name = self.get_principal_mapping_from_ogds()
+        self.key = Expression(
+            options.get("key", "string:" + AC_LOCAL_ROLES_KEY),
+            transmogrifier, name, options,
+        )
+        self.condition = Condition(
+            options.get("condition", "python:True"),
+            transmogrifier, name, options,
+        )
 
     def get_principal_mapping_from_ogds(self):
         session = create_session()
@@ -118,17 +126,24 @@ class MapPrincipalNamesToIDsSection(object):
                 yield item
                 continue
 
-            # What we operate on is a mapping of
-            # <principal name> to <list of roles>:
-            # {
-            #     'user1': ['Reader'],
-            #     'group1': ['Contributor', 'Editor'],
-            #     ...
-            # }
-            local_roles = item.get(AC_LOCAL_ROLES_KEY, {})
-            for pn, roles in local_roles.items():
-                new_pn = self.principal_ids_by_name.get(pn.lower(), pn)
-                del local_roles[pn]
-                local_roles[new_pn] = roles
+            if self.condition(item):
+                key = self.key(item)
+                if key != AC_LOCAL_ROLES_KEY:
+                    if key in item:
+                        item[key] = self.principal_ids_by_name.get(
+                            item[key], item[key])
+                else:
+                    # What we operate on is a mapping of
+                    # <principal name> to <list of roles>:
+                    # {
+                    #     'user1': ['Reader'],
+                    #     'group1': ['Contributor', 'Editor'],
+                    #     ...
+                    # }
+                    local_roles = item.get(AC_LOCAL_ROLES_KEY, {})
+                    for pn, roles in local_roles.items():
+                        new_pn = self.principal_ids_by_name.get(pn.lower(), pn)
+                        del local_roles[pn]
+                        local_roles[new_pn] = roles
 
             yield item
