@@ -17,6 +17,7 @@ from opengever.document.document import Document
 from opengever.globalindex.handlers.task import sync_task
 from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
+from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
@@ -68,6 +69,11 @@ class DossierBuilder(GeverDexterityBuilder):
             years=self.arguments['retention_period'] + 1)
 
         return self
+
+    def before_create(self):
+        if 'responsible' in self.arguments:
+            actor = Actor.lookup(self.arguments['responsible'], name_as_fallback=True)
+            self.arguments['responsible'] = actor.identifier
 
 
 builder_registry.register('dossier', DossierBuilder)
