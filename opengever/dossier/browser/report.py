@@ -66,6 +66,13 @@ class DossierReporter(SolrReporterView):
             'is_default': True,
             'tabbedview_column': 'reference',
         },
+        {
+            'id': 'creator',
+            'is_default': False,
+            'alias': 'creator_fullname',
+            'transform': readable_actor,
+            'title': _(u'dossier_report_creator', default=u'Creator')
+        },
     )
 
     def __call__(self):
