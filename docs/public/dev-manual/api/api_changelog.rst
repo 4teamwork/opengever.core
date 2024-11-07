@@ -23,6 +23,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add ``pending_signing_job`` attribute to serialized documents.
 
 
 2024.14.0 (2024-09-24)

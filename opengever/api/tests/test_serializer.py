@@ -3,6 +3,7 @@ from ftw.bumblebee.interfaces import IBumblebeeDocument
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from ftw.testbrowser import browsing
 from opengever.base.oguid import Oguid
+from opengever.document.document import Document
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
@@ -15,6 +16,8 @@ from plone.restapi.serializer.dxcontent import SerializeToJson
 from unittest import skip
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
+import re
+import requests_mock
 
 
 class TestSerializerSubclasses(IntegrationTestCase):
@@ -257,6 +260,24 @@ class TestDocumentSerializer(IntegrationTestCase):
         browser.open(self.document, headers=self.api_headers)
         self.assertEqual(200, browser.status_code)
         self.assertTrue(browser.json.get('is_locked_by_copy_to_workspace'))
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_document_serialization_contains_pending_signing_job(self, browser, mocker):
+        self.activate_feature('sign')
+        self.login(self.regular_user, browser)
+
+        mocker.post(re.compile('/signing-jobs'), json={'id': 'job-1'})
+
+        browser.open(self.document, headers=self.api_headers)
+        self.assertIn('pending_signing_job', browser.json)
+        self.assertEqual({}, browser.json.get('pending_signing_job'))
+
+        api.content.transition(obj=self.document,
+                               transition=Document.draft_signing_transition)
+
+        browser.open(self.document, headers=self.api_headers)
+        self.assertEqual('job-1', browser.json.get('pending_signing_job').get('job_id'))
 
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):

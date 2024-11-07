@@ -21,7 +21,7 @@ class TestSigningClient(IntegrationTestCase):
 
         mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
 
-        SignServiceClient().queue_signing(self.document, TOKEN, ['foo.bar@example.com'])
+        response = SignServiceClient().queue_signing(self.document, TOKEN, ['foo.bar@example.com'])
 
         self.assertDictEqual(
             {
@@ -34,6 +34,8 @@ class TestSigningClient(IntegrationTestCase):
                 u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf', # noqa
             },
             mocker.last_request.json())
+
+        self.assertDictEqual(DEFAULT_MOCK_RESPONSE, response)
 
     def test_abort_signing_job(self, mocker):
         self.login(self.regular_user)

@@ -13,6 +13,8 @@ from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
 from opengever.meeting import is_meeting_feature_enabled
 from opengever.meeting.model import SubmittedDocument
+from opengever.sign.sign import Signer
+from opengever.sign.utils import is_sign_feature_enabled
 from opengever.workspace.utils import is_restricted_workspace_and_guest
 from opengever.workspace.utils import is_within_workspace
 from opengever.workspaceclient import is_workspace_client_feature_enabled
@@ -77,6 +79,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
         if is_within_workspace(self.context):
             result[u'restrict_downloading_document'] = is_restricted_workspace_and_guest(self.context)
 
+        if is_sign_feature_enabled():
+            self.extend_with_pending_signing_job(result)
+
         additional_metadata = {
             'checked_out': checked_out_by,
             'checked_out_fullname': checked_out_by_fullname,
@@ -129,6 +134,9 @@ class SerializeDocumentToJson(GeverSerializeToJson):
                 result['meeting'] = {'title': meeting.title, '@id': meeting.get_url()}
         else:
             result['submitted_proposal'] = None
+
+    def extend_with_pending_signing_job(self, result):
+        result[u'pending_signing_job'] = Signer(self.context).serialize_pending_signing_job()
 
 
 class DocumentPatch(ContentPatch):

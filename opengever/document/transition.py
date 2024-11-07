@@ -80,7 +80,6 @@ class DocumentSignedDraftTransitionExtender(TransitionExtender):
         manager = getMultiAdapter((self.context, self.request),
                                   ICheckinCheckoutManager)
         manager.revert_to_version(finalized_version_number)
-        Signer(self.context).clear_metadata()
 
 
 class ISignSchema(Schema):
@@ -106,6 +105,7 @@ class DocumentSigningSignedTransitionExtender(TransitionExtender):
             filename=self.get_file_name(),
             create_version=True,
             comment=translate(comment, context=self.request))
+        Signer(self.context).finish_signing()
 
     def get_file_name(self):
         filename, ext = os.path.splitext(self.context.get_filename())

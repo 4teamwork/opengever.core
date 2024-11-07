@@ -35,13 +35,13 @@ class TestSigning(IntegrationTestCase):
 
         self.assertDictEqual(
             {
-                'created': FROZEN_NOW,
+                'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
-                'signers': ['foo.bar@example.com'],
+                'signers': [{u'email': u'foo.bar@example.com', u'userid': u''}],
                 'userid': 'regular_user',
                 'version': 0
-            }, signer.serialize())
+            }, signer.serialize_pending_signing_job())
 
     def test_can_issue_and_invalidate_tokens(self, mocker):
         self.login(self.regular_user)
@@ -70,8 +70,8 @@ class TestSigning(IntegrationTestCase):
         # signing-job should be removed
         self.assertEqual(1, delete_mocker.call_count)
 
-        # metadata-content should be cleared
-        self.assertEqual({}, signer.serialize())
+        # pending signing job should be cleared
+        self.assertEqual({}, signer.serialize_pending_signing_job())
 
     def test_can_complete_signing_process(self, mocker):
         self.login(self.regular_user)
@@ -88,3 +88,6 @@ class TestSigning(IntegrationTestCase):
 
         signed_version = Versioner(self.document).retrieve(1)
         self.assertEqual(u'<DATA>', signed_version.file.data)
+
+        # pending signing job should be cleared
+        self.assertEqual({}, signer.serialize_pending_signing_job())
