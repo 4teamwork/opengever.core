@@ -32,7 +32,7 @@ class DocumentReporter(SolrReporterView):
 
     field_mapper = DocumentReporterFieldMapper
 
-    corresponding_listing_name = 'dossiers'
+    corresponding_listing_name = 'documents'
 
     column_settings = [
         {

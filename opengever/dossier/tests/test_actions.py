@@ -22,20 +22,20 @@ class TestDossierListingActions(IntegrationTestCase):
     def test_dossier_actions_for_reporoot_and_repofolder(self):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'copy_items', u'move_items', u'export_dossiers',
-                            u'pdf_dossierlisting']
+                            u'export_dossiers_with_subdossiers', u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.repository_root))
         self.assertEqual(expected_actions, self.get_actions(self.branch_repofolder))
 
     def test_dossier_actions_for_plone_site(self):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'copy_items', u'move_items', u'export_dossiers',
-                            u'pdf_dossierlisting']
+                            u'export_dossiers_with_subdossiers', u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.portal))
 
     def test_dossier_actions_for_dossier(self):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'copy_items', u'move_items', u'export_dossiers',
-                            u'pdf_dossierlisting']
+                            u'export_dossiers_with_subdossiers', u'pdf_dossierlisting']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
         self.assertEqual(expected_actions, self.get_actions(self.meeting_dossier))
 

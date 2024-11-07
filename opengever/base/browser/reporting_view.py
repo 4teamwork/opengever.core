@@ -2,6 +2,7 @@ from ftw.dictstorage.interfaces import IDictStorage
 from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import escape
 from ftw.tabbedview.interfaces import IGridStateStorageKeyGenerator
+from opengever.api.listing import FILTERS
 from opengever.base import _
 from opengever.base.behaviors.utils import set_attachment_content_disposition
 from opengever.base.reporter import DATE_NUMBER_FORMAT
@@ -113,6 +114,7 @@ class SolrReporterView(BaseReporterView):
 
     def get_selected_items(self):
         paths = self.request.get('paths')
+        include_children = self.request.get('include_children', False)
         listing_name = self.request.get('listing_name')
         if not paths and not listing_name:
             return
@@ -127,7 +129,7 @@ class SolrReporterView(BaseReporterView):
         solr_query['fl'] = self.fields.get_query_fields(fields) + ['path']
 
         if paths:
-            self._extend_selected_items_query_by_paths(solr_query, paths)
+            self._extend_selected_items_query_by_paths(solr_query, paths, include_children=include_children)
         elif listing_name:
             self._extend_selected_items_query_by_listing(solr_query, listing_name)
 
@@ -136,7 +138,8 @@ class SolrReporterView(BaseReporterView):
                 doc = OGSolrDocument(doc, fields=self.solr.manager.schema.fields)
                 yield IContentListingObject(doc)
 
-    def _extend_selected_items_query_by_paths(self, solr_query, paths):
+    def _extend_selected_items_query_by_paths(self, solr_query, paths, include_children=False):
+        filter_queries = []
         # Try to fetch the current sort
         try:
             listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")
@@ -145,8 +148,17 @@ class SolrReporterView(BaseReporterView):
         except KeyError:
             sort = 'modified desc'
 
+        filter_queries.extend(FILTERS.get(listing.listing_name, []))
         solr_query['sort'] = sort
-        solr_query['fq'] = 'path:({})'.format(' OR '.join([escape(path) for path in paths]))
+
+        path_filters = []
+        path_filters.append('path:({})'.format(' OR '.join([escape(path) for path in paths])))
+
+        if include_children:
+            path_filters.append('path_parent:({})'.format(' OR '.join([escape(path) for path in paths])))
+        filter_queries.append('({})'.format(' OR '.join(path_filters)))
+
+        solr_query['fq'] = filter_queries
 
     def _extend_selected_items_query_by_listing(self, solr_query, listing_name):
         listing = queryMultiAdapter((self.context, self.request), name="GET_application_json_@listing")

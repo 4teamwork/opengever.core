@@ -60,7 +60,7 @@ class TestUIActionsGET(IntegrationTestCase):
                       u'&listings:list=dossiers'.format(self.dossier.absolute_url())
         browser.open(dossier_url, method='GET', headers=self.api_headers)
         self.assertEqual([u'edit_items', u'copy_items', u'move_items', u'export_dossiers',
-                          u'pdf_dossierlisting'],
+                          u'export_dossiers_with_subdossiers', u'pdf_dossierlisting'],
                          [action['id'] for action in browser.json['listing_actions']])
         combined_url = u'{}/@ui-actions?categories:list=listing_actions'\
                        u'&listings:list=tasks&listings:list=dossiers'.format(
