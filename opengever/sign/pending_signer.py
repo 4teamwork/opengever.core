@@ -1,3 +1,5 @@
+from opengever.sign.signatory import Signatories
+from opengever.sign.signatory import Signatory
 from opengever.sign.utils import email_to_userid
 from persistent import Persistent
 from persistent.list import PersistentList
@@ -7,6 +9,9 @@ from plone.restapi.serializer.converters import json_compatible
 class PendingSigners(PersistentList):
     def serialize(self):
         return json_compatible([pending_signer.serialize() for pending_signer in self])
+
+    def to_signatories(self):
+        return Signatories([pending_signer.to_signatory() for pending_signer in self])
 
 
 class PendingSigner(Persistent):
@@ -20,6 +25,13 @@ class PendingSigner(Persistent):
 
     def serialize(self):
         return json_compatible({
-            'userid': self.userid if self.userid else email_to_userid(self.email),
+            'userid': self.resolved_userid(),
             'email': self.email,
         })
+
+    def resolved_userid(self):
+        return self.userid if self.userid else email_to_userid(self.email)
+
+    def to_signatory(self):
+        return Signatory(userid=self.resolved_userid(),
+                         email=self.email)

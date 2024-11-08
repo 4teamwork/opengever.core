@@ -1,6 +1,7 @@
 from datetime import datetime
 from opengever.sign.pending_signer import PendingSigner
 from opengever.sign.pending_signer import PendingSigners
+from opengever.sign.signed_version import SignedVersion
 from persistent import Persistent
 from plone.restapi.serializer.converters import json_compatible
 
@@ -31,3 +32,9 @@ class PendingSigningJob(Persistent):
             'signers': self.signers.serialize(),
             'version': self.version,
         })
+
+    def to_signed_version(self):
+        return SignedVersion(
+            signatories=self.signers.to_signatories(),
+            version=self.version + 1
+        )

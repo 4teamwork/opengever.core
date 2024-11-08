@@ -4,6 +4,7 @@ from ftw.testing import freeze
 from opengever.document.document import Document
 from opengever.document.versioner import Versioner
 from opengever.sign.sign import Signer
+from opengever.sign.signed_version import SignedVersion
 from opengever.sign.token import InvalidToken
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -79,9 +80,11 @@ class TestSigning(IntegrationTestCase):
         api.content.transition(obj=self.document,
                                transition=Document.draft_signing_transition)
 
-        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
-
         signer = Signer(self.document)
+
+        self.assertEqual(0, self.document.get_current_version_id(missing_as_zero=True))
+        self.assertEqual(0, len(signer.signed_versions_storage.load().values()))
+
         signer.complete_signing(b64encode('<DATA>'))
 
         self.assertEqual(1, self.document.get_current_version_id(missing_as_zero=True))
@@ -91,3 +94,17 @@ class TestSigning(IntegrationTestCase):
 
         # pending signing job should be cleared
         self.assertEqual({}, signer.serialize_pending_signing_job())
+
+        # a new signature item should have been created
+        self.assertEqual(1, len(signer.signed_versions_storage.load().values()))
+        self.assertEqual(1, signer.signed_versions_storage.load().values()[0].version)
+
+    def test_can_serialize_signed_versions(self, mocker):
+        self.login(self.regular_user)
+
+        signer = Signer(self.document)
+        storage = signer.signed_versions_storage.load()
+        storage.add_signed_version(SignedVersion(version=1))
+        storage.add_signed_version(SignedVersion(version=2))
+
+        self.assertEqual([1, 2], signer.serialize_signed_versions().keys())

@@ -5,6 +5,7 @@ from opengever.document.document import Document
 from opengever.sign.client import sign_service_client
 from opengever.sign.pending_signing_job import PendingSigningJob
 from opengever.sign.storage import PendingSigningJobStorage
+from opengever.sign.storage import SignedVersionsStorage
 from opengever.sign.token import TokenManager
 from plone import api
 from plone.dexterity.utils import safe_utf8
@@ -20,6 +21,7 @@ class Signer(object):
         self.context = context
         self.token_manager = TokenManager(context)
         self.pending_signing_job_storage = PendingSigningJobStorage(context)
+        self.signed_versions_storage = SignedVersionsStorage(context)
 
     def issue_token(self):
         return urlsafe_b64encode(self.token_manager.issue_token())
@@ -51,6 +53,8 @@ class Signer(object):
                 transition_params={'filedata': signed_pdf_data})
 
     def finish_signing(self):
+        signed_version = self.pending_signing_job.to_signed_version()
+        self.signed_versions_storage.load().add_signed_version(signed_version)
         self.pending_signing_job_storage.clear()
 
     @property
@@ -84,6 +88,9 @@ class Signer(object):
 
     def serialize_pending_signing_job(self):
         return self.pending_signing_job.serialize() if self.pending_signing_job else {}
+
+    def serialize_signed_versions(self):
+        return self.signed_versions_storage.load().serialize()
 
 
 class IssuerNotFound(Exception):
