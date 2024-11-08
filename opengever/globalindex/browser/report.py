@@ -1,5 +1,6 @@
 from datetime import datetime
 from opengever.base.browser.reporting_view import BaseReporterView
+from opengever.base.model import create_session
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_actor
 from opengever.base.reporter import StringTranslater
@@ -8,9 +9,11 @@ from opengever.base.utils import is_administrator
 from opengever.globalindex import _
 from opengever.globalindex.utils import get_selected_items
 from opengever.ogds.base.utils import get_current_admin_unit
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
+from sqlalchemy.orm import joinedload
 from zExceptions import Unauthorized
 from zope.i18n import translate
 
@@ -156,3 +159,55 @@ class UserReport(BaseReporterView):
 
         ]
         return columns
+
+
+class OGDSGroupsMembershipReporter(BaseReporterView):
+    """API Endpoint that returns all groups with their related users from ogds.
+
+    GET /groups-membership-report HTTP/1.1
+
+    The endpoint returns each group with a list of its associated users.
+    """
+    filename = 'group-memberships-report.xlsx'
+
+    def check_permissions(self):
+        if not is_administrator():
+            raise Unauthorized
+
+    @property
+    def _columns(self):
+        return [
+            {'id': 'username', 'title': _('label_username')},
+            {'id': 'userid', 'title': _('label_userid')},
+            {'id': 'group_title', 'title': _('label_groupname')},
+            {'id': 'group_id', 'title': _('label_groupid')},
+
+        ]
+
+    def __call__(self):
+        session = create_session()
+        query = session.query(Group).options(joinedload(Group.users))
+        groups_with_users = []
+
+        for group in query.all():
+            for user in group.users:
+                group_info = {
+                    'group_id': group.groupid,
+                    'group_title': group.groupname,
+                    'userid': user.userid,
+                    "username": user.username
+                }
+                groups_with_users.append(group_info)
+
+        reporter = XLSReporter(
+            self.context.REQUEST,
+            self.columns(),
+            groups_with_users,
+            sheet_title=translate(
+                _('label_groups_membership_report', default=u'Groups membership report'), context=self.request),
+            footer='%s %s' % (
+                datetime.now().strftime('%d.%m.%Y %H:%M'),
+                get_current_admin_unit().id()),
+            is_auto_filter_enabled=True
+        )
+        return self.return_excel(reporter)

@@ -18,5 +18,10 @@
       />
 
 
-
+  <browser:page
+      name="groups-membership-report"
+      for="*"
+      class=".report.OGDSGroupsMembershipReporter"
+      permission="zope2.View"
+      />
 </configure>

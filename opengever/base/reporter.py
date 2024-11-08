@@ -84,7 +84,7 @@ class XLSReporter(object):
 
     def __init__(self, request, attributes, results,
                  sheet_title=u' ', footer=u'', portrait_format=False,
-                 blank_header_rows=0, field_mapper=None):
+                 blank_header_rows=0, field_mapper=None, is_auto_filter_enabled=False):
         """Initalize the XLS reporter
         Arguments:
         attributes -- a list of mappings (with 'id', 'title', 'transform')
@@ -99,6 +99,7 @@ class XLSReporter(object):
         self.portrait_format = portrait_format
         self.blank_header_rows = blank_header_rows
         self.field_mapper = field_mapper
+        self.is_auto_filter_enabled = is_auto_filter_enabled
 
     def __call__(self):
         workbook = self.prepare_workbook()
@@ -124,6 +125,16 @@ class XLSReporter(object):
 
         for index, width in column_widths.iteritems():
             sheet.column_dimensions[index].width = width
+
+        if self.is_auto_filter_enabled:
+            # Determine the range for auto_filter based on attributes length
+            last_column = get_column_letter(len(self.attributes))
+            header_row_index = self.blank_header_rows + 1  # Adjusts for any blank header rows
+            sheet.auto_filter.ref = "{start_col}{header_row}:{end_col}{header_row}".format(
+                start_col=get_column_letter(1),
+                header_row=header_row_index,
+                end_col=last_column
+            )
 
         return workbook
 
