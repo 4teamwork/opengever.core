@@ -28,6 +28,9 @@ class DossierListingActions(BaseListingActions):
     def is_export_dossiers_available(self):
         return True
 
+    def is_export_dossiers_with_subdossiers_available(self):
+        return True
+
     def is_move_items_available(self):
         return True
 

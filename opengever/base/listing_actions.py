@@ -21,6 +21,7 @@ class BaseListingActions(object):
         self.maybe_add_zip_selected()
         self.maybe_add_export_documents()
         self.maybe_add_export_dossiers()
+        self.maybe_add_export_dossiers_with_subdossiers()
         self.maybe_add_export_tasks()
         self.maybe_add_export_proposals()
         self.maybe_add_pdf_dossierlisting()
@@ -76,6 +77,9 @@ class BaseListingActions(object):
         return False
 
     def is_export_dossiers_available(self):
+        return False
+
+    def is_export_dossiers_with_subdossiers_available(self):
         return False
 
     def is_export_proposals_available(self):
@@ -159,6 +163,10 @@ class BaseListingActions(object):
     def maybe_add_export_dossiers(self):
         if self.is_export_dossiers_available():
             self.add_action(u'export_dossiers')
+
+    def maybe_add_export_dossiers_with_subdossiers(self):
+        if self.is_export_dossiers_with_subdossiers_available():
+            self.add_action(u'export_dossiers_with_subdossiers')
 
     def maybe_add_export_proposals(self):
         if self.is_export_proposals_available():

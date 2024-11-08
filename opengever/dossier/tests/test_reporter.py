@@ -513,3 +513,40 @@ class TestDossierReporter(SolrIntegrationTestCase):
 
         self.assertEqual(listing_titles_descending, report_titles)
         self.assertNotEqual(listing_titles_ascending, report_titles)
+
+    @browsing
+    def test_dossier_report_with_subdossiers(self, browser):
+        self.login(self.regular_user, browser=browser)
+        data = self.make_path_param(self.dossier)
+        data["include_children"] = True
+
+        browser.open(view='dossier_report', data=data)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        # Main dossier
+        self.assertSequenceEqual(
+            [self.dossier.title,
+             datetime(2016, 1, 1),
+             None,
+             u'Ziegler Robert (robert.ziegler)',
+             u'Active',
+             u'Client1 1.1 / 1'],
+            [cell.value for cell in rows[1]])
+
+        # Subdossiers
+        self.assertSequenceEqual(
+            [u'2016', datetime(2016, 8, 31, 0, 0), None, None, u'Active', u'Client1 1.1 / 1.1'],
+            [cell.value for cell in rows[2]]
+        )
+
+        self.assertSequenceEqual(
+            [u'Subsubdossier', datetime(2016, 8, 31, 0, 0), None, None, u'Active', u'Client1 1.1 / 1.1.1'],
+            [cell.value for cell in rows[3]]
+        )
+
+        self.assertSequenceEqual(
+            [u'2015', datetime(2016, 8, 31, 0, 0), None, None, u'Active', u'Client1 1.1 / 1.2'],
+            [cell.value for cell in rows[4]]
+        )
