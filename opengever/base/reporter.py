@@ -5,6 +5,7 @@ from opengever.base.solr import OGSolrContentListingObject
 from opengever.base.solr.fields import DateListingField
 from opengever.ogds.base.actor import Actor
 from openpyxl import Workbook
+from openpyxl.styles import Alignment
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 from plone.api.portal import get_localized_time
@@ -141,6 +142,9 @@ class XLSReporter(object):
 
                 value = self.get_value(obj, attr)
                 cell.value = value
+
+                # Enable text wrapping for cells that may contain multiline text
+                cell.alignment = Alignment(wrap_text=True)
 
                 if 'hyperlink' in attr:
                     cell.hyperlink = attr.get('hyperlink')(value, obj)
