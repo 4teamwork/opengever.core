@@ -170,7 +170,7 @@ class GeverDeployment(object):
                 pass
 
     def setup_ogds_auth_plugin(self):
-        if self.is_policyless:
+        if not self.ldap_profile:
             install_ogds_auth_plugin()
 
     def install_admin_unit_auth_plugin(self):
