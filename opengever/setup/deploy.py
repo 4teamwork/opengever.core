@@ -12,6 +12,7 @@ from opengever.ogds.auth.admin_unit import addAdminUnitAuthenticationPlugin
 from opengever.ogds.auth.plugin import install_ogds_auth_plugin
 from opengever.ogds.base.interfaces import IAdminUnitConfiguration
 from opengever.ogds.base.sync.ogds_updater import sync_ogds
+from opengever.ogds.models.group import Group
 from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 from opengever.setup.ldap_creds import configure_ldap_credentials
@@ -61,6 +62,7 @@ class GeverDeployment(object):
         self.has_purge_solr = has_purge_solr
         self.ldap_profile = ldap_profile
         self.has_ogds_sync = has_ogds_sync
+        self._groupids_by_name = None
 
     def create(self):
         self.prepare_sql()
@@ -168,7 +170,7 @@ class GeverDeployment(object):
                 pass
 
     def setup_ogds_auth_plugin(self):
-        if self.is_policyless:
+        if not self.ldap_profile:
             install_ogds_auth_plugin()
 
     def install_admin_unit_auth_plugin(self):
@@ -179,14 +181,12 @@ class GeverDeployment(object):
                 None, 'admin_unit_auth', 'Admin Unit Authentication Plugin')
 
     def sync_ogds(self):
-        if not self.has_ogds_sync or self.is_policyless:
-            # TODO: Disable "Sync OGDS" checkbox in setup form for policyless
-            # deployments, since it won't have an effect.
+        if not self.has_ogds_sync:
             return
 
         print '===== SYNC LDAP ===='
         # Import LDAP users and groups
-        sync_ogds(self.site)
+        sync_ogds(self.site, update_remote_timestamps=False)
         print '===== Done SYNCING LDAP ===='
 
     def configure_admin_unit(self):
@@ -256,8 +256,12 @@ class GeverDeployment(object):
         if not group_name:
             return
 
+        if self._groupids_by_name is None:
+            self._groupids_by_name = Group.groupids_by_name()
+
+        groupid = self._groupids_by_name.get(group_name.lower(), group_name)
         site.acl_users.portal_role_manager.assignRoleToPrincipal(
-            role_name, group_name)
+            role_name, groupid)
 
     def install_additional_profiles(self):
         additional_profiles = self.config.get('additional_profiles')
@@ -280,7 +284,9 @@ class GeverDeployment(object):
                     ["CommitteeAdministrator"], obj)
 
     def _assign_roles_to_development_users_group(self, roles, obj):
-        assignment = SharingRoleAssignment(DEVELOPMENT_USERS_GROUP, roles)
+        dev_groupid = self._groupids_by_name.get(
+            DEVELOPMENT_USERS_GROUP, DEVELOPMENT_USERS_GROUP)
+        assignment = SharingRoleAssignment(dev_groupid, roles)
         RoleAssignmentManager(obj).add_or_update_assignment(assignment)
 
     def _has_default_role_assignments(self, obj):

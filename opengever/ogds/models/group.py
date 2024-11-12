@@ -1,4 +1,5 @@
 from opengever.base.model import Base
+from opengever.base.model import create_session
 from opengever.base.model import GROUP_ID_LENGTH
 from opengever.base.model import GROUP_TITLE_LENGTH
 from opengever.base.model import USER_ID_LENGTH
@@ -16,6 +17,8 @@ from sqlalchemy import Table
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import select
+from sqlalchemy.sql.expression import true
 
 
 # association table
@@ -81,6 +84,21 @@ class Group(Base):
                 col for col in cls.__table__.columns
                 if col.name in cls.column_names_to_sync
             }
+
+    @classmethod
+    def groupids_by_name(cls):
+        groupids_by_name = {}
+
+        session = create_session()
+        query = select((Group.groupname, Group.groupid)).where(Group.active == true())
+        res = session.execute(query)
+        ids_by_name = dict(res.fetchall())
+
+        # Make sure lookups by name are case-insensitive
+        for name, id_ in ids_by_name.items():
+            groupids_by_name[name.lower()] = id_
+
+        return groupids_by_name
 
     def __init__(self, groupid, **kwargs):
         self.groupid = groupid

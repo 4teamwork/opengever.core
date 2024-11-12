@@ -4,6 +4,7 @@ from opengever.base.response import IResponseContainer
 from opengever.base.response import MOVE_RESPONSE_TYPE
 from opengever.base.response import Response
 from opengever.base.response import SCHEMA_FIELD_CHANGE_RESPONSE_TYPE
+from opengever.ogds.models.group import Group
 from opengever.setup import DEVELOPMENT_USERS_GROUP
 
 
@@ -24,10 +25,13 @@ class WorkspaceResponseExampleContentCreator(object):
         self.grant_roles()
 
     def grant_roles(self):
+        groupids_by_name = Group.groupids_by_name()
         self.site.acl_users.portal_role_manager.assignRoleToPrincipal(
-            'WorkspacesCreator', DEVELOPMENT_USERS_GROUP)
+            'WorkspacesCreator',
+            groupids_by_name.get(DEVELOPMENT_USERS_GROUP, DEVELOPMENT_USERS_GROUP))
         self.site.acl_users.portal_role_manager.assignRoleToPrincipal(
-            'WorkspacesUser', DEVELOPMENT_USERS_GROUP)
+            'WorkspacesUser',
+            groupids_by_name.get(DEVELOPMENT_USERS_GROUP, DEVELOPMENT_USERS_GROUP))
 
     def create_responses(self):
         todo = self.site.unrestrictedTraverse('workspaces/workspace-1/todo-1')
