@@ -308,7 +308,7 @@ class TestOGDSGroupsMembershipReporter(IntegrationTestCase):
         # Login as an administrator to access the report
         self.login(self.administrator, browser=browser)
 
-        browser.open(view='groups-membership-report')
+        browser.open(view='group-memberships-report')
 
         # Ensure the response status is 200 (OK)
         self.assertEqual(browser.status_code, 200)

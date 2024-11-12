@@ -164,7 +164,7 @@ class UserReport(BaseReporterView):
 class OGDSGroupsMembershipReporter(BaseReporterView):
     """API Endpoint that returns all groups with their related users from ogds.
 
-    GET /groups-membership-report HTTP/1.1
+    GET /group-memberships-report HTTP/1.1
 
     The endpoint returns each group with a list of its associated users.
     """
