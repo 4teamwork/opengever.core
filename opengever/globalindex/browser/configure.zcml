@@ -19,7 +19,7 @@
 
 
   <browser:page
-      name="groups-membership-report"
+      name="group-memberships-report"
       for="*"
       class=".report.OGDSGroupsMembershipReporter"
       permission="zope2.View"
