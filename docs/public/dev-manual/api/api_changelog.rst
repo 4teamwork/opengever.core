@@ -25,6 +25,8 @@ Other Changes
 ^^^^^^^^^^^^^
 - Add ``pending_signing_job`` attribute to serialized documents.
 - Add ``signatures_by_version`` attribute to serialized documents.
+- Extend serialized attributes of the role assignment report items
+
 
 
 2024.14.0 (2024-09-24)

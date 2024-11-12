@@ -41,36 +41,66 @@ class TestRoleAssignmentReportsGet(IntegrationTestCase):
         browser.open(self.portal.absolute_url() + '/@role-assignment-reports/report_0',
                      method='GET', headers=self.api_headers)
         self.assertEqual(
-            {u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
-             u'@type': u'virtual.report.roleassignmentreport',
-             u'referenced_roles': [{u'id': u'Reader', u'title': u'Read'},
-                                   {u'id': u'Contributor', u'title': u'Add dossiers'},
-                                   {u'id': u'Editor', u'title': u'Edit dossiers'},
-                                   {u'id': u'Reviewer', u'title': u'Resolve dossiers'},
-                                   {u'id': u'Publisher', u'title': u'Reactivate dossiers'},
-                                   {u'id': u'DossierManager', u'title': u'Manage dossiers'},
-                                   {u'id': u'TaskResponsible', u'title': u'Task responsible'},
-                                   {u'id': u'Role Manager', u'title': u'Role manager'}],
-             u'items': [{u'UID': u'createrepositorytree000000000001',
-                         u'roles': [u'Contributor'],
-                         u'title': u'Ordnungssystem',
-                         u'url': u'http://nohost/plone/ordnungssystem'},
-                        {u'UID': u'createtreatydossiers000000000018',
-                         u'roles': [u'Reader', u'Editor', u'Reviewer'],
-                         u'title': u'Subsubdossier',
-                         u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-'
-                         u'vereinbarungen/dossier-1/dossier-2/dossier-4'},
-                        {u'UID': u'createrepositorytree000000000004',
-                         u'roles': [u'Contributor', u'Publisher'],
-                         u'title': u'2. Rechnungspr\xfcfungskommission',
-                         u'url': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission'}],
-             u'items_total': 3,
-             u'modified': u'2016-08-31T20:01:33+00:00',
-             u'principal_type': u'user',
-             u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
-             u'principal_id': self.archivist.getId(),
-             u'report_id': u'report_0',
-             u'state': u'ready'}, browser.json)
+            {
+                u'@id': u'http://nohost/plone/@role-assignment-reports/report_0',
+                u'@type': u'virtual.report.roleassignmentreport',
+                u'items': [
+                    {
+                        u'@id': u'http://nohost/plone/ordnungssystem',
+                        u'@type': u'opengever.repository.repositoryroot',
+                        u'UID': u'createrepositorytree000000000001',
+                        u'description': u'',
+                        u'is_leafnode': None,
+                        u'reference_number': u'Client1',
+                        u'review_state': u'repositoryroot-state-active',
+                        u'roles': [u'Contributor'],
+                        u'title': u'Ordnungssystem',
+                        u'url': u'http://nohost/plone/ordnungssystem'
+                    },
+                    {
+                        u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4', # noqa
+                        u'@type': u'opengever.dossier.businesscasedossier',
+                        u'UID': u'createtreatydossiers000000000018',
+                        u'description': u'',
+                        u'dossier_type': None,
+                        u'is_leafnode': None,
+                        u'is_subdossier': True,
+                        u'reference_number': u'Client1 1.1 / 1.1.1',
+                        u'review_state': u'dossier-state-active',
+                        u'roles': [u'Reader', u'Editor', u'Reviewer'],
+                        u'title': u'Subsubdossier',
+                        u'url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4' # noqa
+                    },
+                    {
+                        u'@id': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission',
+                        u'@type': u'opengever.repository.repositoryfolder',
+                        u'UID': u'createrepositorytree000000000004',
+                        u'description': u'',
+                        u'is_leafnode': True,
+                        u'reference_number': u'Client1 2',
+                        u'review_state': u'repositoryfolder-state-active',
+                        u'roles': [u'Contributor', u'Publisher'],
+                        u'title': u'2. Rechnungspr\xfcfungskommission',
+                        u'url': u'http://nohost/plone/ordnungssystem/rechnungsprufungskommission'
+                    }
+                ],
+                u'items_total': 3,
+                u'modified': u'2016-08-31T20:01:33+00:00',
+                u'principal_id': u'archivist',
+                u'principal_label': u'Fischer J\xfcrgen (jurgen.fischer)',
+                u'principal_type': u'user',
+                u'referenced_roles': [
+                    {u'id': u'Reader', u'title': u'Read'},
+                    {u'id': u'Contributor', u'title': u'Add dossiers'},
+                    {u'id': u'Editor', u'title': u'Edit dossiers'},
+                    {u'id': u'Reviewer', u'title': u'Resolve dossiers'},
+                    {u'id': u'Publisher', u'title': u'Reactivate dossiers'},
+                    {u'id': u'DossierManager', u'title': u'Manage dossiers'},
+                    {u'id': u'TaskResponsible', u'title': u'Task responsible'},
+                    {u'id': u'Role Manager', u'title': u'Role manager'}
+                ],
+                u'report_id': u'report_0',
+                u'state': u'ready'}, browser.json)
 
     @browsing
     def test_get_role_assignment_report_with_invalid_report_id_raises_bad_request(self, browser):

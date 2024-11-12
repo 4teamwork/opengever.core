@@ -1,3 +1,4 @@
+from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.ogds.base.actor import Actor
 from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
@@ -7,8 +8,10 @@ from plone.app.uuid.utils import uuidToObject
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.batching import HypermediaBatch
 from plone.restapi.deserializer import json_body
+from plone.restapi.interfaces import ISerializeToJsonSummary
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zope.component import getMultiAdapter
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import implements
@@ -59,7 +62,9 @@ class RoleAssignmentReportsGet(RoleAssignmentReportsBase):
                 raise BadRequest("Invalid report_id '{}'".format(report_id))
             for item in result['items']:
                 obj = uuidToObject(item['UID'])
-                item['title'] = obj.Title()
+                item.update(**getMultiAdapter((obj, self.request), ISerializeToJsonSummary)())
+                ref_num = IReferenceNumber(obj)
+                item['reference_number'] = ref_num.get_number()
                 item['url'] = obj.absolute_url()
 
             result['referenced_roles'] = self.get_referenced_roles()
