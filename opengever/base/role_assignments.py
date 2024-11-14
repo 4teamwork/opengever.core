@@ -1,5 +1,6 @@
 from opengever.base import _
 from opengever.base.oguid import Oguid
+from opengever.sharing.local_roles_lookup.manager import LocalRolesLookupManager
 from persistent.list import PersistentList
 from persistent.mapping import PersistentMapping
 from zope.annotation.interfaces import IAnnotations
@@ -476,6 +477,8 @@ class RoleAssignmentManager(object):
         for principal in owner_principals:
             self.context.manage_addLocalRoles(
                 principal, ['Owner'], verified=True)
+
+        LocalRolesLookupManager().update_lookup_table(self.context)
 
         if reindex:
             self.context.reindexObjectSecurity()

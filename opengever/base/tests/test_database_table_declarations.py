@@ -6,6 +6,7 @@ from opengever.dossiertransfer.model import tables as dossier_transfer_tables
 from opengever.globalindex.model import tables as globalindex_tables
 from opengever.locking.model import tables as lock_tables
 from opengever.meeting.model import tables as meeting_tables
+from opengever.sharing.local_roles_lookup.model import tables as local_roles_lookup_tables
 from unittest import TestCase
 
 
@@ -29,5 +30,6 @@ class TestDatabaseTableDeclarations(TestCase):
             + dossier_transfer_tables
             + base_tables
             + system_messages_tables
+            + local_roles_lookup_tables
         )
         self.assertItemsEqual(expected_tables, Base.metadata.tables.keys())
