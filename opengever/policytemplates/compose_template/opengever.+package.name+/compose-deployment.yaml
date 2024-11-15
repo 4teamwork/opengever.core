@@ -1,0 +1,162 @@
+services:
+
+  ogcore: &ogcore
+    image: docker.io/4teamwork/ogcore:${OGCORE_VERSION:-latest}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    volumes:
+      - ogcore_data:/data
+      - ./opengever/${POLICY_NAME}:/app/opengever/${POLICY_NAME}:ro
+      - ./.tokenauth_keys:/home/plone/.opengever/ftw_tokenauth_keys:ro
+    ports:
+      - "1${DEPLOYMENT_NUMBER:-01}01-1${DEPLOYMENT_NUMBER:-01}0${OGCORE_REPLICAS:-2}:8080"
+    environment: &ogcore-environment
+      APPS_ENDPOINT_URL: ${APPS_ENDPOINT_URL}
+      BUMBLEBEE_APP_ID: ${BUMBLEBEE_APP_ID}
+      BUMBLEBEE_INTERNAL_PLONE_URL: ${BUMBLEBEE_INTERNAL_PLONE_URL}
+      BUMBLEBEE_PUBLIC_URL: ${BUMBLEBEE_PUBLIC_URL}
+      BUMBLEBEE_SECRET: ${BUMBLEBEE_SECRET}
+      FTW_ZOPEMASTER_SLACK_WEBHOOK: ${FTW_ZOPEMASTER_SLACK_WEBHOOK:-}
+      GEVER_COLORIZATION: ${GEVER_COLORIZATION:-}
+      MSGCONVERT_URL: http://msgconvert:8080/
+      OGDS_SYNC_URL: http://ogds-sync:8080/
+      OGDS_URL: postgresql+psycopg2://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}:5432/${OGDS_DB_NAME:-ogds}
+      PDFLATEX_URL: http://pdflatex:8080/
+      RAVEN_DSN: ${RAVEN_DSN:-}
+      RAVEN_PROJECT_DIST: ${RAVEN_PROJECT_DIST:-opengever.core}
+      RAVEN_TAGS: ${RAVEN_TAGS:-}
+      SABLON_URL: http://sablon:8080/
+      SMTP_HOST: ${SMTP_HOST:-localhost}
+      SOLR_BASE: /solr/${CLIENT_ID}
+      TEAMRAUM_URL: ${TEAMRAUM_URL:-}
+      TUS_TMP_FILE_DIR: /data/tus-uploads
+      WEASYPRINT_URL: http://weasyprint:8080/
+      WORKSPACE_SECRET: ${WORKSPACE_SECRET:-}
+      ZCML_PACKAGE_INCLUDES: opengever.${POLICY_NAME}.${CLIENT_ID}
+      ZODB_CACHE_SIZE: ${ZODB_CACHE_SIZE:-100000}
+    depends_on:
+      zeoserver:
+        condition: service_healthy
+      solr:
+        condition: service_started
+      ogds-sync:
+        condition: service_started
+    networks:
+      - default
+      - shared-services
+    restart: always
+    deploy:
+      replicas: ${OGCORE_REPLICAS:-2}
+      resources:
+        limits:
+          memory: ${OGCORE_MEMORY_LIMIT:-1200mb}
+
+  ogcore-cron:
+    <<: *ogcore
+    command: cron
+    ports: []
+    deploy:
+      replicas: 1
+
+  ogcore-debug:
+    <<: *ogcore
+    ports:
+      - "1${DEPLOYMENT_NUMBER}00:8080"
+    stdin_open: true
+    tty: true
+    deploy:
+      replicas: 1
+    profiles:
+      - debug
+
+  zeoserver:
+    image: docker.io/4teamwork/zeoserver:${ZEOSERVER_VERSION:-latest}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    volumes:
+      - ogcore_data:/data
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1500mb
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8100 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  solr: &solr
+    image: docker.io/4teamwork/ogsolr:${SOLR_VERSION:-latest}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    command: solr-foreground
+    volumes:
+      - solr_data:/var/solr/data
+    environment:
+      SOLR_CORES: ${CLIENT_ID:-ogsite}
+      SOLR_JAVA_MEM: ${SOLR_JAVA_MEM:--Xms512m -Xmx1g}
+    ports:
+      - 1${DEPLOYMENT_NUMBER}30:8983
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: ${SOLR_MEMORY_LIMIT:-2048mb}
+
+  solr-di:
+    <<: *solr
+    volumes:
+      - solr_data:/solr-data
+    ports:
+      - 1${DEPLOYMENT_NUMBER}31:8983
+    profiles:
+      - solr-di
+
+  ogds-sync:
+    image: docker.io/4teamwork/ogds-sync:${OGDS_SYNC_VERSION}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    environment:
+      - OGDS_DSN=postgresql://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}/${OGDS_DB_NAME:-ogds}
+      - LDAP_PROFILE=${LDAP_PROFILE}
+      - LDAP_URL=${LDAP_SERVER_URI}
+      - LDAP_BIND_DN=${LDAP_BIND_DN}
+      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD}
+      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN}
+      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN}
+      - LDAP_USER_FILTER=${LDAP_USER_FILTER}
+      - SYNC_INTERVAL=${SYNC_INTERVAL:-3600}
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 500mb
+
+  haproxy:
+    image: docker.io/haproxy:${HAPROXY_VERSION:-latest}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - 1${DEPLOYMENT_NUMBER:-01}50:8000
+      - 1${DEPLOYMENT_NUMBER:-01}51:8800
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 200mb
+
+volumes:
+  ogcore_data:
+  solr_data:
+
+networks:
+  shared-services:
+    external: true

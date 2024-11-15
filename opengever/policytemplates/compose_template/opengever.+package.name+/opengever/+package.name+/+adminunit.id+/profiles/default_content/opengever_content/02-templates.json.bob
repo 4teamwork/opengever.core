@@ -1,0 +1,49 @@
+[
+    {
+        "_path": "/vorlagen/ms-word-template",
+        "_type": "opengever.document.document",
+        "title": "Word Dokument",
+        "file:file": "templates/empty-word-template.docx"
+    },
+    {
+        "_path": "/vorlagen/ms-powerpoint-template",
+        "_type": "opengever.document.document",
+        "title": "PowerPoint Präsentation",
+        "file:file": "templates/empty-powerpoint-template.pptx"
+    },
+    {
+        "_path": "/vorlagen/ms-excel-template",
+        "_type": "opengever.document.document",
+        "title": "Excel Arbeitsmappe",
+        "file:file": "templates/empty-excel-template.xlsx"
+    }{{% if setup.enable_meeting_feature or setup.nof_templates > 0 %}},{{% endif %}}
+    {{% if setup.enable_meeting_feature %}}
+    {
+        "_path": "/vorlagen/sablon-template-1",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokoll",
+        "file:file": "templates/protokoll.docx"
+      },
+      {
+        "_path": "/vorlagen/sablon-template-2",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Protokollauszug",
+        "file:file": "templates/protokollauszug.docx"
+      },
+      {
+        "_path": "/vorlagen/sablon-template-3",
+        "_type": "opengever.meeting.sablontemplate",
+        "title": "Traktandenliste",
+        "file:file": "templates/traktandenliste.docx"
+      }{{% if setup.nof_templates > 0 %}},{{% endif %}}
+{{% endif %}}
+{{% for template in range(setup.nof_templates) %}}
+    {
+        "_path": "/vorlagen/template-{{{loop.index}}}",
+        "_type": "opengever.document.document",
+        "title": "EDIT ME",
+        "file:file": "templates/EDIT ME"
+    }{{% if not loop.last %}},{{% endif %}}
+{{% endfor %}}
+
+]

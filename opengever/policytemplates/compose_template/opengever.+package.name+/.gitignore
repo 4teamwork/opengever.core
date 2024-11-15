@@ -1,0 +1,9 @@
+.DS_Store
+*.mo
+*.pyc
+*.pyo
+/var/
+.age.key
+compose.yaml
+compose.override.yaml
+.env

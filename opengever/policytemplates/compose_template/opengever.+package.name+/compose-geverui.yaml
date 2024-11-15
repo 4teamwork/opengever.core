@@ -1,0 +1,14 @@
+services:
+
+  geverui:
+    image: ghcr.io/4teamwork/gever-ui:${GEVERUI_VERSION:-latest}
+    labels:
+      - ch.onegovgever.client_id=${CLIENT_ID}
+      - ch.onegovgever.hostname=${HOSTNAME:-localhost}
+    ports:
+      - "1${DEPLOYMENT_NUMBER}80:80"
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 100mb

@@ -1,0 +1,92 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:opengever="http://namespaces.zope.org/opengever"
+    xmlns:profilehook="http://namespaces.zope.org/profilehook"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+
+  <genericsetup:registerProfile
+      name="default"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
+      description="Policy for {{{package.title}}}"
+      directory="profiles/default"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  <include package=".upgrades" />
+
+{{% if is_gever %}}
+  <genericsetup:registerProfile
+      name="default_content"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
+      description="Default content for {{{package.title}}}."
+      directory="profiles/default_content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <include package="ftw.profilehook" file="meta.zcml" />
+  <profilehook:hook
+      profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content"
+      handler=".hooks.default_content_installed"
+      />
+{{% endif %}}
+
+  <genericsetup:registerProfile
+      name="units"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:units"
+      description="Units content for {{{package.title}}}."
+      directory="profiles/units"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+{{% if is_teamraum %}}
+  <genericsetup:registerProfile
+      name="workspaces_content"
+      title="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content"
+      description="Default content for {{{package.title}}}."
+      directory="profiles/workspaces_content"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+{{% endif %}}
+
+  <!-- deployments -->
+  <include package="opengever.setup" file="meta.zcml" />
+{{% if is_gever %}}
+  <opengever:registerDeployment
+      title="OneGov GEVER {{{package.title}}}"
+      policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
+      additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:units
+                           opengever.{{{package.name}}}.{{{adminunit.id}}}:default_content
+                           opengever.setup:casauth_ianus_portal
+                          "
+      admin_unit_id="{{{adminunit.id}}}"
+      administrator_group="{{{deployment.administrator_group}}}"
+      limited_admin_group="{{{deployment.limited_admin_group}}}"
+      rolemanager_group="{{{deployment.rolemanager_group}}}"
+      records_manager_group="{{{deployment.records_manager_group}}}"
+      archivist_group="{{{deployment.archivist_group}}}"
+      is_default="True"
+      mail_domain="{{{deployment.mail_domain}}}"
+      mail_from_address="{{{deployment.mail_from_address}}}"
+      />
+
+{{% endif %}}
+{{% if is_teamraum %}}
+  <opengever:registerDeployment
+      title="Teamraum {{{package.title}}}"
+      policy_profile="opengever.{{{package.name}}}.{{{adminunit.id}}}:default"
+      additional_profiles="opengever.{{{package.name}}}.{{{adminunit.id}}}:workspaces_content
+                           opengever.{{{package.name}}}.{{{adminunit.id}}}:units
+                           opengever.setup:casauth_ianus_portal
+                          "
+      admin_unit_id="{{{adminunit.id}}}"
+      administrator_group="{{{deployment.administrator_group}}}"
+      workspace_creator_group="{{{deployment.workspace_creators_group}}}"
+      workspace_user_group="{{{deployment.workspace_users_group}}}"
+      mail_domain="{{{deployment.mail_domain}}}"
+      mail_from_address="{{{deployment.mail_from_address}}}"
+      />
+
+{{% endif %}}
+</configure>

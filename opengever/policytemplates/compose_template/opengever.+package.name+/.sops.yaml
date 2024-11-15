@@ -1,0 +1,6 @@
+creation_rules:
+  - encrypted_regex: "(_SECRET|_PASSWORD|_USER|_BIND_DN|_SECRET_KEY)$"
+    mac_only_encrypted: true
+    key_groups:
+      - age:
+          - replace_with_age_public_key

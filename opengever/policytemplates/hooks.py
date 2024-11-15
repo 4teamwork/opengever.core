@@ -9,7 +9,9 @@ from opengever.repository.interfaces import DEFAULT_REPOSITORY_DEPTH
 from os.path import expanduser
 from pkg_resources import resource_filename
 import os
+import random
 import shutil
+import string
 
 
 POLICYTEMPLATE_DOTFILE_PATH = expanduser('~/.opengever/policytemplate.json')
@@ -79,6 +81,7 @@ DEFAULT_VALUES = {
         'adminunit.title': 'Teamraum',
         'adminunit.abbreviation': 'tr',
         'adminunit.id': 'tr',
+        'deployment.mail_from_address': 'noreply@teamraum.ch',
     },
     'gever': {
         'setup.maximum_dossier_depth': DEFAULT_DOSSIER_DEPTH,
@@ -86,6 +89,7 @@ DEFAULT_VALUES = {
         'setup.maximum_repository_depth': DEFAULT_REPOSITORY_DEPTH,
         'setup.reference_number_formatter': DEFAULT_FORMATTER,
         'setup.reference_prefix_starting_point': DEFAULT_PREFIX_STARTING_POINT,
+        'deployment.mail_from_address': 'noreply@onegovgever.ch',
     }
 }
 
@@ -100,9 +104,9 @@ def initialize(configurator, question):
     # For convenience we store is_teamraum and is_gever variables
     configurator.variables['is_teamraum'] = configurator.variables.get('policy.type') == 'teamraum'
     configurator.variables['is_gever'] = configurator.variables.get('policy.type') == 'gever'
+    filter_questions(configurator)
     init_defaults(configurator)
     init_values(configurator)
-    filter_questions(configurator)
     add_ignored_directories(configurator)
     add_ignored_files(configurator)
 
@@ -132,6 +136,10 @@ def init_defaults(configurator):
 
 def init_values(configurator):
     configurator.variables.update(VARIABLE_VALUES[policy_type(configurator)])
+    configurator.variables.update({
+        'ianus.secret_key': create_secret(length=40),
+        'base.workspace_secret': create_secret(length=40),
+    })
 
 
 def update_defaults(configurator, new_defaults):
@@ -231,6 +239,11 @@ def post_base_domain(configurator, question, answer):
     return answer
 
 
+def post_server_name(configurator, question, answer):
+    configurator.variables['base.short_server_name'] = answer.split('.')[0]
+    return answer
+
+
 def post_nof_templates(configurator, question, answer):
     if not answer:
         return ''
@@ -319,6 +332,16 @@ def post_render(configurator):
         _copy_sablon_templates(content_path)
 
 
+def pre_ianus_db_name(configurator, question):
+    defaults = {
+        'ianus.db_user': configurator.variables['base.ogds_db_user'],
+        'ianus.db_password': configurator.variables['base.ogds_db_password'],
+        'ianus.db_host': configurator.variables['base.server_name'],
+    }
+    update_defaults(configurator, defaults)
+    question.default = u'ianus_{}'.format(configurator.variables['package.name'])
+
+
 def _copy_sablon_templates(content_path):
     templates_path = os.path.join(content_path, 'templates')
 
@@ -339,3 +362,9 @@ def _get_sablon_template_paths():
                 filename)))
 
     return paths
+
+
+def create_secret(length=32):
+    rand = random.SystemRandom()
+    return ''.join(
+        rand.choice(string.ascii_letters + string.digits) for _ in range(length))
