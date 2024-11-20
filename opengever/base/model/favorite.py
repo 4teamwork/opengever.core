@@ -160,6 +160,9 @@ class Favorite(Base):
         if resolved_obj and IDossierMarker.providedBy(resolved_obj):
             result['dossier_type'] = IDossier(resolved_obj).dossier_type
 
+        if resolved_obj and IBaseDocument.providedBy(resolved_obj):
+            result['checked_out'] = resolved_obj.checked_out_by()
+
         if is_workspace_client_feature_enabled() and IBaseDocument.providedBy(resolved_obj):
             result['is_locked_by_copy_to_workspace'] = resolved_obj.is_locked_by_copy_to_workspace()
 
