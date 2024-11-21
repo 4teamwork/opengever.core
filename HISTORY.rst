@@ -10,6 +10,36 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.16.0 (2024-11-21)
+----------------------
+
+Bug fixes:
+
+
+- Properly close template file after processing with Sablon service. [buchi] [GH-8075]
+- Fix broken build of cryptography in Docker image introduced in 2024.15.0. [buchi] [GH-8076]
+- Fix broken JS registry for new installs introduced in 2024.14.0. [buchi] [GH-8077]
+- Make WOPI discovery more robust. [lgraf] [TI-1261]
+- Fix dossier transfer if the target admin unit does not provide the same dossier or document types. [elioschmutz] [TI-1345]
+- - Fix OGDS sync for multi-tenant setups. [lgraf] [TI-1456]
+
+
+Other changes:
+
+
+- Map responsible name to id when creating content with a policy. [buchi] [GH-8081]
+- Map group names to ids when assigning global roles in deployment setup. [buchi] [GH-8081a]
+- Install OGDS auth plugin when there's no LDAP profile. [buchi] [GH-8081b]
+- Document serialization provides pending_signing_job for a running sign process. [elioschmutz] [TI-661]
+- Show correct icon in favorites view if document is checked out. Note: doesn't fix remote admin units. [ran] [TI-1448]
+- - Provide dossier Excel export, including subdossiers. [amo] [TI-1471]
+- Add an optional Creator column to the dossier report. [amo] [TI-1472]
+- Improve formatting of permission columns of repository Excel export. [amo] [TI-1473]
+- Provide groups membership export for admin users. [amo] [TI-1476]
+- Enhance the returned data from the RoleAssignmentReportsGet endpoint by including new values. [amo] [TI-1477]
+- Document serialization provides signature information about signed versions. [elioschmutz] [TI-661-2]
+
+
 2024.15.1 (2024-10-22)
 ----------------------
 
