@@ -1,6 +1,7 @@
 import opengever.ogds.base  # noqa fix cyclic import
 from Acquisition import aq_parent
 from plone import api
+from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import metadata
 from opengever.exportng.db import engine
 from opengever.exportng.db import create_table
@@ -62,7 +63,10 @@ def get_filedata(obj, attrname):
 
 
 def get_file_extension(obj, attrname):
-    value = getattr(obj, attrname)
+    if obj.portal_type == 'opengever.document.document':
+        value = getattr(obj, 'file')
+    else:
+        value = getattr(obj, 'message')
     if value is not None:
         return os.path.splitext(value.filename)[-1][1:]
 
@@ -75,6 +79,10 @@ def userid_to_email(obj, attrname):
         userid_email_mapping = {user.userid: user.email for user in users}
         CACHE['userid_email_mapping'] = userid_email_mapping
     return userid_email_mapping.get(userid, userid)
+
+
+def get_reference_number(obj, attrname):
+    return '.'.join(IReferenceNumber(obj).get_numbers()['repository'])
 
 
 def parent_uid(obj, attrname):
@@ -171,6 +179,26 @@ class CatalogSyncer(object):
         for schema in iterSchemata(obj):
             fields.update(getFields(schema))
         return fields
+
+
+class FileplanEntrySyncer(CatalogSyncer):
+
+    table = 'fileplanentries'
+    query = {
+        'portal_type': 'opengever.repository.repositoryfolder',
+    }
+    mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar', None),
+        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('title', 'botitle', 'varchar', None),
+        Attribute('description', 'bodescription', 'varchar', None),
+        Attribute('location', 'felocation', 'varchar', None),
+        Attribute('reference', 'fcsbusinessnumber', 'varchar', get_reference_number),
+        # Attribute('modified', 'modified', 'datetime', as_datetime),
+        Attribute('valid_from', 'objvalidfrom', 'date', None),
+        Attribute('valid_until', 'objvaliduntil', 'date', None),
+        # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+    ]
 
 
 class DossierSyncer(CatalogSyncer):
@@ -286,6 +314,7 @@ class Syncer(object):
     def create_tables(self):
         create_table(UserSyncer.table, UserSyncer.mapping)
         create_table(GroupSyncer.table, GroupSyncer.mapping)
+        create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.mapping)
         create_table(DossierSyncer.table, DossierSyncer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.mapping)
@@ -294,6 +323,7 @@ class Syncer(object):
     def sync(self):
         UserSyncer().sync()
         GroupSyncer().sync()
+        FileplanEntrySyncer().sync()
         DossierSyncer().sync()
         SubdossierSyncer().sync()
         DocumentSyncer().sync()
