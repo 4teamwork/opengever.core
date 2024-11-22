@@ -14,6 +14,7 @@
 
   <include package="plone.app.workflow" />
   <include package=".browser" />
+  <include package=".local_roles_lookup" />
 
   <i18n:registerTranslations directory="locales" />
 

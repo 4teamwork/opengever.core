@@ -1,0 +1,12 @@
+<configure
+    xmlns:zope="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="download-role-assignment-report"
+      class=".exporter.RoleAssignmentReportExcelDownload"
+      permission="opengever.api.ManageRoleAssignmentReports"
+      />
+
+</configure>
