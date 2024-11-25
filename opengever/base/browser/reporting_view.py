@@ -149,7 +149,11 @@ class SolrReporterView(BaseReporterView):
             sort = 'modified desc'
 
         filter_queries.extend(FILTERS.get(listing.listing_name, []))
-        solr_query['sort'] = sort
+
+        if include_children:
+            sort = 'path asc'
+
+        solr_query["sort"] = sort
 
         path_filters = []
         path_filters.append('path:({})'.format(' OR '.join([escape(path) for path in paths])))
