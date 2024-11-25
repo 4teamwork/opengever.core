@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-12 08:35+0000\n"
+"POT-Creation-Date: 2024-11-25 11:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,11 @@ msgstr "Automatic permission"
 msgid "label_blocked_local_roles"
 msgstr "Protected objects"
 
+#. Default: "Group name"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_group_name"
+msgstr "Group name"
+
 #. German translation: Lokale Berechtigung
 #. Default: "Local permission"
 #: ./opengever/sharing/browser/sharing.py
@@ -50,11 +55,41 @@ msgstr "Local permission"
 msgid "label_no_blocked_local_roles"
 msgstr "No protected objects were found within this scope."
 
+#. Default: "Portal type"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_portal_type"
+msgstr "Portal type"
+
+#. Default: "Principal id"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_principal_id"
+msgstr "Principal id"
+
+#. Default: "Role"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_role"
+msgstr "Role"
+
 #. German translation: Lokale Rolle erfolgreich gespeichert
 #. Default: "Local roles successfully changed"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_roles_successfully_changed"
 msgstr "Local roles successfully changed"
+
+#. Default: "Title"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_title"
+msgstr "Title"
+
+#. Default: "URL"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_url"
+msgstr "URL"
+
+#. Default: "User name"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_user_name"
+msgstr "User name"
 
 #. German translation: Lokale Rollen konnten nicht gespeichert werden.
 #. Default: "Local roles save failed."

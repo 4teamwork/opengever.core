@@ -1,73 +1,98 @@
-from opengever.base import _
+from datetime import datetime
 from opengever.base.browser.reporting_view import BaseReporterView
-from opengever.base.interfaces import IRoleAssignmentReportsStorage
 from opengever.base.reporter import XLSReporter
-from opengever.sharing.browser.sharing import GEVER_ROLE_MAPPING
-from opengever.sharing.browser.sharing import WORKSPACE_ROLE_MAPPING
-from opengever.workspace import is_workspace_feature_enabled
+from opengever.sharing import _
+from opengever.sharing.local_roles_lookup.reporter import RoleAssignmentReporter
 from plone.app.uuid.utils import uuidToObject
-from zExceptions import BadRequest
-from zExceptions import NotFound
-from zope.interface import implements
-from zope.publisher.interfaces import IPublishTraverse
 
 
 class RoleAssignmentReportExcelDownload(BaseReporterView):
 
-    implements(IPublishTraverse)
-
-    def __init__(self, context, request):
-        super(RoleAssignmentReportExcelDownload, self).__init__(context, request)
-        self.params = []
-
-    def publishTraverse(self, request, name):
-        self.params.append(name)
-        return self
-
     def __call__(self):
-        storage = IRoleAssignmentReportsStorage(self.context)
+        principal_ids, include_memberships, root = self.extract_query_params()
 
-        # Expects report_id as path parameter
-        if not len(self.params) == 1:
-            raise NotFound()
-
-        self.report_id = self.params[0]
-        try:
-            report = storage.get(self.report_id)
-        except KeyError:
-            raise BadRequest(u"Invalid report_id '{}'".format(self.report_id))
+        report = RoleAssignmentReporter().excel_report_for(
+            principal_ids=principal_ids,
+            include_memberships=include_memberships,
+            root=root)
 
         items = list(self.prepare_report_for_export(report))
         reporter = XLSReporter(self.request, self.columns(), items)
         return self.return_excel(reporter)
 
+    def extract_query_params(self):
+        filters = self.request.get('filters', {})
+
+        principal_ids = filters.get("principal_ids", [])
+        include_memberships = filters.get("include_memberships", False)
+        root = filters.get("root")
+
+        return principal_ids, include_memberships, root
+
     @property
     def filename(self):
-        return u'{}.xlsx'.format(self.report_id)
+        principal_ids, include_membership, root = self.extract_query_params()
+
+        parts = [datetime.now().strftime('%Y-%m-%d_%H-%M')]
+
+        if root:
+            root = uuidToObject(root)
+            parts.append('branch_{}'.format(root.id))
+
+        if include_membership:
+            parts.append('including_memberships')
+
+        if principal_ids:
+            parts.append('-'.join(principal_ids))
+
+        return u'role_assignment_report_{}.xlsx'.format('_'.join(parts))
 
     def prepare_report_for_export(self, report):
-        for item in report.get('items'):
-            obj = uuidToObject(item.get('UID'))
-            data = {u'title': obj.Title(), u'url': obj.absolute_url()}
-
-            for role in self.available_roles():
-                data[role] = bool(role in item['roles'])
-
-            yield data
-
-    def available_roles(self):
-        return WORKSPACE_ROLE_MAPPING.keys() if is_workspace_feature_enabled() else GEVER_ROLE_MAPPING.keys()
+        for report_item in report:
+            item = report_item.get('item')
+            principal = report_item.get('principal')
+            yield {
+                u'title': item.get('title'),
+                u'url': item.get('@id'),
+                u'portal_type': item.get('@type'),
+                u'principal_id': principal.get('principal_id'),
+                u'username': principal.get('username'),
+                u'groupname': principal.get('groupname'),
+                u'role': report_item.get('role'),
+            }
 
     @property
     def _columns(self):
-        columns = [{'id': 'title',
-                    'title': _('label_title', default=u'Title'),
-                    'hyperlink': lambda value, obj: obj.get('url')}]
-
-        role_mapping = WORKSPACE_ROLE_MAPPING if is_workspace_feature_enabled() else GEVER_ROLE_MAPPING
-
-        for role_id, role_title in role_mapping.items():
-            columns.append({'id': role_id, 'title': role_title,
-                            'transform': lambda value: 'x' if value else ''})
+        columns = [
+            {
+                'id': 'title',
+                'title': _('label_title', default=u'Title'),
+            },
+            {
+                'id': 'url',
+                'title': _('label_url', default=u'URL'),
+                'hyperlink': lambda value, obj: obj.get('url'),
+            },
+            {
+                'id': 'portal_type',
+                'title': _('label_portal_type', default=u'Portal type'),
+            },
+            {
+                'id': 'principal_id',
+                'title': _('label_principal_id', default=u'Principal id'),
+            },
+            {
+                'id': 'username',
+                'title': _('label_user_name', default=u'User name'),
+            },
+            {
+                'id': 'groupname',
+                'title': _('label_group_name', default=u'Group name'),
+            },
+            {
+                'id': 'role',
+                'title': _('label_role', default=u'Role'),
+            }
+        ]
 
         return columns

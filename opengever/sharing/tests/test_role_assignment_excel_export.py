@@ -1,45 +1,28 @@
+from datetime import datetime
 from ftw.testbrowser import browsing
-from opengever.testing import IntegrationTestCase
+from ftw.testing import freeze
+from opengever.testing import SolrIntegrationTestCase
 from openpyxl import load_workbook
 from tempfile import NamedTemporaryFile
 import os
+import pytz
 
 
-class TestExcelRoleAssignmentReport(IntegrationTestCase):
-
-    @browsing
-    def test_raises_notfound_if_no_report_id_is_given(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        url = u'{}/download-role-assignment-report'.format(
-            self.portal.absolute_url())
-
-        with browser.expect_http_error(code=404):
-            browser.open(url)
-
-    @browsing
-    def test_raises_badrequest_if_report_does_not_exists(self, browser):
-        self.login(self.administrator, browser=browser)
-
-        with browser.expect_http_error(code=400):
-            url = u'{}/download-role-assignment-report/not-existing'.format(
-                self.portal.absolute_url())
-            browser.open(url)
+class TestExcelRoleAssignmentReport(SolrIntegrationTestCase):
 
     @browsing
     def test_role_assignment_report(self, browser):
         self.login(self.administrator, browser=browser)
 
-        url = u'{}/download-role-assignment-report/report_0'.format(
+        url = u'{}/download-role-assignment-report'.format(
             self.portal.absolute_url())
-        browser.open(url)
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            browser.open(url, view="?filters.principal_ids:record:list=jurgen.konig")
 
         self.assertEquals(
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             browser.headers['content-type'])
-        self.assertEquals(
-            'attachment; filename="report_0.xlsx"',
-            browser.headers['content-disposition'])
 
         data = browser.contents
         with NamedTemporaryFile(delete=False, suffix='.xlsx') as tmpfile:
@@ -51,11 +34,60 @@ class TestExcelRoleAssignmentReport(IntegrationTestCase):
         rows = list(workbook.active.rows)
 
         self.assertSequenceEqual(
-            [[u'Title', u'Read', u'Add dossiers', u'Edit dossiers',
-              u'Resolve dossiers', u'Reactivate dossiers', u'Manage dossiers',
-              u'Task responsible', u'Role manager'],
-             [u'Ordnungssystem', None, u'x', None, None, None, None, None, None],
-             [u'Subsubdossier', u'x', None, u'x', u'x', None, None, None, None],
-             [u'2. Rechnungspr\xfcfungskommission',
-              None, u'x', None, None, u'x', None, None, None]],
+            [
+                ["Title", "URL", "Portal type", "Principal id", "User name", "Group name", "Role"],
+                [
+                    "Ordnungssystem",
+                    "http://nohost/plone/ordnungssystem",
+                    "opengever.repository.repositoryroot",
+                    "jurgen.konig",
+                    "jurgen.konig",
+                    None,
+                    "Reviewer",
+                ],
+                [
+                    "Ordnungssystem",
+                    "http://nohost/plone/ordnungssystem",
+                    "opengever.repository.repositoryroot",
+                    "jurgen.konig",
+                    "jurgen.konig",
+                    None,
+                    "Publisher",
+                ],
+            ],
             [[cell.value for cell in row] for row in rows])
+
+    @browsing
+    def test_filename_includes_date_time(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/download-role-assignment-report'.format(
+            self.portal.absolute_url())
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            browser.open(url)
+
+            self.assertEquals(
+                'attachment; filename="role_assignment_report_2017-10-16_00-00.xlsx"',
+                browser.headers['content-disposition'])
+
+    @browsing
+    def test_filename_includes_filter_information(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        url = u'{}/download-role-assignment-report'.format(
+            self.portal.absolute_url())
+
+        with freeze(datetime(2017, 10, 16, 0, 0, tzinfo=pytz.utc)):
+            browser.open(
+                url,
+                view="?filters.principal_ids:record:list=jurgen.konig"
+                     "&filters.include_memberships:record:boolean=true&"
+                     "&filters.root:record={}".format(
+                         self.dossier.UID()))
+
+        self.assertEquals(
+            'attachment; filename="role_assignment_report_2017-10-16_00-00'
+            '_branch_dossier-1'
+            '_including_memberships_jurgen.konig.xlsx"',
+            browser.headers['content-disposition'])
