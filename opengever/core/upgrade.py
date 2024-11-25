@@ -21,6 +21,7 @@ from opengever.base.utils import unrestrictedUuidToObject
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJob
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceJobType
 from opengever.nightlyjobs.maintenance_jobs import MaintenanceQueuesManager
+from opengever.sharing.local_roles_lookup.manager import LocalRolesLookupManager
 from operator import itemgetter
 from plone import api
 from plone.memoize import forever
@@ -658,3 +659,23 @@ class NightlyMailAttachmentInfoUpdater(UIDMaintenanceJobContextManagerMixin):
             assert existing['position'] == updated['position']
             assert existing['size'] == updated['size']
             mail._modify_attachment_info(**updated)
+
+
+class NightlyLocalRolesLookupUpdater(UIDMaintenanceJobContextManagerMixin):
+
+    @property
+    def job_type(self):
+        function_dotted_name = ".".join((self.__module__,
+                                         self.__class__.__name__,
+                                         self.update_lookup_table.__name__))
+
+        return MaintenanceJobType(function_dotted_name)
+
+    @classmethod
+    def update_lookup_table(cls, key):
+        context = cls.key_to_obj(key)
+
+        if not context:
+            return
+
+        LocalRolesLookupManager().update_lookup_table(context)
