@@ -225,7 +225,7 @@ class DossierSyncer(CatalogSyncer):
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-        # Attribute('modified', 'modified', 'datetime', as_datetime),
+        Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
         # Attribute('changed', 'changed', 'datetime', None)
         # Attribute('touched', 'touched', 'datetime', None)
         Attribute('title', 'botitle', 'varchar', None),
@@ -233,8 +233,8 @@ class DossierSyncer(CatalogSyncer):
         Attribute('Creator', 'objcreatedby', 'varchar', None),
         Attribute('review_sate', 'bostate', 'varchar', get_dossier_state),
         # Attribute('keywords', 'keywords', 'varchar', None),
-        # Attribute('start', 'objvalidfrom', 'date', None),
-        # Attribute('end', 'objvaliduntil', 'date', None),
+        Attribute('start', 'objvalidfrom', 'date', None),
+        Attribute('end', 'objvalidto', 'date', None),
         Attribute('responsible', 'gboresponsible', 'varchar', userid_to_email),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
         # Attribute('relatedDossier', 'XXX', 'varchar', None),
@@ -242,7 +242,7 @@ class DossierSyncer(CatalogSyncer):
         # Attribute('reference_number', 'bonumberhistory', 'varchar', None),
         # Attribute('dossier_type', 'dossier_type', 'varchar', None),
         Attribute('classification', 'classification', 'varchar', str_upper),
-        Attribute('privacy_layer', 'XX', 'varchar', get_privacy_layer),
+        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
         Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
         Attribute('retention_period', 'retentionperiod', 'integer', None),
@@ -272,13 +272,23 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('title', 'objname', 'varchar', None),
-        Attribute('extension', 'extension', 'varchar', get_file_extension),
-        # Attribute('description', 'bodescription', 'varchar', None),
-        # Attribute('document_date', 'dadate', 'date', None),
-        # Attribute('receipt_date', 'gcreceiptdate', 'date', None),
-        # Attribute('document_author', 'gcauthor', 'varchar', None),
-        # Attribute('external_reference', 'gcexternalreference', 'varchar', None),
+        Attribute('Creator', 'objcreatedby', 'varchar', None),
         Attribute('file', '_file', 'jsonb', get_filedata),
+        Attribute('extension', 'extension', 'varchar', get_file_extension),
+        # Attribute('changed', 'changed', 'datetime', None)
+        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
+        Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
+        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
+        # Attribute('relatedItems', 'XXX', 'varchar', None),
+        Attribute('description', 'dadescription', 'varchar', None),
+        # Attribute('keywords', 'XXX', 'varchar', None),
+        Attribute('foreign_reference', 'gcexternalreference', 'varchar', None),
+        Attribute('document_date', 'dadate', 'date', None),
+        Attribute('receipt_date', 'gcreceiptdate', 'date', None),
+        Attribute('delivery_date', 'gcdeliverydate', 'date', None),
+        # Attribute('document_type', 'XXX', 'date', None),
+        Attribute('document_author', 'gcauthor', 'varchar', None),
+        # Attribute('preserved_as_paper', 'XXX', 'varchar', None),
     ]
 
 
