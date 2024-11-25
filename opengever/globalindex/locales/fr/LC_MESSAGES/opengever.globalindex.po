@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-11-12 10:32+0000\n"
+"POT-Creation-Date: 2024-11-25 15:08+0000\n"
 "PO-Revision-Date: 2017-12-03 09:48+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-globalindex/fr/>\n"
@@ -99,8 +99,12 @@ msgid "label_firstname"
 msgstr "Prénom"
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_groupid"
-msgstr "ID de groupe"
+msgid "label_fullname"
+msgstr "Nom"
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_group_title"
+msgstr "Titre du groupe"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_groupname"
@@ -176,10 +180,6 @@ msgstr "Titre"
 #: ./opengever/globalindex/browser/report.py
 msgid "label_url"
 msgstr "URL"
-
-#: ./opengever/globalindex/browser/report.py
-msgid "label_userid"
-msgstr "ID utilisateur"
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_username"

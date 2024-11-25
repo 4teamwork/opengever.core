@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-11-12 10:32+0000\n"
+"POT-Creation-Date: 2024-11-25 15:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -100,7 +100,11 @@ msgid "label_firstname"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
-msgid "label_groupid"
+msgid "label_fullname"
+msgstr ""
+
+#: ./opengever/globalindex/browser/report.py
+msgid "label_group_title"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
@@ -176,10 +180,6 @@ msgstr ""
 
 #: ./opengever/globalindex/browser/report.py
 msgid "label_url"
-msgstr ""
-
-#: ./opengever/globalindex/browser/report.py
-msgid "label_userid"
 msgstr ""
 
 #: ./opengever/globalindex/browser/report.py

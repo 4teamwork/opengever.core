@@ -177,10 +177,10 @@ class OGDSGroupsMembershipReporter(BaseReporterView):
     @property
     def _columns(self):
         return [
-            {'id': 'username', 'title': _('label_username')},
-            {'id': 'userid', 'title': _('label_userid')},
-            {'id': 'group_title', 'title': _('label_groupname')},
-            {'id': 'group_id', 'title': _('label_groupid')},
+            {'id': 'user_name', 'title': _('label_username')},
+            {'id': 'user_fullname', 'title': _('label_fullname')},
+            {'id': 'group_title', 'title': _('label_group_title')},
+            {'id': 'group_name', 'title': _('label_groupname')},
 
         ]
 
@@ -192,10 +192,10 @@ class OGDSGroupsMembershipReporter(BaseReporterView):
         for group in query.all():
             for user in group.users:
                 group_info = {
-                    'group_id': group.groupid,
-                    'group_title': group.groupname,
-                    'userid': user.userid,
-                    "username": user.username
+                    'group_name': group.groupname,
+                    'group_title': group.title,
+                    "user_name": user.username,
+                    "user_fullname": user.fullname()
                 }
                 groups_with_users.append(group_info)
 
