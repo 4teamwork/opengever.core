@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Add ``@role-assignment-report`` API endpoint.
 
 2024.16.0 (2024-11-21)
 ----------------------
