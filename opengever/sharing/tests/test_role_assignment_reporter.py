@@ -106,7 +106,7 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
         self.login(self.administrator)
         reporter = RoleAssignmentReporter()
 
-        self.assertItemsEqual(
+        self.assertEqual(
             {
                 'total_items': 1,
                 'items': [
@@ -127,13 +127,74 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                         }
                     }
                 ],
-            }, reporter('jurgen.konig'))
+            }, reporter(['jurgen.konig']))
+
+    def test_creates_a_report_for_multiple_principals(self):
+        self.login(self.administrator)
+        reporter = RoleAssignmentReporter()
+
+        self.assertEqual(
+            {
+                "total_items": 3,
+                "items": [
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem",
+                            "@type": "opengever.repository.repositoryroot",
+                            "UID": "createrepositorytree000000000001",
+                            "description": "",
+                            "is_leafnode": None,
+                            "reference": "Client1",
+                            "review_state": "repositoryroot-state-active",
+                            "title": "Ordnungssystem",
+                        },
+                        "role_assignments": {
+                            "Contributor": ["archivist"],
+                            "Reviewer": ["jurgen.konig"],
+                            "Publisher": ["jurgen.konig"],
+                        },
+                    },
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4",
+                            "@type": "opengever.dossier.businesscasedossier",
+                            "UID": "createtreatydossiers000000000018",
+                            "description": "",
+                            "is_leafnode": None,
+                            "reference": "Client1 1.1 / 1.1.1",
+                            "review_state": "dossier-state-active",
+                            "title": "Subsubdossier",
+                        },
+                        "role_assignments": {
+                            "Reviewer": ["archivist"],
+                            "Editor": ["archivist"],
+                            "Reader": ["archivist"],
+                        },
+                    },
+                    {
+                        "item": {
+                            "@id": "http://nohost/plone/ordnungssystem/rechnungsprufungskommission",
+                            "@type": "opengever.repository.repositoryfolder",
+                            "UID": "createrepositorytree000000000004",
+                            "description": "",
+                            "is_leafnode": True,
+                            "reference": "Client1 2",
+                            "review_state": "repositoryfolder-state-active",
+                            "title": "2. Rechnungspr\xc3\xbcfungskommission",
+                        },
+                        "role_assignments": {
+                            "Contributor": ["archivist"],
+                            "Publisher": ["archivist"],
+                        },
+                    },
+                ],
+            }, reporter(['jurgen.konig', 'archivist']))
 
     def test_creates_a_report_for_a_principal_including_all_group_memberships(self):
         self.login(self.administrator)
         reporter = RoleAssignmentReporter()
 
-        self.assertItemsEqual(
+        self.assertEqual(
             {
                 'total_items': 5,
                 'items': [
@@ -175,7 +236,7 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
                     },
                 ],
             },
-            self.strip_item_metadata(reporter('jurgen.konig', include_memberships=True)))
+            self.strip_item_metadata(reporter(['jurgen.konig'], include_memberships=True)))
 
     def test_creates_a_report_restricted_to_a_specific_branch(self):
         self.login(self.administrator)
