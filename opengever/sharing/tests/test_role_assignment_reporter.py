@@ -106,7 +106,7 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
         self.login(self.administrator)
         reporter = RoleAssignmentReporter()
 
-        self.assertItemsEqual(
+        self.assertEqual(
             {
                 'total_items': 1,
                 'items': [
@@ -133,7 +133,7 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
         self.login(self.administrator)
         reporter = RoleAssignmentReporter()
 
-        self.assertItemsEqual(
+        self.assertEqual(
             {
                 'total_items': 5,
                 'items': [
