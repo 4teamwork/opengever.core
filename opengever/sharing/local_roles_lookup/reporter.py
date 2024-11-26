@@ -34,7 +34,7 @@ class RoleAssignmentReporter(object):
         return self.report_for(*args, **kwargs)
 
     def report_for(self,
-                   principal_id=None,
+                   principal_ids=[],
                    include_memberships=False,
                    root=None,
                    start=0,
@@ -62,7 +62,7 @@ class RoleAssignmentReporter(object):
                 "total_items": 1
             }
         """
-        principal_ids = self.expand_principal_ids(principal_id,
+        principal_ids = self.expand_principal_ids(principal_ids,
                                                   include_memberships)
         uids = self.get_distinct_uids(principal_ids)
 
@@ -104,17 +104,20 @@ class RoleAssignmentReporter(object):
                 .with_path(root)
                 .build())
 
-    def expand_principal_ids(self, principal_id, include_memberships=False):
+    def expand_principal_ids(self, principal_ids, include_memberships=False):
         """Returns a list of principal IDs, including memberships if requested.
         """
-        if not principal_id:
-            return []
+        if not principal_ids:
+            return set()
 
-        principal_ids = [principal_id]
+        expanded_principal_ids = set(principal_ids)
+
         if include_memberships:
-            principal_ids.extend(self.resolve_user_memberships(principal_id))
+            for principal_id in principal_ids:
+                expanded_principal_ids.update(
+                    self.resolve_user_memberships(principal_id))
 
-        return principal_ids
+        return expanded_principal_ids
 
     def resolve_user_memberships(self, principal_id):
         ogds_user = User.query.filter_by(userid=principal_id).one_or_none()
