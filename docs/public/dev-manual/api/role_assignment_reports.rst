@@ -202,7 +202,7 @@ Mittels eines GET-Requests können die Daten für einen spezifischen Berechtigun
        Content-Type: application/json
 
        {
-          "@id": "http://localhost:8081/fd/@role-assignment-report?b_size=25&b_start=0&principal_id:list=hugo.boss&root=abca20b04af54d2cbb2816545333e555&include_memberships=true",
+          "@id": "http://localhost:8081/fd/@role-assignment-report?b_size=25&b_start=0&filters.principal_id:record:list=hugo.boss&filters.root:record=abca20b04af54d2cbb2816545333e555&filters.include_memberships:record:boolean=true",
           "items": [
             {
                 "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1",

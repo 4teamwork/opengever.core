@@ -159,11 +159,11 @@ class RoleAssignmentReportsDelete(Service):
 class RoleAssignmentReportGet(Service):
 
     def reply(self):
-        principal_ids = self.resolve_principals(
-            self.request.form.get("principal_ids", []))
+        filters = self.request.get('filters', {})
 
-        include_memberships = self.request.form.get("include_memberships", False)
-        root = self.request.form.get("root")
+        principal_ids = self.resolve_principals(filters.get("principal_ids", []))
+        include_memberships = filters.get("include_memberships", False)
+        root = filters.get("root")
         b_start = safe_int(self.request.form.get("b_start", 0))
         b_size = safe_int(self.request.form.get("b_size", 25))
 
