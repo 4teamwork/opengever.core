@@ -240,13 +240,6 @@
       />
 
   <browser:page
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      name="download-role-assignment-report"
-      class=".role_assignment_excel_report.RoleAssignmentReportExcelDownload"
-      permission="opengever.api.ManageRoleAssignmentReports"
-      />
-
-  <browser:page
       name="logout"
       for="*"
       class=".logout.LogoutView"

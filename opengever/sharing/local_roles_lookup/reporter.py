@@ -3,8 +3,10 @@ from ftw.solr.interfaces import ISolrSearch
 from ftw.solr.query import make_filters
 from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
+from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from opengever.sharing.local_roles_lookup.manager import LocalRolesLookupManager
+from opengever.sharing.local_roles_lookup.model import LocalRoles
 from plone.app.uuid.utils import uuidToObject
 from zope.component import getUtility
 
@@ -82,6 +84,56 @@ class RoleAssignmentReporter(object):
 
         return {'total_items': total_items, 'items': items}
 
+    def excel_report_for(self,
+                         principal_ids=[],
+                         include_memberships=False,
+                         root=None):
+        """Generates a report of objects with custom local role assignments optimized
+        to export in excel.
+
+        Caution: This function will return unbatched results.
+
+        Example:
+            [
+                {
+                    "item": {"@id": "..."},
+                    "role": "Editor",
+                    "principal": {
+                        "principal_id": "principal-1"
+                        "username": "username or empty string",
+                        "groupname": "groupname or empty string",
+                        }
+                }
+            ]
+        """
+        principal_ids = self.expand_principal_ids(principal_ids,
+                                                  include_memberships)
+        uids = self.get_distinct_uids(principal_ids)
+
+        if not uids:
+            return
+
+        filters = self.build_filters(uids, root)
+        local_role_entries_by_uid = self.local_role_entries_by_uid(uids, principal_ids)
+
+        solr_items, total_items = self.solr_service.fetch_all(
+            filters, self.field_list, self.sort_order)
+
+        for solr_item in solr_items:
+            serialized_solr_item = self.serialize_solr_doc(solr_item)
+            for local_role_entry in local_role_entries_by_uid.get(solr_item.get('UID'), []):
+                local_role_item, username, groupname = local_role_entry
+                for role in local_role_item.roles:
+                    yield {
+                        'item': serialized_solr_item,
+                        'role': role,
+                        'principal': {
+                            'principal_id': local_role_item.principal_id,
+                            'username': username,
+                            'groupname': groupname,
+                        }
+                    }
+
     def serialize_solr_doc(self, doc):
         item = OGSolrDocument(doc)
         serialized_item = {
@@ -148,6 +200,36 @@ class RoleAssignmentReporter(object):
             for role in entry.roles:
                 uids[entry.object_uid][role].append(entry.principal_id)
         return uids
+
+    def local_role_entries_by_uid(self, uids_filter=None, principal_ids_filter=None):
+        """Returns a dict of uids containing a list of local role items and
+        principal details:
+
+        {
+          "uid1": [
+                entry_with_principal_details1,
+                entry_with_principal_details2,
+            ]
+        }
+        """
+        uids = defaultdict(list)
+        for entry in self.get_entries_with_principal_details(
+                uids_filter=uids_filter,
+                principal_ids_filter=principal_ids_filter):
+            uids[entry[0].object_uid].append(entry)
+
+        return uids
+
+    def get_entries_with_principal_details(
+            self, uids_filter=None, principal_ids_filter=None):
+        query = self.local_roles_manager.get_entries_query(
+            uids_filter=uids_filter,
+            principal_ids_filter=principal_ids_filter)
+
+        query = query.outerjoin(User, LocalRoles.principal_id == User.userid)
+        query = query.outerjoin(Group, LocalRoles.principal_id == Group.groupid)
+        query = query.with_entities(LocalRoles, User.username, Group.groupname)
+        return query.all()
 
 
 class SolrFilterBuilder:

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-12 08:35+0000\n"
+"POT-Creation-Date: 2024-11-25 11:36+0000\n"
 "PO-Revision-Date: 2017-12-03 11:34+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-sharing/fr/>\n"
@@ -36,6 +36,11 @@ msgstr "Autorisation automatique"
 msgid "label_blocked_local_roles"
 msgstr "Objets protégés"
 
+#. Default: "Group name"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_group_name"
+msgstr "Nom du groupe"
+
 #. Default: "Local permission"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_local_permission"
@@ -46,10 +51,40 @@ msgstr "Autorisations locales"
 msgid "label_no_blocked_local_roles"
 msgstr "Aucun objet protégé n'a été trouvé dans ce domaine."
 
+#. Default: "Portal type"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_portal_type"
+msgstr "Titre de l'acteur"
+
+#. Default: "Principal id"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_principal_id"
+msgstr "ID d'utilisateur ou de groupe"
+
+#. Default: "Role"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_role"
+msgstr "Rôle"
+
 #. Default: "Local roles successfully changed"
 #: ./opengever/sharing/browser/sharing.py
 msgid "label_roles_successfully_changed"
 msgstr "Role local enregistré avec succès"
+
+#. Default: "Title"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_title"
+msgstr "Titre"
+
+#. Default: "URL"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_url"
+msgstr "URL"
+
+#. Default: "User name"
+#: ./opengever/sharing/local_roles_lookup/exporter.py
+msgid "label_user_name"
+msgstr "Nom d'utilisateur"
 
 #. Default: "Local roles save failed."
 #: ./opengever/sharing/browser/sharing.py

@@ -14,6 +14,16 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
 
         return formatted_report
 
+    def strip_excel_item_metadata(self, report):
+        """Formats the report by removing item metadata for easier testing
+        """
+        formatted_report = []
+        for report_item in report:
+            report_item['item'] = {'@id': report_item['item'].get('@id')}
+            formatted_report.append(report_item)
+
+        return formatted_report
+
     def test_can_creates_a_report_for_all_principals_and_objects(self):
         self.login(self.administrator)
         reporter = RoleAssignmentReporter()
@@ -257,3 +267,241 @@ class TestRoleAssignmentReporter(SolrIntegrationTestCase):
         report = reporter(rows=3)
         self.assertEqual(3, len(report.get('items')))
         self.assertEqual(10, report.get('total_items'))
+
+    def test_can_creates_an_excel_report_for_all_principals_and_objects(self):
+        self.login(self.administrator)
+        reporter = RoleAssignmentReporter()
+        self.assertEqual(
+            [
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "archivist",
+                        "username": "jurgen.fischer",
+                    },
+                    "role": "Contributor",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Contributor",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Editor",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Reader",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "jurgen.konig",
+                        "username": "jurgen.konig",
+                    },
+                    "role": "Reviewer",
+                },
+            ], self.strip_excel_item_metadata(reporter.excel_report_for())[:5])
+
+    def test_can_creates_an_excel_report_for_a_single_principal(self):
+        self.login(self.administrator)
+        reporter = RoleAssignmentReporter()
+        self.assertEqual(
+            [
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "jurgen.konig",
+                        "username": "jurgen.konig",
+                    },
+                    "role": "Reviewer",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "jurgen.konig",
+                        "username": "jurgen.konig",
+                    },
+                    "role": "Publisher",
+                },
+            ], self.strip_excel_item_metadata(reporter.excel_report_for(['jurgen.konig'])))
+
+    def test_can_creates_an_excel_report_for_a_principal_including_all_group_memberships(self):
+        self.login(self.administrator)
+        reporter = RoleAssignmentReporter()
+        self.assertEqual(
+            [
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Contributor",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Editor",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": "fa_users",
+                        "principal_id": "fa_users",
+                        "username": None,
+                    },
+                    "role": "Reader",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "jurgen.konig",
+                        "username": "jurgen.konig",
+                    },
+                    "role": "Reviewer",
+                },
+                {
+                    "item": {"@id": "http://nohost/plone/ordnungssystem"},
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "jurgen.konig",
+                        "username": "jurgen.konig",
+                    },
+                    "role": "Publisher",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+            ],
+            self.strip_excel_item_metadata(reporter.excel_report_for(
+                ['jurgen.konig'], include_memberships=True)))
+
+    def test_can_creates_an_excel_report_restricted_to_a_specific_branch(self):
+        self.login(self.administrator)
+        reporter = RoleAssignmentReporter()
+        self.assertEqual(
+            [
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1"
+                    },
+                    "principal": {
+                        "groupname": "fa_inbox_users",
+                        "principal_id": "fa_inbox_users",
+                        "username": None,
+                    },
+                    "role": "TaskResponsible",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1"
+                    },
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "regular_user",
+                        "username": "kathi.barfuss",
+                    },
+                    "role": "TaskResponsible",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4"
+                    },
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "archivist",
+                        "username": "jurgen.fischer",
+                    },
+                    "role": "Reviewer",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4"
+                    },
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "archivist",
+                        "username": "jurgen.fischer",
+                    },
+                    "role": "Editor",
+                },
+                {
+                    "item": {
+                        "@id": "http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4"
+                    },
+                    "principal": {
+                        "groupname": None,
+                        "principal_id": "archivist",
+                        "username": "jurgen.fischer",
+                    },
+                    "role": "Reader",
+                },
+            ],
+            self.strip_excel_item_metadata(reporter.excel_report_for(root=self.dossier.UID())))

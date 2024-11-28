@@ -1,7 +1,6 @@
 from datetime import datetime
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
-from opengever.sharing.local_roles_lookup.reporter import RoleAssignmentReporter
 from opengever.testing import IntegrationTestCase
 from opengever.testing import SolrIntegrationTestCase
 import json
@@ -290,13 +289,13 @@ class TestRoleAssignmentReportGet(SolrIntegrationTestCase):
     def test_role_assignment_report(self, browser):
         self.login(self.administrator, browser=browser)
 
-        url = "{absolute_url}/@role-assignment-report?principal_ids:list={regular_user}".format(
+        url = "{absolute_url}/@role-assignment-report?filters.principal_ids:record:list={regular_user}".format(
             absolute_url=self.portal.absolute_url(),
             regular_user=self.regular_user.getId()
         )
         browser.open(url, method='GET', headers=self.api_headers)
         expected_data = {
-            u'@id': u'http://nohost/plone/@role-assignment-report?principal_ids%3Alist=regular_user',
+            u'@id': u'http://nohost/plone/@role-assignment-report?filters.principal_ids%3Arecord%3Alist=regular_user',
             u'items': [
                 {
                     u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
@@ -384,4 +383,4 @@ class TestRoleAssignmentReportGet(SolrIntegrationTestCase):
             ]
         }
         self.assertEqual(200, browser.status_code)
-        self.assertSequenceEqual(expected_data, browser.json)
+        self.assertEqual(expected_data, browser.json)
