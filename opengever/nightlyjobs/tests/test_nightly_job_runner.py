@@ -376,7 +376,6 @@ class TestNightlyJobRunner(IntegrationTestCase):
         self.login(self.manager)
 
         expected = {
-            u'complete-role-assignment-reports': 1,
             u'create-dossier-journal-pdf': 0,
             u'deliver-sip-packages': 0,
             u'document-title': 1,

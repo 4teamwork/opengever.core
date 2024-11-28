@@ -8,7 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- ``@role-assignment-reports``: Remove api endpoint. Replaced by the ad-hoc report endpoint ``@role-assignment-report``
 
 Other Changes
 ^^^^^^^^^^^^^

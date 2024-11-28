@@ -23,8 +23,7 @@ class TestNightlyJobsStats(IntegrationTestCase):
                          'create-dossier-journal-pdf: 0\n'
                          'deliver-sip-packages: 0\n'
                          'update-disposition-permissions: 2\n'
-                         'execute-after-resolve-jobs: 0\n'
-                         'complete-role-assignment-reports: 1', browser.contents)
+                         'execute-after-resolve-jobs: 0', browser.contents)
 
         with freeze(datetime(2019, 12, 31, 17, 45)) as clock:
             runner = NightlyJobRunner(force_execution=True)
@@ -39,5 +38,4 @@ class TestNightlyJobsStats(IntegrationTestCase):
                          'create-dossier-journal-pdf: 0\n'
                          'deliver-sip-packages: 0\n'
                          'update-disposition-permissions: 0\n'
-                         'execute-after-resolve-jobs: 0\n'
-                         'complete-role-assignment-reports: 0', browser.contents)
+                         'execute-after-resolve-jobs: 0', browser.contents)

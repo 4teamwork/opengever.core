@@ -23,11 +23,9 @@ from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_UNWORTHY
 from opengever.base.behaviors.lifecycle import ARCHIVAL_VALUE_WORTHY
 from opengever.base.command import CreateEmailCommand
 from opengever.base.model import create_session
-from opengever.base.nightly_role_assignment_reports import NightlyRoleAssignmentReports
 from opengever.base.oguid import Oguid
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
-from opengever.base.storage import RoleAssignmentReportsStorage
 from opengever.mail.tests import MAIL_DATA
 from opengever.officeconnector.helpers import get_auth_plugin
 from opengever.ogds.auth.admin_unit import addAdminUnitAuthenticationPlugin
@@ -49,7 +47,6 @@ from time import time
 from zope.annotation.interfaces import IAnnotations
 from zope.component import getUtility
 from zope.component.hooks import getSite
-from zope.globalrequest import getRequest
 import json
 import logging
 import pytz
@@ -193,28 +190,12 @@ class OpengeverContentFixture(object):
                 self.create_disposition()
                 self.create_disposition_with_sip()
 
-        with self.freeze_at_hour(20):
-            with self.login(self.administrator):
-                self.create_role_assignment_reports()
-
     def __call__(self):
         return self._lookup_table
 
     def set_roles(self, obj, principal, roles):
         RoleAssignmentManager(obj).add_or_update_assignment(
             SharingRoleAssignment(principal, roles))
-
-    def create_role_assignment_reports(self):
-        storage = RoleAssignmentReportsStorage(api.portal.get())
-        storage.add(self.archivist.getId())
-        nightly_job_provider = NightlyRoleAssignmentReports(
-            api.portal.get(), getRequest(), self._logger)
-
-        jobs = list(nightly_job_provider)
-        for job in jobs:
-            nightly_job_provider.run_job(job, None)
-        # Add a role assignment report with state in progress
-        storage.add(self.regular_user.getId())
 
     def create_units(self):
         self.admin_unit = create(

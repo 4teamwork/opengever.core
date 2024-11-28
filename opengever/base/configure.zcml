@@ -47,7 +47,6 @@
   </class>
 
   <adapter factory=".namechooser.GEVERRootNameChooser" />
-  <adapter factory=".storage.RoleAssignmentReportsStorage" />
 
   <adapter
       factory=".context_actions.BaseContextActions"
@@ -83,11 +82,6 @@
   <adapter
       factory=".language.NegotiateLanguage"
       for="* opengever.base.interfaces.IOpengeverBaseLayer"
-      />
-
-  <adapter
-      factory=".nightly_role_assignment_reports.NightlyRoleAssignmentReports"
-      name="complete-role-assignment-reports"
       />
 
   <configure package="collective.quickupload.browser">
