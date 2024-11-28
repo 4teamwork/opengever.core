@@ -1,21 +1,20 @@
-import opengever.ogds.base  # noqa fix cyclic import
 from Acquisition import aq_parent
-from plone import api
-from opengever.base.interfaces import IReferenceNumber
-from opengever.exportng.db import metadata
-from opengever.exportng.db import engine
-from opengever.exportng.db import create_table
-from opengever.ogds.models.service import ogds_service
-from sqlalchemy.sql.expression import false
-from sqlalchemy import bindparam
 from collections import namedtuple
-from opengever.ogds.models.user import User
+from opengever.base.interfaces import IReferenceNumber
+from opengever.exportng.db import create_table
+from opengever.exportng.db import engine
+from opengever.exportng.db import metadata
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.service import ogds_service
+from opengever.ogds.models.user import User
+from plone import api
 from plone.dexterity.utils import iterSchemata
+from sqlalchemy import bindparam
+from sqlalchemy.sql.expression import false
 from zope.schema import getFields
 import logging
+import opengever.ogds.base  # noqa fix cyclic import
 import os.path
-
 
 logger = logging.getLogger('opengever.exportng')
 
@@ -87,6 +86,48 @@ def get_reference_number(obj, attrname):
 
 def parent_uid(obj, attrname):
     return aq_parent(obj).UID()
+
+
+def str_upper(obj, attrname):
+    return getattr(obj, attrname, '').upper()
+
+
+def get_public_trial(obj, attrname):
+    value_mapping = {
+        'unchecked': 'NOTASSESSED',
+        'public': 'PUBLIC',
+        'limited-public': 'LIMITEDPUBLIC',
+        'private': 'PRIVATE',
+    }
+    return value_mapping.get(obj.public_trial)
+
+
+def get_archival_value(obj, attrname):
+    value_mapping = {
+        'unchecked': 'NOTASSESSED',
+        'prompt': 'PROMPT',
+        'archival worthy': 'ARCHIVALWORTHY',
+        'not archival worthy': 'NOTARCHIVALWORTHY',
+        'archival worthy with sampling': 'SAMPLING'
+    }
+    return value_mapping.get(obj.archival_value)
+
+
+def get_privacy_layer(obj, attrname):
+    value_mapping = {
+        'privacy_layer_yes': True,
+        'privacy_layer_no': False
+    }
+    return value_mapping.get(obj.privacy_layer)
+
+
+def get_dossier_state(obj, attrname):
+    state_mapping = {
+        'dossier-state-active': 'EDIT',
+        'dossier-state-inactive': 'CANCELLED',
+        'dossier-state-resolved': 'CLOSED'
+    }
+    return state_mapping.get(api.content.get_state(obj))
 
 
 class CatalogSyncer(object):
@@ -211,13 +252,31 @@ class DossierSyncer(CatalogSyncer):
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
+        # Attribute('changed', 'changed', 'datetime', None)
+        # Attribute('touched', 'touched', 'datetime', None)
         Attribute('title', 'botitle', 'varchar', None),
         Attribute('description', 'bodescription', 'varchar', None),
-        # Attribute('modified', 'modified', 'datetime', as_datetime),
-        # Attribute('start', 'objvalidfrom', 'date', None),
-        # Attribute('end', 'objvaliduntil', 'date', None),
+        Attribute('Creator', 'objcreatedby', 'varchar', None),
+        Attribute('review_sate', 'bostate', 'varchar', get_dossier_state),
+        # Attribute('keywords', 'keywords', 'varchar', None),
+        Attribute('start', 'objvalidfrom', 'date', None),
+        Attribute('end', 'objvalidto', 'date', None),
         Attribute('responsible', 'gboresponsible', 'varchar', userid_to_email),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+        # Attribute('relatedDossier', 'XXX', 'varchar', None),
+        # Attribute('former_reference_number', 'bonumberhistory', 'varchar', None),
+        # Attribute('reference_number', 'bonumberhistory', 'varchar', None),
+        # Attribute('dossier_type', 'dossier_type', 'varchar', None),
+        Attribute('classification', 'classification', 'varchar', str_upper),
+        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
+        Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
+        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
+        Attribute('retention_period', 'retentionperiod', 'integer', None),
+        Attribute('retention_period_annotation', 'retentionperiodcomment', 'varchar', None),
+        Attribute('archival_value', 'archivalvalue', 'varchar', get_archival_value),
+        Attribute('archival_value_annotation', 'archivalvaluecomment', 'varchar', None),
+        Attribute('custody_period', 'regularsafeguardperiod', 'varchar', None),
     ]
 
 
@@ -240,13 +299,23 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('title', 'objname', 'varchar', None),
-        Attribute('extension', 'extension', 'varchar', get_file_extension),
-        # Attribute('description', 'bodescription', 'varchar', None),
-        # Attribute('document_date', 'dadate', 'date', None),
-        # Attribute('receipt_date', 'gcreceiptdate', 'date', None),
-        # Attribute('document_author', 'gcauthor', 'varchar', None),
-        # Attribute('external_reference', 'gcexternalreference', 'varchar', None),
+        Attribute('Creator', 'objcreatedby', 'varchar', None),
         Attribute('file', '_file', 'jsonb', get_filedata),
+        Attribute('extension', 'extension', 'varchar', get_file_extension),
+        # Attribute('changed', 'changed', 'datetime', None)
+        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
+        Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
+        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
+        # Attribute('relatedItems', 'XXX', 'varchar', None),
+        Attribute('description', 'dadescription', 'varchar', None),
+        # Attribute('keywords', 'XXX', 'varchar', None),
+        Attribute('foreign_reference', 'gcexternalreference', 'varchar', None),
+        Attribute('document_date', 'dadate', 'date', None),
+        Attribute('receipt_date', 'gcreceiptdate', 'date', None),
+        Attribute('delivery_date', 'gcdeliverydate', 'date', None),
+        # Attribute('document_type', 'XXX', 'date', None),
+        Attribute('document_author', 'gcauthor', 'varchar', None),
+        # Attribute('preserved_as_paper', 'XXX', 'varchar', None),
     ]
 
 
