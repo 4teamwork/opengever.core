@@ -69,6 +69,11 @@ class LocalRolesLookupManager(object):
         self.delete_all_by_uid(context.UID())
 
         for principal, roles in context.get_local_roles():
+            if not principal:
+                # It's possible that some local roles are assigned to 'None'.
+                # We should skip those principals.
+                continue
+
             managed_roles = list(set(roles).intersection(self.MANAGED_ROLES))
             if not managed_roles:
                 continue
