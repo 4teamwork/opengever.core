@@ -19,11 +19,12 @@ class TestNightlyJobsStats(IntegrationTestCase):
         self.assertEqual('Nightly status: unhealthy\n'
                          'Last nightly run: never\n\n'
                          'Nightly job counts:\n'
-                         'maintenance-jobs: 4\n'
                          'create-dossier-journal-pdf: 0\n'
                          'deliver-sip-packages: 0\n'
-                         'update-disposition-permissions: 2\n'
-                         'execute-after-resolve-jobs: 0', browser.contents)
+                         'execute-after-resolve-jobs: 0\n'
+                         'maintenance-jobs: 4\n'
+                         'update-disposition-permissions: 2',
+                         browser.contents)
 
         with freeze(datetime(2019, 12, 31, 17, 45)) as clock:
             runner = NightlyJobRunner(force_execution=True)
@@ -34,8 +35,9 @@ class TestNightlyJobsStats(IntegrationTestCase):
         self.assertEqual('Nightly status: healthy\n'
                          'Last nightly run: 2019-12-31T17:45:00\n\n'
                          'Nightly job counts:\n'
-                         'maintenance-jobs: 0\n'
                          'create-dossier-journal-pdf: 0\n'
                          'deliver-sip-packages: 0\n'
-                         'update-disposition-permissions: 0\n'
-                         'execute-after-resolve-jobs: 0', browser.contents)
+                         'execute-after-resolve-jobs: 0\n'
+                         'maintenance-jobs: 0\n'
+                         'update-disposition-permissions: 0',
+                         browser.contents)

@@ -5,8 +5,8 @@ from Products.Five.browser import BrowserView
 
 
 def get_nightly_job_stats():
-    job_counts = "\n".join(['{}: {}'.format(name, count)
-                            for name, count in get_job_counts().items()])
+    job_counts = "\n".join(sorted(['{}: {}'.format(name, count)
+                           for name, count in get_job_counts().items()]))
     nightly_status = 'Nightly status: {}'.format(
         'healthy' if nightly_run_within_24h() else 'unhealthy')
     timestamp = get_nightly_run_timestamp()
