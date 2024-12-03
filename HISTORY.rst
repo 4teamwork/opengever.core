@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.17.0 (2024-12-03)
+----------------------
+
+New features:
+
+
+- Implement ad-hoc role assignment excel export. [elioschmutz] [TI-1546]
+
+
+Other changes:
+
+
+- Introduce a lookup table for objects having modified local roles. [elioschmutz] [TI-1540]
+- Introduce an object to create role assignment reports. [elioschmutz] [TI-1541]
+- Add GET endpoint to retrieve specific permissions report data for the new UI, with support for various filter criteria to generate targeted reports. [amo] [TI-1543]
+- Allow to create role assignment reports with multiple participants. [elioschmutz] [TI-1541-2]
+
+
 2024.16.0 (2024-11-21)
 ----------------------
 
