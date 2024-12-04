@@ -10,6 +10,8 @@
     xmlns:vdex="http://namespaces.zope.org/vdex"
     i18n_domain="opengever.base">
 
+  <vdex:vocabulary directory="vdexvocabs" />
+
   <meta:provides feature="opengever" />
 
   <include package="Products.CMFCore" file="permissions.zcml" />
