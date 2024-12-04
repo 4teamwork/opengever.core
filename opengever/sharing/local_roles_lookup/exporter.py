@@ -23,7 +23,8 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
             root=root)
 
         items = list(self.prepare_report_for_export(report))
-        reporter = XLSReporter(self.request, self.columns(), items)
+        reporter = XLSReporter(self.request, self.columns(), items,
+                               is_auto_filter_enabled=True)
         return self.return_excel(reporter)
 
     def extract_query_params(self):
