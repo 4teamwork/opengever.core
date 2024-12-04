@@ -725,6 +725,9 @@ class TestRepositoryFolderDefaults(TestDefaultsBase):
         persisted_values = get_persisted_values_for_obj(repofolder)
         expected = self.get_z3c_form_defaults()
 
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
+
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -827,6 +830,9 @@ class TestDossierDefaults(TestDefaultsBase):
         expected['custom_properties']['IDossier.default']['text_dossier'] = None
         expected['custom_properties']['IDossier.default']['date_dossier'] = None
 
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
+
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -889,6 +895,9 @@ class TestDossierDefaults(TestDefaultsBase):
         expected['custom_properties']['IDossier.default']['choosemulti_dossier'] = set()
         expected['custom_properties']['IDossier.default']['text_dossier'] = None
         expected['custom_properties']['IDossier.default']['date_dossier'] = None
+
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
@@ -913,6 +922,9 @@ class TestDossierDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(subdossier)
         expected = self.get_type_defaults()
+
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
 
         # Because the main-dossier is made through the ++add++-form and the
         # subdossier is created trough the object-creator with some attribute
@@ -1025,6 +1037,9 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_z3c_form_defaults()
+
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
         expected['file'] = doc.file
 
         self.assert_default_values_equal(expected, persisted_values)
@@ -1090,6 +1105,9 @@ class TestDocumentDefaults(TestDefaultsBase):
 
         persisted_values = get_persisted_values_for_obj(doc)
         expected = self.get_type_defaults()
+
+       # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
 
         expected['digitally_available'] = True
         expected['file'] = doc.file
@@ -1197,6 +1215,9 @@ class TestMailDefaults(TestDefaultsBase):
         expected = self.get_z3c_form_defaults()
 
         expected['message'] = mail._message
+
+        # vdex-vocabulary values are stored as utf-8 if using z3cform for content creation
+        expected["classification"] = expected["classification"].encode('utf-8')
 
         self.assert_default_values_equal(expected, persisted_values)
 

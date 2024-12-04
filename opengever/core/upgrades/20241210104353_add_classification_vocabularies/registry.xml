@@ -1,0 +1,6 @@
+<registry>
+
+  <record interface="opengever.base.behaviors.classification.IClassificationSettings" field="classification_default_value" />
+  <record interface="opengever.base.behaviors.classification.IClassificationSettings" field="hidden_classifications" />
+
+</registry>

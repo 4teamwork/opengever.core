@@ -1,6 +1,8 @@
 from collections import OrderedDict
 from collective.elephantvocabulary.interfaces import IElephantVocabulary
 from collective.vdexvocabulary.vocabulary import VdexVocabulary
+from opengever.base.default_values import determine_default_value
+from opengever.base.default_values import NO_DEFAULT_MARKER as DEFAULT_VALUES_NO_DEFAULT_MARKER
 from opengever.base.schemadump.config import DEFAULT_OVERRIDES
 from opengever.base.schemadump.config import PYTHON_TO_JS_TYPES
 from opengever.base.schemadump.config import VOCAB_OVERRIDES
@@ -195,7 +197,9 @@ class FieldDumper(object):
             value = adapter.get()
         else:
             # Otherwise see if the field has a schema level default
-            value = field.default
+            value = determine_default_value(field, None)
+            if value is DEFAULT_VALUES_NO_DEFAULT_MARKER:
+                value = None
 
         if value is not field.missing_value:
             return value

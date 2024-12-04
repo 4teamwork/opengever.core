@@ -3,6 +3,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.base.behaviors.classification import CLASSIFICATION_UNPROTECTED
 from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationSettings
 from opengever.base.behaviors.classification import PUBLIC_TRIAL_PRIVATE
@@ -120,8 +121,8 @@ class TestClassificationVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Classification')
-        self.assertEqual(
-            ['unprotected', 'confidential', 'classified'],
+        self.assertItemsEqual(
+            ['classified', 'confidential', 'unprotected'],
             form_field.options_values)
 
     @browsing
@@ -513,3 +514,26 @@ class TestClassificationFieldsAreProtected(IntegrationTestCase):
 
         self.assertEqual(u'unprotected', IClassification(self.dossier).classification)
         self.assertEqual(u'privacy_layer_no', IClassification(self.dossier).privacy_layer)
+
+    @browsing
+    def test_fill_classification(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        browser.open(self.leaf_repofolder)
+        api.portal.set_registry_record(
+            name='hidden_classifications', interface=IClassificationSettings, value=[])
+
+        # Reset cached hidden_terms in the vocabulary
+        IClassification['classification'].vocabulary.hidden_terms = []
+
+        factoriesmenu.add(u'Business Case Dossier')
+
+        form_field = browser.find('Classification')
+        self.assertEqual(
+            ['unprotected', 'confidential', 'classified'],
+            form_field.options_values)
+
+        browser.fill({'Classification': CLASSIFICATION_UNPROTECTED})
+        browser.click_on('Save')
+
+        self.assertEquals(u'unprotected', IClassification(self.leaf_repofolder).classification)
