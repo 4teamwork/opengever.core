@@ -61,6 +61,15 @@ msgstr "Reaktivieren"
 msgid "TaskResponsible"
 msgstr "Auftragnehmer"
 
+msgid "WorkspaceAdmin"
+msgstr "Admin"
+
+msgid "WorkspaceGuest"
+msgstr "Gast"
+
+msgid "WorkspaceMember"
+msgstr "Teammitglied"
+
 #. Default: "close"
 #: opengever/core/profiles/default/workflows/opengever_workspace_meeting/specification.txt
 msgid "close"

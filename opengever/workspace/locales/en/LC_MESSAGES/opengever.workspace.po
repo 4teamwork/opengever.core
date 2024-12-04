@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-10 07:37+0000\n"
+"POT-Creation-Date: 2024-12-04 14:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,24 +97,6 @@ msgstr "Type"
 #: ./opengever/workspace/participation/browser/participants_view.py
 msgid "User"
 msgstr "User"
-
-#. German translation: Admin
-#. Default: "Admin"
-#: ./opengever/workspace/participation/__init__.py
-msgid "WorkspaceAdmin"
-msgstr "Admin"
-
-#. German translation: Gast
-#. Default: "Guest"
-#: ./opengever/workspace/participation/__init__.py
-msgid "WorkspaceGuest"
-msgstr "Guest"
-
-#. German translation: Teammitglied
-#. Default: "Member"
-#: ./opengever/workspace/participation/__init__.py
-msgid "WorkspaceMember"
-msgstr "Member"
 
 #. Default: "absent"
 #: ./opengever/workspace/workspace_meeting.py
