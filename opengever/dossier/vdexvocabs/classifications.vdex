@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="false" language="de">
+    <vocabIdentifier>opengever.dossier.classifications</vocabIdentifier>
+
+    <term>
+        <termIdentifier>public</termIdentifier>
+        <caption>
+            <langstring language="de">Öffentlich</langstring>
+            <langstring language="en">Public</langstring>
+            <langstring language="fr">Public</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>internal</termIdentifier>
+        <caption>
+            <langstring language="de">Intern</langstring>
+            <langstring language="en">Internal</langstring>
+            <langstring language="fr">Interne</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>confidential</termIdentifier>
+        <caption>
+            <langstring language="de">Vertraulich</langstring>
+            <langstring language="en">Confidential</langstring>
+            <langstring language="fr">Confidentiel</langstring>
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>classified</termIdentifier>
+        <caption>
+            <langstring language="de">Geheim</langstring>
+            <langstring language="en">Classified</langstring>
+            <langstring language="fr">Classifié</langstring>
+        </caption>
+    </term>
+</vdex>

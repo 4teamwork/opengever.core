@@ -8,11 +8,13 @@ from plone.autoform.interfaces import IFormFieldProvider
 from plone.memoize import ram
 from plone.supermodel import model
 from zope import schema
+from zope.component import getUtility
 from zope.i18n import translate
 from zope.interface import alsoProvides
 from zope.interface import Interface
 from zope.interface import provider
 from zope.schema.interfaces import IContextAwareDefaultFactory
+from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -118,28 +120,22 @@ class IClassificationSettings(Interface):
     )
 
 
-# CLASSIFICATION: Vocabulary and default value
-CLASSIFICATION_UNPROTECTED = u'unprotected'
-CLASSIFICATION_CONFIDENTIAL = u'confidential'
-CLASSIFICATION_CLASSIFIED = u'classified'
-CLASSIFICATION_CHOICES = (
-    CLASSIFICATION_UNPROTECTED,
-    CLASSIFICATION_CONFIDENTIAL,
-    CLASSIFICATION_CLASSIFIED,
-)
-
-
 def classification_vf(context):
+    vocabulary_factory = getUtility(IVocabularyFactory, name="opengever.dossier.classifications")
     return SimpleVocabulary([
-        SimpleTerm(choice, title=_(choice))
-        for choice in CLASSIFICATION_CHOICES])
+        SimpleTerm(
+            value=term.value,
+            token=term.token,
+            title=_(u"{}".format(term.title)))
+        for term in vocabulary_factory(context)
+    ])
 
 
 @provider(IContextAwareDefaultFactory)
 def classification_default(context):
     default_factory = acquired_default_factory(
         field=IClassification['classification'],
-        default=CLASSIFICATION_UNPROTECTED)
+        default=None)
     return default_factory(context)
 
 
