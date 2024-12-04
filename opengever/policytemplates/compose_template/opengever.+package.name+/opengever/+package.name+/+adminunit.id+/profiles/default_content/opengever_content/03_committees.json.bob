@@ -1,0 +1,18 @@
+[
+    {
+        "_path": "sitzungen",
+        "_type": "opengever.meeting.committeecontainer",
+        "title_de": "Sitzungen",
+        "title_fr": "Séances",
+        "title_en": "Meetings",
+        "_ac_local_roles": {
+            "{{{orgunit.users_group}}}": [
+                "MeetingUser"
+            ],
+            "{{{deployment.rolemanager_group}}}": [
+                "CommitteeAdministrator",
+                "MeetingUser"
+            ]
+        }
+    }
+]
