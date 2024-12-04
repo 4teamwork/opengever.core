@@ -39,7 +39,7 @@ class TestExcelRoleAssignmentReport(SolrIntegrationTestCase):
                 [
                     "Ordnungssystem",
                     "http://nohost/plone/ordnungssystem",
-                    "opengever.repository.repositoryroot",
+                    "Repository Root",
                     "jurgen.konig",
                     "jurgen.konig",
                     None,
@@ -48,11 +48,11 @@ class TestExcelRoleAssignmentReport(SolrIntegrationTestCase):
                 [
                     "Ordnungssystem",
                     "http://nohost/plone/ordnungssystem",
-                    "opengever.repository.repositoryroot",
+                    "Repository Root",
                     "jurgen.konig",
                     "jurgen.konig",
                     None,
-                    "Publisher",
+                    "Reactivate",
                 ],
             ],
             [[cell.value for cell in row] for row in rows])

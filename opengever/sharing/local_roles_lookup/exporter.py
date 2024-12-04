@@ -1,12 +1,18 @@
 from datetime import datetime
 from opengever.base.browser.reporting_view import BaseReporterView
+from opengever.base.reporter import StringTranslater
 from opengever.base.reporter import XLSReporter
 from opengever.sharing import _
 from opengever.sharing.local_roles_lookup.reporter import RoleAssignmentReporter
+from plone import api
 from plone.app.uuid.utils import uuidToObject
 
 
 class RoleAssignmentReportExcelDownload(BaseReporterView):
+
+    def __init__(self, context, request):
+        super(RoleAssignmentReportExcelDownload, self).__init__(context, request)
+        self.ttool = api.portal.get_tool('portal_types')
 
     def __call__(self):
         principal_ids, include_memberships, root = self.extract_query_params()
@@ -51,10 +57,12 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
         for report_item in report:
             item = report_item.get('item')
             principal = report_item.get('principal')
+            fti = self.ttool.get(item.get('@type'))
+
             yield {
                 u'title': item.get('title'),
                 u'url': item.get('@id'),
-                u'portal_type': item.get('@type'),
+                u'portal_type': fti.title if fti else item.get('@type'),
                 u'principal_id': principal.get('principal_id'),
                 u'username': principal.get('username'),
                 u'groupname': principal.get('groupname'),
@@ -76,6 +84,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
             {
                 'id': 'portal_type',
                 'title': _('label_portal_type', default=u'Portal type'),
+                'transform': StringTranslater(None, 'opengever.core').translate,
             },
             {
                 'id': 'principal_id',
@@ -92,6 +101,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
             {
                 'id': 'role',
                 'title': _('label_role', default=u'Role'),
+                'transform': StringTranslater(None, 'plone').translate,
             }
         ]
 
