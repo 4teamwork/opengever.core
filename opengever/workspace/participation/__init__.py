@@ -3,6 +3,7 @@ from opengever.ogds.base.actor import Actor
 from opengever.workspace import _
 from opengever.workspace.config import workspace_config
 from plone import api
+from Products.CMFPlone import PloneMessageFactory as pmf
 from zope.globalrequest import getRequest
 from zope.i18n import translate
 
@@ -18,11 +19,11 @@ class ParticipationRole(object):
 
 
 WORKSPCAE_GUEST = ParticipationRole(
-    'WorkspaceGuest', _('WorkspaceGuest', default="Guest"), True)
+    'WorkspaceGuest', pmf('WorkspaceGuest', default="Guest"), True)
 WORKSPCAE_MEMBER = ParticipationRole(
-    'WorkspaceMember', _('WorkspaceMember', default="Member"), True)
+    'WorkspaceMember', pmf('WorkspaceMember', default="Member"), True)
 WORKSPCAE_ADMIN = ParticipationRole(
-    'WorkspaceAdmin', _('WorkspaceAdmin', default="Admin"), True)
+    'WorkspaceAdmin', pmf('WorkspaceAdmin', default="Admin"), True)
 
 PARTICIPATION_ROLES = {
     WORKSPCAE_GUEST.id: WORKSPCAE_GUEST,
