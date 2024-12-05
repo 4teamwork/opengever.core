@@ -447,33 +447,9 @@
 
   <plone:service
       method="GET"
-      name="@role-assignment-reports"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      factory=".role_assignment_reports.RoleAssignmentReportsGet"
-      permission="opengever.api.ManageRoleAssignmentReports"
-      />
-
-  <plone:service
-      method="GET"
       name="@role-assignment-report"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
       factory=".role_assignment_reports.RoleAssignmentReportGet"
-      permission="opengever.api.ManageRoleAssignmentReports"
-      />
-
-  <plone:service
-      method="POST"
-      name="@role-assignment-reports"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      factory=".role_assignment_reports.RoleAssignmentReportsPost"
-      permission="opengever.api.ManageRoleAssignmentReports"
-      />
-
-  <plone:service
-      method="DELETE"
-      name="@role-assignment-reports"
-      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-      factory=".role_assignment_reports.RoleAssignmentReportsDelete"
       permission="opengever.api.ManageRoleAssignmentReports"
       />
 
