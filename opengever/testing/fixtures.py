@@ -557,6 +557,15 @@ class OpengeverContentFixture(object):
                         u"Additional dossier title", u"", False)
             .with_field("textline", u"location", u"Location", u"", False,
                         default=u"B\xfcren an der Aare")
+            .with_field("bool", u"yesorno_dossier", u"Yes or no", u"", False)
+            .with_field("choice", u"choose_dossier", u"Choose", u"", False,
+                        values=["one", "two", "three"])
+            .with_field("multiple_choice", u"choosemulti_dossier", u"Choose multi", u"", False,
+                        values=["one", "two", "three"])
+            .with_field("int", u"num_dossier", u"Number", u"", False)
+            .with_field("text", u"text_dossier", u"Some lines of text", u"", False)
+            .with_field("date", u"date_dossier", u"Choose a date", u"", False)
+
         )
 
     @staticuid()
