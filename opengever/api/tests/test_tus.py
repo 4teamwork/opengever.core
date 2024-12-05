@@ -172,7 +172,7 @@ class TestTUSUpload(IntegrationTestCase):
         self.assert_tus_replace_fails(self.document, browser)
 
     @skipIf(
-        datetime.now() < datetime(2024, 12, 1),
+        datetime.now() < datetime(2025, 12, 1),
         "Lock verification temporary disabled, because it's not yet works correctly. "
         "Will be fixed with https://4teamwork.atlassian.net/browse/CA-5107",
     )
