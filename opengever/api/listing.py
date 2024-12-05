@@ -4,6 +4,8 @@ from opengever.api.solr_query_service import SolrFieldMapper
 from opengever.api.solr_query_service import SolrQueryBaseService
 from opengever.base.interfaces import ISearchSettings
 from opengever.base.solr.fields import REQUIRED_RESPONSE_FIELDS
+from opengever.document.behaviors.customproperties import IDocumentCustomProperties
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.indexers import ParticipationIndexHelper
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
@@ -318,7 +320,7 @@ class ListingGet(LiveSearchQueryPreprocessingMixin, SolrQueryBaseService):
             raise BadRequest(
                 "Unknown listing {}. Available listings are: {}".format(
                     self.name, ",".join(FILTERS.keys())))
-
+        self.configure_custom_property_field(self.listing_name)
         query, filters, start, rows, sort, field_list, params = \
             self.prepare_solr_query(self.request_payload)
 
@@ -334,3 +336,9 @@ class ListingGet(LiveSearchQueryPreprocessingMixin, SolrQueryBaseService):
         res['facets'] = self.extract_facets_from_response(resp)
 
         return res
+
+    def configure_custom_property_field(self, listing_name):
+        if listing_name == "dossiers":
+            self.field_mapper.propertysheet_field = IDossierCustomProperties['custom_properties']
+        if listing_name == "documents":
+            self.field_mapper.propertysheet_field = IDocumentCustomProperties['custom_properties']

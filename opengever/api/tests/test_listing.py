@@ -19,6 +19,7 @@ from opengever.document.behaviors.customproperties import IDocumentCustomPropert
 from opengever.document.behaviors.metadata import IDocumentMetadata
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.versioner import Versioner
+from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.behaviors.dossier import CHECKLIST_CLOSED_STATE
 from opengever.dossier.behaviors.dossier import CHECKLIST_OPEN_STATE
 from opengever.dossier.behaviors.dossier import IDossier
@@ -792,6 +793,73 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         start_dates = list(set(map(lambda x: x['start'], items)))
         self.assertEqual(1, len(start_dates))
         self.assertEqual('2016-01-01T00:00:00Z', start_dates[0])
+
+    @browsing
+    def test_filter_by_date_custom_fields_for_dossier(self, browser):
+        self.login(self.regular_user, browser=browser)
+        IDossier(self.dossier).dossier_type = u"businesscase"
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDossier.dossier_type.businesscase")
+            .with_field("date", u"birthday", u"Birthday", u"", False)
+        )
+        IDossierCustomProperties(self.dossier).custom_properties = {
+            "IDossier.dossier_type.businesscase": {
+                "birthday": date(2010, 12, 12),
+            }
+        }
+        self.dossier.reindexObject()
+        self.commit_solr()
+        expected_data = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+            u'UID': u'createtreatydossiers000000000001',
+            u'birthday_custom_field_date': u'2010-12-12T00:00:00Z'
+        }
+        view = (
+            '@listing?name=dossiers'
+            '&columns:list=birthday_custom_field_date'
+            '&filters.birthday_custom_field_date:record=2010-12-12TO2010-12-12'
+        )
+
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertSequenceEqual(browser.json['items'][0], expected_data)
+
+    @browsing
+    def test_filter_by_date_custom_fields_for_document(self, browser):
+        self.login(self.regular_user, browser=browser)
+        IDocumentMetadata(self.document).document_type = u"offer"
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.offer")
+            .with_field("date", u"birthday", u"Birthday", u"", False)
+        )
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.offer": {
+                "birthday": date(2010, 12, 12),
+            }
+        }
+        self.document.reindexObject()
+        self.commit_solr()
+        view = (
+            '@listing?name=documents'
+            '&columns:list=birthday_custom_field_date'
+            '&filters.birthday_custom_field_date:record=2010-12-12TO2010-12-12'
+        )
+
+        browser.open(self.repository_root, view=view,
+                     headers=self.api_headers)
+
+        expected_data = {
+            u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
+            u'UID': u'createtreatydossiers000000000002',
+            u'birthday_custom_field_date': u'2010-12-12T00:00:00Z'
+        }
+        self.assertEqual(1, browser.json['items_total'])
+        self.assertSequenceEqual(browser.json['items'][0], expected_data)
 
     @browsing
     def test_filter_by_retention_expiration(self, browser):
