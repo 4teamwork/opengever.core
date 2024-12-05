@@ -245,7 +245,7 @@ class FileplanEntrySyncer(CatalogSyncer):
 
 class DossierSyncer(CatalogSyncer):
 
-    table = 'ogdossiers'
+    table = 'dossiers'
     query = {
         'portal_type': 'opengever.dossier.businesscasedossier',
         'is_subdossier': False,
@@ -283,7 +283,7 @@ class DossierSyncer(CatalogSyncer):
 
 class SubdossierSyncer(DossierSyncer):
 
-    table = 'ogsubdossiers'
+    table = 'subdossiers'
     query = {
         'portal_type': 'opengever.dossier.businesscasedossier',
         'is_subdossier': True,
@@ -292,7 +292,7 @@ class SubdossierSyncer(DossierSyncer):
 
 class DocumentSyncer(CatalogSyncer):
 
-    table = 'ogdocuments'
+    table = 'documents'
     query = {
         'portal_type': 'opengever.document.document',
     }
