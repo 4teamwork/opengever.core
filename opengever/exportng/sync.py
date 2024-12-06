@@ -52,7 +52,12 @@ def as_datetime(obj, attrname):
 
 
 def get_filedata(obj, attrname):
-    value = getattr(obj, attrname)
+    if obj.portal_type == 'ftw.mail.mail':
+        value = getattr(obj, 'original_message')
+        if not value:
+            value = getattr(obj, 'message')
+    else:
+        value = getattr(obj, 'file')
     if value is not None:
         return {
             "filepath": value._blob.committed(),
@@ -63,10 +68,12 @@ def get_filedata(obj, attrname):
 
 
 def get_file_extension(obj, attrname):
-    if obj.portal_type == 'opengever.document.document':
-        value = getattr(obj, 'file')
+    if obj.portal_type == 'ftw.mail.mail':
+        value = getattr(obj, 'original_message')
+        if not value:
+            value = getattr(obj, 'message')
     else:
-        value = getattr(obj, 'message')
+        value = getattr(obj, 'file')
     if value is not None:
         return os.path.splitext(value.filename)[-1][1:]
 
@@ -294,7 +301,7 @@ class DocumentSyncer(CatalogSyncer):
 
     table = 'documents'
     query = {
-        'portal_type': 'opengever.document.document',
+        'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
     }
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
