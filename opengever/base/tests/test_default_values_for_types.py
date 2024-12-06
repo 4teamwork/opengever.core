@@ -820,6 +820,12 @@ class TestDossierDefaults(TestDefaultsBase):
 
         # Add customproperties form missing values
         expected['custom_properties']['IDossier.default']['additional_title'] = None
+        expected['custom_properties']['IDossier.default']['yesorno_dossier'] = False
+        expected['custom_properties']['IDossier.default']['choose_dossier'] = None
+        expected['custom_properties']['IDossier.default']['num_dossier'] = None
+        expected['custom_properties']['IDossier.default']['choosemulti_dossier'] = set()
+        expected['custom_properties']['IDossier.default']['text_dossier'] = None
+        expected['custom_properties']['IDossier.default']['date_dossier'] = None
 
         self.assert_default_values_equal(expected, persisted_values)
 
@@ -877,7 +883,12 @@ class TestDossierDefaults(TestDefaultsBase):
 
         # Add customproperties form missing values
         expected['custom_properties']['IDossier.default']['additional_title'] = None
-
+        expected['custom_properties']['IDossier.default']['yesorno_dossier'] = False
+        expected['custom_properties']['IDossier.default']['choose_dossier'] = None
+        expected['custom_properties']['IDossier.default']['num_dossier'] = None
+        expected['custom_properties']['IDossier.default']['choosemulti_dossier'] = set()
+        expected['custom_properties']['IDossier.default']['text_dossier'] = None
+        expected['custom_properties']['IDossier.default']['date_dossier'] = None
         self.assert_default_values_equal(expected, persisted_values)
 
     @browsing
