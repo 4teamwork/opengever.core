@@ -291,7 +291,7 @@ class DossierSyncer(CatalogSyncer):
         Attribute('retention_period_annotation', 'retentionperiodcomment', 'varchar', None),
         Attribute('archival_value', 'archivalvalue', 'varchar', get_archival_value),
         Attribute('archival_value_annotation', 'archivalvaluecomment', 'varchar', None),
-        Attribute('custody_period', 'regularsafeguardperiod', 'varchar', None),
+        Attribute('custody_period', 'regularsafeguardperiod', 'integer', None),
     ]
 
 
