@@ -277,7 +277,7 @@ class DossierSyncer(CatalogSyncer):
         # Attribute('reference_number', 'bonumberhistory', 'varchar', None),
         # Attribute('dossier_type', 'dossier_type', 'varchar', None),
         Attribute('classification', 'classification', 'varchar', str_upper),
-        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
+        Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
         Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
         Attribute('retention_period', 'retentionperiod', 'integer', None),
@@ -311,7 +311,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('file', '_file', 'jsonb', get_filedata),
         Attribute('extension', 'extension', 'varchar', get_file_extension),
         # Attribute('changed', 'changed', 'datetime', None)
-        Attribute('privacy_layer', 'privacyprotection', 'varchar', get_privacy_layer),
+        Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
         Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
         # Attribute('relatedItems', 'XXX', 'varchar', None),
