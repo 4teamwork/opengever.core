@@ -1,6 +1,9 @@
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
 from Acquisition import aq_parent
 from collections import namedtuple
+from datetime import datetime
+from datetime import date
+from DateTime import DateTime
 from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
@@ -48,7 +51,11 @@ def as_datetime(obj, attrname):
     value = getattr(obj, attrname)
     if callable(value):
         value = value()
-    return value.asdatetime()
+    if isinstance(value, date):
+        value = datetime.combine(value, datetime.min.time())
+    elif isinstance(value, DateTime):
+        value = value.asdatetime()
+    return value
 
 
 def get_filedata(obj, attrname):
