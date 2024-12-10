@@ -161,6 +161,7 @@ class CatalogSyncer(object):
             return conn.execute(stmt).fetchall()
 
     def sync(self):
+        self.init_sync()
         catalog_items = self.get_catalog_items()
         sql_items = self.get_sql_items()
         catalog_keys = set([
@@ -188,10 +189,12 @@ class CatalogSyncer(object):
             item = catalog_items_by_key[key]
             obj = item.getObject()
             inserts.append(self.get_values(obj))
+            self.post_insert_obj(obj)
         table = metadata.tables[self.table]
         with engine.connect() as conn:
             conn.execute(table.insert(), inserts)
         logger.info('Added %s: %s', table, len(added))
+        self.post_insert()
 
         updates = []
         for key in modified:
@@ -235,6 +238,15 @@ class CatalogSyncer(object):
         for schema in iterSchemata(obj):
             fields.update(getFields(schema))
         return fields
+
+    def init_sync(self):
+        return
+
+    def post_insert_obj(self, obj):
+        return
+
+    def post_insert(self):
+        return
 
 
 class FileplanEntrySyncer(CatalogSyncer):
@@ -332,6 +344,54 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('document_author', 'gcauthor', 'varchar', None),
         # Attribute('preserved_as_paper', 'XXX', 'varchar', None),
     ]
+    versions_table = 'document_versions'
+    versions_mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar', None),
+        Attribute('version', 'version', 'integer', None),
+        Attribute('filepath', 'filepath', 'varchar', None),
+        Attribute('filname', 'filename', 'varchar', None),
+        Attribute('principal', 'versby', 'varchar', None),
+        Attribute('timestamp', 'verschangedat', 'datetime', None),
+        Attribute('comment', 'versdesc', 'varchar', None),
+    ]
+
+    def init_sync(self):
+        self.rtool = api.portal.get_tool('portal_repository')
+        self._doc_version_inserts = []
+
+    def post_insert_obj(self, obj):
+        uid = obj.UID()
+        history = self.rtool.getHistory(obj)
+        if len(history) > 0:
+            for version in history:
+                data = get_filedata(version.object, None)
+                self._doc_version_inserts.append({
+                    'objexternalkey': uid,
+                    'version': version.version_id,
+                    'filepath': data['filepath'],
+                    'filename': data['filename'],
+                    'versby': version.sys_metadata['principal'],
+                    'verschangedat': datetime.fromtimestamp(version.sys_metadata['timestamp']),
+                    'versdesc': version.sys_metadata['comment'],
+                })
+        else:
+            data = get_filedata(obj, None)
+            self._doc_version_inserts.append({
+                'objexternalkey': uid,
+                'version': 0,
+                'filepath': data['filepath'],
+                'filename': data['filename'],
+                'versby': obj.Creator(),
+                'verschangedat': as_datetime(obj, 'modified'),
+                'versdesc': '',
+            })
+        return
+
+    def post_insert(self):
+        table = metadata.tables[self.versions_table]
+        with engine.connect() as conn:
+            conn.execute(table.insert(), self._doc_version_inserts)
+        logger.info('Added %s: %s', table, len(self._doc_version_inserts))
 
 
 class OGDSSyncer(object):
@@ -402,6 +462,7 @@ class Syncer(object):
         create_table(DossierSyncer.table, DossierSyncer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.mapping)
+        create_table(DocumentSyncer.versions_table, DocumentSyncer.versions_mapping)
         metadata.create_all(checkfirst=True)
 
     def sync(self):
