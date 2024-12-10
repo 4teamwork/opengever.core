@@ -273,7 +273,7 @@ class DossierSyncer(CatalogSyncer):
         Attribute('title', 'botitle', 'varchar', None),
         Attribute('description', 'bodescription', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', None),
-        Attribute('review_sate', 'bostate', 'varchar', get_dossier_state),
+        Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
         # Attribute('keywords', 'keywords', 'varchar', None),
         Attribute('start', 'objvalidfrom', 'date', None),
         Attribute('end', 'objvalidto', 'date', None),
