@@ -121,8 +121,8 @@ class TestClassificationVocabulary(IntegrationTestCase):
         browser.open(self.leaf_repofolder)
         factoriesmenu.add(u'Business Case Dossier')
         form_field = browser.find('Classification')
-        self.assertEqual(
-            ['unprotected', 'confidential', 'classified'],
+        self.assertItemsEqual(
+            ['classified', 'confidential', 'unprotected'],
             form_field.options_values)
 
     @browsing

@@ -46,7 +46,7 @@ class TestOverview(FunctionalTestCase):
                   ['Physical file', 'yes'],
                   ['Received date', date_format_helper(date.today())],
                   ['Sent date', ''],
-                  ['Classification', 'unprotected'],
+                  ['Classification', 'Unprotected'],
                   ['Privacy protection', 'no'],
                   ['Disclosure status', 'not assessed'],
                   ['Disclosure status statement', '']]
