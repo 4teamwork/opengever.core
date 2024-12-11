@@ -4,6 +4,7 @@ from zope.component.hooks import setSite
 from zope.globalrequest import setRequest
 import argparse
 import logging
+import os.path
 import sys
 
 
@@ -27,6 +28,11 @@ def exportng(app, args):
         help='Path to the Plone site.',
         default=None,
     )
+    parser.add_argument(
+        '--path', '-p',
+        help='Restrict export to the given path',
+        default=None,
+    )
 
     # If run with plone.recipe.zope2instance we need to strip the first 2 args
     if sys.argv[0] != 'exportng':
@@ -45,7 +51,9 @@ def exportng(app, args):
         metadata.drop_all()
         metadata.clear()
 
-    syncer = Syncer()
+    site_path = '/'.join(site.getPhysicalPath())
+    path = os.path.join(site_path, options.path.lstrip('/'))
+    syncer = Syncer(path=path)
     syncer.create_tables()
     syncer.sync()
 
