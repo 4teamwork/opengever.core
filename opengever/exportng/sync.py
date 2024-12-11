@@ -1,8 +1,8 @@
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
 from Acquisition import aq_parent
 from collections import namedtuple
-from datetime import datetime
 from datetime import date
+from datetime import datetime
 from DateTime import DateTime
 from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import create_table
@@ -14,6 +14,8 @@ from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.utils import iterSchemata
 from sqlalchemy import bindparam
+from sqlalchemy import delete
+from sqlalchemy import select
 from sqlalchemy.sql.expression import false
 from zope.schema import getFields
 import logging
@@ -481,3 +483,32 @@ class Syncer(object):
         DossierSyncer(self.query).sync()
         SubdossierSyncer(self.query).sync()
         DocumentSyncer(self.query).sync()
+        self.cleanup_orphans()
+
+    def cleanup_orphans(self):
+        keys = set([])
+        for table in [
+            FileplanEntrySyncer.table,
+            DossierSyncer.table,
+            SubdossierSyncer.table,
+        ]:
+            sqltable = metadata.tables[table]
+            stmt = select([sqltable.c.objexternalkey])
+            with engine.connect() as conn:
+                keys.update([r[0] for r in conn.execute(stmt).fetchall()])
+
+        for table in [
+            DossierSyncer.table,
+            SubdossierSyncer.table,
+            DocumentSyncer.table,
+        ]:
+            sqltable = metadata.tables[table]
+            stmt = select([sqltable.c.objprimaryrelated])
+            with engine.connect() as conn:
+                parent_keys = set([r[0] for r in conn.execute(stmt).fetchall()])
+            orphans = parent_keys - keys
+            if orphans:
+                logger.info('Removing %s orphans from table %s.', len(orphans), table)
+                stmt = delete(sqltable).where(sqltable.c.objprimaryrelated.in_(orphans))
+                with engine.connect() as conn:
+                    conn.execute(stmt)
