@@ -150,9 +150,13 @@ class CatalogSyncer(object):
     catalog_key = 'UID'
     sql_key = 'objexternalkey'
 
+    def __init__(self, query=None):
+        self.base_query = query or {}
+
     def get_catalog_items(self):
+        query = dict(self.base_query, **self.query)
         ct = api.portal.get_tool('portal_catalog')
-        return ct.unrestrictedSearchResults(**self.query)
+        return ct.unrestrictedSearchResults(query)
 
     def get_sql_items(self):
         table = metadata.tables[self.table]
@@ -455,6 +459,11 @@ class GroupSyncer(OGDSSyncer):
 
 class Syncer(object):
 
+    def __init__(self, path=None):
+        self.query = {}
+        if path is not None:
+            self.query['path'] = {'query': path, 'depth': -1}
+
     def create_tables(self):
         create_table(UserSyncer.table, UserSyncer.mapping)
         create_table(GroupSyncer.table, GroupSyncer.mapping)
@@ -468,7 +477,7 @@ class Syncer(object):
     def sync(self):
         UserSyncer().sync()
         GroupSyncer().sync()
-        FileplanEntrySyncer().sync()
-        DossierSyncer().sync()
-        SubdossierSyncer().sync()
-        DocumentSyncer().sync()
+        FileplanEntrySyncer(self.query).sync()
+        DossierSyncer(self.query).sync()
+        SubdossierSyncer(self.query).sync()
+        DocumentSyncer(self.query).sync()
