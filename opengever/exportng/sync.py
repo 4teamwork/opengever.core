@@ -503,12 +503,22 @@ class Syncer(object):
             DocumentSyncer.table,
         ]:
             sqltable = metadata.tables[table]
-            stmt = select([sqltable.c.objprimaryrelated])
+            stmt = select([sqltable.c.objexternalkey, sqltable.c.objprimaryrelated])
             with engine.connect() as conn:
-                parent_keys = set([r[0] for r in conn.execute(stmt).fetchall()])
-            orphans = parent_keys - keys
+                res = conn.execute(stmt).fetchall()
+                parents = dict([r for r in res])
+            orphans = set(parents.values()) - keys
             if orphans:
-                logger.info('Removing %s orphans from table %s.', len(orphans), table)
-                stmt = delete(sqltable).where(sqltable.c.objprimaryrelated.in_(orphans))
+                orphan_keys = [k for k, p in parents.items() if p in orphans]
+                logger.info('Orphans: %s', orphan_keys)
+                stmt = delete(sqltable).where(sqltable.c.objexternalkey.in_(orphan_keys))
                 with engine.connect() as conn:
-                    conn.execute(stmt)
+                    res = conn.execute(stmt)
+                    logger.info('Removed %s orphans from table %s.', res.rowcount, table)
+                keys -= set(orphan_keys)
+                if table == 'documents':
+                    versions_table = metadata.tables[DocumentSyncer.versions_table]
+                    stmt = delete(versions_table).where(versions_table.c.objexternalkey.in_(orphan_keys))
+                    with engine.connect() as conn:
+                        res = conn.execute(stmt)
+                        logger.info('Removed %s orphans from table %s.', res.rowcount, DocumentSyncer.versions_table)
