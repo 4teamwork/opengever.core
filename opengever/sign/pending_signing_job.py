@@ -18,6 +18,7 @@ class PendingSigningJob(Persistent):
                  editors=list(),
                  job_id='',
                  redirect_url='',
+                 invite_url='',
                  ):
 
         self.created = created or datetime.now()
@@ -27,6 +28,7 @@ class PendingSigningJob(Persistent):
         self.editors = PendingEditors([PendingEditor(email=editor) for editor in editors])
         self.job_id = job_id
         self.redirect_url = redirect_url
+        self.invite_url = invite_url
 
     def serialize(self):
         return json_compatible({
@@ -34,6 +36,7 @@ class PendingSigningJob(Persistent):
             'userid': self.userid,
             'job_id': self.job_id,
             'redirect_url': self.redirect_url,
+            'invite_url': self.invite_url,
             'signers': self.signers.serialize(),
             'editors': self.editors.serialize(),
             'version': self.version,

@@ -43,6 +43,7 @@ class Signer(object):
             editors=editors,
             job_id=response.get('id'),
             redirect_url=response.get('redirect_url'),
+            invite_url=response.get('invite_url'),
         )
         return token
 
