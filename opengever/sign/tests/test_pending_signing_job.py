@@ -27,6 +27,7 @@ class TestPendingSigningJob(IntegrationTestCase):
             userid='foo.bar',
             version=1,
             signers=['foo.bar@example.com'],
+            editors=['bar.foo@example.com'],
             job_id='1',
             redirect_url='redirect@example.com')
 
@@ -38,6 +39,12 @@ class TestPendingSigningJob(IntegrationTestCase):
                 'signers': [
                     {
                         'email': 'foo.bar@example.com',
+                        'userid': '',
+                    }
+                ],
+                'editors': [
+                    {
+                        'email': 'bar.foo@example.com',
                         'userid': '',
                     }
                 ],
