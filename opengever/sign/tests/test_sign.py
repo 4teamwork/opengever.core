@@ -31,8 +31,28 @@ class TestSigning(IntegrationTestCase):
         mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
         signer = Signer(self.document)
 
+        signers = ['foo.bar@example.com']
+        editors = ['bar.foo@example.com']
         with freeze(FROZEN_NOW):
-            signer.start_signing(['foo.bar@example.com'])
+            signer.start_signing(signers, editors)
+
+        request = mocker.last_request.json()
+        request['access_token'] = '<token>'
+        request['download_url'] = '<download-url>'
+
+        self.assertDictEqual(
+            {
+                u'access_token': u'<token>',
+                u'document_uid': u'createtreatydossiers000000000002',
+                u'document_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
+                u'download_url': u'<download-url>',
+                u'editors': [u'bar.foo@example.com'],
+                u'signers': [u'foo.bar@example.com'],
+                u'title': u'Vertr\xe4gsentwurf',
+                u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf'
+            },
+            request
+        )
 
         self.assertDictEqual(
             {
@@ -40,6 +60,7 @@ class TestSigning(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'signers': [{u'email': u'foo.bar@example.com', u'userid': u''}],
+                'editors': [{u'email': u'bar.foo@example.com', u'userid': u''}],
                 'userid': 'regular_user',
                 'version': 0
             }, signer.serialize_pending_signing_job())
