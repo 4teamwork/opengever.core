@@ -291,6 +291,7 @@ class DossierSyncer(CatalogSyncer):
         Attribute('title', 'botitle', 'varchar', None),
         Attribute('description', 'bodescription', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', None),
+        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
         # Attribute('keywords', 'keywords', 'varchar', None),
         Attribute('start', 'objvalidfrom', 'date', None),
@@ -333,6 +334,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('title', 'objname', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', None),
+        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('file', '_file', 'jsonb', get_filedata),
         Attribute('extension', 'extension', 'varchar', get_file_extension),
         # Attribute('changed', 'changed', 'datetime', None)
