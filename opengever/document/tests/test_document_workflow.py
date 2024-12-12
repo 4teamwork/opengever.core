@@ -228,7 +228,8 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
-                'signers': [
+                'signers': [],
+                'editors': [
                     {
                         'email': 'foo@example.com',
                         'userid': 'regular_user',
@@ -260,7 +261,8 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
-                'signers': [
+                'signers': [],
+                'editors': [
                     {
                         'email': 'foo@example.com',
                         'userid': 'regular_user',
