@@ -17,6 +17,7 @@ FROZEN_NOW = datetime(2024, 2, 18, 15, 45)
 DEFAULT_MOCK_RESPONSE = {
     'id': '1',
     'redirect_url': 'http://external.example.org/signing-requests/123',
+    'invite_url': 'http://external.example.org/invite/signing-requests/123',
 }
 
 
@@ -59,6 +60,7 @@ class TestSigning(IntegrationTestCase):
                 'created': u'2024-02-18T15:45:00',
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
+                'invite_url': 'http://external.example.org/invite/signing-requests/123',
                 'signers': [{u'email': u'foo.bar@example.com', u'userid': u''}],
                 'editors': [{u'email': u'bar.foo@example.com', u'userid': u''}],
                 'userid': 'regular_user',
