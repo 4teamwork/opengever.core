@@ -1,6 +1,7 @@
 from opengever.base import _
 from opengever.base.acquisition import acquired_default_factory
 from opengever.base.utils import language_cache_key
+from opengever.base.vocabulary import wrap_vocabulary
 from plone import api
 from plone.app.dexterity.behaviors import metadata
 from plone.autoform import directives as form
@@ -29,6 +30,9 @@ PUBLIC_TRIAL_CHOICES = (
     PUBLIC_TRIAL_PRIVATE,
 )
 
+# CLASSIFICATION: default value
+CLASSIFICATION_UNPROTECTED = u'unprotected'
+
 
 def public_trial_vocabulary_factory(context):
     return SimpleVocabulary([
@@ -52,6 +56,13 @@ def public_trial_default():
         'public_trial_default_value', interface=IClassificationSettings)
 
 
+def classification_default():
+    """Default value for `classification` field .
+    """
+    return api.portal.get_registry_record(
+        'classification_default_value', interface=IClassificationSettings)
+
+
 class IClassification(model.Schema):
 
     model.fieldset(
@@ -69,8 +80,11 @@ class IClassification(model.Schema):
     classification = schema.Choice(
         title=_(u'label_classification', default=u'Classification'),
         description=_(u'help_classification', default=u''),
-        source=u'classification_classification_vocabulary',
+        source=wrap_vocabulary(
+            u'opengever.base.classifications',
+            hidden_terms_from_registry='opengever.base.behaviors.IClassificationSettings.hidden_classifications'),
         required=True,
+        defaultFactory=classification_default
     )
 
     form.write_permission(privacy_layer='opengever.base.EditLifecycleAndClassification')
@@ -116,34 +130,22 @@ class IClassificationSettings(Interface):
         required=True,
         default=PUBLIC_TRIAL_UNCHECKED
     )
-
-
-# CLASSIFICATION: Vocabulary and default value
-CLASSIFICATION_UNPROTECTED = u'unprotected'
-CLASSIFICATION_CONFIDENTIAL = u'confidential'
-CLASSIFICATION_CLASSIFIED = u'classified'
-CLASSIFICATION_CHOICES = (
-    CLASSIFICATION_UNPROTECTED,
-    CLASSIFICATION_CONFIDENTIAL,
-    CLASSIFICATION_CLASSIFIED,
-)
-
-
-def classification_vf(context):
-    return SimpleVocabulary([
-        SimpleTerm(choice, title=_(choice))
-        for choice in CLASSIFICATION_CHOICES])
-
-
-@provider(IContextAwareDefaultFactory)
-def classification_default(context):
-    default_factory = acquired_default_factory(
-        field=IClassification['classification'],
-        default=CLASSIFICATION_UNPROTECTED)
-    return default_factory(context)
-
-
-IClassification['classification'].defaultFactory = classification_default
+    hidden_classifications = schema.List(
+        title=u"Classification",
+        value_type=schema.Choice(
+            title=u"Name",
+            vocabulary=u'opengever.base.classifications',
+        ),
+        default=list(),
+        missing_value=list(),
+        required=False
+    )
+    classification_default_value = schema.Choice(
+        title=u'Classification default value',
+        source=u'opengever.base.classifications',
+        required=True,
+        default=CLASSIFICATION_UNPROTECTED
+    )
 
 
 # PRIVACY_LAYER: Vocabulary and default value

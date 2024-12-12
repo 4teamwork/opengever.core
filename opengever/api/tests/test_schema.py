@@ -23,11 +23,11 @@ class TestSchemaEndpoint(IntegrationTestCase):
         ).json
         expected_url = "/".join(
             (self.document.absolute_url(),
-             '@vocabularies/classification_classification_vocabulary'))
+             '@sources/classification'))
         self.assertEqual(
             expected_url,
             response['properties']['classification']['vocabulary']['@id']
-            )
+        )
 
     @browsing
     def test_schema_endpoint_id_for_querysource(self, browser):

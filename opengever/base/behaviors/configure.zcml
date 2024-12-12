@@ -22,11 +22,6 @@
       for="plone.dexterity.interfaces.IDexterityContent"
       />
 
-  <utility
-      component=".classification.classification_vf"
-      provides="zope.schema.interfaces.IVocabularyFactory"
-      name="classification_classification_vocabulary"
-      />
 
   <utility
       component=".classification.privacy_layer_vf"

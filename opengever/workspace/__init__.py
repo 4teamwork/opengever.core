@@ -24,7 +24,7 @@ WHITELISTED_TEAMRAUM_PORTAL_TYPES = {
 
 WHITELISTED_TEAMRAUM_VOCABULARIES = {
     'Behaviors',
-    'classification_classification_vocabulary',
+    'opengever.base.classifications',
     'classification_privacy_layer_vocabulary',
     'classification_public_trial_vocabulary',
     'cmf.calendar.AvailableEventTypes',
