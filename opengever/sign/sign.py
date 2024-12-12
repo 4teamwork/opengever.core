@@ -32,14 +32,15 @@ class Signer(object):
     def invalidate_token(self):
         self.token_manager.invalidate_token()
 
-    def start_signing(self, signers):
+    def start_signing(self, signers=[], editors=[]):
         token = self.issue_token()
-        response = sign_service_client.queue_signing(self.context, token, signers)
-
+        response = sign_service_client.queue_signing(self.context, token,
+                                                     signers, editors)
         self.pending_signing_job = PendingSigningJob(
             userid=api.user.get_current().id,
             version=self.context.get_current_version_id(missing_as_zero=True),
             signers=signers,
+            editors=editors,
             job_id=response.get('id'),
             redirect_url=response.get('redirect_url'),
         )

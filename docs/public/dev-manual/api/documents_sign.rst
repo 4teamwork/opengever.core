@@ -79,6 +79,12 @@ Ein GET-Request auf ein Dokument stellt verschiedene Informationen zu einem aktu
                     "userid": ""
                 }
             ],
+            "editors": [
+                {
+                    "email": "bar.foo@example.com",
+                    "userid": "bar.foo"
+                }
+            ],
             "job_id": "1",
             "redirect_url": "redirect@example.com"
         },
