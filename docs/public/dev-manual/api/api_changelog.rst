@@ -3,7 +3,18 @@
 API Changelog
 =============
 
-2024.18.0 (unreleased)
+2024.19.0 (unreleased)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2024.18.0 (2024.12.13)
 ----------------------
 
 Breaking Changes
