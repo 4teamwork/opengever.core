@@ -87,8 +87,7 @@ def get_file_extension(obj, attrname):
         return os.path.splitext(value.filename)[-1][1:]
 
 
-def userid_to_email(obj, attrname):
-    userid = dexterity_field_value(obj, attrname)
+def userid_to_email(userid):
     userid_email_mapping = CACHE.get('userid_email_mapping', None)
     if userid_email_mapping is None:
         users = ogds_service().all_users()
@@ -97,8 +96,17 @@ def userid_to_email(obj, attrname):
     return userid_email_mapping.get(userid, userid)
 
 
+def get_responsible(obj, attrname):
+    userid = dexterity_field_value(obj, attrname)
+    return userid_to_email(userid)
+
+
 def get_reference_number(obj, attrname):
     return '.'.join(IReferenceNumber(obj).get_numbers()['repository'])
+
+
+def get_dossier_reference_number(obj, attrname):
+    return '.'.join(IReferenceNumber(obj).get_numbers()['dossier'])
 
 
 def parent_uid(obj, attrname):
@@ -145,6 +153,14 @@ def get_dossier_state(obj, attrname):
         'dossier-state-resolved': 'CLOSED'
     }
     return state_mapping.get(api.content.get_state(obj))
+
+
+def get_permissions(obj, attrname):
+    principals = []
+    for principal, roles in obj.get_local_roles():
+        if attrname in roles:
+            principals.append(userid_to_email(principal))
+    return principals
 
 
 class CatalogSyncer(object):
@@ -296,11 +312,11 @@ class DossierSyncer(CatalogSyncer):
         # Attribute('keywords', 'keywords', 'varchar', None),
         Attribute('start', 'objvalidfrom', 'date', None),
         Attribute('end', 'objvalidto', 'date', None),
-        Attribute('responsible', 'gboresponsible', 'varchar', userid_to_email),
+        Attribute('responsible', 'gboresponsible', 'varchar', get_responsible),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
         # Attribute('relatedDossier', 'XXX', 'varchar', None),
         # Attribute('former_reference_number', 'bonumberhistory', 'varchar', None),
-        # Attribute('reference_number', 'bonumberhistory', 'varchar', None),
+        Attribute('reference_number', 'documentnumber', 'varchar', get_dossier_reference_number),
         # Attribute('dossier_type', 'dossier_type', 'varchar', None),
         Attribute('classification', 'classification', 'varchar', str_upper),
         Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
@@ -311,6 +327,9 @@ class DossierSyncer(CatalogSyncer):
         Attribute('archival_value', 'archivalvalue', 'varchar', get_archival_value),
         Attribute('archival_value_annotation', 'archivalvaluecomment', 'varchar', None),
         Attribute('custody_period', 'regularsafeguardperiod', 'integer', None),
+        Attribute('Reader', 'objsecread', 'jsonb', get_permissions),
+        Attribute('Editor', 'objsecchange', 'jsonb', get_permissions),
+        Attribute('DossierManager', 'fadmins', 'jsonb', get_permissions),
     ]
 
 
