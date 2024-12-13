@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``pending_signing_job``: Additionally provides ``editors`` and ``invite_url``
 
 2024.17.0 (2024-12-03)
 ----------------------
