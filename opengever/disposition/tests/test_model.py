@@ -100,7 +100,7 @@ class TestPositionModel(IntegrationTestCase):
         binding = model.binding()
 
         self.assertEquals(u'30', binding.schutzfrist)
-        self.assertEquals('unprotected', binding.klassifizierungskategorie)
+        self.assertEquals('Unprotected', binding.klassifizierungskategorie)
         self.assertEquals(1, binding.datenschutz)
         self.assertEquals('private', binding.oeffentlichkeitsstatus)
         self.assertEquals(u'Enth\xe4lt sch\xfctzenswerte Daten.',
@@ -157,7 +157,7 @@ class TestDossier(IntegrationTestCase):
         binding = Dossier(self.dossier).binding()
 
         self.assertEquals(u'30', binding.schutzfrist)
-        self.assertEquals('unprotected', binding.klassifizierungskategorie)
+        self.assertEquals('Unprotected', binding.klassifizierungskategorie)
         self.assertEquals(1, binding.datenschutz)
         self.assertEquals('private', binding.oeffentlichkeitsstatus)
         self.assertEquals(u'Enth\xe4lt sch\xfctzenswerte Daten.',

@@ -618,7 +618,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             u'changed': u'2016-08-31T14:41:33+00:00',
             u'checklist': None,
             u'classification': {
-                u'title': u'unprotected',
+                u'title': u'Unprotected',
                 u'token': u'unprotected',
             },
             u'container_location': None,
@@ -820,7 +820,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             u'checked_out_fullname': None,
             u'checkout_collaborators': [],
             u'classification': {
-                u'title': u'unprotected',
+                u'title': u'Unprotected',
                 u'token': u'unprotected',
             },
             u'containing_dossier': u'A resolvable main dossier',
@@ -947,7 +947,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             u'checked_out': None,
             u'checked_out_fullname': None,
             u'checkout_collaborators': [],
-            u'classification': {u'title': u'unprotected', u'token': u'unprotected'},
+            u'classification': {u'title': u'Unprotected', u'token': u'unprotected'},
             u'containing_dossier': u'A resolvable main dossier',
             u'containing_subdossier': u'Resolvable Subdossier',
             u'containing_subdossier_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',

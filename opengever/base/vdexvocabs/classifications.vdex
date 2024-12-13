@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vdex xmlns="http://www.imsglobal.org/xsd/imsvdex_v1p0"
+      orderSignificant="true" language="en">
+    <vocabIdentifier>opengever.base.classifications</vocabIdentifier>
+
+    <term>
+        <termIdentifier>unprotected</termIdentifier>
+        <caption>
+            <langstring language="en">Unprotected</langstring>
+            <langstring language="en-us">Unprotected</langstring>
+            <langstring language="de">Nicht klassifiziert</langstring>
+            <langstring language="de-ch">Nicht klassifiziert</langstring>
+            <langstring language="fr">Public</langstring>
+            <langstring language="fr-ch">Public</langstring>
+
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>confidential</termIdentifier>
+        <caption>
+            <langstring language="en">Confidential</langstring>
+            <langstring language="en-us">Confidential</langstring>
+            <langstring language="de">Vertraulich</langstring>
+            <langstring language="de-ch">Vertraulich</langstring>
+            <langstring language="fr">Confidentiel</langstring>
+            <langstring language="fr-ch">Confidentiel</langstring>
+
+        </caption>
+    </term>
+
+    <term>
+        <termIdentifier>classified</termIdentifier>
+        <caption>
+            <langstring language="en">Classified</langstring>
+            <langstring language="en-us">Classified</langstring>
+            <langstring language="de">Geheim</langstring>
+            <langstring language="de-ch">Geheim</langstring>
+            <langstring language="fr">Classifié</langstring>
+            <langstring language="fr-ch">Classifié</langstring>
+
+        </caption>
+    </term>
+</vdex>

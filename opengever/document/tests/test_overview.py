@@ -504,7 +504,7 @@ class TestDocumentOverviewVanilla(IntegrationTestCase):
         browser.open(self.document, view='tabbedview_view-overview')
 
         self.assertEquals(
-            'unprotected',
+            'Unprotected',
             browser.css(
                 '#form-widgets-IClassification-classification',
                 ).first.text,
