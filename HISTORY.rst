@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.18.0 (2024-12-13)
+----------------------
+
+New features:
+
+
+- Activate auto-filtering for the role assignment excel report. [elioschmutz] [TI-1546]
+
+
+Other changes:
+
+
+- Remove static classifications and provide it dynamically via vocabulary. [amo] [TI-1258]
+- Fix filtering by custom fields in the @listing-endpoint. [amo] [TI-1539]
+- Properly translate "portal_type" and "role" values for role assignment excel report. [elioschmutz] [TI-1546]
+- Remove old @role-assignment-reports implementation. [elioschmutz] [TI-1547]
+
+
 2024.17.0 (2024-12-03)
 ----------------------
 
