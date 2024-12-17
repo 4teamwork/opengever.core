@@ -1,0 +1,41 @@
+[
+    {
+        "_path": "private",
+        "_type": "opengever.private.root",
+        "title_de": "Meine Ablage",
+        "title_fr": "Dossier personnel",
+        "title_en": "My repository"
+    },
+    {
+        "_path": "eingangskorb",
+        "_type": "opengever.inbox.inbox",
+        "title_de": "Eingangskorb",
+        "title_fr": "Boîte de réception",
+        "title_en": "Inbox",
+        "responsible_org_unit": "{{{orgunit.id}}}",
+        "_ac_local_roles": {
+          "{{{orgunit.inbox_group}}}": [
+            "Reader",
+            "Editor",
+            "Contributor"
+          ]
+        }
+    },
+    {
+        "_path": "vorlagen",
+        "_type": "opengever.dossier.templatefolder",
+        "title_de": "Vorlagen",
+        "title_fr": "Modèles",
+        "title_en": "Templates",
+        "_ac_local_roles": {
+            "{{{orgunit.users_group}}}": [
+                "Reader"
+            ],
+            "{{{orgunit.inbox_group}}}": [
+                "Contributor",
+                "Editor",
+                "Reader"
+            ]
+        }
+    }
+]

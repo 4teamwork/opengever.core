@@ -1,0 +1,158 @@
+<registry>
+
+  <records interface="opengever.latex.interfaces.ILaTeXSettings">
+    <value key="location">{{{adminunit.title}}}</value>
+  </records>
+
+  <records interface="opengever.bumblebee.interfaces.IGeverBumblebeeSettings">
+    <value key="is_feature_enabled">True</value>
+    <value key="is_auto_refresh_enabled">{{{setup.bumblebee_auto_refresh}}}</value>
+  </records>
+
+  <records interface="ftw.mail.interfaces.IMailSettings">
+    <value key="unwrap_mail">False</value>
+  </records>
+
+  <records interface="opengever.base.interfaces.ISearchSettings">
+    <value key="use_solr">True</value>
+  </records>
+
+{{% if not setup.enable_activity_feature %}}
+  <record interface="opengever.activity.interfaces.IActivitySettings" field="is_feature_enabled">
+    <field type="plone.registry.field.Bool" />
+    <value>False</value>
+  </record>
+
+{{% endif %}}
+{{% if setup.officeconnector_attach or setup.officeconnector_checkout%}}
+  <records interface="opengever.officeconnector.interfaces.IOfficeConnectorSettings">
+{{% if setup.officeconnector_attach %}}
+    <value key="attach_to_outlook_enabled">True</value>
+{{% endif %}}
+{{% if setup.officeconnector_checkout %}}
+    <value key="direct_checkout_and_edit_enabled">True</value>
+{{% endif %}}
+  </records>
+
+{{% endif %}}
+{{% if setup.maximum_mail_size %}}
+  <records interface="opengever.mail.interfaces.ISendDocumentConf">
+    <value key="max_size">{{{setup.maximum_mail_size}}}</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.hubspot %}}
+  <records interface="opengever.base.interfaces.IHubSpotSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+{{% endif %}}
+{{% if is_gever %}}
+{{% if setup.enable_meeting_feature %}}
+  <record interface="opengever.meeting.interfaces.IMeetingSettings" field="is_feature_enabled">
+    <field type="plone.registry.field.Bool" />
+    <value>True</value>
+  </record>
+
+{{% endif %}}
+{{% if setup.enable_docproperty_feature %}}
+  <records interface="opengever.dossier.interfaces.ITemplateFolderProperties">
+    <value key="create_doc_properties">True</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.dossier_templates %}}
+  <records interface="opengever.dossier.dossiertemplate.interfaces.IDossierTemplateSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.ech0147_export %}}
+  <records interface="opengever.ech0147.interfaces.IECH0147Settings">
+    <value key="ech0147_export_enabled">True</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.ech0147_import %}}
+  <records interface="opengever.ech0147.interfaces.IECH0147Settings">
+    <value key="ech0147_import_enabled">True</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.officeatwork %}}
+  <records interface="opengever.officeatwork.interfaces.IOfficeatworkSettings">
+    <value key="is_feature_enabled">True</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.maximum_repository_depth or setup.repositoryfolder_documents_tab or setup.repositoryfolder_tasks_tab
+    or setup.repositoryfolder_proposals_tab %}}
+  <records interface="opengever.repository.interfaces.IRepositoryFolderRecords">
+{{% if setup.maximum_repository_depth %}}
+    <value key="maximum_repository_depth">{{{setup.maximum_repository_depth}}}</value>
+{{% endif %}}
+{{% if setup.repositoryfolder_documents_tab %}}
+    <value key="show_documents_tab">True</value>
+{{% endif %}}
+{{% if setup.repositoryfolder_tasks_tab %}}
+    <value key="show_tasks_tab">True</value>
+{{% endif %}}
+{{% if setup.repositoryfolder_proposals_tab %}}
+    <value key="show_proposals_tab">True</value>
+{{% endif %}}
+  </records>
+
+{{% endif %}}
+{{% if setup.reference_number_formatter or setup.reference_prefix_starting_point %}}
+  <records interface="opengever.base.interfaces.IReferenceNumberSettings">
+{{% if setup.reference_number_formatter %}}
+    <value key="formatter">{{{setup.reference_number_formatter}}}</value>
+{{% endif %}}
+{{% if setup.reference_prefix_starting_point %}}
+    <value key="reference_prefix_starting_point">{{{setup.reference_prefix_starting_point}}}</value>
+{{% endif %}}
+  </records>
+
+{{% endif %}}
+{{% if setup.maximum_dossier_depth %}}
+  <records interface="opengever.dossier.interfaces.IDossierContainerTypes">
+    <value key="maximum_dossier_depth">{{{setup.maximum_dossier_depth}}}</value>
+  </records>
+
+{{% endif %}}
+{{% if setup.use_lenient_dossier_resolver %}}
+  <records interface="opengever.dossier.interfaces.IDossierResolveProperties">
+    <value key="resolver_name">lenient</value>
+  </records>
+
+{{% endif %}}
+{{% if not setup.preserved_as_paper %}}
+  <records interface="opengever.document.interfaces.IDocumentSettings">
+      <value key="preserved_as_paper_default">False</value>
+  </records>
+
+{{% endif %}}
+{{% endif %}}
+{{% if is_teamraum %}}
+  <records interface="opengever.workspace.interfaces.IWorkspaceSettings">
+    <value key="is_feature_enabled">True</value>
+    {{% if setup.invitation_group_dn %}}
+        <value key="invitation_group_dn">{{{setup.invitation_group_dn}}}</value>
+    {{% endif %}}
+  </records>
+
+{{% if not setup.enable_workspace_meeting_feature %}}
+  <records interface="opengever.workspace.interfaces.IWorkspaceMeetingSettings">
+    <value key="is_feature_enabled">False</value>
+  </records>
+
+{{% endif %}}
+
+{{% if not setup.enable_todo_feature %}}
+  <records interface="opengever.workspace.interfaces.IToDoSettings">
+    <value key="is_feature_enabled">False</value>
+  </records>
+
+{{% endif %}}
+{{% endif %}}
+</registry>
