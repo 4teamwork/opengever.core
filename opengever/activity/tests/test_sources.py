@@ -4,6 +4,8 @@ from opengever.activity import notification_center
 from opengever.activity.sources import PossibleWatchersSource
 from opengever.base.interfaces import IBaseSettings
 from opengever.base.model import create_session
+from opengever.ogds.models.group import Group
+from opengever.ogds.models.org_unit import OrgUnit
 from opengever.testing import IntegrationTestCase
 from plone import api
 from unittest import skip
@@ -51,6 +53,35 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.assertItemsEqual([
             'group:regular_group_2',
         ], [term.token for term in source.search('Regular Group')])
+
+    def test_list_only_teams_assigned_to_the_current_org_unit(self):
+        self.login(self.regular_user)
+        source = PossibleWatchersSource(self.task)
+
+        team_1 = create(Builder('ogds_team').having(title=u'Regular Team 1',
+                                                    group=Group.query.first(),
+                                                    org_unit=OrgUnit.get('fa')))
+
+        create(Builder('ogds_team').having(title=u'Regular Team 2',
+                                           group=Group.query.first(),
+                                           org_unit=OrgUnit.get('fa')))
+
+        create(Builder('ogds_team').having(title=u'Regular Team 3',
+                                           group=Group.query.first(),
+                                           org_unit=OrgUnit.get('fa')))
+
+        self.assertItemsEqual([
+            u'Regular Team 1 (Finanz\xe4mt)',
+            u'Regular Team 2 (Finanz\xe4mt)',
+            u'Regular Team 3 (Finanz\xe4mt)',
+        ], [term.title for term in source.search('Regular Team')])
+
+        team_1.org_unit = OrgUnit.get('rk')
+
+        self.assertItemsEqual([
+            u'Regular Team 2 (Finanz\xe4mt)',
+            u'Regular Team 3 (Finanz\xe4mt)',
+        ], [term.title for term in source.search('Regular Team')])
 
     def test_list_users_and_groups_for_teamraum(self):
         self.activate_feature('workspace')
