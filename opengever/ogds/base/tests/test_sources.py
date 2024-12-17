@@ -17,6 +17,7 @@ from opengever.ogds.base.sources import ContactsSource
 from opengever.ogds.base.sources import CurrentAdminUnitOrgUnitsSource
 from opengever.ogds.base.sources import UsersContactsInboxesSource
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.team import Team
 from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.testing import FunctionalTestCase
 from opengever.testing import IntegrationTestCase
@@ -1279,4 +1280,19 @@ class TestAllTeamsSource(IntegrationTestCase):
         self.assertItemsEqual(
             [u'Sekretariat Abteilung XY (Finanz\xe4mt)',
              u'Sekretariat Abteilung Null (Finanz\xe4mt)'],
+            [term.title for term in source.search('Sek')])
+
+    def test_can_restrict_teams_to_current_or_unit(self):
+        self.login(self.administrator)
+        source = AllTeamsSource(self.portal, only_current_orgunit=True)
+
+        self.assertItemsEqual(
+            [u'Sekretariat Abteilung XY (Finanz\xe4mt)',
+             u'Sekretariat Abteilung Null (Finanz\xe4mt)'],
+            [term.title for term in source.search('Sek')])
+
+        Team.get_one(groupid='projekt_b').org_unit_id = 'rk'
+
+        self.assertItemsEqual(
+            [u'Sekretariat Abteilung Null (Finanz\xe4mt)'],
             [term.title for term in source.search('Sek')])

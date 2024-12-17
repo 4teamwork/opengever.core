@@ -1094,6 +1094,10 @@ class AllTeamsSource(AllUsersInboxesAndTeamsSource):
     def search_query(self):
         query = Team.query.filter(Team.active == True)  # noqa
         query = query.order_by(desc(func.lower(Team.title)))
+
+        if self.only_current_orgunit:
+            query = query.filter(Team.org_unit_id == self.client_id)
+
         return query
 
     def getTerm(self, value):
