@@ -69,4 +69,5 @@ class PossibleWatchersSource(BaseMultipleSourcesQuerySource):
                                  PossibleWatchersGroupsSource(context)]
 
         if not is_workspace_feature_enabled():
-            self.source_instances.append(AllTeamsSource(context))
+            self.source_instances.append(AllTeamsSource(context,
+                                                        only_current_orgunit=True))
