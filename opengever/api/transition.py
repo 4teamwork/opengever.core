@@ -385,8 +385,10 @@ class GEVERDocumentWorkflowTransition(GEVERWorkflowTransition):
     def reply(self):
         response = super(GEVERDocumentWorkflowTransition, self).reply()
         if self.transition in self.SIGNING_TRANSITIONS:
-            response['redirect_url'] = Signer(
-                self.context).serialize_pending_signing_job().get('redirect_url')
+            pending_signing_job = Signer(
+                self.context).serialize_pending_signing_job()
+            response['redirect_url'] = pending_signing_job.get('redirect_url')
+            response['invite_url'] = pending_signing_job.get('invite_url')
         return response
 
 

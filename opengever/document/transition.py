@@ -38,7 +38,7 @@ class DocumentFinalSigningTransitionExtender(TransitionExtender):
         if not actor or not actor.email:
             raise NoEmailError()
 
-        Signer(self.context).start_signing(signers=[actor.email])
+        Signer(self.context).start_signing(editors=[actor.email])
 
 
 @implementer(ITransitionExtender)
