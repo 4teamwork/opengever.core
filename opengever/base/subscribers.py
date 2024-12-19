@@ -20,6 +20,7 @@ ALLOWED_ENDPOINTS = set([
     'POST_application_json_@logout',
     'POST_application_json_@login-renew',
     'POST_application_json_@upload-signed-pdf',
+    'PATCH_application_json_@update-pending-signing-job',
     'customlogo',
     'customlogo_right',
     'dump-content-stats',

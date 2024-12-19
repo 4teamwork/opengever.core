@@ -47,3 +47,45 @@ class UploadSignedPdfPost(Service):
 
         self.access_token = access_token
         self.signed_pdf_data = signed_pdf_data
+
+
+class UpdatePendingSigningJob(Service):
+    """Endpoint for updating metadata for a pending signing job"""
+
+    def __call__(self):
+        if api.content.get_state(obj=self.context) != Document.signing_state:
+            raise Forbidden()
+
+        self.extract_payload()
+        self.signer = Signer(self.context)
+
+        return super(UpdatePendingSigningJob, self).__call__()
+
+    def reply(self):
+        with self.signer.adopt_issuer():
+            self.signer.update_pending_signing_job(**self.data)
+
+        self.request.response.setStatus(200)
+        return self.signer.serialize_pending_signing_job()
+
+    def check_permission(self):
+        try:
+            self.signer.validate_token(self.access_token)
+        except InvalidToken:
+            raise Unauthorized()
+
+    def extract_payload(self):
+        data = json_body(self.request)
+        access_token = data.get('access_token')
+        if not access_token:
+            raise BadRequest("Property 'access_token' is required")
+
+        data = data.get('signature_data')
+        if not data:
+            raise BadRequest("Property 'signature_data' is required")
+
+        self.access_token = access_token
+        self.data = {
+            'signers': data.get('signers'),
+            'editors': data.get('editors'),
+        }
