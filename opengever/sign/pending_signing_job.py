@@ -1,7 +1,5 @@
 from datetime import datetime
-from opengever.sign.pending_editor import PendingEditor
 from opengever.sign.pending_editor import PendingEditors
-from opengever.sign.pending_signer import PendingSigner
 from opengever.sign.pending_signer import PendingSigners
 from opengever.sign.signed_version import SignedVersion
 from persistent import Persistent
@@ -24,8 +22,8 @@ class PendingSigningJob(Persistent):
         self.created = created or datetime.now()
         self.userid = userid
         self.version = version
-        self.signers = PendingSigners([PendingSigner(email=signer) for signer in signers])
-        self.editors = PendingEditors([PendingEditor(email=editor) for editor in editors])
+        self.signers = PendingSigners.from_emails(signers)
+        self.editors = PendingEditors.from_emails(editors)
         self.job_id = job_id
         self.redirect_url = redirect_url
         self.invite_url = invite_url
