@@ -20,6 +20,7 @@ class SignServiceClient(object):
                   'document_url': document.absolute_url(),
                   'download_url': bumblebee_service.get_download_url(document),
                   'upload_url': '{}/@upload-signed-pdf'.format(document.absolute_url()),
+                  'update_url': '{}/@update-pending-signing-job'.format(document.absolute_url()),
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'signers': signers,
