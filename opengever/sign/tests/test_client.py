@@ -21,7 +21,10 @@ class TestSigningClient(IntegrationTestCase):
 
         mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
 
-        response = SignServiceClient().queue_signing(self.document, TOKEN, ['foo.bar@example.com'])
+        editors = ['foo@example.com']
+        signatories = ['bar@example.com']
+        response = SignServiceClient().queue_signing(
+            self.document, TOKEN, signatories, editors)
 
         self.assertDictEqual(
             {
@@ -29,7 +32,8 @@ class TestSigningClient(IntegrationTestCase):
                 u'document_uid': u'createtreatydossiers000000000002',
                 u'document_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14', # noqa
                 u'download_url': u'http://nohost/plone/bumblebee_download?checksum={}&uuid=createtreatydossiers000000000002'.format(DOCX_CHECKSUM), # noqa
-                u'signers': ['foo.bar@example.com'],
+                u'signers': ['bar@example.com'],
+                u'editors': ['foo@example.com'],
                 u'title': u'Vertr\xe4gsentwurf',
                 u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf', # noqa
             },
