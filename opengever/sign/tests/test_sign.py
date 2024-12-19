@@ -50,7 +50,8 @@ class TestSigning(IntegrationTestCase):
                 u'editors': [u'bar.foo@example.com'],
                 u'signers': [u'foo.bar@example.com'],
                 u'title': u'Vertr\xe4gsentwurf',
-                u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf'
+                u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf',
+                u'update_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@update-pending-signing-job'
             },
             request
         )

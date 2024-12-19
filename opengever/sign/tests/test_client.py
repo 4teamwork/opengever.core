@@ -36,6 +36,7 @@ class TestSigningClient(IntegrationTestCase):
                 u'editors': ['foo@example.com'],
                 u'title': u'Vertr\xe4gsentwurf',
                 u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf', # noqa
+                u'update_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@update-pending-signing-job', # noqa
             },
             mocker.last_request.json())
 
