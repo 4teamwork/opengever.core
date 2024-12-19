@@ -26,3 +26,11 @@ class TestPendingEditors(IntegrationTestCase):
         self.assertEqual(2, len(container.serialize()))
         self.assertItemsEqual([signer2.email, signer1.email],
                               [item.get('email') for item in container.serialize()])
+
+    def test_can_be_created_from_a_list_of_emails(self):
+        container = PendingEditors.from_emails(['foo@example.com', 'bar@example.com'])
+
+        self.assertEqual(2, len(container))
+        self.assertTrue(isinstance(container[0], PendingEditor))
+        self.assertItemsEqual(['foo@example.com', 'bar@example.com'],
+                              [item.get('email') for item in container.serialize()])

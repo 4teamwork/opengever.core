@@ -43,3 +43,11 @@ class TestPendingSigners(IntegrationTestCase):
         container.append(PendingSigner())
 
         self.assertEqual(2, len(container.to_signatories()))
+
+    def test_can_be_created_from_a_list_of_emails(self):
+        container = PendingSigners.from_emails(['foo@example.com', 'bar@example.com'])
+
+        self.assertEqual(2, len(container))
+        self.assertTrue(isinstance(container[0], PendingSigner))
+        self.assertItemsEqual(['foo@example.com', 'bar@example.com'],
+                              [item.get('email') for item in container.serialize()])
