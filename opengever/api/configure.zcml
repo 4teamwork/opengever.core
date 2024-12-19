@@ -1857,4 +1857,12 @@
       permission="zope.Public"
       />
 
+  <plone:service
+      method="PATCH"
+      name="@update-pending-signing-job"
+      for="opengever.document.document.IDocumentSchema"
+      factory=".sign.UpdatePendingSigningJob"
+      permission="zope.Public"
+      />
+
 </configure>

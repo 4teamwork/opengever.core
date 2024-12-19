@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@update-pending-signing-job``: Add endpoint to update pending signing job
 
 2024.18.0 (2024.12.13)
 ----------------------
