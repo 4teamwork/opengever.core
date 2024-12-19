@@ -88,6 +88,9 @@ class Signer(object):
             raise IssuerNotFound()
         return api.env.adopt_user(user=user)
 
+    def update_pending_signing_job(self, **data):
+        self.pending_signing_job.update(**data)
+
     def serialize_pending_signing_job(self):
         return self.pending_signing_job.serialize() if self.pending_signing_job else {}
 

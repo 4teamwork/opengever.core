@@ -45,3 +45,12 @@ class PendingSigningJob(Persistent):
             signatories=self.signers.to_signatories(),
             version=self.version + 1
         )
+
+    def update(self, **data):
+        signers = data.get('signers')
+        if isinstance(signers, list):
+            self.signers = PendingSigners.from_emails(signers)
+
+        editors = data.get('editors')
+        if isinstance(editors, list):
+            self.editors = PendingEditors.from_emails(editors)
