@@ -25,6 +25,35 @@ Der Request löst den Signaturprozess für das Dokument aus.
 
 Im Rahmen des Signaturprozesses wird ein Access-Token generiert, der dem externen Signaturservice übergeben wird. Dieses Token muss im späteren Request zur Rückführung der signierten PDF-Datei wiederverwendet werden.
 
+Aktualisieren eines ausstehenden Signierungsauftrags
+----------------------------------------------------
+Der Endpoint ``@update-pending-signing-job`` dient dazu, die Listen der Signierenden ("signers") und Bearbeitenden ("editors") eines ausstehenden Signierungsauftrags zu aktualisieren. Dies ermöglicht es einem externen Signierungsdienst, Änderungen in GEVER vorzunehmen und die betroffenen Personen entsprechend anzupassen.
+
+    **Beispiel-Request**:
+
+    .. code-block:: http
+
+        PATCH /@update-pending-signing-job HTTP/1.1
+        Content-Type: application/json
+        Authorization: Bearer <access_token>
+
+        {
+            "access_token": "12345",
+            "signature_data": {
+                "signers": ["new-signer@example.com"],
+                "editors": ["new-editor@example.com"]
+            }
+        }
+
+- ``access_token``: Das beim Start des Signaturprozesses generierte Token.
+- ``signature_data`` (erforderlich): Ein Objekt, das die zu aktualisierenden Felder enthält.
+  - ``signers`` (optional): Eine Liste von E-Mail-Adressen der neuen Signierenden. Wenn nicht angegeben, bleibt die Liste der Signierenden unverändert.
+  - ``editors`` (optional): Eine Liste von E-Mail-Adressen der neuen Bearbeitenden. Wenn nicht angegeben, bleibt die Liste der Bearbeitenden unverändert.
+
+**Hinweise**
+
+- Die Aktualisierung gilt nur für ausstehende Signierungsaufträge und hat keine Auswirkungen auf bereits abgeschlossene Vorgänge.
+
 Hochladen der signierten PDF-Datei
 ----------------------------------
 
