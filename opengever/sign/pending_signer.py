@@ -7,6 +7,11 @@ from plone.restapi.serializer.converters import json_compatible
 
 
 class PendingSigners(PersistentList):
+
+    @classmethod
+    def from_emails(cls, emails):
+        return cls([PendingSigner(email=email) for email in emails])
+
     def serialize(self):
         return json_compatible([pending_signer.serialize() for pending_signer in self])
 

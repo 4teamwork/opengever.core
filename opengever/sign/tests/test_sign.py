@@ -50,7 +50,8 @@ class TestSigning(IntegrationTestCase):
                 u'editors': [u'bar.foo@example.com'],
                 u'signers': [u'foo.bar@example.com'],
                 u'title': u'Vertr\xe4gsentwurf',
-                u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf'
+                u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf',
+                u'update_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@update-pending-signing-job'
             },
             request
         )
@@ -131,3 +132,20 @@ class TestSigning(IntegrationTestCase):
         storage.add_signed_version(SignedVersion(version=2))
 
         self.assertEqual([1, 2], signer.serialize_signed_versions().keys())
+
+    def test_can_update_pending_signing_job(self, mocker):
+        self.login(self.regular_user)
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        signer = Signer(self.document)
+        signer.start_signing(['foo.bar@example.com'])
+
+        self.assertItemsEqual(
+            [{u'userid': u'', u'email': u'foo.bar@example.com'}],
+            signer.pending_signing_job.serialize().get('signers'))
+
+        signer.update_pending_signing_job(signers=['updated@example.com'])
+
+        self.assertItemsEqual(
+            [{u'userid': u'', u'email': u'updated@example.com'}],
+            signer.pending_signing_job.serialize().get('signers'))
