@@ -7,6 +7,7 @@ from opengever.document.document import Document
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
+from opengever.sign.pending_signer import PendingSigner
 from opengever.sign.sign import Signer
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -289,6 +290,11 @@ class TestDocumentSerializer(IntegrationTestCase):
         mocker.post(re.compile('/signing-jobs'), json={'id': 'job-1'})
         api.content.transition(obj=self.document,
                                transition=Document.draft_signing_transition)
+
+        # The sign-service will set the signers when syncing between the
+        # external sign-object and the gever pending singing job.
+        # Here in the test, we just set it by hand.
+        Signer(self.document).start_signing(signers=['foo@example.com'])
 
         Signer(self.document).complete_signing('<data>')
         browser.open(self.document, headers=self.api_headers)

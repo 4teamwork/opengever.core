@@ -10,7 +10,7 @@ class SignServiceClient(object):
     def sign_service_url(self):
         return environ.get('SIGN_SERVICE_URL', '').strip('/')
 
-    def queue_signing(self, document, token, signers):
+    def queue_signing(self, document, token, signers, editors):
         bumblebee_service = IBumblebeeServiceV3(getRequest())
 
         return requests.post(
@@ -23,6 +23,7 @@ class SignServiceClient(object):
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'signers': signers,
+                  'editors': editors,
                   }).json()
 
     def abort_signing(self, job_id):
@@ -40,7 +41,7 @@ class NullSignServiceClient(object):
     def sign_service_url(self):
         return environ.get('SIGN_SERVICE_URL', '').strip('/')
 
-    def queue_signing(self, document, token, signers):
+    def queue_signing(self, document, token, signers, editors):
         return {}
 
     def abort_signing(self, job_id):

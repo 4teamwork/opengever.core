@@ -27,8 +27,10 @@ class TestPendingSigningJob(IntegrationTestCase):
             userid='foo.bar',
             version=1,
             signers=['foo.bar@example.com'],
+            editors=['bar.foo@example.com'],
             job_id='1',
-            redirect_url='redirect@example.com')
+            redirect_url='redirect@example.com',
+            invite_url='redirect@example.com/invite')
 
         self.assertDictEqual(
             {
@@ -41,8 +43,15 @@ class TestPendingSigningJob(IntegrationTestCase):
                         'userid': '',
                     }
                 ],
+                'editors': [
+                    {
+                        'email': 'bar.foo@example.com',
+                        'userid': '',
+                    }
+                ],
                 'job_id': '1',
-                'redirect_url': 'redirect@example.com'
+                'redirect_url': 'redirect@example.com',
+                'invite_url': 'redirect@example.com/invite',
             }, metadata.serialize())
 
     def test_can_be_converted_to_a_signed_version(self):
