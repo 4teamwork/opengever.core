@@ -190,3 +190,119 @@ class TestSignTransitions(SolrIntegrationTestCase):
 
         self.assertEqual('http://external.example.org/signing-requests/123',
                          browser.json.get('redirect_url'))
+
+
+class TestUpdatePendingSigningJobPost(SolrIntegrationTestCase):
+
+    features = ['sign']
+
+    @browsing
+    def test_raises_forbidden_if_context_is_not_in_signing_state(self, browser):
+        with self.login(self.regular_user):
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Forbidden):
+            browser.open(url, method='PATCH', headers=self.api_headers)
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_access_token_is_required_in_payload(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        with self.login(self.regular_user, browser):
+            browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                         method='POST',
+                         headers=self.api_headers)
+
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        with browser.expect_http_error(400):
+            browser.open(url,
+                         method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({}))
+
+        self.assertEqual(
+            {'message': "Property 'access_token' is required",
+             'type': 'BadRequest'},
+            browser.json)
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_requires_a_valid_access_token(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        with self.login(self.regular_user, browser):
+            browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                         method='POST',
+                         headers=self.api_headers)
+
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        browser.exception_bubbling = True
+        with self.assertRaises(Unauthorized):
+            browser.open(url,
+                         method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({
+                             'access_token': urlsafe_b64encode('<invalid-token>'),
+                             'signature_data': {
+                                 'editors': ['foo1@example.com'],
+                                 'signers': ['bar1@example.com'],
+                             }
+                         }))
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_data_attribute_is_required_in_payload(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        with self.login(self.regular_user, browser):
+            browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                         method='POST',
+                         headers=self.api_headers)
+
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        with browser.expect_http_error(400):
+            browser.open(url,
+                         method='PATCH',
+                         headers=self.api_headers,
+                         data=json.dumps({
+                             'access_token': urlsafe_b64encode('<invalid-token>'),
+                         }))
+
+        self.assertEqual(
+            {'message': "Property 'signature_data' is required",
+             'type': 'BadRequest'},
+            browser.json)
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_can_update_signers_and_editors_of_pending_job(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        with self.login(self.regular_user, browser=browser):
+            browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                         method='POST',
+                         headers=self.api_headers)
+
+            token = urlsafe_b64encode(Signer(self.document).token_manager._get_token())
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        browser.open(url,
+                     method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({
+                         'access_token': token,
+                         'signature_data': {
+                             'editors': ['foo1@example.com'],
+                             'signers': ['bar1@example.com'],
+                         }
+                     }))
+
+        self.assertEqual([{'email': 'foo1@example.com', 'userid': ''}],
+                         browser.json.get('editors'))
+        self.assertEqual([{'email': 'bar1@example.com', 'userid': ''}],
+                         browser.json.get('signers'))
