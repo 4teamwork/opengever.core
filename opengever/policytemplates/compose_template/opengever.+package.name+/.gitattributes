@@ -1,0 +1,2 @@
+*.env filter=sops-dotenv
+*.env diff=sops-diff

@@ -21,18 +21,30 @@ class CreatePolicyCLI(object):
         args.append('-O')
         args.append(target_dir)
 
-        policy = input("What policy type do you want to create?\n 1: GEVER \n 2: Teamraum\n")
+        policy = input(
+            "What policy type do you want to create?\n"
+            " 1: GEVER (Compose)\n"
+            " 2: Teamraum (Compose)\n"
+            " 3: GEVER (Buildout)\n"
+            " 4: Teamraum (Buildout)\n"
+        )
         if policy == 1:
+            template = 'opengever.policytemplates:compose_template'
             init_file = 'opengever/policytemplates/gever.ini'
         elif policy == 2:
+            template = 'opengever.policytemplates:compose_template'
+            init_file = 'opengever/policytemplates/teamraum.ini'
+        elif policy == 3:
+            template = 'opengever.policytemplates:policy_template'
+            init_file = 'opengever/policytemplates/gever.ini'
+        elif policy == 4:
+            template = 'opengever.policytemplates:policy_template'
             init_file = 'opengever/policytemplates/teamraum.ini'
         else:
             print('Invalid choice')
             sys.exit()
 
-        template = 'opengever.policytemplates:policy_template'
         args.append(template)
-
         args.append('--config={}'.format(init_file))
         if 'opengever.core.testserver.OPENGEVER_TESTSERVER' in remainder:
             remainder.remove('opengever.core.testserver.OPENGEVER_TESTSERVER')

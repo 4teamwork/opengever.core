@@ -1,0 +1,7 @@
+{{% if setup.enable_private_folder %}}
+from opengever.private import enable_opengever_private
+
+
+def default_content_installed(site):
+    enable_opengever_private()
+{{% endif %}}
