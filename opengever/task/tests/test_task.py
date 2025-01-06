@@ -629,6 +629,29 @@ class TestDeadlineDefaultValue(IntegrationTestCase):
         expected = today + timedelta(days=3)
         self.assertEqual(expected.date(), self.empty_dossier.objectValues()[0].deadline)
 
+    @browsing
+    def test_task_text_is_xss_safe(self, browser):
+
+        self.login(self.dossier_responsible, browser=browser)
+
+        browser.open(self.empty_dossier, view='++add++opengever.task.task')
+
+        task_text = '<p>text comes here</p><img src="http://not.found/" onerror="script:alert(\'XSS\');" />'
+        browser.fill({'Title': 'Test task',
+                      'Task type': 'comment',
+                      'Text': task_text})
+
+        form = browser.find_form_by_field('Responsible')
+        form.find_widget('Responsible').fill(
+            get_current_org_unit().id() + ':' + self.dossier_responsible.getId())
+
+        browser.css('#form-buttons-save').first.click()
+
+        task_text_output = self.empty_dossier.objectValues()[0].text.output
+        expected_task_text = '<p>text comes here</p><img src="http://not.found/" />'
+        self.assertNotIn('onerror="script:alert(\'XSS\');"', task_text_output)
+        self.assertIn(expected_task_text, task_text_output)
+
 
 class TestTaskTypeTranslations(IntegrationTestCase):
 

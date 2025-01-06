@@ -8,6 +8,7 @@ from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 from plone import api
 from plone.app.relationfield.event import update_behavior_relations
+from plone.app.textfield.value import RichTextValue
 from z3c.relationfield.relation import RelationValue
 from zope.component import getUtility
 from zope.intid import IIntIds
@@ -28,7 +29,7 @@ class TestTaskSolrIndexer(SolrIntegrationTestCase):
         self.login(self.regular_user)
 
         self.task.title = u'Test Aufgabe'
-        self.task.text = u'Lorem ipsum'
+        self.task.text = RichTextValue(u'Lorem ipsum')
         self.task.task_type = u'comment'
         self.task.responsible = self.regular_user.getId()
 

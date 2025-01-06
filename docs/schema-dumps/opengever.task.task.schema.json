@@ -84,10 +84,10 @@
             "_zope_schema_type": "Date"
         },
         "text": {
-            "type": "string",
+            "type": "object",
             "title": "Beschreibung",
             "description": "Geben Sie eine detaillierte Arbeitsanweisung oder einen Kommentar ein",
-            "_zope_schema_type": "Text"
+            "_zope_schema_type": "RichText"
         },
         "relatedItems": {
             "type": "array",
