@@ -945,7 +945,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         main_task = children['added'].pop()
 
         self.assertEqual(u'Neuanstellung Hugo B\xf6ss', main_task.title)
-        self.assertEqual(u'Bla bla', main_task.text)
+        self.assertEqual(u'Bla bla', main_task.text.output)
         self.assertEqual(date(2021, 12, 12), main_task.deadline)
 
     @browsing
@@ -962,12 +962,11 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
                     '@id': self.tasktemplate.absolute_url(),
                     'deadline': u'2021-12-12',
                     'title': u'Arbeitsplatz Hugo B\xf6ss',
-                    'text': None,
+                    'text': u'',
                 }
             ],
             'start_immediately': True
         }
-
         with self.observe_children(self.dossier) as children:
             browser.open('{}/@trigger-task-template'.format(
                          self.dossier.absolute_url()),
@@ -981,7 +980,7 @@ class TestTriggerTaskTemplatePost(IntegrationTestCase):
         subtask = subtasks.pop()
 
         self.assertEqual(u'Arbeitsplatz Hugo B\xf6ss', subtask.title)
-        self.assertIsNone(subtask.text)
+        self.assertEqual(subtask.text.output, u'')
         self.assertEqual(date(2021, 12, 12), subtask.deadline)
 
     @browsing

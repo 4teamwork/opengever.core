@@ -9,6 +9,7 @@ from opengever.tasktemplates.content.templatefoldersschema import sequence_type_
 from opengever.tasktemplates.tasktemplatefolder import ProcessCreator
 from opengever.tasktemplates.tasktemplatefolder import ProcessDataPreprocessor
 from plone import api
+from plone.app.textfield import RichText
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IFieldDeserializer
@@ -76,11 +77,13 @@ class ITaskContainer(model.Schema):
         max_length=256,
     )
 
-    text = schema.Text(
+    text = RichText(
         title=task_mf(u"label_text", default=u"Text"),
         description=task_mf(u"help_text", default=u""),
+
         required=False,
-    )
+        default_mime_type='text/html',
+        output_mime_type='text/x-html-safe')
 
     deadline = schema.Date(
         title=task_mf(u"label_deadline", default=u"Deadline"),
@@ -96,9 +99,7 @@ class ProcessPost(Service):
     def reply(self):
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
-
         data = json_body(self.request)
-
         # Before deserializing the fields we need to replace the interactive
         # actors, which are not valid as such.
         data_processor = ProcessDataPreprocessor(self.context, data)
@@ -184,8 +185,9 @@ class ProcessPost(Service):
 
         for name, value in data.items():
             field = schema.get(name)
-            if field is None:
+            if None in (field, value):
                 continue
+
             deserializer = queryMultiAdapter(
                 (field, self.context, self.request), IFieldDeserializer)
             data[name] = deserializer(value)
