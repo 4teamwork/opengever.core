@@ -17,6 +17,7 @@ from sqlalchemy import bindparam
 from sqlalchemy import delete
 from sqlalchemy import select
 from sqlalchemy.sql.expression import false
+from time import time
 from zope.schema import getFields
 import logging
 import os.path
@@ -31,6 +32,16 @@ Attribute = namedtuple(
 )
 
 CACHE = {}
+
+
+def timer(func=time):
+    """Set up a generator returning the elapsed time since the last call """
+    def gen(last=func()):
+        while True:
+            elapsed = func() - last
+            last = func()
+            yield '%.3fs' % elapsed
+    return gen()
 
 
 def rename_dict_key(dict_, old_key, new_key):
@@ -183,6 +194,7 @@ class CatalogSyncer(object):
             return conn.execute(stmt).fetchall()
 
     def sync(self):
+        logger.info('Processing %s...', self.table)
         self.init_sync()
         catalog_items = self.get_catalog_items()
         sql_items = self.get_sql_items()
@@ -206,12 +218,25 @@ class CatalogSyncer(object):
             ):
                 modified.add(key)
 
+        total_time = timer()
+        lap_time = timer()
+        counter = 0
+
         inserts = []
+        added_len = len(added)
         for key in added:
             item = catalog_items_by_key[key]
             obj = item._unrestrictedGetObject()
             inserts.append(self.get_values(obj))
             self.post_insert_obj(obj)
+            counter += 1
+            if counter % 100 == 0:
+                logger.info(
+                    '%d of %d items processed (%.2f %%), last batch in %s',
+                    counter, added_len, 100 * float(counter) / added_len, next(lap_time),
+                )
+        logger.info('Processed %d items in %s.', counter, next(total_time))
+
         table = metadata.tables[self.table]
         with engine.connect() as conn:
             conn.execute(table.insert(), inserts)
