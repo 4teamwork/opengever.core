@@ -209,7 +209,7 @@ class CatalogSyncer(object):
         inserts = []
         for key in added:
             item = catalog_items_by_key[key]
-            obj = item.getObject()
+            obj = item._unrestrictedGetObject()
             inserts.append(self.get_values(obj))
             self.post_insert_obj(obj)
         table = metadata.tables[self.table]
@@ -221,7 +221,7 @@ class CatalogSyncer(object):
         updates = []
         for key in modified:
             item = catalog_items_by_key[key]
-            obj = item.getObject()
+            obj = item._unrestrictedGetObject()
             updates.append(rename_dict_key(self.get_values(obj), self.sql_key, 'b_key'))
         if updates:
             with engine.connect() as conn:
