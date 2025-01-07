@@ -45,6 +45,12 @@ def timer(func=time):
     return gen()
 
 
+def chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in xrange(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 def rename_dict_key(dict_, old_key, new_key):
     dict_[new_key] = dict_.pop(old_key)
     return dict_
@@ -240,7 +246,8 @@ class CatalogSyncer(object):
 
         table = metadata.tables[self.table]
         with engine.connect() as conn:
-            conn.execute(table.insert(), inserts)
+            for chunk in chunks(inserts, 5000):
+                conn.execute(table.insert(), chunk)
         logger.info('Added %s: %s', table, len(added))
         self.post_insert()
 
