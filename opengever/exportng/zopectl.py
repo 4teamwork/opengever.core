@@ -1,3 +1,4 @@
+from opengever.base.security import elevated_privileges
 from opengever.exportng.db import metadata
 from opengever.exportng.sync import Syncer
 from zope.component.hooks import setSite
@@ -55,7 +56,8 @@ def exportng(app, args):
     path = os.path.join(site_path, options.path.lstrip('/'))
     syncer = Syncer(path=path)
     syncer.create_tables()
-    syncer.sync()
+    with elevated_privileges(user_id='zopemaster'):
+        syncer.sync()
 
 
 def setup_logging():
