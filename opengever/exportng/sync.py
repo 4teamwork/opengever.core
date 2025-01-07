@@ -13,6 +13,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.utils import iterSchemata
+from Products.CMFEditions.utilities import dereference
 from sqlalchemy import bindparam
 from sqlalchemy import delete
 from sqlalchemy import select
@@ -409,24 +410,29 @@ class DocumentSyncer(CatalogSyncer):
 
     def init_sync(self):
         self.rtool = api.portal.get_tool('portal_repository')
+        self.hstool = api.portal.get_tool('portal_historiesstorage')
         self._doc_version_inserts = []
 
     def post_insert_obj(self, obj):
         uid = obj.UID()
         history = self.rtool.getHistory(obj)
         if len(history) > 0:
-            for version in history:
-                data = get_filedata(version.object, None)
-                if data is not None:
-                    self._doc_version_inserts.append({
-                        'objexternalkey': uid,
-                        'version': version.version_id,
-                        'filepath': data['filepath'],
-                        'filename': data['filename'],
-                        'versby': version.sys_metadata['principal'],
-                        'verschangedat': datetime.fromtimestamp(version.sys_metadata['timestamp']),
-                        'versdesc': version.sys_metadata['comment'],
-                    })
+            obj, history_id = dereference(obj=obj)
+            for version in range(len(history)):
+                vdata = self.hstool.retrieve(history_id, selector=version)
+                if 'CloneNamedFileBlobs/opengever.document.document.IDocumentSchema.file' not in vdata.referenced_data:
+                    continue
+                filepath = vdata.referenced_data[
+                    'CloneNamedFileBlobs/opengever.document.document.IDocumentSchema.file'].committed()
+                self._doc_version_inserts.append({
+                    'objexternalkey': uid,
+                    'version': version,
+                    'filepath': filepath,
+                    'filename': vdata.object.object.file.filename,
+                    'versby': vdata.metadata['sys_metadata']['principal'],
+                    'verschangedat': datetime.fromtimestamp(vdata.metadata['sys_metadata']['timestamp']),
+                    'versdesc': vdata.metadata['sys_metadata']['comment'],
+                })
         else:
             data = get_filedata(obj, None)
             if data is not None:
