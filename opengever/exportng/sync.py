@@ -392,26 +392,28 @@ class DocumentSyncer(CatalogSyncer):
         if len(history) > 0:
             for version in history:
                 data = get_filedata(version.object, None)
-                self._doc_version_inserts.append({
-                    'objexternalkey': uid,
-                    'version': version.version_id,
-                    'filepath': data['filepath'],
-                    'filename': data['filename'],
-                    'versby': version.sys_metadata['principal'],
-                    'verschangedat': datetime.fromtimestamp(version.sys_metadata['timestamp']),
-                    'versdesc': version.sys_metadata['comment'],
-                })
+                if data is not None:
+                    self._doc_version_inserts.append({
+                        'objexternalkey': uid,
+                        'version': version.version_id,
+                        'filepath': data['filepath'],
+                        'filename': data['filename'],
+                        'versby': version.sys_metadata['principal'],
+                        'verschangedat': datetime.fromtimestamp(version.sys_metadata['timestamp']),
+                        'versdesc': version.sys_metadata['comment'],
+                    })
         else:
             data = get_filedata(obj, None)
-            self._doc_version_inserts.append({
-                'objexternalkey': uid,
-                'version': 0,
-                'filepath': data['filepath'],
-                'filename': data['filename'],
-                'versby': obj.Creator(),
-                'verschangedat': as_datetime(obj, 'modified'),
-                'versdesc': '',
-            })
+            if data is not None:
+                self._doc_version_inserts.append({
+                    'objexternalkey': uid,
+                    'version': 0,
+                    'filepath': data['filepath'],
+                    'filename': data['filename'],
+                    'versby': obj.Creator(),
+                    'verschangedat': as_datetime(obj, 'modified'),
+                    'versdesc': '',
+                })
         return
 
     def post_insert(self):
