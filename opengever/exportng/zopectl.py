@@ -31,7 +31,7 @@ def exportng(app, args):
     parser.add_argument(
         '--path', '-p',
         help='Restrict export to the given path',
-        default=None,
+        default='',
     )
 
     # If run with plone.recipe.zope2instance we need to strip the first 2 args
