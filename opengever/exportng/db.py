@@ -10,6 +10,7 @@ from sqlalchemy import Table
 from sqlalchemy import Text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql import func
+import os
 
 
 COLUMN_TYPES = {
@@ -22,7 +23,9 @@ COLUMN_TYPES = {
     'boolean': Boolean,
 }
 
-engine = create_engine('postgresql:///exportng')
+dsn = os.environ.get('EXPORTNG_DSN', 'postgresql:///exportng')
+
+engine = create_engine(dsn)
 metadata = MetaData(bind=engine)
 
 
