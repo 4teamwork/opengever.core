@@ -111,8 +111,9 @@ def review_state_changed(task, event):
             task.close_main_task()
             return
 
-    if event.action not in ['task-transition-open-tested-and-closed',
-                            'task-transition-resolved-tested-and-closed',
+    if event.action not in ['task-transition-open-resolved',
+                            'task-transition-open-tested-and-closed',
+                            'task-transition-in-progress-resolved',
                             'task-transition-in-progress-tested-and-closed',
                             'task-transition-rejected-skipped']:
         return
