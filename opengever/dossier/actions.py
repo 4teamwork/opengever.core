@@ -25,6 +25,9 @@ class DossierListingActions(BaseListingActions):
     def is_edit_items_available(self):
         return True
 
+    def is_change_items_state_available(self):
+        return True
+
     def is_export_dossiers_available(self):
         return True
 
@@ -41,6 +44,9 @@ class DossierListingActions(BaseListingActions):
 class PrivateDossierListingActions(BaseListingActions):
 
     def is_edit_items_available(self):
+        return True
+
+    def is_change_items_state_available(self):
         return True
 
     def is_export_dossiers_available(self):
