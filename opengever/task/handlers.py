@@ -101,8 +101,8 @@ def review_state_changed(task, event):
     # on the parent task. We need to ensure, that every parent task is in progress.
     if event.action not in ['task-transition-open-planned',
                             'task-transition-planned-open',
-                            'task-transition-rejected-skipped',
-                            'task-transition-reassign']:
+                            'task-transition-reassign',
+                            'task-transition-rejected-skipped']:
         task.maybe_start_parent_task()
 
     if event.action in FINAL_TRANSITIONS:
@@ -111,11 +111,11 @@ def review_state_changed(task, event):
             task.close_main_task()
             return
 
-    if event.action not in ['task-transition-open-resolved',
-                            'task-transition-open-tested-and-closed',
-                            'task-transition-in-progress-resolved',
+    if event.action not in ['task-transition-open-tested-and-closed',
+                            'task-transition-resolved-tested-and-closed',
                             'task-transition-in-progress-tested-and-closed',
-                            'task-transition-rejected-skipped']:
+                            'task-transition-rejected-skipped'
+                            ]:
         return
 
     if task.is_part_of_sequential_process:

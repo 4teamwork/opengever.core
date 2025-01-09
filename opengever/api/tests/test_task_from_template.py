@@ -33,46 +33,10 @@ class TestSequentialTaskPassDocumentsToNextTask(IntegrationTestCase):
         self.assertItemsEqual([], self.seq_subtask_2.task_documents())
 
     @browsing
-    def test_can_pass_documents_to_next_task_with_open_resolved_transition(self, browser):
-        self.login(self.secretariat_user, browser=browser)
-
-        ITask(self.seq_subtask_1).task_type = 'correction'
-        url = '{}/@workflow/task-transition-open-resolved'.format(
-            self.seq_subtask_1.absolute_url())
-        data = {'pass_documents_to_next_task': True}
-
-        browser.open(url, method='POST', data=json.dumps(data),
-                     headers=self.api_headers)
-
-        self.assertEqual(200, browser.status_code)
-        self.assertItemsEqual(
-            [self.document, self.seq_subtask_1_document],
-            [item.to_object for item in ITask(self.seq_subtask_2).relatedItems])
-
-    @browsing
     def test_can_pass_documents_to_next_task_with_open_tested_and_closed_transition(self, browser):
         self.login(self.secretariat_user, browser=browser)
 
         url = '{}/@workflow/task-transition-open-tested-and-closed'.format(
-            self.seq_subtask_1.absolute_url())
-        data = {'pass_documents_to_next_task': True}
-
-        browser.open(url, method='POST', data=json.dumps(data),
-                     headers=self.api_headers)
-
-        self.assertEqual(200, browser.status_code)
-        self.assertItemsEqual(
-            [self.document, self.seq_subtask_1_document],
-            [item.to_object for item in ITask(self.seq_subtask_2).relatedItems])
-
-    @browsing
-    def test_can_pass_documents_to_next_task_with_in_progress_resolved_transition(self, browser):
-        self.login(self.secretariat_user, browser=browser)
-
-        ITask(self.seq_subtask_1).task_type = 'correction'
-        api.content.transition(obj=self.seq_subtask_1, transition='task-transition-open-in-progress')
-
-        url = '{}/@workflow/task-transition-in-progress-resolved'.format(
             self.seq_subtask_1.absolute_url())
         data = {'pass_documents_to_next_task': True}
 
