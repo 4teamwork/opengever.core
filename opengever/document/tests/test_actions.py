@@ -21,15 +21,17 @@ class TestDocumentListingActions(IntegrationTestCase):
 
     def test_document_actions_for_reporoot_and_repofolder(self):
         self.login(self.regular_user)
-        expected_actions = [u'edit_items', u'attach_documents', u'copy_items', u'move_items',
-                            u'zip_selected', u'export_documents']
+        expected_actions = [u'edit_items', u'change_items_state', u'attach_documents',
+                            u'copy_items', u'move_items', u'zip_selected',
+                            u'export_documents']
         self.assertEqual(expected_actions, self.get_actions(self.repository_root))
         self.assertEqual(expected_actions, self.get_actions(self.branch_repofolder))
 
     def test_document_actions_for_open_dossier(self):
         self.login(self.regular_user)
-        expected_actions = [u'edit_items', u'attach_documents', u'copy_items', u'move_items',
-                            u'create_task', u'zip_selected', u'export_documents', u'trash_content']
+        expected_actions = [u'edit_items', u'change_items_state', u'attach_documents',
+                            u'copy_items', u'move_items', u'create_task',
+                            u'zip_selected', u'export_documents', u'trash_content']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
         self.assertEqual(expected_actions, self.get_actions(self.meeting_dossier))
 
@@ -42,8 +44,9 @@ class TestDocumentListingActions(IntegrationTestCase):
     def test_document_actions_for_dossier_with_meeting_feature(self):
         self.login(self.regular_user)
         self.activate_feature('meeting')
-        expected_actions = [u'edit_items', u'attach_documents', u'copy_items', u'move_items',
-                            u'create_task', u'create_proposal', u'zip_selected',
+        expected_actions = [u'edit_items', u'change_items_state', u'attach_documents',
+                            u'copy_items', u'move_items', u'create_task',
+                            u'create_proposal', u'zip_selected',
                             u'export_documents', u'trash_content']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
         self.assertEqual(expected_actions, self.get_actions(self.meeting_dossier))
