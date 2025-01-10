@@ -158,7 +158,7 @@ class KuBParticipationHandler(PloneParticipationHandler):
     def __init__(self, context):
         self.context = context
         self.annotations = IAnnotations(self.context)
-        self.participant_source = KuBContactsSourceBinder()(self.context)
+        self.participant_source = KuBContactsSourceBinder(only_active=True)(self.context)
 
 
 class IParticipationData(Interface):
