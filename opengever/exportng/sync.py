@@ -410,6 +410,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('version', 'version', 'integer', None),
         Attribute('filepath', 'filepath', 'varchar', None),
         Attribute('filname', 'filename', 'varchar', None),
+        Attribute('filesize', 'filesize', 'integer', None),
         Attribute('principal', 'versby', 'varchar', None),
         Attribute('timestamp', 'verschangedat', 'datetime', None),
         Attribute('comment', 'versdesc', 'varchar', None),
@@ -431,11 +432,13 @@ class DocumentSyncer(CatalogSyncer):
                     continue
                 filepath = vdata.referenced_data[
                     'CloneNamedFileBlobs/opengever.document.document.IDocumentSchema.file'].committed()
+                filesize = os.stat(filepath).st_size
                 self._doc_version_inserts.append({
                     'objexternalkey': uid,
                     'version': version,
                     'filepath': filepath,
                     'filename': vdata.object.object.file.filename,
+                    'filesize': filesize,
                     'versby': vdata.metadata['sys_metadata']['principal'],
                     'verschangedat': datetime.fromtimestamp(vdata.metadata['sys_metadata']['timestamp']),
                     'versdesc': vdata.metadata['sys_metadata']['comment'],
@@ -448,6 +451,7 @@ class DocumentSyncer(CatalogSyncer):
                     'version': 0,
                     'filepath': data['filepath'],
                     'filename': data['filename'],
+                    'filesize': os.stat(data['filepath']).st_size,
                     'versby': obj.Creator(),
                     'verschangedat': as_datetime(obj, 'modified'),
                     'versdesc': '',
