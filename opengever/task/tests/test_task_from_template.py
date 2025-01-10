@@ -22,33 +22,6 @@ class TestSequentialTaskProcess(IntegrationTestCase):
 
     features = ('activity', )
 
-    def test_starts_next_task_when_task_gets_resolved(self):
-        self.login(self.regular_user)
-
-        # create subtask
-        subtask2 = create(Builder('task')
-                          .within(self.task)
-                          .having(responsible_client='fa',
-                                  responsible=self.regular_user.getId(),
-                                  issuer=self.dossier_responsible.getId(),
-                                  task_type='correction',
-                                  deadline=date(2016, 11, 1))
-                          .in_state('task-state-planned'))
-
-        self.set_workflow_state('task-state-in-progress', self.subtask)
-        alsoProvides(self.task, IContainSequentialProcess)
-        alsoProvides(self.subtask, IPartOfSequentialProcess)
-        alsoProvides(subtask2, IPartOfSequentialProcess)
-        self.task.set_tasktemplate_order([self.subtask, subtask2])
-
-        api.content.transition(
-            obj=self.subtask, transition='task-transition-in-progress-resolved')
-
-        self.assertEquals(
-            'task-state-resolved', api.content.get_state(self.subtask))
-        self.assertEquals(
-            'task-state-open', api.content.get_state(subtask2))
-
     def test_starts_next_task_when_task_gets_closed(self):
         self.login(self.regular_user)
 
@@ -267,7 +240,7 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-resolved', api.content.get_state(subtask1))
         self.assertEquals(
-            'task-state-open', api.content.get_state(subtask2))
+            'task-state-planned', api.content.get_state(subtask2))
 
     def test_record_activity_when_open_next_task(self):
         self.login(self.regular_user)
@@ -296,7 +269,7 @@ class TestSequentialTaskProcess(IntegrationTestCase):
         self.assertEquals(
             'task-state-resolved', api.content.get_state(self.subtask))
         self.assertEquals(
-            'task-state-open', api.content.get_state(subtask2))
+            'task-state-planned', api.content.get_state(subtask2))
 
         activities = Resource.query.get_by_oguid(
             Oguid.for_object(subtask2)).activities
@@ -680,13 +653,13 @@ class TestCloseTaskFromTemplate(IntegrationTestCase):
             'task-state-in-progress', api.content.get_state(self.sequential_task))
 
         api.content.transition(
-            obj=self.seq_subtask_3, transition='task-transition-open-tested-and-closed')
+            obj=self.seq_subtask_1, transition='task-transition-resolved-tested-and-closed')
 
         self.assertEquals(
             'task-state-in-progress', api.content.get_state(self.sequential_task))
 
         api.content.transition(
-            obj=self.seq_subtask_1, transition='task-transition-resolved-tested-and-closed')
+            obj=self.seq_subtask_3, transition='task-transition-open-tested-and-closed')
 
         self.assertEquals(
             'task-state-tested-and-closed', api.content.get_state(self.sequential_task))
