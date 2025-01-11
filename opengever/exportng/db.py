@@ -45,4 +45,6 @@ def create_table(table, mapping):
     cols.append(Column('_deleted', Boolean, index=True, default=False))
     cols.append(Column('_imported_at', DateTime, index=True, nullable=True))
     cols.append(Column('_objaddress', String, index=True, nullable=True))
+    if table == 'document_versions':
+        cols.append(Column('_uploaded_at', DateTime, index=True, nullable=True))
     Table(table, metadata, *cols)
