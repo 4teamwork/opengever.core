@@ -410,7 +410,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('version', 'version', 'integer', None),
         Attribute('filepath', 'filepath', 'varchar', None),
         Attribute('filname', 'filename', 'varchar', None),
-        Attribute('filesize', 'filesize', 'integer', None),
+        Attribute('filesize', 'filesize', 'bigint', None),
         Attribute('principal', 'versby', 'varchar', None),
         Attribute('timestamp', 'verschangedat', 'datetime', None),
         Attribute('comment', 'versdesc', 'varchar', None),
