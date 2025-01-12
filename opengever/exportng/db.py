@@ -1,3 +1,4 @@
+from sqlalchemy import BigInteger
 from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import create_engine
@@ -21,6 +22,7 @@ COLUMN_TYPES = {
     'date': Date,
     'datetime': DateTime,
     'boolean': Boolean,
+    'bigint': BigInteger,
 }
 
 dsn = os.environ.get('EXPORTNG_DSN', 'postgresql:///exportng')
