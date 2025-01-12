@@ -474,7 +474,8 @@ class OGDSSyncer(object):
             return conn.execute(stmt).fetchall()
 
     def get_ogds_items(self):
-        return self.model.query.all()
+        distinct_attr = getattr(self.model, self.key)
+        return self.model.query.distinct(distinct_attr).all()
 
     def get_values(self, item):
         data = {}
@@ -503,6 +504,7 @@ class UserSyncer(OGDSSyncer):
 
     table = 'users'
     model = User
+    key = 'email'
 
     mapping = [
         Attribute('email', 'email', 'varchar', None),
@@ -516,6 +518,7 @@ class GroupSyncer(OGDSSyncer):
 
     table = 'groups'
     model = Group
+    key = 'groupname'
 
     mapping = [
         Attribute('groupname', 'groupname', 'varchar', None),
