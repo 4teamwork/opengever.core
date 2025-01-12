@@ -114,6 +114,10 @@ def userid_to_email(userid):
     return userid_email_mapping.get(userid, userid)
 
 
+def get_creator(obj, attrname):
+    return userid_to_email(obj.Creator())
+
+
 def get_responsible(obj, attrname):
     userid = dexterity_field_value(obj, attrname)
     return userid_to_email(userid)
@@ -339,7 +343,7 @@ class DossierSyncer(CatalogSyncer):
         # Attribute('touched', 'touched', 'datetime', None)
         Attribute('title', 'botitle', 'varchar', None),
         Attribute('description', 'bodescription', 'varchar', None),
-        Attribute('Creator', 'objcreatedby', 'varchar', None),
+        Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
         # Attribute('keywords', 'keywords', 'varchar', None),
@@ -385,7 +389,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('title', 'objname', 'varchar', None),
-        Attribute('Creator', 'objcreatedby', 'varchar', None),
+        Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('file', '_file', 'jsonb', get_filedata),
         Attribute('extension', 'extension', 'varchar', get_file_extension),
@@ -439,7 +443,7 @@ class DocumentSyncer(CatalogSyncer):
                     'filepath': filepath,
                     'filename': vdata.object.object.file.filename,
                     'filesize': filesize,
-                    'versby': vdata.metadata['sys_metadata']['principal'],
+                    'versby': userid_to_email(vdata.metadata['sys_metadata']['principal']),
                     'verschangedat': datetime.fromtimestamp(vdata.metadata['sys_metadata']['timestamp']),
                     'versdesc': vdata.metadata['sys_metadata']['comment'],
                 })
@@ -452,7 +456,7 @@ class DocumentSyncer(CatalogSyncer):
                     'filepath': data['filepath'],
                     'filename': data['filename'],
                     'filesize': os.stat(data['filepath']).st_size,
-                    'versby': obj.Creator(),
+                    'versby': userid_to_email(obj.Creator()),
                     'verschangedat': as_datetime(obj, 'modified'),
                     'versdesc': '',
                 })
