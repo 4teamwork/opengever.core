@@ -208,8 +208,12 @@ class Task(Base):
     def sync_with(self, plone_task, graceful=False):
         """Sync this task instace with its corresponding plone taks."""
         self.title = plone_task.safe_title
-        self.text = plone_task.text
-
+        self.text = ""
+        if plone_task.text:
+            if isinstance(plone_task.text, unicode):
+                self.text = plone_task.text
+            else:
+                self.text = plone_task.text.output
         self.breadcrumb_title = plone_task.get_breadcrumb_title(
             self.MAX_BREADCRUMB_LENGTH,
         )

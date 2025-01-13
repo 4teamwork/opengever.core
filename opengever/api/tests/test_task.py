@@ -661,7 +661,10 @@ class TestTaskPatch(IntegrationTestCase):
         # returned by the PATCH request.
         self.assertEqual(3, len(browser.json['responses']))
         self.assertEqual(
-            [{u'after': u'New description',
+            [{u'after': {
+                u'data': u'New description',
+                u'content-type': u'text/html',
+                u'encoding': u'utf8'},
               u'before': None,
               u'field_id': u'text',
               u'field_title': u''}],
@@ -671,7 +674,10 @@ class TestTaskPatch(IntegrationTestCase):
         responses = browser.json['responses']
         self.assertEquals(3, len(responses))
         self.assertEquals(
-            [{u'after': u'New description',
+            [{u'after': {
+                u'data': u'New description',
+                u'content-type': u'text/html',
+                u'encoding': u'utf8'},
               u'before': None,
               u'field_id': u'text',
               u'field_title': u''}],

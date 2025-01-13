@@ -98,7 +98,7 @@ class TestTaskSQLSyncer(IntegrationTestCase):
             u'Vertr\xe4ge mit der kantonalen Finanzverwaltung', task.containing_dossier)
         self.assertEqual('', task.containing_subdossier)
         self.assertEqual(1, task.dossier_sequence_number)
-        self.assertIsNone(task.text)
+        self.assertEqual(task.text, "")
         expected_principals = [
             get_current_org_unit().users_group.id(), self.regular_user.getId(),
             get_current_org_unit().inbox_group.id(), u'rk_inbox_users']

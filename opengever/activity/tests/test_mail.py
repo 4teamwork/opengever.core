@@ -95,7 +95,7 @@ class TestEmailNotification(IntegrationTestCase):
         self.assertIn('<p>comment</p>', raw_mail)
 
     @browsing
-    def test_notification_add_task_summary_is_split_into_lines(self, browser):
+    def test_notification_add_task_summary_is_richtext(self, browser):
         self.login(self.dossier_responsible, browser)
         self.create_task_via_browser(browser, description='Multi\nline\ncomment')
         process_mail_queue()
@@ -105,9 +105,9 @@ class TestEmailNotification(IntegrationTestCase):
         raw_mail = mails[0]
         mail = raw_mail.decode("quopri")
 
-        self.assertIn('<td>Multi<br />', mail)
-        self.assertIn('line<br />', mail)
-        self.assertIn('comment</td>', mail)
+        self.assertIn('<td>Multi</p>', mail)
+        self.assertIn('<p>line</p>', mail)
+        self.assertIn('<p>comment</td>', mail)
 
     @browsing
     def test_add_task_notification_mail_includes_info_at(self, browser):
