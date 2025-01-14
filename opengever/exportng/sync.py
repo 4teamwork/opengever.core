@@ -194,6 +194,11 @@ def get_ml_titles(obj, attrname):
     return titles
 
 
+def get_references(obj, attrname):
+    value = dexterity_field_value(obj, attrname)
+    return [ref.to_object.UID() for ref in value if ref.to_object is not None]
+
+
 class CatalogSyncer(object):
 
     catalog_key = 'UID'
@@ -348,20 +353,20 @@ class DossierSyncer(CatalogSyncer):
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
         # Attribute('changed', 'changed', 'datetime', None)
         # Attribute('touched', 'touched', 'datetime', None)
         Attribute('title', 'botitle', 'varchar', None),
         Attribute('description', 'bodescription', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
-        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
-        # Attribute('keywords', 'keywords', 'varchar', None),
+        Attribute('keywords', 'objterms', 'jsonb', dexterity_field_value),
         Attribute('start', 'objvalidfrom', 'date', dexterity_field_value),
         Attribute('end', 'objvalidto', 'date', dexterity_field_value),
         Attribute('responsible', 'gboresponsible', 'varchar', get_responsible),
-        # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
-        # Attribute('relatedDossier', 'XXX', 'varchar', None),
+        Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+        Attribute('relatedDossier', 'gborelateddossiers', 'jsonb', get_references),
         # Attribute('former_reference_number', 'bonumberhistory', 'varchar', None),
         Attribute('reference_number', 'documentnumber', 'varchar', get_dossier_reference_number),
         # Attribute('dossier_type', 'dossier_type', 'varchar', None),
@@ -398,25 +403,24 @@ class DocumentSyncer(CatalogSyncer):
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
+        Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
         Attribute('title', 'objname', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
-        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('file', '_file', 'jsonb', get_filedata),
-        Attribute('extension', 'extension', 'varchar', get_file_extension),
         # Attribute('changed', 'changed', 'datetime', None)
         Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
         Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
         Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
         # Attribute('relatedItems', 'XXX', 'varchar', None),
         Attribute('description', 'dadescription', 'varchar', None),
-        # Attribute('keywords', 'XXX', 'varchar', None),
+        Attribute('keywords', 'objterms', 'jsonb', dexterity_field_value),
         Attribute('foreign_reference', 'gcexternalreference', 'varchar', None),
         Attribute('document_date', 'dadate', 'date', None),
         Attribute('receipt_date', 'gcreceiptdate', 'date', None),
         Attribute('delivery_date', 'gcdeliverydate', 'date', None),
-        # Attribute('document_type', 'XXX', 'date', None),
         Attribute('document_author', 'gcauthor', 'varchar', None),
-        # Attribute('preserved_as_paper', 'XXX', 'varchar', None),
+        # Attribute('document_type', 'XXX', 'date', None),
+        Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean', dexterity_field_value),
     ]
     versions_table = 'document_versions'
     versions_mapping = [
