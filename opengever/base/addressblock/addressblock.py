@@ -1,4 +1,6 @@
 from opengever.base.addressblock.interfaces import IAddressBlockData
+from opengever.base.addressblock.interfaces import IAddressBlockDataSettings
+from plone import api
 from zope.interface import implementer
 
 
@@ -61,6 +63,18 @@ class AddressBlockData(object):
     def is_po_box_address(self):
         return bool(self.po_box)
 
+    def is_salutation_hidden(self):
+        """Check wether the salutation flag is enabled or not"""
+        return api.portal.get_registry_record(
+            'hide_salutation', interface=IAddressBlockDataSettings
+        )
+
+    def get_salutation(self):
+        """Return the salutation if it's not hidden."""
+        if self.salutation and not self.is_salutation_hidden():
+            return self.salutation
+        return ''
+
     def format(self):
         lines = []
 
@@ -68,7 +82,7 @@ class AddressBlockData(object):
             # Private address:
             # Line 1 is salutation
             # Line 2 is person's full name, possibly preceeded by academic title
-            if self.salutation:
+            if self.get_salutation():
                 lines.append(self.salutation)
             lines.append(self.join_tokens(
                 self.academic_title,
@@ -84,7 +98,7 @@ class AddressBlockData(object):
                 # Business address, addressed to a specific person:
                 # Line 2 is the person's salutation, title, and full name
                 lines.append(self.join_tokens(
-                    self.salutation,
+                    self.get_salutation(),
                     self.academic_title,
                     self.first_name,
                     self.last_name,

@@ -225,4 +225,7 @@
   <!-- Sign -->
   <records interface="opengever.sign.interfaces.ISignSettings" />
 
+  <!-- doc props -->
+  <records interface="opengever.base.addressblock.interfaces.IAddressBlockDataSettings" />
+
 </registry>
