@@ -74,7 +74,7 @@ def as_datetime(obj, attrname):
     if isinstance(value, date):
         value = datetime.combine(value, datetime.min.time())
     elif isinstance(value, DateTime):
-        value = value.asdatetime()
+        value = value.asdatetime().replace(tzinfo=None)
     return value
 
 
@@ -183,6 +183,15 @@ def get_permissions(obj, attrname):
         if attrname in roles:
             principals.append(userid_to_email(principal))
     return principals
+
+
+def get_ml_titles(obj, attrname):
+    titles = {}
+    for attr in ['title_de', 'title_fr', 'title_en']:
+        value = dexterity_field_value(obj, attr)
+        if value:
+            titles[attr] = value
+    return titles
 
 
 class CatalogSyncer(object):
@@ -317,11 +326,12 @@ class FileplanEntrySyncer(CatalogSyncer):
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-        Attribute('title', 'botitle', 'varchar', None),
-        Attribute('description', 'bodescription', 'varchar', None),
+        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
+        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
+        Attribute('title', 'fcstitle', 'jsonb', get_ml_titles),
+        Attribute('description', 'fcsdescription', 'varchar', None),
         Attribute('location', 'felocation', 'varchar', None),
         Attribute('reference', 'fcsbusinessnumber', 'varchar', get_reference_number),
-        # Attribute('modified', 'modified', 'datetime', as_datetime),
         Attribute('valid_from', 'objvalidfrom', 'date', None),
         Attribute('valid_until', 'objvaliduntil', 'date', None),
         # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
