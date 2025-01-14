@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- ``@workflow-bulk-transition``: Add endpoint to get information about a workflow assigned to a specific object
 
 2025.1.0 (2024-01-14)
 ----------------------
