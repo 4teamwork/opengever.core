@@ -3,7 +3,18 @@
 API Changelog
 =============
 
-2024.19.0 (unreleased)
+2025.2.0 (unreleased)
+----------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2025.1.0 (2024-01-14)
 ----------------------
 
 Breaking Changes
@@ -14,7 +25,7 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@update-pending-signing-job``: Add endpoint to update pending signing job
 
-2024.18.0 (2024.12.13)
+2024.18.0 (2024-12-13)
 ----------------------
 
 Breaking Changes
