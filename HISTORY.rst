@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.1.0 (2025-01-14)
+---------------------
+
+New features:
+
+
+- Delegate signers management to the external sign service. [elioschmutz] [TI-1494]
+- Provide an endpoint to sync pending signing jobs with the external sign service. [elioschmutz] [TI-1494-2]
+
+
+Other changes:
+
+
+- Add policy template for Docker Compose deployments. [buchi] [GH-8090]
+- Restrict team watchers source to the current org-unit. [elioschmutz] [TI-1735]
+- Restrict possible participants search from finding inactive users in kub. [ran] [TI-1737]
+
+
 2024.18.0 (2024-12-13)
 ----------------------
 
