@@ -419,6 +419,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('receipt_date', 'gcreceiptdate', 'date', None),
         Attribute('delivery_date', 'gcdeliverydate', 'date', None),
         Attribute('document_author', 'gcauthor', 'varchar', None),
+        Attribute('extension', 'extension', 'varchar', get_file_extension),
         # Attribute('document_type', 'XXX', 'date', None),
         Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean', dexterity_field_value),
     ]
