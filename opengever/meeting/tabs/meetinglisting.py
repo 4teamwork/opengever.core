@@ -123,4 +123,4 @@ class MeetingListingTab(FilteredListingTab):
 @adapter(IMeetingTableSourceConfig, Interface)
 class MeetingTableSource(SqlTableSource):
 
-    searchable_columns = [Meeting.location]
+    searchable_columns = [Meeting.location, Meeting.title]
