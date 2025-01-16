@@ -1,0 +1,5 @@
+<registry>
+    <records interface="opengever.base.addressblock.interfaces.IAddressBlockDataSettings">
+        <value key="hide_salutation">False</value>
+    </records>
+</registry>

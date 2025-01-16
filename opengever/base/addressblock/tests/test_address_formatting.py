@@ -1,13 +1,13 @@
 from opengever.base.addressblock import AddressBlockData
+from opengever.testing import IntegrationTestCase
 from textwrap import dedent
-from unittest import TestCase
 
 
 def addr(text):
     return dedent(text.lstrip('\n')).strip()
 
 
-class TestAddressFormatting(TestCase):
+class TestAddressFormatting(IntegrationTestCase):
 
     def test_private_address(self):
         block = AddressBlockData(
@@ -284,5 +284,28 @@ class TestAddressFormatting(TestCase):
 
         expected = addr(u"""
         Bill Gates
+        """)
+        self.assertEqual(expected, block.format())
+
+    def test_private_address_when_hide_salutation_is_active(self):
+        from opengever.base.addressblock.interfaces import IAddressBlockDataSettings
+        from plone import api
+        api.portal.set_registry_record('hide_salutation', True,
+                                       interface=IAddressBlockDataSettings)
+        block = AddressBlockData(
+            salutation=u'Herr',
+            academic_title=u'Dr.',
+            first_name=u'Fridolin',
+            last_name=u'M\xfcller',
+
+            street_and_no=u'Murtenstrasse 42',
+            postal_code=u'3008',
+            city=u'Bern',
+        )
+
+        expected = addr(u"""
+        Dr. Fridolin M\xfcller
+        Murtenstrasse 42
+        3008 Bern
         """)
         self.assertEqual(expected, block.format())
