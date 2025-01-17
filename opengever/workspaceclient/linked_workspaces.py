@@ -453,6 +453,7 @@ class LinkedWorkspaces(object):
         proxy_post = ProxyPost(document_repr)
         proxy_post.context = self.context
         proxy_post.request = getRequest()
+        proxy_post.request_data.pop('relatedItems', None)
         gever_doc = proxy_post.reply()
 
         # Dossier
