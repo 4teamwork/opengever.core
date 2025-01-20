@@ -46,6 +46,7 @@ from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.app.textfield import RichText
 from plone.autoform import directives as form
 from plone.dexterity.content import Container
 from plone.indexer.interfaces import IIndexer
@@ -235,11 +236,12 @@ class ITask(model.Schema):
     )
 
     dexteritytextindexer.searchable('text')
-    text = schema.Text(
-        title=_(u"label_text", default=u"Text"),
+    text = RichText(
+        title=_(u'label_text', default='Text'),
         description=_(u"help_text", default=u""),
         required=False,
-    )
+        default_mime_type='text/html',
+        output_mime_type='text/x-html-safe')
 
     relatedItems = RelationList(
         title=_(u'label_related_items', default=u'Related Items'),

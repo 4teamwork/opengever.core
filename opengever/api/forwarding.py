@@ -30,8 +30,10 @@ class AssignToDossier(Service):
             if responsible:
                 task_payload.update(responsible)
 
-            transition_params['task'] = task_payload
+            if task_payload.get("text") is None:
+                task_payload["text"] = ""
 
+            transition_params['task'] = task_payload
         try:
             task = api.portal.get_tool('portal_workflow').doActionFor(
                 self.context,

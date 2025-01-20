@@ -8,11 +8,10 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- The task text field was changed from a Text field to a RichTextField.
 
 Other Changes
 ^^^^^^^^^^^^^
-
 
 2025.1.0 (2024-01-14)
 ----------------------

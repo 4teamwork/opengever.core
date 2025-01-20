@@ -14,6 +14,7 @@ from opengever.task import _
 from opengever.task import FINISHED_TASK_STATES
 from opengever.task.response_description import ResponseDescription
 from plone import api
+from plone.app.textfield import IRichTextValue
 from Products.CMFPlone import PloneMessageFactory
 from Products.CMFPlone.utils import safe_unicode
 
@@ -91,7 +92,10 @@ class TaskAddedActivity(BaseTaskActivity):
                 msg, self.translate(label, language))
             # Break lines correctly in the table rows
             if value:
-                msg += u"<br />".join(value.splitlines())
+                if IRichTextValue.providedBy(value):
+                    msg += value.output
+                else:
+                    msg += u"<br />".join(value.splitlines())
             msg += u"</td></tr>"
         return u'{}</tbody></table>'.format(msg)
 
