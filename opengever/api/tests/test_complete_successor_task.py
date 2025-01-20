@@ -239,7 +239,7 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
     def test_pass_documents_to_next_task_if_selected(self, browser):
         self.login(self.regular_user, browser)
 
-        self.seq_subtask_1.task_type = 'correction'
+        self.seq_subtask_1.task_type = 'direct-execution'
         self.seq_subtask_1.sync()
 
         successor = accept_task_with_successor(
@@ -252,13 +252,14 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
 
         # Need to trick the transition controller into thinking its a remote
         # request so that it allows the resolve transition on the predecessor
-        with patch('opengever.task.browser.transitioncontroller.'
-                   'RequestChecker.is_remote',
-                   new_callable=PropertyMock) as mock_is_remote:
+        with patch(
+            'opengever.task.browser.transitioncontroller.'
+            'RequestChecker.is_remote',
+                new_callable=PropertyMock) as mock_is_remote:
             mock_is_remote.return_value = True
 
             request_body = json.dumps({
-                'transition': 'task-transition-in-progress-resolved',
+                'transition': 'task-transition-in-progress-tested-and-closed',
                 'text': 'I finished this task.',
                 'pass_documents_to_next_task': True,
             })
@@ -269,9 +270,10 @@ class TestCompleteSuccessorTaskPost(IntegrationTestCase):
                 headers=self.api_headers)
 
         # Predecessor and successor should have been closed
-        self.assertEqual('task-state-resolved',
+        self.assertEqual('task-state-tested-and-closed',
                          api.content.get_state(self.seq_subtask_1))
-        self.assertEqual('task-state-resolved', api.content.get_state(successor))
+        self.assertEqual('task-state-tested-and-closed',
+                         api.content.get_state(successor))
 
         # relatedItems are passed to sequential successor
         self.assertEqual(1, len(self.seq_subtask_2.relatedItems))
