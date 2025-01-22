@@ -80,3 +80,41 @@ Workflow-Schema
 ~~~~~~~~~~~~~~~
 
 Gewisse Workflow Transitions, wie bspw. der Dossier-Abschluss, erwarten je nach Konfiguration weiter Angaben. Diese Schemas können mit einem Request auf den zusätzlichen API Endpoint ``@workflow-schema`` abgefragt werden. Mit dem Rückgabewert kann ein entsprechendes Formular generiert werden.
+
+Workflow-Informationen für Massen-Transitionen
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dieser Endpoint liefert Informationen über die Workflow-Transitionen, die einem bestimmten Objekt zugeordnet sind.
+
+Diese Information ist notwendig, um Massen-Transitionen in einer Benutzeroberfläche zu ermöglichen. Das UI kann anhand eines bestimmten Referenztyps (z. B. des ersten Objekts einer Liste) eine einheitliche Liste von Transitionen für alle Objekte dieser Auflistung anzeigen.
+
+   **Beispiel-Request**:
+
+   .. sourcecode:: http
+
+       GET .../dossier-1/@workflow-bulk-transition HTTP/1.1
+       Accept: application/json
+
+   **Beispiel-Antwort:**
+
+   .. sourcecode:: http
+
+       HTTP/1.1 200 OK
+       Content-Type: application/json
+
+       {
+         "@id": ".../dossier-1/@workflow-bulk-transition",
+         "transitions": [
+           {
+             "source_state_id": "dossier-state-active",
+             "target_state_id": "dossier-state-resolved",
+             "transition_id": "dossier-transition-resolve",
+             "workflow_id": "opengever_dossier_workflow"
+           },
+           {
+             "source_state_id": "dossier-state-resolved",
+             "target_state_id": "dossier-state-active",
+             "transition_id": "dossier-transition-reactivate",
+             "workflow_id": "opengever_dossier_workflow"
+           }
+         ]
+       }

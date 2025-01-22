@@ -66,6 +66,9 @@ class RepositoryDocumentListingActions(BaseDocumentListingActions):
     def is_trash_content_available(self):
         return False
 
+    def is_change_items_state_available(self):
+        return True
+
 
 @adapter(IDossierMarker, IOpengeverBaseLayer)
 class DossierDocumentListingActions(BaseDocumentListingActions):
@@ -94,6 +97,9 @@ class DossierDocumentListingActions(BaseDocumentListingActions):
         return False
 
     def is_edit_items_available(self):
+        return self.context.is_open()
+
+    def is_change_items_state_available(self):
         return self.context.is_open()
 
     def is_move_items_available(self):

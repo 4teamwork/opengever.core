@@ -749,6 +749,14 @@
       />
 
   <plone:service
+      method="GET"
+      name="@workflow-bulk-transition"
+      for="*"
+      factory=".workflow_bulk_transitions.BuklTransitionInformation"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="POST"
       name="@journal"
       for="ftw.journal.interfaces.IJournalizable"

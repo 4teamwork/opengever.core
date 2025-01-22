@@ -12,6 +12,7 @@ class BaseListingActions(object):
     def get_actions(self):
         self.actions = []
         self.maybe_add_edit_items()
+        self.maybe_add_change_items_state()
         self.maybe_add_attach_documents()
         self.maybe_add_copy_items()
         self.maybe_add_move_items()
@@ -71,6 +72,9 @@ class BaseListingActions(object):
         return False
 
     def is_edit_items_available(self):
+        return False
+
+    def is_change_items_state_available(self):
         return False
 
     def is_export_documents_available(self):
@@ -155,6 +159,10 @@ class BaseListingActions(object):
     def maybe_add_edit_items(self):
         if self.is_edit_items_available():
             self.add_action(u'edit_items')
+
+    def maybe_add_change_items_state(self):
+        if self.is_change_items_state_available():
+            self.add_action(u'change_items_state')
 
     def maybe_add_export_documents(self):
         if self.is_export_documents_available():
