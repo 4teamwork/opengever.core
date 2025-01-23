@@ -89,9 +89,9 @@ class TestTransporter(IntegrationTestCase):
 
         new_task, = self.empty_dossier.objectValues()
 
-        self.assertEquals(self.task.title, self.task.title)
-        self.assertEquals(self.task.responsible, new_task.responsible)
-        self.assertEquals(self.task.issuer, new_task.issuer)
+        self.assertEquals(self.subtask.title, new_task.title)
+        self.assertEquals(self.subtask.responsible, new_task.responsible)
+        self.assertEquals(self.subtask.issuer, new_task.issuer)
 
     def test_transport_to_with_elevated_privileges(self):
         self.login(self.administrator)
