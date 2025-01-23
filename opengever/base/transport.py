@@ -8,7 +8,9 @@ from opengever.propertysheets.creation_defaults import initialize_customproperti
 from opengever.propertysheets.field import IPropertySheetField
 from opengever.task.reminder import Reminder
 from opengever.task.task import ITask
+from plone.app.textfield import IRichText
 from plone.app.textfield import IRichTextValue
+from plone.app.textfield.value import RichTextValue
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
@@ -317,6 +319,13 @@ class DexterityFieldDataCollector(object):
                 filename = value['filename']
                 data = base64.decodestring(value['data'])
                 return field._type(data=data, filename=filename)
+
+        if self._provided_by_one_of(field, (IRichText, )):
+            return RichTextValue(
+                raw=value,
+                mimeType='text/html',
+                outputMimeType='text/x-html-safe')
+
         return value
 
     def _provided_by_one_of(self, obj, ifaces):
