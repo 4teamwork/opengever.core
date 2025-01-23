@@ -84,14 +84,17 @@ class TestTransporter(IntegrationTestCase):
     def test_transports_tasks_correctly(self):
         self.login(self.regular_user)
 
+        self.subtask.text = RichTextValue(u'Lorem ipsum')
+
         Transporter().transport_from(
             self.empty_dossier, 'plone', '/'.join(self.subtask.getPhysicalPath()))
 
         new_task, = self.empty_dossier.objectValues()
 
-        self.assertEquals(self.task.title, self.task.title)
-        self.assertEquals(self.task.responsible, new_task.responsible)
-        self.assertEquals(self.task.issuer, new_task.issuer)
+        self.assertEquals(self.subtask.title, new_task.title)
+        self.assertEquals(self.subtask.responsible, new_task.responsible)
+        self.assertEquals(self.subtask.issuer, new_task.issuer)
+        self.assertEquals(self.subtask.text.raw, new_task.text.raw)
 
     def test_transport_to_with_elevated_privileges(self):
         self.login(self.administrator)
