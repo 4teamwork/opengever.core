@@ -8,6 +8,7 @@ from opengever.base.transport import Transporter
 from opengever.propertysheets.utils import get_custom_properties
 from opengever.task.reminder import ReminderOnDate
 from opengever.testing import IntegrationTestCase
+from plone.app.textfield.value import RichTextValue
 from zExceptions import Unauthorized
 from zope.component import getAdapters
 import json
@@ -26,6 +27,8 @@ class TestTransporter(IntegrationTestCase):
         self.login(self.regular_user)
 
         self.task.set_reminder(ReminderOnDate({'date': date(2019, 12, 30)}))
+        self.task.text = RichTextValue(u'Lorem ipsum')
+
         objects_to_test = [self.task]
 
         for obj in objects_to_test:
