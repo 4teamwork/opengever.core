@@ -8,6 +8,7 @@ from opengever.propertysheets.creation_defaults import initialize_customproperti
 from opengever.propertysheets.field import IPropertySheetField
 from opengever.task.reminder import Reminder
 from opengever.task.task import ITask
+from plone.app.textfield import IRichTextValue
 from plone.dexterity.interfaces import IDexterityContent
 from plone.dexterity.utils import addContentToContainer
 from plone.dexterity.utils import createContent
@@ -290,6 +291,9 @@ class DexterityFieldDataCollector(object):
                 return None
             elif self._provided_by_one_of(field, (IRelationList,)):
                 return []
+
+        elif self._provided_by_one_of(value, (IRichTextValue, )):
+            return value.raw
 
         return value
 
