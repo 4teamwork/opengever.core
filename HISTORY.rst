@@ -10,6 +10,21 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.2.0 (2025-01-24)
+---------------------
+
+Other changes:
+
+
+- The next task in the sequence of the standard process can only be automatically opened after the responsible person closes the previous task. [amo] [TI-1331]
+- Change task `text field` from Text field to RichText field. [amo] [TI-1333]
+- Provide new ui listing action: change_items_state. [elioschmutz] [TI-1336]
+- Implement new api endpoint: @workflow-bulk-transition [elioschmutz] [TI-1336-2]
+- Add salutation visibility control based on feature flag setting. [amo] [TI-1570]
+- Enable searching for meetings by title in the meeting listing view. [amo] [TI-1747]
+- Remove 'relatedItems' field from copy_from_workspace post request. [ran] [TI-1796]
+
+
 2025.1.0 (2025-01-14)
 ---------------------
 
