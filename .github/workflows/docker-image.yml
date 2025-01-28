@@ -5,6 +5,8 @@ on:
   push:
     tags:
       - '*.*.*'
+    branches:
+      - master
 
 jobs:
   build:
@@ -45,6 +47,7 @@ jobs:
             4teamwork/ogcore
           tags: |
             type=pep440,pattern={{version}}
+            type=edge,branch=master
 
       - name: Build and push ogcore
         uses: docker/build-push-action@v6
@@ -68,6 +71,7 @@ jobs:
             4teamwork/ogtestserver
           tags: |
             type=pep440,pattern={{version}}
+            type=edge,branch=master
 
       - name: Build and push ogtestserver
         uses: docker/build-push-action@v6
