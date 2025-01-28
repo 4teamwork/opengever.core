@@ -45,8 +45,11 @@ jobs:
         with:
           images: |
             4teamwork/ogcore
+          flavor: |
+            latest=false
           tags: |
             type=pep440,pattern={{version}}
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' && github.event.base_ref == 'refs/heads/master' }}
             type=edge,branch=master
 
       - name: Build and push ogcore
@@ -69,8 +72,11 @@ jobs:
         with:
           images: |
             4teamwork/ogtestserver
+          flavor: |
+            latest=false
           tags: |
             type=pep440,pattern={{version}}
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' && github.event.base_ref == 'refs/heads/master' }}
             type=edge,branch=master
 
       - name: Build and push ogtestserver
