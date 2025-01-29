@@ -229,7 +229,6 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
-                'signers': [],
                 'editors': [
                     {
                         'email': 'foo@example.com',
@@ -264,7 +263,6 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
-                'signers': [],
                 'editors': [
                     {
                         'email': 'foo@example.com',

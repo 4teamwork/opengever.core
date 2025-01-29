@@ -96,7 +96,6 @@ class UpdatePendingSigningJob(Service):
 
         self.access_token = access_token
         self.data = {
-            'signers': data.get('signers'),
             'editors': data.get('editors'),
             'signatures': signatures,
         }

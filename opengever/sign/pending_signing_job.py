@@ -1,7 +1,6 @@
 from datetime import datetime
 from opengever.sign.pending_editor import PendingEditors
 from opengever.sign.pending_signature import PendingSignatures
-from opengever.sign.pending_signer import PendingSigners
 from opengever.sign.signed_version import SignedVersion
 from persistent import Persistent
 from plone.restapi.serializer.converters import json_compatible
@@ -13,7 +12,6 @@ class PendingSigningJob(Persistent):
                  created=None,
                  userid='',
                  version=0,
-                 signers=list(),
                  editors=list(),
                  signatures=None,
                  job_id='',
@@ -24,7 +22,6 @@ class PendingSigningJob(Persistent):
         self.created = created or datetime.now()
         self.userid = userid
         self.version = version
-        self.signers = PendingSigners.from_emails(signers)
         self.editors = PendingEditors.from_emails(editors)
         self.signatures = PendingSignatures() if signatures is None else signatures
         self.job_id = job_id
@@ -38,7 +35,6 @@ class PendingSigningJob(Persistent):
             'job_id': self.job_id,
             'redirect_url': self.redirect_url,
             'invite_url': self.invite_url,
-            'signers': self.signers.serialize(),
             'editors': self.editors.serialize(),
             'signatures': self.signatures.serialize(),
             'version': self.version,
@@ -51,10 +47,6 @@ class PendingSigningJob(Persistent):
         )
 
     def update(self, **data):
-        signers = data.get('signers')
-        if isinstance(signers, list):
-            self.signers = PendingSigners.from_emails(signers)
-
         editors = data.get('editors')
         if isinstance(editors, list):
             self.editors = PendingEditors.from_emails(editors)

@@ -8,7 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Remove no longer used ``signers`` property on serialized pending singing jobs. Use ``signatures`` instead.
 
 Other Changes
 ^^^^^^^^^^^^^

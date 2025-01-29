@@ -40,7 +40,6 @@ Der Endpoint ``@update-pending-signing-job`` dient dazu, die Listen der Signiere
         {
             "access_token": "12345",
             "signature_data": {
-                "signers": ["new-signer@example.com"],
                 "editors": ["new-editor@example.com"]
                 "signatures": [{
                     "email": "foo@example.com",
@@ -52,7 +51,6 @@ Der Endpoint ``@update-pending-signing-job`` dient dazu, die Listen der Signiere
 
 - ``access_token``: Das beim Start des Signaturprozesses generierte Token.
 - ``signature_data`` (erforderlich): Ein Objekt, das die zu aktualisierenden Felder enthält.
-  - ``signers`` (optional): Eine Liste von E-Mail-Adressen der neuen Signierenden. Wenn nicht angegeben, bleibt die Liste der Signierenden unverändert.
   - ``editors`` (optional): Eine Liste von E-Mail-Adressen der neuen Bearbeitenden. Wenn nicht angegeben, bleibt die Liste der Bearbeitenden unverändert.
   - ``signatures`` (optional): Eine Liste von Signierenden und deren Signierungs-Status.
 
@@ -108,12 +106,6 @@ Ein GET-Request auf ein Dokument stellt verschiedene Informationen zu einem aktu
             "created": "2024-02-18T15:45:00",
             "userid": "foo.bar",
             "version": 4,
-            "signers": [
-                {
-                    "email": "foo.bar@example.com",
-                    "userid": ""
-                }
-            ],
             "editors": [
                 {
                     "email": "bar.foo@example.com",
