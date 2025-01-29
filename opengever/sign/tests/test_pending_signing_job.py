@@ -137,3 +137,25 @@ class TestPendingSigningJob(IntegrationTestCase):
         self.assertItemsEqual(
             [{u'userid': u'', u'email': u'bar2@example.com'}],
             pending_signing_job.serialize().get('editors'))
+
+    def test_can_update_signatures(self):
+        self.login(self.regular_user)
+
+        pending_signing_job = PendingSigningJob(signatures=PendingSignatures())
+
+        self.assertItemsEqual([], pending_signing_job.serialize().get('signatures'))
+
+        pending_signing_job.update(signatures=['foo1@example.com'])
+
+        self.assertItemsEqual([], pending_signing_job.serialize().get('signatures'))
+
+        pending_signing_job.update(signatures=PendingSignatures([PendingSignature(email="foo@example.com")]))
+
+        self.assertItemsEqual([
+            {
+                'status': '',
+                'signed_at': '',
+                'userid': 'regular_user',
+                'email': 'foo@example.com'
+            }
+        ], pending_signing_job.serialize().get('signatures'))

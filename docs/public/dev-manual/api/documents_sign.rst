@@ -42,6 +42,11 @@ Der Endpoint ``@update-pending-signing-job`` dient dazu, die Listen der Signiere
             "signature_data": {
                 "signers": ["new-signer@example.com"],
                 "editors": ["new-editor@example.com"]
+                "signatures": [{
+                    "email": "foo@example.com",
+                    "status": "signed",
+                    "signed_at": "2025-01-28T15:00:00.000Z",
+                }]
             }
         }
 
@@ -49,6 +54,7 @@ Der Endpoint ``@update-pending-signing-job`` dient dazu, die Listen der Signiere
 - ``signature_data`` (erforderlich): Ein Objekt, das die zu aktualisierenden Felder enthält.
   - ``signers`` (optional): Eine Liste von E-Mail-Adressen der neuen Signierenden. Wenn nicht angegeben, bleibt die Liste der Signierenden unverändert.
   - ``editors`` (optional): Eine Liste von E-Mail-Adressen der neuen Bearbeitenden. Wenn nicht angegeben, bleibt die Liste der Bearbeitenden unverändert.
+  - ``signatures`` (optional): Eine Liste von Signierenden und deren Signierungs-Status.
 
 **Hinweise**
 

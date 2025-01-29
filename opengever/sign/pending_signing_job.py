@@ -58,3 +58,7 @@ class PendingSigningJob(Persistent):
         editors = data.get('editors')
         if isinstance(editors, list):
             self.editors = PendingEditors.from_emails(editors)
+
+        signatures = data.get('signatures')
+        if isinstance(signatures, PendingSignatures):
+            self.signatures = signatures

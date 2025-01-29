@@ -306,3 +306,52 @@ class TestUpdatePendingSigningJobPost(SolrIntegrationTestCase):
                          browser.json.get('editors'))
         self.assertEqual([{'email': 'bar1@example.com', 'userid': ''}],
                          browser.json.get('signers'))
+
+    @browsing
+    @requests_mock.Mocker()
+    def test_can_update_signatures_of_pending_job(self, browser, mocker):
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        with self.login(self.regular_user, browser=browser):
+            browser.open(self.document.absolute_url() + '/@workflow/' + Document.draft_signing_transition,
+                         method='POST',
+                         headers=self.api_headers)
+
+            token = urlsafe_b64encode(Signer(self.document).token_manager._get_token())
+            url = self.document.absolute_url() + '/@update-pending-signing-job'
+
+        browser.open(url,
+                     method='PATCH',
+                     headers=self.api_headers,
+                     data=json.dumps({
+                         'access_token': token,
+                         'signature_data': {
+                             'signatures': [
+                                 {
+                                     'email': 'foo@example.com',
+                                     'signed_at': '',
+                                     'status': 'open',
+                                 },
+                                 {
+                                     'email': 'bar@example.com',
+                                     'signed_at': '2025-01-28T15:00:00.000Z',
+                                     'status': 'signed',
+                                 }
+                             ],
+                         }
+                     }))
+
+        self.assertEqual(
+            [
+                {
+                    'email': 'foo@example.com',
+                    'signed_at': '',
+                    'status': 'open',
+                    'userid': 'regular_user'},
+                {
+                    'email': 'bar@example.com',
+                    'signed_at': '2025-01-28T15:00:00.000Z',
+                    'status': 'signed',
+                    'userid': ''
+                }
+            ], browser.json.get('signatures'))
