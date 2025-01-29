@@ -20,6 +20,7 @@ class TestPendingSigner(IntegrationTestCase):
             {
                 'email': 'foo@example.com',
                 'userid': 'regular_user',
+                'signed_at': None,
             }, signer.to_signatory().serialize())
 
 

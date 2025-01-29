@@ -26,6 +26,7 @@ class TestPendingSignature(IntegrationTestCase):
             {
                 'email': 'foo@example.com',
                 'userid': 'regular_user',
+                'signed_at': '2025-01-28T15:00:00.000Z',
             }, signature.to_signatory().serialize())
 
 

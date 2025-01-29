@@ -46,7 +46,7 @@ class PendingSigningJob(Persistent):
 
     def to_signed_version(self):
         return SignedVersion(
-            signatories=self.signers.to_signatories(),
+            signatories=self.signatures.to_signatories(),
             version=self.version + 1
         )
 

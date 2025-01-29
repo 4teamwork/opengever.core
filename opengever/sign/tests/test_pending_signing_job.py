@@ -75,7 +75,16 @@ class TestPendingSigningJob(IntegrationTestCase):
             created=PENDING_JOB_CREATION,
             userid='foo.bar',
             version=1,
-            signers=['bar@example.com', 'nicole.kohler@gever.local'],
+            signatures=PendingSignatures([
+                PendingSignature(
+                    email="bar@example.com",
+                    signed_at="2025-01-28T15:00:00.000Z",
+                ),
+                PendingSignature(
+                    email="nicole.kohler@gever.local",
+                    signed_at="2025-01-30T15:00:00.000Z",
+                )
+            ]),
             job_id='1',
             redirect_url='redirect@example.com')
 
@@ -89,11 +98,13 @@ class TestPendingSigningJob(IntegrationTestCase):
                 'signatories': [
                     {
                         'email': 'bar@example.com',
-                        'userid': ''
+                        'userid': '',
+                        'signed_at': '2025-01-28T15:00:00.000Z'
                     },
                     {
                         'email': 'nicole.kohler@gever.local',
-                        'userid': 'nicole.kohler'
+                        'userid': 'nicole.kohler',
+                        'signed_at': '2025-01-30T15:00:00.000Z'
                     }
                 ],
                 'version': 2

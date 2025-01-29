@@ -5,12 +5,15 @@ from opengever.testing import IntegrationTestCase
 
 class TestSignatory(IntegrationTestCase):
     def test_can_be_serialized(self):
-        signatory = Signatory(email='foo@example.com', userid='regular_user')
+        signatory = Signatory(email='foo@example.com',
+                              userid='regular_user',
+                              signed_at='2025-01-28T15:00:00.000Z')
 
         self.assertDictEqual(
             {
                 'email': 'foo@example.com',
-                'userid': 'regular_user'
+                'userid': 'regular_user',
+                'signed_at': '2025-01-28T15:00:00.000Z',
             }, signatory.serialize())
 
     def test_does_not_auto_lookup_userid(self):
@@ -20,6 +23,7 @@ class TestSignatory(IntegrationTestCase):
             {
                 'email': 'foo@example.com',
                 'userid': '',
+                'signed_at': None,
             }, signatory.serialize())
 
 

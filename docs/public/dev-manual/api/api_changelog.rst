@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Add ``signed_at`` attribute to the serialized ``signed_versions`` of a document.
 - ``@update-pending-signing-job``: Also processes signer specific metadatada provided by the ``signatures`` attribute
 - Add ``signatures`` attribute to the ``pending_signature_job`` attribute of serialized documents wich provides detailed information about specific signers
 

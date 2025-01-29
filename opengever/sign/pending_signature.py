@@ -40,4 +40,5 @@ class PendingSignature(Persistent):
 
     def to_signatory(self):
         return Signatory(userid=self.resolved_userid(),
-                         email=self.email)
+                         email=self.email,
+                         signed_at=self.signed_at)

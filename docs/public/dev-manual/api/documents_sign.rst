@@ -140,10 +140,12 @@ Ein GET-Request auf ein Dokument stellt verschiedene Informationen zu einem aktu
                     {
                         "email": "bar@example.com",
                         "userid": "bar.example"
+                        "signed_at": "2025-01-28T15:00:00.000Z"
                     },
                     {
                         "email": "foor@example.com",
                         "userid": ""
+                        "signed_at": "2025-01-30T15:00:00.000Z"
                     }
                 ]
             }
