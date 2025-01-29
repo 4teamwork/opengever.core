@@ -236,6 +236,7 @@ class TestDocumentWorkflow(IntegrationTestCase):
                         'userid': 'regular_user',
                     }
                 ],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())
@@ -270,6 +271,7 @@ class TestDocumentWorkflow(IntegrationTestCase):
                         'userid': 'regular_user',
                     }
                 ],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())

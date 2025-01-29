@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Add ``signatures`` attribute to the ``pending_signature_job`` attribute of serialized documents wich provides detailed information about specific signers
 
 2025.2.0 (2025-01-24)
 ----------------------

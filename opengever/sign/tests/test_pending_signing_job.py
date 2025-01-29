@@ -1,5 +1,7 @@
 from datetime import datetime
 from ftw.testing import freeze
+from opengever.sign.pending_signature import PendingSignature
+from opengever.sign.pending_signature import PendingSignatures
 from opengever.sign.pending_signing_job import PendingSigningJob
 from opengever.testing import IntegrationTestCase
 
@@ -28,6 +30,7 @@ class TestPendingSigningJob(IntegrationTestCase):
             version=1,
             signers=['foo.bar@example.com'],
             editors=['bar.foo@example.com'],
+            signatures=PendingSignatures([PendingSignature(email="foo@example.com")]),
             job_id='1',
             redirect_url='redirect@example.com',
             invite_url='redirect@example.com/invite')
@@ -47,6 +50,14 @@ class TestPendingSigningJob(IntegrationTestCase):
                     {
                         'email': 'bar.foo@example.com',
                         'userid': '',
+                    }
+                ],
+                'signatures': [
+                    {
+                        'email': 'foo@example.com',
+                        'signed_at': '',
+                        'status': '',
+                        'userid': 'regular_user'
                     }
                 ],
                 'job_id': '1',

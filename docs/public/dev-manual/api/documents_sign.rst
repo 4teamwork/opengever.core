@@ -114,6 +114,14 @@ Ein GET-Request auf ein Dokument stellt verschiedene Informationen zu einem aktu
                     "userid": "bar.foo"
                 }
             ],
+            "signatures": [
+                {
+                    "email": "bar.foo@example.com",
+                    "signed_at": "2025-01-28T15:00:00.000Z",
+                    "status": "signed",
+                    "userid": "bar.foo"
+                }
+            ],
             "job_id": "1",
             "redirect_url": "redirect@example.com"
         },

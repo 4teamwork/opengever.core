@@ -64,6 +64,7 @@ class TestSigning(IntegrationTestCase):
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
                 'signers': [{u'email': u'foo.bar@example.com', u'userid': u''}],
                 'editors': [{u'email': u'bar.foo@example.com', u'userid': u''}],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, signer.serialize_pending_signing_job())
