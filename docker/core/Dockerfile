@@ -94,6 +94,7 @@ COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
 COPY ./docker/core/zopectl /app/bin/
 COPY --chown=plone ./docker/core/cron /app/cron
+RUN chmod 644 /app/cron/crontab
 
 RUN mkdir -p /app/var/log /app/var/instance \
  && chown plone:plone /app/var/log \
