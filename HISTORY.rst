@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.2.1 (2025-01-30)
+---------------------
+
+Bug fixes:
+
+
+- Ensure crontab file has correct mode. [buchi] [GH-8121]
+- Fix encoding issues in classic UI. [buchi] [GH-8122]
+
+
 2025.2.0 (2025-01-24)
 ---------------------
 
