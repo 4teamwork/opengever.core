@@ -117,6 +117,11 @@ RUN wget -O /app/lib/python2.7/site-packages/certifi/cacert.pem https://raw.gith
 COPY ./docker/core/patches/hashing.py /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 RUN python2.7 -m compileall /app/lib/python2.7/site-packages/ftw/bumblebee/hashing.py
 
+# Patch p.a.theming to parse HTML with utf-8 encoding. By default the encoding is detected automatically.
+# This no longer works reliably since upgrading to Alpine 3.20, therefore we set the encoding manually
+# to utf-8 which should be fine for us.
+COPY ./docker/core/patches/p_a_theming_transform.py /app/lib/python2.7/site-packages/plone/app/theming/transform.py
+RUN python2.7 -m compileall /app/lib/python2.7/site-packages/plone/app/theming/transform.py
 
 # go-crond builder
 # -----------------------------------------------------------------------------
