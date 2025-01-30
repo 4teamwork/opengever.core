@@ -149,7 +149,7 @@ class ThemeTransform(object):
             return None
 
         try:
-            return getHTMLSerializer(result, pretty_print=False)
+            return getHTMLSerializer(result, pretty_print=False, encoding='utf-8')
         except (AttributeError, TypeError, etree.ParseError):
             return None
 
