@@ -118,9 +118,54 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
                             u'widget': None
                         }
                     }
+                },
+                u'folder_contents': {
+                    u'properties': {
+                        u'choose_custom_field_string': {
+                            u'name': u'choose_custom_field_string',
+                            u'title': u'Choose',
+                            u'type': u'string',
+                            u'widget': None
+                        },
+                        u'choosemulti_custom_field_strings': {
+                            u'name': u'choosemulti_custom_field_strings',
+                            u'title': u'Choose multi',
+                            u'type': u'array',
+                            u'widget': None
+                        },
+                        u'date_custom_field_date': {
+                            u'name': u'date_custom_field_date',
+                            u'title': u'Choose a date',
+                            u'type': u'string',
+                            u'widget': u'date'
+                        },
+                        u'f1_custom_field_string': {
+                            u'name': u'f1_custom_field_string',
+                            u'title': u'Field 1',
+                            u'type': u'string',
+                            u'widget': None
+                        },
+                        u'num_custom_field_int': {
+                            u'name': u'num_custom_field_int',
+                            u'title': u'Number',
+                            u'type': u'integer',
+                            u'widget': None
+                        },
+                        u'textline_custom_field_string': {
+                            u'name': u'textline_custom_field_string',
+                            u'title': u'A line of text',
+                            u'type': u'string',
+                            u'widget': None
+                        },
+                        u'yesorno_custom_field_boolean': {
+                            u'name': u'yesorno_custom_field_boolean',
+                            u'title': u'Yes or no',
+                            u'type': u'boolean',
+                            u'widget': None
+                        }
+                    }
                 }
-            },
-            browser.json
+            }, browser.json
         )
 
     @browsing
@@ -148,6 +193,16 @@ class TestListingCustomFieldsGet(IntegrationTestCase):
         self.assertEqual(
             {
                 u"documents": {
+                    u"properties": {
+                        u"yesorno_custom_field_boolean": {
+                            u"name": u"yesorno_custom_field_boolean",
+                            u"title": u"Y/N (regulations)",
+                            u"type": u"boolean",
+                            u"widget": None
+                        }
+                    }
+                },
+                u"folder_contents": {
                     u"properties": {
                         u"yesorno_custom_field_boolean": {
                             u"name": u"yesorno_custom_field_boolean",

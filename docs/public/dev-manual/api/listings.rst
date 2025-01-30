@@ -319,7 +319,17 @@ Endpoints verwendet werden.
                     "widget": "date"
                 }
             }
-        }
+        },
+        "folder_contents": {
+            "properties": {
+                 "hasmeetingaccess_custom_field_boolean": {
+                 "name": "hasmeetingaccess_custom_field_boolean",
+                 "title": "can access meetings",
+                 "type": "boolean",
+                 "widget": null
+              }
+            }
+          }
     }
 
 
