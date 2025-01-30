@@ -7,6 +7,7 @@ from opengever.task.util import update_reponsible_field_data
 from opengever.tasktemplates import _
 from opengever.tasktemplates.sources import TaskResponsibleSourceBinder
 from opengever.tasktemplates.sources import TaskTemplateIssuerSourceBinder
+from plone.app.textfield import RichText
 from plone.autoform import directives as form
 from plone.dexterity.browser.add import DefaultAddForm
 from plone.dexterity.browser.add import DefaultAddView
@@ -86,11 +87,12 @@ class ITaskTemplate(model.Schema):
 
     # Bad naming: comments is more appropriated
     model.primary('text')
-    text = schema.Text(
-        title=_(u"label_text", default=u"Text"),
+    text = RichText(
+        title=_(u'label_text', default='Text'),
         description=_(u"help_text", default=u""),
         required=False,
-    )
+        default_mime_type='text/html',
+        output_mime_type='text/x-html-safe')
 
     form.widget(preselected=checkbox.SingleCheckBoxFieldWidget)
     preselected = schema.Bool(
