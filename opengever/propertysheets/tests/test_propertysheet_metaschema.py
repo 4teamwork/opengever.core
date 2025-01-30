@@ -410,3 +410,34 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
             ],
             [prop['description'] for prop in field_properties.values()]
         )
+
+
+class TestWorkSpacePropertysheetMetaschemaEndpoint(IntegrationTestCase):
+    features = ('workspace',)
+
+    @browsing
+    def test_assignment_vocabularies_excluded_dossier_type(self, browser):
+        self.login(self.propertysheets_manager, browser)
+
+        headers = self.api_headers.copy()
+        headers.update({'Accept-Language': 'de-ch'})
+
+        browser.open(
+            view="@propertysheet-metaschema",
+            headers=headers,
+        )
+
+        properties = browser.json['properties']
+        self.assertEqual(
+            [
+                u'Dokument',
+                u'Dokument (Typ: Anfrage)',
+                u'Dokument (Typ: Antrag)',
+                u'Dokument (Typ: Bericht)',
+                u'Dokument (Typ: Offerte)',
+                u'Dokument (Typ: Protokoll)',
+                u'Dokument (Typ: Reglement)',
+                u'Dokument (Typ: Vertrag)',
+                u'Dokument (Typ: Weisung)',
+            ],
+            properties['assignments']['items']['enumNames'])
