@@ -114,7 +114,7 @@ class TestProcessPost(IntegrationTestCase):
             "start_immediately": False,
             "process": {
                 "title": "New employee",
-                "text": "<p> A new employee arrives.</p>",
+                "text": "A new employee arrives.",
                 "sequence_type": "sequential",
                 "items": [
                     {
@@ -138,7 +138,6 @@ class TestProcessPost(IntegrationTestCase):
         self.assertEqual(1, len(children['added']))
         main_task = children['added'].pop()
 
-        self.assertEqual("<p> A new employee arrives.</p>", main_task.text.output)
         self.assertEqual(browser.json['@id'], main_task.absolute_url())
         self.assertEqual(u'New employee', main_task.title)
         self.assertEqual(self.regular_user.getId(), main_task.issuer)

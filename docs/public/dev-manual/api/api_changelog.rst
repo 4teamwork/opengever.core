@@ -8,7 +8,7 @@ API Changelog
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-- The task template text field was changed from a Text field to a RichTextField.
+
 
 Other Changes
 ^^^^^^^^^^^^^
