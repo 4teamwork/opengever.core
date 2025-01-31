@@ -13,7 +13,7 @@ class SignServiceClient(object):
     def queue_signing(self, document, token, signers, editors):
         bumblebee_service = IBumblebeeServiceV3(getRequest())
 
-        return requests.post(
+        resp = requests.post(
             '{}/signing-jobs/'.format(self.sign_service_url),
             headers={"Accept": "application/json"},
             json={'access_token': token,
@@ -26,6 +26,9 @@ class SignServiceClient(object):
                   'signers': signers,
                   'editors': editors,
                   }).json()
+
+        resp.raise_for_status()
+        return resp.json()
 
     def abort_signing(self, job_id):
         if job_id is None:
