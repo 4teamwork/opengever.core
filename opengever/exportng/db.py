@@ -41,9 +41,7 @@ def create_table(table, mapping):
             COLUMN_TYPES[attr.col_type],
             nullable=True,
         ))
-    cols.append(Column('_created_at', DateTime, index=True, server_default=func.now()))
     cols.append(Column('_modified_at', DateTime, index=True, onupdate=func.now()))
-    cols.append(Column('_synced_at', DateTime, index=True, onupdate=func.now()))
     cols.append(Column('_deleted', Boolean, index=True, default=False))
     cols.append(Column('_imported_at', DateTime, index=True, nullable=True))
     cols.append(Column('_objaddress', String, index=True, nullable=True))
