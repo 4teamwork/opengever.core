@@ -7,6 +7,7 @@ from plone.restapi.services import Service
 LISTING_TO_SLOTS = {
     u'dossiers': get_dossier_assignment_slots,
     u'documents': get_document_assignment_slots,
+    u'folder_contents': get_document_assignment_slots,
 }
 
 

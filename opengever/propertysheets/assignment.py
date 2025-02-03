@@ -1,4 +1,5 @@
 from opengever.propertysheets import _
+from opengever.workspace import is_workspace_feature_enabled
 from zope.component import getUtility
 from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
@@ -21,8 +22,9 @@ class PropertySheetAssignmentVocabulary(object):
         for term in get_document_assignment_slots_vocab():
             assignment_terms.append(term)
 
-        for term in get_dossier_assignment_slots_vocab():
-            assignment_terms.append(term)
+        if not is_workspace_feature_enabled():
+            for term in get_dossier_assignment_slots_vocab():
+                assignment_terms.append(term)
 
         return SimpleVocabulary(assignment_terms)
 

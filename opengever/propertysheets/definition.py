@@ -4,7 +4,6 @@ from opengever.propertysheets.default_expression import attach_expression_defaul
 from opengever.propertysheets.default_from_member import attach_member_property_default_factory
 from opengever.propertysheets.exceptions import InvalidFieldType
 from opengever.propertysheets.exceptions import InvalidFieldTypeDefinition
-from opengever.propertysheets.exceptions import InvalidSchemaAssignment
 from opengever.propertysheets.helpers import add_current_value_to_allowed_terms
 from opengever.propertysheets.helpers import is_choice_field
 from opengever.propertysheets.helpers import is_multiple_choice_field
@@ -198,9 +197,11 @@ class PropertySheetSchemaDefinition(object):
                 term = assignment_slots.getTermByToken(token)
                 assignments.append(term.value)
             except LookupError:
-                raise InvalidSchemaAssignment(
-                    "The assignment '{}' is invalid.".format(token)
-                )
+                # Missing slots should be ignored without raising an error.
+                # This allows custom properties to remain usable even if the corresponding slots no longer exist.
+                # Currently, this mainly occurs during testing or local development
+                # when switching between Gever and Teamraum.
+                continue
 
         self._assignments = tuple(assignments)
 
