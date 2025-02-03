@@ -185,6 +185,11 @@ def get_permissions(obj, attrname):
     return principals
 
 
+def get_title(obj, attrname):
+    value = dexterity_field_value(obj, attrname)
+    return value.replace('\n', ' ').replace('\r', '')
+
+
 def get_ml_titles(obj, attrname):
     titles = {}
     for attr in ['title_de', 'title_fr', 'title_en']:
@@ -357,7 +362,7 @@ class DossierSyncer(CatalogSyncer):
         Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
         # Attribute('changed', 'changed', 'datetime', None)
         # Attribute('touched', 'touched', 'datetime', None)
-        Attribute('title', 'botitle', 'varchar', None),
+        Attribute('title', 'botitle', 'varchar', get_title),
         Attribute('description', 'bodescription', 'varchar', None),
         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
         Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
@@ -405,7 +410,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
-        Attribute('title', 'objname', 'varchar', None),
+        Attribute('title', 'objname', 'varchar', get_title),
         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
         # Attribute('changed', 'changed', 'datetime', None)
         Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
