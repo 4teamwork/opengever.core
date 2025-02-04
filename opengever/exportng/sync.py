@@ -309,6 +309,7 @@ class CatalogSyncer(object):
                 if callable(value):
                     value = value()
             data[attr.col_name] = value
+        data['_modified_at'] = datetime.now()
         return data
 
     def get_fields(self, obj):
