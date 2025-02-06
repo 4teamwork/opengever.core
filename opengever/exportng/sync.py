@@ -405,6 +405,10 @@ class DossierSyncer(CatalogSyncer):
     query = {
         'portal_type': 'opengever.dossier.businesscasedossier',
         'is_subdossier': False,
+        'review_state': [
+            'dossier-state-active',
+            'dossier-state-resolved',
+        ],
     }
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
@@ -447,6 +451,10 @@ class SubdossierSyncer(DossierSyncer):
     query = {
         'portal_type': 'opengever.dossier.businesscasedossier',
         'is_subdossier': True,
+        'review_state': [
+            'dossier-state-active',
+            'dossier-state-resolved',
+        ],
     }
 
 
@@ -455,6 +463,7 @@ class DocumentSyncer(CatalogSyncer):
     table = 'documents'
     query = {
         'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
+        'trashed': False,
     }
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
