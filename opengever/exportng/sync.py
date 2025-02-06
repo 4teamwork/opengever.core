@@ -134,7 +134,11 @@ def get_dossier_reference_number(obj, attrname):
 
 
 def parent_uid(obj, attrname):
-    return aq_parent(obj).UID()
+    parent = aq_parent(obj)
+    # Documents in tasks are added to the dossier
+    while parent.portal_type == 'opengever.task.task':
+        parent = aq_parent(parent)
+    return parent.UID()
 
 
 def str_upper(obj, attrname):
