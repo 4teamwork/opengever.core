@@ -1,5 +1,7 @@
 from AccessControl import Unauthorized
 from opengever.document.document import Document
+from opengever.sign.pending_signature import PendingSignature
+from opengever.sign.pending_signature import PendingSignatures
 from opengever.sign.sign import Signer
 from opengever.sign.token import InvalidToken
 from plone import api
@@ -84,8 +86,16 @@ class UpdatePendingSigningJob(Service):
         if not data:
             raise BadRequest("Property 'signature_data' is required")
 
+        signatures = PendingSignatures()
+        for signature in data.get('signatures', []):
+            signatures.append(PendingSignature(
+                email=signature.get('email'),
+                status=signature.get('status'),
+                signed_at=signature.get('signed_at'),
+            ))
+
         self.access_token = access_token
         self.data = {
-            'signers': data.get('signers'),
             'editors': data.get('editors'),
+            'signatures': signatures,
         }

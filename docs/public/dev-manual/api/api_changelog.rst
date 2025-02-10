@@ -19,11 +19,13 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Remove no longer used ``signers`` property on serialized pending singing jobs. Use ``signatures`` instead.
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Add ``signed_at`` attribute to the serialized ``signed_versions`` of a document.
+- ``@update-pending-signing-job``: Also processes signer specific metadatada provided by the ``signatures`` attribute
+- Add ``signatures`` attribute to the ``pending_signature_job`` attribute of serialized documents wich provides detailed information about specific signers
 
 2025.2.0 (2025-01-24)
 ----------------------
