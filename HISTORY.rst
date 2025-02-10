@@ -10,6 +10,29 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.3.0 (2025-02-10)
+---------------------
+
+New features:
+
+
+- Add folder_content listing to the @listing-custom-fields endpoint. [amo] [TI-1895]
+
+
+Bug fixes:
+
+
+- Ensure crontab file has correct mode. [buchi] [GH-8121]
+- Fix encoding issues in classic UI. [buchi] [GH-8122]
+- Fix requests using ftw.tokenauth impersonation feature. [elioschmutz] [TI-1911]
+
+
+Other changes:
+
+
+- Exclude the dossier assignment slot from propertysheets for teamraum deployments. [amo] [TI-1895]
+
+
 2025.2.0 (2025-01-24)
 ---------------------
 
