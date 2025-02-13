@@ -1,3 +1,4 @@
+from opengever.sign.pending_signing_job import PendingSigningJob
 from opengever.sign.signed_version import SignedVersions
 from zope.annotation import IAnnotations
 
@@ -13,10 +14,10 @@ class PendingSigningJobStorage(object):
         self.annotations = IAnnotations(self.context)
 
     def store(self, pending_signing_job):
-        self.annotations[self.ANNOTATIONS_KEY] = pending_signing_job
+        self.annotations[self.ANNOTATIONS_KEY] = pending_signing_job.to_json_object()
 
     def load(self):
-        return self.annotations.get(self.ANNOTATIONS_KEY)
+        return PendingSigningJob.from_json_object(self.annotations.get(self.ANNOTATIONS_KEY))
 
     def clear(self):
         if self.ANNOTATIONS_KEY in self.annotations:

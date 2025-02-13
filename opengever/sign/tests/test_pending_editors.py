@@ -13,6 +13,12 @@ class TestPendingEditor(IntegrationTestCase):
                 'userid': 'regular_user'
             }, signer.serialize())
 
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        pending_editor = PendingEditor(email='foo@example.com')
+
+        self.assertTrue(
+            pending_editor == PendingEditor.from_json_object(pending_editor.to_json_object()))
+
 
 class TestPendingEditors(IntegrationTestCase):
     def test_can_be_serialized(self):
@@ -25,7 +31,16 @@ class TestPendingEditors(IntegrationTestCase):
 
         self.assertEqual(2, len(container.serialize()))
         self.assertItemsEqual([signer2.email, signer1.email],
-                              [item.get('email') for item in container.serialize()])
+                              [item.get('email') for item in container.serialize()] )
+
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        container = PendingEditors([
+            PendingEditor(email='foo@example.com'),
+            PendingEditor(email='foo@example.com')
+        ])
+
+        self.assertTrue(
+            container == PendingEditors.from_json_object(container.to_json_object()))
 
     def test_can_be_created_from_a_list_of_emails(self):
         container = PendingEditors.from_emails(['foo@example.com', 'bar@example.com'])
