@@ -17,6 +17,14 @@ class TestPendingSignature(IntegrationTestCase):
                 'userid': 'regular_user'
             }, signature.serialize())
 
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        signature = PendingSignature(email='foo@example.com',
+                                     status="signed",
+                                     signed_at='2025-01-28T15:00:00.000Z')
+
+        self.assertTrue(
+            signature == PendingSignature.from_json_object(signature.to_json_object()))
+
     def test_can_be_converted_to_a_signatory(self):
         signature = PendingSignature(email='foo@example.com',
                                      status="signed",
@@ -42,6 +50,15 @@ class TestPendingSignatures(IntegrationTestCase):
         self.assertEqual(2, len(container.serialize()))
         self.assertItemsEqual([signature2.email, signature1.email],
                               [item.get('email') for item in container.serialize()])
+
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        container = PendingSignatures([
+            PendingSignature(email='foo@example.com'),
+            PendingSignature(email='bar@example.com')
+        ])
+
+        self.assertTrue(
+            container == PendingSignatures.from_json_object(container.to_json_object()))
 
     def test_can_be_converted_to_signatories(self):
         container = PendingSignatures()
