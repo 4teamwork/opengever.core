@@ -6,37 +6,39 @@ from persistent.list import PersistentList
 from plone.restapi.serializer.converters import json_compatible
 
 
-class PendingSigners(PersistentList):
-
-    @classmethod
-    def from_emails(cls, emails):
-        return cls([PendingSigner(email=email) for email in emails])
+class PendingSignatures(PersistentList):
 
     def serialize(self):
-        return json_compatible([pending_signer.serialize() for pending_signer in self])
+        return json_compatible([signature.serialize() for signature in self])
 
     def to_signatories(self):
-        return Signatories([pending_signer.to_signatory() for pending_signer in self])
+        return Signatories([signature.to_signatory() for signature in self])
 
 
-class PendingSigner(Persistent):
+class PendingSignature(Persistent):
+
     def __init__(self,
-                 userid='',
                  email='',
+                 status='',
+                 signed_at='',
                  ):
 
-        self.userid = userid
         self.email = email
+        self.status = status
+        self.signed_at = signed_at
 
     def serialize(self):
         return json_compatible({
             'userid': self.resolved_userid(),
             'email': self.email,
+            'status': self.status,
+            'signed_at': self.signed_at,
         })
 
     def resolved_userid(self):
-        return self.userid if self.userid else email_to_userid(self.email)
+        return email_to_userid(self.email)
 
     def to_signatory(self):
         return Signatory(userid=self.resolved_userid(),
-                         email=self.email)
+                         email=self.email,
+                         signed_at=self.signed_at)
