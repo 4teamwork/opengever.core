@@ -30,3 +30,28 @@ class TestTaskTemplatePost(SolrIntegrationTestCase):
             browser.json.get('responsible'))
         self.assertEquals({u'title': u'Finanz\xe4mt', u'token': u'fa'},
                           browser.json.get('responsible_client'))
+
+    @browsing
+    def test_tasktemplate_with_richt_text_description(self, browser):
+        self.login(self.administrator, browser=browser)
+        data = {
+            '@type': u'opengever.tasktemplates.tasktemplate',
+            'title': 'Testtasktemplate',
+            'task_type': {'token': 'information'},
+            'deadline': 7,
+            'issuer': {'token': INTERACTIVE_ACTOR_RESPONSIBLE_ID},
+            "responsible": {
+                'token': "fa:{}".format(self.secretariat_user.id),
+                'title': u'Finanzamt: K\xe4thi B\xe4rfuss'
+            },
+            "text": "task template description"
+        }
+        browser.open(self.tasktemplatefolder, method="POST",
+                     headers=self.api_headers, data=json.dumps(data))
+        self.assertEquals(
+            {
+                u'data': u'task template description',
+                u'content-type': u'text/html',
+                u'encoding': u'utf8'
+            }, browser.json.get("text")
+        )
