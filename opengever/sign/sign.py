@@ -54,7 +54,9 @@ class Signer(object):
 
     def finish_signing(self):
         signed_version = self.pending_signing_job.to_signed_version()
-        self.signed_versions_storage.load().add_signed_version(signed_version)
+        signed_versions = self.signed_versions_storage.load()
+        signed_versions.add_signed_version(signed_version)
+        self.signed_versions_storage.store(signed_versions)
         self.pending_signing_job_storage.clear()
 
     @property

@@ -36,5 +36,8 @@ class SignedVersionsStorage(object):
 
     def load(self, auto_init=True):
         if auto_init and self.ANNOTATIONS_KEY not in self.annotations:
-            self.annotations[self.ANNOTATIONS_KEY] = SignedVersions()
-        return self.annotations.get(self.ANNOTATIONS_KEY)
+            self.store(SignedVersions())
+        return SignedVersions.from_json_object(self.annotations.get(self.ANNOTATIONS_KEY))
+
+    def store(self, signed_versions):
+        self.annotations[self.ANNOTATIONS_KEY] = signed_versions.to_json_object()

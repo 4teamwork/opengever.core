@@ -42,6 +42,19 @@ class TestSignedVersion(IntegrationTestCase):
                 'version': 1
             }, signed_version.serialize())
 
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        signatories = Signatories([Signatory(email='foo@example.com',
+                                             signed_at='2025-01-28T15:00:00.000Z')])
+
+        signed_version = SignedVersion(
+            id_="1",
+            created=FROZEN_NOW,
+            signatories=signatories,
+            version=1)
+
+        self.assertTrue(
+            signed_version == SignedVersion.from_json_object(signed_version.to_json_object()))
+
 
 class TestSignedVersions(IntegrationTestCase):
     def test_can_be_serialized(self):
@@ -83,3 +96,25 @@ class TestSignedVersions(IntegrationTestCase):
                 u'version': 2
             }
         }, container.serialize())
+
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        signatories = Signatories([Signatory(email='foo@example.com',
+                                             signed_at='2025-01-28T15:00:00.000Z')])
+
+        signed_version_1 = SignedVersion(
+            id_=u"1",
+            created=FROZEN_NOW,
+            signatories=signatories,
+            version=1)
+
+        signed_version_2 = SignedVersion(
+            id_=u"1",
+            created=FROZEN_NOW,
+            version=2)
+
+        container = SignedVersions()
+        container.add_signed_version(signed_version_1)
+        container.add_signed_version(signed_version_2)
+
+        self.assertTrue(
+            container == SignedVersions.from_json_object((container.to_json_object())))

@@ -16,6 +16,14 @@ class TestSignatory(IntegrationTestCase):
                 'signed_at': '2025-01-28T15:00:00.000Z',
             }, signatory.serialize())
 
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        signatory = Signatory(email='foo@example.com',
+                              userid='regular_user',
+                              signed_at='2025-01-28T15:00:00.000Z')
+
+        self.assertTrue(
+            signatory == Signatory.from_json_object(signatory.to_json_object()))
+
     def test_does_not_auto_lookup_userid(self):
         signatory = Signatory(email='foo@example.com')
 
@@ -39,3 +47,12 @@ class TestSignatories(IntegrationTestCase):
         self.assertEqual(2, len(container.serialize()))
         self.assertItemsEqual([signatory2.email, signatory1.email],
                               [item.get('email') for item in container.serialize()])
+
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        container = Signatories([
+            Signatory(email='foo@example.com'),
+            Signatory(email='foo@example.com')
+        ])
+
+        self.assertTrue(
+            container == Signatories.from_json_object(container.to_json_object()))

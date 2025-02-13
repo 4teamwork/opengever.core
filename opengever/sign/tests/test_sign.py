@@ -125,9 +125,10 @@ class TestSigning(IntegrationTestCase):
         self.login(self.regular_user)
 
         signer = Signer(self.document)
-        storage = signer.signed_versions_storage.load()
-        storage.add_signed_version(SignedVersion(version=1))
-        storage.add_signed_version(SignedVersion(version=2))
+        signed_versions = signer.signed_versions_storage.load()
+        signed_versions.add_signed_version(SignedVersion(version=1))
+        signed_versions.add_signed_version(SignedVersion(version=2))
+        signer.signed_versions_storage.store(signed_versions)
 
         self.assertEqual([1, 2], signer.serialize_signed_versions().keys())
 
