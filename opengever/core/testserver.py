@@ -1,6 +1,9 @@
 from contextlib import contextmanager
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.builder import session
+from ftw.bumblebee.tests.helpers import asset as bumblebee_asset
 from ftw.testing import freeze
 from ftw.testing import staticuid
 from ftw.testing.layer import COMPONENT_REGISTRY_ISOLATION
@@ -16,6 +19,8 @@ from opengever.core.testing import activate_bumblebee_feature
 from opengever.core.testing import OpengeverFixture
 from opengever.core.testserver_zope2server import ISOLATION_READINESS
 from opengever.dossier.interfaces import IDossierType
+from opengever.sign.pending_signing_job import PendingSigningJob
+from opengever.sign.signed_version import SignedVersions
 from opengever.testing.helpers import incrementing_intids
 from plone import api
 from plone.app.testing import applyProfile
@@ -75,6 +80,106 @@ class SQLiteBackup(object):
 
 sqlite_backup = SQLiteBackup()
 redis_service_layer = RedisServiceLayer()
+
+
+def default_fixture_class():
+    from opengever.testing.fixtures import OpengeverContentFixture
+
+    class OpengeverContentFixtureTestserver(OpengeverContentFixture):
+        def create_fixture_content(self):
+            super(OpengeverContentFixtureTestserver, self).create_fixture_content()
+
+            with self.freeze_at_hour(20):
+                with self.login(self.dossier_responsible):
+                    self.create_signing_dossier()
+
+        @staticuid()
+        def create_signing_dossier(self):
+            self.signing_dossier = self.register('signing_dossier', create(
+                Builder('dossier')
+                .within(self.repofolder00)
+                .titled(u'Signieren')
+                .having(
+                    description=u'Signierte Dokumente.',
+                    responsible=self.dossier_responsible.getId(),
+                )
+            ))
+
+            self.pending_signing_document = self.register('pending_signing_document', create(
+                Builder('document')
+                .within(self.signing_dossier)
+                .titled(u'Zu signierendes Dokument')
+                .in_state('document-state-signing')
+                .attach_file_containing(
+                    bumblebee_asset('example.docx').bytes(),
+                    u'contract.docx')
+                .pending_signing_job(
+                    PendingSigningJob.from_json_object({
+                        'userid': self.dossier_responsible.getId(),
+                        'editors': [{'email': 'robert.ziegler@gever.local'}],
+                        'signatures': [
+                            {
+                                'email': 'robert.ziegler@gever.local',
+                                'status': 'open',
+                            },
+                            {
+                                'email': 'signed@example.com',
+                                'status': 'signed',
+                                'signed_at': '2025-01-28T15:00:00.000Z',
+                            },
+                            {
+                                'email': 'declined@example.com',
+                                'status': 'declined',
+                            }
+                        ]
+                    })
+                )
+            ))
+
+            self.signed_document = self.register('signed_document', create(
+                Builder('document')
+                .within(self.signing_dossier)
+                .titled(u'Signiertes Dokument')
+                .in_state('document-state-signed')
+                .attach_file_containing(
+                    bumblebee_asset('example.docx').bytes(),
+                    u'contract.docx')
+                .signed_versions(SignedVersions.from_json_object(
+                    {
+                        1: {
+                            'id': 1,
+                            'created': u'2024-02-18T15:45:00',
+                            'signatories': [
+                                {
+                                    'email': 'robert.ziegler@gever.local',
+                                    'userid': 'nicole.kohler',
+                                    'signed_at': '2025-01-28T15:00:00.000Z',
+                                }
+                            ],
+                            'version': 1
+                        },
+                        3: {
+                            'id': 3,
+                            'created': u'2025-02-18T15:45:00',
+                            'signatories': [
+                                {
+                                    'email': 'robert.ziegler@gever.local',
+                                    'userid': 'nicole.kohler',
+                                    'signed_at': '2025-01-29T15:00:00.000Z',
+                                },
+                                {
+                                    'email': 'signed@example.com',
+                                    'userid': '',
+                                    'signed_at': '2025-01-30T15:00:00.000Z',
+                                }
+                            ],
+                            'version': 3
+                        }
+                    },
+                ))
+            ))
+
+    return OpengeverContentFixtureTestserver
 
 
 class TestserverLayer(OpengeverFixture):
@@ -225,8 +330,7 @@ class TestserverLayer(OpengeverFixture):
         custom_fixture_path = os.environ.get('FIXTURE', None)
 
         if not custom_fixture_path:
-            from opengever.testing.fixtures import OpengeverContentFixture
-            return OpengeverContentFixture
+            return default_fixture_class()
 
         fixture_dir = os.path.dirname(custom_fixture_path)
         package_name = 'customfixture'
