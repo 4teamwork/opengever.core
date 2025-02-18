@@ -522,7 +522,7 @@ class DocumentSyncer(CatalogSyncer):
                     'verschangedat': datetime.fromtimestamp(vdata.metadata['sys_metadata']['timestamp']),
                     'versdesc': vdata.metadata['sys_metadata']['comment'],
                 })
-        else:
+        if len(versions) < 1:
             data = get_filedata(obj, None)
             if data is not None:
                 versions.append({
