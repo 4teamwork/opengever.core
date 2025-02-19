@@ -1,0 +1,1 @@
+Properly raise http errors when communicating with ogsign. [elioschmutz]
