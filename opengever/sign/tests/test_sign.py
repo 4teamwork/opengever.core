@@ -32,10 +32,9 @@ class TestSigning(IntegrationTestCase):
         mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
         signer = Signer(self.document)
 
-        signers = ['foo.bar@example.com']
         editors = ['bar.foo@example.com']
         with freeze(FROZEN_NOW):
-            signer.start_signing(signers, editors)
+            signer.start_signing(editors)
 
         request = mocker.last_request.json()
         request['access_token'] = '<token>'
@@ -48,7 +47,6 @@ class TestSigning(IntegrationTestCase):
                 u'document_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
                 u'download_url': u'<download-url>',
                 u'editors': [u'bar.foo@example.com'],
-                u'signers': [u'foo.bar@example.com'],
                 u'title': u'Vertr\xe4gsentwurf',
                 u'upload_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf',
                 u'update_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@update-pending-signing-job'
@@ -62,8 +60,8 @@ class TestSigning(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
-                'signers': [{u'email': u'foo.bar@example.com', u'userid': u''}],
                 'editors': [{u'email': u'bar.foo@example.com', u'userid': u''}],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, signer.serialize_pending_signing_job())
@@ -142,10 +140,10 @@ class TestSigning(IntegrationTestCase):
 
         self.assertItemsEqual(
             [{u'userid': u'', u'email': u'foo.bar@example.com'}],
-            signer.pending_signing_job.serialize().get('signers'))
+            signer.pending_signing_job.serialize().get('editors'))
 
-        signer.update_pending_signing_job(signers=['updated@example.com'])
+        signer.update_pending_signing_job(editors=['updated@example.com'])
 
         self.assertItemsEqual(
             [{u'userid': u'', u'email': u'updated@example.com'}],
-            signer.pending_signing_job.serialize().get('signers'))
+            signer.pending_signing_job.serialize().get('editors'))

@@ -19,7 +19,8 @@ class TestSignedVersion(IntegrationTestCase):
         self.assertNotEqual(SignedVersion().id_, SignedVersion().id_)
 
     def test_can_be_serialized(self):
-        signatories = Signatories([Signatory(email='foo@example.com')])
+        signatories = Signatories([Signatory(email='foo@example.com',
+                                             signed_at='2025-01-28T15:00:00.000Z')])
 
         signed_version = SignedVersion(
             id_="1",
@@ -34,7 +35,8 @@ class TestSignedVersion(IntegrationTestCase):
                 'signatories': [
                     {
                         'email': 'foo@example.com',
-                        'userid': ''
+                        'userid': '',
+                        'signed_at': '2025-01-28T15:00:00.000Z',
                     }
                 ],
                 'version': 1
@@ -43,7 +45,9 @@ class TestSignedVersion(IntegrationTestCase):
 
 class TestSignedVersions(IntegrationTestCase):
     def test_can_be_serialized(self):
-        signatories = Signatories([Signatory(email='foo@example.com')])
+        signatories = Signatories([Signatory(email='foo@example.com',
+                                             signed_at='2025-01-28T15:00:00.000Z')])
+
         signed_version_1 = SignedVersion(
             id_=u"1",
             created=FROZEN_NOW,
@@ -63,7 +67,13 @@ class TestSignedVersions(IntegrationTestCase):
             1: {
                 u'created': u'2024-02-18T15:45:00',
                 u'id': u'1',
-                u'signatories': [{u'email': u'foo@example.com', u'userid': u''}],
+                u'signatories': [
+                    {
+                        u'email': u'foo@example.com',
+                        u'userid': u'',
+                        u'signed_at': u'2025-01-28T15:00:00.000Z',
+                    }
+                ],
                 u'version': 1
             },
             2: {

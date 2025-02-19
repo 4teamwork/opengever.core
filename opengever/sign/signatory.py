@@ -9,12 +9,14 @@ class Signatories(PersistentList):
 
 
 class Signatory(Persistent):
-    def __init__(self, userid='', email=''):
+    def __init__(self, userid='', email='', signed_at=None):
         self.userid = userid
         self.email = email
+        self.signed_at = signed_at
 
     def serialize(self):
         return json_compatible({
             'userid': self.userid,
             'email': self.email,
+            'signed_at': self.signed_at,
         })

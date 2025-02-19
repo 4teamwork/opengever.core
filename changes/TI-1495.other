@@ -1,0 +1,1 @@
+Remove no longer used 'signers' property on serialized pending singing jobs. [elioschmutz]

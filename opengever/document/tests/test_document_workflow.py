@@ -229,13 +229,13 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
-                'signers': [],
                 'editors': [
                     {
                         'email': 'foo@example.com',
                         'userid': 'regular_user',
                     }
                 ],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())
@@ -263,13 +263,13 @@ class TestDocumentWorkflow(IntegrationTestCase):
                 'job_id': '1',
                 'redirect_url': 'http://external.example.org/signing-requests/123',
                 'invite_url': 'http://external.example.org/invite/signing-requests/123',
-                'signers': [],
                 'editors': [
                     {
                         'email': 'foo@example.com',
                         'userid': 'regular_user',
                     }
                 ],
+                'signatures': [],
                 'userid': 'regular_user',
                 'version': 0
             }, Signer(self.document).serialize_pending_signing_job())

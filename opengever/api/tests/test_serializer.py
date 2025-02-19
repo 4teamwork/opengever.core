@@ -7,7 +7,8 @@ from opengever.document.document import Document
 from opengever.locking.lock import COPIED_TO_WORKSPACE_LOCK
 from opengever.private import get_private_folder
 from opengever.repository.behaviors.responsibleorg import IResponsibleOrgUnit
-from opengever.sign.pending_signer import PendingSigner
+from opengever.sign.pending_signature import PendingSignature
+from opengever.sign.pending_signature import PendingSignatures
 from opengever.sign.sign import Signer
 from opengever.testing import IntegrationTestCase
 from plone import api
@@ -294,15 +295,23 @@ class TestDocumentSerializer(IntegrationTestCase):
         # The sign-service will set the signers when syncing between the
         # external sign-object and the gever pending singing job.
         # Here in the test, we just set it by hand.
-        Signer(self.document).start_signing(signers=['foo@example.com'])
-
+        Signer(self.document).start_signing()
+        Signer(self.document).update_pending_signing_job(
+            signatures=PendingSignatures([PendingSignature(email="foo@example.com")]))
         Signer(self.document).complete_signing('<data>')
         browser.open(self.document, headers=self.api_headers)
         self.assertIn('signatures_by_version', browser.json)
         newest_signature = browser.json.get('signatures_by_version').get('1')
         self.assertEqual(1, newest_signature.get('version'))
-        self.assertItemsEqual([{u'email': u'foo@example.com', u'userid': u'regular_user'}],
-                              newest_signature.get('signatories'))
+        self.assertItemsEqual(
+            [
+                {
+                    u'email': u'foo@example.com',
+                    u'userid': u'regular_user',
+                    u'signed_at': '',
+                }
+            ],
+            newest_signature.get('signatories'))
 
     @browsing
     def test_mail_serialization_contains_reference_number(self, browser):
