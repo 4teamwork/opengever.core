@@ -76,7 +76,7 @@ def get_context_members_ids(context, actor_type, disregard_block=False):
             break
         actorroles = portal.acl_users._getLocalRolesForDisplay(content)
         actor_ids = actor_ids.union(set(
-            map(itemgetter(0),
+            map(itemgetter(3),
                 filter(lambda args: is_valid_actorid(actor_type, *args), actorroles))))
 
         if getattr(aq_base(content), '__ac_local_roles_block__', None) \
