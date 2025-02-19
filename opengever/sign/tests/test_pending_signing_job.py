@@ -57,6 +57,22 @@ class TestPendingSigningJob(IntegrationTestCase):
                 'invite_url': 'redirect@example.com/invite',
             }, metadata.serialize())
 
+    def test_can_be_converted_from_json_object_to_json_object(self):
+        self.login(self.regular_user)
+
+        pending_signing_job = PendingSigningJob(
+            created=FROZEN_NOW,
+            userid='foo.bar',
+            version=1,
+            editors=['bar.foo@example.com'],
+            signatures=PendingSignatures([PendingSignature(email="foo@example.com")]),
+            job_id='1',
+            redirect_url='redirect@example.com',
+            invite_url='redirect@example.com/invite')
+
+        self.assertTrue(
+            pending_signing_job == PendingSigningJob.from_json_object(pending_signing_job.to_json_object()))
+
     def test_can_be_converted_to_a_signed_version(self):
         self.login(self.regular_user)
 
