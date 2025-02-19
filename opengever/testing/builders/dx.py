@@ -19,6 +19,7 @@ from opengever.mail.mail import OGMail
 from opengever.meeting.committee import ICommittee
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.base.actor import INTERACTIVE_ACTOR_CURRENT_USER_ID
+from opengever.sign.sign import Signer
 from opengever.task.interfaces import ISuccessorTaskController
 from opengever.task.task import ITask
 from opengever.tasktemplates.interfaces import IContainParallelProcess
@@ -126,6 +127,8 @@ class DocumentBuilder(GeverDexterityBuilder):
     _checked_out = None
     _trashed = False
     _is_shadow = False
+    _pending_signing_job = None
+    _signed_versions = None
 
     def __init__(self, session):
         super(DocumentBuilder, self).__init__(session)
@@ -148,6 +151,14 @@ class DocumentBuilder(GeverDexterityBuilder):
 
     def checked_out_by(self, userid):
         self._checked_out = userid
+        return self
+
+    def pending_signing_job(self, pending_signing_job):
+        self._pending_signing_job = pending_signing_job
+        return self
+
+    def signed_versions(self, signed_versions):
+        self._signed_versions = signed_versions
         return self
 
     def trashed(self):
@@ -174,6 +185,12 @@ class DocumentBuilder(GeverDexterityBuilder):
         if self._is_shadow:
             obj.as_shadow_document()
             obj.reindexObject(idxs=["review_state"])
+
+        if self._pending_signing_job:
+            Signer(obj).pending_signing_job = self._pending_signing_job
+
+        if self._signed_versions:
+            Signer(obj).signed_versions_storage.store(self._signed_versions)
 
         super(DocumentBuilder, self).after_create(obj)
 
