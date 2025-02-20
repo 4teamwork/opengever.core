@@ -21,6 +21,10 @@ class DossierReporterFieldMapper(SolrFieldMapper):
         )
 
 
+def get_link(value, dossier):
+    return dossier.getURL()
+
+
 class DossierReporter(SolrReporterView):
     """View that generate an excel spreadsheet with the XLSReporter,
     which list the selected dossier (paths in request)
@@ -37,6 +41,7 @@ class DossierReporter(SolrReporterView):
         {
             'id': 'title',
             'is_default': True,
+            'hyperlink': get_link,
         },
         {
             'id': 'start',
