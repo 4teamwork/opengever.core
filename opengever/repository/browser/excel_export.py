@@ -29,6 +29,10 @@ def bool_label(value):
     )
 
 
+def get_link(value, context):
+    return context.absolute_url()
+
+
 class RepositoryRootExcelExport(BrowserView):
     """Export a repository tree as an Excel document."""
 
@@ -155,7 +159,7 @@ def generate_report(request, context):
     column_map = (
         {'id': 'get_repository_number', 'title': label_repository_number, 'fold_by_method': repository_number_to_outine_level, 'callable': True},  # noqa
         {'id': 'get_folder_uid', 'title': label_repositoryfolder_uid, 'callable': True},
-        {'id': 'get_folder_path', 'title': label_repositoryfolder_path, 'callable': True},
+        {'id': 'get_folder_path', 'title': label_repositoryfolder_path, 'callable': True, 'hyperlink': get_link,},  # noqa
         {'id': 'title_de', 'title': label_repositoryfolder_title_de},
         {'id': 'title_fr', 'title': label_repositoryfolder_title_fr},
         {'id': 'title_en', 'title': label_repositoryfolder_title_en},
