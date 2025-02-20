@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.2.2 (2025-02-20)
+---------------------
+
+New features:
+
+
+- Link title/path of dossiers and repository folders exported as excel. [elioschmutz] [TI-2089]
+
+
 2025.2.1 (2025-01-30)
 ---------------------
 
