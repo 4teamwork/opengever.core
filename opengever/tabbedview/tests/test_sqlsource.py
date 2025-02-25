@@ -122,8 +122,9 @@ class TestTextFilter(FunctionalTestCase):
         self.dossier = create(Builder('dossier'))
         self.task1 = create(Builder('task')
                             .within(self.dossier)
-                            .having(text=u'\xfcberpr\xfcfung')
-                            .titled('Task A'))
+                            .titled('Task A')
+                            .with_text(content=u'\xfcberpr\xfcfung'))
+
         self.task2 = create(Builder('task')
                             .within(self.dossier)
                             .titled('Closed Task B'))

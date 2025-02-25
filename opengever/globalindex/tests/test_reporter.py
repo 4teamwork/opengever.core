@@ -194,7 +194,6 @@ class TestTaskReporter(IntegrationTestCase):
     @browsing
     def test_does_not_include_subtasks(self, browser):
         self.login(self.regular_user, browser=browser)
-
         browser.open(view='task_report',
                      data={'view_name': 'mytasks',
                            'include_subtasks': False,

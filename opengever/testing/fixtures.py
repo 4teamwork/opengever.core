@@ -1464,10 +1464,10 @@ class OpengeverContentFixture(object):
                 responsible_client=self.org_unit_fa.id(),
                 responsible=self.regular_user.getId(),
                 task_type=u'direct-execution',
-                text=u'L\xf6rem ipsum dolor sit amet, consectetur'
             )
             .relate_to(self.document)
             .in_state('task-state-in-progress')
+            .with_text(content=u"L\xf6rem ipsum dolor sit amet, consectetur")
         ))
         self.create_task_subscriptions(private_task)
 
@@ -1482,10 +1482,10 @@ class OpengeverContentFixture(object):
                 responsible_client=self.org_unit_fa.id(),
                 responsible='inbox:fa',
                 task_type=u'direct-execution',
-                text=u'L\xf6rem ipsum dolor sit amet, consectetur'
             )
             .relate_to(self.document)
             .in_state('task-state-in-progress')
+            .with_text(content=u"L\xf6rem ipsum dolor sit amet, consectetur")
         ))
         self.create_task_subscriptions(inbox_task)
 
@@ -1761,6 +1761,7 @@ class OpengeverContentFixture(object):
             )
             .in_state('task-state-in-progress')
             .relate_to(protected_document_with_task)
+            .with_text(content=u"L\xf6rem ipsum dolor sit amet, consectetur")
         ))
         self.create_task_subscriptions(task_in_protected_dossier)
 

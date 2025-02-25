@@ -4,6 +4,7 @@ from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from plone import api
+from plone.app.textfield import RichText
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
@@ -30,7 +31,7 @@ def deadline_default(context):
 
 @provider(IContextAwareDefaultFactory)
 def text_default(context):
-    return context.text
+    return context.text.raw
 
 
 class IUpdateMetadata(Schema):
@@ -52,11 +53,13 @@ class IUpdateMetadata(Schema):
         defaultFactory=deadline_default,
         required=True)
 
-    text = schema.Text(
+    text = RichText(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
+        required=False,
         defaultFactory=text_default,
-        required=False)
+        default_mime_type='text/html',
+        output_mime_type='text/x-html-safe')
 
 
 class UpdateMetadataForm(DelegateWizardFormMixin, Form):
@@ -78,6 +81,12 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
 
             data['responsibles'] = self.request.get('responsibles')
             data['documents'] = self.request.get('documents', None) or []
+
+            # data gets deserialized again in doActionFor() by an
+            # ITransitionExtender. Thus we have to pass the raw data.
+            if 'text' in data:
+                data['text'] = data['text'].raw
+
             wftool = api.portal.get_tool('portal_workflow')
             wftool.doActionFor(self.context, 'task-transition-delegate',
                                transition_params=data)
