@@ -13,6 +13,7 @@ from opengever.testing import FunctionalTestCase
 from plone import api
 from plone.app.testing import SITE_OWNER_NAME
 from plone.app.testing import TEST_USER_ID
+from plone.app.textfield.value import RichTextValue
 from zope.component import getMultiAdapter
 
 
@@ -47,15 +48,18 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
         with freeze(datetime(2016, 4, 12, 10, 35)):
             task1 = create(Builder('task')
                            .within(dossier)
-                           .having(responsible=self.user.userid,
-                                   issuer=SITE_OWNER_NAME,
-                                   title="task 1"))
+                           .having(
+                               responsible=self.user.userid,
+                               issuer=SITE_OWNER_NAME,
+                               title="task 1",
+                               text=RichTextValue(u'task 1 description')))
 
             task2 = create(Builder('task')
                            .within(subdossier)
                            .having(responsible=self.user.userid,
                                    issuer=self.user.userid,
-                                   title="task 2"))
+                                   title="task 2",
+                                   text=RichTextValue(u'task 2 description')))
 
         expected_deadline = datetime(2016, 4, 19, 0, 0)
 
@@ -72,7 +76,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
             expected = {'label': 'Task list for dossier "`Anfr\xc3\xb6gen 2015 (Client1 / 1)"\'',
                         'task_data_list': [{'completion_date': completion_date.strftime('%d.%m.%Y'),
                                             'deadline': expected_deadline.strftime('%d.%m.%Y'),
-                                            'description': '',
+                                            'description': 'task 1 description',
                                             'responsible': 'Test User (test\\_user\\_1\\_)',
                                             'issuer': 'admin (admin)',
                                             'sequence_number': 1,
@@ -80,7 +84,7 @@ class TestDossierTasksLaTeXView(FunctionalTestCase):
                                             'type': ''},
                                            {'completion_date': None,
                                             'deadline': expected_deadline.strftime('%d.%m.%Y'),
-                                            'description': '',
+                                            'description': 'task 2 description',
                                             'responsible': 'Test User (test\\_user\\_1\\_)',
                                             'issuer': 'Test User (test\\_user\\_1\\_)',
                                             'sequence_number': 2,
