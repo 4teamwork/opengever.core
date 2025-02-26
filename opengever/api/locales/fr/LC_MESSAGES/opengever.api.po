@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-01-25 14:15+0000\n"
+"POT-Creation-Date: 2025-02-26 09:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,10 @@ msgstr "Le document ne peut pas être copié de l’espace de travail car il est
 #: ./opengever/api/linked_workspaces.py
 msgid "Document not in linked workspace"
 msgstr "Le document ne se trouve pas dans un espace de travail lié."
+
+#: ./opengever/api/invitations.py
+msgid "Invitations are disabled."
+msgstr "Les invitations sont désactivées."
 
 #. Default: "It's not allowed to change responsible here. Use \"Reassign\" instead"
 #: ./opengever/api/task.py

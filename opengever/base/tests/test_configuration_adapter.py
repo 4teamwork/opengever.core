@@ -99,6 +99,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('solr', True),
                 ('tasktemplatefolder_nesting', False),
                 ('workspace', False),
+                ('workspace_invitation', True),
                 ('workspace_client', False),
                 ('workspace_creation_restricted', False),
                 ('workspace_meetings', True),

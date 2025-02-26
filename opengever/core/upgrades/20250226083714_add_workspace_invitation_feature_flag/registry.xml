@@ -1,0 +1,5 @@
+<registry>
+
+ <record interface="opengever.workspace.interfaces.IWorkspaceSettings" field="is_invitation_feature_enabled" />
+
+</registry>

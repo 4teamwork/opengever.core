@@ -10,6 +10,7 @@ from opengever.workspace.exceptions import DuplicatePendingInvitation
 from opengever.workspace.exceptions import MultipleUsersFound
 from opengever.workspace.participation import WORKSPCAE_GUEST
 from opengever.workspace.participation.storage import IInvitationStorage
+from zExceptions import Forbidden
 from zope.component import getUtility
 import json
 
@@ -81,6 +82,24 @@ class TestInvitationsPost(IntegrationTestCase):
         self.assertEqual(
             u'http://nohost/plone/workspaces/workspace-1/@invitations/{}'.format(iid),
             item['@id'])
+
+    @browsing
+    def test_invitation_feature_can_be_disabled(self, browser):
+        self.deactivate_feature('workspace_invitation')
+        self.login(self.workspace_admin, browser=browser)
+
+        url = '{}/@invitations'.format(self.workspace.absolute_url())
+        data = json.dumps({
+            'recipient_email': self.regular_user.getProperty('email'),
+            'role': {'token': WORKSPCAE_GUEST.id},
+        })
+
+        with self.assertRaises(Forbidden) as cm:
+            browser.exception_bubbling = True
+            browser.open(url, method='POST', headers=self.api_headers,
+                         data=data)
+
+        self.assertEqual('Invitations are disabled.', str(cm.exception))
 
     @browsing
     def test_prevents_duplicate_invitation(self, browser):
