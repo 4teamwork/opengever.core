@@ -100,6 +100,7 @@ class TestConfigurationAdapter(IntegrationTestCase):
                 ('tasktemplatefolder_nesting', False),
                 ('error_log', False),
                 ('workspace', False),
+                ('workspace_invitation', True),
                 ('workspace_client', False),
                 ('workspace_creation_restricted', False),
                 ('workspace_meetings', True),

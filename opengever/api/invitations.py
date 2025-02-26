@@ -1,5 +1,7 @@
+from opengever.api import _
 from opengever.api.participations import ParticipationTraverseService
 from opengever.api.validation import get_validation_errors
+from opengever.workspace import is_invitation_feature_enabled
 from opengever.workspace.invitation import IWorkspaceInvitationSchema
 from opengever.workspace.participation import invitation_to_item
 from opengever.workspace.participation import TYPE_INVITATION
@@ -13,6 +15,7 @@ from plone.restapi.interfaces import ISerializeToJson
 from plone.restapi.serializer.converters import json_compatible
 from plone.restapi.services import Service
 from zExceptions import BadRequest
+from zExceptions import Forbidden
 from zExceptions import NotFound
 from zope.component import getMultiAdapter
 from zope.component import getUtility
@@ -131,6 +134,9 @@ class InvitationsPost(ParticipationTraverseService):
 
         # Disable CSRF protection
         alsoProvides(self.request, IDisableCSRFProtection)
+
+        if not is_invitation_feature_enabled():
+            raise Forbidden(_("Invitations are disabled."))
 
         data = json_body(self.request)
         data['role'] = data.get('role', {}).get('token')
