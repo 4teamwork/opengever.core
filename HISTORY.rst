@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.18.1 (2025-02-27)
+----------------------
+
+Bug fixes:
+
+
+- Fix encoding issues in classic UI. [buchi] [GH-8122]
+
+
 2024.18.0 (2024-12-13)
 ----------------------
 
