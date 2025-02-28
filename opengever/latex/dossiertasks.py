@@ -84,10 +84,14 @@ class DossierTasksLaTeXView(MakoLaTeXView):
             task_data_list.append({
                 'title': self.convert_plain(task.title),
 <<<<<<< HEAD
+<<<<<<< HEAD
                 'description': self.convert(task_description),
 =======
                 'description': self.convert_plain(task.text.output or ""),
 >>>>>>> ec7aadd6e (Change text field in task schema to RichField and serialize after first)
+=======
+                'description': self.convert_plain(task.text or ""),
+>>>>>>> 68b194d98 (Set default "" string)
                 'sequence_number': task.get_sequence_number(),
                 'type': self.convert_plain(task.get_task_type_label()),
                 'completion_date': completion_date,

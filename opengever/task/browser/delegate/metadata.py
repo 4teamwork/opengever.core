@@ -31,7 +31,7 @@ def deadline_default(context):
 
 @provider(IContextAwareDefaultFactory)
 def text_default(context):
-    return context.text.raw
+    return context.text
 
 
 class IUpdateMetadata(Schema):
@@ -84,8 +84,8 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
 
             # data gets deserialized again in doActionFor() by an
             # ITransitionExtender. Thus we have to pass the raw data.
-            if 'text' in data:
-                data['text'] = data['text'].raw
+
+            data['text'] = data['text'].raw if data.get('text') else u""
 
             wftool = api.portal.get_tool('portal_workflow')
             wftool.doActionFor(self.context, 'task-transition-delegate',
