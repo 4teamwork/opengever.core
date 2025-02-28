@@ -81,6 +81,12 @@ class UpdateMetadataForm(DelegateWizardFormMixin, Form):
 
             data['responsibles'] = self.request.get('responsibles')
             data['documents'] = self.request.get('documents', None) or []
+
+            # For some reason data gets deserialized again in doActionFor() by an
+            # ITransitionExtender. Thus we have to pass the raw data.
+
+            data['text'] = data['text'].raw if data.get('text') else u""
+
             wftool = api.portal.get_tool('portal_workflow')
             wftool.doActionFor(self.context, 'task-transition-delegate',
                                transition_params=data)
