@@ -88,12 +88,14 @@ def get_journal_entries_from_dossier(obj):
                 })
             # XXX: DOSSIER_CLOSED on parent is currently not supported in NG!?
             if parent_event is not None and parent_event != 'DOSSIER_CLOSED':
-                res.append({
-                    'objexternalkey': parent_uid(obj),
-                    'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
-                    'user': entry['actor'],
-                    'historyobject': obj.UID(),
-                    'event': parent_event,
-                    '_journal': 'dossiers',
-                })
+                parent = aq_parent(obj)
+                if parent.portal_type != 'opengever.repository.repositoryfolder':
+                    res.append({
+                        'objexternalkey': parent.UID(),
+                        'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
+                        'user': entry['actor'],
+                        'historyobject': obj.UID(),
+                        'event': parent_event,
+                        '_journal': 'dossiers',
+                    })
     return res
