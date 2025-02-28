@@ -4,6 +4,7 @@ from opengever.ogds.base.sources import UsersContactsInboxesSourceBinder
 from opengever.task import _
 from opengever.task.browser.delegate.main import DelegateWizardFormMixin
 from plone import api
+from plone.app.textfield import RichText
 from plone.autoform.widgets import ParameterizedWidget
 from plone.supermodel.model import Schema
 from plone.z3cform.layout import FormWrapper
@@ -52,11 +53,13 @@ class IUpdateMetadata(Schema):
         defaultFactory=deadline_default,
         required=True)
 
-    text = schema.Text(
+    text = RichText(
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
+        required=False,
         defaultFactory=text_default,
-        required=False)
+        default_mime_type='text/html',
+        output_mime_type='text/x-html-safe')
 
 
 class UpdateMetadataForm(DelegateWizardFormMixin, Form):
