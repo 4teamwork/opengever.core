@@ -8,6 +8,8 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
+from opengever.exportng.journal import get_journal_entries_from_document
+from opengever.exportng.journal import get_journal_entries_from_dossier
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
@@ -22,7 +24,6 @@ from time import time
 from zope.schema import getFields
 import logging
 import os.path
-
 
 logger = logging.getLogger('opengever.exportng')
 
@@ -215,6 +216,16 @@ class CatalogSyncer(object):
     catalog_key = 'UID'
     sql_key = 'objexternalkey'
 
+    journal_table = 'journal_entries'
+    journal_mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar', None),
+        Attribute('relatedobj', 'historyobject', 'varchar', None),
+        Attribute('action', 'event', 'varchar', None),
+        Attribute('time', 'timestamp', 'datetime', None),
+        Attribute('actor', 'user', 'varchar', None),
+        Attribute('journal', '_journal', 'varchar', None),
+    ]
+
     def __init__(self, query=None):
         self.base_query = query or {}
         self.rtool = api.portal.get_tool('portal_repository')
@@ -272,6 +283,7 @@ class CatalogSyncer(object):
 
         inserts = []
         version_inserts = []
+        journal_inserts = []
         added_len = len(added)
         logger.info('Adding %s %s...', added_len, self.table)
         for key in added:
@@ -279,6 +291,7 @@ class CatalogSyncer(object):
             obj = item._unrestrictedGetObject()
             inserts.append(self.get_values(obj))
             version_inserts.extend(self.get_versions(obj))
+            journal_inserts.extend(self.get_journal_entries(obj))
             counter += 1
             if counter % 100 == 0:
                 logger.info(
@@ -300,6 +313,13 @@ class CatalogSyncer(object):
                 for chunk in chunks(version_inserts, SQL_CHUNK_SIZE):
                     conn.execute(table.insert(), chunk)
             logger.info('Added %s: %s', table, len(version_inserts))
+
+        if journal_inserts:
+            table = metadata.tables[self.journal_table]
+            with engine.connect() as conn:
+                for chunk in chunks(journal_inserts, SQL_CHUNK_SIZE):
+                    conn.execute(table.insert(), chunk)
+            logger.info('Added %s: %s', table, len(journal_inserts))
 
     def update_objects(self, modified):
         total_time = timer()
@@ -377,6 +397,9 @@ class CatalogSyncer(object):
     def get_versions(self, obj):
         return []
 
+    def get_journal_entries(self, obj):
+        return []
+
 
 class FileplanEntrySyncer(CatalogSyncer):
 
@@ -443,6 +466,9 @@ class DossierSyncer(CatalogSyncer):
         Attribute('Editor', 'objsecchange', 'jsonb', get_permissions),
         Attribute('DossierManager', 'fadmins', 'jsonb', get_permissions),
     ]
+
+    def get_journal_entries(self, obj):
+        return get_journal_entries_from_dossier(obj)
 
 
 class SubdossierSyncer(DossierSyncer):
@@ -537,6 +563,9 @@ class DocumentSyncer(CatalogSyncer):
                 })
         return versions
 
+    def get_journal_entries(self, obj):
+        return get_journal_entries_from_document(obj)
+
 
 class OGDSSyncer(object):
 
@@ -610,6 +639,7 @@ class Syncer(object):
     def create_tables(self):
         create_table(UserSyncer.table, UserSyncer.mapping)
         create_table(GroupSyncer.table, GroupSyncer.mapping)
+        create_table(CatalogSyncer.journal_table, CatalogSyncer.journal_mapping)
         create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.mapping)
         create_table(DossierSyncer.table, DossierSyncer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
