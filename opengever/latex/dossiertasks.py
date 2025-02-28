@@ -79,9 +79,11 @@ class DossierTasksLaTeXView(MakoLaTeXView):
             if deadline:
                 deadline = deadline.strftime(self.strftimestring)
 
+            task_description = task.text.output if task.text else u''
+
             task_data_list.append({
                 'title': self.convert_plain(task.title),
-                'description': self.convert_plain(task.text or ""),
+                'description': self.convert(task_description),
                 'sequence_number': task.get_sequence_number(),
                 'type': self.convert_plain(task.get_task_type_label()),
                 'completion_date': completion_date,

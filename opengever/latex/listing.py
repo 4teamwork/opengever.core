@@ -17,6 +17,10 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import adapter
 from zope.interface import implementer
 from zope.interface import Interface
+import re
+
+
+STRIP_HTML_RE = re.compile('<[^<]+?>')
 
 
 class Column(object):
@@ -326,7 +330,8 @@ class TaskHistoryLaTeXListing(LaTexListing):
 
             Column('text',
                    _('label_description', default='Description'),
-                   '50%'),
+                   '50%',
+                   lambda item: STRIP_HTML_RE.sub('', item.text if item.text else "")),
         ]
 
 
