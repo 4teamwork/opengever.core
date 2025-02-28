@@ -18,6 +18,7 @@ from plone.dexterity.utils import iterSchemata
 from Products.CMFEditions.utilities import dereference
 from sqlalchemy import bindparam
 from sqlalchemy import delete
+from sqlalchemy import or_
 from sqlalchemy import select
 from sqlalchemy.sql.expression import false
 from time import time
@@ -693,3 +694,10 @@ class Syncer(object):
                     with engine.connect() as conn:
                         res = conn.execute(stmt)
                         logger.info('Removed %s orphans from table %s.', res.rowcount, DocumentSyncer.versions_table)
+                journal_table = metadata.tables[CatalogSyncer.journal_table]
+                stmt = delete(journal_table).where(or_(
+                    journal_table.c.objexternalkey.in_(orphan_keys),
+                    journal_table.c.historyobject.in_(orphan_keys)))
+                with engine.connect() as conn:
+                    res = conn.execute(stmt)
+                    logger.info('Removed %s orphans from table %s.', res.rowcount, CatalogSyncer.journal_table)
