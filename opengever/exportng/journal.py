@@ -5,7 +5,7 @@ from opengever.journal.manager import JournalManager
 
 DOCUMENT_ACTION_TYPE_EVENT_MAPPING = {
     'Document added': ('DOCUMENT_CREATED', True, 'DOCUMENT_ADDED'),
-    'Object moved to trash': ('DOCUMENT_CANCELED', False, 'DOCUMENT_CANCELED'),
+    # 'Object moved to trash': ('DOCUMENT_CANCELED', False, 'DOCUMENT_CANCELED'),
     'Object restore': ('DOCUMENT_RESTORED', False, 'DOCUMENT_RESTORED'),
     'Document checked in': ('CONTENT_CHANGED', False, None),
 }
@@ -86,7 +86,8 @@ def get_journal_entries_from_dossier(obj):
                     'event': obj_event,
                     '_journal': 'dossiers',
                 })
-            if parent_event is not None:
+            # XXX: DOSSIER_CLOSED on parent is currently not supported in NG!?
+            if parent_event is not None and parent_event != 'DOSSIER_CLOSED':
                 res.append({
                     'objexternalkey': parent_uid(obj),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
