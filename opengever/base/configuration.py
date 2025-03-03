@@ -45,6 +45,7 @@ from opengever.sharing.interfaces import ISharingConfiguration
 from opengever.sign.utils import is_sign_feature_enabled
 from opengever.task.interfaces import ITaskSettings
 from opengever.tasktemplates.interfaces import ITaskTemplateSettings
+from opengever.workspace import is_invitation_feature_enabled
 from opengever.workspace.interfaces import IToDoSettings
 from opengever.workspace.interfaces import IWorkspaceMeetingSettings
 from opengever.workspace.interfaces import IWorkspaceSettings
@@ -179,6 +180,7 @@ class GeverSettingsAdpaterV1(object):
         features['tasktemplatefolder_nesting'] = api.portal.get_registry_record('is_tasktemplatefolder_nesting_enabled', interface=ITaskTemplateSettings)  # noqa
         features['error_log'] = is_redis_error_log_feature_enabled()
         features['workspace'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceSettings)
+        features['workspace_invitation'] = is_invitation_feature_enabled()
         features['workspace_client'] = api.portal.get_registry_record('is_feature_enabled', interface=IWorkspaceClientSettings)  # noqa
         features['workspace_creation_restricted'] = api.portal.get_registry_record(
             'is_creation_restricted', interface=IWorkspaceSettings)

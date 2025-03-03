@@ -27,6 +27,13 @@ class IWorkspaceSettings(Interface):
         description=u'Whether workspace creation is restricted, i.e. only allowed from Gever',
         default=False)
 
+    is_invitation_feature_enabled = schema.Bool(
+        title=u'Allow users to be invited to a workspace via email.',
+        description=u'This feature allows workspace admins to send email '
+                    u'invitations to users. This feature is mainly used to '
+                    u'invite external members',
+        default=True)
+
     invitation_group_dn = schema.TextLine(
         title=u'Invitation Group DN',
         description=u'DN of a group where invited users are added on registration',

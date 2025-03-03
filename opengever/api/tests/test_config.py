@@ -110,6 +110,7 @@ class TestConfig(IntegrationTestCase):
                 u'workspace': False,
                 u'workspace_client': False,
                 u'workspace_creation_restricted': False,
+                u'workspace_invitation': True,
                 u'workspace_meetings': True,
                 u'workspace_todo': True,
             })

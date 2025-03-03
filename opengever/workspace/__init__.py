@@ -1,5 +1,6 @@
 from opengever.workspace.interfaces import IToDoSettings
 from opengever.workspace.interfaces import IWorkspaceMeetingSettings
+from opengever.workspace.interfaces import IWorkspaceSettings
 from plone import api
 from zope.i18nmessageid import MessageFactory
 
@@ -85,9 +86,13 @@ WHITELISTED_TEAMRAUM_VOCABULARIES = {
 
 
 def is_workspace_feature_enabled():
-    from opengever.workspace.interfaces import IWorkspaceSettings
     return api.portal.get_registry_record(
         'is_feature_enabled', interface=IWorkspaceSettings)
+
+
+def is_invitation_feature_enabled():
+    return api.portal.get_registry_record(
+        'is_invitation_feature_enabled', interface=IWorkspaceSettings)
 
 
 def is_workspace_meeting_feature_enabled():
