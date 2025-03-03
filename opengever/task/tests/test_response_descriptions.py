@@ -43,12 +43,12 @@ class TestResponseDescriptions(FunctionalTestCase):
         self.task = create(Builder("task")
                            .within(self.dossier)
                            .titled(u'Aufgabe f\xfcr Hans')
-                           .having(text=u'Text f\xfcr Aufgabe',
-                                   task_type='comment',
+                           .having(task_type='comment',
                                    deadline=date(2010, 1, 1),
                                    issuer=TEST_USER_ID,
                                    responsible=TEST_USER_ID,
-                                   responsible_client='org-unit-1'))
+                                   responsible_client='org-unit-1')
+                           .with_text(content=u'Text f\xfcr Aufgabe'))
 
     def get_latest_answer(self, browser):
         latest_answer = browser.css('div.answers .answer').first

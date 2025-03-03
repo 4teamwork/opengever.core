@@ -31,6 +31,7 @@ from opengever.testing.builders.translated import TranslatedTitleBuilderMixin
 from opengever.testing.helpers import MockedSolr
 from opengever.trash.trash import ITrasher
 from plone import api
+from plone.app.textfield.value import RichTextValue
 from plone.namedfile.file import NamedBlobFile
 from Products.CMFCore.utils import getToolByName
 from zope.annotation.interfaces import IAnnotations
@@ -221,7 +222,8 @@ class TaskBuilder(GeverDexterityBuilder):
         self.arguments = {
             'responsible_client': 'org-unit-1',
             'responsible': TEST_USER_ID,
-            'issuer': TEST_USER_ID}
+            'issuer': TEST_USER_ID,
+            'text': None}
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')
@@ -285,6 +287,13 @@ class TaskBuilder(GeverDexterityBuilder):
 
     def as_parallel_task(self):
         self._as_parallel_task = True
+        return self
+
+    def with_text(self, content):
+        self.arguments["text"] = RichTextValue(
+            raw=content,
+            mimeType='text/html',
+            outputMimeType='text/x-html-safe')
         return self
 
 
