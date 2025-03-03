@@ -237,8 +237,9 @@ class TestserverLayer(OpengeverFixture):
             sablon.setUp()
             atexit.register(sablon.tearDown)
 
-        redis_service_layer.setUp()
-        atexit.register(redis_service_layer.tearDown)
+        if not os.environ.get('REDIS_URL'):
+            redis_service_layer.setUp()
+            atexit.register(redis_service_layer.tearDown)
 
         # Install a Virtual Host Monster
         if "virtual_hosting" not in app.objectIds():
