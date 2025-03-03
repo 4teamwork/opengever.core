@@ -21,12 +21,12 @@ class TestTaskWorkflowAddingDocumentsAndMails(FunctionalTestCase):
         self.task = create(Builder("task")
                            .within(self.dossier)
                            .titled(u'Aufgabe f\xfcr Hans')
-                           .having(text=u'Text f\xfcr Aufgabe',
-                                   task_type='comment',
+                           .having(task_type='comment',
                                    deadline=datetime(2010, 1, 1),
                                    issuer=TEST_USER_ID,
                                    responsible=TEST_USER_ID,
-                                   responsible_client='org-unit-1'))
+                                   responsible_client='org-unit-1')
+                           .with_text(content=u'Text f\xfcr Aufgabe'))
 
     def click_task_button(self, browser, button_class, save_and_reload=True):
         """Visits the overview view on `self.task`, clicks the button
