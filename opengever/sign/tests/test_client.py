@@ -32,6 +32,7 @@ class TestSigningClient(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'access_token': u'<access-token>',
+                u'bumblebee_app_id': u'local',
                 u'document_uid': u'createtreatydossiers000000000002',
                 u'document_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14', # noqa
                 u'download_url': u'http://nohost/plone/bumblebee_download?checksum={}&uuid=createtreatydossiers000000000002'.format(DOCX_CHECKSUM), # noqa
@@ -65,6 +66,7 @@ class TestSigningClient(IntegrationTestCase):
         self.assertDictEqual(
             {
                 u'access_token': u'<access-token>',
+                u'bumblebee_app_id': u'local',
                 u'document_uid': u'createtreatydossiers000000000002',
                 u'document_url': u'http://example.com/mygever/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14', # noqa
                 u'download_url': u'http://nohost/plone/bumblebee_download?checksum={}&uuid=createtreatydossiers000000000002'.format(DOCX_CHECKSUM), # noqa

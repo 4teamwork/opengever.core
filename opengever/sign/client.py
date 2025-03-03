@@ -1,3 +1,4 @@
+from ftw.bumblebee.config import bumblebee_config
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from os import environ
 from plone import api
@@ -37,6 +38,7 @@ class SignServiceClient(object):
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'editors': editors,
+                  'bumblebee_app_id': bumblebee_config.app_id,
                   })
 
         resp.raise_for_status()
