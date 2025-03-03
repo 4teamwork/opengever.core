@@ -240,9 +240,7 @@ class TaskBuilder(GeverDexterityBuilder):
             'responsible_client': 'org-unit-1',
             'responsible': TEST_USER_ID,
             'issuer': TEST_USER_ID,
-            'text': RichTextValue(raw=u"",
-                                  mimeType='text/html',
-                                  outputMimeType='text/x-html-safe')}
+            'text': None}
 
     def in_progress(self):
         self.transitions.append('task-transition-open-in-progress')

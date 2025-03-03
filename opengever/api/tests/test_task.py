@@ -665,10 +665,7 @@ class TestTaskPatch(IntegrationTestCase):
                 u'data': u'New description',
                 u'content-type': u'text/html',
                 u'encoding': u'utf8'},
-              u'before': {
-                  u'data': u'',
-                  u'content-type': u'text/html',
-                  u'encoding': u'utf-8'},
+              u'before': None,
               u'field_id': u'text',
               u'field_title': u''}],
             browser.json['responses'][-1]['changes'])
@@ -681,10 +678,7 @@ class TestTaskPatch(IntegrationTestCase):
                 u'data': u'New description',
                 u'content-type': u'text/html',
                 u'encoding': u'utf8'},
-              u'before': {
-                  u'data': u'',
-                  u'content-type': u'text/html',
-                  u'encoding': u'utf-8'},
+              u'before': None,
               u'field_id': u'text',
               u'field_title': u''}],
             responses[-1]['changes'])
