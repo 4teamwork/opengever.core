@@ -8,10 +8,10 @@ from opengever.base.interfaces import IReferenceNumber
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
+from opengever.exportng.utils import userid_to_email
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
 from opengever.ogds.models.group import Group
-from opengever.ogds.models.service import ogds_service
 from opengever.ogds.models.user import User
 from plone import api
 from plone.dexterity.utils import iterSchemata
@@ -107,15 +107,6 @@ def get_file_extension(obj, attrname):
         value = getattr(obj, 'file')
     if value is not None:
         return os.path.splitext(value.filename)[-1][1:]
-
-
-def userid_to_email(userid):
-    userid_email_mapping = CACHE.get('userid_email_mapping', None)
-    if userid_email_mapping is None:
-        users = ogds_service().all_users()
-        userid_email_mapping = {user.userid: user.email for user in users}
-        CACHE['userid_email_mapping'] = userid_email_mapping
-    return userid_email_mapping.get(userid, userid)
 
 
 def get_creator(obj, attrname):
