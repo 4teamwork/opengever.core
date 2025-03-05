@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2024.9.4 (2025-03-05)
+---------------------
+
+New features:
+
+
+- Add feature to disable workspace invitations. [elioschmutz] [TI-2100]
+
+
 2024.9.3 (2024-10-28)
 ---------------------
 
