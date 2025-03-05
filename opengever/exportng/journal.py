@@ -1,5 +1,6 @@
 from Acquisition import aq_parent
 from ftw.journal.interfaces import IAnnotationsJournalizable
+from opengever.exportng.utils import userid_to_email
 from opengever.journal.manager import JournalManager
 
 
@@ -43,7 +44,7 @@ def get_journal_entries_from_document(obj):
                 res.append({
                     'objexternalkey': obj.UID(),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
-                    'user': entry['actor'],
+                    'user': userid_to_email(entry['actor']),
                     'historyobject': histobj,
                     'event': obj_event,
                     '_journal': 'documents',
@@ -52,7 +53,7 @@ def get_journal_entries_from_document(obj):
                 res.append({
                     'objexternalkey': parent_uid(obj),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
-                    'user': entry['actor'],
+                    'user': userid_to_email(entry['actor']),
                     'historyobject': obj.UID(),
                     'event': parent_event,
                     '_journal': 'dossiers',
@@ -81,7 +82,7 @@ def get_journal_entries_from_dossier(obj):
                 res.append({
                     'objexternalkey': obj.UID(),
                     'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
-                    'user': entry['actor'],
+                    'user': userid_to_email(entry['actor']),
                     'historyobject': histobj,
                     'event': obj_event,
                     '_journal': 'dossiers',
@@ -93,7 +94,7 @@ def get_journal_entries_from_dossier(obj):
                     res.append({
                         'objexternalkey': parent.UID(),
                         'timestamp': entry['time'].asdatetime().replace(tzinfo=None),
-                        'user': entry['actor'],
+                        'user': userid_to_email(entry['actor']),
                         'historyobject': obj.UID(),
                         'event': parent_event,
                         '_journal': 'dossiers',
