@@ -41,9 +41,8 @@ class GeverErrorHandling(ErrorHandling):
                     fields[-1]["item_title"] = error.get("item_title")
 
             result['additional_metadata'] = {'fields': fields}
-
             result['translated_message'] = translate(
-                message[0].get('message'),
+                _('msg_inputs_not_valid', default=u'Inputs not valid'),
                 context=self.request)
 
         elif isinstance(message, Message):
