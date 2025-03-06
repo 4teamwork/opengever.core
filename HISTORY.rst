@@ -10,6 +10,34 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.4.0 (2025-03-06)
+---------------------
+
+New features:
+
+
+- Change task template `text field` from Text field to RichText field. [amo] [TI-1333]
+- Detailed information about the pending signers will be serialized for documents. [elioschmutz] [TI-1495]
+- Link title/path of dossiers and repository folders exported as excel. [elioschmutz] [TI-2089]
+- Add feature to disable workspace invitations. [elioschmutz] [TI-2100]
+- Add 'signed_at' attribute to the serialized signed_versions of a document. [elioschmutz] [TI-1495-2]
+
+
+Bug fixes:
+
+
+- Fix getting context member ids in workspace: get userid instead of username. [buchi] [TI-2078]
+- Update UpdateMetadata schema to include richtext and fix relevant task builder [ran] [TI-2108]
+
+
+Other changes:
+
+
+- Remove no longer used 'signers' property on serialized pending singing jobs. [elioschmutz] [TI-1495]
+- Properly raise http errors when communicating with ogsign. [elioschmutz] [TI-1931]
+- Fix pdf-dossier-tasks endpoint after provide Richtext for text (description) field. [amo] [TI-2113]
+
+
 2025.3.0 (2025-02-10)
 ---------------------
 
