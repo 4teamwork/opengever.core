@@ -429,7 +429,7 @@ class DossierSyncer(CatalogSyncer):
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
+        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
         # Attribute('changed', 'changed', 'datetime', None)
         # Attribute('touched', 'touched', 'datetime', None)
         Attribute('title', 'botitle', 'varchar', get_title),
@@ -487,7 +487,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('UID', 'objexternalkey', 'varchar', None),
         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('modified', 'objmodifieddate', 'datetime', as_datetime),
+        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
         Attribute('title', 'objname', 'varchar', get_title),
         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
         # Attribute('changed', 'changed', 'datetime', None)
