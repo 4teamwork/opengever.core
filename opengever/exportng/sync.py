@@ -504,7 +504,7 @@ class DocumentSyncer(CatalogSyncer):
         Attribute('document_author', 'gcauthor', 'varchar', None),
         Attribute('extension', 'extension', 'varchar', get_file_extension),
         # Attribute('document_type', 'XXX', 'date', None),
-        Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean', dexterity_field_value),
+        # Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean', dexterity_field_value),
     ]
     versions_table = 'document_versions'
     versions_mapping = [
