@@ -6,7 +6,7 @@ from opengever.journal.manager import JournalManager
 
 DOCUMENT_ACTION_TYPE_EVENT_MAPPING = {
     'Document added': ('DOCUMENT_CREATED', True, 'DOCUMENT_ADDED'),
-    # 'Object moved to trash': ('DOCUMENT_CANCELED', False, 'DOCUMENT_CANCELED'),
+    'Object moved to trash': ('DOCUMENT_CANCELLED', False, 'DOCUMENT_CANCELLED'),
     'Object restore': ('DOCUMENT_RESTORED', False, 'DOCUMENT_RESTORED'),
     'Document checked in': ('CONTENT_CHANGED', False, None),
 }
