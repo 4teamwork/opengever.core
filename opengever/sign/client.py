@@ -1,6 +1,7 @@
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from os import environ
 from zope.globalrequest import getRequest
+import os
 import requests
 
 
@@ -51,4 +52,12 @@ class NullSignServiceClient(object):
         pass
 
 
-sign_service_client = SignServiceClient()
+client_registry = {
+    'ogsign_service': SignServiceClient,
+    'null_service': NullSignServiceClient
+}
+
+
+def get_sign_service_client():
+    client_name = os.environ.get('SIGN_SERVICE_CLIENT', 'ogsign_service').strip().lower()
+    return client_registry[client_name]()
