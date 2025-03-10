@@ -1,3 +1,5 @@
+from ftw.bumblebee.config import bumblebee_config
+from ftw.bumblebee.hashing import get_conversion_access_token
 from ftw.bumblebee.interfaces import IBumblebeeServiceV3
 from os import environ
 from plone import api
@@ -37,6 +39,9 @@ class SignServiceClient(object):
                   'document_uid': document.UID(),
                   'title': document.title_or_id(),
                   'editors': editors,
+                  'bumblebee_convert_url': bumblebee_service.get_convert_url(),
+                  'bumblebee_app_id': bumblebee_config.app_id,
+                  'bumblebee_access_token': get_conversion_access_token(),
                   })
 
         resp.raise_for_status()

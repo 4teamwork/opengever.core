@@ -8,6 +8,7 @@ from opengever.sign.signed_version import SignedVersion
 from opengever.sign.token import InvalidToken
 from opengever.testing import IntegrationTestCase
 from plone import api
+import os
 import re
 import requests_mock
 
@@ -27,6 +28,8 @@ class TestSigning(IntegrationTestCase):
     features = ['sign']
 
     def test_store_signing_document_metadata_when_starting_sign_process(self, mocker):
+        os.environ['BUMBLEBEE_PUBLIC_URL'] = 'http://bumblebee.local/'
+
         self.login(self.regular_user)
 
         mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
@@ -39,10 +42,15 @@ class TestSigning(IntegrationTestCase):
         request = mocker.last_request.json()
         request['access_token'] = '<token>'
         request['download_url'] = '<download-url>'
+        request['bumblebee_access_token'] = '<bumblebee_access_token>'
+        request['bumblebee_convert_url'] = request['bumblebee_convert_url'].split('?')[0]
 
         self.assertDictEqual(
             {
                 u'access_token': u'<token>',
+                u'bumblebee_access_token': u'<bumblebee_access_token>',
+                u'bumblebee_app_id': u'local',
+                u'bumblebee_convert_url': u'http://bumblebee.local/YnVtYmxlYmVl/api/v3/convert',
                 u'document_uid': u'createtreatydossiers000000000002',
                 u'document_url': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14',
                 u'download_url': u'<download-url>',
