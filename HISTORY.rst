@@ -10,6 +10,21 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.2.3 (2025-03-11)
+---------------------
+
+Bug fixes:
+
+
+- Update UpdateMetadata schema to include richtext and fix relevant task builder [ran] [TI-2108]
+
+
+Other changes:
+
+
+- Fix pdf-dossier-tasks endpoint after provide Richtext for text (description) field. [amo] [TI-2113]
+
+
 2025.2.2 (2025-02-20)
 ---------------------
 
