@@ -145,6 +145,14 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                         u"Document (Type: Contract)",
                     ],
                     [
+                        u"IDocumentMetadata.document_type.costs-statement",
+                        u"Document (Type: Costs Statement)",
+                    ],
+                    [
+                        u"IDocumentMetadata.document_type.credit-note",
+                        u"Document (Type: Credit Note)",
+                    ],
+                    [
                         u"IDocumentMetadata.document_type.directive",
                         u"Document (Type: Directive)",
                     ],
@@ -172,6 +180,11 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                         u"IDocumentMetadata.document_type.request",
                         u"Document (Type: Request)",
                     ],
+
+                    [
+                        u"IDocumentMetadata.document_type.supplementary-agreement",
+                        u"Document (Type: Supplementary Agreement)",
+                    ],
                     [u"IDossier.default", u"Dossier"],
                     [
                         u"IDossier.dossier_type.businesscase",
@@ -181,6 +194,8 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u"enum": [
                     u"IDocument.default",
                     u"IDocumentMetadata.document_type.contract",
+                    u"IDocumentMetadata.document_type.costs-statement",
+                    u"IDocumentMetadata.document_type.credit-note",
                     u"IDocumentMetadata.document_type.directive",
                     u"IDocumentMetadata.document_type.question",
                     u"IDocumentMetadata.document_type.offer",
@@ -188,12 +203,16 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     u"IDocumentMetadata.document_type.regulations",
                     u"IDocumentMetadata.document_type.report",
                     u"IDocumentMetadata.document_type.request",
+
+                    u"IDocumentMetadata.document_type.supplementary-agreement",
                     u"IDossier.default",
                     u"IDossier.dossier_type.businesscase",
                 ],
                 u"enumNames": [
                     u"Document",
                     u"Document (Type: Contract)",
+                    u"Document (Type: Costs Statement)",
+                    u"Document (Type: Credit Note)",
                     u"Document (Type: Directive)",
                     u"Document (Type: Inquiry)",
                     u"Document (Type: Offer)",
@@ -201,6 +220,7 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                     u"Document (Type: Regulations)",
                     u"Document (Type: Report)",
                     u"Document (Type: Request)",
+                    u"Document (Type: Supplementary Agreement)",
                     u"Dossier",
                     u"Dossier (Type: Business case)",
                 ],
@@ -325,11 +345,14 @@ class TestPropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Dokument (Typ: Anfrage)',
                 u'Dokument (Typ: Antrag)',
                 u'Dokument (Typ: Bericht)',
+                u'Dokument (Typ: Gutschrift)',
+                u'Dokument (Typ: Kostenabrechnung)',
                 u'Dokument (Typ: Offerte)',
                 u'Dokument (Typ: Protokoll)',
                 u'Dokument (Typ: Reglement)',
                 u'Dokument (Typ: Vertrag)',
                 u'Dokument (Typ: Weisung)',
+                u'Dokument (Typ: Zusatzvertrag)',
                 u'Dossier',
                 u'Dossier (Typ: Gesch\xe4ftsfall)',
             ],
@@ -434,10 +457,13 @@ class TestWorkSpacePropertysheetMetaschemaEndpoint(IntegrationTestCase):
                 u'Dokument (Typ: Anfrage)',
                 u'Dokument (Typ: Antrag)',
                 u'Dokument (Typ: Bericht)',
+                u'Dokument (Typ: Gutschrift)',
+                u'Dokument (Typ: Kostenabrechnung)',
                 u'Dokument (Typ: Offerte)',
                 u'Dokument (Typ: Protokoll)',
                 u'Dokument (Typ: Reglement)',
                 u'Dokument (Typ: Vertrag)',
                 u'Dokument (Typ: Weisung)',
+                u'Dokument (Typ: Zusatzvertrag)'
             ],
             properties['assignments']['items']['enumNames'])

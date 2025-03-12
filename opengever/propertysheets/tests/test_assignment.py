@@ -14,6 +14,10 @@ EXPECTED_DOCUMENT_ASSIGNMENT_SLOTS = [
     u"IDocumentMetadata.document_type.regulations",
     u"IDocumentMetadata.document_type.report",
     u"IDocumentMetadata.document_type.request",
+    u"IDocumentMetadata.document_type.costs-statement",
+    u"IDocumentMetadata.document_type.credit-note",
+    u"IDocumentMetadata.document_type.supplementary-agreement",
+
 ]
 
 EXPECTED_DOCUMENT_DEFAULT_SLOT = [

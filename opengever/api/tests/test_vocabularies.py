@@ -214,9 +214,10 @@ class TestGetVocabularies(IntegrationTestCase):
             headers=self.api_headers,
         ).json
         self.assertEqual(url, response.get('@id'))
-        self.assertEqual(8, response.get('items_total'))
+        self.assertEqual(11, response.get('items_total'))
         expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
-                           u'question', u'regulations', u'report', u'request']
+                           u'question', u'regulations', u'report', u'request',
+                           u'costs-statement', 'credit-note', 'supplementary-agreement']
         self.assertItemsEqual(expected_tokens,
                               [item['token'] for item in response.get('items')])
 
@@ -230,9 +231,10 @@ class TestGetVocabularies(IntegrationTestCase):
             headers=self.api_headers,
         ).json
         self.assertEqual(url, response.get('@id'))
-        self.assertEqual(8, response.get('items_total'))
+        self.assertEqual(11, response.get('items_total'))
         expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
-                           u'question', u'regulations', u'report', u'request']
+                           u'question', u'regulations', u'report', u'request',
+                           u'costs-statement', 'credit-note', 'supplementary-agreement']
         self.assertItemsEqual(expected_tokens,
                               [item['token'] for item in response.get('items')])
 
@@ -465,9 +467,10 @@ class TestGetSources(IntegrationTestCase):
         ).json
 
         self.assertEqual(url, response.get('@id'))
-        self.assertEqual(8, response.get('items_total'))
+        self.assertEqual(11, response.get('items_total'))
         expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
-                           u'question', u'regulations', u'report', u'request']
+                           u'question', u'regulations', u'report', u'request',
+                           u'costs-statement', 'credit-note', 'supplementary-agreement']
         self.assertItemsEqual(expected_tokens,
                               [item['token'] for item in response.get('items')])
 
@@ -482,9 +485,10 @@ class TestGetSources(IntegrationTestCase):
         ).json
 
         self.assertEqual(url, response.get('@id'))
-        self.assertEqual(8, response.get('items_total'))
+        self.assertEqual(11, response.get('items_total'))
         expected_tokens = [u'contract', u'directive', u'offer', u'protocol',
-                           u'question', u'regulations', u'report', u'request']
+                           u'question', u'regulations', u'report', u'request',
+                           u'costs-statement', 'credit-note', 'supplementary-agreement']
         self.assertItemsEqual(expected_tokens,
                               [item['token'] for item in response.get('items')])
 

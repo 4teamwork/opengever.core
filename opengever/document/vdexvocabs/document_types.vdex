@@ -91,4 +91,38 @@
             <langstring language="fr-ch">Règlement</langstring>
         </caption>
     </term>
+    <term>
+        <termIdentifier>costs-statement</termIdentifier>
+        <caption>
+            <langstring language="en">Costs Statement</langstring>
+            <langstring language="en-us">Costs Statement</langstring>
+            <langstring language="de-ch">Kostenabrechnung</langstring>
+            <langstring language="de">Kostenabrechnung</langstring>
+            <langstring language="fr">Décompte de frais</langstring>
+            <langstring language="fr-ch">Décompte de frais</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>credit-note</termIdentifier>
+        <caption>
+            <langstring language="en">Credit Note</langstring>
+            <langstring language="en-us">Credit Note</langstring>
+            <langstring language="de-ch">Gutschrift</langstring>
+            <langstring language="de">Gutschrift</langstring>
+            <langstring language="fr">Note de crédit</langstring>
+            <langstring language="fr-ch">Note de crédit</langstring>
+        </caption>
+    </term>
+    <term>
+        <termIdentifier>supplementary-agreement</termIdentifier>
+        <caption>
+            <langstring language="en">Supplementary Agreement</langstring>
+            <langstring language="en-us">Supplementary Agreement</langstring>
+            <langstring language="de-ch">Zusatzvertrag</langstring>
+            <langstring language="de">Zusatzvertrag</langstring>
+            <langstring language="fr">Avenant</langstring>
+            <langstring language="fr-ch">Avenant</langstring>
+        </caption>
+    </term>
+
 </vdex>

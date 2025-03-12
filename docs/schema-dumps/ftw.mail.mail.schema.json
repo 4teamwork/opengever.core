@@ -108,13 +108,16 @@
             "_zope_schema_type": "Choice",
             "enum": [
                 "contract",
+                "costs-statement",
+                "credit-note",
                 "directive",
                 "offer",
                 "protocol",
                 "question",
                 "regulations",
                 "report",
-                "request"
+                "request",
+                "supplementary-agreement"
             ]
         },
         "document_author": {
