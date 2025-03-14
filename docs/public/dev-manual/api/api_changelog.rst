@@ -23,7 +23,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- ``@config``: Add ``grant_dossier_manager_to_responsible`` feature flag.
 
 2025.4.0 (2025-03-06)
 ---------------------
