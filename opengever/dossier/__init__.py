@@ -17,3 +17,10 @@ def is_grant_role_manager_to_responsible_enabled():
     from opengever.dossier.interfaces import IDossierSettings
     return api.portal.get_registry_record(
         'grant_role_manager_to_responsible', interface=IDossierSettings)
+
+
+def is_grant_dossier_manager_to_responsible_enabled():
+    # Avoid circular imports
+    from opengever.dossier.interfaces import IDossierSettings
+    return api.portal.get_registry_record(
+        'grant_dossier_manager_to_responsible', interface=IDossierSettings)
