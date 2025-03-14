@@ -2,6 +2,7 @@ from ftw.builder import Builder
 from ftw.builder import create
 from ftw.testbrowser import browsing
 from jsonschema import Draft4Validator
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.testing import IntegrationTestCase
 from plone import api
 
@@ -165,14 +166,15 @@ class TestSchemaEndpoint(IntegrationTestCase):
             headers=self.api_headers,).json
         self.assertNotIn('mode', response['properties']["responsible"])
 
-        self.activate_feature('grant_role_manager_to_responsible')
+        self.activate_feature('grant_dossier_manager_to_responsible')
         response = browser.open(
             self.dossier, view='@schema', method='GET',
             headers=self.api_headers,).json
         self.assertIn('mode', response['properties']["responsible"])
         self.assertEqual("display", response['properties']["responsible"]['mode'])
 
-        self.dossier.give_permissions_to_responsible()
+        IProtectDossier(self.dossier).protect()
+
         response = browser.open(
             self.dossier, view='@schema', method='GET',
             headers=self.api_headers,).json
