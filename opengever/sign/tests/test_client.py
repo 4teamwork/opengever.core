@@ -1,6 +1,7 @@
 from ftw.bumblebee.tests.helpers import DOCX_CHECKSUM
 from opengever.sign.client import SignServiceClient
 from opengever.testing import IntegrationTestCase
+import os
 import re
 import requests_mock
 
@@ -15,6 +16,9 @@ TOKEN = '<access-token>'
 
 @requests_mock.Mocker()
 class TestSigningClient(IntegrationTestCase):
+    def tearDown(self):
+        if 'SIGN_SERVICE_GEVER_URL' in os.environ:
+            del os.environ['SIGN_SERVICE_GEVER_URL']
 
     def test_add_a_signing_job(self, mocker):
         self.login(self.regular_user)
@@ -48,3 +52,27 @@ class TestSigningClient(IntegrationTestCase):
         response = SignServiceClient().abort_signing('123')
 
         self.assertEqual(200, response.status_code)
+
+    def test_can_use_a_different_gever_callback_url(self, mocker):
+        self.login(self.regular_user)
+        os.environ['SIGN_SERVICE_GEVER_URL'] = "http://example.com/mygever"
+
+        mocker.post(re.compile('/signing-jobs'), json=DEFAULT_MOCK_RESPONSE)
+
+        response = SignServiceClient().queue_signing(
+            self.document, TOKEN, [])
+
+        self.assertDictEqual(
+            {
+                u'access_token': u'<access-token>',
+                u'document_uid': u'createtreatydossiers000000000002',
+                u'document_url': u'http://example.com/mygever/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14', # noqa
+                u'download_url': u'http://nohost/plone/bumblebee_download?checksum={}&uuid=createtreatydossiers000000000002'.format(DOCX_CHECKSUM), # noqa
+                u'editors': [],
+                u'title': u'Vertr\xe4gsentwurf',
+                u'upload_url': u'http://example.com/mygever/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@upload-signed-pdf', # noqa
+                u'update_url': u'http://example.com/mygever/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/document-14/@update-pending-signing-job', # noqa
+            },
+            mocker.last_request.json())
+
+        self.assertDictEqual(DEFAULT_MOCK_RESPONSE, response)
