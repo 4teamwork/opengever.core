@@ -37,7 +37,6 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 import atexit
 import imp
-import opengever.sign.client
 import os
 import pytz
 import transaction
@@ -47,8 +46,6 @@ SOLR_HOSTNAME = os.environ.get('SOLR_HOSTNAME', 'localhost')
 SOLR_PORT = os.environ.get('SOLR_PORT', '55003')
 SOLR_CORE = os.environ.get('SOLR_CORE', 'testserver')
 REUSE_RUNNING_SOLR = os.environ.get('TESTSERVER_REUSE_RUNNING_SOLR', None)
-
-opengever.sign.client.sign_service_client = opengever.sign.client.NullSignServiceClient()
 
 
 class SQLiteBackup(object):
