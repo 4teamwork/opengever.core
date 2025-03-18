@@ -103,5 +103,9 @@
       factory=".adapters.DossierResponsibleJsonSchemaProvider"
       name="IDossier.responsible"
       />
+  <adapter
+      factory=".adapters.DossierManagerJsonSchemaProvider"
+      name="IProtectDossier.dossier_manager"
+      />
 
 </configure>

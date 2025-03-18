@@ -181,6 +181,21 @@ class TestSchemaEndpoint(IntegrationTestCase):
         self.assertNotIn('mode', response['properties']["responsible"])
 
     @browsing
+    def test_schema_endpoint_sets_display_mode_for_dossier_manager_field_when_necessary(self, browser):
+        self.login(self.administrator, browser)
+        response = browser.open(
+            self.dossier, view='@schema', method='GET',
+            headers=self.api_headers,).json
+        self.assertNotIn('mode', response['properties']["dossier_manager"])
+
+        self.activate_feature('grant_dossier_manager_to_responsible')
+        response = browser.open(
+            self.dossier, view='@schema', method='GET',
+            headers=self.api_headers,).json
+        self.assertIn('mode', response['properties']["dossier_manager"])
+        self.assertEqual("display", response['properties']["dossier_manager"]['mode'])
+
+    @browsing
     def test_schema_endpoint_returns_jsonschema_for_propertysheets(self, browser):
         """This just tests that the @schema endpoint returns JSON schemas
         for propertysheets at all.
