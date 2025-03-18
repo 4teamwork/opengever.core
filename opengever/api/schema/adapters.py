@@ -85,6 +85,19 @@ class DossierResponsibleJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
             result['mode'] = 'display'
         return result
 
+
+@adapter(IChoice, Interface, IOpengeverBaseLayer)
+@implementer(IJsonSchemaProvider)
+class DossierManagerJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
+    """Mark the dossier_manager field as hidden if we auto-assign the responsible
+    as dossier manager.
+    """
+    def additional(self):
+        result = super(DossierManagerJsonSchemaProvider, self).additional()
+        if is_grant_dossier_manager_to_responsible_enabled():
+            result['mode'] = 'hidden'
+        return result
+
 # These IJsonSchemaProviders below are customized so that we can retain
 # a link to the parent field. We do this so that we can use the parent field's
 # name to render URLs to sources on anonymous inner value_type Choice fields.
