@@ -873,16 +873,26 @@ class SolrFieldMapper(object):
         """
         dynamic_solr_fields = self.get_custom_property_solr_fields()
         matches = [f for f in dynamic_solr_fields if f['name'] == field_name]
-        if matches:
-            if len(matches) > 1:
-                # Check if all field definitions are equal
-                if len(set([tuple(match.items()) for match in matches])) > 1:
-                    raise Exception(
-                        u'PropertySheet incorrectly configured. Multiple fields '
-                        u'defined with name `{}`, but with a different '
-                        u'configuration.'.format(field_name))
 
-            return matches[0]
+        # Check if all field definitions are equal.
+        # By removing the title before checking for equality, we allow custom
+        # fields with the same ID to have different titles. This is a temporary
+        # solution to address issues caused by title typos.
+        # If multiple matches are found, only the first match will be returned.
+        # As a result, the title of the first match will be used in listings or
+        # exports. Since we expect custom fields with the same ID to have the
+        # same general meaning and typically the same title, returning the
+        # first item is acceptable, even if the titles vary.
+        equal_matches = [deepcopy(match) for match in matches]
+        map(lambda item: item.pop('title', None), equal_matches)
+
+        if len(set([tuple(match.items()) for match in equal_matches])) > 1:
+            raise Exception(
+                u'PropertySheet incorrectly configured. Multiple fields '
+                u'defined with name `{}`, but with a different '
+                u'configuration.'.format(field_name))
+
+        return matches[0] if matches else None
 
     def get_custom_property_solr_fields(self, all_slots=False):
         """Get the list of dynamic Solr fields used for custom properties.

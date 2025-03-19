@@ -281,6 +281,59 @@ class TestDocumentReporter(SolrIntegrationTestCase):
         self.assertEqual(expected_values, [cell.value for cell in rows[1]])
 
     @browsing
+    def test_supports_multiple_custom_field_with_different_title(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        create(
+            Builder("property_sheet_schema")
+            .named("schema1")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.offer")
+            .with_field("textline", u"tagline", u"Tag Line - 1", u"", False)
+        )
+
+        # Another propertysheet for a different slot. We add the same field
+        # again but with another title.
+        create(
+            Builder("property_sheet_schema")
+            .named("schema2")
+            .assigned_to_slots(u"IDocumentMetadata.document_type.report")
+            .with_field("textline", u"tagline", u"Tag Line - 2", u"", False))
+
+        IDocumentMetadata(self.document).document_type = u"offer"
+        IDocumentCustomProperties(self.document).custom_properties = {
+            "IDocumentMetadata.document_type.offer": {
+                "tagline": "Foo",
+            }
+        }
+        self.document.reindexObject()
+
+        IDocumentMetadata(self.subdocument).document_type = u"report"
+        IDocumentCustomProperties(self.subdocument).custom_properties = {
+            "IDocumentMetadata.document_type.report": {
+                "tagline": "Bar",
+            }
+        }
+        self.subdocument.reindexObject()
+
+        self.commit_solr()
+
+        params = self.make_path_param(self.document, self.subdocument)
+        params.update({'columns': ['title', 'tagline_custom_field_string']})
+        browser.open(view='document_report', data=params)
+
+        workbook = self.load_workbook(browser.contents)
+        rows = list(workbook.active.rows)
+
+        expected_titles = [u'Title', u'Tag Line - 2']
+        self.assertEqual(expected_titles, [cell.value for cell in rows[0]])
+
+        expected_values = [u'\xdcbersicht der Vertr\xe4ge von 2016', u'Bar']
+        self.assertEqual(expected_values, [cell.value for cell in rows[1]])
+
+        expected_values = [u'Vertr\xe4gsentwurf', u'Foo']
+        self.assertEqual(expected_values, [cell.value for cell in rows[2]])
+
+    @browsing
     def test_sets_number_format_for_date_fields(self, browser):
         self.login(self.regular_user, browser=browser)
 
