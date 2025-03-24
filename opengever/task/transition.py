@@ -451,6 +451,13 @@ class DelegateTransitionExtender(DefaultTransitionExtender):
                         transition_params.pop('documents', []),
                         transition_params)
 
+    def _deserialize_schema(self, schema, transition_params, collect_errors=False):
+        if "text" in transition_params and transition_params["text"] is None:
+            del transition_params["text"]
+
+        return super(DelegateTransitionExtender, self)._deserialize_schema(
+            schema, transition_params, collect_errors=collect_errors)
+
 
 @implementer(ITransitionExtender)
 @adapter(ITask, IBrowserRequest)

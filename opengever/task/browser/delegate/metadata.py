@@ -57,6 +57,7 @@ class IUpdateMetadata(Schema):
         title=_(u"label_text", default=u"Text"),
         description=_(u"help_text", default=u""),
         required=False,
+        missing_value=None,
         defaultFactory=text_default,
         default_mime_type='text/html',
         output_mime_type='text/x-html-safe')
