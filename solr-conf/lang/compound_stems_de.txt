@@ -1656,6 +1656,8 @@ kanone
 kanonen
 kante
 kantig
+kanton
+kantons
 kanzler
 kap
 kapital
