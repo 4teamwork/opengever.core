@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-11-05 13:46+0000\n"
+"POT-Creation-Date: 2025-03-24 10:10+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -410,6 +410,11 @@ msgstr "Create dossier from template"
 msgid "description_dossier_manager"
 msgstr "The user or group selected here will be able to modify or disable dossier protection, once enabled. Usually you'd want to at least include yourself here."
 
+#. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_extend_local_roles"
+msgstr "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
+
 #. German translation: Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagwörter bereits vorausgefüllt.
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -762,6 +767,11 @@ msgstr "End date"
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_end_byline"
 msgstr "End"
+
+#. Default: "Extend local roles"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_extend_local_roles"
+msgstr "Extend local roles"
 
 #. German translation: Externe Referenz
 #. Default: "External Reference"

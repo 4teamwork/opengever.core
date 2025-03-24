@@ -237,6 +237,12 @@
             "description": "",
             "_zope_schema_type": "Date"
         },
+        "extend_local_roles": {
+            "type": "boolean",
+            "title": "Berechtigungen erweitern",
+            "description": "Standardm\u00e4ssig werden vererbte Berechtigungen beim Sch\u00fctzen des Dossiers unterbrochen. W\u00e4hlen Sie diese Option, wenn die Berechtigungen stattdessen erweitert werden sollen.",
+            "_zope_schema_type": "Bool"
+        },
         "custom_properties": {
             "type": "object",
             "title": "Benutzerdefinierte Felder",
@@ -284,6 +290,7 @@
         "custody_period",
         "date_of_cassation",
         "date_of_submission",
+        "extend_local_roles",
         "custom_properties",
         "touched"
     ]

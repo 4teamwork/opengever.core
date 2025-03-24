@@ -679,6 +679,7 @@ class TestDossierTransfersGetFullContent(KuBIntegrationTestCase):
             u'public_trial_statement': None,
             u'reading': [],
             u'reading_and_writing': [],
+            u'extend_local_roles': False,
             u'reference_number': u'Client1 1.1 / 5',
             u'relatedDossier': [],
             u'relative_path': u'ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',

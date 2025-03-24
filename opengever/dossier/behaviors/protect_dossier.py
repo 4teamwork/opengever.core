@@ -39,6 +39,7 @@ class IProtectDossier(model.Schema):
             'reading',
             'reading_and_writing',
             'dossier_manager',
+            'extend_local_roles',
         ],
     )
 
@@ -134,6 +135,25 @@ class IProtectDossier(model.Schema):
         missing_value=None,
     )
 
+    form.write_permission(
+        extend_local_roles='opengever.dossier.ProtectDossier',
+    )
+
+    extend_local_roles = schema.Bool(
+        title=_(u'label_extend_local_roles', default=u'Extend local roles'),
+        description=_(
+            u'description_extend_local_roles',
+            default=(
+                u'Whether dossier protection should block role inheritance'
+                u'or extend the currently inherited role assignments with the'
+                u'additional roles mapping'
+            )
+        ),
+        default=False,
+        required=False,
+        missing_value=False,
+    )
+
     @invariant
     def dossier_manager_filled_if_protection(self):
         if ((self.reading_and_writing or self.reading)
@@ -200,7 +220,7 @@ class DossierProtection(AnnotationsFactoryImpl):
         self.context.reindexObject(idxs=['blocked_local_roles'])
 
     def need_block_role_inheritance(self):
-        return self.is_dossier_protected()
+        return self.is_dossier_protected() and not self.extend_local_roles
 
     def is_role_inheritance_blocked(self, context):
         return getattr(context, '__ac_local_roles_block__', False)

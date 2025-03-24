@@ -23,6 +23,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- Can use ``extend_local_roles`` property for dossier protection feature to extend local roles instead of blocking role inheritance when dossier is protectd.
 - ``@config``: Add ``grant_dossier_manager_to_responsible`` feature flag.
 
 2025.4.0 (2025-03-06)
