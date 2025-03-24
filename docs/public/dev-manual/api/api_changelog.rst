@@ -3,7 +3,18 @@
 API Changelog
 =============
 
-2025.5.0 (unreleased)
+2025.6.0 (unreleased)
+---------------------
+
+Breaking Changes
+^^^^^^^^^^^^^^^^
+
+
+Other Changes
+^^^^^^^^^^^^^
+
+
+2025.5.0 (2025-03-24)
 ---------------------
 
 Breaking Changes
