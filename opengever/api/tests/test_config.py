@@ -82,7 +82,6 @@ class TestConfig(IntegrationTestCase):
                 u'filing_number': False,
                 u'gever_ui_enabled': True,
                 u'grant_dossier_manager_to_responsible': False,
-                u'grant_role_manager_to_responsible': False,
                 u'hubspot': False,
                 u'journal_pdf': False,
                 u'meetings': False,

@@ -19,7 +19,7 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Remove ``grant_role_manager_to_responsible`` feature. Use the ``grant_dossier_manager_to_responsible`` feature instead. The old feature will be migrated to the new one by an upgrade step.
 
 Other Changes
 ^^^^^^^^^^^^^

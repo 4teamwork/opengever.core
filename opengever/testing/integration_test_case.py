@@ -82,7 +82,6 @@ FEATURE_FLAGS = {
     'extjs': 'ftw.tabbedview.interfaces.ITabbedView.extjs_enabled',
     'gever_ui': 'opengever.base.interfaces.IGeverUI.is_feature_enabled',
     'grant_dossier_manager_to_responsible': 'opengever.dossier.interfaces.IDossierSettings.grant_dossier_manager_to_responsible',  # noqa
-    'grant_role_manager_to_responsible': 'opengever.dossier.interfaces.IDossierSettings.grant_role_manager_to_responsible',  # noqa
     'meeting': 'opengever.meeting.interfaces.IMeetingSettings.is_feature_enabled',
     'officeconnector-attach': 'opengever.officeconnector.interfaces.'
                               'IOfficeConnectorSettings.attach_to_outlook_enabled',
