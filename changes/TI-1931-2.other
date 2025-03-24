@@ -1,1 +1,0 @@
-Sign service uses SIGN_SERVICE_GEVER_URL environment variable to construct the callback links. [elioschmutz]

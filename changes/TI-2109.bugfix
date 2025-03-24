@@ -1,1 +1,0 @@
-Fix error when delegating a task and description is None. [ran]

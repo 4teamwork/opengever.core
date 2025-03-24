@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.5.0 (2025-03-24)
+---------------------
+
+Bug fixes:
+
+
+- Fix error when custom fields with the same ID have different titles by allowing title differences without raising an error. [elioschmutz] [TI-1363]
+- Fix error when delegating a task and description is None. [ran] [TI-2109]
+
+
+Other changes:
+
+
+- Add support for read-only mode with Docker. [buchi] [GH-8142]
+- Sign service uses SIGN_SERVICE_GEVER_URL environment variable to construct the callback links. [elioschmutz] [TI-1931-2]
+- Provides bumblebee app id to the ogsign service to enable multiple bumblebee apps. Requires ogsign 2025.2.0 or higher [elioschmutz] [TI-1931-3]
+
+
 2025.4.0 (2025-03-06)
 ---------------------
 
