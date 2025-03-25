@@ -3,7 +3,7 @@ from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.schema import IIdentifier
 from opengever.base.schema import IMultiTypeField
 from opengever.base.vocabulary import WrapperBase
-from opengever.dossier import is_grant_role_manager_to_responsible_enabled
+from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
 from plone import api
 from plone.restapi.types.adapters import ASCIILineJsonSchemaProvider
 from plone.restapi.types.adapters import ChoiceJsonSchemaProvider
@@ -79,9 +79,22 @@ class DossierResponsibleJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
     """
     def additional(self):
         result = super(DossierResponsibleJsonSchemaProvider, self).additional()
-        if is_grant_role_manager_to_responsible_enabled() and\
+        if is_grant_dossier_manager_to_responsible_enabled() and\
            not IAnnotations(self.request).get(TYPE_TO_BE_ADDED_KEY) and\
-           not api.user.has_permission("Sharing page: Delegate roles", obj=self.context):
+           not api.user.has_permission("opengever.dossier: Protect dossier", obj=self.context):
+            result['mode'] = 'display'
+        return result
+
+
+@adapter(IChoice, Interface, IOpengeverBaseLayer)
+@implementer(IJsonSchemaProvider)
+class DossierManagerJsonSchemaProvider(GEVERChoiceJsonSchemaProvider):
+    """Use the widgets "display"-mode for dossier_manager field
+    if we auto-assign the responsible as dossier manager.
+    """
+    def additional(self):
+        result = super(DossierManagerJsonSchemaProvider, self).additional()
+        if is_grant_dossier_manager_to_responsible_enabled():
             result['mode'] = 'display'
         return result
 

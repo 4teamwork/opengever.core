@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-11-05 13:46+0000\n"
+"POT-Creation-Date: 2025-03-24 10:10+0000\n"
 "PO-Revision-Date: 2017-12-03 11:16+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/fr/>\n"
@@ -329,6 +329,11 @@ msgstr "Créer un dossier d'affaire à partir du modèle"
 msgid "description_dossier_manager"
 msgstr "Choisissez un utilisateur ou un groupe pouvant modifier ou enlever la protection d'un dossier ayant été protégé. Normalement c'est vous-même."
 
+#. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "description_extend_local_roles"
+msgstr ""
+
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
 msgid "description_predefined_keywords"
@@ -625,6 +630,11 @@ msgstr "Fin"
 #: ./opengever/dossier/viewlets/byline.py
 msgid "label_end_byline"
 msgstr "Jusqu'au"
+
+#. Default: "Extend local roles"
+#: ./opengever/dossier/behaviors/protect_dossier.py
+msgid "label_extend_local_roles"
+msgstr ""
 
 #. Default: "External Reference"
 #: ./opengever/dossier/behaviors/dossier.py

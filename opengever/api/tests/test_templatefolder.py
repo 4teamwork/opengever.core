@@ -627,8 +627,8 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
         self.assertEqual(self.regular_user.getId(), IDossier(subdossier).responsible)
 
     @browsing
-    def test_create_dossier_from_template_properly_sets_role_manager_local_roles(self, browser):
-        self.activate_feature('grant_role_manager_to_responsible')
+    def test_create_dossier_from_template_properly_sets_dossier_manager_local_roles(self, browser):
+        self.activate_feature('grant_dossier_manager_to_responsible')
         self.login(self.regular_user, browser)
         browser.open(self.leaf_repofolder,
                      view='@vocabularies/opengever.dossier.DossierTemplatesVocabulary',
@@ -647,13 +647,43 @@ class TestDossierFromTemplatePost(IntegrationTestCase):
 
         dossier = children['added'].pop()
         self.assertEqual(self.regular_user.getId(), IDossier(dossier).responsible)
-        self.assertEqual(((self.regular_user.getId(), ('Role Manager', 'Owner')), ),
-                         dossier.get_local_roles())
+        self.assertEqual(
+            (
+                (
+                    self.regular_user.getId(),
+                    (
+                        'Publisher',
+                        'DossierManager',
+                        'Editor',
+                        'Reader',
+                        'Contributor',
+                        'Reviewer',
+                        'Owner'
+                    )
+                ),
+            ),
+            dossier.get_local_roles()
+        )
 
         subdossier = dossier.listFolderContents()[1]
         self.assertEqual(self.regular_user.id, IDossier(subdossier).responsible)
-        self.assertEqual(((self.regular_user.id, ('Role Manager', 'Owner')), ),
-                         subdossier.get_local_roles())
+        self.assertEqual(
+            (
+                (
+                    self.regular_user.getId(),
+                    (
+                        'Publisher',
+                        'DossierManager',
+                        'Editor',
+                        'Reader',
+                        'Contributor',
+                        'Reviewer',
+                        'Owner'
+                    )
+                ),
+            ),
+            subdossier.get_local_roles()
+        )
 
     @browsing
     def test_raise_unauthorized_if_dossiertemplate_feature_is_not_available(self, browser):

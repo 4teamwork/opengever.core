@@ -124,3 +124,32 @@ class TestProtectDossier(SolrIntegrationTestCase):
                      method='PATCH', headers=self.api_headers)
 
         self.assertFalse(IProtectDossier(self.dossier).is_dossier_protected())
+
+    @browsing
+    def test_can_change_role_inheritance(self, browser):
+        self.login(self.dossier_manager, browser=browser)
+        self.assertFalse(IProtectDossier(self.dossier).is_dossier_protected())
+
+        data = {
+            'reading': [self.regular_user.getId()],
+            'dossier_manager': self.dossier_manager.getId(),
+        }
+
+        browser.open(self.dossier, data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertTrue(IProtectDossier(self.dossier).is_dossier_protected())
+
+        # Dossier protection blocks local roles by default
+        self.assertTrue(self.dossier.__ac_local_roles_block__)
+
+        # But can be changed by extending the local roles
+        data = {
+            'extend_local_roles': True,
+        }
+
+        browser.open(self.dossier, data=json.dumps(data),
+                     method='PATCH', headers=self.api_headers)
+
+        self.assertTrue(IProtectDossier(self.dossier).is_dossier_protected())
+        self.assertFalse(self.dossier.__ac_local_roles_block__)

@@ -158,7 +158,7 @@ class GeverSettingsAdpaterV1(object):
         features['favorites'] = api.portal.get_registry_record('is_feature_enabled', interface=IFavoritesSettings)
         features['filing_number'] = self.is_filing_number_feature_installed()
         features['gever_ui_enabled'] = api.portal.get_registry_record('is_feature_enabled', interface=IGeverUI)
-        features['grant_role_manager_to_responsible'] = api.portal.get_registry_record('grant_role_manager_to_responsible', interface=IDossierSettings)  # noqa
+        features['grant_dossier_manager_to_responsible'] = api.portal.get_registry_record('grant_dossier_manager_to_responsible', interface=IDossierSettings)  # noqa
         features['hubspot'] = api.portal.get_registry_record('is_feature_enabled', interface=IHubSpotSettings)  # noqa
         features['journal_pdf'] = api.portal.get_registry_record('journal_pdf_enabled', interface=IDossierResolveProperties)
         features['tasks_pdf'] = api.portal.get_registry_record('tasks_pdf_enabled', interface=IDossierResolveProperties)
