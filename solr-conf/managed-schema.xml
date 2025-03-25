@@ -114,7 +114,6 @@
       or Solr won't start. _version_ and update log are required for SolrCloud
    -->
     <field name="_version_" type="plong" indexed="false" stored="false"/>
-    <field name="_root_" type="string" indexed="true" stored="false" />
     <field name="_language_"  type="string"  indexed="true"  stored="true" />
 
     <!-- Plone default fields -->
