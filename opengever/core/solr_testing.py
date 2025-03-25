@@ -1,6 +1,5 @@
 from collective.indexing.queue import processQueue
 from ftw.solr.interfaces import ISolrConnectionManager
-from itertools import izip_longest
 from path import Path
 from requests.exceptions import ConnectionError
 from zope.component import getUtility
@@ -239,16 +238,12 @@ class SolrReplicationAPIClient(object):
             raise
         response_data = response.json()
 
-        def grouper(iterable, n, fillvalue=None):
-            args = [iter(iterable)] * n
-            return izip_longest(fillvalue=fillvalue, *args)
-
         details = response_data.get('details', {})
         if 'backup' not in details:
             # Status endpoint may not know about running backup yet
             return 'unknown'
 
-        backup_details = dict(grouper(details.get('backup', []), 2))
+        backup_details = details.get('backup', {})
 
         if 'status' not in backup_details:
             raise Exception("Unexpected backup details response from Solr - "
