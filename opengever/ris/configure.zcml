@@ -16,4 +16,9 @@
 
   <adapter factory=".sequence.ProposalSequenceNumberGenerator" />
 
+  <adapter
+      factory=".indexers.committee"
+      name="committee"
+      />
+
 </configure>
