@@ -44,9 +44,14 @@ class SerializeActorToJson(object):
                 represents = serializer()
                 represents['@id'] = represents_url
 
+        if self.context.actor_type == 'riscommittee':
+            id = self.context.get_profile_url()
+        else:
+            id = '{}/@actors/{}'.format(
+                api.portal.get().absolute_url(), self.context.identifier)
+
         result = {
-            '@id': '{}/@actors/{}'.format(
-                api.portal.get().absolute_url(), self.context.identifier),
+            '@id': id,
             '@type': 'virtual.ogds.actor',
             'active': self.context.is_active,
             'actor_type': self.context.actor_type,
