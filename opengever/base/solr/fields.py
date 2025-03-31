@@ -476,6 +476,11 @@ FIELDS_WITH_MAPPING = [
         accessor='checked_out_fullname',
     ),
     ListingField(
+        'committee',
+        index='committee',
+        title=document_mf('label_committee', default='Committee'),
+    ),
+    ListingField(
         'containing_dossier',
         index='containing_dossier',
         title=document_mf(u'label_dossier_title'),

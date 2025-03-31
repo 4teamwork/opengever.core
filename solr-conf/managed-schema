@@ -134,6 +134,7 @@
     <field name="checked_out" type="string" indexed="true" stored="false" />
     <field name="is_locked_by_copy_to_workspace" type="boolean" indexed="true" stored="false" />
     <field name="is_completed" type="boolean" indexed="true" stored="false" />
+    <field name="committee" type="string" indexed="true" stored="false" />
     <field name="containing_dossier" type="string" indexed="false" stored="false" />
     <field name="containing_subdossier" type="string" indexed="false" stored="false" />
     <field name="deadline" type="pdate" indexed="true" stored="false" />

@@ -588,7 +588,20 @@ class RisProposalBuilder(GeverDexterityBuilder):
             'committee_title': "Finanzkommission",
             'committee_url': "https://example.com/fin/",
             'issuer': TEST_USER_ID,
+            'portal_type': 'opengever.ris.proposal',
         }
+
+    def with_committee_title(self, content):
+        self.arguments["committee_title"] = content
+        return self
+
+    def with_committee_url(self, content):
+        self.arguments["committee_url"] = content
+        return self
+
+    def with_id(self, content):
+        self.arguments["id"] = content
+        return self
 
 
 builder_registry.register('ris_proposal', RisProposalBuilder)

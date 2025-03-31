@@ -243,6 +243,11 @@
       name="responsible"
       />
 
+  <adapter
+      factory=".indexers.committeeIndexer"
+      name="committee"
+      />
+
   <adapter factory=".period.PeriodValidator" />
 
 </configure>

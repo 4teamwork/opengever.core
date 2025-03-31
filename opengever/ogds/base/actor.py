@@ -12,6 +12,7 @@ The lookup results are
  - a ContactActor if the identifier starts with "contact:"
  - a TeamActor if the identifier starts with "team:"
  - a CommitteeActor if the identifier starts with "committee:"
+ - a RISCommitteeActor if the identifier starts with "riscommittee:"
  - a PloneUserActor or an OGDSUserActor for any other string.
  - an InteractiveActor if the identifier is one of the INTERACTIVE_ACTOR_IDS
 
@@ -420,6 +421,44 @@ class CommitteeActor(Actor):
 
 
 @implementer(IActor)
+class RISCommitteeActor(Actor):
+
+    # Barebones class for visualization purposes
+
+    css_class = 'actor-committee'
+    actor_type = 'riscommittee'
+
+    def __init__(self, identifier, proposal=None):
+        super(RISCommitteeActor, self).__init__(identifier)
+        self.proposal = proposal
+
+    def get_profile_url(self):
+        return self.proposal.committee_url
+
+    def corresponds_to(self, user):
+        return False
+
+    def get_label(self, with_principal=None):
+        return self.proposal.committee_title
+
+    @property
+    def is_active(self):
+        return True
+
+    def representatives(self):
+        return []
+
+    def represents(self):
+        return None
+
+    def represents_url(self):
+        return None
+
+    def get_portrait_url(self):
+        return None
+
+
+@implementer(IActor)
 class ContactActor(Actor):
 
     css_class = 'actor-contact'
@@ -717,6 +756,25 @@ class ActorLookup(object):
 
         return CommitteeActor(self.identifier, committee=committee)
 
+    def is_riscommittee(self):
+        return self.identifier.startswith('riscommittee:')
+
+    def create_riscommittee_actor(self, proposal=None):
+        if not proposal:
+            id = self.identifier.split(':', 1)[1]
+            catalog = getToolByName(getSite(), 'portal_catalog')
+            query = {'portal_type': 'opengever.ris.proposal',
+                     'id': id}
+
+            proposals = catalog.searchResults(**query)
+            if len(proposals) == 0:
+                return self.create_null_actor()
+
+            proposal = proposals[0].getObject()
+            actor_id = "riscommittee:{}".format(proposal.committee_title)
+
+        return RISCommitteeActor(actor_id, proposal=proposal)
+
     def is_contact(self):
         return self.identifier.startswith('contact:')
 
@@ -836,6 +894,9 @@ class ActorLookup(object):
 
         elif self.is_committee():
             return self.create_committee_actor()
+
+        elif self.is_riscommittee():
+            return self.create_riscommittee_actor()
 
         elif self.is_interactive_actor():
             return self.create_interactive_actor()

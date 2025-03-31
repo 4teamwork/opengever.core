@@ -16,6 +16,7 @@ from opengever.ogds.base.actor import KuBContactActor
 from opengever.ogds.base.actor import NullActor
 from opengever.ogds.base.actor import OGDSGroupActor
 from opengever.ogds.base.actor import OGDSUserActor
+from opengever.ogds.base.actor import RISCommitteeActor
 from opengever.ogds.base.actor import TeamActor
 from opengever.ogds.models.user import User
 from opengever.testing import FunctionalTestCase
@@ -28,6 +29,13 @@ import requests_mock
 
 
 class TestActorLookup(IntegrationTestCase):
+    def setUp(self):
+        super(TestActorLookup, self).setUp()
+        with self.login(self.manager):
+            self.ris_proposal = create(
+                Builder('ris_proposal').within(self.dossier).having(document=self.document)
+                .with_committee_title('Kantonsrat')
+                .with_committee_url('https:://spv.onegovgever.ch'))
 
     def test_null_actor(self):
         actor = Actor.lookup('not-existing')
@@ -91,6 +99,14 @@ class TestActorLookup(IntegrationTestCase):
             actor.get_link(with_icon=False))
 
         self.assertEqual(None, actor.login_name)
+
+    def test_riscommittee_actor_lookup(self):
+        self.login(self.meeting_user)
+        actor = Actor.lookup('riscommittee:proposal-5')
+
+        self.assertIsInstance(actor, RISCommitteeActor)
+        self.assertEqual('Kantonsrat', actor.get_label())
+        self.assertEqual('https:://spv.onegovgever.ch', actor.get_profile_url())
 
     def test_team_actor_lookup(self):
         self.login(self.regular_user)
