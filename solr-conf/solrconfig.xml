@@ -1207,22 +1207,22 @@ via parameters.  The below configuration supports hl.method=original and fastVec
 
   <!-- Script update processor
 
-    This example hooks in an update processor implemented using JavaScript and demonstrates
-    how to pass in custom parameters.
+    Propagates document updates to another Solr
 
     See more about script update processor at https://solr.apache.org/guide/solr/latest/configuration-guide/script-update-processor.html
   -->
-  <!--
-  <updateRequestProcessorChain name="script">
+
+  <updateRequestProcessorChain name="sync.chain">
     <processor class="org.apache.solr.scripting.update.ScriptUpdateProcessorFactory">
-      <str name="script">update-script.js</str>
+      <str name="script">sync-solr.js</str>
       <lst name="params">
-        <str name="config_param">example config parameter</str>
+        <str name="remoteCoreURL">${remoteCoreURL:}</str>
+        <str name="portalTypes">${portalTypes:}</str>
       </lst>
     </processor>
     <processor class="solr.RunUpdateProcessorFactory" />
   </updateRequestProcessorChain>
-  -->
+
 
   <!-- Response Writers
 
