@@ -10,8 +10,9 @@ from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
 from opengever.dossier import _
-from opengever.dossier import is_grant_role_manager_to_responsible_enabled
+from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
@@ -192,10 +193,10 @@ def dossier_comment_added(obj, event):
 
 
 def set_responsible_role(obj, event):
-    if not is_grant_role_manager_to_responsible_enabled():
+    if not is_grant_dossier_manager_to_responsible_enabled():
         return
 
-    obj.give_permissions_to_responsible()
+    IProtectDossier(obj).protect()
 
 
 def update_responsible_role(obj, event):
@@ -203,7 +204,7 @@ def update_responsible_role(obj, event):
        IContainerModifiedEvent.providedBy(event):
         return
 
-    if not is_grant_role_manager_to_responsible_enabled():
+    if not is_grant_dossier_manager_to_responsible_enabled():
         return
 
     attrs = tuple(
@@ -214,9 +215,9 @@ def update_responsible_role(obj, event):
     if 'IDossier.responsible' not in attrs:
         return
 
-    if not api.user.has_permission('Sharing page: Delegate roles', obj=obj):
+    if not api.user.has_permission('opengever.dossier: Protect dossier', obj=obj):
         raise NotReportedForbidden(
             _('changing_responsible_disallowed',
               default=u'You are not allowed to change the responsible.'))
 
-    obj.give_permissions_to_responsible(remove_existing=True)
+    IProtectDossier(obj).protect()

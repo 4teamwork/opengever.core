@@ -1,0 +1,5 @@
+<registry>
+  <records interface="opengever.dossier.interfaces.IDossierSettings">
+    <value key="grant_dossier_manager_to_responsible">False</value>
+  </records>
+</registry>

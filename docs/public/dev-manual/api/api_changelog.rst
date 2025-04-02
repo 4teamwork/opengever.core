@@ -19,11 +19,12 @@ Other Changes
 
 Breaking Changes
 ^^^^^^^^^^^^^^^^
-
+- Remove ``grant_role_manager_to_responsible`` feature. Use the ``grant_dossier_manager_to_responsible`` feature instead. The old feature will be migrated to the new one by an upgrade step.
 
 Other Changes
 ^^^^^^^^^^^^^
-
+- Can use ``extend_local_roles`` property for dossier protection feature to extend local roles instead of blocking role inheritance when dossier is protectd.
+- ``@config``: Add ``grant_dossier_manager_to_responsible`` feature flag.
 
 2025.4.0 (2025-03-06)
 ---------------------

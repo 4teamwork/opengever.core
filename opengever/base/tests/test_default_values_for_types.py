@@ -115,6 +115,7 @@ DOSSIER_DEFAULTS = {
     'start': FROZEN_TODAY,
     'reading': [],
     'reading_and_writing': [],
+    'extend_local_roles': False,
     'dossier_manager': None,
     'touched': FROZEN_TODAY,
     'custom_properties': {'IDossier.default': {'location': u'B\xfcren an der Aare'}},

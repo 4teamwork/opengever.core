@@ -288,9 +288,9 @@ class IDossierChecklistSettings(Interface):
 
 class IDossierSettings(Interface):
 
-    grant_role_manager_to_responsible = schema.Bool(
-        title=u'Grant Role Manager to responsible.',
-        description=u'Whether the dossier responsible should be granted Role '
-        'Manager role. Note that when activating this feature, Role Manager '
+    grant_dossier_manager_to_responsible = schema.Bool(
+        title=u'Grant Dossier Manager to responsible.',
+        description=u'Whether the dossier responsible should be granted Dossier '
+        'Manager role. Note that when activating this feature, Dossier Manager '
         'has to get assigned to the responsible on every dossier.',
         default=False)

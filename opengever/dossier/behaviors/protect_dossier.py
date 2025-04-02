@@ -1,11 +1,14 @@
 from ftw.keywordwidget.widget import KeywordFieldWidget
+from opengever.base.role_assignments import ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE
 from opengever.base.role_assignments import ASSIGNMENT_VIA_PROTECT_DOSSIER
 from opengever.base.role_assignments import ASSIGNMENT_VIA_SHARING
+from opengever.base.role_assignments import DossierResponsibleRoleAssignment
 from opengever.base.role_assignments import ProtectDossierRoleAssignment
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.dossier import _
+from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
+from opengever.dossier.behaviors.dossier import IDossier
 from opengever.ogds.base.sources import AllUsersAndGroupsSourceBinder
-from plone import api
 from plone.autoform import directives as form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.behavior.annotation import AnnotationsFactoryImpl
@@ -36,6 +39,7 @@ class IProtectDossier(model.Schema):
             'reading',
             'reading_and_writing',
             'dossier_manager',
+            'extend_local_roles',
         ],
     )
 
@@ -131,6 +135,25 @@ class IProtectDossier(model.Schema):
         missing_value=None,
     )
 
+    form.write_permission(
+        extend_local_roles='opengever.dossier.ProtectDossier',
+    )
+
+    extend_local_roles = schema.Bool(
+        title=_(u'label_extend_local_roles', default=u'Extend local roles'),
+        description=_(
+            u'description_extend_local_roles',
+            default=(
+                u'Whether dossier protection should block role inheritance'
+                u'or extend the currently inherited role assignments with the'
+                u'additional roles mapping'
+            )
+        ),
+        default=False,
+        required=False,
+        missing_value=False,
+    )
+
     @invariant
     def dossier_manager_filled_if_protection(self):
         if ((self.reading_and_writing or self.reading)
@@ -163,46 +186,29 @@ class DossierProtection(AnnotationsFactoryImpl):
     def __init__(self, context, annotation_schema):
         super(DossierProtection, self).__init__(context, annotation_schema)
         self.context = context
+        self.auto_assign_responsible = is_grant_dossier_manager_to_responsible_enabled()
 
-    def protect(self, force_update=False):
+    def protect(self):
         """Update the role-inheritance and the role-mapping of a dossier.
 
-        The protection-proccess will be started so long as the current user
-        does not have the 'Manager' role and the user also has the required
-        permission to protect dossiers.
+        The default implementation flushes all the local roles and then
+         assigns all the defined users in the protection-schema with the
+         related local-roles.
 
-        First it checks, if the protection is activate or not. Depending on the
-        protection-status, the roles will be inherited or not.
-
-        After updating the inheritance, all the localroles will be flushed
-        to continue without predefined local-roles.
-
-        Then, all the defined users in the protection-schema will receive the
-        related local-roles.
-
-        At the end, the current editing user will receive full access to the
-        to the current dossier also if it not defined in the schema. This
-        is to prevent locking out yourself.
+        If the auto_assign_responsible feature ist active, the function will
+        always override the current dossier_manager with the current dossier
+        responsible before assigning the new local roles.
         """
-        if not self.is_update_allowed(force_update):
-            return
-
-        self.update_role_inheritance()
         self.clear_local_roles()
+        self.update_role_inheritance()
 
-        if self.is_dossier_protected():
-            self.update_role_settings()
+        if self.auto_assign_responsible:
+            self.dossier_manager = IDossier(self.context).responsible
+
+        self.grant_dossier_manager_roles()
+        self.grant_reader_and_writer_roles()
 
         self.context.reindexObjectSecurity()
-
-    def is_update_allowed(self, force_update=False):
-        """Only update the permissions if the current user has the
-        protect dossier permission and a dossier manager is set.
-        """
-        if force_update:
-            return True
-        return api.user.has_permission('opengever.dossier: Protect dossier', obj=self.context) and \
-            (self.dossier_manager or not self.is_dossier_protected())
 
     def update_role_inheritance(self):
         old_value = self.is_role_inheritance_blocked(self.context)
@@ -214,7 +220,7 @@ class DossierProtection(AnnotationsFactoryImpl):
         self.context.reindexObject(idxs=['blocked_local_roles'])
 
     def need_block_role_inheritance(self):
-        return self.is_dossier_protected()
+        return self.is_dossier_protected() and not self.extend_local_roles
 
     def is_role_inheritance_blocked(self, context):
         return getattr(context, '__ac_local_roles_block__', False)
@@ -222,19 +228,47 @@ class DossierProtection(AnnotationsFactoryImpl):
     def is_dossier_protected(self):
         return bool(self.reading or self.reading_and_writing)
 
-    def update_role_settings(self):
-        assignments = []
-        for principal, roles in self.generate_role_settings().items():
-            assignments.append(ProtectDossierRoleAssignment(principal, roles))
+    def grant_reader_and_writer_roles(self):
+        manager = RoleAssignmentManager(self.context)
+        assignments = {}
+
+        for principal in self.reading:
+            assignments[principal] = ProtectDossierRoleAssignment(
+                principal, self.READING_ROLES)
+
+        for principal in self.reading_and_writing:
+            assignments[principal] = ProtectDossierRoleAssignment(
+                principal, self.READING_AND_WRITING_ROLES)
 
         if assignments:
-            manager = RoleAssignmentManager(self.context)
-            manager.reset(assignments)
+            manager.add_or_update_assignments(assignments.values())
+
+    def grant_dossier_manager_roles(self):
+        if not self.dossier_manager:
+            return
+
+        manager = RoleAssignmentManager(self.context)
+
+        # Always set the dossier manager if the auto assign feature is enabled.
+        if self.auto_assign_responsible:
+            assignment = DossierResponsibleRoleAssignment(self.dossier_manager,
+                                                          self.DOSSIER_MANAGER_ROLES,
+                                                          self.context)
+            manager.add_or_update_assignments((assignment, ))
+
+        # Otherwise only assign it if the dossier is meant to be protected
+        elif self.is_dossier_protected:
+            assignment = ProtectDossierRoleAssignment(self.dossier_manager,
+                                                      self.DOSSIER_MANAGER_ROLES,
+                                                      self.context)
+            manager.add_or_update_assignments((assignment, ))
 
     def clear_local_roles(self):
         manager = RoleAssignmentManager(self.context)
         manager.clear_by_causes(
-            [ASSIGNMENT_VIA_SHARING, ASSIGNMENT_VIA_PROTECT_DOSSIER])
+            [ASSIGNMENT_VIA_SHARING,
+             ASSIGNMENT_VIA_PROTECT_DOSSIER,
+             ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE])
 
     def generate_role_settings(self):
         role_settings = {}
