@@ -49,10 +49,11 @@ class MigrateGrantRoleManagerToResponsibleToGrantDossierManagerToResponsibleFeat
             manager.clear_by_causes([ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE])
 
             # Get the current responsible. Even if the responsible is required
-            # on a dossier, it's possible to have dossiers without any responsible.
-            # This should not happen, but is possible. We skip such dossiers.
+            # on a dossier, it's possible to have dossiers without any responsible
+            # or dossiers with a non existing responsible.
+            # Both should not happen, but is possible. We skip such dossiers.
             responsible = IDossier(obj).responsible
-            if not responsible:
+            if not responsible or not api.user.get(responsible):
                 continue
 
             # Assign the new assignment dossier manager roles.
