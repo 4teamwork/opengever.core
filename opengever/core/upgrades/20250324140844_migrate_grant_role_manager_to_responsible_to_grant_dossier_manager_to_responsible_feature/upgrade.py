@@ -48,9 +48,16 @@ class MigrateGrantRoleManagerToResponsibleToGrantDossierManagerToResponsibleFeat
             manager = RoleAssignmentManager(obj)
             manager.clear_by_causes([ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE])
 
+            # Get the current responsible. Even if the responsible is required
+            # on a dossier, it's possible to have dossiers without any responsible.
+            # This should not happen, but is possible. We skip such dossiers.
+            responsible = IDossier(obj).responsible
+            if not responsible:
+                continue
+
             # Assign the new assignment dossier manager roles.
             dossier_protection = IProtectDossier(obj)
-            dossier_protection.dossier_manager = IDossier(obj).responsible
+            dossier_protection.dossier_manager = responsible
 
             # Check if the user already have had view permission on the object.
             # We use this information later on to decide if we need to reindex
