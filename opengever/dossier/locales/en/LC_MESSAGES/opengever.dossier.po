@@ -413,7 +413,8 @@ msgstr "The user or group selected here will be able to modify or disable dossie
 #. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_extend_local_roles"
-msgstr "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
+msgstr "By default, inherited authorizations are interrupted when the dossier is protected.\n"
+"Select this option if you want the inherited authorizations to be extended instead."
 
 #. German translation: Durch Aktivieren dieser Option werden bei der Erstellung des Dossiers ab Vorlage die angegebenen Schlagwörter bereits vorausgefüllt.
 #. Default: "The defined keywords will be preselected for new dossies from template."

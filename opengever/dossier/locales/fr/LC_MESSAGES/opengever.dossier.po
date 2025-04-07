@@ -332,7 +332,8 @@ msgstr "Choisissez un utilisateur ou un groupe pouvant modifier ou enlever la pr
 #. Default: "Whether dossier protection should block role inheritanceor extend the currently inherited role assignments with theadditional roles mapping"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "description_extend_local_roles"
-msgstr ""
+msgstr "Par défaut, les droits d'accès hérités sont interrompus lors de la protection d'un dossier.\n"
+"Sélectionnez cette option si ces droits doivent au contraire être conservés."
 
 #. Default: "The defined keywords will be preselected for new dossies from template."
 #: ./opengever/dossier/dossiertemplate/behaviors.py
@@ -634,7 +635,7 @@ msgstr "Jusqu'au"
 #. Default: "Extend local roles"
 #: ./opengever/dossier/behaviors/protect_dossier.py
 msgid "label_extend_local_roles"
-msgstr ""
+msgstr "Étendre les droits d'accès"
 
 #. Default: "External Reference"
 #: ./opengever/dossier/behaviors/dossier.py
