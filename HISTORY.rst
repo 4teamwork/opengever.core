@@ -10,6 +10,24 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.0 (2025-04-07)
+---------------------
+
+New features:
+
+
+- Replace `grant_role_manager_to_responsible` feature with `grant_dossier_manager_to_responsible` feature. [elioschmutz] [TI-2137]
+- Extend solr and add RisCommittee actor. [ran] [TI-2272]
+- Dossier protection can now be used to extend the current local roles instead of blocking the role inheritance. [elioschmutz] [TI-2137-2]
+
+
+Other changes:
+
+
+- Remove `grant_role_manager_to_responsible` feature. [elioschmutz] [TI-2137]
+- Update translations before 2025.6.0 Release. [ran] [TI-2336]
+
+
 2025.5.0 (2025-03-24)
 ---------------------
 
