@@ -205,3 +205,22 @@ class TestTransferDossierPost(SolrIntegrationTestCase):
 
         self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
         self.assertEqual(self.dossier_responsible.getId(), IDossier(self.subdossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_changes_responsible_extract_token_from_old_user(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         IDossier(self.dossier).responsible)
+
+        old_userid = {
+            u'token': self.dossier_responsible.getId(),
+            u'title': self.dossier_responsible.getUserName()
+        }
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": old_userid,
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)

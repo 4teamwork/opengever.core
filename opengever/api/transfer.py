@@ -40,6 +40,14 @@ class ExtractOldNewUserMixin(Service):
         old_userid = data.get("old_userid")
         new_userid = data.get("new_userid")
 
+        # In case of a context action, we receive a dict for the old_userid,
+        # from which we need to extract the token.
+
+        # example:
+        # 'old_userid': {u'token': u'ben.utzer', u'title': u'Utzer Ben (ben.utzer)'}
+        if isinstance(old_userid, dict):
+            old_userid = old_userid.get('token')
+
         if not old_userid:
             raise BadRequest("Property 'old_userid' is required")
         if not new_userid:

@@ -36,6 +36,7 @@ class BaseListingActions(object):
         self.maybe_add_delete_workspace_content()
         self.maybe_add_delete()
         self.maybe_add_export_users()
+        self.maybe_add_transfer_dossier_responsible()
         return self.actions
 
     def add_action(self, action):
@@ -114,6 +115,9 @@ class BaseListingActions(object):
         return False
 
     def is_export_users_available(self):
+        return False
+
+    def is_transfer_dossier_responsible_available(self):
         return False
 
     def maybe_add_attach_documents(self):
@@ -215,3 +219,7 @@ class BaseListingActions(object):
     def maybe_add_export_users(self):
         if self.is_export_users_available():
             self.add_action(u'export_users')
+
+    def maybe_add_transfer_dossier_responsible(self):
+        if self.is_transfer_dossier_responsible_available():
+            self.add_action(u'transfer_dossier_responsible')

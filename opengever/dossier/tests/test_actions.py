@@ -23,7 +23,7 @@ class TestDossierListingActions(IntegrationTestCase):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting']
+                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.repository_root))
         self.assertEqual(expected_actions, self.get_actions(self.branch_repofolder))
 
@@ -31,14 +31,14 @@ class TestDossierListingActions(IntegrationTestCase):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting']
+                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.portal))
 
     def test_dossier_actions_for_dossier(self):
         self.login(self.regular_user)
         expected_actions = [u'edit_items', u'change_items_state', u'copy_items',
                             u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                            u'pdf_dossierlisting']
+                            u'pdf_dossierlisting', u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
         self.assertEqual(expected_actions, self.get_actions(self.meeting_dossier))
 
@@ -56,8 +56,9 @@ class TestDossierListingActions(IntegrationTestCase):
 
     def test_dossier_actions_for_private_dossier_and_private_folder(self):
         self.login(self.regular_user)
-        expected_actions = [u'edit_items', u'change_items_state', u'export_dossiers',
-                            u'pdf_dossierlisting', u'delete']
+        expected_actions = [
+            u'edit_items', u'change_items_state', u'export_dossiers',
+            u'pdf_dossierlisting', u'delete', u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.private_dossier))
         self.assertEqual(expected_actions, self.get_actions(self.private_folder))
 
@@ -111,8 +112,11 @@ class TestDossierContextActions(IntegrationTestCase):
 
     def test_dossier_context_actions(self):
         self.login(self.regular_user)
-        expected_actions = [u'document_with_template', u'edit', u'export_pdf',
-                            u'pdf_dossierdetails', u'zipexport']
+        expected_actions = [
+            u'document_with_template',
+            u'edit', u'export_pdf',
+            u'pdf_dossierdetails', u'zipexport',
+            u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
 
     def test_document_from_docugate_available_if_feature_enabled(self):
@@ -170,7 +174,8 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             expected_actions = [u'copy_documents_from_workspace', u'copy_documents_to_workspace',
                                 u'create_linked_workspace', u'document_with_template', u'edit',
                                 u'export_pdf', u'link_to_workspace', u'list_workspaces',
-                                u'pdf_dossierdetails', u'unlink_workspace', u'zipexport']
+                                u'pdf_dossierdetails', u'unlink_workspace', u'zipexport',
+                                u'transfer_dossier_responsible']
 
             self.assertEqual(expected_actions, self.get_actions(self.dossier))
 
@@ -180,7 +185,7 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             subdossier = create(Builder('dossier').within(self.dossier))
             expected_actions = [u'copy_documents_to_workspace', u'delete', u'document_with_template', u'edit',
                                 u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
-                                u'zipexport']
+                                u'zipexport', u'transfer_dossier_responsible']
 
             self.assertEqual(expected_actions, self.get_actions(subdossier))
 
@@ -221,8 +226,10 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             api.content.transition(obj=self.dossier,
                                    transition='dossier-transition-deactivate')
             transaction.commit()
-            expected_actions = [u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
-                                u'unlink_workspace', u'zipexport']
+            expected_actions = [
+                u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
+                u'unlink_workspace', u'zipexport',
+            ]
             self.assertEqual(expected_actions, self.get_actions(self.dossier))
 
 

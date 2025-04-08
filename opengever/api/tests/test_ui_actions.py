@@ -35,7 +35,8 @@ class TestUIActionsGET(IntegrationTestCase):
                 {u'id': u'edit'},
                 {u'id': u'export_pdf'},
                 {u'id': u'pdf_dossierdetails'},
-                {u'id': u'zipexport'}]}, browser.json)
+                {u'id': u'zipexport'},
+                {u'id': u'transfer_dossier_responsible'}]}, browser.json)
 
     @browsing
     def test_ui_actions_includes_listing_actions(self, browser):
@@ -61,7 +62,7 @@ class TestUIActionsGET(IntegrationTestCase):
         browser.open(dossier_url, method='GET', headers=self.api_headers)
         self.assertEqual([u'edit_items', u'change_items_state', u'copy_items',
                           u'move_items', u'export_dossiers', u'export_dossiers_with_subdossiers',
-                          u'pdf_dossierlisting'],
+                          u'pdf_dossierlisting', u'transfer_dossier_responsible'],
                          [action['id'] for action in browser.json['listing_actions']])
         combined_url = u'{}/@ui-actions?categories:list=listing_actions'\
                        u'&listings:list=tasks&listings:list=dossiers'.format(
