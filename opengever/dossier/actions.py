@@ -40,6 +40,9 @@ class DossierListingActions(BaseListingActions):
     def is_pdf_dossierlisting_available(self):
         return True
 
+    def is_transfer_dossier_responsible_available(self):
+        return True
+
 
 class PrivateDossierListingActions(BaseListingActions):
 
@@ -53,6 +56,9 @@ class PrivateDossierListingActions(BaseListingActions):
         return True
 
     def is_pdf_dossierlisting_available(self):
+        return True
+
+    def is_transfer_dossier_responsible_available(self):
         return True
 
 
@@ -180,6 +186,9 @@ class DossierContextActions(BaseContextActions):
 
     def is_zipexport_available(self):
         return True
+
+    def is_transfer_dossier_responsible_available(self):
+        return api.user.has_permission('Modify portal content', obj=self.context)
 
 
 @adapter(IDossierTemplateMarker, IOpengeverBaseLayer)
