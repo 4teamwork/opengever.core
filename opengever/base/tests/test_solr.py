@@ -27,7 +27,7 @@ class TestSolr(IntegrationTestCase):
 
     def test_solr_schema_contains_all_tabbedview_columns(self):
         pkg_path = pkg_resources.get_distribution('opengever.core').location
-        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema'))
+        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema.xml'))
         solr_fields = tree.xpath('.//field/@name')
         tabs = get_subclasses(BaseCatalogListingTab)
         for tab in tabs:
@@ -44,7 +44,7 @@ class TestSolr(IntegrationTestCase):
 
     def test_solr_schema_contains_all_search_options_columns(self):
         pkg_path = pkg_resources.get_distribution('opengever.core').location
-        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema'))
+        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema.xml'))
         solr_fields = tree.xpath('.//field/@name')
         tabs = get_subclasses(BaseCatalogListingTab)
         for tab in tabs:
@@ -75,7 +75,7 @@ class TestSolr(IntegrationTestCase):
 
     def test_solr_schema_contains_all_new_indexes_and_metadata(self):
         pkg_path = pkg_resources.get_distribution('opengever.core').location
-        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema'))
+        tree = etree.parse(os.path.join(pkg_path, 'solr-conf', 'managed-schema.xml'))
         solr_fields = tree.xpath('.//field/@name')
 
         catalog = api.portal.get_tool('portal_catalog')

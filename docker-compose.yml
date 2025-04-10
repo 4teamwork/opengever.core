@@ -122,6 +122,10 @@ services:
       - SOLR_CORES=development testing functionaltesting testserver
     ports:
       - 8983:8983
+    ulimits:
+      nofile:
+        soft: 65000
+        hard: 65000
   redis:
     image: redis:6.2-alpine
     command:
