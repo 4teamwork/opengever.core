@@ -53,7 +53,8 @@ class MigrateGrantRoleManagerToResponsibleToGrantDossierManagerToResponsibleFeat
             # or dossiers with a non existing responsible.
             # Both should not happen, but is possible. We skip such dossiers.
             responsible = IDossier(obj).responsible
-            if not responsible or not api.user.get(responsible):
+            responsible_user = api.user.get(responsible or '')
+            if not responsible_user:
                 continue
 
             # Assign the new assignment dossier manager roles.
@@ -64,7 +65,7 @@ class MigrateGrantRoleManagerToResponsibleToGrantDossierManagerToResponsibleFeat
             # We use this information later on to decide if we need to reindex
             # the object security of the object.
             need_reindex = not api.user.has_permission(
-                'View', dossier_protection.dossier_manager, obj=obj)
+                'View', user=responsible_user, obj=obj)
 
             # Grant the dossier manager role to the dossier responsible
             dossier_protection.grant_dossier_manager_roles()
