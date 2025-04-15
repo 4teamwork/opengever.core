@@ -1213,6 +1213,15 @@ via parameters.  The below configuration supports hl.method=original and fastVec
   -->
 
   <updateRequestProcessorChain name="sync.chain">
+    <processor class="org.apache.solr.update.processor.LangDetectLanguageIdentifierUpdateProcessorFactory">
+      <str name="langid.fl">SearchableText,Description,Title</str>
+      <str name="langid.langField">_language_</str>
+      <str name="langid.allowlist">de,en,fr</str>
+      <str name="langid.fallback">general</str>
+      <bool name="langid.map">true</bool>
+      <bool name="langid.map.individual">true</bool>
+      <bool name="langid.map.keepOrig">true</bool>
+    </processor>
     <processor class="org.apache.solr.scripting.update.ScriptUpdateProcessorFactory">
       <str name="script">sync-solr.js</str>
       <lst name="params">
@@ -1220,6 +1229,7 @@ via parameters.  The below configuration supports hl.method=original and fastVec
         <str name="portalTypes">${portalTypes:}</str>
       </lst>
     </processor>
+    <processor class="solr.LogUpdateProcessorFactory" />
     <processor class="solr.RunUpdateProcessorFactory" />
   </updateRequestProcessorChain>
 
