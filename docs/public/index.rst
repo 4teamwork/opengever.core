@@ -9,4 +9,3 @@ Inhalt:
    admin-manual/index.rst
    systemadmin-manual/index.rst
    dev-manual/index.rst
-   release-notes/index.rst
