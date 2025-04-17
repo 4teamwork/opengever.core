@@ -5,7 +5,7 @@ Définir un déroulement standard
 
 Le déroulement standard
 -----------------------
-Il est possible de définir des séquences de tâches récurrentes sous modèles, nommées « déroulements standard ». Seul des utilisateurs (administrateurs) disposant des droits de lecture et d’écriture dans la section des modèles sont autorisés à en créer ou à les modifier. Les déroulements standard peuvent être déclenchés par tous les utilisateurs participant à un dossier pour lequel le déroulement est utilisable. Plus de détails à ce sujet voir la documentation utilisateurs, sous le chapitre :ref:`Travailler avec des déroulements standard  <chapitre-deroulement_standard>`.
+Il est possible de définir des séquences de tâches récurrentes sous modèles, nommées « déroulements standard ». Seul des utilisateurs (administrateurs) disposant des droits de lecture et d’écriture dans la section des modèles sont autorisés à en créer ou à les modifier. Les déroulements standard peuvent être déclenchés par tous les utilisateurs participant à un dossier pour lequel le déroulement est utilisable. Plus de détails à ce sujet voir la documentation utilisateurs, sous le chapitre https://docs.4teamwork.ch/OGG/deroulement-flux-de-travail-standard.
 
 Créer un nouveau déroulement standard
 -------------------------------------
@@ -46,7 +46,7 @@ Pour qu’un déroulement standard soit utilisable dans un dossier (ou sous-doss
 
 |img-deroulementstandard-31|
 
-À partir de ce point, un déroulement standard peut être ajouté et déclenché comme décrit le chapitre :ref:`Travailler avec des déroulements standard  <chapitre-deroulement_standard>` de la documentation utilisateurs.
+À partir de ce point, un déroulement standard peut être ajouté et déclenché comme décrit le chapitre https://docs.4teamwork.ch/OGG/deroulement-flux-de-travail-standard de la documentation utilisateurs.
 
 .. |img-deroulementstandard-20| image:: img/media/img-deroulementstandard-20.png
 .. |img-deroulementstandard-22| image:: img/media/img-deroulementstandard-22.png

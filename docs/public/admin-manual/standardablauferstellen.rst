@@ -10,7 +10,7 @@ vordefinierten Aufgabenfolgen werden Standardabläufe genannt. Diese können nur
 durch (Admin-)Benutzer, welche im Vorlagenbereich schreibberechtigt sind,
 erstellt oder bearbeitet werden. Sie können aber durch alle Benutzer in den
 jeweiligen Dossiers ausgelöst werden. Details zum Auslösen finden Sie daher in
-der :ref:`Benutzerdokumentation <label-standardablauf-benutzer>`.
+der https://docs.4teamwork.ch/OGG/standardablaeufe.
 
 Standardablauf erstellen
 ------------------------
@@ -36,7 +36,7 @@ via *Hinzufügen->Aufgabenvorlage* hinzugefügt.
 
 |img-standardablauf-22|
 
-Die Eingabemaske ist analog der :ref:`normale Aufgaben <label-aufgaben_erstellen>` auszufüllen.
+Die Eingabemaske ist analog der https://docs.4teamwork.ch/OGG/aufgaben auszufüllen.
 
 |img-standardablauf-23|
 
@@ -78,7 +78,7 @@ erscheint.
 
 |img-standardablauf-31|
 
-Nun kann der Standardablauf wie in der :ref:`Benutzerdokumentation <label-standardablauf-benutzer>` beschrieben hinzugefügt und ausgelöst werden.
+Nun kann der Standardablauf wie in der https://docs.4teamwork.ch/OGG/standardablaeufe beschrieben hinzugefügt und ausgelöst werden.
 
 .. |img-standardablauf-20| image:: img/media/img-standardablauf-20.png
 .. |img-standardablauf-22| image:: img/media/img-standardablauf-22.png
