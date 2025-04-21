@@ -270,7 +270,7 @@
       This is the default, so it does not need to be set explicitly.
     -->
     <fieldType name="pint" class="solr.IntPointField"/>
-    <fieldType name="pfloat" class="solr.FloatPointField"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" sortMissingLast="true"/>
     <fieldType name="plong" class="solr.LongPointField"/>
     <fieldType name="pdouble" class="solr.DoublePointField"/>
 
