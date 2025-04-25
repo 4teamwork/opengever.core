@@ -47,7 +47,7 @@ Des rôles correspondants sont (best practice):
 
 Affichage des droits au niveau dossier
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Sans l’onglet « Info », dans la vue détaillée d’un dossier, ainsi que sous Actions > Déblocage, se trouve un aperçu des rôles et les droits d’utilisateurs pour ce dossier. L’aide contextuelle (clic sur «?» bleu) affiche plus de détails concernant les droits du groupe ou l’utilisateur donné. En plus d’une autorisation initiale obtenue par l’intermédiaire de LDAP, il est aussi possible d’accorder une autorisation temporaire pour la durée d’une tâche à accomplir. Pour en savoir plus consultez :ref:`label-taches-flux-travail`.
+Sans l’onglet « Info », dans la vue détaillée d’un dossier, ainsi que sous Actions > Déblocage, se trouve un aperçu des rôles et les droits d’utilisateurs pour ce dossier. L’aide contextuelle (clic sur «?» bleu) affiche plus de détails concernant les droits du groupe ou l’utilisateur donné. En plus d’une autorisation initiale obtenue par l’intermédiaire de LDAP, il est aussi possible d’accorder une autorisation temporaire pour la durée d’une tâche à accomplir. Pour en savoir plus consultez https://docs.4teamwork.ch/OGG/taches.
 
 |img-rollenmodell-1|
 

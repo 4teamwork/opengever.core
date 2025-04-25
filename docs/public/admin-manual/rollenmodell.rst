@@ -85,7 +85,7 @@ Im Dossier Info-Tab sowie unter Aktionen --> Freigabe findet sich eine Übersich
 „?“ gibt bei Klick darauf Auskunft, warum der Benutzende resp. die Gruppe eine
 Berechtigung erhalten hat. Nebst initialer Berechtigung via LDAP oder manueller
 Anpassung, besteht auch die Möglichkeit, dass für die Dauer einer Aufgabe,
-eine Berechtigung erteilt werden kann. Mehr dazu können Sie unter :ref:`label-aufgaben-workflow` lesen.
+eine Berechtigung erteilt werden kann. Mehr dazu können Sie unter https://docs.4teamwork.ch/OGG/aufgaben lesen.
 
 |img-rollenmodell-1|
 
