@@ -17,13 +17,16 @@
 -->
 
 <!--
+ This is the Solr schema file. This file should be named "schema.xml" and
+ should be in the conf directory under the solr home
+ (i.e. ./solr/conf/schema.xml by default)
+ or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
  It should be kept correct and concise, usable out-of-the-box.
 
-
  For more information, on how to customize this file, please see
- http://lucene.apache.org/solr/guide/documents-fields-and-schema-design.html
+ https://solr.apache.org/guide/solr/latest/indexing-guide/schema-elements.html
 
  PERFORMANCE NOTE: this schema includes many optional features and should not
  be used for benchmarking.  To improve performance one could
@@ -36,10 +39,14 @@
   - for best index size and searching performance, set "index" to false
     for all general text fields, use copyField to copy them to the
     catchall "text" field, and use that for searching.
+  - For maximum indexing performance, use the ConcurrentUpdateSolrServer
+    java client.
+  - Remember to run the JVM in server mode, and use a higher logging level
+    that avoids logging every request
 -->
 
-<schema name="default-config" version="1.6">
-    <!-- attribute "name" is the name of this schema and is only used for display purposes.
+<schema name="default-config" version="1.7">
+  <!-- attribute "name" is the name of this schema and is only used for display purposes.
        version="x.y" is Solr's version number for the schema syntax and
        semantics.  It should not normally be changed by applications.
 
@@ -55,23 +62,25 @@
        1.5: omitNorms defaults to true for primitive field types
             (int, float, boolean, string...)
        1.6: useDocValuesAsStored defaults to true.
-    -->
+       1.7: docValues defaults to true, uninvertible defaults to false.
+     -->
 
-    <!-- Valid attributes for fields:
+
+   <!-- Valid attributes for fields:
      name: mandatory - the name for the field
      type: mandatory - the name of a field type from the
-       fieldTypes section
+       fieldTypes
      indexed: true if this field should be indexed (searchable or sortable)
      stored: true if this field should be retrievable
-     docValues: true if this field should have doc values. Doc Values is
-       recommended (required, if you are using *Point fields) for faceting,
-       grouping, sorting and function queries. Doc Values will make the index
+     docValues: true if this field should have doc values. Doc values are
+       useful (required, if you are using *Point fields) for faceting,
+       grouping, sorting and function queries. Doc values will make the index
        faster to load, more NRT-friendly and more memory-efficient.
-       They are currently only supported by StrField, UUIDField, all
-       *PointFields, and depending on the field type, they might require
-       the field to be single-valued, be required or have a default value
-       (check the documentation of the field type you're interested in for
-       more information)
+       They however come with some limitations: they are currently only
+       supported by StrField, UUIDField, all *PointFields, and depending
+       on the field type, they might require the field to be single-valued,
+       be required or have a default value (check the documentation
+       of the field type you're interested in for more information)
      multiValued: true if this field may contain multiple values per document
      omitNorms: (expert) set to true to omit the norms associated with
        this field (this disables length normalization and index-time
@@ -86,22 +95,25 @@
        This will increase storage costs.
      termOffsets: Store offset information with the term vector. This
        will increase storage costs.
+     termPayloads: Store payload information with the term vector. This
+       will increase storage costs.
      required: The field is required.  It will throw an error if the
        value does not exist
      default: a value that should be used if no value is specified
        when adding a document.
-    -->
+   -->
 
-    <!-- field names should consist of alphanumeric or underscore characters only and
+   <!-- field names should consist of alphanumeric or underscore characters only and
       not start with a digit.  This is not currently strictly enforced,
       but other field names will not have first class support from all components
       and back compatibility is not guaranteed.  Names with both leading and
       trailing underscores (e.g. _version_) are reserved.
-    -->
+   -->
 
-    <!-- docValues are enabled by default for long type so we don't need to index the version field  -->
+   <!-- If you remove this field, you must _also_ disable the update log in solrconfig.xml
+      or Solr won't start. _version_ and update log are required for SolrCloud
+   -->
     <field name="_version_" type="plong" indexed="false" stored="false"/>
-    <field name="_root_" type="string" indexed="true" stored="false" docValues="false" />
     <field name="_language_"  type="string"  indexed="true"  stored="true" />
 
     <!-- Plone default fields -->
@@ -206,28 +218,19 @@
     <field name="Title_fr" type="text_fr" indexed="true" stored="true"/>
     <field name="Title_general" type="text_general" indexed="true" stored="true"/>
 
-    <copyField source="path" dest="path_parent"/>
-    <copyField source="sequence_number" dest="sequence_number_string"/>
-
     <dynamicField name="*_custom_field_string" type="string" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_int" type="pint" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_boolean" type="boolean" indexed="true" stored="false"/>
     <dynamicField name="*_custom_field_strings" type="string" indexed="true" stored="false" multiValued="true"/>
     <dynamicField name="*_custom_field_date" type="pdate" indexed="true" stored="false"/>
 
-    <dynamicField name="ignored_*" type="ignored"/>
-
     <!-- Field to use to determine and enforce document uniqueness.
-      Unless this field is marked with required="false", it will be a required field
-    -->
+         Unless this field is marked with required="false", it will be a required field
+     -->
     <uniqueKey>UID</uniqueKey>
 
-    <!-- copyField commands copy one field to another at the time a document
-       is added to the index.  It's used either to index the same field differently,
-       or to add multiple fields to the same field for easier/faster searching.
-
-    <copyField source="sourceFieldName" dest="destinationFieldName"/>
-    -->
+    <copyField source="path" dest="path_parent"/>
+    <copyField source="sequence_number" dest="sequence_number_string"/>
 
     <!-- field type definitions. The "name" attribute is
        just a label to be used by field definitions.  The "class"
@@ -236,6 +239,15 @@
          Class names starting with "solr" refer to java classes in a
        standard package such as org.apache.solr.analysis
     -->
+
+    <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
+    <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true" />
+
+
+    <!-- boolean type: "true" or "false" -->
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"/>
 
     <!-- sortMissingLast and sortMissingFirst attributes are optional attributes are
          currently supported on types that are sorted internally as strings
@@ -252,28 +264,20 @@
          field first in an ascending sort and last in a descending sort.
     -->
 
-    <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
-    <fieldType name="string" class="solr.StrField" sortMissingLast="true" docValues="true" />
-    <fieldType name="strings" class="solr.StrField" sortMissingLast="true" multiValued="true" docValues="true" />
-
-    <!-- boolean type: "true" or "false" -->
-    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true" docValues="true"/>
-    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true" docValues="true"/>
-
     <!--
       Numeric field types that index values using KD-trees.
-      Point fields don't support FieldCache, so they must have docValues="true" if needed for sorting, faceting, functions, etc.
+      Point fields don't support FieldCache, so they must have docValues enabled if needed for sorting, faceting, functions, etc.
+      This is the default, so it does not need to be set explicitly.
     -->
-    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
-    <fieldType name="pfloat" class="solr.FloatPointField" docValues="true" sortMissingLast="true" />
+    <fieldType name="pint" class="solr.IntPointField"/>
+    <fieldType name="pfloat" class="solr.FloatPointField" sortMissingLast="true"/>
+    <fieldType name="plong" class="solr.LongPointField"/>
+    <fieldType name="pdouble" class="solr.DoublePointField"/>
 
-    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
-    <fieldType name="pdouble" class="solr.DoublePointField" docValues="true"/>
-
-    <fieldType name="pints" class="solr.IntPointField" docValues="true" multiValued="true"/>
-    <fieldType name="pfloats" class="solr.FloatPointField" docValues="true" multiValued="true"/>
-    <fieldType name="plongs" class="solr.LongPointField" docValues="true" multiValued="true"/>
-    <fieldType name="pdoubles" class="solr.DoublePointField" docValues="true" multiValued="true"/>
+    <fieldType name="pints" class="solr.IntPointField" multiValued="true"/>
+    <fieldType name="pfloats" class="solr.FloatPointField" multiValued="true"/>
+    <fieldType name="plongs" class="solr.LongPointField" multiValued="true"/>
+    <fieldType name="pdoubles" class="solr.DoublePointField" multiValued="true"/>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
          is a more restricted form of the canonical representation of dateTime
@@ -293,45 +297,48 @@
                   ... 6 months and 3 days in the future from the start of
                       the current day
 
+         Consult the DatePointField javadocs for more information.
       -->
+
     <!-- KD-tree versions of date fields -->
-    <fieldType name="pdate" class="solr.DatePointField" docValues="true"/>
-    <fieldType name="pdates" class="solr.DatePointField" docValues="true" multiValued="true"/>
+    <fieldType name="pdate" class="solr.DatePointField" />
+    <fieldType name="pdates" class="solr.DatePointField" multiValued="true"/>
 
     <!--Binary data type. The data should be sent/retrieved in as Base64 encoded Strings -->
     <fieldType name="binary" class="solr.BinaryField"/>
 
-    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
-        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="false"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-        <filter class="solr.WordDelimiterGraphFilterFactory"
-              splitOnCaseChange="1"
-              splitOnNumerics="1"
-              stemEnglishPossessive="1"
-              generateWordParts="1"
-              generateNumberParts="1"
-              catenateWords="1"
-              catenateNumbers="1"
-              catenateAll="0"
-              preserveOriginal="1"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.ReversedWildcardFilterFactory" withOriginal="true"
-                maxPosAsterisk="2" maxPosQuestion="1" minTrailing="2" maxFractionAsterisk="0"/>
-        <filter class="solr.FlattenGraphFilterFactory" />
-      </analyzer>
-      <analyzer type="query">
-        <charFilter class="solr.ICUNormalizer2CharFilterFactory"/>
-        <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
-        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <filter class="solr.SynonymGraphFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" />
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
+    <!-- The "RandomSortField" is not used to store or search any
+         data.  You can declare fields of this type it in your schema
+         to generate pseudo-random orderings of your docs for sorting
+         or function purposes.  The ordering is generated based on the field
+         name and the version of the index. As long as the index version
+         remains unchanged, and the same field name is reused,
+         the ordering of the docs will be consistent.
+         If you want different pseudo-random orderings of documents,
+         for the same version of the index, use a dynamicField and
+         change the field name in the request.
+     -->
+    <fieldType name="random" class="solr.RandomSortField" indexed="true" />
+
+    <!-- solr.TextField allows the specification of custom text analyzers
+         specified as a tokenizer and a list of token filters. Different
+         analyzers may be specified for indexing and querying.
+
+         The optional positionIncrementGap puts space between multiple fields of
+         this type on the same document, with the purpose of preventing false phrase
+         matching across fields.
+
+         For more info on customizing your analyzer chain, please see
+         https://solr.apache.org/guide/solr/latest/indexing-guide/document-analysis.html#using-analyzers-tokenizers-and-filters
+     -->
+
+    <!-- One can also specify an existing Analyzer class that has a
+         default constructor via the class attribute on the analyzer element.
+         Example:
+    <fieldType name="text_greek" class="solr.TextField">
+      <analyzer class="org.apache.lucene.analysis.el.GreekAnalyzer"/>
     </fieldType>
+    -->
 
     <!-- A general text field that has reasonable, generic
          cross-language defaults: it tokenizes with StandardTokenizer,
@@ -508,50 +515,41 @@
       </analyzer>
     </fieldType>
 
-    <!-- lowercases the entire field value, keeping it as a single token.  -->
-    <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory" />
-      </analyzer>
-    </fieldType>
-
     <!--
       Example of using PathHierarchyTokenizerFactory at index time, so
       queries for paths match documents at that path, or in descendent paths
     -->
     <fieldType name="descendent_path" class="solr.TextField">
       <analyzer type="index">
-        <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+  <tokenizer name="pathHierarchy" delimiter="/" />
       </analyzer>
       <analyzer type="query">
-        <tokenizer class="solr.KeywordTokenizerFactory" />
+  <tokenizer name="keyword" />
       </analyzer>
     </fieldType>
-
     <!--
       Example of using PathHierarchyTokenizerFactory at query time, so
       queries for paths match documents at that path, or in ancestor paths
     -->
     <fieldType name="ancestor_path" class="solr.TextField">
       <analyzer type="index">
-        <tokenizer class="solr.KeywordTokenizerFactory" />
+  <tokenizer name="keyword" />
       </analyzer>
       <analyzer type="query">
-        <tokenizer class="solr.PathHierarchyTokenizerFactory" delimiter="/" />
+  <tokenizer name="pathHierarchy" delimiter="/" />
       </analyzer>
     </fieldType>
 
     <!-- since fields of this type are by default not stored or indexed,
          any data added to them will be ignored outright.  -->
-    <fieldType name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
+    <fieldType name="ignored" stored="false" indexed="false" multiValued="true" docValues="false" class="solr.StrField" />
 
-    <!-- Similarity is the scoring routine for each document vs. a query.
+  <!-- Similarity is the scoring routine for each document vs. a query.
        A custom Similarity or SimilarityFactory may be specified here, but
        the default is fine for most applications.
-       For more info: http://lucene.apache.org/solr/guide/other-schema-elements.html#OtherSchemaElements-Similarity
+       For more info: https://solr.apache.org/guide/solr/latest/indexing-guide/schema-elements.html#similarity
     -->
-    <!--
+  <!--
      <similarity class="com.example.solr.CustomSimilarityFactory">
        <str name="paramkey">param value</str>
      </similarity>
