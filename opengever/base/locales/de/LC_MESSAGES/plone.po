@@ -172,7 +172,10 @@ msgid "disposition-transition-refuse"
 msgstr "Ablehnen"
 
 msgid "document-state-draft"
-msgstr "nicht definiert"
+msgstr "Entwurf"
+
+msgid "document-state-shadow"
+msgstr "Schattenkopie"
 
 msgid "document-state-final"
 msgstr "Final"

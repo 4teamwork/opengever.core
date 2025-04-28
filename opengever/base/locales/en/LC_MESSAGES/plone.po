@@ -219,9 +219,12 @@ msgstr "Submit disposition"
 msgid "disposition-transition-refuse"
 msgstr "Refuse"
 
-#. German translation: nicht definiert
+#. German translation: Entwurf
 msgid "document-state-draft"
-msgstr "undefined"
+msgstr "Draft"
+
+msgid "document-state-shadow"
+msgstr "Shadow copy"
 
 msgid "document-state-final"
 msgstr "Final"
