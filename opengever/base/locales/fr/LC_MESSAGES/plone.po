@@ -42,13 +42,13 @@ msgid "Document state changed to document-state-draft"
 msgstr "Etat du document modifié: brouillon"
 
 msgid "Document state changed to document-state-final"
-msgstr "Etat du document modifié: final"
+msgstr "Etat du document modifié: Finalisé"
 
 msgid "Document state changed to opengever_workspace_document--STATUS--final"
-msgstr "Etat du document modifié: final"
+msgstr "Etat du document modifié: Finalisé"
 
 msgid "Document state changed to opengever_workspace_document--STATUS--active"
-msgstr "Etat du document modifié: brouillon"
+msgstr "Etat du document modifié: Brouillon"
 
 msgid "Document state changed to document-state-signing"
 msgstr "Etat du document modifié: en cours de signature"
@@ -172,10 +172,13 @@ msgid "disposition-transition-refuse"
 msgstr "Offre refusée"
 
 msgid "document-state-draft"
-msgstr "Non défini"
+msgstr "Brouillon"
+
+msgid "document-state-shadow"
+msgstr "Copie shadow"
 
 msgid "document-state-final"
-msgstr "Final"
+msgstr "Finalisé"
 
 msgid "document-state-pending"
 msgstr "En suspend"

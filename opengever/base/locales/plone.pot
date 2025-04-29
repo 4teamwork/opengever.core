@@ -54,6 +54,9 @@ msgstr ""
 msgid "document-state-draft"
 msgstr ""
 
+msgid "document-state-shadow"
+msgstr ""
+
 msgid "document-state-final"
 msgstr ""
 
