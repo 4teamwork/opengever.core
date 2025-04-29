@@ -85,7 +85,7 @@ function valueToString(value) {
  */
 function extractValueFromDoc(doc, key) {
   var value = valueToString(doc.getFieldValue(key));
-  if (value.indexOf("{") === 0 && value.indexOf("}") === value.length - 1) {
+  if (value.indexOf("{") === 0 && value.lastIndexOf("}") === value.length - 1) {
     value = value.substring(1, value.length - 1);
     var modifierSplit = value.split("=");
     var modifier = modifierSplit.shift();
