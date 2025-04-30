@@ -1,0 +1,1 @@
+Bump ftw.solr to version 2.13.4 which fixes the solr zopectl command for deployments with custom fields. [buchi]
