@@ -7,6 +7,7 @@ from opengever.base.solr.fields import REQUIRED_RESPONSE_FIELDS
 from opengever.document.behaviors.customproperties import IDocumentCustomProperties
 from opengever.dossier.behaviors.customproperties import IDossierCustomProperties
 from opengever.dossier.indexers import ParticipationIndexHelper
+from opengever.ogds.models.service import ogds_service
 from plone.registry.interfaces import IRegistry
 from plone.uuid.interfaces import IUUID
 from zExceptions import BadRequest
@@ -190,6 +191,13 @@ class ListingGet(LiveSearchQueryPreprocessingMixin, SolrQueryBaseService):
                         helper.participant_id_and_role_to_index_value(
                             participant_id, role))
             filters['participations'] = participations
+
+        if 'inactive_responsibles' in filters:
+            inactive_responsibles_flag = filters.pop('inactive_responsibles')
+            if inactive_responsibles_flag:
+                if 'responsible' not in filters:
+                    inactive_responsibles = ogds_service().inactive_users()
+                    filters['responsible'] = [user.userid for user in inactive_responsibles]
         return filters
 
     def extract_sort(self, params, query):

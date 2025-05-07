@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+``@listing``: Filtering by inactive dossier responsible is now available.
 
 2025.6.0 (2025-04-07)
 ---------------------
