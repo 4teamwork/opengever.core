@@ -990,6 +990,136 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             titles)
 
     @browsing
+    def test_filter_by_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title&columns:list=responsible')
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        # Assert all items
+        self.assertEqual(17, len(items))
+
+        # filter by dossier_responsible
+        view = (
+            '@listing?name=dossiers'
+            '&columns:list=title'
+            '&columns:list=responsible'
+            '&filters.responsible:record:list={}'.format(self.dossier_responsible))
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        self.assertEqual(10, len(items))
+        self.assertTrue([dossier["responsible"] == self.dossier_responsible for dossier in items])
+
+    @browsing
+    def test_filter_by_dossier_inactive_responsible(self, browser):
+        self.login(self.regular_user, browser=browser)
+        inactive_user_1 = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_user_1")
+        )
+        inactive_user_2 = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_user_2")
+        )
+
+        create(
+            Builder('dossier')
+            .titled(u'Dossier with inactive responsible 1')
+            .within(self.leaf_repofolder)
+            .having(responsible="{}".format(inactive_user_1.userid))
+        )
+        create(
+            Builder('dossier')
+            .titled(u'Dossier with inactive responsible 2')
+            .within(self.leaf_repofolder)
+            .having(responsible="{}".format(inactive_user_2.userid))
+        )
+
+        self.commit_solr()
+
+        view = ('@listing?name=dossiers&columns:list=title&columns:list=responsible')
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        # Assert all items
+        self.assertEqual(19, len(items))
+
+        # filter by inactive users
+        view = (
+            '@listing?name=dossiers'
+            '&columns:list=title'
+            '&columns:list=responsible'
+            '&filters.inactive_responsibles:record:boolean=true')
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        self.assertEqual(2, len(items))
+        self.assertTrue([dossier["responsible"] == [inactive_user_1, inactive_user_2] for dossier in items])
+
+    @browsing
+    def test_filter_by_dossier_inactive_responsible_with_specific_user(self, browser):
+        self.login(self.regular_user, browser=browser)
+        inactive_user_1 = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_user_1")
+        )
+        inactive_user_2 = create(
+            Builder('ogds_user')
+            .having(active=False, userid="inactive_user_2")
+        )
+
+        create(
+            Builder('dossier')
+            .titled(u'Dossier with inactive responsible 1')
+            .within(self.leaf_repofolder)
+            .having(responsible="{}".format(inactive_user_1.userid))
+        )
+        create(
+            Builder('dossier')
+            .titled(u'Dossier with inactive responsible 2')
+            .within(self.leaf_repofolder)
+            .having(responsible="{}".format(inactive_user_2.userid))
+        )
+
+        self.commit_solr()
+        self.login(self.regular_user, browser=browser)
+
+        view = ('@listing?name=dossiers&columns:list=title&columns:list=responsible')
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        # Assert all items
+        self.assertEqual(19, len(items))
+
+        # filter by inactive users
+        view = (
+            '@listing?name=dossiers'
+            '&columns:list=title'
+            '&columns:list=responsible'
+            '&filters.inactive_responsibles:record:boolean=true')
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        self.assertEqual(2, len(items))
+        self.assertTrue([dossier["responsible"] == [inactive_user_1, inactive_user_2] for dossier in items])
+
+        # filter by specific inactive user
+        view = (
+            '@listing?name=dossiers'
+            '&columns:list=title'
+            '&columns:list=responsible'
+            '&filters.inactive_responsibles:record:boolean=true'
+            '&filters.responsible:record:list={}'.format(inactive_user_1.userid))
+        browser.open(self.leaf_repofolder, view=view, headers=self.api_headers)
+        items = browser.json['items']
+
+        self.assertEqual(1, len(items))
+        self.assertTrue([dossier["responsible"] == inactive_user_1 for dossier in items])
+        self.assertTrue([dossier["title"] == 'Dossier with inactive responsible 1' for dossier in items])
+
+    @browsing
     def test_workspaces_listing(self, browser):
         self.login(self.workspace_member, browser=browser)
         query_string = '&'.join((
