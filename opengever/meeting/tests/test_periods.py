@@ -27,9 +27,10 @@ class TestPathBar(IntegrationTestCase):
             'TOC alphabetical '
             'TOC by repository '
             'TOC by dossier reference number '
-            'TOC by repository reference number',
+            'TOC by repository reference number '
+            'TOC by decision sequence number',
             listing.text
-            )
+        )
 
 
 class TestGetOverlappingPeriods(IntegrationTestCase):
@@ -187,18 +188,27 @@ class TestPeriod(IntegrationTestCase):
         period_rows = browser.css('#period_listing .period')
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
-            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'TOC alphabetical TOC by repository '
-             'TOC by dossier reference number TOC by repository reference number',
-             'Edit'],
-            ['2011 (Jan 01, 2011 - Dec 31, 2011)',
-             'TOC alphabetical TOC by repository '
-             'TOC by dossier reference number TOC by repository reference number',
-             'Edit'],
-            ['2010 (Jan 01, 2010 - Dec 31, 2010)',
-             'TOC alphabetical TOC by repository '
-             'TOC by dossier reference number TOC by repository reference number',
-             'Edit']
+            [
+                '2016 (Jan 01, 2016 - Dec 31, 2016)',
+                'TOC alphabetical TOC by repository '
+                'TOC by dossier reference number TOC by repository reference number '
+                'TOC by decision sequence number',
+                'Edit'
+            ],
+            [
+                '2011 (Jan 01, 2011 - Dec 31, 2011)',
+                'TOC alphabetical TOC by repository '
+                'TOC by dossier reference number TOC by repository reference number '
+                'TOC by decision sequence number',
+                'Edit'
+            ],
+            [
+                '2010 (Jan 01, 2010 - Dec 31, 2010)',
+                'TOC alphabetical TOC by repository '
+                'TOC by dossier reference number TOC by repository reference number '
+                'TOC by decision sequence number',
+                'Edit'
+            ]
         ], text_by_period)
 
     @browsing
@@ -227,23 +237,28 @@ class TestPeriod(IntegrationTestCase):
         period_rows = browser.css('#period_listing .period')
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
-            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'TOC alphabetical TOC by repository '
-             'TOC by dossier reference number TOC by repository reference number',
-             'Edit'],
+            [
+                '2016 (Jan 01, 2016 - Dec 31, 2016)',
+                'TOC alphabetical TOC by repository '
+                'TOC by dossier reference number TOC by repository reference number '
+                'TOC by decision sequence number',
+                'Edit'
+            ],
         ], text_by_period)
-
         self.login(self.manager, browser)
         browser.open(self.committee, view='tabbedview_view-periods')
         period_rows = browser.css('#period_listing .period')
         text_by_period = [row.css('> *').text for row in period_rows]
         self.assertEqual([
-            ['2016 (Jan 01, 2016 - Dec 31, 2016)',
-             'TOC alphabetical TOC by repository '
-             'TOC by dossier reference number TOC by repository reference number',
-             'Edit',
-             'TOC JSON alphabetical TOC JSON by repository '
-             'TOC JSON by dossier reference number TOC JSON by repository reference number'],
+            [
+                '2016 (Jan 01, 2016 - Dec 31, 2016)',
+                'TOC alphabetical TOC by repository TOC by dossier reference number '
+                'TOC by repository reference number TOC by decision sequence number',
+                'Edit',
+                'TOC JSON alphabetical TOC JSON by repository '
+                'TOC JSON by dossier reference number '
+                'TOC JSON by repository reference number TOC JSON decision sequence number'
+            ]
         ], text_by_period)
 
     @browsing

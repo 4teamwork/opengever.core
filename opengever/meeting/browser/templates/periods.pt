@@ -40,6 +40,13 @@
             download TOC by repository reference number
           </a>
         </li>
+        <li>
+          <a class="download_toc"
+             tal:attributes="href string:${period/getURL}/@@decision_sequence_number_toc"
+             i18n:translate="label_download_decision_sequence_number_toc">
+            download TOC by decision sequence number
+          </a>
+        </li>
       </ul>
       <ul class="actions" tal:condition="view/is_editable_by_current_user">
         <li>
@@ -77,6 +84,13 @@
              tal:attributes="href string:${period/getURL}/repository_refnum_toc/as_json"
              i18n:translate="label_download_repository_refnum_toc_json">
             download TOC json by repository reference number
+          </a>
+        </li>
+        <li>
+          <a class="download_toc_json"
+              tal:attributes="href string:${period/getURL}/decision_sequence_number_toc/as_json"
+             i18n:translate="label_download_decision_sequence_number_toc_json">
+            download TOC json by decision sequence number
           </a>
         </li>
       </ul>

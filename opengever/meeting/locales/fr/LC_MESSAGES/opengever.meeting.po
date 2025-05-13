@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-10-31 07:15+0000\n"
+"POT-Creation-Date: 2025-05-13 10:37+0000\n"
 "PO-Revision-Date: 2018-05-22 10:15+0000\n"
 "Last-Translator: Niklaus Johner <Niklaus.johner@4teamwork.ch>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-meeting/fr/>\n"
@@ -742,6 +742,11 @@ msgstr "Modèles protocole"
 msgid "filename_alphabetical_toc"
 msgstr "Table des matières ${period} ${committee} alphabétique"
 
+#. Default: "Decision Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_decision_number_toc"
+msgstr "Inhaltsverzeichnis ${period} ${committee} numéro de décision"
+
 #. Default: "Dossier Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_dossier_reference_number_toc"
@@ -1047,6 +1052,16 @@ msgstr "Table des matières alphabétique"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
 msgstr "Table des matières alphabétique JSON"
+
+#. Default: "download TOC by decision sequence number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_decision_sequence_number_toc"
+msgstr "Table des matières numéro de décision"
+
+#. Default: "download TOC json by decision sequence number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_decision_sequence_number_toc_json"
+msgstr "Table des matières numéro de décision JSON"
 
 #. Default: "download TOC by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt

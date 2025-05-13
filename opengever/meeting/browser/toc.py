@@ -5,6 +5,7 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.exceptions import SablonProcessingFailed
 from opengever.meeting.sablon import Sablon
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
+from opengever.meeting.toc.decision_sequence_number import DecisionSequenceNumberBasedTOC
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
 from opengever.meeting.toc.repository_refnum import RepositoryReferenceNumberBasedTOC
@@ -142,6 +143,25 @@ class DownloadRepositoryReferenceNumberTOC(DownloadAlphabeticalTOC):
         return u"{}.docx".format(
             translate(_(u'filename_repository_reference_number_toc',
                         default=u'Repository Reference Number Toc ${period} ${committee}',
+                        mapping={
+                            'period': period_title,
+                            'committee': committee_title,
+                        }),
+                      context=getRequest()))
+
+
+class DownloadDecisionSequenceNumberTOC(DownloadAlphabeticalTOC):
+    def get_data(self):
+        return DecisionSequenceNumberBasedTOC(self.context).get_json()
+
+    def get_filename(self):
+        normalizer = getUtility(IIDNormalizer)
+        period_title = normalizer.normalize(self.context.title)
+        committee_title = normalizer.normalize(self.committee.title)
+
+        return u"{}.docx".format(
+            translate(_(u'filename_decision_number_toc',
+                        default=u'Decision Number Toc ${period} ${committee}',
                         mapping={
                             'period': period_title,
                             'committee': committee_title,
