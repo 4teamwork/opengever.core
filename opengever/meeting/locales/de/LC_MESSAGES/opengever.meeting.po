@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-10-31 07:15+0000\n"
+"POT-Creation-Date: 2025-05-13 10:37+0000\n"
 "PO-Revision-Date: 2017-10-23 18:40+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -740,6 +740,11 @@ msgstr "Vorlagen Protokoll"
 msgid "filename_alphabetical_toc"
 msgstr "Inhaltsverzeichnis ${period} ${committee} alphabetisch"
 
+#. Default: "Decision Number Toc ${period} ${committee}"
+#: ./opengever/meeting/browser/toc.py
+msgid "filename_decision_number_toc"
+msgstr "Inhaltsverzeichnis ${period} ${committee} Beschlussnummer"
+
 #. Default: "Dossier Reference Number Toc ${period} ${committee}"
 #: ./opengever/meeting/browser/toc.py
 msgid "filename_dossier_reference_number_toc"
@@ -1045,6 +1050,16 @@ msgstr "Inhaltsverzeichnis alphabetisch"
 #: ./opengever/meeting/browser/templates/periods.pt
 msgid "label_download_alphabetical_toc_json"
 msgstr "Inhaltsverzeichnis alphabetisch JSON"
+
+#. Default: "download TOC by decision sequence number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_decision_sequence_number_toc"
+msgstr "Inhaltsverzeichnis nach Beschlussnummer"
+
+#. Default: "download TOC json by decision sequence number"
+#: ./opengever/meeting/browser/templates/periods.pt
+msgid "label_download_decision_sequence_number_toc_json"
+msgstr "Inhaltsverzeichnis nach Beschlussnummer JSON"
 
 #. Default: "download TOC by dossier reference number"
 #: ./opengever/meeting/browser/templates/periods.pt

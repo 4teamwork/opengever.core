@@ -160,6 +160,15 @@
       allowed_attributes="as_json"
       />
 
+
+  <browser:page
+      for="opengever.meeting.period.IPeriod"
+      name="decision_sequence_number_toc"
+      class=".toc.DownloadDecisionSequenceNumberTOC"
+      permission="zope2.View"
+      allowed_attributes="as_json"
+      />
+
   <browser:page
       name="tabbedview_view-periods"
       for="opengever.meeting.committee.ICommittee"

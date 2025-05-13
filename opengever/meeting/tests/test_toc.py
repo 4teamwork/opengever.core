@@ -12,6 +12,7 @@ from opengever.meeting.command import MIME_DOCX
 from opengever.meeting.interfaces import IMeetingSettings
 from opengever.meeting.model import Proposal
 from opengever.meeting.toc.alphabetical import AlphabeticalToc
+from opengever.meeting.toc.decision_sequence_number import DecisionSequenceNumberBasedTOC
 from opengever.meeting.toc.dossier_refnum import DossierReferenceNumberBasedTOC
 from opengever.meeting.toc.repository import RepositoryBasedTOC
 from opengever.meeting.toc.repository_refnum import RepositoryReferenceNumberBasedTOC
@@ -719,3 +720,110 @@ class TestMeetingTocDataLocalisation(IntegrationTestCase):
         browser.open(self.period, view='alphabetical_toc/as_json')
         self.assertEqual(u'Son 17 Jul',
                          browser.json["toc"][0]["contents"][0]["meeting_date"])
+
+
+class TestTOCByDecisionSequenceNumber(TestAlphabeticalTOC):
+
+    view_name = 'decision_sequence_number_toc'
+    toc_class = DecisionSequenceNumberBasedTOC
+    toc_filename = 'Decision number TOC 2010 my-committee.docx'
+    download_button_label = 'TOC by decision sequence number'
+
+    expected_toc_json = {
+        'toc': [
+            {
+                'contents': [
+                    {
+                        'decision_number': 2,
+                        'description': None,
+                        'dossier_reference_number': u'1.1.4 / 1',
+                        'has_proposal': True,
+                        'meeting_date': u'01.01.2010',
+                        'meeting_start_page_number': 33,
+                        'repository_folder_title': u'\xc4 Business',
+                        'title': u'proposal 1'
+                    }
+                ],
+                'group_title': ''
+            },
+            {
+                'contents': [
+                    {
+                        'decision_number': 3,
+                        'description': None,
+                        'dossier_reference_number': u'1.1.4 / 2',
+                        'has_proposal': True,
+                        'meeting_date': u'01.01.2010',
+                        'meeting_start_page_number': 33,
+                        'repository_folder_title': u'\xc4 Business',
+                        'title': u'\xc4a proposal'
+                    }
+                ],
+                'group_title': ''},
+            {
+                'contents': [
+                    {
+                        'decision_number': 4,
+                        'description': None,
+                        'dossier_reference_number': u'10.1.4 / 1',
+                        'has_proposal': True,
+                        'meeting_date': u'31.12.2010',
+                        'meeting_start_page_number': 129,
+                        'repository_folder_title': u'A Business',
+                        'title': u'Proposal 3'
+                    }
+                ],
+                'group_title': ''},
+            {
+                'contents': [
+                    {
+                        'decision_number': 5,
+                        'description': u'Really, Anything.',
+                        'dossier_reference_number': u'3.1.4 / 77',
+                        'has_proposal': True,
+                        'meeting_date': u'31.12.2010',
+                        'meeting_start_page_number': 129,
+                        'repository_folder_title': u'Other Stuff',
+                        'title': u'Anything goes'
+                    }
+                ],
+                'group_title': ''},
+            {
+                'contents': [
+                    {
+                        'decision_number': 6,
+                        'description': None,
+                        'dossier_reference_number': None,
+                        'has_proposal': False,
+                        'meeting_date': u'31.12.2010',
+                        'meeting_start_page_number': 129,
+                        'repository_folder_title': None,
+                        'title': u'No Proposal here'
+                    },
+                    {
+                        'decision_number': 7,
+                        'description': u'But a description!',
+                        'dossier_reference_number': None,
+                        'has_proposal': False,
+                        'meeting_date': u'31.12.2010',
+                        'meeting_start_page_number': 129,
+                        'repository_folder_title': None,
+                        'title': u'Nahhh not here either'
+                    }
+                ],
+                'group_title': ''},
+            {
+                'contents': [
+                    {
+                        'decision_number': 8,
+                        'description': None,
+                        'dossier_reference_number': u'1.1.4 / 1',
+                        'has_proposal': True,
+                        'meeting_date': u'01.01.2010',
+                        'meeting_start_page_number': 33,
+                        'repository_folder_title': u'\xc4 Business',
+                        'title': u'aa proposal'
+                    }
+                ],
+                'group_title': ''}]
+    }
