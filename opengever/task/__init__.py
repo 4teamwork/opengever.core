@@ -43,6 +43,7 @@ FINAL_TASK_STATES = [
 
 FINAL_TRANSITIONS = [
     'task-transition-open-cancelled',
+    'task-transition-in-progress-cancelled',
     'task-transition-open-tested-and-closed',
     'task-transition-in-progress-tested-and-closed',
     'task-transition-resolved-tested-and-closed',
