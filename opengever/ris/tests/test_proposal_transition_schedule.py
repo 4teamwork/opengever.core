@@ -6,6 +6,7 @@ from ftw.testbrowser.pages import statusmessages
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
 from opengever.testing import IntegrationTestCase
+import json
 
 
 class TestRisProposalTransitionSchedule(IntegrationTestCase):
@@ -59,3 +60,41 @@ class TestRisProposalTransitionSchedule(IntegrationTestCase):
         statusmessages.assert_message('Item state changed.')
 
         self.assert_workflow_state('proposal-state-scheduled', self.ris_proposal)
+
+    @browsing
+    def test_can_submit_attachments_to_scheduled_proposal(self, browser):
+        self.login(self.regular_user, browser)
+        ris_proposal = create(
+            Builder('ris_proposal')
+            .within(self.dossier)
+            .having(document=self.document)
+            .in_state('proposal-state-scheduled')
+        )
+        attachment_1 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'proposal attachment 1')
+        )
+        attachment_2 = create(
+            Builder('document')
+            .within(self.dossier)
+            .titled(u'proposal attachment 2')
+        )
+
+        # assert ris proposal has no attachments
+        self.assertEqual(len(ris_proposal.attachments), 0)
+        data = json.dumps({
+            "attachments": [
+                attachment_1.absolute_url(),
+                attachment_2.absolute_url()
+            ]
+        })
+        # patch request to update attachments
+        browser.open(
+            ris_proposal.absolute_url(),
+            data,
+            method='PATCH',
+            headers=self.api_headers
+        )
+        # assert ris proposal attachments after patch update request
+        self.assertEqual(len(ris_proposal.attachments), 2)
