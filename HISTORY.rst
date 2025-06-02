@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.5.1 (2025-06-02)
+---------------------
+
+Other changes:
+
+
+- Add TOC download for decision sequence number. [amo] [TI-2294]
+
+
 2025.5.0 (2025-03-24)
 ---------------------
 
