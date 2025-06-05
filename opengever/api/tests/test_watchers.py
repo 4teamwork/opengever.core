@@ -2,11 +2,13 @@ from collections import defaultdict
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.api.watchers import WatcherDeleter
 from opengever.base.model import create_session
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from zExceptions import Forbidden
 import json
 
 
@@ -817,3 +819,56 @@ class TestPossibleWatchers(IntegrationTestCase):
             u'items_total': 10}
 
         self.assertEqual(expected_json, browser.json)
+
+class TestWatcherDeleter(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_can_delete_watcher_from_context(self):
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        WatcherDeleter(self.task).delete(self.regular_user.getId())
+
+        self.assertItemsEqual(
+            [self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+    def test_delete_raises_forbidden_if_not_allowed(self):
+        self.login(self.regular_user)
+
+        with self.assertRaises(Forbidden):
+            WatcherDeleter(self.task).delete(self.dossier_responsible.getId())
+
+    def test_can_delete_returns_true_for_current_user(self):
+        self.login(self.regular_user)
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+    def test_can_delete_returns_true_for_groups(self):
+        self.login(self.regular_user)
+        self.assertTrue(WatcherDeleter(self.task).can_delete('fa_users'))
+
+    def test_can_delete_returns_false_for_foreign_actors_as_editor(self):
+        self.login(self.regular_user)
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_false_for_foreign_actors_as_limited_admin(self):
+        self.login(self.limited_admin)
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_false_for_foreign_actors_as_administrator(self):
+        self.login(self.administrator)
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_false_for_foreign_actors_as_manager(self):
+        self.login(self.manager)
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
