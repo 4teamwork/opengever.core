@@ -1,0 +1,9 @@
+<rolemap>
+  <permissions>
+    <permission name="opengever.api: Remove any watcher" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+  </permissions>
+</rolemap>

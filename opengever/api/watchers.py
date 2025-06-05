@@ -100,6 +100,10 @@ class WatcherDeleter(object):
         self.context = context
 
     def can_delete(self, actor_id):
+        # Always allow depending on a permission
+        if api.user.has_permission('opengever.api: Remove any watcher', obj=self.context):
+            return True
+
         # The user can always remove itslef
         if actor_id == api.user.get_current().getId():
             return True

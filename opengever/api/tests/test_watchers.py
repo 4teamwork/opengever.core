@@ -861,14 +861,14 @@ class TestWatcherDeleter(IntegrationTestCase):
         self.login(self.regular_user)
         self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_limited_admin(self):
+    def test_can_delete_returns_true_for_foreign_actors_as_limited_admin(self):
         self.login(self.limited_admin)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_administrator(self):
+    def test_can_delete_returns_true_for_foreign_actors_as_administrator(self):
         self.login(self.administrator)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_manager(self):
+    def test_can_delete_returns_true_for_foreign_actors_as_manager(self):
         self.login(self.manager)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
