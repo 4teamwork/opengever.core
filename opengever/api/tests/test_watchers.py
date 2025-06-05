@@ -54,6 +54,10 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'watchers_and_roles': {
                 self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                 self.dossier_responsible.id: [u'task_issuer']
+            },
+            u'watcher_properties': {
+                self.regular_user.id: {'can_delete_watcher': True },
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -106,6 +110,10 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'watchers_and_roles': {
                 self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                 self.dossier_responsible.id: [u'task_issuer']
+            },
+            u'watcher_properties': {
+                self.regular_user.id: {'can_delete_watcher': False },
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -143,6 +151,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 self.dossier_responsible.id: [u'regular_watcher']
+            },
+            u'watcher_properties': {
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -179,6 +190,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 self.dossier_responsible.id: [u'regular_watcher']
+            },
+            u'watcher_properties': {
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -219,6 +233,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 u'team:1': [u'task_responsible'],
+            },
+            u'watcher_properties': {
+                u'team:1': {'can_delete_watcher': True },
             }
         }
 
@@ -257,6 +274,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 u'inbox:fa': [u'task_responsible'],
+            },
+            u'watcher_properties': {
+                u'inbox:fa': {'can_delete_watcher': True },
             }
         }
 
@@ -289,7 +309,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         expected_json = {u'@id': self.document.absolute_url() + '/@watchers',
                          u'referenced_actors': [],
                          u'referenced_watcher_roles': [],
-                         u'watchers_and_roles': {}}
+                         u'watchers_and_roles': {},
+                         u'watcher_properties': {}}
         self.assertEqual(expected_json, browser.json['@components']['watchers'])
 
 

@@ -59,6 +59,14 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
             "regular_watcher",
             "task_responsible"
           ]
+        },
+        "watcher_properties": {
+          "peter.mueller": {
+            "can_delete_watcher": true
+          },
+          "rolf.ziegler": {
+            "can_delete_watcher": False
+          }
         }
       }
 
@@ -89,7 +97,8 @@ Die Beobachter können als Komponente eines Inhalts direkt über den ``expand``-
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
           "referenced_actors": ["..."],
           "referenced_watcher_roles": ["..."],
-          "watchers_and_roles": { "...": "..." }
+          "watchers_and_roles": { "...": "..." },
+          "watcher_properties": { "...": "..." }
         }
       },
       "...": "..."
