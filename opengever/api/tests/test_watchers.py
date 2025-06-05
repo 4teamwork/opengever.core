@@ -851,24 +851,77 @@ class TestWatcherDeleter(IntegrationTestCase):
 
     def test_can_delete_returns_true_for_current_user(self):
         self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+    def test_can_delete_returns_true_if_actor_has_watcher_role(self):
+        self.login(self.regular_user)
+        center = notification_center()
+
+        # No one is watching with the WATCHER_ROLE
+        self.assertItemsEqual(
+            [],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        # But with other roles
+        self.assertItemsEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task)]
+        )
+
+        # Delete should not be possible because the WATCHER_ROLE is missing for the user
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        # Now it's possible because the user is watching with the required role
         self.assertTrue(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
 
     def test_can_delete_returns_true_for_groups(self):
         self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, 'fa_users', WATCHER_ROLE)
+
         self.assertTrue(WatcherDeleter(self.task).can_delete('fa_users'))
 
     def test_can_delete_returns_false_for_foreign_actors_as_editor(self):
         self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
         self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_limited_admin(self):
+    def test_can_delete_returns_true_for_foreign_actors_as_limited_admin(self):
         self.login(self.limited_admin)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_administrator(self):
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_true_for_foreign_actors_as_administrator(self):
         self.login(self.administrator)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
 
-    def test_can_delete_returns_false_for_foreign_actors_as_manager(self):
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_true_for_foreign_actors_as_manager(self):
         self.login(self.manager)
-        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))

@@ -98,9 +98,20 @@ class WatcherDeleter(object):
 
     def __init__(self, context):
         self.context = context
+        self.center = notification_center()
 
     def can_delete(self, actor_id):
-        # The user can always remove itslef
+        watchers = self.center.get_watchers(self.context, WATCHER_ROLE)
+
+        # Delete watcher is only possible for the WATCHER_ROLE
+        if actor_id not in [watcher.actorid for watcher in watchers]:
+            return False
+
+        # Always allow depending on a permission
+        if api.user.has_permission('opengever.api: Remove any watcher', obj=self.context):
+            return True
+
+        # The user can always remove itself
         if actor_id == api.user.get_current().getId():
             return True
 

@@ -454,6 +454,12 @@
       <role name="Reviewer" />
     </permission>
 
+    <permission name="opengever.api: Remove any watcher" acquire="True">
+      <role name="Manager" />
+      <role name="Administrator" />
+      <role name="LimitedAdmin" />
+    </permission>
+
   </permissions>
 
 </rolemap>
