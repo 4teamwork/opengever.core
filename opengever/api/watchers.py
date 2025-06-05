@@ -94,6 +94,30 @@ class WatchersPost(Service):
             raise BadRequest(u"Actor '{}' does not exist".format(self.actor_id))
 
 
+class WatcherDeleter(object):
+
+    def __init__(self, context):
+        self.context = context
+
+    def can_delete(self, actor_id):
+        # The user can always remove itslef
+        if actor_id == api.user.get_current().getId():
+            return True
+
+        # The user can never remove another user
+        if isinstance(ActorLookup(actor_id).lookup(), OGDSUserActor):
+            return False
+
+        # the user can remove groups and teams
+        return True
+
+    def delete(self, actor_id):
+        if not self.can_delete(actor_id):
+            raise Forbidden()
+
+        notification_center().remove_watcher_from_resource(self.context, actor_id, WATCHER_ROLE)
+
+
 @implementer(IPublishTraverse)
 class WatchersDelete(Service):
     def __init__(self, context, request):
@@ -110,11 +134,7 @@ class WatchersDelete(Service):
 
         self.extract_data()
         actor_id = self.read_params()
-        if not self.can_delete_actor(actor_id):
-            raise Forbidden()
-
-        self.center = notification_center()
-        self.center.remove_watcher_from_resource(self.context, actor_id, WATCHER_ROLE)
+        WatcherDeleter(self.context).delete(actor_id)
 
         self.request.response.setStatus(204)
         return None
@@ -123,18 +143,6 @@ class WatchersDelete(Service):
         data = json_body(self.request)
         if data:
             raise BadRequest("DELETE does not take any data")
-
-    def can_delete_actor(self, actor_id):
-        # The user can always remove itslef
-        if actor_id == api.user.get_current().getId():
-            return True
-
-        # The user can never remove another user
-        if isinstance(ActorLookup(actor_id).lookup(), OGDSUserActor):
-            return False
-
-        # the user can remove groups and teams
-        return True
 
     def read_params(self):
         if len(self.params) == 0:
