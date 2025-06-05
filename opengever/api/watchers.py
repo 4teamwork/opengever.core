@@ -59,9 +59,15 @@ class Watchers(object):
             }
             for role in roles]
 
+        watcher_properties = defaultdict(dict)
+        deleter = WatcherDeleter(self.context)
+        for actor_id in watchers_and_roles:
+            watcher_properties[actor_id]['can_delete_watcher'] = deleter.can_delete(actor_id)
+
         result['watchers']['watchers_and_roles'] = watchers_and_roles
         result['watchers']['referenced_watcher_roles'] = referenced_watcher_roles
         result['watchers']['referenced_actors'] = referenced_actors
+        result['watchers']['watcher_properties'] = watcher_properties
         return result
 
 
