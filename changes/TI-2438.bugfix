@@ -1,1 +1,0 @@
-Fix solr sync by making value extraction more robust in cases where the value contains curly braces. [ran]

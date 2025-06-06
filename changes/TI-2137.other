@@ -1,1 +1,0 @@
-Fix upgradestep to grant dossier manager to responsible feature if the userid is not the same as the username. [elioschmutz]

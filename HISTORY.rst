@@ -10,6 +10,30 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.7.0 (2025-06-06)
+---------------------
+
+Bug fixes:
+
+
+- Fix extracting email attachments if one of the attachment is another email. [elioschmutz] [TI-1990]
+- Add view permission for reader for forwarding workflow. [amo] [TI-2379]
+- Fix solr sync by making value extraction more robust in cases where the value contains curly braces. [ran] [TI-2438]
+
+
+Other changes:
+
+
+- Bump ftw.solr to version 2.13.4 which fixes the solr zopectl command for deployments with custom fields. [buchi] [TI-2050]
+- Provide actions to transfer responsibility for dossiers and sub-dossiers via context actions and listing actions. [amo] [TI-2135]
+- Fix upgradestep to grant dossier manager to responsible feature if the userid is not the same as the username. [elioschmutz] [TI-2137]
+- extend @listing endpoint with inactive user filter .[amo] [TI-2279]
+- Add TOC download for decision sequence number. [amo] [TI-2294]
+- Remove outdated user manual and release notes. Use docs.4teamwork.ch instead. [elioschmutz] [TI-2318]
+- Enable modify content permission to Attach attachments to submitted / approved ris proposal. [amo] [TI-2329]
+- Expand translations for document states. [ran] [TI-2471]
+
+
 2025.6.0 (2025-04-07)
 ---------------------
 
