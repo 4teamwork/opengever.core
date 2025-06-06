@@ -303,10 +303,14 @@ class TaskTransitionController(BrowserView):
     def progress_to_cancelled_guard(self, c, include_agency):
         """Checks if:
         - The task is generated from tasktemplate and its the main task
+        - Task is not a predecessor or a successor
         - The current user is the issuer
         """
         if self.context.is_from_tasktemplate:
             return not ITask.providedBy(aq_parent(self.context))
+
+        if c.task.has_successors or (c.task.is_successor and not c.task.is_forwarding_successor):
+            return False
 
         if include_agency:
             return (c.current_user.is_issuer

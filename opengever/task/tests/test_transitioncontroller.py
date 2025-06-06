@@ -1,6 +1,9 @@
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.base.role_assignments import SharingRoleAssignment
+from opengever.task.browser.accept.utils import accept_task_with_successor
 from opengever.task.browser.transitioncontroller import TaskTransitionController
 from opengever.tasktemplates.interfaces import IFromTasktemplateGenerated
 from opengever.testing import IntegrationTestCase
@@ -254,6 +257,43 @@ class TestInProgressCancelledGuard(IntegrationTestCase):
         self.assertIn(self.transition, self.get_workflow_transitions_for(self.task))
         self.assertNotIn(
             self.transition, self.get_workflow_transitions_for(self.subtask))
+
+    @browsing
+    def test_not_available_for_predecessor_and_successor(self, browser):
+        self.login(self.dossier_responsible, browser)
+        predecessor = create(
+            Builder('task')
+            .within(self.dossier)
+            .having(issuer=self.dossier_responsible.id,
+                    responsible=self.regular_user.id,
+                    responsible_client='rk',
+                    task_type='correction')
+            .in_state('task-state-open')
+            .titled(u'Inquiry from a concerned citizen'))
+
+        sql_task = predecessor.get_sql_object()
+        with self.login(self.regular_user):
+            successor = accept_task_with_successor(
+                self.dossier,
+                'plone:%s' % sql_task.int_id,
+                u'I accept this task',
+            )
+
+        self.assertNotIn(self.transition, self.get_workflow_transitions_for(predecessor))
+        self.assertNotIn(self.transition, self.get_workflow_transitions_for(successor))
+
+    @browsing
+    def test_available_for_forwarding_successor(self, browser):
+        self.login(self.secretariat_user, browser)
+        forwarding_successor = create(
+            Builder('task')
+            .within(self.dossier)
+            .having(issuer=self.secretariat_user.id,
+                    responsible=self.regular_user.id,
+                    responsible_client='rk',
+                    task_type='correction')
+            .in_state('task-state-in-progress').successor_from(self.inbox_forwarding))
+        self.assertIn(self.transition, self.get_workflow_transitions_for(forwarding_successor))
 
 
 class TestInProgressResolvedGuard(BaseTransitionGuardTests):
