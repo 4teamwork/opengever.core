@@ -186,9 +186,12 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
 
         except PreconditionsViolated as e:
             self.request.response.setStatus(400)
+            error_messages = [err["message"] for err in e.errors]
+            error_ids = [err["id"] for err in e.errors]
             return dict(error=dict(
                 type='PreconditionsViolated',
-                errors=map(self.translate, e.errors),
+                errors=map(self.translate, error_messages),
+                error_ids=error_ids,
                 message=self.translate(str(e))))
 
         except InvalidDates as e:
@@ -197,18 +200,24 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             self.request.response.setStatus(400)
             msg = self.translate(str(e))
             errors = ['The dossier %s has a invalid end_date' % title
-                      for title in e.invalid_dossier_titles]
+                      for title in e.invalid_dossier_titles["message"]]
+            error_ids = [err["id"] for err in e.errors]
             return dict(error=dict(
                 type='PreconditionsViolated',
                 errors=errors,
+                error_ids=error_ids,
                 message=msg))
 
         except AlreadyBeingResolved as e:
             self.request.response.setStatus(400)
-            msg = self.translate(MSG_ALREADY_BEING_RESOLVED)
-            return dict(error=dict(
-                type='AlreadyBeingResolved',
-                message=msg))
+            msg = self.translate(MSG_ALREADY_BEING_RESOLVED["message"])
+            return dict(
+                error=dict(
+                    type='AlreadyBeingResolved',
+                    message=msg,
+                    error_ids=MSG_ALREADY_BEING_RESOLVED["id"]
+                )
+            )
 
         except BadRequest as e:
             self.request.response.setStatus(400)
@@ -238,6 +247,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         # For now we also extract these, but we don't do anything with them
         # in the case of resolving a dossier.
         comment = data.get('comment', '')
+        auto_close_tasks = data.get('auto_close_tasks', False)
         publication_dates = self.parse_publication_dates(data)
         args = [self.context], comment, publication_dates
 
@@ -245,7 +255,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             data = adapter.deserialize(data)
 
         if self.transition == 'dossier-transition-resolve':
-            self.resolve_dossier(*args, **data)
+            self.resolve_dossier(*args, auto_close_tasks=auto_close_tasks, **data)
         elif self.transition == 'dossier-transition-activate':
             self.activate_dossier(*args)
         elif self.transition == 'dossier-transition-deactivate':

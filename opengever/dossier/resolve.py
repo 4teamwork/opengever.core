@@ -36,17 +36,46 @@ from zope.schema.vocabulary import SimpleVocabulary
 import transaction
 
 
-MAIN_DOSSIER_NOT_ACTIVE = _("Dossier is not active and cannot be resolved.")
-NOT_SUPPLIED_OBJECTS = _(
-    "not all documents and tasks are stored in a subdossier.")
-NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
-NOT_CLOSED_TASKS = _("not all task are closed")
-NO_START_DATE = _("the dossier start date is missing.")
-MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
-MSG_ACTIVE_WORKSPACES = _("Not all linked workspaces are deactivated.")
-MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION = _(
+MAIN_DOSSIER_NOT_ACTIVE_MESSAGE = _("Dossier is not active and cannot be resolved.")
+MAIN_DOSSIER_NOT_ACTIVE_ERROR_ID = 100
+MAIN_DOSSIER_NOT_ACTIVE = {"id": MAIN_DOSSIER_NOT_ACTIVE_ERROR_ID, "message": MAIN_DOSSIER_NOT_ACTIVE_MESSAGE}
+
+NOT_SUPPLIED_OBJECTS_MESSAGE = _("not all documents and tasks are stored in a subdossier.")
+NOT_SUPPLIED_OBJECTS_ERROR_ID = 101
+NOT_SUPPLIED_OBJECTS = {"id": NOT_SUPPLIED_OBJECTS_ERROR_ID, "message": NOT_SUPPLIED_OBJECTS_MESSAGE}
+
+NOT_CHECKED_IN_DOCS_MESSAGE = _("not all documents are checked in")
+NOT_CHECKED_IN_DOCS_ERROR_ID = 102
+NOT_CHECKED_IN_DOCS = {"id": NOT_CHECKED_IN_DOCS_ERROR_ID, "message": NOT_CHECKED_IN_DOCS_MESSAGE}
+
+NOT_CLOSED_TASKS_MESSAGE = _("not all task are closed")
+NOT_CLOSED_TASKS_ERROR_ID = 103
+NOT_CLOSED_TASKS = {"id": NOT_CLOSED_TASKS_ERROR_ID, "message": NOT_CLOSED_TASKS_MESSAGE}
+
+NO_START_DATE_MESSAGE = _("the dossier start date is missing.")
+NO_START_DATE_ERROR_ID = 104
+NO_START_DATE = {"id": NO_START_DATE_ERROR_ID, "message": NO_START_DATE_MESSAGE}
+
+MSG_ACTIVE_PROPOSALS_MESSAGE = _("The dossier contains active proposals.")
+MSG_ACTIVE_PROPOSALS_ERROR_ID = 105
+MSG_ACTIVE_PROPOSALS = {"id": MSG_ACTIVE_PROPOSALS_ERROR_ID, "message": MSG_ACTIVE_PROPOSALS_MESSAGE}
+
+MSG_ACTIVE_WORKSPACES_MESSAGE = _("Not all linked workspaces are deactivated.")
+MSG_ACTIVE_WORKSPACES_ERROR_ID = 106
+MSG_ACTIVE_WORKSPACES = {"id": MSG_ACTIVE_WORKSPACES_ERROR_ID, "message": MSG_ACTIVE_WORKSPACES_MESSAGE}
+
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_MESSAGE = _(
     u"Not all linked workspaces are accessible by the current user.")
-MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_ERROR_ID = 107
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION = {
+    "id": MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_ERROR_ID,
+    "message": MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_MESSAGE
+}
+
+MSG_ALREADY_BEING_RESOLVED_MESSAGE = _("Dossier is already being resolved")
+MSG_ALREADY_BEING_RESOLVED_ERROR_ID = 108
+MSG_ALREADY_BEING_RESOLVED = {"id": MSG_ALREADY_BEING_RESOLVED_ERROR_ID, "message": MSG_ALREADY_BEING_RESOLVED_MESSAGE}
+
 
 AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_pending'
 
@@ -154,6 +183,11 @@ class LockingResolveManager(object):
         # by acquring a lock, resolving, and then releasing the lock
         try:
             resolve_lock.acquire(commit=True)
+            auto_close_tasks = transition_params.get("auto_close_tasks", False)
+            if auto_close_tasks:
+                pending_tasks = self._get_pending_tasks()
+                self._auto_close_tasks(pending_tasks)
+
             result = self.execute_recursive_resolve(**transition_params)
 
             # We need to commit here so that a possible ConflictError already
@@ -186,6 +220,22 @@ class LockingResolveManager(object):
             # there was an exception, propagation will continue after leaving
             # this 'finally' block.
             resolve_lock.release(commit=True)
+
+    def _auto_close_tasks(self, tasks):
+        """Auto-close all pending tasks."""
+        for brain in tasks:
+            task = brain.getObject()
+            task.force_update_task_state()
+
+    def _get_pending_tasks(self):
+        """Get all pending tasks in dossier."""
+        catalog = api.portal.get_tool('portal_catalog')
+        path = '/'.join(self.context.getPhysicalPath())
+        return catalog.searchResults(
+            path=path,
+            object_provides=ITask.__identifier__,
+            review_state=['task-state-open', 'task-state-in-progress', 'task-state-resolved']
+        )
 
     def execute_recursive_resolve(self, **transition_params):
         self.resolver.raise_on_failed_preconditions()
@@ -301,7 +351,7 @@ class StrictDossierResolver(object):
             self.enddates_valid = True
         return errors
 
-    def resolve(self, end_date=None, **kwargs):
+    def resolve(self, end_date=None, auto_close_tasks=False, **kwargs):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 

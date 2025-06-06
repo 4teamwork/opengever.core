@@ -906,6 +906,40 @@ class Task(Container, TaskReminderSupport):
         self.sync()
         self.reindexObject()
 
+    def get_available_transitions(self):
+        wftool = api.portal.get_tool("portal_workflow")
+        actions = wftool.listActionInfos(object=self)
+        return [
+            action['id'] for action in actions
+            if action['category'] == 'workflow'
+        ]
+
+    def force_update_task_state(self):
+        state = api.content.get_state(self)
+        transitions = self.get_available_transitions()
+
+        if state == 'task-state-open':
+            api.content.transition(obj=self, transition='task-transition-open-cancelled')
+
+        elif state == 'task-state-in-progress':
+            if 'task-transition-in-progress-resolved' in transitions:
+                api.content.transition(obj=self, transition='task-transition-in-progress-resolved')
+                # refresh transitions after state change
+                transitions = self.get_available_transitions()
+
+            if 'task-transition-resolved-tested-and-closed' in transitions:
+                api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+
+            if 'task-transition-in-progress-cancelled' in transitions:
+                api.content.transition(obj=self, transition='task-transition-in-progress-cancelled')
+                transitions = self.get_available_transitions()
+        elif state == 'task-state-resolved':
+            api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+
+        for subtask in self.objectValues():
+            if ITask.providedBy(subtask):
+                subtask.force_update_task_state()
+
 
 def related_document(context):
     intids = getUtility(IIntIds)
