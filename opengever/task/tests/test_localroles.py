@@ -772,6 +772,30 @@ class TestLocalRolesRevoking(IntegrationTestCase):
         self.assertEqual([], storage._storage())
 
     @browsing
+    def test_cancelling_a_task_in_progress_revokes_roles(self, browser):
+        self.login(self.dossier_responsible, browser=browser)
+        self.set_workflow_state('task-state-in-progress', self.subtask)
+        storage = RoleAssignmentManager(self.subtask).storage
+
+        self.assertEqual(
+            [{'cause': ASSIGNMENT_VIA_TASK,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': self.regular_user.id},
+             {'cause': ASSIGNMENT_VIA_TASK_AGENCY,
+              'roles': ['Editor'],
+              'reference': Oguid.for_object(self.subtask),
+              'principal': 'fa_inbox_users'}],
+            storage._storage())
+
+        # cancel
+        browser.open(self.subtask, view='tabbedview_view-overview')
+        browser.click_on('Cancel')
+        browser.click_on('Save')
+
+        self.assertEqual([], storage._storage())
+
+    @browsing
     def test_cancelling_a_task_does_not_revoke_roles_if_revoke_permission_is_false(self, browser):
         self.login(self.dossier_responsible, browser=browser)
         self.set_workflow_state('task-state-open', self.subtask)
