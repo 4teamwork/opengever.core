@@ -36,17 +36,46 @@ from zope.schema.vocabulary import SimpleVocabulary
 import transaction
 
 
-MAIN_DOSSIER_NOT_ACTIVE = _("Dossier is not active and cannot be resolved.")
-NOT_SUPPLIED_OBJECTS = _(
-    "not all documents and tasks are stored in a subdossier.")
-NOT_CHECKED_IN_DOCS = _("not all documents are checked in")
-NOT_CLOSED_TASKS = _("not all task are closed")
-NO_START_DATE = _("the dossier start date is missing.")
-MSG_ACTIVE_PROPOSALS = _("The dossier contains active proposals.")
-MSG_ACTIVE_WORKSPACES = _("Not all linked workspaces are deactivated.")
-MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION = _(
+MAIN_DOSSIER_NOT_ACTIVE_MESSAGE = _("Dossier is not active and cannot be resolved.")
+MAIN_DOSSIER_NOT_ACTIVE_ERROR_ID = 100
+MAIN_DOSSIER_NOT_ACTIVE = {"id": MAIN_DOSSIER_NOT_ACTIVE_ERROR_ID, "message": MAIN_DOSSIER_NOT_ACTIVE_MESSAGE}
+
+NOT_SUPPLIED_OBJECTS_MESSAGE = _("not all documents and tasks are stored in a subdossier.")
+NOT_SUPPLIED_OBJECTS_ERROR_ID = 101
+NOT_SUPPLIED_OBJECTS = {"id": NOT_SUPPLIED_OBJECTS_ERROR_ID, "message": NOT_SUPPLIED_OBJECTS_MESSAGE}
+
+NOT_CHECKED_IN_DOCS_MESSAGE = _("not all documents are checked in")
+NOT_CHECKED_IN_DOCS_ERROR_ID = 102
+NOT_CHECKED_IN_DOCS = {"id": NOT_CHECKED_IN_DOCS_ERROR_ID, "message": NOT_CHECKED_IN_DOCS_MESSAGE}
+
+NOT_CLOSED_TASKS_MESSAGE = _("not all task are closed")
+NOT_CLOSED_TASKS_ERROR_ID = 103
+NOT_CLOSED_TASKS = {"id": NOT_CLOSED_TASKS_ERROR_ID, "message": NOT_CLOSED_TASKS_MESSAGE}
+
+NO_START_DATE_MESSAGE = _("the dossier start date is missing.")
+NO_START_DATE_ERROR_ID = 104
+NO_START_DATE = {"id": NO_START_DATE_ERROR_ID, "message": NO_START_DATE_MESSAGE}
+
+MSG_ACTIVE_PROPOSALS_MESSAGE = _("The dossier contains active proposals.")
+MSG_ACTIVE_PROPOSALS_ERROR_ID = 105
+MSG_ACTIVE_PROPOSALS = {"id": MSG_ACTIVE_PROPOSALS_ERROR_ID, "message": MSG_ACTIVE_PROPOSALS_MESSAGE}
+
+MSG_ACTIVE_WORKSPACES_MESSAGE = _("Not all linked workspaces are deactivated.")
+MSG_ACTIVE_WORKSPACES_ERROR_ID = 106
+MSG_ACTIVE_WORKSPACES = {"id": MSG_ACTIVE_WORKSPACES_ERROR_ID, "message": MSG_ACTIVE_WORKSPACES_MESSAGE}
+
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_MESSAGE = _(
     u"Not all linked workspaces are accessible by the current user.")
-MSG_ALREADY_BEING_RESOLVED = _("Dossier is already being resolved")
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_ERROR_ID = 107
+MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION = {
+    "id": MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_ERROR_ID,
+    "message": MSG_CONTAINS_WORKSPACE_WITHOUT_VIEW_PERMISSION_MESSAGE
+}
+
+MSG_ALREADY_BEING_RESOLVED_MESSAGE = _("Dossier is already being resolved")
+MSG_ALREADY_BEING_RESOLVED_ERROR_ID = 108
+MSG_ALREADY_BEING_RESOLVED = {"id": MSG_ALREADY_BEING_RESOLVED_ERROR_ID, "message": MSG_ALREADY_BEING_RESOLVED_MESSAGE}
+
 
 AFTER_RESOLVE_JOBS_PENDING_KEY = 'opengever.dossier.resolve.after_resolve_jobs_pending'
 
