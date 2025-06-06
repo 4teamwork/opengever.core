@@ -674,3 +674,110 @@ class TestTaskTypeTranslations(IntegrationTestCase):
             'Zum Bericht / Antrag',
             'Zur Kenntnisnahme'],
             task_type_labels)
+
+
+class TestForceUpdateTaskState(IntegrationTestCase):
+
+    def assert_state(self, expected_state, obj):
+        self.assertEquals(
+            expected_state,
+            api.content.get_state(obj)
+        )
+
+    def assert_states(self, expected_states):
+        for expected, obj in expected_states:
+            self.assert_state(expected, obj)
+
+    def create_subtask(self, parent, state, title, task_type):
+        return create(
+            Builder("task")
+            .within(parent)
+            .in_state(state)
+            .titled(title)
+            .having(
+                issuer=self.dossier_responsible.getId(),
+                responsible=self.dossier_responsible.getId(),
+                responsible_client=u'fa',
+                task_type=task_type
+            )
+        )
+
+    def do_force_update_task_state_test(self, main_task_state, expected_main_task_state, expected_subtask_states):
+        dossier = create(Builder('dossier'))
+        main_task = create(
+            Builder("task")
+            .in_state(main_task_state)
+            .within(dossier)
+            .titled("Main Task")
+            .having(
+                responsible=self.dossier_responsible.getId(),
+                issuer=self.dossier_responsible.getId(),
+                responsible_client=u'fa',
+                task_type='information'
+            )
+        )
+
+        resolved_task = self.create_subtask(main_task, 'task-state-resolved', "Subtask 1", 'correction')
+        in_progress_task = self.create_subtask(main_task, 'task-state-in-progress', "Subtask 2", 'information')
+        open_task = self.create_subtask(main_task, 'task-state-open', "Subtask 3", 'approval')
+        rejected_task = self.create_subtask(main_task, 'task-state-rejected', "Subtask 6", 'direct-execution')
+
+        self.assert_states([
+            (main_task_state, main_task),
+            ('task-state-resolved', resolved_task),
+            ('task-state-in-progress', in_progress_task),
+            ('task-state-open', open_task),
+            ('task-state-rejected', rejected_task),
+        ])
+
+        main_task.force_update_task_state()
+
+        self.assert_state(expected_main_task_state, main_task)
+        self.assert_states([
+            (expected_subtask_states["open_task"], open_task),
+            (expected_subtask_states["in_progress_task"], in_progress_task),
+            (expected_subtask_states["resolved_task"], resolved_task),
+            (expected_subtask_states["rejected_task"], rejected_task),
+        ])
+
+    @browsing
+    def test_force_update_task_state_open(self, browser):
+        self.login(self.dossier_responsible)
+        self.do_force_update_task_state_test(
+            expected_main_task_state='task-state-cancelled',
+            main_task_state='task-state-open',
+            expected_subtask_states={
+                'resolved_task': 'task-state-cancelled',
+                'in_progress_task': 'task-state-cancelled',
+                'open_task': 'task-state-cancelled',
+                'rejected_task': 'task-state-cancelled',
+            }
+        )
+
+    @browsing
+    def test_force_update_task_state_in_progress(self, browser):
+        self.login(self.dossier_responsible)
+        self.do_force_update_task_state_test(
+            expected_main_task_state='task-state-cancelled',
+            main_task_state='task-state-in-progress',
+            expected_subtask_states={
+                'resolved_task': 'task-state-cancelled',
+                'in_progress_task': 'task-state-cancelled',
+                'open_task': 'task-state-cancelled',
+                'rejected_task': 'task-state-cancelled',
+            }
+        )
+
+    @browsing
+    def test_force_update_task_state_resolved(self, browser):
+        self.login(self.dossier_responsible)
+        self.do_force_update_task_state_test(
+            expected_main_task_state='task-state-tested-and-closed',
+            main_task_state='task-state-resolved',
+            expected_subtask_states={
+                'resolved_task': 'task-state-tested-and-closed',
+                'in_progress_task': 'task-state-tested-and-closed',
+                'open_task': 'task-state-cancelled',
+                'rejected_task': 'task-state-rejected',
+            }
+        )
