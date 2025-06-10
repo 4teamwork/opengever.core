@@ -32,6 +32,7 @@ from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_IN_PROGRESS
+from opengever.task import TASK_STATE_OPEN
 from opengever.task import TASK_STATE_PLANNED
 from opengever.task import TASK_STATE_SKIPPED
 from opengever.task import util
@@ -905,6 +906,51 @@ class Task(Container, TaskReminderSupport):
 
         self.sync()
         self.reindexObject()
+
+    def get_available_transitions(self):
+        wftool = api.portal.get_tool("portal_workflow")
+        actions = wftool.listActionInfos(object=self)
+        return [
+            action['id'] for action in actions
+            if action['category'] == 'workflow'
+        ]
+
+    def force_finish_task(self):
+        """This method is used to forcefully close a task, including all its subtasks,
+        when a dossier is being closed and active tasks still exist.
+
+        The need for this method arises from a business requirement where dossiers
+        must be allowed to close even if some of their tasks are still open or in progress.
+        Rather than preventing the dossier from closing, we force each task into a
+        valid terminal state based on its current state.
+
+        # This method is recursive, ensuring that all subtasks are also finished in the same way,
+        """
+        state = api.content.get_state(self)
+        transitions = self.get_available_transitions()
+
+        for subtask in self.objectValues():
+            if ITask.providedBy(subtask):
+                subtask.force_finish_task()
+
+        if state == TASK_STATE_OPEN:
+            api.content.transition(obj=self, transition='task-transition-open-cancelled')
+
+        elif state == TASK_STATE_IN_PROGRESS:
+            if 'task-transition-in-progress-resolved' in transitions:
+                api.content.transition(obj=self, transition='task-transition-in-progress-resolved')
+                # refresh transitions after state change
+                transitions = self.get_available_transitions()
+
+            if 'task-transition-resolved-tested-and-closed' in transitions:
+                api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+
+            if 'task-transition-in-progress-cancelled' in transitions:
+                api.content.transition(obj=self, transition='task-transition-in-progress-cancelled')
+                transitions = self.get_available_transitions()
+
+        elif state == 'task-state-resolved':
+            api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
 
 
 def related_document(context):
