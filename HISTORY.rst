@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.2 (2025-06-10)
+---------------------
+
+Other changes:
+
+
+- Update ftw.solr to version 2.14.0 which supports a separate Tika server for text extraction. [buchi] [TI-2050]
+
+
 2025.6.1 (2025-06-02)
 ---------------------
 
