@@ -2,11 +2,13 @@ from collections import defaultdict
 from ftw.testbrowser import browsing
 from opengever.activity import notification_center
 from opengever.activity.roles import WATCHER_ROLE
+from opengever.api.watchers import WatcherDeleter
 from opengever.base.model import create_session
 from opengever.ogds.models.user import User
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from zExceptions import Forbidden
 import json
 
 
@@ -52,6 +54,10 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'watchers_and_roles': {
                 self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                 self.dossier_responsible.id: [u'task_issuer']
+            },
+            u'watcher_properties': {
+                self.regular_user.id: {'can_delete_watcher': True },
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -104,6 +110,10 @@ class TestWatchersGet(SolrIntegrationTestCase):
             u'watchers_and_roles': {
                 self.regular_user.id: [u'regular_watcher', u'task_responsible'],
                 self.dossier_responsible.id: [u'task_issuer']
+            },
+            u'watcher_properties': {
+                self.regular_user.id: {'can_delete_watcher': False },
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -141,6 +151,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 self.dossier_responsible.id: [u'regular_watcher']
+            },
+            u'watcher_properties': {
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -177,6 +190,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 self.dossier_responsible.id: [u'regular_watcher']
+            },
+            u'watcher_properties': {
+                self.dossier_responsible.id: {'can_delete_watcher': False },
             }
         }
 
@@ -217,6 +233,9 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 u'team:1': [u'task_responsible'],
+            },
+            u'watcher_properties': {
+                u'team:1': {'can_delete_watcher': False },
             }
         }
 
@@ -255,9 +274,11 @@ class TestWatchersGet(SolrIntegrationTestCase):
             ],
             u'watchers_and_roles': {
                 u'inbox:fa': [u'task_responsible'],
+            },
+            u'watcher_properties': {
+                u'inbox:fa': {'can_delete_watcher': False },
             }
         }
-
         self.assertEqual(expected_json, browser.json)
 
         browser.open(self.task.absolute_url() + '?expand=watchers',
@@ -287,7 +308,8 @@ class TestWatchersGet(SolrIntegrationTestCase):
         expected_json = {u'@id': self.document.absolute_url() + '/@watchers',
                          u'referenced_actors': [],
                          u'referenced_watcher_roles': [],
-                         u'watchers_and_roles': {}}
+                         u'watchers_and_roles': {},
+                         u'watcher_properties': {}}
         self.assertEqual(expected_json, browser.json['@components']['watchers'])
 
 
@@ -817,3 +839,109 @@ class TestPossibleWatchers(IntegrationTestCase):
             u'items_total': 10}
 
         self.assertEqual(expected_json, browser.json)
+
+class TestWatcherDeleter(IntegrationTestCase):
+
+    features = ('activity', )
+
+    def test_can_delete_watcher_from_context(self):
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        WatcherDeleter(self.task).delete(self.regular_user.getId())
+
+        self.assertItemsEqual(
+            [self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+    def test_delete_raises_forbidden_if_not_allowed(self):
+        self.login(self.regular_user)
+
+        with self.assertRaises(Forbidden):
+            WatcherDeleter(self.task).delete(self.dossier_responsible.getId())
+
+    def test_can_delete_returns_true_for_current_user(self):
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+    def test_can_delete_returns_true_if_actor_has_watcher_role(self):
+        self.login(self.regular_user)
+        center = notification_center()
+
+        # No one is watching with the WATCHER_ROLE
+        self.assertItemsEqual(
+            [],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        # But with other roles
+        self.assertItemsEqual(
+            [self.regular_user.getId(), self.dossier_responsible.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task)]
+        )
+
+        # Delete should not be possible because the WATCHER_ROLE is missing for the user
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+        center.add_watcher_to_resource(self.task, self.regular_user.getId(), WATCHER_ROLE)
+
+        self.assertItemsEqual(
+            [self.regular_user.getId()],
+            [watcher.actorid for watcher in center.get_watchers(self.task, WATCHER_ROLE)]
+        )
+
+        # Now it's possible because the user is watching with the required role
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.regular_user.getId()))
+
+    def test_can_delete_returns_true_for_groups(self):
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, 'fa_users', WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete('fa_users'))
+
+    def test_can_delete_returns_false_for_foreign_actors_as_editor(self):
+        self.login(self.regular_user)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertFalse(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_true_for_foreign_actors_as_limited_admin(self):
+        self.login(self.limited_admin)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_true_for_foreign_actors_as_administrator(self):
+        self.login(self.administrator)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
+
+    def test_can_delete_returns_true_for_foreign_actors_as_manager(self):
+        self.login(self.manager)
+
+        center = notification_center()
+        center.add_watcher_to_resource(self.task, self.dossier_responsible.getId(), WATCHER_ROLE)
+
+        self.assertTrue(WatcherDeleter(self.task).can_delete(self.dossier_responsible.getId()))
