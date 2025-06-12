@@ -154,6 +154,8 @@ Der ``@possible-watchers``-Endpoint liefert eine Liste von Actors welche als Beo
 
 Weil es üblich ist, dass man sich selbst als Beobachter hinzufügen möchte, wird der eigene Benutzer in der Sortierreihenfolge immer zuoberst dargestellt. Alle restlichen Actors werden Typ (Benutzer, Gruppen, Teams) und nach Name und Vorname oder Titel sortiert.
 
+Es werden nur Benutzer angezeigt, welche mindestens Lese-Rechte für den aktuellen Kontext besitzen.
+
 **Beispiel-Request:**
 
 
