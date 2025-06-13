@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-12 08:50+0000\n"
+"POT-Creation-Date: 2025-06-13 12:43+0000\n"
 "PO-Revision-Date: 2017-09-03 08:50+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: French <https://translations.onegovgever.ch/projects/onegov-gever/opengever-document/fr/>\n"
@@ -497,6 +497,9 @@ msgstr "Document signé"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
 msgstr "Type de document"
+
+msgid "label_document_version_count"
+msgstr "Nombre de versions"
 
 #. Default: "Added as watcher of the document"
 #: ./opengever/document/activities.py

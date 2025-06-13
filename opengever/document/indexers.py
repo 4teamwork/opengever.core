@@ -17,6 +17,7 @@ from opengever.document.document import IDocumentSchema
 from opengever.document.interfaces import ICheckinCheckoutManager
 from opengever.document.interfaces import IDocumentIndexer
 from opengever.document.interfaces import ITemplateDocumentMarker
+from opengever.document.versioner import Versioner
 from opengever.workspaceclient import is_workspace_client_feature_enabled
 from plone import api
 from plone.indexer import indexer
@@ -280,3 +281,11 @@ def is_locked_by_copy_to_workspace(obj):
         return False
 
     return obj.is_locked_by_copy_to_workspace()
+
+
+@indexer(IBaseDocument)
+def document_version_count(obj):
+
+    versioner = Versioner(obj)
+    history = versioner.get_history_metadata()
+    return history.getLength(countPurged=False)
