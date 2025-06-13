@@ -384,6 +384,11 @@
       name="is_locked_by_copy_to_workspace"
       />
 
+  <adapter
+      factory=".indexers.document_version_count"
+      name="document_version_count"
+      />
+
   <adapter factory=".document.UploadValidator" />
 
   <adapter factory=".fileactions.BaseDocumentFileActions" />

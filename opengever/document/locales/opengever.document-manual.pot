@@ -21,3 +21,6 @@ msgstr ""
 
 msgid "label_filesize"
 msgstr ""
+
+msgid "label_document_version_count"
+msgstr ""

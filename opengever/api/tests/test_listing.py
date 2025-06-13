@@ -1822,6 +1822,22 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             [('Testdossier B', 1.0), ('Testdossier A', 0.5), ('Testdossier C', None)],
             [(item['title'], item['progress']) for item in browser.json['items']])
 
+    @browsing
+    def test_document_version_count(self, browser):
+        self.login(self.regular_user, browser=browser)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+        versioner.create_version('Second version')
+        self.commit_solr()
+
+        view = '@listing?name=documents&columns:list=document_version_count'
+        browser.open(self.dossier, view=view, headers=self.api_headers)
+        self.assertEqual(
+            {u'@id': self.document.absolute_url(),
+             u'UID': IUUID(self.document),
+             u'document_version_count': 1},
+            browser.json['items'][0])
+
 
 class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 

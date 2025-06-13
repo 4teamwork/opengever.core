@@ -280,3 +280,8 @@ def is_locked_by_copy_to_workspace(obj):
         return False
 
     return obj.is_locked_by_copy_to_workspace()
+
+
+@indexer(IBaseDocument)
+def document_version_count(obj):
+    return obj.get_current_version_id(missing_as_zero=True)
