@@ -62,6 +62,7 @@ class Versioner(object):
                 'approval_state',
                 'filename',
                 'file_extension',
+                'document_version_count'
             ]
         )
 

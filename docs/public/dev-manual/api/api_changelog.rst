@@ -12,7 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
-
+``@listing``: Document version count is now available.
 
 2025.7.0 (2025-06-06)
 ---------------------

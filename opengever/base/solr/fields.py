@@ -733,6 +733,11 @@ FIELDS_WITH_MAPPING = [
         additional_required_fields=['portal_type', 'Title'],
         title=dossier_mf(u'label_title', default=u'Title'),
     ),
+    ListingField(
+        'document_version_count',
+        index='document_version_count',
+        title=document_mf(u'label_document_version_count'),
+    ),
     DateListingField(
         'touched',
         title=base_mf(u'label_last_modified', default=u'Last modified'),
