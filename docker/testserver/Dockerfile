@@ -1,4 +1,5 @@
-FROM 4teamwork/ogcore:latest
+ARG OGCORE_VERSION=latest
+FROM 4teamwork/ogcore:${OGCORE_VERSION}
 
 USER root
 WORKDIR /app

@@ -13,7 +13,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
 
       - name: Create src directory
         run: mkdir src
@@ -39,56 +42,33 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata from Git reference
-        id: meta_ogcore
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            4teamwork/ogcore
-          flavor: |
-            latest=false
-          tags: |
-            type=pep440,pattern={{version}}
-            type=raw,value=latest,enable=${{ github.ref_type == 'tag' && github.event.base_ref == 'refs/heads/master' }}
-            type=edge,branch=master
+      - name: Set Git commit env variables
+        run: |
+          echo "GIT_TAG=$(git describe --tags --candidates=0)" >> $GITHUB_ENV
+          echo "GIT_SHA_TAG=$(git describe --tags)" >> $GITHUB_ENV
+          echo "LATEST_TAG=$(git describe --tags --abbrev=0 origin/master)" >> $GITHUB_ENV
+          echo "BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
 
       - name: Build and push ogcore
-        uses: docker/build-push-action@v6
+        uses: docker/bake-action@v6
+        env:
+          GITLAB_DEPLOY_TOKEN: ${{ secrets.GITLAB_DEPLOY_TOKEN }}
         with:
-          context: .
-          file: ./docker/core/Dockerfile
-          platforms: ${{ github.ref_type == 'tag' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
+          source: .
+          files: docker-bake.hcl
+          targets: ogcore
           push: true
-          tags: ${{ steps.meta_ogcore.outputs.tags }}
-          labels: ${{ steps.meta_ogcore.outputs.labels }}
-          cache-from: type=gha,scope=ogcore
-          cache-to: type=gha,mode=max,scope=ogcore
-          secrets: |
-            "gldt=${{ secrets.GITLAB_DEPLOY_TOKEN }}"
-
-      - name: Extract metadata from Git reference for ogtestserver
-        id: meta_ogtestserver
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            4teamwork/ogtestserver
-          flavor: |
-            latest=false
-          tags: |
-            type=pep440,pattern={{version}}
-            type=raw,value=latest,enable=${{ github.ref_type == 'tag' && github.event.base_ref == 'refs/heads/master' }}
-            type=edge,branch=master
+          set: |
+            *.secrets=id=gldt,env=GITLAB_DEPLOY_TOKEN
 
       - name: Build and push ogtestserver
-        uses: docker/build-push-action@v6
+        uses: docker/bake-action@v6
+        env:
+          GITLAB_DEPLOY_TOKEN: ${{ secrets.GITLAB_DEPLOY_TOKEN }}
         with:
-          context: .
-          file: ./docker/testserver/Dockerfile
-          platforms: ${{ github.ref_type == 'tag' && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
+          source: .
+          files: docker-bake.hcl
+          targets: ogtestserver
           push: true
-          tags: ${{ steps.meta_ogtestserver.outputs.tags }}
-          labels: ${{ steps.meta_ogtestserver.outputs.labels }}
-          cache-from: type=gha,scope=ogtestserver
-          cache-to: type=gha,mode=max,scope=ogtestserver
-          secrets: |
-            "gldt=${{ secrets.GITLAB_DEPLOY_TOKEN }}"
+          set: |
+            *.secrets=id=gldt,env=GITLAB_DEPLOY_TOKEN
