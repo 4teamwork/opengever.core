@@ -1,3 +1,4 @@
+from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
@@ -9,12 +10,15 @@ from opengever.base.security import elevated_privileges
 from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
 from opengever.bundle.sections.constructor import IDontIssueDossierReferenceNumber
+from opengever.document.behaviors import IBaseDocument
 from opengever.dossier import _
 from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
 from opengever.dossier.behaviors.dossier import IDossier
+from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
+from opengever.repository.interfaces import IRepositoryFolder
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
@@ -221,3 +225,63 @@ def update_responsible_role(obj, event):
               default=u'You are not allowed to change the responsible.'))
 
     IProtectDossier(obj).protect()
+
+
+def get_parent_dossiers(obj):
+    """Return all parent dossiers up to IRepositoryFolder (excluded)."""
+    parents = []
+    for parent in aq_chain(obj):
+        if IDossierMarker.providedBy(parent):
+            parents.append(parent)
+        elif IRepositoryFolder.providedBy(parent):
+            break
+    return parents
+
+
+def reindex_parent_dossiers(obj):
+    for dossier in get_parent_dossiers(obj):
+        dossier.reindexObject(idxs=["UID", "document_count"])
+
+
+def obj_added_handler(obj, event):
+    if not IBaseDocument.providedBy(obj):
+        return
+    reindex_parent_dossiers(obj)
+
+
+def obj_removed_handler(obj, event):
+    if IBaseDocument.providedBy(obj):
+        reindex_parent_dossiers(obj)
+    elif hasattr(obj, "is_folderish"):
+        # Check if folder contained IBaseDocument objects
+        catalog = api.portal.get_tool('portal_catalog')
+        results = catalog(path={'query': '/'.join(obj.getPhysicalPath()), 'depth': -1})
+        if any(IBaseDocument.providedBy(b.getObject()) for b in results):
+            reindex_parent_dossiers(obj)
+
+
+def obj_moved_handler(obj, event):
+    if not event.oldParent or not event.newParent:
+        return
+
+    if IBaseDocument.providedBy(obj):
+        if event.oldParent != event.newParent:
+            reindex_parent_dossiers(event.oldParent)
+        reindex_parent_dossiers(event.newParent)
+
+    elif hasattr(obj, "is_folderish"):
+        catalog = api.portal.get_tool('portal_catalog')
+        results = catalog(path={'query': '/'.join(obj.getPhysicalPath()), 'depth': -1})
+        if any(IBaseDocument.providedBy(b.getObject()) for b in results):
+            reindex_parent_dossiers(event.oldParent)
+            reindex_parent_dossiers(event.newParent)
+
+
+def obj_trashed_handler(obj, event):
+    if IBaseDocument.providedBy(obj):
+        reindex_parent_dossiers(obj)
+
+
+def obj_untrashed_handler(obj, event):
+    if IBaseDocument.providedBy(obj):
+        reindex_parent_dossiers(obj)

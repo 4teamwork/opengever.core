@@ -727,3 +727,6 @@ msgstr "not assessed"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "unprotected"
+
+msgid "label_document_count"
+msgstr "Number of documents"

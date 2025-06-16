@@ -39,6 +39,7 @@ OTHER_ALLOWED_FIELDS = set([
     'is_locked_by_copy_to_workspace',
     'document_version_count',
     'progress',
+    'document_count'
 ])
 
 ALLOWED_ORDER_GROUP_FIELDS = set([
