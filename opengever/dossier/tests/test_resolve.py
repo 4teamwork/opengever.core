@@ -151,11 +151,12 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
              u'review_state': u'dossier-state-resolved'},
             browser.json)
 
-    def assert_errors(self, dossier, browser, error_msgs):
+    def assert_errors(self, dossier, browser, error_msgs, has_not_closed_tasks=False):
         self.assertEqual(400, browser.status_code)
         self.assertEqual(
             {u'error': {
                 u'message': u'',
+                u'has_not_closed_tasks': has_not_closed_tasks,
                 u'errors': error_msgs,
                 u'type': u'PreconditionsViolated'}},
             browser.json)
@@ -1014,7 +1015,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all task are closed'])
+                           [u'not all task are closed'], has_not_closed_tasks=True)
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
@@ -1026,8 +1027,12 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.resolvable_dossier, browser)
 
         self.assert_not_resolved(self.resolvable_dossier)
-        self.assert_errors(self.resolvable_dossier, browser,
-                           ['The dossier A resolvable main dossier has a invalid end_date'])
+        self.assertEqual(
+            {u'error': {
+                u'message': u'',
+                u'errors': [u'The dossier A resolvable main dossier has a invalid end_date'],
+                u'type': u'PreconditionsViolated'}},
+            browser.json)
 
     @browsing
     def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
@@ -1042,8 +1047,12 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.resolvable_dossier, browser)
 
         self.assert_not_resolved(self.resolvable_dossier)
-        self.assert_errors(self.resolvable_dossier, browser,
-                           ['The dossier Resolvable Subdossier has a invalid end_date'])
+        self.assertEqual(
+            {u'error': {
+                u'message': u'',
+                u'errors': [u'The dossier Resolvable Subdossier has a invalid end_date'],
+                u'type': u'PreconditionsViolated'}},
+            browser.json)
 
     @browsing
     def test_dossier_is_resolved_when_resolved_subdossier_has_an_invalid_end_date(self, browser):

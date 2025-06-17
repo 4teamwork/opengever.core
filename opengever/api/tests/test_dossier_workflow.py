@@ -250,7 +250,12 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
             self.assertEqual(400, browser.status_code)
             self.assertDictEqual(
                 {
-                    u'error': {u'message': u'', u'errors': [u'not all task are closed'], u'type': u'PreconditionsViolated'}
+                    u'error': {
+                        u'message': u'',
+                        u'errors': [u'not all task are closed'],
+                        u'type': u'PreconditionsViolated',
+                        u'has_not_closed_tasks': True,
+                    }
                 },
                 browser.json)
 
