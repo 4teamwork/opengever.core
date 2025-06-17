@@ -24,6 +24,7 @@ Breaking Changes
 Other Changes
 ^^^^^^^^^^^^^
 ``@listing``: Filtering by inactive dossier responsible is now available.
+``@watchers``: Extends the @watchers response with ``watcher_properties``.
 
 2025.6.0 (2025-04-07)
 ---------------------

@@ -230,6 +230,7 @@ WRITE_PERMISSIONS = [
     'opengever.api: Manage Role Assignment Reports',
     'opengever.api: Notify Arbitrary Users',
     'opengever.api: Transfer Assignment',
+    'opengever.api: Remove any watcher',
     'opengever.contact: Edit team',
     'opengever.disposition: Edit transfer number',
     'opengever.document: Cancel',

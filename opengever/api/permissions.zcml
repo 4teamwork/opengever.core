@@ -8,5 +8,6 @@
   <permission id="opengever.api.ManageGroups" title="opengever.api: Manage Groups" />
   <permission id="opengever.api.NotifyArbitraryUsers" title="opengever.api: Notify Arbitrary Users" />
   <permission id="opengever.api.AccessErrorLog" title="opengever.api: Access error log" />
+  <permission id="opengever.api.RemoveAnyWatcher" title="opengever.api: Remove any watcher" />
 
 </configure>

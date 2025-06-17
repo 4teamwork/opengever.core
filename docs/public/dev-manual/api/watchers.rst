@@ -30,11 +30,11 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
         "referenced_actors": [
           {
             "@id": "https://example.org/@actors/peter.mueller",
-            "identifier": "peter.mueller",
+            "identifier": "peter.mueller"
           },
           {
             "@id": "https://example.org/@actors/rolf.ziegler",
-            "identifier": "rolf.ziegler",
+            "identifier": "rolf.ziegler"
           }
         ],
         "referenced_watcher_roles": [
@@ -49,7 +49,7 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
           {
             "id": "task_responsible",
             "title": "Auftragnehmer"
-          },
+          }
         ],
         "watchers_and_roles": {
           "peter.mueller": [
@@ -59,6 +59,14 @@ Ein Beobachter kann verschiedene Rollen haben, beispielsweise die Rollen Auftrag
             "regular_watcher",
             "task_responsible"
           ]
+        },
+        "watcher_properties": {
+          "peter.mueller": {
+            "can_delete_watcher": true
+          },
+          "rolf.ziegler": {
+            "can_delete_watcher": false
+          }
         }
       }
 
@@ -89,7 +97,8 @@ Die Beobachter können als Komponente eines Inhalts direkt über den ``expand``-
           "@id": "https://example.org/ordnungssystem/fuehrung/dossier-23/task-1/@listing-stats",
           "referenced_actors": ["..."],
           "referenced_watcher_roles": ["..."],
-          "watchers_and_roles": { "...": "..." }
+          "watchers_and_roles": { "...": "..." },
+          "watcher_properties": { "...": "..." }
         }
       },
       "...": "..."
