@@ -4,6 +4,7 @@ from opengever.activity import notification_center
 from opengever.activity.sources import PossibleWatchersSource
 from opengever.base.interfaces import IBaseSettings
 from opengever.base.model import create_session
+from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.testing import IntegrationTestCase
@@ -53,6 +54,64 @@ class TestPossibleWatchersSource(IntegrationTestCase):
         self.assertItemsEqual([
             'group:regular_group_2',
         ], [term.token for term in source.search('Regular Group')])
+
+    def test_list_only_users_with_view_permission(self):
+        self.login(self.dossier_manager)
+
+        task = create(Builder('task').within(self.empty_dossier)
+               .having(responsible=self.dossier_manager.getId(),
+                       is_private=True,
+                       responsible_client=u'fa'))
+
+        source = PossibleWatchersSource(task)
+
+        dossier_protector = IProtectDossier(self.empty_dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.reading = [self.secretariat_user.getId()]
+        dossier_protector.protect()
+
+        self.assertItemsEqual([], [term.title for term in source.search(u'K\xe4thi')])
+        self.assertItemsEqual([u'K\xf6nig J\xfcrgen (jurgen.konig)'],
+                              [term.title for term in source.search('Konig')])
+
+        dossier_protector.reading = [
+            self.regular_user.getId(),
+            self.secretariat_user.getId()
+        ]
+
+        dossier_protector.protect()
+
+        self.assertItemsEqual([u'B\xe4rfuss K\xe4thi (kathi.barfuss)', ],
+                              [term.title for term in source.search(u'K\xe4thi')])
+        self.assertItemsEqual([u'K\xf6nig J\xfcrgen (jurgen.konig)'],
+                              [term.title for term in source.search('Konig')])
+
+    def test_respect_group_members_if_checking_view_permission(self):
+        self.login(self.dossier_manager)
+
+        task = create(Builder('task').within(self.empty_dossier)
+               .having(responsible=self.dossier_manager.getId(),
+                       is_private=True,
+                       responsible_client=u'fa'))
+
+        source = PossibleWatchersSource(task)
+
+        dossier_protector = IProtectDossier(self.empty_dossier)
+        dossier_protector.dossier_manager = self.dossier_manager.getId()
+        dossier_protector.reading = [self.secretariat_user.getId()]
+        dossier_protector.protect()
+
+        self.assertItemsEqual([], [term.title for term in source.search(u'K\xe4thi')])
+        self.assertItemsEqual([u'K\xf6nig J\xfcrgen (jurgen.konig)'],
+                              [term.title for term in source.search('Konig')])
+
+        dossier_protector.reading = ['fa_users']
+        dossier_protector.protect()
+
+        self.assertItemsEqual([u'B\xe4rfuss K\xe4thi (kathi.barfuss)', ],
+                              [term.title for term in source.search(u'K\xe4thi')])
+        self.assertItemsEqual([u'K\xf6nig J\xfcrgen (jurgen.konig)'],
+                              [term.title for term in source.search('Konig')])
 
     def test_list_only_teams_assigned_to_the_current_org_unit(self):
         self.login(self.regular_user)
