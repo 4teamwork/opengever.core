@@ -9,6 +9,7 @@ from opengever.dossier.resolve import AlreadyBeingResolved
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.dossier.resolve import MSG_ALREADY_BEING_RESOLVED
+from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import PreconditionsViolated
 from opengever.sign.sign import Signer
 from plone import api
@@ -189,6 +190,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             return dict(error=dict(
                 type='PreconditionsViolated',
                 errors=map(self.translate, e.errors),
+                has_not_closed_tasks=NOT_CLOSED_TASKS in e.errors,
                 message=self.translate(str(e))))
 
         except InvalidDates as e:

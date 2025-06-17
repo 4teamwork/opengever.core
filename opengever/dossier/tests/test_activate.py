@@ -138,6 +138,7 @@ class TestDossierActivationRESTAPI(TestDossierActivation):
             {u'error':
                 {u'message': u'',
                  u'errors': error_msgs,
+                 u'has_not_closed_tasks': False,
                  u'type': u'PreconditionsViolated'}},
             browser.json)
         expected_url = dossier.absolute_url() + \
