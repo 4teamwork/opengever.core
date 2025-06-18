@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2024-09-12 08:50+0000\n"
+"POT-Creation-Date: 2025-06-13 12:43+0000\n"
 "PO-Revision-Date: 2017-10-13 14:27+0200\n"
 "Last-Translator: Jonas Baumann <j.baumann@4teamwork.ch>\n"
 "Language-Team: 4teamwork <info@4teamwork.ch>\n"
@@ -500,6 +500,9 @@ msgstr "Dokument signiert"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
 msgstr "Dokumenttyp"
+
+msgid "label_document_version_count"
+msgstr "Anzahl Versionen"
 
 #. Default: "Added as watcher of the document"
 #: ./opengever/document/activities.py

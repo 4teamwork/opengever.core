@@ -550,3 +550,33 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.assertTrue(relations[0].isBroken())
         # Index should only contain unbroken relations
         self.assertEqual(None, solr_data_for(self.document, 'related_items'))
+
+    def test_document_version_count_indexed(self):
+        self.login(self.regular_user)
+        versioner = Versioner(self.document)
+        versioner.create_version('Initial version')
+        versioner.create_version('Second version')
+        self.commit_solr()
+
+        indexed_value = solr_data_for(self.document, 'document_version_count')
+        self.assertEqual(indexed_value, 1)
+        self.assertEqual(indexed_value, self.document.get_current_version_id())
+
+    def test_mail_version_count_indexed(self):
+        """mails are read only (no Edit) therefor the version should never changes
+        """
+        self.login(self.regular_user)
+
+        # version a mail should not affect its version ID
+        versioner = Versioner(self.mail_eml)
+        versioner.create_version('Initial version')
+        versioner.create_version('Second version')
+
+        self.commit_solr()
+        indexed_value = solr_data_for(self.mail_eml, 'document_version_count')
+
+        # Explicit assertion to confirm indexing matches method return value
+        self.assertEqual(indexed_value, self.mail_eml.get_current_version_id())
+
+        # Mails are always on version 0
+        self.assertEqual(indexed_value, 0)

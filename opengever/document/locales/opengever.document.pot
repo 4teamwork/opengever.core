@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-09-12 08:50+0000\n"
+"POT-Creation-Date: 2025-06-13 12:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -494,6 +494,9 @@ msgstr ""
 #. Default: "Document Type"
 #: ./opengever/document/behaviors/metadata.py
 msgid "label_document_type"
+msgstr ""
+
+msgid "label_document_version_count"
 msgstr ""
 
 #. Default: "Added as watcher of the document"
