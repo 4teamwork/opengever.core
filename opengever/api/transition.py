@@ -9,6 +9,7 @@ from opengever.dossier.resolve import AlreadyBeingResolved
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.dossier.resolve import MSG_ALREADY_BEING_RESOLVED
+from opengever.dossier.resolve import NOT_CLOSED_TASKS
 from opengever.dossier.resolve import PreconditionsViolated
 from opengever.sign.sign import Signer
 from plone import api
@@ -189,6 +190,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             return dict(error=dict(
                 type='PreconditionsViolated',
                 errors=map(self.translate, e.errors),
+                has_not_closed_tasks=NOT_CLOSED_TASKS in e.errors,
                 message=self.translate(str(e))))
 
         except InvalidDates as e:
@@ -238,6 +240,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
         # For now we also extract these, but we don't do anything with them
         # in the case of resolving a dossier.
         comment = data.get('comment', '')
+        auto_close_tasks = data.get('auto_close_tasks', False)
         publication_dates = self.parse_publication_dates(data)
         args = [self.context], comment, publication_dates
 
@@ -245,7 +248,7 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             data = adapter.deserialize(data)
 
         if self.transition == 'dossier-transition-resolve':
-            self.resolve_dossier(*args, **data)
+            self.resolve_dossier(*args, auto_close_tasks=auto_close_tasks, **data)
         elif self.transition == 'dossier-transition-activate':
             self.activate_dossier(*args)
         elif self.transition == 'dossier-transition-deactivate':
