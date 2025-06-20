@@ -22,6 +22,7 @@ from opengever.testing import index_data_for
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
+from opengever.trash.trash import ITrasher
 from plone import api
 from zope.event import notify
 from zope.interface import Interface
@@ -355,6 +356,122 @@ class TestDossierIndexers(SolrIntegrationTestCase):
         self.dossiertemplate.reindexObject()
         self.commit_solr()
         self.assertEqual(solr_data_for(self.dossiertemplate, 'dossier_type'), "businesscase")
+
+
+class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
+    """Tests for the `document_count` Solr indexer on dossiers.
+
+    This suite ensures that the `document_count` indexer correctly reflects
+    the number of active documents and mails within a dossier and its subdossiers.
+    It verifies that the index updates as expected when documents/mails are:
+
+    - Added to a dossier
+    - Removed from a dossier
+    - Moved between dossiers
+    - Trashed
+    - Moved between subdossiers
+
+    Covered content types include both:
+    - `opengever.document.document`
+    - `ftw.mail.mail`
+    """
+
+    def setUp(self):
+        super(TestDossierDocumentCountIndexerSolr, self).setUp()
+        self.login(self.regular_user)
+
+    def assert_document_count(self, dossier, expected):
+        dossier.reindexObject()
+        self.commit_solr()
+        self.assertEqual(solr_data_for(dossier, 'document_count'), expected)
+
+    def test_document_and_mail_addition_updates_dossier_index(self):
+        dossier = create(
+            Builder('dossier')
+            .titled(u'Testdossier')
+            .within(self.leaf_repofolder)
+        )
+        self.assert_document_count(dossier, 0)
+        create(Builder('document').within(dossier))
+        create(Builder('mail').within(dossier))
+        self.assert_document_count(dossier, 2)
+
+    def test_document_and_mail_removal_updates_dossier_index(self):
+        dossier = create(
+            Builder('dossier')
+            .titled(u'Testdossier')
+            .within(self.leaf_repofolder)
+        )
+        doc = create(Builder('document').within(dossier))
+        mail = create(Builder('mail').within(dossier))
+        self.assert_document_count(dossier, 2)
+        self.login(self.manager)
+        dossier.manage_delObjects([doc.id, mail.id])
+        self.assert_document_count(dossier, 0)
+
+    def test_moving_document_and_mail_between_dossiers_updates_index(self):
+        source = create(
+            Builder('dossier')
+            .titled(u'Source')
+            .within(self.leaf_repofolder)
+        )
+        target = create(
+            Builder('dossier')
+            .titled(u'Target')
+            .within(self.leaf_repofolder)
+        )
+        doc = create(Builder('document').within(source))
+        mail = create(Builder('mail').within(source))
+        self.assert_document_count(source, 2)
+        self.assert_document_count(target, 0)
+        copy_data = source.manage_cutObjects([doc.id, mail.id])
+        target.manage_pasteObjects(copy_data)
+        self.assert_document_count(source, 0)
+        self.assert_document_count(target, 2)
+
+    def test_trashing_document_and_mail_updates_index(self):
+        dossier = create(
+            Builder('dossier')
+            .titled(u'Testdossier')
+            .within(self.leaf_repofolder)
+        )
+        doc = create(Builder('document').within(dossier))
+        mail = create(Builder('mail').within(dossier))
+        self.assert_document_count(dossier, 2)
+        self.trash_documents(*[doc, mail])
+        self.assert_document_count(dossier, 0)
+
+    def test_moving_subdossier_with_documents_and_mails_updates_index(self):
+        main = create(
+            Builder('dossier')
+            .titled(u'main dossier')
+            .within(self.leaf_repofolder)
+        )
+        sub1 = create(Builder('dossier').within(main).titled(u"Sub1"))
+        sub2 = create(Builder('dossier').within(main).titled(u"Sub2"))
+        doc = create(Builder('document').within(sub1))
+        mail = create(Builder('mail').within(sub1))
+        self.assert_document_count(sub1, 2)
+        self.assert_document_count(sub2, 0)
+        copy_data = sub1.manage_cutObjects([doc.id, mail.id])
+        sub2.manage_pasteObjects(copy_data)
+        self.assert_document_count(sub1, 0)
+        self.assert_document_count(sub2, 2)
+
+    def test_document_restore_updates_dossier_index(self):
+        dossier = create(
+            Builder('dossier')
+            .titled(u'main dossier')
+            .within(self.leaf_repofolder)
+        )
+        doc = create(Builder('document').within(dossier))
+        self.assert_document_count(dossier, 1)
+
+        self.trash_documents(doc)
+        self.assert_document_count(dossier, 0)
+        # Untrash the document and check for indexed value
+        ITrasher(doc).untrash()
+        self.assert_document_count(dossier, 1)
 
 
 class TestDossierFilingNumberIndexer(SolrIntegrationTestCase):

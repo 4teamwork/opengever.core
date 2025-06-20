@@ -937,6 +937,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
             u'has_sametype_children',
             u'start',
             u'Subject',
+            u'document_count',
         ]
         unchanged_solrdata += self.common_unchanged_solrdata
 

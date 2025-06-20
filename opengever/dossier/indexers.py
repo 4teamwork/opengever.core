@@ -27,6 +27,7 @@ from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
+from Products.CMFCore.utils import getToolByName
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -130,6 +131,24 @@ def progress(obj):
     if not is_dossier_checklist_feature_enabled() or not obj.has_checklist_items():
         return None
     return obj.progress()
+
+
+@indexer(IDossierMarker)
+def document_count(obj):
+    DOCUMENT_TYPES = (
+        'opengever.document.document',
+        'ftw.mail.mail',
+    )
+    catalog = getToolByName(obj, 'portal_catalog')
+    brains = catalog.unrestrictedSearchResults(
+        {
+            'path': {'query': '/'.join(obj.getPhysicalPath()), 'depth': -1},
+            'portal_type': DOCUMENT_TYPES,
+            'trashed': False,
+        }
+    )
+
+    return len(brains)
 
 
 TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',

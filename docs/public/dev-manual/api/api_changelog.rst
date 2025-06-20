@@ -14,6 +14,8 @@ Other Changes
 ^^^^^^^^^^^^^
 - ``@possible-watchers``: endpoint only returns users having view permission on the given context.
 - ``@listing``: New field `document_version_count` is now available.
+- ``@listing``: New field `document_count` is now available.
+
 
 2025.7.0 (2025-06-06)
 ---------------------

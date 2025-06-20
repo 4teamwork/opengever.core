@@ -608,3 +608,6 @@ msgstr "Nicht geprüft"
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr "Nicht klassifiziert"
+
+msgid "label_document_count"
+msgstr "Anzahl der Dokumente"

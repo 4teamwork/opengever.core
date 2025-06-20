@@ -603,3 +603,7 @@ msgstr ""
 #: opengever/repository/classification.py
 msgid "unprotected"
 msgstr ""
+
+
+msgid "label_document_count"
+msgstr ""

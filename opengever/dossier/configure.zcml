@@ -253,6 +253,11 @@
       name="progress"
       />
 
+  <adapter
+      factory=".indexers.document_count"
+      name="document_count"
+      />
+
   <subscriber
       for="opengever.dossier.behaviors.dossier.IDossierMarker
            OFS.interfaces.IObjectWillBeMovedEvent"
@@ -330,6 +335,38 @@
            opengever.base.response.IResponseAddedEvent"
       handler=".handlers.dossier_comment_added"
       />
+
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectAddedEvent"
+      handler=".handlers.obj_added_handler"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           zope.lifecycleevent.interfaces.IObjectRemovedEvent"
+      handler=".handlers.obj_removed_handler"
+      />
+
+  <subscriber
+      for="plone.dexterity.interfaces.IDexterityContent
+           zope.lifecycleevent.interfaces.IObjectMovedEvent"
+      handler=".handlers.obj_moved_handler"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.trash.trash.ITrashedEvent"
+      handler=".handlers.obj_trashed_handler"
+      />
+
+  <subscriber
+      for="opengever.document.behaviors.IBaseDocument
+           opengever.trash.trash.IUntrashedEvent"
+      handler=".handlers.obj_untrashed_handler"
+      />
+
 
   <adapter
       factory=".resolve.ResolveDossierTransitionExtender"

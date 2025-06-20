@@ -742,6 +742,11 @@ FIELDS_WITH_MAPPING = [
         'touched',
         title=base_mf(u'label_last_modified', default=u'Last modified'),
     ),
+    ListingField(
+        'document_count',
+        index='document_count',
+        title=base_mf(u'label_document_count'),
+    ),
 ]
 
 

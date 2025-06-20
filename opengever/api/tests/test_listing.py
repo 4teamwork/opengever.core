@@ -1838,6 +1838,107 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
              u'document_version_count': 1},
             browser.json['items'][0])
 
+    @browsing
+    def test_document_count(self, browser):
+        self.login(self.regular_user, browser=browser)
+        query_string = '&'.join((
+            'name=dossiers',
+            'columns:list=document_count',
+
+        ))
+        view = '?'.join(('@listing', query_string))
+        browser.open(self.repository_root, view=view, headers=self.api_headers)
+
+        self.assertEqual([
+
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-19',
+                u'UID': u'createoffereddossiers00000000004',
+                u'document_count': 0
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-18',
+                u'UID': u'createoffereddossiers00000000001',
+                u'document_count': 2
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-20',
+                u'UID': u'createoffereddossiers00000000005',
+                u'document_count': 0
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-17',
+                u'UID': u'createprotecteddossiers000000003',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
+                u'UID': u'createtreatydossiers000000000001',
+                u'document_count': 14
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-10',
+                u'UID': u'createmeetings000000000000000001',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-6',
+                u'UID': u'createinactivedossier00000000001',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-5',
+                u'UID': u'createexpireddossier000000000001',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-13',
+                u'UID': u'createmeetings000000000000000008',
+                u'document_count': 0
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-11',
+                u'UID': u'createmeetings000000000000000003',
+                u'document_count': 2
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-12',
+                u'UID': u'createmeetings000000000000000007',
+                u'document_count': 0
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8/dossier-9',
+                u'UID': u'createresolvabledossier000000002',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-8',
+                u'UID': u'createresolvabledossier000000001',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-7',
+                u'UID': u'createemptydossier00000000000001',
+                u'document_count': 0
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2',
+                u'UID': u'createtreatydossiers000000000015',
+                u'document_count': 3
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-2/dossier-4',  # noqa
+                u'UID': u'createtreatydossiers000000000018',
+                u'document_count': 1
+            },
+            {
+                u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1/dossier-3',
+                u'UID': u'createtreatydossiers000000000016',
+                u'document_count': 0
+            }
+
+        ], browser.json['items'])
+
 
 class TestPloneDossierParticipationsInListingWithRealSolr(SolrIntegrationTestCase):
 
