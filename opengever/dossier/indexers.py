@@ -1,11 +1,16 @@
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from collective import dexteritytextindexer
+from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from opengever.base.interfaces import IReferenceNumber
+from opengever.base.interfaces import ISearchSettings
 from opengever.base.interfaces import ISequenceNumber
 from opengever.base.response import IResponseContainer
+from opengever.base.security import elevated_privileges
 from opengever.base.utils import ensure_str
 from opengever.contact.sources import PloneSqlOrKubContactSourceBinder
+from opengever.document.behaviors import IBaseDocument
 from opengever.document.behaviors.name_from_title import DOCUMENT_NAME_PREFIX
 from opengever.dossier import _
 from opengever.dossier import is_dossier_checklist_feature_enabled
@@ -27,7 +32,6 @@ from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.indexer import indexer
 from Products.CMFCore.interfaces import ISiteRoot
-from Products.CMFCore.utils import getToolByName
 from zope.component import adapter
 from zope.component import getAdapter
 from zope.component import getUtility
@@ -135,20 +139,18 @@ def progress(obj):
 
 @indexer(IDossierMarker)
 def document_count(obj):
-    DOCUMENT_TYPES = (
-        'opengever.document.document',
-        'ftw.mail.mail',
-    )
-    catalog = getToolByName(obj, 'portal_catalog')
-    brains = catalog.unrestrictedSearchResults(
-        {
-            'path': {'query': '/'.join(obj.getPhysicalPath()), 'depth': -1},
-            'portal_type': DOCUMENT_TYPES,
-            'trashed': False,
-        }
-    )
+    if not api.portal.get_registry_record('use_solr', interface=ISearchSettings):
+        return  # plone catalog is not supported due to performance isues.
 
-    return len(brains)
+    solr = getUtility(ISolrSearch)
+    query = {
+        'object_provides': [IBaseDocument.__identifier__],
+        'trashed': False,
+        'path_parent': '/'.join(obj.getPhysicalPath())
+    }
+
+    with elevated_privileges():
+        return solr.search(rows=0, fq=make_filters(**query)).num_found
 
 
 TYPES_WITH_CONTAINING_DOSSIER_INDEX = set(('opengever.dossier.businesscasedossier',

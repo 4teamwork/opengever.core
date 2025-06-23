@@ -2,10 +2,12 @@ from Acquisition import aq_chain
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ftw.solr.interfaces import ISolrSearch
+from ftw.solr.query import make_filters
 from ftw.solr.query import make_path_filter
 from opengever.api.not_reported_exceptions import Forbidden as NotReportedForbidden
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import IReferenceNumberPrefix
+from opengever.base.interfaces import ISearchSettings
 from opengever.base.security import elevated_privileges
 from opengever.base.solr import batched_solr_results
 from opengever.base.solr import OGSolrDocument
@@ -19,13 +21,17 @@ from opengever.dossier.behaviors.protect_dossier import IProtectDossier
 from opengever.dossier.indexers import TYPES_WITH_CONTAINING_SUBDOSSIER_INDEX
 from opengever.globalindex.handlers.task import sync_task
 from opengever.repository.interfaces import IRepositoryFolder
+from opengever.repository.repositoryroot import IRepositoryRoot
 from opengever.workspaceclient.interfaces import ILinkedToWorkspace
 from opengever.workspaceclient.interfaces import ILinkedWorkspaces
 from plone import api
 from plone.app.workflow.interfaces import ILocalrolesModifiedEvent
+from Products.CMFCore.interfaces import IFolderish
 from zope.component import getAdapter
+from zope.component import getUtility
 from zope.component import queryUtility
 from zope.container.interfaces import IContainerModifiedEvent
+from zope.lifecycleevent import IObjectMovedEvent
 from zope.lifecycleevent import IObjectRemovedEvent
 
 
@@ -243,45 +249,55 @@ def reindex_parent_dossiers(obj):
         dossier.reindexObject(idxs=["UID", "document_count"])
 
 
-def obj_added_handler(obj, event):
-    if not IBaseDocument.providedBy(obj):
-        return
-    reindex_parent_dossiers(obj)
+def reindex_document_count_handler(obj, event):
+    old_parent = getattr(event, 'oldParent', None)
+    new_parent = getattr(event, 'newParent', None)
 
-
-def obj_removed_handler(obj, event):
-    if IBaseDocument.providedBy(obj):
-        reindex_parent_dossiers(obj)
-    elif hasattr(obj, "is_folderish"):
-        # Check if folder contained IBaseDocument objects
-        catalog = api.portal.get_tool('portal_catalog')
-        results = catalog(path={'query': '/'.join(obj.getPhysicalPath()), 'depth': -1})
-        if any(IBaseDocument.providedBy(b.getObject()) for b in results):
-            reindex_parent_dossiers(obj)
-
-
-def obj_moved_handler(obj, event):
-    if not event.oldParent or not event.newParent:
+    # Ignore these types because they are not relevant for the document count
+    if IRepositoryFolder.providedBy(obj) or IRepositoryRoot.providedBy(obj):
         return
 
-    if IBaseDocument.providedBy(obj):
-        if event.oldParent != event.newParent:
-            reindex_parent_dossiers(event.oldParent)
-        reindex_parent_dossiers(event.newParent)
+    # Object has been renamed. We don't need to reindex anything
+    if IObjectMovedEvent.providedBy(event) and old_parent == new_parent:
+        return
 
-    elif hasattr(obj, "is_folderish"):
-        catalog = api.portal.get_tool('portal_catalog')
-        results = catalog(path={'query': '/'.join(obj.getPhysicalPath()), 'depth': -1})
-        if any(IBaseDocument.providedBy(b.getObject()) for b in results):
-            reindex_parent_dossiers(event.oldParent)
-            reindex_parent_dossiers(event.newParent)
+    # Object was created and not moved.
+    if IObjectMovedEvent.providedBy(event) and not old_parent or not new_parent:
+        return
+
+    reindex_document_count(obj)
+
+    # Object was moved. We need to reindex the old parent as well
+    if IObjectMovedEvent.providedBy(event):
+        reindex_document_count(event.oldParent)
 
 
-def obj_trashed_handler(obj, event):
+def reindex_document_count(obj):
+    if not api.portal.get_registry_record('use_solr', interface=ISearchSettings):
+        return  # plone catalog is not supported due to performance isues.
+
+    # Always reindex the parents if a document is the context
     if IBaseDocument.providedBy(obj):
         reindex_parent_dossiers(obj)
+        return
 
+    # Ignore no folderish content types since they cannot contain any document
+    if not IFolderish.providedBy(obj):
+        return
 
-def obj_untrashed_handler(obj, event):
-    if IBaseDocument.providedBy(obj):
+    # Reindex the parents only if there is at least one document within the obj.
+    # Otherwise, there is no need to reindex it.
+    solr = getUtility(ISolrSearch)
+    query = {
+        'object_provides': [IBaseDocument.__identifier__],
+        'path_parent': '/'.join(obj.getPhysicalPath())
+    }
+
+    with elevated_privileges():
+        has_containing_documents = solr.search(
+            rows=0,
+            fq=make_filters(**query),
+        ).num_found > 0
+
+    if has_containing_documents:
         reindex_parent_dossiers(obj)

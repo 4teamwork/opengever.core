@@ -336,37 +336,35 @@
       handler=".handlers.dossier_comment_added"
       />
 
-
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
            zope.lifecycleevent.interfaces.IObjectAddedEvent"
-      handler=".handlers.obj_added_handler"
+      handler=".handlers.reindex_document_count_handler"
       />
 
   <subscriber
-      for="opengever.document.behaviors.IBaseDocument
+      for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectRemovedEvent"
-      handler=".handlers.obj_removed_handler"
+      handler=".handlers.reindex_document_count_handler"
       />
 
   <subscriber
       for="plone.dexterity.interfaces.IDexterityContent
            zope.lifecycleevent.interfaces.IObjectMovedEvent"
-      handler=".handlers.obj_moved_handler"
+      handler=".handlers.reindex_document_count_handler"
       />
 
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
            opengever.trash.trash.ITrashedEvent"
-      handler=".handlers.obj_trashed_handler"
+      handler=".handlers.reindex_document_count_handler"
       />
 
   <subscriber
       for="opengever.document.behaviors.IBaseDocument
            opengever.trash.trash.IUntrashedEvent"
-      handler=".handlers.obj_untrashed_handler"
+      handler=".handlers.reindex_document_count_handler"
       />
-
 
   <adapter
       factory=".resolve.ResolveDossierTransitionExtender"

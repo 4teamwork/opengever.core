@@ -359,26 +359,6 @@ class TestDossierIndexers(SolrIntegrationTestCase):
 
 
 class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
-    """Tests for the `document_count` Solr indexer on dossiers.
-
-    This suite ensures that the `document_count` indexer correctly reflects
-    the number of active documents and mails within a dossier and its subdossiers.
-    It verifies that the index updates as expected when documents/mails are:
-
-    - Added to a dossier
-    - Removed from a dossier
-    - Moved between dossiers
-    - Trashed
-    - Moved between subdossiers
-
-    Covered content types include both:
-    - `opengever.document.document`
-    - `ftw.mail.mail`
-    """
-
-    def setUp(self):
-        super(TestDossierDocumentCountIndexerSolr, self).setUp()
-        self.login(self.regular_user)
 
     def assert_document_count(self, dossier, expected):
         dossier.reindexObject()
@@ -386,6 +366,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assertEqual(solr_data_for(dossier, 'document_count'), expected)
 
     def test_document_and_mail_addition_updates_dossier_index(self):
+        self.login(self.regular_user)
         dossier = create(
             Builder('dossier')
             .titled(u'Testdossier')
@@ -397,6 +378,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assert_document_count(dossier, 2)
 
     def test_document_and_mail_removal_updates_dossier_index(self):
+        self.login(self.regular_user)
         dossier = create(
             Builder('dossier')
             .titled(u'Testdossier')
@@ -410,6 +392,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assert_document_count(dossier, 0)
 
     def test_moving_document_and_mail_between_dossiers_updates_index(self):
+        self.login(self.regular_user)
         source = create(
             Builder('dossier')
             .titled(u'Source')
@@ -430,6 +413,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assert_document_count(target, 2)
 
     def test_trashing_document_and_mail_updates_index(self):
+        self.login(self.regular_user)
         dossier = create(
             Builder('dossier')
             .titled(u'Testdossier')
@@ -442,6 +426,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assert_document_count(dossier, 0)
 
     def test_moving_subdossier_with_documents_and_mails_updates_index(self):
+        self.login(self.regular_user)
         main = create(
             Builder('dossier')
             .titled(u'main dossier')
@@ -459,6 +444,7 @@ class TestDossierDocumentCountIndexerSolr(SolrIntegrationTestCase):
         self.assert_document_count(sub2, 2)
 
     def test_document_restore_updates_dossier_index(self):
+        self.login(self.regular_user)
         dossier = create(
             Builder('dossier')
             .titled(u'main dossier')
