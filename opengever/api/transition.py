@@ -6,6 +6,7 @@ from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.deactivate import DossierDeactivator
 from opengever.dossier.reactivate import Reactivator
 from opengever.dossier.resolve import AlreadyBeingResolved
+from opengever.dossier.resolve import AutoCloseTasksNotPossible
 from opengever.dossier.resolve import InvalidDates
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.dossier.resolve import MSG_ALREADY_BEING_RESOLVED
@@ -211,6 +212,12 @@ class GEVERDossierWorkflowTransition(GEVERWorkflowTransition):
             return dict(error=dict(
                 type='AlreadyBeingResolved',
                 message=msg))
+
+        except AutoCloseTasksNotPossible as e:
+            self.request.response.setStatus(400)
+            return dict(error=dict(
+                type='AutoCloseTasksNotPossible',
+                errors=[self.translate(e.message)]))
 
         except BadRequest as e:
             self.request.response.setStatus(400)

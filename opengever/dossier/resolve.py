@@ -19,6 +19,7 @@ from opengever.dossier.resolve_lock import ResolveLock
 from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
 from opengever.task.task import ITask
 from plone import api
+from plone.api.exc import InvalidParameterError
 from Products.CMFCore.Expression import createExprContext
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
@@ -62,6 +63,11 @@ class InvalidDates(Exception):
 
     def __init__(self, invalid_dossier_titles):
         self.invalid_dossier_titles = invalid_dossier_titles
+
+
+class AutoCloseTasksNotPossible(Exception):
+    """Could not auto close the tasks. Please do it manually.
+    """
 
 
 def get_resolver(dossier):
@@ -196,7 +202,12 @@ class LockingResolveManager(object):
         """Auto-close all pending tasks."""
         for brain in tasks:
             task = brain.getObject()
-            task.force_finish_task()
+            try:
+                task.force_finish_task()
+            except InvalidParameterError:
+                raise AutoCloseTasksNotPossible(
+                    _('auto_close_tasks_not_possible',
+                      default=u'Auto-close tasks is not possible. Please close the tasks manually.'))
 
     def _get_pending_tasks(self):
         """Get all pending tasks in dossier."""

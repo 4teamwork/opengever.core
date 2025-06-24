@@ -283,3 +283,39 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assert_state('task-state-cancelled', open_task)
         self.assert_state('task-state-tested-and-closed', in_progress_task)
         self.assert_state('task-state-tested-and-closed', resolved_task)
+
+    @browsing
+    def test_resolve_dossier_auto_close_tasks_raises_error_if_auto_close_is_not_possible(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        # A private task cannot be closed by the secretarian user.
+        # The api should raise an error in this case.
+        create(
+            Builder('task')
+            .within(self.resolvable_dossier)
+            .in_state('task-state-open')
+            .titled(u'Task 1')
+            .having(
+                issuer=self.regular_user.id,
+                responsible=self.regular_user.id,
+                responsible_client='fa',
+                is_private=True,
+            )
+        )
+
+        with browser.expect_http_error(code=400):
+            self.api_transition(
+                self.resolvable_dossier,
+                'dossier-transition-resolve',
+                browser,
+                data=json.dumps({"auto_close_tasks": True})
+            )
+
+        self.assertEqual(
+            {
+                u'error': {
+                    u'errors': [u'Auto-close tasks is not possible. Please close the tasks manually.'],
+                    u'type': u'AutoCloseTasksNotPossible'
+                }
+            },
+            browser.json)
