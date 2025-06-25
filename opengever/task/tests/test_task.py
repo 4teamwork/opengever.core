@@ -743,7 +743,7 @@ class TestForceCloseTask(IntegrationTestCase):
 
     @browsing
     def test_force_finish_task_open_with_subtask(self, browser):
-        self.login(self.dossier_responsible)
+        self.login(self.dossier_responsible, browser)
 
         dossier = create(Builder('dossier'))
         main_task = create(
@@ -802,6 +802,7 @@ class TestForceCloseTask(IntegrationTestCase):
 
         main_task.force_finish_task()
 
+        # If the main task is cancelled, every subtask will be cancelled as well
         self.assertEqual('task-state-cancelled', api.content.get_state(main_task))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask1))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask2))
@@ -810,7 +811,7 @@ class TestForceCloseTask(IntegrationTestCase):
 
     @browsing
     def test_force_finish_task_in_progress_with_subtask(self, browser):
-        self.login(self.dossier_responsible)
+        self.login(self.dossier_responsible, browser)
 
         dossier = create(Builder('dossier'))
         main_task = create(
@@ -869,15 +870,15 @@ class TestForceCloseTask(IntegrationTestCase):
 
         main_task.force_finish_task()
 
-        self.assertEqual('task-state-cancelled', api.content.get_state(main_task))
-        self.assertEqual('task-state-cancelled', api.content.get_state(subtask1))
-        self.assertEqual('task-state-cancelled', api.content.get_state(subtask2))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(main_task))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask1))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask2))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))
 
     @browsing
     def test_force_finish_task_resolved_with_subtask(self, browser):
-        self.login(self.dossier_responsible)
+        self.login(self.dossier_responsible, browser)
 
         dossier = create(Builder('dossier'))
         main_task = create(
@@ -940,4 +941,4 @@ class TestForceCloseTask(IntegrationTestCase):
         self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask1))
         self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask2))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
-        self.assertEqual('task-state-rejected', api.content.get_state(subtask4))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))

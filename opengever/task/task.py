@@ -34,6 +34,8 @@ from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_IN_PROGRESS
 from opengever.task import TASK_STATE_OPEN
 from opengever.task import TASK_STATE_PLANNED
+from opengever.task import TASK_STATE_REJECTED
+from opengever.task import TASK_STATE_RESOLVED
 from opengever.task import TASK_STATE_SKIPPED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
@@ -47,6 +49,7 @@ from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.api.exc import InvalidParameterError
 from plone.app.textfield import RichText
 from plone.autoform import directives as form
 from plone.dexterity.content import Container
@@ -907,14 +910,6 @@ class Task(Container, TaskReminderSupport):
         self.sync()
         self.reindexObject()
 
-    def get_available_transitions(self):
-        wftool = api.portal.get_tool("portal_workflow")
-        actions = wftool.listActionInfos(object=self)
-        return [
-            action['id'] for action in actions
-            if action['category'] == 'workflow'
-        ]
-
     def force_finish_task(self):
         """This method is used to forcefully close a task, including all its subtasks,
         when a dossier is being closed and active tasks still exist.
@@ -924,32 +919,32 @@ class Task(Container, TaskReminderSupport):
         Rather than preventing the dossier from closing, we force each task into a
         valid terminal state based on its current state.
 
-        # This method is recursive, ensuring that all subtasks are also finished in the same way,
+        This method is recursive, ensuring that all subtasks are also finished in the same way,
         """
-        state = api.content.get_state(self)
-        transitions = self.get_available_transitions()
+        if api.content.get_state(self) == TASK_STATE_REJECTED:
+            api.content.transition(obj=self, transition='task-transition-rejected-open')
+
+        if api.content.get_state(self) == TASK_STATE_OPEN:
+            api.content.transition(obj=self, transition='task-transition-open-cancelled')
+            # Cancel a task will automatically cancel all subtasks.
+            return
 
         for subtask in self.objectValues():
             if ITask.providedBy(subtask):
                 subtask.force_finish_task()
 
-        if state == TASK_STATE_OPEN:
-            api.content.transition(obj=self, transition='task-transition-open-cancelled')
-
-        elif state == TASK_STATE_IN_PROGRESS:
-            if 'task-transition-in-progress-resolved' in transitions:
-                api.content.transition(obj=self, transition='task-transition-in-progress-resolved')
-                # refresh transitions after state change
-                transitions = self.get_available_transitions()
-
-            if 'task-transition-resolved-tested-and-closed' in transitions:
+        if api.content.get_state(self) == TASK_STATE_IN_PROGRESS:
+            # Depending on the task type, some transitions are not possible. We
+            # do not try to understand the businesslogic here and naivily do
+            # the expected transitions.
+            try:
+                # We first try to directly close it.
                 api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+            except InvalidParameterError:
+                # If it does not work, we try to resolve it first.
+                api.content.transition(obj=self, transition='task-transition-in-progress-resolved')
 
-            if 'task-transition-in-progress-cancelled' in transitions:
-                api.content.transition(obj=self, transition='task-transition-in-progress-cancelled')
-                transitions = self.get_available_transitions()
-
-        elif state == 'task-state-resolved':
+        if api.content.get_state(self) == TASK_STATE_RESOLVED:
             api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
 
 
