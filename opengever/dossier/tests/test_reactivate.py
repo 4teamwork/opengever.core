@@ -93,7 +93,7 @@ class TestReactivating(IntegrationTestCase):
         self.reactivate(self.resolvable_subdossier, browser)
 
         self.assert_errors(self.resolvable_subdossier, browser,
-                           ["A subdossier may not be reopened on its own. Please reopen the main dossier."])
+                           [u"A subdossier may not be reopened on its own. Please reopen the main dossier."])
         self.assert_workflow_state('dossier-state-resolved',
                                    self.resolvable_subdossier)
 
@@ -170,6 +170,7 @@ class TestReactivatingRESTAPI(TestReactivating):
             {u'error': {
                 u'message': u'',
                 u'errors': error_msgs,
+                u'has_not_closed_tasks': False,
                 u'type': u'PreconditionsViolated'}},
             browser.json)
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-reactivate'

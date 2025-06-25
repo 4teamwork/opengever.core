@@ -525,6 +525,7 @@ class TestArchivePerAPI(IntegrationTestCase):
             {u'error': {
                 u'message': u'',
                 u'errors': [u'not all task are closed'],
+                u'has_not_closed_tasks': True,
                 u'type': u'PreconditionsViolated'}},
             browser.json)
 

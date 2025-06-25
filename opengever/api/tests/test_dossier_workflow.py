@@ -1,9 +1,12 @@
 from datetime import datetime
+from ftw.builder import Builder
+from ftw.builder import create
 from ftw.testbrowser import browsing
 from ftw.testing import freeze
 from opengever.dossier.resolve import LockingResolveManager
 from opengever.testing import IntegrationTestCase
 from plone import api
+import json
 
 
 class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
@@ -21,12 +24,14 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
         self.assertEquals(expected_state,
                           api.content.get_state(obj))
 
-    def api_transition(self, obj, transition, browser):
+    def api_transition(self, obj, transition, browser, data=None):
         url = '/'.join((obj.absolute_url(), '@workflow', transition))
         browser.open(
             url,
-            headers={'Accept': 'application/json'},
-            method='POST')
+            headers=self.api_headers,
+            method='POST',
+            data=data
+        )
 
     @browsing
     def test_resolve_via_restapi(self, browser):
@@ -198,4 +203,119 @@ class TestDossierWorkflowRESTAPITransitions(IntegrationTestCase):
             {u'error':
                 {u'message': u"Invalid transition 'dossier-transition-archive'.\nValid transitions are:\n",
                  u'type': u'Bad Request'}},
+            browser.json)
+
+    @browsing
+    def test_resolve_dossier_auto_close_tasks(self, browser):
+
+        self.login(self.secretariat_user, browser)
+
+        open_task = create(
+            Builder('task')
+            .within(self.resolvable_subdossier)
+            .in_state('task-state-open')
+            .titled(u'Task 1')
+            .having(
+                issuer=self.secretariat_user.id,
+                responsible=self.secretariat_user.id,
+                responsible_client='fa',
+            )
+        )
+        in_progress_task = create(
+            Builder('task')
+            .within(self.resolvable_subdossier)
+            .in_state('task-state-in-progress')
+            .titled(u'Task 2')
+            .having(
+                issuer=self.secretariat_user.id,
+                responsible=self.secretariat_user.id,
+                responsible_client='fa',
+                task_type='approval',
+            )
+        )
+        resolved_task = create(
+            Builder('task')
+            .within(self.resolvable_subdossier)
+            .in_state('task-state-resolved')
+            .titled(u'Task 3')
+            .having(
+                issuer=self.secretariat_user.id,
+                responsible=self.secretariat_user.id,
+                responsible_client='fa',
+            )
+        )
+        with freeze(datetime(2018, 4, 30)):
+            with browser.expect_http_error():
+                self.api_transition(self.resolvable_subdossier, 'dossier-transition-resolve', browser)
+            self.assertEqual(400, browser.status_code)
+            self.assertDictEqual(
+                {
+                    u'error': {
+                        u'message': u'',
+                        u'errors': [u'not all task are closed'],
+                        u'type': u'PreconditionsViolated',
+                        u'has_not_closed_tasks': True,
+                    }
+                },
+                browser.json)
+
+        # dossier and tasks state did not change
+        self.assert_state('dossier-state-active', self.resolvable_subdossier)
+
+        self.assert_state('task-state-open', open_task)
+        self.assert_state('task-state-in-progress', in_progress_task)
+        self.assert_state('task-state-resolved', resolved_task)
+
+        with freeze(datetime(2018, 4, 30)):
+
+            self.api_transition(
+                self.resolvable_subdossier,
+                'dossier-transition-resolve',
+                browser,
+                data=json.dumps({"auto_close_tasks": True})
+            )
+
+        self.assertEqual(200, browser.status_code)
+
+        # dossier and tasks states were changed
+        self.assert_state('dossier-state-resolved', self.resolvable_subdossier)
+
+        self.assert_state('task-state-cancelled', open_task)
+        self.assert_state('task-state-tested-and-closed', in_progress_task)
+        self.assert_state('task-state-tested-and-closed', resolved_task)
+
+    @browsing
+    def test_resolve_dossier_auto_close_tasks_raises_error_if_auto_close_is_not_possible(self, browser):
+        self.login(self.secretariat_user, browser)
+
+        # A private task cannot be closed by the secretarian user.
+        # The api should raise an error in this case.
+        create(
+            Builder('task')
+            .within(self.resolvable_dossier)
+            .in_state('task-state-open')
+            .titled(u'Task 1')
+            .having(
+                issuer=self.regular_user.id,
+                responsible=self.regular_user.id,
+                responsible_client='fa',
+                is_private=True,
+            )
+        )
+
+        with browser.expect_http_error(code=400):
+            self.api_transition(
+                self.resolvable_dossier,
+                'dossier-transition-resolve',
+                browser,
+                data=json.dumps({"auto_close_tasks": True})
+            )
+
+        self.assertEqual(
+            {
+                u'error': {
+                    u'errors': [u'Auto-close tasks is not possible. Please close the tasks manually.'],
+                    u'type': u'AutoCloseTasksNotPossible'
+                }
+            },
             browser.json)

@@ -32,7 +32,10 @@ from opengever.task import FINAL_TASK_STATES
 from opengever.task import is_optional_task_permissions_revoking_enabled
 from opengever.task import is_private_task_feature_enabled
 from opengever.task import TASK_STATE_IN_PROGRESS
+from opengever.task import TASK_STATE_OPEN
 from opengever.task import TASK_STATE_PLANNED
+from opengever.task import TASK_STATE_REJECTED
+from opengever.task import TASK_STATE_RESOLVED
 from opengever.task import TASK_STATE_SKIPPED
 from opengever.task import util
 from opengever.task.interfaces import ITaskSettings
@@ -46,6 +49,7 @@ from opengever.tasktemplates.interfaces import IPartOfSequentialProcess
 from persistent.dict import PersistentDict
 from persistent.list import PersistentList
 from plone import api
+from plone.api.exc import InvalidParameterError
 from plone.app.textfield import RichText
 from plone.autoform import directives as form
 from plone.dexterity.content import Container
@@ -905,6 +909,43 @@ class Task(Container, TaskReminderSupport):
 
         self.sync()
         self.reindexObject()
+
+    def force_finish_task(self):
+        """This method is used to forcefully close a task, including all its subtasks,
+        when a dossier is being closed and active tasks still exist.
+
+        The need for this method arises from a business requirement where dossiers
+        must be allowed to close even if some of their tasks are still open or in progress.
+        Rather than preventing the dossier from closing, we force each task into a
+        valid terminal state based on its current state.
+
+        This method is recursive, ensuring that all subtasks are also finished in the same way,
+        """
+        if api.content.get_state(self) == TASK_STATE_REJECTED:
+            api.content.transition(obj=self, transition='task-transition-rejected-open')
+
+        if api.content.get_state(self) == TASK_STATE_OPEN:
+            api.content.transition(obj=self, transition='task-transition-open-cancelled')
+            # Cancel a task will automatically cancel all subtasks.
+            return
+
+        for subtask in self.objectValues():
+            if ITask.providedBy(subtask):
+                subtask.force_finish_task()
+
+        if api.content.get_state(self) == TASK_STATE_IN_PROGRESS:
+            # Depending on the task type, some transitions are not possible. We
+            # do not try to understand the businesslogic here and naivily do
+            # the expected transitions.
+            try:
+                # We first try to directly close it.
+                api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+            except InvalidParameterError:
+                # If it does not work, we try to resolve it first.
+                api.content.transition(obj=self, transition='task-transition-in-progress-resolved')
+
+        if api.content.get_state(self) == TASK_STATE_RESOLVED:
+            api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
 
 
 def related_document(context):

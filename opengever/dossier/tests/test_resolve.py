@@ -74,7 +74,7 @@ class ResolveTestHelper(object):
         statusmessages.assert_no_error_messages()
         self.assertEquals(info_msgs, info_messages())
 
-    def assert_errors(self, dossier, browser, error_msgs):
+    def assert_errors(self, dossier, browser, error_msgs, **kwargs):
         self.assertEquals(dossier.absolute_url(), browser.url)
         self.assertEquals(error_msgs, error_messages())
 
@@ -151,13 +151,16 @@ class ResolveTestHelperRESTAPI(ResolveTestHelper):
              u'review_state': u'dossier-state-resolved'},
             browser.json)
 
-    def assert_errors(self, dossier, browser, error_msgs):
+    def assert_errors(self, dossier, browser, error_msgs, **additional_error_attrs):
         self.assertEqual(400, browser.status_code)
+        error = {
+            u'message': u'',
+            u'errors': error_msgs,
+            u'type': u'PreconditionsViolated'
+        }
+        error.update(additional_error_attrs)
         self.assertEqual(
-            {u'error': {
-                u'message': u'',
-                u'errors': error_msgs,
-                u'type': u'PreconditionsViolated'}},
+            {u'error': error},
             browser.json)
         expected_url = dossier.absolute_url() + '/@workflow/dossier-transition-resolve'
         self.assertEquals(expected_url, browser.url)
@@ -968,7 +971,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['Not all documents and tasks have been filed into subdossiers.'])
+                           ['Not all documents and tasks have been filed into subdossiers.'],
+                           has_not_closed_tasks=False)
 
     @browsing
     def test_resolving_is_cancelled_when_documents_are_checked_out(self, browser):
@@ -980,7 +984,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['Not all documents have been checked in yet.'])
+                           ['Not all documents have been checked in yet.'],
+                           has_not_closed_tasks=False)
 
     @browsing
     def test_resolving_is_cancelled_when_documents_in_subsubdossiers_are_checked_out(self, browser):
@@ -996,7 +1001,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['Not all documents have been checked in yet.'])
+                           ['Not all documents have been checked in yet.'],
+                           has_not_closed_tasks=False)
 
     @browsing
     def test_resolving_is_cancelled_when_active_tasks_exist(self, browser):
@@ -1014,7 +1020,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['not all task are closed'])
+                           [u'not all task are closed'], has_not_closed_tasks=True)
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_has_an_invalid_end_date(self, browser):
@@ -1027,7 +1033,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['The dossier A resolvable main dossier has a invalid end_date'])
+                           ['The dossier A resolvable main dossier has a invalid end_date'],
+                           )
 
     @browsing
     def test_resolving_is_cancelled_when_subdossier_has_an_invalid_end_date(self, browser):
@@ -1043,8 +1050,7 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['The dossier Resolvable Subdossier has a invalid end_date'])
-
+                          ['The dossier Resolvable Subdossier has a invalid end_date'])
     @browsing
     def test_dossier_is_resolved_when_resolved_subdossier_has_an_invalid_end_date(self, browser):
         self.login(self.secretariat_user, browser)
@@ -1105,7 +1111,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_subdossier)
         self.assert_errors(self.resolvable_subdossier, browser,
-                           ['Dossier contains active proposals.'])
+                           ['Dossier contains active proposals.'],
+                           has_not_closed_tasks=False)
 
     @browsing
     def test_dossier_is_resolved_when_all_tasks_are_closed_and_documents_checked_in(self, browser):
@@ -1145,7 +1152,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
 
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['custom precondition not satisfied'])
+                           ['custom precondition not satisfied'],
+                           has_not_closed_tasks=False)
 
     @browsing
     def test_resolving_when_custom_precondition_is_satisfied(self, browser):
@@ -1182,7 +1190,8 @@ class TestResolveConditions(IntegrationTestCase, ResolveTestHelper):
         self.resolve(self.resolvable_dossier, browser)
         self.assert_not_resolved(self.resolvable_dossier)
         self.assert_errors(self.resolvable_dossier, browser,
-                           ['custom precondition not satisfied'])
+                           ['custom precondition not satisfied'],
+                           has_not_closed_tasks=False)
 
         IDossierCustomProperties(self.resolvable_dossier).custom_properties = {
             "IDossier.default": {"additional_title": "I have an additional title"},
@@ -1211,7 +1220,8 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.resolve(self.dossier, browser)
             self.assert_not_resolved(self.dossier)
             self.assert_errors(self.dossier, browser,
-                               ['Not all linked workspaces are deactivated.'])
+                               ['Not all linked workspaces are deactivated.'],
+                               has_not_closed_tasks=False)
 
     @browsing
     def test_resolving_is_cancelled_when_dossier_is_linked_to_workspaces_without_view_permission(self, browser):
@@ -1229,7 +1239,8 @@ class TestResolveConditionsWithWorkspaceClientFeatureEnabled(ResolveTestHelper,
             self.assert_not_resolved(self.dossier)
             self.assert_errors(
                 self.dossier, browser,
-                [u'You can\'t close the dossier because you do not have access to all its linked workspaces.'])
+                [u'You can\'t close the dossier because you do not have access to all its linked workspaces.'],
+                has_not_closed_tasks=False)
 
     @browsing
     def test_dossier_is_resolved_when_no_workspace_is_linked(self, browser):

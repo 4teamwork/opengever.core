@@ -674,3 +674,271 @@ class TestTaskTypeTranslations(IntegrationTestCase):
             'Zum Bericht / Antrag',
             'Zur Kenntnisnahme'],
             task_type_labels)
+
+
+class TestForceCloseTask(IntegrationTestCase):
+
+    @browsing
+    def test_force_update_open_main_task_without_subtasks(self, browser):
+        self.login(self.dossier_responsible)
+        dossier = create(Builder('dossier'))
+        task = create(
+            Builder('task')
+            .within(dossier)
+            .in_state('task-state-open')
+            .titled('Main task')
+            .having(
+                issuer=self.dossier_responsible.getId(),
+                responsible=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        self.assertEqual('task-state-open', api.content.get_state(task))
+        task.force_finish_task()
+        self.assertEqual('task-state-cancelled', api.content.get_state(task))
+
+    @browsing
+    def test_force_update_in_progress_main_task_without_subtasks(self, browser):
+        self.login(self.dossier_responsible)
+        dossier = create(Builder('dossier'))
+        task = create(
+            Builder('task')
+            .within(dossier)
+            .in_state('task-state-in-progress')
+            .titled('Main task')
+            .having(
+                issuer=self.dossier_responsible.getId(),
+                responsible=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        self.assertEqual('task-state-in-progress', api.content.get_state(task))
+        task.force_finish_task()
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(task))
+
+    @browsing
+    def test_force_update_resolved_main_task_without_subtasks(self, browser):
+        self.login(self.dossier_responsible)
+        dossier = create(Builder('dossier'))
+        task = create(
+            Builder('task')
+            .within(dossier)
+            .in_state('task-state-resolved')
+            .titled('Main task')
+            .having(
+                issuer=self.dossier_responsible.getId(),
+                responsible=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        self.assertEqual('task-state-resolved', api.content.get_state(task))
+        task.force_finish_task()
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(task))
+
+    @browsing
+    def test_force_finish_task_open_with_subtask(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        dossier = create(Builder('dossier'))
+        main_task = create(
+            Builder("task")
+            .within(dossier)
+            .in_state('task-state-open')
+            .titled("Main Task")
+            .having(
+                responsible=self.dossier_responsible.getId(),
+                issuer=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        subtask1 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-resolved')
+            .titled("Subtask 1")
+            .having(task_type='correction',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask2 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-in-progress')
+            .titled("Subtask 2")
+            .having(task_type='information',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask3 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-open')
+            .titled("Subtask 3")
+            .having(task_type='approval',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask4 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-rejected')
+            .titled("Subtask 4")
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+
+        main_task.force_finish_task()
+
+        # If the main task is cancelled, every subtask will be cancelled as well
+        self.assertEqual('task-state-cancelled', api.content.get_state(main_task))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask1))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask2))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))
+
+    @browsing
+    def test_force_finish_task_in_progress_with_subtask(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        dossier = create(Builder('dossier'))
+        main_task = create(
+            Builder("task")
+            .within(dossier)
+            .in_state('task-state-in-progress')
+            .titled("Main Task")
+            .having(
+                responsible=self.dossier_responsible.getId(),
+                issuer=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        subtask1 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-resolved')
+            .titled("Subtask 1")
+            .having(task_type='correction',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask2 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-in-progress')
+            .titled("Subtask 2")
+            .having(task_type='information',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask3 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-open')
+            .titled("Subtask 3")
+            .having(task_type='approval',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask4 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-rejected')
+            .titled("Subtask 4")
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+
+        main_task.force_finish_task()
+
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(main_task))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask1))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask2))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))
+
+    @browsing
+    def test_force_finish_task_resolved_with_subtask(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        dossier = create(Builder('dossier'))
+        main_task = create(
+            Builder("task")
+            .within(dossier)
+            .in_state('task-state-resolved')
+            .titled("Main Task")
+            .having(
+                responsible=self.dossier_responsible.getId(),
+                issuer=self.dossier_responsible.getId(),
+                responsible_client='fa',
+                task_type='information'
+            )
+        )
+
+        subtask1 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-resolved')
+            .titled("Subtask 1")
+            .having(task_type='correction',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask2 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-in-progress')
+            .titled("Subtask 2")
+            .having(task_type='information',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask3 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-open')
+            .titled("Subtask 3")
+            .having(task_type='approval',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        subtask4 = create(
+            Builder("task")
+            .within(main_task)
+            .in_state('task-state-rejected')
+            .titled("Subtask 4")
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+
+        main_task.force_finish_task()
+
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(main_task))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask1))
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask2))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
+        self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))

@@ -19,6 +19,7 @@ from opengever.dossier.resolve_lock import ResolveLock
 from opengever.dossier.statusmessage_mixin import DossierResolutionStatusmessageMixin
 from opengever.task.task import ITask
 from plone import api
+from plone.api.exc import InvalidParameterError
 from Products.CMFCore.Expression import createExprContext
 from Products.CMFCore.Expression import Expression
 from Products.CMFCore.utils import getToolByName
@@ -62,6 +63,11 @@ class InvalidDates(Exception):
 
     def __init__(self, invalid_dossier_titles):
         self.invalid_dossier_titles = invalid_dossier_titles
+
+
+class AutoCloseTasksNotPossible(Exception):
+    """Could not auto close the tasks. Please do it manually.
+    """
 
 
 def get_resolver(dossier):
@@ -154,6 +160,11 @@ class LockingResolveManager(object):
         # by acquring a lock, resolving, and then releasing the lock
         try:
             resolve_lock.acquire(commit=True)
+            auto_close_tasks = transition_params.get("auto_close_tasks", False)
+            if auto_close_tasks:
+                pending_tasks = self._get_pending_tasks()
+                self._auto_close_tasks(pending_tasks)
+
             result = self.execute_recursive_resolve(**transition_params)
 
             # We need to commit here so that a possible ConflictError already
@@ -186,6 +197,28 @@ class LockingResolveManager(object):
             # there was an exception, propagation will continue after leaving
             # this 'finally' block.
             resolve_lock.release(commit=True)
+
+    def _auto_close_tasks(self, tasks):
+        """Auto-close all pending tasks."""
+        for brain in tasks:
+            task = brain.getObject()
+            try:
+                task.force_finish_task()
+            except InvalidParameterError:
+                raise AutoCloseTasksNotPossible(
+                    _('auto_close_tasks_not_possible',
+                      default=u'Auto-close tasks is not possible. Please close the tasks manually.'))
+
+    def _get_pending_tasks(self):
+        """Get all pending tasks in dossier."""
+        catalog = api.portal.get_tool('portal_catalog')
+        path = '/'.join(self.context.getPhysicalPath())
+        return catalog.searchResults(
+            path=path,
+            object_provides=ITask.__identifier__,
+            is_subtask=False,
+            review_state=['task-state-open', 'task-state-in-progress', 'task-state-resolved']
+        )
 
     def execute_recursive_resolve(self, **transition_params):
         self.resolver.raise_on_failed_preconditions()
@@ -301,7 +334,7 @@ class StrictDossierResolver(object):
             self.enddates_valid = True
         return errors
 
-    def resolve(self, end_date=None, **kwargs):
+    def resolve(self, end_date=None, auto_close_tasks=False, **kwargs):
         if not self.enddates_valid or not self.preconditions_fulfilled:
             raise TypeError
 

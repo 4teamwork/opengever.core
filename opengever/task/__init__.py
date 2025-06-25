@@ -35,6 +35,10 @@ TASK_STATE_SKIPPED = 'task-state-skipped'
 
 TASK_STATE_IN_PROGRESS = 'task-state-in-progress'
 
+TASK_STATE_RESOLVED = 'task-state-resolved'
+
+TASK_STATE_REJECTED = 'task-state-rejected'
+
 FINAL_TASK_STATES = [
     'task-state-tested-and-closed',
     'task-state-cancelled',

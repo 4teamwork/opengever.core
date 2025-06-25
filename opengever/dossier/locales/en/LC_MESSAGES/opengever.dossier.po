@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
-"POT-Creation-Date: 2025-03-24 10:10+0000\n"
+"POT-Creation-Date: 2025-06-24 08:51+0000\n"
 "PO-Revision-Date: 2017-05-23 04:53+0000\n"
 "Last-Translator: Jacqueline Sposato <jacqueline.sposato@gmail.com>\n"
 "Language-Team: German <https://translations.onegovgever.ch/projects/onegov-gever/opengever-dossier/de/>\n"
@@ -335,6 +335,11 @@ msgstr "Any participant"
 #: ./opengever/dossier/indexers.py
 msgid "any_role"
 msgstr "Any role"
+
+#. Default: "Auto-close tasks is not possible. Please close the tasks manually."
+#: ./opengever/dossier/resolve.py
+msgid "auto_close_tasks_not_possible"
+msgstr "Auto-close tasks is not possible. Please close the tasks manually."
 
 #. German translation: Erstellen
 #. Default: "Add"
