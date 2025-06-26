@@ -12,6 +12,7 @@ Breaking Changes
 
 Other Changes
 ^^^^^^^^^^^^^
+- The ``auto_close_tasks`` transition parameter for ``dossier-transition-resolve`` enables automatic closure of open tasks before resolving the dossier.
 - ``@possible-watchers``: endpoint only returns users having view permission on the given context.
 - ``@listing``: New field `document_version_count` is now available.
 
