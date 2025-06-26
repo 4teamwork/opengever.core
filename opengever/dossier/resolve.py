@@ -203,7 +203,7 @@ class LockingResolveManager(object):
         for brain in tasks:
             task = brain.getObject()
             try:
-                task.force_finish_task()
+                task.close_task()
             except InvalidParameterError:
                 raise AutoCloseTasksNotPossible(
                     _('auto_close_tasks_not_possible',
