@@ -1,0 +1,1 @@
+- Add new listing action ``close_task`` for tasks [elioschmutz] [TI-2301]

@@ -319,6 +319,43 @@ Zusätzliche Metadaten:
 
        :Datentyp: ``Text``
 
+
+.. _label-auto_close_task:
+
+Aufgabe schliessen
+------------------
+Je nach Aufgabentyp und aktuellem Status müssen unterschiedliche Transitionen ausgeführt werden, um eine Aufgabe abzuschliessen oder abzubrechen.
+
+Der Endpoint ``@close-task`` kann verwendet werden, um eine Aufgabe direkt zu schliessen, unabhängig davon, in welchem Status sie sich aktuell befindet.
+„Schliessen“ bedeutet in diesem Kontext, dass sich die Aufgabe anschliessend in einem der folgenden Stati befindet:
+
+- Abgebrochen
+- Abgeschlossen
+
+Ob eine Aufgabe abgebrochen oder abgeschlossen wird, hängt vom aktuellen Status und Typ der Aufgabe ab. Grundsätzlich gilt:
+
+- Eine Aufgabe, die in Bearbeitung ist, wird abgeschlossen
+- Eine Aufgabe, die noch nicht begonnen wurde, wird abgebrochen
+
+Wichtig: Beim Schliessen einer Aufgabe wird stets der zugrunde liegende Workflow berücksichtigt.
+Erfordert der Abschluss einer Aufgabe mehrere Transitionen, werden diese automatisch in der korrekten Reihenfolge ausgeführt.
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /task-1/@close-task HTTP/1.1
+      Accept: application/json
+      Content-Type: application/json
+
+**Beispiel-Response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No content
+
+
 Aufgabe übertragen
 ------------------
 

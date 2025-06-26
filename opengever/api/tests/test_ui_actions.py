@@ -55,7 +55,7 @@ class TestUIActionsGET(IntegrationTestCase):
         task_url = u'{}/@ui-actions?categories:list=listing_actions'\
                    u'&listings:list=tasks'.format(self.dossier.absolute_url())
         browser.open(task_url, method='GET', headers=self.api_headers)
-        self.assertEqual([u'move_items', u'export_tasks', u'pdf_taskslisting'],
+        self.assertEqual([u'close_tasks', u'move_items', u'export_tasks', u'pdf_taskslisting'],
                          [action['id'] for action in browser.json['listing_actions']])
         dossier_url = u'{}/@ui-actions?categories:list=listing_actions'\
                       u'&listings:list=dossiers'.format(self.dossier.absolute_url())

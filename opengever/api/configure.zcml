@@ -446,6 +446,14 @@
       />
 
   <plone:service
+      method="POST"
+      name="@close-task"
+      for="opengever.task.task.ITask"
+      factory=".task.CloseTaskPost"
+      permission="zope2.View"
+      />
+
+  <plone:service
       method="GET"
       name="@role-assignment-report"
       for="Products.CMFPlone.interfaces.IPloneSiteRoot"
