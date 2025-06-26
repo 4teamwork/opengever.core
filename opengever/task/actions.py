@@ -15,6 +15,9 @@ class TaskListingActions(BaseListingActions):
     def is_pdf_taskslisting_available(self):
         return True
 
+    def is_close_tasks_available(self):
+        return True
+
 
 @adapter(IDossierMarker, IOpengeverBaseLayer)
 class DossierTaskListingActions(TaskListingActions):
