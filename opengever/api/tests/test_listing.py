@@ -1835,7 +1835,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
         self.assertEqual(
             {u'@id': self.document.absolute_url(),
              u'UID': IUUID(self.document),
-             u'document_version_count': 1},
+             u'document_version_count': 2},
             browser.json['items'][0])
 
 

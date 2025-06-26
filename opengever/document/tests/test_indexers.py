@@ -559,8 +559,8 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         self.commit_solr()
 
         indexed_value = solr_data_for(self.document, 'document_version_count')
-        self.assertEqual(indexed_value, 1)
-        self.assertEqual(indexed_value, self.document.get_current_version_id())
+        self.assertEqual(indexed_value, 2)
+        self.assertEqual(indexed_value, self.document.get_current_version_id() + 1)
 
     def test_mail_version_count_indexed(self):
         """mails are read only (no Edit) therefor the version should never changes
@@ -576,7 +576,7 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
         indexed_value = solr_data_for(self.mail_eml, 'document_version_count')
 
         # Explicit assertion to confirm indexing matches method return value
-        self.assertEqual(indexed_value, self.mail_eml.get_current_version_id())
+        self.assertEqual(indexed_value, self.mail_eml.get_current_version_id() + 1)
 
         # Mails are always on version 0
-        self.assertEqual(indexed_value, 0)
+        self.assertEqual(indexed_value, 1)

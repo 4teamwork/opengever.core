@@ -284,4 +284,6 @@ def is_locked_by_copy_to_workspace(obj):
 
 @indexer(IBaseDocument)
 def document_version_count(obj):
-    return obj.get_current_version_id(missing_as_zero=True)
+    # We track the total number of versions, not the current version number.
+    # Since versioning starts at 0, we add 1 to get the actual count of versions.
+    return obj.get_current_version_id(missing_as_zero=True) + 1
