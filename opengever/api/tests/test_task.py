@@ -898,3 +898,16 @@ class TestAddingAdditionalTaskToSequentialProcessPost(IntegrationTestCase):
                          method="POST", headers=self.api_headers)
 
         self.assertEqual("Could not parse `position` attribute", str(cm.exception))
+
+class TestCloseTaskPost(IntegrationTestCase):
+
+    @browsing
+    def test_close_task(self, browser):
+        self.login(self.secretariat_user, browser)
+        self.assertEqual('task-state-in-progress', api.content.get_state(self.task))
+
+        browser.open(self.task.absolute_url() + '/@close-task',
+                     method='POST', headers={'Accept': 'application/json'})
+
+        self.assertEqual(204, browser.status_code)
+        self.assertEqual('task-state-tested-and-closed', api.content.get_state(self.task))

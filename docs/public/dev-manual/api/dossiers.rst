@@ -166,6 +166,8 @@ Wird versucht, ein Dossier mit noch offenen Aufgaben abzuschliessen, ohne diese 
 
 Um alle offenen Aufgaben beim Dossier-Abschluss automatisch zu schliessen, kann der Parameter ``auto_close_tasks``  mitgegeben werden:
 
+Siehe :ref:`label-auto_close_task` für weitere Details, wie die Aufgaben genau geschlossen werden.
+
 
 **Beispiel-Request**:
 

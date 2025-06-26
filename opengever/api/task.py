@@ -23,6 +23,7 @@ from opengever.task.task_response import TaskResponse
 from opengever.task.util import TaskAutoResponseChangesTracker
 from opengever.tasktemplates.interfaces import IContainParallelProcess
 from opengever.tasktemplates.interfaces import IContainSequentialProcess
+from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
 from plone.restapi.interfaces import IDeserializeFromJson
 from plone.restapi.interfaces import IExpandableElement
@@ -35,6 +36,7 @@ from zExceptions import Unauthorized
 from zope.component import adapter
 from zope.component import getMultiAdapter
 from zope.i18n import translate
+from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import Interface
 
@@ -350,3 +352,21 @@ class TaskPatch(ContentPatch):
             raise BadRequest(_(u"change_responsible_not_allowed",
                                default=u"It's not allowed to change responsible here. Use \"Reassign\" instead"))
         return data
+
+
+class CloseTaskPost(Service):
+    """Attempts to close a task.
+
+    Permission checks are intentionally omitted here, as the specific permissions or roles required
+    to close the task are not known in advance. If the user lacks the necessary permissions,
+    an error will be raised by the transition extender.
+    """
+
+    def reply(self):
+        # Disable CSRF protection
+        alsoProvides(self.request, IDisableCSRFProtection)
+
+        self.context.close_task()
+
+        self.request.response.setStatus(204)
+        return super(CloseTaskPost, self).reply()
