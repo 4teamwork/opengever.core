@@ -216,7 +216,7 @@ class TransferDossierPost(ExtractOldNewUserMixin, Service):
 
         for dossier in dossiers_to_transfer:
             IDossier(dossier).responsible = new_userid
-            dossier.reindexObject(idxs=['UID', 'responsible'])
 
             # We have to trigger an object modified event to get a jorunal entry
+            # and reindex the object.
             notify(ObjectModifiedEvent(dossier))

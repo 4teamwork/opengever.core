@@ -2,6 +2,7 @@ from ftw.testbrowser import browsing
 from opengever.activity.model import Notification
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.resolve import LockingResolveManager
+from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
 import json
 
@@ -108,6 +109,23 @@ class TestTransferDossierPost(SolrIntegrationTestCase):
                           "new_userid": self.meeting_user.getId()}))
 
         self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+
+    @browsing
+    def test_transfer_dossier_reindexes_responsible(self, browser):
+        self.login(self.administrator, browser=browser)
+
+        self.assertEqual(
+            self.dossier_responsible.getId(), solr_data_for(self.dossier, 'responsible'))
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.commit_solr()
+
+        self.assertEqual(
+            self.meeting_user.getId(), solr_data_for(self.dossier, 'responsible'))
 
     @browsing
     def test_limited_admin_can_transfer_a_dossier(self, browser):
