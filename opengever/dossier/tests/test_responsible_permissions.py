@@ -6,11 +6,11 @@ from opengever.base.role_assignments import ASSIGNMENT_VIA_DOSSIER_RESPONSIBLE
 from opengever.base.role_assignments import RoleAssignmentManager
 from opengever.dossier.behaviors.dossier import IDossier
 from opengever.dossier.behaviors.protect_dossier import IProtectDossier
-from opengever.testing import IntegrationTestCase
+from opengever.testing import SolrIntegrationTestCase
 import json
 
 
-class TestGrantDossierManagerToResponsibleFeature(IntegrationTestCase):
+class TestGrantDossierManagerToResponsibleFeature(SolrIntegrationTestCase):
 
     features = (
         'grant_dossier_manager_to_responsible',
@@ -308,3 +308,52 @@ class TestGrantDossierManagerToResponsibleFeature(IntegrationTestCase):
 
         self.assertEqual(self.dossier_responsible.getId(),
                          IProtectDossier(dossier).dossier_manager)
+
+    @browsing
+    def test_transfer_dossier_updates_dossier_protection(self, browser):
+        self.login(self.administrator, browser=browser)
+        IProtectDossier(self.dossier).protect()
+
+        self.assertEqual(self.dossier_responsible.getId(),
+                         IDossier(self.dossier).responsible)
+
+        assignments = self.get_assignments_via_responsible(self.dossier)
+
+        self.assertEqual(1, len(assignments))
+        self.assertEqual(
+            {'cause': 8,
+             'roles': [
+                'Reader',
+                'Editor',
+                'Contributor',
+                'Reviewer',
+                'Publisher',
+                'DossierManager'
+             ],
+             'reference': Oguid.for_object(self.dossier).id,
+             'principal': self.dossier_responsible.id},
+            assignments[0])
+
+        browser.open(self.dossier.absolute_url() + '/@transfer-dossier', method='POST',
+                     headers=self.api_headers, data=json.dumps(
+                         {"old_userid": self.dossier_responsible.getId(),
+                          "new_userid": self.meeting_user.getId()}))
+
+        self.assertEqual(self.meeting_user.getId(), IDossier(self.dossier).responsible)
+
+        assignments = self.get_assignments_via_responsible(self.dossier)
+
+        self.assertEqual(1, len(assignments))
+        self.assertEqual(
+            {'cause': 8,
+             'roles': [
+                'Reader',
+                'Editor',
+                'Contributor',
+                'Reviewer',
+                'Publisher',
+                'DossierManager'
+             ],
+             'reference': Oguid.for_object(self.dossier).id,
+             'principal': self.meeting_user.getId()},
+            assignments[0])

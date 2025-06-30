@@ -23,6 +23,7 @@ from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.event import notify
 from zope.interface import alsoProvides
+from zope.lifecycleevent import Attributes
 from zope.lifecycleevent import ObjectModifiedEvent
 import logging
 import transaction
@@ -217,6 +218,9 @@ class TransferDossierPost(ExtractOldNewUserMixin, Service):
         for dossier in dossiers_to_transfer:
             IDossier(dossier).responsible = new_userid
 
-            # We have to trigger an object modified event to get a jorunal entry
-            # and reindex the object.
-            notify(ObjectModifiedEvent(dossier))
+            # We have to trigger an object modified event with the changed field
+            # to properly trigger all event handlers. Most important to mention is:
+            # - to get a jorunal entry.
+            # - to reindex the object on the changed fields only
+            # - to update dossier protection settings
+            notify(ObjectModifiedEvent(dossier, Attributes(IDossier, "IDossier.responsible")))
