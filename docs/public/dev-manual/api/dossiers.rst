@@ -130,3 +130,50 @@ existiert oder neu erstellt werden muss.
    .. sourcecode:: http
 
       HTTP/1.1 204 No content
+
+Dossier abschliessen und dabei automatisch alle offenen Aufgaben schliessen
+---------------------------------------------------------------------------
+Ein Dossier kann über den Workflow abgeschlossen werden. Der Abschluss ist jedoch nur möglich, wenn alle enthaltenen Aufgaben entweder abgeschlossen oder abgebrochen sind. Um diesen Vorgang zu erleichtern, unterstützt der Dossier-Workflow eine Option zum automatischen Schliessen offener Aufgaben.
+
+Wird versucht, ein Dossier mit noch offenen Aufgaben abzuschliessen, ohne diese Option zu nutzen, enthält die Antwort eine entsprechende Fehlermeldung:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /(path)/@workflow/dossier-transition-resolve HTTP/1.1
+      Accept: application/json
+
+
+**Beispiel-Response**:
+
+  .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Content-Type: application/json
+
+      {
+         "error": {
+            "errors": [
+                  "Es sind nicht alle Aufgaben abgeschlossen"
+            ],
+            "has_not_closed_tasks": true,
+            "message": "",
+            "type": "PreconditionsViolated"
+         }
+      }
+
+Um alle offenen Aufgaben beim Dossier-Abschluss automatisch zu schliessen, kann der Parameter ``auto_close_tasks``  mitgegeben werden:
+
+
+**Beispiel-Request**:
+
+   .. sourcecode:: http
+
+      POST /(path)/@workflow/dossier-transition-resolve HTTP/1.1
+      Accept: application/json
+
+      {
+        "auto_close_tasks": "true"
+      }
