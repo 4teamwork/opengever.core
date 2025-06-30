@@ -910,7 +910,7 @@ class Task(Container, TaskReminderSupport):
         self.sync()
         self.reindexObject()
 
-    def force_finish_task(self):
+    def close_task(self):
         """This method is used to forcefully close a task, including all its subtasks,
         when a dossier is being closed and active tasks still exist.
 
@@ -931,7 +931,7 @@ class Task(Container, TaskReminderSupport):
 
         for subtask in self.objectValues():
             if ITask.providedBy(subtask):
-                subtask.force_finish_task()
+                subtask.close_task()
 
         if api.content.get_state(self) == TASK_STATE_IN_PROGRESS:
             # Depending on the task type, some transitions are not possible. We
