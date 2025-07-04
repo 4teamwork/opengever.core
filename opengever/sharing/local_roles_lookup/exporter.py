@@ -18,7 +18,7 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
         principal_ids, include_memberships, root = self.extract_query_params()
 
         report = RoleAssignmentReporter().excel_report_for(
-            principal_ids=principal_ids,
+            principal_ids=self.resolve_principals(principal_ids),
             include_memberships=include_memberships,
             root=root)
 
@@ -35,6 +35,9 @@ class RoleAssignmentReportExcelDownload(BaseReporterView):
         root = filters.get("root")
 
         return principal_ids, include_memberships, root
+
+    def resolve_principals(self, principal_ids):
+        return [principal_id.split(':')[-1] for principal_id in principal_ids]
 
     @property
     def filename(self):
