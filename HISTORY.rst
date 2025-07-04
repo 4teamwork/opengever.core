@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.7.1 (2025-07-04)
+---------------------
+
+Bug fixes:
+
+
+- Fix empty excel sheet if exporting the role assignment report filtered by a group. [elioschmutz] [TI-2673]
+- Properly update dossier protection settings after transfering a dossier from one responsible to another if the "responsible as dossier manager"-feature is enabled. [elioschmutz] [TI-2752]
+
+
 2025.7.0 (2025-06-06)
 ---------------------
 
