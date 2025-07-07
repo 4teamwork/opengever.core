@@ -1,5 +1,6 @@
 from ftw.testbrowser import browsing
 from ftw.testbrowser.pages import factoriesmenu
+from opengever.base.behaviors.lifecycle import ILifeCycle
 from opengever.testing import IntegrationTestCase
 from opengever.testing import solr_data_for
 from opengever.testing import SolrIntegrationTestCase
@@ -413,4 +414,37 @@ class TestIsFolderishIndexer(SolrIntegrationTestCase):
              u'is_folderish': True},
             {u'UID': self.workspace.UID(),
              u'is_folderish': True}
+        ], browser.json["items"])
+
+
+class TestArchivalValueIndexer(SolrIntegrationTestCase):
+
+    @browsing
+    def test_archival_value_solr_index(self, browser):
+        self.login(self.administrator, browser=browser)
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        url = u'{}/@solrsearch?fl=archival_value&fq=UID:({})'.format(
+            self.portal.absolute_url(), self.dossier.UID())
+
+        browser.open(url, method='GET', headers=self.api_headers)
+        self.maxDiff = None
+
+        self.assertEqual([
+            {u'UID': self.dossier.UID(),
+             u'archival_value': 'not assessed'},
+        ], browser.json["items"])
+
+
+        ILifeCycle(self.dossier).archival_value = 'prompt'
+
+        self.dossier.reindexObject()
+        self.commit_solr()
+
+        browser.open(url, method='GET', headers=self.api_headers)
+
+        self.assertEqual([
+            {u'UID': self.dossier.UID(),
+             u'archival_value': 'prompt'},
         ], browser.json["items"])

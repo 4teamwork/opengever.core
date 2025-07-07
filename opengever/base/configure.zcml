@@ -517,6 +517,11 @@
       name="touched"
       />
 
+  <adapter
+      factory=".indexes.archival_value_indexer"
+      name="archival_value"
+      />
+
   <utility factory=".sequence.SequenceNumber" />
 
   <adapter factory=".quickupload.OGQuickUploadCapableFileFactory" />
