@@ -16,6 +16,7 @@ Other Changes
 - The ``auto_close_tasks`` transition parameter for ``dossier-transition-resolve`` enables automatic closure of open tasks before resolving the dossier.
 - ``@possible-watchers``: endpoint only returns users having view permission on the given context.
 - ``@listing``: New field `document_version_count` is now available.
+- ``@solrsearch`` and ``@listing``: ``archival_value`` is added as a new solr index and whitelisted in the ``@listing`` endpoint.
 
 2025.7.0 (2025-06-06)
 ---------------------

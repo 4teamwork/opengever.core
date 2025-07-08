@@ -70,6 +70,7 @@ werden. Folgende Felder stehen zur Verfügung:
 
 - ``@type``: Inhaltstyp
 - ``approval_state``: Genehmigungs-Status
+- ``archival_value``: Archivwürdigkeit
 - ``blocked_local_roles``: Ob Berechtigungen von übergeordneten Ordnern übernommen werden.
 - ``bumblebee_checksum``: SHA-256 Checksumme
 - ``changed``: Änderungsdatum
@@ -149,6 +150,8 @@ siehe Tabelle:
     | Feld                     | Document | Dossier | Arbeitsraume | Arbeitsraum Ordner | Aufgabe |  ToDo   | Anträge | Kontakte | Standardabläufe | Aufgabenvorlagen | Dossiervorlagen | Meetings | Ordnungsposition | RIS-Anträge | Vorlagenordner | Angebote |
     +==========================+==========+=========+==============+====================+=========+=========+=========+==========+=================+==================+=================+==========+==================+=============+================+==========+
     |``@type``                 |    ja    |    ja   |      ja      |         ja         |   ja    |   ja    |   ja    |    ja    |        ja       |        ja        |       ja        |    ja    |        ja        |      ja     |       ja       |   ja     |
+    +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
+    |``archival_value``        |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |        nein      |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+
     |``blocked_local_roles``   |   nein   |    ja   |     nein     |        nein        |  nein   |  nein   |  nein   |   nein   |       nein      |       nein       |       nein      |   nein   |        ja        |     nein    |      nein      |   nein   |
     +--------------------------+----------+---------+--------------+--------------------+---------+---------+---------+----------+-----------------+------------------+-----------------+----------+------------------+-------------+----------------+----------+

@@ -25,9 +25,11 @@ from plone.memoize.instance import memoize
 from plone.rfc822.interfaces import IPrimaryFieldInfo
 from Products.CMFPlone.utils import safe_unicode
 from zExceptions import BadRequest
+from zope.component import getUtility
 from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.i18n import translate
+from zope.schema.interfaces import IVocabularyFactory
 import Missing
 
 
@@ -72,6 +74,17 @@ def translate_dossier_type(dossier_type):
         term = voc.getTerm(dossier_type)
     except LookupError:
         return dossier_type
+    else:
+        return term.title
+
+
+def translated_archival_value(obj):
+    portal = getSite()
+    voc = getUtility(IVocabularyFactory, name="lifecycle_archival_value_vocabulary")(portal)
+    try:
+        term = voc.getTerm(obj.get("archival_value"))
+    except LookupError:
+        return obj.get("archival_value")
     else:
         return term.title
 
@@ -454,6 +467,11 @@ FIELDS_WITH_MAPPING = [
         'type',
         index='portal_type',
         accessor='PortalType',
+    ),
+    ListingField(
+        'archival_value',
+        index='archival_value',
+        accessor=translated_archival_value,
     ),
     ListingField(
         'bumblebee_checksum',
