@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.3 (2025-07-09)
+---------------------
+
+Bug fixes:
+
+
+- Fix empty excel sheet if exporting the role assignment report filtered by a group. [elioschmutz] [TI-2673]
+
+
 2025.6.2 (2025-06-10)
 ---------------------
 
