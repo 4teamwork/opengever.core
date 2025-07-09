@@ -139,6 +139,7 @@
 
     <!-- GEVER specific fields -->
     <field name="approval_state" type="string" indexed="true" stored="false" />
+    <field name="archival_value" type="string" indexed="true" stored="false" />
     <field name="attendees" type="string" indexed="true" stored="false" multiValued="true"/>
     <field name="blocked_local_roles" type="boolean" indexed="true" stored="false" />
     <field name="bumblebee_checksum" type="string" indexed="false" stored="false" />

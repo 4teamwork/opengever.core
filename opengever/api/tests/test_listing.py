@@ -262,6 +262,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             'columns=relative_path',
             'columns=UID',
             'columns=trashed',
+            'columns=archival_value',
             'sort_on=created',
         ))
         view = '?'.join(('@listing', query_string))
@@ -283,6 +284,7 @@ class TestListingWithRealSolr(SolrIntegrationTestCase):
             {u'review_state': u'dossier-state-active',
              u'@id': u'http://nohost/plone/ordnungssystem/fuhrung/vertrage-und-vereinbarungen/dossier-1',
              u'UID': IUUID(self.dossier),
+             u'archival_value': u'Nicht gepr\xfcft',
              u'blocked_local_roles': False,
              u'dossier_type_label':u'Gesch\xe4ftsfall',
              u'external_reference': u'qpr-900-9001-\xf7',

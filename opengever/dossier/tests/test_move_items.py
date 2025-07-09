@@ -932,6 +932,7 @@ class TestMoveItemsUpdatesIndexAndMetadata(SolrIntegrationTestCase, MoveItemsHel
         }
 
         unchanged_solrdata = [
+            u'archival_value',
             u'blocked_local_roles',
             u'containing_subdossier',
             u'has_sametype_children',
