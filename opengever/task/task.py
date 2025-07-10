@@ -919,6 +919,25 @@ class Task(Container, TaskReminderSupport):
         Rather than preventing the dossier from closing, we force each task into a
         valid terminal state based on its current state.
 
+        Transitions applied:
+
+        - task-state-rejected:
+            -> task-transition-rejected-open
+            -> task-transition-open-cancelled
+            => Final state: task-state-cancelled
+
+        - task-state-open:
+            -> task-transition-open-cancelled
+            => Final state: task-state-cancelled
+
+        - task-state-in-progress:
+            -> task-transition-in-progress-tested-and-closed
+            => Final state: task-state-tested-and-closed
+
+        - task-state-resolved:
+            -> task-transition-resolved-tested-and-closed
+            => Final state: task-state-tested-and-closed
+
         This method is recursive, ensuring that all subtasks are also finished in the same way,
         """
         if api.content.get_state(self) == TASK_STATE_REJECTED:
@@ -939,7 +958,7 @@ class Task(Container, TaskReminderSupport):
             # the expected transitions.
             try:
                 # We first try to directly close it.
-                api.content.transition(obj=self, transition='task-transition-resolved-tested-and-closed')
+                api.content.transition(obj=self, transition='task-transition-in-progress-tested-and-closed')
             except InvalidParameterError:
                 # If it does not work, we try to resolve it first.
                 api.content.transition(obj=self, transition='task-transition-in-progress-resolved')

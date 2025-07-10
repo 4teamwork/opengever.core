@@ -942,3 +942,141 @@ class TestForceCloseTask(IntegrationTestCase):
         self.assertEqual('task-state-tested-and-closed', api.content.get_state(subtask2))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask3))
         self.assertEqual('task-state-cancelled', api.content.get_state(subtask4))
+
+    @browsing
+    def test_close_task_variations(self, browser):
+        self.login(self.dossier_responsible, browser)
+
+        # Task type information
+        task_information_open = create(
+            Builder("task")
+            .within(self.dossier)
+            .titled("Subtask 1")
+            .in_state('task-state-open')
+            .having(task_type='information',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_information_open.close_task()
+
+        task_information_in_progress = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-in-progress')
+            .titled("Subtask 2")
+            .having(task_type='information',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_information_in_progress.close_task()
+
+        # Task type approval
+        task_approval_open = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-open')
+            .titled("Subtask 3")
+            .having(task_type='approval',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_approval_open.close_task()
+
+        task_approval_in_progress = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-in-progress')
+            .titled("Subtask 3")
+            .having(task_type='approval',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_approval_in_progress.close_task()
+
+        task_approval_resolved = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-resolved')
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_approval_resolved.close_task()
+
+        # Task type direct execution
+        task_direct_execution_open = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-open')
+            .titled("Subtask 5")
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_direct_execution_open.close_task()
+
+        task_direct_execution_in_progress = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-in-progress')
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_direct_execution_in_progress.close_task()
+
+        task_direct_execution_rejected = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-rejected')
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_direct_execution_rejected.close_task()
+
+        task_direct_execution_resolved = create(
+            Builder("task")
+            .within(self.dossier)
+            .in_state('task-state-resolved')
+            .having(task_type='direct-execution',
+                    issuer=self.dossier_responsible.getId(),
+                    responsible=self.dossier_responsible.getId(),
+                    responsible_client='fa')
+        )
+        task_direct_execution_resolved.close_task()
+
+        self.assertDictEqual(
+            {
+                'task_information_open': 'task-state-cancelled',
+                'task_information_in_progress': 'task-state-tested-and-closed',
+
+                'task_approval_open': 'task-state-cancelled',
+                'task_approval_in_progress': 'task-state-tested-and-closed',
+                'task_approval_resolved': 'task-state-tested-and-closed',
+
+                'task_direct_execution_open': 'task-state-cancelled',
+                'task_direct_execution_in_progress': 'task-state-tested-and-closed',
+                'task_direct_execution_rejected': 'task-state-cancelled',
+                'task_direct_execution_resolved': 'task-state-tested-and-closed',
+            },
+            {
+                'task_information_open': api.content.get_state(task_information_open),
+                'task_information_in_progress': api.content.get_state(task_information_in_progress),
+                'task_approval_open': api.content.get_state(task_approval_open),
+                'task_approval_in_progress': api.content.get_state(task_approval_in_progress),
+                'task_approval_resolved': api.content.get_state(task_approval_resolved),
+                'task_direct_execution_open': api.content.get_state(task_direct_execution_open),
+                'task_direct_execution_in_progress': api.content.get_state(task_direct_execution_in_progress),
+                'task_direct_execution_rejected': api.content.get_state(task_direct_execution_rejected),
+                'task_direct_execution_resolved': api.content.get_state(task_direct_execution_resolved),
+            },
+        )
