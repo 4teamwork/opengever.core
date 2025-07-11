@@ -1,15 +1,17 @@
+from collections import namedtuple
+from opengever.meeting.model import Meeting
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from sqlalchemy.sql.expression import false
-from collections import namedtuple
 import logging
 
 logger = logging.getLogger('opengever.exportng')
 
 Attribute = namedtuple(
     'Attribute',
-    ['name', 'col_name', 'col_type'],
+    ['name', 'col_name', 'col_type', 'getter'],
 )
+Attribute.__new__.__defaults__ = (None,)
 
 
 class OGDSSyncer(object):
@@ -31,7 +33,11 @@ class OGDSSyncer(object):
     def get_values(self, item):
         data = {}
         for attr in self.mapping:
-            data[attr.col_name] = getattr(item, attr.name)
+            if attr.getter is not None:
+                value = attr.getter(item, attr.name)
+            else:
+                value = getattr(item, attr.name)
+            data[attr.col_name] = value
         return data
 
     def truncate(self):
@@ -75,4 +81,47 @@ class GroupSyncer(OGDSSyncer):
         Attribute('groupname', 'groupname', 'varchar'),
         Attribute('title', 'title', 'varchar'),
         Attribute('active', 'active', 'boolean'),
+    ]
+
+
+def get_timezone(item, attr):
+    return 'Europe/Zurich'
+
+
+def get_dossier_uid(item, attr):
+    oguid = getattr(item, attr)
+    return oguid.resolve_object().UID()
+
+
+def get_committee_uid(item, attr):
+    committee = getattr(item, attr)
+    return committee.resolve_committee().UID()
+
+
+def get_meeting_id(item, attr):
+    meeting_id = getattr(item, attr)
+    return '{}-{}-{}-{}'.format(
+        item.dossier_admin_unit_id,
+        item.dossier_int_id,
+        item.committee_id,
+        meeting_id,
+    )
+
+
+class MeetingSyncer(OGDSSyncer):
+
+    table = 'meetings'
+    model = Meeting
+    key = 'meeting_id'
+
+    mapping = [
+        Attribute('meeting_id', 'objexternalkey', 'varchar', get_meeting_id),
+        Attribute('title', 'objsubject', 'varchar'),
+        Attribute('start', 'mbegin', 'datetime'),
+        Attribute('end', 'mend', 'datetime'),
+        Attribute('location', 'mlocation', 'varchar'),
+        Attribute('committee', 'mcommittee', 'varchar', get_committee_uid),
+        Attribute('dossier_oguid', 'mdossier', 'varchar', get_dossier_uid),
+        Attribute('start', 'mtimezone', 'varchar', get_timezone),
+        Attribute('workflow_state', 'mmeetingstate', 'varchar'),
     ]
