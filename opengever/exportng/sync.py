@@ -9,6 +9,7 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.ogds import GroupSyncer
 from opengever.exportng.ogds import UserSyncer
+from opengever.exportng.ogds import MeetingSyncer
 from sqlalchemy import delete
 from sqlalchemy import or_
 from sqlalchemy import select
@@ -34,10 +35,12 @@ class Syncer(object):
         create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.mapping)
         create_table(DocumentSyncer.versions_table, DocumentSyncer.versions_mapping)
+        create_table(MeetingSyncer.table, MeetingSyncer.mapping)
         metadata.create_all(checkfirst=True)
 
     def sync(self):
         UserSyncer(engine, metadata).sync()
+        MeetingSyncer(engine, metadata).sync()
         GroupSyncer(engine, metadata).sync()
         FileplanEntrySyncer(self.query).sync()
         DossierSyncer(self.query).sync()
