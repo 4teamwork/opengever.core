@@ -1,5 +1,11 @@
+from Acquisition import aq_parent
 from collections import namedtuple
+from opengever.exportng.utils import userid_to_email
+from opengever.meeting.model import AgendaItem
+from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Proposal
+from opengever.meeting.model import SubmittedDocument
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
 from sqlalchemy.sql.expression import false
@@ -84,6 +90,33 @@ class GroupSyncer(OGDSSyncer):
     ]
 
 
+def get_committee_uid(item, attr):
+    return item.resolve_committee().UID()
+
+
+def get_committee_dossier_location(item, attr):
+    return item.resolve_committee().get_repository_folder().UID()
+
+
+def get_protocoltype(item, attr):
+    return 'WORD'
+
+
+class CommitteeSyncer(OGDSSyncer):
+
+    table = 'committees'
+    model = Committee
+    key = 'committee_id'
+
+    mapping = [
+        Attribute('committee_id', 'objexternalkey', 'varchar', get_committee_uid),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('workflow_state', 'cdeactivated', 'varchar'),
+        Attribute('committee_id', 'cmeetingdossierlocation', 'varchar', get_committee_dossier_location),
+        Attribute('committee_id', 'cprotocoltype', 'varchar', get_protocoltype),
+    ]
+
+
 def get_timezone(item, attr):
     return 'Europe/Zurich'
 
@@ -93,18 +126,17 @@ def get_dossier_uid(item, attr):
     return oguid.resolve_object().UID()
 
 
-def get_committee_uid(item, attr):
+def get_meeting_committee_uid(item, attr):
     committee = getattr(item, attr)
     return committee.resolve_committee().UID()
 
 
 def get_meeting_id(item, attr):
-    meeting_id = getattr(item, attr)
     return '{}-{}-{}-{}'.format(
         item.dossier_admin_unit_id,
         item.dossier_int_id,
         item.committee_id,
-        meeting_id,
+        item.meeting_id,
     )
 
 
@@ -120,8 +152,118 @@ class MeetingSyncer(OGDSSyncer):
         Attribute('start', 'mbegin', 'datetime'),
         Attribute('end', 'mend', 'datetime'),
         Attribute('location', 'mlocation', 'varchar'),
-        Attribute('committee', 'mcommittee', 'varchar', get_committee_uid),
+        Attribute('committee', 'mcommittee', 'varchar', get_meeting_committee_uid),
         Attribute('dossier_oguid', 'mdossier', 'varchar', get_dossier_uid),
         Attribute('start', 'mtimezone', 'varchar', get_timezone),
         Attribute('workflow_state', 'mmeetingstate', 'varchar'),
     ]
+
+
+def get_agendaitem_id(item, attr):
+    return '{}-{}'.format(
+        get_meeting_id(item.meeting, 'meeting_id'), item.agenda_item_id)
+
+
+def get_agendaitem_meeting_id(item, attr):
+    return get_meeting_id(item.meeting, 'meeting_id')
+
+
+def get_agendaitem_proposal_id(item, attr):
+    if item.has_proposal:
+        return item.proposal.resolve_proposal().UID()
+
+
+def get_agendaitem_dossier(item, attr):
+    if item.has_proposal:
+        return aq_parent(item.proposal.resolve_proposal()).UID()
+
+
+class AgendaItemSyncer(OGDSSyncer):
+
+    table = 'agendaitems'
+    model = AgendaItem
+    key = 'agenda_item_id'
+
+    mapping = [
+        Attribute('agenda_item_id', 'objexternalkey', 'varchar', get_agendaitem_id),
+        Attribute('meeting_id', 'objprimaryrelated', 'varchar', get_agendaitem_meeting_id),
+        Attribute('title', 'objsubject', 'varchar'),
+        Attribute('workflow_state', 'aistate', 'varchar'),
+        Attribute('proposal_id', 'aiproposal', 'varchar', get_agendaitem_proposal_id),
+        Attribute('proposal_id', 'mdossier', 'varchar', get_agendaitem_dossier),
+    ]
+
+
+def get_proposal_uid(item, attr):
+    return item.resolve_proposal().UID()
+
+
+def get_proposal_committee_uid(item, attr):
+    return item.committee.resolve_committee().UID()
+
+
+def get_proposal_dossier_uid(item, attr):
+    return item.resolve_proposal().get_containing_dossier().UID()
+
+
+def get_proposal_issuer(item, attr):
+    return userid_to_email(item.issuer)
+
+
+def get_proposal_creator(item, attr):
+    return userid_to_email(item.resolve_proposal().Creator())
+
+
+def get_proposal_agenda_item(item, attr):
+    if item.agenda_item is not None:
+        return get_agendaitem_id(item.agenda_item, attr)
+    else:
+        return None
+
+
+def get_proposal_state(item, attr):
+    state_mapping = {
+        'scheduled': 'REGISTERED',
+        'pending': 'IN_PREPARATION',
+        'submitted': 'SUBMITTED',
+        'decided': 'DECIDED',
+        'cancelled': 'DISCARDED',
+    }
+    return state_mapping.get(item.workflow_state)
+
+
+class ProposalSyncer(OGDSSyncer):
+
+    table = 'proposals'
+    model = Proposal
+    key = 'proposal_id'
+
+    mapping = [
+        Attribute('proposal_id', 'objexternalkey', 'varchar', get_proposal_uid),
+        Attribute('committee', 'pcommittee', 'varchar', get_proposal_committee_uid),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('workflow_state', 'pstate', 'varchar', get_proposal_state),
+        Attribute('Creator', 'objcreatedby', 'varchar', get_proposal_creator),
+        Attribute('issuer', 'pproposedby', 'varchar', get_proposal_issuer),
+        Attribute('dossier', 'poriginaldossier', 'varchar', get_proposal_dossier_uid),
+        Attribute('agendaitem', 'pagendaitem', 'varchar', get_proposal_agenda_item),
+    ]
+
+
+# class SubmittedDocumentSyncer(OGDSSyncer):
+
+#     table = 'submitteddocuments'
+#     model = SubmittedDocument
+#     key = 'document_id'
+
+#     mapping = [
+#         Attribute('document_id', 'objexternalkey', 'varchar', get_proposal_uid),
+#         Attribute('UID', 'objexternalkey', 'varchar', None),
+#         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+#         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
+#         Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
+#         Attribute('title', 'objname', 'varchar', get_title),
+#         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
+
+#     ]
+
