@@ -120,6 +120,43 @@ class TestTaskReminderSupport(IntegrationTestCase):
             [self.regular_user.getId(), self.dossier_responsible.getId()],
             [notification.userid for notification in notifications])
 
+    def test_do_not_create_reminder_notifications_for_other_admin_units(self):
+        self.login(self.administrator)
+        today = date.today()
+
+        self.task.responsible = self.dossier_responsible.getId()
+        self.task.issuer = self.regular_user.getId()
+        self.task.deadline = today
+
+        self.subtask.responsible = self.dossier_responsible.getId()
+        self.subtask.issuer = self.regular_user.getId()
+        self.subtask.deadline = today + timedelta(days=1)
+        self.set_workflow_state('task-state-open', self.subtask)
+
+        self.sequential_task.responsible = self.dossier_responsible.getId()
+        self.sequential_task.issuer = self.regular_user.getId()
+        self.sequential_task.deadline = today + timedelta(days=5)
+
+        with self.login(self.regular_user):
+            self.task.set_reminder(ReminderSameDay())
+            self.task.sync()
+
+            self.sequential_task.set_reminder(ReminderSameDay())
+            self.sequential_task.sync()
+
+        with self.login(self.dossier_responsible):
+            self.subtask.set_reminder(ReminderOneDayBefore())
+            self.subtask.sync()
+
+        self.task.get_sql_object().admin_unit_id = u'other'
+        self.subtask.get_sql_object().admin_unit_id = u'other'
+        with freeze(pytz.UTC.localize(datetime.combine(today, datetime.min.time()))):
+            create_reminder_notifications()
+
+        task_reminder_activities = Activity.query.filter(
+            Activity.kind == TaskReminderActivity.kind)
+        self.assertEqual(0, task_reminder_activities.count())
+
     def test_do_not_create_reminder_activity_if_task_is_finished(self):
         self.login(self.administrator)
         today = date.today()
