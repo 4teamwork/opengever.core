@@ -2,6 +2,7 @@ from datetime import date
 from opengever.core.debughelpers import get_first_plone_site
 from opengever.core.debughelpers import setup_plone
 from opengever.globalindex.model.reminder_settings import ReminderSetting
+from opengever.ogds.base.utils import get_current_admin_unit
 from opengever.task.activities import TaskReminderActivity
 from opengever.task.reminder import logger
 from plone import api
@@ -38,7 +39,9 @@ def create_reminder_notifications():
     query = ReminderSetting.query.filter(
         ReminderSetting.remind_day == date.today())
 
+    current_admin_unit_id = get_current_admin_unit().unit_id
     for reminder in query.all():
-        TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
+        if reminder.task.admin_unit_id == current_admin_unit_id:
+            TaskReminderActivity(reminder.task, getRequest()).record(reminder.actor_id)
 
     return query.count()
