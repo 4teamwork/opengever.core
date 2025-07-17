@@ -9,6 +9,7 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
+from opengever.exportng.ogds import get_agendaitem_id
 from opengever.exportng.utils import userid_to_email
 from plone import api
 from plone.dexterity.utils import iterSchemata
@@ -123,9 +124,6 @@ def get_dossier_reference_number(obj, attrname):
 
 def parent_uid(obj, attrname):
     parent = aq_parent(obj)
-    # Documents in tasks are added to the dossier
-    while parent.portal_type == 'opengever.task.task':
-        parent = aq_parent(parent)
     return parent.UID()
 
 
@@ -413,7 +411,10 @@ class DossierSyncer(CatalogSyncer):
 
     table = 'dossiers'
     query = {
-        'portal_type': 'opengever.dossier.businesscasedossier',
+        'portal_type': [
+            'opengever.dossier.businesscasedossier',
+            'opengever.meeting.meetingdossier',
+        ],
         'is_subdossier': False,
         'review_state': [
             'dossier-state-active',
@@ -471,6 +472,23 @@ class SubdossierSyncer(DossierSyncer):
     }
 
 
+def get_document_parent_uid(obj, attr):
+    parent = aq_parent(obj)
+    if parent.portal_type == 'opengever.meeting.proposal':
+        parent = aq_parent(parent)
+    elif parent.portal_type == 'opengever.meeting.submittedproposal':
+        proposal = parent.load_model()
+        if proposal.agenda_item is not None:
+            return get_agendaitem_id(proposal.agenda_item, attr)
+        else:
+            parent = proposal.resolve_proposal()
+    # Documents in tasks are added to the dossier
+    while parent.portal_type == 'opengever.task.task':
+        parent = aq_parent(parent)
+
+    return parent.UID()
+
+
 class DocumentSyncer(CatalogSyncer):
 
     table = 'documents'
@@ -480,7 +498,7 @@ class DocumentSyncer(CatalogSyncer):
     }
     mapping = [
         Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('parent', 'objprimaryrelated', 'varchar', get_document_parent_uid),
         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
         Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
         Attribute('title', 'objname', 'varchar', get_title),
@@ -552,3 +570,19 @@ class DocumentSyncer(CatalogSyncer):
 
     def get_journal_entries(self, obj):
         return get_journal_entries_from_document(obj)
+
+
+class CommitteePeriodSyncer(DossierSyncer):
+
+    table = 'committee_periods'
+    query = {
+        'portal_type': 'opengever.meeting.period',
+    }
+
+    mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar', None),
+        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
+        Attribute('title', 'objname', 'varchar', None),
+        Attribute('parent', 'pdbegin', 'varchar', parent_uid),
+        Attribute('created', 'pdend', 'datetime', as_datetime),
+    ]
