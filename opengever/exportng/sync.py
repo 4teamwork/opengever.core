@@ -4,12 +4,17 @@ from opengever.exportng.catalog import DocumentSyncer
 from opengever.exportng.catalog import DossierSyncer
 from opengever.exportng.catalog import FileplanEntrySyncer
 from opengever.exportng.catalog import SubdossierSyncer
+from opengever.exportng.catalog import CommitteePeriodSyncer
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
+from opengever.exportng.ogds import AgendaItemSyncer
+from opengever.exportng.ogds import CommitteeSyncer
 from opengever.exportng.ogds import GroupSyncer
-from opengever.exportng.ogds import UserSyncer
+from opengever.exportng.ogds import MeetingParticipantsSyncer
 from opengever.exportng.ogds import MeetingSyncer
+from opengever.exportng.ogds import ProposalSyncer
+from opengever.exportng.ogds import UserSyncer
 from sqlalchemy import delete
 from sqlalchemy import or_
 from sqlalchemy import select
@@ -35,30 +40,42 @@ class Syncer(object):
         create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.mapping)
         create_table(DocumentSyncer.versions_table, DocumentSyncer.versions_mapping)
+        create_table(CommitteeSyncer.table, CommitteeSyncer.mapping)
         create_table(MeetingSyncer.table, MeetingSyncer.mapping)
+        create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.mapping)
+        create_table(AgendaItemSyncer.table, AgendaItemSyncer.mapping)
+        create_table(ProposalSyncer.table, ProposalSyncer.mapping)
+        create_table(CommitteePeriodSyncer.table, CommitteePeriodSyncer.mapping)
         metadata.create_all(checkfirst=True)
 
     def sync(self):
         UserSyncer(engine, metadata).sync()
-        MeetingSyncer(engine, metadata).sync()
         GroupSyncer(engine, metadata).sync()
         FileplanEntrySyncer(self.query).sync()
         DossierSyncer(self.query).sync()
         SubdossierSyncer(self.query).sync()
         DocumentSyncer(self.query).sync()
+        CommitteePeriodSyncer(self.query).sync()
+        CommitteeSyncer(engine, metadata).sync()
+        MeetingSyncer(engine, metadata).sync()
+        MeetingParticipantsSyncer(engine, metadata).sync()
+        AgendaItemSyncer(engine, metadata).sync()
+        ProposalSyncer(engine, metadata).sync()
         self.cleanup_orphans()
 
     def cleanup_orphans(self):
-        keys = set([])
+        parent_keys = set([])
         for table in [
             FileplanEntrySyncer.table,
             DossierSyncer.table,
             SubdossierSyncer.table,
+            AgendaItemSyncer.table,
+            MeetingSyncer.table,
         ]:
             sqltable = metadata.tables[table]
             stmt = select([sqltable.c.objexternalkey])
             with engine.connect() as conn:
-                keys.update([r[0] for r in conn.execute(stmt).fetchall()])
+                parent_keys.update([r[0] for r in conn.execute(stmt).fetchall()])
 
         for table in [
             DossierSyncer.table,
@@ -70,7 +87,7 @@ class Syncer(object):
             with engine.connect() as conn:
                 res = conn.execute(stmt).fetchall()
                 parents = dict([r for r in res])
-            orphans = set(parents.values()) - keys
+            orphans = set(parents.values()) - parent_keys
             if orphans:
                 orphan_keys = [k for k, p in parents.items() if p in orphans]
                 logger.info('Orphans: %s', orphan_keys)
@@ -78,7 +95,7 @@ class Syncer(object):
                 with engine.connect() as conn:
                     res = conn.execute(stmt)
                     logger.info('Removed %s orphans from table %s.', res.rowcount, table)
-                keys -= set(orphan_keys)
+                parent_keys -= set(orphan_keys)
                 if table == 'documents':
                     versions_table = metadata.tables[DocumentSyncer.versions_table]
                     stmt = delete(versions_table).where(versions_table.c.objexternalkey.in_(orphan_keys))
