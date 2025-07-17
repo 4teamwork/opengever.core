@@ -32,7 +32,8 @@ def exportng(app, args):
     parser.add_argument(
         '--path', '-p',
         help='Restrict export to the given path',
-        default='',
+        action='append',
+        default=[],
     )
 
     # If run with plone.recipe.zope2instance we need to strip the first 2 args
@@ -53,7 +54,7 @@ def exportng(app, args):
         metadata.clear()
 
     site_path = '/'.join(site.getPhysicalPath())
-    path = os.path.join(site_path, options.path.lstrip('/'))
+    path = [os.path.join(site_path, p.lstrip('/')) for p in options.path]
     syncer = Syncer(path=path)
     syncer.create_tables()
     with elevated_privileges(user_id='zopemaster'):
