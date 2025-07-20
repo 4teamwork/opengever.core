@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.4 (2025-07-20)
+---------------------
+
+Bug fixes:
+
+
+- Only create task reminders for tasks in current admin unit. [buchi] [TI-2854]
+
+
 2025.6.3 (2025-07-09)
 ---------------------
 
