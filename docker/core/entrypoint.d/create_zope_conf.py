@@ -5,9 +5,22 @@ import sys
 
 
 def to_bool(string):
-    if string.lower() in ['on', '1', 'true', 'enabled']:
+    if string.lower() in ['on', '1', 'true', 'yes', 'enabled']:
         return True
     return False
+
+
+def parse_filestorage_options(value):
+    res = {}
+    filestorages = value.split(';')
+    for filestorage in filestorages:
+        storage_options = filestorage.split(',')
+        if storage_options:
+            storage_name = storage_options[0]
+            kwargs = dict([kwarg.split('=') for kwarg in storage_options[1:]])
+            res[storage_name] = {
+                k.replace('-', '_'): v for k, v in kwargs.items()}
+    return res
 
 
 def main():
@@ -25,27 +38,84 @@ def main():
         'zeo_address': env.get('ZEO_ADDRESS', 'zeoserver:8100'),
         'storage': env.get('STORAGE', 'zeoclient'),
         'read_only': env.get('READ_ONLY', 'false'),
+        'shared_blob_dir': env.get('SHARED_BLOB_DIR', 'on'),
+        'blob_cache_size': env.get('BLOB_CACHE_SIZE', '2GB')
     }
 
-    if options['debug_mode'] == 'on':
+    if to_bool(options['debug_mode']):
         # Avoid duplicate log entries on console
         options['logfile_loglevel'] = 'CRITICAL'
     else:
         options['logfile_loglevel'] = 'INFO'
 
-    if options['verbose_security'] == 'on':
+    if to_bool(options['verbose_security']):
         options['security_implementation'] = 'python'
 
     if options['storage'] == 'zeoclient':
-        zodb_main_storage = ZEO_STORAGE_TEMPLATE.format(**options)
+        if to_bool(options['shared_blob_dir']):
+            blob_dir = '/data/blobstorage'
+        else:
+            blob_dir = '/app/var/blobcache'
+        zodb_main_storage = ZEO_STORAGE_TEMPLATE.format(
+            name='main',
+            blob_dir=blob_dir,
+            zeoclient_name='zeostorage',
+            zeoclient_storage='1',
+            mountpoint='/',
+            **options)
+        filestorages = env.get('ADDITIONAL_FILESTORAGES')
+        if filestorages:
+            for storage_name, storage_options in parse_filestorage_options(
+                filestorages
+            ).items():
+                if to_bool(storage_options.get('shared_blob_dir', 'on')):
+                    blob_dir = '/data/blobstorage-{}'.format(storage_name)
+                else:
+                    blob_dir = '/app/var/blobcache-{}'.format(storage_name)
+                default_options = {
+                    'zodb_cache_size': options['zodb_cache_size'],
+                    'zeo_address': options['zeo_address'],
+                    'read_only': 'false',
+                    'blob_dir': blob_dir,
+                    'shared_blob_dir': 'on',
+                    'blob_cache_size': '2GB',
+                    'zeoclient_name': '{}_zeostorage'.format(storage_name),
+                    'zeoclient_storage': storage_name,
+                    'mountpoint': '/{}'.format(storage_name),
+                }
+                default_options.update(storage_options)
+                zodb_main_storage += '\n'
+                zodb_main_storage += ZEO_STORAGE_TEMPLATE.format(
+                    name=storage_name, **default_options)
+
     elif options['storage'] == 'relstorage':
         zodb_main_storage = relstorage_config(options)
     else:
-        zodb_main_storage = FILESTORAGE_TEMPLATE.format(**options)
+        zodb_main_storage = FILESTORAGE_TEMPLATE.format(
+            name='main',
+            path='/data/filestorage/Data.fs',
+            blob_dir='/data/blobstorage',
+            mountpoint='/',
+            **options)
         if not os.path.exists('/data/filestorage'):
             os.mkdir('/data/filestorage')
         if not os.path.exists('/data/blobstorage'):
             os.mkdir('/data/blobstorage')
+        filestorages = env.get('ADDITIONAL_FILESTORAGES')
+        if filestorages:
+            for storage_name, storage_options in parse_filestorage_options(
+                filestorages
+            ).items():
+                default_options = {
+                    'zodb_cache_size': options['zodb_cache_size'],
+                    'path': '/data/filestorage/Data.fs',
+                    'blob_dir': '/data/blobstorage-{}'.format(storage_name),
+                    'mountpoint': '/{}'.format(storage_name),
+                }
+                default_options.update(storage_options)
+                zodb_main_storage += '\n'
+                zodb_main_storage += FILESTORAGE_TEMPLATE.format(
+                    name=storage_name, **default_options)
 
     zope_conf = ZOPE_CONF_TEMPLATE.format(
         zodb_main_storage=zodb_main_storage, **options)
@@ -65,7 +135,7 @@ def relstorage_config(options):
     relstorage_options = ''
     for key in relstorage_keys:
         value = os.environ[key]
-        relstorage_options += '        {} {}'.format(
+        relstorage_options += '        {} {}\n'.format(
             key[11:].lower().replace('_', '-'), value)
 
     relstorage_db_keys = [
@@ -73,7 +143,7 @@ def relstorage_config(options):
     relstorage_db_options = ''
     for key in relstorage_db_keys:
         value = os.environ[key]
-        relstorage_db_options += '            {} {}'.format(
+        relstorage_db_options += '            {} {}\n'.format(
             key[14:].lower().replace('_', '-'), value)
 
     return RELSTORAGE_TEMPLATE.format(
@@ -127,32 +197,33 @@ trusted-proxy 127.0.0.1
 """
 
 ZEO_STORAGE_TEMPLATE = """\
-<zodb_db main>
+<zodb_db {name}>
     cache-size {zodb_cache_size}
     <zeoclient>
       read-only {read_only}
       read-only-fallback false
-      blob-dir /data/blobstorage
-      shared-blob-dir on
+      blob-dir {blob_dir}
+      shared-blob-dir {shared_blob_dir}
+      blob-cache-size {blob_cache_size}
       server {zeo_address}
-      storage 1
-      name zeostorage
+      storage {zeoclient_storage}
+      name {zeoclient_name}
       cache-size 128MB
     </zeoclient>
-    mount-point /
+    mount-point {mountpoint}
 </zodb_db>
 """
 
 FILESTORAGE_TEMPLATE = """\
-<zodb_db main>
+<zodb_db {name}>
     cache-size {zodb_cache_size}
     <blobstorage>
-      blob-dir /data/blobstorage
+      blob-dir {blob_dir}
       <filestorage>
-        path /data/filestorage/Data.fs
+        path {path}
       </filestorage>
     </blobstorage>
-    mount-point /
+    mount-point {mountpoint}
 </zodb_db>
 """
 
@@ -166,7 +237,8 @@ RELSTORAGE_TEMPLATE = """\
 {relstorage_db_options}
         </{db_adapter}>
     </relstorage>
-<zodb_db main>
+    mount-point /
+</zodb_db>
 """
 
 if __name__ == "__main__":
