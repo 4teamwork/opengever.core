@@ -1,37 +1,21 @@
-# pkg builder
-# -----------------------------------------------------------------------------
-FROM alpine:3.20 AS pkg-builder
-
-RUN apk -U add \
-    sudo \
-    alpine-sdk \
-    apkbuild-pypi
-
-RUN mkdir -p /var/cache/distfiles && \
-    adduser -D packager && \
-    addgroup packager abuild && \
-    chgrp abuild /var/cache/distfiles && \
-    chmod g+w /var/cache/distfiles && \
-    echo "packager ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-WORKDIR /work
-USER packager
-
-RUN abuild-keygen -a -i -n
-
-COPY --chown=packager:packager ./docker/core/packages/ ./
-
-RUN cd openssl1.1-compat && \
-    abuild -r
 
 # ogcore builder
 # -----------------------------------------------------------------------------
 FROM 4teamwork/plone:4.3.20-alpine3.20 AS builder
 USER root
 
-RUN --mount=from=pkg-builder,source=/home/packager/packages/work,target=/packages \
-    --mount=from=pkg-builder,source=/etc/apk/keys,target=/etc/apk/keys \
-    apk --repository /packages add \
+RUN apk add curl
+
+RUN --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
+    if [ $(uname -m) == "x86_64" ]; \
+    then curl -v -O https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/492/packages/generic/openssl1.1-compat-dev/1.1.1w-r1/openssl1.1-compat-dev-1.1.1w-r1.apk; \
+    else curl -v -O https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/493/packages/generic/openssl1.1-compat-dev/1.1.1w-r1/openssl1.1-compat-dev-1.1.1w-r1.apk; \
+    fi && \
+    apk add --allow-untrusted openssl1.1-compat-dev-1.1.1w-r1.apk && \
+    rm openssl1.1-compat-dev-1.1.1w-r1.apk
+
+RUN apk add \
     gcc \
     musl-dev \
     libc-dev \
@@ -41,7 +25,6 @@ RUN --mount=from=pkg-builder,source=/home/packager/packages/work,target=/package
     libxml2-dev \
     libxslt-dev \
     openldap-dev \
-    openssl1.1-compat-dev \
     libffi-dev \
     libpq \
     libpq-dev \
