@@ -77,6 +77,7 @@ RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
 COPY ./docker/core/zopectl /app/bin/
+COPY ./docker/core/healthcheck.py /app/bin/
 COPY --chown=plone ./docker/core/cron /app/cron
 RUN chmod 644 /app/cron/crontab
 

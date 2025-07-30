@@ -1,0 +1,1 @@
+Add healthcheck script which can be used for readiness probes. [buchi]
