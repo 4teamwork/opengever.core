@@ -1,7 +1,8 @@
+ARG ALPINE_VERSION=3.22
 
 # ogcore builder
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.20 AS builder
+FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS builder
 USER root
 
 RUN apk add curl
@@ -108,7 +109,7 @@ RUN python2.7 -m compileall /app/lib/python2.7/site-packages/plone/app/theming/t
 
 # go-crond builder
 # -----------------------------------------------------------------------------
-FROM golang:1.23-alpine3.20 AS go-crond-builder
+FROM golang:1.23-alpine${ALPINE_VERSION} AS go-crond-builder
 
 RUN apk upgrade --no-cache --force
 RUN apk add --update build-base make git
@@ -128,7 +129,7 @@ RUN make build
 
 # ogcore production image
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.20 AS prod
+FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS prod
 
 USER root
 RUN apk add \
