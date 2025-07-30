@@ -1,49 +1,4 @@
 services:
-  httpd:
-    image: 4teamwork/oghttpd:latest
-    build:
-      context: .
-      dockerfile: ./docker/httpd/Dockerfile
-    ports:
-      - "8088:80"
-    depends_on:
-      - ogui
-      - ogcore
-    environment:
-      - HTTP_PROTOCOL=http
-      - HTTP_PORT=8088
-      - PORTAL_HOST=ianus-frontend
-    profiles:
-      - all
-  msgconvert:
-    image: 4teamwork/msgconvert:latest
-    ports:
-      - 8090:8080
-  sablon:
-    image: 4teamwork/sablon:latest
-    ports:
-      - 8091:8080
-  pdflatex:
-    image: 4teamwork/pdflatex:latest
-    ports:
-      - 8092:8080
-  weasyprint:
-    image: 4teamwork/weasyprint:latest
-    ports:
-      - 8093:8080
-  clamav:
-    image: clamav/clamav:latest
-    ports:
-      - '3310:3310'
-    volumes:
-      - clam_db:/var/lib/clamav
-      - ./clamav/clamd.conf:/etc/clamav/clamd.conf
-    profiles:
-      - clamav
-  ogui:
-    image: 4teamwork/ogui:latest
-    profiles:
-      - all
   ogcore: &ogcore
     build:
       context: .
@@ -126,15 +81,6 @@ services:
       nofile:
         soft: 65000
         hard: 65000
-  redis:
-    image: redis:6.2-alpine
-    command:
-      - redis-server
-      - --save 60 1
-    ports:
-      - 6379:6379
-    volumes:
-      - ./var/redis:/data
   ldap:
     image: bitnami/openldap:2.6
     ports:
@@ -147,6 +93,60 @@ services:
     volumes:
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
       - ./var/openldap:/bitnami/openldap
+  redis:
+    image: redis:6.2-alpine
+    command:
+      - redis-server
+      - --save 60 1
+    ports:
+      - 6379:6379
+    volumes:
+      - ./var/redis:/data
+  ogui:
+    image: 4teamwork/ogui:latest
+    profiles:
+      - all
+  httpd:
+    image: 4teamwork/oghttpd:latest
+    build:
+      context: .
+      dockerfile: ./docker/httpd/Dockerfile
+    ports:
+      - "8088:80"
+    depends_on:
+      - ogui
+      - ogcore
+    environment:
+      - HTTP_PROTOCOL=http
+      - HTTP_PORT=8088
+      - PORTAL_HOST=ianus-frontend
+    profiles:
+      - all
+  msgconvert:
+    image: 4teamwork/msgconvert:latest
+    ports:
+      - 8090:8080
+  sablon:
+    image: 4teamwork/sablon:latest
+    ports:
+      - 8091:8080
+  pdflatex:
+    image: 4teamwork/pdflatex:latest
+    ports:
+      - 8092:8080
+  weasyprint:
+    image: 4teamwork/weasyprint:latest
+    ports:
+      - 8093:8080
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - '3310:3310'
+    volumes:
+      - clam_db:/var/lib/clamav
+      - ./clamav/clamd.conf:/etc/clamav/clamd.conf
+    profiles:
+      - clamav
   mta:
     image: 4teamwork/ogmta:latest
     build:
