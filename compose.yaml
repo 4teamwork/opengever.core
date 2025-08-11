@@ -7,7 +7,7 @@ services:
         - gldt
     image: 4teamwork/ogcore:latest
     volumes:
-      - ./var/ogcore:/data
+      - ogcore:/data
     ports:
       - "8080:8080"
       - "8160:8160"
@@ -37,7 +37,7 @@ services:
   zeoserver:
     image: 4teamwork/zeoserver:4.3.20
     volumes:
-      - ./var/ogcore:/data
+      - ogcore:/data
     profiles:
       - all
       - ogcore
@@ -72,7 +72,7 @@ services:
       dockerfile: ./docker/solr/Dockerfile
     command: solr-foreground
     volumes:
-      - ./var/solr:/var/solr/data
+      - solr:/var/solr
     environment:
       - SOLR_CORES=development testing functionaltesting testserver
     ports:
@@ -91,8 +91,8 @@ services:
       - LDAP_ROOT=dc=dev,dc=onegovgever,dc=ch
       - LDAP_ADMIN_DN=cn=admin,dc=dev,dc=onegovgever,dc=ch
     volumes:
+      - ldap:/bitnami/openldap
       - ./docker/ldap.ldif:/ldifs/ldap.ldif
-      - ./var/openldap:/bitnami/openldap
   redis:
     image: redis:6.2-alpine
     command:
@@ -101,7 +101,7 @@ services:
     ports:
       - 6379:6379
     volumes:
-      - ./var/redis:/data
+      - redis:/data
   ogui:
     image: 4teamwork/ogui:latest
     profiles:
@@ -289,7 +289,11 @@ services:
       - kub
 
 volumes:
+  ogcore:
   ogds:
+  solr:
+  ldap:
+  redis:
   clam_db:
   kub_db:
   kub_media:
