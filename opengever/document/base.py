@@ -14,6 +14,7 @@ from opengever.locking.lock import LOCK_TYPE_COPIED_TO_WORKSPACE_LOCK
 from opengever.meeting.model.generateddocument import GeneratedExcerpt
 from opengever.meeting.proposal import IBaseProposal
 from opengever.meeting.proposal import ISubmittedProposal
+from opengever.ris.proposal import IProposal as IRisProposal
 from opengever.task.task import ITask
 from opengever.trash.trash import ITrashed
 from opengever.workspace.interfaces import IWorkspace
@@ -26,6 +27,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.MimetypesRegistry.common import MimeTypeException
 from Products.MimetypesRegistry.interfaces import IMimetype
 from zc.relation.interfaces import ICatalog
+from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.intid.interfaces import IIntIds
 import logging
@@ -103,7 +105,13 @@ class BaseDocumentMixin(object):
         if relations:
             relation = relations[0]
             submitted_proposal = relation.from_object
-            assert(ISubmittedProposal.providedBy(submitted_proposal))
+            if not (
+                ISubmittedProposal.providedBy(submitted_proposal)
+                or IRisProposal.providedBy(submitted_proposal)
+            ):
+                raise BadRequest(
+                    "Related Proposal must be either ISubmittedProposal or IRisProposal"
+                )
             if check_security:
                 if api.user.has_permission('View', obj=submitted_proposal):
                     return submitted_proposal
