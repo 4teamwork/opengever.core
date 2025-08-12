@@ -1,1 +1,1 @@
-Allow RISProposal to be related to a document. [ran]
+Return None if document related proposal is RISProposal. [ran]
