@@ -105,10 +105,11 @@ class BaseDocumentMixin(object):
         if relations:
             relation = relations[0]
             submitted_proposal = relation.from_object
-            if not (
-                ISubmittedProposal.providedBy(submitted_proposal)
-                or IRisProposal.providedBy(submitted_proposal)
-            ):
+
+            if IRisProposal.providedBy(submitted_proposal):
+                return None
+
+            if not ISubmittedProposal.providedBy(submitted_proposal):
                 raise BadRequest(
                     "Related Proposal must be either ISubmittedProposal or IRisProposal"
                 )
