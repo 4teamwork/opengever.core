@@ -1,4 +1,4 @@
-FROM solr:9.8.1
+FROM solr:9.9.0
 
 ENV SOLR_OPTS="-Dlog4j2.formatMsgNoLookups=true" \
     SOLR_CORES="ogsite" \
