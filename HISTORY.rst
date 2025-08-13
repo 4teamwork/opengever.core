@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.5 (2025-08-13)
+---------------------
+
+Bug fixes:
+
+
+- Return None if document related proposal is RISProposal. [ran] [TI-2959]
+
+
 2025.6.4 (2025-07-20)
 ---------------------
 
