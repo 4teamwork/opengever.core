@@ -188,7 +188,7 @@ class DossierContextActions(BaseContextActions):
         return True
 
     def is_transfer_dossier_responsible_available(self):
-        return api.user.has_permission('Modify portal content', obj=self.context)
+        return api.user.has_permission('opengever.api: Transfer Assignment', obj=self.context)
 
 
 @adapter(IDossierTemplateMarker, IOpengeverBaseLayer)
