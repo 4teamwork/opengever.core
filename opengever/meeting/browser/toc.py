@@ -167,3 +167,14 @@ class DownloadDecisionSequenceNumberTOC(DownloadAlphabeticalTOC):
                             'committee': committee_title,
                         }),
                       context=getRequest()))
+
+    def get_json(self):
+        data = super(DecisionSequenceNumberBasedTOC, self).get_json()
+        period_title = getattr(self.period, 'title', u'')
+        for group in data['toc']:
+            for item in group['contents']:
+                dn = item.get('decision_number')
+                item['decision_number_display'] = (
+                    u"{} / {}".format(period_title, dn) if dn else u""
+                )
+        return data
