@@ -1,0 +1,1 @@
+Add support for serving blobs through ZEO server. This allows us to use PVCs with access mode RWO in Kubernetes. [buchi]

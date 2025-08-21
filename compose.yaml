@@ -1,4 +1,111 @@
 services:
+  ogcore: &ogcore
+    build:
+      context: .
+      dockerfile: ./docker/core/Dockerfile
+      secrets:
+        - gldt
+    image: 4teamwork/ogcore:latest
+    volumes:
+      - ogcore:/data
+    ports:
+      - "8080:8080"
+      - "8160:8160"
+    environment:
+      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD:-secret}
+      - MSGCONVERT_URL=http://msgconvert:8080/
+      - SABLON_URL=http://sablon:8080/
+      - PDFLATEX_URL=http://pdflatex:8080/
+      - WEASYPRINT_URL=http://weasyprint:8080/
+      - OGDS_SYNC_URL=http://ogds-sync:8080/
+    depends_on:
+      - zeoserver
+      - ogds
+      - solr
+    profiles:
+      - all
+      - ogcore
+  ogcore-cron:
+    <<: *ogcore
+    command: cron
+    ports:
+      - "8082:8080"
+    profiles:
+      - all
+      - ogcore-cron
+  zeoserver:
+    image: 4teamwork/zeoserver:4.3.20
+    volumes:
+      - ogcore:/data
+    profiles:
+      - all
+      - ogcore
+  ogds:
+    image: postgres:13-alpine
+    volumes:
+      - ogds:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${OGDS_DB_USER:-ogds}
+      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD:-secret}
+      - POSTGRES_DB=${OGDS_DB_NAME:-ogds}
+    ports:
+      - 15432:5432
+  ogds-sync:
+    image: 4teamwork/ogds-sync:latest
+    ports:
+      - 8099:8080
+    environment:
+      - OGDS_DSN=postgresql://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}/${OGDS_DB_NAME:-ogds}
+      - LDAP_PROFILE=${LDAP_PROFILE:-OpenLDAPLegacy}
+      - LDAP_URL=${LDAP_SERVER_URI:-ldap://ldap:1389}
+      - LDAP_BIND_DN=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
+      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-secret}
+      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN:-ou=Users,dc=dev,dc=onegovgever,dc=ch}
+      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN:-ou=Groups,dc=dev,dc=onegovgever,dc=ch}
+    depends_on:
+      - ogds
+  solr:
+    image: 4teamwork/ogsolr:latest
+    build:
+      context: .
+      dockerfile: ./docker/solr/Dockerfile
+    command: solr-foreground
+    volumes:
+      - solr:/var/solr
+    environment:
+      - SOLR_CORES=development testing functionaltesting testserver
+    ports:
+      - 8983:8983
+    ulimits:
+      nofile:
+        soft: 65000
+        hard: 65000
+  ldap:
+    image: bitnami/openldap:2.6
+    ports:
+      - 1389:1389
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=secret
+      - LDAP_ROOT=dc=dev,dc=onegovgever,dc=ch
+      - LDAP_ADMIN_DN=cn=admin,dc=dev,dc=onegovgever,dc=ch
+    volumes:
+      - ldap:/bitnami/openldap
+      - ./docker/ldap.ldif:/ldifs/ldap.ldif
+  redis:
+    image: redis:6.2-alpine
+    command:
+      - redis-server
+      - --save 60 1
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+  ogui:
+    image: 4teamwork/ogui:latest
+    profiles:
+      - all
   httpd:
     image: 4teamwork/oghttpd:latest
     build:
@@ -40,113 +147,6 @@ services:
       - ./clamav/clamd.conf:/etc/clamav/clamd.conf
     profiles:
       - clamav
-  ogui:
-    image: 4teamwork/ogui:latest
-    profiles:
-      - all
-  ogcore: &ogcore
-    build:
-      context: .
-      dockerfile: ./docker/core/Dockerfile
-      secrets:
-        - gldt
-    image: 4teamwork/ogcore:latest
-    volumes:
-      - ./var/ogcore:/data
-    ports:
-      - "8080:8080"
-      - "8160:8160"
-    environment:
-      - PLONE_LDAP_BIND_UID=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
-      - PLONE_LDAP_BIND_PWD=${LDAP_BIND_PASSWORD:-secret}
-      - MSGCONVERT_URL=http://msgconvert:8080/
-      - SABLON_URL=http://sablon:8080/
-      - PDFLATEX_URL=http://pdflatex:8080/
-      - WEASYPRINT_URL=http://weasyprint:8080/
-      - OGDS_SYNC_URL=http://ogds-sync:8080/
-    depends_on:
-      - zeoserver
-      - ogds
-      - solr
-    profiles:
-      - all
-      - ogcore
-  ogcore-cron:
-    <<: *ogcore
-    command: cron
-    ports:
-      - "8082:8080"
-    profiles:
-      - all
-      - ogcore-cron
-  zeoserver:
-    image: 4teamwork/zeoserver:4.3.20
-    volumes:
-      - ./var/ogcore:/data
-    profiles:
-      - all
-      - ogcore
-  ogds:
-    image: postgres:13-alpine
-    volumes:
-      - ogds:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${OGDS_DB_USER:-ogds}
-      - POSTGRES_PASSWORD=${OGDS_DB_PASSWORD:-secret}
-      - POSTGRES_DB=${OGDS_DB_NAME:-ogds}
-    ports:
-      - 15432:5432
-  ogds-sync:
-    image: 4teamwork/ogds-sync:latest
-    ports:
-      - 8099:8080
-    environment:
-      - OGDS_DSN=postgresql://${OGDS_DB_USER:-ogds}:${OGDS_DB_PASSWORD:-secret}@${OGDS_DB_HOST:-ogds}/${OGDS_DB_NAME:-ogds}
-      - LDAP_PROFILE=${LDAP_PROFILE:-OpenLDAPLegacy}
-      - LDAP_URL=${LDAP_SERVER_URI:-ldap://ldap:1389}
-      - LDAP_BIND_DN=${LDAP_BIND_DN:-cn=admin,dc=dev,dc=onegovgever,dc=ch}
-      - LDAP_BIND_PASSWORD=${LDAP_BIND_PASSWORD:-secret}
-      - LDAP_USER_BASE_DN=${LDAP_USER_BASE_DN:-ou=Users,dc=dev,dc=onegovgever,dc=ch}
-      - LDAP_GROUP_BASE_DN=${LDAP_GROUP_BASE_DN:-ou=Groups,dc=dev,dc=onegovgever,dc=ch}
-    depends_on:
-      - ogds
-  solr:
-    image: 4teamwork/ogsolr:latest
-    build:
-      context: .
-      dockerfile: ./docker/solr/Dockerfile
-    command: solr-foreground
-    volumes:
-      - ./var/solr:/var/solr/data
-    environment:
-      - SOLR_CORES=development testing functionaltesting testserver
-    ports:
-      - 8983:8983
-    ulimits:
-      nofile:
-        soft: 65000
-        hard: 65000
-  redis:
-    image: redis:6.2-alpine
-    command:
-      - redis-server
-      - --save 60 1
-    ports:
-      - 6379:6379
-    volumes:
-      - ./var/redis:/data
-  ldap:
-    image: bitnami/openldap:2.6
-    ports:
-      - 1389:1389
-    environment:
-      - LDAP_ADMIN_USERNAME=admin
-      - LDAP_ADMIN_PASSWORD=secret
-      - LDAP_ROOT=dc=dev,dc=onegovgever,dc=ch
-      - LDAP_ADMIN_DN=cn=admin,dc=dev,dc=onegovgever,dc=ch
-    volumes:
-      - ./docker/ldap.ldif:/ldifs/ldap.ldif
-      - ./var/openldap:/bitnami/openldap
   mta:
     image: 4teamwork/ogmta:latest
     build:
@@ -289,7 +289,11 @@ services:
       - kub
 
 volumes:
+  ogcore:
   ogds:
+  solr:
+  ldap:
+  redis:
   clam_db:
   kub_db:
   kub_media:

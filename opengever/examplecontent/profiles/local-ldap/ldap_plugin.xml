@@ -221,6 +221,35 @@
           type="int"
           />
     </server>
+    <server
+        update="False"
+        delete="False">
+      <item
+          id="host"
+          value="ldap"
+          type="str"
+          />
+      <item
+          id="op_timeout"
+          value="10"
+          type="int"
+          />
+      <item
+          id="protocol"
+          value="ldap"
+          type="str"
+          />
+      <item
+          id="port"
+          value="1389"
+          type="str"
+          />
+      <item
+          id="conn_timeout"
+          value="5"
+          type="int"
+          />
+    </server>
   </ldapplugin>
 
 </ldapplugins>

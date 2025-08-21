@@ -1,37 +1,22 @@
-# pkg builder
-# -----------------------------------------------------------------------------
-FROM alpine:3.20 AS pkg-builder
-
-RUN apk -U add \
-    sudo \
-    alpine-sdk \
-    apkbuild-pypi
-
-RUN mkdir -p /var/cache/distfiles && \
-    adduser -D packager && \
-    addgroup packager abuild && \
-    chgrp abuild /var/cache/distfiles && \
-    chmod g+w /var/cache/distfiles && \
-    echo "packager ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-WORKDIR /work
-USER packager
-
-RUN abuild-keygen -a -i -n
-
-COPY --chown=packager:packager ./docker/core/packages/ ./
-
-RUN cd openssl1.1-compat && \
-    abuild -r
+ARG ALPINE_VERSION=3.22
 
 # ogcore builder
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.20 AS builder
+FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS builder
 USER root
 
-RUN --mount=from=pkg-builder,source=/home/packager/packages/work,target=/packages \
-    --mount=from=pkg-builder,source=/etc/apk/keys,target=/etc/apk/keys \
-    apk --repository /packages add \
+RUN apk add curl
+
+RUN --mount=type=secret,id=gldt \
+    export GITLAB_DEPLOY_TOKEN=$(cat /run/secrets/gldt) && \
+    if [ $(uname -m) == "x86_64" ]; \
+    then curl -v -O https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/492/packages/generic/openssl1.1-compat-dev/1.1.1w-r1/openssl1.1-compat-dev-1.1.1w-r1.apk; \
+    else curl -v -O https://__token__:$GITLAB_DEPLOY_TOKEN@git.4teamwork.ch/api/v4/projects/493/packages/generic/openssl1.1-compat-dev/1.1.1w-r1/openssl1.1-compat-dev-1.1.1w-r1.apk; \
+    fi && \
+    apk add --allow-untrusted openssl1.1-compat-dev-1.1.1w-r1.apk && \
+    rm openssl1.1-compat-dev-1.1.1w-r1.apk
+
+RUN apk add \
     gcc \
     musl-dev \
     libc-dev \
@@ -41,7 +26,6 @@ RUN --mount=from=pkg-builder,source=/home/packager/packages/work,target=/package
     libxml2-dev \
     libxslt-dev \
     openldap-dev \
-    openssl1.1-compat-dev \
     libffi-dev \
     libpq \
     libpq-dev \
@@ -93,6 +77,7 @@ RUN chown -R plone:plone /app/etc
 COPY ./docker/core/entrypoint.d /app/entrypoint.d
 COPY ./docker/core/docker-entrypoint.sh ./docker/core/inituser /app/
 COPY ./docker/core/zopectl /app/bin/
+COPY ./docker/core/healthcheck.py /app/bin/
 COPY --chown=plone ./docker/core/cron /app/cron
 RUN chmod 644 /app/cron/crontab
 
@@ -125,7 +110,7 @@ RUN python2.7 -m compileall /app/lib/python2.7/site-packages/plone/app/theming/t
 
 # go-crond builder
 # -----------------------------------------------------------------------------
-FROM golang:1.23-alpine3.20 AS go-crond-builder
+FROM golang:1.23-alpine${ALPINE_VERSION} AS go-crond-builder
 
 RUN apk upgrade --no-cache --force
 RUN apk add --update build-base make git
@@ -145,7 +130,7 @@ RUN make build
 
 # ogcore production image
 # -----------------------------------------------------------------------------
-FROM 4teamwork/plone:4.3.20-alpine3.20 AS prod
+FROM 4teamwork/plone:4.3.20-alpine${ALPINE_VERSION} AS prod
 
 USER root
 RUN apk add \
