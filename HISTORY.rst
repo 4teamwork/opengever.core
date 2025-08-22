@@ -10,6 +10,43 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.8.0 (2025-08-22)
+---------------------
+
+New features:
+
+
+- Add support for serving blobs through ZEO server. This allows us to use PVCs with access mode RWO in Kubernetes. [buchi] [GH-8183-1]
+- Add healthcheck script which can be used for readiness probes. [buchi] [GH-8183-2]
+- A limited admin, an administrator and a manager can always remove a watcher from an object. [elioschmutz] [TI-1935]
+- - Add new endpoint ``@close-task`` [elioschmutz] [TI-2301] [TI-2301]
+- Add 'archival_value' as a new '@listing'-endpoint field [elioschmutz] [TI-2730]
+- Provide the auto_close_tasks parameter on the task transition action when closing a dossier. [amo] [TI-2000-2]
+- - Add new listing action ``close_task`` for tasks [elioschmutz] [TI-2301] [TI-2301-2]
+
+
+Bug fixes:
+
+
+- Ensure that temporary dossier permissions are correctly revoked when a task is cancelled from the "in progress" state. [elioschmutz] [TI-2422]
+- Disallow to cancel tasks which are synced between multiple admin units. [elioschmutz] [TI-2432]
+- Fix empty excel sheet if exporting the role assignment report filtered by a group. [elioschmutz] [TI-2673]
+- Properly update dossier protection settings after transfering a dossier from one responsible to another if the "responsible as dossier manager"-feature is enabled. [elioschmutz] [TI-2752]
+- Only create task reminders for tasks in current admin unit. [buchi] [TI-2854]
+- Return None if document related proposal is RISProposal. [ran] [TI-2959]
+
+
+Other changes:
+
+
+- Extends the @watchers response with `watcher_properties` which tells the frontend if a specific watcher is deleteable by the current user. [elioschmutz] [TI-1935]
+- Update ftw.solr to version 2.14.1 which supports a separate Tika server for text extraction and reduces memory consumption of Solr when diffing/syncing with catalog. [buchi] [TI-2050]
+- Update Solr to version 9.9.0. [buchi] [TI-2274]
+- Add new listing field: "document_version_count". [amo] [TI-2442]
+- Add 'archival_value' index to solr. [elioschmutz] [TI-2730]
+- A limited admin, an administrator and a manager can always remove a watcher from an object. [elioschmutz] [TI-1935-2]
+
+
 2025.7.0 (2025-06-06)
 ---------------------
 

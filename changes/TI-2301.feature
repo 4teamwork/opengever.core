@@ -1,1 +1,0 @@
-- Add new endpoint ``@close-task`` [elioschmutz] [TI-2301]

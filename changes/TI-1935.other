@@ -1,1 +1,0 @@
-Extends the @watchers response with `watcher_properties` which tells the frontend if a specific watcher is deleteable by the current user. [elioschmutz]
