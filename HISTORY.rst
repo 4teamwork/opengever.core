@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.6.6 (2025-08-30)
+---------------------
+
+Other changes:
+
+
+- Update ftw.solr to version 2.14.1 which reduces memory consumption of Solr when diffing/syncing with catalog. [buchi] [TI-2050]
+
+
 2025.6.5 (2025-08-13)
 ---------------------
 
