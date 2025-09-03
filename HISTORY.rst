@@ -10,6 +10,15 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.8.1 (2025-09-03)
+---------------------
+
+Bug fixes:
+
+
+- Fix Sentry integeration for container deployments. [buchi] [GH-8185]
+
+
 2025.8.0 (2025-08-22)
 ---------------------
 
