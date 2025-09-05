@@ -8,6 +8,8 @@ from opengever.exportng.catalog import CommitteePeriodSyncer
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
+from opengever.exportng.journal import JOURNAL_TABLE
+from opengever.exportng.journal import JOURNAL_MAPPING
 from opengever.exportng.ogds import AgendaItemSyncer
 from opengever.exportng.ogds import CommitteeSyncer
 from opengever.exportng.ogds import GroupSyncer
@@ -34,18 +36,18 @@ class Syncer(object):
     def create_tables(self):
         create_table(UserSyncer.table, UserSyncer.mapping)
         create_table(GroupSyncer.table, GroupSyncer.mapping)
-        create_table(CatalogSyncer.journal_table, CatalogSyncer.journal_mapping)
-        create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.mapping)
-        create_table(DossierSyncer.table, DossierSyncer.mapping)
-        create_table(SubdossierSyncer.table, SubdossierSyncer.mapping)
-        create_table(DocumentSyncer.table, DocumentSyncer.mapping)
-        create_table(DocumentSyncer.versions_table, DocumentSyncer.versions_mapping)
+        create_table(JOURNAL_TABLE, JOURNAL_MAPPING)
+        create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.serializer.mapping)
+        create_table(DossierSyncer.table, DossierSyncer.serializer.mapping)
+        create_table(SubdossierSyncer.table, SubdossierSyncer.serializer.mapping)
+        create_table(DocumentSyncer.table, DocumentSyncer.serializer.mapping)
+        create_table(DocumentSyncer.versions_table, DocumentSyncer.serializer.versions_mapping)
         create_table(CommitteeSyncer.table, CommitteeSyncer.mapping)
         create_table(MeetingSyncer.table, MeetingSyncer.mapping)
         create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.mapping)
         create_table(AgendaItemSyncer.table, AgendaItemSyncer.mapping)
         create_table(ProposalSyncer.table, ProposalSyncer.mapping)
-        create_table(CommitteePeriodSyncer.table, CommitteePeriodSyncer.mapping)
+        create_table(CommitteePeriodSyncer.table, CommitteePeriodSyncer.serializer.mapping)
         metadata.create_all(checkfirst=True)
 
     def sync(self):
@@ -102,10 +104,10 @@ class Syncer(object):
                     with engine.connect() as conn:
                         res = conn.execute(stmt)
                         logger.info('Removed %s orphans from table %s.', res.rowcount, DocumentSyncer.versions_table)
-                journal_table = metadata.tables[CatalogSyncer.journal_table]
+                journal_table = metadata.tables[JOURNAL_TABLE]
                 stmt = delete(journal_table).where(or_(
                     journal_table.c.objexternalkey.in_(orphan_keys),
                     journal_table.c.historyobject.in_(orphan_keys)))
                 with engine.connect() as conn:
                     res = conn.execute(stmt)
-                    logger.info('Removed %s orphans from table %s.', res.rowcount, CatalogSyncer.journal_table)
+                    logger.info('Removed %s orphans from table %s.', res.rowcount, JOURNAL_TABLE)
