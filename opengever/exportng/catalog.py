@@ -1,6 +1,5 @@
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
 from Acquisition import aq_parent
-from collections import namedtuple
 from datetime import date
 from datetime import datetime
 from DateTime import DateTime
@@ -9,8 +8,11 @@ from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
+from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.ogds import get_agendaitem_id
+from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import userid_to_email
+from opengever.meeting.model import AgendaItem
 from plone import api
 from plone.dexterity.utils import iterSchemata
 from Products.CMFEditions.utilities import dereference
@@ -26,11 +28,6 @@ import os.path
 BLOB_VERSION_KEY = 'CloneNamedFileBlobs/opengever.document.document.IDocumentSchema.file'
 CACHE = {}
 SQL_CHUNK_SIZE = 5000
-
-Attribute = namedtuple(
-    'Attribute',
-    ['name', 'col_name', 'col_type', 'getter'],
-)
 
 logger = logging.getLogger('opengever.exportng')
 
@@ -56,144 +53,123 @@ def rename_dict_key(dict_, old_key, new_key):
     return dict_
 
 
-def dexterity_field_value(obj, attrname):
-    fields = CACHE.get('dexterity_fields', {}).get(obj.portal_type, None)
-    if fields is None:
-        fields = {}
-        for schema in iterSchemata(obj):
-            fields.update(getFields(schema))
-        CACHE.setdefault('dexterity_fields', {})[obj.portal_type] = fields
-    field = fields.get(attrname)
-    return getattr(field.interface(obj), attrname)
+class CatalogItemSerializer(object):
 
+    def __init__(self, item):
+        self.item = item
+        self.obj = item._unrestrictedGetObject()
+        self.parent = self.get_parent()
 
-def as_datetime(obj, attrname):
-    value = getattr(obj, attrname)
-    if callable(value):
-        value = value()
-    if isinstance(value, date):
-        value = datetime.combine(value, datetime.min.time())
-    elif isinstance(value, DateTime):
-        value = value.asdatetime().replace(tzinfo=None)
-    return value
+    def get_parent(self):
+        return aq_parent(self.obj)
 
+    def data(self):
+        data = {}
+        for attr in self.mapping:
+            getter = getattr(self, attr.name, None)
+            if getter is not None:
+                value = getter()
+            else:
+                dxfield = self.dexterity_field(attr.name)
+                if dxfield is not None:
+                    value = getattr(dxfield.interface(self.obj), attr.name)
+                else:
+                    try:
+                        value = getattr(self.obj, attr.name)
+                    except AttributeError:
+                        value = None
+                    if callable(value):
+                        value = value()
+            data[attr.col_name] = value
+        data['_modified_at'] = datetime.now()
+        return data
 
-def get_filedata(obj, attrname):
-    if obj.portal_type == 'ftw.mail.mail':
-        value = getattr(obj, 'original_message')
-        if not value:
-            value = getattr(obj, 'message')
-    else:
-        value = getattr(obj, 'file')
-    if value is not None:
-        return {
-            "filepath": value._blob.committed(),
-            "filename": value.filename,
-            "mime_type": value.contentType,
+    def dexterity_field(self, attrname):
+        portal_type = self.obj.portal_type
+        fields = CACHE.get('dexterity_fields', {}).get(portal_type, None)
+        if fields is None:
+            fields = {}
+            for schema in iterSchemata(self.obj):
+                fields.update(getFields(schema))
+            CACHE.setdefault('dexterity_fields', {})[portal_type] = fields
+        return fields.get(attrname)
+
+    def dexterity_field_value(self, attrname):
+        dxfield = self.dexterity_field(attrname)
+        return getattr(dxfield.interface(self.obj), attrname)
+
+    def as_datetime(self, value):
+        if callable(value):
+            value = value()
+        if isinstance(value, date):
+            value = datetime.combine(value, datetime.min.time())
+        elif isinstance(value, DateTime):
+            value = value.asdatetime().replace(tzinfo=None)
+        return value
+
+    def parent_uid(self):
+        return self.parent.UID()
+
+    def created(self):
+        return self.as_datetime(self.obj.created())
+
+    def modified(self):
+        return self.as_datetime(self.obj.modified())
+
+    def title(self):
+        value = self.dexterity_field_value('title')
+        return value.replace('\n', ' ').replace('\r', '')
+
+    def creator(self):
+        return userid_to_email(self.obj.Creator())
+
+    def authorized_principals(self, role):
+        principals = []
+        for principal, roles in self.obj.get_local_roles():
+            if role in roles:
+                principals.append(userid_to_email(principal))
+        return principals
+
+    def readers(self):
+        return self.authorized_principals('Reader')
+
+    def editors(self):
+        return self.authorized_principals('Editor')
+
+    def managers(self):
+        return self.authorized_principals('DossierManager')
+
+    def privacy_layer(self):
+        value_mapping = {
+            'privacy_layer_yes': True,
+            'privacy_layer_no': False
         }
-    return None
+        return value_mapping.get(self.dexterity_field_value('privacy_layer'))
 
+    def public_trial(self):
+        value_mapping = {
+            'unchecked': 'NOTASSESSED',
+            'public': 'PUBLIC',
+            'limited-public': 'LIMITEDPUBLIC',
+            'private': 'PRIVATE',
+        }
+        return value_mapping.get(self.dexterity_field_value('public_trial'))
 
-def get_file_extension(obj, attrname):
-    if obj.portal_type == 'ftw.mail.mail':
-        value = getattr(obj, 'original_message')
-        if not value:
-            value = getattr(obj, 'message')
-    else:
-        value = getattr(obj, 'file')
-    if value is not None:
-        return os.path.splitext(value.filename)[-1][1:]
+    def archival_value(self):
+        value_mapping = {
+            'unchecked': 'NOTASSESSED',
+            'prompt': 'PROMPT',
+            'archival worthy': 'ARCHIVALWORTHY',
+            'not archival worthy': 'NOTARCHIVALWORTHY',
+            'archival worthy with sampling': 'SAMPLING'
+        }
+        return value_mapping.get(self.dexterity_field_value('archival_value'))
 
+    def versions(self):
+        return []
 
-def get_creator(obj, attrname):
-    return userid_to_email(obj.Creator())
-
-
-def get_responsible(obj, attrname):
-    userid = dexterity_field_value(obj, attrname)
-    return userid_to_email(userid)
-
-
-def get_reference_number(obj, attrname):
-    return '.'.join(IReferenceNumber(obj).get_numbers()['repository'])
-
-
-def get_dossier_reference_number(obj, attrname):
-    return '.'.join(IReferenceNumber(obj).get_numbers()['dossier'])
-
-
-def parent_uid(obj, attrname):
-    parent = aq_parent(obj)
-    return parent.UID()
-
-
-def str_upper(obj, attrname):
-    return getattr(obj, attrname, '').upper()
-
-
-def get_public_trial(obj, attrname):
-    value_mapping = {
-        'unchecked': 'NOTASSESSED',
-        'public': 'PUBLIC',
-        'limited-public': 'LIMITEDPUBLIC',
-        'private': 'PRIVATE',
-    }
-    return value_mapping.get(obj.public_trial)
-
-
-def get_archival_value(obj, attrname):
-    value_mapping = {
-        'unchecked': 'NOTASSESSED',
-        'prompt': 'PROMPT',
-        'archival worthy': 'ARCHIVALWORTHY',
-        'not archival worthy': 'NOTARCHIVALWORTHY',
-        'archival worthy with sampling': 'SAMPLING'
-    }
-    return value_mapping.get(obj.archival_value)
-
-
-def get_privacy_layer(obj, attrname):
-    value_mapping = {
-        'privacy_layer_yes': True,
-        'privacy_layer_no': False
-    }
-    return value_mapping.get(obj.privacy_layer)
-
-
-def get_dossier_state(obj, attrname):
-    state_mapping = {
-        'dossier-state-active': 'EDIT',
-        'dossier-state-inactive': 'CANCELLED',
-        'dossier-state-resolved': 'CLOSED'
-    }
-    return state_mapping.get(api.content.get_state(obj))
-
-
-def get_permissions(obj, attrname):
-    principals = []
-    for principal, roles in obj.get_local_roles():
-        if attrname in roles:
-            principals.append(userid_to_email(principal))
-    return principals
-
-
-def get_title(obj, attrname):
-    value = dexterity_field_value(obj, attrname)
-    return value.replace('\n', ' ').replace('\r', '')
-
-
-def get_ml_titles(obj, attrname):
-    titles = {}
-    for attr in ['title_de', 'title_fr', 'title_en']:
-        value = dexterity_field_value(obj, attr)
-        if value:
-            titles[attr] = value
-    return titles
-
-
-def get_references(obj, attrname):
-    value = dexterity_field_value(obj, attrname)
-    return [ref.to_object.UID() for ref in value if ref.to_object is not None]
+    def journal_entries(self):
+        return []
 
 
 class CatalogSyncer(object):
@@ -201,20 +177,8 @@ class CatalogSyncer(object):
     catalog_key = 'UID'
     sql_key = 'objexternalkey'
 
-    journal_table = 'journal_entries'
-    journal_mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('relatedobj', 'historyobject', 'varchar', None),
-        Attribute('action', 'event', 'varchar', None),
-        Attribute('time', 'timestamp', 'datetime', None),
-        Attribute('actor', 'user', 'varchar', None),
-        Attribute('journal', '_journal', 'varchar', None),
-    ]
-
     def __init__(self, query=None):
         self.base_query = query or {}
-        self.rtool = api.portal.get_tool('portal_repository')
-        self.hstool = api.portal.get_tool('portal_historiesstorage')
         self._catalog_items = None
         self._sql_items = None
 
@@ -273,10 +237,10 @@ class CatalogSyncer(object):
         logger.info('Adding %s %s...', added_len, self.table)
         for key in added:
             item = self.catalog_items[key]
-            obj = item._unrestrictedGetObject()
-            inserts.append(self.get_values(obj))
-            version_inserts.extend(self.get_versions(obj))
-            journal_inserts.extend(self.get_journal_entries(obj))
+            serializer = self.serializer(item)
+            inserts.append(serializer.data())
+            version_inserts.extend(serializer.versions())
+            journal_inserts.extend(serializer.journal_entries())
             counter += 1
             if counter % 100 == 0:
                 logger.info(
@@ -300,7 +264,7 @@ class CatalogSyncer(object):
             logger.info('Added %s: %s', table, len(version_inserts))
 
         if journal_inserts:
-            table = metadata.tables[self.journal_table]
+            table = metadata.tables[JOURNAL_TABLE]
             with engine.connect() as conn:
                 for chunk in chunks(journal_inserts, SQL_CHUNK_SIZE):
                     conn.execute(table.insert(), chunk)
@@ -316,8 +280,8 @@ class CatalogSyncer(object):
         logger.info('Modifying %s %s...', modified_len, self.table)
         for key in modified:
             item = self.catalog_items[key]
-            obj = item._unrestrictedGetObject()
-            updates.append(rename_dict_key(self.get_values(obj), self.sql_key, 'b_key'))
+            serializer = self.serializer(item)
+            updates.append(rename_dict_key(serializer.data(), self.sql_key, 'b_key'))
             counter += 1
             if counter % 100 == 0:
                 logger.info(
@@ -357,33 +321,33 @@ class CatalogSyncer(object):
                     getattr(table.c, self.sql_key) == bindparam('b_key')), deletes)
         logger.info('Deleted %s: %s', self.table, len(deleted))
 
-    def get_values(self, obj):
-        data = {}
-        for attr in self.mapping:
-            if attr.getter is not None:
-                value = attr.getter(obj, attr.name)
-            else:
-                try:
-                    value = getattr(obj, attr.name)
-                except AttributeError:
-                    value = None
-                if callable(value):
-                    value = value()
-            data[attr.col_name] = value
-        data['_modified_at'] = datetime.now()
-        return data
 
-    def get_fields(self, obj):
-        fields = {}
-        for schema in iterSchemata(obj):
-            fields.update(getFields(schema))
-        return fields
+class FileplanEntrySerializer(CatalogItemSerializer):
 
-    def get_versions(self, obj):
-        return []
+    mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('parent_uid', 'objprimaryrelated', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
+        Attribute('title', 'fcstitle', 'jsonb'),
+        Attribute('description', 'fcsdescription', 'varchar'),
+        Attribute('location', 'felocation', 'varchar'),
+        Attribute('reference_number', 'fcsbusinessnumber', 'varchar'),
+        Attribute('valid_from', 'objvalidfrom', 'date'),
+        Attribute('valid_until', 'objvaliduntil', 'date'),
+        # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+    ]
 
-    def get_journal_entries(self, obj):
-        return []
+    def title(self):
+        titles = {}
+        for lang in ['de', 'fr', 'en']:
+            value = self.dexterity_field_value('title_%s' % lang)
+            if value:
+                titles[lang] = value
+        return titles
+
+    def reference_number(self):
+        return '.'.join(IReferenceNumber(self.obj).get_numbers()['repository'])
 
 
 class FileplanEntrySyncer(CatalogSyncer):
@@ -392,19 +356,68 @@ class FileplanEntrySyncer(CatalogSyncer):
     query = {
         'portal_type': 'opengever.repository.repositoryfolder',
     }
+    serializer = FileplanEntrySerializer
+
+
+class DossierSerializer(CatalogItemSerializer):
+
     mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
-        Attribute('title', 'fcstitle', 'jsonb', get_ml_titles),
-        Attribute('description', 'fcsdescription', 'varchar', None),
-        Attribute('location', 'felocation', 'varchar', None),
-        Attribute('reference', 'fcsbusinessnumber', 'varchar', get_reference_number),
-        Attribute('valid_from', 'objvalidfrom', 'date', None),
-        Attribute('valid_until', 'objvaliduntil', 'date', None),
-        # Attribute('external_reference', 'boforeignnumber', 'varchar', None),
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('parent_uid', 'objprimaryrelated', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
+        # Attribute('changed', 'changed', 'datetime')
+        # Attribute('touched', 'touched', 'datetime')
+        Attribute('title', 'botitle', 'varchar'),
+        Attribute('description', 'bodescription', 'varchar'),
+        Attribute('creator', 'objcreatedby', 'varchar'),
+        Attribute('review_state', 'bostate', 'varchar'),
+        Attribute('keywords', 'objterms', 'jsonb'),
+        Attribute('start', 'objvalidfrom', 'date'),
+        Attribute('end', 'objvalidto', 'date'),
+        Attribute('responsible', 'gboresponsible', 'varchar'),
+        Attribute('external_reference', 'boforeignnumber', 'varchar'),
+        Attribute('related_dossiers', 'gborelateddossiers', 'jsonb'),
+        Attribute('former_reference_number', 'bonumberhistory', 'jsonb'),
+        Attribute('reference_number', 'documentnumber', 'varchar'),
+        # Attribute('dossier_type', 'XXX', 'varchar'),
+        Attribute('classification', 'classification', 'varchar'),
+        Attribute('privacy_layer', 'privacyprotection', 'boolean'),
+        Attribute('public_trial', 'disclosurestatus', 'varchar'),
+        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar'),
+        Attribute('retention_period', 'retentionperiod', 'integer'),
+        Attribute('retention_period_annotation', 'retentionperiodcomment', 'varchar'),
+        Attribute('archival_value', 'archivalvalue', 'varchar'),
+        Attribute('archival_value_annotation', 'archivalvaluecomment', 'varchar'),
+        Attribute('custody_period', 'regularsafeguardperiod', 'integer'),
+        Attribute('readers', 'objsecread', 'jsonb'),
+        Attribute('editors', 'objsecchange', 'jsonb'),
+        Attribute('managers', 'fadmins', 'jsonb'),
     ]
+
+    def review_state(self):
+        state_mapping = {
+            'dossier-state-active': 'EDIT',
+            'dossier-state-inactive': 'CANCELLED',
+            'dossier-state-resolved': 'CLOSED'
+        }
+        return state_mapping.get(api.content.get_state(self.obj))
+
+    def responsible(self):
+        return userid_to_email(self.dexterity_field_value('responsible'))
+
+    def related_dossiers(self):
+        value = self.dexterity_field_value('relatedDossier')
+        return [ref.to_object.UID() for ref in value if ref.to_object is not None]
+
+    def reference_number(self):
+        return '.'.join(IReferenceNumber(self.obj).get_numbers()['dossier'])
+
+    def former_reference_number(self):
+        return [self.dexterity_field_value('former_reference_number')]
+
+    def classification(self):
+        return self.dexterity_field_value('classification').upper()
 
 
 class DossierSyncer(CatalogSyncer):
@@ -421,39 +434,7 @@ class DossierSyncer(CatalogSyncer):
             'dossier-state-resolved',
         ],
     }
-    mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
-        # Attribute('changed', 'changed', 'datetime', None)
-        # Attribute('touched', 'touched', 'datetime', None)
-        Attribute('title', 'botitle', 'varchar', get_title),
-        Attribute('description', 'bodescription', 'varchar', None),
-        Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
-        Attribute('review_state', 'bostate', 'varchar', get_dossier_state),
-        Attribute('keywords', 'objterms', 'jsonb', dexterity_field_value),
-        Attribute('start', 'objvalidfrom', 'date', dexterity_field_value),
-        Attribute('end', 'objvalidto', 'date', dexterity_field_value),
-        Attribute('responsible', 'gboresponsible', 'varchar', get_responsible),
-        Attribute('external_reference', 'boforeignnumber', 'varchar', None),
-        Attribute('relatedDossier', 'gborelateddossiers', 'jsonb', get_references),
-        # Attribute('former_reference_number', 'bonumberhistory', 'varchar', None),
-        Attribute('reference_number', 'documentnumber', 'varchar', get_dossier_reference_number),
-        # Attribute('dossier_type', 'dossier_type', 'varchar', None),
-        Attribute('classification', 'classification', 'varchar', str_upper),
-        Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
-        Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
-        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
-        Attribute('retention_period', 'retentionperiod', 'integer', None),
-        Attribute('retention_period_annotation', 'retentionperiodcomment', 'varchar', None),
-        Attribute('archival_value', 'archivalvalue', 'varchar', get_archival_value),
-        Attribute('archival_value_annotation', 'archivalvaluecomment', 'varchar', None),
-        Attribute('custody_period', 'regularsafeguardperiod', 'integer', None),
-        Attribute('Reader', 'objsecread', 'jsonb', get_permissions),
-        Attribute('Editor', 'objsecchange', 'jsonb', get_permissions),
-        Attribute('DossierManager', 'fadmins', 'jsonb', get_permissions),
-    ]
+    serializer = DossierSerializer
 
     def get_journal_entries(self, obj):
         return get_journal_entries_from_dossier(obj)
@@ -470,75 +451,106 @@ class SubdossierSyncer(DossierSyncer):
             'dossier-state-resolved',
         ],
     }
+    serializer = DossierSerializer
 
 
-def get_document_parent_uid(obj, attr):
-    parent = aq_parent(obj)
-    if parent.portal_type == 'opengever.meeting.proposal':
-        parent = aq_parent(parent)
-    elif parent.portal_type == 'opengever.meeting.submittedproposal':
-        proposal = parent.load_model()
-        if proposal.agenda_item is not None:
-            return get_agendaitem_id(proposal.agenda_item, attr)
-        else:
-            parent = proposal.resolve_proposal()
-    # Documents in tasks are added to the dossier
-    while parent.portal_type == 'opengever.task.task':
-        parent = aq_parent(parent)
+class DocumentSerializer(CatalogItemSerializer):
 
-    return parent.UID()
-
-
-class DocumentSyncer(CatalogSyncer):
-
-    table = 'documents'
-    query = {
-        'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
-        'trashed': False,
-    }
     mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('parent', 'objprimaryrelated', 'varchar', get_document_parent_uid),
-        Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-        Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
-        Attribute('title', 'objname', 'varchar', get_title),
-        Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
-        # Attribute('changed', 'changed', 'datetime', None)
-        Attribute('privacy_layer', 'privacyprotection', 'boolean', get_privacy_layer),
-        Attribute('public_trial', 'disclosurestatus', 'varchar', get_public_trial),
-        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar', None),
-        # Attribute('relatedItems', 'XXX', 'varchar', None),
-        Attribute('description', 'dadescription', 'varchar', None),
-        Attribute('keywords', 'objterms', 'jsonb', dexterity_field_value),
-        Attribute('foreign_reference', 'gcexternalreference', 'varchar', None),
-        Attribute('document_date', 'dadate', 'date', None),
-        Attribute('receipt_date', 'gcreceiptdate', 'date', None),
-        Attribute('delivery_date', 'gcdeliverydate', 'date', None),
-        Attribute('document_author', 'gcauthor', 'varchar', None),
-        Attribute('extension', 'extension', 'varchar', get_file_extension),
-        # Attribute('document_type', 'XXX', 'date', None),
-        # Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean', dexterity_field_value),
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('parent_uid', 'objprimaryrelated', 'varchar'),
+        Attribute('created', 'objcreatedat', 'datetime'),
+        Attribute('modified', 'objmodifiedat', 'datetime'),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('creator', 'objcreatedby', 'varchar'),
+        # Attribute('changed', 'changed', 'datetime')
+        Attribute('privacy_layer', 'privacyprotection', 'boolean'),
+        Attribute('public_trial', 'disclosurestatus', 'varchar'),
+        Attribute('public_trial_statement', 'disclosurestatusstatement', 'varchar'),
+        Attribute('description', 'dadescription', 'varchar'),
+        Attribute('keywords', 'objterms', 'jsonb'),
+        Attribute('foreign_reference', 'gcexternalreference', 'varchar'),
+        Attribute('document_date', 'dadate', 'date'),
+        Attribute('receipt_date', 'gcreceiptdate', 'date'),
+        Attribute('delivery_date', 'gcdeliverydate', 'date'),
+        Attribute('document_author', 'gcauthor', 'varchar'),
+        Attribute('file_extension', 'extension', 'varchar'),
+        Attribute('attributedefinitiontarget', 'attributedefinitiontarget', 'varchar'),
+        Attribute('preserved_as_paper', 'gcpreservedaspaper', 'boolean'),
+        # Attribute('document_type', 'XXX', 'date'),
     ]
-    versions_table = 'document_versions'
     versions_mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('version', 'version', 'integer', None),
-        Attribute('filepath', 'filepath', 'varchar', None),
-        Attribute('filname', 'filename', 'varchar', None),
-        Attribute('filesize', 'filesize', 'bigint', None),
-        Attribute('principal', 'versby', 'varchar', None),
-        Attribute('timestamp', 'verschangedat', 'datetime', None),
-        Attribute('comment', 'versdesc', 'varchar', None),
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('version', 'version', 'integer'),
+        Attribute('filepath', 'filepath', 'varchar'),
+        Attribute('filname', 'filename', 'varchar'),
+        Attribute('filesize', 'filesize', 'bigint'),
+        Attribute('principal', 'versby', 'varchar'),
+        Attribute('timestamp', 'verschangedat', 'datetime'),
+        Attribute('comment', 'versdesc', 'varchar'),
     ]
 
-    def get_versions(self, obj):
+    def file_extension(self):
+        if self.obj.portal_type == 'ftw.mail.mail':
+            value = getattr(self.obj, 'original_message')
+            if not value:
+                value = getattr(self.obj, 'message')
+        else:
+            value = getattr(self.obj, 'file')
+        if value is not None:
+            return os.path.splitext(value.filename)[-1][1:]
+
+    def get_parent(self):
+        parent = aq_parent(self.obj)
+        if parent.portal_type == 'opengever.meeting.proposal':
+            pass
+        elif parent.portal_type == 'opengever.meeting.submittedproposal':
+            proposal = parent.load_model()
+            if proposal.agenda_item is not None:
+                return proposal.agenda_item
+            else:
+                parent = proposal.resolve_proposal()
+        else:
+            # Documents in tasks are added to the dossier
+            while parent.portal_type == 'opengever.task.task':
+                parent = aq_parent(parent)
+        return parent
+
+    def parent_uid(self):
+        if isinstance(self.parent, AgendaItem):
+            return get_agendaitem_id(self.parent, None)
+        else:
+            return self.parent.UID()
+
+    # proposals:
+    # - pproposaldocument
+    # - pdocuments
+    # agenda items:
+    # - references
+    # - aidecisionword
+    # meetings:
+    # - mdocuments
+    def attributedefinitiontarget(self):
+        if isinstance(self.parent, AgendaItem):
+            return 'references'
+        if self.parent.portal_type == 'opengever.meeting.proposal':
+            return 'pproposaldocument'
+        if self.parent.portal_type == 'opengever.dossier.businesscasedossier':
+            backrefs = self.obj.related_items(include_forwardrefs=False, include_backrefs=True)
+            if any([br.portal_type == 'opengever.meeting.proposal' for br in backrefs]):
+                return 'pdocuments'
+            return 'gbodocuments'
+
+    def versions(self):
         versions = []
-        uid = obj.UID()
-        history = self.rtool.getHistory(obj)
+        uid = self.obj.UID()
+        rtool = api.portal.get_tool('portal_repository')
+        hstool = api.portal.get_tool('portal_historiesstorage')
+        history = rtool.getHistory(self.obj)
         if len(history) > 0:
-            obj, history_id = dereference(obj=obj)
+            obj, history_id = dereference(obj=self.obj)
             for version in range(len(history)):
-                vdata = self.hstool.retrieve(history_id, selector=version)
+                vdata = hstool.retrieve(history_id, selector=version)
                 if BLOB_VERSION_KEY not in vdata.referenced_data:
                     continue
                 filepath = vdata.referenced_data[BLOB_VERSION_KEY].committed()
@@ -554,7 +566,7 @@ class DocumentSyncer(CatalogSyncer):
                     'versdesc': vdata.metadata['sys_metadata']['comment'],
                 })
         if len(versions) < 1:
-            data = get_filedata(obj, None)
+            data = self.get_filedata()
             if data is not None:
                 versions.append({
                     'objexternalkey': uid,
@@ -562,14 +574,52 @@ class DocumentSyncer(CatalogSyncer):
                     'filepath': data['filepath'],
                     'filename': data['filename'],
                     'filesize': os.stat(data['filepath']).st_size,
-                    'versby': userid_to_email(obj.Creator()),
-                    'verschangedat': as_datetime(obj, 'modified'),
+                    'versby': userid_to_email(self.obj.Creator()),
+                    'verschangedat': self.as_datetime(self.obj.modified()),
                     'versdesc': '',
                 })
         return versions
 
-    def get_journal_entries(self, obj):
-        return get_journal_entries_from_document(obj)
+    def get_filedata(self):
+        if self.obj.portal_type == 'ftw.mail.mail':
+            value = getattr(self.obj, 'original_message')
+            if not value:
+                value = getattr(self.obj, 'message')
+        else:
+            value = getattr(self.obj, 'file')
+        if value is not None:
+            return {
+                "filepath": value._blob.committed(),
+                "filename": value.filename,
+                "mime_type": value.contentType,
+            }
+        return None
+
+    def journal_entries(self):
+        return get_journal_entries_from_document(self.obj)
+
+
+class DocumentSyncer(CatalogSyncer):
+
+    table = 'documents'
+    versions_table = 'document_versions'
+    query = {
+        'portal_type': ['opengever.document.document', 'ftw.mail.mail'],
+        'trashed': False,
+    }
+    serializer = DocumentSerializer
+
+
+class CommitteePeriodSerializer(CatalogItemSerializer):
+    mapping = [
+        Attribute('UID', 'objexternalkey', 'varchar'),
+        Attribute('parent_uid', 'objprimaryrelated', 'varchar'),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('start', 'pdbegin', 'date'),
+        Attribute('end', 'pdend', 'date'),
+        # Attribute('decision_sequence_number', 'XXX', 'integer'),
+        # Attribute('meeting_sequence_number', 'XXX', 'integer'),
+    ]
 
 
 class CommitteePeriodSyncer(DossierSyncer):
@@ -578,11 +628,4 @@ class CommitteePeriodSyncer(DossierSyncer):
     query = {
         'portal_type': 'opengever.meeting.period',
     }
-
-    mapping = [
-        Attribute('UID', 'objexternalkey', 'varchar', None),
-        Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-        Attribute('title', 'objname', 'varchar', None),
-        Attribute('parent', 'pdbegin', 'varchar', parent_uid),
-        Attribute('created', 'pdend', 'datetime', as_datetime),
-    ]
+    serializer = CommitteePeriodSerializer
