@@ -1,7 +1,12 @@
+from collections import namedtuple
 from opengever.ogds.models.service import ogds_service
 
-
 CACHE = {}
+
+Attribute = namedtuple(
+    'Attribute',
+    ['name', 'col_name', 'col_type'],
+)
 
 
 def userid_to_email(userid):

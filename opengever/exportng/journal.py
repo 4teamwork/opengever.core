@@ -1,5 +1,6 @@
 from Acquisition import aq_parent
 from ftw.journal.interfaces import IAnnotationsJournalizable
+from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import userid_to_email
 from opengever.journal.manager import JournalManager
 
@@ -20,6 +21,16 @@ DOSSIER_STATE_CHANGES = {
     'Dossier state changed to dossier-state-inactive': 'DOSSIER_CANCELLED',
     'Dossier state changed to dossier-state-active': 'DOSSIER_RESTORED',
 }
+
+JOURNAL_TABLE = 'journal_entries'
+JOURNAL_MAPPING = [
+    Attribute('UID', 'objexternalkey', 'varchar'),
+    Attribute('relatedobj', 'historyobject', 'varchar'),
+    Attribute('action', 'event', 'varchar'),
+    Attribute('time', 'timestamp', 'datetime'),
+    Attribute('actor', 'user', 'varchar'),
+    Attribute('journal', '_journal', 'varchar'),
+]
 
 
 def parent_uid(obj):
