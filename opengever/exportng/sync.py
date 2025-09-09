@@ -1,15 +1,14 @@
 import opengever.ogds.base  # isort:skip # noqa fix cyclic import
-from opengever.exportng.catalog import CatalogSyncer
+from opengever.exportng.catalog import CommitteePeriodSyncer
 from opengever.exportng.catalog import DocumentSyncer
 from opengever.exportng.catalog import DossierSyncer
 from opengever.exportng.catalog import FileplanEntrySyncer
 from opengever.exportng.catalog import SubdossierSyncer
-from opengever.exportng.catalog import CommitteePeriodSyncer
 from opengever.exportng.db import create_table
 from opengever.exportng.db import engine
 from opengever.exportng.db import metadata
-from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.journal import JOURNAL_MAPPING
+from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.ogds import AgendaItemSyncer
 from opengever.exportng.ogds import CommitteeSyncer
 from opengever.exportng.ogds import GroupSyncer
@@ -17,6 +16,7 @@ from opengever.exportng.ogds import MeetingParticipantsSyncer
 from opengever.exportng.ogds import MeetingSyncer
 from opengever.exportng.ogds import ProposalSyncer
 from opengever.exportng.ogds import UserSyncer
+from plone import api
 from sqlalchemy import delete
 from sqlalchemy import or_
 from sqlalchemy import select
@@ -73,6 +73,7 @@ class Syncer(object):
             SubdossierSyncer.table,
             AgendaItemSyncer.table,
             MeetingSyncer.table,
+            ProposalSyncer.table,
         ]:
             sqltable = metadata.tables[table]
             stmt = select([sqltable.c.objexternalkey])
@@ -92,7 +93,10 @@ class Syncer(object):
             orphans = set(parents.values()) - parent_keys
             if orphans:
                 orphan_keys = [k for k, p in parents.items() if p in orphans]
-                logger.info('Orphans: %s', orphan_keys)
+                catalog = api.portal.get_tool('portal_catalog')
+                for uid in orphan_keys:
+                    res = catalog.unrestrictedSearchResults(UID=uid)
+                    logger.info('Orphan object at: %s', res[0].getPath())
                 stmt = delete(sqltable).where(sqltable.c.objexternalkey.in_(orphan_keys))
                 with engine.connect() as conn:
                     res = conn.execute(stmt)
