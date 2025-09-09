@@ -34,19 +34,19 @@ class Syncer(object):
             self.query['path'] = {'query': path, 'depth': -1}
 
     def create_tables(self):
-        create_table(UserSyncer.table, UserSyncer.mapping)
-        create_table(GroupSyncer.table, GroupSyncer.mapping)
+        create_table(UserSyncer.table, UserSyncer.serializer.mapping)
+        create_table(GroupSyncer.table, GroupSyncer.serializer.mapping)
         create_table(JOURNAL_TABLE, JOURNAL_MAPPING)
         create_table(FileplanEntrySyncer.table, FileplanEntrySyncer.serializer.mapping)
         create_table(DossierSyncer.table, DossierSyncer.serializer.mapping)
         create_table(SubdossierSyncer.table, SubdossierSyncer.serializer.mapping)
         create_table(DocumentSyncer.table, DocumentSyncer.serializer.mapping)
         create_table(DocumentSyncer.versions_table, DocumentSyncer.serializer.versions_mapping)
-        create_table(CommitteeSyncer.table, CommitteeSyncer.mapping)
-        create_table(MeetingSyncer.table, MeetingSyncer.mapping)
-        create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.mapping)
-        create_table(AgendaItemSyncer.table, AgendaItemSyncer.mapping)
-        create_table(ProposalSyncer.table, ProposalSyncer.mapping)
+        create_table(CommitteeSyncer.table, CommitteeSyncer.serializer.mapping)
+        create_table(MeetingSyncer.table, MeetingSyncer.serializer.mapping)
+        create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.serializer.mapping)
+        create_table(AgendaItemSyncer.table, AgendaItemSyncer.serializer.mapping)
+        create_table(ProposalSyncer.table, ProposalSyncer.serializer.mapping)
         create_table(CommitteePeriodSyncer.table, CommitteePeriodSyncer.serializer.mapping)
         metadata.create_all(checkfirst=True)
 
