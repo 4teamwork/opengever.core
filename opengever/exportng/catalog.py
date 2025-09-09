@@ -9,7 +9,6 @@ from opengever.exportng.db import metadata
 from opengever.exportng.journal import get_journal_entries_from_document
 from opengever.exportng.journal import get_journal_entries_from_dossier
 from opengever.exportng.journal import JOURNAL_TABLE
-from opengever.exportng.ogds import get_agendaitem_id
 from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
@@ -518,7 +517,7 @@ class DocumentSerializer(CatalogItemSerializer):
 
     def parent_uid(self):
         if isinstance(self.parent, AgendaItem):
-            return get_agendaitem_id(self.parent, None)
+            return 'agendaitem-{}'.format(self.parent.agenda_item_id)
         else:
             return self.parent.UID()
 
