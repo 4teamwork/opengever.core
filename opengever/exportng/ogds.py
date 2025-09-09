@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_parent
-from collections import namedtuple
+from opengever.base.exceptions import InvalidOguidIntIdPart
+from opengever.exportng.utils import Attribute
 from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
@@ -13,11 +14,28 @@ import logging
 
 logger = logging.getLogger('opengever.exportng')
 
-Attribute = namedtuple(
-    'Attribute',
-    ['name', 'col_name', 'col_type', 'getter'],
-)
-Attribute.__new__.__defaults__ = (None,)
+
+class OGDSItemSerializer(object):
+
+    mapping = {}
+
+    def __init__(self, item):
+        self.item = item
+
+    def data(self):
+        data = {}
+        for attr in self.mapping:
+            getter = getattr(self, attr.name, None)
+            if getter is not None:
+                try:
+                    value = getter()
+                except Exception:
+                    import pdb; pdb.set_trace()
+                    pass
+            else:
+                value = getattr(self.item, attr.name)
+            data[attr.col_name] = value
+        return data
 
 
 class OGDSSyncer(object):
@@ -55,7 +73,8 @@ class OGDSSyncer(object):
         self.truncate()
         inserts = []
         for item in self.get_ogds_items():
-            inserts.append(self.get_values(item))
+            serializer = self.serializer(item)
+            inserts.append(serializer.data())
 
         table = self.metadata.tables[self.table]
         with self.engine.connect() as conn:
@@ -63,11 +82,7 @@ class OGDSSyncer(object):
         logger.info('Added %s: %s', table, len(inserts))
 
 
-class UserSyncer(OGDSSyncer):
-
-    table = 'users'
-    model = User
-    key = 'email'
+class UserSerializer(OGDSItemSerializer):
 
     mapping = [
         Attribute('email', 'email', 'varchar'),
@@ -77,11 +92,15 @@ class UserSyncer(OGDSSyncer):
     ]
 
 
-class GroupSyncer(OGDSSyncer):
+class UserSyncer(OGDSSyncer):
 
-    table = 'groups'
-    model = Group
-    key = 'groupname'
+    table = 'users'
+    model = User
+    key = 'email'
+    serializer = UserSerializer
+
+
+class GroupSerializer(OGDSItemSerializer):
 
     mapping = [
         Attribute('groupname', 'groupname', 'varchar'),
@@ -90,20 +109,35 @@ class GroupSyncer(OGDSSyncer):
     ]
 
 
-def get_committee_uid(item, attr):
-    return item.resolve_committee().UID()
+class GroupSyncer(OGDSSyncer):
+
+    table = 'groups'
+    model = Group
+    key = 'groupname'
+    serializer = GroupSerializer
 
 
-def get_committee_dossier_location(item, attr):
-    return item.resolve_committee().get_repository_folder().UID()
+class CommitteeSerializer(OGDSItemSerializer):
 
+    mapping = [
+        Attribute('committee_uid', 'objexternalkey', 'varchar'),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('workflow_state', 'cdeactivated', 'boolean'),
+        Attribute('committee_dossier_location', 'cmeetingdossierlocation', 'varchar'),
+        Attribute('protocoltype', 'cprotocoltype', 'varchar'),
+    ]
 
-def get_protocoltype(item, attr):
-    return 'WORD'
+    def committee_uid(self):
+        return self.item.resolve_committee().UID()
 
+    def workflow_state(self):
+        return self.item.workflow_state != 'active'
 
-def get_committee_state(item, attr):
-    return item.workflow_state == 'active'
+    def committee_dossier_location(self):
+        return self.item.resolve_committee().get_repository_folder().UID()
+
+    def protocoltype(self):
+        return 'WORD'
 
 
 class CommitteeSyncer(OGDSSyncer):
@@ -111,47 +145,49 @@ class CommitteeSyncer(OGDSSyncer):
     table = 'committees'
     model = Committee
     key = 'committee_id'
+    serializer = CommitteeSerializer
 
+
+class MeetingSerializer(OGDSItemSerializer):
+
+    # mlink (video call link)
     mapping = [
-        Attribute('committee_id', 'objexternalkey', 'varchar', get_committee_uid),
-        Attribute('title', 'objname', 'varchar'),
-        Attribute('workflow_state', 'cdeactivated', 'boolean', get_committee_state),
-        Attribute('committee_id', 'cmeetingdossierlocation', 'varchar', get_committee_dossier_location),
-        Attribute('committee_id', 'cprotocoltype', 'varchar', get_protocoltype),
+        Attribute('meeting_id', 'objexternalkey', 'varchar'),
+        Attribute('title', 'objsubject', 'varchar'),
+        Attribute('start', 'mbegin', 'datetime'),
+        Attribute('end', 'mend', 'datetime'),
+        Attribute('location', 'mlocation', 'varchar'),
+        Attribute('committee_uid', 'mcommittee', 'varchar'),
+        Attribute('dossier_uid', 'mdossier', 'varchar'),
+        Attribute('timezone', 'mtimezone', 'varchar'),
+        Attribute('workflow_state', 'mmeetingstate', 'varchar'),
     ]
 
+    def meeting_id(self):
+        return 'meeting-{}'.format(self.item.meeting_id)
 
-def get_timezone(item, attr):
-    return 'Europe/Zurich'
+    def timezone(self):
+        return 'Europe/Zurich'
 
+    def dossier_uid(self):
+        try:
+            dossier = self.item.dossier_oguid.resolve_object()
+        except InvalidOguidIntIdPart:
+            logger.warning('Could not resolve dossier for meeting.')
+            return None
+        return dossier.UID()
 
-def get_dossier_uid(item, attr):
-    oguid = getattr(item, attr)
-    return oguid.resolve_object().UID()
+    def committee_uid(self):
+        return self.item.committee.resolve_committee().UID()
 
-
-def get_meeting_committee_uid(item, attr):
-    committee = getattr(item, attr)
-    return committee.resolve_committee().UID()
-
-
-def get_meeting_id(item, attr):
-    return '{}-{}-{}-{}'.format(
-        item.dossier_admin_unit_id,
-        item.dossier_int_id,
-        item.committee_id,
-        item.meeting_id,
-    )
-
-
-def get_meeting_state(item, attr):
-    state_mapping = {
-        'pending': 'IN_PREPARATION',
-        'held': 'IN_PROGRESS',
-        'closed': 'COMPLETED',
-        'cancelled': 'CLOSED',
-    }
-    return state_mapping.get(item.workflow_state)
+    def workflow_state(self):
+        state_mapping = {
+            'pending': 'IN_PREPARATION',
+            'held': 'IN_PROGRESS',
+            'closed': 'COMPLETED',
+            'cancelled': 'CLOSED',
+        }
+        return state_mapping.get(self.item.workflow_state)
 
 
 class MeetingSyncer(OGDSSyncer):
@@ -159,18 +195,15 @@ class MeetingSyncer(OGDSSyncer):
     table = 'meetings'
     model = Meeting
     key = 'meeting_id'
+    serializer = MeetingSerializer
 
-# mlink (video call link)
+
+class MeetingParticipantsSerializer(OGDSItemSerializer):
+
     mapping = [
-        Attribute('meeting_id', 'objexternalkey', 'varchar', get_meeting_id),
-        Attribute('title', 'objsubject', 'varchar'),
-        Attribute('start', 'mbegin', 'datetime'),
-        Attribute('end', 'mend', 'datetime'),
-        Attribute('location', 'mlocation', 'varchar'),
-        Attribute('committee', 'mcommittee', 'varchar', get_meeting_committee_uid),
-        Attribute('dossier_oguid', 'mdossier', 'varchar', get_dossier_uid),
-        Attribute('start', 'mtimezone', 'varchar', get_timezone),
-        Attribute('workflow_state', 'mmeetingstate', 'varchar', get_meeting_state),
+        Attribute('meeting_id', 'meeting', 'varchar'),
+        Attribute('participant', 'participant', 'varchar'),
+        Attribute('role', 'role', 'varchar'),
     ]
 
 
@@ -179,15 +212,10 @@ class MeetingParticipantsSyncer(OGDSSyncer):
     table = 'meeting_participants'
     model = Meeting
     key = 'meeting_id'
-
-    mapping = [
-        Attribute('meeting_id', 'meeting', 'varchar', get_meeting_id),
-        Attribute('participant', 'participant', 'varchar'),
-        Attribute('role', 'role', 'varchar'),
-    ]
+    serializer = MeetingParticipantsSerializer
 
     def get_values(self, item):
-        meeting_id = get_meeting_id(item, 'meeting_id')
+        meeting_id = 'meeting-{}'.format(item.meeting_id)
         participants = []
         for participant in item.participants:
             role = None
@@ -214,23 +242,30 @@ class MeetingParticipantsSyncer(OGDSSyncer):
         logger.info('Added %s: %s', table, len(inserts))
 
 
-def get_agendaitem_id(item, attr):
-    return '{}-{}'.format(
-        get_meeting_id(item.meeting, 'meeting_id'), item.agenda_item_id)
+class AgendaItemSerializer(OGDSItemSerializer):
 
+    mapping = [
+        Attribute('agendaitem_id', 'objexternalkey', 'varchar'),
+        Attribute('meeting_id', 'objprimaryrelated', 'varchar'),
+        Attribute('title', 'objsubject', 'varchar'),
+        Attribute('workflow_state', 'aistate', 'varchar'),
+        Attribute('proposal_uid', 'aiproposal', 'varchar'),
+        Attribute('dossier_uid', 'mdossier', 'varchar'),
+    ]
 
-def get_agendaitem_meeting_id(item, attr):
-    return get_meeting_id(item.meeting, 'meeting_id')
+    def agendaitem_id(self):
+        return 'agendaitem-{}'.format(self.item.agenda_item_id)
 
+    def meeting_id(self):
+        return 'meeting-{}'.format(self.item.meeting.meeting_id)
 
-def get_agendaitem_proposal_id(item, attr):
-    if item.has_proposal:
-        return item.proposal.resolve_proposal().UID()
+    def proposal_uid(self):
+        if self.item.has_proposal:
+            return self.item.proposal.resolve_proposal().UID()
 
-
-def get_agendaitem_dossier(item, attr):
-    if item.has_proposal:
-        return aq_parent(item.proposal.resolve_proposal()).UID()
+    def dossier_uid(self):
+        if self.item.has_proposal:
+            return aq_parent(self.item.proposal.resolve_proposal()).UID()
 
 
 class AgendaItemSyncer(OGDSSyncer):
@@ -238,53 +273,55 @@ class AgendaItemSyncer(OGDSSyncer):
     table = 'agendaitems'
     model = AgendaItem
     key = 'agenda_item_id'
+    serializer = AgendaItemSerializer
 
+
+class ProposalSerializer(OGDSItemSerializer):
+
+    # objcreatedat, objmodifiedat?
     mapping = [
-        Attribute('agenda_item_id', 'objexternalkey', 'varchar', get_agendaitem_id),
-        Attribute('meeting_id', 'objprimaryrelated', 'varchar', get_agendaitem_meeting_id),
-        Attribute('title', 'objsubject', 'varchar'),
-        Attribute('workflow_state', 'aistate', 'varchar'),
-        Attribute('proposal_id', 'aiproposal', 'varchar', get_agendaitem_proposal_id),
-        Attribute('proposal_id', 'mdossier', 'varchar', get_agendaitem_dossier),
+        Attribute('proposal_uid', 'objexternalkey', 'varchar'),
+        Attribute('committee_uid', 'pcommittee', 'varchar'),
+        Attribute('title', 'objname', 'varchar'),
+        Attribute('workflow_state', 'pstate', 'varchar'),
+        Attribute('creator', 'objcreatedby', 'varchar'),
+        Attribute('issuer', 'pproposedby', 'varchar'),
+        Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
+        Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
     ]
 
+    def __init__(self, item):
+        super(ProposalSerializer, self).__init__(item)
+        self.proposal = item.resolve_proposal()
 
-def get_proposal_uid(item, attr):
-    return item.resolve_proposal().UID()
+    def proposal_uid(self):
+        return self.proposal.UID()
 
+    def committee_uid(self):
+        return self.item.committee.resolve_committee().UID()
 
-def get_proposal_committee_uid(item, attr):
-    return item.committee.resolve_committee().UID()
+    def issuer(self):
+        return userid_to_email(self.item.issuer)
 
+    def dossier_uid(self):
+        return self.proposal.get_containing_dossier().UID()
 
-def get_proposal_dossier_uid(item, attr):
-    return item.resolve_proposal().get_containing_dossier().UID()
+    def creator(self):
+        return userid_to_email(self.proposal.Creator())
 
+    def agendaitem_id(self):
+        if self.item.agenda_item is not None:
+            return "agendaitem-{}".format(self.item.agenda_item.agenda_item_id)
 
-def get_proposal_issuer(item, attr):
-    return userid_to_email(item.issuer)
-
-
-def get_proposal_creator(item, attr):
-    return userid_to_email(item.resolve_proposal().Creator())
-
-
-def get_proposal_agenda_item(item, attr):
-    if item.agenda_item is not None:
-        return get_agendaitem_id(item.agenda_item, attr)
-    else:
-        return None
-
-
-def get_proposal_state(item, attr):
-    state_mapping = {
-        'scheduled': 'REGISTERED',
-        'pending': 'IN_PREPARATION',
-        'submitted': 'SUBMITTED',
-        'decided': 'DECIDED',
-        'cancelled': 'DISCARDED',
-    }
-    return state_mapping.get(item.workflow_state)
+    def workflow_state(self):
+        state_mapping = {
+            'scheduled': 'REGISTERED',
+            'pending': 'IN_PREPARATION',
+            'submitted': 'SUBMITTED',
+            'decided': 'DECIDED',
+            'cancelled': 'DISCARDED',
+        }
+        return state_mapping.get(self.item.workflow_state)
 
 
 class ProposalSyncer(OGDSSyncer):
@@ -292,34 +329,4 @@ class ProposalSyncer(OGDSSyncer):
     table = 'proposals'
     model = Proposal
     key = 'proposal_id'
-
-# objcreatedat, objmodifiedat?
-    mapping = [
-        Attribute('proposal_id', 'objexternalkey', 'varchar', get_proposal_uid),
-        Attribute('committee', 'pcommittee', 'varchar', get_proposal_committee_uid),
-        Attribute('title', 'objname', 'varchar'),
-        Attribute('workflow_state', 'pstate', 'varchar', get_proposal_state),
-        Attribute('Creator', 'objcreatedby', 'varchar', get_proposal_creator),
-        Attribute('issuer', 'pproposedby', 'varchar', get_proposal_issuer),
-        Attribute('dossier', 'poriginaldossier', 'varchar', get_proposal_dossier_uid),
-        Attribute('agendaitem', 'pagendaitem', 'varchar', get_proposal_agenda_item),
-    ]
-
-
-# class SubmittedDocumentSyncer(OGDSSyncer):
-
-#     table = 'submitteddocuments'
-#     model = SubmittedDocument
-#     key = 'document_id'
-
-#     mapping = [
-#         Attribute('document_id', 'objexternalkey', 'varchar', get_proposal_uid),
-#         Attribute('UID', 'objexternalkey', 'varchar', None),
-#         Attribute('parent', 'objprimaryrelated', 'varchar', parent_uid),
-#         Attribute('created', 'objcreatedat', 'datetime', as_datetime),
-#         Attribute('modified', 'objmodifiedat', 'datetime', as_datetime),
-#         Attribute('title', 'objname', 'varchar', get_title),
-#         Attribute('Creator', 'objcreatedby', 'varchar', get_creator),
-
-#     ]
-
+    serializer = ProposalSerializer
