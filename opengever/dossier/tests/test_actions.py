@@ -115,6 +115,23 @@ class TestDossierContextActions(IntegrationTestCase):
         expected_actions = [
             u'document_with_template',
             u'edit', u'export_pdf',
+            u'pdf_dossierdetails', u'zipexport']
+        self.assertEqual(expected_actions, self.get_actions(self.dossier))
+
+    def test_dossier_context_actions_with_manager(self):
+        self.login(self.manager)
+        expected_actions = [
+            u'document_with_template',
+            u'edit', u'export_pdf', u'local_roles',
+            u'pdf_dossierdetails', u'protect_dossier', u'zipexport',
+            u'transfer_dossier_responsible']
+        self.assertEqual(expected_actions, self.get_actions(self.dossier))
+
+    def test_dossier_context_actions_with_limited_admin(self):
+        self.login(self.limited_admin)
+        expected_actions = [
+            u'document_with_template',
+            u'edit', u'export_pdf',
             u'pdf_dossierdetails', u'zipexport',
             u'transfer_dossier_responsible']
         self.assertEqual(expected_actions, self.get_actions(self.dossier))
@@ -174,8 +191,7 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             expected_actions = [u'copy_documents_from_workspace', u'copy_documents_to_workspace',
                                 u'create_linked_workspace', u'document_with_template', u'edit',
                                 u'export_pdf', u'link_to_workspace', u'list_workspaces',
-                                u'pdf_dossierdetails', u'unlink_workspace', u'zipexport',
-                                u'transfer_dossier_responsible']
+                                u'pdf_dossierdetails', u'unlink_workspace', u'zipexport']
 
             self.assertEqual(expected_actions, self.get_actions(self.dossier))
 
@@ -185,7 +201,7 @@ class TestWorkspaceClientDossierContextActions(FunctionalWorkspaceClientTestCase
             subdossier = create(Builder('dossier').within(self.dossier))
             expected_actions = [u'copy_documents_to_workspace', u'delete', u'document_with_template', u'edit',
                                 u'export_pdf', u'list_workspaces', u'pdf_dossierdetails',
-                                u'zipexport', u'transfer_dossier_responsible']
+                                u'zipexport']
 
             self.assertEqual(expected_actions, self.get_actions(subdossier))
 
