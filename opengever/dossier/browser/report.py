@@ -1,4 +1,5 @@
 from opengever.api.solr_query_service import SolrFieldMapper
+from opengever.base import _ as base_mf
 from opengever.base.browser.reporting_view import SolrReporterView
 from opengever.base.reporter import DATE_NUMBER_FORMAT
 from opengever.base.reporter import readable_actor
@@ -77,6 +78,12 @@ class DossierReporter(SolrReporterView):
             'alias': 'creator_fullname',
             'transform': readable_actor,
             'title': _(u'dossier_report_creator', default=u'Creator')
+        },
+        {
+            'id': 'archival_value',
+            'is_default': False,
+            'transform': StringTranslater(None, 'plone').translate,
+            'title': base_mf(u'label_archival_value', default=u'Archival Value')
         },
     )
 
