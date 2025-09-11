@@ -35,8 +35,7 @@ class TestUIActionsGET(IntegrationTestCase):
                 {u'id': u'edit'},
                 {u'id': u'export_pdf'},
                 {u'id': u'pdf_dossierdetails'},
-                {u'id': u'zipexport'},
-                {u'id': u'transfer_dossier_responsible'}]}, browser.json)
+                {u'id': u'zipexport'}]}, browser.json)
 
     @browsing
     def test_ui_actions_includes_listing_actions(self, browser):
