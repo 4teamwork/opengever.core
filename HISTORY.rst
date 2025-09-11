@@ -10,6 +10,16 @@ Versions are of the form MAJOR.MINOR.PATCH. Each MINOR release (MAJOR.MINOR.0) i
 
 .. towncrier release notes start
 
+2025.8.2 (2025-09-11)
+---------------------
+
+Bug fixes:
+
+
+- Fix dossier report translations for archival_value column. [ran] [TI-1604]
+- Only users with 'Transfer Assignment' can see transfer responsible action. [ran] [TI-2961]
+
+
 2025.8.1 (2025-09-03)
 ---------------------
 
