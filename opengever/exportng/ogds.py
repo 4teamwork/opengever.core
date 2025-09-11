@@ -6,6 +6,7 @@ from opengever.exportng.utils import userid_to_email
 from opengever.meeting.model import AgendaItem
 from opengever.meeting.model import Committee
 from opengever.meeting.model import Meeting
+from opengever.meeting.model import Membership
 from opengever.meeting.model import Proposal
 from opengever.ogds.models.group import Group
 from opengever.ogds.models.user import User
@@ -27,11 +28,7 @@ class OGDSItemSerializer(object):
         for attr in self.mapping:
             getter = getattr(self, attr.name, None)
             if getter is not None:
-                try:
-                    value = getter()
-                except Exception:
-                    import pdb; pdb.set_trace()
-                    pass
+                value = getter()
             else:
                 value = getattr(self.item, attr.name)
             data[attr.col_name] = value
@@ -53,16 +50,6 @@ class OGDSSyncer(object):
     def get_ogds_items(self):
         distinct_attr = getattr(self.model, self.key)
         return self.model.query.distinct(distinct_attr).all()
-
-    def get_values(self, item):
-        data = {}
-        for attr in self.mapping:
-            if attr.getter is not None:
-                value = attr.getter(item, attr.name)
-            else:
-                value = getattr(item, attr.name)
-            data[attr.col_name] = value
-        return data
 
     def truncate(self):
         with self.engine.begin() as conn:
@@ -148,6 +135,34 @@ class CommitteeSyncer(OGDSSyncer):
     serializer = CommitteeSerializer
 
 
+class CommitteeMemberSerializer(OGDSItemSerializer):
+
+    mapping = [
+        Attribute('committee_uid', 'committee', 'varchar'),
+        Attribute('member_id', 'participant', 'varchar'),
+        Attribute('role', 'role', 'varchar'),
+        # Attribute('date_from'),
+        # Attribute('date_to'),
+    ]
+
+    def committee_uid(self):
+        return self.item.committee.resolve_committee().UID()
+
+    def member_id(self):
+        return self.item.member.email
+
+
+class CommitteeMemberSyncer(OGDSSyncer):
+
+    table = 'committee_memberships'
+    model = Membership
+    key = 'committee_id'
+    serializer = CommitteeMemberSerializer
+
+    def get_ogds_items(self):
+        return self.model.query.all()
+
+
 class MeetingSerializer(OGDSItemSerializer):
 
     # mlink (video call link)
@@ -206,22 +221,14 @@ class MeetingParticipantsSerializer(OGDSItemSerializer):
         Attribute('role', 'role', 'varchar'),
     ]
 
-
-class MeetingParticipantsSyncer(OGDSSyncer):
-
-    table = 'meeting_participants'
-    model = Meeting
-    key = 'meeting_id'
-    serializer = MeetingParticipantsSerializer
-
-    def get_values(self, item):
-        meeting_id = 'meeting-{}'.format(item.meeting_id)
+    def data(self):
+        meeting_id = 'meeting-{}'.format(self.item.meeting_id)
         participants = []
-        for participant in item.participants:
+        for participant in self.item.participants:
             role = None
-            if participant == item.presidency:
+            if participant == self.item.presidency:
                 role = 'Vorsitz'
-            elif participant == item.secretary:
+            elif participant == self.item.secretary:
                 role = 'Protokollführung'
             participants.append({
                 'meeting': meeting_id,
@@ -230,11 +237,20 @@ class MeetingParticipantsSyncer(OGDSSyncer):
             })
         return participants
 
+
+class MeetingParticipantsSyncer(OGDSSyncer):
+
+    table = 'meeting_participants'
+    model = Meeting
+    key = 'meeting_id'
+    serializer = MeetingParticipantsSerializer
+
     def sync(self):
         self.truncate()
         inserts = []
         for item in self.get_ogds_items():
-            inserts += self.get_values(item)
+            serializer = self.serializer(item)
+            inserts += serializer.data()
 
         table = self.metadata.tables[self.table]
         with self.engine.connect() as conn:
