@@ -2,6 +2,7 @@ from opengever.base.context_actions import BaseContextActions
 from opengever.base.interfaces import IOpengeverBaseLayer
 from opengever.base.listing_actions import BaseListingActions
 from opengever.docugate import is_docugate_feature_enabled
+from opengever.dossier import is_grant_dossier_manager_to_responsible_enabled
 from opengever.dossier.base import DOSSIER_STATE_RESOLVED
 from opengever.dossier.behaviors.dossier import IDossierMarker
 from opengever.dossier.dossiertemplate.behaviors import IDossierTemplateMarker
@@ -188,7 +189,15 @@ class DossierContextActions(BaseContextActions):
         return True
 
     def is_transfer_dossier_responsible_available(self):
-        return api.user.has_permission('Modify portal content', obj=self.context)
+
+        # Fribourg wants everyone to see the action and get an Error if they don't
+        # have the correct permissions.
+        # Everyone else should only be able to see it if they have the correct permissions.
+
+        if is_grant_dossier_manager_to_responsible_enabled():
+            return api.user.has_permission('Modify portal content', obj=self.context)
+
+        return api.user.has_permission('opengever.api: Transfer Assignment', obj=self.context)
 
 
 @adapter(IDossierTemplateMarker, IOpengeverBaseLayer)
