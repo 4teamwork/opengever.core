@@ -10,6 +10,7 @@ from opengever.exportng.db import metadata
 from opengever.exportng.journal import JOURNAL_MAPPING
 from opengever.exportng.journal import JOURNAL_TABLE
 from opengever.exportng.ogds import AgendaItemSyncer
+from opengever.exportng.ogds import CommitteeMemberSyncer
 from opengever.exportng.ogds import CommitteeSyncer
 from opengever.exportng.ogds import GroupSyncer
 from opengever.exportng.ogds import MeetingParticipantsSyncer
@@ -43,6 +44,7 @@ class Syncer(object):
         create_table(DocumentSyncer.table, DocumentSyncer.serializer.mapping)
         create_table(DocumentSyncer.versions_table, DocumentSyncer.serializer.versions_mapping)
         create_table(CommitteeSyncer.table, CommitteeSyncer.serializer.mapping)
+        create_table(CommitteeMemberSyncer.table, CommitteeMemberSyncer.serializer.mapping)
         create_table(MeetingSyncer.table, MeetingSyncer.serializer.mapping)
         create_table(MeetingParticipantsSyncer.table, MeetingParticipantsSyncer.serializer.mapping)
         create_table(AgendaItemSyncer.table, AgendaItemSyncer.serializer.mapping)
@@ -59,6 +61,7 @@ class Syncer(object):
         DocumentSyncer(self.query).sync()
         CommitteePeriodSyncer(self.query).sync()
         CommitteeSyncer(engine, metadata).sync()
+        CommitteeMemberSyncer(engine, metadata).sync()
         MeetingSyncer(engine, metadata).sync()
         MeetingParticipantsSyncer(engine, metadata).sync()
         AgendaItemSyncer(engine, metadata).sync()
