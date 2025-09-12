@@ -14,6 +14,7 @@ from opengever.ogds.models.service import ogds_service
 from opengever.task.helper import task_type_value_helper
 from Products.statusmessages.interfaces import IStatusMessage
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import true
 from zExceptions import Unauthorized
 from zope.i18n import translate
 
@@ -186,11 +187,13 @@ class OGDSGroupsMembershipReporter(BaseReporterView):
 
     def __call__(self):
         session = create_session()
-        query = session.query(Group).options(joinedload(Group.users))
+        query = session.query(Group).options(joinedload(Group.users)).filter(Group.active == true())
         groups_with_users = []
 
         for group in query.all():
             for user in group.users:
+                if not user.active:
+                    continue
                 group_info = {
                     'group_name': group.groupname,
                     'group_title': group.title,
