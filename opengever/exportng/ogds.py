@@ -300,6 +300,9 @@ class AgendaItemSerializer(OGDSItemSerializer):
     def meeting_id(self):
         return 'meeting-{}'.format(self.item.meeting.meeting_id)
 
+    def title(self):
+        return self.item.get_title()
+
     def proposal_uid(self):
         if self.item.has_proposal:
             return self.item.proposal.resolve_proposal().UID()
