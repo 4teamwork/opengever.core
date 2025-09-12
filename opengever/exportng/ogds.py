@@ -112,6 +112,9 @@ class CommitteeSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'cdeactivated', 'boolean'),
         Attribute('committee_dossier_location', 'cmeetingdossierlocation', 'varchar'),
         Attribute('protocoltype', 'cprotocoltype', 'varchar'),
+        Attribute('objsecsecurity', 'objsecsecurity', 'jsonb'),
+        Attribute('objsecchange', 'objsecchange', 'jsonb'),
+        Attribute('objsecread', 'objsecread', 'jsonb'),
     ]
 
     def committee_uid(self):
@@ -125,6 +128,16 @@ class CommitteeSerializer(OGDSItemSerializer):
 
     def protocoltype(self):
         return 'WORD'
+
+    def objsecsecurity(self):
+        return []
+
+    def objsecchange(self):
+        members = self.item.get_active_members()
+        return [member.email for member in members]
+
+    def objsecread(self):
+        return []
 
 
 class CommitteeSyncer(OGDSSyncer):
@@ -154,7 +167,7 @@ class CommitteeMemberSerializer(OGDSItemSerializer):
 
 class CommitteeMemberSyncer(OGDSSyncer):
 
-    table = 'committee_memberships'
+    table = 'committee_participants'
     model = Membership
     key = 'committee_id'
     serializer = CommitteeMemberSerializer
@@ -176,6 +189,9 @@ class MeetingSerializer(OGDSItemSerializer):
         Attribute('dossier_uid', 'mdossier', 'varchar'),
         Attribute('timezone', 'mtimezone', 'varchar'),
         Attribute('workflow_state', 'mmeetingstate', 'varchar'),
+        Attribute('objsecsecurity', 'objsecsecurity', 'jsonb'),
+        Attribute('objsecchange', 'objsecchange', 'jsonb'),
+        Attribute('objsecread', 'objsecread', 'jsonb'),
     ]
 
     def meeting_id(self):
@@ -203,6 +219,15 @@ class MeetingSerializer(OGDSItemSerializer):
             'cancelled': 'CLOSED',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def objsecsecurity(self):
+        return []
+
+    def objsecchange(self):
+        return []
+
+    def objsecread(self):
+        return []
 
 
 class MeetingSyncer(OGDSSyncer):
@@ -282,6 +307,13 @@ class AgendaItemSerializer(OGDSItemSerializer):
     def dossier_uid(self):
         if self.item.has_proposal:
             return aq_parent(self.item.proposal.resolve_proposal()).UID()
+
+    def workflow_state(self):
+        state_mapping = {
+            'pending': 'OPEN',
+            'decided': 'DONE',
+        }
+        return state_mapping.get(self.item.workflow_state)
 
 
 class AgendaItemSyncer(OGDSSyncer):
