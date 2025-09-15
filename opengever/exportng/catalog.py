@@ -535,12 +535,16 @@ class DocumentSerializer(CatalogItemSerializer):
         if self.parent.portal_type == 'opengever.meeting.proposal':
             return 'pproposaldocument'
         if self.parent.portal_type == 'opengever.dossier.businesscasedossier':
-            if self.obj.portal_type == 'opengever.document.document':
-                backrefs = self.obj.related_items(
-                    include_forwardrefs=False, include_backrefs=True)
-                if any([br.portal_type == 'opengever.meeting.proposal' for br in backrefs]):
-                    return 'pdocuments'
             return 'gbodocuments'
+        if self.parent.portal_type == 'opengever.meeting.meetingdossier':
+            return 'gbodocuments'
+        # if self.obj.portal_type == 'opengever.document.document':
+        #     backrefs = self.obj.related_items(
+        #         include_forwardrefs=False, include_backrefs=True)
+        #     if any([br.portal_type == 'opengever.meeting.proposal' for br in backrefs]):
+        #         return 'pdocuments'
+        logger.warning('Could not determine attributedefinitiontarget for %s', self.obj)
+        return 'gbodocuments'
 
     def versions(self):
         versions = []
