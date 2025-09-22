@@ -1943,7 +1943,11 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
         self.assertEqual("this* ! that*", preprocessor.preprocess_query("this ! that"))
         self.assertEqual("this* ' that*", preprocessor.preprocess_query("this ' that"))
 
-    def test_preprocessing_appends_wildcard_to_single_alphanumerical_chars(self):
+    def test_preprocessing_handles_single_alphanumerical_chars(self):
         preprocessor = LiveSearchQueryPreprocessingMixin()
-        self.assertEqual("this* a* that*", preprocessor.preprocess_query("this a that"))
-        self.assertEqual("this* 4* that*", preprocessor.preprocess_query("this 4 that"))
+        self.assertEqual("this* a that*", preprocessor.preprocess_query("this a that"))
+        self.assertEqual("this* 4 that*", preprocessor.preprocess_query("this 4 that"))
+        self.assertEqual("(single char 5)", preprocessor.preprocess_query("single-char-5"))
+        self.assertEqual("(multiple chars 15*)", preprocessor.preprocess_query("multiple-chars-15"))
+        self.assertEqual("1", preprocessor.preprocess_query("1"))
+        self.assertEqual("a", preprocessor.preprocess_query("a"))

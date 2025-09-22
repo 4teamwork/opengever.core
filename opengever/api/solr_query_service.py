@@ -189,7 +189,7 @@ class LiveSearchQueryPreprocessingMixin(object):
             return term
         if term in IGNORED_TOKENS:
             return None
-        if len(term) == 1 and not term.isalnum():
+        if len(term) == 1:
             return term
         prefix = ""
         term = term.rstrip(";,.")
@@ -207,7 +207,8 @@ class LiveSearchQueryPreprocessingMixin(object):
         # Handle bracket and add wildcard to last token
         last_token = tokens[-1]
         n_brackets = len(last_token) - len(last_token.rstrip(")"))
-        last_token = last_token.rstrip(")").rstrip("*") + "*" + n_brackets * ")"
+        wildcard_token = "*" if len(last_token) > 1 else ""
+        last_token = last_token.rstrip(")").rstrip("*") + wildcard_token + n_brackets * ")"
         tokens[-1] = last_token
 
         if len(tokens) > 1:
