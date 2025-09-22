@@ -1827,9 +1827,12 @@ class TestSolrLiveSearchGet(SolrIntegrationTestCase):
         queries = [{"q": "4A.BE.2301-43B/C32"},
                    {"q": "4A.BE.2301-43"},
                    {"q": "4A.BE"},
+                   {"q": "4A 43B"},
+                   {"q": "4 A 43B"},
                    {"q": "2301"},
                    {"q": "BE.2301"},
                    {"q": "43B"},
+                   {"q": "43 B"},
                    {"q": "B/C"}]
         for query in queries:
             livesearch = self.solr_livesearch(browser, query)
@@ -1951,3 +1954,8 @@ class TestSolrLiveSearchQueryPreprocessing(TestCase):
         self.assertEqual("(multiple chars 15*)", preprocessor.preprocess_query("multiple-chars-15"))
         self.assertEqual("1", preprocessor.preprocess_query("1"))
         self.assertEqual("a", preprocessor.preprocess_query("a"))
+
+    def test_preprocessing_handles_combined_chars(self):
+        preprocessor = LiveSearchQueryPreprocessingMixin()
+        self.assertEqual("a1*", preprocessor.preprocess_query("a1"))
+        self.assertEqual("a1* (hugo boss*)", preprocessor.preprocess_query("a1 hugo-boss"))

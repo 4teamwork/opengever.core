@@ -352,6 +352,16 @@
         <charFilter class="solr.MappingCharFilterFactory" mapping="mapping-FoldToASCII.txt"/>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.KeywordRepeatFilterFactory" />
+        <!--
+            We use two instances of WordDelimiterGraphFilterFactory:
+
+            1. The first filter splits tokens on case changes, numerics, and possessives, and generates word and number parts.
+              It also catenates words/numbers and preserves the original token for more granular indexing.
+
+            2. The second filter disables splitting on numerics and only preserves the original token, ensuring unmodified tokens are indexed alongside split versions.
+
+            The goal is to index both split and non-split tokens for better search flexibility.
+        -->
         <filter class="solr.WordDelimiterGraphFilterFactory"
                 splitOnCaseChange="1"
                 splitOnNumerics="1"
@@ -361,6 +371,9 @@
                 catenateWords="1"
                 catenateNumbers="1"
                 catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnNumerics="0"
                 preserveOriginal="1"/>
         <filter class="solr.FlattenGraphFilterFactory" />
         <!-- <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" /> -->
@@ -397,6 +410,16 @@
                 ignoreCase="true"
                 words="lang/stopwords_en.txt"
                 /> -->
+        <!--
+            We use two instances of WordDelimiterGraphFilterFactory:
+
+            1. The first filter splits tokens on case changes, numerics, and possessives, and generates word and number parts.
+              It also catenates words/numbers and preserves the original token for more granular indexing.
+
+            2. The second filter disables splitting on numerics and only preserves the original token, ensuring unmodified tokens are indexed alongside split versions.
+
+            The goal is to index both split and non-split tokens for better search flexibility.
+        -->
         <filter class="solr.WordDelimiterGraphFilterFactory"
                 splitOnCaseChange="1"
                 splitOnNumerics="1"
@@ -406,6 +429,9 @@
                 catenateWords="1"
                 catenateNumbers="1"
                 catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnNumerics="0"
                 preserveOriginal="1"/>
         <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -442,6 +468,17 @@
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.KeywordRepeatFilterFactory" />
+
+          <!--
+            We use two instances of WordDelimiterGraphFilterFactory:
+
+            1. The first filter splits tokens on case changes, numerics, and possessives, and generates word and number parts.
+              It also catenates words/numbers and preserves the original token for more granular indexing.
+
+            2. The second filter disables splitting on numerics and only preserves the original token, ensuring unmodified tokens are indexed alongside split versions.
+
+            The goal is to index both split and non-split tokens for better search flexibility.
+        -->
         <filter class="solr.WordDelimiterGraphFilterFactory"
                 splitOnCaseChange="1"
                 splitOnNumerics="1"
@@ -451,6 +488,9 @@
                 catenateWords="1"
                 catenateNumbers="1"
                 catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnNumerics="0"
                 preserveOriginal="1"/>
         <filter class="solr.FlattenGraphFilterFactory" />
         <filter class="solr.LowerCaseFilterFactory"/>
@@ -481,6 +521,16 @@
       <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
         <filter class="solr.KeywordRepeatFilterFactory" />
+        <!--
+            We use two instances of WordDelimiterGraphFilterFactory:
+
+            1. The first filter splits tokens on case changes, numerics, and possessives, and generates word and number parts.
+              It also catenates words/numbers and preserves the original token for more granular indexing.
+
+            2. The second filter disables splitting on numerics and only preserves the original token, ensuring unmodified tokens are indexed alongside split versions.
+
+            The goal is to index both split and non-split tokens for better search flexibility.
+        -->
         <filter class="solr.WordDelimiterGraphFilterFactory"
                 splitOnCaseChange="1"
                 splitOnNumerics="1"
@@ -490,6 +540,9 @@
                 catenateWords="1"
                 catenateNumbers="1"
                 catenateAll="0"
+                preserveOriginal="1"/>
+        <filter class="solr.WordDelimiterGraphFilterFactory"
+                splitOnNumerics="0"
                 preserveOriginal="1"/>
         <filter class="solr.FlattenGraphFilterFactory" />
         <!-- removes l', etc -->
