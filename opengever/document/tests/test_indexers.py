@@ -580,3 +580,15 @@ class SolrDocumentIndexer(SolrIntegrationTestCase):
 
         # Mails are always on version 0
         self.assertEqual(indexed_value, 1)
+
+    def test_reindex_object_is_possible_as_anonymous(self):
+        """A document should be reindexable as an anonymous user because no
+        user specific data is indexed.
+
+        Reindexing as an anonymous user is required by the
+        save_pdf_under_callback view which is called by bumblebee."""
+        self.login(self.regular_user)
+        document = self.document
+
+        self.logout()
+        self.assertIsNone(document.reindexObject())

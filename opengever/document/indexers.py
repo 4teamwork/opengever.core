@@ -6,6 +6,7 @@ from opengever.base.behaviors.classification import IClassification
 from opengever.base.behaviors.classification import IClassificationMarker
 from opengever.base.interfaces import IReferenceNumber
 from opengever.base.interfaces import ISequenceNumber
+from opengever.base.security import elevated_privileges
 from opengever.base.utils import ensure_str
 from opengever.base.utils import unrestrictedPathToCatalogBrain
 from opengever.document.approvals import IApprovalList
@@ -284,6 +285,13 @@ def is_locked_by_copy_to_workspace(obj):
 
 @indexer(IBaseDocument)
 def document_version_count(obj):
-    # We track the total number of versions, not the current version number.
-    # Since versioning starts at 0, we add 1 to get the actual count of versions.
-    return obj.get_current_version_id(missing_as_zero=True) + 1
+    # We need to access the version history under some circumstances in order
+    # to determine the version count. The version history is protected and
+    # we need elevated privileges to make sure, every user can reindex this
+    # value.
+    #
+    # Fixes: https://4teamwork.atlassian.net/browse/TI-3142
+    with elevated_privileges():
+        # We track the total number of versions, not the current version number.
+        # Since versioning starts at 0, we add 1 to get the actual count of versions.
+        return obj.get_current_version_id(missing_as_zero=True) + 1
