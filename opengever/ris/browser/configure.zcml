@@ -1,7 +1,10 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="opengever.ris">
+
+  <include package="plone.rest" file="meta.zcml" />
 
   <browser:page
       name="proposal_transition_controller"
@@ -38,4 +41,37 @@
       permission="cmf.ModifyPortalContent"
       />
 
+  <plone:service
+      name="@ris-return-excerpt"
+      for="opengever.document.document.IDocumentSchema"
+      method="POST"
+      factory="opengever.ris.browser.ris_excerpt.RISReturnExcerptService"
+      permission="opengever.ris.ReturnExcerpt"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <plone:service
+      name="@ris-update-excerpt"
+      for="opengever.document.document.IDocumentSchema"
+      method="POST"
+      factory="opengever.ris.browser.ris_excerpt.RISUpdateExcerptService"
+      permission="opengever.ris.UpdateExcerpt"
+      layer="opengever.base.interfaces.IOpengeverBaseLayer"
+      />
+
+  <browser:page
+      name="receive-ris-return-excerpt"
+      for="opengever.dossier.behaviors.dossier.IDossierMarker"
+      class="opengever.ris.browser.ris_excerpt.RISReturnExcerptReceive"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
+
+  <browser:page
+      name="receive-ris-update-excerpt"
+      for="opengever.document.document.IDocumentSchema"
+      class="opengever.ris.browser.ris_excerpt.RISUpdateExcerptReceive"
+      permission="zope.Public"
+      layer="opengever.ogds.base.interfaces.IInternalOpengeverRequestLayer"
+      />
 </configure>
