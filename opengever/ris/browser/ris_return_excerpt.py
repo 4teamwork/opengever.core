@@ -4,7 +4,6 @@ from opengever.base.json_response import JSONResponse
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
-from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -14,6 +13,7 @@ from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.intid.interfaces import IIntIds
+import json
 
 
 class RISReturnExcerptService(Service):
@@ -31,7 +31,7 @@ class RISReturnExcerptService(Service):
 
         if not target_cid or not container_path or not proposal_relative_path:
             return JSONResponse(self.request).error(
-                "'target_admin_unit_id', 'proposal_relative_path' and 'target_dossier_relative_path' are required.",
+                "Target admin_unit_id and paths are required.",
                 status=400,
             ).dump()
 
@@ -50,6 +50,23 @@ class RISReturnExcerptService(Service):
 
 class RISReturnExcerptReceive(PrivilegedReceiveObject):
     """Receiver on the target dossier. Runs with elevated privileges."""
+
+    def __call__(self):
+        obj = self.receive()
+        portal = self.context.portal_url.getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+
+        intids = getUtility(IIntIds)
+
+        data = {
+            'path': '/'.join(obj.getPhysicalPath())[len(portal_path) + 1:],
+            'intid': intids.queryId(obj),
+            "url": obj.absolute_url(),
+            "current_version_id": obj.get_current_version_id(missing_as_zero=True),
+        }
+
+        self.request.response.setHeader("Content-type", "application/json")
+        return json.dumps(data)
 
     @property
     def container(self):
@@ -75,7 +92,7 @@ class RISReturnExcerptReceive(PrivilegedReceiveObject):
         if not hasattr(proposal, "excerpts"):
             raise BadRequest("Proposal has no 'excerpts' field.")
 
-        proposal.excerpts =[RelationValue(getUtility(IIntIds).getId(document))]
+        proposal.excerpts = [RelationValue(getUtility(IIntIds).getId(document))]
         proposal.reindexObject(idxs=["excerpts"])
 
     def receive(self):
@@ -89,9 +106,7 @@ class RISReturnExcerptReceive(PrivilegedReceiveObject):
             raise BadRequest("Invalid 'proposal_relative_path' (object not found).")
 
         if not self._is_within(self.container, proposal):
-            raise BadRequest(
-                "The proposal is not located in the target dossier."
-            )
+            raise BadRequest("The proposal is not located in the target dossier.")
         document = super(RISReturnExcerptReceive, self).receive()
 
         self._link_as_excerpt(proposal, document)
@@ -99,7 +114,9 @@ class RISReturnExcerptReceive(PrivilegedReceiveObject):
         if finalize:
             try:
                 with elevated_privileges():
-                    api.content.transition(obj=document, transition="document-transition-finalize")
+                    api.content.transition(
+                        obj=document, transition='document-transition-finalize'
+                    )
             except Exception:
                 pass
 

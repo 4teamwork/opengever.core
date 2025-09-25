@@ -36,6 +36,7 @@ WHITELIST = (
     # Add-form views are special adapters were the permission is stored
     # differently. These views are verified manually:
     'opengever.disposition.browser.form.DispositionAddView',
+    'opengever.ris.browser.ris_return_excerpt.RISReturnExcerptReceive',
 
     # The custom error page needs to be public, since errors may happen
     # during traversal or publish, in both cases security may not yet
