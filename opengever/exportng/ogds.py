@@ -294,6 +294,7 @@ class AgendaItemSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'aistate', 'varchar'),
         Attribute('proposal_uid', 'aiproposal', 'varchar'),
         Attribute('dossier_uid', 'mdossier', 'varchar'),
+        Attribute('sort_order', '_sort_order', 'integer'),
     ]
 
     def agendaitem_id(self):
