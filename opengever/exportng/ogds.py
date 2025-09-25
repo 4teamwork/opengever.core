@@ -201,12 +201,13 @@ class MeetingSerializer(OGDSItemSerializer):
         return 'Europe/Zurich'
 
     def dossier_uid(self):
-        try:
-            dossier = self.item.dossier_oguid.resolve_object()
-        except InvalidOguidIntIdPart:
-            logger.warning('Could not resolve dossier for meeting.')
-            return None
-        return dossier.UID()
+        if self.item.workflow_state == 'closed':
+            try:
+                dossier = self.item.dossier_oguid.resolve_object()
+            except InvalidOguidIntIdPart:
+                logger.warning('Could not resolve dossier for meeting.')
+                return None
+            return dossier.UID()
 
     def committee_uid(self):
         return self.item.committee.resolve_committee().UID()
