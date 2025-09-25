@@ -311,8 +311,10 @@ class AgendaItemSerializer(OGDSItemSerializer):
             return self.item.proposal.resolve_proposal().UID()
 
     def dossier_uid(self):
-        if self.item.has_proposal:
-            return aq_parent(self.item.proposal.resolve_proposal()).UID()
+        if self.item.meeting.workflow_state == 'closed' and self.item.has_proposal:
+            excerpt = self.item.proposal.resolve_submitted_excerpt_document()
+            if excerpt:
+                return aq_parent(excerpt).UID()
 
     def workflow_state(self):
         state_mapping = {
