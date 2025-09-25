@@ -4,7 +4,6 @@ from opengever.base.json_response import JSONResponse
 from opengever.base.security import elevated_privileges
 from opengever.base.transport import PrivilegedReceiveObject
 from opengever.base.transport import Transporter
-from opengever.tasktemplates.content.templatefoldersschema import sequence_type_vocabulary
 from plone import api
 from plone.protect.interfaces import IDisableCSRFProtection
 from plone.restapi.deserializer import json_body
@@ -14,6 +13,7 @@ from zExceptions import BadRequest
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.intid.interfaces import IIntIds
+import json
 
 
 class RISReturnExcerptService(Service):
@@ -51,6 +51,24 @@ class RISReturnExcerptService(Service):
 class RISReturnExcerptReceive(PrivilegedReceiveObject):
     """Receiver on the target dossier. Runs with elevated privileges."""
 
+    def __call__(self):
+        obj = self.receive()
+        portal = self.context.portal_url.getPortalObject()
+        portal_path = '/'.join(portal.getPhysicalPath())
+
+        intids = getUtility(IIntIds)
+
+        data = {
+            'path': '/'.join(obj.getPhysicalPath())[
+                len(portal_path) + 1:],
+            'intid': intids.queryId(obj),
+            "url": obj.absolute_url(),
+            "current_version_id": obj.get_current_version_id(missing_as_zero=True),
+        }
+
+        self.request.response.setHeader("Content-type", "application/json")
+        return json.dumps(data)
+
     @property
     def container(self):
         return self.context
@@ -75,7 +93,7 @@ class RISReturnExcerptReceive(PrivilegedReceiveObject):
         if not hasattr(proposal, "excerpts"):
             raise BadRequest("Proposal has no 'excerpts' field.")
 
-        proposal.excerpts =[RelationValue(getUtility(IIntIds).getId(document))]
+        proposal.excerpts = [RelationValue(getUtility(IIntIds).getId(document))]
         proposal.reindexObject(idxs=["excerpts"])
 
     def receive(self):
