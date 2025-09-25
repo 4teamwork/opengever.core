@@ -284,8 +284,8 @@
       <role name="Administrator" />
     </permission>
 
-        <!-- RIS -->
-    <permission name="opengever.ris: Return Excerpt" acquire="True">
+    <!-- RIS -->
+    <permission name="opengever.ris: Return Excerpt" acquire="False">
       <role name="Manager" />
       <role name="Member" />
     </permission>

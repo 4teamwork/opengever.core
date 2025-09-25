@@ -247,6 +247,7 @@
                    opengever.propertysheets: Manage PropertySheets,
                    opengever.repository: Export repository,
                    opengever.ris: Add Proposal,
+                   opengever.ris: Return Excerpt,
                    opengever.sharing: List Protected Objects,
                    opengever.webactions: Manage own WebActions,
                    opengever.workspace: Add WorkspaceFolder,
