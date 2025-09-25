@@ -340,6 +340,7 @@ class ProposalSerializer(OGDSItemSerializer):
         Attribute('issuer', 'pproposedby', 'varchar'),
         Attribute('dossier_uid', 'poriginaldossier', 'varchar'),
         Attribute('agendaitem_id', 'pagendaitem', 'varchar'),
+        Attribute('attachments', '_pdocuments', 'jsonb'),
     ]
 
     def __init__(self, item):
@@ -374,6 +375,9 @@ class ProposalSerializer(OGDSItemSerializer):
             'cancelled': 'DISCARDED',
         }
         return state_mapping.get(self.item.workflow_state)
+
+    def attachments(self):
+        return [doc.UID() for doc in self.proposal.get_documents()]
 
 
 class ProposalSyncer(OGDSSyncer):
