@@ -294,6 +294,7 @@ class AgendaItemSerializer(OGDSItemSerializer):
         Attribute('workflow_state', 'aistate', 'varchar'),
         Attribute('proposal_uid', 'aiproposal', 'varchar'),
         Attribute('dossier_uid', 'mdossier', 'varchar'),
+        Attribute('excerpt_uid', 'aiprotocolword', 'varchar'),
         Attribute('sort_order', '_sort_order', 'integer'),
     ]
 
@@ -315,6 +316,12 @@ class AgendaItemSerializer(OGDSItemSerializer):
             excerpt = self.item.proposal.resolve_submitted_excerpt_document()
             if excerpt:
                 return aq_parent(excerpt).UID()
+
+    def excerpt_uid(self):
+        if self.item.meeting.workflow_state == 'closed' and self.item.has_proposal:
+            excerpt = self.item.proposal.resolve_submitted_excerpt_document()
+            if excerpt:
+                return excerpt.UID()
 
     def workflow_state(self):
         state_mapping = {
