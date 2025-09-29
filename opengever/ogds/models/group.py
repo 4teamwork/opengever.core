@@ -14,7 +14,10 @@ from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import Table
+from sqlalchemy import UnicodeText
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
+from sqlalchemy.orm import foreign
 from sqlalchemy.orm import relation
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
@@ -23,41 +26,57 @@ from sqlalchemy.sql.expression import true
 
 # association table
 groups_users = Table(
-    'groups_users', Base.metadata,
-    Column('groupid', String(GROUP_ID_LENGTH),
-           ForeignKey('groups.groupid'), primary_key=True),
-    Column('userid', String(USER_ID_LENGTH),
-           ForeignKey('users.userid'), primary_key=True),
+    "groups_users",
+    Base.metadata,
+    Column(
+        "groupid",
+        String(GROUP_ID_LENGTH),
+        ForeignKey("groups.groupid"),
+        primary_key=True,
+    ),
+    Column(
+        "userid", String(USER_ID_LENGTH), ForeignKey("users.userid"), primary_key=True
+    ),
+    Column("note", UnicodeText, nullable=True),
 )
+
+
+class GroupMembership(Base):
+
+    __table__ = groups_users
+
+    group = relationship(
+        "Group",
+        back_populates="memberships")
+    user = relationship(
+        "User",
+        back_populates="memberships"
+    )
 
 
 def create_additional_groups_users_indexes(table, connection, *args, **kw):
     engine = connection.engine
-    if engine.dialect.name != 'sqlite':
+    if engine.dialect.name != "sqlite":
         # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
         # that SQLAlchemy produces for this functional index
-        ix = Index('ix_groups_users_userid_lower',
-                   func.lower(groups_users.c.userid))
+        ix = Index("ix_groups_users_userid_lower", func.lower(groups_users.c.userid))
         ix.create(engine)
 
 
-event.listen(
-    groups_users, 'after_create',
-    create_additional_groups_users_indexes)
+event.listen(groups_users, "after_create", create_additional_groups_users_indexes)
 
 
 class GroupQuery(BaseQuery):
 
-    searchable_fields = ['groupid', 'title']
+    searchable_fields = ["groupid", "title"]
 
 
 class Group(Base):
-    """Group model, corresponds to a LDAP group
-    """
+    """Group model, corresponds to a LDAP group"""
 
     query_cls = GroupQuery
 
-    __tablename__ = 'groups'
+    __tablename__ = "groups"
 
     groupid = Column(String(GROUP_ID_LENGTH), primary_key=True)
     groupname = Column(String(GROUP_ID_LENGTH), nullable=False)
@@ -70,18 +89,31 @@ class Group(Base):
     # allowed to be managed over the @groups endpoint.
     is_local = Column(Boolean, default=False, nullable=True)
 
-    users = relation(User, secondary=groups_users, order_by='User.lastname',
-                     backref=backref('groups', order_by='Group.groupid'))
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="group",
+        cascade="all, delete-orphan",
+        order_by="GroupMembership.userid",
+        lazy="selectin",
+    )
+
+    users = association_proxy(
+        "memberships",
+        "user",
+        creator=lambda user: GroupMembership(user=user),
+    )
+
     teams = relationship(Team, back_populates="group")
 
-    column_names_to_sync = {'groupid', 'groupname', 'external_id', 'active', 'title'}
+    column_names_to_sync = {"groupid", "groupname", "external_id", "active", "title"}
 
     # A classmethod property needs to be defined on the metaclass
     class __metaclass__(type(Base)):
         @property
         def columns_to_sync(cls):
             return {
-                col for col in cls.__table__.columns
+                col
+                for col in cls.__table__.columns
                 if col.name in cls.column_names_to_sync
             }
 
@@ -105,7 +137,7 @@ class Group(Base):
         super(Group, self).__init__(**kwargs)
 
     def __repr__(self):
-        return '<Group %s>' % self.groupid
+        return "<Group %s>" % self.groupid
 
     def __eq__(self, other):
         if isinstance(other, Group):
@@ -127,11 +159,11 @@ class Group(Base):
 
 def create_additional_group_indexes(table, connection, *args, **kw):
     engine = connection.engine
-    if engine.dialect.name != 'sqlite':
+    if engine.dialect.name != "sqlite":
         # SQLite 3.7 (as used on Jenkins) doesn't support the syntax yet
         # that SQLAlchemy produces for this functional index
-        ix = Index('ix_groups_groupid_lower', func.lower(table.c.groupid))
+        ix = Index("ix_groups_groupid_lower", func.lower(table.c.groupid))
         ix.create(engine)
 
 
-event.listen(Group.__table__, 'after_create', create_additional_group_indexes)
+event.listen(Group.__table__, "after_create", create_additional_group_indexes)

@@ -13,6 +13,8 @@ from sqlalchemy import event
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
+from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import relationship
 
 
 class UserQuery(BaseQuery):
@@ -100,6 +102,23 @@ class User(Base):
         'username',
         'zip_code',
     }
+
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        order_by="GroupMembership.groupid",
+        lazy="selectin",
+    )
+
+    groups = association_proxy(
+        "memberships",
+        "group",
+        creator=lambda group: __import__(
+            "opengever.ogds.models.group",
+            fromlist=["GroupMembership"]
+        ).GroupMembership(group=group),
+    )
 
     # A classmethod property needs to be defined on the metaclass
     class __metaclass__(type(Base)):

@@ -67,7 +67,7 @@ class OGDSService(object):
         query = self._query_org_units(
             enabled_only=True, visible_only=True).join(OrgUnit.users_group)
 
-        query = query.join(Group.users).filter(User.userid == userid)
+        query = query.join(Group.memberships).join(User).filter(User.userid == userid)
         org_units = query.all()
 
         if omit_current:
