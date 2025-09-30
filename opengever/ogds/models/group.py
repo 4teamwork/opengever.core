@@ -14,7 +14,7 @@ from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
 from sqlalchemy import Table
-from sqlalchemy import UnicodeText
+from sqlalchemy import Text
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import backref
 from sqlalchemy.orm import foreign
@@ -37,7 +37,7 @@ groups_users = Table(
     Column(
         "userid", String(USER_ID_LENGTH), ForeignKey("users.userid"), primary_key=True
     ),
-    Column("note", UnicodeText, nullable=True),
+    Column("note", Text, nullable=True),
 )
 
 
@@ -47,10 +47,13 @@ class GroupMembership(Base):
 
     group = relationship(
         "Group",
-        back_populates="memberships")
+        back_populates="memberships",
+        primaryjoin="foreign(GroupMembership.groupid)==Group.groupid",
+    )
     user = relationship(
         "User",
-        back_populates="memberships"
+        back_populates="memberships",
+        primaryjoin="foreign(GroupMembership.userid)==User.userid",
     )
 
 

@@ -1881,4 +1881,13 @@
       permission="zope.Public"
       />
 
+  <plone:service
+      method="POST"
+      name="@membership-notes"
+      for="opengever.ogds.models.group.Group"
+      class=".ogdsmembership_notes.MembershipNotes"
+      layer="plone.restapi.interfaces.IPloneRestapiLayer"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>

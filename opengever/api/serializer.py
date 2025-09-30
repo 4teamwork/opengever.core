@@ -20,6 +20,7 @@ from opengever.dossier.utils import supports_is_subdossier
 from opengever.ogds.base.actor import Actor
 from opengever.ogds.models.admin_unit import AdminUnit
 from opengever.ogds.models.group import Group
+from opengever.ogds.models.group import GroupMembership
 from opengever.ogds.models.group import groups_users
 from opengever.ogds.models.org_unit import OrgUnit
 from opengever.ogds.models.team import Team
@@ -326,6 +327,21 @@ class SerializeGroupModelToJson(SerializeSQLModelToJsonBase):
     def add_additional_metadata(self, data):
         extend_with_groupurl(data, self.context, self.request)
 
+    def add_batched_items(self, data):
+        super(SerializeGroupModelToJson, self).add_batched_items(data)
+
+        notes_by_userid = {
+            m.userid: m.note
+            for m in getattr(self.context, "memberships", [])
+            if m.note
+        }
+
+        for item in data.get('items', []) or []:
+            uid = item.get('userid')
+            note = notes_by_userid.get(uid)
+            if note:
+                item['note'] = note
+
 
 @implementer(ISerializeToJson)
 @adapter(IGroupData, IOpengeverBaseLayer)
@@ -410,6 +426,18 @@ class SerializeUserModelToJson(SerializeSQLModelToJsonBase):
             team_serializer = queryMultiAdapter(
                 (team, self.request), ISerializeToJsonSummary)
             data['teams'].append(team_serializer())
+
+        notes_by_groupid = {
+            m.groupid: m.note
+            for m in getattr(self.context, "memberships", [])
+            if m.note
+        }
+
+        for group in data['groups']:
+            groupid = group.get('groupid')
+            note = notes_by_groupid.get(groupid)
+            if note:
+                group['note'] = note
 
     def __call__(self, *args, **kwargs):
         data = super(SerializeUserModelToJson, self).__call__(*args, **kwargs)
