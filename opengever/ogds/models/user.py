@@ -13,6 +13,7 @@ from sqlalchemy import event
 from sqlalchemy import func
 from sqlalchemy import Index
 from sqlalchemy import String
+from sqlalchemy.orm import relationship
 
 
 class UserQuery(BaseQuery):
@@ -100,6 +101,15 @@ class User(Base):
         'username',
         'zip_code',
     }
+
+    memberships = relationship(
+        "GroupMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+        primaryjoin="User.userid == foreign(GroupMembership.userid)",
+        order_by="GroupMembership.groupid",
+    )
 
     # A classmethod property needs to be defined on the metaclass
     class __metaclass__(type(Base)):
